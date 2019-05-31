@@ -12,7 +12,8 @@ export const DefaultSettings = {
         pos: new Vector3(-80, -80, 80),
         pos_x: -80,
         pos_y: -80,
-        pos_z: 80
+        pos_z: 80,
+        target: new Vector3(0, 0, 0)
     },
     colors: {
         viewer_bg: '#E6E6E6',

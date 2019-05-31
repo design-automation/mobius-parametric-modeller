@@ -26,7 +26,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     @Output() eventClicked = new EventEmitter<Event>();
     @Output() resetTableEvent = new EventEmitter<number>();
     @Input() model: GIModel;
-    @Input() attr_table_select: { action: string, ent_type: string, id: number };
+    @Input() attr_table_select: { action: string, ent_type: string, id: number | number[] };
     @Input() selectSwitch: Boolean;
     @Input() attribLabel: string;
     @ViewChild(DropdownMenuComponent) dropdown = new DropdownMenuComponent();
@@ -291,36 +291,91 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this.dataService.switch_page = true;
     }
 
-    attrTableSelect(attrib: { action: string, ent_type: string, id: number }) {
+    attrTableSelect(attrib: { action: string, ent_type: string, id: number | number[] }) {
         sessionStorage.setItem('mpm_changetab', JSON.stringify(false));
         if (attrib.action === 'select') {
+            this.unselectAll();
             switch (attrib.ent_type) {
                 case EEntTypeStr[EEntType.POSI]:
-                    this.selectPositions(attrib.id, null, null, attrib.ent_type + attrib.id);
+                    if (typeof attrib.id === 'number') {
+                        this.selectPositions(attrib.id, null, null, attrib.ent_type + attrib.id);
+                    } else {
+                        attrib.id.forEach((_id) => {
+                            this.selectPositions(_id, null, null, attrib.ent_type + _id);
+                        });
+                    }
                     break;
                 case EEntTypeStr[EEntType.VERT]:
-                    this.selectVertex(attrib.id, null, null, attrib.ent_type + attrib.id);
+                    if (typeof attrib.id === 'number') {
+                        this.selectVertex(attrib.id, null, null, attrib.ent_type + attrib.id);
+                    } else {
+                        attrib.id.forEach((_id) => {
+                            this.selectVertex(_id, null, null, attrib.ent_type + _id);
+                        });
+                    }
                     break;
                 case EEntTypeStr[EEntType.EDGE]:
-                    this.selectEdge(attrib.id);
+                    if (typeof attrib.id === 'number') {
+                        this.selectEdge(attrib.id);
+                    } else {
+                        attrib.id.forEach((_id) => {
+                            this.selectEdge(_id);
+                        });
+                    }
                     break;
                 case EEntTypeStr[EEntType.WIRE]:
-                    this.selectWire(attrib.id);
+                    if (typeof attrib.id === 'number') {
+                        this.selectWire(attrib.id);
+                    } else {
+                        attrib.id.forEach((_id) => {
+                            this.selectWire(_id);
+                        });
+                    }
                     break;
                 case EEntTypeStr[EEntType.FACE]:
-                    this.selectFace(attrib.id);
+                    if (typeof attrib.id === 'number') {
+                        this.selectFace(attrib.id);
+                    } else {
+                        attrib.id.forEach((_id) => {
+                            this.selectFace(_id);
+                        });
+                    }
                     break;
                 case EEntTypeStr[EEntType.PGON]:
-                    this.selectPGon(attrib.id);
+                    if (typeof attrib.id === 'number') {
+                        this.selectPGon(attrib.id);
+                    } else {
+                        attrib.id.forEach((_id) => {
+                            this.selectPGon(_id);
+                        });
+                    }
                     break;
                 case EEntTypeStr[EEntType.PLINE]:
-                    this.selectPLine(attrib.id);
+                    if (typeof attrib.id === 'number') {
+                        this.selectPLine(attrib.id);
+                    } else {
+                        attrib.id.forEach((_id) => {
+                            this.selectPLine(_id);
+                        });
+                    }
                     break;
                 case EEntTypeStr[EEntType.POINT]:
-                    this.selectPoint(attrib.id);
+                    if (typeof attrib.id === 'number') {
+                        this.selectPoint(attrib.id);
+                    } else {
+                        attrib.id.forEach((_id) => {
+                            this.selectPoint(_id);
+                        });
+                    }
                     break;
                 case EEntTypeStr[EEntType.COLL]:
-                    this.chooseColl(attrib.id);
+                    if (typeof attrib.id === 'number') {
+                        this.chooseColl(attrib.id);
+                    } else {
+                        attrib.id.forEach((_id) => {
+                            this.chooseColl(_id);
+                        });
+                    }
                     break;
                 default:
                     break;
@@ -380,8 +435,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             // if (model !== this._data_threejs._model) {
                 this._data_threejs._model = model;
                 try {
-                    // to be completed and test
-                    // this._data_threejs.disposeWebGL();
                     // add geometry to the scene
                     this._data_threejs.addGeometry(model, this.container);
                     // this.resetTable();
@@ -524,6 +577,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         } else {
             if (event.target.tagName === 'CANVAS') {
                 this.unselectAll();
+                this.resetTable();
                 if (event.target.tagName !== 'OL') {
                     // not clicking on Menu item, hide dropdown menu
                     this.dropdown.visible = false;

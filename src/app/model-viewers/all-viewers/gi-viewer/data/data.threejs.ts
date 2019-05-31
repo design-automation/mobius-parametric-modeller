@@ -4,7 +4,8 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
 import { EEntTypeStr, EEntType } from '@assets/libs/geo-info/common';
 import { Vector3 } from 'three';
-
+import { DataService } from '@services';
+import { Vector } from '@assets/core/modules/calc';
 /**
  * ThreejsScene
  */
@@ -58,10 +59,13 @@ export class DataThreejs {
 
     // BufferGeoms
     private BufferGeoms: THREE.BufferGeometry[] = [];
+
+    // initial origin
+    private origin: Vector3 = new Vector3(0, 1, 0);
     /**
      * Constructs a new data subscriber.
      */
-    constructor(settings: Settings) {
+    constructor(settings: Settings, private dataService: DataService) {
         this.settings = settings;
         // scene
         this._scene = new THREE.Scene();
@@ -129,9 +133,6 @@ export class DataThreejs {
      * @param container
      */
     public addGeometry(model: GIModel, container): void {
-        if (localStorage.getItem('mpm_settings') !== null) {
-            this.settings = JSON.parse(localStorage.getItem('mpm_settings'));
-        }
         this._scene.background = new THREE.Color(this.settings.colors.viewer_bg);
         while (this._scene.children.length > 0) {
             this._scene.remove(this._scene.children[0]);
@@ -158,10 +159,11 @@ export class DataThreejs {
         // Add geometry
         const threejs_data: IThreeJS = model.threejs.get3jsData();
 
-        if (threejs_data.posis_indices.length === 0) {
-            this._camera.position.set(-80, -80, 80);
-            return;
-        }
+        // if (threejs_data.posis_indices.length === 0) {
+            // this._camera.position.set(-80, -80, 80);
+            // this._camera.lookAt(this._scene.position);
+            // return;
+        // }
         // if (this.settings.camera !== undefined) {
         //     this._camera.position.set(this.settings.camera.pos.x, this.settings.camera.pos.y, this.settings.camera.pos.z);
         // } else {
@@ -212,9 +214,28 @@ export class DataThreejs {
         this.grid_pos.y = center.y;
         this.axes_pos.x = center.x;
         this.axes_pos.y = center.y;
-        this.grid.position.set(center.x, center.y, 0);
-        this.axesHelper.position.set(center.x, center.y, 0);
 
+        if (threejs_data.posis_indices.length !== 0) {
+            if (this.dataService.newFlowchart) {
+                this.dataService.newFlowchart = false;
+                this.origin = new Vector3(center.x, center.y, 0);
+                this.settings.camera.target = this.origin ;
+                localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
+                this.grid.position.set(center.x, center.y, 0);
+                this.axesHelper.position.set(center.x, center.y, 0);
+            } else {
+                this.grid.position.set(this.origin.x, this.origin.y, 0);
+                this.axesHelper.position.set(this.origin.x, this.origin.y, 0);
+            }
+            const target = new Vector3(this.settings.camera.target.x, this.settings.camera.target.y, this.settings.camera.target.z);
+            this._camera.position.x += target.x;
+            this._camera.position.y += target.y;
+            this._camera.position.z += target.z;
+            this._camera.lookAt(target);
+            this._camera.updateProjectionMatrix();
+            this._controls.target.set(target.x, target.y, target.z);
+            this._controls.update();
+        }
 
         setTimeout(() => {
             if (!this._model.attribs.query.hasAttrib(EEntType.MOD, 'hud')) { return; }
@@ -1157,7 +1178,7 @@ interface Settings {
     tjs_summary: { show: boolean };
     gi_summary: { show: boolean };
     wireframe: { show: boolean };
-    camera: { pos: Vector3 };
+    camera: { pos: Vector3, target: Vector3 };
     colors: {
         viewer_bg: string,
         position: string,

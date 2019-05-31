@@ -8,6 +8,7 @@ import { DataService } from '../data/data.service';
 import { EEntType, EEntTypeStr } from '@libs/geo-info/common';
 import { GIAttribsThreejs } from '@assets/libs/geo-info/GIAttribsThreejs';
 import { ATabsComponent } from './tabs.component';
+import { sortByKey } from '@libs/util/maps';
 
 @Component({
   selector: 'attribute',
@@ -43,6 +44,9 @@ export class AttributeComponent implements OnChanges, DoCheck {
   displayedColumns: string[] = [];
   displayData: {}[] = [];
   selected_ents = new Map();
+  multi_selection = new Map();
+  last_selected;
+  current_selected;
 
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   @ViewChildren(MatSort) sort = new QueryList<MatSort>();
@@ -138,7 +142,7 @@ export class AttributeComponent implements OnChanges, DoCheck {
           });
           this.displayData = SelectedAttribData;
         } else {
-          const AllAttribData = ThreeJSData.getAttribsForTable(this.tab_map[tabIndex]);
+          const AllAttribData = ThreeJSData.getAttribsForTable(this.tab_map[tabIndex]).data;
           AllAttribData.map(row => {
             if (this.selected_ents.has(row._id)) {
               return row.selected = true;
@@ -240,13 +244,73 @@ export class AttributeComponent implements OnChanges, DoCheck {
     const rows = document.querySelectorAll('.selected-row');
     rows.forEach(row => row.classList.remove('selected-row'));
     this.selected_ents.clear();
+    this.multi_selection.clear();
   }
 
-  selectRow(ent_id: string, event: Event) {
+  selectRow(ent_id: string, event) {
     const currentTab = this.getCurrentTab();
     if (currentTab === 9) {
       return;
     }
+    const id = Number(ent_id.substr(2));
+    // Multiple row selection
+    const ThreeJSData = this.data.attribs.threejs;
+    const attrib_table_ents = ThreeJSData.getAttribsForTable(this.tab_map[currentTab]).ents;
+    this.current_selected = id;
+    const s = this.multi_selection;
+
+    if (s.has(this.current_selected) && !event.shiftKey) { // select the same row => unselect
+      s.delete(this.current_selected);
+    } else if (!s.has(this.current_selected) && !event.shiftKey) {
+      s.set(this.current_selected, this.current_selected);
+      this.last_selected = this.current_selected;
+    }
+
+    if (event.shiftKey) {
+      if (this.last_selected === undefined) {
+        this.last_selected = ThreeJSData.getAttribsForTable(this.tab_map[currentTab]).ents[0];
+      }
+      s.clear();
+      if (this.current_selected < this.last_selected) { // select upper row
+        attrib_table_ents.filter(ents => ents > this.current_selected && ents < this.last_selected).forEach(item => {
+          s.set(item, item);
+        });
+        s.set(this.current_selected, this.current_selected);
+        s.set(this.last_selected, this.last_selected);
+      } else if (this.current_selected > this.last_selected) { // select lower row
+        attrib_table_ents.filter(ents => ents < this.current_selected && ents > this.last_selected).forEach(item => {
+          s.set(item, item);
+        });
+        s.set(this.current_selected, this.current_selected);
+        s.set(this.last_selected, this.last_selected);
+      }
+    }
+    if (event.ctrlKey) {
+      this.last_selected = this.current_selected;
+      s.set(this.current_selected, this.current_selected);
+    }
+
+    const ent_type = ent_id.substr(0, 2);
+    const target = event.target;
+    if (s.size === 1) {
+      if (this.selected_ents.has(ent_id)) {
+        this.attrTableSelect.emit({ action: 'unselect', ent_type: ent_type, id: id });
+        this.selected_ents.delete(ent_id);
+        target.parentNode.classList.remove('selected-row');
+      } else {
+        this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: id });
+        this.selected_ents.set(ent_id, id);
+        target.parentNode.classList.add('selected-row');
+      }
+    } else {
+      this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: s });
+      s.forEach(_id => {
+        this.selected_ents.set(ent_id, id);
+      });
+    }
+  }
+
+  add_remove_selected(ent_id, event) {
     const ent_type = ent_id.substr(0, 2);
     const id = Number(ent_id.substr(2));
     const target = event.target || event.srcElement || event.currentTarget;
@@ -261,7 +325,6 @@ export class AttributeComponent implements OnChanges, DoCheck {
       // @ts-ignore
       target.parentNode.classList.add('selected-row');
     }
-
   }
 
   showAttribLabel($event, column) {

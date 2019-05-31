@@ -134,6 +134,7 @@ export class GIViewerComponent implements OnInit {
                 pos_x: this.temp_camera_pos.x,
                 pos_y: this.temp_camera_pos.y,
                 pos_z: this.temp_camera_pos.z,
+                target: new Vector3(0, 0, 0)
             };
             this.dataService.getThreejsScene().settings = this.settings;
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
@@ -209,6 +210,24 @@ export class GIViewerComponent implements OnInit {
                 this.temp_camera_pos.z = Math.round(value);
                 // this.setCamera(null, null, value);
                 break;
+            // case 'camera.target_x':
+            //     if (isNaN(value)) {
+            //         return;
+            //     }
+            //     this.settings.camera.target_x = Math.round(value);
+            //     break;
+            // case 'camera.target_y':
+            //     if (isNaN(value)) {
+            //         return;
+            //     }
+            //     this.settings.camera.target_y = Math.round(value);
+            //     break;
+            // case 'camera.target_z':
+            //     if (isNaN(value)) {
+            //         return;
+            //     }
+            //     this.settings.camera.target_z = Math.round(value);
+            //     break;
             case 'ambient_light.show': // Ambient Light
                 this.settings.ambient_light.show = !this.settings.ambient_light.show;
                 if (scene.ambient_light) {
@@ -370,7 +389,8 @@ interface Settings {
         pos: Vector3,
         pos_x: number,
         pos_y: number,
-        pos_z: number
+        pos_z: number,
+        target: Vector3
     };
     colors: {
         viewer_bg: string,

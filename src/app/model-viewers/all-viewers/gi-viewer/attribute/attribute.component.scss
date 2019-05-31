@@ -79,6 +79,12 @@ table {
       }
     }
     .mat-cell{
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      
       font-size: 12px;
       color: $color8;
       background-color: $color6;

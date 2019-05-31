@@ -110,7 +110,7 @@ export class GIAttribsThreejs {
      *
      * @param ent_type
      */
-    public getAttribsForTable(ent_type: EEntType): any[] {
+    public getAttribsForTable(ent_type: EEntType): {data: any[], ents: number[]} {
         // get the attribs map for this ent type
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
@@ -118,6 +118,8 @@ export class GIAttribsThreejs {
         const data_obj_map: Map< number, { '#': number, _id: string} > = new Map();
         // create the ID for each table row
         const ents_i: number[] = this._model.geom.query.getEnts(ent_type, false);
+
+        // sessionStorage.setItem('attrib_table_ents', JSON.stringify(ents_i));
         let i = 0;
         for (const ent_i of ents_i) {
             data_obj_map.set(ent_i, { '#': i, _id: `${attribs_maps_key}${ent_i}`} );
@@ -154,7 +156,7 @@ export class GIAttribsThreejs {
                 }
             }
         });
-        return Array.from(data_obj_map.values());
+        return { data: Array.from(data_obj_map.values()), ents: ents_i};
     }
 
     /**

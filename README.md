@@ -1,3 +1,3 @@
-# mobius-parametric-modeller-edx1
+# mobius-parametric-modeller-dev
 
-https://design-automation.github.io/mobius-parametric-modeller-edx1/
+https://design-automation.github.io/mobius-parametric-modeller-dev

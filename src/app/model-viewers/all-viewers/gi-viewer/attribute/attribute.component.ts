@@ -27,6 +27,7 @@ export class AttributeComponent implements OnChanges, DoCheck {
   @Output() attribLabel = new EventEmitter<string>();
   showSelected = false;
   currentShowingCol = '';
+  shiftKeyPressed = false;
 
   tabs: { type: number, title: string }[] =
     [
@@ -320,6 +321,10 @@ export class AttributeComponent implements OnChanges, DoCheck {
       // @ts-ignore
       target.parentNode.classList.remove('selected-row');
     } else {
+      if (event.shiftKey) {
+        this.shiftKeyPressed = true;
+        console.log(ent_id);
+      }
       this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: id });
       this.selected_ents.set(ent_id, id);
       // @ts-ignore

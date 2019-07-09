@@ -10,9 +10,9 @@ import { InputType } from '@models/port';
 import { IArgument } from '@models/code';
 
 @Component({
-  selector: 'panel-header',
-  templateUrl:  'panel-header.component.html',
-  styleUrls: ['panel-header.component.scss']
+    selector: 'panel-header',
+    templateUrl: 'panel-header.component.html',
+    styleUrls: ['panel-header.component.scss']
 })
 export class PanelHeaderComponent implements OnDestroy {
 
@@ -50,9 +50,11 @@ export class PanelHeaderComponent implements OnDestroy {
         this.dataService.flowchart.meta.selected_nodes = [index];
         if (this.router.url === '/editor') {
             this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[index].id);
-            if ((index === 0 || index === this.dataService.flowchart.nodes.length - 1)) { setTimeout(() => {
-                this.adjustTextArea();
-            }, 100); }
+            if ((index === 0 || index === this.dataService.flowchart.nodes.length - 1)) {
+                setTimeout(() => {
+                    this.adjustTextArea();
+                }, 100);
+            }
         }
     }
 
@@ -108,8 +110,8 @@ export class PanelHeaderComponent implements OnDestroy {
     }
 
     openDropdownMenu(e: MouseEvent) {
-       let stl = document.getElementById('dropdownMenu').style;
-       if (!stl.display || stl.display === 'none') {
+        let stl = document.getElementById('dropdownMenu').style;
+        if (!stl.display || stl.display === 'none') {
             stl.left = (document.getElementById('dropdownMenuButton').getBoundingClientRect().left + 34 - 100) + 'px';
             stl.display = 'block';
             // const bRect = (<Element>e.target).getBoundingClientRect();
@@ -156,7 +158,7 @@ export class PanelHeaderComponent implements OnDestroy {
     }
 
     updateSettings() {
-        const newSettings = {'execute': (<HTMLInputElement>document.getElementById('settings-execute')).checked};
+        const newSettings = { 'execute': (<HTMLInputElement>document.getElementById('settings-execute')).checked };
         this.dataService.mobiusSettings = newSettings;
         this.dataService.dialog.close();
     }
@@ -173,7 +175,7 @@ export class PanelHeaderComponent implements OnDestroy {
     loadBackup(event: MouseEvent, filecode: string) {
         event.stopPropagation();
         if (this.dataService.checkbackup_header()) {
-            SaveFileComponent.loadFile(filecode, (file)=>{
+            SaveFileComponent.loadFile(filecode, (file) => {
                 if (file === 'error') {
                     return;
                 }
@@ -185,105 +187,105 @@ export class PanelHeaderComponent implements OnDestroy {
             });
         } else {
             const func = this.dataService.getbackup();
-            const fileString: any = localStorage.getItem(filecode);
-            if (!fileString) {
-                return;
-            }
-            const file = circularJSON.parse(fileString);
-            // parse the flowchart
-            const fl = file.flowchart;
-
-            if (this.dataService.flowchart.subFunctions) {
-                const subFunctions = this.dataService.flowchart.subFunctions;
-                let i = 0;
-                while (i < subFunctions.length) {
-                    const subFunc = subFunctions[i];
-                    if (subFunc.name.substring(0, func.name.length) === func.name) {
-                        subFunctions.splice(i, 1);
-                    } else {
-                        i++;
-                    }
+            // const fileString: any = localStorage.getItem(filecode);
+            SaveFileComponent.loadFile(filecode, (fileString) => {
+                if (!fileString) {
+                    return;
                 }
-            } else {
-                this.dataService.flowchart.subFunctions = [];
-            }
+                const file = circularJSON.parse(fileString);
+                // parse the flowchart
+                const fl = file.flowchart;
 
-            let funcName = fl.name.replace(/[^A-Za-z0-9_]/g, '_');
-            if (funcName.match(/^[\d_]/)) {
-                funcName = 'func' + funcName;
-            }
+                if (this.dataService.flowchart.subFunctions) {
+                    const subFunctions = this.dataService.flowchart.subFunctions;
+                    let i = 0;
+                    while (i < subFunctions.length) {
+                        const subFunc = subFunctions[i];
+                        if (subFunc.name.substring(0, func.name.length) === func.name) {
+                            subFunctions.splice(i, 1);
+                        } else {
+                            i++;
+                        }
+                    }
+                } else {
+                    this.dataService.flowchart.subFunctions = [];
+                }
 
-            const documentation = {
-                name: funcName,
-                module: 'Imported',
-                description: fl.description,
-                summary: fl.description,
-                parameters: [],
-                returns: fl.returnDescription
-            };
-            // func = <IFunction>{
-            //     flowchart: <IFlowchart>{
-            //         id: fl.id ? fl.id : IdGenerator.getId(),
-            //         name: fl.name,
-            //         nodes: fl.nodes,
-            //         edges: fl.edges
-            //     },
-            //     name: func.name,
-            //     module: 'Imported',
-            //     doc: documentation,
-            //     importedFile: file
-            // };
-            func.flowchart = <IFlowchart>{
-                                id: fl.id ? fl.id : IdGenerator.getId(),
-                                name: fl.name,
-                                nodes: fl.nodes,
-                                edges: fl.edges
-                            };
-            func.name = funcName;
-            func.doc = documentation;
-            func.importedFile = fileString;
+                let funcName = fl.name.replace(/[^A-Za-z0-9_]/g, '_');
+                if (funcName.match(/^[\d_]/)) {
+                    funcName = 'func' + funcName;
+                }
 
-            func.args = [];
-            for (const prod of fl.nodes[0].procedure) {
-                if (!prod.enabled || prod.type !== ProcedureTypes.Constant) { continue; }
-                let v: string = prod.args[prod.argCount - 2].value || 'undefined';
-                if (v[0] === '"' || v[0] === '\'') { v = v.substring(1, v.length - 1); }
-                if (prod.meta.inputMode !== InputType.Constant) {
-                    documentation.parameters.push({
+                const documentation = {
+                    name: funcName,
+                    module: 'Imported',
+                    description: fl.description,
+                    summary: fl.description,
+                    parameters: [],
+                    returns: fl.returnDescription
+                };
+                // func = <IFunction>{
+                //     flowchart: <IFlowchart>{
+                //         id: fl.id ? fl.id : IdGenerator.getId(),
+                //         name: fl.name,
+                //         nodes: fl.nodes,
+                //         edges: fl.edges
+                //     },
+                //     name: func.name,
+                //     module: 'Imported',
+                //     doc: documentation,
+                //     importedFile: file
+                // };
+                func.flowchart = <IFlowchart>{
+                    id: fl.id ? fl.id : IdGenerator.getId(),
+                    name: fl.name,
+                    nodes: fl.nodes,
+                    edges: fl.edges
+                };
+                func.name = funcName;
+                func.doc = documentation;
+                func.importedFile = fileString;
+
+                func.args = [];
+                for (const prod of fl.nodes[0].procedure) {
+                    if (!prod.enabled || prod.type !== ProcedureTypes.Constant) { continue; }
+                    let v: string = prod.args[prod.argCount - 2].value || 'undefined';
+                    if (v[0] === '"' || v[0] === '\'') { v = v.substring(1, v.length - 1); }
+                    if (prod.meta.inputMode !== InputType.Constant) {
+                        documentation.parameters.push({
+                            name: v,
+                            description: prod.meta.description
+                        });
+                    }
+                    func.args.push(<IArgument>{
                         name: v,
-                        description: prod.meta.description
+                        value: prod.args[prod.argCount - 1].value,
+                        type: prod.meta.inputMode,
                     });
                 }
-                func.args.push(<IArgument>{
-                    name: v,
-                    value: prod.args[prod.argCount - 1].value,
-                    type: prod.meta.inputMode,
-                });
-            }
-            func.argCount = func.args.length;
+                func.argCount = func.args.length;
 
-            for (const i of fl.functions) {
-                i.name = func.name + '_' + i.name;
-                this.dataService.flowchart.subFunctions.push(i);
-            }
-            if (fl.subFunctions) {
-                for (const i of fl.subFunctions) {
+                for (const i of fl.functions) {
                     i.name = func.name + '_' + i.name;
                     this.dataService.flowchart.subFunctions.push(i);
                 }
-            }
+                if (fl.subFunctions) {
+                    for (const i of fl.subFunctions) {
+                        i.name = func.name + '_' + i.name;
+                        this.dataService.flowchart.subFunctions.push(i);
+                    }
+                }
 
-            const end = fl.nodes[fl.nodes.length - 1];
-            const returnProd = end.procedure[end.procedure.length - 1];
-            if (returnProd.args[1].value) {
-                func.hasReturn = true;
-            } else {
-                func.hasReturn = false;
-            }
-            document.getElementById('tooltiptext').click();
-
+                const end = fl.nodes[fl.nodes.length - 1];
+                const returnProd = end.procedure[end.procedure.length - 1];
+                if (returnProd.args[1].value) {
+                    func.hasReturn = true;
+                } else {
+                    func.hasReturn = false;
+                }
+                document.getElementById('tooltiptext').click();
+            });
         }
-        
     }
 
     deleteBackup(event: MouseEvent, filecode: string) {
@@ -326,7 +328,7 @@ export class PanelHeaderComponent implements OnDestroy {
             const rect = this.dataService.dialog.getBoundingClientRect();
 
             const isInDialog = (rect.top <= event.clientY && event.clientY <= rect.top + rect.height
-              && rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
+                && rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
             if (!isInDialog) {
                 this.dataService.dialog.close();
                 this.dataService.dialog = null;
@@ -410,7 +412,7 @@ export class PanelHeaderComponent implements OnDestroy {
 
         let txtArea = document.getElementById('generatedLink');
         txtArea.innerHTML = `${window.location.origin}/${this.urlSet[1]}` +
-                            `?file=${url}${this.urlSet[2]}${this.urlSet[3]}${this.urlSet[4]}`;
+            `?file=${url}${this.urlSet[2]}${this.urlSet[3]}${this.urlSet[4]}`;
         txtArea = null;
     }
 
@@ -435,9 +437,9 @@ export class PanelHeaderComponent implements OnDestroy {
 
         let txtArea = document.getElementById('generatedLink');
         txtArea.innerHTML = `<iframe width='100%' height='600px' style='border: 1px solid black;' src="` +
-                            `${window.location.origin}/${this.urlSet[1]}` +
-                            `?file=${url}${this.urlSet[2]}${this.urlSet[3]}${this.urlSet[4]}"` +
-                            `></iframe>`;
+            `${window.location.origin}/${this.urlSet[1]}` +
+            `?file=${url}${this.urlSet[2]}${this.urlSet[3]}${this.urlSet[4]}"` +
+            `></iframe>`;
         txtArea = null;
     }
 

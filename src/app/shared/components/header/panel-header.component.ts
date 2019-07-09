@@ -173,15 +173,16 @@ export class PanelHeaderComponent implements OnDestroy {
     loadBackup(event: MouseEvent, filecode: string) {
         event.stopPropagation();
         if (this.dataService.checkbackup_header()) {
-            const file = localStorage.getItem(filecode);
-            if (!file) {
-                return;
-            }
-            this.dataService.file = circularJSON.parse(file);
-            this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-            if (this.dataService.mobiusSettings.execute) {
-                document.getElementById('executeButton').click();
-            }
+            SaveFileComponent.loadFile(filecode, (file)=>{
+                if (file === 'error') {
+                    return;
+                }
+                this.dataService.file = circularJSON.parse(file);
+                this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
+                if (this.dataService.mobiusSettings.execute) {
+                    document.getElementById('executeButton').click();
+                }
+            });
         } else {
             const func = this.dataService.getbackup();
             const fileString: any = localStorage.getItem(filecode);
@@ -282,15 +283,17 @@ export class PanelHeaderComponent implements OnDestroy {
             document.getElementById('tooltiptext').click();
 
         }
+        
     }
 
     deleteBackup(event: MouseEvent, filecode: string) {
         event.stopPropagation();
-        const file = localStorage.getItem(filecode);
-        if (!file) {
-            return;
-        }
-        localStorage.removeItem(filecode);
+        // const file = localStorage.getItem(filecode);
+        // if (!file) {
+        //     return;
+        // }
+        // localStorage.removeItem(filecode);
+        SaveFileComponent.deleteFile(filecode);
         const items: string[] = this.getBackupFiles();
         const i = items.indexOf(filecode);
         if (i !== -1) {

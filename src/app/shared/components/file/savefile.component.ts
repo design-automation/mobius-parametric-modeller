@@ -1,4 +1,4 @@
-import { Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { DownloadUtils } from './download.utils';
 import * as circularJSON from 'circular-json';
 import { FlowchartUtils } from '@models/flowchart';
@@ -9,11 +9,19 @@ import { IdGenerator } from '@utils';
 import { IMobius } from '@models/mobius';
 import { INode } from '@models/node';
 
+declare global {
+    interface Navigator {
+        webkitPersistentStorage: {
+            requestQuota: (a, b, c) => {}
+        };
+    }
+}
+
 @Component({
-  selector: 'file-save',
-  template:  `<button id='savefile' class='btn' (click)='download()'>Save</button>`,
-  styles: [
-            `
+    selector: 'file-save',
+    template: `<button id='savefile' class='btn' (click)='download()'>Save</button>`,
+    styles: [
+        `
             button.btn{
                 margin: 0px 0px 0px 0px;
                 font-size: 10px;
@@ -31,10 +39,9 @@ import { INode } from '@models/node';
                 color: white;
             }
              `
-          ]
+    ]
 })
 export class SaveFileComponent {
-
     constructor(private dataService: DataService) {}
 
     static saveFileToLocal(f: IMobius) {
@@ -96,7 +103,74 @@ export class SaveFileComponent {
                 localStorage.setItem('mobius_backup_list', JSON.stringify(items));
             }
         }
-        localStorage.setItem(code, file);
+        // console.log('Filesystem');
+        const requestedBytes = 1024 * 1024 * 50;
+        window['code'] = code;
+        window['file'] = file;
+        navigator.webkitPersistentStorage.requestQuota (
+            requestedBytes, function(grantedBytes) {
+                // @ts-ignore
+                window.webkitRequestFileSystem(PERSISTENT, grantedBytes, SaveFileComponent.saveToFS,
+                function(e) { console.log('Error', e); });
+            }, function(e) { console.log('Error', e); }
+        );
+
+        // localStorage.setItem(code, file);
+    }
+
+    static saveToFS(fs) {
+        fs.root.getFile(window['code'] + '.mob', { create: true}, function (fileEntry) {
+            fileEntry.createWriter(function (fileWriter) {
+                fileWriter.onwriteend = function (e) {
+                    console.log('Write completed.');
+                };
+
+                fileWriter.onerror = function (e) {
+                    console.log('Write failed: ' + e.toString());
+                };
+                const bb = new Blob([window['file']], {type: 'text/plain;charset=utf-8'});
+                fileWriter.write(bb);
+            }, (e) => { console.log(e); });
+        }, (e) => { console.log(e.code); });
+    }
+
+    static deleteFile(filecode) {
+        const requestedBytes = 1024 * 1024 * 50;
+        navigator.webkitPersistentStorage.requestQuota (
+            requestedBytes, function(grantedBytes) {
+                // @ts-ignore
+                window.webkitRequestFileSystem(PERSISTENT, grantedBytes, function(fs) {
+                    fs.root.getFile(filecode + '.mob', {create: false}, function(fileEntry) {
+                      fileEntry.remove(function() {
+                        console.log('File removed.');
+                      }, (e) => { console.log('Error', e); });
+                    });
+                });
+            }, function(e) { console.log('Error', e); }
+        );
+    }
+
+    static loadFile(filecode, callback) {
+        const requestedBytes = 1024 * 1024 * 50;
+        navigator.webkitPersistentStorage.requestQuota (
+            requestedBytes, function(grantedBytes) {
+                // @ts-ignore
+                window.webkitRequestFileSystem(PERSISTENT, grantedBytes, function(fs) {
+                    fs.root.getFile(filecode + '.mob', {}, function(fileEntry) {
+                        fileEntry.file((file) => {
+                            const reader = new FileReader();
+                            reader.onerror = () => {
+                                callback('error');
+                            };
+                            reader.onloadend = () => {
+                                callback(this.result);
+                            };
+                            reader.readAsText(file, 'text/plain;charset=utf-8');
+                        });
+                    });
+                });
+            }, function(e) { console.log('Error', e); }
+        );
     }
 
     static checkDisappearedNodes(checkNode: INode, nodeList: INode[]) {
@@ -139,24 +213,24 @@ export class SaveFileComponent {
                 if (arg.value && arg.value.lastModified) {
                     const p = new Promise((resolve) => {
                         const reader = new FileReader();
-                        reader.onload = function() {
+                        reader.onload = function () {
                             resolve(reader.result);
                         };
                         reader.readAsText(arg.value);
                     });
                     window.localStorage.setItem(arg.value.name, '`' + await p + '`');
-                    arg.value = {'name': arg.value.name};
+                    arg.value = { 'name': arg.value.name };
                 }
                 if (arg.value && arg.value.lastModified) {
                     const p = new Promise((resolve) => {
                         const reader = new FileReader();
-                        reader.onload = function() {
+                        reader.onload = function () {
                             resolve(reader.result);
                         };
                         reader.readAsText(arg.value);
                     });
                     window.localStorage.setItem(arg.value.name, '`' + await p + '`');
-                    arg.value = {'name': arg.value.name};
+                    arg.value = { 'name': arg.value.name };
                 }
             }
         }
@@ -210,7 +284,7 @@ export class SaveFileComponent {
         if (savedfile.name.length < 4 || savedfile.name.substring(savedfile.name.length - 4) !== '.mob') {
             fname = `${fname}.mob`;
         }
-        const blob = new Blob([fileString], {type: 'application/json'});
+        const blob = new Blob([fileString], { type: 'application/json' });
 
         try {
             SaveFileComponent.saveToLocalStorage(savedfile.flowchart.id, savedfile.flowchart.name, fileString);

@@ -406,7 +406,7 @@ export class PanelHeaderComponent implements OnDestroy {
         if (url.indexOf('dropbox') !== -1) {
             url = url.replace('www', 'dl').replace('?dl=0', '');
         }
-        url = url.replace(/\//g, '%2F');
+        url = '_' + btoa(url);
 
         let txtArea = document.getElementById('generatedLink');
         txtArea.innerHTML = `${window.location.origin}/${this.urlSet[1]}` +

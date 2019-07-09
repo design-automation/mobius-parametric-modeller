@@ -38,9 +38,12 @@ export class LoadUrlComponent {
             return;
         }
         url = url[1].split('&')[0];
-        url = url.replace(/%2F/g, '/');
-        url = url.replace(/%5C/g, '\\');
-        url = url.replace(/%22|%27|'|\s/g, '');
+        if (url[0] === '_') {
+            url = atob(decodeURIComponent(url.substring(1)));
+        } else {
+            url = decodeURIComponent(url);
+        }
+        url = url.replace(/'|\s/g, '');
         if (url.indexOf('dropbox') !== -1) {
             url = url.replace('www', 'dl').replace('dl=0', 'dl=1');
         }

@@ -142,95 +142,110 @@ export class ToolsetComponent implements OnInit {
     async import_function(event) {
         // read the file and create the function based on the flowchart
         const p = new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = function() {
-                // parse the flowchart
-                const fileString = reader.result.toString();
-                const fl = CircularJSON.parse(fileString).flowchart;
+            let numFiles = 0;
+            const funcList = [];
+            for (const f of event.target.files) {
+                const reader = new FileReader();
+                reader.onload = function() {
+                    // parse the flowchart
+                    const fileString = reader.result.toString();
+                    const fl = CircularJSON.parse(fileString).flowchart;
 
-                // create function and documentation of the function
-                const funcs = {'main': null, 'sub': []};
-                let funcName = fl.name.replace(/[^A-Za-z0-9_]/g, '_');
-                if (funcName.match(/^[\d_]/)) {
-                    funcName = 'func' + funcName;
-                }
-                const documentation = {
-                    name: funcName,
-                    module: 'Imported',
-                    description: fl.description,
-                    summary: fl.description,
-                    parameters: [],
-                    returns: fl.returnDescription
-                };
-                const func: IFunction = <IFunction>{
-                    flowchart: <IFlowchart>{
-                        id: fl.id ? fl.id : IdGenerator.getId(),
-                        name: fl.name,
-                        nodes: fl.nodes,
-                        edges: fl.edges
-                    },
-                    name: funcName,
-                    module: 'Imported',
-                    doc: documentation,
-                    importedFile: fileString
-                };
+                    // create function and documentation of the function
+                    const funcs = {'main': null, 'sub': []};
+                    let funcName = fl.name.replace(/[^A-Za-z0-9_]/g, '_');
+                    if (funcName.match(/^[\d_]/)) {
+                        funcName = 'func' + funcName;
+                    }
+                    const documentation = {
+                        name: funcName,
+                        module: 'Imported',
+                        description: fl.description,
+                        summary: fl.description,
+                        parameters: [],
+                        returns: fl.returnDescription
+                    };
+                    const func: IFunction = <IFunction>{
+                        flowchart: <IFlowchart>{
+                            id: fl.id ? fl.id : IdGenerator.getId(),
+                            name: fl.name,
+                            nodes: fl.nodes,
+                            edges: fl.edges
+                        },
+                        name: funcName,
+                        module: 'Imported',
+                        doc: documentation,
+                        importedFile: fileString
+                    };
 
-                func.args = [];
-                for (const prod of fl.nodes[0].procedure) {
-                    if (!prod.enabled || prod.type !== ProcedureTypes.Constant) { continue; }
-                    let v: string = prod.args[prod.argCount - 2].value || 'undefined';
-                    if (v[0] === '"' || v[0] === '\'') { v = v.substring(1, v.length - 1); }
-                    if (prod.meta.inputMode !== InputType.Constant) {
-                        documentation.parameters.push({
+                    func.args = [];
+                    for (const prod of fl.nodes[0].procedure) {
+                        if (!prod.enabled || prod.type !== ProcedureTypes.Constant) { continue; }
+                        let v: string = prod.args[prod.argCount - 2].value || 'undefined';
+                        if (v[0] === '"' || v[0] === '\'') { v = v.substring(1, v.length - 1); }
+                        if (prod.meta.inputMode !== InputType.Constant) {
+                            documentation.parameters.push({
+                                name: v,
+                                description: prod.meta.description
+                            });
+                        }
+                        func.args.push(<IArgument>{
                             name: v,
-                            description: prod.meta.description
+                            value: prod.args[prod.argCount - 1].value,
+                            type: prod.meta.inputMode,
                         });
                     }
-                    func.args.push(<IArgument>{
-                        name: v,
-                        value: prod.args[prod.argCount - 1].value,
-                        type: prod.meta.inputMode,
-                    });
-                }
-                func.argCount = func.args.length;
+                    func.argCount = func.args.length;
 
-                const end = fl.nodes[fl.nodes.length - 1];
-                const returnProd = end.procedure[end.procedure.length - 1];
-                if (returnProd.args[1].value) {
-                    func.hasReturn = true;
-                } else {
-                    func.hasReturn = false;
-                }
+                    const end = fl.nodes[fl.nodes.length - 1];
+                    const returnProd = end.procedure[end.procedure.length - 1];
+                    if (returnProd.args[1].value) {
+                        func.hasReturn = true;
+                    } else {
+                        func.hasReturn = false;
+                    }
 
-                // add func and all the imported functions of the imported flowchart to funcs
-                funcs.main = func;
-                for (const i of fl.functions) {
-                    i.name = func.name + '_' + i.name;
-                    funcs.sub.push(i);
-                }
-                if (fl.subFunctions) {
-                    for (const i of fl.subFunctions) {
+                    // add func and all the imported functions of the imported flowchart to funcs
+                    funcs.main = func;
+                    for (const i of fl.functions) {
                         i.name = func.name + '_' + i.name;
                         funcs.sub.push(i);
                     }
-                }
-                resolve(funcs);
-            };
-            reader.onerror = function() {
-                resolve('error');
-            };
-            reader.readAsText(event.target.files[0]);
+                    if (fl.subFunctions) {
+                        for (const i of fl.subFunctions) {
+                            i.name = func.name + '_' + i.name;
+                            funcs.sub.push(i);
+                        }
+                    }
+
+                    if (numFiles + 1 === event.target.files.length) {
+                        funcList.push(funcs);
+                        resolve(funcList);
+                    } else {
+                        numFiles += 1;
+                        funcList.push(funcs);
+                    }
+                };
+                reader.onerror = function() {
+                    numFiles += 1;
+                    funcList.push('error');
+                };
+
+                reader.readAsText(f);
+            }
         });
-        const fnc = await p;
+        const fncs: any = await p;
         (<HTMLInputElement>document.getElementById('selectedFile')).value = '';
-        if (fnc === 'error') {
-            console.warn('Error reading file');
-            return;
+        for (const fnc of fncs) {
+            if (fnc === 'error') {
+                console.warn('Error reading file');
+                continue;
+            }
+            this.eventAction.emit({
+                'type': 'imported',
+                'content': fnc
+            });
         }
-        this.eventAction.emit({
-            'type': 'imported',
-            'content': fnc
-        });
     }
 
 

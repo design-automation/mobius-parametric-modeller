@@ -1,7 +1,6 @@
 import { EEntType, EAttribNames, TEntTypeIdx } from '@libs/geo-info/common';
 // import { isDim0, isDim1, isDim2 } from '@libs/geo-info/id';
 import { idsBreak } from '@libs/geo-info/id';
-import { isNumber } from 'util';
 
 // =========================================================================================================================================
 // Attribute Checks
@@ -161,20 +160,20 @@ export function checkAttribValue(fn_name: string, attrib_value: any, attrib_inde
 // =========================================================================================================================================
 export class TypeCheckObj {
     // entities: Check if string
-    static isEntity(fn_name: string, arg_name: string, arg: string): void {
-        isStringArg(fn_name, arg_name, arg, 'entity');
-        if (arg.slice(2).length === 0) {
-            throw new Error(fn_name + ': ' + arg_name + ' needs to have an index specified');
-        }
-        return;
-    }
-    static isEntityList(fn_name: string, arg_name: string, arg_list: string[]): void {
-        isListArg(fn_name, arg_name, arg_list, 'entity');
-        for (let i = 0; i < arg_list.length; i++) {
-            TypeCheckObj.isEntity(fn_name, arg_name + '[' + i + ']', arg_list[i]);
-        }
-        return;
-    }
+    // static isEntity(fn_name: string, arg_name: string, arg: string): void {
+    //     isStringArg(fn_name, arg_name, arg, 'entity');
+    //     if (arg.slice(2).length === 0) {
+    //         throw new Error(fn_name + ': ' + arg_name + ' needs to have an index specified');
+    //     }
+    //     return;
+    // }
+    // static isEntityList(fn_name: string, arg_name: string, arg_list: string[]): void {
+    //     isListArg(fn_name, arg_name, arg_list, 'entity');
+    //     for (let i = 0; i < arg_list.length; i++) {
+    //         TypeCheckObj.isEntity(fn_name, arg_name + '[' + i + ']', arg_list[i]);
+    //     }
+    //     return;
+    // }
     // any: to catch undefined
     static isAny(fn_name: string, arg_name: string, arg: string): void {
         isAnyArg(fn_name, arg_name, arg);
@@ -331,9 +330,12 @@ export class IDcheckObj {
     // entity types
     // POSI, TRI, VERT, EDGE, WIRE, FACE, POINT, PLINE, PGON, COLL
     static isID(fn_name: string, arg_name: string, arg: any, ent_type_strs: EEntType[]|null): TEntTypeIdx {
-        TypeCheckObj.isEntity(fn_name, arg_name, arg); // check is valid id
-        const ent_arr = idsBreak(arg) as TEntTypeIdx; // split
-
+        let ent_arr;
+        try {
+            ent_arr = idsBreak(arg) as TEntTypeIdx; // split
+        } catch (err) {
+            throw new Error(fn_name + ': ' + arg_name + ' is not a valid Entity ID'); // check valid id
+        }
         if (ent_type_strs === null) {
             ent_type_strs = IDcheckObj.default_ent_type_strs;
         }
@@ -351,33 +353,22 @@ export class IDcheckObj {
         return ent_arr;
     }
     static isIDList(fn_name: string, arg_name: string, arg_list: any[], ent_type_strs: EEntType[]|null): TEntTypeIdx[] {
-        TypeCheckObj.isEntityList(fn_name, arg_name, arg_list); // check is valid id list
-        const ent_arr_lst = idsBreak(arg_list) as TEntTypeIdx[]; // split
-
+        isListArg(fn_name, arg_name, arg_list, 'valid Entity IDs');
+        const ret_arr = [];
         if (ent_type_strs === null) {
             ent_type_strs = IDcheckObj.default_ent_type_strs;
         }
-        for (let i = 0; i < ent_arr_lst.length; i++) {
-            let pass = false;
-            for (let j = 0; j < ent_type_strs.length; j++) {
-                if (ent_arr_lst[i][0] === ent_type_strs[j]) {
-                    pass = true;
-                    break;
-                }
-            }
-            if (pass === false) {
-                const ret_str_arr = [];
-                ent_type_strs.forEach((test_ent) => {
-                    ret_str_arr.push(EEntType[test_ent] + '_list');
-                });
-                throw new Error(fn_name + ': ' + arg_name + '[' + i + ']' + ' is not one of the following valid types - '
-                                + ent_type_strs.map((test_ent) => EEntType[test_ent] + '_list').toString());
-            }
+        for (let i = 0; i < arg_list.length; i++) {
+            ret_arr.push(IDcheckObj.isID(fn_name, arg_name + '[' + i + ']', arg_list[i], ent_type_strs));
         }
-        return ent_arr_lst;
+        return ret_arr as TEntTypeIdx[];
     }
     static isIDList_list(fn_name: string, arg_name: string, arg_list: any, ent_type_strs: EEntType[]|null): TEntTypeIdx[][] {
+        isListArg(fn_name, arg_name, arg_list, 'list of valid Entity IDs');
         const ret_arr = [];
+        if (ent_type_strs === null) {
+            ent_type_strs = IDcheckObj.default_ent_type_strs;
+        }
         for (let i = 0; i < arg_list.length; i++) {
             ret_arr.push(IDcheckObj.isIDList(fn_name, arg_name + '[' + i + ']', arg_list[i], ent_type_strs));
         }

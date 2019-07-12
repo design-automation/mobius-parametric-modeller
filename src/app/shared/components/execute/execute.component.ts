@@ -388,6 +388,7 @@ export class ExecuteComponent {
             const fn = new Function('__modules__', '__params__', fnString);
             // execute the function
 
+
             const result = fn(Modules, params);
 
             for (const v of varsDefined) {

@@ -111,6 +111,18 @@ export class LoadUrlComponent {
         for (const node of loadeddata.flowchart.nodes) {
             checkNodeValidity(node);
         }
+        for (const func of this.dataService.flowchart.functions) {
+            for (const node of func.flowchart.nodes) {
+                checkNodeValidity(node);
+            }
+        }
+        if (this.dataService.flowchart.subFunctions) {
+            for (const func of this.dataService.flowchart.subFunctions) {
+                for (const node of func.flowchart.nodes) {
+                    checkNodeValidity(node);
+                }
+            }
+        }
         let executeB = document.getElementById('executeButton');
         if (executeB && this.dataService.mobiusSettings.execute) { executeB.click(); }
         executeB = null;
@@ -144,6 +156,18 @@ export class LoadUrlComponent {
         this.router.navigate(['/editor']);
         for (const node of loadeddata.flowchart.nodes) {
             checkNodeValidity(node);
+        }
+        for (const func of this.dataService.flowchart.functions) {
+            for (const node of func.flowchart.nodes) {
+                checkNodeValidity(node);
+            }
+        }
+        if (this.dataService.flowchart.subFunctions) {
+            for (const func of this.dataService.flowchart.subFunctions) {
+                for (const node of func.flowchart.nodes) {
+                    checkNodeValidity(node);
+                }
+            }
         }
         this.dataService.clearModifiedNode();
         localStorage.removeItem('temp_file');

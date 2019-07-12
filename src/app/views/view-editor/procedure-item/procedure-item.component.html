@@ -70,18 +70,17 @@
                 <div class='basic-function-text'>
                     elif
                 </div>
-                
             
-            <input class='input--arg'
-                    [(ngModel)]='data.args[0].value'
-                    [class.error]='data.args[0].invalidVar'
-                    [class.linked]='data.args[0].linked'
-                    [class.disabled]='disableInput'
-                    (focus)='onInputFocus(0)'
-                    (blur)='argMod($event, 0)'
-                    placeholder={{data.args[0].name}}
-                    [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
-                    >  
+                <input class='input--arg'
+                        [(ngModel)]='data.args[0].value'
+                        [class.error]='data.args[0].invalidVar'
+                        [class.linked]='data.args[0].linked'
+                        [class.disabled]='disableInput'
+                        (focus)='onInputFocus(0)'
+                        (blur)='argMod($event, 0)'
+                        placeholder={{data.args[0].name}}
+                        [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
+                        >
             </div>
             <div class='container--nested'>
                 <procedure-item 
@@ -189,7 +188,6 @@
                         placeholder={{data.args[0].name}}
                         [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
                         >  
-    
             </div>
                                     
             <div class='container--nested'>

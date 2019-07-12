@@ -1,6 +1,7 @@
 import { INode } from '@models/node';
 import { IProcedure, ProcedureTypes, IFunction } from '@models/procedure';
 import { IPortInput, InputType } from '@models/port';
+import { pythonicReplace } from '@shared/parser';
 import { Observable } from 'rxjs';
 import * as circularJSON from 'circular-json';
 import { _parameterTypes } from '@modules';
@@ -17,7 +18,7 @@ export class CodeUtils {
             prod.type === ProcedureTypes.Comment) { return ['']; }
 
         // mark _terminateCheck to terminate all process after this
-        if (prod.type === ProcedureTypes.Terminate) {
+        if (prod.type === ProcedureTypes.Terminate && prod.enabled) {
             _terminateCheck = '';
             return ['return __params__.model;'];
         }
@@ -29,8 +30,8 @@ export class CodeUtils {
         let prefix = '';
         if (args) {
             prefix =
-            args.hasOwnProperty('0') && args[0].value && args[0].value.indexOf('[') === -1
-            && existingVars.indexOf(args[0].value) === -1 ? 'let ' : '';
+            args.hasOwnProperty('0') && args[0].jsValue && args[0].jsValue.indexOf('[') === -1
+            && existingVars.indexOf(args[0].jsValue) === -1 ? 'let ' : '';
         }
         codeStr.push('');
         if (isMainFlowchart && prod.type !== ProcedureTypes.Else && prod.type !== ProcedureTypes.Elseif) {
@@ -39,24 +40,24 @@ export class CodeUtils {
 
         switch ( prod.type ) {
             case ProcedureTypes.Variable:
-                if (!args[0].value) {
-                    codeStr.push(`${this.repGetAttrib(args[1].value)};`);
+                if (!args[0].jsValue) {
+                    codeStr.push(`${this.repGetAttrib(args[1].jsValue)};`);
                     break;
                 }
-                const repVar = this.repSetAttrib(args[0].value);
+                const repVar = this.repSetAttrib(args[0].jsValue);
                 if (!repVar) {
-                    codeStr.push(`${prefix}${args[0].value} = ${this.repGetAttrib(args[1].value)};`);
+                    codeStr.push(`${prefix}${args[0].jsValue} = ${this.repGetAttrib(args[1].jsValue)};`);
                     if (prefix === 'let ') {
-                        existingVars.push(args[0].value);
+                        existingVars.push(args[0].jsValue);
                     }
                 } else {
-                    codeStr.push(`${repVar[0]} ${this.repGetAttrib(args[1].value)} ${repVar[1]}`);
+                    codeStr.push(`${repVar[0]} ${this.repGetAttrib(args[1].jsValue)} ${repVar[1]}`);
                 }
                 break;
 
             case ProcedureTypes.If:
-                if (args[0].value.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
-                codeStr.push(`if (${this.repGetAttrib(args[0].value)}){`);
+                if (args[0].jsValue.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
+                codeStr.push(`if (${this.repGetAttrib(args[0].jsValue)}){`);
                 break;
 
             case ProcedureTypes.Else:
@@ -64,19 +65,19 @@ export class CodeUtils {
                 break;
 
             case ProcedureTypes.Elseif:
-                if (args[0].value.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
-                codeStr.push(`else if(${this.repGetAttrib(args[0].value)}){`);
+                if (args[0].jsValue.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
+                codeStr.push(`else if(${this.repGetAttrib(args[0].jsValue)}){`);
                 break;
 
             case ProcedureTypes.Foreach:
-                // codeStr.push(`for (${prefix} ${args[0].value} of [...Array(${args[1].value}).keys()]){`);
-                if (args[0].value.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
-                codeStr.push(`for (${prefix} ${args[0].value} of ${this.repGetAttrib(args[1].value)}){`);
+                // codeStr.push(`for (${prefix} ${args[0].jsValue} of [...Array(${args[1].jsValue}).keys()]){`);
+                if (args[0].jsValue.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
+                codeStr.push(`for (${prefix} ${args[0].jsValue} of ${this.repGetAttrib(args[1].jsValue)}){`);
                 break;
 
             case ProcedureTypes.While:
-                if (args[0].value.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
-                codeStr.push(`while (${this.repGetAttrib(args[0].value)}){`);
+                if (args[0].jsValue.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
+                codeStr.push(`while (${this.repGetAttrib(args[0].jsValue)}){`);
                 break;
 
             case ProcedureTypes.Break:
@@ -156,7 +157,7 @@ export class CodeUtils {
             case ProcedureTypes.Function:
                 const argVals = [];
                 for (const arg of args.slice(1)) {
-                    if (arg.value && arg.value.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
+                    if (arg.jsValue && arg.jsValue.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
                     if (arg.name === _parameterTypes.constList) {
                         argVals.push('__params__.constants');
                         continue;
@@ -166,11 +167,11 @@ export class CodeUtils {
                         continue;
                     }
 
-                    if (arg.value && arg.value[0] === '#') {
-                        argVals.push('`' + this.repGetAttrib(arg.value) + '`');
+                    if (arg.jsValue && arg.jsValue[0] === '#') {
+                        argVals.push('`' + this.repGetAttrib(arg.jsValue) + '`');
                         continue;
                     }
-                    argVals.push(this.repGetAttrib(arg.value));
+                    argVals.push(this.repGetAttrib(arg.jsValue));
                 }
                 if (prod.resolvedValue) {
                     for (let i = 0; i < argVals.length; i++) {
@@ -184,17 +185,17 @@ export class CodeUtils {
                 // const argValues = argVals.join(', ');
                 const fnCall = `__modules__.${prod.meta.module}.${prod.meta.name}( ${argVals.join(', ')} )`;
                 if ( prod.meta.module.toUpperCase() === 'OUTPUT') {
-                    if (prod.args[prod.args.length - 1].value) {
+                    if (prod.args[prod.args.length - 1].jsValue) {
                         codeStr.push(`return ${fnCall};`);
                     }
-                } else if (args[0].name === '__none__' || !args[0].value) {
+                } else if (args[0].name === '__none__' || !args[0].jsValue) {
                     codeStr.push(`${fnCall};`);
                 } else {
-                    const repfuncVar = this.repSetAttrib(args[0].value);
+                    const repfuncVar = this.repSetAttrib(args[0].jsValue);
                     if (!repfuncVar) {
-                        codeStr.push(`${prefix}${args[0].value} = ${fnCall};`);
+                        codeStr.push(`${prefix}${args[0].jsValue} = ${fnCall};`);
                         if (prefix === 'let ') {
-                            existingVars.push(args[0].value);
+                            existingVars.push(args[0].jsValue);
                         }
                     } else {
                         codeStr.push(`${repfuncVar[0]} ${fnCall} ${repfuncVar[1]}`);
@@ -219,12 +220,12 @@ export class CodeUtils {
                 }
                 for (let i = 1; i < args.length; i++) {
                     const arg = args[i];
-                    // if (urlCheck && arg.value.indexOf('://') !== -1) {
+                    // if (urlCheck && arg.jsValue.indexOf('://') !== -1) {
                     //     argsVals.push(prod.resolvedValue);
                     //     prod.resolvedValue = null;
                     // }
                     if (arg.type.toString() !== InputType.URL.toString()) {
-                        argsVals.push(this.repGetAttrib(arg.value));
+                        argsVals.push(this.repGetAttrib(arg.jsValue));
                     } else {
                         argsVals.push(prod.resolvedValue);
                     }
@@ -233,19 +234,19 @@ export class CodeUtils {
                 // const fn = `${namePrefix}${prod.meta.name}(__params__, ${argsVals} )`;
                 const fn = `${namePrefix}${prod.meta.name}(__params__${argsVals.map(val => ', ' + val).join('')})`;
 
-                if (args[0].name === '__none__' || !args[0].value) {
+                if (args[0].name === '__none__' || !args[0].jsValue) {
                     codeStr.push(`${fn};`);
                     break;
                 }
-                const repImpVar = this.repSetAttrib(args[0].value);
+                const repImpVar = this.repSetAttrib(args[0].jsValue);
                 if (!repImpVar) {
-                    codeStr.push(`${prefix}${args[0].value} = ${fn};`);
+                    codeStr.push(`${prefix}${args[0].jsValue} = ${fn};`);
                 } else {
                     codeStr.push(`${repImpVar[0]} ${fn} ${repImpVar[1]}`);
                 }
 
                 if (prefix === 'let ') {
-                    existingVars.push(args[0].value);
+                    existingVars.push(args[0].jsValue);
                 }
                 break;
 
@@ -257,12 +258,12 @@ export class CodeUtils {
             codeStr.push(`}`);
         }
 
-        if (isMainFlowchart && prod.print && prod.args[0].value) {
-            const repGet = this.repGetAttrib(prod.args[0].value);
+        if (isMainFlowchart && prod.print && prod.args[0].jsValue) {
+            const repGet = this.repGetAttrib(prod.args[0].jsValue);
             codeStr.push(`printFunc(__params__.console,'${prod.args[0].value}', ${repGet});`);
         }
-        if (isMainFlowchart && prod.selectGeom && prod.args[0].value) {
-            const repGet = this.repGetAttrib(prod.args[0].value);
+        if (isMainFlowchart && prod.selectGeom && prod.args[0].jsValue) {
+            const repGet = this.repGetAttrib(prod.args[0].jsValue);
             codeStr.push(`__modules__.${_parameterTypes.select}(__params__.model, ${repGet}, "${repGet}");`);
         }
         return codeStr;
@@ -419,7 +420,7 @@ export class CodeUtils {
                 //     window.localStorage.setItem('savedFileList', `["${val.name}"]`);
                 // }
                 // window.localStorage.setItem(val.name, result);
-                arg.value = {'name': val.name};
+                arg.jsValue = {'name': val.name};
             }
         }
         return result;

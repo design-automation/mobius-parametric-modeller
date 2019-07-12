@@ -158,7 +158,7 @@
                     placeholder={{data.args[1].name}}
                     [style.width.px]='inputSize(data.args[1].value||data.args[1].name)'
                         >  
-                        
+
             </div>
                                 
             <div class='container--nested'>
@@ -314,7 +314,7 @@
                 <mat-icon class='icon'>delete_outline</mat-icon>
             </button> -->
             <!-- Disable button-->
-            <button id = 'disable-btn' *ngIf='13 > data.type' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+            <button id = 'disable-btn' *ngIf='13 > data.type || data.type === 15' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                 <mat-icon class='icon' svgIcon='disabled'></mat-icon>
             </button>
             <!-- Select button -->

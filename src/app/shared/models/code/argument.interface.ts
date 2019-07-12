@@ -8,4 +8,5 @@ export interface IArgument {
     invalidVar?: boolean|string;
     usedVars?: string[];
     linked?: boolean;
+    jsValue?: any;
 }

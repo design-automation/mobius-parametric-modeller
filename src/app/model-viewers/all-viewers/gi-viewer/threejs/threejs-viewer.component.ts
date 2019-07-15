@@ -606,9 +606,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     private unselectAll() {
         const scene = this._data_threejs;
         const selectings = Array.from(scene.selected_geoms.keys());
-        console.log(scene._scene.children);
         for (const selecting of selectings) {
-            console.log(selecting);
             scene.unselectObj(selecting, this.container);
         }
         document.querySelectorAll('[id^=textLabel_]').forEach(value => {

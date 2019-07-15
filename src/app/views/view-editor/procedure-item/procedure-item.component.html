@@ -7,6 +7,8 @@
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
     (mousedown)='disableShift($event)'
+    (mouseenter)='onenter($event)'
+    (mouseleave)='onleave($event)'
     *ngIf= 'data.type != ProcedureTypes.Return && data.type != ProcedureTypes.Constant'>
     <div class='container--item' >
         <!-- Variable Assignment Template -->
@@ -40,7 +42,7 @@
         <ng-container *ngSwitchCase="ProcedureTypes.If">
             <div class='line--item' >
                 <div class='basic-function-text'>
-                    If
+                    if
                 </div>
                 <input class='input--arg'
                         [(ngModel)]='data.args[0].value'
@@ -68,20 +70,19 @@
         <ng-container *ngSwitchCase="ProcedureTypes.Elseif">
             <div class='line--item'>
                 <div class='basic-function-text'>
-                    Else if
+                    elif
                 </div>
-                
             
-            <input class='input--arg'
-                    [(ngModel)]='data.args[0].value'
-                    [class.error]='data.args[0].invalidVar'
-                    [class.linked]='data.args[0].linked'
-                    [class.disabled]='disableInput'
-                    (focus)='onInputFocus(0)'
-                    (blur)='argMod($event, 0)'
-                    placeholder={{data.args[0].name}}
-                    [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
-                    >  
+                <input class='input--arg'
+                        [(ngModel)]='data.args[0].value'
+                        [class.error]='data.args[0].invalidVar'
+                        [class.linked]='data.args[0].linked'
+                        [class.disabled]='disableInput'
+                        (focus)='onInputFocus(0)'
+                        (blur)='argMod($event, 0)'
+                        placeholder={{data.args[0].name}}
+                        [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
+                        >
             </div>
             <div class='container--nested'>
                 <procedure-item 
@@ -97,7 +98,7 @@
         <ng-container *ngSwitchCase="ProcedureTypes.Else">
             <div class='line--item'>
                 <div class='basic-function-text'>
-                    Else
+                    else
                 </div>
             </div>
                         
@@ -117,14 +118,14 @@
         <!-- BREAK Template -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Break">
             <div class='basic-function-text'>
-                Break
+                break
             </div>
         </div>
 
         <!-- CONTINUE Template -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Continue">
             <div class='basic-function-text'>
-                Continue
+                continue
             </div>
         </div>
 
@@ -133,7 +134,7 @@
         <ng-container *ngSwitchCase="ProcedureTypes.Foreach">
             <div class='line--item'>
                 <div class='basic-function-text'>
-                    Foreach
+                    for
                 </div>
                 <input class='input--arg'
                     [(ngModel)]='data.args[0].value'
@@ -158,7 +159,7 @@
                     placeholder={{data.args[1].name}}
                     [style.width.px]='inputSize(data.args[1].value||data.args[1].name)'
                         >  
-                        
+
             </div>
                                 
             <div class='container--nested'>
@@ -177,7 +178,7 @@
         <ng-container *ngSwitchCase="ProcedureTypes.While">
             <div class='line--item'>
                 <div class='basic-function-text'>
-                    While
+                    while
                 </div>
                 <input class='input--arg' 
                         [(ngModel)]='data.args[0].value'
@@ -189,7 +190,6 @@
                         placeholder={{data.args[0].name}}
                         [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
                         >  
-    
             </div>
                                     
             <div class='container--nested'>
@@ -314,7 +314,7 @@
                 <mat-icon class='icon'>delete_outline</mat-icon>
             </button> -->
             <!-- Disable button-->
-            <button id = 'disable-btn' *ngIf='13 > data.type' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+            <button id = 'disable-btn' *ngIf='13 > data.type || data.type === 15' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                 <mat-icon class='icon' svgIcon='disabled'></mat-icon>
             </button>
             <!-- Select button -->

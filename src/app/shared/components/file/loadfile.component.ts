@@ -83,6 +83,18 @@ export class LoadFileComponent {
             for (const node of loadeddata.flowchart.nodes) {
                 checkNodeValidity(node);
             }
+            for (const func of this.dataService.flowchart.functions) {
+                for (const node of func.flowchart.nodes) {
+                    checkNodeValidity(node);
+                }
+            }
+            if (this.dataService.flowchart.subFunctions) {
+                for (const func of this.dataService.flowchart.subFunctions) {
+                    for (const node of func.flowchart.nodes) {
+                        checkNodeValidity(node);
+                    }
+                }
+            }
             if (this.dataService.mobiusSettings.execute) {
                 document.getElementById('executeButton').click();
             }

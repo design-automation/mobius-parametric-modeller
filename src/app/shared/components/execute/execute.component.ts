@@ -158,7 +158,7 @@ export class ExecuteComponent {
                         }
                         InvalidECheck = true;
                     }
-                    if (!prod.args[0].value || (!prod.args[1].value && prod.args[1].value !== 0)) {
+                    if (!prod.args[0].value || (!prod.args[1].value && prod.args[1].value !== 0 && prod.args[1].value !== false)) {
                         node.hasError = true;
                         prod.hasError = true;
                         EmptyECheck = true;
@@ -168,7 +168,7 @@ export class ExecuteComponent {
                         if (arg.name[0] === '_' || arg.type === 5) {
                             continue;
                         }
-                        if (arg.value !== 0 && !arg.value) {
+                        if (arg.value !== 0 && arg.value !== false && !arg.value) {
                             node.hasError = true;
                             prod.hasError = true;
                             EmptyECheck = true;
@@ -387,6 +387,7 @@ export class ExecuteComponent {
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
             const fn = new Function('__modules__', '__params__', fnString);
             // execute the function
+
 
             const result = fn(Modules, params);
 

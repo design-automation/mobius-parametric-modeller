@@ -10,10 +10,10 @@ import { INode } from '@models/node';
 import { DownloadUtils } from '@shared/components/file/download.utils';
 import { inline_query_expr, inline_func, inline_sort_expr} from '@assets/core/inline/inline';
 import { DataService } from '@services';
-import { _parameterTypes } from '@modules';
 import { InputType } from '@models/port';
 import { IdGenerator } from '@utils';
 import { SaveFileComponent } from '@shared/components/file';
+import * as Modules from '@modules';
 
 const keys = Object.keys(ProcedureTypes);
 const inputEvent = new Event('input', {
@@ -102,11 +102,26 @@ export class ToolsetComponent implements OnInit {
 
     // add selected function from core.modules as a new procedure
     add_function(fnData) {
-        // create a fresh copy of the params to avoid linked objects
-        // todo: figure out
-        fnData.args = fnData.args.map( (arg) => {
-            return {name: arg.name, value: arg.value};
-        });
+
+        // fnData.args = fnData.args.map( (arg) => {
+        //     return {name: arg.name, value: arg.value};
+        // });
+        const newArgs = [];
+        for (let i = 0; i < fnData.args.length; i ++) {
+            const arg = fnData.args[i];
+            const argDoc = ModuleDocList[fnData.module][fnData.name].parameters[i];
+            if (argDoc && argDoc.description.toLowerCase().indexOf('enum') !== -1) {
+                const enm = Modules[fnData.module][argDoc.type];
+                // tslint:disable-next-line:forin
+                for (const j in enm) {
+                    newArgs.push({name: arg.name, value: `'${enm[j]}'`});
+                    break;
+                }
+                continue;
+            }
+            newArgs.push({name: arg.name, value: arg.value});
+        }
+        fnData.args = newArgs;
 
         this.eventAction.emit({
             'type': 'selected',

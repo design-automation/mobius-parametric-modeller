@@ -83,7 +83,10 @@ export class GIAttribsQuery {
     public getModelAttribValue(name: string): TAttribDataTypes {
         const attribs_maps_key: string = EEntTypeStr[EEntType.MOD];
         const attrib: Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
-        if (attrib.get(name) === undefined) { throw new Error('Attribute with this name does not exist.'); }
+        if (attrib.get(name) === undefined) {
+            return null;
+            // throw new Error('Attribute with this name does not exist.');
+        }
         return attrib.get(name);
     }
     /**
@@ -108,7 +111,10 @@ export class GIAttribsQuery {
     public getAttribValue(ent_type: EEntType, name: string, ents_i: number|number[]): TAttribDataTypes|TAttribDataTypes[] {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
-        if (attribs.get(name) === undefined) { throw new Error('Attribute with this name does not exist.'); }
+        if (attribs.get(name) === undefined) {
+            return null;
+            // throw new Error('Attribute with this name does not exist.');
+        }
         return attribs.get(name).getEntVal(ents_i);
     }
     /**

@@ -110,7 +110,7 @@ export class GIAttribsThreejs {
      *
      * @param ent_type
      */
-    public getAttribsForTable(ent_type: EEntType): any[] {
+    public getAttribsForTable(ent_type: EEntType): {data: any[], ents: number[]} {
         // get the attribs map for this ent type
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
@@ -118,16 +118,22 @@ export class GIAttribsThreejs {
         const data_obj_map: Map< number, { '#': number, _id: string} > = new Map();
         // create the ID for each table row
         const ents_i: number[] = this._model.geom.query.getEnts(ent_type, false);
+
+        // sessionStorage.setItem('attrib_table_ents', JSON.stringify(ents_i));
         let i = 0;
         for (const ent_i of ents_i) {
             data_obj_map.set(ent_i, { '#': i, _id: `${attribs_maps_key}${ent_i}`} );
+            if (ent_type === EEntType.COLL) {
+                const coll_parent = this._model.geom.query.getCollParent(ent_i);
+                data_obj_map.get(ent_i)['_parent'] = coll_parent === -1 ? '' : coll_parent;
+            }
             i++;
         }
         // loop through all the attributes
         attribs.forEach( (attrib, attrib_name) => {
             const data_size: number = attrib.getDataSize();
             for (const ent_i of ents_i) {
-                if (attrib_name.substr(0, 1) === '_') {
+                if (attrib_name.substr(0, 1) === '_' && attrib_name !== '_parent') {
                     const attrib_value = attrib.getEntVal(ent_i);
                     data_obj_map.get(ent_i)[`${attrib_name}`] = attrib_value;
                 } else {
@@ -150,14 +156,14 @@ export class GIAttribsThreejs {
                 }
             }
         });
-        return Array.from(data_obj_map.values());
+        return { data: Array.from(data_obj_map.values()), ents: ents_i};
     }
 
     /**
      * @param ent_type
      * @param ents_i
      */
-    public getEntsVals(selected_ents: Map<string, number>, ent_type: EEntType) {
+    public getEntsVals(selected_ents: Map<string, number>, ent_type: EEntType): any[] {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         const data_obj_map: Map< number, { '#': number, _id: string} > = new Map();
@@ -168,6 +174,10 @@ export class GIAttribsThreejs {
         const selected_ents_sorted = sortByKey(selected_ents);
         selected_ents_sorted.forEach(ent => {
             data_obj_map.set(ent, { '#': i, _id: `${attribs_maps_key}${ent}` } );
+            if (ent_type === EEntType.COLL) {
+                const coll_parent = this._model.geom.query.getCollParent(ent);
+                data_obj_map.get(ent)['_parent'] = coll_parent === -1 ? '' : coll_parent;
+            }
             i++;
         });
 

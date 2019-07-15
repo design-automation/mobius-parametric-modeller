@@ -1,6 +1,7 @@
 import { EEntType, EAttribNames, TEntTypeIdx } from '@libs/geo-info/common';
 // import { isDim0, isDim1, isDim2 } from '@libs/geo-info/id';
 import { idsBreak } from '@libs/geo-info/id';
+import { isNumber } from 'util';
 
 // =========================================================================================================================================
 // Attribute Checks
@@ -245,10 +246,7 @@ export class TypeCheckObj {
     static isCoordList_List(fn_name: string, arg_name: string, arg_list: [number, number, number][][]): void {
         isListArg(fn_name, arg_name, arg_list, 'lists of coordinates');
         for (let i = 0; i < arg_list.length; i++) {
-            for (let j = 0; j < arg_list[i].length; j++) {
-                isListLenArg(fn_name, arg_name + '[' + i + ']' + '[' + j + ']', arg_list[i][j], 3);
-                isNumberListArg(fn_name, arg_name + '[' + i + ']' + '[' + j + ']', arg_list[i][j]);
-            }
+            TypeCheckObj.isCoordList(fn_name, arg_name + '[' + i + ']', arg_list[i]);
         }
         return;
     }
@@ -525,7 +523,7 @@ function isStringListArg(fn_name: string, arg_name: string, arg_list: any[], typ
 }
 // Numbers
 function isNumberArg(fn_name: string, arg_name: string, arg: any): void {
-    if (typeof arg !== 'number') {
+    if (isNaN(arg) || isNaN(parseInt(arg))) {
         throw new Error(fn_name + ': ' + arg_name + ' is not a number');
     }
     return;
@@ -533,9 +531,7 @@ function isNumberArg(fn_name: string, arg_name: string, arg: any): void {
 function isNumberListArg(fn_name: string, arg_name: string, arg_list: any): void {
     isListArg(fn_name, arg_name, arg_list, 'numbers');
     for (let i = 0; i < arg_list.length; i++) {
-        if (typeof arg_list[i] !== 'number') {
-            throw new Error(fn_name + ': ' + arg_name + '[' + i + ']' + ' is not a number');
-        }
+        isNumberArg(fn_name, arg_name + '[' + i + ']', arg_list[i]);
     }
     return;
 }

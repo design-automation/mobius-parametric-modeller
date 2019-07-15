@@ -30,6 +30,7 @@ export class DataService {
     private static _activeGallery: any = undefined;
 
     private static _focusedInput: any;
+    private static _highlightedProd: any[] = [];
 
     private static _splitVal = 60;
     private static _flowchartSplitUpdate = false;
@@ -126,6 +127,20 @@ export class DataService {
 
     get focusedInput() {return DataService._focusedInput; }
     set focusedInput(input: any) {DataService._focusedInput = input; }
+
+    getHighlightedProd() {
+        if (DataService._highlightedProd.length > 0) {
+            return DataService._highlightedProd[DataService._highlightedProd.length - 1];
+        }
+        return undefined;
+    }
+    addHighlightedProd(prod: any) {DataService._highlightedProd.push(prod); }
+    removeHighlightedProd(): any {
+        if (DataService._highlightedProd.length > 0) {
+            return DataService._highlightedProd.pop();
+        }
+        return undefined;
+    }
 
     get copiedProd() {return DataService._copiedProd; }
     set copiedProd(prods: any) {DataService._copiedProd = prods; }

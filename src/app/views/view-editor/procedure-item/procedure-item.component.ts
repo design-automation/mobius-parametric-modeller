@@ -12,7 +12,6 @@ import { IArgument } from '@models/code';
 
 import { parseArgument, parseVariable, checkValidVar, modifyVar, modifyArgument, checkNodeValidity} from '@shared/parser';
 
-
 @Component({
     selector: 'procedure-item',
     templateUrl: './procedure-item.component.html',
@@ -37,6 +36,29 @@ export class ProcedureItemComponent implements OnDestroy {
 
     ngOnDestroy() {
         this.ctx = null;
+    }
+
+
+    onenter(e) {
+        e.target.classList.add('onhover');
+        const highlighted = this.dataService.getHighlightedProd();
+        if (highlighted) {
+            highlighted.classList.remove('onhover');
+        }
+        this.dataService.addHighlightedProd(e.target);
+        e.stopPropagation();
+    }
+
+    onleave(e) {
+        let highlighted = this.dataService.removeHighlightedProd();
+        if (highlighted) {
+            highlighted.classList.remove('onhover');
+        }
+        highlighted = this.dataService.getHighlightedProd();
+        if (highlighted) {
+            highlighted.classList.add('onhover');
+        }
+        e.stopPropagation();
     }
 
     performAction(event, idx) {

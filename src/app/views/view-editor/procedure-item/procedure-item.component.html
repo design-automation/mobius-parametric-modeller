@@ -7,6 +7,8 @@
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
     (mousedown)='disableShift($event)'
+    (mouseenter)='onenter($event)'
+    (mouseleave)='onleave($event)'
     *ngIf= 'data.type != ProcedureTypes.Return && data.type != ProcedureTypes.Constant'>
     <div class='container--item' >
         <!-- Variable Assignment Template -->

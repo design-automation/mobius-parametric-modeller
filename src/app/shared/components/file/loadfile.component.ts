@@ -12,7 +12,7 @@ import { checkMobFile } from '@shared/updateOldMobFile';
 @Component({
   selector: 'file-load',
   template:  `<button id='loadfile' class='btn' onclick="document.getElementById('file-input').click();">Load</button>
-              <input id="file-input" type="file" (change)="sendloadfile()" style=" display: none;" />`,
+              <input id="file-input" type="file" (change)="sendloadfile()" style=" display: none;" accept=".mob"/>`,
   styles: [
             `
             button.btn{

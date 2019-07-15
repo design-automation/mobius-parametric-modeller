@@ -167,6 +167,13 @@ export class GIGeomQuery {
     public getCollParent(coll_i: number): number {
         return this._geom_arrays.dn_colls_objs[coll_i][0];
     }
+
+    public getCollParents(coll_i: number) {
+        const parents = this._geom_arrays.dn_colls_objs[coll_i];
+        // @ts-ignore
+        const _parents = parents.flat(1).filter(function (el) {return el != null; });
+        return _parents;
+    }
     /**
      *
      * @param face_i

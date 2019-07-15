@@ -263,6 +263,10 @@ export class DataThreejs {
         positions: number[],
         container,
         labelText = null) {
+
+        if (this.selected_geoms.has(ent_id)) {
+            return;
+        }
         const geom = new THREE.BufferGeometry();
         geom.setIndex(tris_i);
         geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
@@ -323,6 +327,9 @@ export class DataThreejs {
     }
 
     public selectObjLine(ent_id: string, indices, positions, container, labelText = null) {
+        if (this.selected_geoms.has(ent_id)) {
+            return;
+        }
         const bg = this.initBufferLine(positions, indices, [255, 0, 0]);
         const line = new THREE.LineSegments(bg.geom, bg.mat);
         this._scene.add(line);
@@ -453,6 +460,9 @@ export class DataThreejs {
     }
 
     public selectObjPoint(ent_id: string = null, point_indices, positions, container, labelText = null) {
+        if (this.selected_geoms.has(ent_id)) {
+            return;
+        }
         const bg = this.initBufferPoint(positions, point_indices, null, '#ff0000');
         const point = new THREE.Points(bg.geom, bg.mat);
         this._scene.add(point);

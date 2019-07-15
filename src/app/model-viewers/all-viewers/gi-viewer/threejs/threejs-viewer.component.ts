@@ -370,7 +370,14 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     break;
                 case EEntTypeStr[EEntType.COLL]:
                     if (typeof attrib.id === 'number') {
-                        this.chooseColl(attrib.id);
+                        const coll_parents = this.model.geom.query.getCollParents(attrib.id);
+                        if (coll_parents[0] === -1) { // no parent
+                            this.chooseColl(attrib.id);
+                        } else {
+                            coll_parents.forEach(element => {
+                                this.chooseColl(element);
+                            });
+                        }
                     } else {
                         attrib.id.forEach((_id) => {
                             this.chooseColl(_id);
@@ -599,7 +606,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     private unselectAll() {
         const scene = this._data_threejs;
         const selectings = Array.from(scene.selected_geoms.keys());
+        console.log(scene._scene.children);
         for (const selecting of selectings) {
+            console.log(selecting);
             scene.unselectObj(selecting, this.container);
         }
         document.querySelectorAll('[id^=textLabel_]').forEach(value => {

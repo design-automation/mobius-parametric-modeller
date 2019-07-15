@@ -12,6 +12,7 @@ import { inline_query_expr, inline_func, inline_sort_expr} from '@assets/core/in
 import { DataService } from '@services';
 import { InputType } from '@models/port';
 import { IdGenerator } from '@utils';
+import { SaveFileComponent } from '@shared/components/file';
 import * as Modules from '@modules';
 
 const keys = Object.keys(ProcedureTypes);
@@ -304,7 +305,17 @@ export class ToolsetComponent implements OnInit {
     edit_imported_function(event: MouseEvent, fnData) {
         event.stopPropagation();
         const fileString = fnData.importedFile;
-        localStorage.setItem('temp_file', fileString);
+        window['code'] = fnData.name;
+        window['file'] = fileString;
+        const requestedBytes = 1024 * 1024 * 50;
+        navigator.webkitPersistentStorage.requestQuota (
+            requestedBytes, function(grantedBytes) {
+                // @ts-ignore
+                window.webkitRequestFileSystem(PERSISTENT, grantedBytes, SaveFileComponent.saveToFS,
+                function(e) { console.log('Error', e); });
+            }, function(e) { console.log('Error', e); }
+        );
+        // localStorage.setItem('temp_file', fileString);
         window.open(`${window.location.origin}/editor?file=temp`, '_blank');
     }
 

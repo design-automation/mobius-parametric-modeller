@@ -442,7 +442,7 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
     }
 
     // if next comp is Variable/String/Number, not allowed
-    if (nextComp.type !== strType.OTHER && nextComp.value !== 'and' && nextComp.value !== 'or') {
+    if (nextComp.type !== strType.OTHER) {
         return {'error': 'Error: Variable/String/Number after Variable/String/Number\n' +
                 `at: ... ${comps.slice(i - 1).map(cp => cp.value).join(' ')}`};
     }
@@ -1098,7 +1098,13 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
                 if (i === str.length) { break; }
                 code = str.charCodeAt(i);
             }
-            comps.push({ 'type': strType.VAR, 'value': str.substring(startI, i)});
+
+            const varString = str.substring(startI, i);
+            if (varString === 'and' || varString === 'or') {
+                comps.push({ 'type': strType.OTHER, 'value': varString});
+            } else {
+                comps.push({ 'type': strType.VAR, 'value': varString});
+            }
 
         // double-quotes (") or single-quotes (')
         } else if (code === 34 || code === 39) {

@@ -1144,7 +1144,11 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
                     i++;
                 }
             }
-            comps.push({ 'type': strType.OTHER, 'value': str.substring(startI, i)});
+            const stringCode = str.substring(startI, i);
+            if (stringCode === '=') {
+                return 'Error: "=" not acceptable.';
+            }
+            comps.push({ 'type': strType.OTHER, 'value': stringCode});
 
         // or operator (||); check 1st |
         } else if (code === 124) {

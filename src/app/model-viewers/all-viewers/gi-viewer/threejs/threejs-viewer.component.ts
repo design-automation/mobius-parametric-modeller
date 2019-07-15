@@ -370,7 +370,14 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     break;
                 case EEntTypeStr[EEntType.COLL]:
                     if (typeof attrib.id === 'number') {
-                        this.chooseColl(attrib.id);
+                        const coll_parents = this.model.geom.query.getCollParents(attrib.id);
+                        if (coll_parents[0] === -1) { // no parent
+                            this.chooseColl(attrib.id);
+                        } else {
+                            coll_parents.forEach(element => {
+                                this.chooseColl(element);
+                            });
+                        }
                     } else {
                         attrib.id.forEach((_id) => {
                             this.chooseColl(_id);

@@ -1,7 +1,6 @@
 import { Component, Input, Output, EventEmitter, AfterViewInit, OnDestroy } from '@angular/core';
 import { IProcedure } from '@models/procedure';
 import { InputType } from '@models/port';
-import { modifyVarArg } from '@shared/parser';
 const keys = Object.keys(InputType);
 
 @Component({
@@ -73,6 +72,16 @@ export class ProcedureInputEditorComponent implements OnDestroy {
             'type': 'updateGlbs',
         });
         // this.prod.args[0].value = modifyVarArg(this.prod.args[0]);
+    }
+
+    // modify argument input: check if input is valid
+    argMod() {
+        // this.dataService.focusedInput = [event.target, (<HTMLInputElement>event.target).selectionStart];
+        if (!this.prod.args[1].value) { return; }
+        this.eventAction.emit({
+            'type': 'argMod',
+            'content': this.prod
+        });
     }
 
     replaceQuotes(val) {

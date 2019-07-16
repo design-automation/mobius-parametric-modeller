@@ -2,7 +2,7 @@ import { Component, Input, AfterContentInit, AfterViewInit, AfterViewChecked, Ou
 import { INode, NodeUtils } from '@models/node';
 import { PortType } from '@models/port';
 import { IFlowchart } from '@models/flowchart';
-import { updateGlobals } from '@shared/parser';
+import { updateGlobals, modifyArgument } from '@shared/parser';
 
 @Component({
   selector: 'parameter-editor',
@@ -48,6 +48,9 @@ export class ParameterEditorComponent implements OnDestroy {
             case 'selectInp':
                 this.selectInput(event.content);
                 break;
+            case 'argMod':
+                this.argMod(event.content);
+                break;
         }
     }
     deleteProd() {
@@ -85,6 +88,14 @@ export class ParameterEditorComponent implements OnDestroy {
     updateGlbs() {
         updateGlobals(this.node);
     }
+
+    // modify argument input: check if input is valid
+    argMod(prod) {
+        console.log(prod.args);
+        if (!prod.args[1].value) { return; }
+        modifyArgument(prod, 1, this.node.procedure);
+    }
+
 }
 
 

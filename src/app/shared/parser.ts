@@ -2,6 +2,7 @@ import { inline_func } from '@assets/core/inline/inline';
 import { IProcedure, ProcedureTypes } from '@models/procedure';
 import { IArgument } from '@models/code';
 import { INode } from '@models/node';
+import { InputType } from '@models/port';
 
 enum strType {
     NUM,
@@ -24,6 +25,7 @@ const otherSymbols = new Set(['.', '#', ',']);
 const noSpaceBefore = new Set(['@', ',', ']', '[']);
 
 const allConstants = (<string[][]>inline_func[0][1]).map(constComp => constComp[0]);
+const specialVars = new Set(['undefined', 'null'].concat(allConstants));
 
 const reservedWords = [
     'abstract', 'arguments', 'await', 'boolean',
@@ -65,6 +67,7 @@ export function updateGlobals(startNode: INode) {
         const prod = startNode.procedure[i];
         if (prod.type !== ProcedureTypes.Constant) { return; }
         globals.push(prod.args[0].value);
+        prod.args[0].jsValue = prod.args[0].value + '_';
     }
 }
 
@@ -101,8 +104,20 @@ export function modifyVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
 
 export function modifyVarArg(arg: IArgument) {
     let str = arg.value.trim();
-    str = str.replace(/ /g, '_');
-    str = str.toLowerCase();
+    const repSplit = str.split(/\[/g);
+    let bracketCount = -1;
+    for (let i = 0; i < repSplit.length; i++) {
+        bracketCount += 1;
+        repSplit[i] = repSplit[i].split(/\]/g);
+        bracketCount -= repSplit[i].length - 1;
+        if (bracketCount === 0) {
+            repSplit[i][repSplit[i].length - 1] = repSplit[i][repSplit[i].length - 1].replace(/ /g, '_').toLowerCase();
+        } else if (bracketCount < 0) {
+            throw(new Error('Error: bracket closed before opening'));
+        }
+    }
+    str = repSplit.map(splt => splt.join(']')).join('[');
+
     if ((str.match(/\[/g) || []).length !== (str.match(/\]/g) || []).length) {
         arg.invalidVar = true;
         return str;
@@ -220,9 +235,9 @@ export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProd
 
 // VAR INPUT
 export function parseVariable(value: string): {'error'?: string, 'declaredVar'?: string, 'usedVars'?: string[], 'jsStr'?: string} {
-    let str = value.trim();
+    const str = value.trim();
     // str = str.replace(/ /g, '_');
-    str = str.toLowerCase();
+    // str = str.toLowerCase();
     const comps = splitComponents(str);
     if (typeof comps === 'string') {
         return {'error': comps};
@@ -238,7 +253,7 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
         return {'error': `Error: Expect a Variable at the start of the input`};
     }
     if (comps.length === 1) {
-        return {'declaredVar': comps[0].value, 'jsStr': value};
+        return {'declaredVar': comps[0].value, 'jsStr': value + '_'};
     }
     const vars = [];
     const check = analyzeVar(comps, 0, vars, false, true);
@@ -483,6 +498,10 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
     let newString = comp.value;
     let jsString = comp.value;
 
+    if (!disallowAt && !specialVars.has(comp.value)) {
+        jsString += '_';
+    }
+
     // if variable is the last component
     // add the variable to the var list
     if (i + 1 === comps.length) {
@@ -576,6 +595,7 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
     // if variable is followed by "(" --> function
     // does not add to the var list since it's function name
     } else if (comps[i + 1].value === '(') {
+        jsString = jsString.slice(0, -1);
         if (comps[i + 2].value === ')') {
             i++;
             newString += '()';
@@ -640,7 +660,7 @@ function analyzeArray(comps: {'type': strType, 'value': string}[], i: number, va
     if (firstComp.error) { return firstComp; }
     i = firstComp.i + 1;
     let newString = firstComp.str;
-    let jsString = firstComp.str;
+    let jsString = firstComp.jsStr;
 
     while (i < comps.length && comps[i].value === ',') {
         newString += comps[i].value;
@@ -682,7 +702,7 @@ function analyzeJSON(comps: {'type': strType, 'value': string}[], i: number, var
         jsString += ' ';
     }
     newString += firstComp.str;
-    jsString += firstComp.str;
+    jsString += firstComp.jsStr;
 
     i = firstComp.i + 1;
 
@@ -1293,6 +1313,14 @@ function checkProdListValidity(prodList: IProcedure[], nodeProdList: IProcedure[
             case ProcedureTypes.Elseif:
             case ProcedureTypes.While:
                 modifyArgument(prod, 0, nodeProdList);
+                break;
+            case ProcedureTypes.Constant:
+                if (prod.meta.inputMode === InputType.Constant || prod.meta.inputMode === InputType.SimpleInput) {
+                    modifyArgument(prod, 1, nodeProdList);
+                }
+                break;
+            case ProcedureTypes.Return:
+                modifyArgument(prod, 1, nodeProdList);
                 break;
         }
         if (prod.children) {

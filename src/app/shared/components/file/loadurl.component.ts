@@ -65,8 +65,13 @@ export class LoadUrlComponent {
             request.open('GET', url);
             request.onload = () => {
                 if (request.status === 200) {
-
-                    const f = circularJSON.parse(request.responseText);
+                    let f: any;
+                    try {
+                        f = circularJSON.parse(request.responseText);
+                    } catch (ex) {
+                        this.dataService.notifyMessage(`ERROR: Unable to read file...`);
+                        throw(ex);
+                    }
                     if (!f.flowchart.id) {
                         f.flowchart.id = IdGenerator.getId();
                     }

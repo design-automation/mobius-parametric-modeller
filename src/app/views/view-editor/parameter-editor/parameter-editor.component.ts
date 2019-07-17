@@ -2,7 +2,8 @@ import { Component, Input, AfterContentInit, AfterViewInit, AfterViewChecked, Ou
 import { INode, NodeUtils } from '@models/node';
 import { PortType } from '@models/port';
 import { IFlowchart } from '@models/flowchart';
-import { updateGlobals, modifyArgument } from '@shared/parser';
+import { updateGlobals, modifyArgument, checkNodeValidity, checkConstantShadowing } from '@shared/parser';
+import { DataService } from '@shared/services';
 
 @Component({
   selector: 'parameter-editor',
@@ -17,7 +18,7 @@ export class ParameterEditorComponent implements OnDestroy {
     @Output() eventAction = new EventEmitter();
     private ctx = document.createElement('canvas').getContext('2d');
 
-    constructor() {
+    constructor(private dataService: DataService) {
         this.ctx.font = 'bold 12px arial';
     }
 
@@ -87,6 +88,13 @@ export class ParameterEditorComponent implements OnDestroy {
 
     updateGlbs() {
         updateGlobals(this.node);
+        let error = '';
+        for (let i = 1; i < this.flowchart.nodes.length; i++) {
+            error += checkConstantShadowing(this.flowchart.nodes[i]);
+        }
+        if (error !== '') {
+            this.dataService.notifyMessage(`Error: Constant shadowing in nodes:${error.slice(1)}`);
+        }
     }
 
     // modify argument input: check if input is valid

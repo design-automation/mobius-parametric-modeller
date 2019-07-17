@@ -251,6 +251,9 @@ export class ProcedureItemComponent implements OnDestroy {
     varMod() {
         // modifyVar(this.data, this.dataService.node.procedure);
         checkNodeValidity(this.dataService.node);
+        if (this.data.args[0].invalidVar) {
+            this.dataService.notifyMessage(this.data.args[0].invalidVar);
+        }
     }
 
 
@@ -261,6 +264,9 @@ export class ProcedureItemComponent implements OnDestroy {
         if (!this.data.args[argIndex].value) { return; }
         modifyArgument(this.data, argIndex, this.dataService.node.procedure);
         this.clearLinkedArgs(this.dataService.node.procedure);
+        if (this.data.args[argIndex].invalidVar) {
+            this.dataService.notifyMessage(this.data.args[argIndex].invalidVar);
+        }
     }
 
     clearLinkedArgs(prodList: IProcedure[]) {

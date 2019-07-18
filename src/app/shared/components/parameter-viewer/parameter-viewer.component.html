@@ -12,6 +12,6 @@
                   [(ngModel)]='prod.meta.description'
                   placeholder="Parameter Description"
                   disabled></textarea>
-        <procedure-input-viewer [prod]="prod"></procedure-input-viewer>
+        <procedure-input-viewer [prod]="prod" (eventAction)='performAction($event, i)' ></procedure-input-viewer>
     </div>
 </ng-container>

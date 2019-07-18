@@ -162,7 +162,7 @@ export class SaveFileComponent {
                                 callback('error');
                             };
                             reader.onloadend = () => {
-                                callback(this.result);
+                                callback(reader.result);
                             };
                             reader.readAsText(file, 'text/plain;charset=utf-8');
                         });

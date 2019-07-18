@@ -92,7 +92,7 @@
                 <button (click)="openHeaderDialog($event, 'backup')"
                 title="Load Flowchart Backup from Local Storage">
                     <mat-icon>autorenew</mat-icon>
-                    Load Backup 
+                    Local Storage 
                 </button>
                 <br>
                 <button (click)="openHeaderDialog($event, 'url')"
@@ -162,7 +162,7 @@
         </ng-container>
     </div>
     <div class='loadBackupDialog' *ngIf='checkDialog("backup")'>
-        <p>Select File from Browser's Cache to Load: </p>
+        <p>Select File from Local Storage: </p>
         <br>
         <div *ngFor='let backup of getBackupFiles()'>
             <button class='loadBackupButton' (click)="loadBackup($event, backup)">{{backup.split('_-_')[0]}}</button>

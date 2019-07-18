@@ -306,16 +306,8 @@ export class ToolsetComponent implements OnInit {
     edit_imported_function(event: MouseEvent, fnData) {
         event.stopPropagation();
         const fileString = fnData.importedFile;
-        window['code'] = fnData.name;
-        window['file'] = fileString;
-        const requestedBytes = 1024 * 1024 * 50;
-        navigator.webkitPersistentStorage.requestQuota (
-            requestedBytes, function(grantedBytes) {
-                // @ts-ignore
-                window.webkitRequestFileSystem(PERSISTENT, grantedBytes, SaveFileComponent.saveToFS,
-                function(e) { console.log('Error', e); });
-            }, function(e) { console.log('Error', e); }
-        );
+        // console.log(fnData);
+        SaveFileComponent.saveToLocalStorage(fnData.flowchart.id, fnData.flowchart.name, fileString);
         // localStorage.setItem('temp_file', fileString);
         window.open(`${window.location.origin}/editor?file=temp`, '_blank');
     }

@@ -9,7 +9,40 @@
             (click)='toggleAccordion("basic-funcs")' >Basic</button>
             <div class="panel">
                 <ul class='toolset__functions--subset'>
-                    <ng-container *ngFor="let type of ProcedureTypesArr">
+                    <li class='tooltip-basic' [class.invalid]='checkInvalid("Variable")'
+                        [class.basic]='true' (click)='add(0)'> 
+                            Variable
+                    </li>
+                    <li class='tooltip-basic' [class.invalid]='checkInvalid("If")'
+                        [class.basic]='true' (click)='add(1)'> 
+                            If
+                    </li>
+                    <li class='tooltip-basic' [class.invalid]='checkInvalid("Elseif")'
+                        [class.basic]='true' (click)='add(2)'> 
+                            Elif
+                    </li>
+                    <li class='tooltip-basic' [class.invalid]='checkInvalid("Else")'
+                        [class.basic]='true' (click)='add(3)'> 
+                            Else
+                    </li>
+                    <li class='tooltip-basic' [class.invalid]='checkInvalid("Foreach")'
+                        [class.basic]='true' (click)='add(4)'> 
+                            For
+                    </li>
+                    <li class='tooltip-basic' [class.invalid]='checkInvalid("While")'
+                        [class.basic]='true' (click)='add(5)'> 
+                            While
+                    </li>
+                    <li class='tooltip-basic' [class.invalid]='checkInvalid("Break")'
+                        [class.basic]='true' (click)='add(6)'> 
+                            Break
+                    </li>
+                    <li class='tooltip-basic' [class.invalid]='checkInvalid("Continue")'
+                        [class.basic]='true' (click)='add(7)'> 
+                            Continue
+                    </li>
+        
+                    <!-- <ng-container *ngFor="let type of ProcedureTypesArr">
                         <li *ngIf="8 > ProcedureTypes[type]"
                         class='tooltip-basic'
                         [class.invalid]='checkInvalid(type)'
@@ -17,7 +50,8 @@
                         (click)='add(ProcedureTypes[type])'> 
                             {{type}}
                         </li>
-                    </ng-container>
+                    </ng-container> -->
+
                     <li class='tooltip-basic'
                         [class.basic]='true'
                         (click)='add(ProcedureTypes.Comment)'> 

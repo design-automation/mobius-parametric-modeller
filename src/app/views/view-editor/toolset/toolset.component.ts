@@ -94,6 +94,7 @@ export class ToolsetComponent implements OnInit {
 
     // add selected basic function as a new procedure
     add(type: ProcedureTypes, data?): void {
+        console.log(type);
         this.eventAction.emit({
             'type': 'selected',
             'content': { type: type, data: data }
@@ -110,7 +111,7 @@ export class ToolsetComponent implements OnInit {
         for (let i = 0; i < fnData.args.length; i ++) {
             const arg = fnData.args[i];
             const argDoc = ModuleDocList[fnData.module][fnData.name].parameters[i];
-            if (argDoc && argDoc.description.toLowerCase().indexOf('enum') !== -1) {
+            if (argDoc && argDoc.description && argDoc.description.toLowerCase().indexOf('enum') !== -1) {
                 const enm = Modules[fnData.module][argDoc.type];
                 // tslint:disable-next-line:forin
                 for (const j in enm) {
@@ -305,16 +306,8 @@ export class ToolsetComponent implements OnInit {
     edit_imported_function(event: MouseEvent, fnData) {
         event.stopPropagation();
         const fileString = fnData.importedFile;
-        window['code'] = fnData.name;
-        window['file'] = fileString;
-        const requestedBytes = 1024 * 1024 * 50;
-        navigator.webkitPersistentStorage.requestQuota (
-            requestedBytes, function(grantedBytes) {
-                // @ts-ignore
-                window.webkitRequestFileSystem(PERSISTENT, grantedBytes, SaveFileComponent.saveToFS,
-                function(e) { console.log('Error', e); });
-            }, function(e) { console.log('Error', e); }
-        );
+        // console.log(fnData);
+        SaveFileComponent.saveToLocalStorage(fnData.flowchart.id, fnData.flowchart.name, fileString);
         // localStorage.setItem('temp_file', fileString);
         window.open(`${window.location.origin}/editor?file=temp`, '_blank');
     }

@@ -92,9 +92,9 @@ export class CodeUtils {
                 if (!isMainFlowchart) {
                     return [''];
                 }
-                let constName = args[0].value;
+                let constName = args[0].jsValue;
                 if (constName[0] === '"' || constName[0] === '\'') {
-                    constName = args[0].value.substring(1, args[0].value.length - 1);
+                    constName = args[0].jsValue.substring(1, args[0].jsValue.length - 1);
                 }
                 codeStr.push(`__params__['constants']['${constName}'] = ${prod.resolvedValue};`);
 
@@ -131,16 +131,16 @@ export class CodeUtils {
                         returnArgVals.push('__params__.model');
                         continue;
                     }
-                    if (!arg.value) {
+                    if (!arg.jsValue) {
                         check = false;
                         break;
                     }
-                    if (arg.value.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
-                    if (arg.value[0] === '#') {
-                        returnArgVals.push('`' + this.repGetAttrib(arg.value) + '`');
+                    if (arg.jsValue.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
+                    if (arg.jsValue[0] === '#') {
+                        returnArgVals.push('`' + this.repGetAttrib(arg.jsValue) + '`');
                         continue;
                     }
-                    returnArgVals.push(this.repGetAttrib(arg.value));
+                    returnArgVals.push(this.repGetAttrib(arg.jsValue));
                 }
                 if (!check) {
                     codeStr.push(`return __params__['model'];`);
@@ -385,7 +385,7 @@ export class CodeUtils {
     }
 
     static async getStartInput(arg, inputMode): Promise<any> {
-        const val = arg.value;
+        const val = arg.jsValue || arg.value;
         let result = val;
         if (inputMode.toString() === InputType.URL.toString() ) {
             result = await CodeUtils.getURLContent(val);
@@ -533,7 +533,8 @@ export class CodeUtils {
 
     static getFunctionString(func: IFunction): string {
         let fullCode = '';
-        let fnCode = `function ${func.name}(__params__${func.args.map(arg => ', ' + arg.name).join('')})` + `{\nvar merged;\n`;
+
+        let fnCode = `function ${func.name}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')})` + `{\nvar merged;\n`;
 
         for (const node of func.flowchart.nodes) {
             const nodeFuncName = `${func.name}_${node.id}`;
@@ -541,7 +542,7 @@ export class CodeUtils {
                 fnCode += `let result_${nodeFuncName} = __params__.model;\n`;
             } else {
                 const codeRes = CodeUtils.getNodeCode(node, false, func.name)[0];
-                fullCode += `function ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name).join('')}){\n` +
+                fullCode += `function ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){\n` +
                             codeRes[0].join('\n') + `\n}\n\n`;
 
                 const activeNodes = [];
@@ -553,7 +554,8 @@ export class CodeUtils {
                 }
                 fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) =>
                     `result_${func.name}_${nodeId}`).join(', ')}]);\n`;
-                fnCode += `let result_${nodeFuncName} = ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name).join('')});\n`;
+                fnCode += `let result_${nodeFuncName} = ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_'
+                            ).join('')});\n`;
 
             }
             if (node.type === 'end') {

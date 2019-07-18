@@ -79,7 +79,7 @@ export class ExecuteComponent {
                     for (const arg of prod.args) {
                         if (arg.name[0] === '_') { continue; }
                         if (arg.value.indexOf('://') !== -1) {
-                            const val = <string>arg.value.replace(/ /g, '');
+                            const val = <string>(arg.value).replace(/ /g, '');
                             const result = await CodeUtils.getURLContent(val);
                             if (result === undefined) {
                                 prod.resolvedValue = arg.value;

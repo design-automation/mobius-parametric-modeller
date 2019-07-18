@@ -46,7 +46,13 @@ export class LoadFileComponent {
             const reader = new FileReader();
             reader.onloadend = () => {
                 // if (typeof reader.result === 'string') {}
-                const f = circularJSON.parse(<string>reader.result);
+                let f: any;
+                try {
+                    f = circularJSON.parse(<string>reader.result);
+                } catch (ex) {
+                    this.dataService.notifyMessage(`ERROR: Unable to read file...`);
+                    throw(ex);
+                }
                 if (!f.flowchart.id) {
                     f.flowchart.id = IdGenerator.getId();
                 }

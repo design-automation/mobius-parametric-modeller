@@ -79,7 +79,7 @@ export class SaveFileComponent {
 
     static saveToLocalStorage(id: string, name: string, file: string) {
         const itemstring = localStorage.getItem('mobius_backup_list');
-        const code = name + '_-_' + id;
+        const code = name === '___TEMP___' ? name : name + '_-_' + id;
         if (!itemstring) {
             localStorage.setItem('mobius_backup_list', `["${code}"]`);
         } else {
@@ -142,6 +142,12 @@ export class SaveFileComponent {
                     fs.root.getFile(filecode + '.mob', {create: false}, function(fileEntry) {
                       fileEntry.remove(function() {
                         // console.log('File removed.');
+                        const items: string[] = JSON.parse(localStorage.getItem('mobius_backup_list'));
+                        const i = items.indexOf(filecode);
+                        if (i !== -1) {
+                            items.splice(i, 1);
+                            localStorage.setItem('mobius_backup_list', JSON.stringify(items));
+                        }
                       }, (e) => { console.log('Error', e); });
                     });
                 });

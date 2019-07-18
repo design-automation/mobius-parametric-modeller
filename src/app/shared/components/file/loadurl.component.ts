@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { checkNodeValidity } from '@shared/parser';
 import { IdGenerator } from '@utils';
 import { checkMobFile } from '@shared/updateOldMobFile';
+import { SaveFileComponent } from './savefile.component';
 
 @Component({
   selector: 'load-url',
@@ -135,52 +136,59 @@ export class LoadUrlComponent {
     }
 
     loadTempFile() {
-        let f: any = localStorage.getItem('temp_file');
-        if (!f) { return; }
-        f = circularJSON.parse(f);
+        SaveFileComponent.loadFile('___TEMP___', (f) => {
+            if (!f) {
+                return;
+            }
+            // let f: any = localStorage.getItem('temp_file');
+            if (!f) { return; }
+            f = circularJSON.parse(f);
 
-        if (!f.flowchart.id) {
-            f.flowchart.id = IdGenerator.getId();
-        }
-        const loadeddata: IMobius = {
-            name: f.name,
-            author: f.author,
-            flowchart: f.flowchart,
-            version: f.version,
-            settings: f.settings || {}
-        };
-        // file.flowchart.name = urlSplit[urlSplit.length - 1 ].split('.mob')[0];
+            if (!f.flowchart.id) {
+                f.flowchart.id = IdGenerator.getId();
+            }
+            const loadeddata: IMobius = {
+                name: f.name,
+                author: f.author,
+                flowchart: f.flowchart,
+                version: f.version,
+                settings: f.settings || {}
+            };
 
-        checkMobFile(loadeddata);
+            // file.flowchart.name = urlSplit[urlSplit.length - 1 ].split('.mob')[0];
 
-        this.dataService.file = loadeddata;
-        if (loadeddata.settings && JSON.stringify(loadeddata.settings) !== '{}') {
-            window.localStorage.setItem('mpm_settings', loadeddata.settings);
-        }
-        this.dataService.newFlowchart = true;
-        this.router.navigate(['/editor']);
-        for (const node of loadeddata.flowchart.nodes) {
-            checkNodeValidity(node);
-        }
-        for (const func of this.dataService.flowchart.functions) {
-            for (const node of func.flowchart.nodes) {
+            checkMobFile(loadeddata);
+
+            this.dataService.file = loadeddata;
+            if (loadeddata.settings && JSON.stringify(loadeddata.settings) !== '{}') {
+                window.localStorage.setItem('mpm_settings', loadeddata.settings);
+            }
+            this.dataService.newFlowchart = true;
+            this.router.navigate(['/editor']);
+            for (const node of loadeddata.flowchart.nodes) {
                 checkNodeValidity(node);
             }
-        }
-        if (this.dataService.flowchart.subFunctions) {
-            for (const func of this.dataService.flowchart.subFunctions) {
+            for (const func of this.dataService.flowchart.functions) {
                 for (const node of func.flowchart.nodes) {
                     checkNodeValidity(node);
                 }
             }
-        }
-        this.dataService.clearModifiedNode();
-        localStorage.removeItem('temp_file');
+            if (this.dataService.flowchart.subFunctions) {
+                for (const func of this.dataService.flowchart.subFunctions) {
+                    for (const node of func.flowchart.nodes) {
+                        checkNodeValidity(node);
+                    }
+                }
+            }
+            this.dataService.clearModifiedNode();
+            // localStorage.removeItem('temp_file');
+            SaveFileComponent.deleteFile('___TEMP___');
 
-        setTimeout(() => {
-            let executeB = document.getElementById('executeButton');
-            if (executeB && this.dataService.mobiusSettings.execute) { executeB.click(); }
-            executeB = null;
-        }, 50);
+            setTimeout(() => {
+                let executeB = document.getElementById('executeButton');
+                if (executeB && this.dataService.mobiusSettings.execute) { executeB.click(); }
+                executeB = null;
+            }, 50);
+        });
     }
 }

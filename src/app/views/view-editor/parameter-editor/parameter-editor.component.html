@@ -26,6 +26,7 @@
                 <input id='ret--input' 
                 *ngIf='p.name[0] !== "_"'
                 [(ngModel)]='p.value'
+                (blur)='argMod(node.procedure[node.procedure.length-1])'
                 placeholder={{p.name}}
                 [style.width.px]='inputSize(p.value||p.name)'
                 autocomplete='off'

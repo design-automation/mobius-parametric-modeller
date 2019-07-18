@@ -103,7 +103,6 @@ export class SaveFileComponent {
                 localStorage.setItem('mobius_backup_list', JSON.stringify(items));
             }
         }
-        // console.log('Filesystem');
         const requestedBytes = 1024 * 1024 * 50;
         window['code'] = code;
         window['file'] = file;
@@ -121,13 +120,13 @@ export class SaveFileComponent {
     static saveToFS(fs) {
         fs.root.getFile(window['code'] + '.mob', { create: true}, function (fileEntry) {
             fileEntry.createWriter(function (fileWriter) {
-                fileWriter.onwriteend = function (e) {
-                    console.log('Write completed.');
-                };
+                // fileWriter.onwriteend = function (e) {
+                //     console.log('Write completed.');
+                // };
 
-                fileWriter.onerror = function (e) {
-                    console.log('Write failed: ' + e.toString());
-                };
+                // fileWriter.onerror = function (e) {
+                //     console.log('Write failed: ' + e.toString());
+                // };
                 const bb = new Blob([window['file']], {type: 'text/plain;charset=utf-8'});
                 fileWriter.write(bb);
             }, (e) => { console.log(e); });
@@ -142,7 +141,7 @@ export class SaveFileComponent {
                 window.webkitRequestFileSystem(PERSISTENT, grantedBytes, function(fs) {
                     fs.root.getFile(filecode + '.mob', {create: false}, function(fileEntry) {
                       fileEntry.remove(function() {
-                        console.log('File removed.');
+                        // console.log('File removed.');
                       }, (e) => { console.log('Error', e); });
                     });
                 });
@@ -163,7 +162,7 @@ export class SaveFileComponent {
                                 callback('error');
                             };
                             reader.onloadend = () => {
-                                callback(this.result);
+                                callback(reader.result);
                             };
                             reader.readAsText(file, 'text/plain;charset=utf-8');
                         });

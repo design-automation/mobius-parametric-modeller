@@ -110,7 +110,7 @@ export class ToolsetComponent implements OnInit {
         for (let i = 0; i < fnData.args.length; i ++) {
             const arg = fnData.args[i];
             const argDoc = ModuleDocList[fnData.module][fnData.name].parameters[i];
-            if (argDoc && argDoc.description.toLowerCase().indexOf('enum') !== -1) {
+            if (argDoc && argDoc.description && argDoc.description.toLowerCase().indexOf('enum') !== -1) {
                 const enm = Modules[fnData.module][argDoc.type];
                 // tslint:disable-next-line:forin
                 for (const j in enm) {

@@ -360,4 +360,8 @@ export class ProcedureItemComponent implements OnDestroy {
         }
         return enumList;
     }
+
+    updateJsVal(p: IArgument) {
+        p.jsValue = p.value;
+    }
 }

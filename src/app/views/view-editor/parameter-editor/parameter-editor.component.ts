@@ -4,6 +4,7 @@ import { PortType } from '@models/port';
 import { IFlowchart } from '@models/flowchart';
 import { updateGlobals, modifyArgument, checkNodeValidity, checkConstantShadowing } from '@shared/parser';
 import { DataService } from '@shared/services';
+import { IProcedure } from '@models/procedure';
 
 @Component({
   selector: 'parameter-editor',
@@ -98,10 +99,12 @@ export class ParameterEditorComponent implements OnDestroy {
     }
 
     // modify argument input: check if input is valid
-    argMod(prod) {
-        console.log(prod.args);
+    argMod(prod: IProcedure) {
         if (!prod.args[1].value) { return; }
         modifyArgument(prod, 1, this.node.procedure);
+        if (prod.args[1].invalidVar) {
+            this.dataService.notifyMessage(prod.args[1].invalidVar);
+        }
     }
 
 }

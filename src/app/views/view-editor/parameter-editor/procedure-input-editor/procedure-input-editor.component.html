@@ -55,6 +55,7 @@
                 <input *ngSwitchCase="PortTypes.Constant" [(ngModel)]='prod.args[prod.argCount-1].value' placeholder='Default Value' 
                 (focus)='emitClearSelect($event)'
                 (blur)='argMod()'
+                [class.error]='prod.args[prod.argCount-1].invalidVar'
                 [class.disablePointer]='disableInput'
                 [style.width.px]='inputSize(prod.args[prod.argCount-1].value,"Default Value")'>
     
@@ -62,6 +63,7 @@
                 <input *ngSwitchCase="PortTypes.SimpleInput" [(ngModel)]='prod.args[prod.argCount-1].value' placeholder='Default Value' 
                 (focus)='emitClearSelect($event)'
                 (blur)='argMod()'
+                [class.error]='prod.args[prod.argCount-1].invalidVar'
                 [class.disablePointer]='disableInput'
                 [style.width.px]='inputSize(prod.args[prod.argCount-1].value,"Default Value")'>
     

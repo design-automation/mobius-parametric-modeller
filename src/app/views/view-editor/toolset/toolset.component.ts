@@ -94,7 +94,6 @@ export class ToolsetComponent implements OnInit {
 
     // add selected basic function as a new procedure
     add(type: ProcedureTypes, data?): void {
-        console.log(type);
         this.eventAction.emit({
             'type': 'selected',
             'content': { type: type, data: data }

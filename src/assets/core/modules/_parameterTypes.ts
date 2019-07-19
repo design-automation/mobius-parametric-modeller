@@ -79,6 +79,7 @@ intersect = __modules__._calc.intersect;
 project = __modules__._calc.project;
 range = __modules__._list.range;
 isList = __modules__._list.isList;
+len = __modules__._list.listLen;
 listLen = __modules__._list.listLen;
 listCount = __modules__._list.listCount;
 listCopy = __modules__._list.listCopy;

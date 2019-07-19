@@ -33,7 +33,8 @@ const lists = [
     ['range(start, end)', 'Generates a list of integers, from start to end, with a step size of 1'],
     ['range(start, end, step?)', 'Generates a list of integers, from start to end, with a specified step size'],
     ['isList(list)', 'Returns true if this is a list, false otherwise.'],
-    ['listLen(list)', 'Returns the number of items in the list'],
+    ['len(list)', 'Returns the number of items in the list'],
+    // ['listLen(list)', 'Returns the number of items in the list'],
     ['listLast(list)', 'Returns the last item in a list'],
     ['listGet(list, index)', 'Returns the item in the list specified by index, either a positive or negative integer'],
     ['listFind(list, val)', 'Returns the index of the first occurence of the value in the list, or -1 if not found'],
@@ -140,7 +141,8 @@ const trigonometry = [
 ];
 
 const str = [
-    ['replace(string,search_str,new_str)', 'Replace all instances of specified search with a new string']
+    ['replace(string,search_str,new_str)', 'Replace all instances of specified search with a new string'],
+    ['len(str)', 'Returns the number of characters in the string']
 ];
 
 export const inline_func = [

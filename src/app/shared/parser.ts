@@ -25,7 +25,7 @@ const otherSymbols = new Set(['.', '#', ',']);
 const noSpaceBefore = new Set(['@', ',', ']', '[']);
 
 const allConstants = (<string[][]>inline_func[0][1]).map(constComp => constComp[0]);
-const specialVars = new Set(['undefined', 'null'].concat(allConstants));
+const specialVars = new Set(['undefined', 'null', 'infinity'].concat(allConstants));
 
 const reservedWords = [
     'abstract', 'arguments', 'await', 'boolean',

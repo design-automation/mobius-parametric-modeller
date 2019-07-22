@@ -80,7 +80,7 @@ export class ViewDashboardComponent implements AfterViewInit, OnDestroy {
     setSplit(event) {
         this.dataService.splitUpdate = true;
         this.dataService.splitVal = event.sizes[1];
-        this.adjustTextArea();
+        // this.adjustTextArea();
     }
 
     getSplit() { return this.dataService.splitVal; }

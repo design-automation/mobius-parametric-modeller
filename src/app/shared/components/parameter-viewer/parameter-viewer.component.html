@@ -1,17 +1,17 @@
 <!-- <h2>{{displayName()}}</h2> -->
 
-<textarea id='display-flowchart-desc' [(ngModel)]='flowchart.description' placeholder="Model Description" disabled></textarea>
+<div id='display-flowchart-desc' [innerHTML]='getDesc(flowchart.description)' placeholder="Model Description" disabled></div>
 
 <hr>
 
 <ng-container *ngFor="let prod of startNode.procedure">
     <div class='prod--container' *ngIf="prod.enabled && prod.type === 10 && prod.meta.inputMode != 5">
         <!-- input description -->
-        <textarea class='desc'
-                  id='{{prod.ID}}_desc'
-                  [(ngModel)]='prod.meta.description'
-                  placeholder="Parameter Description"
-                  disabled></textarea>
+        <div class='desc'
+            id='{{prod.ID}}_desc'
+            [innerHTML]='getDesc(prod.meta.description)'
+            placeholder="Parameter Description">
+        </div>
         <procedure-input-viewer [prod]="prod" (eventAction)='performAction($event, i)' ></procedure-input-viewer>
     </div>
 </ng-container>

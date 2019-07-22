@@ -31,7 +31,7 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
 
     ngAfterViewInit() {
         setTimeout(() => {
-            this.adjustTextArea();
+            // this.adjustTextArea();
             this.dataService.attribVal = 0;
         }, 100);
     }
@@ -45,31 +45,31 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
     }
 
     adjustTextArea() {
-        if (!this.ctx) { return; }
-        let textarea = document.getElementById('display-flowchart-desc');
-        if (textarea) {
-            const desc = this.dataService.flowchart.description.split('\n');
-            const textareaWidth = textarea.getBoundingClientRect().width - 30;
-            let lineCount = 0;
-            for (const line of desc) {
-                lineCount += Math.floor(this.ctx.measureText(line).width / textareaWidth) + 1;
-            }
-            textarea.style.height = lineCount * 14 + 4 + 'px';
-        }
-        for (const prod of this.dataService.flowchart.nodes[0].procedure) {
-            if (!prod.enabled || prod.type !== 10 || prod.meta.inputMode === 5) { continue; }
-            textarea = document.getElementById(prod.ID + '_desc');
-            if (textarea) {
-                const desc = prod.meta.description.split('\n');
-                const textareaWidth = textarea.getBoundingClientRect().width - 30;
-                let lineCount = 0;
-                for (const line of desc) {
-                    lineCount += Math.floor(this.ctx.measureText(line).width / textareaWidth) + 1;
-                }
-                textarea.style.height = lineCount * 14 + 4 + 'px';
-            }
-        }
-        textarea = null;
+        // if (!this.ctx) { return; }
+        // let textarea = document.getElementById('display-flowchart-desc');
+        // if (textarea) {
+        //     const desc = this.dataService.flowchart.description.split('\n');
+        //     const textareaWidth = textarea.getBoundingClientRect().width - 30;
+        //     let lineCount = 0;
+        //     for (const line of desc) {
+        //         lineCount += Math.floor(this.ctx.measureText(line).width / textareaWidth) + 1;
+        //     }
+        //     textarea.style.height = lineCount * 14 + 4 + 'px';
+        // }
+        // for (const prod of this.dataService.flowchart.nodes[0].procedure) {
+        //     if (!prod.enabled || prod.type !== 10 || prod.meta.inputMode === 5) { continue; }
+        //     textarea = document.getElementById(prod.ID + '_desc');
+        //     if (textarea) {
+        //         const desc = prod.meta.description.split('\n');
+        //         const textareaWidth = textarea.getBoundingClientRect().width - 30;
+        //         let lineCount = 0;
+        //         for (const line of desc) {
+        //             lineCount += Math.floor(this.ctx.measureText(line).width / textareaWidth) + 1;
+        //         }
+        //         textarea.style.height = lineCount * 14 + 4 + 'px';
+        //     }
+        // }
+        // textarea = null;
     }
 
     getEndNode(): INode {

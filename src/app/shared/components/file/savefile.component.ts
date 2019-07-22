@@ -77,9 +77,22 @@ export class SaveFileComponent {
         }
     }
 
-    static saveToLocalStorage(id: string, name: string, file: string) {
+    static saveResourceToLocal(fName: string, f: string) {
+        const splitted = fName.split('.');
+
+        SaveFileComponent.saveToLocalStorage('resource_file', splitted.slice(0, splitted.length - 1).join('.'),
+                                            f, '.' + splitted[splitted.length - 1]);
+    }
+
+    static async loadResource(fName: string) {
+        const splitted = fName.split('.');
+        return JSON.parse(await SaveFileComponent.loadFromFileSystem(splitted.slice(0, splitted.length - 1).join('.') +
+                          '_-_resource_file' + '.' + splitted[splitted.length - 1]));
+    }
+
+    static saveToLocalStorage(id: string, name: string, file: string, ext = '.mob') {
         const itemstring = localStorage.getItem('mobius_backup_list');
-        const code = name === '___TEMP___' ? name : name + '_-_' + id;
+        const code = name === '___TEMP___.mob' ? name : name + '_-_' + id + ext;
         if (!itemstring) {
             localStorage.setItem('mobius_backup_list', `["${code}"]`);
         } else {
@@ -118,7 +131,7 @@ export class SaveFileComponent {
     }
 
     static saveToFS(fs) {
-        fs.root.getFile(window['code'] + '.mob', { create: true}, function (fileEntry) {
+        fs.root.getFile(window['code'], { create: true}, function (fileEntry) {
             fileEntry.createWriter(function (fileWriter) {
                 // fileWriter.onwriteend = function (e) {
                 //     console.log('Write completed.');
@@ -129,6 +142,8 @@ export class SaveFileComponent {
                 // };
                 const bb = new Blob([window['file']], {type: 'text/plain;charset=utf-8'});
                 fileWriter.write(bb);
+                window['file'] = undefined;
+                window['code'] = undefined;
             }, (e) => { console.log(e); });
         }, (e) => { console.log(e.code); });
     }
@@ -139,7 +154,7 @@ export class SaveFileComponent {
             requestedBytes, function(grantedBytes) {
                 // @ts-ignore
                 window.webkitRequestFileSystem(PERSISTENT, grantedBytes, function(fs) {
-                    fs.root.getFile(filecode + '.mob', {create: false}, function(fileEntry) {
+                    fs.root.getFile(filecode, {create: false}, function(fileEntry) {
                       fileEntry.remove(function() {
                         // console.log('File removed.');
                         const items: string[] = JSON.parse(localStorage.getItem('mobius_backup_list'));
@@ -155,27 +170,53 @@ export class SaveFileComponent {
         );
     }
 
-    static loadFile(filecode, callback) {
-        const requestedBytes = 1024 * 1024 * 50;
-        navigator.webkitPersistentStorage.requestQuota (
-            requestedBytes, function(grantedBytes) {
-                // @ts-ignore
-                window.webkitRequestFileSystem(PERSISTENT, grantedBytes, function(fs) {
-                    fs.root.getFile(filecode + '.mob', {}, function(fileEntry) {
-                        fileEntry.file((file) => {
-                            const reader = new FileReader();
-                            reader.onerror = () => {
-                                callback('error');
-                            };
-                            reader.onloadend = () => {
-                                callback(reader.result);
-                            };
-                            reader.readAsText(file, 'text/plain;charset=utf-8');
+    // static loadFile(filecode, callback) {
+    //     const requestedBytes = 1024 * 1024 * 50;
+    //     navigator.webkitPersistentStorage.requestQuota (
+    //         requestedBytes, function(grantedBytes) {
+    //             // @ts-ignore
+    //             window.webkitRequestFileSystem(PERSISTENT, grantedBytes, function(fs) {
+    //                 fs.root.getFile(filecode, {}, function(fileEntry) {
+    //                     fileEntry.file((file) => {
+    //                         const reader = new FileReader();
+    //                         reader.onerror = () => {
+    //                             callback('error');
+    //                         };
+    //                         reader.onloadend = () => {
+    //                             callback(reader.result);
+    //                         };
+    //                         reader.readAsText(file, 'text/plain;charset=utf-8');
+    //                     });
+    //                 });
+    //             });
+    //         }, function(e) { console.log('Error', e); }
+    //     );
+    // }
+
+    static async loadFromFileSystem(filecode): Promise<any> {
+        const p = new Promise((resolve) => {
+            const requestedBytes = 1024 * 1024 * 50;
+            navigator.webkitPersistentStorage.requestQuota (
+                requestedBytes, function(grantedBytes) {
+                    // @ts-ignore
+                    window.webkitRequestFileSystem(PERSISTENT, grantedBytes, function(fs) {
+                        fs.root.getFile(filecode, {}, function(fileEntry) {
+                            fileEntry.file((file) => {
+                                const reader = new FileReader();
+                                reader.onerror = () => {
+                                    resolve('error');
+                                };
+                                reader.onloadend = () => {
+                                    resolve(reader.result);
+                                };
+                                reader.readAsText(file, 'text/plain;charset=utf-8');
+                            });
                         });
                     });
-                });
-            }, function(e) { console.log('Error', e); }
-        );
+                }, function(e) { console.log('Error', e); }
+            );
+        });
+        return await p;
     }
 
     static checkDisappearedNodes(checkNode: INode, nodeList: INode[]) {

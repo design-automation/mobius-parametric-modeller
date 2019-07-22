@@ -15,6 +15,8 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
     logs: string[];
     consoleClearCheck: boolean;
 
+    consoleDiv: HTMLDivElement;
+
     /**
      * constructor
      */
@@ -40,6 +42,9 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
      * ngOnInit
      */
     ngAfterViewInit() {
+        this.consoleDiv = <HTMLDivElement> document.getElementById('userConsole');
+        this.consoleDiv.innerHTML = this.text;
+        this.consoleDiv.style.top = this.consoleDiv.style.top;
         let ct = document.getElementById('console-container');
         if (! this.dataService.consoleScroll) {
             ct.scrollTop = ct.scrollHeight;
@@ -60,6 +65,7 @@ export class ConsoleViewerComponent implements OnInit, AfterViewInit, DoCheck, A
         this.logs = this.dataService.getLog();
         if (this.text !== t) {
             this.text = t;
+            this.consoleDiv.innerHTML = this.text;
             this.scrollcheck = true;
         }
     }

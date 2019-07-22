@@ -306,7 +306,7 @@ export class ToolsetComponent implements OnInit {
         event.stopPropagation();
         const fileString = fnData.importedFile;
         // console.log(fnData);
-        SaveFileComponent.saveToLocalStorage(fnData.flowchart.id, '___TEMP___', fileString);
+        SaveFileComponent.saveToLocalStorage(fnData.flowchart.id, '___TEMP___.mob', fileString);
         // localStorage.setItem('temp_file', fileString);
         window.open(`${window.location.origin}/editor?file=temp`, '_blank');
     }
@@ -500,13 +500,6 @@ export class ToolsetComponent implements OnInit {
     }
 
     assembleImportedTooltip(funcDoc): string {
-        // <span class="tooltiptext1">
-        //     <p class='funcDesc'>{{fn.doc.name}}</p>
-        //     <p>{{fn.doc.description}}</p>
-        //     <p *ngIf='fn.doc.parameters?.length > 0'><span>Parameters: </span></p>
-        //     <p class='paramP' *ngFor='let param of fn.doc.parameters'><span>{{param.name}} - </span> {{param.description}}</p>
-        //     <p *ngIf='fn.doc.returns'><span>Returns: </span>{{fn.doc.returns}}</p>
-        // </span>
         let htmlDesc = `<p class="funcDesc">${funcDoc.name}</p>`;
         htmlDesc += `<p>${funcDoc.description}</p>`;
         if (funcDoc.parameters && funcDoc.parameters.length > 0) {

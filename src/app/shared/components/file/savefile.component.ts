@@ -77,19 +77,6 @@ export class SaveFileComponent {
         }
     }
 
-    static saveResourceToLocal(fName: string, f: string) {
-        const splitted = fName.split('.');
-
-        SaveFileComponent.saveToLocalStorage('resource_file', splitted.slice(0, splitted.length - 1).join('.'),
-                                            f, '.' + splitted[splitted.length - 1]);
-    }
-
-    static async loadResource(fName: string) {
-        const splitted = fName.split('.');
-        return JSON.parse(await SaveFileComponent.loadFromFileSystem(splitted.slice(0, splitted.length - 1).join('.') +
-                          '_-_resource_file' + '.' + splitted[splitted.length - 1]));
-    }
-
     static saveToLocalStorage(id: string, name: string, file: string, ext = '.mob') {
         const itemstring = localStorage.getItem('mobius_backup_list');
         const code = name === '___TEMP___.mob' ? name : name + '_-_' + id + ext;

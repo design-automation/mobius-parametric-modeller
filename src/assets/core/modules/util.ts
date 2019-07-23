@@ -17,12 +17,38 @@ import { __merge__ } from './_model';
 import { _model } from '@modules';
 import { idsMake } from '@libs/geo-info/id';
 
+declare global {
+    interface Navigator {
+        webkitPersistentStorage: {
+            requestQuota: (a, b, c) => {}
+        };
+    }
+}
+
 // ================================================================================================
 // Import / Export data types
 export enum _EIODataFormat {
     GI = 'gi',
     OBJ = 'obj',
     GEOJSON = 'geojson'
+}
+/**
+ * Writes data into chrome local file system.
+ *
+ * @param data_name The name to be saved in the file system (file extension should be included).
+ * @param model_data The data to be saved (can be the url to the file).
+ */
+function WriteData(__model__: GIModel, data_name: string, model_data: string) {
+    saveResource(data_name, model_data);
+}
+/**
+ * Retrieve data from the chrome local file system.
+ *
+ * @param data_name The name to be saved in the file system (file extension should be included).
+ * @returns the data.
+ */
+async function ReadData(__model__: GIModel, data_name: string): Promise<string> {
+    return await loadResource(data_name);
 }
 /**
  * Imports data into the model.
@@ -90,12 +116,12 @@ export function ExportData(__model__: GIModel, filename: string, data_format: _E
             break;
         case _EIOExportDataFormat.OBJ:
             const obj_data: string = exportObj(__model__);
-            //obj_data = obj_data.replace(/#/g, '%23'); // TODO temporary fix
+            // obj_data = obj_data.replace(/#/g, '%23'); // TODO temporary fix
             return download(obj_data, filename);
             break;
         case _EIOExportDataFormat.DAE:
             const dae_data: string = exportDae(__model__);
-            //dae_data = dae_data.replace(/#/g, '%23'); // TODO temporary fix
+            // dae_data = dae_data.replace(/#/g, '%23'); // TODO temporary fix
             return download(dae_data, filename);
             break;
         // case _EIODataFormat.GEOJSON:
@@ -171,4 +197,85 @@ export function ModelCheck(__model__: GIModel): string {
         return String(check);
     }
     return 'No internal inconsistencies have been found.';
+}
+
+// ================================================================================================
+/**
+ * Functions for saving and loading resources to file system.
+ */
+
+function saveResource(name: string, file: string) {
+    const itemstring = localStorage.getItem('mobius_backup_list');
+    if (!itemstring) {
+        localStorage.setItem('mobius_backup_list', `["${name}"]`);
+    } else {
+        const items: string[] = JSON.parse(itemstring);
+        let check = false;
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+            if (item === name) {
+                items.splice(i, 1);
+                items.push(item);
+                check = true;
+                break;
+            }
+        }
+        if (!check) {
+            items.push(name);
+            if (items.length > 5) {
+                const item = items.shift();
+                localStorage.removeItem(item);
+            }
+            localStorage.setItem('mobius_backup_list', JSON.stringify(items));
+        }
+    }
+    const requestedBytes = 1024 * 1024 * 50;
+    window['_code_'] = name;
+    window['_file_'] = file;
+    navigator.webkitPersistentStorage.requestQuota (
+        requestedBytes, function(grantedBytes) {
+            // @ts-ignore
+            window.webkitRequestFileSystem(PERSISTENT, grantedBytes, saveToFS,
+            function(e) { console.log('Error', e); });
+        }, function(e) { console.log('Error', e); }
+    );
+
+    // localStorage.setItem(code, file);
+}
+
+function saveToFS(fs) {
+    fs.root.getFile(window['_code_'], { create: true}, function (fileEntry) {
+        fileEntry.createWriter(function (fileWriter) {
+            const bb = new Blob([window['_file_']], {type: 'text/plain;charset=utf-8'});
+            fileWriter.write(bb);
+            window['_code_'] = undefined;
+            window['_file_'] = undefined;
+        }, (e) => { console.log(e); });
+    }, (e) => { console.log(e.code); });
+}
+
+async function loadResource(filecode: string): Promise<string> {
+    const p = new Promise<string>((resolve) => {
+        const requestedBytes = 1024 * 1024 * 50;
+        navigator.webkitPersistentStorage.requestQuota (
+            requestedBytes, function(grantedBytes) {
+                // @ts-ignore
+                window.webkitRequestFileSystem(PERSISTENT, grantedBytes, function(fs) {
+                    fs.root.getFile(filecode, {}, function(fileEntry) {
+                        fileEntry.file((file) => {
+                            const reader = new FileReader();
+                            reader.onerror = () => {
+                                resolve('error');
+                            };
+                            reader.onloadend = () => {
+                                resolve(<string> reader.result);
+                            };
+                            reader.readAsText(file, 'text/plain;charset=utf-8');
+                        });
+                    });
+                });
+            }, function(e) { console.log('Error', e); }
+        );
+    });
+    return await p;
 }

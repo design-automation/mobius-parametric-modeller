@@ -1,5 +1,12 @@
 # UTIL    
 
+## ReadData  
+* **Description:** Imports data into chrome local file system.  
+* **Parameters:**  
+  * *data_name:* The name to be saved in the file system (file extension should be included).  
+  * *model_data:* The data to be saved (can be the url to the file).
+  
+  
 ## ImportData  
 * **Description:** Imports data into the model.
 In order to get the model data from a file, you need to define the File or URL parameter
@@ -40,4 +47,20 @@ This will result in a popup in your browser, asking you to save the filel.
 * **Description:** Check the internal consistency of the model.  
 * **Parameters:**  
 * **Returns:** Text that summarises what is in the model, click print to see this text.  
+  
+## saveResource  
+* **Description:** Functions for saving and loading resources to file system.  
+* **Parameters:**  
+  * *name:* undefined  
+  * *file:* undefined  
+  
+## saveToFS  
+* **Description:** undefined  
+* **Parameters:**  
+  * *fs:* undefined  
+  
+## loadResource  
+* **Description:** undefined  
+* **Parameters:**  
+  * *filecode:* undefined  
   

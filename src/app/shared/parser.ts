@@ -505,10 +505,10 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
         jsString = 'true';
     } else if (comp.value === 'False') {
         jsString = 'false';
-    } else if (comp.value === 'true') {
-        newString = 'True';
-    } else if (comp.value === 'false') {
-        newString = 'False';
+    // } else if (comp.value === 'true') {
+    //     newString = 'True';
+    // } else if (comp.value === 'false') {
+    //     newString = 'False';
     }
 
 

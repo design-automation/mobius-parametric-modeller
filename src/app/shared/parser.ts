@@ -13,19 +13,19 @@ enum strType {
 
 const mathOperators = new Set(['+', '*', '/', '%']);
 const binaryOperators = new Set([   '+' , '+=' , '-=', '*' , '/' , '%'  , '<' , '<=',
-                                    '==', '===', '>' , '>=', '!=', '!==', '&&', '||', 'and', 'or']);
+                                    '==', '===', '>' , '>=', '!=', '!==', '&&', '||', 'and', 'or', 'not']);
 
 const postfixUnaryOperators = new Set(['++', '--']);
-const prefixUnaryOperators = new Set(['-', '!']);
+const prefixUnaryOperators = new Set(['-', '!', 'not']);
 
-const componentStartSymbols = new Set(['-', '!', '(', '[', '{', '#', '@']);
+const componentStartSymbols = new Set(['-', '!', '(', '[', '{', '#', '@', 'not']);
 
 const otherSymbols = new Set(['.', '#', ',']);
 
 const noSpaceBefore = new Set(['@', ',', ']', '[']);
 
 const allConstants = (<string[][]>inline_func[0][1]).map(constComp => constComp[0]);
-const specialVars = new Set(['undefined', 'null', 'Infinity', 'true', 'false'].concat(allConstants));
+const specialVars = new Set(['undefined', 'null', 'Infinity', 'true', 'false', 'True', 'False'].concat(allConstants));
 
 const reservedWords = [
     'abstract', 'arguments', 'await', 'boolean',
@@ -351,10 +351,15 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
         newString += comps[i].value;
         jsString += comps[i].value;
 
-    // if "-" or "!" add the operator then analyzeComp the next
+    // if "-" or "!" or "not" ==> add the operator then analyzeComp the next
     } else if (prefixUnaryOperators.has(comps[i].value)) {
-        newString += comps[i].value; //////////
-        jsString += comps[i].value; //////////
+        if (comps[i].value === 'not') {
+            newString += 'not '; //////////
+            jsString += '!'; //////////
+        } else {
+            newString += comps[i].value; //////////
+            jsString += comps[i].value; //////////
+        }
         if (i + 1 === comps.length) {
             return {'error': 'Error: Expressions expected after "-"\n' +
             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
@@ -488,15 +493,24 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
     // console.log('analyzeVar |||', comps.slice(i).map(x => x.value).join(' '));
     const comp = comps[i];
 
+    let newString = comp.value;
+    let jsString = comp.value;
+
     //
     if (comp.value === 'and') {
         return {'i': i + 1, 'str': 'and', 'jsStr': '&&'};
     } else if (comp.value === 'or') {
         return {'i': i + 1, 'str': 'or', 'jsStr': '||'};
+    } else if (comp.value === 'True') {
+        jsString = 'true';
+    } else if (comp.value === 'False') {
+        jsString = 'false';
+    } else if (comp.value === 'true') {
+        newString = 'True';
+    } else if (comp.value === 'false') {
+        newString = 'False';
     }
 
-    let newString = comp.value;
-    let jsString = comp.value;
 
     if (!disallowAt && !specialVars.has(comp.value)) {
         jsString += '_';
@@ -1075,7 +1089,7 @@ function analyzeExpression(comps: {'type': strType, 'value': string}[], i: numbe
 // }
 
 function addVars(varList: string[], varName: string) {
-    if (allConstants.indexOf(varName) !== -1) { return; }
+    if (specialVars.has(varName)) { return; }
     if (reservedWords.indexOf(varName) !== -1) { return; }
     if (varList.indexOf(varName) === -1) {
         varList.push(varName);
@@ -1120,7 +1134,7 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
             }
 
             const varString = str.substring(startI, i);
-            if (varString === 'and' || varString === 'or') {
+            if (varString === 'and' || varString === 'or' || varString === 'not') {
                 comps.push({ 'type': strType.OTHER, 'value': varString});
             } else {
                 comps.push({ 'type': strType.VAR, 'value': varString});
@@ -1156,7 +1170,10 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
                 comps.push({ 'type': strType.OTHER, 'value': str.charAt(i)});
                 i++;
             }
-
+        // negative ! => change it to "not"
+        } else if (code === 33 && str.charCodeAt(i + 1) !== 61) {
+            comps.push({ 'type': strType.OTHER, 'value': 'not'});
+            i++;
         // comparison operator (!, <, =, >)
         } else if (code === 33 || (code > 59 && code < 63)) {
             const startI = i;

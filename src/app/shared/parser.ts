@@ -78,7 +78,6 @@ export function modifyVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
 
     procedure.args[0].value = modifyVarArg(procedure.args[0]);
     const modifiedVar = parseVariable(procedure.args[0].value);
-    console.log(modifiedVar.jsStr);
     procedure.args[0].jsValue = modifiedVar.jsStr;
 
     if (modifiedVar.error) {

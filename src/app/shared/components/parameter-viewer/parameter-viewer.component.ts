@@ -23,6 +23,10 @@ export class ParameterViewerComponent {
     }
 
 
+    getDesc(desc: string) {
+        return desc.split('\n').join('<br>');
+    }
+
     performAction(event: any, index: number) {
         switch (event.type) {
             case 'argMod':

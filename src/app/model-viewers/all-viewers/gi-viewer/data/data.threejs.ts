@@ -238,13 +238,13 @@ export class DataThreejs {
         }
 
         setTimeout(() => {
-            if (!this._model.attribs.query.hasAttrib(EEntType.MOD, 'hud')) { return; }
-            const hud = this._model.attribs.query.getModelAttribValue('hud') as string;
-            const element = this._createHud(hud).element;
             let old = document.getElementById('hud');
             if (old) {
                 container.removeChild(old);
             }
+            if (!this._model.attribs.query.hasAttrib(EEntType.MOD, 'hud')) { return; }
+            const hud = this._model.attribs.query.getModelAttribValue('hud') as string;
+            const element = this._createHud(hud).element;
             container.appendChild(element);
             old = null;
         }, 0);

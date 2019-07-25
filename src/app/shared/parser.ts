@@ -3,6 +3,7 @@ import { IProcedure, ProcedureTypes } from '@models/procedure';
 import { IArgument } from '@models/code';
 import { INode } from '@models/node';
 import { InputType } from '@models/port';
+import { _parameterTypes } from '@modules';
 
 enum strType {
     NUM,
@@ -13,19 +14,19 @@ enum strType {
 
 const mathOperators = new Set(['+', '*', '/', '%']);
 const binaryOperators = new Set([   '+' , '+=' , '-=', '*' , '/' , '%'  , '<' , '<=',
-                                    '==', '===', '>' , '>=', '!=', '!==', '&&', '||', 'and', 'or']);
+                                    '==', '===', '>' , '>=', '!=', '!==', '&&', '||', 'and', 'or', 'not']);
 
 const postfixUnaryOperators = new Set(['++', '--']);
-const prefixUnaryOperators = new Set(['-', '!']);
+const prefixUnaryOperators = new Set(['-', '!', 'not']);
 
-const componentStartSymbols = new Set(['-', '!', '(', '[', '{', '#', '@']);
+const componentStartSymbols = new Set(['-', '!', '(', '[', '{', '#', '@', 'not']);
 
 const otherSymbols = new Set(['.', '#', ',']);
 
 const noSpaceBefore = new Set(['@', ',', ']', '[']);
 
 const allConstants = (<string[][]>inline_func[0][1]).map(constComp => constComp[0]);
-const specialVars = new Set(['undefined', 'null', 'Infinity', 'true', 'false'].concat(allConstants));
+const specialVars = new Set(['undefined', 'null', 'Infinity', 'true', 'false', 'True', 'False'].concat(allConstants));
 
 const reservedWords = [
     'abstract', 'arguments', 'await', 'boolean',
@@ -77,6 +78,7 @@ export function modifyVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
 
     procedure.args[0].value = modifyVarArg(procedure.args[0]);
     const modifiedVar = parseVariable(procedure.args[0].value);
+    console.log(modifiedVar.jsStr);
     procedure.args[0].jsValue = modifiedVar.jsStr;
 
     if (modifiedVar.error) {
@@ -247,7 +249,12 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
         if (comps[1].type !== strType.VAR) {
             return {'error': 'Error: Expect attribute name after @'};
         }
-        return {'jsStr': value};
+        if (comps.length === 2) {
+            return {'jsStr': value};
+        }
+        const usedVars = [];
+        const attribComp = analyzeComp(comps, 1, usedVars);
+        return {'usedVars': usedVars, 'jsStr': '@' + attribComp.jsStr};
     }
     if (comps[0].type !== strType.VAR) {
         return {'error': `Error: Expect a Variable at the start of the input`};
@@ -269,40 +276,6 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
     }
     return {'usedVars': vars, 'jsStr': check.jsStr.trim()};
 
-    // if (comps[1].value === '[') {
-    //     let i = 1;
-    //     const openBrackets = [0, 0, 0]; // [roundBracketCount, squareBracketCount, curlyBracketCount]
-    //     const vars: string[] = [];
-    //     while (i < comps.length && comps[i].value !== ']') {
-    //         const check = analyzeComponent(comps, i, openBrackets, vars);
-    //         if (check.error) {
-    //             return check;
-    //         }
-    //         i = check.value;
-    //     }
-    //     if (i !== comps.length - 1) {
-    //         if (comps[i + 1].value !== '@') {
-    //             return {'error': 'Error: Expect ] at the end of the variable'};
-    //         }
-    //         if (!comps[i + 2] || comps[i + 2].type !== strType.VAR) {
-    //             return {'error': 'Error: Expect attribute name after @'};
-    //         }
-    //     }
-    //     addVars(vars, comps[0].value);
-    //     return {'usedVars': vars};
-    // }
-    // if (comps[1].value === '@') {
-    //     if (comps[2].type !== strType.VAR) {
-    //         return {'error': 'Error: Expect attribute name after @'};
-    //     }
-    //     return {'usedVars': [comps[0].value]};
-    // }
-    // if (comps[1].value === '.') {
-    //     if (comps[2].type !== strType.VAR) {
-    //         return {'error': 'Error: Expect attribute name after .'};
-    //     }
-    //     return {'usedVars': [comps[0].value]};
-    // }
 }
 
 
@@ -351,10 +324,15 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
         newString += comps[i].value;
         jsString += comps[i].value;
 
-    // if "-" or "!" add the operator then analyzeComp the next
+    // if "-" or "!" or "not" ==> add the operator then analyzeComp the next
     } else if (prefixUnaryOperators.has(comps[i].value)) {
-        newString += comps[i].value; //////////
-        jsString += comps[i].value; //////////
+        if (comps[i].value === 'not') {
+            newString += 'not '; //////////
+            jsString += '!'; //////////
+        } else {
+            newString += comps[i].value; //////////
+            jsString += comps[i].value; //////////
+        }
         if (i + 1 === comps.length) {
             return {'error': 'Error: Expressions expected after "-"\n' +
             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
@@ -436,7 +414,11 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
         if (result.error) { return result; }
         i = result.i;
         newString = ' @' + result.str.replace(/ /g, '') + ' '; //////////
-        jsString = ' @' + result.jsStr.replace(/ /g, '') + ' '; //////////
+        if (result.jsStr.match(/[.\[\(]/g)) {
+            jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, null, ${result.jsStr})`; //////////
+        } else {
+            jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, null, '${result.jsStr}')`; //////////
+        }
     }
 
     if (i + 1 >= comps.length) { return {'i': i, 'str': newString, 'jsStr': jsString}; }
@@ -488,15 +470,24 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
     // console.log('analyzeVar |||', comps.slice(i).map(x => x.value).join(' '));
     const comp = comps[i];
 
+    let newString = comp.value;
+    let jsString = comp.value;
+
     //
     if (comp.value === 'and') {
         return {'i': i + 1, 'str': 'and', 'jsStr': '&&'};
     } else if (comp.value === 'or') {
         return {'i': i + 1, 'str': 'or', 'jsStr': '||'};
+    } else if (comp.value === 'True') {
+        jsString = 'true';
+    } else if (comp.value === 'False') {
+        jsString = 'false';
+    // } else if (comp.value === 'true') {
+    //     newString = 'True';
+    // } else if (comp.value === 'false') {
+    //     newString = 'False';
     }
 
-    let newString = comp.value;
-    let jsString = comp.value;
 
     if (!disallowAt && !specialVars.has(comp.value)) {
         jsString += '_';
@@ -572,8 +563,8 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
                     at: ... ${comps.slice(result.i + 1).map(cp => cp.value).join(' ')}`};
                 }
                 if (isVariable) {
-                    jsString += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x})(${result.jsStr})]`;
-                    arrayName += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x})(${result.jsStr})]`;
+                    jsString += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
+                    arrayName += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
                 } else {
                     jsString += `.slice(${result.jsStr})[0]`;
                     arrayName += `.slice(${result.jsStr})[0]`;
@@ -645,7 +636,15 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
         if (result.error) { return result; }
         i = result.i;
         newString = ' ' + newString.replace(/ /g, '') + '@' + result.str.replace(/ /g, '') + ' '; //////////
-        jsString = ' ' + jsString.replace(/ /g, '') + '@' + result.jsStr.replace(/ /g, '') + ' '; //////////
+        if (isVariable) {
+            jsString = ' ' + jsString + '@' + result.jsStr + ' '; //////////
+        } else {
+            if (result.jsStr.match(/[.\[\(]/g)) {
+                jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${jsString}, ${result.jsStr}) `; //////////
+            } else {
+                jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${jsString}, '${result.jsStr}') `; //////////
+            }
+        }
     }
     return {'i': i, 'str': newString, 'jsStr': jsString};
 }
@@ -768,6 +767,7 @@ function analyzeExpression(comps: {'type': strType, 'value': string}[], i: numbe
     }
     return {'i': i - 1, 'str': newString, 'jsStr': jsString};
 }
+
 
 // // OLD ARGUMENT INPUT
 // export function parseArgument_OLD(str: string): {'error'?: string, 'vars'?: string[], 'str'?: string} {
@@ -1075,7 +1075,7 @@ function analyzeExpression(comps: {'type': strType, 'value': string}[], i: numbe
 // }
 
 function addVars(varList: string[], varName: string) {
-    if (allConstants.indexOf(varName) !== -1) { return; }
+    if (specialVars.has(varName)) { return; }
     if (reservedWords.indexOf(varName) !== -1) { return; }
     if (varList.indexOf(varName) === -1) {
         varList.push(varName);
@@ -1120,7 +1120,7 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
             }
 
             const varString = str.substring(startI, i);
-            if (varString === 'and' || varString === 'or') {
+            if (varString === 'and' || varString === 'or' || varString === 'not') {
                 comps.push({ 'type': strType.OTHER, 'value': varString});
             } else {
                 comps.push({ 'type': strType.VAR, 'value': varString});
@@ -1156,7 +1156,10 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
                 comps.push({ 'type': strType.OTHER, 'value': str.charAt(i)});
                 i++;
             }
-
+        // negative ! => change it to "not"
+        } else if (code === 33 && str.charCodeAt(i + 1) !== 61) {
+            comps.push({ 'type': strType.OTHER, 'value': 'not'});
+            i++;
         // comparison operator (!, <, =, >)
         } else if (code === 33 || (code > 59 && code < 63)) {
             const startI = i;

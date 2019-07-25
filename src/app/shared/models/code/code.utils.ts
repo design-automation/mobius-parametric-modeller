@@ -41,23 +41,30 @@ export class CodeUtils {
         switch ( prod.type ) {
             case ProcedureTypes.Variable:
                 if (!args[0].jsValue) {
-                    codeStr.push(`${this.repGetAttrib(args[1].jsValue)};`);
+                    codeStr.push(`${args[1].jsValue};`);
+                    // codeStr.push(`${this.repGetAttrib(args[1].jsValue)};`);
                     break;
                 }
                 const repVar = this.repSetAttrib(args[0].jsValue);
                 if (!repVar) {
-                    codeStr.push(`${prefix}${args[0].jsValue} = ${this.repGetAttrib(args[1].jsValue)};`);
+                    codeStr.push(`${prefix}${args[0].jsValue} = ${args[1].jsValue};`);
+                    // codeStr.push(`${prefix}${args[0].jsValue} = ${this.repGetAttrib(args[1].jsValue)};`);
                     if (prefix === 'let ') {
                         existingVars.push(args[0].jsValue);
                     }
                 } else {
-                    codeStr.push(`${repVar[0]} ${this.repGetAttrib(args[1].jsValue)} ${repVar[1]}`);
+                    codeStr.push(`${repVar[0]} ${args[1].jsValue} ${repVar[1]}`);
+                    // codeStr.push(`${repVar[0]} ${this.repGetAttrib(args[1].jsValue)} ${repVar[1]}`);
                 }
                 break;
 
             case ProcedureTypes.If:
-                if (args[0].jsValue.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
-                codeStr.push(`if (${this.repGetAttrib(args[0].jsValue)}){`);
+                if (args[0].jsValue.indexOf('__params__') !== -1 &&
+                    args[0].jsValue.indexOf(_parameterTypes.getattrib) === -1) {
+                        throw new Error('Unexpected Identifier');
+                }
+                codeStr.push(`if (${args[0].jsValue}){`);
+                // codeStr.push(`if (${this.repGetAttrib(args[0].jsValue)}){`);
                 break;
 
             case ProcedureTypes.Else:
@@ -65,19 +72,31 @@ export class CodeUtils {
                 break;
 
             case ProcedureTypes.Elseif:
-                if (args[0].jsValue.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
-                codeStr.push(`else if(${this.repGetAttrib(args[0].jsValue)}){`);
+                if (args[0].jsValue.indexOf('__params__') !== -1 &&
+                    args[0].jsValue.indexOf(_parameterTypes.getattrib) === -1) {
+                        throw new Error('Unexpected Identifier');
+                }
+                codeStr.push(`else if(${args[0].jsValue}){`);
+                // codeStr.push(`else if(${this.repGetAttrib(args[0].jsValue)}){`);
                 break;
 
             case ProcedureTypes.Foreach:
                 // codeStr.push(`for (${prefix} ${args[0].jsValue} of [...Array(${args[1].jsValue}).keys()]){`);
-                if (args[0].jsValue.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
-                codeStr.push(`for (${prefix} ${args[0].jsValue} of ${this.repGetAttrib(args[1].jsValue)}){`);
+                if (args[0].jsValue.indexOf('__params__') !== -1 &&
+                    args[0].jsValue.indexOf(_parameterTypes.getattrib) === -1) {
+                        throw new Error('Unexpected Identifier');
+                }
+                codeStr.push(`for (${prefix} ${args[0].jsValue} of ${args[1].jsValue}){`);
+                // codeStr.push(`for (${prefix} ${args[0].jsValue} of ${this.repGetAttrib(args[1].jsValue)}){`);
                 break;
 
             case ProcedureTypes.While:
-                if (args[0].jsValue.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
-                codeStr.push(`while (${this.repGetAttrib(args[0].jsValue)}){`);
+                if (args[0].jsValue.indexOf('__params__') !== -1 &&
+                    args[0].jsValue.indexOf(_parameterTypes.getattrib) === -1) {
+                        throw new Error('Unexpected Identifier');
+                }
+                codeStr.push(`while (${args[0].jsValue}){`);
+                // codeStr.push(`while (${this.repGetAttrib(args[0].jsValue)}){`);
                 break;
 
             case ProcedureTypes.Break:
@@ -135,12 +154,14 @@ export class CodeUtils {
                         check = false;
                         break;
                     }
-                    if (arg.jsValue.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
+                    if (arg.jsValue.indexOf('__params__') !== -1 &&
+                    arg.jsValue.indexOf(_parameterTypes.getattrib) === -1) { throw new Error('Unexpected Identifier'); }
                     if (arg.jsValue[0] === '#') {
                         returnArgVals.push('`' + this.repGetAttrib(arg.jsValue) + '`');
                         continue;
                     }
-                    returnArgVals.push(this.repGetAttrib(arg.jsValue));
+                    // returnArgVals.push(this.repGetAttrib(arg.jsValue));
+                    returnArgVals.push(arg.jsValue);
                 }
                 if (!check) {
                     codeStr.push(`return __params__['model'];`);
@@ -157,7 +178,9 @@ export class CodeUtils {
             case ProcedureTypes.Function:
                 const argVals = [];
                 for (const arg of args.slice(1)) {
-                    if (arg.jsValue && arg.jsValue.indexOf('__params__') !== -1) { throw new Error('Unexpected Identifier'); }
+                    if (arg.jsValue && arg.jsValue.indexOf('__params__') !== -1 &&
+                    arg.jsValue.indexOf(_parameterTypes.getattrib) === -1) {
+                        throw new Error('Unexpected Identifier'); }
                     if (arg.name === _parameterTypes.constList) {
                         argVals.push('__params__.constants');
                         continue;
@@ -171,7 +194,8 @@ export class CodeUtils {
                         argVals.push('`' + this.repGetAttrib(arg.jsValue) + '`');
                         continue;
                     }
-                    argVals.push(this.repGetAttrib(arg.jsValue));
+                    argVals.push(arg.jsValue);
+                    // argVals.push(this.repGetAttrib(arg.jsValue));
                 }
                 if (prod.resolvedValue) {
                     for (let i = 0; i < argVals.length; i++) {
@@ -225,7 +249,8 @@ export class CodeUtils {
                     //     prod.resolvedValue = null;
                     // }
                     if (arg.type.toString() !== InputType.URL.toString()) {
-                        argsVals.push(this.repGetAttrib(arg.jsValue));
+                        argsVals.push(arg.jsValue);
+                        // argsVals.push(this.repGetAttrib(arg.jsValue));
                     } else {
                         argsVals.push(prod.resolvedValue);
                     }
@@ -259,33 +284,18 @@ export class CodeUtils {
         }
 
         if (isMainFlowchart && prod.print && prod.args[0].jsValue) {
-            const repGet = this.repGetAttrib(prod.args[0].jsValue);
+            const repGet = prod.args[0].jsValue;
+            // const repGet = this.repGetAttrib(prod.args[0].jsValue);
             codeStr.push(`printFunc(__params__.console,'${prod.args[0].value}', ${repGet});`);
         }
         if (isMainFlowchart && prod.selectGeom && prod.args[0].jsValue) {
-            const repGet = this.repGetAttrib(prod.args[0].jsValue);
+            const repGet = prod.args[0].jsValue;
+            // const repGet = this.repGetAttrib(prod.args[0].jsValue);
             codeStr.push(`__modules__.${_parameterTypes.select}(__params__.model, ${repGet}, "${repGet}");`);
         }
         return codeStr;
     }
     static repSetAttrib(val: string) {
-        // if (!val || val.indexOf('@') === -1) {
-        //     return false;
-        // }
-        // const splitted = val.split('@');
-        // if (splitted.length > 2) {
-        //     splitted[1] = splitted.splice(1, splitted.length - 1).join('@');
-        // }
-        // const openBracketMatch = (splitted[1].match(/\[/g) || []).length;
-        // if (openBracketMatch) {
-        //     const bracketSplit = splitted[1].substring(0, splitted[1].length - 1).split('[');
-        //     const innerVar = CodeUtils.repGetAttrib(bracketSplit.splice(1, bracketSplit.length - 1).join('['));
-        //     return [`__modules__.${_parameterTypes.setattrib}(
-        //              __params__.model, ${splitted[0]}, '${bracketSplit[0]}',`, `, ${innerVar});`];
-        // } else {
-        //     return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${splitted[0]}, '${splitted[1]}',`, ');'];
-        // }
-
         if (!val || val.indexOf('@') === -1) {
             return false;
         }
@@ -303,7 +313,8 @@ export class CodeUtils {
         const openBracketMatch = (val_1.match(/\[/g) || []).length;
         if (openBracketMatch) {
             const bracketSplit = val_1.substring(0, val_1.length - 1).split('[');
-            const innerVar = CodeUtils.repGetAttrib(bracketSplit.splice(1, bracketSplit.length - 1).join('['));
+            const innerVar = bracketSplit.splice(1, bracketSplit.length - 1).join('[');
+            // const innerVar = CodeUtils.repGetAttrib(bracketSplit.splice(1, bracketSplit.length - 1).join('['));
             return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0}, '${bracketSplit[0]}',`, `, ${innerVar});`];
         } else {
             return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0}, '${val_1}',`, ');'];
@@ -372,7 +383,7 @@ export class CodeUtils {
         const p = new Promise((resolve) => {
             const request = new XMLHttpRequest();
             request.open('GET', url);
-            request.overrideMimeType('text/plain; charset=x-user-defined');
+            // request.overrideMimeType('text/plain; charset=x-user-defined');
             request.onload = () => {
                 resolve(request.responseText.replace(/(\\[bfnrtv\'\"\\])/g, '\\$1'));
             };

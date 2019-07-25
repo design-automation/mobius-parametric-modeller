@@ -172,119 +172,226 @@ export class PanelHeaderComponent implements OnDestroy {
         this.dataService.dialog.close();
     }
 
-    loadBackup(event: MouseEvent, filecode: string) {
+    async loadBackup(event: MouseEvent, filecode: string) {
         event.stopPropagation();
         if (this.dataService.checkbackup_header()) {
-            SaveFileComponent.loadFile(filecode, (file) => {
-                if (file === 'error') {
-                    return;
-                }
-                this.dataService.file = circularJSON.parse(file);
-                this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-                if (this.dataService.mobiusSettings.execute) {
-                    document.getElementById('executeButton').click();
-                }
-            });
+            const result = await SaveFileComponent.loadFromFileSystem(filecode);
+            if (result === 'error') {
+                return;
+            }
+            this.dataService.file = circularJSON.parse(result);
+            this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
+            if (this.dataService.mobiusSettings.execute) {
+                document.getElementById('executeButton').click();
+            }
+
+            // SaveFileComponent.loadFile(filecode, (file) => {
+            //     if (file === 'error') {
+            //         return;
+            //     }
+            //     this.dataService.file = circularJSON.parse(file);
+            //     this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
+            //     if (this.dataService.mobiusSettings.execute) {
+            //         document.getElementById('executeButton').click();
+            //     }
+            // });
         } else {
             const func = this.dataService.getbackup();
             // const fileString: any = localStorage.getItem(filecode);
-            SaveFileComponent.loadFile(filecode, (fileString) => {
-                if (!fileString) {
-                    return;
-                }
-                const file = circularJSON.parse(fileString);
-                // parse the flowchart
-                const fl = file.flowchart;
+            const result = await SaveFileComponent.loadFromFileSystem(filecode);
+            if (!result) {
+                return;
+            }
+            const file = circularJSON.parse(result);
+            // parse the flowchart
+            const fl = file.flowchart;
 
-                if (this.dataService.flowchart.subFunctions) {
-                    const subFunctions = this.dataService.flowchart.subFunctions;
-                    let i = 0;
-                    while (i < subFunctions.length) {
-                        const subFunc = subFunctions[i];
-                        if (subFunc.name.substring(0, func.name.length) === func.name) {
-                            subFunctions.splice(i, 1);
-                        } else {
-                            i++;
-                        }
+            if (this.dataService.flowchart.subFunctions) {
+                const subFunctions = this.dataService.flowchart.subFunctions;
+                let i = 0;
+                while (i < subFunctions.length) {
+                    const subFunc = subFunctions[i];
+                    if (subFunc.name.substring(0, func.name.length) === func.name) {
+                        subFunctions.splice(i, 1);
+                    } else {
+                        i++;
                     }
-                } else {
-                    this.dataService.flowchart.subFunctions = [];
                 }
+            } else {
+                this.dataService.flowchart.subFunctions = [];
+            }
 
-                let funcName = fl.name.replace(/[^A-Za-z0-9_]/g, '_');
-                if (funcName.match(/^[\d_]/)) {
-                    funcName = 'func' + funcName;
-                }
+            let funcName = fl.name.replace(/[^A-Za-z0-9_]/g, '_');
+            if (funcName.match(/^[\d_]/)) {
+                funcName = 'func' + funcName;
+            }
 
-                const documentation = {
-                    name: funcName,
-                    module: 'Imported',
-                    description: fl.description,
-                    summary: fl.description,
-                    parameters: [],
-                    returns: fl.returnDescription
-                };
-                // func = <IFunction>{
-                //     flowchart: <IFlowchart>{
-                //         id: fl.id ? fl.id : IdGenerator.getId(),
-                //         name: fl.name,
-                //         nodes: fl.nodes,
-                //         edges: fl.edges
-                //     },
-                //     name: func.name,
-                //     module: 'Imported',
-                //     doc: documentation,
-                //     importedFile: file
-                // };
-                func.flowchart = <IFlowchart>{
-                    id: fl.id ? fl.id : IdGenerator.getId(),
-                    name: fl.name,
-                    nodes: fl.nodes,
-                    edges: fl.edges
-                };
-                func.name = funcName;
-                func.doc = documentation;
-                func.importedFile = fileString;
+            const documentation = {
+                name: funcName,
+                module: 'Imported',
+                description: fl.description,
+                summary: fl.description,
+                parameters: [],
+                returns: fl.returnDescription
+            };
+            // func = <IFunction>{
+            //     flowchart: <IFlowchart>{
+            //         id: fl.id ? fl.id : IdGenerator.getId(),
+            //         name: fl.name,
+            //         nodes: fl.nodes,
+            //         edges: fl.edges
+            //     },
+            //     name: func.name,
+            //     module: 'Imported',
+            //     doc: documentation,
+            //     importedFile: file
+            // };
+            func.flowchart = <IFlowchart>{
+                id: fl.id ? fl.id : IdGenerator.getId(),
+                name: fl.name,
+                nodes: fl.nodes,
+                edges: fl.edges
+            };
+            func.name = funcName;
+            func.doc = documentation;
+            func.importedFile = result;
 
-                func.args = [];
-                for (const prod of fl.nodes[0].procedure) {
-                    if (!prod.enabled || prod.type !== ProcedureTypes.Constant) { continue; }
-                    let v: string = prod.args[prod.argCount - 2].value || 'undefined';
-                    if (v[0] === '"' || v[0] === '\'') { v = v.substring(1, v.length - 1); }
-                    if (prod.meta.inputMode !== InputType.Constant) {
-                        documentation.parameters.push({
-                            name: v,
-                            description: prod.meta.description
-                        });
-                    }
-                    func.args.push(<IArgument>{
+            func.args = [];
+            for (const prod of fl.nodes[0].procedure) {
+                if (!prod.enabled || prod.type !== ProcedureTypes.Constant) { continue; }
+                let v: string = prod.args[prod.argCount - 2].value || 'undefined';
+                if (v[0] === '"' || v[0] === '\'') { v = v.substring(1, v.length - 1); }
+                if (prod.meta.inputMode !== InputType.Constant) {
+                    documentation.parameters.push({
                         name: v,
-                        value: prod.args[prod.argCount - 1].value,
-                        type: prod.meta.inputMode,
+                        description: prod.meta.description
                     });
                 }
-                func.argCount = func.args.length;
+                func.args.push(<IArgument>{
+                    name: v,
+                    value: prod.args[prod.argCount - 1].value,
+                    type: prod.meta.inputMode,
+                });
+            }
+            func.argCount = func.args.length;
 
-                for (const i of fl.functions) {
+            for (const i of fl.functions) {
+                i.name = func.name + '_' + i.name;
+                this.dataService.flowchart.subFunctions.push(i);
+            }
+            if (fl.subFunctions) {
+                for (const i of fl.subFunctions) {
                     i.name = func.name + '_' + i.name;
                     this.dataService.flowchart.subFunctions.push(i);
                 }
-                if (fl.subFunctions) {
-                    for (const i of fl.subFunctions) {
-                        i.name = func.name + '_' + i.name;
-                        this.dataService.flowchart.subFunctions.push(i);
-                    }
-                }
+            }
 
-                const end = fl.nodes[fl.nodes.length - 1];
-                const returnProd = end.procedure[end.procedure.length - 1];
-                if (returnProd.args[1].value) {
-                    func.hasReturn = true;
-                } else {
-                    func.hasReturn = false;
-                }
-                document.getElementById('tooltiptext').click();
-            });
+            const end = fl.nodes[fl.nodes.length - 1];
+            const returnProd = end.procedure[end.procedure.length - 1];
+            if (returnProd.args[1].value) {
+                func.hasReturn = true;
+            } else {
+                func.hasReturn = false;
+            }
+            document.getElementById('tooltiptext').click();
+
+            // SaveFileComponent.loadFile(filecode, (fileString) => {
+            //     if (!fileString) {
+            //         return;
+            //     }
+            //     const file = circularJSON.parse(fileString);
+            //     // parse the flowchart
+            //     const fl = file.flowchart;
+
+            //     if (this.dataService.flowchart.subFunctions) {
+            //         const subFunctions = this.dataService.flowchart.subFunctions;
+            //         let i = 0;
+            //         while (i < subFunctions.length) {
+            //             const subFunc = subFunctions[i];
+            //             if (subFunc.name.substring(0, func.name.length) === func.name) {
+            //                 subFunctions.splice(i, 1);
+            //             } else {
+            //                 i++;
+            //             }
+            //         }
+            //     } else {
+            //         this.dataService.flowchart.subFunctions = [];
+            //     }
+
+            //     let funcName = fl.name.replace(/[^A-Za-z0-9_]/g, '_');
+            //     if (funcName.match(/^[\d_]/)) {
+            //         funcName = 'func' + funcName;
+            //     }
+
+            //     const documentation = {
+            //         name: funcName,
+            //         module: 'Imported',
+            //         description: fl.description,
+            //         summary: fl.description,
+            //         parameters: [],
+            //         returns: fl.returnDescription
+            //     };
+            //     // func = <IFunction>{
+            //     //     flowchart: <IFlowchart>{
+            //     //         id: fl.id ? fl.id : IdGenerator.getId(),
+            //     //         name: fl.name,
+            //     //         nodes: fl.nodes,
+            //     //         edges: fl.edges
+            //     //     },
+            //     //     name: func.name,
+            //     //     module: 'Imported',
+            //     //     doc: documentation,
+            //     //     importedFile: file
+            //     // };
+            //     func.flowchart = <IFlowchart>{
+            //         id: fl.id ? fl.id : IdGenerator.getId(),
+            //         name: fl.name,
+            //         nodes: fl.nodes,
+            //         edges: fl.edges
+            //     };
+            //     func.name = funcName;
+            //     func.doc = documentation;
+            //     func.importedFile = fileString;
+
+            //     func.args = [];
+            //     for (const prod of fl.nodes[0].procedure) {
+            //         if (!prod.enabled || prod.type !== ProcedureTypes.Constant) { continue; }
+            //         let v: string = prod.args[prod.argCount - 2].value || 'undefined';
+            //         if (v[0] === '"' || v[0] === '\'') { v = v.substring(1, v.length - 1); }
+            //         if (prod.meta.inputMode !== InputType.Constant) {
+            //             documentation.parameters.push({
+            //                 name: v,
+            //                 description: prod.meta.description
+            //             });
+            //         }
+            //         func.args.push(<IArgument>{
+            //             name: v,
+            //             value: prod.args[prod.argCount - 1].value,
+            //             type: prod.meta.inputMode,
+            //         });
+            //     }
+            //     func.argCount = func.args.length;
+
+            //     for (const i of fl.functions) {
+            //         i.name = func.name + '_' + i.name;
+            //         this.dataService.flowchart.subFunctions.push(i);
+            //     }
+            //     if (fl.subFunctions) {
+            //         for (const i of fl.subFunctions) {
+            //             i.name = func.name + '_' + i.name;
+            //             this.dataService.flowchart.subFunctions.push(i);
+            //         }
+            //     }
+
+            //     const end = fl.nodes[fl.nodes.length - 1];
+            //     const returnProd = end.procedure[end.procedure.length - 1];
+            //     if (returnProd.args[1].value) {
+            //         func.hasReturn = true;
+            //     } else {
+            //         func.hasReturn = false;
+            //     }
+            //     document.getElementById('tooltiptext').click();
+            // });
         }
     }
 
@@ -302,6 +409,14 @@ export class PanelHeaderComponent implements OnDestroy {
             items.splice(i, 1);
             localStorage.setItem('mobius_backup_list', JSON.stringify(items));
         }
+    }
+
+    checkMobBackup(backup): boolean {
+        const splitted = backup.split('.');
+        if (splitted[splitted.length - 1] === 'mob') {
+            return false;
+        }
+        return true;
     }
 
     @HostListener('window:click', ['$event'])

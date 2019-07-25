@@ -290,6 +290,11 @@ button.mat-menu-item:hover{
             background-color: $color5;
             color: $color1;
             display: inline-block;
+
+            &:disabled {
+                background-color: $color5-5;
+                color: $color3;
+            }
         }
         .deleteBackupButton{
             width: fit-content;

@@ -38,7 +38,7 @@ function printFunc(_console, name, value){
     } else {
         val = value;
     }
-    _console.push('  _ ' + name+': '+val);
+    _console.push('<p style="padding: 2px 0px 2px 10px;"><b><i>_ ' + name+':</i></b>  ' + val + '</p>');
     return val;
 }
 `;
@@ -103,8 +103,7 @@ export class ExecuteComponent {
         }
 
         document.getElementById('spinner-on').click();
-        this.dataService.log(' ');
-        this.dataService.log('=====================================================');
+        this.dataService.log('<br><hr>');
 
         // reset input of all nodes except start & resolve all async processes (file reading + get url content)
         for (const node of this.dataService.flowchart.nodes) {
@@ -178,7 +177,8 @@ export class ExecuteComponent {
             }
             if (EmptyECheck) {
                 document.getElementById('Console').click();
-                this.dataService.log('Error: Empty Argument detected. Check marked node(s) and procedure(s)!');
+                this.dataService.log('<h4 style="padding: 2px 0px 2px 0px; color:red;">Error: Empty Argument detected. ' +
+                                     'Check marked node(s) and procedure(s)!</h5>');
                 this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
                 document.getElementById('spinner-off').click();
                 const _category = this.isDev ? 'dev' : 'execute';
@@ -187,8 +187,8 @@ export class ExecuteComponent {
             }
             if (InvalidECheck) {
                 document.getElementById('Console').click();
-                this.dataService.log('Error: Invalid Argument or Argument with Reserved Word detected.' +
-                                     'Check marked node(s) and procedure(s)!');
+                this.dataService.log('<h4 style="padding: 2px 0px 2px 0px; style="color:red">Error: Invalid Argument or ' +
+                                     'Argument with Reserved Word detected. Check marked node(s) and procedure(s)!</h5>');
                 document.getElementById('spinner-off').click();
                 this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
                 const _category = this.isDev ? 'dev' : 'execute';
@@ -219,7 +219,7 @@ export class ExecuteComponent {
                 // setTimeout for 20ms so that the loading screen has enough time to be loaded in
                 setTimeout(() => {
                     this.executeFlowchart();
-                    this.dataService.log(' ');
+                    this.dataService.log('<br>');
                 }, 20);
             }
         } catch (ex) {
@@ -368,7 +368,7 @@ export class ExecuteComponent {
             //  5. main node code
 
             // print the code
-            this.dataService.log(`Executing node: ${node.name}\n`);
+            this.dataService.log(`<h3  style="padding: 10px 0px 2px 0px;">Executing node: ${node.name}</h3>`);
             if (DEBUG) {
                 console.log(`______________________________________________________________\n/*     ${node.name.toUpperCase()}     */\n`);
                 console.log(fnString);
@@ -383,7 +383,7 @@ export class ExecuteComponent {
 
             params['model'] = _parameterTypes.newFn();
             _parameterTypes.mergeFn(params['model'], node.input.value);
-
+            console.log(fnString)
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
             const fn = new Function('__modules__', '__params__', fnString);
             // execute the function
@@ -431,15 +431,18 @@ export class ExecuteComponent {
             const duration: number = Math.round(endTime - startTime);
             let duration_msg: string;
             if (duration < 1000)  {
-                duration_msg = '  Executed in ' + duration + ' milliseconds.';
+                duration_msg = '<p style="padding: 2px 0px 2px 10px;"><i>Executed in ' + duration + ' milliseconds.</i></p>';
             } else {
-                duration_msg = '  Executed in ' + duration / 1000 + ' seconds.';
+                duration_msg = '<p style="padding: 2px 0px 2px 10px;"><i>Executed in ' + duration / 1000 + ' seconds.</i></p>';
             }
             for (const str of params.console) {
                 this.dataService.log(str);
             }
             this.dataService.log(duration_msg);
-            this.dataService.log(' ');
+            this.dataService.log('<br>');
+            if (codeResult[1]) {
+                this.dataService.log('<h4 style="padding: 2px 0px 2px 0px; color:red;">PROCESS TERMINATED</h4>');
+            }
             return globalVars;
         } catch (ex) {
             for (const str of params.console) {
@@ -449,12 +452,12 @@ export class ExecuteComponent {
             const duration: number = Math.round(endTime - startTime);
             let duration_msg: string;
             if (duration < 1000)  {
-                duration_msg = '  Executed in ' + duration + ' milliseconds.';
+                duration_msg = '<p style="padding: 2px 0px 2px 10px;""><i>Executed in ' + duration + ' milliseconds.</i></p>';
             } else {
-                duration_msg = '  Executed in ' + duration / 1000 + ' seconds.';
+                duration_msg = '<p style="padding: 2px 0px 2px 10px;""><i>Executed in ' + duration / 1000 + ' seconds.</i></p>';
             }
             this.dataService.log(duration_msg);
-            this.dataService.log(' ');
+            this.dataService.log('<br>');
             this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
             document.getElementById('spinner-off').click();
             if (DEBUG) {

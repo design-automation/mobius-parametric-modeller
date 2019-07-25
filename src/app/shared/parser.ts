@@ -564,6 +564,21 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
                 if (isVariable) {
                     jsString += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
                     arrayName += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
+
+                    // if (result.jsStr === '0' || Number(result.jsStr)) {
+                    //     const num = Number(result.jsStr);
+                    //     if (num >= 0) {
+                    //         jsString += `[${result.jsStr}]`;
+                    //         arrayName += `[${result.jsStr}]`;
+                    //     } else {
+                    //         jsString += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
+                    //         arrayName += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
+                    //     }
+                    // } else {
+                    //     jsString += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
+                    //     arrayName += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
+                    // }
+
                 } else {
                     jsString += `.slice(${result.jsStr})[0]`;
                     arrayName += `.slice(${result.jsStr})[0]`;

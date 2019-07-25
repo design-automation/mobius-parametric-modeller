@@ -24,7 +24,14 @@ declare global {
         };
     }
 }
-
+function sleep(milliseconds) {
+    const start = new Date().getTime();
+    for (let i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds){
+            break;
+        }
+    }
+}
 // ================================================================================================
 // Import / Export data types
 export enum _EIODataFormat {
@@ -47,8 +54,9 @@ function WriteData(__model__: GIModel, data_name: string, model_data: string) {
  * @param data_name The name to be saved in the file system (file extension should be included).
  * @returns the data.
  */
-async function ReadData(__model__: GIModel, data_name: string): Promise<string> {
-    return await loadResource(data_name);
+function ReadData(__model__: GIModel, data_name: string): any {
+    const result = loadResource(data_name);
+    return result;
 }
 /**
  * Imports data into the model.

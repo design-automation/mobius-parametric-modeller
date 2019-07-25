@@ -249,6 +249,9 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
         if (comps[1].type !== strType.VAR) {
             return {'error': 'Error: Expect attribute name after @'};
         }
+        if (comps.length === 2) {
+            return {'jsStr': value};
+        }
         const usedVars = [];
         const attribComp = analyzeComp(comps, 1, usedVars);
         return {'usedVars': usedVars, 'jsStr': '@' + attribComp.jsStr};

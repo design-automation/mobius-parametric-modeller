@@ -42,7 +42,7 @@
         <ng-container *ngSwitchCase="ProcedureTypes.If">
             <div class='line--item' >
                 <div class='basic-function-text'>
-                    if
+                    If
                 </div>
                 <input class='input--arg'
                         [(ngModel)]='data.args[0].value'
@@ -70,7 +70,7 @@
         <ng-container *ngSwitchCase="ProcedureTypes.Elseif">
             <div class='line--item'>
                 <div class='basic-function-text'>
-                    elif
+                    Else If
                 </div>
             
                 <input class='input--arg'
@@ -98,7 +98,7 @@
         <ng-container *ngSwitchCase="ProcedureTypes.Else">
             <div class='line--item'>
                 <div class='basic-function-text'>
-                    else
+                    Else
                 </div>
             </div>
                         
@@ -118,14 +118,14 @@
         <!-- BREAK Template -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Break">
             <div class='basic-function-text'>
-                break
+                Break
             </div>
         </div>
 
         <!-- CONTINUE Template -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Continue">
             <div class='basic-function-text'>
-                continue
+                Continue
             </div>
         </div>
 
@@ -134,7 +134,7 @@
         <ng-container *ngSwitchCase="ProcedureTypes.Foreach">
             <div class='line--item'>
                 <div class='basic-function-text'>
-                    for
+                    For Each
                 </div>
                 <input class='input--arg'
                     [(ngModel)]='data.args[0].value'
@@ -178,7 +178,7 @@
         <ng-container *ngSwitchCase="ProcedureTypes.While">
             <div class='line--item'>
                 <div class='basic-function-text'>
-                    while
+                    While
                 </div>
                 <input class='input--arg' 
                         [(ngModel)]='data.args[0].value'

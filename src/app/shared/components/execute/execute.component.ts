@@ -229,6 +229,7 @@ export class ExecuteComponent {
 
     executeFlowchart() {
         let globalVars = '';
+        const constantList = {};
 
         // reordering the flowchart
         if (!this.dataService.flowchart.ordered) {
@@ -296,7 +297,7 @@ export class ExecuteComponent {
                 }
                 continue;
             }
-            globalVars = this.executeNode(node, funcStrings, globalVars);
+            globalVars = this.executeNode(node, funcStrings, globalVars, constantList);
         }
 
         for (const node of this.dataService.flowchart.nodes) {
@@ -308,7 +309,6 @@ export class ExecuteComponent {
         }
 
         this.dataOutputService.resetIModel();
-
         document.getElementById('spinner-off').click();
         const category = this.isDev ? 'dev' : 'execute';
         this.googleAnalyticsService.trackEvent(category, 'successful', 'click', performance.now() - this.startTime);
@@ -316,8 +316,8 @@ export class ExecuteComponent {
     }
 
 
-    executeNode(node: INode, funcStrings, globalVars): string {
-        const params = {'currentProcedure': [''], 'console': []};
+    executeNode(node: INode, funcStrings, globalVars, constantList): string {
+        const params = {'currentProcedure': [''], 'console': [], 'constants': constantList};
         let fnString = '';
         const startTime = performance.now();
         try {
@@ -416,6 +416,7 @@ export class ExecuteComponent {
                     if (params['constants'].hasOwnProperty(constant)) {
                         const constString = JSON.stringify(params['constants'][constant]);
                         globalVars += `const ${constant} = ${constString};\n`;
+                        constantList[constant] = params['constants'][constant];
                     }
                 }
                 globalVars += '\n';
@@ -506,10 +507,7 @@ export class ExecuteComponent {
                 ex.message = 'Unrecognized or missing variable in the procedure.';
             }
             document.getElementById('Console').click();
-            this.dataService.log('\n=======================================\n' +
-                        ex.name +
-                        '\n=======================================\n' +
-                        ex.message);
+            this.dataService.log(`<h4 style="padding: 2px 0px 2px 0px; color:red;">Error: ${ex.message}</h4>`);
             // console.log('---------------\nError node code:');
             // console.log(fnString);
             const category = this.isDev ? 'dev' : 'execute';

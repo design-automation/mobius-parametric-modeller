@@ -38,6 +38,11 @@ This will result in a popup in your browser, asking you to save the filel.
     Exports all the data in the model as an OBJ.
   
   
+## ParamInfo  
+* **Description:** Returns a text summary of the contents of this model  
+* **Parameters:**  
+* **Returns:** Text that summarises what is in the model.  
+  
 ## ModelInfo  
 * **Description:** Returns a text summary of the contents of this model  
 * **Parameters:**  

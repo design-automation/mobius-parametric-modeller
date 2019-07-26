@@ -473,9 +473,16 @@ export class GIAttribMap {
         const found_keys: number[] = [];
         for (const ent_i of ents_i) {
             const search_value_arr: TAttribDataTypes = this.getEntVal(ent_i) as TAttribDataTypes;
-            if ((search_value_arr !== undefined) &&
-                this._compare(operator, search_value_arr[val_arr_index], search_val) ) {
-                found_keys.push(ent_i);
+            if (search_value_arr !== undefined) {
+                let comp;
+                if (val_arr_index >= 0) {
+                    comp = this._compare(operator, search_value_arr[val_arr_index], search_val);
+                } else {
+                    comp = this._compare(operator, (<any>search_value_arr).slice(val_arr_index)[0], search_val);
+                }
+                if ( comp ) {
+                    found_keys.push(ent_i);
+                }
             }
         }
         return found_keys;
@@ -497,7 +504,13 @@ export class GIAttribMap {
         const found_keys: number[] = [];
         for (const ent_i of ents_i) {
             const search_value_arr: TAttribDataTypes = this.getEntVal(ent_i) as TAttribDataTypes;
-            if ( this._compare(operator, search_value_arr[val_arr_index], search_val) ) {
+            let comp;
+            if (val_arr_index >= 0) {
+                comp = this._compare(operator, search_value_arr[val_arr_index], search_val);
+            } else {
+                comp = this._compare(operator, (<any>search_value_arr).slice(val_arr_index)[0], search_val);
+            }
+            if ( comp ) {
                 found_keys.push(ent_i);
             }
         }

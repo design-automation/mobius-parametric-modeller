@@ -157,7 +157,7 @@ export class CodeUtils {
                     if (arg.jsValue.indexOf('__params__') !== -1 &&
                     arg.jsValue.indexOf(_parameterTypes.getattrib) === -1) { throw new Error('Unexpected Identifier'); }
                     if (arg.jsValue[0] === '#') {
-                        returnArgVals.push('`' + this.repGetAttrib(arg.jsValue) + '`');
+                        returnArgVals.push('`' + arg.jsValue + '`');
                         continue;
                     }
                     // returnArgVals.push(this.repGetAttrib(arg.jsValue));
@@ -191,7 +191,7 @@ export class CodeUtils {
                     }
 
                     if (arg.jsValue && arg.jsValue[0] === '#') {
-                        argVals.push('`' + this.repGetAttrib(arg.jsValue) + '`');
+                        argVals.push('`' + arg.jsValue + '`');
                         continue;
                     }
                     argVals.push(arg.jsValue);
@@ -327,9 +327,7 @@ export class CodeUtils {
         if (res.length === 1 ) {
             return val;
         }
-        if (res[0] === '#') {
-            return `__modules__.${_parameterTypes.getattrib}(__params__.model, null, '${res[1]}')`;
-        } else if (res[0] === '') {
+        if (res[0] === '') {
             return `__modules__.${_parameterTypes.getattrib}(__params__.model, null, '${res[1]}')`;
         }
         return `__modules__.${_parameterTypes.getattrib}(__params__.model, ${res[0]}, '${res[1]}')`;

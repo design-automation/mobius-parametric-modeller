@@ -14,19 +14,22 @@ enum strType {
 
 const mathOperators = new Set(['+', '*', '/', '%']);
 const binaryOperators = new Set([   '+' , '+=' , '-=', '*' , '/' , '%'  , '<' , '<=',
-                                    '==', '===', '>' , '>=', '!=', '!==', '&&', '||', 'and', 'or', 'not']);
+                                // '==', '===', '>' , '>=', '!=', '!==', '&&', '||', 'and', 'or', 'not']);
+                                '==', '===', '>' , '>=', '!=', '!==', '&&', '||']);
 
 const postfixUnaryOperators = new Set(['++', '--']);
-const prefixUnaryOperators = new Set(['-', '!', 'not']);
+const prefixUnaryOperators = new Set(['-', '!']);
+// const prefixUnaryOperators = new Set(['-', '!', 'not']);
 
-const componentStartSymbols = new Set(['-', '!', '(', '[', '{', '#', '@', 'not']);
+const componentStartSymbols = new Set(['-', '!', '(', '[', '{', '#', '@']);
+// const componentStartSymbols = new Set(['-', '!', '(', '[', '{', '#', '@', 'not']);
 
 const otherSymbols = new Set(['.', '#', ',']);
 
 const noSpaceBefore = new Set(['@', ',', ']', '[']);
 
 const allConstants = (<string[][]>inline_func[0][1]).map(constComp => constComp[0]);
-const specialVars = new Set(['undefined', 'null', 'Infinity', 'true', 'false', 'True', 'False'].concat(allConstants));
+const specialVars = new Set(['undefined', 'null', 'Infinity', 'true', 'false', 'True', 'False', 'None'].concat(allConstants));
 
 const reservedWords = [
     'abstract', 'arguments', 'await', 'boolean',
@@ -325,13 +328,17 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
 
     // if "-" or "!" or "not" ==> add the operator then analyzeComp the next
     } else if (prefixUnaryOperators.has(comps[i].value)) {
-        if (comps[i].value === 'not') {
-            newString += 'not '; //////////
-            jsString += '!'; //////////
-        } else {
-            newString += comps[i].value; //////////
-            jsString += comps[i].value; //////////
-        }
+        newString += comps[i].value; //////////
+        jsString += comps[i].value; //////////
+
+        // if (comps[i].value === 'not') {
+        //     newString += 'not '; //////////
+        //     jsString += '!'; //////////
+        // } else {
+        //     newString += comps[i].value; //////////
+        //     jsString += comps[i].value; //////////
+        // }
+
         if (i + 1 === comps.length) {
             return {'error': 'Error: Expressions expected after "-"\n' +
             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
@@ -401,7 +408,7 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
         if (result.error) { return result; }
         i = result.i;
         newString += ' #@' + result.str.replace(/ /g, '') + ' '; //////////
-        jsString += ' #@' + result.jsStr.replace(/ /g, '') + ' '; //////////
+        jsString += ' #@' + result.str.replace(/ /g, '') + ' '; //////////
 
     // if "@" ==> @variable
     } else if (comps[i].value === '@') {
@@ -472,20 +479,23 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
     let newString = comp.value;
     let jsString = comp.value;
 
-    //
-    if (comp.value === 'and') {
-        return {'i': i + 1, 'str': 'and', 'jsStr': '&&'};
-    } else if (comp.value === 'or') {
-        return {'i': i + 1, 'str': 'or', 'jsStr': '||'};
-    } else if (comp.value === 'True') {
-        jsString = 'true';
-    } else if (comp.value === 'False') {
-        jsString = 'false';
+    // if (comp.value === 'and') {
+    //     return {'i': i + 1, 'str': 'and', 'jsStr': '&&'};
+    // } else if (comp.value === 'or') {
+    //     return {'i': i + 1, 'str': 'or', 'jsStr': '||'};
+    // } else if (comp.value === 'True') {
+    //     jsString = 'true';
+    // } else if (comp.value === 'False') {
+    //     jsString = 'false';
     // } else if (comp.value === 'true') {
     //     newString = 'True';
     // } else if (comp.value === 'false') {
     //     newString = 'False';
-    }
+    // } else if (comp.value === 'null') {
+    //     newString = 'None';
+    // } else if (comp.value === 'None') {
+    //     jsString = 'null';
+    // }
 
 
     if (!disallowAt && !specialVars.has(comp.value)) {
@@ -502,9 +512,9 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
     }
     // if variable is followed immediately by another var/num/str --> not allowed
     if ( comps[i + 1].type !== strType.OTHER) {
-        if (comps[i + 1].value === 'and' || comps[i + 1].value === 'or') {
-            return {'i': i + 1, 'str': newString, 'jsStr': jsString};
-        }
+        // if (comps[i + 1].value === 'and' || comps[i + 1].value === 'or') {
+        //     return {'i': i + 1, 'str': newString, 'jsStr': jsString};
+        // }
         return { 'error': 'Error: Variable followed by another variable/number/string \n' +
         `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
 
@@ -762,13 +772,14 @@ function analyzeExpression(comps: {'type': strType, 'value': string}[], i: numbe
             jsString += ' ';
         }
         newString += comps[i].value;
-        if (comps[i].value === 'and') {
-            jsString += '&&';
-        } else if (comps[i].value === 'or') {
-            jsString += '||';
-        } else {
-            jsString += comps[i].value;
-        }
+        jsString += comps[i].value;
+        // if (comps[i].value === 'and') {
+        //     jsString += '&&';
+        // } else if (comps[i].value === 'or') {
+        //     jsString += '||';
+        // } else {
+        //     jsString += comps[i].value;
+        // }
         const result = analyzeComp(comps, i + 1, vars, false, 'expr');
         if (result.error) { return result; }
         i = result.i + 1;
@@ -1132,13 +1143,14 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
                 if (i === str.length) { break; }
                 code = str.charCodeAt(i);
             }
+            comps.push({ 'type': strType.VAR, 'value': str.substring(startI, i)});
 
-            const varString = str.substring(startI, i);
-            if (varString === 'and' || varString === 'or' || varString === 'not') {
-                comps.push({ 'type': strType.OTHER, 'value': varString});
-            } else {
-                comps.push({ 'type': strType.VAR, 'value': varString});
-            }
+            // const varString = str.substring(startI, i);
+            // if (varString === 'and' || varString === 'or' || varString === 'not') {
+            //     comps.push({ 'type': strType.OTHER, 'value': varString});
+            // } else {
+            //     comps.push({ 'type': strType.VAR, 'value': varString});
+            // }
 
         // double-quotes (") or single-quotes (')
         } else if (code === 34 || code === 39) {
@@ -1170,10 +1182,11 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
                 comps.push({ 'type': strType.OTHER, 'value': str.charAt(i)});
                 i++;
             }
-        // negative ! => change it to "not"
-        } else if (code === 33 && str.charCodeAt(i + 1) !== 61) {
-            comps.push({ 'type': strType.OTHER, 'value': 'not'});
-            i++;
+        // // negative ! => change it to "not"
+        // } else if (code === 33 && str.charCodeAt(i + 1) !== 61) {
+        //     comps.push({ 'type': strType.OTHER, 'value': 'not'});
+        //     i++;
+
         // comparison operator (!, <, =, >)
         } else if (code === 33 || (code > 59 && code < 63)) {
             const startI = i;
@@ -1199,14 +1212,14 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
             if (str.charCodeAt(i) !== 124) { // check 2nd |
                 return 'Error: || expected.';
             }
-            comps.push({ 'type': strType.OTHER, 'value': 'or'});
+            comps.push({ 'type': strType.OTHER, 'value': '||'});
             i++;
         } else if (code === 38) { // and operator (&&); check 1st &
             i++;
             if (str.charCodeAt(i) !== 38) { // check 2nd &
                 return 'Error: && expected.';
             }
-            comps.push({ 'type': strType.OTHER, 'value': 'and'});
+            comps.push({ 'type': strType.OTHER, 'value': '&&'});
             i++;
 
         // others: numeric operator (*, /, %), brackets ((), [], {}), comma (,), space, ...

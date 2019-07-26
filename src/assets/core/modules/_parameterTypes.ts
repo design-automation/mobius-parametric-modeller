@@ -121,4 +121,6 @@ degToRad = __modules__._conversion.degToRad;
 rand = __modules__._rand.rand;
 randInt = __modules__._rand.randInt;
 randPick = __modules__._rand.randPick;
+setattr = __modules__._model.__setAttrib__;
+getattr = __modules__._model.__getAttrib__;
 `;

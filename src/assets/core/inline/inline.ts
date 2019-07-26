@@ -145,6 +145,11 @@ const str = [
     ['len(str)', 'Returns the number of characters in the string']
 ];
 
+const attrib = [
+    ['setattr(entity, name, value)', 'Set an entity attribute value'],
+    ['getattr(entity, name)', 'Query for an entity attribute value']
+];
+
 export const inline_func = [
     ['constants', constants],
     ['random', random],
@@ -154,7 +159,8 @@ export const inline_func = [
     ['colours', colours],
     ['arithmetic', arithmetic],
     ['statistics', statistics],
-    ['trigonometry', trigonometry]
+    ['trigonometry', trigonometry],
+    ['attributes', attrib]
 ];
 
 // const inline_func_lst: string[][][] = inline_func.map(x => x[1]);

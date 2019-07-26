@@ -24,14 +24,6 @@ declare global {
         };
     }
 }
-function sleep(milliseconds) {
-    const start = new Date().getTime();
-    for (let i = 0; i < 1e7; i++) {
-        if ((new Date().getTime() - start) > milliseconds){
-            break;
-        }
-    }
-}
 // ================================================================================================
 // Import / Export data types
 export enum _EIODataFormat {
@@ -142,6 +134,16 @@ export function ExportData(__model__: GIModel, filename: string, data_format: _E
     }
 }
 // ================================================================================================
+/**
+ * Returns a text summary of the contents of this model
+ *
+ * @param __model__
+ * @param __constList__
+ * @returns Text that summarises what is in the model.
+ */
+export function ParamInfo(__model__: GIModel, __constList__: {}|string): string {
+    return JSON.stringify(__constList__);
+}
 /**
  * Returns a text summary of the contents of this model
  *

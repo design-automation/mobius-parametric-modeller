@@ -34,11 +34,17 @@ export enum _EIODataFormat {
 /**
  * Writes data into chrome local file system.
  *
- * @param data_name The name to be saved in the file system (file extension should be included).
  * @param model_data The data to be saved (can be the url to the file).
+ * @param file_name The name to be saved in the file system (file extension should be included).
+ * @returns whether the data is successfully saved.
  */
-function WriteData(__model__: GIModel, data_name: string, model_data: string) {
-    saveResource(data_name, model_data);
+export function WriteData(__model__: GIModel, model_data: string, file_name: string): Boolean {
+    try {
+        saveResource(model_data, file_name);
+        return true;
+    } catch (ex) {
+        return false;
+    }
 }
 /**
  * Retrieve data from the chrome local file system.
@@ -46,9 +52,8 @@ function WriteData(__model__: GIModel, data_name: string, model_data: string) {
  * @param data_name The name to be saved in the file system (file extension should be included).
  * @returns the data.
  */
-function ReadData(__model__: GIModel, data_name: string): any {
-    const result = loadResource(data_name);
-    return result;
+export function ReadData(__model__: GIModel, data_name: string): string {
+    return data_name;
 }
 /**
  * Imports data into the model.
@@ -214,7 +219,7 @@ export function ModelCheck(__model__: GIModel): string {
  * Functions for saving and loading resources to file system.
  */
 
-function saveResource(name: string, file: string) {
+function saveResource(file: string, name: string) {
     const itemstring = localStorage.getItem('mobius_backup_list');
     if (!itemstring) {
         localStorage.setItem('mobius_backup_list', `["${name}"]`);
@@ -246,8 +251,8 @@ function saveResource(name: string, file: string) {
         requestedBytes, function(grantedBytes) {
             // @ts-ignore
             window.webkitRequestFileSystem(PERSISTENT, grantedBytes, saveToFS,
-            function(e) { console.log('Error', e); });
-        }, function(e) { console.log('Error', e); }
+            function(e) { throw e; });
+        }, function(e) { throw e; }
     );
 
     // localStorage.setItem(code, file);
@@ -262,30 +267,4 @@ function saveToFS(fs) {
             window['_file_'] = undefined;
         }, (e) => { console.log(e); });
     }, (e) => { console.log(e.code); });
-}
-
-async function loadResource(filecode: string): Promise<string> {
-    const p = new Promise<string>((resolve) => {
-        const requestedBytes = 1024 * 1024 * 50;
-        navigator.webkitPersistentStorage.requestQuota (
-            requestedBytes, function(grantedBytes) {
-                // @ts-ignore
-                window.webkitRequestFileSystem(PERSISTENT, grantedBytes, function(fs) {
-                    fs.root.getFile(filecode, {}, function(fileEntry) {
-                        fileEntry.file((file) => {
-                            const reader = new FileReader();
-                            reader.onerror = () => {
-                                resolve('error');
-                            };
-                            reader.onloadend = () => {
-                                resolve(<string> reader.result);
-                            };
-                            reader.readAsText(file, 'text/plain;charset=utf-8');
-                        });
-                    });
-                });
-            }, function(e) { console.log('Error', e); }
-        );
-    });
-    return await p;
 }

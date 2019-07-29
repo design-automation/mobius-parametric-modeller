@@ -3,9 +3,9 @@
 ## WriteData  
 * **Description:** Writes data into chrome local file system.  
 * **Parameters:**  
-  * *data_name:* The name to be saved in the file system (file extension should be included).  
-  * *model_data:* The data to be saved (can be the url to the file).
-  
+  * *model_data:* The data to be saved (can be the url to the file).  
+  * *file_name:* The name to be saved in the file system (file extension should be included).  
+* **Returns:** whether the data is successfully saved.  
   
 ## ReadData  
 * **Description:** Retrieve data from the chrome local file system.  
@@ -69,9 +69,4 @@ This will result in a popup in your browser, asking you to save the filel.
 * **Description:** undefined  
 * **Parameters:**  
   * *fs:* undefined  
-  
-## loadResource  
-* **Description:** undefined  
-* **Parameters:**  
-  * *filecode:* undefined  
   

@@ -179,7 +179,9 @@ export class PanelHeaderComponent implements OnDestroy {
             if (result === 'error') {
                 return;
             }
+
             this.dataService.file = circularJSON.parse(result);
+            this.dataService.file.flowchart.meta.selected_nodes = [this.dataService.file.flowchart.nodes.length - 1];
             this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
             if (this.dataService.mobiusSettings.execute) {
                 document.getElementById('executeButton').click();
@@ -203,6 +205,7 @@ export class PanelHeaderComponent implements OnDestroy {
                 return;
             }
             const file = circularJSON.parse(result);
+            file.flowchart.meta.selected_nodes = [file.flowchart.nodes.length - 1];
             // parse the flowchart
             const fl = file.flowchart;
 

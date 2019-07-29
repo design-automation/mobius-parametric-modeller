@@ -12,6 +12,7 @@ import { InputType } from '@models/port';
 import { GoogleAnalyticsService } from '@shared/services/google.analytics';
 import { Router } from '@angular/router';
 import { DataOutputService } from '@shared/services/dataOutput.service';
+import { SaveFileComponent } from '@shared/components/file';
 
 export const mergeInputsFunc = `
 function mergeInputs(models){
@@ -76,17 +77,28 @@ export class ExecuteComponent {
             for (const func of _parameterTypes.urlFunctions) {
                 const funcMeta = func.split('.');
                 if (prod.meta.module === funcMeta[0] && prod.meta.name === funcMeta[1]) {
-                    for (const arg of prod.args) {
-                        if (arg.name[0] === '_') { continue; }
-                        if (arg.value.indexOf('://') !== -1) {
-                            const val = <string>(arg.value).replace(/ /g, '');
-                            const result = await CodeUtils.getURLContent(val);
-                            if (result === undefined) {
+                    const arg = prod.args[2];
+                    console.log(arg.name, arg.value);
+                    if (arg.name[0] === '_') { continue; }
+                    if (arg.value.indexOf('://') !== -1) {
+                        const val = <string>(arg.value).replace(/ /g, '');
+                        const result = await CodeUtils.getURLContent(val);
+                        if (result === undefined) {
+                            prod.resolvedValue = arg.value;
+                        } else {
+                            prod.resolvedValue = '`' + result + '`';
+                        }
+                        break;
+                    } else {
+                        const backup_list = JSON.parse(localStorage.getItem('mobius_backup_list'));
+                        const val = arg.value.replace(/\"|\'/g, '');
+                        if (backup_list.indexOf(val) !== -1) {
+                            const result = await SaveFileComponent.loadFromFileSystem(val);
+                            if (!result || result === 'error') {
                                 prod.resolvedValue = arg.value;
                             } else {
                                 prod.resolvedValue = '`' + result + '`';
                             }
-                            break;
                         }
                     }
                     break;

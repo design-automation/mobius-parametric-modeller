@@ -198,12 +198,17 @@ export class CodeUtils {
                     // argVals.push(this.repGetAttrib(arg.jsValue));
                 }
                 if (prod.resolvedValue) {
+                    let prodResolvedCheck = false;
                     for (let i = 0; i < argVals.length; i++) {
                         if (argVals[i].indexOf('://') !== -1) {
                             argVals[i] = prod.resolvedValue;
                             prod.resolvedValue = null;
+                            prodResolvedCheck = true;
                             break;
                         }
+                    }
+                    if (!prodResolvedCheck) {
+                        argVals[1] = prod.resolvedValue;
                     }
                 }
                 // const argValues = argVals.join(', ');

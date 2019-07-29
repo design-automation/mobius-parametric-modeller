@@ -23,7 +23,7 @@ export const _parameterTypes = {
 
     return: '_Output.Return',
 
-    urlFunctions: ['util.ImportData', 'util.ModelCompare']
+    urlFunctions: ['util.WriteData', 'util.ReadData', 'util.ImportData', 'util.ModelCompare']
 };
 
 export const _varString = `

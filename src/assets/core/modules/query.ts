@@ -1,9 +1,9 @@
 /**
  * The `query` module has functions for querying entities in the the model.
  * Most of these functions all return a list of IDs of entities in the model.
- * The Count function returns the number of entities, rather than the list of entities.
- *
+ * ~
  * The Get() function is an important function, and is used in many modelling workflows.
+ * ~
  */
 
 /**
@@ -15,10 +15,10 @@ import { TId, TQuery, EEntType, ESort, TEntTypeIdx } from '@libs/geo-info/common
 import { idsMake, getArrDepth } from '@libs/geo-info/id';
 import { checkIDs, IDcheckObj } from './_check_args';
 
-// TQuery should be something like this:
+// TQuery is defined as a string.
+// It should be something like this:
 //
 // #@name != value
-// #@name1 > 10 || #@name2 < 5 && #@name3 == 'red'
 // #@xyz[2] > 5
 //
 // ================================================================================================
@@ -133,48 +133,35 @@ function _compareID(ent_arr1: TEntTypeIdx, ent_arr2: TEntTypeIdx): number {
     if (index1 !== index2) { return index1 -  index2; }
     return 0;
 }
-export enum _EQuerySortMethod {
-    'ID_ASCENDING' = 'ID_ascending',
-    'ID_DESCENDING' = 'ID_descending',
-    'GEOMETRIC' = 'geometric_order'
-}
 /**
- * Returns a list of entities based on a query expression. 
+ * Returns a list of entities based on a query expression.
  * The result will always be a list of entities, even if there is only one entity.
- * In a case where you expect only one entity, remember to get the first item in the list.
+ * In a case where you want only one entity, remember to get the first item in the list.
  * ~
- * The query expression should use the following format: #@name == value,
+ * The query expression can use the following format: #@name == value,
  * where 'name' is the attribute name, and 'value' is the attribute value that you are searching for.
  * ~
  * If the attribute value is a string, then in must be in quotes, as follows: #@name == 'str_value'.
- * The '==' is the comparison operator. The other comparison operators are: !=, >, >=, <, =<.
  * ~
- * Entities can be search using multiple query expressions, as follows:  #@name1 == value1 &&  #@name2 == value2.
- * Query expressions can be combined with either && (and) and || (or), where
- * && takes precedence over ||.
- * ~
- * The order of the entities is specified by the 'sort' method. If 'geometrc_order' is slected, then entities are
- * returned in the order in which they are found within the geometric model. For exampl, when getting positions of a polygon, 
- * then the order of the positions will follow the order of the vertices in the polygon.
+ * If the attribute value is a number, then any comparison operator can be used: ==, !=, >, >=, <, =<.
  * ~
  * @param __model__
  * @param select Enum, specifies what type of entities will be returned.
  * @param entities List of entities to be searched. If 'null' (without quotes), all entities in the model will be searched.
  * @param query_expr Attribute condition. If 'null' (without quotes), no condition is set; all found entities are returned.
- * @param sort Enum, sort the entities that are returned in specific order.
  * @returns Entities, a list of entities that match the type specified in 'select' and the conditions specified in 'query_expr'.
- * @example positions = query.Get(positions, polyline1, #@xyz[2]>10, 'geometric_order')
+ * @example positions = query.Get(positions, polyline1, #@xyz[2]>10)
  * @example_info Returns a list of positions that are part of polyline1 where the z-coordinate is more than 10.
- * @example positions = query.Get(positions, null, #@xyz[2]>10, 'ID_descending')
+ * @example positions = query.Get(positions, null, #@xyz[2]>10)
  * @example_info Returns a list of positions in the model where the z-coordinate is more than 10.
- * @example positions = query.Get(positions, polyline1, null, 'geometric_order')
+ * @example positions = query.Get(positions, polyline1, null)
  * @example_info Returns a list of all of the positions that are part of polyline1.
- * @example polylines = query.Get(polylines, position1, null, 'ID_descending')
+ * @example polylines = query.Get(polylines, position1, null)
  * @example_info Returns a list of all of the polylines that use position1.
- * @example collections = query.Get(collections, null, #@type=="floors", 'ID_descending')
+ * @example collections = query.Get(collections, null, #@type=="floors")
  * @example_info Returns a list of all the collections that have an attribute called "type" with a value "floors".
  */
-export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], query_expr: TQuery, sort: _EQuerySortMethod): TId[] {
+export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], query_expr: TQuery): TId[] {
     // --- Error Check ---
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
     if (entities !== null && entities !== undefined) {
@@ -186,13 +173,6 @@ export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId
     const select_ent_types: EEntType|EEntType[] = _convertSelectToEEntTypeStr(select);
     const found_ents_arr: TEntTypeIdx[] = _get(__model__, select_ent_types, ents_arr, query_expr);
     if (found_ents_arr.length === 0) { return []; }
-    // sort entities
-    if (sort === _EQuerySortMethod.ID_ASCENDING) {
-        found_ents_arr.sort(_compareID);
-    } else if (sort === _EQuerySortMethod.ID_DESCENDING) {
-        found_ents_arr.sort(_compareID);
-        found_ents_arr.reverse();
-    }
     // remove duplicates
     const found_ents_arr_no_dups: TEntTypeIdx[] = [found_ents_arr[0]];
     for (let i = 1; i < found_ents_arr.length; i++) {
@@ -254,13 +234,13 @@ export function Invert(__model__: GIModel, select: _EQuerySelect, entities: TId|
 // ================================================================================================
 /**
  * Returns the number of entities based on a query expression.
- * The query expression should use the following format: #@name == value,
- * where 'name' is the attribute name, and 'value' is the attribute value.
- * If the attribute value is a string, then in must be in qoutes, as follows: #@name == 'str_value'.
- * The '==' is the comparison operator. The other comparison operators are: !=, >, >=, <, =<.
- * Entities can be search using multiple query expressions, as follows:  #@name1 == value1 &&  #@name2 == value2.
- * Query expressions can be combine with either && (and) and || (or), where
- * && takes precedence over ||.
+ * ~
+ * The query expression can use the following format: #@name == value,
+ * where 'name' is the attribute name, and 'value' is the attribute value that you are searching for.
+ * ~
+ * If the attribute value is a string, then in must be in quotes, as follows: #@name == 'str_value'.
+ * ~
+ * If the attribute value is a number, then any comparison operator can be used: ==, !=, >, >=, <, =<.
  *
  * @param __model__
  * @param select Enum, specifies what type of entities are to be counted.
@@ -276,7 +256,7 @@ export function Count(__model__: GIModel, select: _EQuerySelect, entities: TId|T
     //     checkIDs('query.Count', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null);
     // }
     // --- Error Check ---
-    return Get(__model__, select, entities, query_expr, _EQuerySortMethod.GEOMETRIC).length; // Check done in Get
+    return Get(__model__, select, entities, query_expr).length; // Check done in Get
 }
 // ================================================================================================
 export function _neighbours(__model__: GIModel,  select_ent_types: EEntType|EEntType[],
@@ -302,7 +282,8 @@ export function _neighbours(__model__: GIModel,  select_ent_types: EEntType|EEnt
     }
 }
 /**
-* Returns a list of welded neighbours of any entity
+* Returns a list of welded neighbours of any entity.
+* ~
 * @param __model__
 * @param select Enum, select the types of neighbours to return
 * @param entities List of entities.
@@ -344,9 +325,12 @@ export enum _ESortMethod {
 }
 /**
  * Sorts entities based on a sort expression.
+ * ~
  * The sort expression should use the following format: #@name, where 'name' is the attribute name.
  * Entities can be sorted using multiple sort expresssions as follows: #@name1 && #@name2.
+ * ~
  * If the attribute is a list, and index can also be specified as follows: #@name1[index].
+ * ~
  * @param __model__
  * @param entities List of two or more entities to be sorted, all of the same entity type.
  * @param sort_expr Attribute condition. If 'null' (without quotes), entities will be sorted based on their ID.
@@ -587,56 +571,3 @@ export function Type(__model__: GIModel, entities: TId|TId[], query_ent_type: _E
 // TODO IS_QUAD
 
 // ================================================================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * Checks if polyline(s) or wire(s) are closed.
- * ~
- * WARNING: This function has been deprecated. Plese use the query.Type() function instead.
- *
- * @param __model__
- * @param lines Wires, polylines, or polygons.
- * @returns Boolean or list of boolean in input sequence of lines.
- * @example mod.IsClosed([polyline1,polyline2,polyline3])
- * @example_info Returns list [true,true,false] if polyline1 and polyline2 are closed but polyline3 is open.
- */
-export function _IsClosed(__model__: GIModel, lines: TId|TId[]): boolean|boolean[] {
-    // --- Error Check ---
-    const ents_arr = checkIDs('query.isClosed', 'lines', lines, [IDcheckObj.isID, IDcheckObj.isIDList],
-                                [EEntType.PLINE, EEntType.WIRE, EEntType.PGON]);
-    // --- Error Check ---
-    return _isClosed(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
-}

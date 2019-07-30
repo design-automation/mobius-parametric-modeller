@@ -3,38 +3,30 @@
 ## Get  
 * **Description:** Returns a list of entities based on a query expression.
 The result will always be a list of entities, even if there is only one entity.
-In a case where you expect only one entity, remember to get the first item in the list.
+In a case where you want only one entity, remember to get the first item in the list.
 ~
-The query expression should use the following format: #@name == value,
+The query expression can use the following format: #@name == value,
 where 'name' is the attribute name, and 'value' is the attribute value that you are searching for.
 ~
 If the attribute value is a string, then in must be in quotes, as follows: #@name == 'str_value'.
-The '==' is the comparison operator. The other comparison operators are: !=, >, >=, <, =<.
 ~
-Entities can be search using multiple query expressions, as follows:  #@name1 == value1 &&  #@name2 == value2.
-Query expressions can be combined with either && (and) and || (or), where
-&& takes precedence over ||.
-~
-The order of the entities is specified by the 'sort' method. If 'geometrc_order' is slected, then entities are
-returned in the order in which they are found within the geometric model. For exampl, when getting positions of a polygon,
-then the order of the positions will follow the order of the vertices in the polygon.
+If the attribute value is a number, then any comparison operator can be used: ==, !=, >, >=, <, =<.
 ~  
 * **Parameters:**  
   * *select:* Enum, specifies what type of entities will be returned.  
   * *entities:* List of entities to be searched. If 'null' (without quotes), all entities in the model will be searched.  
   * *query_expr:* Attribute condition. If 'null' (without quotes), no condition is set; all found entities are returned.  
-  * *sort:* Enum, sort the entities that are returned in specific order.  
 * **Returns:** Entities, a list of entities that match the type specified in 'select' and the conditions specified in 'query_expr'.  
 * **Examples:**  
-  * positions = query.Get(positions, polyline1, #@xyz[2]>10, 'geometric_order')  
+  * positions = query.Get(positions, polyline1, #@xyz[2]>10)  
     Returns a list of positions that are part of polyline1 where the z-coordinate is more than 10.  
-  * positions = query.Get(positions, null, #@xyz[2]>10, 'ID_descending')  
+  * positions = query.Get(positions, null, #@xyz[2]>10)  
     Returns a list of positions in the model where the z-coordinate is more than 10.  
-  * positions = query.Get(positions, polyline1, null, 'geometric_order')  
+  * positions = query.Get(positions, polyline1, null)  
     Returns a list of all of the positions that are part of polyline1.  
-  * polylines = query.Get(polylines, position1, null, 'ID_descending')  
+  * polylines = query.Get(polylines, position1, null)  
     Returns a list of all of the polylines that use position1.  
-  * collections = query.Get(collections, null, #@type=="floors", 'ID_descending')  
+  * collections = query.Get(collections, null, #@type=="floors")  
     Returns a list of all the collections that have an attribute called "type" with a value "floors".
   
   
@@ -51,13 +43,13 @@ then the order of the positions will follow the order of the vertices in the pol
   
 ## Count  
 * **Description:** Returns the number of entities based on a query expression.
-The query expression should use the following format: #@name == value,
-where 'name' is the attribute name, and 'value' is the attribute value.
-If the attribute value is a string, then in must be in qoutes, as follows: #@name == 'str_value'.
-The '==' is the comparison operator. The other comparison operators are: !=, >, >=, <, =<.
-Entities can be search using multiple query expressions, as follows:  #@name1 == value1 &&  #@name2 == value2.
-Query expressions can be combine with either && (and) and || (or), where
-&& takes precedence over ||.  
+~
+The query expression can use the following format: #@name == value,
+where 'name' is the attribute name, and 'value' is the attribute value that you are searching for.
+~
+If the attribute value is a string, then in must be in quotes, as follows: #@name == 'str_value'.
+~
+If the attribute value is a number, then any comparison operator can be used: ==, !=, >, >=, <, =<.  
 * **Parameters:**  
   * *select:* Enum, specifies what type of entities are to be counted.  
   * *entities:* List of entities to be searched. If 'null' (without quotes), list of all entities in the model.  
@@ -69,7 +61,8 @@ Query expressions can be combine with either && (and) and || (or), where
   
   
 ## Neighbours  
-* **Description:** Returns a list of welded neighbours of any entity  
+* **Description:** Returns a list of welded neighbours of any entity.
+~  
 * **Parameters:**  
   * *select:* Enum, select the types of neighbours to return  
   * *entities:* List of entities.  
@@ -81,9 +74,12 @@ Query expressions can be combine with either && (and) and || (or), where
   
 ## Sort  
 * **Description:** Sorts entities based on a sort expression.
+~
 The sort expression should use the following format: #@name, where 'name' is the attribute name.
 Entities can be sorted using multiple sort expresssions as follows: #@name1 && #@name2.
-If the attribute is a list, and index can also be specified as follows: #@name1[index].  
+~
+If the attribute is a list, and index can also be specified as follows: #@name1[index].
+~  
 * **Parameters:**  
   * *entities:* List of two or more entities to be sorted, all of the same entity type.  
   * *sort_expr:* Attribute condition. If 'null' (without quotes), entities will be sorted based on their ID.  

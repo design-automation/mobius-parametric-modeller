@@ -31,6 +31,14 @@ export enum _EIODataFormat {
     OBJ = 'obj',
     GEOJSON = 'geojson'
 }
+export enum _EIODataSource {
+    DEFAULT = 'default',
+    FILESYS = 'from file system'
+}
+export enum _EIODataTarget {
+    DEFAULT = 'download file',
+    FILESYS = 'save to file system'
+}
 /**
  * Writes data into chrome local file system.
  *
@@ -40,8 +48,7 @@ export enum _EIODataFormat {
  */
 export function WriteData(__model__: GIModel, model_data: string, file_name: string): Boolean {
     try {
-        saveResource(model_data, file_name);
-        return true;
+        return saveResource(model_data, file_name);
     } catch (ex) {
         return false;
     }
@@ -108,26 +115,36 @@ export enum _EIOExportDataFormat {
  * @param __model__
  * @param filename Name of the file as a string.
  * @param data_format Enum, the file format.
+ * @param data_target Enum, where the data is to be exported to.
  * @returns Boolean.
  * @example util.ExportData ('my_model.obj', obj)
  * @example_info Exports all the data in the model as an OBJ.
  */
-export function ExportData(__model__: GIModel, filename: string, data_format: _EIOExportDataFormat): boolean {
+export function ExportData(__model__: GIModel, filename: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): boolean {
     switch (data_format) {
         case _EIOExportDataFormat.GI:
             let gi_data: string = JSON.stringify(__model__.getData());
             gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
-            return download(gi_data , filename);
+            if (data_target === _EIODataTarget.DEFAULT) {
+                return download(gi_data , filename);
+            }
+            return saveResource(gi_data, filename);
             break;
         case _EIOExportDataFormat.OBJ:
             const obj_data: string = exportObj(__model__);
             // obj_data = obj_data.replace(/#/g, '%23'); // TODO temporary fix
-            return download(obj_data, filename);
+            if (data_target === _EIODataTarget.DEFAULT) {
+                return download(obj_data , filename);
+            }
+            return saveResource(obj_data, filename);
             break;
         case _EIOExportDataFormat.DAE:
             const dae_data: string = exportDae(__model__);
             // dae_data = dae_data.replace(/#/g, '%23'); // TODO temporary fix
-            return download(dae_data, filename);
+            if (data_target === _EIODataTarget.DEFAULT) {
+                return download(dae_data, filename);
+            }
+            return saveResource(dae_data, filename);
             break;
         // case _EIODataFormat.GEOJSON:
         //     const geojson_data: string = exportObj(__model__);
@@ -137,6 +154,20 @@ export function ExportData(__model__: GIModel, filename: string, data_format: _E
             throw new Error('Data type not recognised');
             break;
     }
+}
+/**
+ * Export data from the model as a file.
+ * This will result in a popup in your browser, asking you to save the filel.
+ * @param __model__
+ * @param filename Name of the file as a string.
+ * @returns Boolean.
+ * @example util.ExportData ('my_model.obj', obj)
+ * @example_info Exports all the data in the model as an OBJ.
+ */
+export function ExportEDXAnswer(__model__: GIModel, filename: string): boolean {
+    let gi_data: string = JSON.stringify(__model__.getData());
+    gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
+    return download(gi_data , filename);
 }
 // ================================================================================================
 /**
@@ -219,7 +250,7 @@ export function ModelCheck(__model__: GIModel): string {
  * Functions for saving and loading resources to file system.
  */
 
-function saveResource(file: string, name: string) {
+function saveResource(file: string, name: string): boolean {
     const itemstring = localStorage.getItem('mobius_backup_list');
     if (!itemstring) {
         localStorage.setItem('mobius_backup_list', `["${name}"]`);
@@ -254,7 +285,7 @@ function saveResource(file: string, name: string) {
             function(e) { throw e; });
         }, function(e) { throw e; }
     );
-
+    return true;
     // localStorage.setItem(code, file);
 }
 

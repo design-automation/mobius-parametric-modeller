@@ -32,6 +32,7 @@ This will result in a popup in your browser, asking you to save the filel.
 * **Parameters:**  
   * *filename:* Name of the file as a string.  
   * *data_format:* Enum, the file format.  
+  * *data_target:* Enum, where the data is to be exported to.  
 * **Returns:** Boolean.  
 * **Examples:**  
   * util.ExportData ('my_model.obj', obj)  
@@ -62,8 +63,8 @@ This will result in a popup in your browser, asking you to save the filel.
 ## saveResource  
 * **Description:** Functions for saving and loading resources to file system.  
 * **Parameters:**  
-  * *name:* undefined  
   * *file:* undefined  
+  * *name:* undefined  
   
 ## saveToFS  
 * **Description:** undefined  

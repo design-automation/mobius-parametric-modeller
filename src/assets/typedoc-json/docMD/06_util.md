@@ -62,8 +62,8 @@ This will result in a popup in your browser, asking you to save the filel.
 ## saveResource  
 * **Description:** Functions for saving and loading resources to file system.  
 * **Parameters:**  
-  * *name:* undefined  
   * *file:* undefined  
+  * *name:* undefined  
   
 ## saveToFS  
 * **Description:** undefined  

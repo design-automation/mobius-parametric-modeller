@@ -34,25 +34,26 @@ function _position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TEntTypeId
     }
 }
 /**
- * Adds a new position to the model.
+ * Adds one or more new position to the model.
  *
  * @param __model__
- * @param coords XYZ coordinates as a list of three numbers.
- * @returns Entities, new position, or a list of new positions, or a list of lists of new positions .
+ * @param coords A list of three numbers, or nested lists of three numbers.
+ * @returns A new position, or nested list of new positions.
  * @example position1 = make.Position([1,2,3])
  * @example_info Creates a position with coordinates x=1, y=2, z=3.
+ * @example positions = make.Position([[1,2,3],[3,4,5],[5,6,7]])
+ * @example_info Creates three positions, with coordinates [1,2,3],[3,4,5] and [5,6,7].
  * @example_link make.Position.mob&node=1
  */
 export function Position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TId|TId[]|TId[][] {
     // --- Error Check ---
     checkCommTypes('make.Position', 'coords', coords, [TypeCheckObj.isCoord, TypeCheckObj.isCoordList, TypeCheckObj.isCoordList_List]);
-    // TODO allow to Txyz[][]
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = _position(__model__, coords);
     return idsMake(new_ents_arr);
 }
 // ================================================================================================
-function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx|TEntTypeIdx[] {
+function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
     const depth: number = getArrDepth(ents_arr);
     if (depth === 1) {
         const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx; // either a posi or something else
@@ -63,30 +64,33 @@ function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntType
             const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
             return posis_i.map(posi_i => _point(__model__, [EEntType.POSI, posi_i])) as TEntTypeIdx[];
         }
-    } else { // depth === 2 or 3
-        return (ents_arr as TEntTypeIdx[]).map(_ents_arr => _point(__model__, _ents_arr)) as TEntTypeIdx[];
+    } else if (depth === 2) {
+        ents_arr = ents_arr as TEntTypeIdx[];
+        return ents_arr.map(ents_arr_item => _point(__model__, ents_arr_item)) as TEntTypeIdx[];
+    } else { // depth > 2
+        ents_arr = ents_arr as TEntTypeIdx[][];
+        return ents_arr.map(ents_arr_item => _point(__model__, ents_arr_item)) as TEntTypeIdx[][];
     }
 }
 /**
- * Adds a new point to the model. If a list of positions is provided as the input, then a list of points is generated.
+ * Adds one or more new points to the model.
  *
  * @param __model__
- * @param positions Position of point, or other entities from which positions will be extracted.
+ * @param positions Position, or list of positions, or other entities from which positions can be extracted.
  * @returns Entities, new point or a list of new points.
- * @example_info Creates a point at position1.
  * @example point1 = make.Point(position1)
  * @example_info Creates a point at position1.
  * @example_link make.Point.mob&node=1
  */
-export function Point(__model__: GIModel, positions: TId|TId[]): TId|TId[] {
+export function Point(__model__: GIModel, positions: TId|TId[]|TId[][]): TId|TId[]|TId[][] {
     // --- Error Check ---
     const ents_arr = checkIDs('make.Point', 'positions', positions,
         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
         [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
-        EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON])  as TEntTypeIdx|TEntTypeIdx[];
+        EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON])  as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
     // --- Error Check ---
-    const new_ents_arr: TEntTypeIdx|TEntTypeIdx[] =  _point(__model__, ents_arr);
-    return idsMake(new_ents_arr) as TId|TId[];
+    const new_ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] =  _point(__model__, ents_arr);
+    return idsMake(new_ents_arr) as TId|TId[]|TId[][];
 }
 // ================================================================================================
 // Enums for Polyline()
@@ -95,13 +99,15 @@ export enum _EClose {
     CLOSE = 'close'
 }
 function _polyline(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][], close: _EClose): TEntTypeIdx|TEntTypeIdx[] {
-    if (getArrDepth(ents_arr) === 2) {
+    const depth: number = getArrDepth(ents_arr);
+    if (depth === 2) {
         const bool_close: boolean = (close === _EClose.CLOSE);
         const posis_i: number[] = idIndicies(ents_arr as TEntTypeIdx[]);
         const pline_i: number = __model__.geom.add.addPline(posis_i, bool_close);
         return [EEntType.PLINE, pline_i] as TEntTypeIdx;
     } else {
-        return (ents_arr as TEntTypeIdx[][]).map(ent_arr => _polyline(__model__, ent_arr, close)) as TEntTypeIdx[];
+        ents_arr = ents_arr as TEntTypeIdx[][];
+        return ents_arr.map(ents_arr_item => _polyline(__model__, ents_arr_item, close)) as TEntTypeIdx[];
     }
 }
 function _getPlinePosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx[][] {
@@ -161,7 +167,7 @@ function _getPlinePosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTy
  * Adds one or more new polylines to the model.
  *
  * @param __model__
- * @param entities List of positions, or list of lists of positions, or entities from which positions can be extracted.
+ * @param entities List of positions, or nested lists of positions, or entities from which positions can be extracted.
  * @param close Enum, 'open' or 'close'.
  * @returns Entities, new polyline, or a list of new polylines.
  * @example polyline1 = make.Polyline([position1,position2,position3], close)
@@ -187,12 +193,14 @@ export function Polyline(__model__: GIModel, entities: TId|TId[]|TId[][], close:
 }
 // ================================================================================================
 function _polygon(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx|TEntTypeIdx[] {
-    if (getArrDepth(ents_arr) === 2) {
+    const depth: number = getArrDepth(ents_arr);
+    if (depth === 2) {
         const posis_i: number[] = idIndicies(ents_arr as TEntTypeIdx[]);
         const pgon_i: number = __model__.geom.add.addPgon(posis_i);
         return [EEntType.PGON, pgon_i] as TEntTypeIdx;
     } else {
-        return (ents_arr as TEntTypeIdx[][]).map(_ents_arr => _polygon(__model__, _ents_arr)) as TEntTypeIdx[];
+        ents_arr = ents_arr as TEntTypeIdx[][];
+        return ents_arr.map(ents_arr_item => _polygon(__model__, ents_arr_item)) as TEntTypeIdx[];
     }
 }
 function _getPgonPosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx[][] {
@@ -252,10 +260,12 @@ function _getPgonPosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTyp
  * Adds one or more new polygons to the model.
  *
  * @param __model__
- * @param entities List of positions, or list of lists of positions, or entities from which positions can be extracted.
+ * @param entities List of positions, or nested lists of positions, or entities from which positions can be extracted.
  * @returns Entities, new polygon, or a list of new polygons.
- * @example polygon1 = make.Polygon([position1,position2,position3])
- * @example_info Creates a polygon with vertices position1, position2, position3 in sequence.
+ * @example polygon1 = make.Polygon([pos1,pos2,pos3])
+ * @example_info Creates a polygon with vertices pos1, pos2, pos3 in sequence.
+ * @example polygons = make.Polygon([[pos1,pos2,pos3], [pos3,pos4,pos5]])
+ * @example_info Creates two polygons, the first with vertices at [pos1,pos2,pos3], and the second with vertices at [pos3,pos4,pos5].
  * @example_link make.Polygon.mob&node=1
  */
 export function Polygon(__model__: GIModel, entities: TId|TId[]|TId[][]): TId|TId[] {
@@ -275,9 +285,14 @@ export function Polygon(__model__: GIModel, entities: TId|TId[]|TId[][]): TId|TI
     }
 }
 // ================================================================================================
-export function _collection(__model__: GIModel, parent_index: number, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TEntTypeIdx {
-    if (getArrDepth(ents_arr) === 1) {
+export function _collection(__model__: GIModel, parent_index: number,
+        ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx|TEntTypeIdx[] {
+    const depth: number = getArrDepth(ents_arr);
+    if (depth === 1) {
         ents_arr = [ents_arr] as TEntTypeIdx[];
+    } else if (depth === 3) {
+        ents_arr = ents_arr as TEntTypeIdx[][];
+        return ents_arr.map(ents_arr_item => _collection(__model__, parent_index, ents_arr_item)) as TEntTypeIdx[];
     }
     const points: number[] = [];
     const plines: number[] = [];
@@ -291,17 +306,19 @@ export function _collection(__model__: GIModel, parent_index: number, ents_arr: 
     return [EEntType.COLL, coll_i];
 }
 /**
- * Adds a new collection to the model.
+ * Adds one or more new collections to the model.
  *
  * @param __model__
- * @param parent_coll Collection
- * @param geometry List of points, polylines, polygons.
+ * @param parent_coll Collection, the parent collection or null.
+ * @param objects List or nested lists of points, polylines, polygons.
  * @returns Entities, new collection, or a list of new collections.
  * @example collection1 = make.Collection([point1,polyine1,polygon1])
  * @example_info Creates a collection containing point1, polyline1, polygon1.
+ * @example collections = make.Collection([[point1,polyine1],[polygon1]])
+ * @example_info Creates two collections, the first containing point1 and polyline1, the second containing polygon1.
  * @example_link make.Collection.mob&node=1
  */
-export function Collection(__model__: GIModel, parent_coll: TId, geometry: TId|TId[]): TId {
+export function Collection(__model__: GIModel, parent_coll: TId, objects: TId|TId[]): TId|TId[] {
     // --- Error Check ---
     const fn_name = 'make.Collection';
     let parent_index: number;
@@ -311,15 +328,18 @@ export function Collection(__model__: GIModel, parent_coll: TId, geometry: TId|T
     } else {
         parent_index = -1;
     }
-    const ents_arr = checkIDs(fn_name, 'geometry', geometry,
-        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.POINT, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
+    const ents_arr = checkIDs(fn_name, 'objects', objects,
+        [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
+        [EEntType.POINT, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
     // --- Error Check ---
-    const new_ent_arr: TEntTypeIdx = _collection(__model__, parent_index, ents_arr);
-    return idsMake(new_ent_arr) as TId;
+    const new_ent_arr: TEntTypeIdx|TEntTypeIdx[] = _collection(__model__, parent_index, ents_arr);
+    return idsMake(new_ent_arr) as TId|TId[];
 }
 // ================================================================================================
-function _copyGeom(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], copy_attributes: boolean): TEntTypeIdx|TEntTypeIdx[] {
-    if (getArrDepth(ents_arr) === 1) {
+function _copyGeom(__model__: GIModel,
+        ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][], copy_attributes: boolean): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
+    const depth: number = getArrDepth(ents_arr);
+    if (depth === 1) {
         const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
         if (isColl(ent_type)) {
             const coll_i: number = __model__.geom.add.copyColls(index, copy_attributes) as number;
@@ -337,13 +357,21 @@ function _copyGeom(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], copy
             const posi_i: number = __model__.geom.add.copyPosis(index, copy_attributes) as number;
             return [ent_type, posi_i];
         }
-    } else {
-        return (ents_arr as TEntTypeIdx[]).map(one_ent => _copyGeom(__model__, one_ent, copy_attributes)) as TEntTypeIdx[];
+    } else if (depth === 2) {
+        ents_arr = ents_arr as TEntTypeIdx[];
+        return ents_arr.map(ents_arr_item => _copyGeom(__model__, ents_arr_item, copy_attributes)) as TEntTypeIdx[];
+    } else { // depth > 2
+        ents_arr = ents_arr as TEntTypeIdx[][];
+        return ents_arr.map(ents_arr_item => _copyGeom(__model__, ents_arr_item, copy_attributes)) as TEntTypeIdx[][];
     }
 }
-function _copyGeomPosis(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], copy_attributes: boolean): TEntTypeIdx[] {
-    if (getArrDepth(ents_arr) === 1) {
+function _copyGeomPosis(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][], copy_attributes: boolean): void {
+    const depth: number = getArrDepth(ents_arr);
+    if (depth === 1) {
         ents_arr = [ents_arr] as TEntTypeIdx[];
+    } else if (depth > 2) {
+        // @ts-ignore
+        ents_arr = ents_arr.flat(depth - 2) as TEntTypeIdx[];
     }
     // create the new positions
     const old_to_new_posis_i_map: Map<number, number> = new Map(); // count number of posis
@@ -366,8 +394,8 @@ function _copyGeomPosis(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
         }
     }
     // return all the new points
-    const all_new_posis_i: number[] = Array.from(old_to_new_posis_i_map.values());
-    return all_new_posis_i.map( posi_i => [EEntType.POSI, posi_i] ) as TEntTypeIdx[];
+    // const all_new_posis_i: number[] = Array.from(old_to_new_posis_i_map.values());
+    // return all_new_posis_i.map( posi_i => [EEntType.POSI, posi_i] ) as TEntTypeIdx[];
 }
 export enum _ECopyAttribues {
     COPY_ATTRIBUTES = 'copy_attributes',
@@ -377,26 +405,25 @@ export enum _ECopyAttribues {
  * Adds a new copy of specified entities to the model.
  *
  * @param __model__
- * @param entities Position, point, polyline, polygon, collection to be copied.
- * @param copy_positions Enum to create a copy of the existing positions or to reuse the existing positions.
+ * @param entities Entity or lists of entities to be copied. Entities can be positions, points, polylines, polygons and collections.
  * @param copy_attributes Enum to copy attributes or to have no attributes copied.
  * @returns Entities, the copied entity or a list of copied entities.
- * @example copy1 = make.Copy([position1,polyine1,polygon1], copy_positions, copy_attributes)
- * @example_info Creates a list containing a copy of the entities in sequence of input.
+ * @example copies = make.Copy([position1,polyine1,polygon1], copy_attributes)
+ * @example_info Creates a copy of position1, polyine1, and polygon1.
  */
-export function Copy(__model__: GIModel, entities: TId|TId[], copy_attributes: _ECopyAttribues): TId|TId[] {
+export function Copy(__model__: GIModel, entities: TId|TId[]|TId[][], copy_attributes: _ECopyAttribues): TId|TId[]|TId[][] {
     // --- Error Check ---
     const ents_arr = checkIDs('make.Copy', 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
-        [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+        [IDcheckObj.isID, IDcheckObj.isIDList, , IDcheckObj.isIDList_list],
+        [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
     // --- Error Check ---
     const bool_copy_attribs: boolean = (copy_attributes === _ECopyAttribues.COPY_ATTRIBUTES);
     // copy the list of entities
-    const new_ents_arr: TEntTypeIdx|TEntTypeIdx[] = _copyGeom(__model__, ents_arr, bool_copy_attribs);
+    const new_ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = _copyGeom(__model__, ents_arr, bool_copy_attribs);
     // copy the positions that belong to the list of entities
     _copyGeomPosis(__model__, new_ents_arr, bool_copy_attribs);
     // return only the new entities
-    return idsMake(new_ents_arr) as TId|TId[];
+    return idsMake(new_ents_arr) as TId|TId[]|TId[][];
 }
 // ================================================================================================
 // Hole modelling operation
@@ -442,17 +469,16 @@ function _getHolePosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntT
 }
 /**
  * Makes one or more holes in a polygon.
- * Each hole is defined by a list of positions.
+ * ~
  * The positions must be on the polygon, i.e. they must be co-planar with the polygon and
  * they must be within the boundary of the polygon.
+ * ~
  * If the list of positions consists of a single list, then one hole will be generated.
  * If the list of positions consists of a list of lists, then multiple holes will be generated.
  * ~
- * The hole positions should lie within the polygon surface.
- *
  * @param __model__
  * @param face A polygon or a face to make holes in.
- * @param positions List of positions, or list of lists of positions, or entities from which positions can be extracted.
+ * @param positions List of positions, or nested lists of positions, or entities from which positions can be extracted.
  * @returns Entities, a list of wires resulting from the hole(s).
  */
 export function Hole(__model__: GIModel, face: TId, positions: TId|TId[]|TId[][]): TId[] {
@@ -468,17 +494,14 @@ export function Hole(__model__: GIModel, face: TId, positions: TId|TId[]|TId[][]
     return idsMake(new_ents_arr) as TId[];
 }
 // ================================================================================================
-// export enum _ELoftMethod {
-//     OPEN =  'open',
-//     CLOSED  =  'closed'
-// }
 export enum _ELoftMethod {
     OPEN_QUADS =  'open_quads',
     CLOSED_QUADS  =  'closed_quads',
     OPEN_STRINGERS =  'open_stringers',
     CLOSED_STRINGERS  =  'closed_stringers',
     OPEN_RIBS = 'open_ribs',
-    CLOSED_RIBS = 'closed_ribs'
+    CLOSED_RIBS = 'closed_ribs',
+    COPIES = 'copies'
 }
 function _loftQuads(__model__: GIModel, ents_arr: TEntTypeIdx[], divisions: number, method: _ELoftMethod): TEntTypeIdx[] {
     const edges_arrs_i: number[][] = [];
@@ -651,6 +674,45 @@ function _loftRibs(__model__: GIModel, ents_arr: TEntTypeIdx[], divisions: numbe
     }
     return rib_plines_i.map( pline_i => [EEntType.PLINE, pline_i]) as TEntTypeIdx[];
 }
+function _loftCopies(__model__: GIModel, ents_arr: TEntTypeIdx[], divisions: number): TEntTypeIdx[] {
+    const posis_arrs_i: number[][] = [];
+    let num_posis = 0;
+    for (const ents of ents_arr) {
+        const [ent_type, index]: TEntTypeIdx = ents as TEntTypeIdx;
+        const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
+        if (posis_arrs_i.length === 0) { num_posis = posis_i.length; }
+        if (posis_i.length !== num_posis) {
+            throw new Error('make.Loft: Number of positions is not consistent.');
+        }
+        posis_arrs_i.push(posis_i);
+    }
+    const copies: TEntTypeIdx[] = [];
+    for (let i = 0; i < posis_arrs_i.length - 1; i++) {
+        copies.push(ents_arr[i]);
+        if (divisions > 0) {
+            const xyzs1: Txyz[] = posis_arrs_i[i].map(posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+            const xyzs2: Txyz[] = posis_arrs_i[i + 1].map(posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+            const vecs: Txyz[] = [];
+            for (let k = 0; k < num_posis; k++) {
+                const vec: Txyz = vecDiv(vecFromTo(xyzs1[k], xyzs2[k]), divisions);
+                vecs.push(vec);
+            }
+            for (let j = 1; j < divisions; j++) {
+                const lofted_ent_arr: TEntTypeIdx = _copyGeom(__model__, ents_arr[i], true) as TEntTypeIdx;
+                _copyGeomPosis(__model__, lofted_ent_arr, true);
+                const [lofted_ent_type, lofted_ent_i]: [number, number] = lofted_ent_arr;
+                const new_posis_i: number[] = __model__.geom.query.navAnyToPosi(lofted_ent_type, lofted_ent_i);
+                for (let k = 0; k < num_posis; k++) {
+                    const new_xyz: Txyz = vecAdd(xyzs1[k], vecMult(vecs[k], j));
+                    __model__.attribs.add.setPosiCoords(new_posis_i[k], new_xyz);
+                }
+                copies.push(lofted_ent_arr);
+            }
+        }
+    }
+    copies.push(ents_arr[ents_arr.length - 1]);
+    return copies;
+}
 function _loft(__model__: GIModel, ents_arrs: TEntTypeIdx[]|TEntTypeIdx[][], divisions: number, method: _ELoftMethod): TEntTypeIdx[] {
     const depth: number = getArrDepth(ents_arrs);
     if (depth === 2) {
@@ -665,6 +727,8 @@ function _loft(__model__: GIModel, ents_arrs: TEntTypeIdx[]|TEntTypeIdx[][], div
             case _ELoftMethod.OPEN_RIBS:
             case _ELoftMethod.CLOSED_RIBS:
                 return _loftRibs(__model__, ents_arr, divisions, method);
+            case _ELoftMethod.COPIES:
+                return _loftCopies(__model__, ents_arr, divisions);
             default:
                 break;
         }
@@ -681,8 +745,9 @@ function _loft(__model__: GIModel, ents_arrs: TEntTypeIdx[]|TEntTypeIdx[][], div
  * Lofts between entities.
  * ~
  * The geometry that is generated depends on the method that is selected.
- * The 'loft_quads' methods will generate polygons.
- * The 'loft_stringers' and 'loft_ribs' methods will generate polylines.
+ * - The 'quads' methods will generate polygons.
+ * - The 'stringers' and 'ribs' methods will generate polylines.
+ * - The 'copies' method will generate copies of the input geometry type.
  *
  * @param __model__
  * @param entities List of entities, or list of lists of entities.
@@ -717,7 +782,8 @@ export function Loft(__model__: GIModel, entities: TId[]|TId[][], divisions: num
 export enum _EExtrudeMethod {
     QUADS =  'quads',
     STRINGERS = 'stringers',
-    RIBS = 'ribs'
+    RIBS = 'ribs',
+    COPIES = 'copies'
 }
 function _extrudeColl(__model__: GIModel, index: number,
         extrude_vec: Txyz, divisions: number, method: _EExtrudeMethod): TEntTypeIdx[] {
@@ -880,6 +946,26 @@ function _extrudeRibs(__model__: GIModel, ent_type: number, index: number, extru
     // return the ribs
     return new_plines_i.map(pline_i => [EEntType.PLINE, pline_i] as TEntTypeIdx);
 }
+function _extrudeCopies(__model__: GIModel, ent_type: number, index: number, extrude_vec: Txyz, divisions: number): TEntTypeIdx[] {
+    const copies: TEntTypeIdx[] = [[ent_type, index]];
+    const vec: Txyz = vecDiv(extrude_vec, divisions);
+    const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
+    const xyzs: Txyz[] = posis_i.map(posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+    // make the copies
+    for (let i = 1; i < divisions + 1; i++) {
+        const extruded_ent_arr: TEntTypeIdx = _copyGeom(__model__, [ent_type, index], true) as TEntTypeIdx;
+        _copyGeomPosis(__model__, extruded_ent_arr, true);
+        const [extruded_ent_type, extruded_ent_i]: [number, number] = extruded_ent_arr;
+        const new_posis_i: number[] = __model__.geom.query.navAnyToPosi(extruded_ent_type, extruded_ent_i);
+        for (let j = 0; j < new_posis_i.length; j++) {
+            const new_xyz: Txyz = vecAdd(xyzs[j], vecMult(vec, i));
+            __model__.attribs.add.setPosiCoords(new_posis_i[j], new_xyz);
+        }
+        copies.push(extruded_ent_arr);
+    }
+    // return the copies
+    return copies;
+}
 function _extrudeCap(__model__: GIModel, index: number, strip_posis_map: Map<number, number[]>, divisions: number): number {
     const face_i: number = __model__.geom.query.navPgonToFace(index);
     // get positions on boundary
@@ -919,6 +1005,8 @@ function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
                 return _extrudeStringers(__model__, ent_type, index, extrude_vec, divisions);
             case _EExtrudeMethod.RIBS:
                 return _extrudeRibs(__model__, ent_type, index, extrude_vec, divisions);
+            case _EExtrudeMethod.COPIES:
+                return _extrudeCopies(__model__, ent_type, index, extrude_vec, divisions);
             default:
                 throw new Error('Extrude method not recognised.');
         }
@@ -936,7 +1024,12 @@ function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
  * - Extrusion of a position, vertex, or point produces polylines;
  * - Extrusion of an edge, wire, or polyline produces polygons;
  * - Extrusion of a face or polygon produces polygons, capped at the top.
- *
+ * ~
+ * The geometry that is generated depends on the method that is selected.
+ * - The 'quads' methods will generate polygons.
+ * - The 'stringers' and 'ribs' methods will generate polylines.
+ * - The 'copies' method will generate copies of the input geometry type.
+ * ~
  * @param __model__
  * @param entities Vertex, edge, wire, face, position, point, polyline, polygon, collection.
  * @param distance Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).

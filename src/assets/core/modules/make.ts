@@ -1135,19 +1135,14 @@ function _divide(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], diviso
 }
 // ================================================================================================
 /**
- * Unweld vertices so that they do not share positions.
+ * Unweld vertices so that they do not share positions. The new positions that are generated are returned.
  * ~
- * For the vertices of the specified entities, if they share positions with other entities in the model,
- * then those positions will be replaced with new positions.
- * ~
- * This function performs a shallow unweld.
- * That is, the vertices within the set of specified entities are not unwelded.
  * @param __model__
  * @param entities Entities, a list of vertices, or entities from which vertices can be extracted.
  * @param method Enum; the method to use for unweld.
  * @returns Entities, a list of new positions resulting from the unweld.
  * @example mod.Unweld(polyline1)
- * @example_info Unwelds the vertices of polyline1 from all the vertices in the model that shares the same position.
+ * @example_info Unwelds the vertices of polyline1 from all other vertices that shares the same position.
  */
 export function Unweld(__model__: GIModel, entities: TId|TId[]): TId[] {
     // --- Error Check ---

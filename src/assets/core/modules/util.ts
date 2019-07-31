@@ -31,6 +31,14 @@ export enum _EIODataFormat {
     OBJ = 'obj',
     GEOJSON = 'geojson'
 }
+export enum _EIODataSource {
+    DEFAULT = 'default',
+    FILESYS = 'from file system'
+}
+export enum _EIODataTarget {
+    DEFAULT = 'download file',
+    FILESYS = 'save to file system'
+}
 /**
  * Writes data into chrome local file system.
  *
@@ -40,8 +48,7 @@ export enum _EIODataFormat {
  */
 export function WriteData(__model__: GIModel, model_data: string, file_name: string): Boolean {
     try {
-        saveResource(model_data, file_name);
-        return true;
+        return saveResource(model_data, file_name);
     } catch (ex) {
         return false;
     }
@@ -108,26 +115,36 @@ export enum _EIOExportDataFormat {
  * @param __model__
  * @param filename Name of the file as a string.
  * @param data_format Enum, the file format.
+ * @param data_target Enum, where the data is to be exported to.
  * @returns Boolean.
  * @example util.ExportData ('my_model.obj', obj)
  * @example_info Exports all the data in the model as an OBJ.
  */
-export function ExportData(__model__: GIModel, filename: string, data_format: _EIOExportDataFormat): boolean {
+export function ExportData(__model__: GIModel, filename: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): boolean {
     switch (data_format) {
         case _EIOExportDataFormat.GI:
             let gi_data: string = JSON.stringify(__model__.getData());
             gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
-            return download(gi_data , filename);
+            if (data_target === _EIODataTarget.DEFAULT) {
+                return download(gi_data , filename);
+            }
+            return saveResource(gi_data, filename);
             break;
         case _EIOExportDataFormat.OBJ:
             const obj_data: string = exportObj(__model__);
             // obj_data = obj_data.replace(/#/g, '%23'); // TODO temporary fix
-            return download(obj_data, filename);
+            if (data_target === _EIODataTarget.DEFAULT) {
+                return download(obj_data , filename);
+            }
+            return saveResource(obj_data, filename);
             break;
         case _EIOExportDataFormat.DAE:
             const dae_data: string = exportDae(__model__);
             // dae_data = dae_data.replace(/#/g, '%23'); // TODO temporary fix
-            return download(dae_data, filename);
+            if (data_target === _EIODataTarget.DEFAULT) {
+                return download(dae_data, filename);
+            }
+            return saveResource(dae_data, filename);
             break;
         // case _EIODataFormat.GEOJSON:
         //     const geojson_data: string = exportObj(__model__);
@@ -138,6 +155,58 @@ export function ExportData(__model__: GIModel, filename: string, data_format: _E
             break;
     }
 }
+export enum _EIOExportParams {
+    YES = 'Add Params',
+    NO = 'No Params'
+}
+export enum _EIOExportContents {
+    BOTH = 'Both',
+    CONSOLE = 'Console Only',
+    MODEL = 'Model Only'
+}
+
+/**
+ * Export data from the model as a file.
+ * This will result in a popup in your browser, asking you to save the filel.
+ * @param __model__
+ * @param __console__
+ * @param __constList__
+ * @param filename Name of the file as a string.
+ * @param exportParams Enum.
+ * @param exportContent Enum.
+ * @returns Boolean.
+ * @example util.ExportIO('my_model.json')
+ * @example_info Exports all the data in the model as an OBJ.
+ */
+export function ExportIO(__model__: GIModel, __console__: string[], __constList__: {}, filename: string,
+                        exportParams: _EIOExportParams, exportContent: _EIOExportContents): boolean {
+    // let gi_data: string = JSON.stringify(__model__.getData());
+    // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
+    const consolidatedConsole = [];
+    for (const logStr of __console__) {
+        if (!logStr.match('<p style="padding: 2px 0px 2px 10px;"><b><i>')) {
+            continue;
+        }
+        const replacedStr = logStr.replace('<p style="padding: 2px 0px 2px 10px;"><b><i>', '')
+                               .replace('</i></b> ', '').replace('</p>', '').replace('<br>', '\n');
+        consolidatedConsole.push(replacedStr);
+    }
+    const edxAnswer = {
+        'params' : __constList__,
+        'console': consolidatedConsole.join('\n'),
+        'model'  : __model__.getData()
+    };
+    if (exportParams === _EIOExportParams.NO) {
+        edxAnswer['params'] = undefined;
+    }
+    if (exportContent === _EIOExportContents.CONSOLE) {
+        edxAnswer['model'] = undefined;
+    } else if (exportContent === _EIOExportContents.MODEL) {
+        edxAnswer['console'] = undefined;
+    }
+
+    return download(JSON.stringify(edxAnswer) , filename);
+}
 // ================================================================================================
 /**
  * Returns a text summary of the contents of this model
@@ -146,7 +215,7 @@ export function ExportData(__model__: GIModel, filename: string, data_format: _E
  * @param __constList__
  * @returns Text that summarises what is in the model.
  */
-export function ParamInfo(__model__: GIModel, __constList__: {}|string): string {
+export function ParamInfo(__model__: GIModel, __constList__: {}): string {
     return JSON.stringify(__constList__);
 }
 /**
@@ -219,7 +288,7 @@ export function ModelCheck(__model__: GIModel): string {
  * Functions for saving and loading resources to file system.
  */
 
-function saveResource(file: string, name: string) {
+function saveResource(file: string, name: string): boolean {
     const itemstring = localStorage.getItem('mobius_backup_list');
     if (!itemstring) {
         localStorage.setItem('mobius_backup_list', `["${name}"]`);
@@ -254,7 +323,7 @@ function saveResource(file: string, name: string) {
             function(e) { throw e; });
         }, function(e) { throw e; }
     );
-
+    return true;
     // localStorage.setItem(code, file);
 }
 

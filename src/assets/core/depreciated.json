@@ -168,9 +168,19 @@
         },
         "new_func": {
             "name": "Get",
-            "module": "query",
+            "module": "query"
+        }
+    },
+    {
+        "old_func": {
+            "name": "ExportData",
+            "module": "util"
+        },
+        "new_func": {
+            "name": "ExportData",
+            "module": "util",
             "values": {
-                "sort": "'ID_ascending'"
+                "data_target": "'download file'"
             }
         }
     }

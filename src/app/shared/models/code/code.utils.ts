@@ -180,13 +180,18 @@ export class CodeUtils {
                 for (const arg of args.slice(1)) {
                     if (arg.jsValue && arg.jsValue.indexOf('__params__') !== -1 &&
                     arg.jsValue.indexOf(_parameterTypes.getattrib) === -1) {
-                        throw new Error('Unexpected Identifier'); }
+                        throw new Error('Unexpected Identifier');
+                    }
                     if (arg.name === _parameterTypes.constList) {
                         argVals.push('__params__.constants');
                         continue;
                     }
                     if (arg.name === _parameterTypes.model) {
                         argVals.push('__params__.model');
+                        continue;
+                    }
+                    if (arg.name === _parameterTypes.console) {
+                        argVals.push('__params__.console');
                         continue;
                     }
 
@@ -295,8 +300,9 @@ export class CodeUtils {
         }
         if (isMainFlowchart && prod.selectGeom && prod.args[0].jsValue) {
             // const repGet = prod.args[0].jsValue;
-            const repGet = this.repGetAttrib(prod.args[0].jsValue);
-            codeStr.push(`__modules__.${_parameterTypes.select}(__params__.model, ${repGet}, "${repGet}");`);
+            const repGet = this.repGetAttrib(prod.args[0].value);
+            const repGetJS = this.repGetAttrib(prod.args[0].jsValue);
+            codeStr.push(`__modules__.${_parameterTypes.select}(__params__.model, ${repGetJS}, "${repGet}");`);
         }
         return codeStr;
     }

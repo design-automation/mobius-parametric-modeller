@@ -658,7 +658,7 @@ export class GIGeomQuery {
      * @param ent_type
      * @param verts_i
      */
-    public neighbour(ent_type: EEntType, verts_i: number[]): number[] {
+    public neighbor(ent_type: EEntType, verts_i: number[]): number[] {
         const neighbour_ents_i: Set<number> = new Set();
         for (const vert_i of verts_i) {
             const posi_i: number = this.navVertToPosi(vert_i);

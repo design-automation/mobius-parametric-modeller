@@ -22,7 +22,7 @@ import { checkIDs, IDcheckObj } from './_check_args';
 // #@xyz[2] > 5
 //
 // ================================================================================================
-// These are used by Get(), Count(), and Neighbours()
+// These are used by Get(), Count(), and neighbors()
 export enum _EQuerySelect {
     POSI =   'positions',
     VERT =   'vertices',
@@ -362,30 +362,30 @@ export function _perimeter(__model__: GIModel,  select_ent_types: EEntType|EEntT
 }
 // ================================================================================================
 /**
-* Returns a list of neighbouring entities. In order to qualify as a neighbour,
+* Returns a list of neighboring entities. In order to qualify as a neighbor,
 * entities must not be part of the set of input entities, but must be welded to one or more entities in the input.
 * ~
 * @param __model__
-* @param select Enum, select the types of neighbours to return
+* @param select Enum, select the types of neighbors to return
 * @param entities List of entities.
-* @returns Entities, a list of welded neighbours
-* @example mod.Neighbour('edges', [polyline1,polyline2,polyline3])
+* @returns Entities, a list of welded neighbors
+* @example mod.neighbor('edges', [polyline1,polyline2,polyline3])
 * @example_info Returns list of edges that are welded to polyline1, polyline2, or polyline3.
 */
-export function Neighbour(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[]): TId[] {
+export function Neighbor(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[]): TId[] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
     if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs('query.Neighbour', 'entities', entities,
+        ents_arr = checkIDs('query.neighbor', 'entities', entities,
             [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
     }
     // --- Error Check ---
     const select_ent_types: EEntType|EEntType[] = _convertSelectToEEntTypeStr(select);
-    const found_ents_arr: TEntTypeIdx[] = _neighbours(__model__, select_ent_types, ents_arr);
+    const found_ents_arr: TEntTypeIdx[] = _neighbors(__model__, select_ent_types, ents_arr);
     return idsMake(found_ents_arr) as TId[];
 }
-export function _neighbours(__model__: GIModel,  select_ent_types: EEntType|EEntType[],
+export function _neighbors(__model__: GIModel,  select_ent_types: EEntType|EEntType[],
     ents_arr: TEntTypeIdx|TEntTypeIdx[]): TEntTypeIdx[] {
     if (!Array.isArray(select_ent_types)) {
         const select_ent_type: EEntType = select_ent_types as EEntType;
@@ -402,13 +402,13 @@ export function _neighbours(__model__: GIModel,  select_ent_types: EEntType|EEnt
             }
         }
         console.log(verts_i);
-        // get the neighbour entities
-        const all_nbor_ents_i: number[] = __model__.geom.query.neighbour(select_ent_type, verts_i);
+        // get the neighbor entities
+        const all_nbor_ents_i: number[] = __model__.geom.query.neighbor(select_ent_type, verts_i);
         return all_nbor_ents_i.map(nbor_ent_i => [select_ent_type, nbor_ent_i]) as TEntTypeIdx[];
     } else {
         const query_results: TEntTypeIdx[] = [];
         for (const select_ent_type of select_ent_types) {
-            query_results.push(..._neighbours(__model__, select_ent_type, ents_arr));
+            query_results.push(..._neighbors(__model__, select_ent_type, ents_arr));
         }
         return query_results;
     }

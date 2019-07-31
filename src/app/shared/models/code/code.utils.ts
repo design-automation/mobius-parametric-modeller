@@ -300,8 +300,9 @@ export class CodeUtils {
         }
         if (isMainFlowchart && prod.selectGeom && prod.args[0].jsValue) {
             // const repGet = prod.args[0].jsValue;
-            const repGet = this.repGetAttrib(prod.args[0].jsValue);
-            codeStr.push(`__modules__.${_parameterTypes.select}(__params__.model, ${repGet}, "${repGet}");`);
+            const repGet = this.repGetAttrib(prod.args[0].value);
+            const repGetJS = this.repGetAttrib(prod.args[0].jsValue);
+            codeStr.push(`__modules__.${_parameterTypes.select}(__params__.model, ${repGetJS}, "${repGet}");`);
         }
         return codeStr;
     }

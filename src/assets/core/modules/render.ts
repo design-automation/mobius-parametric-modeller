@@ -10,8 +10,11 @@
  */
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { Txyz } from '@assets/libs/geo-info/common';
+import { Txyz, TColor, EAttribNames, EAttribDataTypeStrs } from '@assets/libs/geo-info/common';
 import * as THREE from 'three';
+import { TId, TQuery, EEntType, ESort, TEntTypeIdx } from '@libs/geo-info/common';
+import { idsMake, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
+import { checkIDs, IDcheckObj, checkCommTypes, TypeCheckObj } from './_check_args';
 
 export enum _ESide {
     FRONT =   'front',
@@ -47,6 +50,33 @@ enum _EMaterialType {
     PHONG = 'MeshPhongMaterial',
     STANDARD = 'MeshStandardMaterial',
     PHYSICAL = 'MeshPhysicalMaterial'
+}
+// ================================================================================================
+/**
+ * Sets color by creating a vertex attribute called 'rgb' and setting the value. 
+ *
+ * @param name The name of the material.
+ * @param opacity The opacity of the glass, between 0 (totally transparent) and 1 (totally opaque).
+ * @returns void
+ */
+export function Color(__model__: GIModel, entities: TId|TId[], color: TColor): void {
+    if (isEmptyArr(entities)) { return; }
+    // --- Error Check ---
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[] =
+        checkIDs('render.Color', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+    checkCommTypes('make.Position', 'coords', color, [TypeCheckObj.isColor]);
+    // --- Error Check ---
+    if (!Array.isArray(ents_arr[0])) { ents_arr = [ents_arr] as TEntTypeIdx[]; }
+    if (!__model__.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOR)) {
+        __model__.attribs.add.addAttrib(EEntType.VERT, EAttribNames.COLOR, EAttribDataTypeStrs.FLOAT, 3);
+    }
+    for (const ent_arr of ents_arr) {
+        const [ent_type, ent_i]: [number, number] = ent_arr as TEntTypeIdx;
+        const verts_i: number[] = __model__.geom.query.navAnyToVert(ent_type, ent_i);
+        for (const vert_i of verts_i) {
+            __model__.attribs.add.setAttribValue(EEntType.VERT, vert_i, EAttribNames.COLOR, color);
+        }
+    }
 }
 // ================================================================================================
 /**

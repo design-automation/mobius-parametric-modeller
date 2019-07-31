@@ -4,6 +4,7 @@ export const _parameterTypes = {
     constList: '__constList__',
     model: '__model__',
     input: '__input__',
+    console: '__console__',
 
     new: '_model.__new__',
     newFn: __new__,

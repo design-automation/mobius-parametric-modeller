@@ -31,7 +31,7 @@ function printFunc(_console, name, value){
     } else if (typeof value === 'number' || value === undefined) {
         val = value;
     } else if (typeof value === 'string') {
-        val = '"' + value + '"';
+        val = '"' + value.replace(/\\n/g, '<br>') + '"';
     } else if (value.constructor === [].constructor) {
         val = JSON.stringify(value);
     } else if (value.constructor === {}.constructor) {
@@ -329,7 +329,9 @@ export class ExecuteComponent {
 
 
     executeNode(node: INode, funcStrings, globalVars, constantList): string {
-        const params = {'currentProcedure': [''], 'console': [], 'constants': constantList};
+        const params = {'currentProcedure': [''], 'console': this.dataService.getLog(), 'constants': constantList};
+        const consoleLength = params.console.length;
+
         let fnString = '';
         const startTime = performance.now();
         try {
@@ -447,9 +449,9 @@ export class ExecuteComponent {
             } else {
                 duration_msg = '<p style="padding: 2px 0px 2px 10px;"><i>Executed in ' + duration / 1000 + ' seconds.</i></p>';
             }
-            for (const str of params.console) {
-                this.dataService.log(str);
-            }
+            // for (const logStr of params.console) {
+            //     this.dataService.log(logStr);
+            // }
             this.dataService.log(duration_msg);
             this.dataService.log('<br>');
             if (codeResult[1]) {
@@ -457,9 +459,9 @@ export class ExecuteComponent {
             }
             return globalVars;
         } catch (ex) {
-            for (const str of params.console) {
-                this.dataService.log(str);
-            }
+            // for (const str of params.console) {
+            //     this.dataService.log(str);
+            // }
             const endTime = performance.now();
             const duration: number = Math.round(endTime - startTime);
             let duration_msg: string;

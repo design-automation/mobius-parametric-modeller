@@ -155,19 +155,57 @@ export function ExportData(__model__: GIModel, filename: string, data_format: _E
             break;
     }
 }
+export enum _EIOExportParams {
+    YES = 'Add Params',
+    NO = 'No Params'
+}
+export enum _EIOExportContents {
+    BOTH = 'Both',
+    CONSOLE = 'Console Only',
+    MODEL = 'Model Only'
+}
+
 /**
  * Export data from the model as a file.
  * This will result in a popup in your browser, asking you to save the filel.
  * @param __model__
+ * @param __console__
+ * @param __constList__
  * @param filename Name of the file as a string.
+ * @param exportParams Enum.
+ * @param exportContent Enum.
  * @returns Boolean.
- * @example util.ExportData ('my_model.obj', obj)
+ * @example util.ExportIO('my_model.json')
  * @example_info Exports all the data in the model as an OBJ.
  */
-export function ExportEDXAnswer(__model__: GIModel, filename: string): boolean {
-    let gi_data: string = JSON.stringify(__model__.getData());
-    gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
-    return download(gi_data , filename);
+export function ExportIO(__model__: GIModel, __console__: string[], __constList__: {}, filename: string,
+                        exportParams: _EIOExportParams, exportContent: _EIOExportContents): boolean {
+    // let gi_data: string = JSON.stringify(__model__.getData());
+    // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
+    const consolidatedConsole = [];
+    for (const logStr of __console__) {
+        if (!logStr.match('<p style="padding: 2px 0px 2px 10px;"><b><i>')) {
+            continue;
+        }
+        const replacedStr = logStr.replace('<p style="padding: 2px 0px 2px 10px;"><b><i>', '')
+                               .replace('</i></b> ', '').replace('</p>', '').replace('<br>', '\n');
+        consolidatedConsole.push(replacedStr);
+    }
+    const edxAnswer = {
+        'params' : __constList__,
+        'console': consolidatedConsole.join('\n'),
+        'model'  : __model__.getData()
+    };
+    if (exportParams === _EIOExportParams.NO) {
+        edxAnswer['params'] = undefined;
+    }
+    if (exportContent === _EIOExportContents.CONSOLE) {
+        edxAnswer['model'] = undefined;
+    } else if (exportContent === _EIOExportContents.MODEL) {
+        edxAnswer['console'] = undefined;
+    }
+
+    return download(JSON.stringify(edxAnswer) , filename);
 }
 // ================================================================================================
 /**
@@ -177,7 +215,7 @@ export function ExportEDXAnswer(__model__: GIModel, filename: string): boolean {
  * @param __constList__
  * @returns Text that summarises what is in the model.
  */
-export function ParamInfo(__model__: GIModel, __constList__: {}|string): string {
+export function ParamInfo(__model__: GIModel, __constList__: {}): string {
     return JSON.stringify(__constList__);
 }
 /**

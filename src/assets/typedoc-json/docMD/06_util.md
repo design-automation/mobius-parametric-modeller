@@ -39,6 +39,20 @@ This will result in a popup in your browser, asking you to save the filel.
     Exports all the data in the model as an OBJ.
   
   
+## ExportIO  
+* **Description:** Export data from the model as a file.
+This will result in a popup in your browser, asking you to save the filel.  
+* **Parameters:**  
+  * *__console__:* undefined  
+  * *filename:* Name of the file as a string.  
+  * *exportParams:* Enum.  
+  * *exportContent:* Enum.  
+* **Returns:** Boolean.  
+* **Examples:**  
+  * util.ExportIO('my_model.json')  
+    Exports all the data in the model as an OBJ.
+  
+  
 ## ParamInfo  
 * **Description:** Returns a text summary of the contents of this model  
 * **Parameters:**  

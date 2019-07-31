@@ -180,13 +180,18 @@ export class CodeUtils {
                 for (const arg of args.slice(1)) {
                     if (arg.jsValue && arg.jsValue.indexOf('__params__') !== -1 &&
                     arg.jsValue.indexOf(_parameterTypes.getattrib) === -1) {
-                        throw new Error('Unexpected Identifier'); }
+                        throw new Error('Unexpected Identifier');
+                    }
                     if (arg.name === _parameterTypes.constList) {
                         argVals.push('__params__.constants');
                         continue;
                     }
                     if (arg.name === _parameterTypes.model) {
                         argVals.push('__params__.model');
+                        continue;
+                    }
+                    if (arg.name === _parameterTypes.console) {
+                        argVals.push('__params__.console');
                         continue;
                     }
 

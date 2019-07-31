@@ -12724,7 +12724,7 @@
 			},
 			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/make.ts",
 			"comment": {
-				"shortText": "The `make` module has functions for making new entities in the model.\nAll these functions all return the IDs of the entities that are created."
+				"shortText": "The `make` module has functions for making new entities in the model.\nAll these functions return the IDs of the entities that are created."
 			},
 			"children": [
 				{
@@ -12810,7 +12810,7 @@
 								{
 									"fileName": "core/modules/make.ts",
 									"line": 425,
-									"character": 15
+									"character": 19
 								}
 							],
 							"defaultValue": "\"copy_attributes\""
@@ -12827,7 +12827,7 @@
 								{
 									"fileName": "core/modules/make.ts",
 									"line": 426,
-									"character": 13
+									"character": 17
 								}
 							],
 							"defaultValue": "\"no_attributes\""
@@ -12871,7 +12871,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 1103,
+									"line": 1088,
 									"character": 13
 								}
 							],
@@ -12888,7 +12888,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 1104,
+									"line": 1089,
 									"character": 17
 								}
 							],
@@ -12905,7 +12905,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 1102,
+									"line": 1087,
 									"character": 13
 								}
 							],
@@ -12926,7 +12926,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 1101,
+							"line": 1086,
 							"character": 26
 						}
 					]
@@ -12951,7 +12951,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 786,
+									"line": 818,
 									"character": 10
 								}
 							],
@@ -12968,7 +12968,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 783,
+									"line": 815,
 									"character": 9
 								}
 							],
@@ -12985,7 +12985,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 785,
+									"line": 817,
 									"character": 8
 								}
 							],
@@ -13002,7 +13002,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 784,
+									"line": 816,
 									"character": 13
 								}
 							],
@@ -13024,7 +13024,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 782,
+							"line": 814,
 							"character": 27
 						}
 					]
@@ -13049,7 +13049,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 499,
+									"line": 527,
 									"character": 16
 								}
 							],
@@ -13066,7 +13066,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 503,
+									"line": 531,
 									"character": 15
 								}
 							],
@@ -13083,7 +13083,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 501,
+									"line": 529,
 									"character": 20
 								}
 							],
@@ -13100,7 +13100,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 504,
+									"line": 532,
 									"character": 10
 								}
 							],
@@ -13117,7 +13117,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 498,
+									"line": 526,
 									"character": 14
 								}
 							],
@@ -13134,7 +13134,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 502,
+									"line": 530,
 									"character": 13
 								}
 							],
@@ -13151,7 +13151,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/make.ts",
-									"line": 500,
+									"line": 528,
 									"character": 18
 								}
 							],
@@ -13176,7 +13176,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 497,
+							"line": 525,
 							"character": 24
 						}
 					]
@@ -13446,7 +13446,7 @@
 					]
 				},
 				{
-					"id": 2199,
+					"id": 2183,
 					"name": "Divide",
 					"kind": 64,
 					"kindString": "Function",
@@ -13455,7 +13455,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2200,
+							"id": 2184,
 							"name": "Divide",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -13484,7 +13484,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2201,
+									"id": 2185,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13497,7 +13497,7 @@
 									}
 								},
 								{
-									"id": 2202,
+									"id": 2186,
 									"name": "edges",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13525,7 +13525,7 @@
 									}
 								},
 								{
-									"id": 2203,
+									"id": 2187,
 									"name": "divisor",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13539,7 +13539,7 @@
 									}
 								},
 								{
-									"id": 2204,
+									"id": 2188,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13567,13 +13567,13 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 1171,
+							"line": 1075,
 							"character": 22
 						}
 					]
 				},
 				{
-					"id": 2176,
+					"id": 2121,
 					"name": "Extrude",
 					"kind": 64,
 					"kindString": "Function",
@@ -13582,7 +13582,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2177,
+							"id": 2122,
 							"name": "Extrude",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -13611,7 +13611,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2178,
+									"id": 2123,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13624,7 +13624,7 @@
 									}
 								},
 								{
-									"id": 2179,
+									"id": 2124,
 									"name": "entities",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13652,7 +13652,7 @@
 									}
 								},
 								{
-									"id": 2180,
+									"id": 2125,
 									"name": "distance",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13676,7 +13676,7 @@
 									}
 								},
 								{
-									"id": 2181,
+									"id": 2126,
 									"name": "divisions",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13690,7 +13690,7 @@
 									}
 								},
 								{
-									"id": 2182,
+									"id": 2127,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13728,7 +13728,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 1045,
+							"line": 796,
 							"character": 23
 						}
 					]
@@ -13840,7 +13840,7 @@
 					]
 				},
 				{
-					"id": 2115,
+					"id": 2086,
 					"name": "Loft",
 					"kind": 64,
 					"kindString": "Function",
@@ -13849,7 +13849,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2116,
+							"id": 2087,
 							"name": "Loft",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -13886,7 +13886,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2117,
+									"id": 2088,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13899,7 +13899,7 @@
 									}
 								},
 								{
-									"id": 2118,
+									"id": 2089,
 									"name": "entities",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13933,7 +13933,7 @@
 									}
 								},
 								{
-									"id": 2119,
+									"id": 2090,
 									"name": "divisions",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13944,7 +13944,7 @@
 									}
 								},
 								{
-									"id": 2120,
+									"id": 2091,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13972,7 +13972,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 763,
+							"line": 516,
 							"character": 20
 						}
 					]
@@ -14031,7 +14031,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "Position, or list of positions, or other entities from which positions can be extracted."
+										"text": "Position, or list of positions, or entities from which positions can be extracted."
 									},
 									"type": {
 										"type": "union",
@@ -14165,7 +14165,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "List of positions, or nested lists of positions, or entities from which positions can be extracted."
+										"text": "List or nested lists of positions, or entities from which positions can be extracted."
 									},
 									"type": {
 										"type": "union",
@@ -14280,7 +14280,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "List of positions, or nested lists of positions, or entities from which positions can be extracted."
+										"text": "List or nested lists of positions, or entities from which positions can be extracted."
 									},
 									"type": {
 										"type": "union",
@@ -14418,7 +14418,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "A list of three numbers, or nested lists of three numbers."
+										"text": "A list of three numbers, or a list of lists of three numbers."
 									},
 									"type": {
 										"type": "union",
@@ -14491,7 +14491,7 @@
 					]
 				},
 				{
-					"id": 2205,
+					"id": 2201,
 					"name": "Unweld",
 					"kind": 64,
 					"kindString": "Function",
@@ -14500,7 +14500,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2206,
+							"id": 2202,
 							"name": "Unweld",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -14521,7 +14521,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2207,
+									"id": 2203,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -14534,7 +14534,7 @@
 									}
 								},
 								{
-									"id": 2208,
+									"id": 2204,
 									"name": "entities",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -14575,13 +14575,13 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 1197,
+							"line": 1152,
 							"character": 22
 						}
 					]
 				},
 				{
-					"id": 2183,
+					"id": 2215,
 					"name": "_Join",
 					"kind": 64,
 					"kindString": "Function",
@@ -14590,7 +14590,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2184,
+							"id": 2216,
 							"name": "_Join",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -14611,7 +14611,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2185,
+									"id": 2217,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -14624,7 +14624,7 @@
 									}
 								},
 								{
-									"id": 2186,
+									"id": 2218,
 									"name": "geometry",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -14652,20 +14652,20 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 1093,
+							"line": 1237,
 							"character": 21
 						}
 					]
 				},
 				{
-					"id": 2214,
+					"id": 2210,
 					"name": "_PolygonHoles",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2215,
+							"id": 2211,
 							"name": "_PolygonHoles",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -14686,7 +14686,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2216,
+									"id": 2212,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -14699,7 +14699,7 @@
 									}
 								},
 								{
-									"id": 2217,
+									"id": 2213,
 									"name": "positions",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -14717,7 +14717,7 @@
 									}
 								},
 								{
-									"id": 2218,
+									"id": 2214,
 									"name": "hole_positions",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -14761,7 +14761,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 1260,
+							"line": 1215,
 							"character": 22
 						}
 					]
@@ -15072,21 +15072,21 @@
 					]
 				},
 				{
-					"id": 2193,
+					"id": 2195,
 					"name": "_divide",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2194,
+							"id": 2196,
 							"name": "_divide",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2195,
+									"id": 2197,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15098,7 +15098,7 @@
 									}
 								},
 								{
-									"id": 2196,
+									"id": 2198,
 									"name": "ents_arr",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15123,7 +15123,7 @@
 									}
 								},
 								{
-									"id": 2197,
+									"id": 2199,
 									"name": "divisor",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15134,7 +15134,7 @@
 									}
 								},
 								{
-									"id": 2198,
+									"id": 2200,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15159,27 +15159,27 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 1132,
+							"line": 1117,
 							"character": 16
 						}
 					]
 				},
 				{
-					"id": 2187,
+					"id": 2189,
 					"name": "_divideEdge",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2188,
+							"id": 2190,
 							"name": "_divideEdge",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2189,
+									"id": 2191,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15191,7 +15191,7 @@
 									}
 								},
 								{
-									"id": 2190,
+									"id": 2192,
 									"name": "edge_i",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15202,7 +15202,7 @@
 									}
 								},
 								{
-									"id": 2191,
+									"id": 2193,
 									"name": "divisor",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15213,7 +15213,7 @@
 									}
 								},
 								{
-									"id": 2192,
+									"id": 2194,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15237,27 +15237,27 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 1106,
+							"line": 1091,
 							"character": 20
 						}
 					]
 				},
 				{
-					"id": 2169,
+					"id": 2176,
 					"name": "_extrude",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2170,
+							"id": 2177,
 							"name": "_extrude",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2171,
+									"id": 2178,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15269,7 +15269,7 @@
 									}
 								},
 								{
-									"id": 2172,
+									"id": 2179,
 									"name": "ents_arr",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15294,7 +15294,7 @@
 									}
 								},
 								{
-									"id": 2173,
+									"id": 2180,
 									"name": "dist",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15315,7 +15315,7 @@
 									}
 								},
 								{
-									"id": 2174,
+									"id": 2181,
 									"name": "divisions",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15326,7 +15326,7 @@
 									}
 								},
 								{
-									"id": 2175,
+									"id": 2182,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15351,27 +15351,27 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 987,
+							"line": 1019,
 							"character": 17
 						}
 					]
 				},
 				{
-					"id": 2163,
+					"id": 2170,
 					"name": "_extrudeCap",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2164,
+							"id": 2171,
 							"name": "_extrudeCap",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2165,
+									"id": 2172,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15383,7 +15383,7 @@
 									}
 								},
 								{
-									"id": 2166,
+									"id": 2173,
 									"name": "index",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15394,7 +15394,7 @@
 									}
 								},
 								{
-									"id": 2167,
+									"id": 2174,
 									"name": "strip_posis_map",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15418,7 +15418,7 @@
 									}
 								},
 								{
-									"id": 2168,
+									"id": 2175,
 									"name": "divisions",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15438,27 +15438,27 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 969,
+							"line": 1001,
 							"character": 20
 						}
 					]
 				},
 				{
-					"id": 2121,
+					"id": 2128,
 					"name": "_extrudeColl",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2122,
+							"id": 2129,
 							"name": "_extrudeColl",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2123,
+									"id": 2130,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15470,7 +15470,7 @@
 									}
 								},
 								{
-									"id": 2124,
+									"id": 2131,
 									"name": "index",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15481,7 +15481,7 @@
 									}
 								},
 								{
-									"id": 2125,
+									"id": 2132,
 									"name": "extrude_vec",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15493,7 +15493,7 @@
 									}
 								},
 								{
-									"id": 2126,
+									"id": 2133,
 									"name": "divisions",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15504,7 +15504,7 @@
 									}
 								},
 								{
-									"id": 2127,
+									"id": 2134,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15529,27 +15529,27 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 788,
+							"line": 820,
 							"character": 21
 						}
 					]
 				},
 				{
-					"id": 2156,
+					"id": 2163,
 					"name": "_extrudeCopies",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2157,
+							"id": 2164,
 							"name": "_extrudeCopies",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2158,
+									"id": 2165,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15561,7 +15561,7 @@
 									}
 								},
 								{
-									"id": 2159,
+									"id": 2166,
 									"name": "ent_type",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15572,7 +15572,7 @@
 									}
 								},
 								{
-									"id": 2160,
+									"id": 2167,
 									"name": "index",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15583,7 +15583,7 @@
 									}
 								},
 								{
-									"id": 2161,
+									"id": 2168,
 									"name": "extrude_vec",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15595,7 +15595,7 @@
 									}
 								},
 								{
-									"id": 2162,
+									"id": 2169,
 									"name": "divisions",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15619,111 +15619,21 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 949,
+							"line": 981,
 							"character": 23
 						}
 					]
 				},
 				{
-					"id": 2128,
+					"id": 2135,
 					"name": "_extrudeDim0",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2129,
-							"name": "_extrudeDim0",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"parameters": [
-								{
-									"id": 2130,
-									"name": "__model__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "GIModel",
-										"id": 1416
-									}
-								},
-								{
-									"id": 2131,
-									"name": "ent_type",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "intrinsic",
-										"name": "number"
-									}
-								},
-								{
-									"id": 2132,
-									"name": "index",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "intrinsic",
-										"name": "number"
-									}
-								},
-								{
-									"id": 2133,
-									"name": "extrude_vec",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "Txyz",
-										"id": 281
-									}
-								},
-								{
-									"id": 2134,
-									"name": "divisions",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "intrinsic",
-										"name": "number"
-									}
-								}
-							],
-							"type": {
-								"type": "array",
-								"elementType": {
-									"type": "reference",
-									"name": "TEntTypeIdx",
-									"id": 272
-								}
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/make.ts",
-							"line": 798,
-							"character": 21
-						}
-					]
-				},
-				{
-					"id": 2135,
-					"name": "_extrudeQuads",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {},
-					"signatures": [
-						{
 							"id": 2136,
-							"name": "_extrudeQuads",
+							"name": "_extrudeDim0",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
@@ -15799,111 +15709,21 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 813,
-							"character": 22
-						}
-					]
-				},
-				{
-					"id": 2149,
-					"name": "_extrudeRibs",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {},
-					"signatures": [
-						{
-							"id": 2150,
-							"name": "_extrudeRibs",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"parameters": [
-								{
-									"id": 2151,
-									"name": "__model__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "GIModel",
-										"id": 1416
-									}
-								},
-								{
-									"id": 2152,
-									"name": "ent_type",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "intrinsic",
-										"name": "number"
-									}
-								},
-								{
-									"id": 2153,
-									"name": "index",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "intrinsic",
-										"name": "number"
-									}
-								},
-								{
-									"id": 2154,
-									"name": "extrude_vec",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "Txyz",
-										"id": 281
-									}
-								},
-								{
-									"id": 2155,
-									"name": "divisions",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "intrinsic",
-										"name": "number"
-									}
-								}
-							],
-							"type": {
-								"type": "array",
-								"elementType": {
-									"type": "reference",
-									"name": "TEntTypeIdx",
-									"id": 272
-								}
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/make.ts",
-							"line": 886,
+							"line": 830,
 							"character": 21
 						}
 					]
 				},
 				{
 					"id": 2142,
-					"name": "_extrudeStringers",
+					"name": "_extrudeQuads",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
 							"id": 2143,
-							"name": "_extrudeStringers",
+							"name": "_extrudeQuads",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
@@ -15979,7 +15799,187 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 855,
+							"line": 845,
+							"character": 22
+						}
+					]
+				},
+				{
+					"id": 2156,
+					"name": "_extrudeRibs",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 2157,
+							"name": "_extrudeRibs",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 2158,
+									"name": "__model__",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "GIModel",
+										"id": 1416
+									}
+								},
+								{
+									"id": 2159,
+									"name": "ent_type",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								},
+								{
+									"id": 2160,
+									"name": "index",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								},
+								{
+									"id": 2161,
+									"name": "extrude_vec",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "Txyz",
+										"id": 281
+									}
+								},
+								{
+									"id": 2162,
+									"name": "divisions",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								}
+							],
+							"type": {
+								"type": "array",
+								"elementType": {
+									"type": "reference",
+									"name": "TEntTypeIdx",
+									"id": 272
+								}
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/modules/make.ts",
+							"line": 918,
+							"character": 21
+						}
+					]
+				},
+				{
+					"id": 2149,
+					"name": "_extrudeStringers",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 2150,
+							"name": "_extrudeStringers",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 2151,
+									"name": "__model__",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "GIModel",
+										"id": 1416
+									}
+								},
+								{
+									"id": 2152,
+									"name": "ent_type",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								},
+								{
+									"id": 2153,
+									"name": "index",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								},
+								{
+									"id": 2154,
+									"name": "extrude_vec",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "Txyz",
+										"id": 281
+									}
+								},
+								{
+									"id": 2155,
+									"name": "divisions",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								}
+							],
+							"type": {
+								"type": "array",
+								"elementType": {
+									"type": "reference",
+									"name": "TEntTypeIdx",
+									"id": 272
+								}
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/modules/make.ts",
+							"line": 887,
 							"character": 26
 						}
 					]
@@ -16313,21 +16313,21 @@
 					]
 				},
 				{
-					"id": 2109,
+					"id": 2115,
 					"name": "_loft",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2110,
+							"id": 2116,
 							"name": "_loft",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2111,
+									"id": 2117,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -16339,7 +16339,7 @@
 									}
 								},
 								{
-									"id": 2112,
+									"id": 2118,
 									"name": "ents_arrs",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -16370,7 +16370,7 @@
 									}
 								},
 								{
-									"id": 2113,
+									"id": 2119,
 									"name": "divisions",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -16381,7 +16381,7 @@
 									}
 								},
 								{
-									"id": 2114,
+									"id": 2120,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -16406,27 +16406,27 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 716,
+							"line": 744,
 							"character": 14
 						}
 					]
 				},
 				{
-					"id": 2104,
+					"id": 2110,
 					"name": "_loftCopies",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2105,
+							"id": 2111,
 							"name": "_loftCopies",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2106,
+									"id": 2112,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -16438,7 +16438,7 @@
 									}
 								},
 								{
-									"id": 2107,
+									"id": 2113,
 									"name": "ents_arr",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -16453,7 +16453,7 @@
 									}
 								},
 								{
-									"id": 2108,
+									"id": 2114,
 									"name": "divisions",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -16477,187 +16477,21 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 677,
+							"line": 705,
 							"character": 20
 						}
 					]
 				},
 				{
-					"id": 2086,
+					"id": 2092,
 					"name": "_loftQuads",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2087,
-							"name": "_loftQuads",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"parameters": [
-								{
-									"id": 2088,
-									"name": "__model__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "GIModel",
-										"id": 1416
-									}
-								},
-								{
-									"id": 2089,
-									"name": "ents_arr",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "reference",
-											"name": "TEntTypeIdx",
-											"id": 272
-										}
-									}
-								},
-								{
-									"id": 2090,
-									"name": "divisions",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "intrinsic",
-										"name": "number"
-									}
-								},
-								{
-									"id": 2091,
-									"name": "method",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "_ELoftMethod",
-										"id": 1988
-									}
-								}
-							],
-							"type": {
-								"type": "array",
-								"elementType": {
-									"type": "reference",
-									"name": "TEntTypeIdx",
-									"id": 272
-								}
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/make.ts",
-							"line": 506,
-							"character": 19
-						}
-					]
-				},
-				{
-					"id": 2098,
-					"name": "_loftRibs",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {},
-					"signatures": [
-						{
-							"id": 2099,
-							"name": "_loftRibs",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"parameters": [
-								{
-									"id": 2100,
-									"name": "__model__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "GIModel",
-										"id": 1416
-									}
-								},
-								{
-									"id": 2101,
-									"name": "ents_arr",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "reference",
-											"name": "TEntTypeIdx",
-											"id": 272
-										}
-									}
-								},
-								{
-									"id": 2102,
-									"name": "divisions",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "intrinsic",
-										"name": "number"
-									}
-								},
-								{
-									"id": 2103,
-									"name": "method",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "_ELoftMethod",
-										"id": 1988
-									}
-								}
-							],
-							"type": {
-								"type": "array",
-								"elementType": {
-									"type": "reference",
-									"name": "TEntTypeIdx",
-									"id": 272
-								}
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/make.ts",
-							"line": 614,
-							"character": 18
-						}
-					]
-				},
-				{
-					"id": 2092,
-					"name": "_loftStringers",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {},
-					"signatures": [
-						{
 							"id": 2093,
-							"name": "_loftStringers",
+							"name": "_loftQuads",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
@@ -16726,7 +16560,173 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 573,
+							"line": 534,
+							"character": 19
+						}
+					]
+				},
+				{
+					"id": 2104,
+					"name": "_loftRibs",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 2105,
+							"name": "_loftRibs",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 2106,
+									"name": "__model__",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "GIModel",
+										"id": 1416
+									}
+								},
+								{
+									"id": 2107,
+									"name": "ents_arr",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"name": "TEntTypeIdx",
+											"id": 272
+										}
+									}
+								},
+								{
+									"id": 2108,
+									"name": "divisions",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								},
+								{
+									"id": 2109,
+									"name": "method",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "_ELoftMethod",
+										"id": 1988
+									}
+								}
+							],
+							"type": {
+								"type": "array",
+								"elementType": {
+									"type": "reference",
+									"name": "TEntTypeIdx",
+									"id": 272
+								}
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/modules/make.ts",
+							"line": 642,
+							"character": 18
+						}
+					]
+				},
+				{
+					"id": 2098,
+					"name": "_loftStringers",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 2099,
+							"name": "_loftStringers",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 2100,
+									"name": "__model__",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "GIModel",
+										"id": 1416
+									}
+								},
+								{
+									"id": 2101,
+									"name": "ents_arr",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"name": "TEntTypeIdx",
+											"id": 272
+										}
+									}
+								},
+								{
+									"id": 2102,
+									"name": "divisions",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								},
+								{
+									"id": 2103,
+									"name": "method",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "_ELoftMethod",
+										"id": 1988
+									}
+								}
+							],
+							"type": {
+								"type": "array",
+								"elementType": {
+									"type": "reference",
+									"name": "TEntTypeIdx",
+									"id": 272
+								}
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/modules/make.ts",
+							"line": 601,
 							"character": 23
 						}
 					]
@@ -16920,21 +16920,21 @@
 					]
 				},
 				{
-					"id": 2209,
+					"id": 2205,
 					"name": "_polygonHoles",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2210,
+							"id": 2206,
 							"name": "_polygonHoles",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2211,
+									"id": 2207,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -16946,7 +16946,7 @@
 									}
 								},
 								{
-									"id": 2212,
+									"id": 2208,
 									"name": "ents_arr",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -16961,7 +16961,7 @@
 									}
 								},
 								{
-									"id": 2213,
+									"id": 2209,
 									"name": "holes_ents_arr",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17002,7 +17002,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/make.ts",
-							"line": 1238,
+							"line": 1193,
 							"character": 22
 						}
 					]
@@ -17226,42 +17226,42 @@
 					"children": [
 						2047,
 						2057,
-						2199,
-						2176,
+						2183,
+						2121,
 						2072,
-						2115,
+						2086,
 						2013,
 						2035,
 						2021,
 						2005,
-						2205,
-						2183,
-						2214,
+						2201,
+						2215,
+						2210,
 						2052,
 						2062,
 						2067,
-						2193,
-						2187,
-						2169,
-						2163,
-						2121,
-						2156,
+						2195,
+						2189,
+						2176,
+						2170,
 						2128,
+						2163,
 						2135,
-						2149,
 						2142,
+						2156,
+						2149,
 						2082,
 						2043,
 						2031,
 						2077,
-						2109,
-						2104,
-						2086,
-						2098,
+						2115,
+						2110,
 						2092,
+						2104,
+						2098,
 						2017,
 						2039,
-						2209,
+						2205,
 						2026,
 						2009
 					]

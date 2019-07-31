@@ -3,7 +3,7 @@
 ## Position  
 * **Description:** Adds one or more new position to the model.  
 * **Parameters:**  
-  * *coords:* A list of three numbers, or nested lists of three numbers.  
+  * *coords:* A list of three numbers, or a list of lists of three numbers.  
 * **Returns:** A new position, or nested list of new positions.  
 * **Examples:**  
   * position1 = make.Position([1,2,3])  
@@ -17,7 +17,7 @@
 ## Point  
 * **Description:** Adds one or more new points to the model.  
 * **Parameters:**  
-  * *positions:* Position, or list of positions, or other entities from which positions can be extracted.  
+  * *positions:* Position, or list of positions, or entities from which positions can be extracted.  
 * **Returns:** Entities, new point or a list of new points.  
 * **Examples:**  
   * point1 = make.Point(position1)  
@@ -29,7 +29,7 @@
 ## Polyline  
 * **Description:** Adds one or more new polylines to the model.  
 * **Parameters:**  
-  * *entities:* List of positions, or nested lists of positions, or entities from which positions can be extracted.  
+  * *entities:* List or nested lists of positions, or entities from which positions can be extracted.  
   * *close:* Enum, 'open' or 'close'.  
 * **Returns:** Entities, new polyline, or a list of new polylines.  
 * **Examples:**  
@@ -42,7 +42,7 @@
 ## Polygon  
 * **Description:** Adds one or more new polygons to the model.  
 * **Parameters:**  
-  * *entities:* List of positions, or nested lists of positions, or entities from which positions can be extracted.  
+  * *entities:* List or nested lists of positions, or entities from which positions can be extracted.  
 * **Returns:** Entities, new polygon, or a list of new polygons.  
 * **Examples:**  
   * polygon1 = make.Polygon([pos1,pos2,pos3])  

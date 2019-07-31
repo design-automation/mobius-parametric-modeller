@@ -99,7 +99,8 @@ export enum EAttribNames {
     NORMAL =  'normal',
     COLOR =   'rgb',
     TEXTURE = 'uv',
-    NAME = 'name'
+    NAME = 'name',
+    MATERIAL = 'material'
 }
 
 /**

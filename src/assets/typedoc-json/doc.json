@@ -21599,7 +21599,7 @@
 				},
 				{
 					"id": 1941,
-					"name": "Neighbour",
+					"name": "Neighbor",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {
@@ -21608,17 +21608,17 @@
 					"signatures": [
 						{
 							"id": 1942,
-							"name": "Neighbour",
+							"name": "Neighbor",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Returns a list of neighbouring entities. In order to qualify as a neighbour,\nentities must not be part of the set of input entities, but must be welded to one or more entities in the input.\n~",
-								"returns": "Entities, a list of welded neighbours",
+								"shortText": "Returns a list of neighboring entities. In order to qualify as a neighbor,\nentities must not be part of the set of input entities, but must be welded to one or more entities in the input.\n~",
+								"returns": "Entities, a list of welded neighbors",
 								"tags": [
 									{
 										"tag": "example",
-										"text": "mod.Neighbour('edges', [polyline1,polyline2,polyline3])"
+										"text": "mod.neighbor('edges', [polyline1,polyline2,polyline3])"
 									},
 									{
 										"tag": "example_info",
@@ -21647,7 +21647,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "Enum, select the types of neighbours to return"
+										"text": "Enum, select the types of neighbors to return"
 									},
 									"type": {
 										"type": "reference",
@@ -21698,7 +21698,7 @@
 						{
 							"fileName": "core/modules/query.ts",
 							"line": 375,
-							"character": 25
+							"character": 24
 						}
 					]
 				},
@@ -22950,7 +22950,7 @@
 				},
 				{
 					"id": 1946,
-					"name": "_neighbours",
+					"name": "_neighbors",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {
@@ -22959,7 +22959,7 @@
 					"signatures": [
 						{
 							"id": 1947,
-							"name": "_neighbours",
+							"name": "_neighbors",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
@@ -23041,7 +23041,7 @@
 						{
 							"fileName": "core/modules/query.ts",
 							"line": 388,
-							"character": 27
+							"character": 26
 						}
 					]
 				},
@@ -41908,7 +41908,7 @@
 						},
 						{
 							"id": 1015,
-							"name": "neighbour",
+							"name": "neighbor",
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
@@ -41919,7 +41919,7 @@
 							"signatures": [
 								{
 									"id": 1016,
-									"name": "neighbour",
+									"name": "neighbor",
 									"kind": 4096,
 									"kindString": "Call signature",
 									"flags": {},
@@ -41971,7 +41971,7 @@
 								{
 									"fileName": "libs/geo-info/GIGeomQuery.ts",
 									"line": 661,
-									"character": 20
+									"character": 19
 								}
 							]
 						},

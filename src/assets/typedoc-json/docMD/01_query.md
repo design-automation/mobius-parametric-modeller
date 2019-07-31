@@ -91,16 +91,16 @@ entities must be part of the set of input entities and must have naked edges.
     Returns list of edges that are at the perimeter of polygon1, polygon2, or polygon3.
   
   
-## Neighbour  
-* **Description:** Returns a list of neighbouring entities. In order to qualify as a neighbour,
+## Neighbor  
+* **Description:** Returns a list of neighboring entities. In order to qualify as a neighbor,
 entities must not be part of the set of input entities, but must be welded to one or more entities in the input.
 ~  
 * **Parameters:**  
-  * *select:* Enum, select the types of neighbours to return  
+  * *select:* Enum, select the types of neighbors to return  
   * *entities:* List of entities.  
-* **Returns:** Entities, a list of welded neighbours  
+* **Returns:** Entities, a list of welded neighbors  
 * **Examples:**  
-  * mod.Neighbour('edges', [polyline1,polyline2,polyline3])  
+  * mod.neighbor('edges', [polyline1,polyline2,polyline3])  
     Returns list of edges that are welded to polyline1, polyline2, or polyline3.
   
   

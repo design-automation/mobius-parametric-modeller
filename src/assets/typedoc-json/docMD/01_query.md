@@ -41,6 +41,24 @@ If the attribute value is a number, then any comparison operator can be used: ==
     Returns a list of all the objects in the model except polyline1.
   
   
+## Sort  
+* **Description:** Sorts entities based on a sort expression.
+~
+The sort expression should use the following format: #@name, where 'name' is the attribute name.
+Entities can be sorted using multiple sort expresssions as follows: #@name1 && #@name2.
+~
+If the attribute is a list, and index can also be specified as follows: #@name1[index].
+~  
+* **Parameters:**  
+  * *entities:* List of two or more entities to be sorted, all of the same entity type.  
+  * *sort_expr:* Attribute condition. If 'null' (without quotes), entities will be sorted based on their ID.  
+  * *method:* Enum, sort descending or ascending.  
+* **Returns:** Entities, a list of sorted entities.  
+* **Examples:**  
+  * sorted_list = query.Sort( [pos1, pos2, pos3], #@xyz[2], descending)  
+    Returns a list of three positions, sorted according to the descending z value.
+  
+  
 ## Count  
 * **Description:** Returns the number of entities based on a query expression.
 ~
@@ -60,34 +78,30 @@ If the attribute value is a number, then any comparison operator can be used: ==
     Returns the number of positions defined by polyline1 where the z-coordinate is more than 10.
   
   
-## Neighbours  
-* **Description:** Returns a list of welded neighbours of any entity.
+## Perimeter  
+* **Description:** Returns a list of perimeter entities. In order to qualify as a perimeter entity,
+entities must be part of the set of input entities and must have naked edges.
+~  
+* **Parameters:**  
+  * *select:* Enum, select the types of entities to return  
+  * *entities:* List of entities.  
+* **Returns:** Entities, a list of perimeter entities.  
+* **Examples:**  
+  * mod.Perimeter('edges', [polygon1,polygon2,polygon])  
+    Returns list of edges that are at the perimeter of polygon1, polygon2, or polygon3.
+  
+  
+## Neighbour  
+* **Description:** Returns a list of neighbouring entities. In order to qualify as a neighbour,
+entities must not be part of the set of input entities, but must be welded to one or more entities in the input.
 ~  
 * **Parameters:**  
   * *select:* Enum, select the types of neighbours to return  
   * *entities:* List of entities.  
 * **Returns:** Entities, a list of welded neighbours  
 * **Examples:**  
-  * mod.Neighbours([polyline1,polyline2,polyline3])  
-    Returns list of entities that are welded to polyline1 and polyline2.
-  
-  
-## Sort  
-* **Description:** Sorts entities based on a sort expression.
-~
-The sort expression should use the following format: #@name, where 'name' is the attribute name.
-Entities can be sorted using multiple sort expresssions as follows: #@name1 && #@name2.
-~
-If the attribute is a list, and index can also be specified as follows: #@name1[index].
-~  
-* **Parameters:**  
-  * *entities:* List of two or more entities to be sorted, all of the same entity type.  
-  * *sort_expr:* Attribute condition. If 'null' (without quotes), entities will be sorted based on their ID.  
-  * *method:* Enum, sort descending or ascending.  
-* **Returns:** Entities, a list of sorted entities.  
-* **Examples:**  
-  * sorted_list = query.Sort( [pos1, pos2, pos3], #@xyz[2], descending)  
-    Returns a list of three positions, sorted according to the descending z value.
+  * mod.Neighbour('edges', [polyline1,polyline2,polyline3])  
+    Returns list of edges that are welded to polyline1, polyline2, or polyline3.
   
   
 ## Type  

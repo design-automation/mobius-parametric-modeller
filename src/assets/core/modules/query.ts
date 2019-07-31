@@ -12,7 +12,7 @@
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TQuery, EEntType, ESort, TEntTypeIdx } from '@libs/geo-info/common';
-import { idsMake, getArrDepth } from '@libs/geo-info/id';
+import { idsMake, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
 import { checkIDs, IDcheckObj } from './_check_args';
 
 // TQuery is defined as a string.
@@ -87,6 +87,58 @@ function _convertSelectToEEntTypeStr(select: _EQuerySelect): EEntType|EEntType[]
     }
 }
 // ================================================================================================
+/**
+ * Returns a list of entities based on a query expression.
+ * The result will always be a list of entities, even if there is only one entity.
+ * In a case where you want only one entity, remember to get the first item in the list.
+ * ~
+ * The query expression can use the following format: #@name == value,
+ * where 'name' is the attribute name, and 'value' is the attribute value that you are searching for.
+ * ~
+ * If the attribute value is a string, then in must be in quotes, as follows: #@name == 'str_value'.
+ * ~
+ * If the attribute value is a number, then any comparison operator can be used: ==, !=, >, >=, <, =<.
+ * ~
+ * @param __model__
+ * @param select Enum, specifies what type of entities will be returned.
+ * @param entities List of entities to be searched. If 'null' (without quotes), all entities in the model will be searched.
+ * @param query_expr Attribute condition. If 'null' (without quotes), no condition is set; all found entities are returned.
+ * @returns Entities, a list of entities that match the type specified in 'select' and the conditions specified in 'query_expr'.
+ * @example positions = query.Get(positions, polyline1, #@xyz[2]>10)
+ * @example_info Returns a list of positions that are part of polyline1 where the z-coordinate is more than 10.
+ * @example positions = query.Get(positions, null, #@xyz[2]>10)
+ * @example_info Returns a list of positions in the model where the z-coordinate is more than 10.
+ * @example positions = query.Get(positions, polyline1, null)
+ * @example_info Returns a list of all of the positions that are part of polyline1.
+ * @example polylines = query.Get(polylines, position1, null)
+ * @example_info Returns a list of all of the polylines that use position1.
+ * @example collections = query.Get(collections, null, #@type=="floors")
+ * @example_info Returns a list of all the collections that have an attribute called "type" with a value "floors".
+ */
+export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], query_expr: TQuery): TId[] {
+    if (isEmptyArr(entities)) { return []; }
+    // --- Error Check ---
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
+    if (entities !== null && entities !== undefined) {
+        ents_arr = checkIDs('query.Get', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+    }
+    // TODO add a condition called isNull for entities
+    // TODO check the query string
+    // --- Error Check ---
+    const select_ent_types: EEntType|EEntType[] = _convertSelectToEEntTypeStr(select);
+    const found_ents_arr: TEntTypeIdx[] = _get(__model__, select_ent_types, ents_arr, query_expr);
+    if (found_ents_arr.length === 0) { return []; }
+    // remove duplicates
+    const found_ents_arr_no_dups: TEntTypeIdx[] = [found_ents_arr[0]];
+    for (let i = 1; i < found_ents_arr.length; i++) {
+        const current: TEntTypeIdx = found_ents_arr[i];
+        const previous: TEntTypeIdx = found_ents_arr[i - 1];
+        if (!(current[0] === previous[0] && current[1] === previous[1])) {
+            found_ents_arr_no_dups.push(found_ents_arr[i]);
+        }
+    }
+    return idsMake(found_ents_arr_no_dups) as TId[];
+}
 function _get(__model__: GIModel, select_ent_types: EEntType|EEntType[],
               ents_arr: TEntTypeIdx|TEntTypeIdx[], query_expr: TQuery): TEntTypeIdx[] {
     if (!Array.isArray(select_ent_types)) {
@@ -133,59 +185,29 @@ function _compareID(ent_arr1: TEntTypeIdx, ent_arr2: TEntTypeIdx): number {
     if (index1 !== index2) { return index1 -  index2; }
     return 0;
 }
+// ================================================================================================
 /**
- * Returns a list of entities based on a query expression.
- * The result will always be a list of entities, even if there is only one entity.
- * In a case where you want only one entity, remember to get the first item in the list.
- * ~
- * The query expression can use the following format: #@name == value,
- * where 'name' is the attribute name, and 'value' is the attribute value that you are searching for.
- * ~
- * If the attribute value is a string, then in must be in quotes, as follows: #@name == 'str_value'.
- * ~
- * If the attribute value is a number, then any comparison operator can be used: ==, !=, >, >=, <, =<.
- * ~
+ * Returns a list of entities excluding the specified entities.
  * @param __model__
  * @param select Enum, specifies what type of entities will be returned.
- * @param entities List of entities to be searched. If 'null' (without quotes), all entities in the model will be searched.
- * @param query_expr Attribute condition. If 'null' (without quotes), no condition is set; all found entities are returned.
- * @returns Entities, a list of entities that match the type specified in 'select' and the conditions specified in 'query_expr'.
- * @example positions = query.Get(positions, polyline1, #@xyz[2]>10)
- * @example_info Returns a list of positions that are part of polyline1 where the z-coordinate is more than 10.
- * @example positions = query.Get(positions, null, #@xyz[2]>10)
- * @example_info Returns a list of positions in the model where the z-coordinate is more than 10.
- * @example positions = query.Get(positions, polyline1, null)
- * @example_info Returns a list of all of the positions that are part of polyline1.
- * @example polylines = query.Get(polylines, position1, null)
- * @example_info Returns a list of all of the polylines that use position1.
- * @example collections = query.Get(collections, null, #@type=="floors")
- * @example_info Returns a list of all the collections that have an attribute called "type" with a value "floors".
+ * @param entities List of entities to be excluded.
+ * @returns Entities, a list of entities that match the type specified in 'select'.
+ * @example objects = query.Get(objects, polyline1, null)
+ * @example_info Returns a list of all the objects in the model except polyline1.
  */
-export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], query_expr: TQuery): TId[] {
+export function Invert(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[]): TId[] {
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
     if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs('query.Get', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = checkIDs('query.Invert', 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
     }
-    // TODO add a condition called isNull for entities
-    // TODO check the query string
     // --- Error Check ---
     const select_ent_types: EEntType|EEntType[] = _convertSelectToEEntTypeStr(select);
-    const found_ents_arr: TEntTypeIdx[] = _get(__model__, select_ent_types, ents_arr, query_expr);
-    if (found_ents_arr.length === 0) { return []; }
-    // remove duplicates
-    const found_ents_arr_no_dups: TEntTypeIdx[] = [found_ents_arr[0]];
-    for (let i = 1; i < found_ents_arr.length; i++) {
-        const current: TEntTypeIdx = found_ents_arr[i];
-        const previous: TEntTypeIdx = found_ents_arr[i - 1];
-        if (!(current[0] === previous[0] && current[1] === previous[1])) {
-            found_ents_arr_no_dups.push(found_ents_arr[i]);
-        }
-    }
-    return idsMake(found_ents_arr_no_dups) as TId[];
+    const found_ents_arr: TEntTypeIdx[] = _invert(__model__, select_ent_types, ents_arr);
+    return idsMake(found_ents_arr) as TId[];
 }
-// ================================================================================================
-// ================================================================================================
 function _invert(__model__: GIModel, select_ent_types: EEntType|EEntType[], ents_arr: TEntTypeIdx|TEntTypeIdx[]): TEntTypeIdx[] {
     if (!Array.isArray(select_ent_types)) {
         const select_ent_type: EEntType = select_ent_types as EEntType;
@@ -211,25 +233,52 @@ function _invert(__model__: GIModel, select_ent_types: EEntType|EEntType[], ents
         return query_results_arr;
     }
 }
+// ================================================================================================
 /**
- * Returns a list of entities excluding the specified entities.
+ * Sorts entities based on a sort expression.
+ * ~
+ * The sort expression should use the following format: #@name, where 'name' is the attribute name.
+ * Entities can be sorted using multiple sort expresssions as follows: #@name1 && #@name2.
+ * ~
+ * If the attribute is a list, and index can also be specified as follows: #@name1[index].
+ * ~
  * @param __model__
- * @param select Enum, specifies what type of entities will be returned.
- * @param entities List of entities to be excluded.
- * @returns Entities, a list of entities that match the type specified in 'select'.
- * @example objects = query.Get(objects, polyline1, null)
- * @example_info Returns a list of all the objects in the model except polyline1.
+ * @param entities List of two or more entities to be sorted, all of the same entity type.
+ * @param sort_expr Attribute condition. If 'null' (without quotes), entities will be sorted based on their ID.
+ * @param method Enum, sort descending or ascending.
+ * @returns Entities, a list of sorted entities.
+ * @example sorted_list = query.Sort( [pos1, pos2, pos3], #@xyz[2], descending)
+ * @example_info Returns a list of three positions, sorted according to the descending z value.
  */
-export function Invert(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[]): TId[] {
+export function Sort(__model__: GIModel, entities: TId[], sort_expr: TQuery, method: _ESortMethod): TId[] {
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
-    let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
-    if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs('query.Get', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+    const ents_arr = checkIDs('query.Sort', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    // TODO check the sort expression
+    // --- Error Check ---
+    const sort_method: ESort = (method === _ESortMethod.DESCENDING) ? ESort.DESCENDING : ESort.ASCENDING;
+    const sorted_ents_arr: TEntTypeIdx[] = _sort(__model__, ents_arr, sort_expr, sort_method);
+    return idsMake(sorted_ents_arr) as TId[];
+}
+export enum _ESortMethod {
+    'DESCENDING' = 'descending',
+    'ASCENDING' = 'ascending'
+}
+function _sort(__model__: GIModel, ents_arr: TEntTypeIdx[], sort_expr: TQuery, method: ESort): TEntTypeIdx[] {
+    // get the list of ents_i
+    const ent_type: EEntType = ents_arr[0][0];
+    const ents_i: number[] = ents_arr.filter( ent_arr => ent_arr[0] === ent_type ).map( ent_arr => ent_arr[1] );
+    // check if the sort expression is null
+    if (sort_expr === null || sort_expr === undefined) {
+        ents_i.sort();
+        if (method === ESort.ASCENDING) {
+            ents_i.reverse();
+        }
+        return ents_i.map( entity_i => [ent_type, entity_i]) as TEntTypeIdx[];
     }
-    // --- Error Check ---
-    const select_ent_types: EEntType|EEntType[] = _convertSelectToEEntTypeStr(select);
-    const found_ents_arr: TEntTypeIdx[] = _invert(__model__, select_ent_types, ents_arr);
-    return idsMake(found_ents_arr) as TId[];
+    // do the sort on the list of entities
+    const sort_result: number[] = __model__.attribs.query.sortByAttribs(ent_type, ents_i, sort_expr, method);
+    return sort_result.map( entity_i => [ent_type, entity_i]) as TEntTypeIdx[];
 }
 // ================================================================================================
 /**
@@ -251,14 +300,91 @@ export function Invert(__model__: GIModel, select: _EQuerySelect, entities: TId|
  * @example_info Returns the number of positions defined by polyline1 where the z-coordinate is more than 10.
  */
 export function Count(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], query_expr: TQuery): number {
+    if (isEmptyArr(entities)) { return 0; }
     // --- Error Check ---
-    // if (entities !== null && entities !== undefined) {
-    //     checkIDs('query.Count', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null);
-    // }
+    if (entities !== null && entities !== undefined) {
+        checkIDs('query.Count', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null);
+    }
     // --- Error Check ---
-    return Get(__model__, select, entities, query_expr).length; // Check done in Get
+    return Get(__model__, select, entities, query_expr).length;
 }
 // ================================================================================================
+/**
+* Returns a list of perimeter entities. In order to qualify as a perimeter entity,
+* entities must be part of the set of input entities and must have naked edges.
+* ~
+* @param __model__
+* @param select Enum, select the types of entities to return
+* @param entities List of entities.
+* @returns Entities, a list of perimeter entities.
+* @example mod.Perimeter('edges', [polygon1,polygon2,polygon])
+* @example_info Returns list of edges that are at the perimeter of polygon1, polygon2, or polygon3.
+*/
+export function Perimeter(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[]): TId[] {
+    if (isEmptyArr(entities)) { return []; }
+    // --- Error Check ---
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
+    if (entities !== null && entities !== undefined) {
+        ents_arr = checkIDs('query.Perimeter', 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+    }
+    // --- Error Check ---
+    const select_ent_types: EEntType|EEntType[] = _convertSelectToEEntTypeStr(select);
+    const found_ents_arr: TEntTypeIdx[] = _perimeter(__model__, select_ent_types, ents_arr);
+    return idsMake(found_ents_arr) as TId[];
+}
+export function _perimeter(__model__: GIModel,  select_ent_types: EEntType|EEntType[],
+    ents_arr: TEntTypeIdx|TEntTypeIdx[]): TEntTypeIdx[] {
+    if (!Array.isArray(select_ent_types)) {
+        const select_ent_type: EEntType = select_ent_types as EEntType;
+        if (!Array.isArray(ents_arr[0])) {
+            ents_arr = [ents_arr] as TEntTypeIdx[];
+        }
+        // get an array of all edges
+        const edges_i: number[] = [];
+        for (const ent_arr of ents_arr) {
+            const [ent_type, index]: TEntTypeIdx = ent_arr as TEntTypeIdx ;
+            const edges_ent_i: number[] = __model__.geom.query.navAnyToEdge(ent_type, index);
+            for (const edge_ent_i of edges_ent_i) {
+                edges_i.push(edge_ent_i);
+            }
+        }
+        // get the perimeter entities
+        const all_perim_ents_i: number[] = __model__.geom.query.perimeter(select_ent_type, edges_i);
+        return all_perim_ents_i.map(perim_ent_i => [select_ent_type, perim_ent_i]) as TEntTypeIdx[];
+    } else {
+        const query_results: TEntTypeIdx[] = [];
+        for (const select_ent_type of select_ent_types) {
+            query_results.push(..._perimeter(__model__, select_ent_type, ents_arr));
+        }
+        return query_results;
+    }
+}
+// ================================================================================================
+/**
+* Returns a list of neighbouring entities. In order to qualify as a neighbour,
+* entities must not be part of the set of input entities, but must be welded to one or more entities in the input.
+* ~
+* @param __model__
+* @param select Enum, select the types of neighbours to return
+* @param entities List of entities.
+* @returns Entities, a list of welded neighbours
+* @example mod.Neighbour('edges', [polyline1,polyline2,polyline3])
+* @example_info Returns list of edges that are welded to polyline1, polyline2, or polyline3.
+*/
+export function Neighbour(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[]): TId[] {
+    if (isEmptyArr(entities)) { return []; }
+    // --- Error Check ---
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
+    if (entities !== null && entities !== undefined) {
+        ents_arr = checkIDs('query.Neighbour', 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+    }
+    // --- Error Check ---
+    const select_ent_types: EEntType|EEntType[] = _convertSelectToEEntTypeStr(select);
+    const found_ents_arr: TEntTypeIdx[] = _neighbours(__model__, select_ent_types, ents_arr);
+    return idsMake(found_ents_arr) as TId[];
+}
 export function _neighbours(__model__: GIModel,  select_ent_types: EEntType|EEntType[],
     ents_arr: TEntTypeIdx|TEntTypeIdx[]): TEntTypeIdx[] {
     if (!Array.isArray(select_ent_types)) {
@@ -266,13 +392,19 @@ export function _neighbours(__model__: GIModel,  select_ent_types: EEntType|EEnt
         if (!Array.isArray(ents_arr[0])) {
             ents_arr = [ents_arr] as TEntTypeIdx[];
         }
-        const all_nbor_ents_i: Set<number> = new Set();
-        for (const ents of ents_arr) {
-            const [ent_type, index]: TEntTypeIdx = ents as TEntTypeIdx ;
-            const nbor_ents_i: number[] = __model__.geom.query.neighbours(ent_type, select_ent_type, index);
-            nbor_ents_i.forEach(nbor_ent_i => all_nbor_ents_i.add(nbor_ent_i));
+        // get an array of all vertices
+        const verts_i: number[] = [];
+        for (const ent_arr of ents_arr) {
+            const [ent_type, index]: TEntTypeIdx = ent_arr as TEntTypeIdx ;
+            const verts_ent_i: number[] = __model__.geom.query.navAnyToVert(ent_type, index);
+            for (const vert_ent_i of verts_ent_i) {
+                verts_i.push(vert_ent_i);
+            }
         }
-        return Array.from(all_nbor_ents_i).map(nbor_ent_i => [select_ent_type, nbor_ent_i]) as TEntTypeIdx[];
+        console.log(verts_i);
+        // get the neighbour entities
+        const all_nbor_ents_i: number[] = __model__.geom.query.neighbour(select_ent_type, verts_i);
+        return all_nbor_ents_i.map(nbor_ent_i => [select_ent_type, nbor_ent_i]) as TEntTypeIdx[];
     } else {
         const query_results: TEntTypeIdx[] = [];
         for (const select_ent_type of select_ent_types) {
@@ -281,74 +413,37 @@ export function _neighbours(__model__: GIModel,  select_ent_types: EEntType|EEnt
         return query_results;
     }
 }
-/**
-* Returns a list of welded neighbours of any entity.
-* ~
-* @param __model__
-* @param select Enum, select the types of neighbours to return
-* @param entities List of entities.
-* @returns Entities, a list of welded neighbours
-* @example mod.Neighbours([polyline1,polyline2,polyline3])
-* @example_info Returns list of entities that are welded to polyline1 and polyline2.
-*/
-export function Neighbours(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[]): TId[] {
-    // --- Error Check ---
-    let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
-    if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs('query.Get', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
-    }
-    // --- Error Check ---
-    const select_ent_types: EEntType|EEntType[] = _convertSelectToEEntTypeStr(select);
-    const found_ents_arr: TEntTypeIdx[] = _neighbours(__model__, select_ent_types, ents_arr);
-    return idsMake(found_ents_arr) as TId[];
-}
 // ================================================================================================
-function _sort(__model__: GIModel, ents_arr: TEntTypeIdx[], sort_expr: TQuery, method: ESort): TEntTypeIdx[] {
-    // get the list of ents_i
-    const ent_type: EEntType = ents_arr[0][0];
-    const ents_i: number[] = ents_arr.filter( ent_arr => ent_arr[0] === ent_type ).map( ent_arr => ent_arr[1] );
-    // check if the sort expression is null
-    if (sort_expr === null || sort_expr === undefined) {
-        ents_i.sort();
-        if (method === ESort.ASCENDING) {
-            ents_i.reverse();
-        }
-        return ents_i.map( entity_i => [ent_type, entity_i]) as TEntTypeIdx[];
-    }
-    // do the sort on the list of entities
-    const sort_result: number[] = __model__.attribs.query.sortByAttribs(ent_type, ents_i, sort_expr, method);
-    return sort_result.map( entity_i => [ent_type, entity_i]) as TEntTypeIdx[];
-}
-export enum _ESortMethod {
-    'DESCENDING' = 'descending',
-    'ASCENDING' = 'ascending'
-}
 /**
- * Sorts entities based on a sort expression.
+ * Checks the type of an entity.
  * ~
- * The sort expression should use the following format: #@name, where 'name' is the attribute name.
- * Entities can be sorted using multiple sort expresssions as follows: #@name1 && #@name2.
+ * For is_used_posi, returns true if the entity is a posi, and it is used by at least one vertex.
+ * For is_unused_posi, it returns the opposite of is_used_posi.
+ * For is_object, returns true if the entity is a point, a polyline, or a polygon.
+ * For is_topology, returns true if the entity is a vertex, an edge, a wire, or a face.
+ * For is_point_topology, is_polyline_topology, and is_polygon_topology, returns true
+ * if the entity is a topological entity, and it is part of an object of the specified type.
  * ~
- * If the attribute is a list, and index can also be specified as follows: #@name1[index].
- * ~
+ * For is_open, returns true if the entity is a wire or polyline and is open. For is_closed, it returns the opposite of is_open.
+ * For is_hole, returns ture if the entity is a wire, and it defines a hole in a face.
+ * For has_holes, returns true if the entity is a face or polygon, and it has holes.
+ * For has_no_holes, it returns the opposite of has_holes.
+ *
  * @param __model__
- * @param entities List of two or more entities to be sorted, all of the same entity type.
- * @param sort_expr Attribute condition. If 'null' (without quotes), entities will be sorted based on their ID.
- * @param method Enum, sort descending or ascending.
- * @returns Entities, a list of sorted entities.
- * @example sorted_list = query.Sort( [pos1, pos2, pos3], #@xyz[2], descending)
- * @example_info Returns a list of three positions, sorted according to the descending z value.
+ * @param entities An entity, or a list of entities.
+ * @param query_ent_type Enum, select the conditions to test agains.
+ * @returns Boolean or list of boolean in input sequence.
+ * @example query.Type([polyline1, polyline2, polygon1], is_polyline )
+ * @example_info Returns a list [true, true, false] if polyline1 and polyline2 are polylines but polygon1 is not a polyline.
  */
-export function Sort(__model__: GIModel, entities: TId[], sort_expr: TQuery, method: _ESortMethod): TId[] {
+export function Type(__model__: GIModel, entities: TId|TId[], query_ent_type: _EQueryEntType): boolean|boolean[] {
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
-    const ents_arr = checkIDs('query.Sort', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
-    // TODO check the sort expression
+    const fn_name = 'query.Type';
+    const ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
-    const sort_method: ESort = (method === _ESortMethod.DESCENDING) ? ESort.DESCENDING : ESort.ASCENDING;
-    const sorted_ents_arr: TEntTypeIdx[] = _sort(__model__, ents_arr, sort_expr, sort_method);
-    return idsMake(sorted_ents_arr) as TId[];
+    return _type(__model__, ents_arr, query_ent_type);
 }
-// ================================================================================================
 function _isClosed(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): boolean|boolean[] {
     if (!Array.isArray(ents_arr[0])) {
         const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
@@ -538,36 +633,6 @@ function _type(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], query_en
     }
 
 }
-/**
- * Checks the type of an entity.
- * ~
- * For is_used_posi, returns true if the entity is a posi, and it is used by at least one vertex.
- * For is_unused_posi, it returns the opposite of is_used_posi.
- * For is_object, returns true if the entity is a point, a polyline, or a polygon.
- * For is_topology, returns true if the entity is a vertex, an edge, a wire, or a face.
- * For is_point_topology, is_polyline_topology, and is_polygon_topology, returns true
- * if the entity is a topological entity, and it is part of an object of the specified type.
- * ~
- * For is_open, returns true if the entity is a wire or polyline and is open. For is_closed, it returns the opposite of is_open.
- * For is_hole, returns ture if the entity is a wire, and it defines a hole in a face.
- * For has_holes, returns true if the entity is a face or polygon, and it has holes.
- * For has_no_holes, it returns the opposite of has_holes.
- *
- * @param __model__
- * @param entities An entity, or a list of entities.
- * @param query_ent_type Enum, select the conditions to test agains.
- * @returns Boolean or list of boolean in input sequence.
- * @example query.Type([polyline1, polyline2, polygon1], is_polyline )
- * @example_info Returns a list [true, true, false] if polyline1 and polyline2 are polylines but polygon1 is not a polyline.
- */
-export function Type(__model__: GIModel, entities: TId|TId[], query_ent_type: _EQueryEntType): boolean|boolean[] {
-    // --- Error Check ---
-    const fn_name = 'query.Type';
-    const ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
-    // --- Error Check ---
-    return _type(__model__, ents_arr, query_ent_type);
-}
 // TODO IS_PLANAR
 // TODO IS_QUAD
-
 // ================================================================================================

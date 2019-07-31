@@ -10,7 +10,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EAttribNames, TId, EEntType, Txyz, TEntTypeIdx } from '@libs/geo-info/common';
 import { isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi,
-    isEdge, idsMake, idIndicies, getArrDepth, isFace } from '@libs/geo-info/id';
+    isEdge, isFace, idsMake, idIndicies, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
 import { __merge__ } from './_model';
 import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd, vecFromTo } from '@libs/geom/vectors';
 import { _model } from '@modules';
@@ -31,6 +31,7 @@ import { distance } from '@assets/libs/geom/distance';
  * @example_link make.Position.mob&node=1
  */
 export function Position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TId|TId[]|TId[][] {
+    if (isEmptyArr(coords)) { return []; }
     // --- Error Check ---
     checkCommTypes('make.Position', 'coords', coords, [TypeCheckObj.isCoord, TypeCheckObj.isCoordList, TypeCheckObj.isCoordList_List]);
     // --- Error Check ---
@@ -57,15 +58,16 @@ function _position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TEntTypeId
  * Adds one or more new points to the model.
  *
  * @param __model__
- * @param positions Position, or list of positions, or entities from which positions can be extracted.
+ * @param entities Position, or list of positions, or entities from which positions can be extracted.
  * @returns Entities, new point or a list of new points.
  * @example point1 = make.Point(position1)
  * @example_info Creates a point at position1.
  * @example_link make.Point.mob&node=1
  */
-export function Point(__model__: GIModel, positions: TId|TId[]|TId[][]): TId|TId[]|TId[][] {
+export function Point(__model__: GIModel, entities: TId|TId[]|TId[][]): TId|TId[]|TId[][] {
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
-    const ents_arr = checkIDs('make.Point', 'positions', positions,
+    const ents_arr = checkIDs('make.Point', 'positions', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
         [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
         EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON])  as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
@@ -105,6 +107,7 @@ function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntType
  * @example_link make.Polyline.mob&node=1
  */
 export function Polyline(__model__: GIModel, entities: TId|TId[]|TId[][], close: _EClose): TId|TId[] {
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const ents_arr = checkIDs('make.Polyline', 'positions', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
@@ -205,6 +208,7 @@ function _getPlinePosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTy
  * @example_link make.Polygon.mob&node=1
  */
 export function Polygon(__model__: GIModel, entities: TId|TId[]|TId[][]): TId|TId[] {
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const ents_arr = checkIDs('make.Polygon', 'positions', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
@@ -290,7 +294,7 @@ function _getPgonPosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTyp
  *
  * @param __model__
  * @param parent_coll Collection, the parent collection or null.
- * @param objects List or nested lists of points, polylines, polygons.
+ * @param entities List or nested lists of points, polylines, polygons.
  * @returns Entities, new collection, or a list of new collections.
  * @example collection1 = make.Collection([point1,polyine1,polygon1])
  * @example_info Creates a collection containing point1, polyline1, polygon1.
@@ -298,7 +302,8 @@ function _getPgonPosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTyp
  * @example_info Creates two collections, the first containing point1 and polyline1, the second containing polygon1.
  * @example_link make.Collection.mob&node=1
  */
-export function Collection(__model__: GIModel, parent_coll: TId, objects: TId|TId[]): TId|TId[] {
+export function Collection(__model__: GIModel, parent_coll: TId, entities: TId|TId[]): TId|TId[] {
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'make.Collection';
     let parent_index: number;
@@ -308,7 +313,7 @@ export function Collection(__model__: GIModel, parent_coll: TId, objects: TId|TI
     } else {
         parent_index = -1;
     }
-    const ents_arr = checkIDs(fn_name, 'objects', objects,
+    const ents_arr = checkIDs(fn_name, 'objects', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
         [EEntType.POINT, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
     // --- Error Check ---
@@ -347,6 +352,7 @@ export function _collection(__model__: GIModel, parent_index: number,
  * @example_info Creates a copy of position1, polyine1, and polygon1.
  */
 export function Copy(__model__: GIModel, entities: TId|TId[]|TId[][], copy_attributes: _ECopyAttribues): TId|TId[]|TId[][] {
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const ents_arr = checkIDs('make.Copy', 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, , IDcheckObj.isIDList_list],
@@ -436,15 +442,16 @@ export enum _ECopyAttribues {
  * If the list of positions consists of a list of lists, then multiple holes will be generated.
  * ~
  * @param __model__
- * @param face A polygon or a face to make holes in.
- * @param positions List of positions, or nested lists of positions, or entities from which positions can be extracted.
+ * @param face A face or polygon to make holes in.
+ * @param entities List of positions, or nested lists of positions, or entities from which positions can be extracted.
  * @returns Entities, a list of wires resulting from the hole(s).
  */
-export function Hole(__model__: GIModel, face: TId, positions: TId|TId[]|TId[][]): TId[] {
-    if (!Array.isArray(positions)) { positions = [positions]; }
+export function Hole(__model__: GIModel, face: TId, entities: TId|TId[]|TId[][]): TId[] {
+    if (isEmptyArr(entities)) { return []; }
+    if (!Array.isArray(entities)) { entities = [entities]; }
     // --- Error Check ---
     const face_ent_arr = checkIDs('make.Hole', 'face', face, [IDcheckObj.isID], [EEntType.FACE, EEntType.PGON]) as TEntTypeIdx;
-    const holes_ents_arr = checkIDs('make.Hole', 'positions', positions,
+    const holes_ents_arr = checkIDs('make.Hole', 'positions', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
         [EEntType.POSI, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
     // --- Error Check ---
@@ -514,6 +521,7 @@ function _getHolePosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntT
  * @example_info Creates quad polygons lofting first between polyline1 and polyline2, and then between polyline3 and polyline4.
  */
 export function Loft(__model__: GIModel, entities: TId[]|TId[][], divisions: number, method: _ELoftMethod): TId[] {
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const ents_arr = checkIDs('make.Loft', 'entities', entities,
         [IDcheckObj.isIDList, IDcheckObj.isIDList_list],
@@ -795,6 +803,7 @@ function _loft(__model__: GIModel, ents_arrs: TEntTypeIdx[]|TEntTypeIdx[][], div
  */
 export function Extrude(__model__: GIModel, entities: TId|TId[],
         distance: number|Txyz, divisions: number, method: _EExtrudeMethod): TId|TId[] {
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'make.Extrude';
     const ents_arr =  checkIDs(fn_name, 'entities', entities,
@@ -1063,7 +1072,7 @@ function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
  * that have a new length that is equal to or greater than the minimum.
  * ~
  * @param __model__
- * @param edges Edges, or entities from which edges can be extracted.
+ * @param entities Edges, or entities from which edges can be extracted.
  * @param divisor Segment length or number of segments.
  * @param method Enum, select the method for dividing edges.
  * @returns Entities, a list of new edges resulting from the divide.
@@ -1072,10 +1081,11 @@ function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
  * @example segments2 = make.Divide(edge1, 5, by_length)
  * @example_info If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
  */
-export function Divide(__model__: GIModel, edges: TId|TId[], divisor: number, method: _EDivideMethod): TId[] {
+export function Divide(__model__: GIModel, entities: TId|TId[], divisor: number, method: _EDivideMethod): TId[] {
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'make.Divide';
-    const ents_arr = checkIDs('make.Divide', 'edges', edges,
+    const ents_arr = checkIDs('make.Divide', 'edges', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
     checkCommTypes(fn_name, 'divisor', divisor, [TypeCheckObj.isNumber]);
     // --- Error Check ---
@@ -1145,6 +1155,7 @@ function _divide(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], diviso
  * @example_info Unwelds the vertices of polyline1 from all other vertices that shares the same position.
  */
 export function Unweld(__model__: GIModel, entities: TId|TId[]): TId[] {
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     let ents_arr = checkIDs('modify.Unweld', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
                             [EEntType.VERT, EEntType.EDGE, EEntType.WIRE, EEntType.FACE,

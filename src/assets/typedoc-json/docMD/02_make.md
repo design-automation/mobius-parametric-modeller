@@ -17,7 +17,7 @@
 ## Point  
 * **Description:** Adds one or more new points to the model.  
 * **Parameters:**  
-  * *positions:* Position, or list of positions, or entities from which positions can be extracted.  
+  * *entities:* Position, or list of positions, or entities from which positions can be extracted.  
 * **Returns:** Entities, new point or a list of new points.  
 * **Examples:**  
   * point1 = make.Point(position1)  
@@ -57,7 +57,7 @@
 * **Description:** Adds one or more new collections to the model.  
 * **Parameters:**  
   * *parent_coll:* Collection, the parent collection or null.  
-  * *objects:* List or nested lists of points, polylines, polygons.  
+  * *entities:* List or nested lists of points, polylines, polygons.  
 * **Returns:** Entities, new collection, or a list of new collections.  
 * **Examples:**  
   * collection1 = make.Collection([point1,polyine1,polygon1])  
@@ -89,8 +89,8 @@ If the list of positions consists of a single list, then one hole will be genera
 If the list of positions consists of a list of lists, then multiple holes will be generated.
 ~  
 * **Parameters:**  
-  * *face:* A polygon or a face to make holes in.  
-  * *positions:* List of positions, or nested lists of positions, or entities from which positions can be extracted.  
+  * *face:* A face or polygon to make holes in.  
+  * *entities:* List of positions, or nested lists of positions, or entities from which positions can be extracted.  
 * **Returns:** Entities, a list of wires resulting from the hole(s).  
   
 ## Loft  
@@ -150,7 +150,7 @@ then the edge is divided into the maximum number of shorter edges
 that have a new length that is equal to or greater than the minimum.
 ~  
 * **Parameters:**  
-  * *edges:* Edges, or entities from which edges can be extracted.  
+  * *entities:* Edges, or entities from which edges can be extracted.  
   * *divisor:* Segment length or number of segments.  
   * *method:* Enum, select the method for dividing edges.  
 * **Returns:** Entities, a list of new edges resulting from the divide.  
@@ -162,18 +162,13 @@ that have a new length that is equal to or greater than the minimum.
   
   
 ## Unweld  
-* **Description:** Unweld vertices so that they do not share positions.
-~
-For the vertices of the specified entities, if they share positions with other entities in the model,
-then those positions will be replaced with new positions.
-~
-This function performs a shallow unweld.
-That is, the vertices within the set of specified entities are not unwelded.  
+* **Description:** Unweld vertices so that they do not share positions. The new positions that are generated are returned.
+~  
 * **Parameters:**  
   * *entities:* Entities, a list of vertices, or entities from which vertices can be extracted.  
 * **Returns:** Entities, a list of new positions resulting from the unweld.  
 * **Examples:**  
   * mod.Unweld(polyline1)  
-    Unwelds the vertices of polyline1 from all the vertices in the model that shares the same position.
+    Unwelds the vertices of polyline1 from all other vertices that shares the same position.
   
   

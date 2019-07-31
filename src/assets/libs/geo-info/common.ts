@@ -1,6 +1,6 @@
 import { GIAttribMap } from './GIAttribMap';
 
-//longitude latitude in Singapore, NUS
+// longitude latitude in Singapore, NUS
 export const LONGLAT = [103.778329, 1.298759];
 
 // some constants

@@ -1,21 +1,23 @@
 # MAKE    
 
 ## Position  
-* **Description:** Adds a new position to the model.  
+* **Description:** Adds one or more new position to the model.  
 * **Parameters:**  
-  * *coords:* XYZ coordinates as a list of three numbers.  
-* **Returns:** Entities, new position, or a list of new positions, or a list of lists of new positions .  
+  * *coords:* A list of three numbers, or a list of lists of three numbers.  
+* **Returns:** A new position, or nested list of new positions.  
 * **Examples:**  
   * position1 = make.Position([1,2,3])  
     Creates a position with coordinates x=1, y=2, z=3.  
+  * positions = make.Position([[1,2,3],[3,4,5],[5,6,7]])  
+    Creates three positions, with coordinates [1,2,3],[3,4,5] and [5,6,7].  
 * **Example URLs:**  
   1. [make.Position.mob](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/make.Position.mob&node=1
 )  
   
 ## Point  
-* **Description:** Adds a new point to the model. If a list of positions is provided as the input, then a list of points is generated.  
+* **Description:** Adds one or more new points to the model.  
 * **Parameters:**  
-  * *positions:* Position of point, or other entities from which positions will be extracted.  
+  * *positions:* Position, or list of positions, or entities from which positions can be extracted.  
 * **Returns:** Entities, new point or a list of new points.  
 * **Examples:**  
   * point1 = make.Point(position1)  
@@ -27,7 +29,7 @@
 ## Polyline  
 * **Description:** Adds one or more new polylines to the model.  
 * **Parameters:**  
-  * *entities:* List of positions, or list of lists of positions, or entities from which positions can be extracted.  
+  * *entities:* List or nested lists of positions, or entities from which positions can be extracted.  
   * *close:* Enum, 'open' or 'close'.  
 * **Returns:** Entities, new polyline, or a list of new polylines.  
 * **Examples:**  
@@ -40,24 +42,28 @@
 ## Polygon  
 * **Description:** Adds one or more new polygons to the model.  
 * **Parameters:**  
-  * *entities:* List of positions, or list of lists of positions, or entities from which positions can be extracted.  
+  * *entities:* List or nested lists of positions, or entities from which positions can be extracted.  
 * **Returns:** Entities, new polygon, or a list of new polygons.  
 * **Examples:**  
-  * polygon1 = make.Polygon([position1,position2,position3])  
-    Creates a polygon with vertices position1, position2, position3 in sequence.  
+  * polygon1 = make.Polygon([pos1,pos2,pos3])  
+    Creates a polygon with vertices pos1, pos2, pos3 in sequence.  
+  * polygons = make.Polygon([[pos1,pos2,pos3], [pos3,pos4,pos5]])  
+    Creates two polygons, the first with vertices at [pos1,pos2,pos3], and the second with vertices at [pos3,pos4,pos5].  
 * **Example URLs:**  
   1. [make.Polygon.mob](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/make.Polygon.mob&node=1
 )  
   
 ## Collection  
-* **Description:** Adds a new collection to the model.  
+* **Description:** Adds one or more new collections to the model.  
 * **Parameters:**  
-  * *parent_coll:* Collection  
-  * *geometry:* List of points, polylines, polygons.  
+  * *parent_coll:* Collection, the parent collection or null.  
+  * *objects:* List or nested lists of points, polylines, polygons.  
 * **Returns:** Entities, new collection, or a list of new collections.  
 * **Examples:**  
   * collection1 = make.Collection([point1,polyine1,polygon1])  
     Creates a collection containing point1, polyline1, polygon1.  
+  * collections = make.Collection([[point1,polyine1],[polygon1]])  
+    Creates two collections, the first containing point1 and polyline1, the second containing polygon1.  
 * **Example URLs:**  
   1. [make.Collection.mob](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/make.Collection.mob&node=1
 )  
@@ -65,34 +71,35 @@
 ## Copy  
 * **Description:** Adds a new copy of specified entities to the model.  
 * **Parameters:**  
-  * *entities:* Position, point, polyline, polygon, collection to be copied.  
+  * *entities:* Entity or lists of entities to be copied. Entities can be positions, points, polylines, polygons and collections.  
   * *copy_attributes:* Enum to copy attributes or to have no attributes copied.  
 * **Returns:** Entities, the copied entity or a list of copied entities.  
 * **Examples:**  
-  * copy1 = make.Copy([position1,polyine1,polygon1], copy_positions, copy_attributes)  
-    Creates a list containing a copy of the entities in sequence of input.
+  * copies = make.Copy([position1,polyine1,polygon1], copy_attributes)  
+    Creates a copy of position1, polyine1, and polygon1.
   
   
 ## Hole  
 * **Description:** Makes one or more holes in a polygon.
-Each hole is defined by a list of positions.
+~
 The positions must be on the polygon, i.e. they must be co-planar with the polygon and
 they must be within the boundary of the polygon.
+~
 If the list of positions consists of a single list, then one hole will be generated.
 If the list of positions consists of a list of lists, then multiple holes will be generated.
-~
-The hole positions should lie within the polygon surface.  
+~  
 * **Parameters:**  
   * *face:* A polygon or a face to make holes in.  
-  * *positions:* List of positions, or list of lists of positions, or entities from which positions can be extracted.  
+  * *positions:* List of positions, or nested lists of positions, or entities from which positions can be extracted.  
 * **Returns:** Entities, a list of wires resulting from the hole(s).  
   
 ## Loft  
 * **Description:** Lofts between entities.
 ~
 The geometry that is generated depends on the method that is selected.
-The 'loft_quads' methods will generate polygons.
-The 'loft_stringers' and 'loft_ribs' methods will generate polylines.  
+- The 'quads' methods will generate polygons.
+- The 'stringers' and 'ribs' methods will generate polylines.
+- The 'copies' method will generate copies of the input geometry type.  
 * **Parameters:**  
   * *entities:* List of entities, or list of lists of entities.  
   * *divisions:* undefined  
@@ -111,7 +118,13 @@ The 'loft_stringers' and 'loft_ribs' methods will generate polylines.
 * **Description:** Extrudes geometry by distance or by vector.
 - Extrusion of a position, vertex, or point produces polylines;
 - Extrusion of an edge, wire, or polyline produces polygons;
-- Extrusion of a face or polygon produces polygons, capped at the top.  
+- Extrusion of a face or polygon produces polygons, capped at the top.
+~
+The geometry that is generated depends on the method that is selected.
+- The 'quads' methods will generate polygons.
+- The 'stringers' and 'ribs' methods will generate polylines.
+- The 'copies' method will generate copies of the input geometry type.
+~  
 * **Parameters:**  
   * *entities:* Vertex, edge, wire, face, position, point, polyline, polygon, collection.  
   * *distance:* Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).  
@@ -127,7 +140,7 @@ In this case, the 'quads' setting is ignored.
   
   
 ## Divide  
-* **Description:** Divides edges in a set of shorter edges.
+* **Description:** Divides edges into a set of shorter edges.
 ~
 If the 'by_number' method is selected, then each edge is divided into a fixed number of equal length shorter edges.
 If the 'by length' method is selected, then each edge is divided into shorter edges of the specified length.
@@ -149,16 +162,13 @@ that have a new length that is equal to or greater than the minimum.
   
   
 ## Unweld  
-* **Description:** Unweld vertices so that they do not share positions.
-For the vertices of the specified entities, if they share positions with other entities in the model,
-then those positions will be replaced with new positions.
-This function performs a simple unweld.
-That is, the vertices within the set of specified entities are not unwelded.  
+* **Description:** Unweld vertices so that they do not share positions. The new positions that are generated are returned.
+~  
 * **Parameters:**  
-  * *entities:* Vertex, edge, wire, face, point, polyline, polygon, collection.  
+  * *entities:* Entities, a list of vertices, or entities from which vertices can be extracted.  
 * **Returns:** Entities, a list of new positions resulting from the unweld.  
 * **Examples:**  
   * mod.Unweld(polyline1)  
-    Unwelds polyline1 from all ther entities that shares the same position.
+    Unwelds the vertices of polyline1 from all other vertices that shares the same position.
   
   

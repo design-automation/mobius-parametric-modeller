@@ -589,7 +589,7 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
             }
 
             newString += ` ${operator.value} ${operand.str} `; //////////
-            jsString += `, "operator": "${operator.value}", "value": ${operand.jsStr} }`;
+            jsString += `, "operator": "${operator.value}", "val": ${operand.jsStr} }`;
 
             return {'i': i + 2, 'str': newString, 'jsStr': jsString};
         }

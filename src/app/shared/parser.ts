@@ -15,7 +15,7 @@ enum strType {
 const mathOperators = new Set(['+', '*', '/', '%']);
 const binaryOperators = new Set([   '+' , '+=' , '-=', '*' , '/' , '%'  , '<' , '<=',
                                 // '==', '===', '>' , '>=', '!=', '!==', '&&', '||', 'and', 'or', 'not']);
-                                '==', '===', '>' , '>=', '!=', '!==', '&&', '||']);
+                                '==', '===', '>' , '>=', '!=', '!==', '&&', '||' ]);
 
 const postfixUnaryOperators = new Set(['++', '--']);
 const prefixUnaryOperators = new Set(['-', '!']);
@@ -181,7 +181,7 @@ export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProd
     if (!procedure.args[argIndex].value) { return; }
     // PARSER CALL
     let varResult = parseArgument(procedure.args[argIndex].value);
-
+    console.log(varResult.jsStr);
     if (varResult.error) {
         procedure.args[argIndex].invalidVar = varResult.error;
         return;
@@ -407,8 +407,37 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
         const result = analyzeVar(comps, i + 2, vars, true);
         if (result.error) { return result; }
         i = result.i;
-        newString += ' #@' + result.str.replace(/ /g, '') + ' '; //////////
-        jsString += ' #@' + result.str.replace(/ /g, '') + ' '; //////////
+
+        // newString += ' #@' + result.str.replace(/ /g, '') + ' '; //////////
+        // jsString += ' #@' + result.str.replace(/ /g, '') + ' '; //////////
+
+        let attr;
+        let attrIndex;
+        const bracketIndex = result.str.indexOf('[');
+        if (bracketIndex !== -1) {
+            attr = result.str.slice(0, bracketIndex);
+            attrIndex = result.str.slice(bracketIndex + 1, -1);
+        } else {
+            attr = result.str;
+            attrIndex = null;
+        }
+
+        const operator = comps[i + 1];
+        if (operator.type !== strType.OTHER) {
+            return {'error': 'Error: Operator expected\n' +
+            `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
+
+        const operand = analyzeComp(comps, i + 2, vars);
+        if (operand.error) {
+            return operand;
+        }
+
+        newString += ` #@${result.str} ${operator.value} ${operand.str} `; //////////
+        jsString += `{"ent_type1": null, "att_name1": "${attr}", "attr_index1": ${attrIndex}, ` +
+                     `"operator": "${operator.value}", "value": ${operand.jsStr} }`;
+
+        return {'i': i + 2, 'str': newString, 'jsStr': jsString};
 
     // if "@" ==> @variable
     } else if (comps[i].value === '@') {
@@ -517,6 +546,86 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
         // }
         return { 'error': 'Error: Variable followed by another variable/number/string \n' +
         `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+    } else if (comps[i + 1].value === '#') {
+        if (comps[i + 2].value !== '@') {
+            return { 'error': `Error: "@" expected \n
+            at: ... ${comps.slice(i + 2).map(cp => cp.value).join(' ')}`};
+        }
+        const ent_type1 = newString;
+
+        const result = analyzeVar(comps, i + 3, vars, true);
+        if (result.error) { return result; }
+        i = result.i;
+
+        let att_name1;
+        let att_Index;
+        const bracketIndex = result.str.indexOf('[');
+        if (bracketIndex !== -1) {
+            att_name1 = result.str.slice(0, bracketIndex);
+            att_Index = result.str.slice(bracketIndex + 1, -1);
+        } else {
+            att_name1 = result.str;
+            att_Index = null;
+        }
+
+        newString += `#@${result.str}`;
+        jsString = `{"ent_type1": "${ent_type1}", "att_name1": "${att_name1}", "attr_index1": ${att_Index}`;
+
+        if (i >= comps.length - 1) {
+            jsString += '}';
+            return {'i': i, 'str': newString, 'jsStr': jsString};
+        }
+
+        const operator = comps[i + 1];
+        if (operator.type !== strType.OTHER) {
+            return {'error': 'Error: Operator expected\n' +
+            `at: ... ${comps.slice(i + 1).map(cp => cp.value).join(' ')}`};
+        }
+
+        if (operator.value !== '>>') {
+            const operand = analyzeComp(comps, i + 2, vars);
+            if (operand.error) {
+                return operand;
+            }
+
+            newString += ` ${operator.value} ${operand.str} `; //////////
+            jsString += `, "operator": "${operator.value}", "value": ${operand.jsStr} }`;
+
+            return {'i': i + 2, 'str': newString, 'jsStr': jsString};
+        }
+
+        if (comps[i + 2].type !== strType.VAR) {
+            return {'error': 'Error: Variable expected after ">>"\n' +
+            `at: ... ${comps.slice(i + 2).map(cp => cp.value).join(' ')}`};
+        }
+
+        const ent_type2 = comps[i + 2].value;
+
+        if (comps[i + 3].value !== '#' && comps[i + 4].value !== '@') {
+            return { 'error': `Error: "#@" expected \n
+            at: ... ${comps.slice(i + 2).map(cp => cp.value).join(' ')}`};
+        }
+
+        const result2 = analyzeVar(comps, i + 5, vars, true);
+        if (result2.error) { return result2; }
+        i = result2.i;
+
+        let att_name2;
+        let att_Index2;
+        const bracketIndex2 = result2.str.indexOf('[');
+        if (bracketIndex2 !== -1) {
+            att_name2 = result2.str.slice(0, bracketIndex2);
+            att_Index2 = result2.str.slice(bracketIndex2 + 1, -1);
+        } else {
+            att_name2 = result2.str;
+            att_Index2 = null;
+        }
+
+        newString += ` >> ${ent_type2}#@${result2.str}`;
+        jsString += `, "operator": ">>", "ent_type2": "${ent_type2}", "att_name2": "${att_name2}", "attr_index2": ${att_Index2}}`;
+        return {'i': i, 'str': newString, 'jsStr': jsString};
+
+
 
     // if variable is followed by "[" --> array/json
     // add the variable to var list and check for validity of the first component inside the bracket
@@ -1182,10 +1291,11 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
                 comps.push({ 'type': strType.OTHER, 'value': str.charAt(i)});
                 i++;
             }
-        // // negative ! => change it to "not"
-        // } else if (code === 33 && str.charCodeAt(i + 1) !== 61) {
-        //     comps.push({ 'type': strType.OTHER, 'value': 'not'});
-        //     i++;
+
+        // attr.push operator (>>)
+        } else if (code === 62 && str.charCodeAt(i + 1) === 62) {
+            i += 2;
+            comps.push({ 'type': strType.OTHER, 'value': '>>'});
 
         // comparison operator (!, <, =, >)
         } else if (code === 33 || (code > 59 && code < 63)) {

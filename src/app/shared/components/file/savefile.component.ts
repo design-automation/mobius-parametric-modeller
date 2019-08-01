@@ -111,8 +111,6 @@ export class SaveFileComponent {
         window['_code__'] = code;
         window['_file__'] = file;
 
-        console.log(file);
-
         navigator.webkitPersistentStorage.requestQuota (
             requestedBytes, function(grantedBytes) {
                 // @ts-ignore

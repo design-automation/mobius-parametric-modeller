@@ -194,6 +194,10 @@ export class CodeUtils {
                         argVals.push('__params__.console');
                         continue;
                     }
+                    if (arg.name === _parameterTypes.fileName) {
+                        argVals.push('__params__.fileName');
+                        continue;
+                    }
 
                     if (arg.jsValue && arg.jsValue[0] === '#') {
                         argVals.push('`' + arg.jsValue + '`');

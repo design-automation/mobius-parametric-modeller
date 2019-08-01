@@ -5,6 +5,7 @@ export const _parameterTypes = {
     model: '__model__',
     input: '__input__',
     console: '__console__',
+    fileName: '__fileName__',
 
     new: '_model.__new__',
     newFn: __new__,

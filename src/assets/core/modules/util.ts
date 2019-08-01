@@ -171,6 +171,7 @@ export enum _EIOExportContents {
  * @param __model__
  * @param __console__
  * @param __constList__
+ * @param __fileName__
  * @param filename Name of the file as a string.
  * @param exportParams Enum.
  * @param exportContent Enum.
@@ -178,8 +179,8 @@ export enum _EIOExportContents {
  * @example util.ExportIO('my_model.json')
  * @example_info Exports all the data in the model as an OBJ.
  */
-export function ExportIO(__model__: GIModel, __console__: string[], __constList__: {}, filename: string,
-                        exportParams: _EIOExportParams, exportContent: _EIOExportContents): boolean {
+export function ExportIO(__model__: GIModel, __console__: string[], __constList__: {}, __fileName__: string,
+                        filename: string, exportParams: _EIOExportParams, exportContent: _EIOExportContents): boolean {
     // let gi_data: string = JSON.stringify(__model__.getData());
     // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
     const consolidatedConsole = [];
@@ -192,6 +193,7 @@ export function ExportIO(__model__: GIModel, __console__: string[], __constList_
         consolidatedConsole.push(replacedStr);
     }
     const edxAnswer = {
+        'fileName': __fileName__,
         'params' : __constList__,
         'console': consolidatedConsole.join('\n'),
         'model'  : __model__.getData()

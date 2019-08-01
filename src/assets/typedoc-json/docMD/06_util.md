@@ -44,6 +44,7 @@ This will result in a popup in your browser, asking you to save the filel.
 This will result in a popup in your browser, asking you to save the filel.  
 * **Parameters:**  
   * *__console__:* undefined  
+  * *__fileName__:* undefined  
   * *filename:* Name of the file as a string.  
   * *exportParams:* Enum.  
   * *exportContent:* Enum.  

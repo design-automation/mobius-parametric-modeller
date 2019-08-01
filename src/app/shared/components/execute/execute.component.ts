@@ -329,7 +329,12 @@ export class ExecuteComponent {
 
 
     executeNode(node: INode, funcStrings, globalVars, constantList): string {
-        const params = {'currentProcedure': [''], 'console': this.dataService.getLog(), 'constants': constantList};
+        const params = {
+            'currentProcedure': [''],
+            'console': this.dataService.getLog(),
+            'constants': constantList,
+            'fileName': this.dataService.flowchart.name
+        };
         const consoleLength = params.console.length;
 
         let fnString = '';

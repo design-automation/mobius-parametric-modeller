@@ -181,7 +181,7 @@ export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProd
     if (!procedure.args[argIndex].value) { return; }
     // PARSER CALL
     let varResult = parseArgument(procedure.args[argIndex].value);
-    console.log(varResult.jsStr);
+
     if (varResult.error) {
         procedure.args[argIndex].invalidVar = varResult.error;
         return;

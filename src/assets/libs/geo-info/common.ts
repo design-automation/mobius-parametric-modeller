@@ -34,6 +34,17 @@ export type TColor = [number, number, number]; // TODO replace with Txyz
 export type TNormal = [number, number, number]; // TODO replace with xyz
 export type TTexture = [number, number];
 
+export interface IExpr {
+    ent_type1: string;
+    att_name1: string;
+    att_index1: number;
+    ent_type2?: string;
+    att_name2?: string;
+    att_index2?: number;
+    operator?: string;
+    value?: string|number|string[]|number[];
+}
+
 // Types of entities
 export enum EEntType {
     POSI,

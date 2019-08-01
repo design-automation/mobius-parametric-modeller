@@ -115,6 +115,105 @@ function _convertSelectToEEntTypeStr(select: _EQuerySelect): EEntType|EEntType[]
  * @example collections = query.Get(collections, null, #@type=="floors")
  * @example_info Returns a list of all the collections that have an attribute called "type" with a value "floors".
  */
+export function Get2(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], query_expr: TQuery): TId[] {
+    if (isEmptyArr(entities)) { return []; }
+    // --- Error Check ---
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
+    if (entities !== null && entities !== undefined) {
+        ents_arr = checkIDs('query.Get', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+    }
+    // TODO add a condition called isNull for entities
+    // TODO check the query string
+    // --- Error Check ---
+    const select_ent_types: EEntType|EEntType[] = _convertSelectToEEntTypeStr(select);
+    const found_ents_arr: TEntTypeIdx[] = _get(__model__, select_ent_types, ents_arr, query_expr);
+    if (found_ents_arr.length === 0) { return []; }
+    // remove duplicates
+    const found_ents_arr_no_dups: TEntTypeIdx[] = [found_ents_arr[0]];
+    for (let i = 1; i < found_ents_arr.length; i++) {
+        const current: TEntTypeIdx = found_ents_arr[i];
+        const previous: TEntTypeIdx = found_ents_arr[i - 1];
+        if (!(current[0] === previous[0] && current[1] === previous[1])) {
+            found_ents_arr_no_dups.push(found_ents_arr[i]);
+        }
+    }
+    return idsMake(found_ents_arr_no_dups) as TId[];
+}
+function _get2(__model__: GIModel, select_ent_types: EEntType|EEntType[],
+              ents_arr: TEntTypeIdx|TEntTypeIdx[], query_expr: TQuery): TEntTypeIdx[] {
+    if (!Array.isArray(select_ent_types)) {
+        const select_ent_type: EEntType = select_ent_types as EEntType;
+        // get the list of entities
+        const found_entities_i: number[] = [];
+        if (ents_arr === null || ents_arr === undefined) {
+            found_entities_i.push(...__model__.geom.query.getEnts(select_ent_type, false));
+        } else {
+            if (ents_arr.length === 0) {
+                return [];
+            } else if (getArrDepth(ents_arr) === 1) {
+                ents_arr = [ents_arr] as TEntTypeIdx[];
+            }
+            for (const ents of ents_arr) {
+                found_entities_i.push(...__model__.geom.query.navAnyToAny(ents[0], select_ent_type, ents[1]));
+            }
+        }
+        // check if the query is null
+        if (query_expr === null || query_expr === undefined) {
+            // sort
+            return found_entities_i.map( entity_i => [select_ent_type, entity_i]) as TEntTypeIdx[];
+        }
+        // do the query on the list of entities
+        const query_result: number[] = __model__.attribs.query.queryAttribs(select_ent_type, query_expr, found_entities_i);
+        if (query_result.length === 0) { return []; }
+        return query_result.map( entity_i => [select_ent_type, entity_i]) as TEntTypeIdx[];
+    } else {
+        const query_results_arr: TEntTypeIdx[] = [];
+        for (const select_ent_type of select_ent_types) {
+            const ent_type_query_results: TEntTypeIdx[] = _get(__model__, select_ent_type, ents_arr, query_expr);
+            for (const query_result of ent_type_query_results) {
+                query_results_arr.push(query_result);
+            }
+        }
+        // return the query results
+        return query_results_arr;
+    }
+}
+function _compareID2(ent_arr1: TEntTypeIdx, ent_arr2: TEntTypeIdx): number {
+    const [ent_type1, index1]: TEntTypeIdx = ent_arr1;
+    const [ent_type2, index2]: TEntTypeIdx = ent_arr2;
+    if (ent_type1 !== ent_type2) { return ent_type1 -  ent_type2; }
+    if (index1 !== index2) { return index1 -  index2; }
+    return 0;
+}
+// ================================================================================================
+/**
+ * Returns a list of entities based on a query expression.
+ * The result will always be a list of entities, even if there is only one entity.
+ * In a case where you want only one entity, remember to get the first item in the list.
+ * ~
+ * The query expression can use the following format: #@name == value,
+ * where 'name' is the attribute name, and 'value' is the attribute value that you are searching for.
+ * ~
+ * If the attribute value is a string, then in must be in quotes, as follows: #@name == 'str_value'.
+ * ~
+ * If the attribute value is a number, then any comparison operator can be used: ==, !=, >, >=, <, =<.
+ * ~
+ * @param __model__
+ * @param select Enum, specifies what type of entities will be returned.
+ * @param entities List of entities to be searched. If 'null' (without quotes), all entities in the model will be searched.
+ * @param query_expr Attribute condition. If 'null' (without quotes), no condition is set; all found entities are returned.
+ * @returns Entities, a list of entities that match the type specified in 'select' and the conditions specified in 'query_expr'.
+ * @example positions = query.Get(positions, polyline1, #@xyz[2]>10)
+ * @example_info Returns a list of positions that are part of polyline1 where the z-coordinate is more than 10.
+ * @example positions = query.Get(positions, null, #@xyz[2]>10)
+ * @example_info Returns a list of positions in the model where the z-coordinate is more than 10.
+ * @example positions = query.Get(positions, polyline1, null)
+ * @example_info Returns a list of all of the positions that are part of polyline1.
+ * @example polylines = query.Get(polylines, position1, null)
+ * @example_info Returns a list of all of the polylines that use position1.
+ * @example collections = query.Get(collections, null, #@type=="floors")
+ * @example_info Returns a list of all the collections that have an attribute called "type" with a value "floors".
+ */
 export function Get(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], query_expr: TQuery): TId[] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---

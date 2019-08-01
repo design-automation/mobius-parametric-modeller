@@ -1,5 +1,34 @@
 # QUERY    
 
+## Get2  
+* **Description:** Returns a list of entities based on a query expression.
+The result will always be a list of entities, even if there is only one entity.
+In a case where you want only one entity, remember to get the first item in the list.
+~
+The query expression can use the following format: #@name == value,
+where 'name' is the attribute name, and 'value' is the attribute value that you are searching for.
+~
+If the attribute value is a string, then in must be in quotes, as follows: #@name == 'str_value'.
+~
+If the attribute value is a number, then any comparison operator can be used: ==, !=, >, >=, <, =<.
+~  
+* **Parameters:**  
+  * *entities:* List of entities to be searched. If 'null' (without quotes), all entities in the model will be searched.  
+  * *expr:* Query expression.  
+* **Returns:** Entities, a list of entities that match the type specified in 'select' and the conditions specified in 'query_expr'.  
+* **Examples:**  
+  * positions = query.Get(positions, polyline1, #@xyz[2]>10)  
+    Returns a list of positions that are part of polyline1 where the z-coordinate is more than 10.  
+  * positions = query.Get(positions, null, #@xyz[2]>10)  
+    Returns a list of positions in the model where the z-coordinate is more than 10.  
+  * positions = query.Get(positions, polyline1, null)  
+    Returns a list of all of the positions that are part of polyline1.  
+  * polylines = query.Get(polylines, position1, null)  
+    Returns a list of all of the polylines that use position1.  
+  * collections = query.Get(collections, null, #@type=="floors")  
+    Returns a list of all the collections that have an attribute called "type" with a value "floors".
+  
+  
 ## Get  
 * **Description:** Returns a list of entities based on a query expression.
 The result will always be a list of entities, even if there is only one entity.

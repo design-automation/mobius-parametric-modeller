@@ -434,7 +434,7 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
         }
 
         newString += ` #@${result.str} ${operator.value} ${operand.str} `; //////////
-        jsString += `{"ent_type1": null, "att_name1": "${attr}", "attr_index1": ${attrIndex}, ` +
+        jsString += `{"ent_type1": null, "attrib_name1": "${attr}", "attrib_index1": ${attrIndex}, ` +
                      `"operator": "${operator.value}", "value": ${operand.jsStr} }`;
 
         return {'i': i + 2, 'str': newString, 'jsStr': jsString};
@@ -557,19 +557,19 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
         if (result.error) { return result; }
         i = result.i;
 
-        let att_name1;
-        let att_Index;
+        let attrib_name1;
+        let attrib_index;
         const bracketIndex = result.str.indexOf('[');
         if (bracketIndex !== -1) {
-            att_name1 = result.str.slice(0, bracketIndex);
-            att_Index = result.str.slice(bracketIndex + 1, -1);
+            attrib_name1 = result.str.slice(0, bracketIndex);
+            attrib_index = result.str.slice(bracketIndex + 1, -1);
         } else {
-            att_name1 = result.str;
-            att_Index = null;
+            attrib_name1 = result.str;
+            attrib_index = null;
         }
 
         newString += `#@${result.str}`;
-        jsString = `{"ent_type1": "${ent_type1}", "att_name1": "${att_name1}", "attr_index1": ${att_Index}`;
+        jsString = `{"ent_type1": "${ent_type1}", "attrib_name1": "${attrib_name1}", "attrib_index1": ${attrib_index}`;
 
         if (i >= comps.length - 1) {
             jsString += '}';
@@ -589,7 +589,7 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
             }
 
             newString += ` ${operator.value} ${operand.str} `; //////////
-            jsString += `, "operator": "${operator.value}", "val": ${operand.jsStr} }`;
+            jsString += `, "operator": "${operator.value}", "value": ${operand.jsStr} }`;
 
             return {'i': i + 2, 'str': newString, 'jsStr': jsString};
         }
@@ -610,19 +610,19 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
         if (result2.error) { return result2; }
         i = result2.i;
 
-        let att_name2;
-        let att_Index2;
+        let attrib_name2;
+        let attrib_index2;
         const bracketIndex2 = result2.str.indexOf('[');
         if (bracketIndex2 !== -1) {
-            att_name2 = result2.str.slice(0, bracketIndex2);
-            att_Index2 = result2.str.slice(bracketIndex2 + 1, -1);
+            attrib_name2 = result2.str.slice(0, bracketIndex2);
+            attrib_index2 = result2.str.slice(bracketIndex2 + 1, -1);
         } else {
-            att_name2 = result2.str;
-            att_Index2 = null;
+            attrib_name2 = result2.str;
+            attrib_index2 = null;
         }
 
         newString += ` >> ${ent_type2}#@${result2.str}`;
-        jsString += `, "operator": ">>", "ent_type2": "${ent_type2}", "att_name2": "${att_name2}", "attr_index2": ${att_Index2}}`;
+        jsString += `, "operator": ">>", "ent_type2": "${ent_type2}", "attrib_name2": "${attrib_name2}", "attrib_index2": ${attrib_index2}}`;
         return {'i': i, 'str': newString, 'jsStr': jsString};
 
 

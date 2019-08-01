@@ -86,7 +86,7 @@ export function Color(__model__: GIModel, entities: TId|TId[], color: TColor): v
 // ================================================================================================
 /**
  * Sets material by creating a polygon attribute called 'material' and setting the value.
- * The value is a sitring, which is the name of the material. 
+ * The value is a sitring, which is the name of the material.
  * The properties of this material must be defined at the model level, using one of the material functions.
  *
  * @param entities The entities for which to set the material.

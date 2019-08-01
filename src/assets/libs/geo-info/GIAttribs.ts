@@ -7,8 +7,10 @@ import { GIAttribsIO } from './GIAttribsIO';
 
 function hashCode(s: string) {
     let h: number;
-    for(let i = 0; i < s.length; i++) 
+    for (let i = 0; i < s.length; i++) {
+          // tslint:disable-next-line:no-bitwise
           h = Math.imul(31, h) + s.charCodeAt(i) | 0;
+    }
     return h;
 }
 

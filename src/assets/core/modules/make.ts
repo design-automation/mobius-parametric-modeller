@@ -303,7 +303,6 @@ function _getPgonPosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTyp
  * @example_link make.Collection.mob&node=1
  */
 export function Collection(__model__: GIModel, parent_coll: TId, entities: TId|TId[]): TId|TId[] {
-    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'make.Collection';
     let parent_index: number;

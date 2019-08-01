@@ -1,6 +1,7 @@
 import { GIModel } from './GIModel';
 import { TAttribDataTypes, IAttribsMaps, IQueryComponent,
-    Txyz, EAttribNames, EEntType, EQueryOperatorTypes, ISortComponent, ESort, EAttribDataTypeStrs, EEntTypeStr } from './common';
+    Txyz, EAttribNames, EEntType, EQueryOperatorTypes, ISortComponent, ESort,
+    EAttribDataTypeStrs, EEntTypeStr, IExprQuery } from './common';
 import { GIAttribMap } from './GIAttribMap';
 import { string } from '@assets/core/modules/_mathjs';
 
@@ -207,6 +208,32 @@ export class GIAttribsQuery {
         }
         // return the result
         return union_query_results;
+    }
+    /**
+     * Query the model using a query strings.
+     * Returns a list of entities in the model.
+     * @param query The query object, IExprQuery
+     * @param indices The indices of entites in the model. These are assumed to be of type ent_type.
+     */
+    public queryAttribs2(query: IExprQuery, indices: number[]): number[] {
+        // get the map that contains all the attributes for the ent_type
+        const attribs_maps_key: string = EEntTypeStr[query.ent_type];
+        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        // do the query
+        if (attribs && attribs.has(query.attrib_name)) {
+            const attrib: GIAttribMap = attribs.get(query.attrib_name);
+            const query_ents_i: number[] = attrib.queryVal2(
+                indices,
+                query.attrib_index,
+                query.operator,
+                query.value
+            );
+            // return the result
+            return query_ents_i;
+        } else {
+            throw new Error('Attribute "' + query.attrib_name + '" does not exist.');
+            // query_ents_i = [];
+        }
     }
     /**
      * Query the model using a sort strings.

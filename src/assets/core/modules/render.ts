@@ -2,7 +2,7 @@
  * The `render` module has functions for defining various settings for the 3D viewer.
  * Color is saved as vertex attributes, materials as polygon attributes.
  * The material definitions are saved as attributes at the model level.
- * These include things like creating more advanced materials.
+ * More advanced materials can be created.
  * For more informtion, see the threejs docs: https://threejs.org/
  */
 
@@ -64,10 +64,14 @@ export function Color(__model__: GIModel, entities: TId|TId[], color: TColor): v
     if (isEmptyArr(entities)) { return; }
     // --- Error Check ---
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] =
-        checkIDs('render.Color', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+        checkIDs('render.Color', 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx|TEntTypeIdx[];
     checkCommTypes('make.Position', 'coords', color, [TypeCheckObj.isColor]);
     // --- Error Check ---
-    if (!Array.isArray(ents_arr[0])) { ents_arr = [ents_arr] as TEntTypeIdx[]; }
+    const depth: number = getArrDepth(ents_arr);
+    if (depth === 1) { ents_arr = [ents_arr] as TEntTypeIdx[]; }
+    // @ts-ignore
+    if (depth > 2) { ents_arr = ents_arr.flat(depth - 2); }
     if (!__model__.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOR)) {
         __model__.attribs.add.addAttrib(EEntType.VERT, EAttribNames.COLOR, EAttribDataTypeStrs.FLOAT, 3);
     }
@@ -93,9 +97,13 @@ export function Material(__model__: GIModel, entities: TId|TId[], material: stri
     if (isEmptyArr(entities)) { return; }
     // --- Error Check ---
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] =
-        checkIDs('render.Color', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+        checkIDs('render.Color', 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
-    if (!Array.isArray(ents_arr[0])) { ents_arr = [ents_arr] as TEntTypeIdx[]; }
+    const depth: number = getArrDepth(ents_arr);
+    if (depth === 1) { ents_arr = [ents_arr] as TEntTypeIdx[]; }
+    // @ts-ignore
+    if (depth > 2) { ents_arr = ents_arr.flat(depth - 2); }
     if (!__model__.attribs.query.hasAttrib(EEntType.PGON, EAttribNames.MATERIAL)) {
         __model__.attribs.add.addAttrib(EEntType.PGON, EAttribNames.MATERIAL, EAttribDataTypeStrs.STRING, 1);
     }

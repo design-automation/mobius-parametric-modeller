@@ -654,24 +654,48 @@ export class GIGeomQuery {
     // Other methods
     // ============================================================================
     /**
-     * Get the welded neighbour vertices of a set of vertices.
+     * Given a set of vertices, get the welded neighbour entities.
      * @param ent_type
-     * @param index
+     * @param verts_i
      */
-    public neighbours(from_ets: EEntType, to_ets: EEntType, index: number): number[] {
-        const verts_i: number[] = this.navAnyToVert(from_ets, index);
-        const posis_i: number[] = this.navAnyToPosi(from_ets, index);
+    public neighbor(ent_type: EEntType, verts_i: number[]): number[] {
         const neighbour_ents_i: Set<number> = new Set();
-        for (const posi_i of posis_i) {
+        for (const vert_i of verts_i) {
+            const posi_i: number = this.navVertToPosi(vert_i);
             const found_verts_i: number[] = this.navPosiToVert(posi_i);
             for (const found_vert_i of found_verts_i) {
                 if (verts_i.indexOf(found_vert_i) === -1) {
-                    const found_ents_i: number[] = this.navAnyToAny(EEntType.VERT, to_ets, found_vert_i);
-                    found_ents_i.forEach( found_ent_i => neighbour_ents_i.add(found_ent_i));
+                    const found_ents_i: number[] = this.navAnyToAny(EEntType.VERT, ent_type, found_vert_i);
+                    found_ents_i.forEach( found_ent_i => neighbour_ents_i.add(found_ent_i) );
                 }
             }
         }
         return Array.from(neighbour_ents_i);
     }
-
+    /**
+     * Given a set of edges, get the perimeter entities.
+     * @param ent_type
+     * @param edges_i
+     */
+    public perimeter(ent_type: EEntType, edges_i: number[]): number[] {
+        const edge_posis_map: Map<number, number[]> = new Map();
+        const edge_to_posi_pairs_map: Map<number, [number, number]> = new Map();
+        for (const edge_i of edges_i) {
+            const posi_pair_i: [number, number] = this.navAnyToPosi(EEntType.EDGE, edge_i) as [number, number];
+            if (!edge_posis_map.has(posi_pair_i[0])) {
+                edge_posis_map.set(posi_pair_i[0], []);
+            }
+            edge_posis_map.get(posi_pair_i[0]).push(posi_pair_i[1]);
+            edge_to_posi_pairs_map.set(edge_i, posi_pair_i );
+        }
+        const perimeter_ents_i: Set<number> = new Set();
+        for (const edge_i of edges_i) {
+            const posi_pair_i: [number, number] = edge_to_posi_pairs_map.get(edge_i);
+            if (!edge_posis_map.has(posi_pair_i[1]) || edge_posis_map.get(posi_pair_i[1]).indexOf(posi_pair_i[0]) === -1) {
+                const found_ents_i: number[] = this.navAnyToAny(EEntType.EDGE, ent_type, edge_i);
+                found_ents_i.forEach( found_ent_i => perimeter_ents_i.add(found_ent_i) );
+            }
+        }
+        return Array.from(perimeter_ents_i);
+    }
 }

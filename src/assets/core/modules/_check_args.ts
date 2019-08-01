@@ -229,6 +229,12 @@ export class TypeCheckObj {
         return;
     }
     // Other Geometry
+    static isColor(fn_name: string, arg_name: string, arg: [number, number, number]): void { // TColor = [number, number, number]
+        isListArg(fn_name, arg_name, arg, 'numbers');
+        isListLenArg(fn_name, arg_name, arg, 3);
+        isNumberListArg(fn_name, arg_name, arg);
+        return;
+    }
     static isCoord(fn_name: string, arg_name: string, arg: [number, number, number]): void { // Txyz = [number, number, number]
         isListArg(fn_name, arg_name, arg, 'numbers');
         isListLenArg(fn_name, arg_name, arg, 3);

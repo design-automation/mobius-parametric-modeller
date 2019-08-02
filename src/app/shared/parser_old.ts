@@ -292,7 +292,6 @@ export function parseArgument(str: string): {'error'?: string, 'vars'?: string[]
     let newString = '';
     let jsString = '';
     const check = analyzeComp(comps, 0, vars);
-    console.log(check.jsStr);
     if (check.error) {
         console.log(check.error, '\n', str);
         return check;
@@ -394,12 +393,66 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
         newString += `{${result.str}}`; //////////
         jsString += `{${result.jsStr}}`; //////////
 
-    // if "@"/"#"/"?" ==> query
-    } else if (comps[i].value === '@' || comps[i].value === '#' || comps[i].value === '?') {
-        const result = analyzeQuery(comps, i, vars, '', '');
+    // if "#" ==> #@variable
+    } else if (comps[i].value === '#') {
+        if (i + 1 === comps.length || comps[i + 1].value !== '@') {
+            return {'error': 'Error: "@" expected after "#"\n' +
+            `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
+        if (i + 2 === comps.length || comps[i + 2].type !== strType.VAR) {
+            return {'error': 'Error: Variable expected after "#@"\n' +
+            `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
+        const result = analyzeVar(comps, i + 2, vars, true);
         if (result.error) { return result; }
         i = result.i;
-        return {'i': i, 'str': result.str, 'jsStr': result.jsStr};
+
+        // newString += ' #@' + result.str.replace(/ /g, '') + ' '; //////////
+        // jsString += ' #@' + result.str.replace(/ /g, '') + ' '; //////////
+
+        let attr;
+        let attrIndex;
+        const bracketIndex = result.str.indexOf('[');
+        if (bracketIndex !== -1) {
+            attr = result.str.slice(0, bracketIndex);
+            attrIndex = result.str.slice(bracketIndex + 1, -1);
+        } else {
+            attr = result.str;
+            attrIndex = null;
+        }
+
+        const operator = comps[i + 1];
+        if (operator.type !== strType.OTHER) {
+            return {'error': 'Error: Operator expected\n' +
+            `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
+
+        const operand = analyzeComp(comps, i + 2, vars);
+        if (operand.error) {
+            return operand;
+        }
+
+        newString += ` #@${result.str} ${operator.value} ${operand.str} `; //////////
+        jsString += `{"ent_type1": null, "attrib_name1": "${attr}", "attrib_index1": ${attrIndex}, ` +
+                     `"operator": "${operator.value}", "value": ${operand.jsStr} }`;
+
+        return {'i': i + 2, 'str': newString, 'jsStr': jsString};
+
+    // if "@" ==> @variable
+    } else if (comps[i].value === '@') {
+        if (i + 1 === comps.length || comps[i + 1].type !== strType.VAR) {
+            return {'error': 'Error: Variable expected after "@"\n' +
+            `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
+        const result = analyzeVar(comps, i + 1, vars, true);
+        if (result.error) { return result; }
+        i = result.i;
+        newString = ' @' + result.str.replace(/ /g, '') + ' '; //////////
+        if (result.jsStr.match(/[.\[\(]/g)) {
+            jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, null, ${result.jsStr})`; //////////
+        } else {
+            jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, null, '${result.jsStr}')`; //////////
+        }
     }
 
     if (i + 1 >= comps.length) { return {'i': i, 'str': newString, 'jsStr': jsString}; }
@@ -492,6 +545,91 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
         // }
         return { 'error': 'Error: Variable followed by another variable/number/string \n' +
         `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+    } else if (comps[i + 1].value === '#') {
+        if (i + 2 === comps.length) {
+            return {'i': i + 1, 'str': newString + '#', 'jsStr': `{"ent_type1": "${newString}", "att_name1": null, "att_index1": null}`};
+        }
+        if (comps[i + 2].value !== '@') {
+            return { 'error': `Error: "@" expected \n
+            at: ... ${comps.slice(i + 2).map(cp => cp.value).join(' ')}`};
+        }
+        const ent_type1 = newString;
+
+        const result = analyzeVar(comps, i + 3, vars, true);
+        if (result.error) { return result; }
+        i = result.i;
+
+        let attrib_name1;
+        let attrib_index;
+        const bracketIndex = result.str.indexOf('[');
+        if (bracketIndex !== -1) {
+            attrib_name1 = result.str.slice(0, bracketIndex);
+            attrib_index = result.str.slice(bracketIndex + 1, -1);
+        } else {
+            attrib_name1 = result.str;
+            attrib_index = null;
+        }
+
+        newString += `#@${result.str}`;
+        jsString = `{"ent_type1": "${ent_type1}", "attrib_name1": "${attrib_name1}", "attrib_index1": ${attrib_index}`;
+
+        if (i >= comps.length - 1) {
+            jsString += '}';
+            return {'i': i, 'str': newString, 'jsStr': jsString};
+        }
+
+        const operator = comps[i + 1];
+        if (operator.type !== strType.OTHER) {
+            return {'error': 'Error: Operator expected\n' +
+            `at: ... ${comps.slice(i + 1).map(cp => cp.value).join(' ')}`};
+        }
+
+        if (operator.value !== '>>') {
+            const operand = analyzeComp(comps, i + 2, vars);
+            if (operand.error) {
+                return operand;
+            }
+            i = operand.i;
+
+            newString += ` ${operator.value} ${operand.str} `; //////////
+            jsString += `, "operator": "${operator.value}", "value": ${operand.jsStr} }`;
+
+            return {'i': i, 'str': newString, 'jsStr': jsString};
+        }
+
+        if (comps[i + 2].type !== strType.VAR) {
+            return {'error': 'Error: Variable expected after ">>"\n' +
+            `at: ... ${comps.slice(i + 2).map(cp => cp.value).join(' ')}`};
+        }
+
+        const ent_type2 = comps[i + 2].value;
+
+        if (comps[i + 3].value !== '#' && comps[i + 4].value !== '@') {
+            return { 'error': `Error: "#@" expected \n
+            at: ... ${comps.slice(i + 2).map(cp => cp.value).join(' ')}`};
+        }
+
+        const result2 = analyzeVar(comps, i + 5, vars, true);
+        if (result2.error) { return result2; }
+        i = result2.i;
+
+        let attrib_name2;
+        let attrib_index2;
+        const bracketIndex2 = result2.str.indexOf('[');
+        if (bracketIndex2 !== -1) {
+            attrib_name2 = result2.str.slice(0, bracketIndex2);
+            attrib_index2 = result2.str.slice(bracketIndex2 + 1, -1);
+        } else {
+            attrib_name2 = result2.str;
+            attrib_index2 = null;
+        }
+
+        newString += ` >> ${ent_type2}#@${result2.str}`;
+        jsString += `, "operator": ">>", "ent_type2": "${ent_type2}", ` +
+                    `"attrib_name2": "${attrib_name2}", "attrib_index2": ${attrib_index2}}`;
+        return {'i': i, 'str': newString, 'jsStr': jsString};
+
+
 
     // if variable is followed by "[" --> array/json
     // add the variable to var list and check for validity of the first component inside the bracket
@@ -622,12 +760,28 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
         addVars(vars, comp.value);
     }
 
-    if (!disallowAt && i + 1 < comps.length && (comps[i + 1].value === '@' || comps[i + 1].value === '#' || comps[i + 1].value === '?')) {
-        const result = analyzeQuery(comps, i + 1, vars, newString, jsString);
+    if (i + 1 < comps.length && comps[i + 1].value === '@') {
+        if (disallowAt) {
+            return { 'error': 'Error: Invalid "@"\n' +
+            `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
+        if (comps[i + 2].type !== strType.VAR) {
+            return {'error': 'Error: Variable expected after "@"\n' +
+            `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
+        const result = analyzeVar(comps, i + 2, vars, true);
         if (result.error) { return result; }
         i = result.i;
-        newString = result.str;
-        jsString = result.jsStr;
+        newString = ' ' + newString.replace(/ /g, '') + '@' + result.str.replace(/ /g, '') + ' '; //////////
+        if (isVariable) {
+            jsString = ' ' + jsString + '@' + result.jsStr + ' '; //////////
+        } else {
+            if (result.jsStr.match(/[.\[\(]/g)) {
+                jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${jsString}, ${result.jsStr}) `; //////////
+            } else {
+                jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${jsString}, '${result.jsStr}') `; //////////
+            }
+        }
     }
     return {'i': i, 'str': newString, 'jsStr': jsString};
 }
@@ -720,117 +874,6 @@ function analyzeJSON(comps: {'type': strType, 'value': string}[], i: number, var
     return {'i': i - 1, 'str': newString, 'jsStr': jsString};
 }
 
-function analyzeQuery(comps: {'type': strType, 'value': string}[], i: number, vars: string[], startStr: string, startJS: string):
-                    {'error'?: string, 'i'?: number, 'str'?: string, 'jsStr'?: string} {
-    let newString = startStr;
-    let jsString = startJS;
-
-    while (true) {
-        if (comps[i].value === '@') {
-            if (i + 1 === comps.length || comps[i + 1].type !== strType.VAR) {
-                return {'error': 'Error: Variable expected after "@"\n' +
-                `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
-            }
-            const result = analyzeVar(comps, i + 1, vars, true);
-            if (result.error) { return result; }
-            i = result.i;
-
-
-            let entity = jsString;
-            if (newString === '') {
-                entity = 'null';
-            }
-            newString += '@' + result.str.replace(/ /g, '') + ' '; //////////
-
-            const bracketIndex = result.jsStr.indexOf('.slice(');
-            if (bracketIndex !== -1) {
-                jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity},` +
-                           ` '${result.jsStr.slice(0, bracketIndex)}').slice(${result.jsStr.slice(bracketIndex + 7, -4)})[0]`;
-            } else {
-                jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${result.str}')`; //////////
-            }
-            return {'i': i, 'str': newString, 'jsStr': jsString};
-            // if (i === comps.length - 1 || (comps[i + 1].value !== '@' && comps[i + 1].value !== '#' && comps[i + 1].value !== '?')) {
-            //     return {'i': i, 'str': newString, 'jsStr': jsString};
-            // }
-            // i += 1;
-
-            return {'i': i, 'str': newString, 'jsStr': jsString};
-        } else if (comps[i].value === '#') {
-            if (comps[i + 1].type !== strType.VAR) {
-                return {'error': 'Error: variable expected after "#"'};
-            }
-            const result = analyzeVar(comps, i + 1, vars, true);
-            if (result.error) { return result; }
-            i = result.i;
-
-            let entity = jsString;
-            if (newString === '') {
-                entity = 'null';
-            }
-
-            newString += '#' + result.str.replace(/ /g, '') + ' '; //////////
-            jsString = ` __modules__.${_parameterTypes.queryGet}(__params__.model, '${result.str}', ${entity})`; //////////
-
-            if (i === comps.length - 1 || (comps[i + 1].value !== '@' && comps[i + 1].value !== '#' && comps[i + 1].value !== '?')) {
-                return {'i': i, 'str': newString, 'jsStr': jsString};
-            }
-            i += 1;
-        } else if (comps[i].value === '?') {
-            if (i + 1 === comps.length || comps[i + 1].value !== '@') {
-                return {'error': 'Error: "@" expected after "?"\n' +
-                `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
-            }
-            if (i + 2 === comps.length || comps[i + 2].type !== strType.VAR) {
-                return {'error': 'Error: Variable expected after "@"\n' +
-                `at: ... ${comps.slice(i + 1).map(cp => cp.value).join(' ')}`};
-            }
-            const result = analyzeVar(comps, i + 2, vars, true);
-            if (result.error) { return result; }
-            i = result.i;
-
-            let entity = jsString;
-            if (newString === '') {
-                entity = 'null';
-            }
-
-            let att_name;
-            let att_index;
-
-            const bracketIndex = result.jsStr.indexOf('.slice(');
-            if (bracketIndex !== -1) {
-                att_name = result.jsStr.slice(0, bracketIndex);
-                att_index = result.jsStr.slice(bracketIndex + 7, -4);
-            } else {
-                att_name = result.str;
-                att_index = 'null';
-            }
-
-            if (comps[i + 1].type !== strType.OTHER) {
-                return {'error': 'Error: Variable expected after "@"\n' +
-                `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
-            }
-
-            const operator = comps[i + 1].value;
-
-            const nComp = analyzeComp(comps, i + 2, vars);
-            if (nComp.error) {
-                return nComp;
-            }
-            i = nComp.i;
-
-            newString += `?@${result.str}${operator}${nComp.str} `;
-            jsString = ` __modules__.${_parameterTypes.queryFilter}(__params__.model, ${entity}, '${att_name}'` +
-                       `, ${att_index}, '${operator}', ${nComp.jsStr})`; //////////
-
-            if (i === comps.length - 1 || (comps[i + 1].value !== '@' && comps[i + 1].value !== '#' && comps[i + 1].value !== '?')) {
-                return {'i': i, 'str': newString, 'jsStr': jsString};
-            }
-            i += 1;
-        }
-    }
-}
-
 function analyzeExpression(comps: {'type': strType, 'value': string}[], i: number, vars: string[], noSpace?: boolean):
                 {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string, 'jsStr'?: string} {
     // console.log('analyzeExpression |||', comps.slice(i).map(x => x.value).join(' '));
@@ -862,6 +905,312 @@ function analyzeExpression(comps: {'type': strType, 'value': string}[], i: numbe
     }
     return {'i': i - 1, 'str': newString, 'jsStr': jsString};
 }
+
+
+// // OLD ARGUMENT INPUT
+// export function parseArgument_OLD(str: string): {'error'?: string, 'vars'?: string[], 'str'?: string} {
+//     const comps = splitComponents(str);
+//     if (typeof comps === 'string') {
+//         return {'error': comps};
+//     }
+//     let i = 0;
+//     const openBrackets = [0, 0, 0]; // [roundBracketCount, squareBracketCount, curlyBracketCount]
+//     const vars: string[] = [];
+//     let newString = '';
+//     while (i < comps.length) {
+//         const check = analyzeComponent(comps, i, openBrackets, vars);
+//         if (check.error) {
+//             return check;
+//         }
+//         i = check.value;
+//         newString += check.str;
+//     }
+//     if (openBrackets[0] > 0) {
+//         return { 'error': `Error: Mismatching number of round brackets: ${openBrackets[0]} extra open brackets "("`};
+
+//     } else if (openBrackets[0] < 0) {
+//         return { 'error': `Error: Mismatching number of round brackets: ${0 - openBrackets[0]} extra closing brackets ")"`};
+
+//     }
+//     if (openBrackets[1] > 0) {
+//         return { 'error': `Error: Mismatching number of square brackets: ${openBrackets[1]} extra open brackets "["`};
+
+//     } else if (openBrackets[1] < 0) {
+//         return { 'error': `Error: Mismatching number of square brackets: ${0 - openBrackets[1]} extra closing brackets "]"`};
+
+//     }
+//     if (openBrackets[2] > 0) {
+//         return { 'error': `Error: Mismatching number of curly brackets: ${openBrackets[2]} extra open brackets "{"`};
+
+//     } else if (openBrackets[2] < 0) {
+//         return { 'error': `Error: Mismatching number of curly brackets: ${0 - openBrackets[2]} extra closing brackets "}"`};
+
+//     }
+//     return {'vars': vars, 'str': newString};
+// }
+
+
+// //
+// // ANALYZE 1: GENERAL
+// //
+// function analyzeComponent(comps: {'type': strType, 'value': string}[], i: number,
+//                           openBrackets: number[], vars: string[]): {'error'?: string, 'value'?: number, 'str'?: string} {
+//     const comp = comps[i];
+//     let newString: string;
+//     if (comp.type === strType.VAR) {
+//         return checkVariable(comps, i, openBrackets, vars);
+//     } else if (comp.type !== strType.OTHER) {
+//         return checkNumStr(comps, i, openBrackets);
+//     } else {
+//         if (comp.value === '(') {
+//             openBrackets[0] += 1;
+//             if (!comps[i + 1] || (!isParameter(comps[i + 1]) && comps[i + 1].value !== ')')) {
+//                 return { 'error': `Error: Expect expression, string, number or variable after "(" \n` +
+//                             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+//             }
+//             newString = '( ';
+
+//         } else if (comp.value === '[') {
+//             openBrackets[1] += 1;
+//             if (!comps[i + 1] || (!isParameter(comps[i + 1]) && comps[i + 1].value !== ']')) {
+//                 return { 'error': `Error: Expect expression, string, number or variable after "[" \n` +
+//                             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+//             }
+//             newString = '[';
+
+//         } else if (comp.value === '{') {
+//             openBrackets[2] += 1;
+//             if (!comps[i + 1] || (!isParameter(comps[i + 1]) && comps[i + 1].value !== '}')) {
+//                 return { 'error': `Error: Expect expression, string, number or variable after "{" \n` +
+//                             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+//             }
+//             newString = '{ ';
+
+//         } else if (comp.value === ')') {
+//             openBrackets[0] -= 1;
+//             newString = comp.value;
+//             if (i + 1 < comps.length && !noSpaceBefore.has(comps[i + 1].value)) {
+//                 newString += ' ';
+//             }
+
+//         } else if (comp.value === ']') {
+//             openBrackets[1] -= 1;
+//             newString = comp.value;
+//             if (i + 1 < comps.length && !noSpaceBefore.has(comps[i + 1].value)) {
+//                 newString += ' ';
+//             }
+
+//         } else if (comp.value === '}') {
+//             openBrackets[2] -= 1;
+//             newString = comp.value;
+//             if (i + 1 < comps.length && !noSpaceBefore.has(comps[i + 1].value)) {
+//                 newString += ' ';
+//             }
+
+//         } else if (comp.value === '@') {
+//             if (comps[i + 1].type !== strType.OTHER) {
+//                 newString = comp.value + comps[i + 1].value;
+//                 if (i + 2 < comps.length && comps[i + 2].value !== '[') {
+//                     newString += ' ';
+//                 }
+//                 i++;
+//             } else {
+//                 return { 'error': 'Error: Expect attribute name after @ \n' +
+//                 `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+//             }
+//         } else if (postfixUnaryOperators.has(comp.value)) {
+//             if (!isParameter(comps[i - 1], true)) {
+//                 return { 'error': `Error: Expect expression, string, number or variable before operator ${comp.value} \n` +
+//                 `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+//             }
+//             newString = comp.value + ' ';
+
+//         } else if (prefixUnaryOperators.has(comp.value)) {
+//             if (i === comps.length - 1 || !isParameter(comps[i + 1])) {
+//                 return { 'error': `Error: Expect expression, string, number or variable after operator ${comp.value} \n` +
+//                 `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+//             }
+//             if (comp.value === '-') {
+//                 newString = comp.value + ' ';
+//             } else {
+//                 newString = comp.value;
+//             }
+
+//         } else if (binaryOperators.has(comp.value)) {
+//             let checkBef: boolean, checkAft: boolean;
+//             if (mathOperators.has(comp.value)) {
+//                 checkBef = !isParameter(comps[i - 1], true, true);
+//                 checkAft = i === comps.length - 1 || !isParameter(comps[i + 1], false, true);
+//             } else {
+//                 checkBef = !isParameter(comps[i - 1], true);
+//                 checkAft = i === comps.length - 1 || !isParameter(comps[i + 1], false);
+//             }
+//             if (checkBef) {
+//                 return { 'error': `Error: Expect expression, string, number or variable before operator ${comp.value} \n` +
+//                 `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+//             }
+//             if (checkAft) {
+//                 return { 'error': `Error: Expect expression, string, number or variable after operator ${comp.value} \n` +
+//                 `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+//             }
+//             newString = comp.value + ' ';
+//         } else if (otherSymbols.has(comp.value)) {
+//             if (comp.value === '.' || comp.value === '#') {
+//                 newString = comp.value;
+//             } else {
+//                 newString = comp.value + ' ';
+//             }
+//         } else {
+//             newString = comp.value + ' ';
+//         }
+//         i++;
+//     }
+//     return {'value': i, 'str': newString};
+// }
+
+// //
+// // ANALYZE 2: VARIABLE
+// //
+// function checkVariable(comps: {'type': strType, 'value': string}[], i: number,
+//                        openBrackets: number[], vars: string[]): {'error'?: string, 'value'?: number, 'str'?: string} {
+//     const comp = comps[i];
+//     // if variable is the last component
+//     // add the variable to the var list
+//     if (i + 1 === comps.length) {
+//         addVars(vars, comp.value);
+//         i += 1;
+//         return {'value': i, 'str': comp.value};
+//     }
+//     // if variable is followed immediately by another var/num/str --> not allowed
+//     if ( comps[i + 1].type !== strType.OTHER ) {
+//         return { 'error': 'Error: Variable followed by another variable/number/string \n' +
+//         `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+
+//     // if variable is followed by "[" --> array/json
+//     // add the variable to var list and check for validity of the first component inside the bracket
+//     } else if (comps[i + 1].value === '[') {
+//         addVars(vars, comp.value);
+//         openBrackets[1] += 1;
+//         i += 2;
+//         if (!isParameter(comps[i])) {
+//             return { 'error': 'Error: Expect expression, string, number or variable after "[" \n' +
+//             `at: ... ${comps.slice(i - 2).map(cp => cp.value).join(' ')}`};
+//         }
+//         return {'value': i, 'str': comp.value + '['};
+
+//     // if variable is followed by "(" --> function
+//     // does not add to the var list since it's function name
+//     } else if (comps[i + 1].value === '(') {
+//         openBrackets[0] += 1;
+//         i += 2;
+//         if (comps[i].value === ')') {
+//             i++;
+//             openBrackets[0] -= 1;
+//         } else if (!isParameter(comps[i])) {
+//             return { 'error': 'Error: Expect expression, string, number, variable or ")" after "(" \n' +
+//             `at: ... ${comps.slice(i - 2).map(cp => cp.value).join(' ')}`};
+//         }
+//         return {'value': i, 'str': comp.value + '( '};
+
+//     // if variable is followed by "{" --> not allowed
+//     } else if (comps[i + 1].value === '{') {
+//         return { 'error': 'Error: Variable followed by "{" \n' +
+//         `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+
+//     // if variable is followed by "#" / "." / "@" / ")" / "]" / "}"
+//     } else if (otherSymbols.has(comps[i + 1].value) ||
+//                comps[i + 1].value === ')' ||
+//                comps[i + 1].value === ']' ||
+//                comps[i + 1].value === '}') {
+//         if (comps[i + 1].value === '#') {
+//             return { 'error': `Error: Variable followed by "${comps[i + 1].value}" \n` +
+//             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+//         }
+//         addVars(vars, comp.value);
+//         i += 1;
+//         return {'value': i, 'str': comp.value};
+//     // all other cases
+//     } else {
+//         addVars(vars, comp.value);
+//         i += 1;
+//         return {'value': i, 'str': comp.value + ' '};
+//     }
+// }
+
+// //
+// // ANALYZE 3: NUMBER/STRING
+// //
+// function checkNumStr(comps: {'type': strType, 'value': string}[], i: number,
+//                      openBrackets: number[]): {'error'?: string, 'value'?: number, 'str'?: string} {
+//     const comp = comps[i];
+
+//     // if num/str is the last component --> return
+//     if (i + 1 === comps.length) {
+//         i += 1;
+//         return {'value': i, 'str': comp.value};
+//     }
+//     // if num/str is followed by another var/num/str --> not allowed
+//     if ( comps[i + 1].type !== strType.OTHER ) {
+//         return { 'error': 'Error: number/string followed by another variable/number/string \n' +
+//         `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+
+//     // if num/str is followed by "(" or "{" --> not allowed
+//     } else if (comps[i + 1].value === '(' || comps[i + 1].value === '{') {
+//         return { 'error': 'Error: number/string followed by bracket \n' +
+//         `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+
+//     // if num/str is followed by "[" --> only allowed for str
+//     } else if (comps[i + 1].value === '[') {
+//         if (comp.type === strType.NUM) {
+//             return { 'error': 'Error: number/string followed by bracket \n' +
+//             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+//         }
+//         openBrackets[1] += 1;
+//         i += 2;
+//         if (!isParameter(comps[i])) {
+//             return { 'error': 'Error: Expect expression, string, number or variable after [ \n' +
+//             `at: ... ${comps.slice(i - 2).map(cp => cp.value).join(' ')}`};
+//         }
+//     // if variable is followed by "#" / "." / "@" / ")" / "]" / "}"
+//     } else if ( otherSymbols.has(comps[i + 1].value) ||
+//                 comps[i + 1].value === ')' ||
+//                 comps[i + 1].value === ']' ||
+//                 comps[i + 1].value === '}') {
+//         if (comps[i + 1].value === '@' || comps[i + 1].value === '#') {
+//             return { 'error': `Error: number/string followed by "${comps[i + 1].value}" \n` +
+//             `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+//         }
+//         i += 1;
+//         return {'value': i, 'str': comp.value};
+//     // all other cases
+//     } else {
+//         i += 1;
+//         return {'value': i, 'str': comp.value + ' '};
+//     }
+// }
+
+// function isParameter(comp: {'type': strType, 'value': string}, prev: boolean = false, noSpecialBracket: boolean = false): boolean {
+//     if (prev) {
+//         if (comp.value === '}') {
+//             if (noSpecialBracket) {
+//                 return false;
+//             } else { return true; }
+//         }
+//         return  comp.type !== strType.OTHER ||
+//                 comp.value === ']' ||
+//                 comp.value === ')';
+//     }
+//     if (comp.value === '[' || comp.value === '{') {
+//         if (noSpecialBracket) {
+//             return false;
+//         } else { return true; }
+//     }
+//     return  comp.type !== strType.OTHER ||
+//             comp.value === '(' ||
+//             comp.value === '-' ||
+//             comp.value === '#' ||
+//             comp.value === '@';
+// }
 
 function addVars(varList: string[], varName: string) {
     if (specialVars.has(varName)) { return; }

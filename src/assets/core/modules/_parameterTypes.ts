@@ -20,6 +20,8 @@ export const _parameterTypes = {
 
     setattrib: '_model.__setAttrib__',
     getattrib: '_model.__getAttrib__',
+    queryGet: 'query.Get',
+    queryFilter: 'query.Filter',
 
     select: '_model.__select__',
 

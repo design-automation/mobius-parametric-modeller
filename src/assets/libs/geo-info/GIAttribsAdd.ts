@@ -1,6 +1,6 @@
 import { GIModel } from './GIModel';
 import { IAttribsData, IModelData, IAttribData, TAttribDataTypes, EEntType,
-    EAttribDataTypeStrs, IGeomData, IAttribsMaps, EAttribNames, Txyz, EEntTypeStr, EAttribPromote } from './common';
+    EAttribDataTypeStrs, IGeomData, IAttribsMaps, EAttribNames, Txyz, EEntTypeStr, EAttribPush } from './common';
 import { GIAttribMap } from './GIAttribMap';
 import { vecAdd, vecDiv, vecSum } from '@libs/geom/vectors';
 import * as mathjs from 'mathjs';
@@ -152,8 +152,8 @@ export class GIAttribsAdd {
     /**
      * Promotes attrib values up and down the hierarchy.
      */
-    public promoteAttribValues(ent_type: EEntType, attrib_name: string, indices: number[], to_ent_type: EEntType,
-            method: EAttribPromote): void {
+    public pushAttribValues(ent_type: EEntType, attrib_name: string, indices: number[], to_ent_type: EEntType,
+            method: EAttribPush): void {
         if (ent_type === to_ent_type) { return; }
         // check that the attribute exists
         if (! this._model.attribs.query.hasAttrib(ent_type, attrib_name)) {
@@ -215,9 +215,9 @@ export class GIAttribsAdd {
     // ============================================================================
     // Private methods
     // ============================================================================
-    private _aggregateValues(values: TAttribDataTypes[], data_size: number, method: EAttribPromote): TAttribDataTypes {
+    private _aggregateValues(values: TAttribDataTypes[], data_size: number, method: EAttribPush): TAttribDataTypes {
         switch (method) {
-            case EAttribPromote.AVERAGE:
+            case EAttribPush.AVERAGE:
                 if (data_size > 1) {
                     const result: number[] = [];
                     for (let i = 0; i < data_size; i++) {
@@ -227,7 +227,7 @@ export class GIAttribsAdd {
                 } else {
                     return mathjs.mean(values);
                 }
-            case EAttribPromote.MEDIAN:
+            case EAttribPush.MEDIAN:
                 if (data_size > 1) {
                     const result: number[] = [];
                     for (let i = 0; i < data_size; i++) {
@@ -237,7 +237,7 @@ export class GIAttribsAdd {
                 } else {
                     return mathjs.median(values);
                 }
-            case EAttribPromote.SUM:
+            case EAttribPush.SUM:
                 if (data_size > 1) {
                     const result: number[] = [];
                     for (let i = 0; i < data_size; i++) {
@@ -247,7 +247,7 @@ export class GIAttribsAdd {
                 } else {
                     return mathjs.sum(values);
                 }
-            case EAttribPromote.MIN:
+            case EAttribPush.MIN:
                 if (data_size > 1) {
                     const result: number[] = [];
                     for (let i = 0; i < data_size; i++) {
@@ -257,7 +257,7 @@ export class GIAttribsAdd {
                 } else {
                     return mathjs.min(values);
                 }
-            case EAttribPromote.MAX:
+            case EAttribPush.MAX:
                 if (data_size > 1) {
                     const result: number[] = [];
                     for (let i = 0; i < data_size; i++) {
@@ -267,10 +267,10 @@ export class GIAttribsAdd {
                 } else {
                     return mathjs.max(values);
                 }
-            case EAttribPromote.LAST:
+            case EAttribPush.LAST:
                 return values[values.length - 1];
             default:
-                return values[0]; // EAttribPromote.FIRST
+                return values[0]; // EAttribPush.FIRST
         }
     }
     /**

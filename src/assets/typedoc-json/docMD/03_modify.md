@@ -126,39 +126,6 @@ in the ring. The first edge will become the last edge.
     If open, polylines are changed to closed; if already closed, nothing happens.
   
   
-## PushAttribs  
-* **Description:** Pushes existing attribute values onto other entities.
-Attribute values can be promoted up the hierarchy, demoted down the hierarchy, or transferred across the hierarchy.
-~
-In certain cases, when attributes are pushed, they may be aggregated. For example, if you are pushing attributes
-from vertices to polygons, then there will be multiple vertex attributes that can be combined in
-different ways.
-The 'method' specifies how the attributes should be aggregated. Note that if no aggregation is required
-then the aggregation method is ignored.
-~
-The aggregation methods consist of numerical functions such as average, median, sum, max, and min. These will
-only work if the attribute values are numbers or lists of numbers. If the attribute values are string, then
-the numerical functions are ignored.
-~
-If the attribute values are lists of numbers, then these aggregation methods work on the individual items in the list.
-For example, lets say you have an attribute consisting of normal vectors on vertices. If you push these attributes
-down to the positions, then aggregation may be required, since multiple vertices can share the same position.
-In this case, if you choose the `average` aggregation method, then resulting vectors on the positions will be the
-average of vertex vectors.  
-* **Parameters:**  
-  * *entities:* The entities that currently contain the attribute values.  
-  * *attrib_name:* The name of the attribute to be promoted, demoted, or transferred.  
-  * *to_level:* Enum; The level to which to promote, demote, or transfer the attribute values.  
-  * *method:* Enum; The method to use when attribute values need to be aggregated.  
-* **Returns:** void  
-* **Examples:**  
-  * promote1 = modify.PushAttribs([pgon1, pgon2], 'area', collections, sum)  
-    For the two polygons (pgon1 and pgon2), it gets the attribute values from the attribute called `area`,
-and pushes them up to the collection level. The `sum` method specifies that the two areas should be added up.
-Note that in order to create an attribute at the collection level, the two polygons should be part of a
-collection. If they are not part of the collection, then no attribute values will be push.
-  
-  
 ## Delete  
 * **Description:** Deletes geometric entities: positions, points, polylines, polygons, and collections.
 When deleting positions, any topology that requires those positions will also be deleted.

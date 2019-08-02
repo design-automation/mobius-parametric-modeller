@@ -547,6 +547,9 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
         return { 'error': 'Error: Variable followed by another variable/number/string \n' +
         `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
     } else if (comps[i + 1].value === '#') {
+        if (i + 2 === comps.length) {
+            return {'i': i, 'str': newString + '#', 'jsStr': `{"ent_type1": "newString", "att_name1": null, "att_index1": null}`};
+        }
         if (comps[i + 2].value !== '@') {
             return { 'error': `Error: "@" expected \n
             at: ... ${comps.slice(i + 2).map(cp => cp.value).join(' ')}`};

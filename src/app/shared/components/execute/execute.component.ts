@@ -335,7 +335,7 @@ export class ExecuteComponent {
             'constants': constantList,
             'fileName': this.dataService.flowchart.name
         };
-        const consoleLength = params.console.length;
+        // const consoleLength = params.console.length;
 
         let fnString = '';
         const startTime = performance.now();

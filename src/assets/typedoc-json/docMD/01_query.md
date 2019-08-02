@@ -1,31 +1,69 @@
 # QUERY    
 
-## Get2  
-* **Description:** Returns a list of entities based on a query expression.
+## Search  
+* **Description:** Search the model for entities based on a query expression.
 The result will always be a list of entities, even if there is only one entity.
 In a case where you want only one entity, remember to get the first item in the list.
 ~
-The query expression can use the following format: #@name == value,
-where 'name' is the attribute name, and 'value' is the attribute value that you are searching for.
+The query expression can use the following format: ab#@name == value, where
+'ab' is the two letter identifier of the entity type ('ps', '_v', '_e', '_w', '_f', 'pt', 'pl', 'pg', 'co')
+'name' is the attribute name, and
+'value' is the attribute value that you are searching for.
 ~
-If the attribute value is a string, then in must be in quotes, as follows: #@name == 'str_value'.
+If the attribute value is a string, then in must be in quotes, e.g.: pg#@name == 'str_value'.
 ~
 If the attribute value is a number, then any comparison operator can be used: ==, !=, >, >=, <, =<.
+~
+If the attribute value is a list, then a list index can be used, e.g.: ps#@xyz[2] > 10.
 ~  
 * **Parameters:**  
-  * *entities:* List of entities to be searched. If 'null' (without quotes), all entities in the model will be searched.  
   * *expr:* Query expression.  
-* **Returns:** Entities, a list of entities that match the type specified in 'select' and the conditions specified in 'query_expr'.  
+* **Returns:** Entities, a list of entities that match the conditions specified in 'expr'.  
 * **Examples:**  
-  * positions = query.Get(positions, polyline1, #@xyz[2]>10)  
+  * positions = query.Get(polyline1, ps#@xyz[2]>10)  
     Returns a list of positions that are part of polyline1 where the z-coordinate is more than 10.  
-  * positions = query.Get(positions, null, #@xyz[2]>10)  
+  * positions = query.Get(null, ps#@xyz[2]>10)  
     Returns a list of positions in the model where the z-coordinate is more than 10.  
-  * positions = query.Get(positions, polyline1, null)  
+  * positions = query.Get(polyline1, ps#)  
     Returns a list of all of the positions that are part of polyline1.  
-  * polylines = query.Get(polylines, position1, null)  
+  * polylines = query.Get(position1, pl#)  
     Returns a list of all of the polylines that use position1.  
-  * collections = query.Get(collections, null, #@type=="floors")  
+  * collections = query.Get(null, co#@type=="floors")  
+    Returns a list of all the collections that have an attribute called "type" with a value "floors".
+  
+  
+## Get2  
+* **Description:** Get entities from a list of entities based on a query expression.
+For example, you can get the position entities from a list of polygon entities.
+~
+The result will always be a list of entities, even if there is only one entity.
+In a case where you want only one entity, remember to get the first item in the list.
+~
+The query expression can use the following format: ab#@name == value, where
+'ab' is the two letter identifier of the entity type ('ps', '_v', '_e', '_w', '_f', 'pt', 'pl', 'pg', 'co')
+'name' is the attribute name, and
+'value' is the attribute value that you are searching for.
+~
+If the attribute value is a string, then in must be in quotes, e.g.: pg#@name == 'str_value'.
+~
+If the attribute value is a number, then any comparison operator can be used: ==, !=, >, >=, <, =<.
+~
+If the attribute value is a list, then a list index can be used, e.g.: ps#@xyz[2] > 10.
+~  
+* **Parameters:**  
+  * *expr:* Query expression.  
+  * *entities:* List of entities to get entities from.  
+* **Returns:** Entities, a list of entities that match the conditions specified in 'expr'.  
+* **Examples:**  
+  * positions = query.Get(polyline1, ps#@xyz[2]>10)  
+    Returns a list of positions that are part of polyline1 where the z-coordinate is more than 10.  
+  * positions = query.Get(null, ps#@xyz[2]>10)  
+    Returns a list of positions in the model where the z-coordinate is more than 10.  
+  * positions = query.Get(polyline1, ps#)  
+    Returns a list of all of the positions that are part of polyline1.  
+  * polylines = query.Get(position1, pl#)  
+    Returns a list of all of the polylines that use position1.  
+  * collections = query.Get(null, co#@type=="floors")  
     Returns a list of all the collections that have an attribute called "type" with a value "floors".
   
   
@@ -86,25 +124,6 @@ If the attribute is a list, and index can also be specified as follows: #@name1[
 * **Examples:**  
   * sorted_list = query.Sort( [pos1, pos2, pos3], #@xyz[2], descending)  
     Returns a list of three positions, sorted according to the descending z value.
-  
-  
-## Count  
-* **Description:** Returns the number of entities based on a query expression.
-~
-The query expression can use the following format: #@name == value,
-where 'name' is the attribute name, and 'value' is the attribute value that you are searching for.
-~
-If the attribute value is a string, then in must be in quotes, as follows: #@name == 'str_value'.
-~
-If the attribute value is a number, then any comparison operator can be used: ==, !=, >, >=, <, =<.  
-* **Parameters:**  
-  * *select:* Enum, specifies what type of entities are to be counted.  
-  * *entities:* List of entities to be searched. If 'null' (without quotes), list of all entities in the model.  
-  * *query_expr:* Attribute condition. If 'null' (without quotes), no condition is set; list of all search entities is returned.  
-* **Returns:** Number of entities.  
-* **Examples:**  
-  * num_ents = query.Count(positions, polyline1, #@xyz[2]>10)  
-    Returns the number of positions defined by polyline1 where the z-coordinate is more than 10.
   
   
 ## Perimeter  

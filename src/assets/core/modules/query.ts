@@ -2,7 +2,6 @@
  * The `query` module has functions for querying entities in the the model.
  * Most of these functions all return a list of IDs of entities in the model.
  * ~
- * The Get() function is an important function, and is used in many modelling workflows.
  * ~
  */
 
@@ -23,7 +22,7 @@ import { checkIDs, IDcheckObj } from './_check_args';
 // #@xyz[2] > 5
 //
 // ================================================================================================
-// These are used by Get(), Count(), and neighbors()
+// These are used by Get(), Search(), Neighbor()
 export enum _EQuerySelect {
     POSI =   'positions',
     VERT =   'vertices',
@@ -131,34 +130,97 @@ function _exprGetQueryOperator(select: string): EQueryOperatorTypes {
     }
 }
 // ================================================================================================
+// ================================================================================================
 /**
- * Returns a list of entities based on a query expression.
+ * Search the model for entities based on a query expression.
  * The result will always be a list of entities, even if there is only one entity.
  * In a case where you want only one entity, remember to get the first item in the list.
  * ~
- * The query expression can use the following format: #@name == value,
- * where 'name' is the attribute name, and 'value' is the attribute value that you are searching for.
+ * The query expression can use the following format: ab#@name == value, where 
+ * 'ab' is the two letter identifier of the entity type ('ps', '_v', '_e', '_w', '_f', 'pt', 'pl', 'pg', 'co')
+ * 'name' is the attribute name, and 
+ * 'value' is the attribute value that you are searching for.
  * ~
- * If the attribute value is a string, then in must be in quotes, as follows: #@name == 'str_value'.
+ * If the attribute value is a string, then in must be in quotes, e.g.: pg#@name == 'str_value'.
  * ~
  * If the attribute value is a number, then any comparison operator can be used: ==, !=, >, >=, <, =<.
  * ~
+ * If the attribute value is a list, then a list index can be used, e.g.: ps#@xyz[2] > 10.
+ * ~
  * @param __model__
- * @param entities List of entities to be searched. If 'null' (without quotes), all entities in the model will be searched.
  * @param expr Query expression.
- * @returns Entities, a list of entities that match the type specified in 'select' and the conditions specified in 'query_expr'.
- * @example positions = query.Get(positions, polyline1, #@xyz[2]>10)
+ * @returns Entities, a list of entities that match the conditions specified in 'expr'.
+ * @example positions = query.Get(polyline1, ps#@xyz[2]>10)
  * @example_info Returns a list of positions that are part of polyline1 where the z-coordinate is more than 10.
- * @example positions = query.Get(positions, null, #@xyz[2]>10)
+ * @example positions = query.Get(null, ps#@xyz[2]>10)
  * @example_info Returns a list of positions in the model where the z-coordinate is more than 10.
- * @example positions = query.Get(positions, polyline1, null)
+ * @example positions = query.Get(polyline1, ps#)
  * @example_info Returns a list of all of the positions that are part of polyline1.
- * @example polylines = query.Get(polylines, position1, null)
+ * @example polylines = query.Get(position1, pl#)
  * @example_info Returns a list of all of the polylines that use position1.
- * @example collections = query.Get(collections, null, #@type=="floors")
+ * @example collections = query.Get(null, co#@type=="floors")
  * @example_info Returns a list of all the collections that have an attribute called "type" with a value "floors".
  */
-export function Get2(__model__: GIModel, entities: TId|TId[], expr: IExpr): TId[]|TId[][] {
+export function Search(__model__: GIModel, expr: IExpr): TId[]|TId[][] {
+    console.log(expr);
+    // --- Error Check ---
+    // --- Error Check ---
+    // convert IExpr to IExprQuery
+    const expr_query: IExprQuery = {
+        ent_type: _exprGetEntType(expr.ent_type1),
+        attrib_name: expr.attrib_name1,
+        attrib_index: expr.attrib_index1,
+        operator: _exprGetQueryOperator(expr.operator),
+        value: expr.value
+    };
+    // check if the query if valid // TODO add more checks
+    if (expr_query.ent_type === undefined) {
+        throw new Error('Query expression must define an entity type.');
+    }
+    // get all entities in the model of type expr_query.ent_type
+    const ents_i: number[] = __model__.geom.query.getEnts(expr_query.ent_type, false);
+    const ents_arr: TEntTypeIdx[] = ents_i.map(ent_i => [expr_query.ent_type, ent_i]) as TEntTypeIdx[];
+    if (isEmptyArr(ents_arr)) { return []; }
+    // do the query
+    const found_ents_arr: TEntTypeIdx[]|TEntTypeIdx[][] = _get2(__model__, ents_arr, expr_query);
+    // return the result
+    return idsMake(found_ents_arr) as TId[]|TId[][];
+}
+/**
+ * Get entities from a list of entities based on a query expression. 
+ * For example, you can get the position entities from a list of polygon entities.
+ * ~
+ * The result will always be a list of entities, even if there is only one entity.
+ * In a case where you want only one entity, remember to get the first item in the list.
+ * ~
+ * The query expression can use the following format: ab#@name == value, where 
+ * 'ab' is the two letter identifier of the entity type ('ps', '_v', '_e', '_w', '_f', 'pt', 'pl', 'pg', 'co')
+ * 'name' is the attribute name, and
+ * 'value' is the attribute value that you are searching for.
+ * ~
+ * If the attribute value is a string, then in must be in quotes, e.g.: pg#@name == 'str_value'.
+ * ~
+ * If the attribute value is a number, then any comparison operator can be used: ==, !=, >, >=, <, =<.
+ * ~
+ * If the attribute value is a list, then a list index can be used, e.g.: ps#@xyz[2] > 10.
+ * ~
+ * @param __model__
+ * @param expr Query expression.
+ * @param entities List of entities to get entities from. 
+ * @returns Entities, a list of entities that match the conditions specified in 'expr'.
+ * @example positions = query.Get(polyline1, ps#@xyz[2]>10)
+ * @example_info Returns a list of positions that are part of polyline1 where the z-coordinate is more than 10.
+ * @example positions = query.Get(null, ps#@xyz[2]>10)
+ * @example_info Returns a list of positions in the model where the z-coordinate is more than 10.
+ * @example positions = query.Get(polyline1, ps#)
+ * @example_info Returns a list of all of the positions that are part of polyline1.
+ * @example polylines = query.Get(position1, pl#)
+ * @example_info Returns a list of all of the polylines that use position1.
+ * @example collections = query.Get(null, co#@type=="floors")
+ * @example_info Returns a list of all the collections that have an attribute called "type" with a value "floors".
+ */
+export function Get2(__model__: GIModel, expr: IExpr, entities: TId|TId[]): TId[]|TId[][] {
+    console.log(expr);
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     let ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = null;
@@ -185,6 +247,7 @@ export function Get2(__model__: GIModel, entities: TId|TId[], expr: IExpr): TId[
         const ents_i: number[] = __model__.geom.query.getEnts(expr_query.ent_type, false);
         ents_arr = ents_i.map(ent_i => [expr_query.ent_type, ent_i]) as TEntTypeIdx[];
     }
+    if (isEmptyArr(ents_arr)) { return []; }
     // make sure that the ents_arr is at least depth 2
     const depth: number = getArrDepth(ents_arr);
     if (depth === 1) { ents_arr = [ents_arr] as TEntTypeIdx[]; }
@@ -411,34 +474,6 @@ function _sort(__model__: GIModel, ents_arr: TEntTypeIdx[], sort_expr: TQuery, m
     // do the sort on the list of entities
     const sort_result: number[] = __model__.attribs.query.sortByAttribs(ent_type, ents_i, sort_expr, method);
     return sort_result.map( entity_i => [ent_type, entity_i]) as TEntTypeIdx[];
-}
-// ================================================================================================
-/**
- * Returns the number of entities based on a query expression.
- * ~
- * The query expression can use the following format: #@name == value,
- * where 'name' is the attribute name, and 'value' is the attribute value that you are searching for.
- * ~
- * If the attribute value is a string, then in must be in quotes, as follows: #@name == 'str_value'.
- * ~
- * If the attribute value is a number, then any comparison operator can be used: ==, !=, >, >=, <, =<.
- *
- * @param __model__
- * @param select Enum, specifies what type of entities are to be counted.
- * @param entities List of entities to be searched. If 'null' (without quotes), list of all entities in the model.
- * @param query_expr Attribute condition. If 'null' (without quotes), no condition is set; list of all search entities is returned.
- * @returns Number of entities.
- * @example num_ents = query.Count(positions, polyline1, #@xyz[2]>10)
- * @example_info Returns the number of positions defined by polyline1 where the z-coordinate is more than 10.
- */
-export function Count(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], query_expr: TQuery): number {
-    if (isEmptyArr(entities)) { return 0; }
-    // --- Error Check ---
-    if (entities !== null && entities !== undefined) {
-        checkIDs('query.Count', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null);
-    }
-    // --- Error Check ---
-    return Get(__model__, select, entities, query_expr).length;
 }
 // ================================================================================================
 /**
@@ -768,3 +803,36 @@ function _type(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], query_en
 // TODO IS_PLANAR
 // TODO IS_QUAD
 // ================================================================================================
+
+
+
+
+// ================================================================================================
+/**
+ * Returns the number of entities based on a query expression.
+ * ~
+ * The query expression can use the following format: #@name == value,
+ * where 'name' is the attribute name, and 'value' is the attribute value that you are searching for.
+ * ~
+ * If the attribute value is a string, then in must be in quotes, as follows: #@name == 'str_value'.
+ * ~
+ * If the attribute value is a number, then any comparison operator can be used: ==, !=, >, >=, <, =<.
+ *
+ * @param __model__
+ * @param select Enum, specifies what type of entities are to be counted.
+ * @param entities List of entities to be searched. If 'null' (without quotes), list of all entities in the model.
+ * @param query_expr Attribute condition. If 'null' (without quotes), no condition is set; list of all search entities is returned.
+ * @returns Number of entities.
+ * @example num_ents = query.Count(positions, polyline1, #@xyz[2]>10)
+ * @example_info Returns the number of positions defined by polyline1 where the z-coordinate is more than 10.
+ */
+export function _Count(__model__: GIModel, select: _EQuerySelect, entities: TId|TId[], query_expr: TQuery): number {
+    if (isEmptyArr(entities)) { return 0; }
+    // --- Error Check ---
+    if (entities !== null && entities !== undefined) {
+        checkIDs('query.Count', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null);
+    }
+    // --- Error Check ---
+    return Get(__model__, select, entities, query_expr).length;
+}
+

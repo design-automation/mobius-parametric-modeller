@@ -181,11 +181,11 @@ export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProd
     if (!procedure.args[argIndex].value) { return; }
     // PARSER CALL
     let varResult = parseArgument(procedure.args[argIndex].value);
-
     if (varResult.error) {
         procedure.args[argIndex].invalidVar = varResult.error;
         return;
     }
+    console.log(varResult.jsStr)
 
     procedure.args[argIndex].value = varResult.str;
     procedure.args[argIndex].jsValue = varResult.jsStr;
@@ -548,7 +548,7 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
         `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
     } else if (comps[i + 1].value === '#') {
         if (i + 2 === comps.length) {
-            return {'i': i, 'str': newString + '#', 'jsStr': `{"ent_type1": "newString", "att_name1": null, "att_index1": null}`};
+            return {'i': i + 1, 'str': newString + '#', 'jsStr': `{"ent_type1": "${newString}", "att_name1": null, "att_index1": null}`};
         }
         if (comps[i + 2].value !== '@') {
             return { 'error': `Error: "@" expected \n
@@ -590,11 +590,12 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
             if (operand.error) {
                 return operand;
             }
+            i = operand.i;
 
             newString += ` ${operator.value} ${operand.str} `; //////////
             jsString += `, "operator": "${operator.value}", "value": ${operand.jsStr} }`;
 
-            return {'i': i + 2, 'str': newString, 'jsStr': jsString};
+            return {'i': i, 'str': newString, 'jsStr': jsString};
         }
 
         if (comps[i + 2].type !== strType.VAR) {
@@ -625,7 +626,8 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
         }
 
         newString += ` >> ${ent_type2}#@${result2.str}`;
-        jsString += `, "operator": ">>", "ent_type2": "${ent_type2}", "attrib_name2": "${attrib_name2}", "attrib_index2": ${attrib_index2}}`;
+        jsString += `, "operator": ">>", "ent_type2": "${ent_type2}", ` +
+                    `"attrib_name2": "${attrib_name2}", "attrib_index2": ${attrib_index2}}`;
         return {'i': i, 'str': newString, 'jsStr': jsString};
 
 

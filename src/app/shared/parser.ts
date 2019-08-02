@@ -185,7 +185,6 @@ export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProd
         procedure.args[argIndex].invalidVar = varResult.error;
         return;
     }
-    console.log(varResult.jsStr)
 
     procedure.args[argIndex].value = varResult.str;
     procedure.args[argIndex].jsValue = varResult.jsStr;

@@ -28,8 +28,9 @@ in the Start node of the flowchart.
   
 ## ExportData  
 * **Description:** Export data from the model as a file.
-This will result in a popup in your browser, asking you to save the filel.  
+This will result in a popup in your browser, asking you to save the file.  
 * **Parameters:**  
+  * *entities:* undefined  
   * *filename:* Name of the file as a string.  
   * *data_format:* Enum, the file format.  
   * *data_target:* Enum, where the data is to be exported to.  

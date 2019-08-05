@@ -8,9 +8,10 @@ import { _parameterTypes } from '@assets/core/_parameterTypes';
 
 
 export function checkMobFile(file: any) {
-
+    // check the end node
     checkEndReturn(file);
 
+    // check if there's any missing procedure in each node
     let hasError = false;
     for (const node of file.flowchart.nodes) {
         if (!checkMissingProd(node.procedure, file.version)) {
@@ -35,11 +36,15 @@ export function checkMobFile(file: any) {
 function checkMissingProd(prodList: any[], fileVersion: number) {
     let check = true;
     for (const prod of prodList) {
+
+        // check the children procedures if the procedure has any
         if (prod.children) {
             if (!checkMissingProd(prod.children, fileVersion)) {
                 check = false;
             }
         }
+
+        // unify value & default of constants (all start node constants i.e. constant/simpleinput/slider/url...)
         prod.hasError = false;
         if (fileVersion < 3) {
             if (prod.type === ProcedureTypes.Constant) {
@@ -49,6 +54,7 @@ function checkMissingProd(prodList: any[], fileVersion: number) {
             }
         }
 
+        // only continue below for function procedures
         if (prod.type !== ProcedureTypes.Function) { continue; }
 
 
@@ -107,8 +113,13 @@ function checkMissingProd(prodList: any[], fileVersion: number) {
 }
 
 function checkEndReturn(file) {
+
+    // edit the return procedure (last procedure in the end node)
     if (file.version === 1) {
         const endNode = file.flowchart.nodes[file.flowchart.nodes.length - 1];
+
+        // add a blank procedure if there is no procedure in the node
+        // (all node must start with a blank procedure)
         if (endNode.procedure.length === 0) {
             endNode.procedure = [{type: 13, ID: '',
             parent: undefined,
@@ -123,6 +134,8 @@ function checkEndReturn(file) {
             selectGeom: false,
             hasError: false}];
         }
+
+        // add a return procedure if there is none before
         if (endNode.procedure[endNode.procedure.length - 1].type !== 11) {
             const returnMeta = _parameterTypes.return.split('.');
             for (const i of ModuleList) {

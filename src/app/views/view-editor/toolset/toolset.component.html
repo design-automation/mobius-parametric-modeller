@@ -183,7 +183,7 @@
                     <div class = "divider--in"></div>
                 </div>
     
-                <button id='inlineExpr' class="accordion inline--cat"  (click)='toggleAccordion("inlineExpr", true)'>Expressions</button>
+                <!-- <button id='inlineExpr' class="accordion inline--cat"  (click)='toggleAccordion("inlineExpr", true)'>Expressions</button>
                 <div class="panel">
                     <button id='inlineQueryExpr' class="accordion" (click)='toggleAccordion("inlineQueryExpr", true)'>Inline Query Expr</button>
                     <div class="panel">
@@ -191,11 +191,7 @@
                             <li *ngFor='let expr of inlineQueryExpr' (click)='add_inline(expr[0])' title='{{expr[1]}}'>
                                 {{expr[0]}}
                             </li>
-                            <!-- <li *ngFor='let expr of inlineQueryExpr' (click)='add_inline(expr)' title='{{expr}}'>
-                                {{expr}}
-                            </li> -->
                         </ul>
-                        <!--Divider-->
                         <div class = "divider--in"></div>
                     </div>
                     <button id='inlineSortExpr' class="accordion" (click)='toggleAccordion("inlineSortExpr", true)'>Inline Sort Expr</button>
@@ -204,14 +200,10 @@
                             <li *ngFor='let expr of inlineSortExpr' (click)='add_inline(expr[0])' title='{{expr[1]}}'>
                                 {{expr[0]}}
                             </li>
-                            <!-- <li *ngFor='let expr of inlineSortExpr' (click)='add_inline(expr)' title='{{expr}}'>
-                                {{expr}}
-                            </li> -->
                         </ul>
-                        <!--Divider-->
                         <div class = "divider--in"></div>
                     </div>
-                </div>
+                </div> -->
     
     
                 <button id='inlineFunc' class="accordion inline--cat" (click)='toggleAccordion("inlineFunc", true)'>Functions</button>

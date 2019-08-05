@@ -32,12 +32,21 @@ export enum _EIODataFormat {
     GEOJSON = 'geojson'
 }
 export enum _EIODataSource {
-    DEFAULT = 'default',
-    FILESYS = 'from file system'
+    DEFAULT = 'From URL',
+    FILESYS = 'From Local Storage'
 }
 export enum _EIODataTarget {
-    DEFAULT = 'download file',
-    FILESYS = 'save to file system'
+    DEFAULT = 'Save to Hard Disk',
+    FILESYS = 'Save to Local Storage'
+}
+/**
+ * Retrieve data from the chrome local file system.
+ *
+ * @param data The data to be read (from URL or from Local Storage).
+ * @returns the data.
+ */
+export function ReadData(__model__: GIModel, data: string): string {
+    return data;
 }
 /**
  * Writes data into chrome local file system.
@@ -52,15 +61,6 @@ export function WriteData(__model__: GIModel, model_data: string, file_name: str
     } catch (ex) {
         return false;
     }
-}
-/**
- * Retrieve data from the chrome local file system.
- *
- * @param data_name The name to be saved in the file system (file extension should be included).
- * @returns the data.
- */
-export function ReadData(__model__: GIModel, data_name: string): string {
-    return data_name;
 }
 /**
  * Imports data into the model.

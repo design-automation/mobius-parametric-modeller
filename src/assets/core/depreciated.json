@@ -180,7 +180,7 @@
             "name": "ExportData",
             "module": "util",
             "values": {
-                "data_target": "'download file'"
+                "data_target": "'Save to Hard Disk'"
             }
         }
     }

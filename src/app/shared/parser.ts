@@ -3,7 +3,7 @@ import { IProcedure, ProcedureTypes } from '@models/procedure';
 import { IArgument } from '@models/code';
 import { INode } from '@models/node';
 import { InputType } from '@models/port';
-import { _parameterTypes } from '@modules';
+import { _parameterTypes } from '@assets/core/_parameterTypes';
 
 enum strType {
     NUM,

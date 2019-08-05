@@ -1,4 +1,4 @@
-import {__new__, __merge__} from './_model';
+import {__new__, __merge__} from './modules/_model';
 
 export const _parameterTypes = {
     constList: '__constList__',

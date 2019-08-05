@@ -11,9 +11,10 @@
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TQuery, EEntType, ESort, TEntTypeIdx,
-    EAttribPush, TAttribDataTypes, EEntTypeStr} from '@libs/geo-info/common';
+    EAttribPush, TAttribDataTypes, EEntTypeStr, EAttribDataTypeStrs} from '@libs/geo-info/common';
 import { idsMake, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
-import { checkIDs, IDcheckObj, checkCommTypes, TypeCheckObj, checkAttribValue, checkAttribName } from './_check_args';
+import { checkIDs, IDcheckObj, checkCommTypes, TypeCheckObj, checkAttribValue, checkAttribName, checkEntTypeSel } from './_check_args';
+import { GIAttribMap } from '@assets/libs/geo-info/GIAttribMap';
 
 // ================================================================================================
 export enum _EEntTypeSel {
@@ -26,59 +27,6 @@ export enum _EEntTypeSel {
     PLINE =  'pl',
     PGON =   'pg',
     COLL =   'co'
-    // ,
-    // OBJS =   'objects',
-    // TOPOS =  'topologies',
-    // ALL =    'all'
-}
-function _convertEntTypeSel(Sel: _EEntTypeSel): EEntType|EEntType[] {
-    switch (Sel) {
-        case _EEntTypeSel.POSI:
-            return EEntType.POSI;
-        case _EEntTypeSel.VERT:
-            return EEntType.VERT;
-        case _EEntTypeSel.EDGE:
-            return EEntType.EDGE;
-        case _EEntTypeSel.WIRE:
-            return EEntType.WIRE;
-        case _EEntTypeSel.FACE:
-            return EEntType.FACE;
-        case _EEntTypeSel.POINT:
-            return EEntType.POINT;
-        case _EEntTypeSel.PLINE:
-            return EEntType.PLINE;
-        case _EEntTypeSel.PGON:
-            return EEntType.PGON;
-        case _EEntTypeSel.COLL:
-            return EEntType.COLL;
-        // case _EEntTypeEnum.OBJS:
-        //     return [
-        //         EEntType.POINT,
-        //         EEntType.PLINE,
-        //         EEntType.PGON
-        //     ];
-        // case _EEntTypeEnum.TOPOS:
-        //     return [
-        //         EEntType.VERT,
-        //         EEntType.EDGE,
-        //         EEntType.WIRE,
-        //         EEntType.FACE
-        //     ];
-        // case _EEntTypeEnum.ALL:
-        //     return [
-        //         EEntType.POSI,
-        //         EEntType.VERT,
-        //         EEntType.EDGE,
-        //         EEntType.WIRE,
-        //         EEntType.FACE,
-        //         EEntType.POINT,
-        //         EEntType.PLINE,
-        //         EEntType.PGON,
-        //         EEntType.COLL
-        //     ];
-        default:
-            throw new Error('Entity type not recognised.');
-    }
 }
 // ================================================================================================
 // ================================================================================================
@@ -95,6 +43,18 @@ function _convertEntTypeSel(Sel: _EEntTypeSel): EEntType|EEntType[] {
  */
 export function Add(__model__: GIModel, ent_type_sel: _EEntTypeSel, name: string, template: TAttribDataTypes): boolean {
     console.log('calling add attrib');
+    // --- Error Check ---
+    const fn_name = 'attrib.Add';
+    const arg_name = 'ent_type_sel';
+    const ent_type: EEntType = checkEntTypeSel(fn_name, arg_name, ent_type_sel);
+    checkAttribName(fn_name , name);
+    // --- Error Check ---
+    const data_type: EAttribDataTypeStrs = null;
+    const data_size: number = null;
+    const attrib_map: GIAttribMap = __model__.attribs.add.addAttrib(ent_type, name, data_type, data_size);
+    if (attrib_map === null || attrib_map === undefined) {
+        return false;
+    }
     return true;
 }
 // ================================================================================================
@@ -132,7 +92,7 @@ export function Rename(__model__: GIModel, ent_type_sel: _EEntTypeSel, old_name:
 /**
  * Set an attribute value for one or more entities.
  * ~
- * If entities is null, then attributes will be created at the model level.
+ * If entities is null, then model level attributes will be set.
  * ~
  * @param __model__
  * @param entities Entities, the entities to set the attribute value for.
@@ -147,7 +107,7 @@ export function Set(__model__: GIModel, entities: TId|TId[]|TId[][],
     // @ts-ignore
     if (entities !== null && getArrDepth(entities) === 2) { entities = __.flatten(entities); }
     // --- Error Check ---
-    const fn_name = 'entities@' + name;
+    const fn_name = 'attrib.Set';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
     if (entities !== null && entities !== undefined) {
         ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
@@ -252,6 +212,8 @@ function _setAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
 /**
  * Get attribute values for one or more entities.
  * ~
+ * If entities is null, then model level attributes will be returned.
+ * ~
  * @param __model__
  * @param entities Entities, the entities to get the attribute values for.
  * @param name The attribute name.
@@ -267,7 +229,8 @@ export function Get(__model__: GIModel, entities: TId|TId[]|TId[][],
     if (entities !== null && entities !== undefined) {
         ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
     }
-    checkCommTypes(fn_name, 'name', name, [TypeCheckObj.isString]);
+    checkAttribName(fn_name, name);
+    // checkCommTypes(fn_name, 'name', name, [TypeCheckObj.isString]);
     if (index !== null && index !== undefined) {
         checkCommTypes(fn_name, 'index', index, [TypeCheckObj.isNumber]);
     }

@@ -166,8 +166,8 @@
                 <div class="panel" [class.opened] = 'true' *ngIf='searchedInlines.length > 0'>
                     <ul class='toolset__functions--subset inline_set'>
                         <ng-container *ngFor='let fnString of searchedInlines'>
-                            <li (click)='add_inline(fnString)'>
-                                {{fnString}}
+                            <li (click)='add_inline(fnString[0])' title='{{fnString[1]}}'>
+                                {{fnString[0]}}
                             </li>
                         </ng-container>
                     </ul>

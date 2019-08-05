@@ -483,20 +483,20 @@ export class ToolsetComponent implements OnInit {
             if (cnst.type !== ProcedureTypes.Constant) { continue; }
             const cnstString = cnst.args[cnst.argCount - 2].value;
             if (cnstString.toLowerCase().indexOf(str) !== -1) {
-                this.searchedInlines.push(cnstString);
+                this.searchedInlines.push([cnstString, `Global Variable ${cnstString}`]);
             }
         }
-        for (const expr of this.inlineQueryExpr) {
-            if (this.searchedInlines.length >= 10) { break; }
-            if (expr[0].toLowerCase().indexOf(str) !== -1) {
-                this.searchedInlines.push(expr);
-            }
-        }
+        // for (const expr of this.inlineQueryExpr) {
+        //     if (this.searchedInlines.length >= 10) { break; }
+        //     if (expr[0].toLowerCase().indexOf(str) !== -1) {
+        //         this.searchedInlines.push([expr, '']);
+        //     }
+        // }
         for (const category of this.inlineFunc) {
             for (const funcString of category[1]) {
                 if (this.searchedInlines.length >= 10) { break; }
                 if (funcString[0].toLowerCase().indexOf(str) !== -1) {
-                    this.searchedInlines.push(funcString[0]);
+                    this.searchedInlines.push(funcString);
                 }
             }
             if (this.searchedInlines.length >= 10) { break; }

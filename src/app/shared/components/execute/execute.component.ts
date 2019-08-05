@@ -5,7 +5,6 @@ import { INode } from '@models/node';
 import { IProcedure, ProcedureTypes } from '@models/procedure';
 
 import * as Modules from '@modules';
-import { _parameterTypes, _varString } from '@modules';
 import { DataService } from '@services';
 // import { WebWorkerService } from 'ngx-web-worker';
 import { InputType } from '@models/port';
@@ -13,6 +12,7 @@ import { GoogleAnalyticsService } from '@shared/services/google.analytics';
 import { Router } from '@angular/router';
 import { DataOutputService } from '@shared/services/dataOutput.service';
 import { SaveFileComponent } from '@shared/components/file';
+import { _parameterTypes, _varString } from '@assets/core/_parameterTypes';
 
 export const mergeInputsFunc = `
 function mergeInputs(models){

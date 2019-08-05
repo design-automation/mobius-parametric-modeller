@@ -4,7 +4,7 @@ import * as funcs from '@modules';
 import * as depreciated from '@assets/core/depreciated.json';
 
 import * as circularJSON from 'circular-json';
-import { _parameterTypes } from '@modules';
+import { _parameterTypes } from '@assets/core/_parameterTypes';
 
 
 export function checkMobFile(file: any) {

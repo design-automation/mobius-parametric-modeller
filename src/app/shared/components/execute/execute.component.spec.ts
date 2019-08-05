@@ -7,10 +7,11 @@ import { MatIconModule } from '@angular/material';
 import { GoogleAnalyticsService } from '@shared/services/google.analytics';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { FlowchartUtils } from '@models/flowchart';
-import { _model, _parameterTypes } from '@modules';
+import { _model } from '@modules';
 import * as galleryUrl from '@assets/gallery/__config__.json';
 import * as testUrl from '@assets/unit_tests/unit_test.json';
 import { DataOutputService } from '@shared/services/dataOutput.service';
+import { _parameterTypes } from '@assets/core/_parameterTypes';
 
 describe('Execute Component test', () => {
     let loadURLfixture:   ComponentFixture<LoadUrlComponent>;

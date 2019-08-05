@@ -3,7 +3,7 @@ import { Component, Input, Output,  EventEmitter, OnDestroy} from '@angular/core
 import { IProcedure, ProcedureTypes } from '@models/procedure';
 import { ModuleDocList } from '@shared/decorators';
 
-import { _parameterTypes} from '@modules';
+import { _parameterTypes } from '@assets/core/_parameterTypes';
 
 import { inline_func } from '@assets/core/inline/inline';
 import * as Modules from '@modules';

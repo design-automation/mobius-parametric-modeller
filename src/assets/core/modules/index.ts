@@ -83,4 +83,4 @@ export {_util};
 import * as _Output from './_output';
 export {_Output};
 
-export * from './_parameterTypes';
+export * from '../_parameterTypes';

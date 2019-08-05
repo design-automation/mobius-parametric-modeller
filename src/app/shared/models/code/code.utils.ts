@@ -4,7 +4,7 @@ import { IPortInput, InputType } from '@models/port';
 import { pythonicReplace } from '@shared/parser';
 import { Observable } from 'rxjs';
 import * as circularJSON from 'circular-json';
-import { _parameterTypes } from '@modules';
+import { _parameterTypes } from '@assets/core/_parameterTypes';
 
 let _terminateCheck: string;
 

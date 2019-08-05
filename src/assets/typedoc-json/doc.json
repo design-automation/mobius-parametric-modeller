@@ -12,7 +12,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/_calc.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/_calc.ts",
 			"children": [
 				{
 					"id": 3103,
@@ -111,7 +111,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/_check_args.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/_check_args.ts",
 			"children": [
 				{
 					"id": 1592,
@@ -3704,7 +3704,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/_colours.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/_colours.ts",
 			"children": [
 				{
 					"id": 3186,
@@ -3831,7 +3831,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/_constants.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/_constants.ts",
 			"children": [
 				{
 					"id": 3200,
@@ -3850,8 +3850,60 @@
 						}
 					],
 					"type": {
-						"type": "intrinsic",
-						"name": "Object"
+						"type": "tuple",
+						"elements": [
+							{
+								"type": "tuple",
+								"elements": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								]
+							},
+							{
+								"type": "tuple",
+								"elements": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								]
+							},
+							{
+								"type": "tuple",
+								"elements": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								]
+							}
+						]
 					},
 					"defaultValue": " XYPLANE"
 				},
@@ -3872,8 +3924,60 @@
 						}
 					],
 					"type": {
-						"type": "intrinsic",
-						"name": "Object"
+						"type": "tuple",
+						"elements": [
+							{
+								"type": "tuple",
+								"elements": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								]
+							},
+							{
+								"type": "tuple",
+								"elements": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								]
+							},
+							{
+								"type": "tuple",
+								"elements": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								]
+							}
+						]
 					},
 					"defaultValue": " XZPLANE"
 				},
@@ -3894,8 +3998,60 @@
 						}
 					],
 					"type": {
-						"type": "intrinsic",
-						"name": "Object"
+						"type": "tuple",
+						"elements": [
+							{
+								"type": "tuple",
+								"elements": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								]
+							},
+							{
+								"type": "tuple",
+								"elements": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								]
+							},
+							{
+								"type": "tuple",
+								"elements": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								]
+							}
+						]
 					},
 					"defaultValue": " YXPLANE"
 				},
@@ -3916,8 +4072,60 @@
 						}
 					],
 					"type": {
-						"type": "intrinsic",
-						"name": "Object"
+						"type": "tuple",
+						"elements": [
+							{
+								"type": "tuple",
+								"elements": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								]
+							},
+							{
+								"type": "tuple",
+								"elements": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								]
+							},
+							{
+								"type": "tuple",
+								"elements": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								]
+							}
+						]
 					},
 					"defaultValue": " YZPLANE"
 				},
@@ -3938,8 +4146,60 @@
 						}
 					],
 					"type": {
-						"type": "intrinsic",
-						"name": "Object"
+						"type": "tuple",
+						"elements": [
+							{
+								"type": "tuple",
+								"elements": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								]
+							},
+							{
+								"type": "tuple",
+								"elements": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								]
+							},
+							{
+								"type": "tuple",
+								"elements": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								]
+							}
+						]
 					},
 					"defaultValue": " ZXPLANE"
 				},
@@ -3960,8 +4220,60 @@
 						}
 					],
 					"type": {
-						"type": "intrinsic",
-						"name": "Object"
+						"type": "tuple",
+						"elements": [
+							{
+								"type": "tuple",
+								"elements": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								]
+							},
+							{
+								"type": "tuple",
+								"elements": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								]
+							},
+							{
+								"type": "tuple",
+								"elements": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								]
+							}
+						]
 					},
 					"defaultValue": " ZYPLANE"
 				}
@@ -3996,7 +4308,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/_conversion.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/_conversion.ts",
 			"children": [
 				{
 					"id": 3196,
@@ -4109,7 +4421,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/_list.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/_list.ts",
 			"children": [
 				{
 					"id": 3110,
@@ -5143,7 +5455,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/_mathjs.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/_mathjs.ts",
 			"children": [
 				{
 					"id": 1256,
@@ -5653,7 +5965,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/_model.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/_model.ts",
 			"children": [
 				{
 					"id": 1919,
@@ -6959,7 +7271,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/_output.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/_output.ts",
 			"children": [
 				{
 					"id": 3213,
@@ -7057,7 +7369,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/_parameterTypes.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/_parameterTypes.ts",
 			"children": [
 				{
 					"id": 3238,
@@ -7568,7 +7880,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/_rand.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/_rand.ts",
 			"children": [
 				{
 					"id": 3069,
@@ -7903,7 +8215,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/_set.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/_set.ts",
 			"children": [
 				{
 					"id": 3181,
@@ -8168,7 +8480,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/_util.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/_util.ts",
 			"children": [
 				{
 					"id": 3207,
@@ -8260,7 +8572,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/_vec.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/_vec.ts",
 			"children": [
 				{
 					"id": 3074,
@@ -8623,7 +8935,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/attrib.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/attrib.ts",
 			"comment": {
 				"shortText": "The `attrib` module has functions for working with attributes in teh model.\nNote that attributes can also be set and retrieved using the \"@\" symbol.\n~\n~"
 			},
@@ -9854,7 +10166,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/calc.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/calc.ts",
 			"comment": {
 				"shortText": "The `calc` module has functions for performing various types of calculations with entities in the model.\nThese functions neither make nor modify anything in the model.\nThese functions all return either numbers or lists of numbers."
 			},
@@ -11152,8 +11464,21 @@
 								}
 							],
 							"type": {
-								"type": "intrinsic",
-								"name": "Object"
+								"type": "tuple",
+								"elements": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								]
 							}
 						}
 					],
@@ -11211,7 +11536,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/index.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/index.ts",
 			"sources": [
 				{
 					"fileName": "core/modules/index.ts",
@@ -11228,7 +11553,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/isect.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/isect.ts",
 			"comment": {
 				"shortText": "The `isect` module has functions for performing intersections between entities in the model.\nThese functions may make new entities, and may modify existing entities, depending on the function that is selected.\nIf new entities are created, then the function will return the IDs of those entities."
 			},
@@ -11645,7 +11970,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/list.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/list.ts",
 			"comment": {
 				"shortText": "The `list` module has functions for working with lists of items.\nThese functions have no direct link with the model, the are generic functions for manipulating lists.\nThe functions are often used when manipulating lists of IDs of entities in the model.\nThese functions neither make nor modify anything in the model.\nIn addition to these functions, there are also various inline functions available for working with lists."
 			},
@@ -14120,7 +14445,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/make.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/make.ts",
 			"comment": {
 				"shortText": "The `make` module has functions for making new entities in the model.\nAll these functions return the IDs of the entities that are created."
 			},
@@ -18681,7 +19006,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/modify.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/modify.ts",
 			"comment": {
 				"shortText": "The `modify` module has functions for modifying existing entities in the model.\nThese functions do not make any new entities, but they may change attribute values.\nAll these functions all return void."
 			},
@@ -20629,7 +20954,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/pattern.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/pattern.ts",
 			"comment": {
 				"shortText": "The `pattern` module has functions for creating patters of positions in the model.\nAll these functions all return lists of position IDs.\nThe list may be nested, depending on which function is selected."
 			},
@@ -21213,7 +21538,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/query.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/query.ts",
 			"comment": {
 				"shortText": "The `query` module has functions for querying entities in the the model.\nMost of these functions all return a list of IDs of entities in the model.\n~\n~"
 			},
@@ -24392,7 +24717,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/render.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/render.ts",
 			"comment": {
 				"shortText": "The `render` module has functions for defining various settings for the 3D viewer.\nColor is saved as vertex attributes, materials as polygon attributes.\nThe material definitions are saved as attributes at the model level.\nMore advanced materials can be created.\nFor more informtion, see the threejs docs: https://threejs.org/"
 			},
@@ -25775,7 +26100,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/util.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/util.ts",
 			"comment": {
 				"shortText": "The `util` module has functions for importing data into the model and\nexporting data out of the model."
 			},
@@ -27264,7 +27589,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/core/modules/virtual.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/virtual.ts",
 			"comment": {
 				"shortText": "The `virtual` module has functions for creating virtual geometric constructs.\nThey are called 'virtual' due to the fact that they are not saved in the model.\nCurrently there are two types of virtual constructs: planes and rays.\nMost of these functions neither make nor modify anything in the model.\nThe exception is the `Vis` functions, that generate some polylines and polygons in the model\nto aid with visualizing these virtual constructs."
 			},
@@ -28763,7 +29088,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/filesys/download.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/filesys/download.ts",
 			"children": [
 				{
 					"id": 2746,
@@ -28853,7 +29178,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIAttribMap.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIAttribMap.ts",
 			"children": [
 				{
 					"id": 18,
@@ -30032,9 +30357,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -30091,9 +30416,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -30126,9 +30451,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -30160,9 +30485,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -30195,9 +30520,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -30288,9 +30613,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -30361,9 +30686,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -30415,9 +30740,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -30465,9 +30790,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -30518,9 +30843,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -30571,9 +30896,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -30605,9 +30930,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -30652,9 +30977,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -30700,9 +31025,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -30797,9 +31122,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -30895,9 +31220,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -30988,9 +31313,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -31062,9 +31387,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -31213,7 +31538,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIAttribs.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIAttribs.ts",
 			"children": [
 				{
 					"id": 1377,
@@ -31311,9 +31636,9 @@
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"sources": [
 								{
@@ -31334,9 +31659,9 @@
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"sources": [
 								{
@@ -31357,9 +31682,9 @@
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"sources": [
 								{
@@ -31380,9 +31705,9 @@
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"sources": [
 								{
@@ -31529,9 +31854,9 @@
 							"kind": 2097152,
 							"kindString": "Object literal",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"children": [
 								{
@@ -31556,12 +31881,11 @@
 										"typeArguments": [
 											{
 												"type": "intrinsic",
-												"name": "string"
+												"name": "any"
 											},
 											{
-												"type": "reference",
-												"name": "GIAttribMap",
-												"id": 18
+												"type": "intrinsic",
+												"name": "any"
 											}
 										]
 									},
@@ -31589,12 +31913,11 @@
 										"typeArguments": [
 											{
 												"type": "intrinsic",
-												"name": "string"
+												"name": "any"
 											},
 											{
-												"type": "reference",
-												"name": "GIAttribMap",
-												"id": 18
+												"type": "intrinsic",
+												"name": "any"
 											}
 										]
 									},
@@ -31622,12 +31945,11 @@
 										"typeArguments": [
 											{
 												"type": "intrinsic",
-												"name": "string"
+												"name": "any"
 											},
 											{
-												"type": "reference",
-												"name": "GIAttribMap",
-												"id": 18
+												"type": "intrinsic",
+												"name": "any"
 											}
 										]
 									},
@@ -31655,12 +31977,11 @@
 										"typeArguments": [
 											{
 												"type": "intrinsic",
-												"name": "string"
+												"name": "any"
 											},
 											{
-												"type": "reference",
-												"name": "GIAttribMap",
-												"id": 18
+												"type": "intrinsic",
+												"name": "any"
 											}
 										]
 									},
@@ -31688,12 +32009,11 @@
 										"typeArguments": [
 											{
 												"type": "intrinsic",
-												"name": "string"
+												"name": "any"
 											},
 											{
-												"type": "reference",
-												"name": "GIAttribMap",
-												"id": 18
+												"type": "intrinsic",
+												"name": "any"
 											}
 										]
 									},
@@ -31721,7 +32041,7 @@
 										"typeArguments": [
 											{
 												"type": "intrinsic",
-												"name": "string"
+												"name": "any"
 											},
 											{
 												"type": "intrinsic",
@@ -31753,12 +32073,11 @@
 										"typeArguments": [
 											{
 												"type": "intrinsic",
-												"name": "string"
+												"name": "any"
 											},
 											{
-												"type": "reference",
-												"name": "GIAttribMap",
-												"id": 18
+												"type": "intrinsic",
+												"name": "any"
 											}
 										]
 									},
@@ -31786,12 +32105,11 @@
 										"typeArguments": [
 											{
 												"type": "intrinsic",
-												"name": "string"
+												"name": "any"
 											},
 											{
-												"type": "reference",
-												"name": "GIAttribMap",
-												"id": 18
+												"type": "intrinsic",
+												"name": "any"
 											}
 										]
 									},
@@ -31819,12 +32137,11 @@
 										"typeArguments": [
 											{
 												"type": "intrinsic",
-												"name": "string"
+												"name": "any"
 											},
 											{
-												"type": "reference",
-												"name": "GIAttribMap",
-												"id": 18
+												"type": "intrinsic",
+												"name": "any"
 											}
 										]
 									},
@@ -31852,12 +32169,11 @@
 										"typeArguments": [
 											{
 												"type": "intrinsic",
-												"name": "string"
+												"name": "any"
 											},
 											{
-												"type": "reference",
-												"name": "GIAttribMap",
-												"id": 18
+												"type": "intrinsic",
+												"name": "any"
 											}
 										]
 									},
@@ -32013,7 +32329,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIAttribsAdd.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIAttribsAdd.ts",
 			"children": [
 				{
 					"id": 1147,
@@ -32279,9 +32595,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -32374,9 +32690,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -32445,9 +32761,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -32517,9 +32833,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -32577,9 +32893,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -32674,9 +32990,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -32791,9 +33107,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -32889,9 +33205,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -32971,9 +33287,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -33034,9 +33350,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -33094,9 +33410,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -33244,7 +33560,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIAttribsIO.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIAttribsIO.ts",
 			"children": [
 				{
 					"id": 1347,
@@ -33608,9 +33924,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -33643,9 +33959,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -33691,9 +34007,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -33799,7 +34115,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIAttribsQuery.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIAttribsQuery.ts",
 			"children": [
 				{
 					"id": 1278,
@@ -33932,9 +34248,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -34054,9 +34370,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -34118,9 +34434,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -34181,9 +34497,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -34245,9 +34561,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -34339,9 +34655,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -34393,9 +34709,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -34493,9 +34809,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -34563,9 +34879,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -34614,9 +34930,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -34665,9 +34981,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -34716,9 +35032,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -34779,9 +35095,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -34829,9 +35145,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -35003,7 +35319,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIAttribsThreejs.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIAttribsThreejs.ts",
 			"children": [
 				{
 					"id": 1225,
@@ -35136,9 +35452,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -35192,9 +35508,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -35246,9 +35562,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -35302,9 +35618,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -35422,9 +35738,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -35493,9 +35809,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -35549,9 +35865,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -35644,7 +35960,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIGeom.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIGeom.ts",
 			"children": [
 				{
 					"id": 1090,
@@ -35719,9 +36035,9 @@
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"sources": [
 								{
@@ -35742,9 +36058,9 @@
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"sources": [
 								{
@@ -35765,9 +36081,9 @@
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"sources": [
 								{
@@ -35788,9 +36104,9 @@
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"sources": [
 								{
@@ -35811,9 +36127,9 @@
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"sources": [
 								{
@@ -35834,9 +36150,9 @@
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"sources": [
 								{
@@ -35860,9 +36176,9 @@
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"sources": [
 								{
@@ -36124,9 +36440,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -36287,9 +36603,9 @@
 							"kind": 2097152,
 							"kindString": "Object literal",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"children": [
 								{
@@ -36939,7 +37255,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIGeomAdd.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIGeomAdd.ts",
 			"children": [
 				{
 					"id": 525,
@@ -37069,9 +37385,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -37131,9 +37447,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -37181,9 +37497,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -37245,9 +37561,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -37279,9 +37595,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -37348,9 +37664,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -37398,9 +37714,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -37463,9 +37779,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -37558,9 +37874,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -37627,9 +37943,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -37692,9 +38008,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -37742,9 +38058,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -37776,9 +38092,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -37861,9 +38177,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -37946,9 +38262,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -38031,9 +38347,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -38116,9 +38432,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -38272,7 +38588,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIGeomIO.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIGeomIO.ts",
 			"children": [
 				{
 					"id": 1074,
@@ -38402,9 +38718,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -38437,9 +38753,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -38488,9 +38804,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -38596,7 +38912,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIGeomModify.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIGeomModify.ts",
 			"children": [
 				{
 					"id": 686,
@@ -39277,9 +39593,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -39349,9 +39665,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -39399,9 +39715,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -39494,9 +39810,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -39589,9 +39905,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -39656,9 +39972,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -39729,9 +40045,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -39802,9 +40118,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -39875,9 +40191,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -39948,9 +40264,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -40010,9 +40326,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -40072,9 +40388,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -40133,9 +40449,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -40183,9 +40499,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -40261,9 +40577,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -40308,9 +40624,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -40372,9 +40688,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -40430,9 +40746,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -40486,9 +40802,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -40623,7 +40939,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIGeomQuery.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIGeomQuery.ts",
 			"children": [
 				{
 					"id": 869,
@@ -40753,9 +41069,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -40816,9 +41132,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -40877,9 +41193,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -40927,9 +41243,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -40971,9 +41287,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -41036,9 +41352,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -41084,9 +41400,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -41135,9 +41451,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -41184,9 +41500,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -41234,9 +41550,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -41336,9 +41652,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -41386,9 +41702,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -41463,9 +41779,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -41529,9 +41845,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -41595,9 +41911,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -41661,9 +41977,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -41727,9 +42043,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -41793,9 +42109,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -41859,9 +42175,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -41925,9 +42241,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -41991,9 +42307,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42057,9 +42373,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42123,9 +42439,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42167,9 +42483,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42214,9 +42530,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42261,9 +42577,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42308,9 +42624,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42355,9 +42671,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42399,9 +42715,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42443,9 +42759,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42490,9 +42806,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42537,9 +42853,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42584,9 +42900,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42628,9 +42944,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42675,9 +42991,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42719,9 +43035,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42766,9 +43082,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42810,9 +43126,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42857,9 +43173,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42901,9 +43217,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42948,9 +43264,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -42995,9 +43311,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -43039,9 +43355,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -43083,9 +43399,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -43130,9 +43446,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -43177,9 +43493,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -43221,9 +43537,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -43265,9 +43581,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -43334,9 +43650,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -43396,9 +43712,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -43569,7 +43885,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIGeomThreejs.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIGeomThreejs.ts",
 			"children": [
 				{
 					"id": 1048,
@@ -43839,9 +44155,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -43918,9 +44234,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -43997,9 +44313,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -44062,7 +44378,7 @@
 												"type": "array",
 												"elementType": {
 													"type": "intrinsic",
-													"name": "any"
+													"name": "object"
 												}
 											},
 											{
@@ -44103,9 +44419,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -44198,7 +44514,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIModel.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIModel.ts",
 			"children": [
 				{
 					"id": 1435,
@@ -44212,33 +44528,35 @@
 					"comment": {
 						"shortText": "Geo-info model class."
 					},
-					"indexSignature": {
-						"id": 1436,
-						"name": "__index",
-						"kind": 8192,
-						"kindString": "Index signature",
-						"flags": {},
-						"comment": {
-							"shortText": "Geo-info model class."
-						},
-						"parameters": [
-							{
-								"id": 1437,
-								"name": "x",
-								"kind": 32768,
-								"kindString": "Parameter",
-								"flags": {},
-								"type": {
-									"type": "intrinsic",
-									"name": "string"
+					"indexSignature": [
+						{
+							"id": 1436,
+							"name": "__index",
+							"kind": 8192,
+							"kindString": "Index signature",
+							"flags": {},
+							"comment": {
+								"shortText": "Geo-info model class."
+							},
+							"parameters": [
+								{
+									"id": 1437,
+									"name": "x",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
 								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "any"
 							}
-						],
-						"type": {
-							"type": "intrinsic",
-							"name": "any"
 						}
-					},
+					],
 					"children": [
 						{
 							"id": 1441,
@@ -44302,9 +44620,9 @@
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"sources": [
 								{
@@ -44325,9 +44643,9 @@
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"sources": [
 								{
@@ -44348,9 +44666,9 @@
 							"kind": 1024,
 							"kindString": "Property",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"sources": [
 								{
@@ -44371,9 +44689,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -44408,9 +44726,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -44524,9 +44842,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -44559,9 +44877,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -44607,9 +44925,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -44718,7 +45036,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIModelThreejs.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/GIModelThreejs.ts",
 			"children": [
 				{
 					"id": 1425,
@@ -44853,9 +45171,9 @@
 							"kind": 2048,
 							"kindString": "Method",
 							"flags": {
+								"isPublic": true,
 								"isExported": true,
-								"isExternal": true,
-								"isPublic": true
+								"isExternal": true
 							},
 							"signatures": [
 								{
@@ -44942,7 +45260,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geo-info/ThreejsJSON.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/ThreejsJSON.ts",
 			"children": [
 				{
 					"id": 1408,
@@ -45090,7 +45408,7 @@
 								"type": "array",
 								"elementType": {
 									"type": "intrinsic",
-									"name": "any"
+									"name": "object"
 								}
 							}
 						},
@@ -45421,7 +45739,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geo-info/common.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/common.ts",
 			"children": [
 				{
 					"id": 255,
@@ -49820,7 +50138,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geo-info/id.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/id.ts",
 			"children": [
 				{
 					"id": 804,
@@ -50953,7 +51271,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geo-info/io_dae.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/io_dae.ts",
 			"children": [
 				{
 					"id": 2678,
@@ -52126,7 +52444,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geo-info/io_geojson.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/io_geojson.ts",
 			"children": [
 				{
 					"id": 2682,
@@ -53167,7 +53485,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geo-info/io_obj.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/io_obj.ts",
 			"children": [
 				{
 					"id": 2597,
@@ -53291,7 +53609,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geom/distance.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geom/distance.ts",
 			"children": [
 				{
 					"id": 1772,
@@ -53529,7 +53847,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geom/intersect.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geom/intersect.ts",
 			"children": [
 				{
 					"id": 3091,
@@ -53801,7 +54119,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geom/matrix.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geom/matrix.ts",
 			"children": [
 				{
 					"id": 2099,
@@ -54677,7 +54995,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geom/triangle.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geom/triangle.ts",
 			"children": [
 				{
 					"id": 503,
@@ -54925,7 +55243,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/geom/vectors.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geom/vectors.ts",
 			"children": [
 				{
 					"id": 596,
@@ -56281,7 +56599,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/triangulate/earcut.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/triangulate/earcut.ts",
 			"children": [
 				{
 					"id": 491,
@@ -58295,7 +58613,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/triangulate/threex.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/triangulate/threex.ts",
 			"children": [
 				{
 					"id": 322,
@@ -58732,7 +59050,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/triangulate/triangulate.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/triangulate/triangulate.ts",
 			"children": [
 				{
 					"id": 517,
@@ -58889,7 +59207,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/util/arrays.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/util/arrays.ts",
 			"children": [
 				{
 					"id": 6,
@@ -59145,7 +59463,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Dropbox/Files/Software/GitHub/design-automation2/mobius-parametric-modeller-dev/src/assets/libs/util/maps.ts",
+			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/util/maps.ts",
 			"children": [
 				{
 					"id": 1221,

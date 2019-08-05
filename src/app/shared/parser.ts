@@ -3,7 +3,7 @@ import { IProcedure, ProcedureTypes } from '@models/procedure';
 import { IArgument } from '@models/code';
 import { INode } from '@models/node';
 import { InputType } from '@models/port';
-import { _parameterTypes } from '@modules';
+import { _parameterTypes } from '@assets/core/_parameterTypes';
 
 enum strType {
     NUM,
@@ -292,7 +292,6 @@ export function parseArgument(str: string): {'error'?: string, 'vars'?: string[]
     let newString = '';
     let jsString = '';
     const check = analyzeComp(comps, 0, vars);
-    console.log(check.jsStr);
     if (check.error) {
         console.log(check.error, '\n', str);
         return check;

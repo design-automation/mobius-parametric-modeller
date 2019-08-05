@@ -1,4 +1,4 @@
-import { EQueryOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, RE_SPACES } from './common';
+import { EFilterOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, RE_SPACES } from './common';
 import { arrRem } from '../util/arrays';
 
 /**
@@ -266,7 +266,7 @@ export class GIAttribMap {
      * @param operator The relational operator, ==, !=, <=, >=, etc
      * @param val_k The string version of the value.
      */
-    public queryVal(ents_i: number[], val_arr_index: number, operator: EQueryOperatorTypes, val_k: string): number[] {
+    public queryVal(ents_i: number[], val_arr_index: number, operator: EFilterOperatorTypes, val_k: string): number[] {
         // check the validity of the arguments
         const indexed = (val_arr_index !== null && val_arr_index !== undefined);
         if (indexed) {
@@ -278,12 +278,12 @@ export class GIAttribMap {
             }
         }
         if (this._data_type === EAttribDataTypeStrs.STRING) {
-            if (operator !== EQueryOperatorTypes.IS_EQUAL && operator !== EQueryOperatorTypes.IS_NOT_EQUAL) {
+            if (operator !== EFilterOperatorTypes.IS_EQUAL && operator !== EFilterOperatorTypes.IS_NOT_EQUAL) {
                 { throw new Error('Query operator "' + operator + '" and query "' + val_k + '" value are incompatible.'); }
             }
         }
         if (val_k === 'null') {
-            if (operator !== EQueryOperatorTypes.IS_EQUAL && operator !== EQueryOperatorTypes.IS_NOT_EQUAL) {
+            if (operator !== EFilterOperatorTypes.IS_EQUAL && operator !== EFilterOperatorTypes.IS_NOT_EQUAL) {
                 { throw new Error('Query operator ' + operator + ' and query "null" value are incompatible.'); }
             }
         }
@@ -309,7 +309,7 @@ export class GIAttribMap {
      * @param operator The relational operator, ==, !=, <=, >=, etc
      * @param search_val The value to search, string or number, or string[] or number[].
      */
-    public queryVal2(ents_i: number[], val_arr_index: number, operator: EQueryOperatorTypes, search_val: TAttribDataTypes): number[] {
+    public queryVal2(ents_i: number[], val_arr_index: number, operator: EFilterOperatorTypes, search_val: TAttribDataTypes): number[] {
         // check the validity of the arguments
         const indexed = (val_arr_index !== null && val_arr_index !== undefined);
         if (indexed) {
@@ -321,12 +321,12 @@ export class GIAttribMap {
             }
         }
         if (this._data_type === EAttribDataTypeStrs.STRING) {
-            if (operator !== EQueryOperatorTypes.IS_EQUAL && operator !== EQueryOperatorTypes.IS_NOT_EQUAL) {
+            if (operator !== EFilterOperatorTypes.IS_EQUAL && operator !== EFilterOperatorTypes.IS_NOT_EQUAL) {
                 { throw new Error('Query operator "' + operator + '" and query "' + search_val + '" value are incompatible.'); }
             }
         }
         if (search_val === null) {
-            if (operator !== EQueryOperatorTypes.IS_EQUAL && operator !== EQueryOperatorTypes.IS_NOT_EQUAL) {
+            if (operator !== EFilterOperatorTypes.IS_EQUAL && operator !== EFilterOperatorTypes.IS_NOT_EQUAL) {
                 { throw new Error('Query operator "' + operator + '" and query "null" value are incompatible.'); }
             }
         }
@@ -427,7 +427,7 @@ export class GIAttribMap {
      * @param val1
      * @param val2
      */
-    private _compare(operator: EQueryOperatorTypes, val1: any, val2: any): boolean {
+    private _compare(operator: EFilterOperatorTypes, val1: any, val2: any): boolean {
         if (Array.isArray(val1)) {
             if (!Array.isArray(val2)) { return false; }
             if (val1.length !== val2.length) { return false; }
@@ -440,22 +440,22 @@ export class GIAttribMap {
         if (val2 === undefined) { val2 = null; }
         switch (operator) {
             // ==
-            case EQueryOperatorTypes.IS_EQUAL:
+            case EFilterOperatorTypes.IS_EQUAL:
                 return val1 === val2;
             // !=
-            case EQueryOperatorTypes.IS_NOT_EQUAL:
+            case EFilterOperatorTypes.IS_NOT_EQUAL:
                 return val1 !== val2;
             // >
-            case EQueryOperatorTypes.IS_GREATER:
+            case EFilterOperatorTypes.IS_GREATER:
                 return val1 > val2;
             // >=
-            case EQueryOperatorTypes.IS_GREATER_OR_EQUAL:
+            case EFilterOperatorTypes.IS_GREATER_OR_EQUAL:
                 return val1 >= val2;
             // <
-            case EQueryOperatorTypes.IS_LESS:
+            case EFilterOperatorTypes.IS_LESS:
                 return val1 < val2;
             // <=
-            case EQueryOperatorTypes.IS_LESS_OR_EQUAL:
+            case EFilterOperatorTypes.IS_LESS_OR_EQUAL:
                 return val1 <= val2;
             default:
                 throw new Error('Query operator not found: ' + operator);
@@ -465,13 +465,13 @@ export class GIAttribMap {
     /**
      * Searches for the value using the operator
      */
-    private _searchNumValue(ents_i: number[], operator: EQueryOperatorTypes, val_k: string): number[] {
+    private _searchNumValue(ents_i: number[], operator: EFilterOperatorTypes, val_k: string): number[] {
         // clean up
         val_k = val_k.replace(RE_SPACES, '');
         // first deal with null cases
-        if (val_k === 'null' && operator === EQueryOperatorTypes.IS_EQUAL ) {
+        if (val_k === 'null' && operator === EFilterOperatorTypes.IS_EQUAL ) {
             return this.getEntsWithoutVal(ents_i);
-        } else if (val_k === 'null' && operator === EQueryOperatorTypes.IS_NOT_EQUAL ) {
+        } else if (val_k === 'null' && operator === EFilterOperatorTypes.IS_NOT_EQUAL ) {
             return this.getEntsWithVal(ents_i);
         }
         // get the values to search for
@@ -482,18 +482,18 @@ export class GIAttribMap {
         // search
         let found_keys: number[];
         switch (operator) {
-            case EQueryOperatorTypes.IS_EQUAL:
+            case EFilterOperatorTypes.IS_EQUAL:
                 found_keys = this.getEntsFromVal(search_val);
                 if (found_keys === undefined) { return []; }
                 return ents_i.filter(ent_i => found_keys.indexOf(ent_i) !== -1);
-            case EQueryOperatorTypes.IS_NOT_EQUAL:
+            case EFilterOperatorTypes.IS_NOT_EQUAL:
                 found_keys = this.getEntsFromVal(search_val);
                 if (found_keys === undefined) { return []; }
                 return ents_i.filter(ent_i => found_keys.indexOf(ent_i) === -1);
-            case EQueryOperatorTypes.IS_GREATER:
-            case EQueryOperatorTypes.IS_GREATER_OR_EQUAL:
-            case EQueryOperatorTypes.IS_LESS:
-            case EQueryOperatorTypes.IS_LESS_OR_EQUAL:
+            case EFilterOperatorTypes.IS_GREATER:
+            case EFilterOperatorTypes.IS_GREATER_OR_EQUAL:
+            case EFilterOperatorTypes.IS_LESS:
+            case EFilterOperatorTypes.IS_LESS_OR_EQUAL:
                 found_keys = [];
                 for (const ent_i of ents_i) {
                     const val: TAttribDataTypes = this.getEntVal(ent_i) as TAttribDataTypes;
@@ -509,11 +509,11 @@ export class GIAttribMap {
     /**
      * Searches for the value using the operator
      */
-    private _searchStrValue(ents_i: number[], operator: EQueryOperatorTypes, val_k: string): number[] {
+    private _searchStrValue(ents_i: number[], operator: EFilterOperatorTypes, val_k: string): number[] {
         // first deal with null cases
-        if (val_k === 'null' && operator === EQueryOperatorTypes.IS_EQUAL ) {
+        if (val_k === 'null' && operator === EFilterOperatorTypes.IS_EQUAL ) {
             return this.getEntsWithoutVal(ents_i);
-        } else if (val_k === 'null' && operator === EQueryOperatorTypes.IS_NOT_EQUAL ) {
+        } else if (val_k === 'null' && operator === EFilterOperatorTypes.IS_NOT_EQUAL ) {
             return this.getEntsWithVal(ents_i);
         }
         // get the values to search for
@@ -521,18 +521,18 @@ export class GIAttribMap {
         // search
         let found_keys: number[];
         switch (operator) {
-            case EQueryOperatorTypes.IS_EQUAL:
+            case EFilterOperatorTypes.IS_EQUAL:
                 found_keys = this.getEntsFromVal(search_val);
                 if (found_keys === undefined) { return []; }
                 return ents_i.filter(ent_i => found_keys.indexOf(ent_i) !== -1);
-            case EQueryOperatorTypes.IS_NOT_EQUAL:
+            case EFilterOperatorTypes.IS_NOT_EQUAL:
                 found_keys = this.getEntsFromVal(search_val);
                 if (found_keys === undefined) { return []; }
                 return ents_i.filter(ent_i => found_keys.indexOf(ent_i) === -1);
-            case EQueryOperatorTypes.IS_GREATER:
-            case EQueryOperatorTypes.IS_GREATER_OR_EQUAL:
-            case EQueryOperatorTypes.IS_LESS:
-            case EQueryOperatorTypes.IS_LESS_OR_EQUAL:
+            case EFilterOperatorTypes.IS_GREATER:
+            case EFilterOperatorTypes.IS_GREATER_OR_EQUAL:
+            case EFilterOperatorTypes.IS_LESS:
+            case EFilterOperatorTypes.IS_LESS_OR_EQUAL:
                 throw new Error('Query error: Operator not allowed with string values.');
             default:
                 throw new Error('Query error: Operator not found.');
@@ -541,7 +541,7 @@ export class GIAttribMap {
     /**
      * Searches for the value using the operator
      */
-    private _searchIndexedNumValue(ents_i: number[], val_arr_index: number, operator: EQueryOperatorTypes, val_k: string): number[] {
+    private _searchIndexedNumValue(ents_i: number[], val_arr_index: number, operator: EFilterOperatorTypes, val_k: string): number[] {
         // clean up
         val_k = val_k.replace(RE_SPACES, '');
         // get the search value, null or a number
@@ -575,7 +575,7 @@ export class GIAttribMap {
     /**
      * Searches for the value using the operator
      */
-    private _searchIndexedStrValue(ents_i: number[], val_arr_index: number, operator: EQueryOperatorTypes, val_k: string): number[] {
+    private _searchIndexedStrValue(ents_i: number[], val_arr_index: number, operator: EFilterOperatorTypes, val_k: string): number[] {
         // clean up
         val_k = val_k.replace(RE_SPACES, '');
         // get the search value, null or a string
@@ -605,28 +605,28 @@ export class GIAttribMap {
     /**
      * Searches for the value using the operator
      */
-    private _searchNumValue2(ents_i: number[], operator: EQueryOperatorTypes, search_val: number|number[]): number[] {
+    private _searchNumValue2(ents_i: number[], operator: EFilterOperatorTypes, search_val: number|number[]): number[] {
         // first deal with null cases
-        if (search_val === null && operator === EQueryOperatorTypes.IS_EQUAL ) {
+        if (search_val === null && operator === EFilterOperatorTypes.IS_EQUAL ) {
             return this.getEntsWithoutVal(ents_i);
-        } else if (search_val === null && operator === EQueryOperatorTypes.IS_NOT_EQUAL ) {
+        } else if (search_val === null && operator === EFilterOperatorTypes.IS_NOT_EQUAL ) {
             return this.getEntsWithVal(ents_i);
         }
         // search
         let found_keys: number[];
         switch (operator) {
-            case EQueryOperatorTypes.IS_EQUAL:
+            case EFilterOperatorTypes.IS_EQUAL:
                 found_keys = this.getEntsFromVal(search_val);
                 if (found_keys === undefined) { return []; }
                 return ents_i.filter(ent_i => found_keys.indexOf(ent_i) !== -1);
-            case EQueryOperatorTypes.IS_NOT_EQUAL:
+            case EFilterOperatorTypes.IS_NOT_EQUAL:
                 found_keys = this.getEntsFromVal(search_val);
                 if (found_keys === undefined) { return []; }
                 return ents_i.filter(ent_i => found_keys.indexOf(ent_i) === -1);
-            case EQueryOperatorTypes.IS_GREATER:
-            case EQueryOperatorTypes.IS_GREATER_OR_EQUAL:
-            case EQueryOperatorTypes.IS_LESS:
-            case EQueryOperatorTypes.IS_LESS_OR_EQUAL:
+            case EFilterOperatorTypes.IS_GREATER:
+            case EFilterOperatorTypes.IS_GREATER_OR_EQUAL:
+            case EFilterOperatorTypes.IS_LESS:
+            case EFilterOperatorTypes.IS_LESS_OR_EQUAL:
                 found_keys = [];
                 for (const ent_i of ents_i) {
                     const val: TAttribDataTypes = this.getEntVal(ent_i) as TAttribDataTypes;
@@ -642,28 +642,28 @@ export class GIAttribMap {
     /**
      * Searches for the value using the operator
      */
-    private _searchStrValue2(ents_i: number[], operator: EQueryOperatorTypes, search_val: string|string[]): number[] {
+    private _searchStrValue2(ents_i: number[], operator: EFilterOperatorTypes, search_val: string|string[]): number[] {
         // first deal with null cases
-        if (search_val === null && operator === EQueryOperatorTypes.IS_EQUAL ) {
+        if (search_val === null && operator === EFilterOperatorTypes.IS_EQUAL ) {
             return this.getEntsWithoutVal(ents_i);
-        } else if (search_val === null && operator === EQueryOperatorTypes.IS_NOT_EQUAL ) {
+        } else if (search_val === null && operator === EFilterOperatorTypes.IS_NOT_EQUAL ) {
             return this.getEntsWithVal(ents_i);
         }
         // search
         let found_keys: number[];
         switch (operator) {
-            case EQueryOperatorTypes.IS_EQUAL:
+            case EFilterOperatorTypes.IS_EQUAL:
                 found_keys = this.getEntsFromVal(search_val);
                 if (found_keys === undefined) { return []; }
                 return ents_i.filter(ent_i => found_keys.indexOf(ent_i) !== -1);
-            case EQueryOperatorTypes.IS_NOT_EQUAL:
+            case EFilterOperatorTypes.IS_NOT_EQUAL:
                 found_keys = this.getEntsFromVal(search_val);
                 if (found_keys === undefined) { return []; }
                 return ents_i.filter(ent_i => found_keys.indexOf(ent_i) === -1);
-            case EQueryOperatorTypes.IS_GREATER:
-            case EQueryOperatorTypes.IS_GREATER_OR_EQUAL:
-            case EQueryOperatorTypes.IS_LESS:
-            case EQueryOperatorTypes.IS_LESS_OR_EQUAL:
+            case EFilterOperatorTypes.IS_GREATER:
+            case EFilterOperatorTypes.IS_GREATER_OR_EQUAL:
+            case EFilterOperatorTypes.IS_LESS:
+            case EFilterOperatorTypes.IS_LESS_OR_EQUAL:
                 throw new Error('Query error: Operator not allowed with string values.');
             default:
                 throw new Error('Query error: Operator not found.');
@@ -672,7 +672,7 @@ export class GIAttribMap {
     /**
      * Searches for the value using the operator
      */
-    private _searchIndexedNumValue2(ents_i: number[], val_arr_index: number, operator: EQueryOperatorTypes, search_val: number): number[] {
+    private _searchIndexedNumValue2(ents_i: number[], val_arr_index: number, operator: EFilterOperatorTypes, search_val: number): number[] {
         // do the search
         const found_keys: number[] = [];
         for (const ent_i of ents_i) {
@@ -694,7 +694,7 @@ export class GIAttribMap {
     /**
      * Searches for the value using the operator
      */
-    private _searchIndexedStrValue2(ents_i: number[], val_arr_index: number, operator: EQueryOperatorTypes, search_val: string): number[] {
+    private _searchIndexedStrValue2(ents_i: number[], val_arr_index: number, operator: EFilterOperatorTypes, search_val: string): number[] {
         // do the search
         const found_keys: number[] = [];
         for (const ent_i of ents_i) {

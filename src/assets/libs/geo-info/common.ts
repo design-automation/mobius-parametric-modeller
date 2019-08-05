@@ -34,62 +34,51 @@ export type TColor = [number, number, number]; // TODO replace with Txyz
 export type TNormal = [number, number, number]; // TODO replace with xyz
 export type TTexture = [number, number];
 
-export interface IExpr {
-    ent_type1: string;
-    attrib_name1?: string;
-    attrib_index1?: number;
-    ent_type2?: string;
-    attrib_name2?: string;
-    attrib_index2?: number;
-    operator?: string;
-    value?: TAttribDataTypes;
-}
+// export interface IExpr {
+//     ent_type1: string;
+//     attrib_name1?: string;
+//     attrib_index1?: number;
+//     ent_type2?: string;
+//     attrib_name2?: string;
+//     attrib_index2?: number;
+//     operator?: string;
+//     value?: TAttribDataTypes;
+// }
 
-export interface IExprQuery {
-    ent_type: EEntType;
-    attrib_name?: string;
-    attrib_index?: number;
-    operator?: EQueryOperatorTypes;
-    value?: TAttribDataTypes;
-}
+// export interface IExprQuery {
+//     ent_type: EEntType;
+//     attrib_name?: string;
+//     attrib_index?: number;
+//     operator?: EFilterOperatorTypes;
+//     value?: TAttribDataTypes;
+// }
 
-export interface IExprSort {
-    ent_type: EEntType;
-    attrib_name: string;
-    attrib_index?: number;
-}
+// export interface IExprSort {
+//     ent_type: EEntType;
+//     attrib_name: string;
+//     attrib_index?: number;
+// }
 
-export interface IExprPush {
-    ent_type1: EEntType;
-    attrib_name1: string;
-    attrib_index1?: number;
-    ent_type2: EEntType;
-    attrib_name2: string;
-    attrib_index2?: number;
-}
+// export interface IExprPush {
+//     ent_type1: EEntType;
+//     attrib_name1: string;
+//     attrib_index1?: number;
+//     ent_type2: EEntType;
+//     attrib_name2: string;
+//     attrib_index2?: number;
+// }
 
-export enum EExprEntType {
-    POSI =   'ps',
-    VERT =   '_v',
-    EDGE =   '_e',
-    WIRE =   '_w',
-    FACE =   '_f',
-    POINT =  'pt',
-    PLINE =  'pl',
-    PGON =   'pg',
-    COLL =   'co'
-}
-
-export enum EExprOperator {
-    IS_EQUAL =              '==',
-    IS_NOT_EQUAL =          '!=',
-    IS_GREATER_OR_EQUAL =   '>=',
-    IS_LESS_OR_EQUAL =      '<=',
-    IS_GREATER =            '>',
-    IS_LESS =               '<',
-    EQUAL =                 '=',
-    PUSH =                  '>>'
-}
+// export enum EExprEntType {
+//     POSI =   'ps',
+//     VERT =   '_v',
+//     EDGE =   '_e',
+//     WIRE =   '_w',
+//     FACE =   '_f',
+//     POINT =  'pt',
+//     PLINE =  'pl',
+//     PGON =   'pg',
+//     COLL =   'co'
+// }
 
 // Types of entities
 export enum EEntType {
@@ -161,9 +150,9 @@ export enum EAttribNames {
 }
 
 /**
- * The types of operators that can be used in a query.
+ * The types of operators that can be used in a filter.
  */
-export enum EQueryOperatorTypes {
+export enum EFilterOperatorTypes {
     IS_EQUAL = '==',
     IS_NOT_EQUAL = '!=',
     IS_GREATER_OR_EQUAL = '>=',
@@ -173,20 +162,20 @@ export enum EQueryOperatorTypes {
     EQUAL = '='
 }
 
-/**
- * A query component.
- * Each query can consist of multiple components.
- * Some examples of queries
- * @name == value
- * @name > value
- * @name[2] <= value
- */
-export interface IQueryComponent {
-    attrib_name: string;
-    attrib_index: number;
-    attrib_value_str: string;
-    operator_type: EQueryOperatorTypes;
-}
+// /**
+//  * A query component.
+//  * Each query can consist of multiple components.
+//  * Some examples of queries
+//  * @name == value
+//  * @name > value
+//  * @name[2] <= value
+//  */
+// export interface IQueryComponent {
+//     attrib_name: string;
+//     attrib_index: number;
+//     attrib_value_str: string;
+//     operator_type: EFilterOperatorTypes;
+// }
 
 /**
  * A sort component.
@@ -201,11 +190,11 @@ export interface ISortComponent {
 }
 
 export enum ESort {
-    'DESCENDING' = 'descending',
-    'ASCENDING' = 'ascending'
+    DESCENDING = 'descending',
+    ASCENDING = 'ascending'
 }
 
-export enum EAttribPromote {
+export enum EAttribPush {
     AVERAGE,
     MEDIAN,
     SUM,

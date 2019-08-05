@@ -751,7 +751,7 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[], i: number, va
             const bracketIndex = result.jsStr.indexOf('.slice(');
             if (bracketIndex !== -1) {
                 jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity},` +
-                           ` '${result.jsStr.slice(0, bracketIndex)}').slice(${result.jsStr.slice(bracketIndex + 7, -4)})[0]`;
+                           ` '${result.jsStr.slice(0, bracketIndex)}', ${result.jsStr.slice(bracketIndex + 7, -4)})`;
             } else {
                 jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${result.str}')`; //////////
             }
@@ -760,8 +760,6 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[], i: number, va
             //     return {'i': i, 'str': newString, 'jsStr': jsString};
             // }
             // i += 1;
-
-            return {'i': i, 'str': newString, 'jsStr': jsString};
         } else if (comps[i].value === '#') {
             if (comps[i + 1].type !== strType.VAR) {
                 return {'error': 'Error: variable expected after "#"'};

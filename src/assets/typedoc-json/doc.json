@@ -157,7 +157,7 @@
 								"type": "intrinsic",
 								"name": "string"
 							},
-							"defaultValue": "\"attrib.__getAttrib__\""
+							"defaultValue": "\"attrib.Get\""
 						},
 						{
 							"id": 3253,
@@ -445,7 +445,7 @@
 								"type": "intrinsic",
 								"name": "string"
 							},
-							"defaultValue": "\"attrib.__setAttrib__\""
+							"defaultValue": "\"attrib.Set\""
 						},
 						{
 							"id": 3269,
@@ -33115,7 +33115,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 218,
+									"line": 224,
 									"character": 28
 								}
 							]
@@ -33176,7 +33176,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 280,
+									"line": 286,
 									"character": 30
 								}
 							]
@@ -33342,7 +33342,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 140,
+									"line": 146,
 									"character": 22
 								}
 							]
@@ -33414,7 +33414,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 111,
+									"line": 117,
 									"character": 28
 								}
 							]
@@ -33474,7 +33474,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 130,
+									"line": 136,
 									"character": 25
 								}
 							]
@@ -33571,7 +33571,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 155,
+									"line": 161,
 									"character": 27
 								}
 							]
@@ -33688,7 +33688,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 94,
+									"line": 97,
 									"character": 32
 								}
 							]
@@ -33786,7 +33786,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 78,
+									"line": 81,
 									"character": 25
 								}
 							]
@@ -33991,7 +33991,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 122,
+									"line": 128,
 									"character": 24
 								}
 							]
@@ -34075,7 +34075,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 212,
+									"line": 218,
 									"character": 31
 								}
 							]

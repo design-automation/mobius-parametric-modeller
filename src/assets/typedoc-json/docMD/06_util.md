@@ -1,17 +1,18 @@
 # UTIL    
 
-## WriteData  
-* **Description:** Writes data into chrome local file system.  
-* **Parameters:**  
-  * *model_data:* The data to be saved (can be the url to the file).  
-  * *file_name:* The name to be saved in the file system (file extension should be included).  
-* **Returns:** whether the data is successfully saved.  
-  
 ## ReadData  
-* **Description:** Retrieve data from the chrome local file system.  
+* **Description:** Read data from a Url or from local storage.  
 * **Parameters:**  
-  * *data_name:* The name to be saved in the file system (file extension should be included).  
+  * *data:* The data to be read (from URL or from Local Storage).  
 * **Returns:** the data.  
+  
+## WriteData  
+* **Description:** Save data to the hard disk or to the local storage.  
+* **Parameters:**  
+  * *data:* The data to be saved (can be the url to the file).  
+  * *file_name:* The name to be saved in the file system (file extension should be included).  
+  * *data_target:* undefined  
+* **Returns:** whether the data is successfully saved.  
   
 ## ImportData  
 * **Description:** Imports data into the model.

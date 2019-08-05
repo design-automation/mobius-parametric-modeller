@@ -40,7 +40,7 @@ export enum _EIODataTarget {
     FILESYS = 'Save to Local Storage'
 }
 /**
- * Retrieve data from the chrome local file system.
+ * Read data from a Url or from local storage.
  *
  * @param data The data to be read (from URL or from Local Storage).
  * @returns the data.
@@ -49,15 +49,18 @@ export function ReadData(__model__: GIModel, data: string): string {
     return data;
 }
 /**
- * Writes data into chrome local file system.
+ * Save data to the hard disk or to the local storage.
  *
- * @param model_data The data to be saved (can be the url to the file).
+ * @param data The data to be saved (can be the url to the file).
  * @param file_name The name to be saved in the file system (file extension should be included).
  * @returns whether the data is successfully saved.
  */
-export function WriteData(__model__: GIModel, model_data: string, file_name: string): Boolean {
+export function WriteData(__model__: GIModel, data: string, file_name: string, data_target: _EIODataTarget): Boolean {
     try {
-        return saveResource(model_data, file_name);
+        if (data_target === _EIODataTarget.DEFAULT) {
+            return download(data, file_name);
+        }
+        return saveResource(data, file_name);
     } catch (ex) {
         return false;
     }

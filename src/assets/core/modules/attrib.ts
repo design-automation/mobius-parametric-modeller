@@ -267,6 +267,7 @@ export function Get(__model__: GIModel, entities: TId|TId[]|TId[][],
     if (entities !== null && entities !== undefined) {
         ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
     }
+    console.log(ents_arr);
     checkCommTypes(fn_name, 'name', name, [TypeCheckObj.isString]);
     if (index !== null && index !== undefined) {
         checkCommTypes(fn_name, 'index', index, [TypeCheckObj.isNumber]);

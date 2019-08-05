@@ -54,7 +54,6 @@ export class CodeUtils {
                     }
                 } else {
                     codeStr.push(`${repVar[0]} ${args[1].jsValue} ${repVar[1]}`);
-                    console.log(codeStr[codeStr.length - 1])
                     // codeStr.push(`${repVar[0]} ${this.repGetAttrib(args[1].jsValue)} ${repVar[1]}`);
                 }
                 break;

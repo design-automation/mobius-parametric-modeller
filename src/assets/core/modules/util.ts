@@ -111,7 +111,7 @@ export enum _EIOExportDataFormat {
 }
 /**
  * Export data from the model as a file.
- * This will result in a popup in your browser, asking you to save the filel.
+ * This will result in a popup in your browser, asking you to save the file.
  * @param __model__
  * @param filename Name of the file as a string.
  * @param data_format Enum, the file format.
@@ -120,7 +120,9 @@ export enum _EIOExportDataFormat {
  * @example util.ExportData ('my_model.obj', obj)
  * @example_info Exports all the data in the model as an OBJ.
  */
-export function ExportData(__model__: GIModel, filename: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): boolean {
+export function ExportData(__model__: GIModel, entities: TId|TId[]|TId[][],
+        filename: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): boolean {
+    // TODO implement export of entities
     switch (data_format) {
         case _EIOExportDataFormat.GI:
             let gi_data: string = JSON.stringify(__model__.getData());

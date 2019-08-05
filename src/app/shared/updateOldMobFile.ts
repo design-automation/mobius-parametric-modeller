@@ -1,7 +1,7 @@
 import { ProcedureTypes } from '@models/procedure';
 import { ModuleList } from './decorators';
 import * as funcs from '@modules';
-import * as depreciated from '@assets/core/depreciated.json';
+import * as deprecated from '@assets/core/deprecated.json';
 
 import * as circularJSON from 'circular-json';
 import { _parameterTypes } from '@assets/core/_parameterTypes';
@@ -53,7 +53,7 @@ function checkMissingProd(prodList: any[], fileVersion: number) {
 
 
         // @ts-ignore
-        for (const dpFn of depreciated.default) {
+        for (const dpFn of deprecated.default) {
             if (dpFn.old_func.name.toLowerCase() === prod.meta.name.toLowerCase() &&
                 dpFn.old_func.module.toLowerCase() === prod.meta.module.toLowerCase()) {
                 let data: any;

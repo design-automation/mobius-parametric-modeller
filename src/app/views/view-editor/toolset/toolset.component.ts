@@ -429,17 +429,19 @@ export class ToolsetComponent implements OnInit {
         if (str.length === 0) {
             return;
         }
-        for (let i = 0; i < 8; i++) {
-            if (this.searchedFunctions.length >= 10) { break; }
-            if (this.ProcedureTypesArr[i].toLowerCase().indexOf(str) !== -1) {
-                this.searchedFunctions.push({
-                    'type': 'basic',
-                    'name': this.ProcedureTypesArr[i],
-                });
-            }
-        }
 
-        // @ts-ignore
+        // Search Basic Functions: Variable, If, ElseIf, Else, ...
+        // for (let i = 0; i < 8; i++) {
+        //     if (this.searchedFunctions.length >= 10) { break; }
+        //     if (this.ProcedureTypesArr[i].toLowerCase().indexOf(str) !== -1) {
+        //         this.searchedFunctions.push({
+        //             'type': 'basic',
+        //             'name': this.ProcedureTypesArr[i],
+        //         });
+        //     }
+        // }
+
+        // Search Core Functions
         for (const mod of this.Modules) {
             if (this.searchedFunctions.length >= 10) { break; }
             if (mod.module[0] === '_' || mod.module === 'Input' || mod.module === 'Output') {continue; }
@@ -451,11 +453,13 @@ export class ToolsetComponent implements OnInit {
                         'type': 'function',
                         'name': func.name,
                         'module': mod.module,
-                        'data': func
+                        'data': func,
                     });
                 }
             }
         }
+
+        // Search User Defined Functions
         for (const func of this.dataService.flowchart.functions) {
             if (this.searchedFunctions.length >= 10) { break; }
             if (func.name.toLowerCase().indexOf(str) !== -1) {

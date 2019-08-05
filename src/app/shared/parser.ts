@@ -292,6 +292,7 @@ export function parseArgument(str: string): {'error'?: string, 'vars'?: string[]
     let newString = '';
     let jsString = '';
     const check = analyzeComp(comps, 0, vars);
+    console.log(check.jsStr)
     if (check.error) {
         console.log(check.error, '\n', str);
         return check;
@@ -398,7 +399,9 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
         const result = analyzeQuery(comps, i, vars, '', '');
         if (result.error) { return result; }
         i = result.i;
-        return {'i': i, 'str': result.str, 'jsStr': result.jsStr};
+        newString = result.str;
+        jsString = result.jsStr;
+        // return {'i': i, 'str': result.str, 'jsStr': result.jsStr};
     }
 
     if (i + 1 >= comps.length) { return {'i': i, 'str': newString, 'jsStr': jsString}; }
@@ -751,17 +754,15 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[], i: number, va
             const bracketIndex = result.jsStr.indexOf('.slice(');
             if (bracketIndex !== -1) {
                 jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity},` +
-                           ` '${result.jsStr.slice(0, bracketIndex)}').slice(${result.jsStr.slice(bracketIndex + 7, -4)})[0]`;
+                           ` '${result.jsStr.slice(0, bracketIndex)}', ${result.jsStr.slice(bracketIndex + 7, -4)})`;
             } else {
-                jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${result.str}')`; //////////
+                jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${result.str}', null)`; //////////
             }
             return {'i': i, 'str': newString, 'jsStr': jsString};
             // if (i === comps.length - 1 || (comps[i + 1].value !== '@' && comps[i + 1].value !== '#' && comps[i + 1].value !== '?')) {
             //     return {'i': i, 'str': newString, 'jsStr': jsString};
             // }
             // i += 1;
-
-            return {'i': i, 'str': newString, 'jsStr': jsString};
         } else if (comps[i].value === '#') {
             if (comps[i + 1].type !== strType.VAR) {
                 return {'error': 'Error: variable expected after "#"'};

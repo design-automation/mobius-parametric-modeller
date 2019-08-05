@@ -18,8 +18,8 @@ export const _parameterTypes = {
     preprocess: '_model.__preprocess__',
     postprocess: '_model.__postprocess__',
 
-    setattrib: 'attrib.__setAttrib__',
-    getattrib: 'attrib.__getAttrib__',
+    setattrib: 'attrib.Set',
+    getattrib: 'attrib.Get',
     queryGet: 'query.Get',
     queryFilter: 'query.Filter',
 

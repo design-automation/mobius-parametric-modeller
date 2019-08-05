@@ -66,6 +66,9 @@ export class GIAttribsAdd {
         if (list_value === undefined) { throw new Error('Attribute with this name does not exist.'); }
         if (!Array.isArray(list_value)) { throw new Error('Attribute is not a list, so indexed values are not allowed.'); }
         if (value_index >= list_value.length) { throw new Error('Value index is out of range for attribute list size.'); }
+        if (value_index < 0) {
+            value_index += list_value.length;
+        }
         list_value[value_index] = value;
     }
     /**
@@ -99,6 +102,9 @@ export class GIAttribsAdd {
         if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
         if (attrib.getDataSize() === 1) { throw new Error('Attribute is not a list, so indexed values are not allowed.'); }
         if (value_index >= attrib.getDataSize()) { throw new Error('Value index is out of range for attribute list size.'); }
+        if (value_index < 0) {
+            value_index += attrib.getDataSize();
+        }
         attrib.setEntIdxVal(ents_i, value_index, value);
     }
     /**

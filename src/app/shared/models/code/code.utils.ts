@@ -325,14 +325,14 @@ export class CodeUtils {
             val_0 = val.slice(0, atIndex);
             val_1 = val.slice(atIndex + 1);
         }
-        const openBracketMatch = (val_1.match(/\[/g) || []).length;
-        if (openBracketMatch) {
-            const bracketSplit = val_1.substring(0, val_1.length - 1).split('[');
-            const innerVar = bracketSplit.splice(1, bracketSplit.length - 1).join('[');
+        const bracketIndex = val_1.indexOf('.slice(');
+        if (bracketIndex !== -1) {
+            const name = val_1.slice(0, bracketIndex);
+            const index = val_1.slice(bracketIndex + 7, -4);
             // const innerVar = CodeUtils.repGetAttrib(bracketSplit.splice(1, bracketSplit.length - 1).join('['));
-            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0}, '${bracketSplit[0]}',`, `, ${innerVar});`];
+            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0}, '${name}', ${index},`, `);`];
         } else {
-            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0}, '${val_1}',`, ');'];
+            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0}, '${val_1}', null, `, ');'];
         }
     }
 

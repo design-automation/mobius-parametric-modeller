@@ -78,7 +78,6 @@ export class ExecuteComponent {
                 const funcMeta = func.split('.');
                 if (prod.meta.module === funcMeta[0] && prod.meta.name === funcMeta[1]) {
                     const arg = prod.args[2];
-                    console.log(arg.name, arg.value);
                     if (arg.name[0] === '_') { continue; }
                     if (arg.value.indexOf('://') !== -1) {
                         const val = <string>(arg.value).replace(/ /g, '');

@@ -1,17 +1,18 @@
 # UTIL    
 
-## WriteData  
-* **Description:** Writes data into chrome local file system.  
-* **Parameters:**  
-  * *model_data:* The data to be saved (can be the url to the file).  
-  * *file_name:* The name to be saved in the file system (file extension should be included).  
-* **Returns:** whether the data is successfully saved.  
-  
 ## ReadData  
-* **Description:** Retrieve data from the chrome local file system.  
+* **Description:** Read data from a Url or from local storage.  
 * **Parameters:**  
-  * *data_name:* The name to be saved in the file system (file extension should be included).  
+  * *data:* The data to be read (from URL or from Local Storage).  
 * **Returns:** the data.  
+  
+## WriteData  
+* **Description:** Save data to the hard disk or to the local storage.  
+* **Parameters:**  
+  * *data:* The data to be saved (can be the url to the file).  
+  * *file_name:* The name to be saved in the file system (file extension should be included).  
+  * *data_target:* Enum, where the data is to be exported to.  
+* **Returns:** whether the data is successfully saved.  
   
 ## ImportData  
 * **Description:** Imports data into the model.
@@ -28,8 +29,9 @@ in the Start node of the flowchart.
   
 ## ExportData  
 * **Description:** Export data from the model as a file.
-This will result in a popup in your browser, asking you to save the filel.  
+This will result in a popup in your browser, asking you to save the file.  
 * **Parameters:**  
+  * *entities:* undefined  
   * *filename:* Name of the file as a string.  
   * *data_format:* Enum, the file format.  
   * *data_target:* Enum, where the data is to be exported to.  

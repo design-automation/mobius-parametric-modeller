@@ -160,7 +160,6 @@ export const inline_func = [
     ['arithmetic', arithmetic],
     ['statistics', statistics],
     ['trigonometry', trigonometry],
-    ['attributes', attrib]
 ];
 
 // const inline_func_lst: string[][][] = inline_func.map(x => x[1]);

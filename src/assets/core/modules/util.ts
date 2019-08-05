@@ -53,6 +53,7 @@ export function ReadData(__model__: GIModel, data: string): string {
  *
  * @param data The data to be saved (can be the url to the file).
  * @param file_name The name to be saved in the file system (file extension should be included).
+ * @param data_target Enum, where the data is to be exported to.
  * @returns whether the data is successfully saved.
  */
 export function WriteData(__model__: GIModel, data: string, file_name: string, data_target: _EIODataTarget): Boolean {

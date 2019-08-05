@@ -11,7 +11,7 @@
 * **Parameters:**  
   * *data:* The data to be saved (can be the url to the file).  
   * *file_name:* The name to be saved in the file system (file extension should be included).  
-  * *data_target:* undefined  
+  * *data_target:* Enum, where the data is to be exported to.  
 * **Returns:** whether the data is successfully saved.  
   
 ## ImportData  

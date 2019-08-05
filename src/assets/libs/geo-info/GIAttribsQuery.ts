@@ -3,7 +3,7 @@ import { TAttribDataTypes, IAttribsMaps,
     Txyz, EAttribNames, EEntType,  ESort,
     EAttribDataTypeStrs, EEntTypeStr, EFilterOperatorTypes } from './common';
 import { GIAttribMap } from './GIAttribMap';
-import { string } from '@assets/core/modules/_mathjs';
+import { string } from '@assets/core/inline/_mathjs';
 
 /**
  * Class for attributes.

@@ -47,34 +47,34 @@ export {list};
 
 // helpers
 
-import * as _mathjs from './_mathjs';
+import * as _mathjs from '../inline/_mathjs';
 export {_mathjs};
 
-import * as _rand from './_rand';
+import * as _rand from '../inline/_rand';
 export {_rand};
 
-import * as _vec from './_vec';
+import * as _vec from '../inline/_vec';
 export {_vec};
 
-import * as _calc from './_calc';
+import * as _calc from '../inline/_calc';
 export {_calc};
 
-import * as _list from './_list';
+import * as _list from '../inline/_list';
 export {_list};
 
-import * as _set from './_set';
+import * as _set from '../inline/_set';
 export {_set};
 
-import * as _colours from './_colours';
+import * as _colours from '../inline/_colours';
 export {_colours};
 
-import * as _conversion from './_conversion';
+import * as _conversion from '../inline/_conversion';
 export {_conversion};
 
-import * as _constants from './_constants';
+import * as _constants from '../inline/_constants';
 export {_constants};
 
-import * as _util from './_util';
+import * as _util from '../inline/_util';
 export {_util};
 
 

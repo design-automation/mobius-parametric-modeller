@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { INode } from '@models/node';
 import { _parameterTypes } from '@assets/core/_parameterTypes';
 import { WebWorkerService } from 'ngx-web-worker';
-import { mode } from '@assets/core/modules/_mathjs';
 
 @Injectable()
 export class DataOutputService {

@@ -478,6 +478,7 @@ export class ToolsetComponent implements OnInit {
         if (str.length === 0) {
             return;
         }
+        // search Global Variables
         for (const cnst of this.dataService.flowchart.nodes[0].procedure) {
             if (this.searchedInlines.length >= 10) { break; }
             if (cnst.type !== ProcedureTypes.Constant) { continue; }
@@ -486,12 +487,16 @@ export class ToolsetComponent implements OnInit {
                 this.searchedInlines.push([cnstString, `Global Variable ${cnstString}`]);
             }
         }
+
+        // // search inline query expressions
         // for (const expr of this.inlineQueryExpr) {
         //     if (this.searchedInlines.length >= 10) { break; }
         //     if (expr[0].toLowerCase().indexOf(str) !== -1) {
         //         this.searchedInlines.push([expr, '']);
         //     }
         // }
+
+        // search inline functions
         for (const category of this.inlineFunc) {
             for (const funcString of category[1]) {
                 if (this.searchedInlines.length >= 10) { break; }

@@ -15,20 +15,23 @@ export {_model};
 import * as query from './query';
 export {query};
 
+import * as pattern from './pattern';
+export {pattern};
+
 import * as make from './make';
 export {make};
 
 import * as modify from './modify';
 export {modify};
 
+import * as attrib from './attrib';
+export {attrib};
+
 // import * as isect from './isect';
 // export {isect};
 
 import * as calc from './calc';
 export {calc};
-
-import * as pattern from './pattern';
-export {pattern};
 
 import * as virtual from './virtual';
 export {virtual};

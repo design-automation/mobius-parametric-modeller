@@ -292,7 +292,6 @@ export function parseArgument(str: string): {'error'?: string, 'vars'?: string[]
     let newString = '';
     let jsString = '';
     const check = analyzeComp(comps, 0, vars);
-    console.log(check.jsStr);
     if (check.error) {
         console.log(check.error, '\n', str);
         return check;

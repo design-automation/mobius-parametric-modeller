@@ -622,7 +622,14 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
         addVars(vars, comp.value);
     }
 
-    if (!disallowAt && i + 1 < comps.length && (comps[i + 1].value === '@' || comps[i + 1].value === '#' || comps[i + 1].value === '?')) {
+    if (isVariable && comps[i + 1].value === '@') {
+        const result = analyzeVar(comps, i + 2, vars, true);
+        if (result.error) { return result; }
+        i = result.i;
+        newString = ' ' + newString.replace(/ /g, '') + '@' + result.str.replace(/ /g, '') + ' '; //////////
+        jsString = ' ' + jsString + '@' + result.jsStr + ' '; //////////
+    } else if (!disallowAt && i + 1 < comps.length &&
+    (comps[i + 1].value === '@' || comps[i + 1].value === '#' || comps[i + 1].value === '?')) {
         const result = analyzeQuery(comps, i + 1, vars, newString, jsString);
         if (result.error) { return result; }
         i = result.i;

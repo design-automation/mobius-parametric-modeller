@@ -148,8 +148,23 @@ export class GIAttribsQuery {
      */
     public getAttribNames(ent_type: EEntType): string[] {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
-        return Array.from(attribs.keys());
+        const attribs_map: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        return Array.from(attribs_map.keys());
+    }
+    /**
+     * Get all the user defined attribute names for an entity type
+     * This excludes the built in attribute names, xyz and anything starting with '_'
+     * @param ent_type
+     */
+    public getAttribNamesUser(ent_type: EEntType): string[] {
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
+        const attribs_map: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        let attribs: string[] = Array.from(attribs_map.keys());
+        if (ent_type === EEntType.POSI) {
+            attribs = attribs.filter(attrib => attrib !== 'xyz');
+        }
+        attribs = attribs.filter(attrib => attrib[0] !== '_');
+        return attribs;
     }
     /**
      * Get attrib

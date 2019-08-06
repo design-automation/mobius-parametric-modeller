@@ -345,19 +345,18 @@ export function _collection(__model__: GIModel, parent_index: number,
  *
  * @param __model__
  * @param entities Entity or lists of entities to be copied. Entities can be positions, points, polylines, polygons and collections.
- * @param copy_attributes Enum to copy attributes or to have no attributes copied.
  * @returns Entities, the copied entity or a list of copied entities.
- * @example copies = make.Copy([position1,polyine1,polygon1], copy_attributes)
+ * @example copies = make.Copy([position1,polyine1,polygon1])
  * @example_info Creates a copy of position1, polyine1, and polygon1.
  */
-export function Copy(__model__: GIModel, entities: TId|TId[]|TId[][], copy_attributes: _ECopyAttribues): TId|TId[]|TId[][] {
+export function Copy(__model__: GIModel, entities: TId|TId[]|TId[][]): TId|TId[]|TId[][] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const ents_arr = checkIDs('make.Copy', 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, , IDcheckObj.isIDList_list],
         [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
     // --- Error Check ---
-    const bool_copy_attribs: boolean = (copy_attributes === _ECopyAttribues.COPY_ATTRIBUTES);
+    const bool_copy_attribs = true;
     // copy the list of entities
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = _copyGeom(__model__, ents_arr, bool_copy_attribs);
     // copy the positions that belong to the list of entities
@@ -426,10 +425,7 @@ function _copyGeomPosis(__model__: GIModel, ents_arr: TEntTypeIdx | TEntTypeIdx[
     // const all_new_posis_i: number[] = Array.from(old_to_new_posis_i_map.values());
     // return all_new_posis_i.map( posi_i => [EEntType.POSI, posi_i] ) as TEntTypeIdx[];
 }
-export enum _ECopyAttribues {
-    COPY_ATTRIBUTES = 'copy_attributes',
-    NO_ATTRIBUTES = 'no_attributes'
-}
+
 // ================================================================================================
 /**
  * Makes one or more holes in a polygon.

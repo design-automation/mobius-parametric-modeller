@@ -74,10 +74,16 @@ export class GIAttribMap {
     //     });
     // }
     /**
-     * Returns the name of this attribute.
+     * Gets the name of this attribute.
      */
     public getName(): string {
         return this._name;
+    }
+    /**
+     * Sets the name of this attribute.
+     */
+    public setName(name: string): void {
+        this._name = name;
     }
     /**
      * Returns the data type of this attribute.

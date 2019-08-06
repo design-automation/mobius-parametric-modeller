@@ -49,6 +49,13 @@ const lists = [
     ['lisZip2(lists)', 'Converts a set of lists from rows into columns, based on the longest list']
  ];
 
+ const sets = [
+    ['setMake(list)', 'Generates a list of unique items.'],
+    ['setUni(list1, list2)', 'Generates a list of unique items from the union of the two input lists.'],
+    ['setInt(list1, list2)', 'Generates a list of unique items from the intersection of the two input lists.'],
+    ['setDif(list1, list2)', 'Generates a list of unique items from the difference of the two input lists.']
+ ];
+
  const vectors = [
     ['vecAdd(v1, v2)', 'Adds two vectors'],
     ['vecSub(v1, v2)', 'Subtracts vec2 from vec1'],
@@ -66,7 +73,7 @@ const lists = [
     ['vecEqual(v1, v2, tol)', 'Returns true if the difference between two vectors is smaler than a specified tolerance']
 ];
 
-const colours = [
+const colors = [
     ['colFalse(val, min, max)', 'Creates a colour from a value in the range between min and max.']
 ];
 
@@ -154,9 +161,10 @@ export const inline_func = [
     ['constants', constants],
     ['random', random],
     ['lists', lists],
+    ['sets', sets],
     ['conversion', conversion],
     ['vectors', vectors],
-    ['colours', colours],
+    ['colors', colors],
     ['arithmetic', arithmetic],
     ['statistics', statistics],
     ['trigonometry', trigonometry],

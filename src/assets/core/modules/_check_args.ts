@@ -3,16 +3,6 @@ import { EEntType, EAttribNames, TEntTypeIdx, EEntTypeStr } from '@libs/geo-info
 import { idsBreak } from '@libs/geo-info/id';
 import { isNumber } from 'util';
 
-
-// check that the arg is one of the entity select types, ps _v, _e, _w, _f, pt, pl, pg, co
-export function checkEntTypeSel(fn_name: string, arg_name: string, arg: any): EEntType {
-    const ent_type: EEntType = EEntType[EEntTypeStr[arg]];
-    if (ent_type === undefined) {
-        throw new Error(fn_name + ': ' + arg_name + ' is not one of the following valid types - ' +
-        'ps, _v, _e, _w, _f, pt, pl, pg, co, mo.');
-    }
-    return EEntType[EEntTypeStr[arg]];
-}
 // =========================================================================================================================================
 // Attribute Checks
 // =========================================================================================================================================

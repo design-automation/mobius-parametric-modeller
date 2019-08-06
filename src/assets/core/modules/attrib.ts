@@ -13,7 +13,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TQuery, EEntType, ESort, TEntTypeIdx,
     EAttribPush, TAttribDataTypes, EEntTypeStr, EAttribDataTypeStrs} from '@libs/geo-info/common';
 import { idsMake, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
-import { checkIDs, IDcheckObj, checkCommTypes, TypeCheckObj, checkAttribValue, checkAttribName, checkEntTypeSel } from './_check_args';
+import { checkIDs, IDcheckObj, checkCommTypes, TypeCheckObj, checkAttribValue, checkAttribName } from './_check_args';
 import { GIAttribMap } from '@assets/libs/geo-info/GIAttribMap';
 
 // ================================================================================================
@@ -26,7 +26,35 @@ export enum _EEntTypeSel {
     POINT =  'pt',
     PLINE =  'pl',
     PGON =   'pg',
-    COLL =   'co'
+    COLL =   'co',
+    MOD =    'mo'
+}
+
+function _getEntTypeFromStr(ent_type_str: _EEntTypeSel): EEntType {
+    switch (ent_type_str) {
+        case _EEntTypeSel.POSI:
+            return EEntType.POSI;
+        case _EEntTypeSel.VERT:
+            return EEntType.VERT;
+        case _EEntTypeSel.EDGE:
+            return EEntType.EDGE;
+        case _EEntTypeSel.WIRE:
+            return EEntType.WIRE;
+        case _EEntTypeSel.FACE:
+            return EEntType.FACE;
+        case _EEntTypeSel.POINT:
+            return EEntType.POINT;
+        case _EEntTypeSel.PLINE:
+            return EEntType.PLINE;
+        case _EEntTypeSel.PGON:
+            return EEntType.PGON;
+        case _EEntTypeSel.COLL:
+            return EEntType.COLL;
+        case _EEntTypeSel.MOD:
+            return EEntType.MOD;
+        default:
+            break;
+    }
 }
 // ================================================================================================
 // ================================================================================================
@@ -37,25 +65,29 @@ export enum _EEntTypeSel {
  * ~
  * @param __model__
  * @param ent_type_sel Enum, the attribute entity type.
- * @param name The attribute name.
+ * @param attrib The attribute name.
  * @param template The template for the attribute. For example, 123 or "abc" or [1,2,3] or ["a", "b", "c"].
- * @returns True if the attribute was added. False otherwise.
  */
-export function Add(__model__: GIModel, ent_type_sel: _EEntTypeSel, name: string, template: TAttribDataTypes): boolean {
-    console.log('calling add attrib');
+export function Add(__model__: GIModel, ent_type_sel: _EEntTypeSel, attrib: string, template: TAttribDataTypes): void {
+    if (ent_type_sel === 'ps' && attrib === 'xyz') { return; }
     // --- Error Check ---
     const fn_name = 'attrib.Add';
     const arg_name = 'ent_type_sel';
-    const ent_type: EEntType = checkEntTypeSel(fn_name, arg_name, ent_type_sel);
-    checkAttribName(fn_name , name);
+    checkAttribName(fn_name , attrib);
     // --- Error Check ---
-    const data_type: EAttribDataTypeStrs = null;
-    const data_size: number = null;
-    const attrib_map: GIAttribMap = __model__.attribs.add.addAttrib(ent_type, name, data_type, data_size);
-    if (attrib_map === null || attrib_map === undefined) {
-        return false;
+    // convert the ent_type_str to an ent_type
+    const ent_type: EEntType = _getEntTypeFromStr(ent_type_sel);
+    if (ent_type === undefined) {
+        throw new Error(fn_name + ': ' + arg_name + ' is not one of the following valid types - ' +
+        'ps, _v, _e, _w, _f, pt, pl, pg, co, mo.');
     }
-    return true;
+    // analyse the template
+    const is_array: boolean = Array.isArray(template);
+    const is_string: boolean  = is_array ? typeof template[0] === 'string' : typeof template === 'string';
+    const data_size: number = is_array ? (template as Array<any>).length : 1;
+    const data_type: EAttribDataTypeStrs = is_string ? EAttribDataTypeStrs.STRING : EAttribDataTypeStrs.FLOAT;
+    // create the attribute
+    __model__.attribs.add.addAttrib(ent_type, attrib, data_type, data_size);
 }
 // ================================================================================================
 /**
@@ -65,12 +97,23 @@ export function Add(__model__: GIModel, ent_type_sel: _EEntTypeSel, name: string
  * ~
  * @param __model__
  * @param ent_type_sel Enum, the attribute entity type.
- * @param name The attribute name.
- * @returns True if the attribute was deleted. False otherwise.
+ * @param attrib The attribute name.
  */
-export function Delete(__model__: GIModel, ent_type_sel: _EEntTypeSel, name: string): boolean {
-    console.log('calling delete attrib');
-    return true;
+export function Delete(__model__: GIModel, ent_type_sel: _EEntTypeSel, attrib: string): void {
+    if (ent_type_sel === 'ps' && attrib === 'xyz') { return; }
+    // --- Error Check ---
+    const fn_name = 'attrib.Delete';
+    const arg_name = 'ent_type_sel';
+    checkAttribName(fn_name , attrib);
+    // --- Error Check ---
+    // convert the ent_type_str to an ent_type
+    const ent_type: EEntType = _getEntTypeFromStr(ent_type_sel);
+    if (ent_type === undefined) {
+        throw new Error(fn_name + ': ' + arg_name + ' is not one of the following valid types - ' +
+        'ps, _v, _e, _w, _f, pt, pl, pg, co, mo.');
+    }
+    // create the attribute
+    __model__.attribs.modify.delAttrib(ent_type, attrib);
 }
 // ================================================================================================
 /**
@@ -80,13 +123,25 @@ export function Delete(__model__: GIModel, ent_type_sel: _EEntTypeSel, name: str
  * ~
  * @param __model__
  * @param ent_type_sel Enum, the attribute entity type.
- * @param old_name The old attribute name.
- * @param new_name The old attribute name.
- * @returns True if the attribute was renamed. False otherwise.
+ * @param old_attrib The old attribute name.
+ * @param new_attrib The old attribute name.
  */
-export function Rename(__model__: GIModel, ent_type_sel: _EEntTypeSel, old_name: string, new_name: string): boolean {
-    console.log('calling rename attrib');
-    return true;
+export function Rename(__model__: GIModel, ent_type_sel: _EEntTypeSel, old_attrib: string, new_attrib: string): void {
+    if (ent_type_sel === 'ps' && old_attrib === 'xyz') { return; }
+    // --- Error Check ---
+    const fn_name = 'attrib.Rename';
+    const arg_name = 'ent_type_sel';
+    checkAttribName(fn_name , old_attrib);
+    checkAttribName(fn_name , new_attrib);
+    // --- Error Check ---
+    // convert the ent_type_str to an ent_type
+    const ent_type: EEntType = _getEntTypeFromStr(ent_type_sel);
+    if (ent_type === undefined) {
+        throw new Error(fn_name + ': ' + arg_name + ' is not one of the following valid types - ' +
+        'ps, _v, _e, _w, _f, pt, pl, pg, co, mo.');
+    }
+    // create the attribute
+    __model__.attribs.modify.renameAttrib(ent_type, old_attrib, new_attrib);
 }
 // ================================================================================================
 /**
@@ -96,13 +151,12 @@ export function Rename(__model__: GIModel, ent_type_sel: _EEntTypeSel, old_name:
  * ~
  * @param __model__
  * @param entities Entities, the entities to set the attribute value for.
- * @param name The attribute name.
+ * @param attrib The attribute name.
  * @param index The attribute index if setting a value in a list, or null otherwise.
  * @param value The attribute value, or list of values.
- * @returns True if the attribute value was set successully for all entities. False otherwise.
  */
 export function Set(__model__: GIModel, entities: TId|TId[]|TId[][],
-                              name: string, index: number, value: TAttribDataTypes|TAttribDataTypes[]): boolean {
+                              attrib: string, index: number, value: TAttribDataTypes|TAttribDataTypes[]): void {
     // if entities is null, then we are setting model attributes
     // @ts-ignore
     if (entities !== null && getArrDepth(entities) === 2) { entities = __.flatten(entities); }
@@ -112,10 +166,9 @@ export function Set(__model__: GIModel, entities: TId|TId[]|TId[][],
     if (entities !== null && entities !== undefined) {
         ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
     }
-    checkAttribName(fn_name , name);
+    checkAttribName(fn_name , attrib);
     // --- Error Check ---
-    _setAttrib(__model__, ents_arr, name, value, index);
-    return true; // TODO fix this so that only return true if all were successful
+    _setAttrib(__model__, ents_arr, attrib, value, index);
 }
 function _setModelAttrib(__model__: GIModel, attrib_name: string, attrib_value: TAttribDataTypes, attrib_index?: number): void {
     if (attrib_index !== null && attrib_index !== undefined) {
@@ -216,11 +269,11 @@ function _setAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
  * ~
  * @param __model__
  * @param entities Entities, the entities to get the attribute values for.
- * @param name The attribute name.
+ * @param attrib The attribute name.
  * @returns One attribute value, or a list of attribute values.
  */
 export function Get(__model__: GIModel, entities: TId|TId[]|TId[][],
-        name: string, index: number): TAttribDataTypes|TAttribDataTypes[] {
+        attrib: string, index: number): TAttribDataTypes|TAttribDataTypes[] {
     // @ts-ignore
     if (entities !== null && getArrDepth(entities) === 2) { entities = __.flatten(entities); }
     // --- Error Check ---
@@ -229,13 +282,13 @@ export function Get(__model__: GIModel, entities: TId|TId[]|TId[][],
     if (entities !== null && entities !== undefined) {
         ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
     }
-    checkAttribName(fn_name, name);
+    checkAttribName(fn_name, attrib);
     // checkCommTypes(fn_name, 'name', name, [TypeCheckObj.isString]);
     if (index !== null && index !== undefined) {
         checkCommTypes(fn_name, 'index', index, [TypeCheckObj.isNumber]);
     }
     // --- Error Check ---
-    return _get(__model__, ents_arr, name, index);
+    return _get(__model__, ents_arr, attrib, index);
 }
 function _get(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
         attrib_name: string, attrib_index?: number): TAttribDataTypes|TAttribDataTypes[] {
@@ -269,15 +322,45 @@ function _get(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
  * ~
  * @param __model__
  * @param entities Entities, the entities to push the attribute values for.
- * @param name The attribute name, can be one or two names.
+ * @param attrib The attribute name, can be one or two names.
  * @param ent_type_sel Enum, the traget entity type where the attribute values should be pushed to.
  * @param method_sel Enum, the method for aggregating attribute values in cases where aggregation is necessary.
- * @returns True if the attribte was successfully pushed for all entities. False otherwise.
  */
 export function Push(__model__: GIModel, entities: TId|TId[],
-        name: string|[string, string], ent_type_sel: _EEntTypeSel, method_sel: _EPushMethodSel): boolean {
-    console.log('calling push attrib');
-    return true;
+        attrib: string|[string, string], ent_type_sel: _EEntTypeSel, method_sel: _EPushMethodSel): void {
+    // @ts-ignore
+    if (entities !== null && getArrDepth(entities) === 2) { entities = __.flatten(entities); }
+    // --- Error Check ---
+    const fn_name = 'attrib.Push';
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
+    if (entities !== null && entities !== undefined) {
+        ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+    }
+    // --- Error Check ---
+    // get the source ent_type and indices
+    const source_ent_type: EEntType = ents_arr[0][0];
+    const indices: number[] = [];
+    for (const ent_arr of ents_arr) {
+        if (ent_arr[0] !== source_ent_type) {
+            throw new Error('The entities must all be of the same type.');
+        }
+        indices.push(ent_arr[1]);
+    }
+    // get the source and target names
+    const is_array: boolean = Array.isArray(attrib);
+    if (is_array && attrib.length < 2) { throw new Error('Two attribute names must be defined, the existing name and the new name.'); }
+    const source_attrib: string =  is_array ? attrib[0] : attrib as string;
+    const target_attrib: string =  is_array ? attrib[1] : attrib as string;
+    // check the names
+    checkAttribName(fn_name, source_attrib);
+    checkAttribName(fn_name, target_attrib);
+    // get the target enty_type
+    const target_ent_type: EEntType = _getEntTypeFromStr(ent_type_sel);
+    if (source_ent_type === target_ent_type) { throw new Error('The new attribute is at the same level as the existing attribute.'); }
+    // get the method
+    const method: EAttribPush = _convertPromoteMethod(method_sel);
+    // do the push
+    __model__.attribs.add.pushAttribValues(source_ent_type, source_attrib, indices, target_ent_type, target_attrib, method);
 }
 export enum _EPushMethodSel {
     FIRST = 'first',
@@ -288,8 +371,8 @@ export enum _EPushMethodSel {
     MIN = 'min',
     MAX = 'max'
 }
-function _convertPromoteMethod(Selion: _EPushMethodSel): EAttribPush {
-    switch (Selion) {
+function _convertPromoteMethod(select: _EPushMethodSel): EAttribPush {
+    switch (select) {
         case _EPushMethodSel.AVERAGE:
             return EAttribPush.AVERAGE;
         case _EPushMethodSel.MEDIAN:

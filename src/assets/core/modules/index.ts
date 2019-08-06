@@ -36,14 +36,14 @@ export {calc};
 import * as virtual from './virtual';
 export {virtual};
 
-import * as util from './util';
-export {util};
-
 import * as render from './render';
 export {render};
 
 import * as list from './list';
 export {list};
+
+import * as util from './util';
+export {util};
 
 // helpers
 
@@ -65,8 +65,8 @@ export {_list};
 import * as _set from '../inline/_set';
 export {_set};
 
-import * as _colours from '../inline/_colours';
-export {_colours};
+import * as _colors from '../inline/_colors';
+export {_colors};
 
 import * as _conversion from '../inline/_conversion';
 export {_conversion};

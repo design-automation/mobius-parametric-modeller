@@ -4,11 +4,14 @@ import { GIAttribsQuery } from './GIAttribsQuery';
 import { GIModel } from './GIModel';
 import { EEntType, EAttribNames,  IAttribsData, EAttribDataTypeStrs, IAttribsMaps } from './common';
 import { GIAttribsIO } from './GIAttribsIO';
+import { GIAttribsModify } from './GIAttribModify';
 
 function hashCode(s: string) {
     let h: number;
-    for(let i = 0; i < s.length; i++) 
+    for (let i = 0; i < s.length; i++) {
+          // tslint:disable-next-line:no-bitwise
           h = Math.imul(31, h) + s.charCodeAt(i) | 0;
+    }
     return h;
 }
 
@@ -33,6 +36,7 @@ export class GIAttribs {
     // sub classes with methods
     public io: GIAttribsIO;
     public add: GIAttribsAdd;
+    public modify: GIAttribsModify;
     public query: GIAttribsQuery;
     public threejs: GIAttribsThreejs;
    /**
@@ -43,6 +47,7 @@ export class GIAttribs {
         this._model = model;
         this.io = new GIAttribsIO(model, this._attribs_maps);
         this.add = new GIAttribsAdd(model, this._attribs_maps);
+        this.modify = new GIAttribsModify(model, this._attribs_maps);
         this.query = new GIAttribsQuery(model, this._attribs_maps);
         this.threejs = new GIAttribsThreejs(model, this._attribs_maps);
         this.add.addAttrib(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.FLOAT, 3);

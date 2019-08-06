@@ -9,7 +9,40 @@
             (click)='toggleAccordion("basic-funcs")' >Basic</button>
             <div class="panel">
                 <ul class='toolset__functions--subset'>
-                    <ng-container *ngFor="let type of ProcedureTypesArr">
+                    <li class='tooltip-basic' [class.invalid]='checkInvalid("Variable")'
+                        [class.basic]='true' (click)='add(0)'> 
+                            Variable
+                    </li>
+                    <li class='tooltip-basic' [class.invalid]='checkInvalid("If")'
+                        [class.basic]='true' (click)='add(1)'> 
+                            If
+                    </li>
+                    <li class='tooltip-basic' [class.invalid]='checkInvalid("Elseif")'
+                        [class.basic]='true' (click)='add(2)'> 
+                            Else if
+                    </li>
+                    <li class='tooltip-basic' [class.invalid]='checkInvalid("Else")'
+                        [class.basic]='true' (click)='add(3)'> 
+                            Else
+                    </li>
+                    <li class='tooltip-basic' [class.invalid]='checkInvalid("Foreach")'
+                        [class.basic]='true' (click)='add(4)'> 
+                            Foreach
+                    </li>
+                    <li class='tooltip-basic' [class.invalid]='checkInvalid("While")'
+                        [class.basic]='true' (click)='add(5)'> 
+                            While
+                    </li>
+                    <li class='tooltip-basic' [class.invalid]='checkInvalid("Break")'
+                        [class.basic]='true' (click)='add(6)'> 
+                            Break
+                    </li>
+                    <li class='tooltip-basic' [class.invalid]='checkInvalid("Continue")'
+                        [class.basic]='true' (click)='add(7)'> 
+                            Continue
+                    </li>
+        
+                    <!-- <ng-container *ngFor="let type of ProcedureTypesArr">
                         <li *ngIf="8 > ProcedureTypes[type]"
                         class='tooltip-basic'
                         [class.invalid]='checkInvalid(type)'
@@ -17,7 +50,8 @@
                         (click)='add(ProcedureTypes[type])'> 
                             {{type}}
                         </li>
-                    </ng-container>
+                    </ng-container> -->
+
                     <li class='tooltip-basic'
                         [class.basic]='true'
                         (click)='add(ProcedureTypes.Comment)'> 
@@ -42,11 +76,15 @@
                     <ul class='toolset__functions--subset'>
                         <ng-container *ngFor='let fn of searchedFunctions'>
                             <li *ngIf='fn.type=="function"'
-                            (click)='add_function(fn.data)'>
+                            (click)='add_function(fn.data)'
+                            (mouseenter)='popupTooltip($event, fn.data.doc)'
+                            (mouseleave)='turnoffTooltip()'>
                                 <span class='module-name'>{{fn.module}}.</span>{{fn.name}}
                             </li>
                             <li *ngIf='fn.type=="imported"'
-                            (click)='add_imported_function(fn.data)'>
+                            (click)='add_imported_function(fn.data)'
+                            (mouseenter)='popupTooltip($event, assembleImportedTooltip(fn.data.doc))'
+                            (mouseleave)='turnoffTooltip()'>
                                 <span class='module-name'>user.</span>{{fn.name}}
                             </li>
                         </ng-container>
@@ -128,15 +166,15 @@
                 <div class="panel" [class.opened] = 'true' *ngIf='searchedInlines.length > 0'>
                     <ul class='toolset__functions--subset inline_set'>
                         <ng-container *ngFor='let fnString of searchedInlines'>
-                            <li (click)='add_inline(fnString)'>
-                                {{fnString}}
+                            <li (click)='add_inline(fnString[0])' title='{{fnString[1]}}'>
+                                {{fnString[0]}}
                             </li>
                         </ng-container>
                     </ul>
                 </div>
             </div>
             <div class="panel">
-                <button id='globals' class="accordion inline--cat"  (click)='toggleAccordion("globals", true)'>Globals</button>
+                <button id='globalParameters' class="accordion inline--cat"  (click)='toggleAccordion("globalParameters", true)'>Parameters</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset inline_set'>
                         <ng-container *ngFor='let cnst of getFlowchart().nodes[0].procedure'>
@@ -149,7 +187,7 @@
                     <div class = "divider--in"></div>
                 </div>
     
-                <button id='inlineExpr' class="accordion inline--cat"  (click)='toggleAccordion("inlineExpr", true)'>Expressions</button>
+                <!-- <button id='inlineExpr' class="accordion inline--cat"  (click)='toggleAccordion("inlineExpr", true)'>Expressions</button>
                 <div class="panel">
                     <button id='inlineQueryExpr' class="accordion" (click)='toggleAccordion("inlineQueryExpr", true)'>Inline Query Expr</button>
                     <div class="panel">
@@ -157,11 +195,7 @@
                             <li *ngFor='let expr of inlineQueryExpr' (click)='add_inline(expr[0])' title='{{expr[1]}}'>
                                 {{expr[0]}}
                             </li>
-                            <!-- <li *ngFor='let expr of inlineQueryExpr' (click)='add_inline(expr)' title='{{expr}}'>
-                                {{expr}}
-                            </li> -->
                         </ul>
-                        <!--Divider-->
                         <div class = "divider--in"></div>
                     </div>
                     <button id='inlineSortExpr' class="accordion" (click)='toggleAccordion("inlineSortExpr", true)'>Inline Sort Expr</button>
@@ -170,14 +204,10 @@
                             <li *ngFor='let expr of inlineSortExpr' (click)='add_inline(expr[0])' title='{{expr[1]}}'>
                                 {{expr[0]}}
                             </li>
-                            <!-- <li *ngFor='let expr of inlineSortExpr' (click)='add_inline(expr)' title='{{expr}}'>
-                                {{expr}}
-                            </li> -->
                         </ul>
-                        <!--Divider-->
                         <div class = "divider--in"></div>
                     </div>
-                </div>
+                </div> -->
     
     
                 <button id='inlineFunc' class="accordion inline--cat" (click)='toggleAccordion("inlineFunc", true)'>Functions</button>

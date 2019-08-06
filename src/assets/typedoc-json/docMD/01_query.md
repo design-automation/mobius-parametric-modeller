@@ -1,47 +1,83 @@
 # QUERY    
 
 ## Get  
-* **Description:** Returns a list of entities based on a query expression.
+* **Description:** Get entities from a list of entities.
+For example, you can get the position entities from a list of polygon entities.
+~
 The result will always be a list of entities, even if there is only one entity.
-In a case where you expect only one entity, remember to get the first item in the list.
+In a case where you want only one entity, remember to get the first item in the list.
 ~
-The query expression should use the following format: #@name == value,
-where 'name' is the attribute name, and 'value' is the attribute value that you are searching for.
-~
-If the attribute value is a string, then in must be in quotes, as follows: #@name == 'str_value'.
-The '==' is the comparison operator. The other comparison operators are: !=, >, >=, <, =<.
-~
-Entities can be search using multiple query expressions, as follows:  #@name1 == value1 &&  #@name2 == value2.
-Query expressions can be combined with either && (and) and || (or), where
-&& takes precedence over ||.
-~
-The order of the entities is specified by the 'sort' method. If 'geometrc_order' is slected, then entities are
-returned in the order in which they are found within the geometric model. For exampl, when getting positions of a polygon,
-then the order of the positions will follow the order of the vertices in the polygon.
+The resulting list of entities will not contain duplicate entities.
 ~  
 * **Parameters:**  
-  * *select:* Enum, specifies what type of entities will be returned.  
-  * *entities:* List of entities to be searched. If 'null' (without quotes), all entities in the model will be searched.  
-  * *query_expr:* Attribute condition. If 'null' (without quotes), no condition is set; all found entities are returned.  
-  * *sort:* Enum, sort the entities that are returned in specific order.  
-* **Returns:** Entities, a list of entities that match the type specified in 'select' and the conditions specified in 'query_expr'.  
+  * *ent_type_enum:* Enum, the type of entity to get.  
+  * *entities:* List of entities to get entities from, or 'null' to get all entities in the model.  
+* **Returns:** Entities, a list of entities.  
 * **Examples:**  
-  * positions = query.Get(positions, polyline1, #@xyz[2]>10, 'geometric_order')  
+  * positions = query.Get('positions', [polyline1, polyline2])  
+    Returns a list of positions that are part of polyline1.
+  
+  
+## Filter  
+* **Description:** Filter entities based on a query.
+~
+The result will always be a list of entities, even if there is only one entity.
+In a case where you want only one entity, remember to get the first item in the list.
+~
+The filter expression can use the following format: ab#@name == value, where
+'ab' is the two letter identifier of the entity type ('ps', '_v', '_e', '_w', '_f', 'pt', 'pl', 'pg', 'co')
+'name' is the attribute name, and
+'value' is the attribute value that you are searching for.
+~
+If the attribute value is a string, then in must be in quotes, e.g.: pg#@name == 'str_value'.
+~
+If the attribute value is a number, then any comparison operator can be used: ==, !=, >, >=, <, =<.
+~
+If the attribute value is a list, then a list index can be used, e.g.: ps#@xyz[2] > 10.
+~  
+* **Parameters:**  
+  * *entities:* List of entities to filter.  
+  * *name:* The attribute name to use for filtering.  
+  * *index:* Attribute index to use for filtering, or null.  
+  * *operator_enum:* Enum, the operator to use for filtering  
+  * *value:* The attribute value to use for filtering.  
+* **Returns:** Entities, a list of entities that match the conditions specified in 'expr'.  
+* **Examples:**  
+  * positions = query.Get(polyline1, ps#@xyz[2]>10)  
     Returns a list of positions that are part of polyline1 where the z-coordinate is more than 10.  
-  * positions = query.Get(positions, null, #@xyz[2]>10, 'ID_descending')  
+  * positions = query.Get(null, ps#@xyz[2]>10)  
     Returns a list of positions in the model where the z-coordinate is more than 10.  
-  * positions = query.Get(positions, polyline1, null, 'geometric_order')  
+  * positions = query.Get(polyline1, ps#)  
     Returns a list of all of the positions that are part of polyline1.  
-  * polylines = query.Get(polylines, position1, null, 'ID_descending')  
+  * polylines = query.Get(position1, pl#)  
     Returns a list of all of the polylines that use position1.  
-  * collections = query.Get(collections, null, #@type=="floors", 'ID_descending')  
+  * collections = query.Get(null, co#@type=="floors")  
     Returns a list of all the collections that have an attribute called "type" with a value "floors".
+  
+  
+## Sort  
+* **Description:** Sorts entities based on a sort expression.
+~
+The sort expression should use the following format: #@name, where 'name' is the attribute name.
+Entities can be sorted using multiple sort expresssions as follows: #@name1 && #@name2.
+~
+If the attribute is a list, and index can also be specified as follows: #@name1[index].
+~  
+* **Parameters:**  
+  * *entities:* List of two or more entities to be sorted, all of the same entity type.  
+  * *name:* Attribute name to use for sorting.  
+  * *index:* Attribute index to use for sorting, or null.  
+  * *method_enum:* Enum, sort descending or ascending.  
+* **Returns:** Entities, a list of sorted entities.  
+* **Examples:**  
+  * sorted_list = query.Sort( [pos1, pos2, pos3], #@xyz[2], descending)  
+    Returns a list of three positions, sorted according to the descending z value.
   
   
 ## Invert  
 * **Description:** Returns a list of entities excluding the specified entities.  
 * **Parameters:**  
-  * *select:* Enum, specifies what type of entities will be returned.  
+  * *ent_type_enum:* Enum, specifies what type of entities will be returned.  
   * *entities:* List of entities to be excluded.  
 * **Returns:** Entities, a list of entities that match the type specified in 'select'.  
 * **Examples:**  
@@ -49,49 +85,30 @@ then the order of the positions will follow the order of the vertices in the pol
     Returns a list of all the objects in the model except polyline1.
   
   
-## Count  
-* **Description:** Returns the number of entities based on a query expression.
-The query expression should use the following format: #@name == value,
-where 'name' is the attribute name, and 'value' is the attribute value.
-If the attribute value is a string, then in must be in qoutes, as follows: #@name == 'str_value'.
-The '==' is the comparison operator. The other comparison operators are: !=, >, >=, <, =<.
-Entities can be search using multiple query expressions, as follows:  #@name1 == value1 &&  #@name2 == value2.
-Query expressions can be combine with either && (and) and || (or), where
-&& takes precedence over ||.  
+## Perimeter  
+* **Description:** Returns a list of perimeter entities. In order to qualify as a perimeter entity,
+entities must be part of the set of input entities and must have naked edges.
+~  
 * **Parameters:**  
-  * *select:* Enum, specifies what type of entities are to be counted.  
-  * *entities:* List of entities to be searched. If 'null' (without quotes), list of all entities in the model.  
-  * *query_expr:* Attribute condition. If 'null' (without quotes), no condition is set; list of all search entities is returned.  
-* **Returns:** Number of entities.  
-* **Examples:**  
-  * num_ents = query.Count(positions, polyline1, #@xyz[2]>10)  
-    Returns the number of positions defined by polyline1 where the z-coordinate is more than 10.
-  
-  
-## Neighbours  
-* **Description:** Returns a list of welded neighbours of any entity  
-* **Parameters:**  
-  * *select:* Enum, select the types of neighbours to return  
+  * *ent_type:* Enum, select the types of entities to return  
   * *entities:* List of entities.  
-* **Returns:** Entities, a list of welded neighbours  
+* **Returns:** Entities, a list of perimeter entities.  
 * **Examples:**  
-  * mod.Neighbours([polyline1,polyline2,polyline3])  
-    Returns list of entities that are welded to polyline1 and polyline2.
+  * mod.Perimeter('edges', [polygon1,polygon2,polygon])  
+    Returns list of edges that are at the perimeter of polygon1, polygon2, or polygon3.
   
   
-## Sort  
-* **Description:** Sorts entities based on a sort expression.
-The sort expression should use the following format: #@name, where 'name' is the attribute name.
-Entities can be sorted using multiple sort expresssions as follows: #@name1 && #@name2.
-If the attribute is a list, and index can also be specified as follows: #@name1[index].  
+## Neighbor  
+* **Description:** Returns a list of neighboring entities. In order to qualify as a neighbor,
+entities must not be part of the set of input entities, but must be welded to one or more entities in the input.
+~  
 * **Parameters:**  
-  * *entities:* List of two or more entities to be sorted, all of the same entity type.  
-  * *sort_expr:* Attribute condition. If 'null' (without quotes), entities will be sorted based on their ID.  
-  * *method:* Enum, sort descending or ascending.  
-* **Returns:** Entities, a list of sorted entities.  
+  * *ent_type_enum:* Enum, select the types of neighbors to return  
+  * *entities:* List of entities.  
+* **Returns:** Entities, a list of welded neighbors  
 * **Examples:**  
-  * sorted_list = query.Sort( [pos1, pos2, pos3], #@xyz[2], descending)  
-    Returns a list of three positions, sorted according to the descending z value.
+  * mod.neighbor('edges', [polyline1,polyline2,polyline3])  
+    Returns list of edges that are welded to polyline1, polyline2, or polyline3.
   
   
 ## Type  
@@ -110,7 +127,7 @@ For has_holes, returns true if the entity is a face or polygon, and it has holes
 For has_no_holes, it returns the opposite of has_holes.  
 * **Parameters:**  
   * *entities:* An entity, or a list of entities.  
-  * *query_ent_type:* Enum, select the conditions to test agains.  
+  * *type_query_enum:* Enum, select the conditions to test agains.  
 * **Returns:** Boolean or list of boolean in input sequence.  
 * **Examples:**  
   * query.Type([polyline1, polyline2, polygon1], is_polyline )  

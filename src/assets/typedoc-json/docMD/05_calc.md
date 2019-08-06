@@ -3,8 +3,8 @@
 ## Distance  
 * **Description:** Calculates the distance between two positions.  
 * **Parameters:**  
-  * *position1:* First position.  
-  * *position2:* Second position, or list of positions.  
+  * *entities1:* First position.  
+  * *entities2:* Second position, or list of positions.  
   * *method:* Enum; distance or min_distance.  
 * **Returns:** Distance, or list of distances (if position2 is a list).  
 * **Examples:**  
@@ -15,7 +15,7 @@
 ## Length  
 * **Description:** Calculates the length of a line or a list of lines.  
 * **Parameters:**  
-  * *lines:* Edge, wire or polyline.  
+  * *entities:* Edge, wire or polyline.  
 * **Returns:** Length.  
 * **Examples:**  
   * length1 = calc.Length (line1)
@@ -33,7 +33,7 @@
 ## Vector  
 * **Description:** Returns a vector along an edge.  
 * **Parameters:**  
-  * *edge:* An edge  
+  * *entities:* An edge  
 * **Returns:** The vector [x, y, z] from the start point of an edge to the end point of an edge.  
   
 ## Centroid  
@@ -66,11 +66,11 @@ For points and positions with no vertices, the normal is [0, 0, 0].
     If the input is non-planar, the output vector will be an average of all normals vector of the polygon triangles.
   
   
-## ParamTToXyz  
-* **Description:** Calculates the location on a linear entity, given a t parameter.  
+## Eval  
+* **Description:** Calculates the xyz location on an entity, given a parameter.  
 * **Parameters:**  
-  * *line:* Edge, wire, or polyline.  
-  * *t_param:* A value between 0 to 1.  
+  * *entities:* Edge, wire, or polyline.  
+  * *param:* A value between 0 to 1.  
 * **Returns:** The coordinates of the location, [x, y, z]. (No position is created in the model.)  
 * **Examples:**  
   * coord1 = calc.ParamTToXyz (polyline1, 0.23)

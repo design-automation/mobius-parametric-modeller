@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_ofsdpa1ckr9",
+                "id": "node_k9zuxrlb72a",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -67,7 +67,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_t03844xak2",
+                                    "id": "node_jq33hwxt2yq",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -100,15 +100,17 @@
                                                     "name": "item",
                                                     "value": "i",
                                                     "invalidVar": false,
-                                                    "linked": false
+                                                    "linked": false,
+                                                    "jsValue": "i_"
                                                 },
                                                 {
                                                     "name": "list",
-                                                    "value": "range( 1, 20)",
+                                                    "value": "range(1, 20)",
                                                     "default": [],
                                                     "usedVars": [],
                                                     "invalidVar": false,
-                                                    "linked": false
+                                                    "linked": false,
+                                                    "jsValue": "range(1, 20)"
                                                 }
                                             ],
                                             "children": [
@@ -142,7 +144,8 @@
                                                             "name": "var_name",
                                                             "invalidVar": false,
                                                             "value": "grid",
-                                                            "linked": false
+                                                            "linked": false,
+                                                            "jsValue": "grid_"
                                                         },
                                                         {
                                                             "name": "__model__",
@@ -157,7 +160,8 @@
                                                                 "i"
                                                             ],
                                                             "invalidVar": false,
-                                                            "linked": false
+                                                            "linked": false,
+                                                            "jsValue": "[35, 0, i_ * 5]"
                                                         },
                                                         {
                                                             "name": "size",
@@ -165,7 +169,8 @@
                                                             "value": "[50, 10]",
                                                             "usedVars": [],
                                                             "invalidVar": false,
-                                                            "linked": false
+                                                            "linked": false,
+                                                            "jsValue": "[50, 10]"
                                                         }
                                                     ],
                                                     "selected": false,
@@ -189,7 +194,8 @@
                                                             "name": "var_name",
                                                             "value": "pg",
                                                             "invalidVar": false,
-                                                            "linked": false
+                                                            "linked": false,
+                                                            "jsValue": "pg_"
                                                         },
                                                         {
                                                             "name": "__model__",
@@ -204,7 +210,8 @@
                                                                 "grid"
                                                             ],
                                                             "invalidVar": false,
-                                                            "linked": false
+                                                            "linked": false,
+                                                            "jsValue": "grid_"
                                                         }
                                                     ],
                                                     "selected": false,
@@ -214,58 +221,46 @@
                                                 {
                                                     "type": 8,
                                                     "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~1",
-                                                    "ID": "prod-58gmzhpc79r",
+                                                    "ID": "prod-n8voe09dfq",
                                                     "enabled": true,
                                                     "print": false,
                                                     "meta": {
                                                         "module": "query",
                                                         "name": "Get"
                                                     },
-                                                    "argCount": 6,
+                                                    "argCount": 4,
                                                     "args": [
                                                         {
                                                             "name": "var_name",
                                                             "value": "edges",
+                                                            "linked": false,
                                                             "invalidVar": false,
-                                                            "linked": false
+                                                            "jsValue": "edges_"
                                                         },
                                                         {
                                                             "name": "__model__",
                                                             "linked": false
                                                         },
                                                         {
-                                                            "name": "select",
-                                                            "value": "'edges'",
+                                                            "name": "ent_type_enum",
+                                                            "value": "'_e'",
+                                                            "jsValue": "'_e'",
+                                                            "linked": false,
                                                             "usedVars": [],
-                                                            "invalidVar": false,
-                                                            "linked": false
+                                                            "invalidVar": false
                                                         },
                                                         {
                                                             "name": "entities",
                                                             "value": "pg",
+                                                            "jsValue": "pg_",
                                                             "usedVars": [
                                                                 "pg"
                                                             ],
                                                             "invalidVar": false,
                                                             "linked": false
-                                                        },
-                                                        {
-                                                            "name": "query_expr",
-                                                            "value": "null",
-                                                            "usedVars": [],
-                                                            "invalidVar": false,
-                                                            "linked": false
-                                                        },
-                                                        {
-                                                            "name": "sort",
-                                                            "value": "'ID_ascending'",
-                                                            "usedVars": [],
-                                                            "invalidVar": false,
-                                                            "linked": false
                                                         }
                                                     ],
                                                     "selected": false,
-                                                    "hasError": false,
                                                     "variable": "edges"
                                                 },
                                                 {
@@ -284,7 +279,8 @@
                                                             "name": "var_name",
                                                             "value": "cn",
                                                             "invalidVar": false,
-                                                            "linked": false
+                                                            "linked": false,
+                                                            "jsValue": "cn_"
                                                         },
                                                         {
                                                             "name": "__model__",
@@ -299,7 +295,8 @@
                                                                 "edges"
                                                             ],
                                                             "invalidVar": false,
-                                                            "linked": false
+                                                            "linked": false,
+                                                            "jsValue": "edges_.slice(1)[0]"
                                                         }
                                                     ],
                                                     "selected": false,
@@ -335,7 +332,8 @@
                                                                 "edges"
                                                             ],
                                                             "invalidVar": false,
-                                                            "linked": false
+                                                            "linked": false,
+                                                            "jsValue": "edges_.slice(1)[0]"
                                                         },
                                                         {
                                                             "name": "origin",
@@ -345,7 +343,8 @@
                                                                 "cn"
                                                             ],
                                                             "invalidVar": false,
-                                                            "linked": false
+                                                            "linked": false,
+                                                            "jsValue": "cn_"
                                                         },
                                                         {
                                                             "name": "scale",
@@ -353,7 +352,8 @@
                                                             "default": 0,
                                                             "usedVars": [],
                                                             "invalidVar": false,
-                                                            "linked": false
+                                                            "linked": false,
+                                                            "jsValue": "2.9"
                                                         }
                                                     ],
                                                     "selected": false,
@@ -388,7 +388,8 @@
                                                                 "pg"
                                                             ],
                                                             "invalidVar": false,
-                                                            "linked": false
+                                                            "linked": false,
+                                                            "jsValue": "pg_"
                                                         },
                                                         {
                                                             "name": "origin",
@@ -396,7 +397,8 @@
                                                             "default": 0,
                                                             "usedVars": [],
                                                             "invalidVar": false,
-                                                            "linked": false
+                                                            "linked": false,
+                                                            "jsValue": "[0, 0, 0]"
                                                         },
                                                         {
                                                             "name": "axis",
@@ -404,17 +406,19 @@
                                                             "default": 0,
                                                             "usedVars": [],
                                                             "invalidVar": false,
-                                                            "linked": false
+                                                            "linked": false,
+                                                            "jsValue": "[0, 0, 1]"
                                                         },
                                                         {
                                                             "name": "angle",
-                                                            "value": "( PI / 8) * i",
+                                                            "value": "(PI / 8) * i",
                                                             "default": 0,
                                                             "usedVars": [
                                                                 "i"
                                                             ],
                                                             "invalidVar": false,
-                                                            "linked": false
+                                                            "linked": false,
+                                                            "jsValue": "(PI / 8) * i_"
                                                         }
                                                     ],
                                                     "selected": false,
@@ -448,7 +452,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_ae9u49uros",
+                                                        "id": "node_f3aafghh1q",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -511,7 +515,8 @@
                                                             },
                                                             "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
                                                         },
-                                                        "hasError": false
+                                                        "hasError": false,
+                                                        "hasExecuted": false
                                                     }
                                                 },
                                                 "selected": false
@@ -522,7 +527,8 @@
                                         },
                                         "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode"
                                     },
-                                    "hasError": false
+                                    "hasError": true,
+                                    "hasExecuted": false
                                 }
                             },
                             "selected": false
@@ -533,7 +539,8 @@
                     },
                     "parentNode": "~flowchart~nodes~0"
                 },
-                "hasError": false
+                "hasError": false,
+                "hasExecuted": true
             },
             "~flowchart~nodes~0~output~edges~0~target~parentNode",
             "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
@@ -545,8 +552,8 @@
         "functions": [],
         "ordered": true,
         "id": "e75c4f8e-24f6-09ce-0297-b719e30336e7",
-        "last_updated": "2019-04-04T13:13:05.455Z"
+        "last_updated": "2019-08-06T03:56:02.920Z"
     },
     "version": 1,
-    "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":false,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":\"pg\",\"name\":\"Polygons\"},\"tab\":0},\"version\":\"0.4.33\"}"
+    "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-80,\"y\":-80,\"z\":80},\"pos_x\":-80,\"pos_y\":-80,\"pos_z\":80,\"target\":{\"x\":0,\"y\":0,\"z\":0}},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":5,\"name\":\"Faces\"},\"tab\":\"0\"},\"version\":\"0.4.38\"}"
 }

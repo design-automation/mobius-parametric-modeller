@@ -1,4 +1,4 @@
-import { EEntType, EAttribNames, TEntTypeIdx } from '@libs/geo-info/common';
+import { EEntType, EAttribNames, TEntTypeIdx, EEntTypeStr } from '@libs/geo-info/common';
 // import { isDim0, isDim1, isDim2 } from '@libs/geo-info/id';
 import { idsBreak } from '@libs/geo-info/id';
 
@@ -33,11 +33,12 @@ export function checkAttribValue(fn_name: string, attrib_value: any, attrib_inde
         TypeCheckObj.isNumber(fn_name, 'attrib_index', attrib_index);
         // check sting, number
         checkCommTypes(fn_name  + '[' + attrib_index + ']', 'attrib_value', attrib_value,
-            [TypeCheckObj.isString, TypeCheckObj.isNumber]);
+            [TypeCheckObj.isString, TypeCheckObj.isNumber, TypeCheckObj.isNull]);
     } else {
         // check sting, number, string[], number[]
         checkCommTypes(fn_name, 'attrib_value', attrib_value,
-            [TypeCheckObj.isString, TypeCheckObj.isNumber, TypeCheckObj.isStringList, TypeCheckObj.isNumberList]);
+            [TypeCheckObj.isString, TypeCheckObj.isNumber, TypeCheckObj.isNull,
+                TypeCheckObj.isStringList, TypeCheckObj.isNumberList, TypeCheckObj.isNullList]);
     }
 }
 
@@ -207,6 +208,10 @@ export class TypeCheckObj {
         isNumberListArg(fn_name, arg_name, arg_list);
         return;
     }
+    static isNullList(fn_name: string, arg_name: string, arg_list: number[]): void {
+        isNullListArg(fn_name, arg_name, arg_list);
+        return;
+    }
     static isInt(fn_name: string, arg_name: string, arg: number): void {
         isIntArg(fn_name, arg_name, arg);
         return;
@@ -228,6 +233,12 @@ export class TypeCheckObj {
         return;
     }
     // Other Geometry
+    static isColor(fn_name: string, arg_name: string, arg: [number, number, number]): void { // TColor = [number, number, number]
+        isListArg(fn_name, arg_name, arg, 'numbers');
+        isListLenArg(fn_name, arg_name, arg, 3);
+        isNumberListArg(fn_name, arg_name, arg);
+        return;
+    }
     static isCoord(fn_name: string, arg_name: string, arg: [number, number, number]): void { // Txyz = [number, number, number]
         isListArg(fn_name, arg_name, arg, 'numbers');
         isListLenArg(fn_name, arg_name, arg, 3);
@@ -514,7 +525,7 @@ function isStringListArg(fn_name: string, arg_name: string, arg_list: any[], typ
 }
 // Numbers
 function isNumberArg(fn_name: string, arg_name: string, arg: any): void {
-    if (isNaN(arg) || isNaN(parseInt(arg))) {
+    if (isNaN(arg) || isNaN(parseInt(arg, 10))) {
         throw new Error(fn_name + ': ' + arg_name + ' is not a number');
     }
     return;
@@ -523,6 +534,13 @@ function isNumberListArg(fn_name: string, arg_name: string, arg_list: any): void
     isListArg(fn_name, arg_name, arg_list, 'numbers');
     for (let i = 0; i < arg_list.length; i++) {
         isNumberArg(fn_name, arg_name + '[' + i + ']', arg_list[i]);
+    }
+    return;
+}
+function isNullListArg(fn_name: string, arg_name: string, arg_list: any): void {
+    isListArg(fn_name, arg_name, arg_list, 'null');
+    for (let i = 0; i < arg_list.length; i++) {
+        isNullArg(fn_name, arg_name + '[' + i + ']', arg_list[i]);
     }
     return;
 }

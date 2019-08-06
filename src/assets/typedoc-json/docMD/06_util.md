@@ -1,5 +1,19 @@
 # UTIL    
 
+## ReadData  
+* **Description:** Read data from a Url or from local storage.  
+* **Parameters:**  
+  * *data:* The data to be read (from URL or from Local Storage).  
+* **Returns:** the data.  
+  
+## WriteData  
+* **Description:** Save data to the hard disk or to the local storage.  
+* **Parameters:**  
+  * *data:* The data to be saved (can be the url to the file).  
+  * *file_name:* The name to be saved in the file system (file extension should be included).  
+  * *data_target:* Enum, where the data is to be exported to.  
+* **Returns:** whether the data is successfully saved.  
+  
 ## ImportData  
 * **Description:** Imports data into the model.
 In order to get the model data from a file, you need to define the File or URL parameter
@@ -15,15 +29,37 @@ in the Start node of the flowchart.
   
 ## ExportData  
 * **Description:** Export data from the model as a file.
-This will result in a popup in your browser, asking you to save the filel.  
+This will result in a popup in your browser, asking you to save the file.  
 * **Parameters:**  
+  * *entities:* undefined  
   * *filename:* Name of the file as a string.  
   * *data_format:* Enum, the file format.  
+  * *data_target:* Enum, where the data is to be exported to.  
 * **Returns:** Boolean.  
 * **Examples:**  
   * util.ExportData ('my_model.obj', obj)  
     Exports all the data in the model as an OBJ.
   
+  
+## ExportIO  
+* **Description:** Export data from the model as a file.
+This will result in a popup in your browser, asking you to save the filel.  
+* **Parameters:**  
+  * *__console__:* undefined  
+  * *__fileName__:* undefined  
+  * *filename:* Name of the file as a string.  
+  * *exportParams:* Enum.  
+  * *exportContent:* Enum.  
+* **Returns:** Boolean.  
+* **Examples:**  
+  * util.ExportIO('my_model.json')  
+    Exports all the data in the model as an OBJ.
+  
+  
+## ParamInfo  
+* **Description:** Returns a text summary of the contents of this model  
+* **Parameters:**  
+* **Returns:** Text that summarises what is in the model.  
   
 ## ModelInfo  
 * **Description:** Returns a text summary of the contents of this model  
@@ -40,4 +76,15 @@ This will result in a popup in your browser, asking you to save the filel.
 * **Description:** Check the internal consistency of the model.  
 * **Parameters:**  
 * **Returns:** Text that summarises what is in the model, click print to see this text.  
+  
+## saveResource  
+* **Description:** Functions for saving and loading resources to file system.  
+* **Parameters:**  
+  * *file:* undefined  
+  * *name:* undefined  
+  
+## saveToFS  
+* **Description:** undefined  
+* **Parameters:**  
+  * *fs:* undefined  
   

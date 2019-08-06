@@ -78,7 +78,7 @@ export class GIAttribsThreejs {
         verts_i.forEach( (vert_i, gi_index) => {
             if (vert_i !== null) {
                 const value = verts_attrib.getEntVal(vert_i) as TAttribDataTypes;
-                if (attrib_name === EAttribNames.COLOUR) {
+                if (attrib_name === EAttribNames.COLOR) {
                     const _value = value === undefined ? [1, 1, 1] : value;
                     verts_attribs_values.push(_value);
                 } else {

@@ -56,9 +56,9 @@ textarea{
     overflow-y: hidden;
 }
 
-// .desc{
-    //padding-left: $small-padding;
-// }
+.desc{
+    height: max-content;
+}
 
 .prod--container{
     //margin-bottom: 5px;
@@ -68,6 +68,6 @@ textarea{
 }
 
 #display-flowchart-desc {
-    padding-bottom: 30px;
+    padding-bottom: 10px;
     //border-bottom: 3px solid $color1;
 }

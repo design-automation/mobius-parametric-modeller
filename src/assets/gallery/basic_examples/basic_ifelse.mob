@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_5gjqi833gtl",
+                "id": "node_4xs1p0umssh",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -38,15 +38,18 @@
                                 "name": "const_name",
                                 "value": "sides",
                                 "default": 0,
-                                "invalidVar": false
+                                "invalidVar": false,
+                                "jsValue": "sides_",
+                                "linked": false
                             },
                             {
                                 "name": "__input__",
-                                "value": 7,
+                                "value": 2,
                                 "default": 2,
                                 "step": "1",
                                 "min": "1",
-                                "max": "10"
+                                "max": "10",
+                                "linked": false
                             }
                         ],
                         "selected": false,
@@ -84,7 +87,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_028064zdpqtr",
+                                    "id": "node_2jdjwkylze9",
                                     "position": {
                                         "x": 5347.865234375,
                                         "y": 5194.1435546875
@@ -115,7 +118,13 @@
                                             "args": [
                                                 {
                                                     "name": "condition",
-                                                    "value": "sides < 4"
+                                                    "value": "sides < 4",
+                                                    "jsValue": "sides_ < 4",
+                                                    "usedVars": [
+                                                        "sides"
+                                                    ],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "children": [
@@ -148,36 +157,56 @@
                                                         {
                                                             "name": "var_name",
                                                             "value": "pattern1",
-                                                            "invalidVar": false
+                                                            "invalidVar": false,
+                                                            "jsValue": "pattern1_",
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "__model__",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "origin",
-                                                            "value": "[0 , 0 , 0]",
-                                                            "default": 0
+                                                            "value": "[0, 0, 0]",
+                                                            "default": 0,
+                                                            "jsValue": "[0, 0, 0]",
+                                                            "usedVars": [],
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "radius",
                                                             "value": "10",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "jsValue": "10",
+                                                            "usedVars": [],
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "num_positions",
                                                             "value": "3",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "jsValue": "3",
+                                                            "usedVars": [],
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "arc_angle",
                                                             "value": "null",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "jsValue": "null",
+                                                            "usedVars": [],
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         }
                                                     ],
                                                     "selected": false,
                                                     "hasError": false,
-                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~1"
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~1",
+                                                    "variable": "pattern1"
                                                 },
                                                 {
                                                     "type": 8,
@@ -193,26 +222,40 @@
                                                         {
                                                             "name": "var_name",
                                                             "value": "polyline1",
-                                                            "invalidVar": false
+                                                            "invalidVar": false,
+                                                            "jsValue": "polyline1_",
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "__model__",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "positions",
                                                             "value": "pattern1",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "jsValue": "pattern1_",
+                                                            "usedVars": [
+                                                                "pattern1"
+                                                            ],
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "close",
                                                             "value": "'close'",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "jsValue": "'close'",
+                                                            "usedVars": [],
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         }
                                                     ],
                                                     "selected": false,
                                                     "hasError": false,
-                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~1"
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~1",
+                                                    "variable": "polyline1"
                                                 }
                                             ],
                                             "selected": false,
@@ -227,7 +270,13 @@
                                             "args": [
                                                 {
                                                     "name": "condition",
-                                                    "value": "sides == 4"
+                                                    "value": "sides == 4",
+                                                    "jsValue": "sides_ == 4",
+                                                    "usedVars": [
+                                                        "sides"
+                                                    ],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "children": [
@@ -260,36 +309,56 @@
                                                         {
                                                             "name": "var_name",
                                                             "value": "pattern1",
-                                                            "invalidVar": false
+                                                            "invalidVar": false,
+                                                            "jsValue": "pattern1_",
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "__model__",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "origin",
-                                                            "value": "[0 , 0 , 0]",
-                                                            "default": 0
+                                                            "value": "[0, 0, 0]",
+                                                            "default": 0,
+                                                            "jsValue": "[0, 0, 0]",
+                                                            "usedVars": [],
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "radius",
                                                             "value": "10",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "jsValue": "10",
+                                                            "usedVars": [],
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "num_positions",
                                                             "value": "4",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "jsValue": "4",
+                                                            "usedVars": [],
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "arc_angle",
                                                             "value": "null",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "jsValue": "null",
+                                                            "usedVars": [],
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         }
                                                     ],
                                                     "selected": false,
                                                     "hasError": false,
-                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2"
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2",
+                                                    "variable": "pattern1"
                                                 },
                                                 {
                                                     "type": 8,
@@ -305,26 +374,40 @@
                                                         {
                                                             "name": "var_name",
                                                             "value": "polyline1",
-                                                            "invalidVar": false
+                                                            "invalidVar": false,
+                                                            "jsValue": "polyline1_",
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "__model__",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "positions",
                                                             "value": "pattern1",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "jsValue": "pattern1_",
+                                                            "usedVars": [
+                                                                "pattern1"
+                                                            ],
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "close",
                                                             "value": "'close'",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "jsValue": "'close'",
+                                                            "usedVars": [],
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         }
                                                     ],
                                                     "selected": false,
                                                     "hasError": false,
-                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2"
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2",
+                                                    "variable": "polyline1"
                                                 }
                                             ],
                                             "hasError": false,
@@ -367,36 +450,56 @@
                                                         {
                                                             "name": "var_name",
                                                             "value": "pattern1",
-                                                            "invalidVar": false
+                                                            "invalidVar": false,
+                                                            "jsValue": "pattern1_",
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "__model__",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "origin",
-                                                            "value": "[0 , 0 , 0]",
-                                                            "default": 0
+                                                            "value": "[0, 0, 0]",
+                                                            "default": 0,
+                                                            "jsValue": "[0, 0, 0]",
+                                                            "usedVars": [],
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "radius",
                                                             "value": "10",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "jsValue": "10",
+                                                            "usedVars": [],
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "num_positions",
                                                             "value": "5",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "jsValue": "5",
+                                                            "usedVars": [],
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "arc_angle",
                                                             "value": "null",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "jsValue": "null",
+                                                            "usedVars": [],
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         }
                                                     ],
                                                     "selected": false,
                                                     "hasError": false,
-                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~3"
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~3",
+                                                    "variable": "pattern1"
                                                 },
                                                 {
                                                     "type": 8,
@@ -412,26 +515,40 @@
                                                         {
                                                             "name": "var_name",
                                                             "value": "polyline1",
-                                                            "invalidVar": false
+                                                            "invalidVar": false,
+                                                            "jsValue": "polyline1_",
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "__model__",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "positions",
                                                             "value": "pattern1",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "jsValue": "pattern1_",
+                                                            "usedVars": [
+                                                                "pattern1"
+                                                            ],
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "close",
                                                             "value": "'close'",
-                                                            "default": 0
+                                                            "default": 0,
+                                                            "jsValue": "'close'",
+                                                            "usedVars": [],
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         }
                                                     ],
                                                     "selected": false,
                                                     "hasError": false,
-                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~3"
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~3",
+                                                    "variable": "polyline1"
                                                 }
                                             ],
                                             "selected": false,
@@ -460,7 +577,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_ws86c0c9ua",
+                                                        "id": "node_xq6i6co1bsi",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -494,12 +611,14 @@
                                                                     {
                                                                         "name": "__model__",
                                                                         "value": "",
-                                                                        "default": 0
+                                                                        "default": 0,
+                                                                        "linked": false
                                                                     },
                                                                     {
                                                                         "name": "value",
                                                                         "value": "",
-                                                                        "default": 0
+                                                                        "default": 0,
+                                                                        "linked": false
                                                                     }
                                                                 ],
                                                                 "print": false,
@@ -531,7 +650,8 @@
                                         "meta": {
                                             "mode": 0
                                         },
-                                        "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode"
+                                        "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode",
+                                        "model": null
                                     },
                                     "hasExecuted": true,
                                     "hasError": false
@@ -543,7 +663,8 @@
                     "meta": {
                         "mode": 0
                     },
-                    "parentNode": "~flowchart~nodes~0"
+                    "parentNode": "~flowchart~nodes~0",
+                    "model": null
                 },
                 "hasError": false,
                 "hasExecuted": true
@@ -556,9 +677,10 @@
             "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0"
         ],
         "functions": [],
-        "ordered": true
+        "ordered": true,
+        "id": "077974e7-0742-ba5c-676b-d2ee95bc43a2",
+        "last_updated": "2019-08-06T03:54:52.194Z"
     },
-    "last_updated": "2019-01-31T04:57:55.913Z",
     "version": 1,
-    "settings": {}
+    "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-80,\"y\":-80,\"z\":80},\"pos_x\":-80,\"pos_y\":-80,\"pos_z\":80,\"target\":{\"x\":2.5,\"y\":0,\"z\":0}},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":5,\"name\":\"Faces\"},\"tab\":\"0\"},\"version\":\"0.4.38\"}"
 }

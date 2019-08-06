@@ -1,6 +1,6 @@
 import { GIModel } from './GIModel';
 import { IAttribsData, IModelData, IAttribData, TAttribDataTypes, EEntType,
-    EAttribDataTypeStrs, IGeomData, IAttribsMaps, EAttribNames, Txyz, EEntTypeStr, EAttribPromote } from './common';
+    EAttribDataTypeStrs, IGeomData, IAttribsMaps, EAttribNames, Txyz, EEntTypeStr, EAttribPush } from './common';
 import { GIAttribMap } from './GIAttribMap';
 import { vecAdd, vecDiv, vecSum } from '@libs/geom/vectors';
 import * as mathjs from 'mathjs';
@@ -28,7 +28,7 @@ export class GIAttribsAdd {
      * @param data_type The data type of the attribute.
      * @param data_size The data size of the attribute. For example, an XYZ vector has size=3.
      */
-    public addAttrib(ent_type: EEntType, name: string, data_type: EAttribDataTypeStrs, data_size: number): GIAttribMap {
+    public addAttrib(ent_type: EEntType, name: string, data_type: EAttribDataTypeStrs, data_size: number): boolean {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         if (!attribs.has(name)) {
@@ -39,7 +39,7 @@ export class GIAttribsAdd {
                 throw new Error('Attribute could not be created do to conflict with existing attribute with same name.');
             }
         }
-        return attribs.get(name);
+        return true;
     }
     /**
      * Set a model attrib value
@@ -66,6 +66,9 @@ export class GIAttribsAdd {
         if (list_value === undefined) { throw new Error('Attribute with this name does not exist.'); }
         if (!Array.isArray(list_value)) { throw new Error('Attribute is not a list, so indexed values are not allowed.'); }
         if (value_index >= list_value.length) { throw new Error('Value index is out of range for attribute list size.'); }
+        if (value_index < 0) {
+            value_index += list_value.length;
+        }
         list_value[value_index] = value;
     }
     /**
@@ -99,6 +102,9 @@ export class GIAttribsAdd {
         if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
         if (attrib.getDataSize() === 1) { throw new Error('Attribute is not a list, so indexed values are not allowed.'); }
         if (value_index >= attrib.getDataSize()) { throw new Error('Value index is out of range for attribute list size.'); }
+        if (value_index < 0) {
+            value_index += attrib.getDataSize();
+        }
         attrib.setEntIdxVal(ents_i, value_index, value);
     }
     /**
@@ -152,41 +158,42 @@ export class GIAttribsAdd {
     /**
      * Promotes attrib values up and down the hierarchy.
      */
-    public promoteAttribValues(ent_type: EEntType, attrib_name: string, indices: number[], to_ent_type: EEntType,
-            method: EAttribPromote): void {
-        if (ent_type === to_ent_type) { return; }
+    public pushAttribValues(source_ent_type: EEntType, source_attrib_name: string, source_indices: number[],
+            target_ent_type: EEntType, target_attrib_name: string, method: EAttribPush): void {
+        if (source_ent_type === target_ent_type) { return; }
         // check that the attribute exists
-        if (! this._model.attribs.query.hasAttrib(ent_type, attrib_name)) {
+        if (! this._model.attribs.query.hasAttrib(source_ent_type, source_attrib_name)) {
             throw new Error('The attribute does not exist.');
         }
         // get the data type and data size of the existing attribute
-        const data_type: EAttribDataTypeStrs = this._model.attribs.query.getAttribDataType(ent_type, attrib_name);
-        const data_size: number = this._model.attribs.query.getAttribDataSize(ent_type, attrib_name);
+        const data_type: EAttribDataTypeStrs = this._model.attribs.query.getAttribDataType(source_ent_type, source_attrib_name);
+        const data_size: number = this._model.attribs.query.getAttribDataSize(source_ent_type, source_attrib_name);
         // move attributes from entities up to the model, or form model down to entities
-        if (to_ent_type === EEntType.MOD) {
-            this.addAttrib(to_ent_type, attrib_name, data_type, data_size);
+        if (target_ent_type === EEntType.MOD) {
+            this.addAttrib(target_ent_type, target_attrib_name, data_type, data_size);
             const attrib_values: TAttribDataTypes[] = [];
-            for (const index of indices) {
-                attrib_values.push(this._model.attribs.query.getAttribValue(ent_type, attrib_name, index) as TAttribDataTypes);
+            for (const index of source_indices) {
+                attrib_values.push(
+                    this._model.attribs.query.getAttribValue(source_ent_type, source_attrib_name, index) as TAttribDataTypes);
             }
             const value: TAttribDataTypes = this._aggregateValues(attrib_values, data_size, method);
-            this.setModelAttribValue(attrib_name, value);
+            this.setModelAttribValue(target_attrib_name, value);
             return;
-        } else if (ent_type === EEntType.MOD) {
-            const value: TAttribDataTypes = this._model.attribs.query.getModelAttribValue(attrib_name);
-            this.addAttrib(to_ent_type, attrib_name, data_type, data_size);
-            const target_ents_i: number[] = this._model.geom.query.getEnts(to_ent_type, false);
+        } else if (source_ent_type === EEntType.MOD) {
+            const value: TAttribDataTypes = this._model.attribs.query.getModelAttribValue(source_attrib_name);
+            this.addAttrib(target_ent_type, target_attrib_name, data_type, data_size);
+            const target_ents_i: number[] = this._model.geom.query.getEnts(target_ent_type, false);
             for (const target_ent_i of target_ents_i) {
-                this.setAttribValue(to_ent_type, target_ent_i, attrib_name, value);
+                this.setAttribValue(target_ent_type, target_ent_i, target_attrib_name, value);
             }
             return;
         }
         // get all the values for each target
         const attrib_values_map: Map<number, TAttribDataTypes[]> = new Map();
-        for (const index of indices) {
+        for (const index of source_indices) {
             const attrib_value: TAttribDataTypes =
-                this._model.attribs.query.getAttribValue(ent_type, attrib_name, index) as TAttribDataTypes;
-            const target_ents_i: number[] = this._model.geom.query.navAnyToAny(ent_type, to_ent_type, index);
+                this._model.attribs.query.getAttribValue(source_ent_type, source_attrib_name, index) as TAttribDataTypes;
+            const target_ents_i: number[] = this._model.geom.query.navAnyToAny(source_ent_type, target_ent_type, index);
             for (const target_ent_i of target_ents_i) {
                 if (! attrib_values_map.has(target_ent_i)) {
                         attrib_values_map.set(target_ent_i, []);
@@ -195,14 +202,14 @@ export class GIAttribsAdd {
             }
         }
         // create the new target attribute if it does not already exist
-        this.addAttrib(to_ent_type, attrib_name, data_type, data_size);
+        this.addAttrib(target_ent_type, target_attrib_name, data_type, data_size);
         // calculate the new value and set the attribute
         attrib_values_map.forEach( (attrib_values, target_ent_i) => {
             let value: TAttribDataTypes = attrib_values[0];
             if (attrib_values.length > 1 && data_type === EAttribDataTypeStrs.FLOAT) {
                 value = this._aggregateValues(attrib_values, data_size, method);
             }
-            this.setAttribValue(to_ent_type, target_ent_i, attrib_name, value);
+            this.setAttribValue(target_ent_type, target_ent_i, target_attrib_name, value);
         });
     }
     /**
@@ -215,9 +222,9 @@ export class GIAttribsAdd {
     // ============================================================================
     // Private methods
     // ============================================================================
-    private _aggregateValues(values: TAttribDataTypes[], data_size: number, method: EAttribPromote): TAttribDataTypes {
+    private _aggregateValues(values: TAttribDataTypes[], data_size: number, method: EAttribPush): TAttribDataTypes {
         switch (method) {
-            case EAttribPromote.AVERAGE:
+            case EAttribPush.AVERAGE:
                 if (data_size > 1) {
                     const result: number[] = [];
                     for (let i = 0; i < data_size; i++) {
@@ -227,7 +234,7 @@ export class GIAttribsAdd {
                 } else {
                     return mathjs.mean(values);
                 }
-            case EAttribPromote.MEDIAN:
+            case EAttribPush.MEDIAN:
                 if (data_size > 1) {
                     const result: number[] = [];
                     for (let i = 0; i < data_size; i++) {
@@ -237,7 +244,7 @@ export class GIAttribsAdd {
                 } else {
                     return mathjs.median(values);
                 }
-            case EAttribPromote.SUM:
+            case EAttribPush.SUM:
                 if (data_size > 1) {
                     const result: number[] = [];
                     for (let i = 0; i < data_size; i++) {
@@ -247,7 +254,7 @@ export class GIAttribsAdd {
                 } else {
                     return mathjs.sum(values);
                 }
-            case EAttribPromote.MIN:
+            case EAttribPush.MIN:
                 if (data_size > 1) {
                     const result: number[] = [];
                     for (let i = 0; i < data_size; i++) {
@@ -257,7 +264,7 @@ export class GIAttribsAdd {
                 } else {
                     return mathjs.min(values);
                 }
-            case EAttribPromote.MAX:
+            case EAttribPush.MAX:
                 if (data_size > 1) {
                     const result: number[] = [];
                     for (let i = 0; i < data_size; i++) {
@@ -267,10 +274,10 @@ export class GIAttribsAdd {
                 } else {
                     return mathjs.max(values);
                 }
-            case EAttribPromote.LAST:
+            case EAttribPush.LAST:
                 return values[values.length - 1];
             default:
-                return values[0]; // EAttribPromote.FIRST
+                return values[0]; // EAttribPush.FIRST
         }
     }
     /**

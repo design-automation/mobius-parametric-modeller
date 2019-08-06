@@ -5,12 +5,13 @@ import { ProcedureTypes } from '@shared/models/procedure';
 import * as circularJSON from 'circular-json';
 import * as funcs from '@modules';
 import { DataService } from '@services';
-import { _parameterTypes } from '@modules';
+import { _parameterTypes } from '@assets/core/_parameterTypes';
 import { ModuleList } from '@shared/decorators';
 import { Router } from '@angular/router';
 import { checkNodeValidity } from '@shared/parser';
 import { IdGenerator } from '@utils';
 import { checkMobFile } from '@shared/updateOldMobFile';
+import { SaveFileComponent } from './savefile.component';
 
 @Component({
   selector: 'load-url',
@@ -134,9 +135,10 @@ export class LoadUrlComponent {
         this.dataService.clearModifiedNode();
     }
 
-    loadTempFile() {
-        let f: any = localStorage.getItem('temp_file');
-        if (!f) { return; }
+    async loadTempFile() {
+        let f = await SaveFileComponent.loadFromFileSystem('___TEMP___.mob');
+        // let f: any = localStorage.getItem('temp_file');
+        if (!f || f === 'error') { return; }
         f = circularJSON.parse(f);
 
         if (!f.flowchart.id) {
@@ -149,6 +151,7 @@ export class LoadUrlComponent {
             version: f.version,
             settings: f.settings || {}
         };
+
         // file.flowchart.name = urlSplit[urlSplit.length - 1 ].split('.mob')[0];
 
         checkMobFile(loadeddata);
@@ -175,12 +178,65 @@ export class LoadUrlComponent {
             }
         }
         this.dataService.clearModifiedNode();
-        localStorage.removeItem('temp_file');
+        // localStorage.removeItem('temp_file');
+        SaveFileComponent.deleteFile('___TEMP___.mob');
 
         setTimeout(() => {
             let executeB = document.getElementById('executeButton');
             if (executeB && this.dataService.mobiusSettings.execute) { executeB.click(); }
             executeB = null;
         }, 50);
+
+        // SaveFileComponent.loadFile('___TEMP___.mob', (f) => {
+        //     // let f: any = localStorage.getItem('temp_file');
+        //     if (!f || f === 'error') { return; }
+        //     f = circularJSON.parse(f);
+
+        //     if (!f.flowchart.id) {
+        //         f.flowchart.id = IdGenerator.getId();
+        //     }
+        //     const loadeddata: IMobius = {
+        //         name: f.name,
+        //         author: f.author,
+        //         flowchart: f.flowchart,
+        //         version: f.version,
+        //         settings: f.settings || {}
+        //     };
+
+        //     // file.flowchart.name = urlSplit[urlSplit.length - 1 ].split('.mob')[0];
+
+        //     checkMobFile(loadeddata);
+
+        //     this.dataService.file = loadeddata;
+        //     if (loadeddata.settings && JSON.stringify(loadeddata.settings) !== '{}') {
+        //         window.localStorage.setItem('mpm_settings', loadeddata.settings);
+        //     }
+        //     this.dataService.newFlowchart = true;
+        //     this.router.navigate(['/editor']);
+        //     for (const node of loadeddata.flowchart.nodes) {
+        //         checkNodeValidity(node);
+        //     }
+        //     for (const func of this.dataService.flowchart.functions) {
+        //         for (const node of func.flowchart.nodes) {
+        //             checkNodeValidity(node);
+        //         }
+        //     }
+        //     if (this.dataService.flowchart.subFunctions) {
+        //         for (const func of this.dataService.flowchart.subFunctions) {
+        //             for (const node of func.flowchart.nodes) {
+        //                 checkNodeValidity(node);
+        //             }
+        //         }
+        //     }
+        //     this.dataService.clearModifiedNode();
+        //     // localStorage.removeItem('temp_file');
+        //     SaveFileComponent.deleteFile('___TEMP___.mob');
+
+        //     setTimeout(() => {
+        //         let executeB = document.getElementById('executeButton');
+        //         if (executeB && this.dataService.mobiusSettings.execute) { executeB.click(); }
+        //         executeB = null;
+        //     }, 50);
+        // });
     }
 }

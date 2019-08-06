@@ -10,7 +10,7 @@ import { InputType } from '@models/port';
 export class ProcedureInputViewerComponent implements OnDestroy {
 
     @Input() prod: IProcedure;
-    @Output() delete = new EventEmitter();
+    @Output() eventAction = new EventEmitter();
     PortTypes = InputType;
     private ctx = document.createElement('canvas').getContext('2d');
 
@@ -69,5 +69,16 @@ export class ProcedureInputViewerComponent implements OnDestroy {
         } else if (max && val > max) {
             this.prod.args[this.prod.argCount - 1].value = max;
         }
+    }
+
+
+    // modify argument input: check if input is valid
+    argMod() {
+        // this.dataService.focusedInput = [event.target, (<HTMLInputElement>event.target).selectionStart];
+        if (!this.prod.args[1].value) { return; }
+        this.eventAction.emit({
+            'type': 'argMod',
+            'content': this.prod
+        });
     }
 }

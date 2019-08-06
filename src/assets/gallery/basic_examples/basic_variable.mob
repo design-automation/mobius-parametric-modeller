@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_sjj3q6ps3c8",
+                "id": "node_t5m0n4lvdr",
                 "position": {
                     "x": 5350,
                     "y": 4999.1787109375
@@ -39,7 +39,8 @@
                                 "default": 0,
                                 "invalidVar": false,
                                 "value": "constant1",
-                                "linked": false
+                                "linked": false,
+                                "jsValue": "constant1_"
                             },
                             {
                                 "name": "__input__",
@@ -69,13 +70,17 @@
                                 "default": 0,
                                 "invalidVar": false,
                                 "value": "simple_input1",
-                                "linked": false
+                                "linked": false,
+                                "jsValue": "simple_input1_"
                             },
                             {
                                 "name": "__input__",
                                 "default": 0,
                                 "value": "123",
-                                "linked": false
+                                "linked": false,
+                                "jsValue": "123",
+                                "usedVars": [],
+                                "invalidVar": false
                             }
                         ],
                         "selected": false,
@@ -99,7 +104,8 @@
                                 "default": 0,
                                 "invalidVar": false,
                                 "value": "slider1",
-                                "linked": false
+                                "linked": false,
+                                "jsValue": "slider1_"
                             },
                             {
                                 "name": "__input__",
@@ -132,7 +138,8 @@
                                 "default": 0,
                                 "invalidVar": false,
                                 "value": "check_box1",
-                                "linked": false
+                                "linked": false,
+                                "jsValue": "check_box1_"
                             },
                             {
                                 "name": "__input__",
@@ -162,7 +169,8 @@
                                 "default": 0,
                                 "invalidVar": false,
                                 "value": "url1",
-                                "linked": false
+                                "linked": false,
+                                "jsValue": "url1_"
                             },
                             {
                                 "name": "__input__",
@@ -206,7 +214,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Create some local variables",
-                                    "id": "node_fyw1l3z4dwt",
+                                    "id": "node_bg4mowdxgvn",
                                     "position": {
                                         "x": 5350.81982421875,
                                         "y": 5201.63916015625
@@ -239,14 +247,16 @@
                                                     "name": "var_name",
                                                     "value": "my_var1",
                                                     "invalidVar": false,
-                                                    "linked": false
+                                                    "linked": false,
+                                                    "jsValue": "my_var1_"
                                                 },
                                                 {
                                                     "name": "value",
                                                     "value": "123",
                                                     "usedVars": [],
                                                     "invalidVar": false,
-                                                    "linked": false
+                                                    "linked": false,
+                                                    "jsValue": "123"
                                                 }
                                             ],
                                             "selected": false,
@@ -264,14 +274,16 @@
                                                     "name": "var_name",
                                                     "value": "my_var2",
                                                     "invalidVar": false,
-                                                    "linked": false
+                                                    "linked": false,
+                                                    "jsValue": "my_var2_"
                                                 },
                                                 {
                                                     "name": "value",
                                                     "value": "456.789",
                                                     "usedVars": [],
                                                     "invalidVar": false,
-                                                    "linked": false
+                                                    "linked": false,
+                                                    "jsValue": "456.789"
                                                 }
                                             ],
                                             "selected": false,
@@ -289,14 +301,16 @@
                                                     "name": "var_name",
                                                     "value": "my_var3",
                                                     "invalidVar": false,
-                                                    "linked": false
+                                                    "linked": false,
+                                                    "jsValue": "my_var3_"
                                                 },
                                                 {
                                                     "name": "value",
                                                     "value": "\"this is some text\"",
                                                     "usedVars": [],
                                                     "invalidVar": false,
-                                                    "linked": false
+                                                    "linked": false,
+                                                    "jsValue": "\"this is some text\""
                                                 }
                                             ],
                                             "selected": false,
@@ -314,14 +328,16 @@
                                                     "name": "var_name",
                                                     "value": "my_var4",
                                                     "invalidVar": false,
-                                                    "linked": false
+                                                    "linked": false,
+                                                    "jsValue": "my_var4_"
                                                 },
                                                 {
                                                     "name": "value",
                                                     "value": "[1, 2, 3]",
                                                     "usedVars": [],
                                                     "invalidVar": false,
-                                                    "linked": false
+                                                    "linked": false,
+                                                    "jsValue": "[1, 2, 3]"
                                                 }
                                             ],
                                             "selected": false,
@@ -339,14 +355,16 @@
                                                     "name": "var_name",
                                                     "value": "my_var5",
                                                     "invalidVar": false,
-                                                    "linked": false
+                                                    "linked": false,
+                                                    "jsValue": "my_var5_"
                                                 },
                                                 {
                                                     "name": "value",
                                                     "value": "[\"aaa\", \"bbb\"]",
                                                     "usedVars": [],
                                                     "invalidVar": false,
-                                                    "linked": false
+                                                    "linked": false,
+                                                    "jsValue": "[\"aaa\", \"bbb\"]"
                                                 }
                                             ],
                                             "selected": false,
@@ -364,14 +382,16 @@
                                                     "name": "var_name",
                                                     "value": "my_var6",
                                                     "invalidVar": false,
-                                                    "linked": false
+                                                    "linked": false,
+                                                    "jsValue": "my_var6_"
                                                 },
                                                 {
                                                     "name": "value",
                                                     "value": "[[1, 2, 3], [\"aaa\", \"bbb\"]]",
                                                     "usedVars": [],
                                                     "invalidVar": false,
-                                                    "linked": false
+                                                    "linked": false,
+                                                    "jsValue": "[[1, 2, 3], [\"aaa\", \"bbb\"]]"
                                                 }
                                             ],
                                             "selected": false,
@@ -389,7 +409,8 @@
                                                     "name": "var_name",
                                                     "value": "my_var7",
                                                     "invalidVar": false,
-                                                    "linked": false
+                                                    "linked": false,
+                                                    "jsValue": "my_var7_"
                                                 },
                                                 {
                                                     "name": "value",
@@ -399,7 +420,8 @@
                                                         "my_var2"
                                                     ],
                                                     "invalidVar": false,
-                                                    "linked": false
+                                                    "linked": false,
+                                                    "jsValue": "my_var1_ + my_var2_"
                                                 }
                                             ],
                                             "selected": false,
@@ -417,7 +439,8 @@
                                                     "name": "var_name",
                                                     "value": "my_var8",
                                                     "invalidVar": false,
-                                                    "linked": false
+                                                    "linked": false,
+                                                    "jsValue": "my_var8_"
                                                 },
                                                 {
                                                     "name": "value",
@@ -428,7 +451,8 @@
                                                         "my_var3"
                                                     ],
                                                     "invalidVar": false,
-                                                    "linked": false
+                                                    "linked": false,
+                                                    "jsValue": "[my_var1_, my_var2_, my_var3_]"
                                                 }
                                             ],
                                             "selected": false,
@@ -458,7 +482,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_bonhv0i5hut",
+                                                        "id": "node_47b2h1kzet6",
                                                         "position": {
                                                             "x": 5349.18017578125,
                                                             "y": 5400.81982421875
@@ -531,7 +555,8 @@
                                         "meta": {
                                             "mode": 0
                                         },
-                                        "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode"
+                                        "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode",
+                                        "model": null
                                     },
                                     "hasExecuted": true,
                                     "hasError": false
@@ -543,9 +568,10 @@
                     "meta": {
                         "mode": 0
                     },
-                    "parentNode": "~flowchart~nodes~0"
+                    "parentNode": "~flowchart~nodes~0",
+                    "model": null
                 },
-                "hasError": true,
+                "hasError": false,
                 "hasExecuted": true
             },
             "~flowchart~nodes~0~output~edges~0~target~parentNode",
@@ -558,8 +584,8 @@
         "functions": [],
         "ordered": true,
         "id": "2ba6f0e8-7f7b-4fd5-3375-c9e9fd1fff6e",
-        "last_updated": "2019-04-09T09:15:53.386Z"
+        "last_updated": "2019-08-06T03:54:30.243Z"
     },
     "version": 1,
-    "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-80,\"y\":-80,\"z\":80},\"pos_x\":-80,\"pos_y\":-80,\"pos_z\":80},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":\"_f\",\"name\":\"Faces\"},\"tab\":\"0\"},\"version\":\"0.4.33\"}"
+    "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-80,\"y\":-80,\"z\":80},\"pos_x\":-80,\"pos_y\":-80,\"pos_z\":80,\"target\":{\"x\":0,\"y\":0,\"z\":0}},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":5,\"name\":\"Faces\"},\"tab\":\"0\"},\"version\":\"0.4.38\"}"
 }

@@ -114,7 +114,7 @@ export class ToolsetComponent implements OnInit {
                 const enm = Modules[fnData.module][argDoc.type];
                 // tslint:disable-next-line:forin
                 for (const j in enm) {
-                    newArgs.push({name: arg.name, value: `'${enm[j]}'`});
+                    newArgs.push({name: arg.name, value: `'${enm[j]}'`, jsValue: `'${enm[j]}'`});
                     break;
                 }
                 continue;

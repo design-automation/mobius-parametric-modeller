@@ -72,10 +72,9 @@
 * **Description:** Adds a new copy of specified entities to the model.  
 * **Parameters:**  
   * *entities:* Entity or lists of entities to be copied. Entities can be positions, points, polylines, polygons and collections.  
-  * *copy_attributes:* Enum to copy attributes or to have no attributes copied.  
 * **Returns:** Entities, the copied entity or a list of copied entities.  
 * **Examples:**  
-  * copies = make.Copy([position1,polyine1,polygon1], copy_attributes)  
+  * copies = make.Copy([position1,polyine1,polygon1])  
     Creates a copy of position1, polyine1, and polygon1.
   
   

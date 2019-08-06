@@ -447,15 +447,6 @@
                                                             ],
                                                             "invalidVar": false,
                                                             "linked": false
-                                                        },
-                                                        {
-                                                            "name": "copy_attributes",
-                                                            "value": "'no_attributes'",
-                                                            "default": 0,
-                                                            "jsValue": "'no_attributes'",
-                                                            "usedVars": [],
-                                                            "invalidVar": false,
-                                                            "linked": false
                                                         }
                                                     ],
                                                     "selected": false,
@@ -836,15 +827,6 @@
                                                                                 "usedVars": [
                                                                                     "pgon"
                                                                                 ],
-                                                                                "invalidVar": false,
-                                                                                "linked": false
-                                                                            },
-                                                                            {
-                                                                                "name": "copy_attributes",
-                                                                                "value": "'no_attributes'",
-                                                                                "default": 0,
-                                                                                "jsValue": "'no_attributes'",
-                                                                                "usedVars": [],
                                                                                 "invalidVar": false,
                                                                                 "linked": false
                                                                             }

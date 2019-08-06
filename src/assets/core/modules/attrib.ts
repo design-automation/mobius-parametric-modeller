@@ -316,11 +316,11 @@ function _get(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
             return __model__.attribs.query.getModelAttribValue(attrib_name);
         }
     } else if (ents_arr.length === 0) {
-        return;
+        return [];
     } else if (getArrDepth(ents_arr) === 1) {
         const [ent_type, ent_i]: TEntTypeIdx = ents_arr as TEntTypeIdx;
-        if (attrib_name === 'id') {
-            if (has_index) { throw new Error('The "id" attribute does have an index.'); }
+        if (attrib_name === '_id') {
+            if (has_index) { throw new Error('The "_id" attribute does have an index.'); }
             return EEntTypeStr[ent_type] + ent_i as TAttribDataTypes;
         } else if (has_index) {
             return __model__.attribs.query.getAttribIndexedValue(ent_type, attrib_name, ent_i, attrib_index);

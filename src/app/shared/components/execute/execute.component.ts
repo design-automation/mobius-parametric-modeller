@@ -404,7 +404,7 @@ export class ExecuteComponent {
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
 
             // *********************************************************
-            console.log(fnString);
+            // console.log(fnString);
 
             const fn = new Function('__modules__', '__params__', fnString);
             // execute the function

@@ -253,7 +253,6 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
         const usedVars = [];
         const result = analyzeQuery(comps, 0, usedVars, '', '', true);
         if (result.error) { return result; }
-        console.log(result.jsStr);
         return {'usedVars': usedVars, 'jsStr': result.jsStr.trim()};
     }
 
@@ -293,12 +292,10 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
 
 // NEW ARGUMENT INPUT
 export function parseArgument(str: string): {'error'?: string, 'vars'?: string[], 'str'?: string, 'jsStr'?: string} {
-    // console.log('_____',str);
     const comps = splitComponents(str);
     if (typeof comps === 'string') {
         return {'error': comps};
     }
-    // console.log(comps);
     const vars: string[] = [];
     let newString = '';
     let jsString = '';
@@ -320,7 +317,6 @@ export function parseArgument(str: string): {'error'?: string, 'vars'?: string[]
 function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, vars: string[],
                     noSpace?: boolean, expressionType?: string):
                 {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string, 'jsStr'?: string} {
-    // console.log('analyzeComp |||', comps.slice(i).map(x => x.value).join(' '));
     let newString = '';
     let jsString = '';
 
@@ -461,7 +457,6 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
 function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars: string[],
                     disallowAt: boolean, isVariable = false):
                     {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string, 'jsStr'?: string} {
-    // console.log('analyzeVar |||', comps.slice(i).map(x => x.value).join(' '));
     const comp = comps[i];
 
     let newString = comp.value;
@@ -647,7 +642,6 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
 
 function analyzeArray(comps: {'type': strType, 'value': string}[], i: number, vars: string[]):
                 {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string, 'jsStr'?: string} {
-    // console.log('analyzeArray |||', comps.slice(i).map(x => x.value).join(' '));
     if (comps[i].type === strType.OTHER && !componentStartSymbols.has(comps[i].value)) {
         return {'i': i, 'str': '', 'jsStr': ''};
     }
@@ -670,7 +664,6 @@ function analyzeArray(comps: {'type': strType, 'value': string}[], i: number, va
         newString += result.str;
         jsString += result.jsStr;
     }
-    // console.log('~',i, comps.length, newString)
     return {'i': i - 1, 'str': newString, 'jsStr': jsString};
 }
 
@@ -853,7 +846,6 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
 
 function analyzeExpression(comps: {'type': strType, 'value': string}[], i: number, vars: string[], noSpace?: boolean):
                 {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string, 'jsStr'?: string} {
-    // console.log('analyzeExpression |||', comps.slice(i).map(x => x.value).join(' '));
     let newString = '';
     let jsString = '';
     while (i < comps.length && (comps[i].value === '-' || binaryOperators.has(comps[i].value))) {

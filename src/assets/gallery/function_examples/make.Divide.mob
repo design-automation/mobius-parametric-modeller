@@ -1,5 +1,5 @@
 {
-    "name": "default_file.mob",
+    "name": "make.Divide",
     "author": "new_user",
     "flowchart": {
         "name": "make.Divide",
@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_rvvt0afgaq",
+                "id": "node_qr1k430iam",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -67,7 +67,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_cpqwg7qyed9",
+                                    "id": "node_t832j6qno1",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -103,20 +103,28 @@
                                                 {
                                                     "name": "var_name",
                                                     "value": "ps1",
-                                                    "invalidVar": false
+                                                    "invalidVar": false,
+                                                    "jsValue": "ps1_",
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "__model__",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "coords",
-                                                    "value": "[0 , 0 , 0]",
-                                                    "default": 0
+                                                    "value": "[0, 0, 0]",
+                                                    "default": 0,
+                                                    "jsValue": "[0, 0, 0]",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "variable": "ps1"
                                         },
                                         {
                                             "type": 8,
@@ -132,20 +140,28 @@
                                                 {
                                                     "name": "var_name",
                                                     "value": "ps2",
-                                                    "invalidVar": false
+                                                    "invalidVar": false,
+                                                    "jsValue": "ps2_",
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "__model__",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "coords",
-                                                    "value": "[20 , 20 , 0]",
-                                                    "default": 0
+                                                    "value": "[20, 20, 0]",
+                                                    "default": 0,
+                                                    "jsValue": "[20, 20, 0]",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "variable": "ps2"
                                         },
                                         {
                                             "type": 8,
@@ -161,25 +177,40 @@
                                                 {
                                                     "name": "var_name",
                                                     "value": "pl",
-                                                    "invalidVar": false
+                                                    "invalidVar": false,
+                                                    "jsValue": "pl_",
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "__model__",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "positions",
-                                                    "value": "[ps1 , ps2]",
-                                                    "default": 0
+                                                    "value": "[ps1, ps2]",
+                                                    "default": 0,
+                                                    "jsValue": "[ps1_, ps2_]",
+                                                    "usedVars": [
+                                                        "ps1",
+                                                        "ps2"
+                                                    ],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "close",
                                                     "value": "'open'",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "'open'",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "variable": "pl"
                                         },
                                         {
                                             "type": 8,
@@ -195,30 +226,48 @@
                                                 {
                                                     "name": "var_name",
                                                     "value": "div1",
-                                                    "invalidVar": false
+                                                    "invalidVar": false,
+                                                    "jsValue": "div1_",
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "__model__",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "edge",
                                                     "value": "pl",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "pl_",
+                                                    "usedVars": [
+                                                        "pl"
+                                                    ],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "divisor",
                                                     "value": "5",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "5",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "method",
                                                     "value": "'by_number'",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "'by_number'",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "variable": "div1"
                                         }
                                     ],
                                     "state": {
@@ -243,7 +292,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_x81ns5zq8xc",
+                                                        "id": "node_kf1n7ntih3n",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -277,12 +326,14 @@
                                                                     {
                                                                         "name": "__model__",
                                                                         "value": "",
-                                                                        "default": 0
+                                                                        "default": 0,
+                                                                        "linked": false
                                                                     },
                                                                     {
                                                                         "name": "value",
                                                                         "value": "",
-                                                                        "default": 0
+                                                                        "default": 0,
+                                                                        "linked": false
                                                                     }
                                                                 ],
                                                                 "print": false,
@@ -304,7 +355,8 @@
                                                             },
                                                             "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
                                                         },
-                                                        "hasError": false
+                                                        "hasError": false,
+                                                        "hasExecuted": true
                                                     }
                                                 },
                                                 "selected": false
@@ -313,9 +365,11 @@
                                         "meta": {
                                             "mode": 0
                                         },
-                                        "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode"
+                                        "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode",
+                                        "model": null
                                     },
-                                    "hasError": false
+                                    "hasError": false,
+                                    "hasExecuted": true
                                 }
                             },
                             "selected": false
@@ -324,9 +378,11 @@
                     "meta": {
                         "mode": 0
                     },
-                    "parentNode": "~flowchart~nodes~0"
+                    "parentNode": "~flowchart~nodes~0",
+                    "model": null
                 },
-                "hasError": false
+                "hasError": false,
+                "hasExecuted": true
             },
             "~flowchart~nodes~0~output~edges~0~target~parentNode",
             "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
@@ -336,9 +392,10 @@
             "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0"
         ],
         "functions": [],
-        "ordered": true
+        "ordered": true,
+        "id": "f6502f5a-f022-67d7-66cb-9822b68f68ea",
+        "last_updated": "2019-08-06T05:21:56.788Z"
     },
-    "last_updated": "2019-01-27T11:01:04.297Z",
     "version": 1,
-    "settings": {}
+    "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-80,\"y\":-80,\"z\":80},\"pos_x\":-80,\"pos_y\":-80,\"pos_z\":80,\"target\":{\"x\":10,\"y\":10,\"z\":0}},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":5,\"name\":\"Faces\"},\"tab\":\"0\"},\"version\":\"0.4.38\"}"
 }

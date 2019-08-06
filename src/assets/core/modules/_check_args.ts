@@ -81,7 +81,7 @@ export function checkAttribValue(fn_name: string, attrib_value: any, attrib_inde
 //         if (blocked === true) {
 //             let pass = false;
 //             const err_arr = [fn_name + ': ' + 'attrib_name is one of the reserved attribute names - '
-//                             + Object.values(EAttribNames).toString() + '\n'];
+//                             + Object.values(EAttribNames).toString() + '<br>'];
 //             if (isName) {
 //                 try {
 //                     isValidName(fn_name, 'attrib_value', attrib_value);
@@ -109,7 +109,7 @@ export function checkAttribValue(fn_name: string, attrib_value: any, attrib_inde
 //                         try {
 //                             check_fns[i](fn_name + '.' + check_fns[i], 'attrib_value', attrib_value);
 //                         } catch (err) {
-//                             err_arr.push(err.message + '\n');
+//                             err_arr.push(err.message + '<br>');
 //                             continue;
 //                         }
 //                         pass = true;
@@ -133,7 +133,7 @@ export function checkAttribValue(fn_name: string, attrib_value: any, attrib_inde
 //                             check_fns[i](fn_name + '[' + attrib_index + ']' + '.' + check_fns[i],
 //                                                       'attrib_value', attrib_value);
 //                         } catch (err) {
-//                             err_arr.push(err.message + '\n');
+//                             err_arr.push(err.message + '<br>');
 //                             continue;
 //                         }
 //                         pass = true;
@@ -398,14 +398,14 @@ export function checkCommTypes(fn_name: string, arg_name: string, arg: any, chec
         try {
            ret = check_fns[i](fn_name, arg_name, arg);
         } catch (err) {
-            err_arr.push(err.message + '\n');
+            err_arr.push(err.message + '<br>');
             continue;
         }
         pass = true;
         break; // passed
     }
     if (pass === false) { // Failed all tests: argument does not fall into any valid types
-        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests:\n';
+        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests:<br>';
         throw new Error(ret_msg + err_arr.join(''));
     }
     return ret;
@@ -420,14 +420,14 @@ export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns:
         try {
            ret =  check_fns[i](fn_name, arg_name, arg, IDchecks);
         } catch (err) {
-            err_arr.push(err.message + '\n');
+            err_arr.push(err.message + '<br>');
             continue;
         }
         pass = true;
         break; // passed
     }
     if (pass === false) { // Failed all tests: argument does not fall into any valid types
-        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests:\n';
+        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests:<br>';
         throw new Error(ret_msg + err_arr.join(''));
     }
     return ret; // returns TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]; depends on which passes
@@ -444,7 +444,7 @@ export function checkIDnTypes(fn_name: string, arg_name: string, arg: any, check
         try {
             ret = check_fns[i](fn_name, arg_name, arg, IDchecks);
         } catch (err) {
-            err_arr.push(err.message + '\n');
+            err_arr.push(err.message + '<br>');
             continue;
         }
         pass = true;
@@ -455,7 +455,7 @@ export function checkIDnTypes(fn_name: string, arg_name: string, arg: any, check
         //     try {
         //         ret = IDcheckObj[check_fns[i]](fn_name + '.' + check_fns[i], arg_name, arg, IDchecks);
         //     } catch (err) {
-        //         err_arr.push(err.message + '\n');
+        //         err_arr.push(err.message + '<br>');
         //         continue;
         //     }
         //     pass = true;
@@ -465,7 +465,7 @@ export function checkIDnTypes(fn_name: string, arg_name: string, arg: any, check
         //     try {
         //         TypeCheckObj[check_fns[i]](fn_name + '.' + check_fns[i], arg_name, arg);
         //     } catch (err) {
-        //         err_arr.push(err.message + '\n');
+        //         err_arr.push(err.message + '<br>');
         //         continue;
         //     }
         //     pass = true;
@@ -473,7 +473,7 @@ export function checkIDnTypes(fn_name: string, arg_name: string, arg: any, check
         // }
     }
     if (pass === false) { // Failed all tests: argument does not fall into any valid types
-        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests:\n';
+        const ret_msg = fn_name + ': ' + arg_name + ' failed the following tests:<br>';
         throw new Error(ret_msg + err_arr.join(''));
     }
     return ret; // returns void|TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]; depends on which passes

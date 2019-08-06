@@ -33,9 +33,9 @@ function printFunc(_console, name, value){
     } else if (typeof value === 'string') {
         val = '"' + value.replace(/\\n/g, '<br>') + '"';
     } else if (value.constructor === [].constructor) {
-        val = JSON.stringify(value);
+        val = JSON.stringify(value).replace(/,/g, ', ');
     } else if (value.constructor === {}.constructor) {
-        val = JSON.stringify(value);
+        val = JSON.stringify(value).replace(/,/g, ', ');
     } else {
         val = value;
     }

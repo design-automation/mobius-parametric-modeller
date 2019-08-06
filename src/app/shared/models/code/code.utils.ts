@@ -141,7 +141,8 @@ export class CodeUtils {
                 } else {
                     codeStr.push(`let __return_value__ = __modules__.${_parameterTypes.return}(${returnArgVals.join(', ')});`);
                     if (isMainFlowchart) {
-                        codeStr.push(`__params__.console.push('Return: ' + __return_value__.toString());`);
+                        codeStr.push(`__params__.console.push('<p><b>Return: <i>' + ` +
+                                     `__return_value__.toString().replace(/,/g,', ') + '</i></b></p>');`);
                     }
                     codeStr.push(`return __return_value__;`);
                 }

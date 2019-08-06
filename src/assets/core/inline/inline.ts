@@ -30,9 +30,9 @@ const constants = [
  ];
 
 const lists = [
+    ['isList(list)', 'Returns true if this is a list, false otherwise.'],
     ['range(start, end)', 'Generates a list of integers, from start to end, with a step size of 1'],
     ['range(start, end, step?)', 'Generates a list of integers, from start to end, with a specified step size'],
-    ['isList(list)', 'Returns true if this is a list, false otherwise.'],
     ['len(list)', 'Returns the number of items in the list'],
     // ['listLen(list)', 'Returns the number of items in the list'],
     ['listLast(list)', 'Returns the last item in a list'],
@@ -46,7 +46,7 @@ const lists = [
     ['listFlat(list, depth?)', 'Returns a copy of the nested list, flattened to the specified depth'],
     ['listSlice(list, start, end?)', 'Return a sub-list from the list'],
     ['listZip(lists)', 'Converts a set of lists from rows into columns, based on the shortest list'],
-    ['lisZip2(lists)', 'Converts a set of lists from rows into columns, based on the longest list']
+    ['listZip2(lists)', 'Converts a set of lists from rows into columns, based on the longest list']
  ];
 
  const sets = [

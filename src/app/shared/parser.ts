@@ -246,17 +246,28 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
         return {'error': comps};
     }
 
-    if (comps[0].value === '@') {
+    if ((comps[0].value === '@' || comps[0].value === '#' || comps[0].value === '?')) {
         if (comps[1].type !== strType.VAR) {
-            return {'error': 'Error: Expect attribute name after @'};
-        }
-        if (comps.length === 2) {
-            return {'jsStr': value};
+            return {'error': 'Error: Expect attribute name after ' + comps[0].value};
         }
         const usedVars = [];
-        const attribComp = analyzeComp(comps, 1, usedVars);
-        return {'usedVars': usedVars, 'jsStr': '@' + attribComp.jsStr};
+        const result = analyzeQuery(comps, 0, usedVars, '', '', true);
+        if (result.error) { return result; }
+        console.log(result.jsStr);
+        return {'usedVars': usedVars, 'jsStr': result.jsStr.trim()};
     }
+
+    // if (comps[0].value === '@') {
+    //     if (comps[1].type !== strType.VAR) {
+    //         return {'error': 'Error: Expect attribute name after @'};
+    //     }
+    //     if (comps.length === 2) {
+    //         return {'jsStr': value};
+    //     }
+    //     const usedVars = [];
+    //     const attribComp = analyzeComp(comps, 1, usedVars);
+    //     return {'usedVars': usedVars, 'jsStr': '@' + attribComp.jsStr};
+    // }
     if (comps[0].type !== strType.VAR) {
         return {'error': `Error: Expect a Variable at the start of the input`};
     }
@@ -624,15 +635,8 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
         addVars(vars, comp.value);
     }
 
-    if (isVariable && comps[i + 1].value === '@') {
-        const result = analyzeVar(comps, i + 2, vars, true);
-        if (result.error) { return result; }
-        i = result.i;
-        newString = ' ' + newString.replace(/ /g, '') + '@' + result.str.replace(/ /g, '') + ' '; //////////
-        jsString = ' ' + jsString + '@' + result.jsStr + ' '; //////////
-    } else if (!disallowAt && i + 1 < comps.length &&
-    (comps[i + 1].value === '@' || comps[i + 1].value === '#' || comps[i + 1].value === '?')) {
-        const result = analyzeQuery(comps, i + 1, vars, newString, jsString);
+    if (!disallowAt && i + 1 < comps.length && (comps[i + 1].value === '@' || comps[i + 1].value === '#' || comps[i + 1].value === '?')) {
+        const result = analyzeQuery(comps, i + 1, vars, newString, jsString, isVariable);
         if (result.error) { return result; }
         i = result.i;
         newString = result.str;
@@ -729,13 +733,22 @@ function analyzeJSON(comps: {'type': strType, 'value': string}[], i: number, var
     return {'i': i - 1, 'str': newString, 'jsStr': jsString};
 }
 
-function analyzeQuery(comps: {'type': strType, 'value': string}[], i: number, vars: string[], startStr: string, startJS: string):
+function analyzeQuery(comps: {'type': strType, 'value': string}[],
+                      i: number, vars: string[], startStr: string, startJS: string, isVariable?: boolean):
                     {'error'?: string, 'i'?: number, 'str'?: string, 'jsStr'?: string} {
     let newString = startStr;
     let jsString = startJS;
 
     while (true) {
         if (comps[i].value === '@') {
+            if (isVariable) {
+                const attrbVar = analyzeVar(comps, i + 1, vars, true, false);
+                if (attrbVar.error) { return attrbVar; }
+                i = attrbVar.i;
+                newString = ' ' + newString + '@' + attrbVar.str.replace(/ /g, '') + ' '; //////////
+                jsString = ' ' + jsString + '@' + attrbVar.jsStr + ' '; //////////
+                return {'i': i, 'str': newString, 'jsStr': jsString};
+            }
             if (i + 1 === comps.length || comps[i + 1].type !== strType.VAR) {
                 return {'error': 'Error: Variable expected after "@"\n' +
                 `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};

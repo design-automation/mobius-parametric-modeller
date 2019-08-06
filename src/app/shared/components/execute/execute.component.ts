@@ -402,9 +402,12 @@ export class ExecuteComponent {
             params['model'] = _parameterTypes.newFn();
             _parameterTypes.mergeFn(params['model'], node.input.value);
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
+
+            // *********************************************************
+            console.log(fnString);
+
             const fn = new Function('__modules__', '__params__', fnString);
             // execute the function
-
 
             const result = fn(Modules, params);
 

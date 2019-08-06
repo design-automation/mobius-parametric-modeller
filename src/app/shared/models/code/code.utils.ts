@@ -342,10 +342,22 @@ export class CodeUtils {
         if (res.length === 1 ) {
             return val;
         }
+        let entity = res[0];
         if (res[0] === '') {
-            return `__modules__.${_parameterTypes.getattrib}(__params__.model, null, '${res[1]}')`;
+            entity = 'null';
         }
-        return `__modules__.${_parameterTypes.getattrib}(__params__.model, ${res[0]}, '${res[1]}')`;
+
+        let att_name;
+        let att_index;
+        const bracketIndex = res[1].indexOf('.slice(');
+        if (bracketIndex !== -1) {
+            att_name = res[1].slice(0, bracketIndex);
+            att_index = res[1].slice(bracketIndex + 7, -4);
+        } else {
+            att_name = res[1];
+            att_index = 'null';
+        }
+        return `__modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${att_name}', ${att_index})`;
 
         // if (!val) { return; }
         // if (typeof val === 'number') { return val; }

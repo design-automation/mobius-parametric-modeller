@@ -783,7 +783,17 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
             }
 
             newString += '#' + result.str.replace(/ /g, '') + ' '; //////////
-            jsString = ` __modules__.${_parameterTypes.queryGet}(__params__.model, '${result.str}', ${entity})`; //////////
+
+
+            const bracketIndex = result.jsStr.indexOf('.slice(');
+            if (bracketIndex !== -1) {
+                const att_name = result.jsStr.slice(0, bracketIndex);
+                const att_index = result.jsStr.slice(bracketIndex + 7, -4);
+                jsString = ` __modules__.${_parameterTypes.queryGet}(__params__.model, '${att_name}', ${entity}).slice(${att_index})[0]`;
+            } else {
+                jsString = ` __modules__.${_parameterTypes.queryGet}(__params__.model, '${result.str}', ${entity})`;
+            }
+
 
             if (i === comps.length - 1 || (comps[i + 1].value !== '@' && comps[i + 1].value !== '#' && comps[i + 1].value !== '?')) {
                 return {'i': i, 'str': newString, 'jsStr': jsString};

@@ -42,29 +42,21 @@ export class CodeUtils {
             case ProcedureTypes.Variable:
                 if (!args[0].jsValue) {
                     codeStr.push(`${args[1].jsValue};`);
-                    // codeStr.push(`${this.repGetAttrib(args[1].jsValue)};`);
                     break;
                 }
                 const repVar = this.repSetAttrib(args[0].jsValue);
                 if (!repVar) {
                     codeStr.push(`${prefix}${args[0].jsValue} = ${args[1].jsValue};`);
-                    // codeStr.push(`${prefix}${args[0].jsValue} = ${this.repGetAttrib(args[1].jsValue)};`);
                     if (prefix === 'let ') {
                         existingVars.push(args[0].jsValue);
                     }
                 } else {
                     codeStr.push(`${repVar[0]} ${args[1].jsValue} ${repVar[1]}`);
-                    // codeStr.push(`${repVar[0]} ${this.repGetAttrib(args[1].jsValue)} ${repVar[1]}`);
                 }
                 break;
 
             case ProcedureTypes.If:
-                if (args[0].jsValue.indexOf('__params__') !== -1 &&
-                    args[0].jsValue.indexOf(_parameterTypes.getattrib) === -1) {
-                        throw new Error('Unexpected Identifier');
-                }
                 codeStr.push(`if (${args[0].jsValue}){`);
-                // codeStr.push(`if (${this.repGetAttrib(args[0].jsValue)}){`);
                 break;
 
             case ProcedureTypes.Else:
@@ -72,31 +64,15 @@ export class CodeUtils {
                 break;
 
             case ProcedureTypes.Elseif:
-                if (args[0].jsValue.indexOf('__params__') !== -1 &&
-                    args[0].jsValue.indexOf(_parameterTypes.getattrib) === -1) {
-                        throw new Error('Unexpected Identifier');
-                }
                 codeStr.push(`else if(${args[0].jsValue}){`);
-                // codeStr.push(`else if(${this.repGetAttrib(args[0].jsValue)}){`);
                 break;
 
             case ProcedureTypes.Foreach:
-                // codeStr.push(`for (${prefix} ${args[0].jsValue} of [...Array(${args[1].jsValue}).keys()]){`);
-                if (args[0].jsValue.indexOf('__params__') !== -1 &&
-                    args[0].jsValue.indexOf(_parameterTypes.getattrib) === -1) {
-                        throw new Error('Unexpected Identifier');
-                }
                 codeStr.push(`for (${prefix} ${args[0].jsValue} of ${args[1].jsValue}){`);
-                // codeStr.push(`for (${prefix} ${args[0].jsValue} of ${this.repGetAttrib(args[1].jsValue)}){`);
                 break;
 
             case ProcedureTypes.While:
-                if (args[0].jsValue.indexOf('__params__') !== -1 &&
-                    args[0].jsValue.indexOf(_parameterTypes.getattrib) === -1) {
-                        throw new Error('Unexpected Identifier');
-                }
                 codeStr.push(`while (${args[0].jsValue}){`);
-                // codeStr.push(`while (${this.repGetAttrib(args[0].jsValue)}){`);
                 break;
 
             case ProcedureTypes.Break:
@@ -154,13 +130,10 @@ export class CodeUtils {
                         check = false;
                         break;
                     }
-                    if (arg.jsValue.indexOf('__params__') !== -1 &&
-                    arg.jsValue.indexOf(_parameterTypes.getattrib) === -1) { throw new Error('Unexpected Identifier'); }
                     if (arg.jsValue[0] === '#') {
                         returnArgVals.push('`' + arg.jsValue + '`');
                         continue;
                     }
-                    // returnArgVals.push(this.repGetAttrib(arg.jsValue));
                     returnArgVals.push(arg.jsValue);
                 }
                 if (!check) {
@@ -168,7 +141,6 @@ export class CodeUtils {
                 } else {
                     codeStr.push(`let __return_value__ = __modules__.${_parameterTypes.return}(${returnArgVals.join(', ')});`);
                     if (isMainFlowchart) {
-                        // codeStr.push(`console.(log'Return: ', __return_value__);`);
                         codeStr.push(`__params__.console.push('Return: ' + __return_value__.toString());`);
                     }
                     codeStr.push(`return __return_value__;`);
@@ -178,10 +150,6 @@ export class CodeUtils {
             case ProcedureTypes.Function:
                 const argVals = [];
                 for (const arg of args.slice(1)) {
-                    if (arg.jsValue && arg.jsValue.indexOf('__params__') !== -1 &&
-                    arg.jsValue.indexOf(_parameterTypes.getattrib) === -1) {
-                        throw new Error('Unexpected Identifier');
-                    }
                     if (arg.name === _parameterTypes.constList) {
                         argVals.push('__params__.constants');
                         continue;
@@ -204,7 +172,6 @@ export class CodeUtils {
                         continue;
                     }
                     argVals.push(arg.jsValue);
-                    // argVals.push(this.repGetAttrib(arg.jsValue));
                 }
                 if (prod.resolvedValue) {
                     let prodResolvedCheck = false;

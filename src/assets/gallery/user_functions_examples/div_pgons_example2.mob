@@ -192,7 +192,7 @@
                                                 "module": "make",
                                                 "name": "Copy"
                                             },
-                                            "argCount": 4,
+                                            "argCount": 3,
                                             "args": [
                                                 {
                                                     "name": "var_name",

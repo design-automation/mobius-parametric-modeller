@@ -467,13 +467,19 @@ export class GIGeomModify {
      * @param new_posis_i
      */
     public replacePosis(ent_type: EEntType, ent_i: number, new_posis_i: number[]): void {
-        const verts_i: number[] = this._geom.query.navAnyToVert(ent_type, ent_i);
-        if (verts_i.length !== new_posis_i.length) {
+        const old_posis_i: number[] = this._geom.query.navAnyToPosi(ent_type, ent_i);
+        if (old_posis_i.length !== new_posis_i.length) {
             throw new Error('Replacing positions operation failed due to incorrect number of positions.');
         }
-        for (let i = 0; i < verts_i.length; i++) {
-            const vert_i: number = verts_i[i];
-            const old_posi_i: number = this._geom_arrays.dn_verts_posis[vert_i];
+        const old_posis_i_map: Map<number, number> = new Map(); // old_posi_i -> index
+        for (let i = 0; i < old_posis_i.length; i++) {
+            const old_posi_i: number = old_posis_i[i];
+            old_posis_i_map[old_posi_i] = i;
+        }
+        const verts_i: number[] = this._geom.query.navAnyToVert(ent_type, ent_i);
+        for (const vert_i of verts_i) {
+            const old_posi_i: number = this._geom.query.navVertToPosi(vert_i);
+            const i: number = old_posis_i_map[old_posi_i];
             const new_posi_i: number = new_posis_i[i];
             // set the down array
             this._geom_arrays.dn_verts_posis[vert_i] = new_posi_i;

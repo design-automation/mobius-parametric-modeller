@@ -71,7 +71,7 @@ The bounding box consists of a list of lists, as follows [[x, y, z], [x, y, z], 
 ## VisRay  
 * **Description:** Visualises a ray by creating a line.  
 * **Parameters:**  
-  * *ray:* A list of two list of three coordinates [origin, vector]: [[x,y,z],[x',y',z']]  
+  * *rays:* A list of two list of three coordinates [origin, vector]: [[x,y,z],[x',y',z']]  
   * *scale:* undefined  
 * **Returns:** entities, a line representing the ray.  
 * **Examples:**  
@@ -92,7 +92,7 @@ The bounding box consists of a list of lists, as follows [[x, y, z], [x, y, z], 
 ## VisBBox  
 * **Description:** Visualises a bounding box by adding geometry to the model.  
 * **Parameters:**  
-  * *bbox:* A list of lists.  
+  * *bboxes:* A list of lists.  
 * **Returns:** Entities, twelve polylines representing the box.  
 * **Examples:**  
   * bbox1 = virtual.viBBox(position1, vector1, [0,1,0])  

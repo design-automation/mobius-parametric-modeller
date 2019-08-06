@@ -111,36 +111,93 @@ describe('Execute Component test', () => {
                     'Loaded file name and the file name in dataService do not match.');
                 const output = dataService.flowchart.nodes[dataService.flowchart.nodes.length - 1];
                 const model = JSON.parse(output.model);
-                const geom_data = model.geometry;
-                if (test.requirements.hasOwnProperty('num_positions')) {
-                    expect(geom_data.num_positions).toBe(test.requirements['num_positions'], 'No. positions do not match');
+                if (test.requirements.hasOwnProperty('geometry')) {
+                    const geom_data = model.geometry;
+                    if (test.requirements.geometry.hasOwnProperty('num_positions')) {
+                        expect(geom_data.num_positions).toBe(test.requirements.geometry['num_positions'], 'No. positions do not match');
+                    }
+                    if (test.requirements.geometry.hasOwnProperty('num_triangles')) {
+                        expect(geom_data.triangles.length).toBe(test.requirements.geometry['num_triangles'], 'No. triangles do not match');
+                    }
+                    if (test.requirements.geometry.hasOwnProperty('num_vertices')) {
+                        expect(geom_data.vertices.length).toBe(test.requirements.geometry['num_vertices'], 'No. vertices do not match');
+                    }
+                    if (test.requirements.geometry.hasOwnProperty('num_edges')) {
+                        expect(geom_data.edges.length).toBe(test.requirements.geometry['num_edges'], 'No. edges do not match');
+                    }
+                    if (test.requirements.geometry.hasOwnProperty('num_wires')) {
+                        expect(geom_data.wires.length).toBe(test.requirements.geometry['num_wires'], 'No. wires do not match');
+                    }
+                    if (test.requirements.geometry.hasOwnProperty('num_faces')) {
+                        expect(geom_data.faces.length).toBe(test.requirements.geometry['num_faces'], 'No. faces do not match');
+                    }
+                    if (test.requirements.geometry.hasOwnProperty('num_points')) {
+                        expect(geom_data.points.length).toBe(test.requirements.geometry['num_points'], 'No. points do not match');
+                    }
+                    if (test.requirements.geometry.hasOwnProperty('num_polylines')) {
+                        expect(geom_data.polylines.length).toBe(test.requirements.geometry['num_polylines'], 'No. polylines do not match');
+                    }
+                    if (test.requirements.geometry.hasOwnProperty('num_polygons')) {
+                        expect(geom_data.polygons.length).toBe(test.requirements.geometry['num_polygons'], 'No. polygons do not match');
+                    }
+                    if (test.requirements.geometry.hasOwnProperty('num_collections')) {
+                        expect(geom_data.collections.length).toBe(test.requirements.geometry['num_collections'],
+                        'No. collections do not match');
+                    }
                 }
-                if (test.requirements.hasOwnProperty('num_triangles')) {
-                    expect(geom_data.triangles.length).toBe(test.requirements['num_triangles'], 'No. triangles do not match');
-                }
-                if (test.requirements.hasOwnProperty('num_vertices')) {
-                    expect(geom_data.vertices.length).toBe(test.requirements['num_vertices'], 'No. vertices do not match');
-                }
-                if (test.requirements.hasOwnProperty('num_edges')) {
-                    expect(geom_data.edges.length).toBe(test.requirements['num_edges'], 'No. edges do not match');
-                }
-                if (test.requirements.hasOwnProperty('num_wires')) {
-                    expect(geom_data.wires.length).toBe(test.requirements['num_wires'], 'No. wires do not match');
-                }
-                if (test.requirements.hasOwnProperty('num_faces')) {
-                    expect(geom_data.faces.length).toBe(test.requirements['num_faces'], 'No. faces do not match');
-                }
-                if (test.requirements.hasOwnProperty('num_points')) {
-                    expect(geom_data.points.length).toBe(test.requirements['num_points'], 'No. points do not match');
-                }
-                if (test.requirements.hasOwnProperty('num_polylines')) {
-                    expect(geom_data.polylines.length).toBe(test.requirements['num_polylines'], 'No. polylines do not match');
-                }
-                if (test.requirements.hasOwnProperty('num_polygons')) {
-                    expect(geom_data.polygons.length).toBe(test.requirements['num_polygons'], 'No. polygons do not match');
-                }
-                if (test.requirements.hasOwnProperty('num_collections')) {
-                    expect(geom_data.collections.length).toBe(test.requirements['num_collections'], 'No. collections do not match');
+                if (test.requirements.hasOwnProperty('attributes')) {
+                    const attrb_data = model.attributes;
+                    let testSet, resultSet;
+                    if (test.requirements.attributes.hasOwnProperty('position_attribs')) {
+                        testSet = new Set(attrb_data.positions.map(x => x.name));
+                        resultSet = new Set(test.requirements.attributes['position_attribs']);
+                        expect(testSet).toEqual(resultSet, 'No. position attributes do not match');
+                    }
+                    if (test.requirements.attributes.hasOwnProperty('vertex_attribs')) {
+                        testSet = new Set(attrb_data.vertices.map(x => x.name));
+                        resultSet = new Set(test.requirements.attributes['vertex_attribs']);
+                        expect(testSet).toEqual(resultSet, 'No. vertex attributes do not match');
+                    }
+                    if (test.requirements.attributes.hasOwnProperty('edge_attribs')) {
+                        testSet = new Set(attrb_data.edges.map(x => x.name));
+                        resultSet = new Set(test.requirements.attributes['edge_attribs']);
+                        expect(testSet).toEqual(resultSet, 'No. edge attributes do not match');
+                    }
+                    if (test.requirements.attributes.hasOwnProperty('wire_attribs')) {
+                        testSet = new Set(attrb_data.wires.map(x => x.name));
+                        resultSet = new Set(test.requirements.attributes['wire_attribs']);
+                        expect(testSet).toEqual(resultSet, 'No. wire attributes do not match');
+                    }
+                    if (test.requirements.attributes.hasOwnProperty('face_attribs')) {
+                        testSet = new Set(attrb_data.faces.map(x => x.name));
+                        resultSet = new Set(test.requirements.attributes['face_attribs']);
+                        expect(testSet).toEqual(resultSet, 'No. face attributes do not match');
+                    }
+                    if (test.requirements.attributes.hasOwnProperty('point_attribs')) {
+                        testSet = new Set(attrb_data.points.map(x => x.name));
+                        resultSet = new Set(test.requirements.attributes['point_attribs']);
+                        expect(testSet).toEqual(resultSet, 'No. point attributes do not match');
+                    }
+                    if (test.requirements.attributes.hasOwnProperty('polyline_attribs')) {
+                        testSet = new Set(attrb_data.polylines.map(x => x.name));
+                        resultSet = new Set(test.requirements.attributes['polyline_attribs']);
+                        expect(testSet).toEqual(resultSet, 'No. polyline attributes do not match');
+                    }
+                    if (test.requirements.attributes.hasOwnProperty('polygon_attribs')) {
+                        testSet = new Set(attrb_data.polygons.map(x => x.name));
+                        resultSet = new Set(test.requirements.attributes['polygon_attribs']);
+                        expect(testSet).toEqual(resultSet, 'No. polygon attributes do not match');
+                    }
+                    if (test.requirements.attributes.hasOwnProperty('collection_attribs')) {
+                        testSet = new Set(attrb_data.collections.map(x => x.name));
+                        resultSet = new Set(test.requirements.attributes['collection_attribs']);
+                        expect(testSet).toEqual(resultSet, 'No. collection attributes do not match');
+                    }
+                    if (test.requirements.attributes.hasOwnProperty('model_attribs')) {
+                        testSet = new Set(attrb_data.model.map(x => x.name));
+                        resultSet = new Set(test.requirements.attributes['model_attribs']);
+                        expect(testSet).toEqual(resultSet, 'No. model attributes do not match');
+                    }
                 }
                 if (test.returns) {
                     expect(output.output.value).toBe(test.returns, 'Return values do not match');

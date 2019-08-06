@@ -1091,6 +1091,7 @@ export function Divide(__model__: GIModel, entities: TId|TId[], divisor: number,
 export enum _EDivideMethod {
     BY_NUMBER =  'by_number',
     BY_LENGTH  =  'by_length',
+    BY_MAX_LENGTH  =  'by_max_length',
     BY_MIN_LENGTH  =  'by_min_length'
 }
 function _divideEdge(__model__: GIModel, edge_i: number, divisor: number, method: _EDivideMethod): number[] {
@@ -1102,10 +1103,24 @@ function _divideEdge(__model__: GIModel, edge_i: number, divisor: number, method
         new_xyzs = interpByNum(start, end, divisor - 1);
     } else if (method === _EDivideMethod.BY_LENGTH) {
         new_xyzs = interpByLen(start, end, divisor);
-    } else { // BY_MIN_LENGTH
+    } else if (method === _EDivideMethod.BY_MAX_LENGTH) {
         const len: number = distance(start, end);
-        const num_div: number = Math.ceil(len / divisor);
-        new_xyzs = interpByNum(start, end, num_div - 1);
+        if (divisor === 0) {
+            new_xyzs = [];
+        } else {
+            const num_div: number = Math.ceil(len / divisor);
+            const num_div_max: number = num_div > 1 ? num_div - 1 : 0;
+            new_xyzs = interpByNum(start, end, num_div_max);
+        }
+    } else { // BY_MIN_LENGTH
+        if (divisor === 0) {
+            new_xyzs = [];
+        } else {
+            const len: number = distance(start, end);
+            const num_div: number = Math.floor(len / divisor);
+            const num_div_min: number = num_div > 1 ? num_div - 1 : 0;
+            new_xyzs = interpByNum(start, end, num_div_min);
+        }
     }
     const new_edges_i: number[] = [];
     let old_edge_i: number = edge_i;

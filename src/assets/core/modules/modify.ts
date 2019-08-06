@@ -270,6 +270,29 @@ export function XForm(__model__: GIModel, entities: TId|TId[], from: TPlane, to:
     }
 }
 // ================================================================================================
+/**
+ * Modifies a collection.
+ * ~
+ * If the method is 'set_parent', then the parent can be updated by specifying a parent collection.
+ * If the method is 'add_entities', then entities are added to the collection.
+ * If the method is 'remove_entities', then entities are removed from the collection.
+ * If adding or removing entities, then the entities must be points, polylines, or polygons.
+ *
+ * @param __model__
+ * @param coll The collection to be updated.
+ * @param entities Points, polylines, and polygons, or a single collection.
+ * @param method Enum, the method to use when modifying the collection.
+ * @returns void
+ */
+export function Collection(__model__: GIModel, coll: TId, entities: TId|TId[], method: _EModifyCollectionMethod): void {
+    // --- Error Check ---
+    const coll_arr = checkIDs('modify.Collection', 'coll', coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
+    const ents_arr = checkIDs('modify.Collection', 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList],
+        [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+    // --- Error Check ---
+    _collection(__model__, coll_arr, ents_arr, method);
+}
 export enum _EModifyCollectionMethod {
     SET_PARENT_ENTITY = 'set_parent',
     ADD_ENTITIES = 'add_entities',
@@ -317,39 +340,7 @@ function _collection(__model__: GIModel, coll_arr: TEntTypeIdx, ents_arr: TEntTy
         __model__.geom.modify.collRemoveEnts(coll_i, points_i, plines_i, pgons_i);
     }
 }
-/**
- * Modifies a collection.
- * ~
- * If the method is 'set_parent', then the parent can be updated by specifying a parent collection.
- * If the method is 'add_entities', then entities are added to the collection.
- * If the method is 'remove_entities', then entities are removed from the collection.
- * If adding or removing entities, then the entities must be points, polylines, or polygons.
- *
- * @param __model__
- * @param coll The collection to be updated.
- * @param entities Points, polylines, and polygons, or a single collection.
- * @param method Enum, the method to use when modifying the collection.
- * @returns void
- */
-export function Collection(__model__: GIModel, coll: TId, entities: TId|TId[], method: _EModifyCollectionMethod): void {
-    // --- Error Check ---
-    const coll_arr = checkIDs('modify.Collection', 'coll', coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
-    const ents_arr = checkIDs('modify.Collection', 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
-        [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
-    // --- Error Check ---
-    _collection(__model__, coll_arr, ents_arr, method);
-}
 // ================================================================================================
-function _reverse(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
-    if (getArrDepth(ents_arr) === 1 && ents_arr.length) {
-        const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
-        const wires_i: number[] = __model__.geom.query.navAnyToWire(ent_type, index);
-        wires_i.forEach( wire_i => __model__.geom.modify.reverse(wire_i) );
-    } else {
-        (ents_arr as TEntTypeIdx[]).forEach( ent_arr => _reverse(__model__, ent_arr) );
-    }
-}
 /**
  * Reverses direction of entities.
  * @param __model__
@@ -368,16 +359,16 @@ export function Reverse(__model__: GIModel, entities: TId|TId[]): void {
     // --- Error Check ---
     _reverse(__model__, ents_arr);
 }
-// ================================================================================================
-function _shift(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], offset: number): void {
+function _reverse(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
     if (getArrDepth(ents_arr) === 1 && ents_arr.length) {
         const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
         const wires_i: number[] = __model__.geom.query.navAnyToWire(ent_type, index);
-        wires_i.forEach( wire_i => __model__.geom.modify.shift(wire_i, offset) );
+        wires_i.forEach( wire_i => __model__.geom.modify.reverse(wire_i) );
     } else {
-        (ents_arr as TEntTypeIdx[]).forEach( ent_arr => _shift(__model__, ent_arr, offset) );
+        (ents_arr as TEntTypeIdx[]).forEach( ent_arr => _reverse(__model__, ent_arr) );
     }
 }
+// ================================================================================================
 /**
  * Shifts the order of the edges in a closed wire.
  * ~
@@ -404,7 +395,30 @@ export function Shift(__model__: GIModel, entities: TId|TId[], offset: number): 
     // --- Error Check ---
     _shift(__model__, ents_arr, offset);
 }
+function _shift(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], offset: number): void {
+    if (getArrDepth(ents_arr) === 1 && ents_arr.length) {
+        const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
+        const wires_i: number[] = __model__.geom.query.navAnyToWire(ent_type, index);
+        wires_i.forEach( wire_i => __model__.geom.modify.shift(wire_i, offset) );
+    } else {
+        (ents_arr as TEntTypeIdx[]).forEach( ent_arr => _shift(__model__, ent_arr, offset) );
+    }
+}
 // ================================================================================================
+/**
+ * Closes polyline(s) if open.
+ * @param __model__
+ * @param lines Polyline(s).
+ * @returns void
+ * @example modify.Close([polyline1,polyline2,...])
+ * @example_info If open, polylines are changed to closed; if already closed, nothing happens.
+ */
+export function Close(__model__: GIModel, lines: TId|TId[]): void {
+    // --- Error Check ---
+    const ents_arr = checkIDs('modify.Close', 'lines', lines, [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE]);
+    // --- Error Check ---
+    _close(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
+}
 function _close(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
     if (getArrDepth(ents_arr) === 1 && ents_arr.length) {
         const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
@@ -420,20 +434,6 @@ function _close(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
             _close(__model__, ents as TEntTypeIdx);
         }
     }
-}
-/**
- * Closes polyline(s) if open.
- * @param __model__
- * @param lines Polyline(s).
- * @returns void
- * @example modify.Close([polyline1,polyline2,...])
- * @example_info If open, polylines are changed to closed; if already closed, nothing happens.
- */
-export function Close(__model__: GIModel, lines: TId|TId[]): void {
-    // --- Error Check ---
-    const ents_arr = checkIDs('modify.Close', 'lines', lines, [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE]);
-    // --- Error Check ---
-    _close(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
 }
 // ================================================================================================
 // // AttribPush modelling operation
@@ -588,7 +588,33 @@ export function _Weld(__model__: GIModel, entities: TId[]): void {
     throw new Error('Not implemented.');
 }
 // ================================================================================================
-// Stuff for Delete()
+
+/**
+ * Deletes geometric entities: positions, points, polylines, polygons, and collections.
+ * When deleting positions, any topology that requires those positions will also be deleted.
+ * (For example, any vertices linked to the deleted position will also be deleted,
+ * which may in turn result in some edges being deleted, and so forth.)
+ * For positions, the selection to delete or keep unused positions is ignored.
+ * When deleting objects (point, polyline, and polygons), topology is also deleted.
+ * When deleting collections, none of the objects in the collection are deleted.
+ * @param __model__
+ * @param entities Position, point, polyline, polygon, collection.
+ * @param del_unused_posis Enum, delete or keep unused positions.
+ * @returns void
+ * @example modify.Delete(polygon1)
+ * @example_info Deletes polygon1 from the model.
+ */
+export function Delete(__model__: GIModel, entities: TId|TId[], del_unused_posis: _EDeleteMethod  ): void {
+    // @ts-ignore
+    if (Array.isArray(entities)) { entities = __.flatten(entities); }
+    // --- Error Check ---
+    const ents_arr = checkIDs('modify.Delete', 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList],
+        [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+    // --- Error Check ---
+    const bool_del_unused_posis: boolean = (del_unused_posis === _EDeleteMethod.DEL_UNUSED_POINTS);
+    _delete(__model__, ents_arr, bool_del_unused_posis);
+}
 export enum _EDeleteMethod {
     DEL_UNUSED_POINTS =  'del_unused_posis',
     KEEP_UNUSED_POINTS  =  'keep_unused_posis'
@@ -620,22 +646,20 @@ function _delete(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], del_un
     __model__.geom.modify.delPoints(points_i, del_unused_posis);
     __model__.geom.modify.delPosis(posis_i);
 }
+// ================================================================================================
 /**
- * Deletes geometric entities: positions, points, polylines, polygons, and collections.
- * When deleting positions, any topology that requires those positions will also be deleted.
- * (For example, any vertices linked to the deleted position will also be deleted,
- * which may in turn result in some edges being deleted, and so forth.)
- * For positions, the selection to delete or keep unused positions is ignored.
- * When deleting objects (point, polyline, and polygons), topology is also deleted.
- * When deleting collections, none of the objects in the collection are deleted.
+ * Keeps the specified geometric entities: positions, points, polylines, polygons, and collections.
+ * Everything else in the model is deleted.
+ * When a collection is kept, all objects inside the collection are also kept.
+ * When an object is kept, all positions used by the object are also kept.
+ *
  * @param __model__
  * @param entities Position, point, polyline, polygon, collection.
- * @param del_unused_posis Enum, delete or keep unused positions.
  * @returns void
  * @example modify.Delete(polygon1)
  * @example_info Deletes polygon1 from the model.
  */
-export function Delete(__model__: GIModel, entities: TId|TId[], del_unused_posis: _EDeleteMethod  ): void {
+export function Keep(__model__: GIModel, entities: TId|TId[] ): void {
     // @ts-ignore
     if (Array.isArray(entities)) { entities = __.flatten(entities); }
     // --- Error Check ---
@@ -643,10 +667,8 @@ export function Delete(__model__: GIModel, entities: TId|TId[], del_unused_posis
         [IDcheckObj.isID, IDcheckObj.isIDList],
         [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
-    const bool_del_unused_posis: boolean = (del_unused_posis === _EDeleteMethod.DEL_UNUSED_POINTS);
-    _delete(__model__, ents_arr, bool_del_unused_posis);
+    _keep(__model__, ents_arr);
 }
-// ================================================================================================
 function _keep(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
     ents_arr = ((getArrDepth(ents_arr) === 1) ? [ents_arr] : ents_arr) as TEntTypeIdx[];
     const colls_i: Set<number> = new Set();
@@ -694,28 +716,7 @@ function _keep(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
     const del_posis_i: number[] = all_unused_posis_i.filter( posi_i => !posis_i.has(posi_i) );
     __model__.geom.modify.delPosis(del_posis_i);
 }
-/**
- * Keeps the specified geometric entities: positions, points, polylines, polygons, and collections.
- * Everything else in the model is deleted.
- * When a collection is kept, all objects inside the collection are also kept.
- * When an object is kept, all positions used by the object are also kept.
- *
- * @param __model__
- * @param entities Position, point, polyline, polygon, collection.
- * @returns void
- * @example modify.Delete(polygon1)
- * @example_info Deletes polygon1 from the model.
- */
-export function Keep(__model__: GIModel, entities: TId|TId[] ): void {
-    // @ts-ignore
-    if (Array.isArray(entities)) { entities = __.flatten(entities); }
-    // --- Error Check ---
-    const ents_arr = checkIDs('modify.Delete', 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
-        [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
-    // --- Error Check ---
-    _keep(__model__, ents_arr);
-}
+
 
 
 

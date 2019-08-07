@@ -380,7 +380,7 @@ export function Push(__model__: GIModel, entities: TId|TId[],
     const target_ent_type: EEntType = _getEntTypeFromStr(ent_type_sel);
     if (source_ent_type === target_ent_type) { throw new Error('The new attribute is at the same level as the existing attribute.'); }
     // get the method
-    const method: EAttribPush = _convertPromoteMethod(method_sel);
+    const method: EAttribPush = _convertPushMethod(method_sel);
     // do the push
     __model__.attribs.add.pushAttribValues(source_ent_type, source_attrib, indices, target_ent_type, target_attrib, method);
 }
@@ -393,7 +393,7 @@ export enum _EPushMethodSel {
     MIN = 'min',
     MAX = 'max'
 }
-function _convertPromoteMethod(select: _EPushMethodSel): EAttribPush {
+function _convertPushMethod(select: _EPushMethodSel): EAttribPush {
     switch (select) {
         case _EPushMethodSel.AVERAGE:
             return EAttribPush.AVERAGE;

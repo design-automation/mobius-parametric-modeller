@@ -14,7 +14,7 @@ import __ from 'underscore';
  */
 export function __new__(): GIModel {
     const model: GIModel = new GIModel();
-    model.attribs.add.addAttrib(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.FLOAT, 3);
+    model.attribs.add.addAttrib(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.LIST);
     return model;
 }
 //  ===============================================================================================
@@ -251,7 +251,7 @@ export function __select__(__model__: GIModel, ents_id: string|string[]|string[]
         const attrib_value: string = var_name + '[' + ent_indices.join('][') + ']';
         __model__.geom.selected.push(ent_arr);
         if (!__model__.attribs.query.hasAttrib(ent_arr[0], attrib_name)) {
-            __model__.attribs.add.addAttrib(ent_arr[0], attrib_name, EAttribDataTypeStrs.STRING, 1);
+            __model__.attribs.add.addAttrib(ent_arr[0], attrib_name, EAttribDataTypeStrs.LIST);
         }
         __model__.attribs.add.setAttribValue(ent_arr[0], ent_arr[1], attrib_name, attrib_value);
     }

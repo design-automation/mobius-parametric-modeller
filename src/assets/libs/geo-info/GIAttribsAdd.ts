@@ -26,16 +26,15 @@ export class GIAttribsAdd {
      * @param ent_type The level at which to create the attribute.
      * @param name The name of the attribute.
      * @param data_type The data type of the attribute.
-     * @param data_size The data size of the attribute. For example, an XYZ vector has size=3.
      */
-    public addAttrib(ent_type: EEntType, name: string, data_type: EAttribDataTypeStrs, data_size: number): boolean {
+    public addAttrib(ent_type: EEntType, name: string, data_type: EAttribDataTypeStrs): boolean {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         if (!attribs.has(name)) {
-            const attrib: GIAttribMap = new GIAttribMap(name, data_type, data_size);
+            const attrib: GIAttribMap = new GIAttribMap(name, data_type);
             attribs.set(name, attrib);
         } else {
-            if (attribs.get(name).getDataType() !== data_type || attribs.get(name).getDataSize() !== data_size) {
+            if (attribs.get(name).getDataType() !== data_type) {
                 throw new Error('Attribute could not be created do to conflict with existing attribute with same name.');
             }
         }
@@ -82,8 +81,8 @@ export class GIAttribsAdd {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         if (attribs.get(name) === undefined) {
-            const [new_data_type, new_data_size]: [EAttribDataTypeStrs, number] = this._checkDataTypeSize(value);
-            this.addAttrib(ent_type, name, new_data_type, new_data_size);
+            const new_data_type: EAttribDataTypeStrs = this._checkDataTypeSize(value);
+            this.addAttrib(ent_type, name, new_data_type);
         }
         attribs.get(name).setEntVal(ents_i, value);
     }
@@ -100,10 +99,8 @@ export class GIAttribsAdd {
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         const attrib: GIAttribMap = attribs.get(name);
         if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
-        if (attrib.getDataSize() === 1) { throw new Error('Attribute is not a list, so indexed values are not allowed.'); }
-        if (value_index >= attrib.getDataSize()) { throw new Error('Value index is out of range for attribute list size.'); }
-        if (value_index < 0) {
-            value_index += attrib.getDataSize();
+        if (attrib.getDataType() !== EAttribDataTypeStrs.LIST) { 
+            throw new Error('Attribute is not a list, so indexed values are not allowed.'); 
         }
         attrib.setEntIdxVal(ents_i, value_index, value);
     }
@@ -170,7 +167,7 @@ export class GIAttribsAdd {
         const data_size: number = this._model.attribs.query.getAttribDataSize(source_ent_type, source_attrib_name);
         // move attributes from entities up to the model, or form model down to entities
         if (target_ent_type === EEntType.MOD) {
-            this.addAttrib(target_ent_type, target_attrib_name, data_type, data_size);
+            this.addAttrib(target_ent_type, target_attrib_name, data_type);
             const attrib_values: TAttribDataTypes[] = [];
             for (const index of source_indices) {
                 attrib_values.push(
@@ -181,7 +178,7 @@ export class GIAttribsAdd {
             return;
         } else if (source_ent_type === EEntType.MOD) {
             const value: TAttribDataTypes = this._model.attribs.query.getModelAttribValue(source_attrib_name);
-            this.addAttrib(target_ent_type, target_attrib_name, data_type, data_size);
+            this.addAttrib(target_ent_type, target_attrib_name, data_type);
             const target_ents_i: number[] = this._model.geom.query.getEnts(target_ent_type, false);
             for (const target_ent_i of target_ents_i) {
                 this.setAttribValue(target_ent_type, target_ent_i, target_attrib_name, value);
@@ -202,11 +199,11 @@ export class GIAttribsAdd {
             }
         }
         // create the new target attribute if it does not already exist
-        this.addAttrib(target_ent_type, target_attrib_name, data_type, data_size);
+        this.addAttrib(target_ent_type, target_attrib_name, data_type);
         // calculate the new value and set the attribute
         attrib_values_map.forEach( (attrib_values, target_ent_i) => {
             let value: TAttribDataTypes = attrib_values[0];
-            if (attrib_values.length > 1 && data_type === EAttribDataTypeStrs.FLOAT) {
+            if (attrib_values.length > 1 && data_type === EAttribDataTypeStrs.NUMBER) {
                 value = this._aggregateValues(attrib_values, data_size, method);
             }
             this.setAttribValue(target_ent_type, target_ent_i, target_attrib_name, value);
@@ -280,32 +277,42 @@ export class GIAttribsAdd {
                 return values[0]; // EAttribPush.FIRST
         }
     }
+    // /**
+    //  * Utility method to check the data type and size of a value
+    //  * @param value
+    //  */
+    // private _checkDataTypeSize(value: TAttribDataTypes): [EAttribDataTypeStrs, number] {
+    //     let data_size: number;
+    //     let first_value = null;
+    //     if (Array.isArray(value)) {
+    //         const values = value as number[] | string[];
+    //         if (values.length === 1) {
+    //             throw new Error('An array data type must have more than one value.');
+    //         }
+    //         first_value = values[0];
+    //         data_size = values.length;
+    //     } else {
+    //         first_value = value;
+    //         data_size = 1;
+    //     }
+    //     let data_type: EAttribDataTypeStrs = null;
+    //     if (typeof first_value === 'number') {
+    //         data_type = EAttribDataTypeStrs.NUMBER;
+    //     } else if (typeof first_value === 'string') {
+    //         data_type = EAttribDataTypeStrs.STRING;
+    //     } else {
+    //         throw new Error('Data type for new attribute not recognised.');
+    //     }
+    //     return [data_type, data_size];
+    // }
     /**
-     * Utility method to check the data type and size of a value
+     * Utility method to check the data type of an attribute.
      * @param value
      */
-    private _checkDataTypeSize(value: TAttribDataTypes): [EAttribDataTypeStrs, number] {
-        let data_size: number;
-        let first_value = null;
-        if (Array.isArray(value)) {
-            const values = value as number[] | string[];
-            if (values.length === 1) {
-                throw new Error('An array data type must have more than one value.');
-            }
-            first_value = values[0];
-            data_size = values.length;
-        } else {
-            first_value = value;
-            data_size = 1;
-        }
-        let data_type: EAttribDataTypeStrs = null;
-        if (typeof first_value === 'number') {
-            data_type = EAttribDataTypeStrs.FLOAT;
-        } else if (typeof first_value === 'string') {
-            data_type = EAttribDataTypeStrs.STRING;
-        } else {
-            throw new Error('Data type for new attribute not recognised.');
-        }
-        return [data_type, data_size];
+    private _checkDataTypeSize(value: TAttribDataTypes): EAttribDataTypeStrs {
+        if (typeof value === 'string') { return EAttribDataTypeStrs.STRING; }
+        if (typeof value === 'number') { return EAttribDataTypeStrs.NUMBER; }
+        if (Array.isArray(value)) { return EAttribDataTypeStrs.LIST; }
+        throw new Error('Data type for new attribute not recognised.');
     }
 }

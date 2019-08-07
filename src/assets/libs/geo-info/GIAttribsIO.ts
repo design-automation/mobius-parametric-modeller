@@ -125,7 +125,7 @@ export class GIAttribsIO {
             const name: string = from_attrib.getName();
             // get or create the existing attrib
             if (!to_attribs.has(name)) {
-                to_attribs.set(name, new GIAttribMap( name, from_attrib.getDataType(), from_attrib.getDataSize()) );
+                to_attribs.set(name, new GIAttribMap( name, from_attrib.getDataType()) );
             }
             const to_attrib: GIAttribMap = to_attribs.get(name);
             // get the data and shift the ents_i indices
@@ -148,7 +148,7 @@ export class GIAttribsIO {
         new_attribs_data.forEach( new_attrib_data => {
             const name: string = new_attrib_data.name;
             // create a new attrib
-            const to_attrib: GIAttribMap = new GIAttribMap( name, new_attrib_data.data_type, new_attrib_data.data_size );
+            const to_attrib: GIAttribMap = new GIAttribMap( name, new_attrib_data.data_type );
             to_attribs.set(name, to_attrib);
             // set the data
             to_attrib.setEntsVals(new_attrib_data.data);

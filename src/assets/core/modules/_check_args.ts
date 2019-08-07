@@ -31,14 +31,11 @@ export function checkAttribValue(fn_name: string, attrib_value: any, attrib_inde
     if (attrib_index !== null && attrib_index !== undefined) {
         // check if index is number
         TypeCheckObj.isNumber(fn_name, 'attrib_index', attrib_index);
-        // check sting, number
-        checkCommTypes(fn_name  + '[' + attrib_index + ']', 'attrib_value', attrib_value,
-            [TypeCheckObj.isString, TypeCheckObj.isNumber, TypeCheckObj.isNull]);
+        // this is an item in a list, the item value can be any
     } else {
         // check sting, number, string[], number[]
         checkCommTypes(fn_name, 'attrib_value', attrib_value,
-            [TypeCheckObj.isString, TypeCheckObj.isNumber, TypeCheckObj.isNull,
-                TypeCheckObj.isStringList, TypeCheckObj.isNumberList, TypeCheckObj.isNullList]);
+            [TypeCheckObj.isString, TypeCheckObj.isNumber, TypeCheckObj.isNull, TypeCheckObj.isList]);
     }
 }
 

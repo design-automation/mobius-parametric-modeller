@@ -65,10 +65,10 @@ function _getEntTypeFromStr(ent_type_str: _EEntTypeSel): EEntType {
  * ~
  * @param __model__
  * @param ent_type_sel Enum, the attribute entity type.
+ * @param data_type_sel Enum, the data type for this attribute
  * @param attribs A single attribute name, or a list of attribute names.
- * @param template The template for the attributes. For example, 123 or "abc" or [1,2,3] or ["a", "b", "c"].
  */
-export function Add(__model__: GIModel, ent_type_sel: _EEntTypeSel, attribs: string|string[], template: TAttribDataTypes): void {
+export function Add(__model__: GIModel, ent_type_sel: _EEntTypeSel, data_type_sel: _EDataTypeSel, attribs: string|string[]): void {
     if (ent_type_sel === 'ps' && attribs === 'xyz') { return; }
     // --- Error Check ---
     const fn_name = 'attrib.Add';
@@ -87,15 +87,31 @@ export function Add(__model__: GIModel, ent_type_sel: _EEntTypeSel, attribs: str
     attribs = attribs as string[];
     for (const attrib of attribs) { checkAttribName(fn_name , attrib); }
     // --- Error Check ---
-    // analyse the template
-    const is_array: boolean = Array.isArray(template);
-    const is_string: boolean  = is_array ? typeof template[0] === 'string' : typeof template === 'string';
-    const data_size: number = is_array ? (template as Array<any>).length : 1;
-    const data_type: EAttribDataTypeStrs = is_string ? EAttribDataTypeStrs.STRING : EAttribDataTypeStrs.FLOAT;
+    // set the data type
+    let data_type: EAttribDataTypeStrs = null;
+    switch (data_type_sel) {
+        case _EDataTypeSel.NUMBER:
+            data_type = EAttribDataTypeStrs.NUMBER;
+            break;
+        case _EDataTypeSel.STRING:
+            data_type = EAttribDataTypeStrs.STRING;
+            break;
+        case _EDataTypeSel.LIST:
+            data_type = EAttribDataTypeStrs.LIST;
+            break;
+        default:
+            throw new Error('Data type not recognised.');
+            break;
+    }
     // create the attribute
     for (const attrib of attribs) {
-        __model__.attribs.add.addAttrib(ent_type, attrib, data_type, data_size);
+        __model__.attribs.add.addAttrib(ent_type, attrib, data_type);
     }
+}
+export enum _EDataTypeSel {
+    NUMBER =   'number',
+    STRING =   'string',
+    LIST =   'list'
 }
 // ================================================================================================
 /**

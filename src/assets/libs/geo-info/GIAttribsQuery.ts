@@ -48,7 +48,7 @@ export class GIAttribsQuery {
                 first_value = value;
             }
             if (typeof first_value === 'string') { return EAttribDataTypeStrs.STRING; }
-            return EAttribDataTypeStrs.FLOAT;
+            return EAttribDataTypeStrs.NUMBER;
         } else {
             const ent_attribs: Map<string, GIAttribMap> = attribs as Map<string, GIAttribMap>;
             return ent_attribs.get(name).getDataType();
@@ -269,7 +269,6 @@ export class GIAttribsQuery {
         // create the sort copmapre function
         function _sortCompare(ent1_i: number, ent2_i: number): number {
             const attrib: GIAttribMap = attribs.get(name);
-            const data_size: number = attrib.getDataSize();
             let val1: TAttribDataTypes = attrib.getEntVal(ent1_i) as TAttribDataTypes;
             let val2: TAttribDataTypes = attrib.getEntVal(ent2_i) as TAttribDataTypes;
             if (index !== null) {

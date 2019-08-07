@@ -73,7 +73,7 @@ export function Color(__model__: GIModel, entities: TId|TId[], color: TColor): v
     // @ts-ignore
     if (depth > 2) { ents_arr = ents_arr.flat(depth - 2); }
     if (!__model__.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOR)) {
-        __model__.attribs.add.addAttrib(EEntType.VERT, EAttribNames.COLOR, EAttribDataTypeStrs.FLOAT, 3);
+        __model__.attribs.add.addAttrib(EEntType.VERT, EAttribNames.COLOR, EAttribDataTypeStrs.LIST);
     }
     for (const ent_arr of ents_arr) {
         const [ent_type, ent_i]: [number, number] = ent_arr as TEntTypeIdx;
@@ -105,7 +105,7 @@ export function Material(__model__: GIModel, entities: TId|TId[], material: stri
     // @ts-ignore
     if (depth > 2) { ents_arr = ents_arr.flat(depth - 2); }
     if (!__model__.attribs.query.hasAttrib(EEntType.PGON, EAttribNames.MATERIAL)) {
-        __model__.attribs.add.addAttrib(EEntType.PGON, EAttribNames.MATERIAL, EAttribDataTypeStrs.STRING, 1);
+        __model__.attribs.add.addAttrib(EEntType.PGON, EAttribNames.MATERIAL, EAttribDataTypeStrs.STRING);
     }
     for (const ent_arr of ents_arr) {
         const [ent_type, ent_i]: [number, number] = ent_arr as TEntTypeIdx;

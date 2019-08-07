@@ -50,7 +50,7 @@ export class GIAttribs {
         this.modify = new GIAttribsModify(model, this._attribs_maps);
         this.query = new GIAttribsQuery(model, this._attribs_maps);
         this.threejs = new GIAttribsThreejs(model, this._attribs_maps);
-        this.add.addAttrib(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.FLOAT, 3);
+        this.add.addAttrib(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.LIST);
     }
     /**
      * Compares this model and another model.

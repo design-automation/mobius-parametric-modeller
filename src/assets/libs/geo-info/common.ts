@@ -246,8 +246,9 @@ export interface IGeomCopy {
 // enums
 export enum EAttribDataTypeStrs {
     // INT = 'Int',
-    FLOAT = 'Float',
-    STRING = 'String'
+    NUMBER = 'Number',
+    STRING = 'String',
+    LIST = 'List' // a list of anything
 }
 
 // types
@@ -263,7 +264,7 @@ export type TPline = number; // [wire,....]
 export type TPgon = number; // [face,....]
 export type TColl = [number, number[], number[], number[]]; // [parent, [point, ...], [polyline, ...], [polygon, ....]]
 export type TEntity = TTri | TVert | TEdge | TWire | TFace | TPoint | TPline | TPgon | TColl;
-export type TAttribDataTypes = string | string[] | number | number[];
+export type TAttribDataTypes = string | number | any[];
 export type TEntAttribValuesArr = Array<[number[], TAttribDataTypes]>;
 export type TModelAttribValuesArr = Array<[string, TAttribDataTypes]>;
 // interfaces for JSON data
@@ -286,7 +287,6 @@ export interface IGeomData {
 export interface IAttribData {
     name: string;
     data_type: EAttribDataTypeStrs;
-    data_size: number;
     data: TEntAttribValuesArr;
 }
 export interface IAttribsData {

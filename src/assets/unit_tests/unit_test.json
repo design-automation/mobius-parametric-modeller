@@ -55,7 +55,86 @@
                 }
             },
             "returns": ""
+        },
+        {
+            "url" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/basic_examples/basic_foreach.mob",
+            "requirements": {"geometry":{"num_positions":76,"num_vertices":76,"num_edges":76,"num_wires":19,"num_faces":19,"num_points":0,"num_polylines":0,"num_polygons":19,"num_collections":0},"attributes":{"position_attribs":["xyz"],"vertex_attribs":[],"edge_attribs":[],"wire_attribs":[],"face_attribs":[],"point_attribs":[],"polyline_attribs":[],"polygon_attribs":[],"collection_attribs":[],"model_attribs":[]}},
+            "returns": ""
+        },
+        {
+            "url" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/basic_examples/basic_while.mob",
+            "requirements": {"geometry":{"num_positions":44,"num_vertices":44,"num_edges":44,"num_wires":8,"num_faces":0,"num_points":0,"num_polylines":8,"num_polygons":0,"num_collections":0},"attributes":{"position_attribs":["xyz"],"vertex_attribs":[],"edge_attribs":[],"wire_attribs":[],"face_attribs":[],"point_attribs":[],"polyline_attribs":[],"polygon_attribs":[],"collection_attribs":[],"model_attribs":[]}},
+            "returns": ""
+        },
+        {
+            "url" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/flow_examples/podium_with_towers.mob",
+            "requirements": {"geometry":{"num_positions":1900,"num_vertices":4566,"num_edges":4562,"num_wires":1116,"num_faces":1112,"num_points":0,"num_polylines":4,"num_polygons":1112,"num_collections":0},"attributes":{"position_attribs":["xyz"],"vertex_attribs":["rgb"],"edge_attribs":[],"wire_attribs":[],"face_attribs":[],"point_attribs":[],"polyline_attribs":[],"polygon_attribs":["type"],"collection_attribs":[],"model_attribs":[]}},
+            "returns": ""
+        },
+        {
+            "url" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/shapes_examples/torus.mob",
+            "requirements": {"geometry":{"num_positions":84,"num_vertices":148,"num_edges":148,"num_wires":37,"num_faces":16,"num_points":0,"num_polylines":5,"num_polygons":16,"num_collections":0},"attributes":{"position_attribs":["xyz"],"vertex_attribs":[],"edge_attribs":[],"wire_attribs":[],"face_attribs":[],"point_attribs":[],"polyline_attribs":[],"polygon_attribs":[],"collection_attribs":[],"model_attribs":[]}},
+            "returns": ""
+        },
+        {
+            "url" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/rendering_examples/glass_materials.mob",
+            "requirements": {"geometry":{"num_positions":12,"num_vertices":28,"num_edges":28,"num_wires":7,"num_faces":5,"num_points":0,"num_polylines":1,"num_polygons":5,"num_collections":0},"attributes":{"position_attribs":["xyz"],"vertex_attribs":[],"edge_attribs":[],"wire_attribs":[],"face_attribs":[],"point_attribs":[],"polyline_attribs":[],"polygon_attribs":["type","material"],"collection_attribs":[],"model_attribs":["solid","glass"]}},
+            "returns": ""
+        },
+        {
+            "url" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/rendering_examples/front_and_back_materials.mob",
+            "requirements": {"geometry":{"num_positions":8,"num_vertices":20,"num_edges":20,"num_wires":5,"num_faces":4,"num_points":0,"num_polylines":1,"num_polygons":4,"num_collections":0},"attributes":{"position_attribs":["xyz"],"vertex_attribs":[],"edge_attribs":[],"wire_attribs":[],"face_attribs":[],"point_attribs":[],"polyline_attribs":[],"polygon_attribs":["material"],"collection_attribs":[],"model_attribs":["mat_f","mat_b"]}},
+            "returns": ""
+        },
+        {
+            "url" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/user_functions_examples/hello_example.mob",
+            "requirements": {"geometry":{"num_positions":0,"num_vertices":0,"num_edges":0,"num_wires":0,"num_faces":0,"num_points":0,"num_polylines":0,"num_polygons":0,"num_collections":0},"attributes":{"position_attribs":["xyz"],"vertex_attribs":[],"edge_attribs":[],"wire_attribs":[],"face_attribs":[],"point_attribs":[],"polyline_attribs":[],"polygon_attribs":[],"collection_attribs":[],"model_attribs":[]}},
+            "returns": ""
+        },
+        {
+            "url" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/user_functions_examples/hello_func.mob",
+            "requirements": {"geometry":{"num_positions":0,"num_vertices":0,"num_edges":0,"num_wires":0,"num_faces":0,"num_points":0,"num_polylines":0,"num_polygons":0,"num_collections":0},"attributes":{"position_attribs":["xyz"],"vertex_attribs":[],"edge_attribs":[],"wire_attribs":[],"face_attribs":[],"point_attribs":[],"polyline_attribs":[],"polygon_attribs":[],"collection_attribs":[],"model_attribs":[]}},
+            "returns": "hello jack"
+        },
+        {
+            "url" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/user_functions_examples/div_pgons_example1.mob",
+            "requirements": {"geometry":{"num_positions":388,"num_vertices":1044,"num_edges":1044,"num_wires":261,"num_faces":256,"num_points":0,"num_polylines":5,"num_polygons":256,"num_collections":0},"attributes":{"position_attribs":["xyz"],"vertex_attribs":[],"edge_attribs":[],"wire_attribs":[],"face_attribs":[],"point_attribs":[],"polyline_attribs":[],"polygon_attribs":[],"collection_attribs":[],"model_attribs":["divided_pgons"]}},
+            "returns": ""
+        },
+        {
+            "url" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/user_functions_examples/div_pgons_example2.mob",
+            "requirements": {"geometry":{"num_positions":892,"num_vertices":3080,"num_edges":3080,"num_wires":770,"num_faces":768,"num_points":0,"num_polylines":2,"num_polygons":768,"num_collections":0},"attributes":{"position_attribs":["xyz"],"vertex_attribs":[],"edge_attribs":[],"wire_attribs":[],"face_attribs":[],"point_attribs":[],"polyline_attribs":[],"polygon_attribs":[],"collection_attribs":[],"model_attribs":["divided_pgons"]}},
+            "returns": ""
+        },
+        {
+            "url" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/user_functions_examples/div_pgons_func.mob",
+            "requirements": {"geometry":{"num_positions":36,"num_vertices":80,"num_edges":80,"num_wires":20,"num_faces":20,"num_points":0,"num_polylines":0,"num_polygons":20,"num_collections":0},"attributes":{"position_attribs":["xyz"],"vertex_attribs":[],"edge_attribs":[],"wire_attribs":[],"face_attribs":[],"point_attribs":[],"polyline_attribs":[],"polygon_attribs":[],"collection_attribs":[],"model_attribs":["divided_pgons"]}},
+            "returns": ""
+        },
+        {
+            "url" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/user_functions_examples/offset_floors_and_windows_example.mob",
+            "requirements": {"geometry":{"num_positions":1288,"num_vertices":1918,"num_edges":1918,"num_wires":434,"num_faces":224,"num_points":0,"num_polylines":0,"num_polygons":224,"num_collections":0},"attributes":{"position_attribs":["xyz"],"vertex_attribs":[],"edge_attribs":[],"wire_attribs":[],"face_attribs":[],"point_attribs":[],"polyline_attribs":[],"polygon_attribs":[],"collection_attribs":[],"model_attribs":["ret"]}},
+            "returns": ""
+        },
+        {
+            "url" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/user_functions_examples/offset_func.mob",
+            "requirements": {"geometry":{"num_positions":31,"num_vertices":28,"num_edges":26,"num_wires":6,"num_faces":4,"num_points":0,"num_polylines":2,"num_polygons":4,"num_collections":0},"attributes":{"position_attribs":["xyz"],"vertex_attribs":[],"edge_attribs":[],"wire_attribs":[],"face_attribs":[],"point_attribs":[],"polyline_attribs":[],"polygon_attribs":[],"collection_attribs":[],"model_attribs":["ret_closed","ret_open"]}},
+            "returns": ""
+        },
+        {
+            "url" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/user_functions_examples/offset_pgons_func.mob",
+            "requirements": {"geometry":{"num_positions":31,"num_vertices":28,"num_edges":28,"num_wires":6,"num_faces":5,"num_points":0,"num_polylines":0,"num_polygons":5,"num_collections":0},"attributes":{"position_attribs":["xyz"],"vertex_attribs":[],"edge_attribs":[],"wire_attribs":[],"face_attribs":[],"point_attribs":[],"polyline_attribs":[],"polygon_attribs":[],"collection_attribs":[],"model_attribs":["ret"]}},
+            "returns": ""
+        },
+        {
+            "url" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/user_functions_examples/pyramids_from_pgons_func.mob",
+            "requirements": {"geometry":{"num_positions":25,"num_vertices":148,"num_edges":148,"num_wires":45,"num_faces":45,"num_points":0,"num_polylines":0,"num_polygons":45,"num_collections":0},"attributes":{"position_attribs":["xyz"],"vertex_attribs":[],"edge_attribs":[],"wire_attribs":[],"face_attribs":[],"point_attribs":[],"polyline_attribs":[],"polygon_attribs":[],"collection_attribs":[],"model_attribs":["triangles"]}},
+            "returns": ""
+        },
+        {
+            "url" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/user_functions_examples/torus.mob",
+            "requirements": {},
+            "returns": ""
         }
-
     ]
 }

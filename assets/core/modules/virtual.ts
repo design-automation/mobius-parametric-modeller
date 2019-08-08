@@ -81,14 +81,6 @@ export function Plane(__model__: GIModel, origin: TId|Txyz, x_vec: Txyz, xy_vec:
     ];
 }
 // ================================================================================================
-function _rayFromPlane(planes: TPlane|TPlane[]): TRay|TRay[] {
-    if (getArrDepth(planes) === 2) {
-        const plane: TPlane = planes as TPlane;
-        return [plane[0], vecCross(plane[1], plane[2])];
-    } else {
-        return (planes as TPlane[]).map( plane => _rayFromPlane(plane)) as TRay[];
-    }
-}
 /**
  * Create a ray, from a plane.
  * The direction will be along the z axis.
@@ -106,7 +98,32 @@ export function RayFromPlane(planes: TPlane|TPlane[]): TRay|TRay[] {
     // --- Error Check ---
     return _rayFromPlane(planes);
 }
+function _rayFromPlane(planes: TPlane|TPlane[]): TRay|TRay[] {
+    if (getArrDepth(planes) === 2) {
+        const plane: TPlane = planes as TPlane;
+        return [plane[0], vecCross(plane[1], plane[2])];
+    } else {
+        return (planes as TPlane[]).map( plane => _rayFromPlane(plane)) as TRay[];
+    }
+}
 // ================================================================================================
+/**
+ * Returns a ray for an edge, a face, or a polygons. For edges, it returns a ray along the edge, from teh start vertex to the end vertex
+ * For a face or polygon, it returns the ray that is the z-axis of the plane.
+ * ~
+ * For an edge, the ray vector is not normalised. For a face or polygon, the ray vector is normalised.
+ *
+ * @param __model__
+ * @param entities An edge, a face, or a polygon, or a list.
+ * @returns The ray.
+ */
+export function GetRay(__model__: GIModel, entities: TId|TId[]): TRay|TRay[] {
+    // --- Error Check ---
+    const ents_arr = checkIDs('virtual.GetRay', 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.FACE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
+    // --- Error Check ---
+    return _getRay(__model__, ents_arr);
+}
 function _getRayFromEdge(__model__: GIModel, ent_arr: TEntTypeIdx): TRay {
     const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_arr[0], ent_arr[1]);
     const xyzs: Txyz[] = posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
@@ -131,41 +148,7 @@ function _getRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TRay|
         return (ents_arr as TEntTypeIdx[]).map( ent_arr => _getRay(__model__, ent_arr)) as TRay[];
     }
 }
-/**
- * Returns a ray for an edge, a face, or a polygons. For edges, it returns a ray along the edge, from teh start vertex to the end vertex
- * For a face or polygon, it returns the ray that is the z-axis of the plane.
- * ~
- * For an edge, the ray vector is not normalised. For a face or polygon, the ray vector is normalised.
- *
- * @param __model__
- * @param entities An edge, a face, or a polygon, or a list.
- * @returns The ray.
- */
-export function GetRay(__model__: GIModel, entities: TId|TId[]): TRay|TRay[] {
-    // --- Error Check ---
-    const ents_arr = checkIDs('virtual.GetRay', 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.FACE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
-    // --- Error Check ---
-    return _getRay(__model__, ents_arr);
-}
 // ================================================================================================
-function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPlane|TPlane[] {
-    if (getArrDepth(ents_arr) === 1) {
-        const ent_arr = ents_arr as TEntTypeIdx;
-        const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_arr[0], ent_arr[1]);
-        const unique_posis_i = Array.from(new Set(posis_i));
-        if (unique_posis_i.length < 3) { throw new Error('Too few points to calculate plane.'); }
-        const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
-        const origin: Txyz = vecDiv(vecSum(unique_xyzs), unique_xyzs.length);
-        // const normal: Txyz = newellNorm(unique_xyzs);
-        const normal: Txyz = _normal(__model__, ent_arr, 1) as Txyz;
-        const x_vec: Txyz = vecNorm(vecFromTo(unique_xyzs[0], unique_xyzs[1]));
-        const y_vec: Txyz = vecCross(normal, x_vec); // must be z-axis, x-axis
-        return [origin, x_vec, y_vec] as TPlane;
-    } else {
-        return (ents_arr as TEntTypeIdx[]).map(ent_arr => _getPlane(__model__, ent_arr)) as TPlane[];
-    }
-}
 /**
  * Returns a plane from a polygon, a face, a polyline, or a wire.
  * For polylines or wires, there must be at least three non-colinear vertices.
@@ -184,7 +167,44 @@ export function GetPlane(__model__: GIModel, entities: TId|TId[]): TPlane|TPlane
     // --- Error Check ---
     return _getPlane(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
 }
+function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPlane|TPlane[] {
+    if (getArrDepth(ents_arr) === 1) {
+        const ent_arr = ents_arr as TEntTypeIdx;
+        const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_arr[0], ent_arr[1]);
+        const unique_posis_i = Array.from(new Set(posis_i));
+        if (unique_posis_i.length < 3) { throw new Error('Too few points to calculate plane.'); }
+        const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+        const origin: Txyz = vecDiv(vecSum(unique_xyzs), unique_xyzs.length);
+        // const normal: Txyz = newellNorm(unique_xyzs);
+        const normal: Txyz = _normal(__model__, ent_arr, 1) as Txyz;
+        const x_vec: Txyz = vecNorm(vecFromTo(unique_xyzs[0], unique_xyzs[1]));
+        const y_vec: Txyz = vecCross(normal, x_vec); // must be z-axis, x-axis
+        return [origin, x_vec, y_vec] as TPlane;
+    } else {
+        return (ents_arr as TEntTypeIdx[]).map(ent_arr => _getPlane(__model__, ent_arr)) as TPlane[];
+    }
+}
 // ================================================================================================
+/**
+ * Returns the bounding box of the entities.
+ * The bounding box is an imaginary box that completley contains all the geometry.
+ * The box is always aligned with the global x, y, and z axes.
+ * The bounding box consists of a list of lists, as follows [[x, y, z], [x, y, z], [x, y, z], [x, y, z]].
+ * - The first [x, y, z] is the coordinates of the centre of the bounding box.
+ * - The second [x, y, z] is the corner of the bounding box with the lowest x, y, z values.
+ * - The third [x, y, z] is the corner of the bounding box with the highest x, y, z values.
+ * - The fourth [x, y, z] is the dimensions of the bounding box.
+ * @param __model__
+ * @param entities The etities for which to calculate the bounding box.
+ * @returns The bounding box consisting of a list of four lists.
+ */
+export function GetBBox(__model__: GIModel, entities: TId|TId[]): TBBox {
+    if (!Array.isArray(entities)) { entities = [entities]; }
+    // --- Error Check ---
+    const ents_arr: TEntTypeIdx[] = checkIDs('virtual.BBox', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[]; // all
+    // --- Error Check ---
+    return _getBoundingBox(__model__, ents_arr);
+}
 function _getBoundingBox(__model__: GIModel, ents_arr: TEntTypeIdx[]): TBBox {
     const posis_set_i: Set<number> = new Set();
     for (const ent_arr of ents_arr) {
@@ -212,27 +232,23 @@ function _getBoundingBox(__model__: GIModel, ents_arr: TEntTypeIdx[]): TBBox {
         [corner_max[0] - corner_min[0], corner_max[1] + corner_min[1], corner_max[2] + corner_min[2]]
     ];
 }
-/**
- * Returns the bounding box of the entities.
- * The bounding box is an imaginary box that completley contains all the geometry.
- * The box is always aligned with the global x, y, and z axes.
- * The bounding box consists of a list of lists, as follows [[x, y, z], [x, y, z], [x, y, z], [x, y, z]].
- * - The first [x, y, z] is the coordinates of the centre of the bounding box.
- * - The second [x, y, z] is the corner of the bounding box with the lowest x, y, z values.
- * - The third [x, y, z] is the corner of the bounding box with the highest x, y, z values.
- * - The fourth [x, y, z] is the dimensions of the bounding box.
- * @param __model__
- * @param entities The etities for which to calculate the bounding box.
- * @returns The bounding box consisting of a list of four lists.
- */
-export function GetBBox(__model__: GIModel, entities: TId|TId[]): TBBox {
-    if (!Array.isArray(entities)) { entities = [entities]; }
-    // --- Error Check ---
-    const ents_arr: TEntTypeIdx[] = checkIDs('virtual.BBox', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[]; // all
-    // --- Error Check ---
-    return _getBoundingBox(__model__, ents_arr);
-}
 // ================================================================================================
+/**
+ * Visualises a ray by creating a line.
+ *
+ * @param __model__
+ * @param rays A list of two list of three coordinates [origin, vector]: [[x,y,z],[x',y',z']]
+ * @returns entities, a line representing the ray.
+ * @example ray1 = virtual.visRay([[1,2,3],[0,0,1]])
+ */
+export function VisRay(__model__: GIModel, rays: TRay|TRay[], scale: number): TId[] {
+    // --- Error Check ---
+    const fn_name = 'virtual.visRay';
+    checkCommTypes(fn_name, 'ray', rays, [TypeCheckObj.isRay]); // TODO rays can be a list // add isRayList to enable check
+    checkCommTypes(fn_name, 'scale', scale, [TypeCheckObj.isNumber]);
+    // --- Error Check ---
+   return idsMake(_visRay(__model__, rays, scale)) as TId[];
+}
 function _visRay(__model__: GIModel, rays: TRay|TRay[], scale: number): TEntTypeIdx[] {
     if (getArrDepth(rays) === 2) {
         const ray: TRay = rays as TRay;
@@ -263,23 +279,24 @@ function _visRay(__model__: GIModel, rays: TRay|TRay[], scale: number): TEntType
         return ents_arr;
     }
 }
+// ================================================================================================
 /**
- * Visualises a ray by creating a line.
+ * Visualises a plane by creating a polygon and axis lines.
  *
  * @param __model__
- * @param ray A list of two list of three coordinates [origin, vector]: [[x,y,z],[x',y',z']]
- * @returns entities, a line representing the ray.
- * @example ray1 = virtual.visRay([[1,2,3],[0,0,1]])
+ * @param plane A list of lists
+ * @returns Entities, a polygon and two polyline representing the plane.
+ * @example plane1 = virtual.visPlane(position1, vector1, [0,1,0])
+ * @example_info Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
  */
-export function VisRay(__model__: GIModel, ray: TRay|TRay[], scale: number): TId[] {
+export function VisPlane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): TId[] {
     // --- Error Check ---
-    const fn_name = 'virtual.visRay';
-    checkCommTypes(fn_name, 'ray', ray, [TypeCheckObj.isRay]); // TODO rays can be a list // add isRayList to enable check
+    const fn_name = 'virtual.visPlane';
+    checkCommTypes(fn_name, 'planes', planes, [TypeCheckObj.isPlane]); // TODO planes can be a list // add isPlaneList to enable check
     checkCommTypes(fn_name, 'scale', scale, [TypeCheckObj.isNumber]);
     // --- Error Check ---
-   return idsMake(_visRay(__model__, ray, scale)) as TId[];
+    return idsMake(_visPlane(__model__, planes, scale)) as TId[];
 }
-// ================================================================================================
 function _visPlane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): TEntTypeIdx[] {
     if (getArrDepth(planes) === 2) {
         const plane: TPlane = planes as TPlane;
@@ -340,24 +357,23 @@ function _visPlane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): 
         return ents_arr;
     }
 }
+// ================================================================================================
 /**
- * Visualises a plane by creating a polygon and axis lines.
+ * Visualises a bounding box by adding geometry to the model.
  *
  * @param __model__
- * @param plane A list of lists
- * @returns Entities, a polygon and two polyline representing the plane.
- * @example plane1 = virtual.visPlane(position1, vector1, [0,1,0])
+ * @param bboxes A list of lists.
+ * @returns Entities, twelve polylines representing the box.
+ * @example bbox1 = virtual.viBBox(position1, vector1, [0,1,0])
  * @example_info Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
  */
-export function VisPlane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): TId[] {
+export function VisBBox(__model__: GIModel, bboxes: TBBox|TBBox): TId[] {
     // --- Error Check ---
-    const fn_name = 'virtual.visPlane';
-    checkCommTypes(fn_name, 'planes', planes, [TypeCheckObj.isPlane]); // TODO planes can be a list // add isPlaneList to enable check
-    checkCommTypes(fn_name, 'scale', scale, [TypeCheckObj.isNumber]);
+    const fn_name = 'virtual.visBBox';
+    checkCommTypes(fn_name, 'bbox', bboxes, [TypeCheckObj.isBBox]); // TODO bboxs can be a list // add isBBoxList to enable check
     // --- Error Check ---
-    return idsMake(_visPlane(__model__, planes, scale)) as TId[];
+    return  idsMake(_visBBox(__model__, bboxes)) as TId[];
 }
-// ================================================================================================
 function _visBBox(__model__: GIModel, bboxs: TBBox|TBBox[]): TEntTypeIdx[] {
     if (getArrDepth(bboxs) === 2) {
         const bbox: TBBox = bboxs as TBBox;
@@ -408,21 +424,5 @@ function _visBBox(__model__: GIModel, bboxs: TBBox|TBBox[]): TEntTypeIdx[] {
         }
         return ents_arr;
     }
-}
-/**
- * Visualises a bounding box by adding geometry to the model.
- *
- * @param __model__
- * @param bbox A list of lists.
- * @returns Entities, twelve polylines representing the box.
- * @example bbox1 = virtual.viBBox(position1, vector1, [0,1,0])
- * @example_info Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
- */
-export function VisBBox(__model__: GIModel, bbox: TBBox|TBBox): TId[] {
-    // --- Error Check ---
-    const fn_name = 'virtual.visBBox';
-    checkCommTypes(fn_name, 'bbox', bbox, [TypeCheckObj.isBBox]); // TODO bboxs can be a list // add isBBoxList to enable check
-    // --- Error Check ---
-    return  idsMake(_visBBox(__model__, bbox)) as TId[];
 }
 // ================================================================================================

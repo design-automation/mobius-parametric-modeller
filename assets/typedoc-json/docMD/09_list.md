@@ -19,7 +19,10 @@
   
   
 ## Remove  
-* **Description:** Removes items in a list.  
+* **Description:** Removes items in a list.
+~
+If @param method is set to 'index', then @param item should be the index of the item to be replaced. Negative indexes are allowed.
+If @param method is not set to 'index', then @param item should be the value.  
 * **Parameters:**  
   * *list:* The list in which to remove items  
   * *item:* The item to remove, either the index of the item or the value. Negative indexes are allowed.  
@@ -27,11 +30,14 @@
 * **Returns:** void  
   
 ## Replace  
-* **Description:** Replaces items in a list.  
+* **Description:** Replaces items in a list.
+~
+If @param method is set to 'index', then @param old_item should be the index of the item to be replaced. Negative indexes are allowed.
+If @param method is not set to 'index', then @param old_item should be the value.  
 * **Parameters:**  
   * *list:* The list in which to replace items  
-  * *item:* The item to replace, either the index of the item or the value. Negative indexes are allowed.  
-  * *new_value:* The new value.  
+  * *old_item:* The old item to replace.  
+  * *new_item:* The new item.  
   * *method:* Enum, select the method for replacing items in the list.  
 * **Returns:** void  
   

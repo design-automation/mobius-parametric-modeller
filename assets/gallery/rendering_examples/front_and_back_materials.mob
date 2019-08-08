@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_56j0yx94gej",
+                "id": "node_2onw5p0qoqn",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -67,7 +67,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_pmdt8aurqqq",
+                                    "id": "node_hrrc5r9nusu",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -103,25 +103,37 @@
                                                 {
                                                     "name": "var_name",
                                                     "value": "rec",
-                                                    "invalidVar": false
+                                                    "invalidVar": false,
+                                                    "jsValue": "rec_",
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "__model__",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "origin",
                                                     "value": "XY",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "XY",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "size",
                                                     "value": "123",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "123",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "variable": "rec"
                                         },
                                         {
                                             "type": 8,
@@ -137,25 +149,39 @@
                                                 {
                                                     "name": "var_name",
                                                     "value": "pl",
-                                                    "invalidVar": false
+                                                    "invalidVar": false,
+                                                    "jsValue": "pl_",
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "__model__",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "positions",
                                                     "value": "rec",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "rec_",
+                                                    "usedVars": [
+                                                        "rec"
+                                                    ],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "close",
                                                     "value": "'close'",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "'close'",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "variable": "pl"
                                         },
                                         {
                                             "type": 8,
@@ -166,35 +192,57 @@
                                                 "module": "make",
                                                 "name": "Extrude"
                                             },
-                                            "argCount": 5,
+                                            "argCount": 6,
                                             "args": [
                                                 {
                                                     "name": "var_name",
                                                     "value": "sides",
-                                                    "invalidVar": false
+                                                    "invalidVar": false,
+                                                    "jsValue": "sides_",
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "__model__",
-                                                    "default": 0
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "entities",
                                                     "value": "pl",
-                                                    "default": 0
+                                                    "jsValue": "pl_",
+                                                    "usedVars": [
+                                                        "pl"
+                                                    ],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "distance",
                                                     "value": "123",
-                                                    "default": 0
+                                                    "jsValue": "123",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "divisions",
                                                     "value": "1",
-                                                    "default": 0
+                                                    "jsValue": "1",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
+                                                },
+                                                {
+                                                    "name": "method",
+                                                    "value": "'quads'",
+                                                    "jsValue": "'quads'",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "variable": "sides"
                                         },
                                         {
                                             "type": 0,
@@ -206,15 +254,25 @@
                                                 {
                                                     "name": "var_name",
                                                     "value": "sides@material",
-                                                    "invalidVar": false
+                                                    "invalidVar": false,
+                                                    "jsValue": "sides_@material",
+                                                    "usedVars": [
+                                                        "sides"
+                                                    ],
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "value",
-                                                    "value": "[\"mat_f\" , \"mat_b\"]"
+                                                    "value": "[\"mat_f\", \"mat_b\"]",
+                                                    "jsValue": "[\"mat_f\", \"mat_b\"]",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "selected": false,
-                                            "hasError": false
+                                            "hasError": false,
+                                            "variable": null
                                         },
                                         {
                                             "type": 8,
@@ -228,36 +286,58 @@
                                             "argCount": 7,
                                             "args": [
                                                 {
-                                                    "name": "__none__"
+                                                    "name": "__none__",
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "__model__",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "name",
                                                     "value": "\"mat_f\"",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "\"mat_f\"",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "colour",
-                                                    "value": "[0 , 1 , 0]",
-                                                    "default": 0
+                                                    "value": "[0, 1, 0]",
+                                                    "default": 0,
+                                                    "jsValue": "[0, 1, 0]",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "opacity",
                                                     "value": "0.7",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "0.7",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "select_side",
                                                     "value": "'front'",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "'front'",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "select_vert_colours",
                                                     "value": "'none'",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "'none'",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "selected": false,
@@ -275,31 +355,49 @@
                                             "argCount": 6,
                                             "args": [
                                                 {
-                                                    "name": "__none__"
+                                                    "name": "__none__",
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "__model__",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "name",
                                                     "value": "\"mat_f\"",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "\"mat_f\"",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "emissive",
-                                                    "value": "[0 , 0 , 0]",
-                                                    "default": 0
+                                                    "value": "[0, 0, 0]",
+                                                    "default": 0,
+                                                    "jsValue": "[0, 0, 0]",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "specular",
-                                                    "value": "[1 , 1 , 1]",
-                                                    "default": 0
+                                                    "value": "[1, 1, 1]",
+                                                    "default": 0,
+                                                    "jsValue": "[1, 1, 1]",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "shininess",
                                                     "value": "10",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "10",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "selected": false,
@@ -317,36 +415,58 @@
                                             "argCount": 7,
                                             "args": [
                                                 {
-                                                    "name": "__none__"
+                                                    "name": "__none__",
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "__model__",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "name",
                                                     "value": "\"mat_b\"",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "\"mat_b\"",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "select_side",
-                                                    "value": "[0 , 0 , 1]",
-                                                    "default": 0
+                                                    "value": "[0, 0, 1]",
+                                                    "default": 0,
+                                                    "jsValue": "[0, 0, 1]",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "select_vert_colours",
                                                     "value": "1",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "1",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "opacity",
                                                     "value": "'back'",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "'back'",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "colour",
                                                     "value": "'none'",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "'none'",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "selected": false,
@@ -364,36 +484,58 @@
                                             "argCount": 7,
                                             "args": [
                                                 {
-                                                    "name": "__none__"
+                                                    "name": "__none__",
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "__model__",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "name",
                                                     "value": "\"mat_b\"",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "\"mat_b\"",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "emissive",
-                                                    "value": "[0 , 0 , 0]",
-                                                    "default": 0
+                                                    "value": "[0, 0, 0]",
+                                                    "default": 0,
+                                                    "jsValue": "[0, 0, 0]",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "roughness",
                                                     "value": "0.6",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "0.6",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "metalness",
                                                     "value": "0.1",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "0.1",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 },
                                                 {
                                                     "name": "reflectivity",
                                                     "value": "1",
-                                                    "default": 0
+                                                    "default": 0,
+                                                    "jsValue": "1",
+                                                    "usedVars": [],
+                                                    "invalidVar": false,
+                                                    "linked": false
                                                 }
                                             ],
                                             "selected": false,
@@ -422,7 +564,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_ml2xqs1fncb",
+                                                        "id": "node_nx07wuzivud",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -456,12 +598,14 @@
                                                                     {
                                                                         "name": "__model__",
                                                                         "value": "",
-                                                                        "default": 0
+                                                                        "default": 0,
+                                                                        "linked": false
                                                                     },
                                                                     {
                                                                         "name": "value",
                                                                         "value": "",
-                                                                        "default": 0
+                                                                        "default": 0,
+                                                                        "linked": false
                                                                     }
                                                                 ],
                                                                 "print": false,
@@ -483,7 +627,8 @@
                                                             },
                                                             "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
                                                         },
-                                                        "hasError": false
+                                                        "hasError": false,
+                                                        "hasExecuted": true
                                                     }
                                                 },
                                                 "selected": false
@@ -492,9 +637,11 @@
                                         "meta": {
                                             "mode": 0
                                         },
-                                        "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode"
+                                        "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode",
+                                        "model": null
                                     },
-                                    "hasError": false
+                                    "hasError": false,
+                                    "hasExecuted": true
                                 }
                             },
                             "selected": false
@@ -503,9 +650,11 @@
                     "meta": {
                         "mode": 0
                     },
-                    "parentNode": "~flowchart~nodes~0"
+                    "parentNode": "~flowchart~nodes~0",
+                    "model": null
                 },
-                "hasError": false
+                "hasError": false,
+                "hasExecuted": true
             },
             "~flowchart~nodes~0~output~edges~0~target~parentNode",
             "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
@@ -515,9 +664,10 @@
             "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0"
         ],
         "functions": [],
-        "ordered": true
+        "ordered": true,
+        "id": "7d59235c-0133-2f1b-a491-0c23b0717b83",
+        "last_updated": "2019-08-06T05:21:25.357Z"
     },
-    "last_updated": "2019-02-04T01:54:29.597Z",
     "version": 1,
-    "settings": {}
+    "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-80,\"y\":-80,\"z\":80},\"pos_x\":-80,\"pos_y\":-80,\"pos_z\":80,\"target\":{\"x\":0,\"y\":0,\"z\":0}},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":5,\"name\":\"Faces\"},\"tab\":\"0\"},\"version\":\"0.4.38\"}"
 }

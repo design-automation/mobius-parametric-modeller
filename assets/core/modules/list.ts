@@ -126,13 +126,16 @@ export function Add(list: any[], item: any|any[], method: _EAddMethod): void {
 }
 // ================================================================================================
 export enum _ERemoveMethod {
-    REMOVE_INDEX = 'remove_index',
-    REMOVE_FIRST_VALUE = 'remove_first_value',
-    REMOVE_LAST_VALUE = 'remove_last_value',
-    REMOVE_ALL_VALUES = 'remove_all_values'
+    REMOVE_INDEX = 'index',
+    REMOVE_FIRST_VALUE = 'first_value',
+    REMOVE_LAST_VALUE = 'last_value',
+    REMOVE_ALL_VALUES = 'all_values'
 }
 /**
  * Removes items in a list.
+ * ~
+ * If @param method is set to 'index', then @param item should be the index of the item to be replaced. Negative indexes are allowed.
+ * If @param method is not set to 'index', then @param item should be the value.
  *
  * @param list The list in which to remove items
  * @param item The item to remove, either the index of the item or the value. Negative indexes are allowed.
@@ -183,41 +186,44 @@ export enum _EReplaceMethod {
 }
 /**
  * Replaces items in a list.
+ * ~
+ * If @param method is set to 'index', then @param old_item should be the index of the item to be replaced. Negative indexes are allowed.
+ * If @param method is not set to 'index', then @param old_item should be the value.
  *
  * @param list The list in which to replace items
- * @param item The item to replace, either the index of the item or the value. Negative indexes are allowed.
- * @param new_value The new value.
+ * @param old_item The old item to replace. 
+ * @param new_item The new item.
  * @param method Enum, select the method for replacing items in the list.
  * @returns void
  */
-export function Replace(list: any[], item: any, new_value: any, method: _EReplaceMethod): void {
+export function Replace(list: any[], old_item: any, new_item: any, method: _EReplaceMethod): void {
     // --- Error Check ---
     const fn_name = 'list.Replace';
     checkCommTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
-    checkCommTypes(fn_name, 'item', item, [TypeCheckObj.isAny]);
-    checkCommTypes(fn_name, 'new_value', new_value, [TypeCheckObj.isAny]);
+    checkCommTypes(fn_name, 'item', old_item, [TypeCheckObj.isAny]);
+    checkCommTypes(fn_name, 'new_value', new_item, [TypeCheckObj.isAny]);
     // --- Error Check ---
     let index: number;
     switch (method) {
         case _EReplaceMethod.REPLACE_INDEX:
-            index = item;
+            index = old_item;
             if (! isNaN(index) ) {
                 if (index < 0) { index = list.length + index; }
-                list[index] = new_value;
+                list[index] = new_item;
             }
             break;
         case _EReplaceMethod.REPLACE_FIRST_VALUE:
-            index = list.indexOf(item);
-            if (index !== -1) { list[index] = new_value; }
+            index = list.indexOf(old_item);
+            if (index !== -1) { list[index] = new_item; }
             break;
         case _EReplaceMethod.REPLACE_LAST_VALUE:
-            index = list.lastIndexOf(item);
-            if (index !== -1) { list[index] = new_value; }
+            index = list.lastIndexOf(old_item);
+            if (index !== -1) { list[index] = new_item; }
             break;
         case _EReplaceMethod.REPLACE_ALL_VALUES:
             for (index = 0; index < list.length; index++) {
-                if (list[index] === item) {
-                    list[index] = new_value;
+                if (list[index] === old_item) {
+                    list[index] = new_item;
                 }
             }
             break;

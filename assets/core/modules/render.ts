@@ -1,7 +1,8 @@
 /**
  * The `render` module has functions for defining various settings for the 3D viewer.
- * These settings are saved as attributes at the model level.
- * These include things like creating more advanced materials.
+ * Color is saved as vertex attributes, materials as polygon attributes.
+ * The material definitions are saved as attributes at the model level.
+ * More advanced materials can be created.
  * For more informtion, see the threejs docs: https://threejs.org/
  */
 
@@ -10,8 +11,11 @@
  */
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { Txyz } from '@assets/libs/geo-info/common';
+import { Txyz, TColor, EAttribNames, EAttribDataTypeStrs } from '@assets/libs/geo-info/common';
 import * as THREE from 'three';
+import { TId, TQuery, EEntType, ESort, TEntTypeIdx } from '@libs/geo-info/common';
+import { idsMake, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
+import { checkIDs, IDcheckObj, checkCommTypes, TypeCheckObj } from './_check_args';
 
 export enum _ESide {
     FRONT =   'front',
@@ -50,6 +54,69 @@ enum _EMaterialType {
 }
 // ================================================================================================
 /**
+ * Sets color by creating a vertex attribute called 'rgb' and setting the value.
+ *
+ * @param entities The entities for which to set the color.
+ * @param color The color, [0,0,0] is black, [1,1,1] is white.
+ * @returns void
+ */
+export function Color(__model__: GIModel, entities: TId|TId[], color: TColor): void {
+    if (isEmptyArr(entities)) { return; }
+    // --- Error Check ---
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[] =
+        checkIDs('render.Color', 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx|TEntTypeIdx[];
+    checkCommTypes('make.Position', 'coords', color, [TypeCheckObj.isColor]);
+    // --- Error Check ---
+    const depth: number = getArrDepth(ents_arr);
+    if (depth === 1) { ents_arr = [ents_arr] as TEntTypeIdx[]; }
+    // @ts-ignore
+    if (depth > 2) { ents_arr = ents_arr.flat(depth - 2); }
+    if (!__model__.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOR)) {
+        __model__.attribs.add.addAttrib(EEntType.VERT, EAttribNames.COLOR, EAttribDataTypeStrs.LIST);
+    }
+    for (const ent_arr of ents_arr) {
+        const [ent_type, ent_i]: [number, number] = ent_arr as TEntTypeIdx;
+        const verts_i: number[] = __model__.geom.query.navAnyToVert(ent_type, ent_i);
+        for (const vert_i of verts_i) {
+            __model__.attribs.add.setAttribValue(EEntType.VERT, vert_i, EAttribNames.COLOR, color);
+        }
+    }
+}
+// ================================================================================================
+/**
+ * Sets material by creating a polygon attribute called 'material' and setting the value.
+ * The value is a sitring, which is the name of the material.
+ * The properties of this material must be defined at the model level, using one of the material functions.
+ *
+ * @param entities The entities for which to set the material.
+ * @param color The name of the material.
+ * @returns void
+ */
+export function Material(__model__: GIModel, entities: TId|TId[], material: string): void {
+    if (isEmptyArr(entities)) { return; }
+    // --- Error Check ---
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[] =
+        checkIDs('render.Color', 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx|TEntTypeIdx[];
+    // --- Error Check ---
+    const depth: number = getArrDepth(ents_arr);
+    if (depth === 1) { ents_arr = [ents_arr] as TEntTypeIdx[]; }
+    // @ts-ignore
+    if (depth > 2) { ents_arr = ents_arr.flat(depth - 2); }
+    if (!__model__.attribs.query.hasAttrib(EEntType.PGON, EAttribNames.MATERIAL)) {
+        __model__.attribs.add.addAttrib(EEntType.PGON, EAttribNames.MATERIAL, EAttribDataTypeStrs.STRING);
+    }
+    for (const ent_arr of ents_arr) {
+        const [ent_type, ent_i]: [number, number] = ent_arr as TEntTypeIdx;
+        const pgons_i: number[] = __model__.geom.query.navAnyToPgon(ent_type, ent_i);
+        for (const pgon_i of pgons_i) {
+            __model__.attribs.add.setAttribValue(EEntType.PGON, pgon_i, EAttribNames.MATERIAL, material);
+        }
+    }
+}
+// ================================================================================================
+/**
  * Creates a glass material with an opacity setting. The material will default to a Phong material.
  * ~
  * In order to assign a material to polygons in the model, a polygon attribute called 'material'
@@ -80,7 +147,7 @@ export function GlassMaterial(__model__: GIModel, name: string, opacity: number)
  * ~
  * [See the threejs docs](https://threejs.org/docs/#api/en/materials/MeshBasicMaterial)
  * ~
- * The colour pf teh material can either ignore or apply the vertex rgb colours.
+ * The colour pf the material can either ignore or apply the vertex rgb colours.
  * If 'apply' id selected, then the actual colour will be a combination of the material colour
  * and the vertex colours, as specified by the a vertex attribute called 'rgb'.
  * In such a case, if material colour is set to white, then it will

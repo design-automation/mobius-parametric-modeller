@@ -30,9 +30,9 @@ const constants = [
  ];
 
 const lists = [
+    ['isList(list)', 'Returns true if this is a list, false otherwise.'],
     ['range(start, end)', 'Generates a list of integers, from start to end, with a step size of 1'],
     ['range(start, end, step?)', 'Generates a list of integers, from start to end, with a specified step size'],
-    ['isList(list)', 'Returns true if this is a list, false otherwise.'],
     ['len(list)', 'Returns the number of items in the list'],
     // ['listLen(list)', 'Returns the number of items in the list'],
     ['listLast(list)', 'Returns the last item in a list'],
@@ -46,7 +46,14 @@ const lists = [
     ['listFlat(list, depth?)', 'Returns a copy of the nested list, flattened to the specified depth'],
     ['listSlice(list, start, end?)', 'Return a sub-list from the list'],
     ['listZip(lists)', 'Converts a set of lists from rows into columns, based on the shortest list'],
-    ['lisZip2(lists)', 'Converts a set of lists from rows into columns, based on the longest list']
+    ['listZip2(lists)', 'Converts a set of lists from rows into columns, based on the longest list']
+ ];
+
+ const sets = [
+    ['setMake(list)', 'Generates a list of unique items.'],
+    ['setUni(list1, list2)', 'Generates a list of unique items from the union of the two input lists.'],
+    ['setInt(list1, list2)', 'Generates a list of unique items from the intersection of the two input lists.'],
+    ['setDif(list1, list2)', 'Generates a list of unique items from the difference of the two input lists.']
  ];
 
  const vectors = [
@@ -66,7 +73,7 @@ const lists = [
     ['vecEqual(v1, v2, tol)', 'Returns true if the difference between two vectors is smaler than a specified tolerance']
 ];
 
-const colours = [
+const colors = [
     ['colFalse(val, min, max)', 'Creates a colour from a value in the range between min and max.']
 ];
 
@@ -145,16 +152,22 @@ const str = [
     ['len(str)', 'Returns the number of characters in the string']
 ];
 
+const attrib = [
+    ['setattr(entity, name, value)', 'Set an entity attribute value'],
+    ['getattr(entity, name)', 'Query for an entity attribute value']
+];
+
 export const inline_func = [
     ['constants', constants],
     ['random', random],
     ['lists', lists],
+    ['sets', sets],
     ['conversion', conversion],
     ['vectors', vectors],
-    ['colours', colours],
+    ['colors', colors],
     ['arithmetic', arithmetic],
     ['statistics', statistics],
-    ['trigonometry', trigonometry]
+    ['trigonometry', trigonometry],
 ];
 
 // const inline_func_lst: string[][][] = inline_func.map(x => x[1]);

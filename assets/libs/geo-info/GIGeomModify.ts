@@ -266,8 +266,8 @@ export class GIGeomModify {
     // Modify geometry
     // ============================================================================
     /**
-     * 
-     * @param coll_i Set collection parent
+     * Set the parent if a collection
+     * @param coll_i The index of teh collection that is the parent
      * @param parent_coll_i
      */
     public setCollParent(coll_i: number, parent_coll_i: number): void {
@@ -467,13 +467,19 @@ export class GIGeomModify {
      * @param new_posis_i
      */
     public replacePosis(ent_type: EEntType, ent_i: number, new_posis_i: number[]): void {
-        const verts_i: number[] = this._geom.query.navAnyToVert(ent_type, ent_i);
-        if (verts_i.length !== new_posis_i.length) {
+        const old_posis_i: number[] = this._geom.query.navAnyToPosi(ent_type, ent_i);
+        if (old_posis_i.length !== new_posis_i.length) {
             throw new Error('Replacing positions operation failed due to incorrect number of positions.');
         }
-        for (let i = 0; i < verts_i.length; i++) {
-            const vert_i: number = verts_i[i];
-            const old_posi_i: number = this._geom_arrays.dn_verts_posis[vert_i];
+        const old_posis_i_map: Map<number, number> = new Map(); // old_posi_i -> index
+        for (let i = 0; i < old_posis_i.length; i++) {
+            const old_posi_i: number = old_posis_i[i];
+            old_posis_i_map[old_posi_i] = i;
+        }
+        const verts_i: number[] = this._geom.query.navAnyToVert(ent_type, ent_i);
+        for (const vert_i of verts_i) {
+            const old_posi_i: number = this._geom.query.navVertToPosi(vert_i);
+            const i: number = old_posis_i_map[old_posi_i];
             const new_posi_i: number = new_posis_i[i];
             // set the down array
             this._geom_arrays.dn_verts_posis[vert_i] = new_posi_i;
@@ -484,11 +490,10 @@ export class GIGeomModify {
         }
     }
     /**
-     * Unweld the vertices
-     * TODO copy attributes onto new positions?
+     * Unweld the vertices on naked edges.
      * @param verts_i
      */
-    public unweldVerts(verts_i: number[]): number[] {
+    public unweldVertsShallow(verts_i: number[]): number[] {
         // create a map, for each posi_i, count how many verts there are in the input verts
         const exist_posis_i_map: Map<number, number> = new Map(); // posi_i -> count
         for (const vert_i of verts_i) {
@@ -526,6 +531,31 @@ export class GIGeomModify {
         }
         // return all the new positions
         return Array.from(old_to_new_posis_i_map.values());
+    }
+    /**
+     * Unweld all vertices
+     * @param verts_i
+     */
+    public unweldVerts(verts_i: number[]): number[] {
+        const new_posis_i: number[] = [];
+        for (const vert_i of verts_i) {
+            const exist_posi_i: number = this._geom.query.navVertToPosi(vert_i);
+            const all_verts_i: number[] = this._geom.query.navPosiToVert(exist_posi_i);
+            const all_verts_count: number = all_verts_i.length;
+            if (all_verts_count > 1) {
+                const new_posi_i: number = this._geom.add.copyPosis(exist_posi_i, true) as number;
+                // update the down arrays
+                this._geom_arrays.dn_verts_posis[vert_i] = new_posi_i;
+                // update the up arrays for the old posi, i.e. remove this vert
+                arrRem(this._geom_arrays.up_posis_verts[exist_posi_i], vert_i);
+                // update the up arrays for the new posi, i.e. add this vert
+                this._geom_arrays.up_posis_verts[new_posi_i].push(vert_i);
+                // add the new posi_i to the list, to be returned later
+                new_posis_i.push(new_posi_i);
+            }
+        }
+        // return all the new positions
+        return new_posis_i;
     }
     /**
      * Reverse the edges of a wire.

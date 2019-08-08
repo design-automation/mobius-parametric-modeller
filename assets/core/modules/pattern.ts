@@ -8,7 +8,7 @@
  *
  */
 
- import { checkCommTypes, TypeCheckObj } from './_check_args';
+import { checkCommTypes, TypeCheckObj } from './_check_args';
 import { Txyz, TPlane, XYPLANE, TId, EEntType } from '@libs/geo-info/common';
 import { getArrDepth, idsMakeFromIndicies } from '@libs/geo-info/id';
 import { vecAdd } from '@libs/geom/vectors';
@@ -18,26 +18,21 @@ import { __merge__ } from './_model';
 import { GIModel } from '@libs/geo-info/GIModel';
 // ================================================================================================
 /**
- * Creates positions in an arc pattern, and returns the list of new positions.
- * If the angle of the arc is set to null, then circular patterns will be created.
- * For circular patterns, duplicates at start and end are automatically removed.
- *
+ * Creates four positions in a rectangle pattern, and returns the list of new positions.
  * @param __model__
  * @param origin XYZ coordinates as a list of three numbers.
- * @param radius Radius of circle as a number.
- * @param num_positions Number of positions distributed equally along the arc.
- * @param arc_angle Angle of arc (in radians).
- * @returns Entities, a list of positions.
- * @example coordinates1 = pattern.Arc([0,0,0], 10, 12, PI)
- * @example_info Creates a list of 12 XYZ coordinates distributed equally along a semicircle of radius 10.
+ * @param size Size of rectangle. If number, assume square of that length; if list of two numbers, x and y lengths respectively.
+ * @returns Entities, a list of four positions.
+ * @example coordinates1 = pattern.Rectangle([0,0,0], 10)
+ * @example_info Creates a list of 4 coords, being the vertices of a 10 by 10 square.
+ * @example coordinates1 = pattern.Rectangle([0,0,0], [10,20])
+ * @example_info Creates a list of 4 coords, being the vertices of a 10 by 20 rectangle.
  */
-export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num_positions: number, arc_angle: number): TId[] {
+export function Rectangle(__model__: GIModel, origin: Txyz|TPlane, size: number|[number, number]): TId[] {
     // --- Error Check ---
-    const fn_name = 'pattern.Arc';
+    const fn_name = 'pattern.Rectangle';
     checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
-    checkCommTypes(fn_name, 'radius', radius, [TypeCheckObj.isNumber]);
-    checkCommTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
-    checkCommTypes(fn_name, 'arc_angle', arc_angle, [TypeCheckObj.isNumber, TypeCheckObj.isNull]);
+    checkCommTypes(fn_name, 'size', size, [TypeCheckObj.isNumber, TypeCheckObj.isXYlist]);
     // --- Error Check ---
     // create the matrix one time
     let matrix: Matrix4;
@@ -45,15 +40,17 @@ export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num
     if (origin_is_plane) {
         matrix = xfromSourceTargetMatrix(XYPLANE, origin as  TPlane);
     }
-    // calc the rot angle per position
-    const rot: number = (arc_angle === null) ? (2 * Math.PI) / num_positions : arc_angle / (num_positions - 1);
-    // create positions
+    // create the positions
     const posis_i: number[] = [];
-    for (let i = 0; i < num_positions; i++) {
-        const angle: number = rot * i; // CCW
-        const x: number = (Math.cos(angle) * radius);
-        const y: number = (Math.sin(angle) * radius);
-        let xyz: Txyz = [x, y, 0];
+    const xy_size: [number, number] = (Array.isArray(size) ? size : [size, size]) as [number, number];
+    const coords: Txyz[] = [
+        [-(xy_size[0] / 2), -(xy_size[1] / 2), 0],
+        [ (xy_size[0] / 2), -(xy_size[1] / 2), 0],
+        [ (xy_size[0] / 2),  (xy_size[1] / 2), 0],
+        [-(xy_size[0] / 2),  (xy_size[1] / 2), 0]
+    ];
+    for (const coord of coords) {
+        let xyz: Txyz = coord;
         if (origin_is_plane) {
             xyz = multMatrix(xyz, matrix);
         } else { // we have a plane
@@ -63,16 +60,10 @@ export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num
         __model__.attribs.add.setPosiCoords(posi_i, xyz);
         posis_i.push(posi_i);
     }
-    // return the list of posis
+    // return
     return idsMakeFromIndicies(EEntType.POSI, posis_i) as TId[];
 }
 // ================================================================================================
-export enum _EGridMethod {
-    FLAT = 'flat',
-    COLUMNS = 'columns',
-    ROWS = 'rows',
-    SQUARES = 'squares'
-}
 /**
 * Creates positions in a grid pattern, and returns the list (or list of lists) of new positions.
 * @param __model__
@@ -161,23 +152,34 @@ export function Grid(__model__: GIModel, origin: Txyz|TPlane, size: number|[numb
     }
     return idsMakeFromIndicies(EEntType.POSI, posis_i2) as TId[][];
 }
+export enum _EGridMethod {
+    FLAT = 'flat',
+    COLUMNS = 'columns',
+    ROWS = 'rows',
+    SQUARES = 'squares'
+}
 // ================================================================================================
 /**
- * Creates four positions in a rectangle pattern, and returns the list of new positions.
+ * Creates positions in an arc pattern, and returns the list of new positions.
+ * If the angle of the arc is set to null, then circular patterns will be created.
+ * For circular patterns, duplicates at start and end are automatically removed.
+ *
  * @param __model__
  * @param origin XYZ coordinates as a list of three numbers.
- * @param size Size of rectangle. If number, assume square of that length; if list of two numbers, x and y lengths respectively.
- * @returns Entities, a list of four positions.
- * @example coordinates1 = pattern.Rectangle([0,0,0], 10)
- * @example_info Creates a list of 4 coords, being the vertices of a 10 by 10 square.
- * @example coordinates1 = pattern.Rectangle([0,0,0], [10,20])
- * @example_info Creates a list of 4 coords, being the vertices of a 10 by 20 rectangle.
+ * @param radius Radius of circle as a number.
+ * @param num_positions Number of positions distributed equally along the arc.
+ * @param arc_angle Angle of arc (in radians).
+ * @returns Entities, a list of positions.
+ * @example coordinates1 = pattern.Arc([0,0,0], 10, 12, PI)
+ * @example_info Creates a list of 12 XYZ coordinates distributed equally along a semicircle of radius 10.
  */
-export function Rectangle(__model__: GIModel, origin: Txyz|TPlane, size: number|[number, number]): TId[] {
+export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num_positions: number, arc_angle: number): TId[] {
     // --- Error Check ---
-    const fn_name = 'pattern.Rectangle';
+    const fn_name = 'pattern.Arc';
     checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
-    checkCommTypes(fn_name, 'size', size, [TypeCheckObj.isNumber, TypeCheckObj.isXYlist]);
+    checkCommTypes(fn_name, 'radius', radius, [TypeCheckObj.isNumber]);
+    checkCommTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+    checkCommTypes(fn_name, 'arc_angle', arc_angle, [TypeCheckObj.isNumber, TypeCheckObj.isNull]);
     // --- Error Check ---
     // create the matrix one time
     let matrix: Matrix4;
@@ -185,17 +187,15 @@ export function Rectangle(__model__: GIModel, origin: Txyz|TPlane, size: number|
     if (origin_is_plane) {
         matrix = xfromSourceTargetMatrix(XYPLANE, origin as  TPlane);
     }
-    // create the positions
+    // calc the rot angle per position
+    const rot: number = (arc_angle === null) ? (2 * Math.PI) / num_positions : arc_angle / (num_positions - 1);
+    // create positions
     const posis_i: number[] = [];
-    const xy_size: [number, number] = (Array.isArray(size) ? size : [size, size]) as [number, number];
-    const coords: Txyz[] = [
-        [-(xy_size[0] / 2), -(xy_size[1] / 2), 0],
-        [ (xy_size[0] / 2), -(xy_size[1] / 2), 0],
-        [ (xy_size[0] / 2),  (xy_size[1] / 2), 0],
-        [-(xy_size[0] / 2),  (xy_size[1] / 2), 0]
-    ];
-    for (const coord of coords) {
-        let xyz: Txyz = coord;
+    for (let i = 0; i < num_positions; i++) {
+        const angle: number = rot * i; // CCW
+        const x: number = (Math.cos(angle) * radius);
+        const y: number = (Math.sin(angle) * radius);
+        let xyz: Txyz = [x, y, 0];
         if (origin_is_plane) {
             xyz = multMatrix(xyz, matrix);
         } else { // we have a plane
@@ -205,7 +205,7 @@ export function Rectangle(__model__: GIModel, origin: Txyz|TPlane, size: number|
         __model__.attribs.add.setPosiCoords(posi_i, xyz);
         posis_i.push(posi_i);
     }
-    // return
+    // return the list of posis
     return idsMakeFromIndicies(EEntType.POSI, posis_i) as TId[];
 }
 // ================================================================================================

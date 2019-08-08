@@ -161,6 +161,16 @@ modal-window {
         //     outline: none;
         // }
     }
+
+    .getbtn{
+        cursor: pointer;
+        background: $color7;
+        border: 1px solid $color4;
+        box-sizing: border-box;
+        margin-left: 10px;
+        height: 20px;
+        width: 50px;
+    }
 }
 
 body.modal-open {
@@ -330,9 +340,9 @@ body.modal-open {
         float: left;
     }
 
-    #camera{
+    #camera, #camera_target{
         input{
-            width: 80px;
+            width: 65px;
             border: 1px solid #bdbdbd;
             height: 16px;
             margin-right: 3px;

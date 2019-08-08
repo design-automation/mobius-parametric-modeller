@@ -150,8 +150,14 @@ export class GIAttribsThreejs {
                             }
                         }
                     } else {
-                        const _attrib_value = isString(attrib_value) ? `'${attrib_value}'` : attrib_value;
-                        data_obj_map.get(ent_i)[`${attrib_name}`] = _attrib_value;
+                        if (attrib_name === 'xyz' && ent_type === EEntType.POSI && Array.isArray(attrib_value)) {
+                            data_obj_map.get(ent_i)['x'] = attrib_value[0];
+                            data_obj_map.get(ent_i)['y'] = attrib_value[1];
+                            data_obj_map.get(ent_i)['z'] = attrib_value[2];
+                        } else {
+                            const _attrib_value = isString(attrib_value) ? `'${attrib_value}'` : attrib_value;
+                            data_obj_map.get(ent_i)[`${attrib_name}`] = _attrib_value;
+                        }
                     }
                 }
             }
@@ -200,8 +206,14 @@ export class GIAttribsThreejs {
                             }
                         }
                     } else {
-                        const _attrib_value = isString(attrib_value) ? `'${attrib_value}'` : attrib_value;
-                        data_obj_map.get(ent_i)[`${attrib_name}`] = _attrib_value;
+                        if (attrib_name === 'xyz' && ent_type === EEntType.POSI && Array.isArray(attrib_value)) {
+                            data_obj_map.get(ent_i)['x'] = attrib_value[0];
+                            data_obj_map.get(ent_i)['y'] = attrib_value[1];
+                            data_obj_map.get(ent_i)['z'] = attrib_value[2];
+                        } else {
+                            const _attrib_value = isString(attrib_value) ? `'${attrib_value}'` : attrib_value;
+                            data_obj_map.get(ent_i)[`${attrib_name}`] = _attrib_value;
+                        }
                     }
                 }
             }

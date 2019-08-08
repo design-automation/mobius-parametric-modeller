@@ -159,32 +159,28 @@
 									</div>
 								</dd>
 								<dd id='camera'>
-									<div class="label">Camera</div>
-									<!-- <div>
-										<button (click)="settingOnChange('camera.curr_pos')" class="filebtn closebtn" style="margin-left: 0">Get Camera</button>
-									</div> -->
+									<div class="label">Camera Position</div>
 									<input type="number" 
-									(change)="settingOnChange('camera.curr_pos_x', $event.target.value)" 
-									[value]="formatNumber(temp_camera_pos.x)">
+									[value]="formatNumber(settings.camera.pos.x)">
 									<input type="number" 
-									(change)="settingOnChange('camera.curr_pos_y', $event.target.value)"
-									[value]="formatNumber(temp_camera_pos.y)">
+									[value]="formatNumber(settings.camera.pos.y)">
 									<input type="number" 
-									(change)="settingOnChange('camera.curr_pos_z', $event.target.value)"
-									[value]="formatNumber(temp_camera_pos.z)">
+									[value]="formatNumber(settings.camera.pos.z)">
+									<button (click)="settingOnChange('camera.get_camera_pos')" class="filebtn getbtn">Get</button>
 								</dd>
-								<!-- <dd id='camera'>
+								<dd id='camera_target'>
 									<div class="label">Camera Target</div>
 									<input type="number"
 									(change)="settingOnChange('camera.target_x', $event.target.value)" 
-									[value]="formatNumber(settings.camera.target_x)">
+									[value]="formatNumber(settings.camera.target.x)">
 									<input type="number" 
 									(change)="settingOnChange('camera.target_y', $event.target.value)"
-									[value]="formatNumber(settings.camera.target_y)">
+									[value]="formatNumber(settings.camera.target.y)">
 									<input type="number" 
 									(change)="settingOnChange('camera.target_z', $event.target.value)"
-									[value]="formatNumber(settings.camera.target_z)">
-								</dd> -->
+									[value]="formatNumber(settings.camera.target.z)">
+									<button (click)="settingOnChange('camera.get_target_pos')" class="filebtn getbtn">Get</button>
+								</dd>
 							</dl>
 						</div>
 					</tab>

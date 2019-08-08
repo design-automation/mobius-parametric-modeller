@@ -34,6 +34,7 @@ export class GIViewerComponent implements OnInit {
     normalsEnabled = false;
 
     temp_camera_pos = new Vector3(-80, -80, 80);
+    temp_target_pos = new Vector3(0, 0, 0);
 
     public clickedEvent: Event;
     public attrTableSelect: Event;
@@ -134,7 +135,7 @@ export class GIViewerComponent implements OnInit {
                 pos_x: this.temp_camera_pos.x,
                 pos_y: this.temp_camera_pos.y,
                 pos_z: this.temp_camera_pos.z,
-                target: new Vector3(0, 0, 0)
+                target: this.temp_target_pos
             };
             this.dataService.getThreejsScene().settings = this.settings;
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
@@ -186,48 +187,31 @@ export class GIViewerComponent implements OnInit {
             case 'wireframe.show':
                 this.wireframeToggle();
                 break;
-            case 'camera.curr_pos':
-                // this.temp_camera_pos = this.dataService.getThreejsScene()._camera.position;
+            case 'camera.get_camera_pos':
+                this.temp_camera_pos = this.dataService.getThreejsScene()._camera.position;
+                this.settings.camera.pos = this.temp_camera_pos;
                 break;
-            case 'camera.curr_pos_x':
+            case 'camera.target_x':
                 if (isNaN(value)) {
                     return;
                 }
-                this.temp_camera_pos.x = Math.round(value);
-                // this.setCamera(value, null, null);
+                this.temp_target_pos.x = Math.round(value);
                 break;
-            case 'camera.curr_pos_y':
+            case 'camera.target_y':
                 if (isNaN(value)) {
                     return;
                 }
-                this.temp_camera_pos.y = Math.round(value);
-                // this.setCamera(null, value, null);
+                this.temp_target_pos.y = Math.round(value);
                 break;
-            case 'camera.curr_pos_z':
+            case 'camera.target_z':
                 if (isNaN(value)) {
                     return;
                 }
-                this.temp_camera_pos.z = Math.round(value);
-                // this.setCamera(null, null, value);
+                this.temp_target_pos.z = Math.round(value);
                 break;
-            // case 'camera.target_x':
-            //     if (isNaN(value)) {
-            //         return;
-            //     }
-            //     this.settings.camera.target_x = Math.round(value);
-            //     break;
-            // case 'camera.target_y':
-            //     if (isNaN(value)) {
-            //         return;
-            //     }
-            //     this.settings.camera.target_y = Math.round(value);
-            //     break;
-            // case 'camera.target_z':
-            //     if (isNaN(value)) {
-            //         return;
-            //     }
-            //     this.settings.camera.target_z = Math.round(value);
-            //     break;
+            case 'camera.get_target_pos':
+                this.settings.camera.target = this.temp_target_pos;
+                break;
             case 'ambient_light.show': // Ambient Light
                 this.settings.ambient_light.show = !this.settings.ambient_light.show;
                 if (scene.ambient_light) {

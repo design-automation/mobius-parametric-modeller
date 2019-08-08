@@ -92,7 +92,7 @@ export class AttributeComponent implements OnChanges, DoCheck {
   }
 
   ngDoCheck() {
-    const attrib = document.getElementById('attrib');
+    const attrib = document.getElementById('attribTable');
     if (attrib) {
       const paginators = document.getElementsByClassName('mat-paginator');
       const l = paginators.length;

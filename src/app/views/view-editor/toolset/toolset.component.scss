@@ -139,8 +139,6 @@
 
     &.mainAccordion{
         &.active {
-            border-left: 2px solid $selected-color;
-            border-bottom: 2px solid $selected-color;
             &:after {
                 content: "\2bc6"; /* Unicode character for "minus" sign (-) */
             }
@@ -164,6 +162,8 @@
 .panel {
     width: inherit;
     padding: 0px;
+    border-left: 2px solid $color3;
+    margin-left: 3px;
     display: none;
     // background-color: $color5;
     overflow: hidden;

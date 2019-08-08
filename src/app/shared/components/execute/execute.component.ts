@@ -312,11 +312,16 @@ export class ExecuteComponent {
         }
 
         for (const node of this.dataService.flowchart.nodes) {
-            delete node.output.value;
-
-            // if (node.type !== 'end') {
-            //     delete node.output.value;
-            // }
+            // delete node.output.value;
+            if (node.type === 'end') {
+                if (node.procedure[node.procedure.length - 1].args[1].jsValue) {
+                    continue;
+                } else {
+                    delete node.output.value;
+                }
+            } else {
+                delete node.output.value;
+            }
         }
 
         this.dataOutputService.resetIModel();

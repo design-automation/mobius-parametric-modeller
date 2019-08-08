@@ -52,40 +52,6 @@ describe('Execute Component test', () => {
         // dataService.file.flowchart = undefined;
     });
 
-    // for (const exampleSet of galleryUrl.data) {
-    //     for (const file of exampleSet.files) {
-    //         const f = file.replace(/ /g, '');
-    //         let nodeCheck = false;
-    //         if (f.indexOf('node=') !== -1) {
-    //             nodeCheck = true;
-    //         }
-    //         it('load and execute gallery file: ' + f.split('.mob')[0], async (done: DoneFn) => {
-    //             await loadURLfixture.componentInstance.loadStartUpURL(`?file=${exampleSet.link}${f}`);
-    //             const rSpy = router.navigate as jasmine.Spy;
-    //             expect(dataService.file.flowchart).toBeDefined(`Unable to load ${f.split('.mob')[0]}.mob`);
-    //             if (dataService.file.flowchart) {
-    //                 let nodeProcedures = 0;
-    //                 for (const node of dataService.flowchart.nodes) {
-    //                     nodeProcedures += node.procedure.length;
-    //                 }
-    //                 dataService.flagModifiedNode(dataService.file.flowchart.nodes[0].id);
-
-    //                 expect(nodeProcedures > dataService.flowchart.nodes.length + 1).toBe(true,
-    //                         `${f.split('.mob')[0]}.mob is an empty flowchart`);
-    //                 if (nodeCheck) {
-    //                     expect(rSpy.calls.first().args[0][0]).toBe('/editor', 'Needs to navigate to editor');
-    //                 }
-    //                 await executeFixture.componentInstance.execute(true);
-    //                 expect(f.split('.mob')[0]).toBe(dataService.file.name,
-    //                     'Loaded file name and the file name in dataService do not match.');
-    //                 expect(dataService.flowchart.nodes[dataService.flowchart.nodes.length - 1].model).toBeDefined(
-    //                     `Execute fails. The end node model is not defined.`);
-    //             }
-    //             done();
-    //         });
-    //     }
-    // }
-
     for (const test of testUrl.test_data) {
         let testName: any = test.url.split('/');
         testName = testName[testName.length - 1];
@@ -156,52 +122,52 @@ describe('Execute Component test', () => {
                     const attrb_data = model.attributes;
                     let testSet, resultSet;
                     if (test.requirements.attributes.hasOwnProperty('position_attribs')) {
-                        testSet = new Set(attrb_data.positions.map(x => x.name));
+                        testSet = new Set(oModel.attribs.query.getAttribNames(EEntType.POSI));
                         resultSet = new Set(test.requirements.attributes['position_attribs']);
                         expect(testSet).toEqual(resultSet, 'No. position attributes do not match');
                     }
                     if (test.requirements.attributes.hasOwnProperty('vertex_attribs')) {
-                        testSet = new Set(attrb_data.vertices.map(x => x.name));
+                        testSet = new Set(oModel.attribs.query.getAttribNames(EEntType.VERT));
                         resultSet = new Set(test.requirements.attributes['vertex_attribs']);
                         expect(testSet).toEqual(resultSet, 'No. vertex attributes do not match');
                     }
                     if (test.requirements.attributes.hasOwnProperty('edge_attribs')) {
-                        testSet = new Set(attrb_data.edges.map(x => x.name));
+                        testSet = new Set(oModel.attribs.query.getAttribNames(EEntType.EDGE));
                         resultSet = new Set(test.requirements.attributes['edge_attribs']);
                         expect(testSet).toEqual(resultSet, 'No. edge attributes do not match');
                     }
                     if (test.requirements.attributes.hasOwnProperty('wire_attribs')) {
-                        testSet = new Set(attrb_data.wires.map(x => x.name));
+                        testSet = new Set(oModel.attribs.query.getAttribNames(EEntType.WIRE));
                         resultSet = new Set(test.requirements.attributes['wire_attribs']);
                         expect(testSet).toEqual(resultSet, 'No. wire attributes do not match');
                     }
                     if (test.requirements.attributes.hasOwnProperty('face_attribs')) {
-                        testSet = new Set(attrb_data.faces.map(x => x.name));
+                        testSet = new Set(oModel.attribs.query.getAttribNames(EEntType.FACE));
                         resultSet = new Set(test.requirements.attributes['face_attribs']);
                         expect(testSet).toEqual(resultSet, 'No. face attributes do not match');
                     }
                     if (test.requirements.attributes.hasOwnProperty('point_attribs')) {
-                        testSet = new Set(attrb_data.points.map(x => x.name));
+                        testSet = new Set(oModel.attribs.query.getAttribNames(EEntType.POINT));
                         resultSet = new Set(test.requirements.attributes['point_attribs']);
                         expect(testSet).toEqual(resultSet, 'No. point attributes do not match');
                     }
                     if (test.requirements.attributes.hasOwnProperty('polyline_attribs')) {
-                        testSet = new Set(attrb_data.polylines.map(x => x.name));
+                        testSet = new Set(oModel.attribs.query.getAttribNames(EEntType.PLINE));
                         resultSet = new Set(test.requirements.attributes['polyline_attribs']);
                         expect(testSet).toEqual(resultSet, 'No. polyline attributes do not match');
                     }
                     if (test.requirements.attributes.hasOwnProperty('polygon_attribs')) {
-                        testSet = new Set(attrb_data.polygons.map(x => x.name));
+                        testSet = new Set(oModel.attribs.query.getAttribNames(EEntType.PGON));
                         resultSet = new Set(test.requirements.attributes['polygon_attribs']);
                         expect(testSet).toEqual(resultSet, 'No. polygon attributes do not match');
                     }
                     if (test.requirements.attributes.hasOwnProperty('collection_attribs')) {
-                        testSet = new Set(attrb_data.collections.map(x => x.name));
+                        testSet = new Set(oModel.attribs.query.getAttribNames(EEntType.COLL));
                         resultSet = new Set(test.requirements.attributes['collection_attribs']);
                         expect(testSet).toEqual(resultSet, 'No. collection attributes do not match');
                     }
                     if (test.requirements.attributes.hasOwnProperty('model_attribs')) {
-                        testSet = new Set(attrb_data.model.map(x => x.name));
+                        testSet = new Set(oModel.attribs.query.getAttribNames(EEntType.MOD));
                         resultSet = new Set(test.requirements.attributes['model_attribs']);
                         expect(testSet).toEqual(resultSet, 'No. model attributes do not match');
                     }
@@ -209,7 +175,7 @@ describe('Execute Component test', () => {
                 if (test.returns) {
                     expect(output.output.value).toBe(test.returns, 'Return values do not match');
                 }
-                expect(_model.__checkModel__(oModel)).toEqual([], '_model.__checkModel__ failed');
+                // expect(_model.__checkModel__(oModel)).toEqual([], '_model.__checkModel__ failed');
             }
             done();
         });

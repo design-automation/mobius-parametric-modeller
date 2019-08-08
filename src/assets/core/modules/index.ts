@@ -47,6 +47,9 @@ export {util};
 
 // helpers
 
+import * as _math from '../inline/_math';
+export {_math};
+
 import * as _mathjs from '../inline/_mathjs';
 export {_mathjs};
 

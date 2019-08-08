@@ -227,14 +227,14 @@ export class DataThreejs {
                 this.grid.position.set(this.origin.x, this.origin.y, 0);
                 this.axesHelper.position.set(this.origin.x, this.origin.y, 0);
             }
-            const target = new Vector3(this.settings.camera.target.x, this.settings.camera.target.y, this.settings.camera.target.z);
-            this._camera.position.x += target.x;
-            this._camera.position.y += target.y;
-            this._camera.position.z += target.z;
-            this._camera.lookAt(target);
-            this._camera.updateProjectionMatrix();
-            this._controls.target.set(target.x, target.y, target.z);
-            this._controls.update();
+            // const target = new Vector3(this.settings.camera.target.x, this.settings.camera.target.y, this.settings.camera.target.z);
+            // this._camera.position.x += target.x;
+            // this._camera.position.y += target.y;
+            // this._camera.position.z += target.z;
+            // this._camera.lookAt(target);
+            // this._camera.updateProjectionMatrix();
+            // this._controls.target.set(target.x, target.y, target.z);
+            // this._controls.update();
         }
 
         setTimeout(() => {
@@ -1043,11 +1043,11 @@ export class DataThreejs {
         vec_centre_to_pos.setLength(tmp_vec.length());
         const perspectiveNewPos: THREE.Vector3 = new THREE.Vector3();
         perspectiveNewPos.addVectors(center, vec_centre_to_pos);
-        const newLookAt = new THREE.Vector3(center.x, center.y, center.z);
-        this._camera.position.copy(perspectiveNewPos);
+        const newLookAt = this._camera.getWorldDirection(center);
+        // this._camera.position.copy(perspectiveNewPos);
         this._camera.lookAt(newLookAt);
         this._camera.updateProjectionMatrix();
-        this._controls.target.set(newLookAt.x, newLookAt.y, newLookAt.z);
+        this._controls.target.set(center.x, center.y, center.z);
         this._controls.update();
         const textLabels = this._textLabels;
         if (textLabels.size !== 0) {

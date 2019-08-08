@@ -19,7 +19,7 @@
             <!--Divider-->
             <div class = "divider"></div>
 
-            <button id='basic-funcs' class="accordion" 
+            <button id='basic-funcs' class="accordion mainAccordion" 
             (click)='toggleAccordion("basic-funcs")' >Control Flow</button>
             <div class="panel">
                 <ul class='toolset__functions--subset'>
@@ -72,7 +72,7 @@
             
             <!--Divider-->
             <div class = "divider"></div>
-            <button id='Functions' class="accordion"  (click)='toggleAccordionHead("Functions")'>Functions
+            <button id='Functions' class="accordion mainAccordion"  (click)='toggleAccordionHead("Functions")'>Functions
             </button>
             <!--Search Bar-->
             <div class = 'searchbar--container'>
@@ -163,7 +163,7 @@
             <!--Divider-->
             <div class = "divider"></div>
             
-            <button id='Inline' class="accordion"  (click)='toggleAccordionHead("Inline")'>Inline
+            <button id='Inline' class="accordion mainAccordion"  (click)='toggleAccordionHead("Inline")'>Inline
             </button>
             <!--Search Bar-->
             <div class = 'searchbar--container'>
@@ -179,7 +179,7 @@
                 </div>
             </div>
             <div class="panel">
-                <button id='globalParameters' class="accordion inline--cat"  (click)='toggleAccordion("globalParameters", true)'>Parameters</button>
+                <button id='globalParameters' class="accordion inline--cat"  (click)='toggleAccordion("globalParameters", true)'>parameters</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset inline_set'>
                         <ng-container *ngFor='let cnst of getFlowchart().nodes[0].procedure'>
@@ -213,9 +213,20 @@
                         <div class = "divider--in"></div>
                     </div>
                 </div> -->
+                <ng-container *ngFor='let category of inlineFunc'>
+                    <button id='inlineFunc_{{category[0]}}' class="accordion inline--cat" (click)='toggleAccordion("inlineFunc_"+category[0], true)'>{{category[0]}}</button>
+                    <div class="panel">
+                        <ul class='toolset__functions--subset inline_set'>
+                            <li *ngFor='let funcString of category[1]' (click)='add_inline(funcString[0])' title='{{funcString[1]}}'>
+                                {{funcString[0]}}
+                            </li>
+                        </ul>
+                        <div class = "divider--in"></div>
+                    </div>
+                </ng-container>
+
     
-    
-                <button id='inlineFunc' class="accordion inline--cat" (click)='toggleAccordion("inlineFunc", true)'>Functions</button>
+                <!-- <button id='inlineFunc' class="accordion inline--cat" (click)='toggleAccordion("inlineFunc", true)'>Functions</button>
                 <div class="panel">
                     <ng-container *ngFor='let category of inlineFunc'>
                         <button id='inlineFunc_{{category[0]}}' class="accordion" (click)='toggleAccordion("inlineFunc_"+category[0], true)'>{{category[0]}}</button>
@@ -224,15 +235,11 @@
                                 <li *ngFor='let funcString of category[1]' (click)='add_inline(funcString[0])' title='{{funcString[1]}}'>
                                     {{funcString[0]}}
                                 </li>
-                                <!-- <li *ngFor='let funcString of category[1]' (click)='add_inline(funcString)' title='{{funcString}}'>
-                                    {{funcString}}
-                                </li> -->
                             </ul>
-                            <!--Divider-->
                             <div class = "divider--in"></div>
                         </div>
                     </ng-container>
-                </div>
+                </div> -->
             </div>
         </ng-container>
         <div class = "divider"></div>

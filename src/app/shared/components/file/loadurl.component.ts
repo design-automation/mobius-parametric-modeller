@@ -5,7 +5,7 @@ import { ProcedureTypes } from '@shared/models/procedure';
 import * as circularJSON from 'circular-json';
 import * as funcs from '@modules';
 import { DataService } from '@services';
-import { _parameterTypes } from '@modules';
+import { _parameterTypes } from '@assets/core/_parameterTypes';
 import { ModuleList } from '@shared/decorators';
 import { Router } from '@angular/router';
 import { checkNodeValidity } from '@shared/parser';

@@ -4,7 +4,7 @@ import { IPortInput, InputType } from '@models/port';
 import { pythonicReplace } from '@shared/parser';
 import { Observable } from 'rxjs';
 import * as circularJSON from 'circular-json';
-import { _parameterTypes } from '@modules';
+import { _parameterTypes } from '@assets/core/_parameterTypes';
 
 let _terminateCheck: string;
 
@@ -42,29 +42,21 @@ export class CodeUtils {
             case ProcedureTypes.Variable:
                 if (!args[0].jsValue) {
                     codeStr.push(`${args[1].jsValue};`);
-                    // codeStr.push(`${this.repGetAttrib(args[1].jsValue)};`);
                     break;
                 }
                 const repVar = this.repSetAttrib(args[0].jsValue);
                 if (!repVar) {
                     codeStr.push(`${prefix}${args[0].jsValue} = ${args[1].jsValue};`);
-                    // codeStr.push(`${prefix}${args[0].jsValue} = ${this.repGetAttrib(args[1].jsValue)};`);
                     if (prefix === 'let ') {
                         existingVars.push(args[0].jsValue);
                     }
                 } else {
                     codeStr.push(`${repVar[0]} ${args[1].jsValue} ${repVar[1]}`);
-                    // codeStr.push(`${repVar[0]} ${this.repGetAttrib(args[1].jsValue)} ${repVar[1]}`);
                 }
                 break;
 
             case ProcedureTypes.If:
-                if (args[0].jsValue.indexOf('__params__') !== -1 &&
-                    args[0].jsValue.indexOf(_parameterTypes.getattrib) === -1) {
-                        throw new Error('Unexpected Identifier');
-                }
                 codeStr.push(`if (${args[0].jsValue}){`);
-                // codeStr.push(`if (${this.repGetAttrib(args[0].jsValue)}){`);
                 break;
 
             case ProcedureTypes.Else:
@@ -72,31 +64,15 @@ export class CodeUtils {
                 break;
 
             case ProcedureTypes.Elseif:
-                if (args[0].jsValue.indexOf('__params__') !== -1 &&
-                    args[0].jsValue.indexOf(_parameterTypes.getattrib) === -1) {
-                        throw new Error('Unexpected Identifier');
-                }
                 codeStr.push(`else if(${args[0].jsValue}){`);
-                // codeStr.push(`else if(${this.repGetAttrib(args[0].jsValue)}){`);
                 break;
 
             case ProcedureTypes.Foreach:
-                // codeStr.push(`for (${prefix} ${args[0].jsValue} of [...Array(${args[1].jsValue}).keys()]){`);
-                if (args[0].jsValue.indexOf('__params__') !== -1 &&
-                    args[0].jsValue.indexOf(_parameterTypes.getattrib) === -1) {
-                        throw new Error('Unexpected Identifier');
-                }
                 codeStr.push(`for (${prefix} ${args[0].jsValue} of ${args[1].jsValue}){`);
-                // codeStr.push(`for (${prefix} ${args[0].jsValue} of ${this.repGetAttrib(args[1].jsValue)}){`);
                 break;
 
             case ProcedureTypes.While:
-                if (args[0].jsValue.indexOf('__params__') !== -1 &&
-                    args[0].jsValue.indexOf(_parameterTypes.getattrib) === -1) {
-                        throw new Error('Unexpected Identifier');
-                }
                 codeStr.push(`while (${args[0].jsValue}){`);
-                // codeStr.push(`while (${this.repGetAttrib(args[0].jsValue)}){`);
                 break;
 
             case ProcedureTypes.Break:
@@ -154,13 +130,10 @@ export class CodeUtils {
                         check = false;
                         break;
                     }
-                    if (arg.jsValue.indexOf('__params__') !== -1 &&
-                    arg.jsValue.indexOf(_parameterTypes.getattrib) === -1) { throw new Error('Unexpected Identifier'); }
                     if (arg.jsValue[0] === '#') {
-                        returnArgVals.push('`' + this.repGetAttrib(arg.jsValue) + '`');
+                        returnArgVals.push('`' + arg.jsValue + '`');
                         continue;
                     }
-                    // returnArgVals.push(this.repGetAttrib(arg.jsValue));
                     returnArgVals.push(arg.jsValue);
                 }
                 if (!check) {
@@ -168,8 +141,8 @@ export class CodeUtils {
                 } else {
                     codeStr.push(`let __return_value__ = __modules__.${_parameterTypes.return}(${returnArgVals.join(', ')});`);
                     if (isMainFlowchart) {
-                        // codeStr.push(`console.(log'Return: ', __return_value__);`);
-                        codeStr.push(`__params__.console.push('Return: ' + __return_value__.toString());`);
+                        codeStr.push(`__params__.console.push('<p><b>Return: <i>' + ` +
+                                     `__return_value__.toString().replace(/,/g,', ') + '</i></b></p>');`);
                     }
                     codeStr.push(`return __return_value__;`);
                 }
@@ -178,9 +151,6 @@ export class CodeUtils {
             case ProcedureTypes.Function:
                 const argVals = [];
                 for (const arg of args.slice(1)) {
-                    if (arg.jsValue && arg.jsValue.indexOf('__params__') !== -1 &&
-                    arg.jsValue.indexOf(_parameterTypes.getattrib) === -1) {
-                        throw new Error('Unexpected Identifier'); }
                     if (arg.name === _parameterTypes.constList) {
                         argVals.push('__params__.constants');
                         continue;
@@ -189,21 +159,33 @@ export class CodeUtils {
                         argVals.push('__params__.model');
                         continue;
                     }
+                    if (arg.name === _parameterTypes.console) {
+                        argVals.push('__params__.console');
+                        continue;
+                    }
+                    if (arg.name === _parameterTypes.fileName) {
+                        argVals.push('__params__.fileName');
+                        continue;
+                    }
 
                     if (arg.jsValue && arg.jsValue[0] === '#') {
-                        argVals.push('`' + this.repGetAttrib(arg.jsValue) + '`');
+                        argVals.push('`' + arg.jsValue + '`');
                         continue;
                     }
                     argVals.push(arg.jsValue);
-                    // argVals.push(this.repGetAttrib(arg.jsValue));
                 }
                 if (prod.resolvedValue) {
+                    let prodResolvedCheck = false;
                     for (let i = 0; i < argVals.length; i++) {
                         if (argVals[i].indexOf('://') !== -1) {
                             argVals[i] = prod.resolvedValue;
                             prod.resolvedValue = null;
+                            prodResolvedCheck = true;
                             break;
                         }
+                    }
+                    if (!prodResolvedCheck) {
+                        argVals[1] = prod.resolvedValue;
                     }
                 }
                 // const argValues = argVals.join(', ');
@@ -290,8 +272,9 @@ export class CodeUtils {
         }
         if (isMainFlowchart && prod.selectGeom && prod.args[0].jsValue) {
             // const repGet = prod.args[0].jsValue;
-            const repGet = this.repGetAttrib(prod.args[0].jsValue);
-            codeStr.push(`__modules__.${_parameterTypes.select}(__params__.model, ${repGet}, "${repGet}");`);
+            const repGet = this.repGetAttrib(prod.args[0].value);
+            const repGetJS = this.repGetAttrib(prod.args[0].jsValue);
+            codeStr.push(`__modules__.${_parameterTypes.select}(__params__.model, ${repGetJS}, "${repGet}");`);
         }
         return codeStr;
     }
@@ -310,14 +293,14 @@ export class CodeUtils {
             val_0 = val.slice(0, atIndex);
             val_1 = val.slice(atIndex + 1);
         }
-        const openBracketMatch = (val_1.match(/\[/g) || []).length;
-        if (openBracketMatch) {
-            const bracketSplit = val_1.substring(0, val_1.length - 1).split('[');
-            const innerVar = bracketSplit.splice(1, bracketSplit.length - 1).join('[');
+        const bracketIndex = val_1.indexOf('.slice(');
+        if (bracketIndex !== -1) {
+            const name = val_1.slice(0, bracketIndex);
+            const index = val_1.slice(bracketIndex + 7, -4);
             // const innerVar = CodeUtils.repGetAttrib(bracketSplit.splice(1, bracketSplit.length - 1).join('['));
-            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0}, '${bracketSplit[0]}',`, `, ${innerVar});`];
+            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0}, '${name}', ${index},`, `);`];
         } else {
-            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0}, '${val_1}',`, ');'];
+            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0}, '${val_1}', null, `, ');'];
         }
     }
 
@@ -327,12 +310,22 @@ export class CodeUtils {
         if (res.length === 1 ) {
             return val;
         }
-        if (res[0] === '#') {
-            return `__modules__.${_parameterTypes.getattrib}(__params__.model, null, '${res[1]}')`;
-        } else if (res[0] === '') {
-            return `__modules__.${_parameterTypes.getattrib}(__params__.model, null, '${res[1]}')`;
+        let entity = res[0];
+        if (res[0] === '') {
+            entity = 'null';
         }
-        return `__modules__.${_parameterTypes.getattrib}(__params__.model, ${res[0]}, '${res[1]}')`;
+
+        let att_name;
+        let att_index;
+        const bracketIndex = res[1].indexOf('.slice(');
+        if (bracketIndex !== -1) {
+            att_name = res[1].slice(0, bracketIndex);
+            att_index = res[1].slice(bracketIndex + 7, -4);
+        } else {
+            att_name = res[1];
+            att_index = 'null';
+        }
+        return `__modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${att_name}', ${att_index})`;
 
         // if (!val) { return; }
         // if (typeof val === 'number') { return val; }

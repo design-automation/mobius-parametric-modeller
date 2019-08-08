@@ -9,7 +9,7 @@
  */
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TPlane, Txyz, EEntType, TEntTypeIdx, EAttribPromote} from '@libs/geo-info/common';
+import { TId, TPlane, Txyz, EEntType, TEntTypeIdx} from '@libs/geo-info/common';
 import { getArrDepth, isColl, isPgon, isPline, isPoint, isPosi } from '@libs/geo-info/id';
 import { vecAdd, vecSum, vecDiv } from '@libs/geom/vectors';
 import { checkCommTypes, checkIDs, IDcheckObj, TypeCheckObj} from './_check_args';
@@ -270,6 +270,29 @@ export function XForm(__model__: GIModel, entities: TId|TId[], from: TPlane, to:
     }
 }
 // ================================================================================================
+/**
+ * Modifies a collection.
+ * ~
+ * If the method is 'set_parent', then the parent can be updated by specifying a parent collection.
+ * If the method is 'add_entities', then entities are added to the collection.
+ * If the method is 'remove_entities', then entities are removed from the collection.
+ * If adding or removing entities, then the entities must be points, polylines, or polygons.
+ *
+ * @param __model__
+ * @param coll The collection to be updated.
+ * @param entities Points, polylines, and polygons, or a single collection.
+ * @param method Enum, the method to use when modifying the collection.
+ * @returns void
+ */
+export function Collection(__model__: GIModel, coll: TId, entities: TId|TId[], method: _EModifyCollectionMethod): void {
+    // --- Error Check ---
+    const coll_arr = checkIDs('modify.Collection', 'coll', coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
+    const ents_arr = checkIDs('modify.Collection', 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList],
+        [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+    // --- Error Check ---
+    _collection(__model__, coll_arr, ents_arr, method);
+}
 export enum _EModifyCollectionMethod {
     SET_PARENT_ENTITY = 'set_parent',
     ADD_ENTITIES = 'add_entities',
@@ -317,39 +340,7 @@ function _collection(__model__: GIModel, coll_arr: TEntTypeIdx, ents_arr: TEntTy
         __model__.geom.modify.collRemoveEnts(coll_i, points_i, plines_i, pgons_i);
     }
 }
-/**
- * Modifies a collection.
- * ~
- * If the method is 'set_parent', then the parent can be updated by specifying a parent collection.
- * If the method is 'add_entities', then entities are added to the collection.
- * If the method is 'remove_entities', then entities are removed from the collection.
- * If adding or removing entities, then the entities must be points, polylines, or polygons.
- *
- * @param __model__
- * @param coll The collection to be updated.
- * @param entities Points, polylines, and polygons, or a single collection.
- * @param method Enum, the method to use when modifying the collection.
- * @returns void
- */
-export function Collection(__model__: GIModel, coll: TId, entities: TId|TId[], method: _EModifyCollectionMethod): void {
-    // --- Error Check ---
-    const coll_arr = checkIDs('modify.Collection', 'coll', coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
-    const ents_arr = checkIDs('modify.Collection', 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
-        [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
-    // --- Error Check ---
-    _collection(__model__, coll_arr, ents_arr, method);
-}
 // ================================================================================================
-function _reverse(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
-    if (getArrDepth(ents_arr) === 1 && ents_arr.length) {
-        const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
-        const wires_i: number[] = __model__.geom.query.navAnyToWire(ent_type, index);
-        wires_i.forEach( wire_i => __model__.geom.modify.reverse(wire_i) );
-    } else {
-        (ents_arr as TEntTypeIdx[]).forEach( ent_arr => _reverse(__model__, ent_arr) );
-    }
-}
 /**
  * Reverses direction of entities.
  * @param __model__
@@ -368,16 +359,16 @@ export function Reverse(__model__: GIModel, entities: TId|TId[]): void {
     // --- Error Check ---
     _reverse(__model__, ents_arr);
 }
-// ================================================================================================
-function _shift(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], offset: number): void {
+function _reverse(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
     if (getArrDepth(ents_arr) === 1 && ents_arr.length) {
         const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
         const wires_i: number[] = __model__.geom.query.navAnyToWire(ent_type, index);
-        wires_i.forEach( wire_i => __model__.geom.modify.shift(wire_i, offset) );
+        wires_i.forEach( wire_i => __model__.geom.modify.reverse(wire_i) );
     } else {
-        (ents_arr as TEntTypeIdx[]).forEach( ent_arr => _shift(__model__, ent_arr, offset) );
+        (ents_arr as TEntTypeIdx[]).forEach( ent_arr => _reverse(__model__, ent_arr) );
     }
 }
+// ================================================================================================
 /**
  * Shifts the order of the edges in a closed wire.
  * ~
@@ -404,7 +395,30 @@ export function Shift(__model__: GIModel, entities: TId|TId[], offset: number): 
     // --- Error Check ---
     _shift(__model__, ents_arr, offset);
 }
+function _shift(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], offset: number): void {
+    if (getArrDepth(ents_arr) === 1 && ents_arr.length) {
+        const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
+        const wires_i: number[] = __model__.geom.query.navAnyToWire(ent_type, index);
+        wires_i.forEach( wire_i => __model__.geom.modify.shift(wire_i, offset) );
+    } else {
+        (ents_arr as TEntTypeIdx[]).forEach( ent_arr => _shift(__model__, ent_arr, offset) );
+    }
+}
 // ================================================================================================
+/**
+ * Closes polyline(s) if open.
+ * @param __model__
+ * @param lines Polyline(s).
+ * @returns void
+ * @example modify.Close([polyline1,polyline2,...])
+ * @example_info If open, polylines are changed to closed; if already closed, nothing happens.
+ */
+export function Close(__model__: GIModel, lines: TId|TId[]): void {
+    // --- Error Check ---
+    const ents_arr = checkIDs('modify.Close', 'lines', lines, [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE]);
+    // --- Error Check ---
+    _close(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
+}
 function _close(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
     if (getArrDepth(ents_arr) === 1 && ents_arr.length) {
         const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
@@ -421,155 +435,141 @@ function _close(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
         }
     }
 }
-/**
- * Closes polyline(s) if open.
- * @param __model__
- * @param lines Polyline(s).
- * @returns void
- * @example modify.Close([polyline1,polyline2,...])
- * @example_info If open, polylines are changed to closed; if already closed, nothing happens.
- */
-export function Close(__model__: GIModel, lines: TId|TId[]): void {
-    // --- Error Check ---
-    const ents_arr = checkIDs('modify.Close', 'lines', lines, [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE]);
-    // --- Error Check ---
-    _close(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
-}
 // ================================================================================================
-// AttribPush modelling operation
-export enum _EPromoteMethod {
-    FIRST = 'first',
-    LAST = 'last',
-    AVERAGE = 'average',
-    MEDIAN = 'median',
-    SUM = 'sum',
-    MIN = 'min',
-    MAX = 'max'
-}
-// Promote modelling operation
-export enum _EPromoteTarget {
-    POSI = 'positions',
-    VERT = 'vertices',
-    EDGE = 'edges',
-    WIRE = 'wires',
-    FACE = 'faces',
-    POINT = 'points',
-    PLINE = 'plines',
-    PGON = 'pgons',
-    COLL = 'collections',
-    MOD = 'model'
-}
-function _convertPromoteMethod(selection: _EPromoteMethod): EAttribPromote {
-    switch (selection) {
-        case _EPromoteMethod.AVERAGE:
-            return EAttribPromote.AVERAGE;
-        case _EPromoteMethod.MEDIAN:
-            return EAttribPromote.MEDIAN;
-        case _EPromoteMethod.SUM:
-            return EAttribPromote.SUM;
-        case _EPromoteMethod.MIN:
-            return EAttribPromote.MIN;
-        case _EPromoteMethod.MAX:
-            return EAttribPromote.MAX;
-        case _EPromoteMethod.FIRST:
-            return EAttribPromote.FIRST;
-        case _EPromoteMethod.LAST:
-            return EAttribPromote.LAST;
-        default:
-            break;
-    }
-}
-function _convertPromoteTarget(selection: _EPromoteTarget): EEntType {
-    switch (selection) {
-        case _EPromoteTarget.POSI:
-            return EEntType.POSI;
-        case _EPromoteTarget.VERT:
-            return EEntType.VERT;
-        case _EPromoteTarget.EDGE:
-            return EEntType.EDGE;
-        case _EPromoteTarget.WIRE:
-            return EEntType.WIRE;
-        case _EPromoteTarget.FACE:
-            return EEntType.FACE;
-        case _EPromoteTarget.POINT:
-            return EEntType.POINT;
-        case _EPromoteTarget.PLINE:
-            return EEntType.PLINE;
-        case _EPromoteTarget.PGON:
-            return EEntType.PGON;
-        case _EPromoteTarget.COLL:
-            return EEntType.COLL;
-        case _EPromoteTarget.MOD:
-            return EEntType.MOD;
-        default:
-            break;
-    }
-}
-/**
- * Pushes existing attribute values onto other entities.
- * Attribute values can be promoted up the hierarchy, demoted down the hierarchy, or transferred across the hierarchy.
- * ~
- * In certain cases, when attributes are pushed, they may be aggregated. For example, if you are pushing attributes
- * from vertices to polygons, then there will be multiple vertex attributes that can be combined in
- * different ways.
- * The 'method' specifies how the attributes should be aggregated. Note that if no aggregation is required
- * then the aggregation method is ignored.
- * ~
- * The aggregation methods consist of numerical functions such as average, median, sum, max, and min. These will
- * only work if the attribute values are numbers or lists of numbers. If the attribute values are string, then
- * the numerical functions are ignored.
- * ~
- * If the attribute values are lists of numbers, then these aggregation methods work on the individual items in the list.
- * For example, lets say you have an attribute consisting of normal vectors on vertices. If you push these attributes
- * down to the positions, then aggregation may be required, since multiple vertices can share the same position.
- * In this case, if you choose the `average` aggregation method, then resulting vectors on the positions will be the
- * average of vertex vectors.
- *
- * @param __model__
- * @param entities The entities that currently contain the attribute values.
- * @param attrib_name The name of the attribute to be promoted, demoted, or transferred.
- * @param to_level Enum; The level to which to promote, demote, or transfer the attribute values.
- * @param method Enum; The method to use when attribute values need to be aggregated.
- * @returns void
- * @example promote1 = modify.PushAttribs([pgon1, pgon2], 'area', collections, sum)
- * @example_info For the two polygons (pgon1 and pgon2), it gets the attribute values from the attribute called `area`,
- * and pushes them up to the collection level. The `sum` method specifies that the two areas should be added up.
- * Note that in order to create an attribute at the collection level, the two polygons should be part of a
- * collection. If they are not part of the collection, then no attribute values will be push.
- */
-export function PushAttribs(__model__: GIModel, entities: TId|TId[], attrib_name: string,
-        to_level: _EPromoteTarget, method: _EPromoteMethod): void {
-    // --- Error Check ---
-    let ents_arr: TEntTypeIdx|TEntTypeIdx[];
-    if (entities !== null) {
-        ents_arr = checkIDs('modify.Attribute', 'entities', entities,
-                            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
-    } else {
-        ents_arr = null;
-    }
-    // --- Error Check ---
-    let from_ent_type: EEntType;
-    const indices: number[] = [];
-    if (ents_arr !== null) {
-        const ents_arrs: TEntTypeIdx[] = ((getArrDepth(ents_arr) === 1) ? [ents_arr] : ents_arr) as TEntTypeIdx[];
-        from_ent_type = ents_arrs[0][0];
-        for (const [ent_type, index] of ents_arrs) {
-            if (ent_type !== from_ent_type) {
-                throw new Error('All entities must be of the same type.');
-            }
-            indices.push(index);
-        }
-    } else {
-        from_ent_type = EEntType.MOD;
-    }
-    const to_ent_type: EEntType = _convertPromoteTarget(to_level);
-    const promote_method: EAttribPromote = _convertPromoteMethod(method);
-    if (from_ent_type === to_ent_type) {
-        __model__.attribs.add.transferAttribValues(from_ent_type, attrib_name, indices, promote_method);
-    } else {
-        __model__.attribs.add.promoteAttribValues(from_ent_type, attrib_name, indices, to_ent_type, promote_method);
-    }
-}
+// // AttribPush modelling operation
+// export enum _EPromoteMethod {
+//     FIRST = 'first',
+//     LAST = 'last',
+//     AVERAGE = 'average',
+//     MEDIAN = 'median',
+//     SUM = 'sum',
+//     MIN = 'min',
+//     MAX = 'max'
+// }
+// // Promote modelling operation
+// export enum _EPromoteTarget {
+//     POSI = 'positions',
+//     VERT = 'vertices',
+//     EDGE = 'edges',
+//     WIRE = 'wires',
+//     FACE = 'faces',
+//     POINT = 'points',
+//     PLINE = 'plines',
+//     PGON = 'pgons',
+//     COLL = 'collections',
+//     MOD = 'model'
+// }
+// function _convertPromoteMethod(selection: _EPromoteMethod): EAttribPromote {
+//     switch (selection) {
+//         case _EPromoteMethod.AVERAGE:
+//             return EAttribPromote.AVERAGE;
+//         case _EPromoteMethod.MEDIAN:
+//             return EAttribPromote.MEDIAN;
+//         case _EPromoteMethod.SUM:
+//             return EAttribPromote.SUM;
+//         case _EPromoteMethod.MIN:
+//             return EAttribPromote.MIN;
+//         case _EPromoteMethod.MAX:
+//             return EAttribPromote.MAX;
+//         case _EPromoteMethod.FIRST:
+//             return EAttribPromote.FIRST;
+//         case _EPromoteMethod.LAST:
+//             return EAttribPromote.LAST;
+//         default:
+//             break;
+//     }
+// }
+// function _convertPromoteTarget(selection: _EPromoteTarget): EEntType {
+//     switch (selection) {
+//         case _EPromoteTarget.POSI:
+//             return EEntType.POSI;
+//         case _EPromoteTarget.VERT:
+//             return EEntType.VERT;
+//         case _EPromoteTarget.EDGE:
+//             return EEntType.EDGE;
+//         case _EPromoteTarget.WIRE:
+//             return EEntType.WIRE;
+//         case _EPromoteTarget.FACE:
+//             return EEntType.FACE;
+//         case _EPromoteTarget.POINT:
+//             return EEntType.POINT;
+//         case _EPromoteTarget.PLINE:
+//             return EEntType.PLINE;
+//         case _EPromoteTarget.PGON:
+//             return EEntType.PGON;
+//         case _EPromoteTarget.COLL:
+//             return EEntType.COLL;
+//         case _EPromoteTarget.MOD:
+//             return EEntType.MOD;
+//         default:
+//             break;
+//     }
+// }
+// /**
+//  * Pushes existing attribute values onto other entities.
+//  * Attribute values can be promoted up the hierarchy, demoted down the hierarchy, or transferred across the hierarchy.
+//  * ~
+//  * In certain cases, when attributes are pushed, they may be aggregated. For example, if you are pushing attributes
+//  * from vertices to polygons, then there will be multiple vertex attributes that can be combined in
+//  * different ways.
+//  * The 'method' specifies how the attributes should be aggregated. Note that if no aggregation is required
+//  * then the aggregation method is ignored.
+//  * ~
+//  * The aggregation methods consist of numerical functions such as average, median, sum, max, and min. These will
+//  * only work if the attribute values are numbers or lists of numbers. If the attribute values are string, then
+//  * the numerical functions are ignored.
+//  * ~
+//  * If the attribute values are lists of numbers, then these aggregation methods work on the individual items in the list.
+//  * For example, lets say you have an attribute consisting of normal vectors on vertices. If you push these attributes
+//  * down to the positions, then aggregation may be required, since multiple vertices can share the same position.
+//  * In this case, if you choose the `average` aggregation method, then resulting vectors on the positions will be the
+//  * average of vertex vectors.
+//  *
+//  * @param __model__
+//  * @param entities The entities that currently contain the attribute values.
+//  * @param attrib_name The name of the attribute to be promoted, demoted, or transferred.
+//  * @param to_level Enum; The level to which to promote, demote, or transfer the attribute values.
+//  * @param method Enum; The method to use when attribute values need to be aggregated.
+//  * @returns void
+//  * @example promote1 = modify.PushAttribs([pgon1, pgon2], 'area', collections, sum)
+//  * @example_info For the two polygons (pgon1 and pgon2), it gets the attribute values from the attribute called `area`,
+//  * and pushes them up to the collection level. The `sum` method specifies that the two areas should be added up.
+//  * Note that in order to create an attribute at the collection level, the two polygons should be part of a
+//  * collection. If they are not part of the collection, then no attribute values will be push.
+//  */
+// export function PushAttribs(__model__: GIModel, entities: TId|TId[], attrib_name: string,
+//         to_level: _EPromoteTarget, method: _EPromoteMethod): void {
+//     // --- Error Check ---
+//     let ents_arr: TEntTypeIdx|TEntTypeIdx[];
+//     if (entities !== null) {
+//         ents_arr = checkIDs('modify.Attribute', 'entities', entities,
+//                             [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+//     } else {
+//         ents_arr = null;
+//     }
+//     // --- Error Check ---
+//     let from_ent_type: EEntType;
+//     const indices: number[] = [];
+//     if (ents_arr !== null) {
+//         const ents_arrs: TEntTypeIdx[] = ((getArrDepth(ents_arr) === 1) ? [ents_arr] : ents_arr) as TEntTypeIdx[];
+//         from_ent_type = ents_arrs[0][0];
+//         for (const [ent_type, index] of ents_arrs) {
+//             if (ent_type !== from_ent_type) {
+//                 throw new Error('All entities must be of the same type.');
+//             }
+//             indices.push(index);
+//         }
+//     } else {
+//         from_ent_type = EEntType.MOD;
+//     }
+//     const to_ent_type: EEntType = _convertPromoteTarget(to_level);
+//     const promote_method: EAttribPromote = _convertPromoteMethod(method);
+//     if (from_ent_type === to_ent_type) {
+//         __model__.attribs.add.transferAttribValues(from_ent_type, attrib_name, indices, promote_method);
+//     } else {
+//         __model__.attribs.add.promoteAttribValues(from_ent_type, attrib_name, indices, to_ent_type, promote_method);
+//     }
+// }
 // ================================================================================================
 /**
  * Welds entities together.
@@ -588,7 +588,33 @@ export function _Weld(__model__: GIModel, entities: TId[]): void {
     throw new Error('Not implemented.');
 }
 // ================================================================================================
-// Stuff for Delete()
+
+/**
+ * Deletes geometric entities: positions, points, polylines, polygons, and collections.
+ * When deleting positions, any topology that requires those positions will also be deleted.
+ * (For example, any vertices linked to the deleted position will also be deleted,
+ * which may in turn result in some edges being deleted, and so forth.)
+ * For positions, the selection to delete or keep unused positions is ignored.
+ * When deleting objects (point, polyline, and polygons), topology is also deleted.
+ * When deleting collections, none of the objects in the collection are deleted.
+ * @param __model__
+ * @param entities Position, point, polyline, polygon, collection.
+ * @param del_unused_posis Enum, delete or keep unused positions.
+ * @returns void
+ * @example modify.Delete(polygon1)
+ * @example_info Deletes polygon1 from the model.
+ */
+export function Delete(__model__: GIModel, entities: TId|TId[], del_unused_posis: _EDeleteMethod  ): void {
+    // @ts-ignore
+    if (Array.isArray(entities)) { entities = __.flatten(entities); }
+    // --- Error Check ---
+    const ents_arr = checkIDs('modify.Delete', 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList],
+        [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+    // --- Error Check ---
+    const bool_del_unused_posis: boolean = (del_unused_posis === _EDeleteMethod.DEL_UNUSED_POINTS);
+    _delete(__model__, ents_arr, bool_del_unused_posis);
+}
 export enum _EDeleteMethod {
     DEL_UNUSED_POINTS =  'del_unused_posis',
     KEEP_UNUSED_POINTS  =  'keep_unused_posis'
@@ -620,22 +646,20 @@ function _delete(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], del_un
     __model__.geom.modify.delPoints(points_i, del_unused_posis);
     __model__.geom.modify.delPosis(posis_i);
 }
+// ================================================================================================
 /**
- * Deletes geometric entities: positions, points, polylines, polygons, and collections.
- * When deleting positions, any topology that requires those positions will also be deleted.
- * (For example, any vertices linked to the deleted position will also be deleted,
- * which may in turn result in some edges being deleted, and so forth.)
- * For positions, the selection to delete or keep unused positions is ignored.
- * When deleting objects (point, polyline, and polygons), topology is also deleted.
- * When deleting collections, none of the objects in the collection are deleted.
+ * Keeps the specified geometric entities: positions, points, polylines, polygons, and collections.
+ * Everything else in the model is deleted.
+ * When a collection is kept, all objects inside the collection are also kept.
+ * When an object is kept, all positions used by the object are also kept.
+ *
  * @param __model__
  * @param entities Position, point, polyline, polygon, collection.
- * @param del_unused_posis Enum, delete or keep unused positions.
  * @returns void
  * @example modify.Delete(polygon1)
  * @example_info Deletes polygon1 from the model.
  */
-export function Delete(__model__: GIModel, entities: TId|TId[], del_unused_posis: _EDeleteMethod  ): void {
+export function Keep(__model__: GIModel, entities: TId|TId[] ): void {
     // @ts-ignore
     if (Array.isArray(entities)) { entities = __.flatten(entities); }
     // --- Error Check ---
@@ -643,10 +667,8 @@ export function Delete(__model__: GIModel, entities: TId|TId[], del_unused_posis
         [IDcheckObj.isID, IDcheckObj.isIDList],
         [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
-    const bool_del_unused_posis: boolean = (del_unused_posis === _EDeleteMethod.DEL_UNUSED_POINTS);
-    _delete(__model__, ents_arr, bool_del_unused_posis);
+    _keep(__model__, ents_arr);
 }
-// ================================================================================================
 function _keep(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
     ents_arr = ((getArrDepth(ents_arr) === 1) ? [ents_arr] : ents_arr) as TEntTypeIdx[];
     const colls_i: Set<number> = new Set();
@@ -694,28 +716,7 @@ function _keep(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): void {
     const del_posis_i: number[] = all_unused_posis_i.filter( posi_i => !posis_i.has(posi_i) );
     __model__.geom.modify.delPosis(del_posis_i);
 }
-/**
- * Keeps the specified geometric entities: positions, points, polylines, polygons, and collections.
- * Everything else in the model is deleted.
- * When a collection is kept, all objects inside the collection are also kept.
- * When an object is kept, all positions used by the object are also kept.
- *
- * @param __model__
- * @param entities Position, point, polyline, polygon, collection.
- * @returns void
- * @example modify.Delete(polygon1)
- * @example_info Deletes polygon1 from the model.
- */
-export function Keep(__model__: GIModel, entities: TId|TId[] ): void {
-    // @ts-ignore
-    if (Array.isArray(entities)) { entities = __.flatten(entities); }
-    // --- Error Check ---
-    const ents_arr = checkIDs('modify.Delete', 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
-        [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
-    // --- Error Check ---
-    _keep(__model__, ents_arr);
-}
+
 
 
 

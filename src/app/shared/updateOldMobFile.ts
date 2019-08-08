@@ -1,16 +1,17 @@
 import { ProcedureTypes } from '@models/procedure';
 import { ModuleList } from './decorators';
 import * as funcs from '@modules';
-import * as depreciated from '@assets/core/depreciated.json';
+import * as deprecated from '@assets/core/deprecated.json';
 
 import * as circularJSON from 'circular-json';
-import { _parameterTypes } from '@modules';
+import { _parameterTypes } from '@assets/core/_parameterTypes';
 
 
 export function checkMobFile(file: any) {
+    // check the end node
+    // checkEndReturn(file);
 
-    checkEndReturn(file);
-
+    // check if there's any missing procedure in each node
     let hasError = false;
     for (const node of file.flowchart.nodes) {
         if (!checkMissingProd(node.procedure, file.version)) {
@@ -21,6 +22,8 @@ export function checkMobFile(file: any) {
     if (hasError) {
         alert('The flowchart contains functions that do not exist in the current version of Mobius');
     }
+
+    // check all user defined functions
     for (const userDefFunc of file.flowchart.functions) {
         if (!userDefFunc.flowchart) { continue; }
         for (const node of userDefFunc.flowchart.nodes) {
@@ -30,16 +33,31 @@ export function checkMobFile(file: any) {
             }
         }
     }
+    if (file.flowchart.subFunctions) {
+        for (const userDefFunc of file.flowchart.subFunctions) {
+            if (!userDefFunc.flowchart) { continue; }
+            for (const node of userDefFunc.flowchart.nodes) {
+                if (!checkMissingProd(node.procedure, file.version)) {
+                    alert('User Defined Function ' + userDefFunc.name +
+                          ' contains functions that do not exist in the current version of Mobius');
+                }
+            }
+        }
+    }
 }
 
 function checkMissingProd(prodList: any[], fileVersion: number) {
     let check = true;
     for (const prod of prodList) {
+
+        // check the children procedures if the procedure has any
         if (prod.children) {
             if (!checkMissingProd(prod.children, fileVersion)) {
                 check = false;
             }
         }
+
+        // unify value & default of constants (all start node constants i.e. constant/simpleinput/slider/url...)
         prod.hasError = false;
         if (fileVersion < 3) {
             if (prod.type === ProcedureTypes.Constant) {
@@ -49,11 +67,12 @@ function checkMissingProd(prodList: any[], fileVersion: number) {
             }
         }
 
+        // only continue below for function procedures
         if (prod.type !== ProcedureTypes.Function) { continue; }
 
 
         // @ts-ignore
-        for (const dpFn of depreciated.default) {
+        for (const dpFn of deprecated.default) {
             if (dpFn.old_func.name.toLowerCase() === prod.meta.name.toLowerCase() &&
                 dpFn.old_func.module.toLowerCase() === prod.meta.module.toLowerCase()) {
                 let data: any;
@@ -107,8 +126,13 @@ function checkMissingProd(prodList: any[], fileVersion: number) {
 }
 
 function checkEndReturn(file) {
+
+    // edit the return procedure (last procedure in the end node)
     if (file.version === 1) {
         const endNode = file.flowchart.nodes[file.flowchart.nodes.length - 1];
+
+        // add a blank procedure if there is no procedure in the node
+        // (all node must start with a blank procedure)
         if (endNode.procedure.length === 0) {
             endNode.procedure = [{type: 13, ID: '',
             parent: undefined,
@@ -123,6 +147,8 @@ function checkEndReturn(file) {
             selectGeom: false,
             hasError: false}];
         }
+
+        // add a return procedure if there is none before
         if (endNode.procedure[endNode.procedure.length - 1].type !== 11) {
             const returnMeta = _parameterTypes.return.split('.');
             for (const i of ModuleList) {

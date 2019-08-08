@@ -3,7 +3,7 @@ import { IMobius } from '@models/mobius';
 import { Observable } from 'rxjs';
 import * as circularJSON from 'circular-json';
 import { DataService } from '@services';
-import { _parameterTypes } from '@modules';
+import { _parameterTypes } from '@assets/core/_parameterTypes';
 import { ModuleList } from '@shared/decorators';
 import { checkNodeValidity } from '@shared/parser';
 import { IdGenerator } from '@utils';

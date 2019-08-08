@@ -391,7 +391,15 @@ export class GIGeomQuery {
     public navAnyToFace(ent_type: EEntType, index: number): number[] {
         if (isPosi(ent_type)) {
             const verts_i: number[] = this.navPosiToVert(index);
-            return [].concat(...verts_i.map( vert_i => this.navAnyToFace(EEntType.VERT, vert_i) ));
+            // avoid getting duplicates
+            const faces_i_set: Set<number> = new Set();
+            for (const vert_i of verts_i) {
+                const faces_i: number[] = this.navAnyToFace(EEntType.VERT, vert_i);
+                for (const face_i of faces_i) {
+                    faces_i_set.add(face_i);
+                }
+            }
+            return Array.from(new Set(faces_i_set));
         } else if (isVert(ent_type)) {
             const edges_i: number[] = this.navVertToEdge(index);
             return [].concat(...edges_i.map( edge_i => this.navAnyToFace(EEntType.EDGE, edge_i) ));
@@ -424,7 +432,15 @@ export class GIGeomQuery {
     public navAnyToWire(ent_type: EEntType, index: number): number[] {
         if (isPosi(ent_type)) {
             const verts_i: number[] = this.navPosiToVert(index);
-            return [].concat(...verts_i.map( vert_i => this.navAnyToWire(EEntType.VERT, vert_i) ));
+            // avoid getting duplicates
+            const wires_i_set: Set<number> = new Set();
+            for (const vert_i of verts_i) {
+                const wires_i: number[] = this.navAnyToWire(EEntType.VERT, vert_i);
+                for (const wire_i of wires_i) {
+                    wires_i_set.add(wire_i);
+                }
+            }
+            return Array.from(new Set(wires_i_set));
         } else if (isVert(ent_type)) {
             const edges_i: number[] = this.navVertToEdge(index);
             return [].concat(...edges_i.map( edge_i => this.navEdgeToWire(edge_i) ));
@@ -654,24 +670,48 @@ export class GIGeomQuery {
     // Other methods
     // ============================================================================
     /**
-     * Get the welded neighbour vertices of a set of vertices.
+     * Given a set of vertices, get the welded neighbour entities.
      * @param ent_type
-     * @param index
+     * @param verts_i
      */
-    public neighbours(from_ets: EEntType, to_ets: EEntType, index: number): number[] {
-        const verts_i: number[] = this.navAnyToVert(from_ets, index);
-        const posis_i: number[] = this.navAnyToPosi(from_ets, index);
+    public neighbor(ent_type: EEntType, verts_i: number[]): number[] {
         const neighbour_ents_i: Set<number> = new Set();
-        for (const posi_i of posis_i) {
+        for (const vert_i of verts_i) {
+            const posi_i: number = this.navVertToPosi(vert_i);
             const found_verts_i: number[] = this.navPosiToVert(posi_i);
             for (const found_vert_i of found_verts_i) {
                 if (verts_i.indexOf(found_vert_i) === -1) {
-                    const found_ents_i: number[] = this.navAnyToAny(EEntType.VERT, to_ets, found_vert_i);
-                    found_ents_i.forEach( found_ent_i => neighbour_ents_i.add(found_ent_i));
+                    const found_ents_i: number[] = this.navAnyToAny(EEntType.VERT, ent_type, found_vert_i);
+                    found_ents_i.forEach( found_ent_i => neighbour_ents_i.add(found_ent_i) );
                 }
             }
         }
         return Array.from(neighbour_ents_i);
     }
-
+    /**
+     * Given a set of edges, get the perimeter entities.
+     * @param ent_type
+     * @param edges_i
+     */
+    public perimeter(ent_type: EEntType, edges_i: number[]): number[] {
+        const edge_posis_map: Map<number, number[]> = new Map();
+        const edge_to_posi_pairs_map: Map<number, [number, number]> = new Map();
+        for (const edge_i of edges_i) {
+            const posi_pair_i: [number, number] = this.navAnyToPosi(EEntType.EDGE, edge_i) as [number, number];
+            if (!edge_posis_map.has(posi_pair_i[0])) {
+                edge_posis_map.set(posi_pair_i[0], []);
+            }
+            edge_posis_map.get(posi_pair_i[0]).push(posi_pair_i[1]);
+            edge_to_posi_pairs_map.set(edge_i, posi_pair_i );
+        }
+        const perimeter_ents_i: Set<number> = new Set();
+        for (const edge_i of edges_i) {
+            const posi_pair_i: [number, number] = edge_to_posi_pairs_map.get(edge_i);
+            if (!edge_posis_map.has(posi_pair_i[1]) || edge_posis_map.get(posi_pair_i[1]).indexOf(posi_pair_i[0]) === -1) {
+                const found_ents_i: number[] = this.navAnyToAny(EEntType.EDGE, ent_type, edge_i);
+                found_ents_i.forEach( found_ent_i => perimeter_ents_i.add(found_ent_i) );
+            }
+        }
+        return Array.from(perimeter_ents_i);
+    }
 }

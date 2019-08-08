@@ -1,17 +1,18 @@
 # UTIL    
 
-## WriteData  
-* **Description:** Writes data into chrome local file system.  
-* **Parameters:**  
-  * *data_name:* The name to be saved in the file system (file extension should be included).  
-  * *model_data:* The data to be saved (can be the url to the file).
-  
-  
 ## ReadData  
-* **Description:** Retrieve data from the chrome local file system.  
+* **Description:** Read data from a Url or from local storage.  
 * **Parameters:**  
-  * *data_name:* The name to be saved in the file system (file extension should be included).  
+  * *data:* The data to be read (from URL or from Local Storage).  
 * **Returns:** the data.  
+  
+## WriteData  
+* **Description:** Save data to the hard disk or to the local storage.  
+* **Parameters:**  
+  * *data:* The data to be saved (can be the url to the file).  
+  * *file_name:* The name to be saved in the file system (file extension should be included).  
+  * *data_target:* Enum, where the data is to be exported to.  
+* **Returns:** whether the data is successfully saved.  
   
 ## ImportData  
 * **Description:** Imports data into the model.
@@ -28,15 +29,37 @@ in the Start node of the flowchart.
   
 ## ExportData  
 * **Description:** Export data from the model as a file.
-This will result in a popup in your browser, asking you to save the filel.  
+This will result in a popup in your browser, asking you to save the file.  
 * **Parameters:**  
+  * *entities:* undefined  
   * *filename:* Name of the file as a string.  
   * *data_format:* Enum, the file format.  
+  * *data_target:* Enum, where the data is to be exported to.  
 * **Returns:** Boolean.  
 * **Examples:**  
   * util.ExportData ('my_model.obj', obj)  
     Exports all the data in the model as an OBJ.
   
+  
+## ExportIO  
+* **Description:** Export data from the model as a file.
+This will result in a popup in your browser, asking you to save the filel.  
+* **Parameters:**  
+  * *__console__:* undefined  
+  * *__fileName__:* undefined  
+  * *filename:* Name of the file as a string.  
+  * *exportParams:* Enum.  
+  * *exportContent:* Enum.  
+* **Returns:** Boolean.  
+* **Examples:**  
+  * util.ExportIO('my_model.json')  
+    Exports all the data in the model as an OBJ.
+  
+  
+## ParamInfo  
+* **Description:** Returns a text summary of the contents of this model  
+* **Parameters:**  
+* **Returns:** Text that summarises what is in the model.  
   
 ## ModelInfo  
 * **Description:** Returns a text summary of the contents of this model  
@@ -57,16 +80,11 @@ This will result in a popup in your browser, asking you to save the filel.
 ## saveResource  
 * **Description:** Functions for saving and loading resources to file system.  
 * **Parameters:**  
-  * *name:* undefined  
   * *file:* undefined  
+  * *name:* undefined  
   
 ## saveToFS  
 * **Description:** undefined  
 * **Parameters:**  
   * *fs:* undefined  
-  
-## loadResource  
-* **Description:** undefined  
-* **Parameters:**  
-  * *filecode:* undefined  
   

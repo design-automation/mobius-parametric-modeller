@@ -5,13 +5,14 @@ import { INode } from '@models/node';
 import { IProcedure, ProcedureTypes } from '@models/procedure';
 
 import * as Modules from '@modules';
-import { _parameterTypes, _varString } from '@modules';
 import { DataService } from '@services';
 // import { WebWorkerService } from 'ngx-web-worker';
 import { InputType } from '@models/port';
 import { GoogleAnalyticsService } from '@shared/services/google.analytics';
 import { Router } from '@angular/router';
 import { DataOutputService } from '@shared/services/dataOutput.service';
+import { SaveFileComponent } from '@shared/components/file';
+import { _parameterTypes, _varString } from '@assets/core/_parameterTypes';
 
 export const mergeInputsFunc = `
 function mergeInputs(models){
@@ -30,11 +31,11 @@ function printFunc(_console, name, value){
     } else if (typeof value === 'number' || value === undefined) {
         val = value;
     } else if (typeof value === 'string') {
-        val = '"' + value + '"';
+        val = '"' + value.replace(/\\n/g, '<br>') + '"';
     } else if (value.constructor === [].constructor) {
-        val = JSON.stringify(value);
+        val = JSON.stringify(value).replace(/,/g, ', ');
     } else if (value.constructor === {}.constructor) {
-        val = JSON.stringify(value);
+        val = JSON.stringify(value).replace(/,/g, ', ');
     } else {
         val = value;
     }
@@ -76,17 +77,27 @@ export class ExecuteComponent {
             for (const func of _parameterTypes.urlFunctions) {
                 const funcMeta = func.split('.');
                 if (prod.meta.module === funcMeta[0] && prod.meta.name === funcMeta[1]) {
-                    for (const arg of prod.args) {
-                        if (arg.name[0] === '_') { continue; }
-                        if (arg.value.indexOf('://') !== -1) {
-                            const val = <string>(arg.value).replace(/ /g, '');
-                            const result = await CodeUtils.getURLContent(val);
-                            if (result === undefined) {
+                    const arg = prod.args[2];
+                    if (arg.name[0] === '_') { continue; }
+                    if (arg.value.indexOf('://') !== -1) {
+                        const val = <string>(arg.value).replace(/ /g, '');
+                        const result = await CodeUtils.getURLContent(val);
+                        if (result === undefined) {
+                            prod.resolvedValue = arg.value;
+                        } else {
+                            prod.resolvedValue = '`' + result + '`';
+                        }
+                        break;
+                    } else {
+                        const backup_list = JSON.parse(localStorage.getItem('mobius_backup_list'));
+                        const val = arg.value.replace(/\"|\'/g, '');
+                        if (backup_list.indexOf(val) !== -1) {
+                            const result = await SaveFileComponent.loadFromFileSystem(val);
+                            if (!result || result === 'error') {
                                 prod.resolvedValue = arg.value;
                             } else {
                                 prod.resolvedValue = '`' + result + '`';
                             }
-                            break;
                         }
                     }
                     break;
@@ -229,6 +240,7 @@ export class ExecuteComponent {
 
     executeFlowchart() {
         let globalVars = '';
+        const constantList = {};
 
         // reordering the flowchart
         if (!this.dataService.flowchart.ordered) {
@@ -296,19 +308,23 @@ export class ExecuteComponent {
                 }
                 continue;
             }
-            globalVars = this.executeNode(node, funcStrings, globalVars);
+            globalVars = this.executeNode(node, funcStrings, globalVars, constantList);
         }
 
         for (const node of this.dataService.flowchart.nodes) {
-            delete node.output.value;
-
-            // if (node.type !== 'end') {
-            //     delete node.output.value;
-            // }
+            // delete node.output.value;
+            if (node.type === 'end') {
+                if (node.procedure[node.procedure.length - 1].args[1].jsValue) {
+                    continue;
+                } else {
+                    delete node.output.value;
+                }
+            } else {
+                delete node.output.value;
+            }
         }
 
         this.dataOutputService.resetIModel();
-
         document.getElementById('spinner-off').click();
         const category = this.isDev ? 'dev' : 'execute';
         this.googleAnalyticsService.trackEvent(category, 'successful', 'click', performance.now() - this.startTime);
@@ -316,8 +332,15 @@ export class ExecuteComponent {
     }
 
 
-    executeNode(node: INode, funcStrings, globalVars): string {
-        const params = {'currentProcedure': [''], 'console': []};
+    executeNode(node: INode, funcStrings, globalVars, constantList): string {
+        const params = {
+            'currentProcedure': [''],
+            'console': this.dataService.getLog(),
+            'constants': constantList,
+            'fileName': this.dataService.flowchart.name
+        };
+        // const consoleLength = params.console.length;
+
         let fnString = '';
         const startTime = performance.now();
         try {
@@ -384,9 +407,12 @@ export class ExecuteComponent {
             params['model'] = _parameterTypes.newFn();
             _parameterTypes.mergeFn(params['model'], node.input.value);
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
+
+            // *********************************************************
+            // console.log(fnString);
+
             const fn = new Function('__modules__', '__params__', fnString);
             // execute the function
-
 
             const result = fn(Modules, params);
 
@@ -416,6 +442,7 @@ export class ExecuteComponent {
                     if (params['constants'].hasOwnProperty(constant)) {
                         const constString = JSON.stringify(params['constants'][constant]);
                         globalVars += `const ${constant} = ${constString};\n`;
+                        constantList[constant] = params['constants'][constant];
                     }
                 }
                 globalVars += '\n';
@@ -434,9 +461,9 @@ export class ExecuteComponent {
             } else {
                 duration_msg = '<p style="padding: 2px 0px 2px 10px;"><i>Executed in ' + duration / 1000 + ' seconds.</i></p>';
             }
-            for (const str of params.console) {
-                this.dataService.log(str);
-            }
+            // for (const logStr of params.console) {
+            //     this.dataService.log(logStr);
+            // }
             this.dataService.log(duration_msg);
             this.dataService.log('<br>');
             if (codeResult[1]) {
@@ -444,9 +471,9 @@ export class ExecuteComponent {
             }
             return globalVars;
         } catch (ex) {
-            for (const str of params.console) {
-                this.dataService.log(str);
-            }
+            // for (const str of params.console) {
+            //     this.dataService.log(str);
+            // }
             const endTime = performance.now();
             const duration: number = Math.round(endTime - startTime);
             let duration_msg: string;
@@ -506,10 +533,7 @@ export class ExecuteComponent {
                 ex.message = 'Unrecognized or missing variable in the procedure.';
             }
             document.getElementById('Console').click();
-            this.dataService.log('\n=======================================\n' +
-                        ex.name +
-                        '\n=======================================\n' +
-                        ex.message);
+            this.dataService.log(`<h4 style="padding: 2px 0px 2px 0px; color:red;">Error: ${ex.message}</h4>`);
             // console.log('---------------\nError node code:');
             // console.log(fnString);
             const category = this.isDev ? 'dev' : 'execute';

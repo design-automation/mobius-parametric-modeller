@@ -114,7 +114,7 @@ export class ToolsetComponent implements OnInit {
                 const enm = Modules[fnData.module][argDoc.type];
                 // tslint:disable-next-line:forin
                 for (const j in enm) {
-                    newArgs.push({name: arg.name, value: `'${enm[j]}'`});
+                    newArgs.push({name: arg.name, value: `'${enm[j]}'`, jsValue: `'${enm[j]}'`});
                     break;
                 }
                 continue;
@@ -429,17 +429,19 @@ export class ToolsetComponent implements OnInit {
         if (str.length === 0) {
             return;
         }
-        for (let i = 0; i < 8; i++) {
-            if (this.searchedFunctions.length >= 10) { break; }
-            if (this.ProcedureTypesArr[i].toLowerCase().indexOf(str) !== -1) {
-                this.searchedFunctions.push({
-                    'type': 'basic',
-                    'name': this.ProcedureTypesArr[i],
-                });
-            }
-        }
 
-        // @ts-ignore
+        // Search Basic Functions: Variable, If, ElseIf, Else, ...
+        // for (let i = 0; i < 8; i++) {
+        //     if (this.searchedFunctions.length >= 10) { break; }
+        //     if (this.ProcedureTypesArr[i].toLowerCase().indexOf(str) !== -1) {
+        //         this.searchedFunctions.push({
+        //             'type': 'basic',
+        //             'name': this.ProcedureTypesArr[i],
+        //         });
+        //     }
+        // }
+
+        // Search Core Functions
         for (const mod of this.Modules) {
             if (this.searchedFunctions.length >= 10) { break; }
             if (mod.module[0] === '_' || mod.module === 'Input' || mod.module === 'Output') {continue; }
@@ -451,11 +453,13 @@ export class ToolsetComponent implements OnInit {
                         'type': 'function',
                         'name': func.name,
                         'module': mod.module,
-                        'data': func
+                        'data': func,
                     });
                 }
             }
         }
+
+        // Search User Defined Functions
         for (const func of this.dataService.flowchart.functions) {
             if (this.searchedFunctions.length >= 10) { break; }
             if (func.name.toLowerCase().indexOf(str) !== -1) {
@@ -474,25 +478,30 @@ export class ToolsetComponent implements OnInit {
         if (str.length === 0) {
             return;
         }
+        // search Global Variables
         for (const cnst of this.dataService.flowchart.nodes[0].procedure) {
             if (this.searchedInlines.length >= 10) { break; }
             if (cnst.type !== ProcedureTypes.Constant) { continue; }
             const cnstString = cnst.args[cnst.argCount - 2].value;
             if (cnstString.toLowerCase().indexOf(str) !== -1) {
-                this.searchedInlines.push(cnstString);
+                this.searchedInlines.push([cnstString, `Global Variable ${cnstString}`]);
             }
         }
-        for (const expr of this.inlineQueryExpr) {
-            if (this.searchedInlines.length >= 10) { break; }
-            if (expr[0].toLowerCase().indexOf(str) !== -1) {
-                this.searchedInlines.push(expr);
-            }
-        }
+
+        // // search inline query expressions
+        // for (const expr of this.inlineQueryExpr) {
+        //     if (this.searchedInlines.length >= 10) { break; }
+        //     if (expr[0].toLowerCase().indexOf(str) !== -1) {
+        //         this.searchedInlines.push([expr, '']);
+        //     }
+        // }
+
+        // search inline functions
         for (const category of this.inlineFunc) {
             for (const funcString of category[1]) {
                 if (this.searchedInlines.length >= 10) { break; }
                 if (funcString[0].toLowerCase().indexOf(str) !== -1) {
-                    this.searchedInlines.push(funcString[0]);
+                    this.searchedInlines.push(funcString);
                 }
             }
             if (this.searchedInlines.length >= 10) { break; }

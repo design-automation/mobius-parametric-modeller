@@ -7,6 +7,12 @@ export function getArrDepth(arr: any): number {
     }
     return 0;
 }
+export function isEmptyArr(arr: any): boolean {
+    if (Array.isArray(arr) && !arr.length) {
+        return true;
+    }
+    return false;
+}
 // ============================================================================
 export function idsMakeFromIndicies(ent_type: EEntType, idxs: number|number[]|number[][]): TId|TId[]|TId[][] {
     const depth: number = getArrDepth(idxs);

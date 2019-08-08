@@ -1,9 +1,11 @@
-import {__new__, __merge__} from './_model';
+import {__new__, __merge__} from './modules/_model';
 
 export const _parameterTypes = {
     constList: '__constList__',
     model: '__model__',
     input: '__input__',
+    console: '__console__',
+    fileName: '__fileName__',
 
     new: '_model.__new__',
     newFn: __new__,
@@ -16,14 +18,16 @@ export const _parameterTypes = {
     preprocess: '_model.__preprocess__',
     postprocess: '_model.__postprocess__',
 
-    setattrib: '_model.__setAttrib__',
-    getattrib: '_model.__getAttrib__',
+    setattrib: 'attrib.Set',
+    getattrib: 'attrib.Get',
+    queryGet: 'query.Get',
+    queryFilter: 'query.Filter',
 
     select: '_model.__select__',
 
     return: '_Output.Return',
 
-    urlFunctions: ['util.ImportData', 'util.ModelCompare']
+    urlFunctions: ['util.WriteData', 'util.ReadData', 'util.ImportData', 'util.ModelCompare']
 };
 
 export const _varString = `
@@ -35,8 +39,8 @@ YX = __modules__._constants.YX;
 ZY = __modules__._constants.ZY;
 XZ = __modules__._constants.XZ;
 approx = __modules__._util.approx;
-min = Math.min;
-max = Math.max;
+min = __modules__._math.min;
+max = __modules__._math.max;
 pow = Math.pow;
 sqrt = Math.sqrt;
 exp = Math.exp;
@@ -115,10 +119,12 @@ vecAng2 = __modules__._vec.vecAng2;
 vecDot = __modules__._vec.vecDot;
 vecCross = __modules__._vec.vecCross;
 vecEqual = __modules__._vec.vecEqual;
-colFalse = __modules__._colours.colFalse;
+colFalse = __modules__._colors.colFalse;
 radToDeg = __modules__._conversion.radToDeg;
 degToRad = __modules__._conversion.degToRad;
 rand = __modules__._rand.rand;
 randInt = __modules__._rand.randInt;
 randPick = __modules__._rand.randPick;
+setattr = __modules__._model.__setAttrib__;
+getattr = __modules__._model.__getAttrib__;
 `;

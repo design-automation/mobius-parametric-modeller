@@ -1,6 +1,6 @@
 import { GIAttribMap } from './GIAttribMap';
 
-//longitude latitude in Singapore, NUS
+// longitude latitude in Singapore, NUS
 export const LONGLAT = [103.778329, 1.298759];
 
 // some constants
@@ -33,6 +33,52 @@ export type TId = string;
 export type TColor = [number, number, number]; // TODO replace with Txyz
 export type TNormal = [number, number, number]; // TODO replace with xyz
 export type TTexture = [number, number];
+
+// export interface IExpr {
+//     ent_type1: string;
+//     attrib_name1?: string;
+//     attrib_index1?: number;
+//     ent_type2?: string;
+//     attrib_name2?: string;
+//     attrib_index2?: number;
+//     operator?: string;
+//     value?: TAttribDataTypes;
+// }
+
+// export interface IExprQuery {
+//     ent_type: EEntType;
+//     attrib_name?: string;
+//     attrib_index?: number;
+//     operator?: EFilterOperatorTypes;
+//     value?: TAttribDataTypes;
+// }
+
+// export interface IExprSort {
+//     ent_type: EEntType;
+//     attrib_name: string;
+//     attrib_index?: number;
+// }
+
+// export interface IExprPush {
+//     ent_type1: EEntType;
+//     attrib_name1: string;
+//     attrib_index1?: number;
+//     ent_type2: EEntType;
+//     attrib_name2: string;
+//     attrib_index2?: number;
+// }
+
+// export enum EExprEntType {
+//     POSI =   'ps',
+//     VERT =   '_v',
+//     EDGE =   '_e',
+//     WIRE =   '_w',
+//     FACE =   '_f',
+//     POINT =  'pt',
+//     PLINE =  'pl',
+//     PGON =   'pg',
+//     COLL =   'co'
+// }
 
 // Types of entities
 export enum EEntType {
@@ -97,15 +143,16 @@ export interface IAttribsMaps {
 export enum EAttribNames {
     COORDS =  'xyz',
     NORMAL =  'normal',
-    COLOUR =   'rgb',
+    COLOR =   'rgb',
     TEXTURE = 'uv',
-    NAME = 'name'
+    NAME = 'name',
+    MATERIAL = 'material'
 }
 
 /**
- * The types of operators that can be used in a query.
+ * The types of operators that can be used in a filter.
  */
-export enum EQueryOperatorTypes {
+export enum EFilterOperatorTypes {
     IS_EQUAL = '==',
     IS_NOT_EQUAL = '!=',
     IS_GREATER_OR_EQUAL = '>=',
@@ -115,20 +162,20 @@ export enum EQueryOperatorTypes {
     EQUAL = '='
 }
 
-/**
- * A query component.
- * Each query can consist of multiple components.
- * Some examples of queries
- * @name == value
- * @name > value
- * @name[2] <= value
- */
-export interface IQueryComponent {
-    attrib_name: string;
-    attrib_index: number;
-    attrib_value_str: string;
-    operator_type: EQueryOperatorTypes;
-}
+// /**
+//  * A query component.
+//  * Each query can consist of multiple components.
+//  * Some examples of queries
+//  * @name == value
+//  * @name > value
+//  * @name[2] <= value
+//  */
+// export interface IQueryComponent {
+//     attrib_name: string;
+//     attrib_index: number;
+//     attrib_value_str: string;
+//     operator_type: EFilterOperatorTypes;
+// }
 
 /**
  * A sort component.
@@ -143,11 +190,11 @@ export interface ISortComponent {
 }
 
 export enum ESort {
-    'DESCENDING' = 'descending',
-    'ASCENDING' = 'ascending'
+    DESCENDING = 'descending',
+    ASCENDING = 'ascending'
 }
 
-export enum EAttribPromote {
+export enum EAttribPush {
     AVERAGE,
     MEDIAN,
     SUM,
@@ -199,8 +246,9 @@ export interface IGeomCopy {
 // enums
 export enum EAttribDataTypeStrs {
     // INT = 'Int',
-    FLOAT = 'Float',
-    STRING = 'String'
+    NUMBER = 'Number',
+    STRING = 'String',
+    LIST = 'List' // a list of anything
 }
 
 // types
@@ -216,7 +264,7 @@ export type TPline = number; // [wire,....]
 export type TPgon = number; // [face,....]
 export type TColl = [number, number[], number[], number[]]; // [parent, [point, ...], [polyline, ...], [polygon, ....]]
 export type TEntity = TTri | TVert | TEdge | TWire | TFace | TPoint | TPline | TPgon | TColl;
-export type TAttribDataTypes = string | string[] | number | number[];
+export type TAttribDataTypes = string | number | any[];
 export type TEntAttribValuesArr = Array<[number[], TAttribDataTypes]>;
 export type TModelAttribValuesArr = Array<[string, TAttribDataTypes]>;
 // interfaces for JSON data
@@ -239,7 +287,6 @@ export interface IGeomData {
 export interface IAttribData {
     name: string;
     data_type: EAttribDataTypeStrs;
-    data_size: number;
     data: TEntAttribValuesArr;
 }
 export interface IAttribsData {

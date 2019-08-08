@@ -4,7 +4,7 @@ import { InputType, PortUtils } from '@models/port';
 import * as circularJSON from 'circular-json';
 import { IdGenerator } from '@utils';
 import { ModuleList, ModuleDocList } from '@shared/decorators';
-import { _parameterTypes } from '@modules';
+import { _parameterTypes } from '@assets/core/_parameterTypes';
 
 export abstract class NodeUtils {
 

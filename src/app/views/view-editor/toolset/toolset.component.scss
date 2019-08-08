@@ -136,19 +136,38 @@
     font-weight: 550;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    &.mainAccordion{
+        &.active {
+            &:after {
+                content: "\2bc6"; /* Unicode character for "minus" sign (-) */
+            }
+        }
+        &:after{
+            content: '\2bc8'; 
+            font-size: 12px;
+            font-style: normal;
+            // color: #777;
+            float: right;
+            margin-left: 5px;
+        }
+    }
+    &.active, &:hover {
+        background-color: $color3; 
+    }
 }
 
-.active, .accordion:hover {
-    background-color: $color3; 
-}
+
 
 .panel {
     width: inherit;
     padding: 0px;
+    border-left: 2px solid $color3;
+    margin-left: 3px;
     display: none;
-    background-color: $color5;
+    // background-color: $color5;
     overflow: hidden;
-    button:not(.inline--cat){
+    button{
         font-weight: 550;
         color: $selected-color;
         font-style: italic;
@@ -157,6 +176,16 @@
 
     &.opened{
         display: block;
+    }
+}
+
+.tooltip-variable{
+    display: block;
+    color: $color8;
+
+    &.invalid{
+        opacity: $disabled-opacity;
+        pointer-events: none;
     }
 }
 

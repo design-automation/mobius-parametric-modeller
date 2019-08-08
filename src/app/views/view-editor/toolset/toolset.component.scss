@@ -160,6 +160,16 @@
     }
 }
 
+.tooltip-variable{
+    display: block;
+    color: $color8;
+
+    &.invalid{
+        opacity: $disabled-opacity;
+        pointer-events: none;
+    }
+}
+
 .tooltip-basic{
     display: block;
     color: $basic-function-text-color;

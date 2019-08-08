@@ -4,15 +4,25 @@
     <div [hidden]="getNode().type == 'start' && !getViewOutput()">
         <ng-container>
             <!-- basic functions: variable, if, else, else if, for, while, continue, break -->
-        
+            <ul class='toolset__functions--subset'>
+                <li class='tooltip-variable' [class.invalid]='checkInvalid("Variable")'
+                    [class.basic]='true' (click)='add(0)'> 
+                        Variable
+                </li>
+                <li class='tooltip-variable'
+                    [class.basic]='true'
+                    (click)='add(ProcedureTypes.Comment)'> 
+                        Comment
+                </li>
+
+            </ul>
+            <!--Divider-->
+            <div class = "divider"></div>
+
             <button id='basic-funcs' class="accordion" 
-            (click)='toggleAccordion("basic-funcs")' >Basic</button>
+            (click)='toggleAccordion("basic-funcs")' >Control Flow</button>
             <div class="panel">
                 <ul class='toolset__functions--subset'>
-                    <li class='tooltip-basic' [class.invalid]='checkInvalid("Variable")'
-                        [class.basic]='true' (click)='add(0)'> 
-                            Variable
-                    </li>
                     <li class='tooltip-basic' [class.invalid]='checkInvalid("If")'
                         [class.basic]='true' (click)='add(1)'> 
                             If
@@ -52,11 +62,6 @@
                         </li>
                     </ng-container> -->
 
-                    <li class='tooltip-basic'
-                        [class.basic]='true'
-                        (click)='add(ProcedureTypes.Comment)'> 
-                            Comment
-                    </li>
                     <li class='tooltip-basic'
                         [class.basic]='true'
                         (click)='add(ProcedureTypes.Terminate)'> 

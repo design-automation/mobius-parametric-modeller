@@ -391,7 +391,15 @@ export class GIGeomQuery {
     public navAnyToFace(ent_type: EEntType, index: number): number[] {
         if (isPosi(ent_type)) {
             const verts_i: number[] = this.navPosiToVert(index);
-            return [].concat(...verts_i.map( vert_i => this.navAnyToFace(EEntType.VERT, vert_i) ));
+            // avoid getting duplicates
+            const faces_i_set: Set<number> = new Set();
+            for (const vert_i of verts_i) {
+                const faces_i: number[] = this.navAnyToFace(EEntType.VERT, vert_i);
+                for (const face_i of faces_i) {
+                    faces_i_set.add(face_i);
+                }
+            }
+            return Array.from(new Set(faces_i_set));
         } else if (isVert(ent_type)) {
             const edges_i: number[] = this.navVertToEdge(index);
             return [].concat(...edges_i.map( edge_i => this.navAnyToFace(EEntType.EDGE, edge_i) ));
@@ -424,7 +432,15 @@ export class GIGeomQuery {
     public navAnyToWire(ent_type: EEntType, index: number): number[] {
         if (isPosi(ent_type)) {
             const verts_i: number[] = this.navPosiToVert(index);
-            return [].concat(...verts_i.map( vert_i => this.navAnyToWire(EEntType.VERT, vert_i) ));
+            // avoid getting duplicates
+            const wires_i_set: Set<number> = new Set();
+            for (const vert_i of verts_i) {
+                const wires_i: number[] = this.navAnyToWire(EEntType.VERT, vert_i);
+                for (const wire_i of wires_i) {
+                    wires_i_set.add(wire_i);
+                }
+            }
+            return Array.from(new Set(wires_i_set));
         } else if (isVert(ent_type)) {
             const edges_i: number[] = this.navVertToEdge(index);
             return [].concat(...edges_i.map( edge_i => this.navEdgeToWire(edge_i) ));

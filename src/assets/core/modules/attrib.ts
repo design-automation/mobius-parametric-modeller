@@ -202,23 +202,41 @@ export function Set(__model__: GIModel, entities: TId|TId[]|TId[][],
     // --- Error Check ---
     _setAttrib(__model__, ents_arr, attrib, value, index);
 }
+function _setAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
+        attrib_name: string, attrib_values: TAttribDataTypes|TAttribDataTypes[], attrib_index?: number): void {
+    // check the ents_arr
+    if (ents_arr === null) {
+        _setModelAttrib(__model__, attrib_name, attrib_values as TAttribDataTypes, attrib_index);
+        return;
+    } else if (ents_arr.length === 0) {
+        return;
+    } else if (getArrDepth(ents_arr) === 1) {
+        ents_arr = [ents_arr] as TEntTypeIdx[];
+    }
+    ents_arr = ents_arr as TEntTypeIdx[];
+    // are we setting a list of ents to a list of values? ie many to many?
+    const attrib_values_depth: number = getArrDepth(attrib_values);
+    const first_ent_type: number = ents_arr[0][0];
+    if (__model__.attribs.query.hasAttrib(first_ent_type, attrib_name)) {
+        const attrib_data_type: EAttribDataTypeStrs = __model__.attribs.query.getAttribDataType(first_ent_type, attrib_name);
+        const attrib_is_list: boolean = attrib_data_type === EAttribDataTypeStrs.LIST;
+        const values_is_list: boolean = attrib_values_depth > 0;
+        // many to many should only be true in cases where the opposite would cause an error
+        if (!attrib_is_list && values_is_list) {
+            _setEachEntDifferentAttribValue(__model__, ents_arr, attrib_name, attrib_values as TAttribDataTypes[], attrib_index);
+            return;
+        }
+    }
+    // all ents get the same attribute value
+    _setEachEntSameAttribValue(__model__, ents_arr, attrib_name, attrib_values as TAttribDataTypes, attrib_index);
+    return;
+}
 function _setModelAttrib(__model__: GIModel, attrib_name: string, attrib_value: TAttribDataTypes, attrib_index?: number): void {
     if (attrib_index !== null && attrib_index !== undefined) {
         __model__.attribs.add.setModelAttribIndexedValue(attrib_name, attrib_index, attrib_value as number|string);
     } else {
         __model__.attribs.add.setModelAttribValue(attrib_name, attrib_value);
     }
-}
-function _getEntsIndices(__model__: GIModel, ents_arr: TEntTypeIdx[]): number[] {
-    const ent_type: number = ents_arr[0][0];
-    const ents_i: number[] = [];
-    for (let i = 0; i < ents_arr.length; i++) {
-        if (ents_arr[i][0] !== ent_type) {
-            throw new Error('If an attribute is being set for multiple entities, then they must all be of the same type.');
-        }
-        ents_i.push(ents_arr[i][1]);
-    }
-    return ents_i;
 }
 function _setEachEntDifferentAttribValue(__model__: GIModel, ents_arr: TEntTypeIdx[],
         attrib_name: string, attrib_values: TAttribDataTypes[], attrib_index?: number): void {
@@ -254,45 +272,17 @@ function _setEachEntSameAttribValue(__model__: GIModel, ents_arr: TEntTypeIdx[],
         __model__.attribs.add.setAttribValue(ent_type, ents_i, attrib_name, attrib_value);
     }
 }
-function _setAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
-        attrib_name: string, attrib_values: TAttribDataTypes|TAttribDataTypes[], attrib_index?: number): void {
-    // check the ents_arr
-    if (ents_arr === null) {
-        _setModelAttrib(__model__, attrib_name, attrib_values as TAttribDataTypes, attrib_index);
-        return;
-    } else if (ents_arr.length === 0) {
-        return;
-    } else if (getArrDepth(ents_arr) === 1) {
-        ents_arr = [ents_arr] as TEntTypeIdx[];
-    }
-    ents_arr = ents_arr as TEntTypeIdx[];
-    // check attrib_values
-    // are we setting a list of ents to a list of values?
-    const attrib_values_depth: number = getArrDepth(attrib_values);
-    if (attrib_values_depth === 2) {
-        // attrib values is a list of lists
-        // we assume that we are trying to set a different value for each ent
-        // so we expect the list lengths to be equal
-        _setEachEntDifferentAttribValue(__model__, ents_arr, attrib_name, attrib_values as TAttribDataTypes[], attrib_index);
-        return;
-    } else if (attrib_values_depth === 1) {
-        // check if ents_arr.length equals attrib_values.length
-        // then check if the first ent already has an attrib with the specified name
-        // if both are true, then we assume we are trying to set each ent to each value
-        const attrib_values_arr: number[]|string[] = attrib_values as number[]|string[];
-        if (ents_arr.length === attrib_values_arr.length) {
-            const first_ent_type: number = ents_arr[0][0];
-            if (__model__.attribs.query.hasAttrib(first_ent_type, attrib_name)) {
-                _setEachEntDifferentAttribValue(__model__, ents_arr, attrib_name, attrib_values as TAttribDataTypes[], attrib_index);
-                return;
-            }
+function _getEntsIndices(__model__: GIModel, ents_arr: TEntTypeIdx[]): number[] {
+    const ent_type: number = ents_arr[0][0];
+    const ents_i: number[] = [];
+    for (let i = 0; i < ents_arr.length; i++) {
+        if (ents_arr[i][0] !== ent_type) {
+            throw new Error('If an attribute is being set for multiple entities, then they must all be of the same type.');
         }
+        ents_i.push(ents_arr[i][1]);
     }
-    // all ents get the same attribute value
-    _setEachEntSameAttribValue(__model__, ents_arr, attrib_name, attrib_values as TAttribDataTypes, attrib_index);
-    return;
+    return ents_i;
 }
-
 // ================================================================================================
 /**
  * Get attribute values for one or more entities.
@@ -390,7 +380,7 @@ export function Push(__model__: GIModel, entities: TId|TId[],
     const target_ent_type: EEntType = _getEntTypeFromStr(ent_type_sel);
     if (source_ent_type === target_ent_type) { throw new Error('The new attribute is at the same level as the existing attribute.'); }
     // get the method
-    const method: EAttribPush = _convertPromoteMethod(method_sel);
+    const method: EAttribPush = _convertPushMethod(method_sel);
     // do the push
     __model__.attribs.add.pushAttribValues(source_ent_type, source_attrib, indices, target_ent_type, target_attrib, method);
 }
@@ -403,7 +393,7 @@ export enum _EPushMethodSel {
     MIN = 'min',
     MAX = 'max'
 }
-function _convertPromoteMethod(select: _EPushMethodSel): EAttribPush {
+function _convertPushMethod(select: _EPushMethodSel): EAttribPush {
     switch (select) {
         case _EPushMethodSel.AVERAGE:
             return EAttribPush.AVERAGE;

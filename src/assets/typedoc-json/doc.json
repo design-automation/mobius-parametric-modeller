@@ -9041,7 +9041,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/attrib.ts",
-									"line": 400,
+									"line": 390,
 									"character": 11
 								}
 							],
@@ -9058,7 +9058,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/attrib.ts",
-									"line": 398,
+									"line": 388,
 									"character": 9
 								}
 							],
@@ -9075,7 +9075,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/attrib.ts",
-									"line": 399,
+									"line": 389,
 									"character": 8
 								}
 							],
@@ -9092,7 +9092,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/attrib.ts",
-									"line": 404,
+									"line": 394,
 									"character": 7
 								}
 							],
@@ -9109,7 +9109,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/attrib.ts",
-									"line": 401,
+									"line": 391,
 									"character": 10
 								}
 							],
@@ -9126,7 +9126,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/attrib.ts",
-									"line": 403,
+									"line": 393,
 									"character": 7
 								}
 							],
@@ -9143,7 +9143,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/attrib.ts",
-									"line": 402,
+									"line": 392,
 									"character": 7
 								}
 							],
@@ -9168,7 +9168,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/attrib.ts",
-							"line": 397,
+							"line": 387,
 							"character": 27
 						}
 					]
@@ -9485,7 +9485,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/attrib.ts",
-							"line": 307,
+							"line": 297,
 							"character": 19
 						}
 					]
@@ -9622,7 +9622,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/attrib.ts",
-							"line": 361,
+							"line": 351,
 							"character": 20
 						}
 					]
@@ -9861,14 +9861,14 @@
 				},
 				{
 					"id": 1795,
-					"name": "_convertPromoteMethod",
+					"name": "_convertPushMethod",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
 							"id": 1796,
-							"name": "_convertPromoteMethod",
+							"name": "_convertPushMethod",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
@@ -9896,8 +9896,8 @@
 					"sources": [
 						{
 							"fileName": "core/modules/attrib.ts",
-							"line": 406,
-							"character": 30
+							"line": 396,
+							"character": 27
 						}
 					]
 				},
@@ -10000,7 +10000,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/attrib.ts",
-							"line": 325,
+							"line": 315,
 							"character": 13
 						}
 					]
@@ -10048,21 +10048,21 @@
 					]
 				},
 				{
-					"id": 1751,
+					"id": 1772,
 					"name": "_getEntsIndices",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 1752,
+							"id": 1773,
 							"name": "_getEntsIndices",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 1753,
+									"id": 1774,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -10074,7 +10074,7 @@
 									}
 								},
 								{
-									"id": 1754,
+									"id": 1775,
 									"name": "ents_arr",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -10101,27 +10101,27 @@
 					"sources": [
 						{
 							"fileName": "core/modules/attrib.ts",
-							"line": 212,
+							"line": 275,
 							"character": 24
 						}
 					]
 				},
 				{
-					"id": 1769,
+					"id": 1745,
 					"name": "_setAttrib",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 1770,
+							"id": 1746,
 							"name": "_setAttrib",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 1771,
+									"id": 1747,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -10133,7 +10133,7 @@
 									}
 								},
 								{
-									"id": 1772,
+									"id": 1748,
 									"name": "ents_arr",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -10158,7 +10158,7 @@
 									}
 								},
 								{
-									"id": 1773,
+									"id": 1749,
 									"name": "attrib_name",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -10169,7 +10169,7 @@
 									}
 								},
 								{
-									"id": 1774,
+									"id": 1750,
 									"name": "attrib_values",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -10194,271 +10194,7 @@
 									}
 								},
 								{
-									"id": 1775,
-									"name": "attrib_index",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {
-										"isOptional": true
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "number"
-									}
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/attrib.ts",
-							"line": 257,
-							"character": 19
-						}
-					]
-				},
-				{
-					"id": 1755,
-					"name": "_setEachEntDifferentAttribValue",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {},
-					"signatures": [
-						{
-							"id": 1756,
-							"name": "_setEachEntDifferentAttribValue",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"parameters": [
-								{
-									"id": 1757,
-									"name": "__model__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "GIModel",
-										"id": 1429
-									}
-								},
-								{
-									"id": 1758,
-									"name": "ents_arr",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "reference",
-											"name": "TEntTypeIdx",
-											"id": 269
-										}
-									}
-								},
-								{
-									"id": 1759,
-									"name": "attrib_name",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "intrinsic",
-										"name": "string"
-									}
-								},
-								{
-									"id": 1760,
-									"name": "attrib_values",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "reference",
-											"name": "TAttribDataTypes",
-											"id": 290
-										}
-									}
-								},
-								{
-									"id": 1761,
-									"name": "attrib_index",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {
-										"isOptional": true
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "number"
-									}
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/attrib.ts",
-							"line": 223,
-							"character": 40
-						}
-					]
-				},
-				{
-					"id": 1762,
-					"name": "_setEachEntSameAttribValue",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {},
-					"signatures": [
-						{
-							"id": 1763,
-							"name": "_setEachEntSameAttribValue",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"parameters": [
-								{
-									"id": 1764,
-									"name": "__model__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "GIModel",
-										"id": 1429
-									}
-								},
-								{
-									"id": 1765,
-									"name": "ents_arr",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "reference",
-											"name": "TEntTypeIdx",
-											"id": 269
-										}
-									}
-								},
-								{
-									"id": 1766,
-									"name": "attrib_name",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "intrinsic",
-										"name": "string"
-									}
-								},
-								{
-									"id": 1767,
-									"name": "attrib_value",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "TAttribDataTypes",
-										"id": 290
-									}
-								},
-								{
-									"id": 1768,
-									"name": "attrib_index",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {
-										"isOptional": true
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "number"
-									}
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/attrib.ts",
-							"line": 243,
-							"character": 35
-						}
-					]
-				},
-				{
-					"id": 1745,
-					"name": "_setModelAttrib",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {},
-					"signatures": [
-						{
-							"id": 1746,
-							"name": "_setModelAttrib",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"parameters": [
-								{
-									"id": 1747,
-									"name": "__model__",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "GIModel",
-										"id": 1429
-									}
-								},
-								{
-									"id": 1748,
-									"name": "attrib_name",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "intrinsic",
-										"name": "string"
-									}
-								},
-								{
-									"id": 1749,
-									"name": "attrib_value",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"name": "TAttribDataTypes",
-										"id": 290
-									}
-								},
-								{
-									"id": 1750,
+									"id": 1751,
 									"name": "attrib_index",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -10481,6 +10217,270 @@
 						{
 							"fileName": "core/modules/attrib.ts",
 							"line": 205,
+							"character": 19
+						}
+					]
+				},
+				{
+					"id": 1758,
+					"name": "_setEachEntDifferentAttribValue",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 1759,
+							"name": "_setEachEntDifferentAttribValue",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 1760,
+									"name": "__model__",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "GIModel",
+										"id": 1429
+									}
+								},
+								{
+									"id": 1761,
+									"name": "ents_arr",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"name": "TEntTypeIdx",
+											"id": 269
+										}
+									}
+								},
+								{
+									"id": 1762,
+									"name": "attrib_name",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 1763,
+									"name": "attrib_values",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"name": "TAttribDataTypes",
+											"id": 290
+										}
+									}
+								},
+								{
+									"id": 1764,
+									"name": "attrib_index",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "void"
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/modules/attrib.ts",
+							"line": 241,
+							"character": 40
+						}
+					]
+				},
+				{
+					"id": 1765,
+					"name": "_setEachEntSameAttribValue",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 1766,
+							"name": "_setEachEntSameAttribValue",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 1767,
+									"name": "__model__",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "GIModel",
+										"id": 1429
+									}
+								},
+								{
+									"id": 1768,
+									"name": "ents_arr",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"name": "TEntTypeIdx",
+											"id": 269
+										}
+									}
+								},
+								{
+									"id": 1769,
+									"name": "attrib_name",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 1770,
+									"name": "attrib_value",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "TAttribDataTypes",
+										"id": 290
+									}
+								},
+								{
+									"id": 1771,
+									"name": "attrib_index",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "void"
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/modules/attrib.ts",
+							"line": 261,
+							"character": 35
+						}
+					]
+				},
+				{
+					"id": 1752,
+					"name": "_setModelAttrib",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {},
+					"signatures": [
+						{
+							"id": 1753,
+							"name": "_setModelAttrib",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 1754,
+									"name": "__model__",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "GIModel",
+										"id": 1429
+									}
+								},
+								{
+									"id": 1755,
+									"name": "attrib_name",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 1756,
+									"name": "attrib_value",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"name": "TAttribDataTypes",
+										"id": 290
+									}
+								},
+								{
+									"id": 1757,
+									"name": "attrib_index",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "void"
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/modules/attrib.ts",
+							"line": 234,
 							"character": 24
 						}
 					]
@@ -10509,11 +10509,11 @@
 						1795,
 						1782,
 						1718,
-						1751,
-						1769,
-						1755,
-						1762,
-						1745
+						1772,
+						1745,
+						1758,
+						1765,
+						1752
 					]
 				}
 			],
@@ -32731,7 +32731,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 222,
+									"line": 229,
 									"character": 28
 								}
 							]
@@ -32783,7 +32783,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 312,
+									"line": 319,
 									"character": 30
 								}
 							]
@@ -32806,7 +32806,8 @@
 									"kindString": "Call signature",
 									"flags": {},
 									"comment": {
-										"shortText": "Creates a new attribte.\nIf the attribute already exists, then the existing attribute is returned."
+										"shortText": "Creates a new attribte, at either the model level or the entity level.",
+										"text": "For entity attributes, if an attribute with the same name but different data_type already exists,\nthen an error is thrown.\n"
 									},
 									"parameters": [
 										{
@@ -32856,14 +32857,14 @@
 									],
 									"type": {
 										"type": "intrinsic",
-										"name": "boolean"
+										"name": "void"
 									}
 								}
 							],
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 30,
+									"line": 32,
 									"character": 20
 								}
 							]
@@ -32934,7 +32935,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 143,
+									"line": 150,
 									"character": 22
 								}
 							]
@@ -33006,7 +33007,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 114,
+									"line": 121,
 									"character": 28
 								}
 							]
@@ -33066,7 +33067,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 133,
+									"line": 140,
 									"character": 25
 								}
 							]
@@ -33174,7 +33175,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 158,
+									"line": 165,
 									"character": 27
 								}
 							]
@@ -33291,7 +33292,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 96,
+									"line": 103,
 									"character": 32
 								}
 							]
@@ -33389,7 +33390,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 80,
+									"line": 87,
 									"character": 25
 								}
 							]
@@ -33471,7 +33472,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 61,
+									"line": 68,
 									"character": 37
 								}
 							]
@@ -33534,7 +33535,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 49,
+									"line": 56,
 									"character": 30
 								}
 							]
@@ -33594,7 +33595,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 125,
+									"line": 132,
 									"character": 24
 								}
 							]
@@ -33678,7 +33679,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsAdd.ts",
-									"line": 216,
+									"line": 223,
 									"character": 31
 								}
 							]
@@ -42018,7 +42019,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomQuery.ts",
-									"line": 626,
+									"line": 642,
 									"character": 22
 								}
 							]
@@ -42150,7 +42151,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomQuery.ts",
-									"line": 469,
+									"line": 485,
 									"character": 23
 								}
 							]
@@ -42480,7 +42481,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomQuery.ts",
-									"line": 613,
+									"line": 629,
 									"character": 23
 								}
 							]
@@ -42546,7 +42547,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomQuery.ts",
-									"line": 574,
+									"line": 590,
 									"character": 22
 								}
 							]
@@ -42612,7 +42613,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomQuery.ts",
-									"line": 517,
+									"line": 533,
 									"character": 23
 								}
 							]
@@ -42678,7 +42679,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomQuery.ts",
-									"line": 424,
+									"line": 432,
 									"character": 23
 								}
 							]
@@ -43889,7 +43890,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomQuery.ts",
-									"line": 661,
+									"line": 677,
 									"character": 19
 								}
 							]
@@ -44020,7 +44021,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomQuery.ts",
-									"line": 680,
+									"line": 696,
 									"character": 20
 								}
 							]

@@ -20,25 +20,32 @@ export class GIAttribsAdd {
         this._attribs_maps = attribs_maps;
     }
     /**
-     * Creates a new attribte.
-     * If the attribute already exists, then the existing attribute is returned.
+     * Creates a new attribte, at either the model level or the entity level.
+     *
+     * For entity attributes, if an attribute with the same name but different data_type already exists, 
+     * then an error is thrown.
      *
      * @param ent_type The level at which to create the attribute.
      * @param name The name of the attribute.
      * @param data_type The data type of the attribute.
      */
-    public addAttrib(ent_type: EEntType, name: string, data_type: EAttribDataTypeStrs): boolean {
+    public addAttrib(ent_type: EEntType, name: string, data_type: EAttribDataTypeStrs): void {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
-        if (!attribs.has(name)) {
-            const attrib: GIAttribMap = new GIAttribMap(name, data_type);
-            attribs.set(name, attrib);
+        const attribs: Map<string, any> = this._attribs_maps[attribs_maps_key];
+        if (ent_type === EEntType.MOD) {
+            if (!attribs.has(name)) {
+                attribs.set(name, null);
+            }
         } else {
-            if (attribs.get(name).getDataType() !== data_type) {
-                throw new Error('Attribute could not be created do to conflict with existing attribute with same name.');
+            if (!attribs.has(name)) {
+                const attrib: GIAttribMap = new GIAttribMap(name, data_type);
+                attribs.set(name, attrib);
+            } else {
+                if (attribs.get(name).getDataType() !== data_type) {
+                    throw new Error('Attribute could not be created due to conflict with existing attribute with same name.');
+                }
             }
         }
-        return true;
     }
     /**
      * Set a model attrib value

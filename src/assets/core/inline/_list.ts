@@ -51,7 +51,11 @@ export function listGet(list: any[], index: number|number[]): any|any[] {
 }
 
 export function listFind(list: any[], val: any): number {
-    return list.indexOf(val);
+    const index = list.indexOf(val);
+    if (index === -1) {
+        return null;
+    }
+    return index;
 }
 
 export function listHas(list: any[], val: any): boolean {

@@ -54,6 +54,8 @@ export class ExecuteComponent {
 
     private startTime;
     private isDev = true;
+    private triggerCheck: boolean;
+
     constructor(private dataService: DataService,
                 private dataOutputService: DataOutputService,
                 private router: Router,
@@ -108,6 +110,7 @@ export class ExecuteComponent {
 
     async execute(testing?: boolean) {
         this.startTime = performance.now();
+        this.triggerCheck = false;
 
         if (this.dataService.consoleClear) {
             this.dataService.clearLog();
@@ -337,7 +340,8 @@ export class ExecuteComponent {
             'currentProcedure': [''],
             'console': this.dataService.getLog(),
             'constants': constantList,
-            'fileName': this.dataService.flowchart.name
+            'fileName': this.dataService.flowchart.name,
+            'message': null
         };
         // const consoleLength = params.console.length;
 
@@ -413,8 +417,12 @@ export class ExecuteComponent {
 
             const fn = new Function('__modules__', '__params__', fnString);
             // execute the function
-
             const result = fn(Modules, params);
+
+            if (params.message && !this.triggerCheck) {
+                this.triggerCheck = true;
+                this.dataService.notifyMessage(params.message.replace('%node%', node.name));
+            }
 
             for (const v of varsDefined) {
                 if (window.hasOwnProperty(v)) {

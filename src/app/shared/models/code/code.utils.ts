@@ -274,7 +274,11 @@ export class CodeUtils {
             // const repGet = prod.args[0].jsValue;
             const repGet = this.repGetAttrib(prod.args[0].value);
             const repGetJS = this.repGetAttrib(prod.args[0].jsValue);
-            codeStr.push(`__modules__.${_parameterTypes.select}(__params__.model, ${repGetJS}, "${repGet}");`);
+            codeStr.push(`try {` +
+            `\t__modules__.${_parameterTypes.select}(__params__.model, ${repGetJS}, "${repGet}"); ` +
+            `} catch (ex) {` +
+            `\t__params__.message = 'Trying to select geometric entities in node "%node%", but no entity was found';` +
+            `}`);
         }
         return codeStr;
     }

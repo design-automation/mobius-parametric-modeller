@@ -18,6 +18,7 @@ export class PanelHeaderComponent implements OnDestroy {
 
     @Input() flowchart: IFlowchart;
     executeCheck: boolean;
+    nodeListCheck: boolean;
 
     urlSet = ['', 'publish', '', '', ''];
     urlValid: boolean;
@@ -27,8 +28,13 @@ export class PanelHeaderComponent implements OnDestroy {
     constructor(private dataService: DataService, private router: Router) {
         if (this.router.url === '/about') {
             this.executeCheck = false;
+            this.nodeListCheck = false;
+        } else if (this.router.url === '/gallery') {
+            this.executeCheck = true;
+            this.nodeListCheck = false;
         } else {
             this.executeCheck = true;
+            this.nodeListCheck = true;
         }
         this.ctx.font = '12px sans-serif';
     }

@@ -56,6 +56,11 @@ This will result in a popup in your browser, asking you to save the filel.
     Exports all the data in the model as an OBJ.
   
   
+## convertString  
+* **Description:** undefined  
+* **Parameters:**  
+  * *value:* undefined  
+  
 ## ParamInfo  
 * **Description:** Returns a text summary of the contents of this model  
 * **Parameters:**  

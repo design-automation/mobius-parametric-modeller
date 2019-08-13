@@ -39,9 +39,10 @@
             [class.error]='prod.args[0].invalidVar'
             [class.disablePointer]='disableInput'
             (focus)='emitClearSelect($event)'
-            placeholder="Parameter Name"
-            [style.width.px]='inputSize(prod.args[0].value,"Parameter Name")'>
+            placeholder="Param_name"
+            [style.width.px]='inputSize(prod.args[0].value,"Param_name")'>
         </div>
+        =
         <!-- <div class='inline-div' *ngIf='prod.type == 12'>
             <select [(ngModel)]="prod.meta.inputMode" tabindex="-1">
                 <option value='3' [selected]="prod.meta.inputMode == 3">URL</option>
@@ -148,7 +149,7 @@
         </div> 
     </ng-container>
     <div class = 'desc--container'>
-        <textarea id='{{prod.ID}}_desc' autogrow class='inp--desc' placeholder='Description' 
+        <textarea id='{{prod.ID}}_desc' autogrow class='inp--desc' placeholder='Parameter Description' 
         (click)='emitClearSelect($event)'
         [class.disablePointer]='disableInput'
         [(ngModel)]='prod.meta.description'></textarea>

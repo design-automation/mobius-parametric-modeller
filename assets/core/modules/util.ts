@@ -185,7 +185,7 @@ export enum _EIOExportContents {
  * @example util.ExportIO('my_model.json')
  * @example_info Exports all the data in the model as an OBJ.
  */
-export function ExportIO(__model__: GIModel, __console__: string[], __constList__: {}, __fileName__: string,
+export function ExportIO(__model__: GIModel, __console__: string[], __constList__: any, __fileName__: string,
                         filename: string, exportParams: _EIOExportParams, exportContent: _EIOExportContents): boolean {
     // let gi_data: string = JSON.stringify(__model__.getData());
     // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
@@ -198,9 +198,15 @@ export function ExportIO(__model__: GIModel, __console__: string[], __constList_
                                .replace('</i></b> ', '').replace('</p>', '').replace('<br>', '\n');
         consolidatedConsole.push(replacedStr);
     }
+    const newConstList = {};
+    for (const obj in __constList__) {
+        if (__constList__.hasOwnProperty(obj)) {
+            newConstList[obj] = convertString(__constList__[obj]);
+        }
+    }
     const edxAnswer = {
         'fileName': __fileName__,
-        'params' : __constList__,
+        'params' : newConstList,
         'console': consolidatedConsole.join('\n'),
         'model'  : __model__.getData()
     };
@@ -214,6 +220,23 @@ export function ExportIO(__model__: GIModel, __console__: string[], __constList_
     }
 
     return download(JSON.stringify(edxAnswer) , filename);
+}
+function convertString(value) {
+    let val;
+    if (!value) {
+        val = value;
+    } else if (typeof value === 'number' || value === undefined) {
+        val = value;
+    } else if (typeof value === 'string') {
+        val = '"' + value + '"';
+    } else if (value.constructor === [].constructor) {
+        val = JSON.stringify(value);
+    } else if (value.constructor === {}.constructor) {
+        val = JSON.stringify(value);
+    } else {
+        val = value;
+    }
+    return val;
 }
 // ================================================================================================
 /**

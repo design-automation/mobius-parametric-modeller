@@ -13774,7 +13774,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "List of items to add, or null."
+										"text": "Optional, list of items to add, or null."
 									},
 									"type": {
 										"type": "array",
@@ -15392,7 +15392,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "Collection, the parent collection or null."
+										"text": "Optional, collection, the parent collection or null."
 									},
 									"type": {
 										"type": "reference",
@@ -22859,7 +22859,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "List of entities to filter."
+										"text": "Optional, list of entities to filter, or null.."
 									},
 									"type": {
 										"type": "union",
@@ -22901,7 +22901,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "Attribute index to use for filtering, or null."
+										"text": "Optional, attribute index to use for filtering (for attributes that are lists), or null to filter all entities the model."
 									},
 									"type": {
 										"type": "intrinsic",
@@ -23038,7 +23038,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "List of entities to get entities from, or 'null' to get all entities in the model."
+										"text": "Optional, list of entities to get entities from, or null to get all entities in the model."
 									},
 									"type": {
 										"type": "union",
@@ -23491,7 +23491,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "Optional, attribute index to use for sorting, or null."
+										"text": "Optional, attribute index to use for sorting (for attributes that are lists), or null."
 									},
 									"type": {
 										"type": "intrinsic",

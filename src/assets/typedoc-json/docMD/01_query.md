@@ -66,7 +66,7 @@ If the attribute is a list, and index can also be specified as follows: #@name1[
 * **Parameters:**  
   * *entities:* List of two or more entities to be sorted, all of the same entity type.  
   * *name:* Attribute name to use for sorting.  
-  * *index:* Attribute index to use for sorting, or null.  
+  * *index:* Optional, attribute index to use for sorting, or null.  
   * *method_enum:* Enum, sort descending or ascending.  
 * **Returns:** Entities, a list of sorted entities.  
 * **Examples:**  

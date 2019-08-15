@@ -305,9 +305,23 @@ function _sort(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: string,
     // get the list of ents_i
     const ent_type: EEntType = ents_arr[0][0];
     const ents_i: number[] = ents_arr.filter( ent_arr => ent_arr[0] === ent_type ).map( ent_arr => ent_arr[1] );
+    // check if we are sorting by '_id'
+    if (attrib_name === '_id') {
+        const ents_arr_copy: TEntTypeIdx[] = ents_arr.slice();
+        ents_arr_copy.sort(_compareID);
+        if (method === ESort.DESCENDING) { ents_arr_copy.reverse(); }
+        return ents_arr_copy;
+    }
     // do the sort on the list of entities
     const sort_result: number[] = __model__.attribs.query.sortByAttribs(ent_type, ents_i, attrib_name, attrib_index, method);
     return sort_result.map( entity_i => [ent_type, entity_i]) as TEntTypeIdx[];
+}
+function _compareID(id1: TEntTypeIdx, id2: TEntTypeIdx): number {
+    const [ent_type1, index1] = id1;
+    const [ent_type2, index2] = id2;
+    if (ent_type1 !== ent_type2) { return ent_type1 -  ent_type2; }
+    if (index1 !== index2) { return index1 -  index2; }
+    return 0;
 }
 // ================================================================================================
 /**

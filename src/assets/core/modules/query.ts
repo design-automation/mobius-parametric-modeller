@@ -107,7 +107,7 @@ function _entType(select: _EEntTypeEnum): EEntType|EEntType[] {
  * ~
  * @param __model__
  * @param ent_type_enum Enum, the type of entity to get.
- * @param entities List of entities to get entities from, or 'null' to get all entities in the model.
+ * @param entities Optional, list of entities to get entities from, or null to get all entities in the model.
  * @returns Entities, a list of entities.
  * @example positions = query.Get('positions', [polyline1, polyline2])
  * @example_info Returns a list of positions that are part of polyline1.
@@ -181,9 +181,9 @@ function _get(__model__: GIModel, ent_type: EEntType, ents_arr: TEntTypeIdx[]|TE
  * If the attribute value is a list, then a list index can be used, e.g.: ps#@xyz[2] > 10.
  * ~
  * @param __model__
- * @param entities List of entities to filter.
+ * @param entities Optional, list of entities to filter, or null..
  * @param name The attribute name to use for filtering.
- * @param index Attribute index to use for filtering, or null.
+ * @param index Optional, attribute index to use for filtering (for attributes that are lists), or null to filter all entities the model.
  * @param operator_enum Enum, the operator to use for filtering
  * @param value The attribute value to use for filtering.
  * @returns Entities, a list of entities that match the conditions specified in 'expr'.
@@ -281,7 +281,7 @@ function _filter(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][],
  * @param __model__
  * @param entities List of two or more entities to be sorted, all of the same entity type.
  * @param name Attribute name to use for sorting.
- * @param index Optional, attribute index to use for sorting, or null.
+ * @param index Optional, attribute index to use for sorting (for attributes that are lists), or null.
  * @param method_enum Enum, sort descending or ascending.
  * @returns Entities, a list of sorted entities.
  * @example sorted_list = query.Sort( [pos1, pos2, pos3], #@xyz[2], descending)

@@ -56,7 +56,7 @@
 ## Collection  
 * **Description:** Adds one or more new collections to the model.  
 * **Parameters:**  
-  * *parent_coll:* Collection, the parent collection or null.  
+  * *parent_coll:* Optional, collection, the parent collection or null.  
   * *entities:* List or nested lists of points, polylines, polygons.  
 * **Returns:** Entities, new collection, or a list of new collections.  
 * **Examples:**  

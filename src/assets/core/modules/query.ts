@@ -281,7 +281,7 @@ function _filter(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][],
  * @param __model__
  * @param entities List of two or more entities to be sorted, all of the same entity type.
  * @param name Attribute name to use for sorting.
- * @param index Attribute index to use for sorting, or null.
+ * @param index Optional, attribute index to use for sorting, or null.
  * @param method_enum Enum, sort descending or ascending.
  * @returns Entities, a list of sorted entities.
  * @example sorted_list = query.Sort( [pos1, pos2, pos3], #@xyz[2], descending)

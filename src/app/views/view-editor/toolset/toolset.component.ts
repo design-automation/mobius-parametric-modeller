@@ -110,15 +110,21 @@ export class ToolsetComponent implements OnInit {
         for (let i = 0; i < fnData.args.length; i ++) {
             const arg = fnData.args[i];
             const argDoc = ModuleDocList[fnData.module][fnData.name].parameters[i];
-            if (argDoc && argDoc.description && argDoc.description.toLowerCase().indexOf('enum') !== -1) {
-                const enm = Modules[fnData.module][argDoc.type];
-                // tslint:disable-next-line:forin
-                for (const j in enm) {
-                    newArgs.push({name: arg.name, value: `'${enm[j]}'`, jsValue: `'${enm[j]}'`});
-                    break;
+            if (argDoc && argDoc.description ) {
+                const docText = argDoc.description.toLowerCase();
+                if (docText.indexOf('enum') !== -1) {
+                    const enm = Modules[fnData.module][argDoc.type];
+                    // tslint:disable-next-line:forin
+                    for (const j in enm) {
+                        newArgs.push({name: arg.name, value: `'${enm[j]}'`, jsValue: `'${enm[j]}'`});
+                        break;
+                    }
+                    continue;
+                } else if (docText.indexOf('optional') !== -1) {
+                    newArgs.push({name: arg.name, value: `null`, jsValue: `null`});
+                    continue;
                 }
-                continue;
-            }
+            } 
             newArgs.push({name: arg.name, value: arg.value});
         }
         fnData.args = newArgs;

@@ -812,13 +812,23 @@ function analyzePythonSlicing(
                 {'error'?: string, 'i'?: number, 'str'?: string, 'jsStr'?: string, 'arrayName'?: string} {
     let newString = '';
     let jsString = '';
+    if (comps[i + 1].type === strType.STR) {
+        if (i + 2 >= comps.length || comps[i + 2].value !== ']') {
+            return {'error': `Error: "]" expected \n
+            at: ... ${comps.slice(i + 1).map(cp => cp.value).join(' ')}`};
+        }
+        newString += `[${comps[i + 1].value}]`;
+        jsString += `[${comps[i + 1].value}]`;
+        arrayName += `[${comps[i + 1].value}]`;
+        return {'i': i + 2, 'str': newString, 'jsStr': jsString, 'arrayName': arrayName};
+    }
     if (i + 2 < comps.length && comps[i + 1].value === ':') {
         if (comps[i + 2].value === ']') {
             i += 2;
             newString += '[:]';
             jsString += '.slice()';
             arrayName += '.slice()';
-            return {'i': i, 'str': newString, 'jsStr': jsString};
+            return {'i': i, 'str': newString, 'jsStr': jsString, 'arrayName': arrayName};
         }
         const secondResult = analyzeComp(comps, i + 2, vars);
         if (secondResult.error) { return secondResult; }
@@ -826,7 +836,7 @@ function analyzePythonSlicing(
         arrayName += '.slice(0,' + secondResult.jsStr + ')';
         newString += '[ : ' + secondResult.str + ']';
         i = secondResult.i + 1;
-        return {'i': i, 'str': newString, 'jsStr': jsString};
+        return {'i': i, 'str': newString, 'jsStr': jsString, 'arrayName': arrayName};
     }
     const result = analyzeComp(comps, i + 1, vars);
     if (result.error) { return result; }
@@ -838,26 +848,31 @@ function analyzePythonSlicing(
             arrayName += `)`;
             i = result.i + 2;
             newString += `[${result.str} :]`;
-            return {'i': i, 'str': newString, 'jsStr': jsString};
+            return {'i': i, 'str': newString, 'jsStr': jsString, 'arrayName': arrayName};
         }
         const secondResult = analyzeComp(comps, result.i + 2, vars);
         jsString += `, ${secondResult.jsStr})`;
         arrayName += `, ${secondResult.jsStr})`;
         i = secondResult.i + 1;
         newString += `[${result.str} : ${secondResult.str}]`;
-        return {'i': i, 'str': newString, 'jsStr': jsString};
+        return {'i': i, 'str': newString, 'jsStr': jsString, 'arrayName': arrayName};
     }
     if (result.i + 1 >= comps.length || comps[result.i + 1].value !== ']') {
         return { 'error': `Error: "]" expected \n
         at: ... ${comps.slice(result.i + 1).map(cp => cp.value).join(' ')}`};
     }
-    if (isVariable) {
-        jsString += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
-        arrayName += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
-    } else {
-        jsString += `.slice(${result.jsStr})[0]`;
-        arrayName += `.slice(${result.jsStr})[0]`;
-    }
+
+    jsString += `[pythonList(${result.jsStr}, ${arrayName}.length)]`;
+    arrayName += `[pythonList(${result.jsStr}, ${arrayName}.length)]`;
+
+    // if (isVariable) {
+    //     jsString += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
+    //     arrayName += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
+    // } else {
+    //     jsString += `.slice(${result.jsStr})[0]`;
+    //     arrayName += `.slice(${result.jsStr})[0]`;
+    // }
+
     i = result.i + 1;
     newString += '[' + result.str + ']';
     return {'i': i, 'str': newString, 'jsStr': jsString, 'arrayName': arrayName};

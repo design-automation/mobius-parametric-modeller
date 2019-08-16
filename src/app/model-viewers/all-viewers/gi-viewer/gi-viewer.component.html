@@ -160,11 +160,11 @@
 								</dd>
 								<dd id='camera'>
 									<div class="label">Camera Position</div>
-									<input type="number" 
+									<input type="number" disabled
 									[value]="formatNumber(settings.camera.pos.x)">
-									<input type="number" 
+									<input type="number" disabled
 									[value]="formatNumber(settings.camera.pos.y)">
-									<input type="number" 
+									<input type="number" disabled
 									[value]="formatNumber(settings.camera.pos.z)">
 									<button (click)="settingOnChange('camera.get_camera_pos')" class="filebtn getbtn">Get</button>
 								</dd>

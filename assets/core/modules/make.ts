@@ -293,7 +293,7 @@ function _getPgonPosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTyp
  * Adds one or more new collections to the model.
  *
  * @param __model__
- * @param parent_coll Collection, the parent collection or null.
+ * @param parent_coll Optional, collection, the parent collection or null.
  * @param entities List or nested lists of points, polylines, polygons.
  * @returns Entities, new collection, or a list of new collections.
  * @example collection1 = make.Collection([point1,polyine1,polygon1])

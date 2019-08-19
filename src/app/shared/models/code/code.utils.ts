@@ -258,12 +258,6 @@ export class CodeUtils {
                 break;
 
         }
-        if (prod.children) {
-            for (const p of prod.children) {
-                codeStr = codeStr.concat(CodeUtils.getProcedureCode(p, existingVars, isMainFlowchart, functionName, usedFunctions));
-            }
-            codeStr.push(`}`);
-        }
 
         if (isMainFlowchart && prod.print && prod.args[0].jsValue) {
             // const repGet = prod.args[0].jsValue;
@@ -279,6 +273,13 @@ export class CodeUtils {
             `} catch (ex) {` +
             `\t__params__.message = 'Trying to select geometric entities in node "%node%", but no entity was found';` +
             `}`);
+        }
+
+        if (prod.children) {
+            for (const p of prod.children) {
+                codeStr = codeStr.concat(CodeUtils.getProcedureCode(p, existingVars, isMainFlowchart, functionName, usedFunctions));
+            }
+            codeStr.push(`}`);
         }
         return codeStr;
     }

@@ -547,6 +547,9 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
     // does not add to the var list since it's function name
     } else if (comps[i + 1].value === '(') {
         jsString = jsString.slice(0, -1);
+        if (i + 2 >= comps.length) {
+            return { 'error': `Error: ")" expected \nat: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
         if (comps[i + 2].value === ')') {
             i++;
             newString += '()';
@@ -812,6 +815,9 @@ function analyzePythonSlicing(
                 {'error'?: string, 'i'?: number, 'str'?: string, 'jsStr'?: string, 'arrayName'?: string} {
     let newString = '';
     let jsString = '';
+    if (i + 1 >= comps.length) {
+        return {'error': `Error: "]" expected`};
+    }
     if (comps[i + 1].type === strType.STR) {
         if (i + 2 >= comps.length || comps[i + 2].value !== ']') {
             return {'error': `Error: "]" expected \n

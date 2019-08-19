@@ -193,13 +193,13 @@ export class ProcedureItemComponent implements OnDestroy {
         const prodList = this.dataService.node.state.procedure;
         let newPrint;
         let i = prodList.length - 1;
-        while (i >= 0 && !(prodList[i].argCount > 0 && prodList[i].args[0].name === 'var_name')) {
+        while (i >= 0 && !this.canBePrinted(prodList[i])) {
             i--;
         }
         if (i === -1) { return; }
         newPrint = ! prodList[i].print;
         for (const prod of prodList) {
-            if (prod.argCount > 0 && prod.args[0].name === 'var_name') {
+            if (this.canBePrinted(prod)) {
                 prod.print = newPrint;
             }
         }
@@ -228,8 +228,9 @@ export class ProcedureItemComponent implements OnDestroy {
     }
 
 
-    canBePrinted() {
-        return this.data.argCount > 0 && this.data.args[0].name === 'var_name';
+    canBePrinted(prod = this.data) {
+        return prod.argCount > 0 && prod.args[0].name === 'var_name';
+        // return prod.argCount > 0 && (prod.args[0].name === 'var_name' || prod.args[0].name === 'item');
     }
 
     canSelectGeom() {

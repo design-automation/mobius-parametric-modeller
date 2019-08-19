@@ -229,8 +229,8 @@ export class ProcedureItemComponent implements OnDestroy {
 
 
     canBePrinted(prod = this.data) {
-        return prod.argCount > 0 && prod.args[0].name === 'var_name';
-        // return prod.argCount > 0 && (prod.args[0].name === 'var_name' || prod.args[0].name === 'item');
+        // return prod.argCount > 0 && prod.args[0].name === 'var_name';
+        return prod.argCount > 0 && (prod.args[0].name === 'var_name' || prod.args[0].name === 'item');
     }
 
     canSelectGeom() {

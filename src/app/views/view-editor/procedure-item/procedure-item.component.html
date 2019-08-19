@@ -322,7 +322,7 @@
                 <mat-icon class='icon' svgIcon='select'></mat-icon>
             </button>
             <!-- Print button-->
-            <button id = 'print-btn' *ngIf='canBePrinted()' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+            <button id = 'print-btn' [class.printing]='data.print' [class.disabled]='!data.enabled' *ngIf='canBePrinted()' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                 <mat-icon class="icon" svgIcon='print'></mat-icon>
             </button>
             <!-- help button-->

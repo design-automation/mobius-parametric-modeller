@@ -83,10 +83,10 @@
         border-left: 2px solid $print-color;
         padding-bottom: 0px;
         padding-left: 1px;
-        #print-btn{
-            color: $print-color;
-            background-color: $color6;
-        }
+        // #print-btn{
+        //     color: $print-color;
+        //     background-color: $color6;
+        // }
         &.onhover {
             background-color: $print-color-lt;
             #print-btn{
@@ -114,13 +114,13 @@
             .btn{
                 background-color: inherit;
             }
-            #print-btn{
-                display: flex;
-                justify-content: center;   
-                &:hover{
-                    color: $selected-color;
-                }
-            }
+            // #print-btn{
+            //     display: flex;
+            //     justify-content: center;   
+            //     &:hover{
+            //         color: $selected-color;
+            //     }
+            // }
         }
         &.selected{
             border-bottom: 2px solid $selected-color;
@@ -325,6 +325,19 @@
     //         background-color: inherit;
     //     }
     // }
+}
+#print-btn{
+    &.printing:not(.disabled){
+        color: $print-color;
+        background-color: $color6;
+    }
+    &.printing{
+        display: flex;
+        justify-content: center;   
+        &:hover{
+            color: $selected-color;
+        }
+    }
 }
 
 .container--item{

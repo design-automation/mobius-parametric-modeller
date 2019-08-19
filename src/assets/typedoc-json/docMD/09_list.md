@@ -68,7 +68,7 @@ If num_to_remove is 0, then values are only inserted.
   * *list:* List to splice.  
   * *index:* Zero-based index after which to starting removing or inserting items.  
   * *num_to_remove:* Number of items to remove.  
-  * *items_to_insert:* List of items to add, or null.  
+  * *items_to_insert:* Optional, list of items to add, or null.  
 * **Returns:** void  
 * **Examples:**  
   * result = list.Splice(list1, 1, 3, [2.2, 3.3])  

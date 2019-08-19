@@ -14,6 +14,14 @@ import { DataOutputService } from '@shared/services/dataOutput.service';
 import { SaveFileComponent } from '@shared/components/file';
 import { _parameterTypes, _varString } from '@assets/core/_parameterTypes';
 
+export const pythonList = `
+function pythonList(x, l){
+    if (x < 0) {
+        return x + l;
+    }
+    return x;
+}
+`;
 export const mergeInputsFunc = `
 function mergeInputs(models){
     let result = __modules__.${_parameterTypes.new}();
@@ -385,7 +393,7 @@ export class ExecuteComponent {
             fnString = _varString + globalVars + fnString;
 
             // add the merge input function and the print function
-            fnString = mergeInputsFunc + '\n' + printFunc + '\n' + fnString;
+            fnString = pythonList + '\n' + mergeInputsFunc + '\n' + printFunc + '\n' + fnString;
 
             // ==> generated code structure:
             //  1. mergeInputFunction

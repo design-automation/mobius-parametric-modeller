@@ -386,8 +386,17 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
                 `at: ... ${comps.slice(result.i + 1).map(cp => cp.value).join(' ')}`};
             }
             i = result.i + 1;
-            newString += `[${result.str}]`; //////////
-            jsString += `[${result.jsStr}]`; //////////
+            newString += `[${result.str}]`;
+            jsString += `[${result.jsStr}]`;
+            let arrayName = jsString;
+            while (i + 1 < comps.length && comps[i + 1].value === '[') {
+                const result2 = analyzePythonSlicing(comps, i + 1, vars, arrayName, false);
+                if (result2.error) { return result2; }
+                newString += result2.str;
+                jsString += result2.jsStr;
+                arrayName = result2.arrayName;
+                i = result2.i;
+            }
         }
     // if '{' ==> JSON
     } else if (comps[i].value === '{') {
@@ -508,76 +517,20 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
             addVars(vars, comp.value);
         }
 
-        let arrayName = comps[i].value;
+        let arrayName = jsString;
 
         // look for all subsequent "." or "[]" for the variable
         // e.g. a[:][0].b.x[-1]
         while (i + 1 < comps.length && (comps[i + 1].value === '[' || comps[i + 1].value === '.')) {
+
             if (comps[i + 1].value === '[') {
-                if (i + 3 < comps.length && comps[i + 2].value === ':') {
-                    if (comps[i + 3].value === ']') {
-                        i += 3;
-                        newString += '[:]';
-                        jsString += '.slice()';
-                        arrayName += '.slice()';
-                        continue;
-                    }
-                    const secondResult = analyzeComp(comps, i + 3, vars);
-                    if (secondResult.error) { return secondResult; }
-                    jsString += '.slice(0,' + secondResult.jsStr + ')';
-                    arrayName += '.slice(0,' + secondResult.jsStr + ')';
-                    newString += '[ : ' + secondResult.str + ']';
-                    i = secondResult.i + 1;
-
-                    continue;
-                }
-                const result = analyzeComp(comps, i + 2, vars);
+                const result = analyzePythonSlicing(comps, i + 1, vars, arrayName, isVariable);
                 if (result.error) { return result; }
-                if (comps[result.i + 1].value === ':') {
-                    jsString += `.slice(${result.jsStr}`;
-                    arrayName += `.slice(${result.jsStr}`;
-                    if (comps[result.i + 2].value === ']') {
-                        jsString += `)`;
-                        arrayName += `)`;
-                        i = result.i + 2;
-                        newString += `[${result.str} :]`;
-                        continue;
-                    }
-                    const secondResult = analyzeComp(comps, result.i + 2, vars);
-                    jsString += `, ${secondResult.jsStr})`;
-                    arrayName += `, ${secondResult.jsStr})`;
-                    i = secondResult.i + 1;
-                    newString += `[${result.str} : ${secondResult.str}]`;
-                    continue;
-                }
-                if (result.i + 1 >= comps.length || comps[result.i + 1].value !== ']') {
-                    return { 'error': `Error: "]" expected \n
-                    at: ... ${comps.slice(result.i + 1).map(cp => cp.value).join(' ')}`};
-                }
-                if (isVariable) {
-                    jsString += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
-                    arrayName += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
+                newString += result.str;
+                jsString +=  result.jsStr;
+                arrayName = arrayName;
+                i = result.i;
 
-                    // if (result.jsStr === '0' || Number(result.jsStr)) {
-                    //     const num = Number(result.jsStr);
-                    //     if (num >= 0) {
-                    //         jsString += `[${result.jsStr}]`;
-                    //         arrayName += `[${result.jsStr}]`;
-                    //     } else {
-                    //         jsString += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
-                    //         arrayName += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
-                    //     }
-                    // } else {
-                    //     jsString += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
-                    //     arrayName += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
-                    // }
-
-                } else {
-                    jsString += `.slice(${result.jsStr})[0]`;
-                    arrayName += `.slice(${result.jsStr})[0]`;
-                }
-                i = result.i + 1;
-                newString += '[' + result.str + ']';
             } else {
                 i = i + 2;
                 if (comps[i].type !== strType.VAR) {
@@ -594,6 +547,9 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
     // does not add to the var list since it's function name
     } else if (comps[i + 1].value === '(') {
         jsString = jsString.slice(0, -1);
+        if (i + 2 >= comps.length) {
+            return { 'error': `Error: ")" expected \nat: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
         if (comps[i + 2].value === ')') {
             i++;
             newString += '()';
@@ -852,6 +808,80 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
             i += 1;
         }
     }
+}
+
+function analyzePythonSlicing(
+                comps: {'type': strType, 'value': string}[], i: number, vars: string[], arrayName: string, isVariable: boolean):
+                {'error'?: string, 'i'?: number, 'str'?: string, 'jsStr'?: string, 'arrayName'?: string} {
+    let newString = '';
+    let jsString = '';
+    if (i + 1 >= comps.length) {
+        return {'error': `Error: "]" expected`};
+    }
+    if (comps[i + 1].type === strType.STR) {
+        if (i + 2 >= comps.length || comps[i + 2].value !== ']') {
+            return {'error': `Error: "]" expected \n
+            at: ... ${comps.slice(i + 1).map(cp => cp.value).join(' ')}`};
+        }
+        newString += `[${comps[i + 1].value}]`;
+        jsString += `[${comps[i + 1].value}]`;
+        arrayName += `[${comps[i + 1].value}]`;
+        return {'i': i + 2, 'str': newString, 'jsStr': jsString, 'arrayName': arrayName};
+    }
+    if (i + 2 < comps.length && comps[i + 1].value === ':') {
+        if (comps[i + 2].value === ']') {
+            i += 2;
+            newString += '[:]';
+            jsString += '.slice()';
+            arrayName += '.slice()';
+            return {'i': i, 'str': newString, 'jsStr': jsString, 'arrayName': arrayName};
+        }
+        const secondResult = analyzeComp(comps, i + 2, vars);
+        if (secondResult.error) { return secondResult; }
+        jsString += '.slice(0,' + secondResult.jsStr + ')';
+        arrayName += '.slice(0,' + secondResult.jsStr + ')';
+        newString += '[ : ' + secondResult.str + ']';
+        i = secondResult.i + 1;
+        return {'i': i, 'str': newString, 'jsStr': jsString, 'arrayName': arrayName};
+    }
+    const result = analyzeComp(comps, i + 1, vars);
+    if (result.error) { return result; }
+    if (comps[result.i + 1].value === ':') {
+        jsString += `.slice(${result.jsStr}`;
+        arrayName += `.slice(${result.jsStr}`;
+        if (comps[result.i + 2].value === ']') {
+            jsString += `)`;
+            arrayName += `)`;
+            i = result.i + 2;
+            newString += `[${result.str} :]`;
+            return {'i': i, 'str': newString, 'jsStr': jsString, 'arrayName': arrayName};
+        }
+        const secondResult = analyzeComp(comps, result.i + 2, vars);
+        jsString += `, ${secondResult.jsStr})`;
+        arrayName += `, ${secondResult.jsStr})`;
+        i = secondResult.i + 1;
+        newString += `[${result.str} : ${secondResult.str}]`;
+        return {'i': i, 'str': newString, 'jsStr': jsString, 'arrayName': arrayName};
+    }
+    if (result.i + 1 >= comps.length || comps[result.i + 1].value !== ']') {
+        return { 'error': `Error: "]" expected \n
+        at: ... ${comps.slice(result.i + 1).map(cp => cp.value).join(' ')}`};
+    }
+
+    jsString += `[pythonList(${result.jsStr}, ${arrayName}.length)]`;
+    arrayName += `[pythonList(${result.jsStr}, ${arrayName}.length)]`;
+
+    // if (isVariable) {
+    //     jsString += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
+    //     arrayName += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
+    // } else {
+    //     jsString += `.slice(${result.jsStr})[0]`;
+    //     arrayName += `.slice(${result.jsStr})[0]`;
+    // }
+
+    i = result.i + 1;
+    newString += '[' + result.str + ']';
+    return {'i': i, 'str': newString, 'jsStr': jsString, 'arrayName': arrayName};
 }
 
 function analyzeExpression(comps: {'type': strType, 'value': string}[], i: number, vars: string[], noSpace?: boolean):

@@ -260,35 +260,33 @@ export class AttributeComponent implements OnChanges, DoCheck {
     this.current_selected = id;
     const s = this.multi_selection;
 
-    if (s.has(this.current_selected) && !event.shiftKey) { // select the same row => unselect
-      s.delete(this.current_selected);
-    } else if (!s.has(this.current_selected) && !event.shiftKey) {
-      s.set(this.current_selected, this.current_selected);
-      this.last_selected = this.current_selected;
-    }
-
-    if (event.shiftKey) {
-      if (this.last_selected === undefined) {
-        this.last_selected = ThreeJSData.getAttribsForTable(this.tab_map[currentTab]).ents[0];
-      }
-      s.clear();
-      if (this.current_selected < this.last_selected) { // select upper row
-        attrib_table_ents.filter(ents => ents > this.current_selected && ents < this.last_selected).forEach(item => {
-          s.set(item, item);
-        });
-        s.set(this.current_selected, this.current_selected);
-        s.set(this.last_selected, this.last_selected);
-      } else if (this.current_selected > this.last_selected) { // select lower row
-        attrib_table_ents.filter(ents => ents < this.current_selected && ents > this.last_selected).forEach(item => {
-          s.set(item, item);
-        });
-        s.set(this.current_selected, this.current_selected);
-        s.set(this.last_selected, this.last_selected);
-      }
-    }
     if (event.ctrlKey) {
       this.last_selected = this.current_selected;
       s.set(this.current_selected, this.current_selected);
+    } else {
+      if (!event.shiftKey) {
+        s.clear();
+        s.set(this.current_selected, this.current_selected);
+        this.last_selected = this.current_selected;
+      } else {
+        if (this.last_selected === undefined) {
+          this.last_selected = ThreeJSData.getAttribsForTable(this.tab_map[currentTab]).ents[0];
+        }
+        s.clear();
+        if (this.current_selected < this.last_selected) { // select upper row
+          attrib_table_ents.filter(ents => ents > this.current_selected && ents < this.last_selected).forEach(item => {
+            s.set(item, item);
+          });
+          s.set(this.current_selected, this.current_selected);
+          s.set(this.last_selected, this.last_selected);
+        } else if (this.current_selected > this.last_selected) { // select lower row
+          attrib_table_ents.filter(ents => ents < this.current_selected && ents > this.last_selected).forEach(item => {
+            s.set(item, item);
+          });
+          s.set(this.current_selected, this.current_selected);
+          s.set(this.last_selected, this.last_selected);
+        }
+      }
     }
 
     const ent_type = ent_id.substr(0, 2);

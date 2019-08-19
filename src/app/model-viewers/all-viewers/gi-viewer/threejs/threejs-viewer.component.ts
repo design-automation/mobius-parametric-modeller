@@ -291,10 +291,10 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this.dataService.switch_page = true;
     }
 
-    attrTableSelect(attrib: { action: string, ent_type: string, id: number | number[] }) {
+    attrTableSelect(attrib: { action: string, ent_type: string, id: number | number[] }, flowchart = false) {
         sessionStorage.setItem('mpm_changetab', JSON.stringify(false));
         if (attrib.action === 'select') {
-            this.unselectAll();
+            if (!flowchart) {this.unselectAll(); } // If select from Flowchart, don't unselect all.
             switch (attrib.ent_type) {
                 case EEntTypeStr[EEntType.POSI]:
                     if (typeof attrib.id === 'number') {
@@ -468,7 +468,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                         selected.forEach(s => {
                             const type = EEntTypeStr[s[0]], id = Number(s[1]);
                             if (this.model.geom.query.entExists(s[0], id)) {
-                                this.attrTableSelect({ action: 'select', ent_type: type, id: id });
+                                this.attrTableSelect({ action: 'select', ent_type: type, id: id }, true);
                             }
                         });
 

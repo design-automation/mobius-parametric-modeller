@@ -100,7 +100,7 @@ export class AttributeComponent implements OnChanges, DoCheck {
         let index = 0;
         for (; index < l; index++) {
           const p = paginators[index];
-          p.className = 'mat-paginator hide';
+          p.className = 'mat-paginator '; // hide
         }
       } else {
         let index = 0;

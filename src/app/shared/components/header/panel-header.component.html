@@ -168,6 +168,8 @@
             <button class='loadBackupButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backup.split('_-_')[0]}}</button>
             <button class='deleteBackupButton' (click)="deleteBackup($event, backup)"><mat-icon>delete_outline</mat-icon></button>
         </div>
+        <button id='addBackupButton' onclick="document.getElementById('addBackup').click();">+</button>
+        <input id='addBackup' type="file" (change)="addBackup()" style=" display: none;"/>
     </div>
     <div class='settingsDialog' *ngIf='checkDialog("settings")'>
         <p>Mobius Settings:</p>

@@ -305,6 +305,14 @@ button.mat-menu-item:hover{
             color: $color1;
             display: inline-block;
         }
+        #addBackupButton{
+            width: 34px;
+            margin-bottom: 2px;
+            padding: 0px 5px 0px 5px;
+            background-color: $color5;
+            color: $color1;
+            display: inline-block;
+        }
     }
     .settingsDialog{
         font-family: 12px sans-serif;

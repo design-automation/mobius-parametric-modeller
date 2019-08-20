@@ -275,11 +275,16 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             const pastingPlace = node.state.procedure[node.state.procedure.length - 1];
             const toBePasted = this.dataService.copiedProd;
             const redoActions = [];
+            let notified = false;
             if (pastingPlace === undefined) {
                 for (let i = 0; i < toBePasted.length; i++) {
                     if (toBePasted[i].type === ProcedureTypes.Blank ||
                         toBePasted[i].type === ProcedureTypes.Return) { continue; }
-                    NodeUtils.paste_procedure(node, toBePasted[i]);
+                    const check = NodeUtils.paste_procedure(node, toBePasted[i]);
+                    if (!check) {
+                        this.dataService.notifyMessage('Error: Unable to paste procedure');
+                        notified = true;
+                    }
                     redoActions.unshift({'type': 'add',
                         'parent': this.dataService.node.state.procedure[0].parent, 'prod': this.dataService.node.state.procedure[0]});
                     node.state.procedure[0].selected = false;
@@ -289,7 +294,11 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 for (let i = toBePasted.length - 1; i >= 0; i --) {
                     if (toBePasted[i].type === ProcedureTypes.Blank ||
                         toBePasted[i].type === ProcedureTypes.Return) { continue; }
-                    NodeUtils.paste_procedure(node, toBePasted[i]);
+                    const check = NodeUtils.paste_procedure(node, toBePasted[i]);
+                    if (!check) {
+                        this.dataService.notifyMessage('Error: Unable to paste procedure');
+                        notified = true;
+                    }
                     redoActions.unshift({'type': 'add',
                         'parent': this.dataService.node.state.procedure[0].parent, 'prod': this.dataService.node.state.procedure[0]});
 
@@ -304,7 +313,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             // toBePasted = undefined;
             // this.notificationMessage = `Pasted ${toBePasted.length} Procedures`;
             // this.notificationTrigger = !this.notificationTrigger;
-            this.dataService.notifyMessage(`Pasted ${toBePasted.length} Procedures`);
+            if (!notified) {
+                this.dataService.notifyMessage(`Pasted ${toBePasted.length} Procedures`);
+            }
         }
     }
     @HostListener('window:keydown', ['$event'])
@@ -312,7 +323,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         if (!this.disableInput && (event.key === 'Control' || event.key === 'Shift' || event.key === 'Meta')) {
             this.disableInput = true;
         } else if (event.key === 'z' && (event.ctrlKey || event.metaKey)) {
-            event.preventDefault();
+            if (document.activeElement.nodeName !== 'INPUT') {
+                event.preventDefault();
+            }
         }
     }
 
@@ -363,6 +376,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         if (event.key === 'Delete') {
             this.deleteSelectedProds();
         } else if (event.key.toLowerCase() === 'z' && (event.ctrlKey === true || event.metaKey === true)) {
+            if (document.activeElement.nodeName === 'INPUT') {
+                return;
+            }
             let actions: any;
             // if ((<HTMLElement>event.target).nodeName === 'INPUT') {return; }
             if (event.shiftKey) {

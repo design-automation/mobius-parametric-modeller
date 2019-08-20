@@ -8,7 +8,7 @@ import { distance } from '@libs/geom/distance';
  */
 export function importDae(obj_str: string): GIModel {
     const model: GIModel = new GIModel();
-    throw new Error("Not implemented");
+    throw new Error('Not implemented');
     return model;
 }
 

@@ -415,7 +415,7 @@ export class GIAttribMap {
     /**
      * Compare two values with a comparison operator, ==, !=, >, >=, <, <=
      * ~
-     * If the values are of different types, then false is returned. 
+     * If the values are of different types, then false is returned.
      * ~
      * For arrays, true is returned only if a pairwise comparison between the items in the two arrays all return true.
      * The two arrays must also be of equal length.

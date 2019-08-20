@@ -124,7 +124,7 @@ export class ToolsetComponent implements OnInit {
                     newArgs.push({name: arg.name, value: `null`, jsValue: `null`});
                     continue;
                 }
-            } 
+            }
             newArgs.push({name: arg.name, value: arg.value});
         }
         fnData.args = newArgs;

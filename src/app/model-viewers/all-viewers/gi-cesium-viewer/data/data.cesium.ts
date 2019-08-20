@@ -302,12 +302,12 @@ export class DataCesium {
             // this._viewer.camera.viewBoundingSphere(sphere);
             // this._camera = [sphere, this._viewer.camera];
 
-            //if (!this._camera) {
+            // if (!this._camera) {
                 // set up the camera
                 const sphere = new Cesium.BoundingSphere(origin, 1e2);
                 this._viewer.camera.viewBoundingSphere(sphere);
                 this._camera = [sphere, this._viewer.camera];
-            //}
+            // }
 
 
             const extent = new Cesium.Rectangle.fromDegrees(

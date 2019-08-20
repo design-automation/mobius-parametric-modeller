@@ -102,7 +102,7 @@ export function triangulate(coords: Txyz[], holes?: Txyz[][]): number[][] {
     coords_v_2d.forEach(coord_v_2d => flat_vert_xys.push(coord_v_2d.x, coord_v_2d.y));
 
     // hole vertices uing EARCUT
-    // holes is an array of hole indices if any (e.g. [5, 8] for a 12-vertex input would mean 
+    // holes is an array of hole indices if any (e.g. [5, 8] for a 12-vertex input would mean
     // one hole with vertices 5–7 and another with 8–11).
     const hole_indices: number[] = [];
     let index_counter: number = coords_v.length;

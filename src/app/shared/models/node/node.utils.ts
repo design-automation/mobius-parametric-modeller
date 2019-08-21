@@ -73,6 +73,7 @@ export abstract class NodeUtils {
                     selectGeom: false,
                     hasError: false
                 };
+
                 for (const arg of newReturn.args) {
                     arg.value = '';
                     arg.jsValue = '';

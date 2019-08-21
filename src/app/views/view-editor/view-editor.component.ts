@@ -9,6 +9,7 @@ import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
 import { nodeChildrenAsMap } from '@angular/router/src/utils/tree';
 import { checkNodeValidity } from '@shared/parser';
 import { DataOutputService } from '@shared/services/dataOutput.service';
+import { SaveFileComponent } from '@shared/components/file';
 
 @Component({
   selector: 'view-editor',
@@ -212,12 +213,13 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
 
         const temp = node.state.procedure.slice();
-        this.dataService.copiedProd = [];
-        NodeUtils.rearrangeProcedures(this.dataService.copiedProd, temp, node.procedure);
-
+        const copiedProds = [];
+        NodeUtils.rearrangeProcedures(copiedProds, temp, node.procedure);
+        SaveFileComponent.clearResolvedValue(copiedProds);
+        localStorage.setItem('mobius_copied_procedures', circularJSON.stringify(copiedProds));
         // this.notificationMessage = `Copied ${this.dataService.copiedProd.length} Procedures`;
         // this.notificationTrigger = !this.notificationTrigger;
-        this.dataService.notifyMessage(`Copied ${this.dataService.copiedProd.length} Procedures`);
+        this.dataService.notifyMessage(`Copied ${copiedProds.length} Procedures`);
     }
 
     // cut selected procedures
@@ -235,12 +237,13 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
 
         const temp = node.state.procedure.slice();
-        this.dataService.copiedProd = [];
-        NodeUtils.rearrangeProcedures(this.dataService.copiedProd, temp, node.procedure);
+        const copiedProds = [];
+        NodeUtils.rearrangeProcedures(copiedProds, temp, node.procedure);
+        SaveFileComponent.clearResolvedValue(copiedProds);
 
         let parentArray: IProcedure[];
         const redoActions = [];
-        for (const prod of this.dataService.copiedProd) {
+        for (const prod of copiedProds) {
             if (prod.type === ProcedureTypes.Blank) { continue; }
             if (prod.parent) {
                 parentArray = prod.parent.children;
@@ -254,6 +257,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 }
             }
         }
+        localStorage.setItem('mobius_copied_procedures', circularJSON.stringify(copiedProds));
         this.dataService.registerEdtAction(redoActions);
         checkNodeValidity(this.dataService.node);
 
@@ -261,19 +265,23 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
         // this.notificationMessage = `Cut ${this.dataService.copiedProd.length} Procedures`;
         // this.notificationTrigger = !this.notificationTrigger;
-        this.dataService.notifyMessage(`Cut ${this.dataService.copiedProd.length} Procedures`);
+        this.dataService.notifyMessage(`Cut ${copiedProds.length} Procedures`);
     }
 
     // paste copied procedures
     pasteProd() {
         const node = this.dataService.node;
         if (this.copyCheck
-        && this.dataService.copiedProd
         && document.activeElement.nodeName !== 'INPUT'
         && document.activeElement.nodeName !== 'TEXTAREA'
         && this.router.url === '/editor') {
+            const copiedProds = localStorage.getItem('mobius_copied_procedures');
+            if (!copiedProds) {
+                this.dataService.notifyMessage('Error: No saved procedure to be pasted!');
+                return;
+            }
             const pastingPlace = node.state.procedure[node.state.procedure.length - 1];
-            const toBePasted = this.dataService.copiedProd;
+            const toBePasted = circularJSON.parse(copiedProds);
             const redoActions = [];
             let notified = false;
             if (pastingPlace === undefined) {

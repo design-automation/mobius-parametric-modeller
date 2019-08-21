@@ -119,42 +119,76 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
 
         // copy: copy node
         this.copySub = this.copyListener.subscribe(val => {
-            // || document.activeElement.tagName === 'TEXTAREA'
             if (!this.listenerActive) { return; }
-            const node = this.dataService.node;
-            if (node.type === '') {
-                const saved = {
+            const saved = [];
+            const copied = [];
+            let message = '';
+            for (const nodeIndex of this.dataService.flowchart.meta.selected_nodes) {
+                const node = this.dataService.flowchart.nodes[nodeIndex];
+                if (node.type !== '') {
+                    message += 'Cannot copy Start/End nodes.<br>';
+                    continue;
+                }
+                saved.push({
                     'input': node.input,
                     'output': node.output,
                     'model': node.model
-                };
+                });
                 node.input = undefined;
                 node.output = undefined;
                 node.model = undefined;
-                this.copied = circularJSON.stringify(node);
-
-                node.input = saved.input;
-                node.output = saved.output;
-                node.model = saved.model;
-
-                // this.notificationMessage = `Copied Last Selected Node`;
-                // this.notificationTrigger = !this.notificationTrigger;
-                this.dataService.notifyMessage(`Copied Last Selected Node`);
+                copied.push(node);
             }
+            localStorage.setItem('mobius_copied_nodes', circularJSON.stringify(copied));
+
+            for (const nodeIndex of this.dataService.flowchart.meta.selected_nodes) {
+                const node = this.dataService.flowchart.nodes[nodeIndex];
+                if (node.type !== '') { continue; }
+                const savedData = saved.shift();
+                node.input = savedData.input;
+                node.output = savedData.output;
+                node.model = savedData.model;
+            }
+            this.dataService.notifyMessage(message + `${copied.length} Nodes copied.`);
+
+            // if (!this.listenerActive) { return; }
+            // const node = this.dataService.node;
+            // if (node.type === '') {
+            //     const saved = {
+            //         'input': node.input,
+            //         'output': node.output,
+            //         'model': node.model
+            //     };
+            //     node.input = undefined;
+            //     node.output = undefined;
+            //     node.model = undefined;
+            //     this.copied = circularJSON.stringify(node);
+
+            //     node.input = saved.input;
+            //     node.output = saved.output;
+            //     node.model = saved.model;
+
+            //     this.dataService.notifyMessage(`Copied Last Selected Node`);
+            // }
         });
 
         // paste: paste copied node
         this.pasteSub = this.pasteListener.subscribe((val: ClipboardEvent) => {
             //
             if (!this.listenerActive || document.activeElement.tagName === 'TEXTAREA' || this.router.url !== '/flowchart') { return; }
-            if (this.copied) {
-                event.preventDefault();
-                const newNode = <INode>circularJSON.parse(this.copied);
-                const pt = this.canvas.createSVGPoint();
-                pt.x = 20;
-                pt.y = 100;
+            const copiedNodes = circularJSON.parse(localStorage.getItem('mobius_copied_nodes'));
+            if (copiedNodes.length === 0) {
+                this.dataService.notifyMessage(`Error: No saved nodes to be pasted!`);
+                return;
+            }
+            event.preventDefault();
+            const pt = this.canvas.createSVGPoint();
+            pt.x = 20;
+            pt.y = 100;
+            for (const newNode of copiedNodes) {
 
                 const svgP = this.convertCoord(pt);
+                pt.y += 80;
 
                 NodeUtils.updateNode(newNode, svgP);
                 newNode.enabled = false;
@@ -168,13 +202,13 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
 
                 // this.notificationMessage = `Pasted Node`;
                 // this.notificationTrigger = !this.notificationTrigger;
-                this.dataService.notifyMessage(`Pasted Node`);
 
                 // ViewFlowchartComponent.enableNode(newNode);
                 // FlowchartUtils.orderNodes(this.dataService.flowchart);
 
-                this.dataService.registerFlwAction({'type': 'add', 'nodes': [newNode]});
             }
+            this.dataService.notifyMessage(`Pasted ${copiedNodes.length} nodes`);
+            this.dataService.registerFlwAction({'type': 'add', 'nodes': copiedNodes});
         });
 
         // delete: delete selected edge(s)

@@ -18,6 +18,9 @@ export function checkMobFile(file: any) {
             node.hasError = true;
             hasError = true;
         }
+        if (node.type === 'end') {
+            node.procedure[node.procedure.length - 1].ID = 'Return';
+        }
     }
     if (hasError) {
         alert('The flowchart contains functions that do not exist in the current version of Mobius');

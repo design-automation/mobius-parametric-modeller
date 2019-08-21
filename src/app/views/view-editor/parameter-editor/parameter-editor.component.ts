@@ -100,7 +100,10 @@ export class ParameterEditorComponent implements OnDestroy {
 
     // modify argument input: check if input is valid
     argMod(prod: IProcedure) {
-        if (!prod.args[1].value) { return; }
+        if (!prod.args[1].value) {
+            prod.args[1].jsValue = undefined;
+            return;
+        }
         modifyArgument(prod, 1, this.node.procedure);
         if (prod.args[1].invalidVar) {
             this.dataService.notifyMessage(prod.args[1].invalidVar);

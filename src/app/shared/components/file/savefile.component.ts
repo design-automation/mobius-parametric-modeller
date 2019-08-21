@@ -265,11 +265,6 @@ export class SaveFileComponent {
                 node.output.value = undefined;
             }
             SaveFileComponent.clearResolvedValue(node.procedure);
-            for (const prod of node.procedure) {
-                if (prod.hasOwnProperty('resolvedValue')) {
-                    prod.resolvedValue = undefined;
-                }
-            }
         }
 
         // make a copy of the flowchart

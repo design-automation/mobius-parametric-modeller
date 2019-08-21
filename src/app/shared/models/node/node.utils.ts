@@ -58,7 +58,7 @@ export abstract class NodeUtils {
             if (i.module !== returnMeta[0]) { continue; }
             for ( const j of i.functions) {
                 if (j.name !== returnMeta[1]) { continue; }
-                const newReturn = {type: 11, ID: '',
+                const newReturn = {type: 11, ID: 'Return',
                 parent: undefined,
                 meta: {name: '', module: ''},
                 children: undefined,

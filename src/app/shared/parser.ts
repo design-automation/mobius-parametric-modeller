@@ -188,7 +188,6 @@ export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProd
 
     procedure.args[argIndex].value = varResult.str;
     procedure.args[argIndex].jsValue = varResult.jsStr;
-
     varResult = checkValidVar(varResult.vars, procedure, nodeProdList);
     if (!varResult.error) {
         procedure.args[argIndex].usedVars = varResult.vars;

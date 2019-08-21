@@ -5,7 +5,7 @@
 	"flags": {},
 	"children": [
 		{
-			"id": 3259,
+			"id": 3197,
 			"name": "\"core/_parameterTypes\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -16,7 +16,7 @@
 			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/_parameterTypes.ts",
 			"children": [
 				{
-					"id": 3280,
+					"id": 3218,
 					"name": "_varString",
 					"kind": 32,
 					"kindString": "Variable",
@@ -39,7 +39,7 @@
 					"defaultValue": " `\r\nPI = Math.PI;\r\nXY = __modules__._constants.XY;\r\nYZ = __modules__._constants.YZ;\r\nZX = __modules__._constants.ZX;\r\nYX = __modules__._constants.YX;\r\nZY = __modules__._constants.ZY;\r\nXZ = __modules__._constants.XZ;\r\napprox = __modules__._util.approx;\r\nmin = __modules__._math.min;\r\nmax = __modules__._math.max;\r\npow = Math.pow;\r\nsqrt = Math.sqrt;\r\nexp = Math.exp;\r\nlog = Math.log;\r\nround = Math.round;\r\nceil = Math.ceil;\r\nfloor = Math.floor;\r\nabs = Math.abs;\r\nsin = Math.sin;\r\nasin = Math.asin;\r\nsinh = Math.sinh;\r\nasinh = Math.asinh;\r\ncos = Math.cos;\r\nacos = Math.acos;\r\ncosh = Math.cosh;\r\nacosh = Math.acosh;\r\ntan = Math.tan;\r\natan = Math.atan;\r\ntanh = Math.tanh;\r\natanh = Math.atanh;\r\natan2 = Math.atan2;\r\nboolean = __modules__._mathjs.boolean;\r\nnumber = __modules__._mathjs.number;\r\nstring = __modules__._mathjs.string;\r\nmad = __modules__._mathjs.mad;\r\nmean = __modules__._mathjs.mean;\r\nmedian = __modules__._mathjs.median;\r\nmode = __modules__._mathjs.mode;\r\nprod = __modules__._mathjs.prod;\r\nstd = __modules__._mathjs.std;\r\nvari = __modules__._mathjs.var;\r\nsum = __modules__._mathjs.sum;\r\nhypot = __modules__._mathjs.hypot;\r\nnorm = __modules__._mathjs.norm;\r\nmod = __modules__._mathjs.mod;\r\nsquare = __modules__._mathjs.square;\r\ncube = __modules__._mathjs.cube;\r\ndistance = __modules__._calc.distance;\r\nintersect = __modules__._calc.intersect;\r\nproject = __modules__._calc.project;\r\nrange = __modules__._list.range;\r\nisList = __modules__._list.isList;\r\nlen = __modules__._list.listLen;\r\nlistLen = __modules__._list.listLen;\r\nlistCount = __modules__._list.listCount;\r\nlistCopy = __modules__._list.listCopy;\r\nlistLast = __modules__._list.listLast;\r\nlistGet = __modules__._list.listGet;\r\nlistFind = __modules__._list.listFind;\r\nlistHas = __modules__._list.listHas;\r\nlistJoin = __modules__._list.listJoin;\r\nlistFlat = __modules__._list.listFlat;\r\nlistSlice = __modules__._list.listSlice;\r\nlistZip = __modules__._list.listZip;\r\nlistZip2 = __modules__._list.listZip2;\r\nsetMake = __modules__._set.setMake;\r\nsetUni = __modules__._set.setUni;\r\nsetInt = __modules__._set.setInt;\r\nsetDif = __modules__._set.setDif;\r\nlength = __modules__._list.length;\r\nshuffle = __modules__._list.shuffle;\r\nconcat = __modules__._list.concat;\r\nzip = __modules__._list.zip;\r\nzip2 = __modules__._list.zip2;\r\nvecAdd = __modules__._vec.vecAdd;\r\nvecSub = __modules__._vec.vecSub;\r\nvecDiv = __modules__._vec.vecDiv;\r\nvecMult = __modules__._vec.vecMult;\r\nvecLen = __modules__._vec.vecLen;\r\nvecSetLen = __modules__._vec.vecSetLen;\r\nvecNorm = __modules__._vec.vecNorm;\r\nvecRev = __modules__._vec.vecRev;\r\nvecFromTo = __modules__._vec.vecFromTo;\r\nvecAng = __modules__._vec.vecAng;\r\nvecAng2 = __modules__._vec.vecAng2;\r\nvecDot = __modules__._vec.vecDot;\r\nvecCross = __modules__._vec.vecCross;\r\nvecEqual = __modules__._vec.vecEqual;\r\ncolFalse = __modules__._colors.colFalse;\r\nradToDeg = __modules__._conversion.radToDeg;\r\ndegToRad = __modules__._conversion.degToRad;\r\nrand = __modules__._rand.rand;\r\nrandInt = __modules__._rand.randInt;\r\nrandPick = __modules__._rand.randPick;\r\nsetattr = __modules__._model.__setAttrib__;\r\ngetattr = __modules__._model.__getAttrib__;\r\n`"
 				},
 				{
-					"id": 3260,
+					"id": 3198,
 					"name": "_parameterTypes",
 					"kind": 2097152,
 					"kindString": "Object literal",
@@ -50,7 +50,7 @@
 					},
 					"children": [
 						{
-							"id": 3270,
+							"id": 3208,
 							"name": "addData",
 							"kind": 32,
 							"kindString": "Variable",
@@ -72,7 +72,7 @@
 							"defaultValue": "\"_model.addGiData\""
 						},
 						{
-							"id": 3264,
+							"id": 3202,
 							"name": "console",
 							"kind": 32,
 							"kindString": "Variable",
@@ -94,7 +94,7 @@
 							"defaultValue": "\"__console__\""
 						},
 						{
-							"id": 3261,
+							"id": 3199,
 							"name": "constList",
 							"kind": 32,
 							"kindString": "Variable",
@@ -116,7 +116,7 @@
 							"defaultValue": "\"__constList__\""
 						},
 						{
-							"id": 3265,
+							"id": 3203,
 							"name": "fileName",
 							"kind": 32,
 							"kindString": "Variable",
@@ -138,7 +138,7 @@
 							"defaultValue": "\"__fileName__\""
 						},
 						{
-							"id": 3274,
+							"id": 3212,
 							"name": "getattrib",
 							"kind": 32,
 							"kindString": "Variable",
@@ -160,7 +160,7 @@
 							"defaultValue": "\"attrib.Get\""
 						},
 						{
-							"id": 3263,
+							"id": 3201,
 							"name": "input",
 							"kind": 32,
 							"kindString": "Variable",
@@ -182,7 +182,7 @@
 							"defaultValue": "\"__input__\""
 						},
 						{
-							"id": 3268,
+							"id": 3206,
 							"name": "merge",
 							"kind": 32,
 							"kindString": "Variable",
@@ -204,7 +204,7 @@
 							"defaultValue": "\"_model.__merge__\""
 						},
 						{
-							"id": 3269,
+							"id": 3207,
 							"name": "mergeFn",
 							"kind": 32,
 							"kindString": "Variable",
@@ -227,7 +227,7 @@
 							"defaultValue": " __merge__"
 						},
 						{
-							"id": 3262,
+							"id": 3200,
 							"name": "model",
 							"kind": 32,
 							"kindString": "Variable",
@@ -249,7 +249,7 @@
 							"defaultValue": "\"__model__\""
 						},
 						{
-							"id": 3266,
+							"id": 3204,
 							"name": "new",
 							"kind": 32,
 							"kindString": "Variable",
@@ -271,7 +271,7 @@
 							"defaultValue": "\"_model.__new__\""
 						},
 						{
-							"id": 3267,
+							"id": 3205,
 							"name": "newFn",
 							"kind": 32,
 							"kindString": "Variable",
@@ -294,7 +294,7 @@
 							"defaultValue": " __new__"
 						},
 						{
-							"id": 3272,
+							"id": 3210,
 							"name": "postprocess",
 							"kind": 32,
 							"kindString": "Variable",
@@ -316,7 +316,7 @@
 							"defaultValue": "\"_model.__postprocess__\""
 						},
 						{
-							"id": 3271,
+							"id": 3209,
 							"name": "preprocess",
 							"kind": 32,
 							"kindString": "Variable",
@@ -338,7 +338,7 @@
 							"defaultValue": "\"_model.__preprocess__\""
 						},
 						{
-							"id": 3276,
+							"id": 3214,
 							"name": "queryFilter",
 							"kind": 32,
 							"kindString": "Variable",
@@ -360,7 +360,7 @@
 							"defaultValue": "\"query.Filter\""
 						},
 						{
-							"id": 3275,
+							"id": 3213,
 							"name": "queryGet",
 							"kind": 32,
 							"kindString": "Variable",
@@ -382,7 +382,7 @@
 							"defaultValue": "\"query.Get\""
 						},
 						{
-							"id": 3278,
+							"id": 3216,
 							"name": "return",
 							"kind": 32,
 							"kindString": "Variable",
@@ -404,7 +404,7 @@
 							"defaultValue": "\"_Output.Return\""
 						},
 						{
-							"id": 3277,
+							"id": 3215,
 							"name": "select",
 							"kind": 32,
 							"kindString": "Variable",
@@ -426,7 +426,7 @@
 							"defaultValue": "\"_model.__select__\""
 						},
 						{
-							"id": 3273,
+							"id": 3211,
 							"name": "setattrib",
 							"kind": 32,
 							"kindString": "Variable",
@@ -448,7 +448,7 @@
 							"defaultValue": "\"attrib.Set\""
 						},
 						{
-							"id": 3279,
+							"id": 3217,
 							"name": "urlFunctions",
 							"kind": 32,
 							"kindString": "Variable",
@@ -478,25 +478,25 @@
 							"title": "Variables",
 							"kind": 32,
 							"children": [
-								3270,
-								3264,
-								3261,
-								3265,
-								3274,
-								3263,
-								3268,
-								3269,
-								3262,
-								3266,
-								3267,
-								3272,
-								3271,
-								3276,
-								3275,
-								3278,
-								3277,
-								3273,
-								3279
+								3208,
+								3202,
+								3199,
+								3203,
+								3212,
+								3201,
+								3206,
+								3207,
+								3200,
+								3204,
+								3205,
+								3210,
+								3209,
+								3214,
+								3213,
+								3216,
+								3215,
+								3211,
+								3217
 							]
 						}
 					],
@@ -518,14 +518,14 @@
 					"title": "Variables",
 					"kind": 32,
 					"children": [
-						3280
+						3218
 					]
 				},
 				{
 					"title": "Object literals",
 					"kind": 2097152,
 					"children": [
-						3260
+						3198
 					]
 				}
 			],
@@ -538,7 +538,7 @@
 			]
 		},
 		{
-			"id": 3142,
+			"id": 3080,
 			"name": "\"core/inline/_calc\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -549,7 +549,7 @@
 			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/inline/_calc.ts",
 			"children": [
 				{
-					"id": 3145,
+					"id": 3083,
 					"name": "distance",
 					"kind": 32,
 					"kindString": "Variable",
@@ -573,7 +573,7 @@
 					"defaultValue": " dist.distance"
 				},
 				{
-					"id": 3143,
+					"id": 3081,
 					"name": "intersect",
 					"kind": 32,
 					"kindString": "Variable",
@@ -592,12 +592,12 @@
 					"type": {
 						"type": "reference",
 						"name": "intersect",
-						"id": 3134
+						"id": 3072
 					},
 					"defaultValue": " isect.intersect"
 				},
 				{
-					"id": 3144,
+					"id": 3082,
 					"name": "project",
 					"kind": 32,
 					"kindString": "Variable",
@@ -616,7 +616,7 @@
 					"type": {
 						"type": "reference",
 						"name": "project",
-						"id": 3138
+						"id": 3076
 					},
 					"defaultValue": " isect.project"
 				}
@@ -626,9 +626,9 @@
 					"title": "Variables",
 					"kind": 32,
 					"children": [
-						3145,
-						3143,
-						3144
+						3083,
+						3081,
+						3082
 					]
 				}
 			],
@@ -641,7 +641,7 @@
 			]
 		},
 		{
-			"id": 3227,
+			"id": 3165,
 			"name": "\"core/inline/_colors\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -652,7 +652,7 @@
 			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/inline/_colors.ts",
 			"children": [
 				{
-					"id": 3228,
+					"id": 3166,
 					"name": "false_col",
 					"kind": 32,
 					"kindString": "Variable",
@@ -680,7 +680,7 @@
 					"defaultValue": " ch.scale(['blue', 'cyan', 'green', 'yellow', 'red'])"
 				},
 				{
-					"id": 3229,
+					"id": 3167,
 					"name": "colFalse",
 					"kind": 64,
 					"kindString": "Function",
@@ -690,14 +690,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3230,
+							"id": 3168,
 							"name": "colFalse",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3231,
+									"id": 3169,
 									"name": "val",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -708,7 +708,7 @@
 									}
 								},
 								{
-									"id": 3232,
+									"id": 3170,
 									"name": "min",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -719,7 +719,7 @@
 									}
 								},
 								{
-									"id": 3233,
+									"id": 3171,
 									"name": "max",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -751,14 +751,14 @@
 					"title": "Variables",
 					"kind": 32,
 					"children": [
-						3228
+						3166
 					]
 				},
 				{
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						3229
+						3167
 					]
 				}
 			],
@@ -771,7 +771,7 @@
 			]
 		},
 		{
-			"id": 3241,
+			"id": 3179,
 			"name": "\"core/inline/_constants\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -782,7 +782,7 @@
 			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/inline/_constants.ts",
 			"children": [
 				{
-					"id": 3242,
+					"id": 3180,
 					"name": "XY",
 					"kind": 32,
 					"kindString": "Variable",
@@ -857,7 +857,7 @@
 					"defaultValue": " XYPLANE"
 				},
 				{
-					"id": 3247,
+					"id": 3185,
 					"name": "XZ",
 					"kind": 32,
 					"kindString": "Variable",
@@ -932,7 +932,7 @@
 					"defaultValue": " XZPLANE"
 				},
 				{
-					"id": 3245,
+					"id": 3183,
 					"name": "YX",
 					"kind": 32,
 					"kindString": "Variable",
@@ -1007,7 +1007,7 @@
 					"defaultValue": " YXPLANE"
 				},
 				{
-					"id": 3243,
+					"id": 3181,
 					"name": "YZ",
 					"kind": 32,
 					"kindString": "Variable",
@@ -1082,7 +1082,7 @@
 					"defaultValue": " YZPLANE"
 				},
 				{
-					"id": 3244,
+					"id": 3182,
 					"name": "ZX",
 					"kind": 32,
 					"kindString": "Variable",
@@ -1157,7 +1157,7 @@
 					"defaultValue": " ZXPLANE"
 				},
 				{
-					"id": 3246,
+					"id": 3184,
 					"name": "ZY",
 					"kind": 32,
 					"kindString": "Variable",
@@ -1237,12 +1237,12 @@
 					"title": "Variables",
 					"kind": 32,
 					"children": [
-						3242,
-						3247,
-						3245,
-						3243,
-						3244,
-						3246
+						3180,
+						3185,
+						3183,
+						3181,
+						3182,
+						3184
 					]
 				}
 			],
@@ -1255,7 +1255,7 @@
 			]
 		},
 		{
-			"id": 3234,
+			"id": 3172,
 			"name": "\"core/inline/_conversion\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -1266,7 +1266,7 @@
 			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/inline/_conversion.ts",
 			"children": [
 				{
-					"id": 3238,
+					"id": 3176,
 					"name": "degToRad",
 					"kind": 64,
 					"kindString": "Function",
@@ -1276,14 +1276,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3239,
+							"id": 3177,
 							"name": "degToRad",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3240,
+									"id": 3178,
 									"name": "deg",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1309,7 +1309,7 @@
 					]
 				},
 				{
-					"id": 3235,
+					"id": 3173,
 					"name": "radToDeg",
 					"kind": 64,
 					"kindString": "Function",
@@ -1319,14 +1319,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3236,
+							"id": 3174,
 							"name": "radToDeg",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3237,
+									"id": 3175,
 									"name": "rad",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1357,8 +1357,8 @@
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						3238,
-						3235
+						3176,
+						3173
 					]
 				}
 			],
@@ -1371,7 +1371,7 @@
 			]
 		},
 		{
-			"id": 3146,
+			"id": 3084,
 			"name": "\"core/inline/_list\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -1382,7 +1382,7 @@
 			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/inline/_list.ts",
 			"children": [
 				{
-					"id": 3152,
+					"id": 3090,
 					"name": "isList",
 					"kind": 64,
 					"kindString": "Function",
@@ -1392,14 +1392,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3153,
+							"id": 3091,
 							"name": "isList",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3154,
+									"id": 3092,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1425,7 +1425,7 @@
 					]
 				},
 				{
-					"id": 3208,
+					"id": 3146,
 					"name": "length",
 					"kind": 64,
 					"kindString": "Function",
@@ -1435,14 +1435,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3209,
+							"id": 3147,
 							"name": "length",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3210,
+									"id": 3148,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1471,7 +1471,7 @@
 					]
 				},
 				{
-					"id": 3162,
+					"id": 3100,
 					"name": "listCopy",
 					"kind": 64,
 					"kindString": "Function",
@@ -1481,14 +1481,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3163,
+							"id": 3101,
 							"name": "listCopy",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3164,
+									"id": 3102,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1520,7 +1520,7 @@
 					]
 				},
 				{
-					"id": 3158,
+					"id": 3096,
 					"name": "listCount",
 					"kind": 64,
 					"kindString": "Function",
@@ -1530,14 +1530,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3159,
+							"id": 3097,
 							"name": "listCount",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3160,
+									"id": 3098,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1551,7 +1551,7 @@
 									}
 								},
 								{
-									"id": 3161,
+									"id": 3099,
 									"name": "val",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1577,7 +1577,7 @@
 					]
 				},
 				{
-					"id": 3172,
+					"id": 3110,
 					"name": "listFind",
 					"kind": 64,
 					"kindString": "Function",
@@ -1587,14 +1587,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3173,
+							"id": 3111,
 							"name": "listFind",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3174,
+									"id": 3112,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1608,7 +1608,7 @@
 									}
 								},
 								{
-									"id": 3175,
+									"id": 3113,
 									"name": "val",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1634,7 +1634,7 @@
 					]
 				},
 				{
-					"id": 3184,
+					"id": 3122,
 					"name": "listFlat",
 					"kind": 64,
 					"kindString": "Function",
@@ -1644,14 +1644,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3185,
+							"id": 3123,
 							"name": "listFlat",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3186,
+									"id": 3124,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1665,7 +1665,7 @@
 									}
 								},
 								{
-									"id": 3187,
+									"id": 3125,
 									"name": "depth",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1696,7 +1696,7 @@
 					]
 				},
 				{
-					"id": 3168,
+					"id": 3106,
 					"name": "listGet",
 					"kind": 64,
 					"kindString": "Function",
@@ -1706,14 +1706,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3169,
+							"id": 3107,
 							"name": "listGet",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3170,
+									"id": 3108,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1727,7 +1727,7 @@
 									}
 								},
 								{
-									"id": 3171,
+									"id": 3109,
 									"name": "index",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1777,7 +1777,7 @@
 					]
 				},
 				{
-					"id": 3176,
+					"id": 3114,
 					"name": "listHas",
 					"kind": 64,
 					"kindString": "Function",
@@ -1787,14 +1787,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3177,
+							"id": 3115,
 							"name": "listHas",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3178,
+									"id": 3116,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1808,7 +1808,7 @@
 									}
 								},
 								{
-									"id": 3179,
+									"id": 3117,
 									"name": "val",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1834,7 +1834,7 @@
 					]
 				},
 				{
-					"id": 3180,
+					"id": 3118,
 					"name": "listJoin",
 					"kind": 64,
 					"kindString": "Function",
@@ -1844,14 +1844,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3181,
+							"id": 3119,
 							"name": "listJoin",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3182,
+									"id": 3120,
 									"name": "list1",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1865,7 +1865,7 @@
 									}
 								},
 								{
-									"id": 3183,
+									"id": 3121,
 									"name": "list2",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1897,7 +1897,7 @@
 					]
 				},
 				{
-					"id": 3165,
+					"id": 3103,
 					"name": "listLast",
 					"kind": 64,
 					"kindString": "Function",
@@ -1907,14 +1907,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3166,
+							"id": 3104,
 							"name": "listLast",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3167,
+									"id": 3105,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1943,7 +1943,7 @@
 					]
 				},
 				{
-					"id": 3155,
+					"id": 3093,
 					"name": "listLen",
 					"kind": 64,
 					"kindString": "Function",
@@ -1953,14 +1953,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3156,
+							"id": 3094,
 							"name": "listLen",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3157,
+									"id": 3095,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -1989,7 +1989,7 @@
 					]
 				},
 				{
-					"id": 3188,
+					"id": 3126,
 					"name": "listSlice",
 					"kind": 64,
 					"kindString": "Function",
@@ -1999,14 +1999,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3189,
+							"id": 3127,
 							"name": "listSlice",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3190,
+									"id": 3128,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2020,7 +2020,7 @@
 									}
 								},
 								{
-									"id": 3191,
+									"id": 3129,
 									"name": "start",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2031,7 +2031,7 @@
 									}
 								},
 								{
-									"id": 3192,
+									"id": 3130,
 									"name": "end",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2062,7 +2062,7 @@
 					]
 				},
 				{
-					"id": 3193,
+					"id": 3131,
 					"name": "listZip",
 					"kind": 64,
 					"kindString": "Function",
@@ -2072,14 +2072,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3194,
+							"id": 3132,
 							"name": "listZip",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3195,
+									"id": 3133,
 									"name": "lists",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2114,7 +2114,7 @@
 					]
 				},
 				{
-					"id": 3196,
+					"id": 3134,
 					"name": "listZip2",
 					"kind": 64,
 					"kindString": "Function",
@@ -2124,14 +2124,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3197,
+							"id": 3135,
 							"name": "listZip2",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3198,
+									"id": 3136,
 									"name": "lists",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2166,7 +2166,7 @@
 					]
 				},
 				{
-					"id": 3147,
+					"id": 3085,
 					"name": "range",
 					"kind": 64,
 					"kindString": "Function",
@@ -2176,14 +2176,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3148,
+							"id": 3086,
 							"name": "range",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3149,
+									"id": 3087,
 									"name": "start",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2194,7 +2194,7 @@
 									}
 								},
 								{
-									"id": 3150,
+									"id": 3088,
 									"name": "end",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2205,7 +2205,7 @@
 									}
 								},
 								{
-									"id": 3151,
+									"id": 3089,
 									"name": "step",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2236,7 +2236,7 @@
 					]
 				},
 				{
-					"id": 3199,
+					"id": 3137,
 					"name": "shuffle",
 					"kind": 64,
 					"kindString": "Function",
@@ -2246,14 +2246,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3200,
+							"id": 3138,
 							"name": "shuffle",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3201,
+									"id": 3139,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2285,7 +2285,7 @@
 					]
 				},
 				{
-					"id": 3202,
+					"id": 3140,
 					"name": "zip",
 					"kind": 64,
 					"kindString": "Function",
@@ -2295,14 +2295,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3203,
+							"id": 3141,
 							"name": "zip",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3204,
+									"id": 3142,
 									"name": "lists",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2337,7 +2337,7 @@
 					]
 				},
 				{
-					"id": 3205,
+					"id": 3143,
 					"name": "zip2",
 					"kind": 64,
 					"kindString": "Function",
@@ -2347,14 +2347,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3206,
+							"id": 3144,
 							"name": "zip2",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3207,
+									"id": 3145,
 									"name": "lists",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2394,24 +2394,24 @@
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						3152,
-						3208,
-						3162,
-						3158,
-						3172,
-						3184,
-						3168,
-						3176,
-						3180,
-						3165,
-						3155,
-						3188,
-						3193,
-						3196,
-						3147,
-						3199,
-						3202,
-						3205
+						3090,
+						3146,
+						3100,
+						3096,
+						3110,
+						3122,
+						3106,
+						3114,
+						3118,
+						3103,
+						3093,
+						3126,
+						3131,
+						3134,
+						3085,
+						3137,
+						3140,
+						3143
 					]
 				}
 			],
@@ -2424,7 +2424,7 @@
 			]
 		},
 		{
-			"id": 3085,
+			"id": 3023,
 			"name": "\"core/inline/_math\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -2435,7 +2435,7 @@
 			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/inline/_math.ts",
 			"children": [
 				{
-					"id": 3089,
+					"id": 3027,
 					"name": "max",
 					"kind": 64,
 					"kindString": "Function",
@@ -2445,14 +2445,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3090,
+							"id": 3028,
 							"name": "max",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3091,
+									"id": 3029,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2478,7 +2478,7 @@
 					]
 				},
 				{
-					"id": 3086,
+					"id": 3024,
 					"name": "min",
 					"kind": 64,
 					"kindString": "Function",
@@ -2488,14 +2488,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3087,
+							"id": 3025,
 							"name": "min",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3088,
+									"id": 3026,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -2526,8 +2526,8 @@
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						3089,
-						3086
+						3027,
+						3024
 					]
 				}
 			],
@@ -3072,7 +3072,7 @@
 			]
 		},
 		{
-			"id": 3092,
+			"id": 3030,
 			"name": "\"core/inline/_rand\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -3083,7 +3083,7 @@
 			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/inline/_rand.ts",
 			"children": [
 				{
-					"id": 3111,
+					"id": 3049,
 					"name": "_randShuffleWithSeed",
 					"kind": 64,
 					"kindString": "Function",
@@ -3092,14 +3092,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3112,
+							"id": 3050,
 							"name": "_randShuffleWithSeed",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3113,
+									"id": 3051,
 									"name": "arr",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3113,7 +3113,7 @@
 									}
 								},
 								{
-									"id": 3114,
+									"id": 3052,
 									"name": "s",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3144,7 +3144,7 @@
 					]
 				},
 				{
-					"id": 3108,
+					"id": 3046,
 					"name": "_randWithSeed",
 					"kind": 64,
 					"kindString": "Function",
@@ -3153,14 +3153,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3109,
+							"id": 3047,
 							"name": "_randWithSeed",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3110,
+									"id": 3048,
 									"name": "s",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3186,7 +3186,7 @@
 					]
 				},
 				{
-					"id": 3093,
+					"id": 3031,
 					"name": "rand",
 					"kind": 64,
 					"kindString": "Function",
@@ -3196,14 +3196,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3094,
+							"id": 3032,
 							"name": "rand",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3095,
+									"id": 3033,
 									"name": "min",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3214,7 +3214,7 @@
 									}
 								},
 								{
-									"id": 3096,
+									"id": 3034,
 									"name": "max",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3225,7 +3225,7 @@
 									}
 								},
 								{
-									"id": 3097,
+									"id": 3035,
 									"name": "seed",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3253,7 +3253,7 @@
 					]
 				},
 				{
-					"id": 3098,
+					"id": 3036,
 					"name": "randInt",
 					"kind": 64,
 					"kindString": "Function",
@@ -3263,14 +3263,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3099,
+							"id": 3037,
 							"name": "randInt",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3100,
+									"id": 3038,
 									"name": "min",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3281,7 +3281,7 @@
 									}
 								},
 								{
-									"id": 3101,
+									"id": 3039,
 									"name": "max",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3292,7 +3292,7 @@
 									}
 								},
 								{
-									"id": 3102,
+									"id": 3040,
 									"name": "seed",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3320,7 +3320,7 @@
 					]
 				},
 				{
-					"id": 3103,
+					"id": 3041,
 					"name": "randPick",
 					"kind": 64,
 					"kindString": "Function",
@@ -3330,14 +3330,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3104,
+							"id": 3042,
 							"name": "randPick",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3105,
+									"id": 3043,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3351,7 +3351,7 @@
 									}
 								},
 								{
-									"id": 3106,
+									"id": 3044,
 									"name": "num",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3362,7 +3362,7 @@
 									}
 								},
 								{
-									"id": 3107,
+									"id": 3045,
 									"name": "seed",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3398,11 +3398,11 @@
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						3111,
-						3108,
-						3093,
-						3098,
-						3103
+						3049,
+						3046,
+						3031,
+						3036,
+						3041
 					]
 				}
 			],
@@ -3415,7 +3415,7 @@
 			]
 		},
 		{
-			"id": 3211,
+			"id": 3149,
 			"name": "\"core/inline/_set\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -3426,7 +3426,7 @@
 			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/inline/_set.ts",
 			"children": [
 				{
-					"id": 3223,
+					"id": 3161,
 					"name": "setDif",
 					"kind": 64,
 					"kindString": "Function",
@@ -3436,14 +3436,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3224,
+							"id": 3162,
 							"name": "setDif",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3225,
+									"id": 3163,
 									"name": "list1",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3457,7 +3457,7 @@
 									}
 								},
 								{
-									"id": 3226,
+									"id": 3164,
 									"name": "list2",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3489,7 +3489,7 @@
 					]
 				},
 				{
-					"id": 3219,
+					"id": 3157,
 					"name": "setInt",
 					"kind": 64,
 					"kindString": "Function",
@@ -3499,14 +3499,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3220,
+							"id": 3158,
 							"name": "setInt",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3221,
+									"id": 3159,
 									"name": "list1",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3520,7 +3520,7 @@
 									}
 								},
 								{
-									"id": 3222,
+									"id": 3160,
 									"name": "list2",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3552,7 +3552,7 @@
 					]
 				},
 				{
-					"id": 3212,
+					"id": 3150,
 					"name": "setMake",
 					"kind": 64,
 					"kindString": "Function",
@@ -3562,14 +3562,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3213,
+							"id": 3151,
 							"name": "setMake",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3214,
+									"id": 3152,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3601,7 +3601,7 @@
 					]
 				},
 				{
-					"id": 3215,
+					"id": 3153,
 					"name": "setUni",
 					"kind": 64,
 					"kindString": "Function",
@@ -3611,14 +3611,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3216,
+							"id": 3154,
 							"name": "setUni",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3217,
+									"id": 3155,
 									"name": "list1",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3632,7 +3632,7 @@
 									}
 								},
 								{
-									"id": 3218,
+									"id": 3156,
 									"name": "list2",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3669,10 +3669,10 @@
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						3223,
-						3219,
-						3212,
-						3215
+						3161,
+						3157,
+						3150,
+						3153
 					]
 				}
 			],
@@ -3685,7 +3685,7 @@
 			]
 		},
 		{
-			"id": 3248,
+			"id": 3186,
 			"name": "\"core/inline/_util\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -3696,7 +3696,7 @@
 			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/inline/_util.ts",
 			"children": [
 				{
-					"id": 3249,
+					"id": 3187,
 					"name": "approx",
 					"kind": 64,
 					"kindString": "Function",
@@ -3706,14 +3706,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3250,
+							"id": 3188,
 							"name": "approx",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3251,
+									"id": 3189,
 									"name": "n1",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3724,7 +3724,7 @@
 									}
 								},
 								{
-									"id": 3252,
+									"id": 3190,
 									"name": "n2",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3735,7 +3735,7 @@
 									}
 								},
 								{
-									"id": 3253,
+									"id": 3191,
 									"name": "t",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -3766,7 +3766,7 @@
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						3249
+						3187
 					]
 				}
 			],
@@ -3779,7 +3779,7 @@
 			]
 		},
 		{
-			"id": 3115,
+			"id": 3053,
 			"name": "\"core/inline/_vec\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -3790,7 +3790,7 @@
 			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/inline/_vec.ts",
 			"children": [
 				{
-					"id": 3116,
+					"id": 3054,
 					"name": "vecAdd",
 					"kind": 32,
 					"kindString": "Variable",
@@ -3814,7 +3814,7 @@
 					"defaultValue": " vec.vecAdd"
 				},
 				{
-					"id": 3125,
+					"id": 3063,
 					"name": "vecAng",
 					"kind": 32,
 					"kindString": "Variable",
@@ -3838,7 +3838,7 @@
 					"defaultValue": " vec.vecAng"
 				},
 				{
-					"id": 3126,
+					"id": 3064,
 					"name": "vecAng2",
 					"kind": 32,
 					"kindString": "Variable",
@@ -3862,7 +3862,7 @@
 					"defaultValue": " vec.vecAng2"
 				},
 				{
-					"id": 3128,
+					"id": 3066,
 					"name": "vecCross",
 					"kind": 32,
 					"kindString": "Variable",
@@ -3886,7 +3886,7 @@
 					"defaultValue": " vec.vecCross"
 				},
 				{
-					"id": 3118,
+					"id": 3056,
 					"name": "vecDiv",
 					"kind": 32,
 					"kindString": "Variable",
@@ -3910,7 +3910,7 @@
 					"defaultValue": " vec.vecDiv"
 				},
 				{
-					"id": 3127,
+					"id": 3065,
 					"name": "vecDot",
 					"kind": 32,
 					"kindString": "Variable",
@@ -3934,7 +3934,7 @@
 					"defaultValue": " vec.vecDot"
 				},
 				{
-					"id": 3129,
+					"id": 3067,
 					"name": "vecEqual",
 					"kind": 32,
 					"kindString": "Variable",
@@ -3958,7 +3958,7 @@
 					"defaultValue": " vec.vecEqual"
 				},
 				{
-					"id": 3124,
+					"id": 3062,
 					"name": "vecFromTo",
 					"kind": 32,
 					"kindString": "Variable",
@@ -3982,7 +3982,7 @@
 					"defaultValue": " vec.vecFromTo"
 				},
 				{
-					"id": 3120,
+					"id": 3058,
 					"name": "vecLen",
 					"kind": 32,
 					"kindString": "Variable",
@@ -4006,7 +4006,7 @@
 					"defaultValue": " vec.vecLen"
 				},
 				{
-					"id": 3119,
+					"id": 3057,
 					"name": "vecMult",
 					"kind": 32,
 					"kindString": "Variable",
@@ -4030,7 +4030,7 @@
 					"defaultValue": " vec.vecMult"
 				},
 				{
-					"id": 3122,
+					"id": 3060,
 					"name": "vecNorm",
 					"kind": 32,
 					"kindString": "Variable",
@@ -4054,7 +4054,7 @@
 					"defaultValue": " vec.vecNorm"
 				},
 				{
-					"id": 3123,
+					"id": 3061,
 					"name": "vecRev",
 					"kind": 32,
 					"kindString": "Variable",
@@ -4078,7 +4078,7 @@
 					"defaultValue": " vec.vecRev"
 				},
 				{
-					"id": 3121,
+					"id": 3059,
 					"name": "vecSetLen",
 					"kind": 32,
 					"kindString": "Variable",
@@ -4102,7 +4102,7 @@
 					"defaultValue": " vec.vecSetLen"
 				},
 				{
-					"id": 3117,
+					"id": 3055,
 					"name": "vecSub",
 					"kind": 32,
 					"kindString": "Variable",
@@ -4131,20 +4131,20 @@
 					"title": "Variables",
 					"kind": 32,
 					"children": [
-						3116,
-						3125,
-						3126,
-						3128,
-						3118,
-						3127,
-						3129,
-						3124,
-						3120,
-						3119,
-						3122,
-						3123,
-						3121,
-						3117
+						3054,
+						3063,
+						3064,
+						3066,
+						3056,
+						3065,
+						3067,
+						3062,
+						3058,
+						3057,
+						3060,
+						3061,
+						3059,
+						3055
 					]
 				}
 			],
@@ -9053,7 +9053,7 @@
 			]
 		},
 		{
-			"id": 3254,
+			"id": 3192,
 			"name": "\"core/modules/_output\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -9063,7 +9063,7 @@
 			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/core/modules/_output.ts",
 			"children": [
 				{
-					"id": 3255,
+					"id": 3193,
 					"name": "Return",
 					"kind": 64,
 					"kindString": "Function",
@@ -9072,7 +9072,7 @@
 					},
 					"signatures": [
 						{
-							"id": 3256,
+							"id": 3194,
 							"name": "Return",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -9089,7 +9089,7 @@
 							},
 							"parameters": [
 								{
-									"id": 3257,
+									"id": 3195,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -9104,7 +9104,7 @@
 									}
 								},
 								{
-									"id": 3258,
+									"id": 3196,
 									"name": "value",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -9138,7 +9138,7 @@
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						3255
+						3193
 					]
 				}
 			],
@@ -12324,7 +12324,7 @@
 			]
 		},
 		{
-			"id": 3281,
+			"id": 3219,
 			"name": "\"core/modules/index\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -12341,7 +12341,7 @@
 			]
 		},
 		{
-			"id": 3282,
+			"id": 3220,
 			"name": "\"core/modules/isect\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -12354,7 +12354,7 @@
 			},
 			"children": [
 				{
-					"id": 3283,
+					"id": 3221,
 					"name": "_EKnifeKeep",
 					"kind": 4,
 					"kindString": "Enumeration",
@@ -12363,7 +12363,7 @@
 					},
 					"children": [
 						{
-							"id": 3284,
+							"id": 3222,
 							"name": "KEEP_ABOVE",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -12380,7 +12380,7 @@
 							"defaultValue": "\"keep above the plane\""
 						},
 						{
-							"id": 3286,
+							"id": 3224,
 							"name": "KEEP_ALL",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -12397,7 +12397,7 @@
 							"defaultValue": "\"keep all\""
 						},
 						{
-							"id": 3285,
+							"id": 3223,
 							"name": "KEEP_BELOW",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -12419,9 +12419,9 @@
 							"title": "Enumeration members",
 							"kind": 16,
 							"children": [
-								3284,
-								3286,
-								3285
+								3222,
+								3224,
+								3223
 							]
 						}
 					],
@@ -12434,7 +12434,7 @@
 					]
 				},
 				{
-					"id": 3287,
+					"id": 3225,
 					"name": "Intersect",
 					"kind": 64,
 					"kindString": "Function",
@@ -12443,7 +12443,7 @@
 					},
 					"signatures": [
 						{
-							"id": 3288,
+							"id": 3226,
 							"name": "Intersect",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -12464,7 +12464,7 @@
 							},
 							"parameters": [
 								{
-									"id": 3289,
+									"id": 3227,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -12477,7 +12477,7 @@
 									}
 								},
 								{
-									"id": 3290,
+									"id": 3228,
 									"name": "entities1",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -12492,7 +12492,7 @@
 									}
 								},
 								{
-									"id": 3291,
+									"id": 3229,
 									"name": "entities2",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -12526,7 +12526,7 @@
 					]
 				},
 				{
-					"id": 3292,
+					"id": 3230,
 					"name": "Knife",
 					"kind": 64,
 					"kindString": "Function",
@@ -12535,7 +12535,7 @@
 					},
 					"signatures": [
 						{
-							"id": 3293,
+							"id": 3231,
 							"name": "Knife",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -12556,7 +12556,7 @@
 							},
 							"parameters": [
 								{
-									"id": 3294,
+									"id": 3232,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -12569,7 +12569,7 @@
 									}
 								},
 								{
-									"id": 3295,
+									"id": 3233,
 									"name": "geometry",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -12587,7 +12587,7 @@
 									}
 								},
 								{
-									"id": 3296,
+									"id": 3234,
 									"name": "plane",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -12602,7 +12602,7 @@
 									}
 								},
 								{
-									"id": 3297,
+									"id": 3235,
 									"name": "keep",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -12613,7 +12613,7 @@
 									"type": {
 										"type": "reference",
 										"name": "_EKnifeKeep",
-										"id": 3283
+										"id": 3221
 									}
 								}
 							],
@@ -12636,7 +12636,7 @@
 					]
 				},
 				{
-					"id": 3298,
+					"id": 3236,
 					"name": "Split",
 					"kind": 64,
 					"kindString": "Function",
@@ -12645,7 +12645,7 @@
 					},
 					"signatures": [
 						{
-							"id": 3299,
+							"id": 3237,
 							"name": "Split",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -12666,7 +12666,7 @@
 							},
 							"parameters": [
 								{
-									"id": 3300,
+									"id": 3238,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -12679,7 +12679,7 @@
 									}
 								},
 								{
-									"id": 3301,
+									"id": 3239,
 									"name": "geometry",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -12697,7 +12697,7 @@
 									}
 								},
 								{
-									"id": 3302,
+									"id": 3240,
 									"name": "polyline",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -12736,16 +12736,16 @@
 					"title": "Enumerations",
 					"kind": 4,
 					"children": [
-						3283
+						3221
 					]
 				},
 				{
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						3287,
-						3292,
-						3298
+						3225,
+						3230,
+						3236
 					]
 				}
 			],
@@ -12790,7 +12790,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 23,
+									"line": 119,
 									"character": 14
 								}
 							],
@@ -12807,7 +12807,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 22,
+									"line": 118,
 									"character": 16
 								}
 							],
@@ -12824,7 +12824,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 24,
+									"line": 120,
 									"character": 16
 								}
 							],
@@ -12841,7 +12841,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 28,
+									"line": 124,
 									"character": 13
 								}
 							],
@@ -12858,7 +12858,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 26,
+									"line": 122,
 									"character": 14
 								}
 							],
@@ -12875,7 +12875,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 25,
+									"line": 121,
 									"character": 20
 								}
 							],
@@ -12892,7 +12892,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 29,
+									"line": 125,
 									"character": 17
 								}
 							],
@@ -12909,7 +12909,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 27,
+									"line": 123,
 									"character": 18
 								}
 							],
@@ -12926,7 +12926,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 21,
+									"line": 117,
 									"character": 10
 								}
 							],
@@ -12943,7 +12943,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 20,
+									"line": 116,
 									"character": 12
 								}
 							],
@@ -12971,135 +12971,8 @@
 					"sources": [
 						{
 							"fileName": "core/modules/list.ts",
-							"line": 19,
+							"line": 115,
 							"character": 23
-						}
-					]
-				},
-				{
-					"id": 2744,
-					"name": "_EAppendMethod",
-					"kind": 4,
-					"kindString": "Enumeration",
-					"flags": {
-						"isExported": true
-					},
-					"comment": {
-						"shortText": "================================================================================================\nlist functions that obtain and return information from an input list. Does not modify input list."
-					},
-					"children": [
-						{
-							"id": 2746,
-							"name": "TO_END",
-							"kind": 16,
-							"kindString": "Enumeration member",
-							"flags": {
-								"isExported": true
-							},
-							"sources": [
-								{
-									"fileName": "core/modules/list.ts",
-									"line": 389,
-									"character": 10
-								}
-							],
-							"defaultValue": "\"to_end\""
-						},
-						{
-							"id": 2745,
-							"name": "TO_START",
-							"kind": 16,
-							"kindString": "Enumeration member",
-							"flags": {
-								"isExported": true
-							},
-							"sources": [
-								{
-									"fileName": "core/modules/list.ts",
-									"line": 388,
-									"character": 12
-								}
-							],
-							"defaultValue": "\"to_start\""
-						}
-					],
-					"groups": [
-						{
-							"title": "Enumeration members",
-							"kind": 16,
-							"children": [
-								2746,
-								2745
-							]
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/list.ts",
-							"line": 387,
-							"character": 26
-						}
-					]
-				},
-				{
-					"id": 2753,
-					"name": "_EIndexOfMethod",
-					"kind": 4,
-					"kindString": "Enumeration",
-					"flags": {
-						"isExported": true
-					},
-					"children": [
-						{
-							"id": 2754,
-							"name": "SEARCH_ALL",
-							"kind": 16,
-							"kindString": "Enumeration member",
-							"flags": {
-								"isExported": true
-							},
-							"sources": [
-								{
-									"fileName": "core/modules/list.ts",
-									"line": 511,
-									"character": 14
-								}
-							],
-							"defaultValue": "\"search_all\""
-						},
-						{
-							"id": 2755,
-							"name": "SEARCH_FIRST",
-							"kind": 16,
-							"kindString": "Enumeration member",
-							"flags": {
-								"isExported": true
-							},
-							"sources": [
-								{
-									"fileName": "core/modules/list.ts",
-									"line": 512,
-									"character": 16
-								}
-							],
-							"defaultValue": "\"search_first\""
-						}
-					],
-					"groups": [
-						{
-							"title": "Enumeration members",
-							"kind": 16,
-							"children": [
-								2754,
-								2755
-							]
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/list.ts",
-							"line": 510,
-							"character": 27
 						}
 					]
 				},
@@ -13123,7 +12996,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 132,
+									"line": 178,
 									"character": 21
 								}
 							],
@@ -13140,7 +13013,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 130,
+									"line": 176,
 									"character": 22
 								}
 							],
@@ -13157,7 +13030,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 129,
+									"line": 175,
 									"character": 16
 								}
 							],
@@ -13174,7 +13047,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 131,
+									"line": 177,
 									"character": 21
 								}
 							],
@@ -13196,70 +13069,8 @@
 					"sources": [
 						{
 							"fileName": "core/modules/list.ts",
-							"line": 128,
+							"line": 174,
 							"character": 26
-						}
-					]
-				},
-				{
-					"id": 2747,
-					"name": "_ERemoveValueMethod",
-					"kind": 4,
-					"kindString": "Enumeration",
-					"flags": {
-						"isExported": true
-					},
-					"children": [
-						{
-							"id": 2748,
-							"name": "REMOVE_ALL",
-							"kind": 16,
-							"kindString": "Enumeration member",
-							"flags": {
-								"isExported": true
-							},
-							"sources": [
-								{
-									"fileName": "core/modules/list.ts",
-									"line": 442,
-									"character": 14
-								}
-							],
-							"defaultValue": "\"remove_all\""
-						},
-						{
-							"id": 2749,
-							"name": "REMOVE_FIRST",
-							"kind": 16,
-							"kindString": "Enumeration member",
-							"flags": {
-								"isExported": true
-							},
-							"sources": [
-								{
-									"fileName": "core/modules/list.ts",
-									"line": 443,
-									"character": 16
-								}
-							],
-							"defaultValue": "\"remove_first\""
-						}
-					],
-					"groups": [
-						{
-							"title": "Enumeration members",
-							"kind": 16,
-							"children": [
-								2748,
-								2749
-							]
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/list.ts",
-							"line": 441,
-							"character": 31
 						}
 					]
 				},
@@ -13283,7 +13094,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 185,
+									"line": 233,
 									"character": 22
 								}
 							],
@@ -13300,7 +13111,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 183,
+									"line": 231,
 									"character": 23
 								}
 							],
@@ -13317,7 +13128,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 182,
+									"line": 230,
 									"character": 17
 								}
 							],
@@ -13334,7 +13145,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 184,
+									"line": 232,
 									"character": 22
 								}
 							],
@@ -13356,70 +13167,8 @@
 					"sources": [
 						{
 							"fileName": "core/modules/list.ts",
-							"line": 181,
+							"line": 229,
 							"character": 27
-						}
-					]
-				},
-				{
-					"id": 2750,
-					"name": "_EReplaceValueMethod",
-					"kind": 4,
-					"kindString": "Enumeration",
-					"flags": {
-						"isExported": true
-					},
-					"children": [
-						{
-							"id": 2751,
-							"name": "REPLACE_ALL",
-							"kind": 16,
-							"kindString": "Enumeration member",
-							"flags": {
-								"isExported": true
-							},
-							"sources": [
-								{
-									"fileName": "core/modules/list.ts",
-									"line": 475,
-									"character": 15
-								}
-							],
-							"defaultValue": "\"replace_all\""
-						},
-						{
-							"id": 2752,
-							"name": "REPLACE_FIRST",
-							"kind": 16,
-							"kindString": "Enumeration member",
-							"flags": {
-								"isExported": true
-							},
-							"sources": [
-								{
-									"fileName": "core/modules/list.ts",
-									"line": 476,
-									"character": 17
-								}
-							],
-							"defaultValue": "\"replace_first\""
-						}
-					],
-					"groups": [
-						{
-							"title": "Enumeration members",
-							"kind": 16,
-							"children": [
-								2751,
-								2752
-							]
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/list.ts",
-							"line": 474,
-							"character": 32
 						}
 					]
 				},
@@ -13443,7 +13192,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 237,
+									"line": 260,
 									"character": 9
 								}
 							],
@@ -13460,7 +13209,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 241,
+									"line": 264,
 									"character": 6
 								}
 							],
@@ -13477,7 +13226,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 239,
+									"line": 262,
 									"character": 7
 								}
 							],
@@ -13494,7 +13243,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 245,
+									"line": 268,
 									"character": 10
 								}
 							],
@@ -13511,7 +13260,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 236,
+									"line": 259,
 									"character": 7
 								}
 							],
@@ -13528,7 +13277,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 238,
+									"line": 261,
 									"character": 13
 								}
 							],
@@ -13545,7 +13294,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 242,
+									"line": 265,
 									"character": 10
 								}
 							],
@@ -13562,7 +13311,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 240,
+									"line": 263,
 									"character": 11
 								}
 							],
@@ -13579,7 +13328,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 244,
+									"line": 267,
 									"character": 13
 								}
 							],
@@ -13596,7 +13345,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/list.ts",
-									"line": 243,
+									"line": 266,
 									"character": 9
 								}
 							],
@@ -13624,13 +13373,13 @@
 					"sources": [
 						{
 							"fileName": "core/modules/list.ts",
-							"line": 235,
+							"line": 258,
 							"character": 24
 						}
 					]
 				},
 				{
-					"id": 2756,
+					"id": 2744,
 					"name": "Add",
 					"kind": 64,
 					"kindString": "Function",
@@ -13639,7 +13388,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2757,
+							"id": 2745,
 							"name": "Add",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -13684,7 +13433,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2758,
+									"id": 2746,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13701,7 +13450,7 @@
 									}
 								},
 								{
-									"id": 2759,
+									"id": 2747,
 									"name": "item",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13727,7 +13476,7 @@
 									}
 								},
 								{
-									"id": 2760,
+									"id": 2748,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13751,13 +13500,13 @@
 					"sources": [
 						{
 							"fileName": "core/modules/list.ts",
-							"line": 47,
+							"line": 35,
 							"character": 19
 						}
 					]
 				},
 				{
-					"id": 2761,
+					"id": 2749,
 					"name": "Remove",
 					"kind": 64,
 					"kindString": "Function",
@@ -13766,7 +13515,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2762,
+							"id": 2750,
 							"name": "Remove",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -13777,7 +13526,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2763,
+									"id": 2751,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13794,7 +13543,7 @@
 									}
 								},
 								{
-									"id": 2764,
+									"id": 2752,
 									"name": "item",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13808,7 +13557,7 @@
 									}
 								},
 								{
-									"id": 2765,
+									"id": 2753,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13832,13 +13581,13 @@
 					"sources": [
 						{
 							"fileName": "core/modules/list.ts",
-							"line": 145,
+							"line": 139,
 							"character": 22
 						}
 					]
 				},
 				{
-					"id": 2766,
+					"id": 2754,
 					"name": "Replace",
 					"kind": 64,
 					"kindString": "Function",
@@ -13847,7 +13596,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2767,
+							"id": 2755,
 							"name": "Replace",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -13858,7 +13607,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2768,
+									"id": 2756,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13875,7 +13624,7 @@
 									}
 								},
 								{
-									"id": 2769,
+									"id": 2757,
 									"name": "old_item",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13889,7 +13638,7 @@
 									}
 								},
 								{
-									"id": 2770,
+									"id": 2758,
 									"name": "new_item",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13903,7 +13652,7 @@
 									}
 								},
 								{
-									"id": 2771,
+									"id": 2759,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13927,13 +13676,13 @@
 					"sources": [
 						{
 							"fileName": "core/modules/list.ts",
-							"line": 199,
+							"line": 194,
 							"character": 23
 						}
 					]
 				},
 				{
-					"id": 2780,
+					"id": 2760,
 					"name": "Sort",
 					"kind": 64,
 					"kindString": "Function",
@@ -13942,7 +13691,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2781,
+							"id": 2761,
 							"name": "Sort",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -13971,7 +13720,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2782,
+									"id": 2762,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -13988,7 +13737,7 @@
 									}
 								},
 								{
-									"id": 2783,
+									"id": 2763,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -14012,13 +13761,13 @@
 					"sources": [
 						{
 							"fileName": "core/modules/list.ts",
-							"line": 308,
+							"line": 252,
 							"character": 20
 						}
 					]
 				},
 				{
-					"id": 2784,
+					"id": 2772,
 					"name": "Splice",
 					"kind": 64,
 					"kindString": "Function",
@@ -14027,7 +13776,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2785,
+							"id": 2773,
 							"name": "Splice",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -14048,7 +13797,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2786,
+									"id": 2774,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -14065,7 +13814,7 @@
 									}
 								},
 								{
-									"id": 2787,
+									"id": 2775,
 									"name": "index",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -14079,7 +13828,7 @@
 									}
 								},
 								{
-									"id": 2788,
+									"id": 2776,
 									"name": "num_to_remove",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -14093,7 +13842,7 @@
 									}
 								},
 								{
-									"id": 2789,
+									"id": 2777,
 									"name": "items_to_insert",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -14119,933 +13868,27 @@
 					"sources": [
 						{
 							"fileName": "core/modules/list.ts",
-							"line": 330,
+							"line": 331,
 							"character": 22
 						}
 					]
 				},
 				{
-					"id": 2790,
-					"name": "_Append",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 2791,
-							"name": "_Append",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Adds an item to a list.\nIf item is a list, the entire list will be appended as a single item.",
-								"returns": "void",
-								"tags": [
-									{
-										"tag": "example",
-										"text": "append = list.Append(list, 4, 'at_end')"
-									},
-									{
-										"tag": "example_info",
-										"text": "where list = [1,2,3]\nExpected value of list is [1,2,3,4].\n"
-									}
-								]
-							},
-							"parameters": [
-								{
-									"id": 2792,
-									"name": "list",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "List to append the item to."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "any"
-										}
-									}
-								},
-								{
-									"id": 2793,
-									"name": "value",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Item to append."
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "any"
-									}
-								},
-								{
-									"id": 2794,
-									"name": "method",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Enum, select the method."
-									},
-									"type": {
-										"type": "reference",
-										"name": "_EAppendMethod",
-										"id": 2744
-									}
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/list.ts",
-							"line": 403,
-							"character": 23
-						}
-					]
-				},
-				{
-					"id": 2822,
-					"name": "_Concat",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 2823,
-							"name": "_Concat",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Creates a new list by combining two lists into a new list.\n~\nWARNING: This function has been deprecated. Please use the inline listJoin() function.",
-								"returns": "Combined list (list1 first, followed by list2).",
-								"tags": [
-									{
-										"tag": "example",
-										"text": "newlist = list.Concat(list1,list2)"
-									},
-									{
-										"tag": "example_info",
-										"text": "where list1 = [1,2,3]\nand list2 = [9,0]\nExpected value of newlist is [1,2,3,9,0].\n"
-									}
-								]
-							},
-							"parameters": [
-								{
-									"id": 2824,
-									"name": "list1",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "First list."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "any"
-										}
-									}
-								},
-								{
-									"id": 2825,
-									"name": "list2",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Second list."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "any"
-										}
-									}
-								}
-							],
-							"type": {
-								"type": "array",
-								"elementType": {
-									"type": "intrinsic",
-									"name": "any"
-								}
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/list.ts",
-							"line": 615,
-							"character": 23
-						}
-					]
-				},
-				{
-					"id": 2819,
-					"name": "_Copy",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 2820,
-							"name": "_Copy",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Creates a new list by creating a new list by making a copy of an existing list.\n~\nWARNING: This function has been deprecated. Please use the inline listCopy() function.",
-								"returns": "New duplicated list.",
-								"tags": [
-									{
-										"tag": "example",
-										"text": "copy1 = list.Copy(list)"
-									},
-									{
-										"tag": "example_info",
-										"text": "where list = [1,2,3]\nExpected value of copy is [1,2,3].\n"
-									}
-								]
-							},
-							"parameters": [
-								{
-									"id": 2821,
-									"name": "entities",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "List to copy."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "any"
-										}
-									}
-								}
-							],
-							"type": {
-								"type": "array",
-								"elementType": {
-									"type": "intrinsic",
-									"name": "any"
-								}
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/list.ts",
-							"line": 594,
-							"character": 21
-						}
-					]
-				},
-				{
-					"id": 2826,
-					"name": "_Flatten",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 2827,
-							"name": "_Flatten",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Creates a new list by flattening an n-dimensional list into a one-dimensional list.\n~\nWARNING: This function has been deprecated. Please use the inline listFlat() function.",
-								"returns": "Flattened list.",
-								"tags": [
-									{
-										"tag": "example",
-										"text": "flatten = list.Flatten(list)"
-									},
-									{
-										"tag": "example_info",
-										"text": "where list = [1,2,3,[4,5]]\nExpected value of flatten is [1,2,3,4,5].\n"
-									}
-								]
-							},
-							"parameters": [
-								{
-									"id": 2828,
-									"name": "list",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "List to flatten."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "any"
-										}
-									}
-								}
-							],
-							"type": {
-								"type": "array",
-								"elementType": {
-									"type": "intrinsic",
-									"name": "any"
-								}
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/list.ts",
-							"line": 636,
-							"character": 24
-						}
-					]
-				},
-				{
-					"id": 2815,
-					"name": "_Includes",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 2816,
-							"name": "_Includes",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Searches for a value in an list and returns true if found.\nItems must match both the value and type of specified value.\n~\nReturns false if no values in list match specified value.\n~\nWARNING: This function has been deprecated. Please use the inline listHas() function.",
-								"returns": "Returns true if value can be found in list, false if value cannot be found.",
-								"tags": [
-									{
-										"tag": "example",
-										"text": "exists = list.Includes(list,2)"
-									},
-									{
-										"tag": "example_info",
-										"text": "where list = [6,2,2,7]\nExpected value of exists is true.\n"
-									}
-								]
-							},
-							"parameters": [
-								{
-									"id": 2817,
-									"name": "list",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "List."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "any"
-										}
-									}
-								},
-								{
-									"id": 2818,
-									"name": "value",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Value to search for."
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "any"
-									}
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "boolean"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/list.ts",
-							"line": 568,
-							"character": 25
-						}
-					]
-				},
-				{
-					"id": 2810,
-					"name": "_IndexOf",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 2811,
-							"name": "_IndexOf",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Searches for a value in a list and returns the index position if found.\nItems must match both the value and type of specified value.\n~\nReturns -1 if no values in list match specified value.\n~\nWARNING: This function has been deprecated. Please use the inline listFind() function.",
-								"returns": "Index position or list of index positions containing specified value.",
-								"tags": [
-									{
-										"tag": "example",
-										"text": "positions = list.IndexOf(list,2,true)"
-									},
-									{
-										"tag": "example_info",
-										"text": "where list = [6,2,2,7]\nExpected value of positions is [1,2].\n"
-									}
-								]
-							},
-							"parameters": [
-								{
-									"id": 2812,
-									"name": "list",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "List."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "any"
-										}
-									}
-								},
-								{
-									"id": 2813,
-									"name": "value",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Value to search for."
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "any"
-									}
-								},
-								{
-									"id": 2814,
-									"name": "method",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Enum, specifies whether to search all occurances or only the first."
-									},
-									"type": {
-										"type": "reference",
-										"name": "_EIndexOfMethod",
-										"id": 2753
-									}
-								}
-							],
-							"type": {
-								"type": "union",
-								"types": [
-									{
-										"type": "intrinsic",
-										"name": "number"
-									},
-									{
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "number"
-										}
-									}
-								]
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/list.ts",
-							"line": 530,
-							"character": 24
-						}
-					]
-				},
-				{
-					"id": 2795,
-					"name": "_RemoveIndex",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 2796,
-							"name": "_RemoveIndex",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Removes the value at the specified index from a list.\n~\nWARNING: This function has been deprecated. Please use the list.Modify() function.",
-								"tags": [
-									{
-										"tag": "example",
-										"text": "remove = list.RemoveIndex(list,1)"
-									},
-									{
-										"tag": "example_info",
-										"text": "where list = [1,2,3]\nExpected value of remove is [1,3].\n"
-									}
-								]
-							},
-							"parameters": [
-								{
-									"id": 2797,
-									"name": "list",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "List to remove value from."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "any"
-										}
-									}
-								},
-								{
-									"id": 2798,
-									"name": "index",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Zero-based index number of value to remove."
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "number"
-									}
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/list.ts",
-							"line": 432,
-							"character": 28
-						}
-					]
-				},
-				{
-					"id": 2799,
-					"name": "_RemoveValue",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 2800,
-							"name": "_RemoveValue",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Removes values that matches specified value from a list.\nItems must match both the value and type of specified value.\n~\nReturns original list if no values in list match specified value.\n~\nWARNING: This function has been deprecated. Please use the list.Modify() function.",
-								"tags": [
-									{
-										"tag": "example",
-										"text": "remove = list.RemoveValue(list,2,'remove_all')"
-									},
-									{
-										"tag": "example_info",
-										"text": "where list = [1,2,2,3]\nExpected value of remove is [1,3].\n"
-									}
-								]
-							},
-							"parameters": [
-								{
-									"id": 2801,
-									"name": "list",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "List to remove value from."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "any"
-										}
-									}
-								},
-								{
-									"id": 2802,
-									"name": "value",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Value to search for."
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "any"
-									}
-								},
-								{
-									"id": 2803,
-									"name": "method",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Enum; specifies whether to remove all occurances or only the first."
-									},
-									"type": {
-										"type": "reference",
-										"name": "_ERemoveValueMethod",
-										"id": 2747
-									}
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/list.ts",
-							"line": 460,
-							"character": 28
-						}
-					]
-				},
-				{
-					"id": 2804,
-					"name": "_ReplaceValue",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 2805,
-							"name": "_ReplaceValue",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Replaces values that matches specified value from an list with a new value\nItems must match both the value and type of specified value\n~\nReturns original list if no value in list matches specified value.\n~\nWARNING: This function has been deprecated. Please use the list.Modify() function.",
-								"tags": [
-									{
-										"tag": "example",
-										"text": "replace = list.ReplaceValue(list,2,9,'replace_all')"
-									},
-									{
-										"tag": "example_info",
-										"text": "where list = [1,2,2,3]\nExpected value of replace is [1,9,9,3].\n"
-									}
-								]
-							},
-							"parameters": [
-								{
-									"id": 2806,
-									"name": "list",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "List to remove value from."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "any"
-										}
-									}
-								},
-								{
-									"id": 2807,
-									"name": "value1",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Value to search for."
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "any"
-									}
-								},
-								{
-									"id": 2808,
-									"name": "value2",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Value to replace existing value with."
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "any"
-									}
-								},
-								{
-									"id": 2809,
-									"name": "method",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Enum; specifies whether to replace all occurances or only the first."
-									},
-									"type": {
-										"type": "reference",
-										"name": "_EReplaceValueMethod",
-										"id": 2750
-									}
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/list.ts",
-							"line": 494,
-							"character": 29
-						}
-					]
-				},
-				{
-					"id": 2837,
-					"name": "_Reverse",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 2838,
-							"name": "_Reverse",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Reverses the order of values in a list and returns a new list.\n~\nWARNING: This function has been deprecated. Please use the list.Sort() function.",
-								"returns": "New reversed list.",
-								"tags": [
-									{
-										"tag": "example",
-										"text": "result = list.Reverse(list1)"
-									},
-									{
-										"tag": "example_info",
-										"text": "where list1 = [1,2,3]\nExpected value of result is [3,2,1].\n"
-									}
-								]
-							},
-							"parameters": [
-								{
-									"id": 2839,
-									"name": "entities",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "List to reverse."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "any"
-										}
-									}
-								}
-							],
-							"type": {
-								"type": "intrinsic",
-								"name": "void"
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/list.ts",
-							"line": 686,
-							"character": 24
-						}
-					]
-				},
-				{
-					"id": 2832,
-					"name": "_Slice",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {
-						"isExported": true
-					},
-					"signatures": [
-						{
-							"id": 2833,
-							"name": "_Slice",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"comment": {
-								"shortText": "Creates a new list by copying a portion of an existing list, from start index to end index (end not included).\n~\nWARNING: This function has been deprecated. Please use the inline listSlice() function.",
-								"returns": "A new list.",
-								"tags": [
-									{
-										"tag": "example",
-										"text": "result = list.Slice(list,1,3)"
-									},
-									{
-										"tag": "example_info",
-										"text": "where list = [1,2,3,4,5]\nExpected value of result is [2,3].\n"
-									}
-								]
-							},
-							"parameters": [
-								{
-									"id": 2834,
-									"name": "list",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "List to slice."
-									},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "any"
-										}
-									}
-								},
-								{
-									"id": 2835,
-									"name": "start",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Zero-based index at which to begin slicing.\n     A negative index can be used, indicating an offset from the end of the sequence.\n     If start is undefined, slice begins from index 0."
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "number"
-									}
-								},
-								{
-									"id": 2836,
-									"name": "end",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"comment": {
-										"text": "Zero-based index before which to end slicing. Slice extracts up to but not including end.\n     A negative index can be used, indicating an offset from the end of the sequence.\n     If end is undefined, slice extracts through the end of the sequence."
-									},
-									"type": {
-										"type": "intrinsic",
-										"name": "number"
-									}
-								}
-							],
-							"type": {
-								"type": "array",
-								"elementType": {
-									"type": "intrinsic",
-									"name": "any"
-								}
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/list.ts",
-							"line": 664,
-							"character": 22
-						}
-					]
-				},
-				{
-					"id": 2772,
+					"id": 2764,
 					"name": "_compareID",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2773,
+							"id": 2765,
 							"name": "_compareID",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2774,
+									"id": 2766,
 									"name": "id1",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15056,7 +13899,7 @@
 									}
 								},
 								{
-									"id": 2775,
+									"id": 2767,
 									"name": "id2",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15076,73 +13919,27 @@
 					"sources": [
 						{
 							"fileName": "core/modules/list.ts",
-							"line": 247,
+							"line": 270,
 							"character": 19
 						}
 					]
 				},
 				{
-					"id": 2829,
-					"name": "_flattenDeep",
-					"kind": 64,
-					"kindString": "Function",
-					"flags": {},
-					"signatures": [
-						{
-							"id": 2830,
-							"name": "_flattenDeep",
-							"kind": 4096,
-							"kindString": "Call signature",
-							"flags": {},
-							"parameters": [
-								{
-									"id": 2831,
-									"name": "list",
-									"kind": 32768,
-									"kindString": "Parameter",
-									"flags": {},
-									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "any"
-										}
-									}
-								}
-							],
-							"type": {
-								"type": "array",
-								"elementType": {
-									"type": "intrinsic",
-									"name": "any"
-								}
-							}
-						}
-					],
-					"sources": [
-						{
-							"fileName": "core/modules/list.ts",
-							"line": 643,
-							"character": 21
-						}
-					]
-				},
-				{
-					"id": 2776,
+					"id": 2768,
 					"name": "_sort",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2777,
+							"id": 2769,
 							"name": "_sort",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2778,
+									"id": 2770,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15156,7 +13953,7 @@
 									}
 								},
 								{
-									"id": 2779,
+									"id": 2771,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -15177,7 +13974,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/list.ts",
-							"line": 254,
+							"line": 277,
 							"character": 14
 						}
 					]
@@ -15189,12 +13986,8 @@
 					"kind": 4,
 					"children": [
 						2712,
-						2744,
-						2753,
 						2723,
-						2747,
 						2728,
-						2750,
 						2733
 					]
 				},
@@ -15202,25 +13995,13 @@
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						2756,
-						2761,
-						2766,
-						2780,
-						2784,
-						2790,
-						2822,
-						2819,
-						2826,
-						2815,
-						2810,
-						2795,
-						2799,
-						2804,
-						2837,
-						2832,
+						2744,
+						2749,
+						2754,
+						2760,
 						2772,
-						2829,
-						2776
+						2764,
+						2768
 					]
 				}
 			],
@@ -26882,7 +25663,7 @@
 			]
 		},
 		{
-			"id": 2997,
+			"id": 2935,
 			"name": "\"core/modules/util\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -26895,21 +25676,21 @@
 			},
 			"children": [
 				{
-					"id": 3020,
+					"id": 2958,
 					"name": "__global",
 					"kind": 2,
 					"kindString": "Module",
 					"flags": {},
 					"children": [
 						{
-							"id": 3021,
+							"id": 2959,
 							"name": "Navigator",
 							"kind": 256,
 							"kindString": "Interface",
 							"flags": {},
 							"children": [
 								{
-									"id": 3022,
+									"id": 2960,
 									"name": "webkitPersistentStorage",
 									"kind": 1024,
 									"kindString": "Property",
@@ -26924,14 +25705,14 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 3023,
+											"id": 2961,
 											"name": "__type",
 											"kind": 65536,
 											"kindString": "Type literal",
 											"flags": {},
 											"children": [
 												{
-													"id": 3024,
+													"id": 2962,
 													"name": "requestQuota",
 													"kind": 32,
 													"kindString": "Variable",
@@ -26946,21 +25727,21 @@
 													"type": {
 														"type": "reflection",
 														"declaration": {
-															"id": 3025,
+															"id": 2963,
 															"name": "__type",
 															"kind": 65536,
 															"kindString": "Type literal",
 															"flags": {},
 															"signatures": [
 																{
-																	"id": 3026,
+																	"id": 2964,
 																	"name": "__call",
 																	"kind": 4096,
 																	"kindString": "Call signature",
 																	"flags": {},
 																	"parameters": [
 																		{
-																			"id": 3027,
+																			"id": 2965,
 																			"name": "a",
 																			"kind": 32768,
 																			"kindString": "Parameter",
@@ -26971,7 +25752,7 @@
 																			}
 																		},
 																		{
-																			"id": 3028,
+																			"id": 2966,
 																			"name": "b",
 																			"kind": 32768,
 																			"kindString": "Parameter",
@@ -26982,7 +25763,7 @@
 																			}
 																		},
 																		{
-																			"id": 3029,
+																			"id": 2967,
 																			"name": "c",
 																			"kind": 32768,
 																			"kindString": "Parameter",
@@ -27015,7 +25796,7 @@
 													"title": "Variables",
 													"kind": 32,
 													"children": [
-														3024
+														2962
 													]
 												}
 											],
@@ -27035,7 +25816,7 @@
 									"title": "Properties",
 									"kind": 1024,
 									"children": [
-										3022
+										2960
 									]
 								}
 							],
@@ -27053,7 +25834,7 @@
 							"title": "Interfaces",
 							"kind": 256,
 							"children": [
-								3021
+								2959
 							]
 						}
 					],
@@ -27066,7 +25847,7 @@
 					]
 				},
 				{
-					"id": 2998,
+					"id": 2936,
 					"name": "_EIODataFormat",
 					"kind": 4,
 					"kindString": "Enumeration",
@@ -27075,7 +25856,7 @@
 					},
 					"children": [
 						{
-							"id": 3001,
+							"id": 2939,
 							"name": "GEOJSON",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -27092,7 +25873,7 @@
 							"defaultValue": "\"geojson\""
 						},
 						{
-							"id": 2999,
+							"id": 2937,
 							"name": "GI",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -27109,7 +25890,7 @@
 							"defaultValue": "\"gi\""
 						},
 						{
-							"id": 3000,
+							"id": 2938,
 							"name": "OBJ",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -27131,9 +25912,9 @@
 							"title": "Enumeration members",
 							"kind": 16,
 							"children": [
-								3001,
-								2999,
-								3000
+								2939,
+								2937,
+								2938
 							]
 						}
 					],
@@ -27146,7 +25927,7 @@
 					]
 				},
 				{
-					"id": 3002,
+					"id": 2940,
 					"name": "_EIODataSource",
 					"kind": 4,
 					"kindString": "Enumeration",
@@ -27155,7 +25936,7 @@
 					},
 					"children": [
 						{
-							"id": 3003,
+							"id": 2941,
 							"name": "DEFAULT",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -27172,7 +25953,7 @@
 							"defaultValue": "\"From URL\""
 						},
 						{
-							"id": 3004,
+							"id": 2942,
 							"name": "FILESYS",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -27194,8 +25975,8 @@
 							"title": "Enumeration members",
 							"kind": 16,
 							"children": [
-								3003,
-								3004
+								2941,
+								2942
 							]
 						}
 					],
@@ -27208,7 +25989,7 @@
 					]
 				},
 				{
-					"id": 3005,
+					"id": 2943,
 					"name": "_EIODataTarget",
 					"kind": 4,
 					"kindString": "Enumeration",
@@ -27217,7 +25998,7 @@
 					},
 					"children": [
 						{
-							"id": 3006,
+							"id": 2944,
 							"name": "DEFAULT",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -27234,7 +26015,7 @@
 							"defaultValue": "\"Save to Hard Disk\""
 						},
 						{
-							"id": 3007,
+							"id": 2945,
 							"name": "FILESYS",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -27256,8 +26037,8 @@
 							"title": "Enumeration members",
 							"kind": 16,
 							"children": [
-								3006,
-								3007
+								2944,
+								2945
 							]
 						}
 					],
@@ -27270,7 +26051,7 @@
 					]
 				},
 				{
-					"id": 3016,
+					"id": 2954,
 					"name": "_EIOExportContents",
 					"kind": 4,
 					"kindString": "Enumeration",
@@ -27279,7 +26060,7 @@
 					},
 					"children": [
 						{
-							"id": 3017,
+							"id": 2955,
 							"name": "BOTH",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -27296,7 +26077,7 @@
 							"defaultValue": "\"Both\""
 						},
 						{
-							"id": 3018,
+							"id": 2956,
 							"name": "CONSOLE",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -27313,7 +26094,7 @@
 							"defaultValue": "\"Console Only\""
 						},
 						{
-							"id": 3019,
+							"id": 2957,
 							"name": "MODEL",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -27335,9 +26116,9 @@
 							"title": "Enumeration members",
 							"kind": 16,
 							"children": [
-								3017,
-								3018,
-								3019
+								2955,
+								2956,
+								2957
 							]
 						}
 					],
@@ -27350,7 +26131,7 @@
 					]
 				},
 				{
-					"id": 3008,
+					"id": 2946,
 					"name": "_EIOExportDataFormat",
 					"kind": 4,
 					"kindString": "Enumeration",
@@ -27359,7 +26140,7 @@
 					},
 					"children": [
 						{
-							"id": 3011,
+							"id": 2949,
 							"name": "DAE",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -27376,7 +26157,7 @@
 							"defaultValue": "\"dae\""
 						},
 						{
-							"id": 3012,
+							"id": 2950,
 							"name": "GEOJSON",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -27393,7 +26174,7 @@
 							"defaultValue": "\"geojson\""
 						},
 						{
-							"id": 3009,
+							"id": 2947,
 							"name": "GI",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -27410,7 +26191,7 @@
 							"defaultValue": "\"gi\""
 						},
 						{
-							"id": 3010,
+							"id": 2948,
 							"name": "OBJ",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -27432,10 +26213,10 @@
 							"title": "Enumeration members",
 							"kind": 16,
 							"children": [
-								3011,
-								3012,
-								3009,
-								3010
+								2949,
+								2950,
+								2947,
+								2948
 							]
 						}
 					],
@@ -27448,7 +26229,7 @@
 					]
 				},
 				{
-					"id": 3013,
+					"id": 2951,
 					"name": "_EIOExportParams",
 					"kind": 4,
 					"kindString": "Enumeration",
@@ -27457,7 +26238,7 @@
 					},
 					"children": [
 						{
-							"id": 3015,
+							"id": 2953,
 							"name": "NO",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -27474,7 +26255,7 @@
 							"defaultValue": "\"No Params\""
 						},
 						{
-							"id": 3014,
+							"id": 2952,
 							"name": "YES",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -27496,8 +26277,8 @@
 							"title": "Enumeration members",
 							"kind": 16,
 							"children": [
-								3015,
-								3014
+								2953,
+								2952
 							]
 						}
 					],
@@ -27510,7 +26291,7 @@
 					]
 				},
 				{
-					"id": 3045,
+					"id": 2983,
 					"name": "ExportData",
 					"kind": 64,
 					"kindString": "Function",
@@ -27519,7 +26300,7 @@
 					},
 					"signatures": [
 						{
-							"id": 3046,
+							"id": 2984,
 							"name": "ExportData",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -27540,7 +26321,7 @@
 							},
 							"parameters": [
 								{
-									"id": 3047,
+									"id": 2985,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -27553,7 +26334,7 @@
 									}
 								},
 								{
-									"id": 3048,
+									"id": 2986,
 									"name": "entities",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -27589,7 +26370,7 @@
 									}
 								},
 								{
-									"id": 3049,
+									"id": 2987,
 									"name": "filename",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -27603,7 +26384,7 @@
 									}
 								},
 								{
-									"id": 3050,
+									"id": 2988,
 									"name": "data_format",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -27614,11 +26395,11 @@
 									"type": {
 										"type": "reference",
 										"name": "_EIOExportDataFormat",
-										"id": 3008
+										"id": 2946
 									}
 								},
 								{
-									"id": 3051,
+									"id": 2989,
 									"name": "data_target",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -27629,7 +26410,7 @@
 									"type": {
 										"type": "reference",
 										"name": "_EIODataTarget",
-										"id": 3005
+										"id": 2943
 									}
 								}
 							],
@@ -27648,7 +26429,7 @@
 					]
 				},
 				{
-					"id": 3052,
+					"id": 2990,
 					"name": "ExportIO",
 					"kind": 64,
 					"kindString": "Function",
@@ -27657,7 +26438,7 @@
 					},
 					"signatures": [
 						{
-							"id": 3053,
+							"id": 2991,
 							"name": "ExportIO",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -27678,7 +26459,7 @@
 							},
 							"parameters": [
 								{
-									"id": 3054,
+									"id": 2992,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -27691,7 +26472,7 @@
 									}
 								},
 								{
-									"id": 3055,
+									"id": 2993,
 									"name": "__console__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -27706,7 +26487,7 @@
 									}
 								},
 								{
-									"id": 3056,
+									"id": 2994,
 									"name": "__constList__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -27718,7 +26499,7 @@
 									}
 								},
 								{
-									"id": 3057,
+									"id": 2995,
 									"name": "__fileName__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -27730,7 +26511,7 @@
 									}
 								},
 								{
-									"id": 3058,
+									"id": 2996,
 									"name": "filename",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -27744,7 +26525,7 @@
 									}
 								},
 								{
-									"id": 3059,
+									"id": 2997,
 									"name": "exportParams",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -27755,11 +26536,11 @@
 									"type": {
 										"type": "reference",
 										"name": "_EIOExportParams",
-										"id": 3013
+										"id": 2951
 									}
 								},
 								{
-									"id": 3060,
+									"id": 2998,
 									"name": "exportContent",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -27770,7 +26551,7 @@
 									"type": {
 										"type": "reference",
 										"name": "_EIOExportContents",
-										"id": 3016
+										"id": 2954
 									}
 								}
 							],
@@ -27789,7 +26570,7 @@
 					]
 				},
 				{
-					"id": 3040,
+					"id": 2978,
 					"name": "ImportData",
 					"kind": 64,
 					"kindString": "Function",
@@ -27798,7 +26579,7 @@
 					},
 					"signatures": [
 						{
-							"id": 3041,
+							"id": 2979,
 							"name": "ImportData",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -27819,7 +26600,7 @@
 							},
 							"parameters": [
 								{
-									"id": 3042,
+									"id": 2980,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -27831,7 +26612,7 @@
 									}
 								},
 								{
-									"id": 3043,
+									"id": 2981,
 									"name": "model_data",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -27845,7 +26626,7 @@
 									}
 								},
 								{
-									"id": 3044,
+									"id": 2982,
 									"name": "data_format",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -27856,7 +26637,7 @@
 									"type": {
 										"type": "reference",
 										"name": "_EIODataFormat",
-										"id": 2998
+										"id": 2936
 									}
 								}
 							],
@@ -27879,7 +26660,7 @@
 					]
 				},
 				{
-					"id": 3075,
+					"id": 3013,
 					"name": "ModelCheck",
 					"kind": 64,
 					"kindString": "Function",
@@ -27888,7 +26669,7 @@
 					},
 					"signatures": [
 						{
-							"id": 3076,
+							"id": 3014,
 							"name": "ModelCheck",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -27899,7 +26680,7 @@
 							},
 							"parameters": [
 								{
-									"id": 3077,
+									"id": 3015,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -27927,7 +26708,7 @@
 					]
 				},
 				{
-					"id": 3071,
+					"id": 3009,
 					"name": "ModelCompare",
 					"kind": 64,
 					"kindString": "Function",
@@ -27936,7 +26717,7 @@
 					},
 					"signatures": [
 						{
-							"id": 3072,
+							"id": 3010,
 							"name": "ModelCompare",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -27947,7 +26728,7 @@
 							},
 							"parameters": [
 								{
-									"id": 3073,
+									"id": 3011,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -27960,7 +26741,7 @@
 									}
 								},
 								{
-									"id": 3074,
+									"id": 3012,
 									"name": "gi_model_data",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -27986,7 +26767,7 @@
 					]
 				},
 				{
-					"id": 3068,
+					"id": 3006,
 					"name": "ModelInfo",
 					"kind": 64,
 					"kindString": "Function",
@@ -27995,7 +26776,7 @@
 					},
 					"signatures": [
 						{
-							"id": 3069,
+							"id": 3007,
 							"name": "ModelInfo",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -28006,7 +26787,7 @@
 							},
 							"parameters": [
 								{
-									"id": 3070,
+									"id": 3008,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -28034,7 +26815,7 @@
 					]
 				},
 				{
-					"id": 3064,
+					"id": 3002,
 					"name": "ParamInfo",
 					"kind": 64,
 					"kindString": "Function",
@@ -28043,7 +26824,7 @@
 					},
 					"signatures": [
 						{
-							"id": 3065,
+							"id": 3003,
 							"name": "ParamInfo",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -28054,7 +26835,7 @@
 							},
 							"parameters": [
 								{
-									"id": 3066,
+									"id": 3004,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -28067,7 +26848,7 @@
 									}
 								},
 								{
-									"id": 3067,
+									"id": 3005,
 									"name": "__constList__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -28094,7 +26875,7 @@
 					]
 				},
 				{
-					"id": 3030,
+					"id": 2968,
 					"name": "ReadData",
 					"kind": 64,
 					"kindString": "Function",
@@ -28103,7 +26884,7 @@
 					},
 					"signatures": [
 						{
-							"id": 3031,
+							"id": 2969,
 							"name": "ReadData",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -28114,7 +26895,7 @@
 							},
 							"parameters": [
 								{
-									"id": 3032,
+									"id": 2970,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -28126,7 +26907,7 @@
 									}
 								},
 								{
-									"id": 3033,
+									"id": 2971,
 									"name": "data",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -28155,7 +26936,7 @@
 					]
 				},
 				{
-					"id": 3034,
+					"id": 2972,
 					"name": "WriteData",
 					"kind": 64,
 					"kindString": "Function",
@@ -28164,7 +26945,7 @@
 					},
 					"signatures": [
 						{
-							"id": 3035,
+							"id": 2973,
 							"name": "WriteData",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -28175,7 +26956,7 @@
 							},
 							"parameters": [
 								{
-									"id": 3036,
+									"id": 2974,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -28187,7 +26968,7 @@
 									}
 								},
 								{
-									"id": 3037,
+									"id": 2975,
 									"name": "data",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -28201,7 +26982,7 @@
 									}
 								},
 								{
-									"id": 3038,
+									"id": 2976,
 									"name": "file_name",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -28215,7 +26996,7 @@
 									}
 								},
 								{
-									"id": 3039,
+									"id": 2977,
 									"name": "data_target",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -28226,7 +27007,7 @@
 									"type": {
 										"type": "reference",
 										"name": "_EIODataTarget",
-										"id": 3005
+										"id": 2943
 									}
 								}
 							],
@@ -28245,21 +27026,21 @@
 					]
 				},
 				{
-					"id": 3061,
+					"id": 2999,
 					"name": "convertString",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 3062,
+							"id": 3000,
 							"name": "convertString",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3063,
+									"id": 3001,
 									"name": "value",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -28285,14 +27066,14 @@
 					]
 				},
 				{
-					"id": 3078,
+					"id": 3016,
 					"name": "saveResource",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 3079,
+							"id": 3017,
 							"name": "saveResource",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -28302,7 +27083,7 @@
 							},
 							"parameters": [
 								{
-									"id": 3080,
+									"id": 3018,
 									"name": "file",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -28313,7 +27094,7 @@
 									}
 								},
 								{
-									"id": 3081,
+									"id": 3019,
 									"name": "name",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -28339,21 +27120,21 @@
 					]
 				},
 				{
-					"id": 3082,
+					"id": 3020,
 					"name": "saveToFS",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 3083,
+							"id": 3021,
 							"name": "saveToFS",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3084,
+									"id": 3022,
 									"name": "fs",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -28384,37 +27165,37 @@
 					"title": "Modules",
 					"kind": 2,
 					"children": [
-						3020
+						2958
 					]
 				},
 				{
 					"title": "Enumerations",
 					"kind": 4,
 					"children": [
-						2998,
-						3002,
-						3005,
-						3016,
-						3008,
-						3013
+						2936,
+						2940,
+						2943,
+						2954,
+						2946,
+						2951
 					]
 				},
 				{
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						3045,
-						3052,
-						3040,
-						3075,
-						3071,
-						3068,
-						3064,
-						3030,
-						3034,
-						3061,
-						3078,
-						3082
+						2983,
+						2990,
+						2978,
+						3013,
+						3009,
+						3006,
+						3002,
+						2968,
+						2972,
+						2999,
+						3016,
+						3020
 					]
 				}
 			],
@@ -29925,7 +28706,7 @@
 			]
 		},
 		{
-			"id": 2992,
+			"id": 2930,
 			"name": "\"libs/filesys/download\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -29936,7 +28717,7 @@
 			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/filesys/download.ts",
 			"children": [
 				{
-					"id": 2993,
+					"id": 2931,
 					"name": "download",
 					"kind": 64,
 					"kindString": "Function",
@@ -29946,7 +28727,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2994,
+							"id": 2932,
 							"name": "download",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -29956,7 +28737,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2995,
+									"id": 2933,
 									"name": "data",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -29968,7 +28749,7 @@
 									}
 								},
 								{
-									"id": 2996,
+									"id": 2934,
 									"name": "filename",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -30002,7 +28783,7 @@
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						2993
+						2931
 					]
 				}
 			],
@@ -52031,7 +50812,7 @@
 			]
 		},
 		{
-			"id": 2847,
+			"id": 2785,
 			"name": "\"libs/geo-info/io_dae\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -52042,7 +50823,7 @@
 			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/io_dae.ts",
 			"children": [
 				{
-					"id": 2925,
+					"id": 2863,
 					"name": "exportDae",
 					"kind": 64,
 					"kindString": "Function",
@@ -52052,7 +50833,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2926,
+							"id": 2864,
 							"name": "exportDae",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -52062,7 +50843,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2927,
+									"id": 2865,
 									"name": "model",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52089,7 +50870,7 @@
 					]
 				},
 				{
-					"id": 2855,
+					"id": 2793,
 					"name": "getGeomMeshPgon",
 					"kind": 64,
 					"kindString": "Function",
@@ -52098,14 +50879,14 @@
 					},
 					"signatures": [
 						{
-							"id": 2856,
+							"id": 2794,
 							"name": "getGeomMeshPgon",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2857,
+									"id": 2795,
 									"name": "id",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52116,7 +50897,7 @@
 									}
 								},
 								{
-									"id": 2858,
+									"id": 2796,
 									"name": "num_posis",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52127,7 +50908,7 @@
 									}
 								},
 								{
-									"id": 2859,
+									"id": 2797,
 									"name": "xyz_str",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52138,7 +50919,7 @@
 									}
 								},
 								{
-									"id": 2860,
+									"id": 2798,
 									"name": "num_tri",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52149,7 +50930,7 @@
 									}
 								},
 								{
-									"id": 2861,
+									"id": 2799,
 									"name": "indices_str",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52160,7 +50941,7 @@
 									}
 								},
 								{
-									"id": 2862,
+									"id": 2800,
 									"name": "material_id",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52186,7 +50967,7 @@
 					]
 				},
 				{
-					"id": 2863,
+					"id": 2801,
 					"name": "getGeomMeshPline",
 					"kind": 64,
 					"kindString": "Function",
@@ -52195,14 +50976,14 @@
 					},
 					"signatures": [
 						{
-							"id": 2864,
+							"id": 2802,
 							"name": "getGeomMeshPline",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2865,
+									"id": 2803,
 									"name": "id",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52213,7 +50994,7 @@
 									}
 								},
 								{
-									"id": 2866,
+									"id": 2804,
 									"name": "num_posis",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52224,7 +51005,7 @@
 									}
 								},
 								{
-									"id": 2867,
+									"id": 2805,
 									"name": "xyz_str",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52235,7 +51016,7 @@
 									}
 								},
 								{
-									"id": 2868,
+									"id": 2806,
 									"name": "num_lines",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52246,7 +51027,7 @@
 									}
 								},
 								{
-									"id": 2869,
+									"id": 2807,
 									"name": "indices_str",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52257,7 +51038,7 @@
 									}
 								},
 								{
-									"id": 2870,
+									"id": 2808,
 									"name": "material_id",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52283,7 +51064,7 @@
 					]
 				},
 				{
-					"id": 2851,
+					"id": 2789,
 					"name": "getInstGeom",
 					"kind": 64,
 					"kindString": "Function",
@@ -52292,14 +51073,14 @@
 					},
 					"signatures": [
 						{
-							"id": 2852,
+							"id": 2790,
 							"name": "getInstGeom",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2853,
+									"id": 2791,
 									"name": "id",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52310,7 +51091,7 @@
 									}
 								},
 								{
-									"id": 2854,
+									"id": 2792,
 									"name": "material_id",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52336,7 +51117,7 @@
 					]
 				},
 				{
-					"id": 2871,
+					"id": 2809,
 					"name": "getMaterial",
 					"kind": 64,
 					"kindString": "Function",
@@ -52345,14 +51126,14 @@
 					},
 					"signatures": [
 						{
-							"id": 2872,
+							"id": 2810,
 							"name": "getMaterial",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2873,
+									"id": 2811,
 									"name": "id",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52363,7 +51144,7 @@
 									}
 								},
 								{
-									"id": 2874,
+									"id": 2812,
 									"name": "effect_id",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52389,7 +51170,7 @@
 					]
 				},
 				{
-					"id": 2886,
+					"id": 2824,
 					"name": "getNodesWithInstGeoms",
 					"kind": 64,
 					"kindString": "Function",
@@ -52398,14 +51179,14 @@
 					},
 					"signatures": [
 						{
-							"id": 2887,
+							"id": 2825,
 							"name": "getNodesWithInstGeoms",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2888,
+									"id": 2826,
 									"name": "id",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52416,7 +51197,7 @@
 									}
 								},
 								{
-									"id": 2889,
+									"id": 2827,
 									"name": "inst_geoms",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52442,7 +51223,7 @@
 					]
 				},
 				{
-					"id": 2875,
+					"id": 2813,
 					"name": "getPgonEffect",
 					"kind": 64,
 					"kindString": "Function",
@@ -52451,14 +51232,14 @@
 					},
 					"signatures": [
 						{
-							"id": 2876,
+							"id": 2814,
 							"name": "getPgonEffect",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2877,
+									"id": 2815,
 									"name": "id",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52469,7 +51250,7 @@
 									}
 								},
 								{
-									"id": 2878,
+									"id": 2816,
 									"name": "color",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52495,7 +51276,7 @@
 					]
 				},
 				{
-					"id": 2879,
+					"id": 2817,
 					"name": "getPlineEffect",
 					"kind": 64,
 					"kindString": "Function",
@@ -52504,14 +51285,14 @@
 					},
 					"signatures": [
 						{
-							"id": 2880,
+							"id": 2818,
 							"name": "getPlineEffect",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2881,
+									"id": 2819,
 									"name": "id",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52522,7 +51303,7 @@
 									}
 								},
 								{
-									"id": 2882,
+									"id": 2820,
 									"name": "color",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52548,7 +51329,7 @@
 					]
 				},
 				{
-					"id": 2883,
+					"id": 2821,
 					"name": "getVisualSceneNode",
 					"kind": 64,
 					"kindString": "Function",
@@ -52557,14 +51338,14 @@
 					},
 					"signatures": [
 						{
-							"id": 2884,
+							"id": 2822,
 							"name": "getVisualSceneNode",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2885,
+									"id": 2823,
 									"name": "id",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52590,7 +51371,7 @@
 					]
 				},
 				{
-					"id": 2848,
+					"id": 2786,
 					"name": "importDae",
 					"kind": 64,
 					"kindString": "Function",
@@ -52600,7 +51381,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2849,
+							"id": 2787,
 							"name": "importDae",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -52610,7 +51391,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2850,
+									"id": 2788,
 									"name": "obj_str",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52637,7 +51418,7 @@
 					]
 				},
 				{
-					"id": 2890,
+					"id": 2828,
 					"name": "processColls",
 					"kind": 64,
 					"kindString": "Function",
@@ -52646,7 +51427,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2891,
+							"id": 2829,
 							"name": "processColls",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -52656,7 +51437,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2892,
+									"id": 2830,
 									"name": "model",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52683,7 +51464,7 @@
 					]
 				},
 				{
-					"id": 2905,
+					"id": 2843,
 					"name": "processGeomMeshPgon",
 					"kind": 64,
 					"kindString": "Function",
@@ -52692,14 +51473,14 @@
 					},
 					"signatures": [
 						{
-							"id": 2906,
+							"id": 2844,
 							"name": "processGeomMeshPgon",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2907,
+									"id": 2845,
 									"name": "model",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52711,7 +51492,7 @@
 									}
 								},
 								{
-									"id": 2908,
+									"id": 2846,
 									"name": "pgon_i",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52722,7 +51503,7 @@
 									}
 								},
 								{
-									"id": 2909,
+									"id": 2847,
 									"name": "material_id",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52733,7 +51514,7 @@
 									}
 								},
 								{
-									"id": 2910,
+									"id": 2848,
 									"name": "geom_meshes_map",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52769,7 +51550,7 @@
 					]
 				},
 				{
-					"id": 2919,
+					"id": 2857,
 					"name": "processGeomMeshPline",
 					"kind": 64,
 					"kindString": "Function",
@@ -52778,14 +51559,14 @@
 					},
 					"signatures": [
 						{
-							"id": 2920,
+							"id": 2858,
 							"name": "processGeomMeshPline",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2921,
+									"id": 2859,
 									"name": "model",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52797,7 +51578,7 @@
 									}
 								},
 								{
-									"id": 2922,
+									"id": 2860,
 									"name": "pline_i",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52808,7 +51589,7 @@
 									}
 								},
 								{
-									"id": 2923,
+									"id": 2861,
 									"name": "material_id",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52819,7 +51600,7 @@
 									}
 								},
 								{
-									"id": 2924,
+									"id": 2862,
 									"name": "geom_meshes_map",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52855,7 +51636,7 @@
 					]
 				},
 				{
-					"id": 2897,
+					"id": 2835,
 					"name": "processMaterialPgon",
 					"kind": 64,
 					"kindString": "Function",
@@ -52864,7 +51645,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2898,
+							"id": 2836,
 							"name": "processMaterialPgon",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -52874,7 +51655,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2899,
+									"id": 2837,
 									"name": "model",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52886,7 +51667,7 @@
 									}
 								},
 								{
-									"id": 2900,
+									"id": 2838,
 									"name": "pgon_i",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52897,7 +51678,7 @@
 									}
 								},
 								{
-									"id": 2901,
+									"id": 2839,
 									"name": "has_color_attrib",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52908,7 +51689,7 @@
 									}
 								},
 								{
-									"id": 2902,
+									"id": 2840,
 									"name": "materials_map",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52929,7 +51710,7 @@
 									}
 								},
 								{
-									"id": 2903,
+									"id": 2841,
 									"name": "material_effects_map",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52950,7 +51731,7 @@
 									}
 								},
 								{
-									"id": 2904,
+									"id": 2842,
 									"name": "materials_rev_map",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -52986,7 +51767,7 @@
 					]
 				},
 				{
-					"id": 2911,
+					"id": 2849,
 					"name": "processMaterialPline",
 					"kind": 64,
 					"kindString": "Function",
@@ -52995,7 +51776,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2912,
+							"id": 2850,
 							"name": "processMaterialPline",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -53005,7 +51786,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2913,
+									"id": 2851,
 									"name": "model",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53017,7 +51798,7 @@
 									}
 								},
 								{
-									"id": 2914,
+									"id": 2852,
 									"name": "pline_i",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53028,7 +51809,7 @@
 									}
 								},
 								{
-									"id": 2915,
+									"id": 2853,
 									"name": "has_color_attrib",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53039,7 +51820,7 @@
 									}
 								},
 								{
-									"id": 2916,
+									"id": 2854,
 									"name": "materials_map",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53060,7 +51841,7 @@
 									}
 								},
 								{
-									"id": 2917,
+									"id": 2855,
 									"name": "material_effects_map",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53081,7 +51862,7 @@
 									}
 								},
 								{
-									"id": 2918,
+									"id": 2856,
 									"name": "materials_rev_map",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53117,7 +51898,7 @@
 					]
 				},
 				{
-					"id": 2893,
+					"id": 2831,
 					"name": "processPgonInColl",
 					"kind": 64,
 					"kindString": "Function",
@@ -53126,14 +51907,14 @@
 					},
 					"signatures": [
 						{
-							"id": 2894,
+							"id": 2832,
 							"name": "processPgonInColl",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2895,
+									"id": 2833,
 									"name": "model",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53145,7 +51926,7 @@
 									}
 								},
 								{
-									"id": 2896,
+									"id": 2834,
 									"name": "pgon_i",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53176,22 +51957,22 @@
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						2925,
-						2855,
 						2863,
-						2851,
-						2871,
-						2886,
-						2875,
-						2879,
-						2883,
-						2848,
-						2890,
-						2905,
-						2919,
-						2897,
-						2911,
-						2893
+						2793,
+						2801,
+						2789,
+						2809,
+						2824,
+						2813,
+						2817,
+						2821,
+						2786,
+						2828,
+						2843,
+						2857,
+						2835,
+						2849,
+						2831
 					]
 				}
 			],
@@ -53204,7 +51985,7 @@
 			]
 		},
 		{
-			"id": 2928,
+			"id": 2866,
 			"name": "\"libs/geo-info/io_geojson\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -53215,7 +51996,7 @@
 			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/io_geojson.ts",
 			"children": [
 				{
-					"id": 2929,
+					"id": 2867,
 					"name": "EGeojsoFeatureType",
 					"kind": 4,
 					"kindString": "Enumeration",
@@ -53224,7 +52005,7 @@
 					},
 					"children": [
 						{
-							"id": 2931,
+							"id": 2869,
 							"name": "LINESTRING",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -53241,7 +52022,7 @@
 							"defaultValue": "\"LineString\""
 						},
 						{
-							"id": 2934,
+							"id": 2872,
 							"name": "MULTILINESTRING",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -53258,7 +52039,7 @@
 							"defaultValue": "\"MultiLineString\""
 						},
 						{
-							"id": 2933,
+							"id": 2871,
 							"name": "MULTIPOINT",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -53275,7 +52056,7 @@
 							"defaultValue": "\"MultiPoint\""
 						},
 						{
-							"id": 2935,
+							"id": 2873,
 							"name": "MULTIPOLYGON",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -53292,7 +52073,7 @@
 							"defaultValue": "\"MultiPolygon\""
 						},
 						{
-							"id": 2930,
+							"id": 2868,
 							"name": "POINT",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -53309,7 +52090,7 @@
 							"defaultValue": "\"Point\""
 						},
 						{
-							"id": 2932,
+							"id": 2870,
 							"name": "POLYGON",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -53331,12 +52112,12 @@
 							"title": "Enumeration members",
 							"kind": 16,
 							"children": [
-								2931,
-								2934,
-								2933,
-								2935,
-								2930,
-								2932
+								2869,
+								2872,
+								2871,
+								2873,
+								2868,
+								2870
 							]
 						}
 					],
@@ -53349,7 +52130,7 @@
 					]
 				},
 				{
-					"id": 2981,
+					"id": 2919,
 					"name": "_addAttribsToModel",
 					"kind": 64,
 					"kindString": "Function",
@@ -53358,7 +52139,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2982,
+							"id": 2920,
 							"name": "_addAttribsToModel",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -53368,7 +52149,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2983,
+									"id": 2921,
 									"name": "model",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53383,7 +52164,7 @@
 									}
 								},
 								{
-									"id": 2984,
+									"id": 2922,
 									"name": "ent_type",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53395,7 +52176,7 @@
 									}
 								},
 								{
-									"id": 2985,
+									"id": 2923,
 									"name": "ent_i",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53406,7 +52187,7 @@
 									}
 								},
 								{
-									"id": 2986,
+									"id": 2924,
 									"name": "feature",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53432,7 +52213,7 @@
 					]
 				},
 				{
-					"id": 2975,
+					"id": 2913,
 					"name": "_addPgonCollToModel",
 					"kind": 64,
 					"kindString": "Function",
@@ -53441,7 +52222,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2976,
+							"id": 2914,
 							"name": "_addPgonCollToModel",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -53451,7 +52232,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2977,
+									"id": 2915,
 									"name": "model",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53466,7 +52247,7 @@
 									}
 								},
 								{
-									"id": 2978,
+									"id": 2916,
 									"name": "multipolygon",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53477,7 +52258,7 @@
 									}
 								},
 								{
-									"id": 2979,
+									"id": 2917,
 									"name": "proj_obj",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53488,7 +52269,7 @@
 									}
 								},
 								{
-									"id": 2980,
+									"id": 2918,
 									"name": "elevation",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53526,7 +52307,7 @@
 					]
 				},
 				{
-					"id": 2957,
+					"id": 2895,
 					"name": "_addPgonToModel",
 					"kind": 64,
 					"kindString": "Function",
@@ -53535,7 +52316,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2958,
+							"id": 2896,
 							"name": "_addPgonToModel",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -53545,7 +52326,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2959,
+									"id": 2897,
 									"name": "model",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53560,7 +52341,7 @@
 									}
 								},
 								{
-									"id": 2960,
+									"id": 2898,
 									"name": "polygon",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53571,7 +52352,7 @@
 									}
 								},
 								{
-									"id": 2961,
+									"id": 2899,
 									"name": "proj_obj",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53582,7 +52363,7 @@
 									}
 								},
 								{
-									"id": 2962,
+									"id": 2900,
 									"name": "elevation",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53608,7 +52389,7 @@
 					]
 				},
 				{
-					"id": 2969,
+					"id": 2907,
 					"name": "_addPlineCollToModel",
 					"kind": 64,
 					"kindString": "Function",
@@ -53617,7 +52398,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2970,
+							"id": 2908,
 							"name": "_addPlineCollToModel",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -53627,7 +52408,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2971,
+									"id": 2909,
 									"name": "model",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53642,7 +52423,7 @@
 									}
 								},
 								{
-									"id": 2972,
+									"id": 2910,
 									"name": "multilinestring",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53653,7 +52434,7 @@
 									}
 								},
 								{
-									"id": 2973,
+									"id": 2911,
 									"name": "proj_obj",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53664,7 +52445,7 @@
 									}
 								},
 								{
-									"id": 2974,
+									"id": 2912,
 									"name": "elevation",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53702,7 +52483,7 @@
 					]
 				},
 				{
-					"id": 2951,
+					"id": 2889,
 					"name": "_addPlineToModel",
 					"kind": 64,
 					"kindString": "Function",
@@ -53711,7 +52492,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2952,
+							"id": 2890,
 							"name": "_addPlineToModel",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -53721,7 +52502,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2953,
+									"id": 2891,
 									"name": "model",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53736,7 +52517,7 @@
 									}
 								},
 								{
-									"id": 2954,
+									"id": 2892,
 									"name": "linestring",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53747,7 +52528,7 @@
 									}
 								},
 								{
-									"id": 2955,
+									"id": 2893,
 									"name": "proj_obj",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53758,7 +52539,7 @@
 									}
 								},
 								{
-									"id": 2956,
+									"id": 2894,
 									"name": "elevation",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53784,7 +52565,7 @@
 					]
 				},
 				{
-					"id": 2963,
+					"id": 2901,
 					"name": "_addPointCollToModel",
 					"kind": 64,
 					"kindString": "Function",
@@ -53793,7 +52574,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2964,
+							"id": 2902,
 							"name": "_addPointCollToModel",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -53803,7 +52584,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2965,
+									"id": 2903,
 									"name": "model",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53818,7 +52599,7 @@
 									}
 								},
 								{
-									"id": 2966,
+									"id": 2904,
 									"name": "multipoint",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53832,7 +52613,7 @@
 									}
 								},
 								{
-									"id": 2967,
+									"id": 2905,
 									"name": "proj_obj",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53843,7 +52624,7 @@
 									}
 								},
 								{
-									"id": 2968,
+									"id": 2906,
 									"name": "elevation",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53881,7 +52662,7 @@
 					]
 				},
 				{
-					"id": 2945,
+					"id": 2883,
 					"name": "_addPointToModel",
 					"kind": 64,
 					"kindString": "Function",
@@ -53890,7 +52671,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2946,
+							"id": 2884,
 							"name": "_addPointToModel",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -53900,7 +52681,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2947,
+									"id": 2885,
 									"name": "model",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53915,7 +52696,7 @@
 									}
 								},
 								{
-									"id": 2948,
+									"id": 2886,
 									"name": "point",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53929,7 +52710,7 @@
 									}
 								},
 								{
-									"id": 2949,
+									"id": 2887,
 									"name": "proj_obj",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53940,7 +52721,7 @@
 									}
 								},
 								{
-									"id": 2950,
+									"id": 2888,
 									"name": "elevation",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -53966,7 +52747,7 @@
 					]
 				},
 				{
-					"id": 2941,
+					"id": 2879,
 					"name": "_createProjection",
 					"kind": 64,
 					"kindString": "Function",
@@ -53975,7 +52756,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2942,
+							"id": 2880,
 							"name": "_createProjection",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -53985,7 +52766,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2943,
+									"id": 2881,
 									"name": "model",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -54000,7 +52781,7 @@
 									}
 								},
 								{
-									"id": 2944,
+									"id": 2882,
 									"name": "geojson_obj",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -54026,7 +52807,7 @@
 					]
 				},
 				{
-					"id": 2987,
+					"id": 2925,
 					"name": "_xformLongLat",
 					"kind": 64,
 					"kindString": "Function",
@@ -54035,7 +52816,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2988,
+							"id": 2926,
 							"name": "_xformLongLat",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -54045,7 +52826,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2989,
+									"id": 2927,
 									"name": "long_lat_arr",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -54087,7 +52868,7 @@
 									}
 								},
 								{
-									"id": 2990,
+									"id": 2928,
 									"name": "proj_obj",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -54098,7 +52879,7 @@
 									}
 								},
 								{
-									"id": 2991,
+									"id": 2929,
 									"name": "elevation",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -54141,7 +52922,7 @@
 					]
 				},
 				{
-					"id": 2936,
+					"id": 2874,
 					"name": "importGeojson",
 					"kind": 64,
 					"kindString": "Function",
@@ -54151,7 +52932,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2937,
+							"id": 2875,
 							"name": "importGeojson",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -54161,7 +52942,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2938,
+									"id": 2876,
 									"name": "model",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -54173,7 +52954,7 @@
 									}
 								},
 								{
-									"id": 2939,
+									"id": 2877,
 									"name": "geojson_str",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -54184,7 +52965,7 @@
 									}
 								},
 								{
-									"id": 2940,
+									"id": 2878,
 									"name": "elevation",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -54216,23 +52997,23 @@
 					"title": "Enumerations",
 					"kind": 4,
 					"children": [
-						2929
+						2867
 					]
 				},
 				{
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						2981,
-						2975,
-						2957,
-						2969,
-						2951,
-						2963,
-						2945,
-						2941,
-						2987,
-						2936
+						2919,
+						2913,
+						2895,
+						2907,
+						2889,
+						2901,
+						2883,
+						2879,
+						2925,
+						2874
 					]
 				}
 			],
@@ -54245,7 +53026,7 @@
 			]
 		},
 		{
-			"id": 2840,
+			"id": 2778,
 			"name": "\"libs/geo-info/io_obj\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -54256,7 +53037,7 @@
 			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geo-info/io_obj.ts",
 			"children": [
 				{
-					"id": 2844,
+					"id": 2782,
 					"name": "exportObj",
 					"kind": 64,
 					"kindString": "Function",
@@ -54266,7 +53047,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2845,
+							"id": 2783,
 							"name": "exportObj",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -54276,7 +53057,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2846,
+									"id": 2784,
 									"name": "model",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -54303,7 +53084,7 @@
 					]
 				},
 				{
-					"id": 2841,
+					"id": 2779,
 					"name": "importObj",
 					"kind": 64,
 					"kindString": "Function",
@@ -54313,7 +53094,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2842,
+							"id": 2780,
 							"name": "importObj",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -54323,7 +53104,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2843,
+									"id": 2781,
 									"name": "obj_str",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -54355,8 +53136,8 @@
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						2844,
-						2841
+						2782,
+						2779
 					]
 				}
 			],
@@ -54607,7 +53388,7 @@
 			]
 		},
 		{
-			"id": 3130,
+			"id": 3068,
 			"name": "\"libs/geom/intersect\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -54618,7 +53399,7 @@
 			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller-dev/src/assets/libs/geom/intersect.ts",
 			"children": [
 				{
-					"id": 3133,
+					"id": 3071,
 					"name": "TPlane",
 					"kind": 4194304,
 					"kindString": "Type alias",
@@ -54638,23 +53419,23 @@
 							{
 								"type": "reference",
 								"name": "Txyz",
-								"id": 3131
+								"id": 3069
 							},
 							{
 								"type": "reference",
 								"name": "Txyz",
-								"id": 3131
+								"id": 3069
 							},
 							{
 								"type": "reference",
 								"name": "Txyz",
-								"id": 3131
+								"id": 3069
 							}
 						]
 					}
 				},
 				{
-					"id": 3132,
+					"id": 3070,
 					"name": "TRay",
 					"kind": 4194304,
 					"kindString": "Type alias",
@@ -54674,18 +53455,18 @@
 							{
 								"type": "reference",
 								"name": "Txyz",
-								"id": 3131
+								"id": 3069
 							},
 							{
 								"type": "reference",
 								"name": "Txyz",
-								"id": 3131
+								"id": 3069
 							}
 						]
 					}
 				},
 				{
-					"id": 3131,
+					"id": 3069,
 					"name": "Txyz",
 					"kind": 4194304,
 					"kindString": "Type alias",
@@ -54718,7 +53499,7 @@
 					}
 				},
 				{
-					"id": 3134,
+					"id": 3072,
 					"name": "intersect",
 					"kind": 64,
 					"kindString": "Function",
@@ -54728,14 +53509,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3135,
+							"id": 3073,
 							"name": "intersect",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3136,
+									"id": 3074,
 									"name": "r1",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -54743,11 +53524,11 @@
 									"type": {
 										"type": "reference",
 										"name": "TRay",
-										"id": 3132
+										"id": 3070
 									}
 								},
 								{
-									"id": 3137,
+									"id": 3075,
 									"name": "r2",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -54758,12 +53539,12 @@
 											{
 												"type": "reference",
 												"name": "TRay",
-												"id": 3132
+												"id": 3070
 											},
 											{
 												"type": "reference",
 												"name": "TPlane",
-												"id": 3133
+												"id": 3071
 											}
 										]
 									}
@@ -54784,7 +53565,7 @@
 					]
 				},
 				{
-					"id": 3138,
+					"id": 3076,
 					"name": "project",
 					"kind": 64,
 					"kindString": "Function",
@@ -54794,14 +53575,14 @@
 					},
 					"signatures": [
 						{
-							"id": 3139,
+							"id": 3077,
 							"name": "project",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 3140,
+									"id": 3078,
 									"name": "c",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -54809,11 +53590,11 @@
 									"type": {
 										"type": "reference",
 										"name": "Txyz",
-										"id": 3131
+										"id": 3069
 									}
 								},
 								{
-									"id": 3141,
+									"id": 3079,
 									"name": "r",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -54824,12 +53605,12 @@
 											{
 												"type": "reference",
 												"name": "TRay",
-												"id": 3132
+												"id": 3070
 											},
 											{
 												"type": "reference",
 												"name": "TPlane",
-												"id": 3133
+												"id": 3071
 											}
 										]
 									}
@@ -54838,7 +53619,7 @@
 							"type": {
 								"type": "reference",
 								"name": "Txyz",
-								"id": 3131
+								"id": 3069
 							}
 						}
 					],
@@ -54856,17 +53637,17 @@
 					"title": "Type aliases",
 					"kind": 4194304,
 					"children": [
-						3133,
-						3132,
-						3131
+						3071,
+						3070,
+						3069
 					]
 				},
 				{
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						3134,
-						3138
+						3072,
+						3076
 					]
 				}
 			],
@@ -60316,34 +59097,34 @@
 			"title": "External modules",
 			"kind": 1,
 			"children": [
-				3259,
-				3142,
-				3227,
-				3241,
-				3234,
-				3146,
-				3085,
+				3197,
+				3080,
+				3165,
+				3179,
+				3172,
+				3084,
+				3023,
 				1228,
-				3092,
-				3211,
-				3248,
-				3115,
+				3030,
+				3149,
+				3186,
+				3053,
 				1454,
 				1875,
-				3254,
+				3192,
 				1694,
 				1807,
-				3281,
-				3282,
+				3219,
+				3220,
 				2711,
 				2213,
 				2448,
 				2188,
 				1952,
 				2624,
-				2997,
+				2935,
 				2546,
-				2992,
+				2930,
 				17,
 				1352,
 				1369,
@@ -60362,11 +59143,11 @@
 				1401,
 				119,
 				776,
-				2847,
-				2928,
-				2840,
+				2785,
+				2866,
+				2778,
 				1798,
-				3130,
+				3068,
 				2131,
 				475,
 				568,

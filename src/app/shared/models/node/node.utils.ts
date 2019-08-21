@@ -58,20 +58,24 @@ export abstract class NodeUtils {
             if (i.module !== returnMeta[0]) { continue; }
             for ( const j of i.functions) {
                 if (j.name !== returnMeta[1]) { continue; }
-                const newReturn = {type: 11, ID: 'Return',
-                parent: undefined,
-                meta: {name: '', module: ''},
-                children: undefined,
-                variable: undefined,
-                argCount: j.argCount,
-                args: j.args,
-                print: false,
-                enabled: true,
-                selected: false,
-                selectGeom: false,
-                hasError: false};
+                const newReturn = {
+                    type: 11,
+                    ID: 'Return',
+                    parent: undefined,
+                    meta: {name: '', module: ''},
+                    children: undefined,
+                    variable: undefined,
+                    argCount: j.argCount,
+                    args: j.args,
+                    print: false,
+                    enabled: true,
+                    selected: false,
+                    selectGeom: false,
+                    hasError: false
+                };
                 for (const arg of newReturn.args) {
                     arg.value = '';
+                    arg.jsValue = '';
                 }
                 node.procedure.push(newReturn);
                 check = true;

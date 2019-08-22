@@ -257,6 +257,13 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                         element.innerHTML = String(_attr_val);
                     }
                 }
+            } else if (attr_name === '#') {
+                for (let i = 0; i < allLabels.length; i++) {
+                    const element = allLabels[i];
+                    const val = Number(element.getAttribute('data-index'));
+                    const index = arr.findIndex(l => l === val);
+                    element.innerHTML = String(index);
+                }
             } else if (attr_name === '_id') {
                 for (let i = 0; i < allLabels.length; i++) {
                     const element = allLabels[i];

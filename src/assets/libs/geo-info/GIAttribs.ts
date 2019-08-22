@@ -87,7 +87,7 @@ export class GIAttribs {
         for (const ent_type of eny_type_array) {
             const ent_type_str: string = ent_type_strs[ent_type];
             const attrib_names_1: string[] = this._model.attribs.query.getAttribNamesUser(ent_type);
-            const attrib_names_2: string[] = model.attribs.query.getAttribNames(ent_type);
+            const attrib_names_2: string[] = model.attribs.query.getAttribNamesUser(ent_type);
             if (attrib_names_1.length !== attrib_names_2.length) {
                 result.matches = false;
                 result.comment += 'The number of ' + ent_type_str + ' attributes do not match.\n';

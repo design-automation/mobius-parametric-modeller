@@ -55,9 +55,9 @@ export class GIModel {
      * @param model The model to compare with.
      */
     public compare(model: GIModel): {matches: boolean, comment: string} {
-        const result: {matches: boolean, comment: string} = {matches: true, comment: ''};
-        this.geom.compare(model, result);
-        this.attribs.compare(model, result);
+        const result_array: {matches: boolean, comment: any} = {matches: true, comment: []};
+        this.geom.compare(model, result_array);
+        this.attribs.compare(model, result_array);
         // temporary solution for comparing models
         const this_model: IModelData = this.getData();
         this_model.geometry.selected = [];
@@ -65,16 +65,35 @@ export class GIModel {
         other_model.geometry.selected = [];
         const this_model_str: string = JSON.stringify(this_model);
         const other_model_str: string = JSON.stringify(other_model);
+        result_array.comment.push('Comparing model data.');
         if (this_model_str !== other_model_str) {
-            result.comment = result.comment + 'When comparing the geometry and attributes in the two models, differences were found.\n';
-        }
-        // return the result
-        if (result.matches) {
-            result.comment = 'Comparison of models: The two models match.\n';
+            result_array.matches = false;
+            result_array.comment.push(['Differences were found in the data.']);
         } else {
-            result.comment = 'Comparison of models: The two models no not match.\n' + result.comment;
+            result_array.comment.push(['Everything matches.']);
         }
-        return result;
+        // Add a final msg
+        if (result_array.matches) {
+            result_array.comment = ['RESULT: The two models match.'];
+        } else {
+            result_array.comment.push('RESULT: The two models no not match.');
+        }
+        // html formatting
+        let formatted_str = '<ul>';
+        for (const comment of result_array.comment) {
+            if (Array.isArray(comment)) {
+                formatted_str += '<ul>';
+                    for (const sub_comment of comment) {
+                        formatted_str += '<li>' + sub_comment + '</li>';
+                    }
+                formatted_str += '</ul>';
+            } else {
+                formatted_str += '<li>' + comment + '</li>';
+            }
+        }
+        formatted_str += '</ul>';
+        // return the result
+        return {matches: result_array.matches, comment: formatted_str};
     }
     /**
      * Check model for internal consistency

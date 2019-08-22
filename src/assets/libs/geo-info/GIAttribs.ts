@@ -56,8 +56,8 @@ export class GIAttribs {
      * Compares this model and another model.
      * @param model The model to compare with.
      */
-    compare(model: GIModel, result: {matches: boolean, comment: string}): void {
-        result.comment += 'Comparing Attributes.\n';
+    compare(model: GIModel, result: {matches: boolean, comment: any[]}): void {
+        result.comment.push('Comparing attribute names and types.');
         const eny_type_array: EEntType[] = [
             EEntType.POSI,
             EEntType.VERT,
@@ -84,41 +84,45 @@ export class GIAttribs {
             'model'
         ];
         // compare all attributes except model attributes
+        const attrib_comments: string[] = [];
         for (const ent_type of eny_type_array) {
             const ent_type_str: string = ent_type_strs[ent_type];
             const attrib_names_1: string[] = this._model.attribs.query.getAttribNamesUser(ent_type);
             const attrib_names_2: string[] = model.attribs.query.getAttribNamesUser(ent_type);
             if (attrib_names_1.length !== attrib_names_2.length) {
                 result.matches = false;
-                result.comment += 'The number of ' + ent_type_str + ' attributes do not match.\n';
+                attrib_comments.push('The number of ' + ent_type_str + ' attributes do not match.');
                 for (const name2 of attrib_names_2) {
                     if (attrib_names_1.indexOf(name2) === -1 ) {
                         result.matches = false;
-                        result.comment += 'There is an additional "' + name2 + '" ' + ent_type_str + ' attribute.\n';
+                        attrib_comments.push('There is an additional "' + name2 + '" ' + ent_type_str + ' attribute.');
                     }
                 }
             } else {
-                result.comment += 'The number of ' + ent_type_str + ' attributes match.\n';
+               // attrib_comments.push('The number of ' + ent_type_str + ' attributes match.');
             }
             for (const name1 of attrib_names_1) {
                 const data_type_1: EAttribDataTypeStrs = this._model.attribs.query.getAttribDataType(ent_type, name1);
                 if (attrib_names_2.indexOf(name1) === -1 ) {
                     result.matches = false;
-                    result.comment += 'The "' + name1 + '" ' + ent_type_str + ' attribute with ';
-                    result.comment += 'datatype "' + data_type_1 + '" is missing.\n';
+                    attrib_comments.push('The "' + name1 + '" ' + ent_type_str + ' attribute with '
+                        + 'datatype "' + data_type_1 + '" is missing.');
                 } else {
                     const data_type_2: EAttribDataTypeStrs = model.attribs.query.getAttribDataType(ent_type, name1);
                     if (data_type_1 !== data_type_2) {
                         result.matches = false;
-                        result.comment += 'The "' + name1 + '" ' + ent_type_str + ' attribute datatype is wrong. ';
-                        result.comment += 'It is "' + data_type_1 + '" but it should be "' + data_type_1 + '".\n';
+                        attrib_comments.push('The "' + name1 + '" ' + ent_type_str + ' attribute datatype is wrong. '
+                            + 'It is "' + data_type_1 + '" but it should be "' + data_type_1 + '".');
                     } else {
-                        result.comment += 'The "' + name1 + '" ' + ent_type_str + ' attribute with ';
-                        result.comment += 'datatype "' + data_type_1 + '" exists.\n';
+                        // attrib_comments.push('The "' + name1 + '" ' + ent_type_str + ' attribute with '
+                        //    + 'datatype "' + data_type_1 + '" exists.');
                     }
                 }
             }
         }
-        // TODO compare attribute values
+        if (attrib_comments.length === 0) {
+            attrib_comments.push('Everything matches.');
+        }
+        result.comment.push(attrib_comments);
     }
 }

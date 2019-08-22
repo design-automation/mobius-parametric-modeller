@@ -57,6 +57,7 @@ export class GIAttribs {
      * @param model The model to compare with.
      */
     compare(model: GIModel, result: {matches: boolean, comment: string}): void {
+        result.comment += 'Comparing Attributes.\n';
         const eny_type_array: EEntType[] = [
             EEntType.POSI,
             EEntType.VERT,
@@ -71,6 +72,7 @@ export class GIAttribs {
         ];
         const ent_type_strs: string[] = [
             'positions',
+            'triangles',
             'vertices',
             'edges',
             'wires',
@@ -81,9 +83,10 @@ export class GIAttribs {
             'collections',
             'model'
         ];
+        // compare all attributes except model attributes
         for (const ent_type of eny_type_array) {
             const ent_type_str: string = ent_type_strs[ent_type];
-            const attrib_names_1: string[] = this._model.attribs.query.getAttribNames(ent_type);
+            const attrib_names_1: string[] = this._model.attribs.query.getAttribNamesUser(ent_type);
             const attrib_names_2: string[] = model.attribs.query.getAttribNames(ent_type);
             if (attrib_names_1.length !== attrib_names_2.length) {
                 result.matches = false;
@@ -94,6 +97,8 @@ export class GIAttribs {
                         result.comment += 'There is an additional "' + name2 + '" ' + ent_type_str + ' attribute.\n';
                     }
                 }
+            } else {
+                result.comment += 'The number of ' + ent_type_str + ' attributes match.\n';
             }
             for (const name1 of attrib_names_1) {
                 const data_type_1: EAttribDataTypeStrs = this._model.attribs.query.getAttribDataType(ent_type, name1);
@@ -107,6 +112,9 @@ export class GIAttribs {
                         result.matches = false;
                         result.comment += 'The "' + name1 + '" ' + ent_type_str + ' attribute datatype is wrong. ';
                         result.comment += 'It is "' + data_type_1 + '" but it should be "' + data_type_1 + '".\n';
+                    } else {
+                        result.comment += 'The "' + name1 + '" ' + ent_type_str + ' attribute with ';
+                        result.comment += 'datatype "' + data_type_1 + '" exists.\n';
                     }
                 }
             }

@@ -58,10 +58,21 @@ export class GIModel {
         const result: {matches: boolean, comment: string} = {matches: true, comment: ''};
         this.geom.compare(model, result);
         this.attribs.compare(model, result);
+        // temporary solution for comparing models
+        const this_model: IModelData = this.getData();
+        this_model.geometry.selected = [];
+        const other_model: IModelData = model.getData();
+        other_model.geometry.selected = [];
+        const this_model_str: string = JSON.stringify(this_model);
+        const other_model_str: string = JSON.stringify(other_model);
+        if (this_model_str !== other_model_str) {
+            result.comment = result.comment + 'When comparing the geometry and attributes in the two models, differences were found.\n';
+        }
+        // return the result
         if (result.matches) {
-            result.comment = 'Models match.';
+            result.comment = 'Comparison of models: The two models match.\n';
         } else {
-            result.comment = 'Models do not match.\n' + result.comment;
+            result.comment = 'Comparison of models: The two models no not match.\n' + result.comment;
         }
         return result;
     }

@@ -62,9 +62,9 @@ export class GIGeom {
      * @param model The model to compare with.
      */
     compare(model: GIModel, result: {matches: boolean, comment: string}): void {
+        result.comment += 'Comparing Geometry.\n';
         const eny_type_array: EEntType[] = [
             EEntType.POSI,
-            EEntType.TRI,
             EEntType.VERT,
             EEntType.EDGE,
             EEntType.WIRE,
@@ -76,6 +76,7 @@ export class GIGeom {
         ];
         const ent_type_strs: string[] = [
             'positions',
+            'triangles',
             'vertices',
             'edges',
             'wires',
@@ -89,6 +90,8 @@ export class GIGeom {
             if (this.model.geom.query.numEnts(ent_type, false) !== model.geom.query.numEnts(ent_type, false)) {
                 result.matches = false;
                 result.comment += 'Number of ' + ent_type_strs[ent_type] + ' do not match.\n';
+            } else {
+                result.comment += 'Number of ' + ent_type_strs[ent_type] + ' match.\n';
             }
         }
     }

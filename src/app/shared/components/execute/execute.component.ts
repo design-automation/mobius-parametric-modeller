@@ -542,7 +542,7 @@ export class ExecuteComponent {
                 ex.message = 'Unexpected Identifier error. Did you declare everything?' +
                 'Check that your strings are enclosed in quotes (")';
             } else if (ex.toString().indexOf('Unexpected token') > -1 || ex.toString().indexOf('unexpected token') > -1) {
-                ex.message = 'Unexpected token error. Check for stray spaces or reserved keywords?';
+                ex.message = 'Unable to compile code. Check code order and arguments.';
             } else if (ex.toString().indexOf('\'readAsText\' on \'FileReader\'') > -1) {
                 ex.message = 'Unable to read file input. Check all start node inputs.';
             } else if (ex.toString().indexOf('Cannot read property \'splice\'') > -1) {

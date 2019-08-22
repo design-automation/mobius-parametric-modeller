@@ -26702,7 +26702,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/util.ts",
-							"line": 308,
+							"line": 307,
 							"character": 26
 						}
 					]
@@ -26723,8 +26723,8 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Compare this model to the data from another GI model.",
-								"returns": "Text that summarises the comparison between this model and the the GI model.\n"
+								"shortText": "Compare the GI data in this model to the GI data in another model.",
+								"returns": "Text that summarises the comparison between the two models.\n"
 							},
 							"parameters": [
 								{
@@ -27114,7 +27114,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/util.ts",
-							"line": 322,
+							"line": 321,
 							"character": 21
 						}
 					]
@@ -27154,7 +27154,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/util.ts",
-							"line": 361,
+							"line": 360,
 							"character": 17
 						}
 					]
@@ -35781,7 +35781,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeom.ts",
-									"line": 164,
+									"line": 167,
 									"character": 23
 								}
 							]
@@ -35815,7 +35815,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeom.ts",
-									"line": 215,
+									"line": 218,
 									"character": 23
 								}
 							]
@@ -35849,7 +35849,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeom.ts",
-									"line": 265,
+									"line": 268,
 									"character": 23
 								}
 							]
@@ -35883,7 +35883,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeom.ts",
-									"line": 237,
+									"line": 240,
 									"character": 24
 								}
 							]
@@ -35920,7 +35920,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeom.ts",
-									"line": 112,
+									"line": 115,
 									"character": 23
 								}
 							]
@@ -35954,7 +35954,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeom.ts",
-									"line": 128,
+									"line": 131,
 									"character": 23
 								}
 							]
@@ -35988,7 +35988,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeom.ts",
-									"line": 182,
+									"line": 185,
 									"character": 23
 								}
 							]
@@ -36025,7 +36025,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeom.ts",
-									"line": 98,
+									"line": 101,
 									"character": 16
 								}
 							]
@@ -44274,7 +44274,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModel.ts",
-									"line": 71,
+									"line": 82,
 									"character": 16
 								}
 							]

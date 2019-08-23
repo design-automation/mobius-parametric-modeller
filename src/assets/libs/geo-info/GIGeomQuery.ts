@@ -167,7 +167,11 @@ export class GIGeomQuery {
     public getCollParent(coll_i: number): number {
         return this._geom_arrays.dn_colls_objs[coll_i][0];
     }
-
+    /**
+     * I am not sure what this is... TODO
+     * A collection can only have one parent
+     * @param coll_i
+     */
     public getCollParents(coll_i: number) {
         const parents = this._geom_arrays.dn_colls_objs[coll_i];
         // @ts-ignore

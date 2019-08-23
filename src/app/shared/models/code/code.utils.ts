@@ -137,7 +137,7 @@ export class CodeUtils {
                     returnArgVals.push(arg.jsValue);
                 }
                 if (!check) {
-                    codeStr.push(`return __params__['model'];`);
+                    codeStr.push(`return null;`);
                 } else {
                     codeStr.push(`let __return_value__ = __modules__.${_parameterTypes.return}(${returnArgVals.join(', ')});`);
                     if (isMainFlowchart) {

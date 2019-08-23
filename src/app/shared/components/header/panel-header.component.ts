@@ -429,16 +429,7 @@ export class PanelHeaderComponent implements OnDestroy {
                 };
             reader.readAsText(selectedFile);
         });
-        let fileName = selectedFile.name;
-        let extension;
-        const splittedName = fileName.split('.');
-        if (splittedName.length === 1) {
-            extension = '';
-        } else {
-            fileName = splittedName.slice(0, -1).join('.');
-            extension = '.' + splittedName[splittedName.length - 1];
-        }
-        SaveFileComponent.saveToLocalStorage('', fileName, <string> await p, extension);
+        SaveFileComponent.saveToLocalStorage(selectedFile.name, <string> await p);
     }
 
     checkMobBackup(backup): boolean {

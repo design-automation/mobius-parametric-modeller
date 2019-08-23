@@ -2,7 +2,7 @@ import { GIGeom } from './GIGeom';
 import { GIAttribs } from './GIAttribs';
 import { IModelData, IGeomPack, EEntType, Txyz, TEntAttribValuesArr, TAttribDataTypes, TEntity, TEntTypeIdx } from './common';
 import { GIModelThreejs } from './GIModelThreejs';
-import { type } from 'os';
+
 /**
  * Geo-info model class.
  */
@@ -59,12 +59,12 @@ export class GIModel {
     }
     /**
      * Compares this model and another model.
-     * 
+     *
      * Polygons must have the vertices in the same order, and starting at the same position.
-     * 
+     *
      * TODO: implement model attributes, need to compare values
      * TODO: implement collections, need to oompare attributes, parent id, and object ids
-     * 
+     *
      * @param model The model to compare with.
      */
     public compare(model: GIModel): {matches: boolean, comment: string} {

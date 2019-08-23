@@ -312,7 +312,7 @@ export class ToolsetComponent implements OnInit {
         event.stopPropagation();
         const fileString = fnData.importedFile;
         // console.log(fnData);
-        SaveFileComponent.saveToLocalStorage(fnData.flowchart.id, '___TEMP___.mob', fileString);
+        SaveFileComponent.saveToLocalStorage('___TEMP___.mob', fileString);
         // localStorage.setItem('temp_file', fileString);
         window.open(`${window.location.origin}/editor?file=temp`, '_blank');
     }

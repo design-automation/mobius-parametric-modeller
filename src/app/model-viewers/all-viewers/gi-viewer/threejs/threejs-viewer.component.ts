@@ -258,12 +258,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     }
                 }
             } else if (attr_name === '#') {
-                for (let i = 0; i < allLabels.length; i++) {
-                    const element = allLabels[i];
-                    const val = Number(element.getAttribute('data-index'));
-                    const index = arr.findIndex(l => l === val);
-                    element.innerHTML = String(index);
-                }
+                this.labelforindex(showSelected, allLabels, arr);
             } else if (attr_name === '_id') {
                 for (let i = 0; i < allLabels.length; i++) {
                     const element = allLabels[i];
@@ -272,24 +267,32 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 }
             }
         } else {
-            if (showSelected) {
-                for (let i = 0; i < allLabels.length; i++) {
-                    const element = allLabels[i];
-                    const val = Number(element.getAttribute('data-index'));
-                    const index = arr.findIndex(l => l === val);
-                    element.innerHTML = String(index);
-                }
-            } else {
-                const ent_arr = this.model.geom.query.getEnts(this.SelectingEntityType.id, false);
-                for (let i = 0; i < allLabels.length; i++) {
-                    const element = allLabels[i];
-                    const val = Number(element.getAttribute('data-index'));
-                    const index = ent_arr.findIndex(l => l === val);
-                    element.innerHTML = String(index);
-                }
+            this.labelforindex(showSelected, allLabels, arr);
+            for (let i = 0; i < allLabels.length; i++) {
+                const element = allLabels[i];
+                element.innerHTML = String('');
             }
         }
         this.render(this);
+    }
+
+    labelforindex(showSelected, allLabels, arr) {
+        if (showSelected) {
+            for (let i = 0; i < allLabels.length; i++) {
+                const element = allLabels[i];
+                const val = Number(element.getAttribute('data-index'));
+                const index = arr.findIndex(l => l === val);
+                element.innerHTML = String(index);
+            }
+        } else {
+            const ent_arr = this.model.geom.query.getEnts(this.SelectingEntityType.id, false);
+            for (let i = 0; i < allLabels.length; i++) {
+                const element = allLabels[i];
+                const val = Number(element.getAttribute('data-index'));
+                const index = ent_arr.findIndex(l => l === val);
+                element.innerHTML = String(index);
+            }
+        }
     }
 
     ngOnDestroy() {

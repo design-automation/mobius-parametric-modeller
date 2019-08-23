@@ -71,29 +71,7 @@ export class GIModel {
         const result_array: {matches: boolean, comment: any} = {matches: true, comment: []};
         this.geom.compare(model, result_array);
         this.attribs.compare(model, result_array);
-        const obj_ent_types: EEntType[] = [EEntType.POINT, EEntType.PLINE, EEntType.PGON];
-        // this model
-        const this_fingerprints: string[] = [];
-        for (const obj_ent_type of obj_ent_types) {
-            this_fingerprints.push( this.getEntsFingerprint(obj_ent_type) );
-        }
-        const this_model_str: string = this_fingerprints.join('|');
-        // console.log(this_model_str);
-        // other model
-        const other_fingerprints: string[] = [];
-        for (const obj_ent_type of obj_ent_types) {
-            other_fingerprints.push( model.getEntsFingerprint(obj_ent_type) );
-        }
-        const other_model_str: string = other_fingerprints.join('|');
-        // console.log(other_model_str);
-        // compare the two models
-        result_array.comment.push('Comparing model data.');
-        if (this_model_str !== other_model_str) {
-            result_array.matches = false;
-            result_array.comment.push(['Differences were found in the data.']);
-        } else {
-            result_array.comment.push(['Everything matches.']);
-        }
+        this.compareData(model, result_array);
         // Add a final msg
         if (result_array.matches) {
             result_array.comment = ['RESULT: The two models match.'];
@@ -120,6 +98,31 @@ export class GIModel {
     // ============================================================================
     // Private methods for fingerprinting
     // ============================================================================
+    /**
+     * Compare the data in two models
+     */
+    private compareData(model: GIModel , result_array: {matches: boolean, comment: any[]}): void {
+        result_array.comment.push('Comparing model data.');
+        const data_comments: string [] = [];
+        const obj_ent_types: EEntType[] = [EEntType.POINT, EEntType.PLINE, EEntType.PGON];
+        const obj_ent_type_strs: Map<EEntType, string> = new Map([
+            [EEntType.POINT, 'points'],
+            [EEntType.PLINE, 'polylines'],
+            [EEntType.PGON, 'polygons']
+        ]);
+        for (const obj_ent_type of obj_ent_types) {
+            const this_fingerprints: string = this.getEntsFingerprint(obj_ent_type);
+            const other_fingerprints: string = model.getEntsFingerprint(obj_ent_type);
+            if (this_fingerprints !== other_fingerprints) {
+                result_array.matches = false;
+                data_comments.push('Differences were found in the ' + obj_ent_type_strs.get(obj_ent_type) + ' data.');
+            }
+        }
+        if (data_comments.length === 0) {
+            data_comments.push('Everything matches.');
+        }
+        result_array.comment.push(data_comments);
+    }
     /**
      * Get a fingerprint of all geometric entities of a certain type in the model
      */

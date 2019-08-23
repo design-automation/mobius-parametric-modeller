@@ -101,49 +101,90 @@ export class GIModel {
     /**
      * Compare the data in two models
      */
-    private compareData(model: GIModel , result_array: {matches: boolean, comment: any[]}): void {
+    private compareData(other_model: GIModel , result_array: {matches: boolean, comment: any[]}): void {
         result_array.comment.push('Comparing model data.');
         const data_comments: string [] = [];
+        // popint, polylines, polygons
         const obj_ent_types: EEntType[] = [EEntType.POINT, EEntType.PLINE, EEntType.PGON];
         const obj_ent_type_strs: Map<EEntType, string> = new Map([
             [EEntType.POINT, 'points'],
             [EEntType.PLINE, 'polylines'],
             [EEntType.PGON, 'polygons']
         ]);
+        // create the maps to store the new sorted order of all the point, plines, pgons
+        const this_i_maps: Map<EEntType, Map<number, number>> = new Map();
+        const other_i_maps: Map<EEntType, Map<number, number>> = new Map();
+        // create fingerprints for points, plines, pgons
         for (const obj_ent_type of obj_ent_types) {
-            const this_fingerprints: string = this.getEntsFingerprint(obj_ent_type);
-            const other_fingerprints: string = model.getEntsFingerprint(obj_ent_type);
+            const [this_fingerprints, this_i_map]: [string, Map<number, number>] = this.getEntsFingerprint(obj_ent_type);
+            // console.log('this ' + obj_ent_type_strs.get(obj_ent_type) + ': ', this_fingerprints);
+            const [other_fingerprints, other_i_map]: [string, Map<number, number>] = other_model.getEntsFingerprint(obj_ent_type);
+            // console.log('other ' + obj_ent_type_strs.get(obj_ent_type) + ': ', other_fingerprints);
+            this_i_maps.set(obj_ent_type, this_i_map);
+            other_i_maps.set(obj_ent_type, other_i_map);
             if (this_fingerprints !== other_fingerprints) {
                 result_array.matches = false;
                 data_comments.push('Differences were found in the ' + obj_ent_type_strs.get(obj_ent_type) + ' data.');
             }
         }
+        // collections
+        const this_colls_fingerprint: string = this.getCollFingerprints(this_i_maps);
+        // console.log('this coll: ', this_colls_fingerprint);
+        const other_colls_fingerprint: string = other_model.getCollFingerprints(other_i_maps);
+        // console.log('other coll: ', other_colls_fingerprint);
+        if (this_colls_fingerprint !== other_colls_fingerprint) {
+            result_array.matches = false;
+            data_comments.push('Differences were found in the collections data.');
+        }
+        // model attributes
+
+        // TODO
+
+        // add a final comment if everything matches
         if (data_comments.length === 0) {
             data_comments.push('Everything matches.');
         }
         result_array.comment.push(data_comments);
     }
     /**
-     * Get a fingerprint of all geometric entities of a certain type in the model
+     * Get a fingerprint of all geometric entities of a certain type in the model.
+     * This returns a fingerprint string, and a map old_i -> new_i.
+     * The new_i will be consistent, no matter how the model was created.
+     * This is needed for creating fingerprints for collections.
      */
-    private getEntsFingerprint(ent_type: EEntType): string {
+    private getEntsFingerprint(ent_type: EEntType): [string, Map<number, number>] {
         const fingerprints: string[]  = [];
         const ents_i: number[] = this.geom.query.getEnts(ent_type, false);
         for (const ent_i of ents_i) {
             fingerprints.push(this.getEntFingerprint(ent_type, ent_i));
         }
-        if (fingerprints.length === 0) { return '~'; }
+        // if there are no values for a certain entity type, e.g. no polylines, then return ~
+        if (fingerprints.length === 0) { return ['~', null]; }
+        // before we sort, we need to save the original order, which will be required for collections
+        const fingerprint_to_old_i_map: Map<string, number> = new Map();
+        for (let i = 0; i < fingerprints.length; i++) {
+            fingerprint_to_old_i_map.set(fingerprints[i], i);
+        }
+        // the fingerprints of the entities are sorted and sepeparted by a $, e.g. polyline5$polyline3$polyline6...
         fingerprints.sort();
-        return fingerprints.join('$');
+        // now we need to create a map from old index to new index
+        const old_i_to_new_i_map: Map<number, number> = new Map();
+        for (let i = 0; i < fingerprints.length; i++) {
+            const old_i: number = fingerprint_to_old_i_map.get(fingerprints[i]);
+            old_i_to_new_i_map.set(old_i, i);
+        }
+        // return the result
+        return [fingerprints.join('$'), old_i_to_new_i_map];
     }
     /**
-     * Get a fingerprint of a geometric entity
+     * Get a fingerprint of one geometric entity: point, polyline, polygon
      */
     private getEntFingerprint(from_ent_type: EEntType, index: number): string {
         const fingerprints = [];
-        const ent_types: EEntType[] = [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE, EEntType.FACE,
+        // deal with everything else
+        const to_ent_types: EEntType[] = [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE, EEntType.FACE,
             EEntType.POINT, EEntType.PLINE, EEntType.PGON];
-        for (const to_ent_type of ent_types) {
+        for (const to_ent_type of to_ent_types) {
             const sub_fingerprints: string[] = [];
             if (to_ent_type <= from_ent_type) {
                 const attrib_names: string[] = this.attribs.query.getAttribNames(to_ent_type);
@@ -178,10 +219,67 @@ export class GIModel {
                     }
                 }
             }
+            // the fingerprints of the sub entities are sorted and seperated by @, e.g. vertex5@vertex3@...
             if (to_ent_type === EEntType.WIRE) {
                 sub_fingerprints.sort();
             }
             fingerprints.push(sub_fingerprints.join('@'));
+        }
+        // the fingerprint of the entities are seperated by #, e.g. #positions#vertices#edges...
+        // there is no need to sort these, they are already in a fixed order
+        return fingerprints.join('#');
+    }
+    /**
+     * Get one fingerprint for all collections
+     */
+    private getCollFingerprints(index_map: Map<EEntType, Map<number, number>>): string {
+        const fingerprints: string[]  = [];
+        const colls_i: number[] = this.geom.query.getEnts(EEntType.COLL, false);
+        for (const ent_i of colls_i) {
+            fingerprints.push(this.getCollFingerprint(ent_i, index_map));
+        }
+        // if there are no values for a certain entity type, e.g. no coll, then return ~
+        if (fingerprints.length === 0) { return '~'; }
+        // before we sort, we need to save the original order, which will be required for the parent collection index
+        const fingerprint_to_old_i_map: Map<string, number> = new Map();
+        for (let i = 0; i < fingerprints.length; i++) {
+            fingerprint_to_old_i_map.set(fingerprints[i], i);
+        }
+        // the fingerprints of the collections are sorted and sepeparted by a $, e.g. coll5$coll3$coll6...
+        fingerprints.sort();
+        // now we need to create a map from old index to new index
+        const old_i_to_new_i_map: Map<number, number> = new Map();
+        for (let i = 0; i < fingerprints.length; i++) {
+            const old_i: number = fingerprint_to_old_i_map.get(fingerprints[i]);
+            old_i_to_new_i_map.set(old_i, i);
+        }
+        // for each collection, we now add the parent id, using the new index
+        for (let i = 0; i < fingerprints.length; i++) {
+            const coll_old_i: number = fingerprint_to_old_i_map.get(fingerprints[i]);
+            const coll_parent_old_i: number = this.geom.query.getCollParent(coll_old_i);
+            let parent_str = '';
+            if (coll_parent_old_i === -1) {
+                parent_str = '.^';
+            } else {
+                const coll_parent_new_i: number = old_i_to_new_i_map.get(coll_parent_old_i);
+                parent_str = coll_parent_new_i + '^';
+            }
+            fingerprints[i] = parent_str + fingerprints[i];
+        }
+        // return the result
+        return fingerprints.join('$');
+    }
+    /**
+     * Get a fingerprint of one collection
+     */
+    private getCollFingerprint(index: number, index_map: Map<EEntType, Map<number, number>>): string {
+        const to_ent_types: EEntType[] = [EEntType.POINT, EEntType.PLINE, EEntType.PGON];
+        const fingerprints: string[] = [];
+        for (const to_ent_type of to_ent_types) {
+            const ents_i: number[] = this.geom.query.navAnyToAny(EEntType.COLL, to_ent_type, index);
+            const ents_new_i: number[] = ents_i.map(ent_i => index_map.get(to_ent_type).get(ent_i));
+            ents_new_i.sort();
+            fingerprints.push(ents_new_i.join(','));
         }
         return fingerprints.join('#');
     }

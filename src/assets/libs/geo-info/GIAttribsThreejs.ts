@@ -150,10 +150,11 @@ export class GIAttribsThreejs {
                             }
                         }
                     } else {
-                        if (attrib_name === 'xyz' && ent_type === EEntType.POSI && Array.isArray(attrib_value)) {
-                            data_obj_map.get(ent_i)['xyz[0]'] = attrib_value[0];
-                            data_obj_map.get(ent_i)['xyz[1]'] = attrib_value[1];
-                            data_obj_map.get(ent_i)['xyz[2]'] = attrib_value[2];
+                        if (ent_type === EEntType.POSI && Array.isArray(attrib_value)) {
+                            for (let index = 0; index < attrib_value.length; index++) {
+                                const _v = Array.isArray(attrib_value[index]) ? JSON.stringify(attrib_value[index]) : attrib_value[index];
+                                data_obj_map.get(ent_i)[`${attrib_name}[${index}]`] = _v;
+                            }
                         } else {
                             const _attrib_value = isString(attrib_value) ? `'${attrib_value}'` : attrib_value;
                             data_obj_map.get(ent_i)[`${attrib_name}`] = _attrib_value;
@@ -206,10 +207,11 @@ export class GIAttribsThreejs {
                             }
                         }
                     } else {
-                        if (attrib_name === 'xyz' && ent_type === EEntType.POSI && Array.isArray(attrib_value)) {
-                            data_obj_map.get(ent_i)['xyz[0]'] = attrib_value[0];
-                            data_obj_map.get(ent_i)['xyz[1]'] = attrib_value[1];
-                            data_obj_map.get(ent_i)['xyz[2]'] = attrib_value[2];
+                        if (ent_type === EEntType.POSI && Array.isArray(attrib_value)) {
+                            for (let index = 0; index < attrib_value.length; index++) {
+                                const _v = Array.isArray(attrib_value[index]) ? JSON.stringify(attrib_value[index]) : attrib_value[index];
+                                data_obj_map.get(ent_i)[`${attrib_name}[${index}]`] = _v;
+                            }
                         } else {
                             const _attrib_value = isString(attrib_value) ? `'${attrib_value}'` : attrib_value;
                             data_obj_map.get(ent_i)[`${attrib_name}`] = _attrib_value;

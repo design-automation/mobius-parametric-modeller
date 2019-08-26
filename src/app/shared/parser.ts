@@ -719,11 +719,12 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
             } else {
                 jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${result.str}', null)`; //////////
             }
-            return {'i': i, 'str': newString, 'jsStr': jsString};
-            // if (i === comps.length - 1 || (comps[i + 1].value !== '@' && comps[i + 1].value !== '#' && comps[i + 1].value !== '?')) {
-            //     return {'i': i, 'str': newString, 'jsStr': jsString};
-            // }
-            // i += 1;
+            // return {'i': i, 'str': newString, 'jsStr': jsString};
+
+            if (i === comps.length - 1 || (comps[i + 1].value !== '@' && comps[i + 1].value !== '#' && comps[i + 1].value !== '?')) {
+                return {'i': i, 'str': newString, 'jsStr': jsString};
+            }
+            i += 1;
         } else if (comps[i].value === '#') {
             if (comps[i + 1].type !== strType.VAR) {
                 return {'error': 'Error: variable expected after "#"'};

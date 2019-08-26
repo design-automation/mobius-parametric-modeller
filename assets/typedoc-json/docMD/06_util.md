@@ -72,10 +72,10 @@ This will result in a popup in your browser, asking you to save the filel.
 * **Returns:** Text that summarises what is in the model, click print to see this text.  
   
 ## ModelCompare  
-* **Description:** Compare this model to the data from another GI model.  
+* **Description:** Compare the GI data in this model to the GI data in another model.  
 * **Parameters:**  
   * *gi_model_data:* undefined  
-* **Returns:** Text that summarises the comparison between this model and the the GI model.  
+* **Returns:** Text that summarises the comparison between the two models.  
   
 ## ModelCheck  
 * **Description:** Check the internal consistency of the model.  

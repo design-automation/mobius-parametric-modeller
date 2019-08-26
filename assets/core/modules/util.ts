@@ -286,17 +286,16 @@ export function ModelInfo(__model__: GIModel): string {
 }
 // ================================================================================================
 /**
- * Compare this model to the data from another GI model.
+ * Compare the GI data in this model to the GI data in another model.
  *
  * @param __model__
- * @returns Text that summarises the comparison between this model and the the GI model.
+ * @returns Text that summarises the comparison between the two models.
  */
 export function ModelCompare(__model__: GIModel, gi_model_data: string): string {
     const gi_obj: IModelData = JSON.parse(gi_model_data) as IModelData;
     const other_model = new GIModel(gi_obj);
     const result: {matches: boolean, comment: string} = __model__.compare(other_model);
-    if (result.comment !== '') { return result.comment; }
-    return 'The two models match.';
+    return result.comment;
 }
 // ================================================================================================
 /**

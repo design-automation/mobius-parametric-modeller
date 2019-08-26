@@ -22,7 +22,7 @@ export class GIAttribsAdd {
     /**
      * Creates a new attribte, at either the model level or the entity level.
      *
-     * For entity attributes, if an attribute with the same name but different data_type already exists, 
+     * For entity attributes, if an attribute with the same name but different data_type already exists,
      * then an error is thrown.
      *
      * @param ent_type The level at which to create the attribute.
@@ -106,8 +106,8 @@ export class GIAttribsAdd {
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         const attrib: GIAttribMap = attribs.get(name);
         if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
-        if (attrib.getDataType() !== EAttribDataTypeStrs.LIST) { 
-            throw new Error('Attribute is not a list, so indexed values are not allowed.'); 
+        if (attrib.getDataType() !== EAttribDataTypeStrs.LIST) {
+            throw new Error('Attribute is not a list, so indexed values are not allowed.');
         }
         attrib.setEntIdxVal(ents_i, value_index, value);
     }

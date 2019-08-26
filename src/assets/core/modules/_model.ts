@@ -244,14 +244,14 @@ export function __select__(__model__: GIModel, ents_id: string|string[]|string[]
     ents_id = ((Array.isArray(ents_id)) ? ents_id : [ents_id]) as string[];
     const [ents_id_flat, ents_indices] = _flatten(ents_id);
     const ents_arr: TEntTypeIdx[] = idsBreak(ents_id_flat) as TEntTypeIdx[];
+    const attrib_name: string = '_' + var_name;
     for (let i = 0; i < ents_arr.length; i++) {
         const ent_arr: TEntTypeIdx = ents_arr[i];
         const ent_indices: number[] = ents_indices[i];
-        const attrib_name: string = '_' + var_name;
         const attrib_value: string = var_name + '[' + ent_indices.join('][') + ']';
         __model__.geom.selected.push(ent_arr);
         if (!__model__.attribs.query.hasAttrib(ent_arr[0], attrib_name)) {
-            __model__.attribs.add.addAttrib(ent_arr[0], attrib_name, EAttribDataTypeStrs.LIST);
+            __model__.attribs.add.addAttrib(ent_arr[0], attrib_name, EAttribDataTypeStrs.STRING);
         }
         __model__.attribs.add.setAttribValue(ent_arr[0], ent_arr[1], attrib_name, attrib_value);
     }

@@ -1,29 +1,29 @@
-import {Arr} from "./arr";
-import {} from "jasmine";
+import {Arr} from './arr';
+import {} from 'jasmine';
 
-describe("Tests for Arr functions", () => {
-    it("test_make", () => {
+describe('Tests for Arr functions', () => {
+    it('test_make', () => {
         expect( test_make() ).toBe(true);
     });
-    it("test_makeSeq", () => {
+    it('test_makeSeq', () => {
         expect( test_makeSeq() ).toBe(true);
     });
-    it ("test_equal", () => {
+    it ('test_equal', () => {
         expect( test_equal() ).toBe(true);
     });
-    it ("test_indexOf", () => {
+    it ('test_indexOf', () => {
         expect( test_indexOf() ).toBe(true);
     });
-    it ("test_flatten", () => {
+    it ('test_flatten', () => {
         expect( test_flatten() ).toBe(true);
     });
-    it ("test_deepCopy", () => {
+    it ('test_deepCopy', () => {
         expect( test_deepCopy() ).toBe(true);
     });
-    it ("test_deepFill", () => {
+    it ('test_deepFill', () => {
         expect( test_deepFill() ).toBe(true);
     });
-    it ("test_deepCount", () => {
+    it ('test_deepCount', () => {
         expect( test_deepCount() ).toBe(true);
     });
 });
@@ -57,16 +57,16 @@ export function test_equal(): boolean {
     if (Arr.equal([1, 2, 3], [1, 2])) {return false; }
     if (Arr.equal([1, 2], [1, 2, 3])) {return false; }
     if (!Arr.equal([1.1, 2.2], [1.1, 2.2])) {return false; }
-    if (!Arr.equal([], [])) {return false;}
-    if (!Arr.equal([null, null], [null, null])) {return false;}
-    if (Arr.equal([1,2,3], null)) {return false;}
-    if (Arr.equal(null, [1,2,3])) {return false;}
+    if (!Arr.equal([], [])) {return false; }
+    if (!Arr.equal([null, null], [null, null])) {return false; }
+    if (Arr.equal([1, 2, 3], null)) {return false; }
+    if (Arr.equal(null, [1, 2, 3])) {return false; }
     // sparse arrays
     const x: number[] = [];
     x[2] = 5;
     const y: number[] = [];
     y[2] = 5;
-    if (!Arr.equal(x, y)) {return false;}
+    if (!Arr.equal(x, y)) {return false; }
     return true;
 }
 
@@ -77,8 +77,8 @@ export function test_indexOf(): boolean {
     if (Arr.indexOf([[], [2], [1, 2], [3, 4]], [1, 2]) !== 2) {return false; }
     if (Arr.indexOf([[], [1, null], [2], [1, null], [3, 4]], [1, null]) !== 1) {return false; }
     if (Arr.indexOf([[], [1, null], [2], [1, null], [3, 4]], [1, 3]) !== -1) {return false; }
-    if (Arr.indexOf([1,2,3], null) !== -1) {return false;}
-    if (Arr.indexOf([null,2,3], null) !== 0) {return false;}
+    if (Arr.indexOf([1, 2, 3], null) !== -1) {return false; }
+    if (Arr.indexOf([null, 2, 3], null) !== 0) {return false; }
 
     // sparse arrays
     const x: number[][] = [];

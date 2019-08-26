@@ -41,6 +41,10 @@ textarea, #flowchart-name, #ret--input{
         border-color: $selected-color;
         background-color: $color7;
     }
+    &.error{
+        border: 2px solid $error-color;
+    }
+
 }
 
 .input-container{

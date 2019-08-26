@@ -5,7 +5,7 @@ import { IFlowchart } from '@models/flowchart';
 import * as CircularJSON from 'circular-json';
 import { IArgument } from '@models/code';
 import { ModuleList, ModuleDocList } from '@shared/decorators';
-import { INode } from '@models/node';
+import { INode, NodeUtils } from '@models/node';
 
 import { DownloadUtils } from '@shared/components/file/download.utils';
 import { inline_query_expr, inline_func, inline_sort_expr} from '@assets/core/inline/inline';
@@ -124,7 +124,7 @@ export class ToolsetComponent implements OnInit {
                     newArgs.push({name: arg.name, value: `null`, jsValue: `null`});
                     continue;
                 }
-            } 
+            }
             newArgs.push({name: arg.name, value: arg.value});
         }
         fnData.args = newArgs;
@@ -312,7 +312,7 @@ export class ToolsetComponent implements OnInit {
         event.stopPropagation();
         const fileString = fnData.importedFile;
         // console.log(fnData);
-        SaveFileComponent.saveToLocalStorage(fnData.flowchart.id, '___TEMP___.mob', fileString);
+        SaveFileComponent.saveToLocalStorage('___TEMP___.mob', fileString);
         // localStorage.setItem('temp_file', fileString);
         window.open(`${window.location.origin}/editor?file=temp`, '_blank');
     }
@@ -361,72 +361,7 @@ export class ToolsetComponent implements OnInit {
 
 
     checkInvalid(type) {
-        const node = this.dataService.node;
-        const tp = type.toUpperCase();
-        if (tp === 'ELSE') {
-            if (node.state.procedure.length === 0) { return true; }
-            const checkNode = node.state.procedure[node.state.procedure.length - 1];
-            if (checkNode.type.toString() !== ProcedureTypes.If.toString()
-            && checkNode.type.toString() !== ProcedureTypes.Elseif.toString()) {
-                return true;
-            }
-            let prods: IProcedure[];
-
-            if (checkNode.parent) { prods = checkNode.parent.children;
-            } else { prods = node.procedure; }
-
-            for (let i = 0 ; i < prods.length - 1; i++) {
-                if (prods[i].ID === checkNode.ID) {
-                    if (prods[i + 1].type.toString() === ProcedureTypes.Elseif.toString() ||
-                    prods[i + 1].type.toString() === ProcedureTypes.Else.toString()) {
-                        return true;
-                    }
-                    return false;
-                }
-            }
-            return false;
-        } else if (tp === 'ELSEIF') {
-            if (node.state.procedure.length === 0) { return true; }
-            const checkNode = node.state.procedure[node.state.procedure.length - 1];
-            return (checkNode.type.toString() !== ProcedureTypes.If.toString()
-            && checkNode.type.toString() !== ProcedureTypes.Elseif.toString());
-        } else {
-            let checkNode = node.state.procedure[node.state.procedure.length - 1];
-            if (tp === 'BREAK' || tp === 'CONTINUE') {
-                if (!checkNode) {return true; }
-                while (checkNode.parent) {
-                    if (checkNode.parent.type.toString() === ProcedureTypes.Foreach.toString() ||
-                    checkNode.parent.type.toString() === ProcedureTypes.While.toString()) {
-                        return false;
-                    }
-                    checkNode = checkNode.parent;
-                }
-                return true;
-            }
-
-            if (checkNode) {
-                let prods: IProcedure[];
-
-                if (checkNode.parent) { prods = checkNode.parent.children;
-                } else { prods = node.procedure; }
-
-                if (checkNode.type.toString() === ProcedureTypes.If.toString()
-                || checkNode.type.toString() === ProcedureTypes.Elseif.toString()) {
-                    for (let i = 0 ; i < prods.length - 1; i++) {
-                        if (prods[i].ID === checkNode.ID) {
-                            if (prods[i + 1].type.toString() === ProcedureTypes.Else.toString()
-                            || prods[i + 1].type.toString() === ProcedureTypes.Elseif.toString()) {
-                                return true;
-                            }
-                            return false;
-                        }
-                    }
-                }
-            }
-
-
-        }
-        return false;
+        return NodeUtils.checkInvalid(type, this.dataService.node);
     }
 
     searchFunction(event) {

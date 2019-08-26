@@ -61,10 +61,10 @@ export class GIGeom {
      * Compares this model and another model.
      * @param model The model to compare with.
      */
-    compare(model: GIModel, result: {matches: boolean, comment: string}): void {
+    compare(model: GIModel, result: {matches: boolean, comment: any[]}): void {
+        result.comment.push('Comparing number of geometric entities.');
         const eny_type_array: EEntType[] = [
             EEntType.POSI,
-            EEntType.TRI,
             EEntType.VERT,
             EEntType.EDGE,
             EEntType.WIRE,
@@ -76,6 +76,7 @@ export class GIGeom {
         ];
         const ent_type_strs: string[] = [
             'positions',
+            'triangles',
             'vertices',
             'edges',
             'wires',
@@ -85,12 +86,19 @@ export class GIGeom {
             'polygons',
             'collections'
         ];
+        const geom_comments: string[] = [];
         for (const ent_type of eny_type_array) {
             if (this.model.geom.query.numEnts(ent_type, false) !== model.geom.query.numEnts(ent_type, false)) {
                 result.matches = false;
-                result.comment += 'Number of ' + ent_type_strs[ent_type] + ' do not match.\n';
+                geom_comments.push('Number of ' + ent_type_strs[ent_type] + ' do not match.');
+            } else {
+                // result.comment.push('Number of ' + ent_type_strs[ent_type] + ' match.');
             }
         }
+        if (geom_comments.length === 0) {
+            geom_comments.push('Everything matches.');
+        }
+        result.comment.push(geom_comments);
     }
     /**
      * Checks geometry for internal consistency

@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_4uf9ql5czof",
+                "id": "node_83vbo0hi668",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -58,7 +58,7 @@
                             },
                             {
                                 "name": "__input__",
-                                "value": 9,
+                                "value": 6,
                                 "default": 4,
                                 "step": "1",
                                 "min": "4",
@@ -92,7 +92,7 @@
                             },
                             {
                                 "name": "__input__",
-                                "value": 5,
+                                "value": 4,
                                 "default": 4,
                                 "step": "1",
                                 "min": "4",
@@ -135,7 +135,7 @@
                                 },
                                 "parentNode": {
                                     "name": "make torus",
-                                    "id": "node_7qir5zif0gm",
+                                    "id": "node_ibvr4fs0p4d",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -522,12 +522,12 @@
                                                 {
                                                     "type": 8,
                                                     "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~6",
-                                                    "ID": "prod-akfutr43oxu",
+                                                    "ID": "prod-veon8kvdt",
                                                     "enabled": true,
                                                     "print": false,
                                                     "meta": {
                                                         "module": "list",
-                                                        "name": "_Append"
+                                                        "name": "Add"
                                                     },
                                                     "argCount": 4,
                                                     "args": [
@@ -537,34 +537,31 @@
                                                         },
                                                         {
                                                             "name": "list",
-                                                            "default": 0,
                                                             "value": "circs",
+                                                            "linked": false,
                                                             "jsValue": "circs_",
                                                             "usedVars": [
                                                                 "circs"
                                                             ],
-                                                            "invalidVar": false,
-                                                            "linked": false
+                                                            "invalidVar": false
                                                         },
                                                         {
-                                                            "name": "value",
-                                                            "default": 0,
+                                                            "name": "item",
                                                             "value": "cir_pl2",
+                                                            "linked": false,
                                                             "jsValue": "cir_pl2_",
                                                             "usedVars": [
                                                                 "cir_pl2"
                                                             ],
-                                                            "invalidVar": false,
-                                                            "linked": false
+                                                            "invalidVar": false
                                                         },
                                                         {
                                                             "name": "method",
-                                                            "default": 0,
                                                             "value": "'to_end'",
                                                             "jsValue": "'to_end'",
+                                                            "linked": false,
                                                             "usedVars": [],
-                                                            "invalidVar": false,
-                                                            "linked": false
+                                                            "invalidVar": false
                                                         }
                                                     ],
                                                     "selected": false,
@@ -707,7 +704,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_yft4n21c6d",
+                                                        "id": "node_vu6h2nekica",
                                                         "position": {
                                                             "x": 5352.4541015625,
                                                             "y": 5393.3125
@@ -731,7 +728,7 @@
                                                             },
                                                             {
                                                                 "type": 11,
-                                                                "ID": "",
+                                                                "ID": "Return",
                                                                 "meta": {
                                                                     "name": "",
                                                                     "module": ""
@@ -1032,7 +1029,9 @@
                                             "name": "ent_type_enum",
                                             "linked": false,
                                             "value": "'_e'",
-                                            "jsValue": "'_e'"
+                                            "jsValue": "'_e'",
+                                            "usedVars": [],
+                                            "invalidVar": false
                                         },
                                         {
                                             "name": "entities",
@@ -1073,7 +1072,7 @@
                                             "name": "entities",
                                             "value": "edges[1]",
                                             "default": 0,
-                                            "jsValue": "edges_.slice(1)[0]",
+                                            "jsValue": "edges_[pythonList(1, edges_.length)]",
                                             "usedVars": [
                                                 "edges"
                                             ],
@@ -1126,7 +1125,7 @@
                                             "name": "entities",
                                             "value": "edges[1]",
                                             "default": 0,
-                                            "jsValue": "edges_.slice(1)[0]",
+                                            "jsValue": "edges_[pythonList(1, edges_.length)]",
                                             "usedVars": [
                                                 "edges"
                                             ],
@@ -1488,7 +1487,9 @@
                                                                         "name": "ent_type_enum",
                                                                         "linked": false,
                                                                         "value": "'_e'",
-                                                                        "jsValue": "'_e'"
+                                                                        "jsValue": "'_e'",
+                                                                        "usedVars": [],
+                                                                        "invalidVar": false
                                                                     },
                                                                     {
                                                                         "name": "entities",
@@ -1533,7 +1534,7 @@
                                                                         "name": "positions",
                                                                         "value": "edges[0]",
                                                                         "default": 0,
-                                                                        "jsValue": "edges_.slice(0)[0]",
+                                                                        "jsValue": "edges_[pythonList(0, edges_.length)]",
                                                                         "usedVars": [
                                                                             "edges"
                                                                         ],
@@ -1582,7 +1583,7 @@
                                                                         "name": "positions",
                                                                         "value": "edges[2]",
                                                                         "default": 0,
-                                                                        "jsValue": "edges_.slice(2)[0]",
+                                                                        "jsValue": "edges_[pythonList(2, edges_.length)]",
                                                                         "usedVars": [
                                                                             "edges"
                                                                         ],
@@ -1989,7 +1990,7 @@
         "ordered": true,
         "id": "b852f189-9c68-6152-6947-0fa17b290b08",
         "subFunctions": [],
-        "last_updated": "2019-08-06T05:44:54.673Z"
+        "last_updated": "2019-08-23T07:04:39.291Z"
     },
     "version": 1,
     "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-80,\"y\":-80,\"z\":80},\"pos_x\":-80,\"pos_y\":-80,\"pos_z\":80,\"target\":{\"x\":0,\"y\":0,\"z\":0}},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":5,\"name\":\"Faces\"},\"tab\":\"0\"},\"version\":\"0.4.38\"}"

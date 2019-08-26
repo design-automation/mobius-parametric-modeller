@@ -76,14 +76,14 @@ export class SaveFileComponent {
         //     node.output.value = mod.output;
         // }
         const downloadResult = SaveFileComponent.fileDownloadString(f);
-        SaveFileComponent.saveToLocalStorage(downloadResult.id, downloadResult.name, downloadResult.file);
+        SaveFileComponent.saveToLocalStorage(downloadResult.name, downloadResult.file);
 
 
     }
 
-    static saveToLocalStorage(id: string, name: string, file: string, ext = '.mob') {
+    static saveToLocalStorage(name: string, file: string) {
         const itemstring = localStorage.getItem('mobius_backup_list');
-        const code = name === '___TEMP___.mob' ? name : name + '_-_' + id + ext;
+        const code = name;
         if (!itemstring) {
             localStorage.setItem('mobius_backup_list', `["${code}"]`);
         } else {
@@ -100,7 +100,7 @@ export class SaveFileComponent {
             }
             if (!check) {
                 items.push(code);
-                if (items.length > 5) {
+                if (items.length > 10) {
                     const item = items.shift();
                     localStorage.removeItem(item);
                 }
@@ -208,7 +208,7 @@ export class SaveFileComponent {
         });
     }
 
-    static fileDownloadString(f: IMobius): {'id': string, 'name': string, 'savedName': string, 'file': string} {
+    static fileDownloadString(f: IMobius): {'name': string, 'file': string} {
         f.settings = localStorage.getItem('mpm_settings');
 
         // if any node disappears from the flowchart but is still present in any edge (due to bug), restore the node.
@@ -265,11 +265,6 @@ export class SaveFileComponent {
                 node.output.value = undefined;
             }
             SaveFileComponent.clearResolvedValue(node.procedure);
-            for (const prod of node.procedure) {
-                if (prod.hasOwnProperty('resolvedValue')) {
-                    prod.resolvedValue = undefined;
-                }
-            }
         }
 
         // make a copy of the flowchart
@@ -319,7 +314,7 @@ export class SaveFileComponent {
             fname = `${fname}.mob`;
         }
 
-        return {'id': savedfile.id, 'name': savedfile.name, 'savedName': fname, 'file': fileString};
+        return {'name': fname, 'file': fileString};
     }
 
     async download() {
@@ -328,12 +323,12 @@ export class SaveFileComponent {
         const blob = new Blob([downloadResult.file], { type: 'application/json' });
 
         try {
-            SaveFileComponent.saveToLocalStorage(downloadResult.id, downloadResult.name, downloadResult.file);
+            SaveFileComponent.saveToLocalStorage(downloadResult.name, downloadResult.file);
         } catch (ex) {
             console.log('Unable to save file to local storage');
         }
 
-        DownloadUtils.downloadFile(downloadResult.savedName, blob);
+        DownloadUtils.downloadFile(downloadResult.name, blob);
         this.dataService.file.name = 'Untitled';
     }
 

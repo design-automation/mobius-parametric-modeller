@@ -420,6 +420,18 @@ export class PanelHeaderComponent implements OnDestroy {
         }
     }
 
+    async addBackup() {
+        const selectedFile = (<HTMLInputElement>document.getElementById('addBackup')).files[0];
+        const p = new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                resolve(<string>reader.result);
+                };
+            reader.readAsText(selectedFile);
+        });
+        SaveFileComponent.saveToLocalStorage(selectedFile.name, <string> await p);
+    }
+
     checkMobBackup(backup): boolean {
         const splitted = backup.split('.');
         if (splitted[splitted.length - 1] === 'mob') {
@@ -430,6 +442,9 @@ export class PanelHeaderComponent implements OnDestroy {
 
     @HostListener('window:click', ['$event'])
     onWindowClick(event: MouseEvent) {
+        if ((<HTMLElement>event.target).id === 'addBackup' || (<HTMLElement>event.target).id === 'addBackupButton') {
+            return;
+        }
         let dropdownMenu = document.getElementById('dropdownMenu');
         if (dropdownMenu) {
             dropdownMenu.style.display = 'none';

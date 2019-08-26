@@ -58,20 +58,25 @@ export abstract class NodeUtils {
             if (i.module !== returnMeta[0]) { continue; }
             for ( const j of i.functions) {
                 if (j.name !== returnMeta[1]) { continue; }
-                const newReturn = {type: 11, ID: '',
-                parent: undefined,
-                meta: {name: '', module: ''},
-                children: undefined,
-                variable: undefined,
-                argCount: j.argCount,
-                args: j.args,
-                print: false,
-                enabled: true,
-                selected: false,
-                selectGeom: false,
-                hasError: false};
+                const newReturn = {
+                    type: 11,
+                    ID: 'Return',
+                    parent: undefined,
+                    meta: {name: '', module: ''},
+                    children: undefined,
+                    variable: undefined,
+                    argCount: j.argCount,
+                    args: j.args,
+                    print: false,
+                    enabled: true,
+                    selected: false,
+                    selectGeom: false,
+                    hasError: false
+                };
+
                 for (const arg of newReturn.args) {
                     arg.value = '';
+                    arg.jsValue = '';
                 }
                 node.procedure.push(newReturn);
                 check = true;
@@ -479,11 +484,82 @@ export abstract class NodeUtils {
         }
     }
 
-    static paste_procedure(node: INode, prod: IProcedure ) {
+    static paste_procedure(node: INode, prod: IProcedure ): boolean {
+        if (NodeUtils.checkInvalid(ProcedureTypes[prod.type], node)) {
+            return false;
+        }
         const newProd = NodeUtils.updateID(circularJSON.parse(circularJSON.stringify(prod)));
         newProd.parent = undefined;
         NodeUtils.insert_procedure(node, newProd);
         NodeUtils.select_procedure(node, newProd, false, false);
+        return true;
     }
 
+    static checkInvalid(type: string, node: INode) {
+        const tp = type.toUpperCase();
+        if (tp === 'ELSE') {
+            if (node.state.procedure.length === 0) { return true; }
+            const checkNode = node.state.procedure[node.state.procedure.length - 1];
+            if (checkNode.type.toString() !== ProcedureTypes.If.toString()
+            && checkNode.type.toString() !== ProcedureTypes.Elseif.toString()) {
+                return true;
+            }
+            let prods: IProcedure[];
+
+            if (checkNode.parent) { prods = checkNode.parent.children;
+            } else { prods = node.procedure; }
+
+            for (let i = 0 ; i < prods.length - 1; i++) {
+                if (prods[i].ID === checkNode.ID) {
+                    if (prods[i + 1].type.toString() === ProcedureTypes.Elseif.toString() ||
+                    prods[i + 1].type.toString() === ProcedureTypes.Else.toString()) {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            return false;
+        } else if (tp === 'ELSEIF') {
+            if (node.state.procedure.length === 0) { return true; }
+            const checkNode = node.state.procedure[node.state.procedure.length - 1];
+            return (checkNode.type.toString() !== ProcedureTypes.If.toString()
+            && checkNode.type.toString() !== ProcedureTypes.Elseif.toString());
+        } else {
+            let checkNode = node.state.procedure[node.state.procedure.length - 1];
+            if (tp === 'BREAK' || tp === 'CONTINUE') {
+                if (!checkNode) {return true; }
+                while (checkNode.parent) {
+                    if (checkNode.parent.type.toString() === ProcedureTypes.Foreach.toString() ||
+                    checkNode.parent.type.toString() === ProcedureTypes.While.toString()) {
+                        return false;
+                    }
+                    checkNode = checkNode.parent;
+                }
+                return true;
+            }
+
+            if (checkNode) {
+                let prods: IProcedure[];
+
+                if (checkNode.parent) { prods = checkNode.parent.children;
+                } else { prods = node.procedure; }
+
+                if (checkNode.type.toString() === ProcedureTypes.If.toString()
+                || checkNode.type.toString() === ProcedureTypes.Elseif.toString()) {
+                    for (let i = 0 ; i < prods.length - 1; i++) {
+                        if (prods[i].ID === checkNode.ID) {
+                            if (prods[i + 1].type.toString() === ProcedureTypes.Else.toString()
+                            || prods[i + 1].type.toString() === ProcedureTypes.Elseif.toString()) {
+                                return true;
+                            }
+                            return false;
+                        }
+                    }
+                }
+            }
+
+
+        }
+        return false;
+    }
 }

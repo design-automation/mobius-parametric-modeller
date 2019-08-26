@@ -1109,6 +1109,9 @@ export class DataThreejs {
         if (last_segment === 'editor') {
             return;
         }
+        if (event.ctrlKey) {
+            return;
+        }
         const keyCode = event.which;
         // console.log(keyCode);
         const positionDelta = 10;

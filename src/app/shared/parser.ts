@@ -188,7 +188,6 @@ export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProd
 
     procedure.args[argIndex].value = varResult.str;
     procedure.args[argIndex].jsValue = varResult.jsStr;
-
     varResult = checkValidVar(varResult.vars, procedure, nodeProdList);
     if (!varResult.error) {
         procedure.args[argIndex].usedVars = varResult.vars;
@@ -868,16 +867,18 @@ function analyzePythonSlicing(
         at: ... ${comps.slice(result.i + 1).map(cp => cp.value).join(' ')}`};
     }
 
-    jsString += `[pythonList(${result.jsStr}, ${arrayName}.length)]`;
-    arrayName += `[pythonList(${result.jsStr}, ${arrayName}.length)]`;
+    // jsString += `[pythonList(${result.jsStr}, ${arrayName}.length)]`;
+    // arrayName += `[pythonList(${result.jsStr}, ${arrayName}.length)]`;
 
-    // if (isVariable) {
-    //     jsString += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
-    //     arrayName += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
-    // } else {
-    //     jsString += `.slice(${result.jsStr})[0]`;
-    //     arrayName += `.slice(${result.jsStr})[0]`;
-    // }
+    if (isVariable) {
+        jsString += `[pythonList(${result.jsStr}, ${arrayName}.length)]`;
+        arrayName += `[pythonList(${result.jsStr}, ${arrayName}.length)]`;
+        // jsString += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
+        // arrayName += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
+    } else {
+        jsString += `.slice(${result.jsStr})[0]`;
+        arrayName += `.slice(${result.jsStr})[0]`;
+    }
 
     i = result.i + 1;
     newString += '[' + result.str + ']';

@@ -100,7 +100,7 @@ export class AttributeComponent implements OnChanges, DoCheck {
         let index = 0;
         for (; index < l; index++) {
           const p = paginators[index];
-          p.className = 'mat-paginator hide';
+          p.className = 'mat-paginator '; // hide
         }
       } else {
         let index = 0;
@@ -321,7 +321,7 @@ export class AttributeComponent implements OnChanges, DoCheck {
     } else {
       if (event.shiftKey) {
         this.shiftKeyPressed = true;
-        console.log(ent_id);
+        // console.log(ent_id);
       }
       this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: id });
       this.selected_ents.set(ent_id, id);

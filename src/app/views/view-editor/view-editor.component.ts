@@ -9,6 +9,7 @@ import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
 import { nodeChildrenAsMap } from '@angular/router/src/utils/tree';
 import { checkNodeValidity } from '@shared/parser';
 import { DataOutputService } from '@shared/services/dataOutput.service';
+import { SaveFileComponent } from '@shared/components/file';
 
 @Component({
   selector: 'view-editor',
@@ -212,12 +213,13 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
 
         const temp = node.state.procedure.slice();
-        this.dataService.copiedProd = [];
-        NodeUtils.rearrangeProcedures(this.dataService.copiedProd, temp, node.procedure);
-
+        const copiedProds = [];
+        NodeUtils.rearrangeProcedures(copiedProds, temp, node.procedure);
+        SaveFileComponent.clearResolvedValue(copiedProds);
+        localStorage.setItem('mobius_copied_procedures', circularJSON.stringify(copiedProds));
         // this.notificationMessage = `Copied ${this.dataService.copiedProd.length} Procedures`;
         // this.notificationTrigger = !this.notificationTrigger;
-        this.dataService.notifyMessage(`Copied ${this.dataService.copiedProd.length} Procedures`);
+        this.dataService.notifyMessage(`Copied ${copiedProds.length} Procedures`);
     }
 
     // cut selected procedures
@@ -235,12 +237,13 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
 
         const temp = node.state.procedure.slice();
-        this.dataService.copiedProd = [];
-        NodeUtils.rearrangeProcedures(this.dataService.copiedProd, temp, node.procedure);
+        const copiedProds = [];
+        NodeUtils.rearrangeProcedures(copiedProds, temp, node.procedure);
+        SaveFileComponent.clearResolvedValue(copiedProds);
 
         let parentArray: IProcedure[];
         const redoActions = [];
-        for (const prod of this.dataService.copiedProd) {
+        for (const prod of copiedProds) {
             if (prod.type === ProcedureTypes.Blank) { continue; }
             if (prod.parent) {
                 parentArray = prod.parent.children;
@@ -254,6 +257,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 }
             }
         }
+        localStorage.setItem('mobius_copied_procedures', circularJSON.stringify(copiedProds));
         this.dataService.registerEdtAction(redoActions);
         checkNodeValidity(this.dataService.node);
 
@@ -261,25 +265,34 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
         // this.notificationMessage = `Cut ${this.dataService.copiedProd.length} Procedures`;
         // this.notificationTrigger = !this.notificationTrigger;
-        this.dataService.notifyMessage(`Cut ${this.dataService.copiedProd.length} Procedures`);
+        this.dataService.notifyMessage(`Cut ${copiedProds.length} Procedures`);
     }
 
     // paste copied procedures
     pasteProd() {
         const node = this.dataService.node;
         if (this.copyCheck
-        && this.dataService.copiedProd
         && document.activeElement.nodeName !== 'INPUT'
         && document.activeElement.nodeName !== 'TEXTAREA'
         && this.router.url === '/editor') {
+            const copiedProds = localStorage.getItem('mobius_copied_procedures');
+            if (!copiedProds) {
+                this.dataService.notifyMessage('Error: No saved procedure to be pasted!');
+                return;
+            }
             const pastingPlace = node.state.procedure[node.state.procedure.length - 1];
-            const toBePasted = this.dataService.copiedProd;
+            const toBePasted = circularJSON.parse(copiedProds);
             const redoActions = [];
+            let notified = false;
             if (pastingPlace === undefined) {
                 for (let i = 0; i < toBePasted.length; i++) {
                     if (toBePasted[i].type === ProcedureTypes.Blank ||
                         toBePasted[i].type === ProcedureTypes.Return) { continue; }
-                    NodeUtils.paste_procedure(node, toBePasted[i]);
+                    const check = NodeUtils.paste_procedure(node, toBePasted[i]);
+                    if (!check) {
+                        this.dataService.notifyMessage('Error: Unable to paste procedure');
+                        notified = true;
+                    }
                     redoActions.unshift({'type': 'add',
                         'parent': this.dataService.node.state.procedure[0].parent, 'prod': this.dataService.node.state.procedure[0]});
                     node.state.procedure[0].selected = false;
@@ -289,7 +302,11 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 for (let i = toBePasted.length - 1; i >= 0; i --) {
                     if (toBePasted[i].type === ProcedureTypes.Blank ||
                         toBePasted[i].type === ProcedureTypes.Return) { continue; }
-                    NodeUtils.paste_procedure(node, toBePasted[i]);
+                    const check = NodeUtils.paste_procedure(node, toBePasted[i]);
+                    if (!check) {
+                        this.dataService.notifyMessage('Error: Unable to paste procedure');
+                        notified = true;
+                    }
                     redoActions.unshift({'type': 'add',
                         'parent': this.dataService.node.state.procedure[0].parent, 'prod': this.dataService.node.state.procedure[0]});
 
@@ -304,7 +321,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             // toBePasted = undefined;
             // this.notificationMessage = `Pasted ${toBePasted.length} Procedures`;
             // this.notificationTrigger = !this.notificationTrigger;
-            this.dataService.notifyMessage(`Pasted ${toBePasted.length} Procedures`);
+            if (!notified) {
+                this.dataService.notifyMessage(`Pasted ${toBePasted.length} Procedures`);
+            }
         }
     }
     @HostListener('window:keydown', ['$event'])
@@ -312,7 +331,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         if (!this.disableInput && (event.key === 'Control' || event.key === 'Shift' || event.key === 'Meta')) {
             this.disableInput = true;
         } else if (event.key === 'z' && (event.ctrlKey || event.metaKey)) {
-            event.preventDefault();
+            if (document.activeElement.nodeName !== 'INPUT') {
+                event.preventDefault();
+            }
         }
     }
 
@@ -363,6 +384,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         if (event.key === 'Delete') {
             this.deleteSelectedProds();
         } else if (event.key.toLowerCase() === 'z' && (event.ctrlKey === true || event.metaKey === true)) {
+            if (document.activeElement.nodeName === 'INPUT') {
+                return;
+            }
             let actions: any;
             // if ((<HTMLElement>event.target).nodeName === 'INPUT') {return; }
             if (event.shiftKey) {

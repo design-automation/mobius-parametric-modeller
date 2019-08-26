@@ -396,11 +396,10 @@ export class ExecuteComponent {
             fnString = pythonList + '\n' + mergeInputsFunc + '\n' + printFunc + '\n' + fnString;
 
             // ==> generated code structure:
-            //  1. mergeInputFunction
-            //  2. printFunction
-            //  3. constants
-            //  4. user functions
-            //  5. main node code
+            //  1. mergeInputFunction + printFunc
+            //  2. constants
+            //  3. user functions
+            //  4. main node code
 
             // print the code
             this.dataService.log(`<h3  style="padding: 10px 0px 2px 0px;">Executing node: ${node.name}</h3>`);
@@ -440,8 +439,18 @@ export class ExecuteComponent {
                     }
                 }
             }
-            node.output.value = result;
+
+            if (node.type === 'end') {
+                node.output.value = result;
+            } else {
+                node.output.value = params['model'];
+            }
+
+            // mark the node as has been executed
             node.hasExecuted = true;
+
+            // check all the input nodes of this node, if all of their children nodes are all executed,
+            // change their output.value to null to preserve memory space.
             node.input.edges.forEach( edge => {
                 const inputNode = edge.source.parentNode;
                 if (inputNode.output.edges.length > 1) {
@@ -449,10 +458,10 @@ export class ExecuteComponent {
                         if (!outputEdge.target.parentNode.hasExecuted) { return; }
                     }
                 }
-                inputNode.output.model = null;
+                inputNode.output.value = null;
             });
 
-            // diff(node.output.value.getData(), node.input.value.getData());
+            // if start node ->
             if (node.type === 'start') {
                 for (const constant in params['constants']) {
                     if (params['constants'].hasOwnProperty(constant)) {
@@ -542,7 +551,7 @@ export class ExecuteComponent {
                 ex.message = 'Unexpected Identifier error. Did you declare everything?' +
                 'Check that your strings are enclosed in quotes (")';
             } else if (ex.toString().indexOf('Unexpected token') > -1 || ex.toString().indexOf('unexpected token') > -1) {
-                ex.message = 'Unexpected token error. Check for stray spaces or reserved keywords?';
+                ex.message = 'Unable to compile code. Check code order and arguments.';
             } else if (ex.toString().indexOf('\'readAsText\' on \'FileReader\'') > -1) {
                 ex.message = 'Unable to read file input. Check all start node inputs.';
             } else if (ex.toString().indexOf('Cannot read property \'splice\'') > -1) {

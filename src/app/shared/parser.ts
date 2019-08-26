@@ -873,7 +873,7 @@ function analyzePythonSlicing(
     if (isVariable) {
         jsString += `[pythonList(${result.jsStr}, ${arrayName}.length)]`;
         arrayName += `[pythonList(${result.jsStr}, ${arrayName}.length)]`;
-            // jsString += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
+        // jsString += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
         // arrayName += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
     } else {
         jsString += `.slice(${result.jsStr})[0]`;

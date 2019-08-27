@@ -387,13 +387,13 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
             i = result.i + 1;
             newString += `[${result.str}]`;
             jsString += `[${result.jsStr}]`;
-            let arrayName = jsString;
+            // let arrayName = jsString;
             while (i + 1 < comps.length && comps[i + 1].value === '[') {
-                const result2 = analyzePythonSlicing(comps, i + 1, vars, arrayName, false);
+                const result2 = analyzePythonSlicing(comps, i + 1, vars, jsString, false);
                 if (result2.error) { return result2; }
                 newString += result2.str;
                 jsString += result2.jsStr;
-                arrayName = result2.arrayName;
+                // arrayName = result2.arrayName;
                 i = result2.i;
             }
         }
@@ -516,18 +516,18 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
             addVars(vars, comp.value);
         }
 
-        let arrayName = jsString;
+        // let arrayName = jsString;
 
         // look for all subsequent "." or "[]" for the variable
         // e.g. a[:][0].b.x[-1]
         while (i + 1 < comps.length && (comps[i + 1].value === '[' || comps[i + 1].value === '.')) {
 
             if (comps[i + 1].value === '[') {
-                const result = analyzePythonSlicing(comps, i + 1, vars, arrayName, isVariable);
+                const result = analyzePythonSlicing(comps, i + 1, vars, jsString, isVariable);
                 if (result.error) { return result; }
                 newString += result.str;
                 jsString +=  result.jsStr;
-                arrayName = arrayName;
+                // arrayName = result.arrayName;
                 i = result.i;
 
             } else {
@@ -538,7 +538,7 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
                 }
                 newString += '.' + comps[i].value;
                 jsString += '.' + comps[i].value;
-                arrayName += '.' + comps[i].value;
+                // arrayName += '.' + comps[i].value;
             }
         }
 
@@ -712,10 +712,14 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
             }
             newString += '@' + result.str.replace(/ /g, '') + ' '; //////////
 
-            const bracketIndex = result.jsStr.indexOf('.slice(');
+            const bracketIndex = result.jsStr.indexOf('[pythonList(');
             if (bracketIndex !== -1) {
+                const arrayName = result.jsStr.substring(0, bracketIndex);
+                const index = result.jsStr.lastIndexOf(arrayName);
                 jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity},` +
-                           ` '${result.jsStr.slice(0, bracketIndex)}', ${result.jsStr.slice(bracketIndex + 7, -4)})`;
+                           ` '${arrayName}', ${result.jsStr.substring(bracketIndex + 12, index - 2)})`;
+                // jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity},` +
+                //            ` '${result.jsStr.slice(0, bracketIndex)}', ${result.jsStr.slice(bracketIndex + 7, -4)})`;
             } else {
                 jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${result.str}', null)`; //////////
             }
@@ -741,11 +745,21 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
             newString += '#' + result.str.replace(/ /g, '') + ' '; //////////
 
 
-            const bracketIndex = result.jsStr.indexOf('.slice(');
+            let bracketIndex = result.jsStr.indexOf('[pythonList(');
             if (bracketIndex !== -1) {
-                const att_name = result.jsStr.slice(0, bracketIndex);
-                const att_index = result.jsStr.slice(bracketIndex + 7, -4);
-                jsString = ` __modules__.${_parameterTypes.queryGet}(__params__.model, '${att_name}', ${entity}).slice(${att_index})[0]`;
+                const arrayName = result.jsStr.substring(0, bracketIndex);
+                const index = result.jsStr.lastIndexOf(arrayName);
+                jsString = ` __modules__.${_parameterTypes.queryGet}(__params__.model, '${arrayName}', ${entity})` +
+                           `[pythonList(${result.jsStr.substring(bracketIndex + 12, index - 2)}, ` +
+                           `__modules__.${_parameterTypes.queryGet}(__params__.model, '${arrayName}', ${entity}).length)]`;
+                // const att_name = result.jsStr.slice(0, bracketIndex);
+                // const att_index = result.jsStr.slice(bracketIndex + 7, -4);
+                // jsString = ` __modules__.${_parameterTypes.queryGet}(__params__.model, '${att_name}', ${entity}).slice(${att_index})[0]`;
+            } else if (result.jsStr.indexOf('.slice(') !== -1) {
+                bracketIndex = result.jsStr.indexOf('.slice(');
+                const arrayName = result.jsStr.substring(0, bracketIndex);
+                jsString = ` __modules__.${_parameterTypes.queryGet}(__params__.model, '${arrayName}', ${entity})` +
+                           result.jsStr.substring(bracketIndex);
             } else {
                 jsString = ` __modules__.${_parameterTypes.queryGet}(__params__.model, '${result.str}', ${entity})`;
             }
@@ -775,11 +789,11 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
 
             let att_name;
             let att_index;
-
-            const bracketIndex = result.jsStr.indexOf('.slice(');
+            const bracketIndex = result.jsStr.indexOf('[pythonList(');
             if (bracketIndex !== -1) {
                 att_name = result.jsStr.slice(0, bracketIndex);
-                att_index = result.jsStr.slice(bracketIndex + 7, -4);
+                const index = result.jsStr.lastIndexOf(att_name);
+                att_index = result.jsStr.substring(bracketIndex + 12, index - 2);
             } else {
                 att_name = result.str;
                 att_index = 'null';
@@ -812,7 +826,9 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
 
 function analyzePythonSlicing(
                 comps: {'type': strType, 'value': string}[], i: number, vars: string[], arrayName: string, isVariable: boolean):
-                {'error'?: string, 'i'?: number, 'str'?: string, 'jsStr'?: string, 'arrayName'?: string} {
+                {'error'?: string, 'i'?: number, 'str'?: string, 'jsStr'?: string
+                // , 'arrayName'?: string
+                } {
     let newString = '';
     let jsString = '';
     if (i + 1 >= comps.length) {
@@ -825,65 +841,72 @@ function analyzePythonSlicing(
         }
         newString += `[${comps[i + 1].value}]`;
         jsString += `[${comps[i + 1].value}]`;
-        arrayName += `[${comps[i + 1].value}]`;
-        return {'i': i + 2, 'str': newString, 'jsStr': jsString, 'arrayName': arrayName};
+        // arrayName += `[${comps[i + 1].value}]`;
+        return {'i': i + 2, 'str': newString, 'jsStr': jsString }; // , 'arrayName': arrayName};
     }
     if (i + 2 < comps.length && comps[i + 1].value === ':') {
         if (comps[i + 2].value === ']') {
             i += 2;
             newString += '[:]';
             jsString += '.slice()';
-            arrayName += '.slice()';
-            return {'i': i, 'str': newString, 'jsStr': jsString, 'arrayName': arrayName};
+            // arrayName += '.slice()';
+            return {'i': i, 'str': newString, 'jsStr': jsString}; // , 'arrayName': arrayName};
         }
         const secondResult = analyzeComp(comps, i + 2, vars);
         if (secondResult.error) { return secondResult; }
+        if (secondResult.i + 1 >= comps.length || comps[secondResult.i + 1].value !== ']') {
+            return {'error': `Error: "]" expected \n
+            at: ... ${comps.slice(secondResult.i - 1).map(cp => cp.value).join(' ')}`};
+        }
         jsString += '.slice(0,' + secondResult.jsStr + ')';
-        arrayName += '.slice(0,' + secondResult.jsStr + ')';
+        // arrayName += '.slice(0,' + secondResult.jsStr + ')';
         newString += '[ : ' + secondResult.str + ']';
         i = secondResult.i + 1;
-        return {'i': i, 'str': newString, 'jsStr': jsString, 'arrayName': arrayName};
+        return {'i': i, 'str': newString, 'jsStr': jsString}; // , 'arrayName': arrayName};
     }
     const result = analyzeComp(comps, i + 1, vars);
     if (result.error) { return result; }
     if (comps[result.i + 1].value === ':') {
         jsString += `.slice(${result.jsStr}`;
-        arrayName += `.slice(${result.jsStr}`;
+        // arrayName += `.slice(${result.jsStr}`;
         if (comps[result.i + 2].value === ']') {
             jsString += `)`;
-            arrayName += `)`;
+            // arrayName += `)`;
             i = result.i + 2;
             newString += `[${result.str} :]`;
-            return {'i': i, 'str': newString, 'jsStr': jsString, 'arrayName': arrayName};
+            return {'i': i, 'str': newString, 'jsStr': jsString}; // , 'arrayName': arrayName};
         }
         const secondResult = analyzeComp(comps, result.i + 2, vars);
+        if (secondResult.error) { return secondResult; }
+        if (secondResult.i + 1 >= comps.length || comps[secondResult.i + 1].value !== ']') {
+            return {'error': `Error: "]" expected \n
+            at: ... ${comps.slice(secondResult.i - 1).map(cp => cp.value).join(' ')}`};
+        }
         jsString += `, ${secondResult.jsStr})`;
-        arrayName += `, ${secondResult.jsStr})`;
+        // arrayName += `, ${secondResult.jsStr})`;
         i = secondResult.i + 1;
         newString += `[${result.str} : ${secondResult.str}]`;
-        return {'i': i, 'str': newString, 'jsStr': jsString, 'arrayName': arrayName};
+        return {'i': i, 'str': newString, 'jsStr': jsString}; // , 'arrayName': arrayName};
     }
     if (result.i + 1 >= comps.length || comps[result.i + 1].value !== ']') {
         return { 'error': `Error: "]" expected \n
         at: ... ${comps.slice(result.i + 1).map(cp => cp.value).join(' ')}`};
     }
 
-    // jsString += `[pythonList(${result.jsStr}, ${arrayName}.length)]`;
+    jsString += `[pythonList(${result.jsStr}, ${arrayName}.length)]`;
     // arrayName += `[pythonList(${result.jsStr}, ${arrayName}.length)]`;
 
-    if (isVariable) {
-        jsString += `[pythonList(${result.jsStr}, ${arrayName}.length)]`;
-        arrayName += `[pythonList(${result.jsStr}, ${arrayName}.length)]`;
-        // jsString += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
-        // arrayName += `[(x=>{if (x < 0) {x += ${arrayName}.length;} return x;})(${result.jsStr})]`;
-    } else {
-        jsString += `.slice(${result.jsStr})[0]`;
-        arrayName += `.slice(${result.jsStr})[0]`;
-    }
+    // if (isVariable) {
+    //     jsString += `[pythonList(${result.jsStr}, ${arrayName}.length)]`;
+    //     arrayName += `[pythonList(${result.jsStr}, ${arrayName}.length)]`;
+    // } else {
+    //     jsString += `.slice(${result.jsStr})[0]`;
+    //     arrayName += `.slice(${result.jsStr})[0]`;
+    // }
 
     i = result.i + 1;
     newString += '[' + result.str + ']';
-    return {'i': i, 'str': newString, 'jsStr': jsString, 'arrayName': arrayName};
+    return {'i': i, 'str': newString, 'jsStr': jsString}; // , 'arrayName': arrayName};
 }
 
 function analyzeExpression(comps: {'type': strType, 'value': string}[], i: number, vars: string[], noSpace?: boolean):

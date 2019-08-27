@@ -867,10 +867,14 @@ function analyzePythonSlicing(
     const result = analyzeComp(comps, i + 1, vars);
     if (result.error) { return result; }
     if (comps[result.i + 1].value === ':') {
+        if (result.i + 2 >= comps.length) {
+            return {'error': `Error: "]" expected \n
+            at: ... ${comps.slice(i + 1).map(cp => cp.value).join(' ')}`};
+        }
         jsString += `.slice(${result.jsStr}`;
         // arrayName += `.slice(${result.jsStr}`;
         if (comps[result.i + 2].value === ']') {
-            jsString += `)`;
+                jsString += `)`;
             // arrayName += `)`;
             i = result.i + 2;
             newString += `[${result.str} :]`;

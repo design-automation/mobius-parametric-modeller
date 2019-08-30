@@ -245,9 +245,18 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
         return {'error': comps};
     }
 
+    // if (comps[0].value === '@') {
+    //     const i = 1;
     if ((comps[0].value === '@' || comps[0].value === '#' || comps[0].value === '?')) {
-        if (comps[1].type !== strType.VAR) {
-            return {'error': 'Error: Expect attribute name after ' + comps[0].value};
+        let i = 1;
+        if (comps[0].value === '?') {
+            if (comps[1].value !== '@') {
+                return {'error': 'Error: Expect "@" name after "?"'};
+            }
+            i = 2;
+        }
+        if ( i >= comps.length || comps[i].type !== strType.VAR) {
+            return {'error': 'Error: Expect attribute name after "' + comps[0].value + '"'};
         }
         const usedVars = [];
         const result = analyzeQuery(comps, 0, usedVars, '', '', true);
@@ -255,17 +264,6 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
         return {'usedVars': usedVars, 'jsStr': result.jsStr.trim()};
     }
 
-    // if (comps[0].value === '@') {
-    //     if (comps[1].type !== strType.VAR) {
-    //         return {'error': 'Error: Expect attribute name after @'};
-    //     }
-    //     if (comps.length === 2) {
-    //         return {'jsStr': value};
-    //     }
-    //     const usedVars = [];
-    //     const attribComp = analyzeComp(comps, 1, usedVars);
-    //     return {'usedVars': usedVars, 'jsStr': '@' + attribComp.jsStr};
-    // }
     if (comps[0].type !== strType.VAR) {
         return {'error': `Error: Expect a Variable at the start of the input`};
     }
@@ -609,6 +607,7 @@ function analyzeArray(comps: {'type': strType, 'value': string}[], i: number, va
     while (i < comps.length && comps[i].value === ',') {
         newString += comps[i].value;
         jsString += comps[i].value;
+        if (i + 1 >= comps.length) { return { 'error': `Error: "]" expected`}; }
         const result = analyzeComp(comps, i + 1, vars, false, 'array');
         if (result.error) { return result; }
         i = result.i + 1;
@@ -626,6 +625,9 @@ function analyzeArray(comps: {'type': strType, 'value': string}[], i: number, va
 function analyzeJSON(comps: {'type': strType, 'value': string}[], i: number, vars: string[]):
                 {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string, 'jsStr'?: string} {
     if (comps[i].type !== strType.STR) {
+        if (comps[i].value === '}') {
+            return {'i': i - 1, 'str': '', 'jsStr': ''};
+        }
         return {'i': i, 'str': '', 'jsStr': ''};
     }
     let newString = comps[i].value;
@@ -640,6 +642,9 @@ function analyzeJSON(comps: {'type': strType, 'value': string}[], i: number, var
 
     const firstComp = analyzeComp(comps, i + 2, vars, false, 'array');
     if (firstComp.error) { return firstComp; }
+    if (firstComp.str === '') {
+        return {'error': 'Error: Expression expected after ":"'};
+    }
     if (firstComp.str[0] !== ' ') {
         newString += ' ';
         jsString += ' ';
@@ -649,12 +654,11 @@ function analyzeJSON(comps: {'type': strType, 'value': string}[], i: number, var
 
     i = firstComp.i + 1;
 
-    while (i < comps.length && comps[i].value === ';') {
+    while (i < comps.length && comps[i].value === ',') {
         newString += comps[i].value;
         jsString += comps[i].value;
         if (comps[i + 1].type !== strType.STR) {
-            return {'error': 'Error: string expected\n' +
-            `at: ... ${comps.slice(i + 1).map(cp => cp.value).join(' ')}`};
+            return {'error': 'Error: key name expected after ","'};
         }
         newString += comps[i + 1].value;
         jsString += comps[i + 1].value;
@@ -665,9 +669,11 @@ function analyzeJSON(comps: {'type': strType, 'value': string}[], i: number, var
         }
         newString += ':';
         jsString += ':';
-
-        const result = analyzeComp(comps, i + 2, vars, false, 'array');
-        if (firstComp.error) { return firstComp; }
+        const result = analyzeComp(comps, i + 3, vars, false, 'array');
+        if (result.error) { return firstComp; }
+        if (result.str === '') {
+            return {'error': 'Error: Expression expected after ":"'};
+        }
         if (result.str[0] !== ' ') {
             newString += ' ';
             jsString += ' ';
@@ -675,7 +681,7 @@ function analyzeJSON(comps: {'type': strType, 'value': string}[], i: number, var
         newString += result.str;
         jsString += result.jsStr;
 
-        i = firstComp.i + 1;
+        i = result.i + 1;
     }
 
     return {'i': i - 1, 'str': newString, 'jsStr': jsString};
@@ -698,7 +704,7 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
                 return {'i': i, 'str': newString, 'jsStr': jsString};
             }
             if (i + 1 === comps.length || comps[i + 1].type !== strType.VAR) {
-                return {'error': 'Error: Variable expected after "@"\n' +
+                return {'error': 'Error: Attribute name expected after "@"\n' +
                 `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
             }
             const result = analyzeVar(comps, i + 1, vars, true);
@@ -730,8 +736,8 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
             }
             i += 1;
         } else if (comps[i].value === '#') {
-            if (comps[i + 1].type !== strType.VAR) {
-                return {'error': 'Error: variable expected after "#"'};
+            if (i + 1 >= comps.length || comps[i + 1].type !== strType.VAR) {
+                return {'error': 'Error: geometry type expected after "#"'};
             }
             const result = analyzeVar(comps, i + 1, vars, true);
             if (result.error) { return result; }
@@ -787,8 +793,8 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
                 entity = 'null';
             }
 
-            let att_name;
-            let att_index;
+            let att_name: string;
+            let att_index: string;
             const bracketIndex = result.jsStr.indexOf('[pythonList(');
             if (bracketIndex !== -1) {
                 att_name = result.jsStr.slice(0, bracketIndex);
@@ -799,12 +805,13 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
                 att_index = 'null';
             }
 
-            if (comps[i + 1].type !== strType.OTHER) {
-                return {'error': 'Error: Variable expected after "@"\n' +
-                `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+            if (i + 1 >= comps.length || comps[i + 1].type !== strType.OTHER) {
+                return {'error': 'Error: Comparison operator expected after attribute name'};
             }
 
             const operator = comps[i + 1].value;
+
+            if (i + 2 >= comps.length) { return {'error': 'Error: Expression expected after comparison operator'}; }
 
             const nComp = analyzeComp(comps, i + 2, vars);
             if (nComp.error) {
@@ -831,14 +838,9 @@ function analyzePythonSlicing(
                 } {
     let newString = '';
     let jsString = '';
-    if (i + 1 >= comps.length) {
-        return {'error': `Error: "]" expected`};
-    }
+    if (i + 1 >= comps.length) { return {'error': `Error: "]" expected`}; }
     if (comps[i + 1].type === strType.STR) {
-        if (i + 2 >= comps.length || comps[i + 2].value !== ']') {
-            return {'error': `Error: "]" expected \n
-            at: ... ${comps.slice(i + 1).map(cp => cp.value).join(' ')}`};
-        }
+        if (i + 2 >= comps.length || comps[i + 2].value !== ']') { return {'error': `Error: "]" expected`}; }
         newString += `[${comps[i + 1].value}]`;
         jsString += `[${comps[i + 1].value}]`;
         // arrayName += `[${comps[i + 1].value}]`;
@@ -866,11 +868,10 @@ function analyzePythonSlicing(
     }
     const result = analyzeComp(comps, i + 1, vars);
     if (result.error) { return result; }
-    if (comps[result.i + 1].value === ':') {
-        if (result.i + 2 >= comps.length) {
-            return {'error': `Error: "]" expected \n
-            at: ... ${comps.slice(i + 1).map(cp => cp.value).join(' ')}`};
-        }
+    if (result.str === ']' || result.str === '') { return { 'error': `Error: Content expected`};
+    } else if (result.i + 1 >= comps.length) { return { 'error': `Error: "]" expected`};
+    } else if (comps[result.i + 1].value === ':') {
+        if (result.i + 2 >= comps.length) { return {'error': `Error: "]" expected`}; }
         jsString += `.slice(${result.jsStr}`;
         // arrayName += `.slice(${result.jsStr}`;
         if (comps[result.i + 2].value === ']') {
@@ -883,18 +884,13 @@ function analyzePythonSlicing(
         const secondResult = analyzeComp(comps, result.i + 2, vars);
         if (secondResult.error) { return secondResult; }
         if (secondResult.i + 1 >= comps.length || comps[secondResult.i + 1].value !== ']') {
-            return {'error': `Error: "]" expected \n
-            at: ... ${comps.slice(secondResult.i - 1).map(cp => cp.value).join(' ')}`};
+            return {'error': `Error: "]" expected`};
         }
         jsString += `, ${secondResult.jsStr})`;
         // arrayName += `, ${secondResult.jsStr})`;
         i = secondResult.i + 1;
         newString += `[${result.str} : ${secondResult.str}]`;
         return {'i': i, 'str': newString, 'jsStr': jsString}; // , 'arrayName': arrayName};
-    }
-    if (result.i + 1 >= comps.length || comps[result.i + 1].value !== ']') {
-        return { 'error': `Error: "]" expected \n
-        at: ... ${comps.slice(result.i + 1).map(cp => cp.value).join(' ')}`};
     }
 
     jsString += `[pythonList(${result.jsStr}, ${arrayName}.length)]`;
@@ -907,7 +903,6 @@ function analyzePythonSlicing(
     //     jsString += `.slice(${result.jsStr})[0]`;
     //     arrayName += `.slice(${result.jsStr})[0]`;
     // }
-
     i = result.i + 1;
     newString += '[' + result.str + ']';
     return {'i': i, 'str': newString, 'jsStr': jsString}; // , 'arrayName': arrayName};
@@ -931,6 +926,7 @@ function analyzeExpression(comps: {'type': strType, 'value': string}[], i: numbe
         // } else {
         //     jsString += comps[i].value;
         // }
+        if (i + 1 >= comps.length) { return {'error': `Error: Expression expected after ${comps[i].value}`}; }
         const result = analyzeComp(comps, i + 1, vars, false, 'expr');
         if (result.error) { return result; }
         i = result.i + 1;

@@ -16,6 +16,7 @@ import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd, vecFromTo } from '@l
 import { _model } from '@modules';
 import { checkCommTypes, checkIDs, IDcheckObj, TypeCheckObj } from './_check_args';
 import { distance } from '@assets/libs/geom/distance';
+import { arrMakeFlat } from '@assets/libs/util/arrs';
 
 // ================================================================================================
 /**
@@ -291,10 +292,12 @@ function _getPgonPosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTyp
 // ================================================================================================
 /**
  * Adds one or more new collections to the model.
- *
+ * ~
+ * If the list of entities contains other collections, these other collections will then become 
+ * children of the new collection that will be created.
+ * ~
  * @param __model__
- * @param parent_coll Optional, collection, the parent collection or null.
- * @param entities List or nested lists of points, polylines, polygons.
+ * @param entities List or nested lists of points, polylines, polygons, and other colletions.
  * @returns Entities, new collection, or a list of new collections.
  * @example collection1 = make.Collection([point1,polyine1,polygon1])
  * @example_info Creates a collection containing point1, polyline1, polygon1.
@@ -302,41 +305,41 @@ function _getPgonPosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTyp
  * @example_info Creates two collections, the first containing point1 and polyline1, the second containing polygon1.
  * @example_link make.Collection.mob&node=1
  */
-export function Collection(__model__: GIModel, parent_coll: TId, entities: TId|TId[]): TId|TId[] {
+export function Collection(__model__: GIModel, entities: TId|TId[]|TId[][]): TId|TId[] {
     // --- Error Check ---
     const fn_name = 'make.Collection';
-    let parent_index: number;
-    if (parent_coll !== null && parent_coll !== undefined) {
-        const parent_ent_arr = checkIDs(fn_name, 'parent_coll', parent_coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
-        parent_index = parent_ent_arr[1];
-    } else {
-        parent_index = -1;
-    }
     const ents_arr = checkIDs(fn_name, 'objects', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
-        [EEntType.POINT, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
+        [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
     // --- Error Check ---
-    const new_ent_arr: TEntTypeIdx|TEntTypeIdx[] = _collection(__model__, parent_index, ents_arr);
+    const new_ent_arr: TEntTypeIdx|TEntTypeIdx[] = _collection(__model__, ents_arr);
     return idsMake(new_ent_arr) as TId|TId[];
 }
-export function _collection(__model__: GIModel, parent_index: number,
-    ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][]): TEntTypeIdx | TEntTypeIdx[] {
+export function _collection(__model__: GIModel, ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][]): TEntTypeIdx | TEntTypeIdx[] {
     const depth: number = getArrDepth(ents_arr);
     if (depth === 1) {
         ents_arr = [ents_arr] as TEntTypeIdx[];
     } else if (depth === 3) {
         ents_arr = ents_arr as TEntTypeIdx[][];
-        return ents_arr.map(ents_arr_item => _collection(__model__, parent_index, ents_arr_item)) as TEntTypeIdx[];
+        return ents_arr.map(ents_arr_item => _collection(__model__, ents_arr_item)) as TEntTypeIdx[];
     }
-    const points: number[] = [];
-    const plines: number[] = [];
-    const pgons: number[] = [];
+    const points_i: number[] = [];
+    const plines_i: number[] = [];
+    const pgons_i: number[] = [];
+    const child_colls_i: number[] = [];
     for (const ent_arr of ents_arr) {
-        if (isPoint(ent_arr[0])) { points.push(ent_arr[1]); }
-        if (isPline(ent_arr[0])) { plines.push(ent_arr[1]); }
-        if (isPgon(ent_arr[0])) { pgons.push(ent_arr[1]); }
+        if (isPoint(ent_arr[0])) { points_i.push(ent_arr[1]); }
+        if (isPline(ent_arr[0])) { plines_i.push(ent_arr[1]); }
+        if (isPgon(ent_arr[0])) { pgons_i.push(ent_arr[1]); }
+        if (isColl(ent_arr[0])) { child_colls_i.push(ent_arr[1]); }
     }
-    const coll_i: number = __model__.geom.add.addColl(parent_index, points, plines, pgons);
+    // create the collection, setting tha parent to -1
+    const coll_i: number = __model__.geom.add.addColl(-1, points_i, plines_i, pgons_i);
+    // set the parents
+    for (const child_coll_i of child_colls_i) {
+        __model__.geom.modify.setCollParent(child_coll_i, coll_i);
+    }
+    // return the new collection
     return [EEntType.COLL, coll_i];
 }
 // ================================================================================================

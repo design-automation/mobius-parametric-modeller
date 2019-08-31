@@ -1,4 +1,5 @@
-
+import __ from 'underscore';
+import { deepCopy } from './copy';
 
 /**
  * Remove an item from an array
@@ -37,4 +38,37 @@ export function arrIdxRem(arr: any[], idx: number, item: any, del_empty: boolean
     if (del_empty && arr[idx].length === 0) {
         delete arr[idx];
     }
+}
+/**
+ * Make flat array from anything.
+ * ~
+ * If it is not an array, then make it an array
+ * ~
+ * If it is an array, then make it flat
+ * ~
+ * @param data
+ */
+export function arrMakeFlat(data: any): any[] {
+    if (!Array.isArray(data)) {
+        return [data];
+    }
+    const depth = arrMaxDepth(data);
+    // @ts-ignore
+    const new_array = data.flat(depth - 1);
+}
+/**
+ * Maximum depth of an array
+ * @param data
+ */
+export function arrMaxDepth(data: any[]): number {
+    let d1 = 0;
+    if (Array.isArray(data)) {
+        for (const item of data) {
+            const d2 = arrMaxDepth(item);
+            if (d2 > d1) {
+                d1 = d2;
+            }
+        }
+    }
+    return d1;
 }

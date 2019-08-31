@@ -18,23 +18,6 @@ The resulting list of entities will not contain duplicate entities.
     Returns a list of positions that are part of polyline1 and polyline2.
   
   
-## Invert  
-* **Description:** Returns a list of entities that are not part of the specified entities.
-For example, you can get the position entities that are not part of a list of polygon entities.
-~
-This function does the opposite of query.Get().
-While query.Get() gets entities that are part of of the list of entities,
-this function gets the entities that are not part of the list of entities.
-~  
-* **Parameters:**  
-  * *ent_type_enum:* Enum, specifies what type of entities will be returned.  
-  * *entities:* List of entities to be excluded.  
-* **Returns:** Entities, a list of entities that match the type specified in 'ent_type_enum', and that are not in entities.  
-* **Examples:**  
-  * positions = query.Invert('positions', [polyline1, polyline2])  
-    Returns a list of positions that are not part of polyline1 and polyline2.
-  
-  
 ## Filter  
 * **Description:** Filter entities based on a query.
 ~
@@ -53,7 +36,7 @@ If the attribute value is a number, then any comparison operator can be used: ==
 If the attribute value is a list, then a list index can be used, e.g.: ps#@xyz[2] > 10.
 ~  
 * **Parameters:**  
-  * *entities:* Optional, list of entities to filter, or null..  
+  * *entities:* List of entities to filter, or null..  
   * *name:* The attribute name to use for filtering.  
   * *index:* Optional, attribute index to use for filtering (for attributes that are lists), or null to filter all entities the model.  
   * *operator_enum:* Enum, the operator to use for filtering  
@@ -72,6 +55,23 @@ If the attribute value is a list, then a list index can be used, e.g.: ps#@xyz[2
     Returns a list of all the collections that have an attribute called "type" with a value "floors".
   
   
+## Invert  
+* **Description:** Returns a list of entities that are not part of the specified entities.
+For example, you can get the position entities that are not part of a list of polygon entities.
+~
+This function does the opposite of query.Get().
+While query.Get() gets entities that are part of of the list of entities,
+this function gets the entities that are not part of the list of entities.
+~  
+* **Parameters:**  
+  * *ent_type_enum:* Enum, specifies what type of entities will be returned.  
+  * *entities:* List of entities to be excluded.  
+* **Returns:** Entities, a list of entities that match the type specified in 'ent_type_enum', and that are not in entities.  
+* **Examples:**  
+  * positions = query.Invert('positions', [polyline1, polyline2])  
+    Returns a list of positions that are not part of polyline1 and polyline2.
+  
+  
 ## Sort  
 * **Description:** Sorts entities based on a sort expression.
 ~
@@ -83,7 +83,7 @@ If the attribute is a list, and index can also be specified as follows: #@name1[
 * **Parameters:**  
   * *entities:* List of two or more entities to be sorted, all of the same entity type.  
   * *name:* Attribute name to use for sorting.  
-  * *index:* Optional, attribute index to use for sorting (for attributes that are lists), or null.  
+  * *idx_or_key:* Optional, attribute index to use for sorting (for attributes that are lists), or null.  
   * *method_enum:* Enum, sort descending or ascending.  
 * **Returns:** Entities, a list of sorted entities.  
 * **Examples:**  

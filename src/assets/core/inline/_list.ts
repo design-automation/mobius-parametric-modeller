@@ -2,6 +2,7 @@
  * list functions that obtain and return information from an input list. Does not modify input list.
  */
 import __ from 'underscore';
+import { arrMakeFlat } from '@assets/libs/util/arrs';
 
 export function range(start: number, end: number, step?: number): number[] {
     if (start === undefined) { throw new Error('Invalid inline arg: min must be defined.'); }
@@ -74,9 +75,11 @@ export function listJoin(list1: any[], list2: any[]): any[] {
 }
 
 export function listFlat(list: any[], depth?: number): any[] {
-    let list_copy = list.slice();
-    for (let i  = 0; i < depth; i++) { list_copy = __.flatten(list_copy, true); }
-    return list_copy;
+    if (depth !== undefined) {
+        // @ts-ignore
+        return list.flat(depth);
+    }
+    return arrMakeFlat(list);
 }
 
 export function listSlice(list: any[], start: number, end?: number): any[] {

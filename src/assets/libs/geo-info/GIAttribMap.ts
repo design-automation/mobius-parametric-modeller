@@ -1,5 +1,5 @@
 import { EFilterOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, RE_SPACES } from './common';
-import { arrRem } from '../util/arrays';
+import { arrRem } from '../util/arrs';
 import { deepCopy } from '../util/copy';
 
 /**

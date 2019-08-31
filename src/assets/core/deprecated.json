@@ -183,5 +183,22 @@
                 "data_target": "'Save to Hard Disk'"
             }
         }
+    },
+    {
+        "old_func": {
+            "name": "Collection",
+            "module": "make",
+            "values": {
+                "parent_coll": "'parent_coll'",
+                "entities": "'entities'"
+            }
+        },
+        "new_func": {
+            "name": "Collection",
+            "module": "make",
+            "values": {
+                "entities": "'entities'"
+            }
+        }
     }
 ]

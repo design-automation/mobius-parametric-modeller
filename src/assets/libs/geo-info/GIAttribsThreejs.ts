@@ -131,7 +131,7 @@ export class GIAttribsThreejs {
         }
         // loop through all the attributes
         attribs.forEach( (attrib, attrib_name) => {
-            const data_size: number = attrib.getDataSize();
+            const data_size: number = attrib.getDataLength();
             for (const ent_i of ents_i) {
                 if (attrib_name.substr(0, 1) === '_' && attrib_name !== '_parent') {
                     const attrib_value = attrib.getEntVal(ent_i);
@@ -192,9 +192,8 @@ export class GIAttribsThreejs {
             }
             i++;
         });
-
         attribs.forEach( (attrib, attrib_name) => {
-            const data_size: number = attrib.getDataSize();
+            const data_size: number = attrib.getDataLength();
             for (const ent_i of Array.from(selected_ents.values())) {
                 if (attrib_name.substr(0, 1) === '_') {
                     const attrib_value = attrib.getEntVal(ent_i);
@@ -232,10 +231,16 @@ export class GIAttribsThreejs {
         });
         return Array.from(data_obj_map.values());
     }
-
+    /**
+     * TODO
+     * This is confusing... will this not always return the same, i.e. id = index
+     * @param ent_type
+     * @param id
+     */
     public getIdIndex(ent_type: EEntType, id: number) {
         const ents_i = this._model.geom.query.getEnts(ent_type, false);
         const index = ents_i.findIndex(ent_i => ent_i === id);
+        console.log("calling getIdIndex in GIATtribsThreejs", id, index);
         return index;
     }
 }

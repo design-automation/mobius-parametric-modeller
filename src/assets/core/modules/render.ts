@@ -79,7 +79,7 @@ export function Color(__model__: GIModel, entities: TId|TId[], color: TColor): v
         const [ent_type, ent_i]: [number, number] = ent_arr as TEntTypeIdx;
         const verts_i: number[] = __model__.geom.query.navAnyToVert(ent_type, ent_i);
         for (const vert_i of verts_i) {
-            __model__.attribs.add.setAttribValue(EEntType.VERT, vert_i, EAttribNames.COLOR, color);
+            __model__.attribs.add.setAttribVal(EEntType.VERT, vert_i, EAttribNames.COLOR, color);
         }
     }
 }
@@ -111,7 +111,7 @@ export function Material(__model__: GIModel, entities: TId|TId[], material: stri
         const [ent_type, ent_i]: [number, number] = ent_arr as TEntTypeIdx;
         const pgons_i: number[] = __model__.geom.query.navAnyToPgon(ent_type, ent_i);
         for (const pgon_i of pgons_i) {
-            __model__.attribs.add.setAttribValue(EEntType.PGON, pgon_i, EAttribNames.MATERIAL, material);
+            __model__.attribs.add.setAttribVal(EEntType.PGON, pgon_i, EAttribNames.MATERIAL, material);
         }
     }
 }
@@ -341,7 +341,7 @@ function _setMaterialModelAttrib(__model__: GIModel, name: string, settings_obj:
     // if the material already exists, then existing settings will be added
     // but new settings will take precedence
     if (__model__.attribs.query.hasModelAttrib(name)) {
-        const exist_settings_str: string = __model__.attribs.query.getModelAttribValue(name) as string;
+        const exist_settings_str: string = __model__.attribs.query.getModelAttribVal(name) as string;
         const exist_settings_obj: object = JSON.parse(exist_settings_str);
         // check that the existing material is a Basic one
         if (exist_settings_obj['type'] !== _EMaterialType.BASIC) {
@@ -357,5 +357,5 @@ function _setMaterialModelAttrib(__model__: GIModel, name: string, settings_obj:
         }
     }
     const settings_str: string = JSON.stringify(settings_obj);
-    __model__.attribs.add.setModelAttribValue(name, settings_str);
+    __model__.attribs.add.setModelAttribVal(name, settings_str);
 }

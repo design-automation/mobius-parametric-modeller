@@ -196,7 +196,7 @@ export class GIModel {
                     const sub_ents_i: number[] = this.geom.query.navAnyToAny(from_ent_type, to_ent_type, index);
                     for (const attrib_name of attrib_names) {
                         for (const sub_ent_i of sub_ents_i) {
-                            const attrib_value: TAttribDataTypes = this.attribs.query.getAttribValue(to_ent_type, attrib_name, sub_ent_i);
+                            const attrib_value: TAttribDataTypes = this.attribs.query.getAttribVal(to_ent_type, attrib_name, sub_ent_i);
                             sub_fingerprints.push(this.getAttribValFingerprint(attrib_value));
                         }
                     }
@@ -207,7 +207,7 @@ export class GIModel {
                         const sub_ents_i: number[] = this.geom.query.navAnyToAny(EEntType.WIRE, to_ent_type, wire_i);
                         for (const attrib_name of attrib_names) {
                             for (const sub_ent_i of sub_ents_i) {
-                                const attrib_value: TAttribDataTypes = this.attribs.query.getAttribValue(
+                                const attrib_value: TAttribDataTypes = this.attribs.query.getAttribVal(
                                         to_ent_type, attrib_name, sub_ent_i);
                                 wire_fingerprints.push(this.getAttribValFingerprint(attrib_value));
                             }

@@ -149,8 +149,8 @@ export class GIGeomAdd {
                 const attrib_names: string[] = this._geom.model.attribs.query.getAttribNames(EEntType.POSI);
                 for (const attrib_name of attrib_names) {
                     const value: TAttribDataTypes =
-                        this._geom.model.attribs.query.getAttribValue(EEntType.POSI, attrib_name, posis_i) as TAttribDataTypes;
-                    this._geom.model.attribs.add.setAttribValue(EEntType.POSI, new_posi_i, attrib_name, value);
+                        this._geom.model.attribs.query.getAttribVal(EEntType.POSI, attrib_name, posis_i) as TAttribDataTypes;
+                    this._geom.model.attribs.add.setAttribVal(EEntType.POSI, new_posi_i, attrib_name, value);
                 }
             }
             return new_posi_i;

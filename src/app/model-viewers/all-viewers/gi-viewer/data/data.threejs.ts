@@ -243,7 +243,7 @@ export class DataThreejs {
                 container.removeChild(old);
             }
             if (!this._model.attribs.query.hasAttrib(EEntType.MOD, 'hud')) { return; }
-            const hud = this._model.attribs.query.getModelAttribValue('hud') as string;
+            const hud = this._model.attribs.query.getModelAttribVal('hud') as string;
             const element = this._createHud(hud).element;
             container.appendChild(element);
             old = null;

@@ -3,7 +3,6 @@ import { TAttribDataTypes, IAttribsMaps,
     Txyz, EAttribNames, EEntType,  ESort,
     EAttribDataTypeStrs, EEntTypeStr, EFilterOperatorTypes } from './common';
 import { GIAttribMap } from './GIAttribMap';
-import { string } from '@assets/core/inline/_mathjs';
 
 /**
  * Class for attributes.
@@ -41,47 +40,54 @@ export class GIAttribsQuery {
         if (ent_type === EEntType.MOD) {
             const mod_attribs: Map<string, TAttribDataTypes> = attribs as Map<string, TAttribDataTypes>;
             const value: TAttribDataTypes = mod_attribs.get(name);
-            let first_value: number|string;
-            if (Array.isArray(value)) {
-                first_value = value[0];
-            } else {
-                first_value = value;
+            if (typeof value === 'number') {
+                return EAttribDataTypeStrs.NUMBER;
+            } else if (typeof value === 'string') {
+                return EAttribDataTypeStrs.STRING;
+            } else if (typeof value === 'boolean') {
+                return EAttribDataTypeStrs.BOOLEAN;
+            } else if (Array.isArray(value)) {
+                return EAttribDataTypeStrs.LIST;
+            } else if (typeof value === 'object') {
+                return EAttribDataTypeStrs.DICT;
             }
-            if (typeof first_value === 'string') { return EAttribDataTypeStrs.STRING; }
-            return EAttribDataTypeStrs.NUMBER;
+            throw new Error('Datatype of model attribute not recognised.');
         } else {
             const ent_attribs: Map<string, GIAttribMap> = attribs as Map<string, GIAttribMap>;
             return ent_attribs.get(name).getDataType();
         }
     }
     /**
-     * Get attrib data size. Also works for MOD attribs.
+     * Get attrib data type. Also works for MOD attribs.
      *
      * @param ent_type
      * @param name
      */
-    public getAttribDataSize(ent_type: EEntType, name: string): number {
+    public getAttribDataLength(ent_type: EEntType, name: string): number {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap>|Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
         if (attribs.get(name) === undefined) { throw new Error('Attribute with this name does not exist.'); }
         if (ent_type === EEntType.MOD) {
             const mod_attribs: Map<string, TAttribDataTypes> = attribs as Map<string, TAttribDataTypes>;
             const value: TAttribDataTypes = mod_attribs.get(name);
-            if (Array.isArray(value)) {
-                return (value as number[]|string[]).length;
-            } else {
+            if (typeof value === 'number' || typeof value === 'string' || typeof value === 'boolean') {
                 return 1;
+            } else if (Array.isArray(value)) {
+                return value.length;
+            } else if (typeof value === 'object') {
+                return Object.keys(value).length;
             }
+            throw new Error('Datatype of model attribute not recognised.');
         } else {
             const ent_attribs: Map<string, GIAttribMap> = attribs as Map<string, GIAttribMap>;
-            return ent_attribs.get(name).getDataSize();
+            return ent_attribs.get(name).getDataLength();
         }
     }
     /**
      * Get a model attrib value
      * @param name
      */
-    public getModelAttribValue(name: string): TAttribDataTypes {
+    public getModelAttribVal(name: string): TAttribDataTypes {
         const attribs_maps_key: string = EEntTypeStr[EEntType.MOD];
         const attribs: Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
         const value: TAttribDataTypes = attribs.get(name);
@@ -89,18 +95,40 @@ export class GIAttribsQuery {
         return value;
     }
     /**
-     * Get a model attrib indexed value
+     * Get a model attrib list value given an index
+     * ~
+     * If this attribute is not a list, it will return null
+     * ~
+     * If idx is creater than the length of the list, undefined is returned.
+     * ~
      * @param ent_type
      * @param name
      */
-    public getModelAttribIndexedValue(name: string, value_index: number): number|string {
+    public getModelAttribListIdxVal(name: string, idx: number): number|string {
         const attribs_maps_key: string = EEntTypeStr[EEntType.MOD];
         const attribs: Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
         const list_value: TAttribDataTypes = attribs.get(name);
         if (list_value === undefined) { return null; }
         if (!Array.isArray(list_value)) { return null; }
-        if (value_index >= list_value.length) { return null; }
-        return list_value[value_index];
+        return list_value[idx];
+    }
+    /**
+     * Get a model attrib dict value given a key
+     * ~
+     * If this attribute is not a dict, it will return null
+     * ~
+     * If key does not exist, undefined is returned.
+     * ~
+     * @param ent_type
+     * @param name
+     */
+    public getModelAttribDictKeyVal(name: string, key: string): number|string {
+        const attribs_maps_key: string = EEntTypeStr[EEntType.MOD];
+        const attribs: Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
+        const dict_value: TAttribDataTypes = attribs.get(name);
+        if (dict_value === undefined) { return null; }
+        if (Array.isArray(dict_value) || typeof dict_value !== 'object') { return null; }
+        return dict_value[key];
     }
     /**
      * Get an entity attrib value.
@@ -108,7 +136,7 @@ export class GIAttribsQuery {
      * @param ent_type
      * @param name
      */
-    public getAttribValue(ent_type: EEntType, name: string, ents_i: number|number[]): TAttribDataTypes|TAttribDataTypes[] {
+    public getAttribVal(ent_type: EEntType, name: string, ents_i: number|number[]): TAttribDataTypes|TAttribDataTypes[] {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         const attrib: GIAttribMap = attribs.get(name);
@@ -117,18 +145,37 @@ export class GIAttribsQuery {
     }
     /**
      * Get an entity attrib indexed value.
-     * If the attribute does not exist or the index is out of range, return null.
+     * ~
+     * If the attribute does not exist 
+     * ~
+     * If the index is out of range, return undefined.
+     * ~
      * @param ent_type
      * @param name
      */
-    public getAttribIndexedValue(ent_type: EEntType, name: string, ents_i: number, value_index: number): number|string {
+    public getAttribListIdxVal(ent_type: EEntType, name: string, ents_i: number, idx: number): any {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         const attrib: GIAttribMap = attribs.get(name);
         if (attrib === undefined) { return null; }
-        // if (attrib.getDataSize() === 1) { throw new Error('Attribute is not a list, so indexed values are not allowed.'); }
-        if (value_index >= attrib.getDataSize()) { throw new Error('Value index is out of range for attribute list size.'); }
-        return attrib.getEntIdxVal(ents_i, value_index) as number|string;
+        return attrib.getEntListIdxVal(ents_i, idx);
+    }
+        /**
+     * Get an entity attrib indexed value.
+     * ~
+     * If the attribute does not exist 
+     * ~
+     * If the index is out of range, return undefined.
+     * ~
+     * @param ent_type
+     * @param name
+     */
+    public getAttribDictKeyVal(ent_type: EEntType, name: string, ents_i: number, key: string): any {
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
+        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attrib: GIAttribMap = attribs.get(name);
+        if (attrib === undefined) { return null; }
+        return attrib.getEntDictKeyVal(ents_i, key);
     }
     /**
      * Check if attribute exists
@@ -228,23 +275,25 @@ export class GIAttribsQuery {
      * @param ent_type The type of the entities being quieried.
      * @param ents_i Entites in the model, assumed to be of type ent_type.
      * @param name
-     * @param index
+     * @param idx_or_key
      * @param value
      */
     public filterByAttribs(ent_type: EEntType, ents_i: number[],
-            name: string, index: number, op_type: EFilterOperatorTypes, value: TAttribDataTypes): number[] {
+            name: string, idx_or_key: number|string, op_type: EFilterOperatorTypes, value: TAttribDataTypes): number[] {
         // get the map that contains all the attributes for the ent_type
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         // do the query
         if (attribs && attribs.has(name)) {
             const attrib: GIAttribMap = attribs.get(name);
-            const query_ents_i: number[] = attrib.queryVal2(
-                ents_i,
-                index,
-                op_type,
-                value
-            );
+            let query_ents_i: number[];
+            if (typeof idx_or_key === 'number') {
+                query_ents_i = attrib.queryListIdxVal(ents_i, idx_or_key, op_type, value);
+            } else if (typeof idx_or_key === 'string') {
+                query_ents_i = attrib.queryDictKeyVal(ents_i, idx_or_key, op_type, value);
+            } else {
+                query_ents_i = attrib.queryVal(ents_i, op_type, value);
+            }
             // return the result
             return query_ents_i;
         } else {

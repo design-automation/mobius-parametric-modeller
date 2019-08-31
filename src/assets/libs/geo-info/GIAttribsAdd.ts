@@ -53,7 +53,7 @@ export class GIAttribsAdd {
      * @param name
      * @param value
      */
-    public setModelAttribValue(name: string, value: TAttribDataTypes): void {
+    public setModelAttribVal(name: string, value: TAttribDataTypes): void {
         const attribs_maps_key: string = EEntTypeStr[EEntType.MOD];
         const attrib: Map<string, any> = this._attribs_maps[attribs_maps_key];
         attrib.set(name, value);
@@ -65,17 +65,32 @@ export class GIAttribsAdd {
      * @param name
      * @param value
      */
-    public setModelAttribIndexedValue(name: string, value_index: number, value: number|string): void {
+    public setModelAttribListIdxVal(name: string, idx: number, value: any): void {
         const attribs_maps_key: string = EEntTypeStr[EEntType.MOD];
         const attrib: Map<string, any> = this._attribs_maps[attribs_maps_key];
         const list_value: TAttribDataTypes = attrib.get(name);
         if (list_value === undefined) { throw new Error('Attribute with this name does not exist.'); }
-        if (!Array.isArray(list_value)) { throw new Error('Attribute is not a list, so indexed values are not allowed.'); }
-        if (value_index >= list_value.length) { throw new Error('Value index is out of range for attribute list size.'); }
-        if (value_index < 0) {
-            value_index += list_value.length;
+        if (!Array.isArray(list_value)) {
+            throw new Error('Attribute is not a list, so indexed values are not allowed.');
         }
-        list_value[value_index] = value;
+        list_value[idx] = value;
+    }
+    /**
+     * Set a model attrib indexed value.
+     * If the attribute does not exist, it throws an error.
+     * @param id
+     * @param name
+     * @param value
+     */
+    public setModelAttribDictKeyVal(name: string, key: string, value: any): void {
+        const attribs_maps_key: string = EEntTypeStr[EEntType.MOD];
+        const attrib: Map<string, any> = this._attribs_maps[attribs_maps_key];
+        const dict_value: TAttribDataTypes = attrib.get(name);
+        if (dict_value === undefined) { throw new Error('Attribute with this name does not exist.'); }
+        if (Array.isArray(dict_value) || typeof dict_value !== 'object') {
+            throw new Error('Attribute is not a dictionary, so keyed values are not allowed.');
+        }
+        dict_value[key] = value;
     }
     /**
      * Set an entity attrib value
@@ -84,7 +99,7 @@ export class GIAttribsAdd {
      * @param name
      * @param value
      */
-    public setAttribValue(ent_type: EEntType, ents_i: number|number[], name: string, value: TAttribDataTypes): void {
+    public setAttribVal(ent_type: EEntType, ents_i: number|number[], name: string, value: TAttribDataTypes): void {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         if (attribs.get(name) === undefined) {
@@ -100,8 +115,8 @@ export class GIAttribsAdd {
      * @param name
      * @param value
      */
-    public setAttribIndexedValue(ent_type: EEntType, ents_i: number|number[], name: string,
-            value_index: number, value: number|string): void {
+    public setAttribListIdxVal(ent_type: EEntType, ents_i: number|number[], name: string,
+            idx: number, value: any): void {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         const attrib: GIAttribMap = attribs.get(name);
@@ -109,7 +124,25 @@ export class GIAttribsAdd {
         if (attrib.getDataType() !== EAttribDataTypeStrs.LIST) {
             throw new Error('Attribute is not a list, so indexed values are not allowed.');
         }
-        attrib.setEntIdxVal(ents_i, value_index, value);
+        attrib.setEntListIdxVal(ents_i, idx, value);
+    }
+    /**
+     * Set an entity attrib indexed value.
+     * If the attribute does not exist, it throws an error.
+     * @param id
+     * @param name
+     * @param value
+     */
+    public setAttribDictKeyVal(ent_type: EEntType, ents_i: number|number[], name: string,
+        key: string, value: any): void {
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
+        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attrib: GIAttribMap = attribs.get(name);
+        if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
+        if (attrib.getDataType() !== EAttribDataTypeStrs.DICT) {
+            throw new Error('Attribute is not a dictionary, so keyed values are not allowed.');
+        }
+        attrib.setEntDictKeyVal(ents_i, key, value);
     }
     /**
      * Delete the entity from an attribute
@@ -162,7 +195,7 @@ export class GIAttribsAdd {
     /**
      * Promotes attrib values up and down the hierarchy.
      */
-    public pushAttribValues(source_ent_type: EEntType, source_attrib_name: string, source_indices: number[],
+    public pushAttribVals(source_ent_type: EEntType, source_attrib_name: string, source_indices: number[],
             target_ent_type: EEntType, target_attrib_name: string, method: EAttribPush): void {
         if (source_ent_type === target_ent_type) { return; }
         // check that the attribute exists
@@ -171,24 +204,24 @@ export class GIAttribsAdd {
         }
         // get the data type and data size of the existing attribute
         const data_type: EAttribDataTypeStrs = this._model.attribs.query.getAttribDataType(source_ent_type, source_attrib_name);
-        const data_size: number = this._model.attribs.query.getAttribDataSize(source_ent_type, source_attrib_name);
+        const data_size: number = this._model.attribs.query.getAttribDataLength(source_ent_type, source_attrib_name);
         // move attributes from entities up to the model, or form model down to entities
         if (target_ent_type === EEntType.MOD) {
             this.addAttrib(target_ent_type, target_attrib_name, data_type);
             const attrib_values: TAttribDataTypes[] = [];
             for (const index of source_indices) {
                 attrib_values.push(
-                    this._model.attribs.query.getAttribValue(source_ent_type, source_attrib_name, index) as TAttribDataTypes);
+                    this._model.attribs.query.getAttribVal(source_ent_type, source_attrib_name, index) as TAttribDataTypes);
             }
-            const value: TAttribDataTypes = this._aggregateValues(attrib_values, data_size, method);
-            this.setModelAttribValue(target_attrib_name, value);
+            const value: TAttribDataTypes = this._aggregateVals(attrib_values, data_size, method);
+            this.setModelAttribVal(target_attrib_name, value);
             return;
         } else if (source_ent_type === EEntType.MOD) {
-            const value: TAttribDataTypes = this._model.attribs.query.getModelAttribValue(source_attrib_name);
+            const value: TAttribDataTypes = this._model.attribs.query.getModelAttribVal(source_attrib_name);
             this.addAttrib(target_ent_type, target_attrib_name, data_type);
             const target_ents_i: number[] = this._model.geom.query.getEnts(target_ent_type, false);
             for (const target_ent_i of target_ents_i) {
-                this.setAttribValue(target_ent_type, target_ent_i, target_attrib_name, value);
+                this.setAttribVal(target_ent_type, target_ent_i, target_attrib_name, value);
             }
             return;
         }
@@ -196,7 +229,7 @@ export class GIAttribsAdd {
         const attrib_values_map: Map<number, TAttribDataTypes[]> = new Map();
         for (const index of source_indices) {
             const attrib_value: TAttribDataTypes =
-                this._model.attribs.query.getAttribValue(source_ent_type, source_attrib_name, index) as TAttribDataTypes;
+                this._model.attribs.query.getAttribVal(source_ent_type, source_attrib_name, index) as TAttribDataTypes;
             const target_ents_i: number[] = this._model.geom.query.navAnyToAny(source_ent_type, target_ent_type, index);
             for (const target_ent_i of target_ents_i) {
                 if (! attrib_values_map.has(target_ent_i)) {
@@ -211,9 +244,9 @@ export class GIAttribsAdd {
         attrib_values_map.forEach( (attrib_values, target_ent_i) => {
             let value: TAttribDataTypes = attrib_values[0];
             if (attrib_values.length > 1 && data_type === EAttribDataTypeStrs.NUMBER) {
-                value = this._aggregateValues(attrib_values, data_size, method);
+                value = this._aggregateVals(attrib_values, data_size, method);
             }
-            this.setAttribValue(target_ent_type, target_ent_i, target_attrib_name, value);
+            this.setAttribVal(target_ent_type, target_ent_i, target_attrib_name, value);
         });
     }
     /**
@@ -226,7 +259,7 @@ export class GIAttribsAdd {
     // ============================================================================
     // Private methods
     // ============================================================================
-    private _aggregateValues(values: TAttribDataTypes[], data_size: number, method: EAttribPush): TAttribDataTypes {
+    private _aggregateVals(values: TAttribDataTypes[], data_size: number, method: EAttribPush): TAttribDataTypes {
         switch (method) {
             case EAttribPush.AVERAGE:
                 if (data_size > 1) {
@@ -317,9 +350,17 @@ export class GIAttribsAdd {
      * @param value
      */
     private _checkDataTypeSize(value: TAttribDataTypes): EAttribDataTypeStrs {
-        if (typeof value === 'string') { return EAttribDataTypeStrs.STRING; }
-        if (typeof value === 'number') { return EAttribDataTypeStrs.NUMBER; }
-        if (Array.isArray(value)) { return EAttribDataTypeStrs.LIST; }
+        if (typeof value === 'string') { 
+            return EAttribDataTypeStrs.STRING;
+        } else if (typeof value === 'number') {
+            return EAttribDataTypeStrs.NUMBER;
+        } else if (typeof value === 'boolean') {
+            return EAttribDataTypeStrs.BOOLEAN;
+        } else if (Array.isArray(value)) {
+            return EAttribDataTypeStrs.LIST;
+        } else if (typeof value === 'object') {
+            return EAttribDataTypeStrs.LIST;
+        }
         throw new Error('Data type for new attribute not recognised.');
     }
 }

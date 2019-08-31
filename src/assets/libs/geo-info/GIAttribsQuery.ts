@@ -306,11 +306,11 @@ export class GIAttribsQuery {
      * @param ent_type The type of the entities being sorted.
      * @param ents_i Entites in the model, assumed to be of type ent_type.
      * @param name
-     * @param index
+     * @param idx_or_key
      * @param value
      */
     public sortByAttribs(ent_type: EEntType, ents_i: number[],
-            name: string, index: number, method: ESort): number[] {
+            name: string, idx_or_key: number|string, method: ESort): number[] {
         // get the map that contains all the ettributes for the ent_type
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
@@ -322,28 +322,91 @@ export class GIAttribsQuery {
             return ents_i;
         }
         // create the sort copmapre function
-        function _sortCompare(ent1_i: number, ent2_i: number): number {
-            let val1: TAttribDataTypes = attrib.getEntVal(ent1_i) as TAttribDataTypes;
-            let val2: TAttribDataTypes = attrib.getEntVal(ent2_i) as TAttribDataTypes;
-            if (index !== null) {
-                if (val1 !== undefined && val1 !== null) {
-                    val1 = val1[index];
-                }
-                if (val2 !== undefined && val2 !== null) {
-                    val2 = val2[index];
-                }
-            }
+        function _sortCompareVals(ent1_i: number, ent2_i: number): number {
+            const val1: number|string|boolean = attrib.getEntVal(ent1_i) as number|string|boolean;
+            const val2: number|string|boolean = attrib.getEntVal(ent2_i) as number|string|boolean;
             if (method === ESort.DESCENDING) {
-                if (val1 < val2) { return -1; }
-                if (val1 > val2) { return 1; }
-            } else {
                 if (val1 < val2) { return 1; }
                 if (val1 > val2) { return -1; }
+            } else {
+                if (val1 < val2) { return -1; }
+                if (val1 > val2) { return 1; }
+            }
+            return 0;
+        }
+        function _sortCompareListIdxVals(ent1_i: number, ent2_i: number): number {
+            const l1: any[] = attrib.getEntVal(ent1_i) as any[];
+            const l2: any[] = attrib.getEntVal(ent2_i) as any[];
+            const val1: any = (l1 !== undefined && l1 !== null) ? l1[idx_or_key] : null;
+            const val2: any = (l2 !== undefined && l2 !== null) ? l2[idx_or_key] : null;
+            if (method === ESort.DESCENDING) {
+                if (val1 < val2) { return 1; }
+                if (val1 > val2) { return -1; }
+            } else {
+                if (val1 < val2) { return -1; }
+                if (val1 > val2) { return 1; }
+            }
+            return 0;
+        }
+        function _sortCompareDictKeyVals(ent1_i: number, ent2_i: number): number {
+            const o1: object = attrib.getEntVal(ent1_i) as object;
+            const o2: object = attrib.getEntVal(ent2_i) as object;
+            const val1: any = (o1 !== undefined && o1 !== null) ? o1[idx_or_key] : null;
+            const val2: any = (o2 !== undefined && o2 !== null) ? o2[idx_or_key] : null;
+            if (method === ESort.DESCENDING) {
+                if (val1 < val2) { return 1; }
+                if (val1 > val2) { return -1; }
+            } else {
+                if (val1 < val2) { return -1; }
+                if (val1 > val2) { return 1; }
+            }
+            return 0;
+        }
+        function _sortCompareLists(ent1_i: number, ent2_i: number): number {
+            const l1: any[] = attrib.getEntVal(ent1_i) as any[];
+            const l2: any[] = attrib.getEntVal(ent2_i) as any[];
+            const len: number = l1.length > l2.length ? l1.length : l2.length;
+            if (method === ESort.DESCENDING) {
+                for (let i = 0; i < len; i++) {
+                    if (l1[i] < l2[i]) { return 1; }
+                    if (l1[i] > l2[i]) { return -1; }
+                }
+            } else {
+                for (let i = 0; i < len; i++) {
+                    if (l1[i] < l2[i]) { return -1; }
+                    if (l1[i] > l2[i]) { return 1; }
+                }
+            }
+            return 0;
+        }
+        function _sortCompareDicts(ent1_i: number, ent2_i: number): number {
+            const o1: object = attrib.getEntVal(ent1_i) as object;
+            const o2: object = attrib.getEntVal(ent2_i) as object;
+            if (method === ESort.DESCENDING) {
+                if (o1 < o2) { return 1; }
+                if (o1 > o2) { return -1; }
+            } else {
+                if (o1 < o2) { return -1; }
+                if (o1 > o2) { return 1; }
             }
             return 0;
         }
         // do the sort
-        ents_i.sort(_sortCompare);
+        if (attrib.getDataType() === EAttribDataTypeStrs.LIST) {
+            if (idx_or_key === null || idx_or_key === undefined) {
+                ents_i.sort(_sortCompareLists);
+            } else {
+                ents_i.sort(_sortCompareListIdxVals);
+            }
+        } else if (attrib.getDataType() === EAttribDataTypeStrs.DICT) {
+            if (idx_or_key === null || idx_or_key === undefined) {
+                ents_i.sort(_sortCompareDicts);
+            } else {
+                ents_i.sort(_sortCompareDictKeyVals);
+            }
+        } else {
+            ents_i.sort(_sortCompareVals);
+        }
         return ents_i;
     }
     // ============================================================================

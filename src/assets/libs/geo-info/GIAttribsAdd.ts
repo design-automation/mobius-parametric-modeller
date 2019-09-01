@@ -350,7 +350,7 @@ export class GIAttribsAdd {
      * @param value
      */
     private _checkDataTypeSize(value: TAttribDataTypes): EAttribDataTypeStrs {
-        if (typeof value === 'string') { 
+        if (typeof value === 'string') {
             return EAttribDataTypeStrs.STRING;
         } else if (typeof value === 'number') {
             return EAttribDataTypeStrs.NUMBER;

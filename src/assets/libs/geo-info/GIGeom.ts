@@ -5,7 +5,6 @@ import { GIGeomModify } from './GIGeomModify';
 import { GIGeomQuery } from './GIGeomQuery';
 import { GIGeomThreejs } from './GIGeomThreejs';
 import { GIGeomIO } from './GIGeomIO';
-import { ArrayCamera } from 'three';
 
 /**
  * Class for geometry.

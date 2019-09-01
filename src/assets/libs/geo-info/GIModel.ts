@@ -67,10 +67,17 @@ export class GIModel {
      *
      * @param model The model to compare with.
      */
-    public compare(model: GIModel): {matches: boolean, comment: string} {
+    public compare(model: GIModel, norm_wires: boolean): {matches: boolean, comment: string} {
         const result_array: {matches: boolean, comment: any} = {matches: true, comment: []};
+        // do some basic counting
         this.geom.compare(model, result_array);
         this.attribs.compare(model, result_array);
+        // normalize the two models
+        if (norm_wires) {
+            this.normalize();
+            model.normalize();
+        }
+        // compare the actual data
         this.compareData(model, result_array);
         // Add a final msg
         if (result_array.matches) {
@@ -94,6 +101,84 @@ export class GIModel {
         formatted_str += '</ul>';
         // return the result
         return {matches: result_array.matches, comment: formatted_str};
+    }
+    // ============================================================================
+    // Private methods for normalizing
+    // ============================================================================
+    /**
+     * Normalises the direction of open wires
+     */
+    private normalize(): void {
+        this.normalizeOpenWires();
+        this.normalizeClosedWires();
+        this.normalizeHoles();
+    }
+    /**
+     * Normalises the direction of open wires
+     */
+    private normalizeOpenWires(): void {
+        for (const wire_i of this.geom.query.getEnts(EEntType.WIRE, false)) {
+            if (!this.geom.query.istWireClosed(wire_i)) {
+                // an open wire can only start at the first or last vertex, but the order can be reversed
+                const verts_i: number[] = this.geom.query.navAnyToVert(EEntType.WIRE, wire_i);
+                const fingerprint_start: string = this.xyzFingerprint(EEntType.VERT, verts_i[0]);
+                const fingerprint_end: string = this.xyzFingerprint(EEntType.VERT, verts_i[verts_i.length - 1]);
+                if (fingerprint_start > fingerprint_end) {
+                    this.geom.modify.reverse(wire_i);
+                }
+            }
+        }
+    }
+    /**
+     * Normalises the edge order of closed wires
+     */
+    private normalizeClosedWires(): void {
+        for (const wire_i of this.geom.query.getEnts(EEntType.WIRE, false)) {
+            if (this.geom.query.istWireClosed(wire_i)) {
+                // a closed wire can start at any edge, but the order cannot be reversed
+                const edges_i: number[] = this.geom.query.navAnyToEdge(EEntType.WIRE, wire_i);
+                const fingerprints: Array<[string, number]> = [];
+                for (let i = 0; i < edges_i.length; i++) {
+                    const edge_i: number = edges_i[i];
+                    fingerprints.push([this.xyzFingerprint(EEntType.EDGE, edge_i), i]);
+                }
+                fingerprints.sort();
+                this.geom.modify.shift(wire_i, fingerprints[0][1]);
+            }
+        }
+    }
+    /**
+     * Normalises the order of holes in faces
+     */
+    private normalizeHoles(): void {
+        for (const face_i of this.geom.query.getEnts(EEntType.FACE, false)) {
+            const holes_i: number[] = this.geom.query.getFaceHoles(face_i);
+            if (holes_i.length > 0) {
+                const fingerprints: Array<[string, number]> = [];
+                for (const hole_i of holes_i) {
+                    fingerprints.push([this.xyzFingerprint(EEntType.WIRE, hole_i), hole_i]);
+                }
+                fingerprints.sort();
+                const reordered_holes_i: number[] = fingerprints.map( fingerprint => fingerprint[1]);
+                this.geom.modify.setFaceHoles(face_i, reordered_holes_i);
+            }
+        }
+    }
+    /**
+     * For any entity, greate a string that concatenates all the xyz values of its positions.
+     * ~
+     * These strings will be used for sorting entities into a predictable order,
+     * independent of the order in which the geometry was actually created.
+     * ~
+     * If there are multiple entities in exactly the same position, then the ordering may be unpredictable.
+     * ~
+     * @param ent_type
+     * @param ent_i
+     */
+    private xyzFingerprint(ent_type: EEntType, ent_i: number): string {
+        const posis_i: number[] = this.geom.query.navAnyToPosi(ent_type, ent_i);
+        const fingerprints: string[] = posis_i.map(posi_i => this.getAttribValFingerprint(this.attribs.query.getPosiCoords(posi_i)));
+        return fingerprints.join('|');
     }
     // ============================================================================
     // Private methods for fingerprinting
@@ -149,8 +234,8 @@ export class GIModel {
     /**
      * Get a fingerprint of all geometric entities of a certain type in the model.
      * This returns a fingerprint string, and a map old_i -> new_i.
-     * The new_i will be consistent, no matter how the model was created.
-     * This is needed for creating fingerprints for collections.
+     * The map new_i will be consistent, no matter how the model was created.
+     * The map is needed for creating fingerprints for collections.
      */
     private getEntsFingerprint(ent_type: EEntType): [string, Map<number, number>] {
         const fingerprints: string[]  = [];
@@ -165,7 +250,7 @@ export class GIModel {
         for (let i = 0; i < fingerprints.length; i++) {
             fingerprint_to_old_i_map.set(fingerprints[i], i);
         }
-        // the fingerprints of the entities are sorted and sepeparted by a $, e.g. polyline5$polyline3$polyline6...
+        // the fingerprints of the entities are sorted
         fingerprints.sort();
         // now we need to create a map from old index to new index
         const old_i_to_new_i_map: Map<number, number> = new Map();
@@ -174,6 +259,7 @@ export class GIModel {
             old_i_to_new_i_map.set(old_i, i);
         }
         // return the result
+        // sepeparted by a $, e.g. polyline5$polyline3$polyline6...
         return [fingerprints.join('$'), old_i_to_new_i_map];
     }
     /**
@@ -186,36 +272,17 @@ export class GIModel {
             EEntType.POINT, EEntType.PLINE, EEntType.PGON];
         for (const to_ent_type of to_ent_types) {
             const sub_fingerprints: string[] = [];
+            // we are only interested in entities that are lower or equal to from_ent_type
             if (to_ent_type <= from_ent_type) {
                 const attrib_names: string[] = this.attribs.query.getAttribNames(to_ent_type);
+                // sort the attrib names
                 attrib_names.sort();
-                // Wires represent holes in polygons
-                // they can be in any order, so we have to sort them
-                // a polygons fingerprint is a sorted set of wire fingerprints
-                if (from_ent_type !== EEntType.PGON || to_ent_type > EEntType.WIRE) {
-                    const sub_ents_i: number[] = this.geom.query.navAnyToAny(from_ent_type, to_ent_type, index);
-                    for (const attrib_name of attrib_names) {
-                        for (const sub_ent_i of sub_ents_i) {
-                            const attrib_value: TAttribDataTypes = this.attribs.query.getAttribVal(to_ent_type, attrib_name, sub_ent_i);
-                            sub_fingerprints.push(this.getAttribValFingerprint(attrib_value));
-                        }
-                    }
-                } else {
-                    const wires_i: number[] = this.geom.query.navAnyToWire(EEntType.PGON, index);
-                    const wire_fingerprints: string[] = [];
-                    for (const wire_i of wires_i) {
-                        const sub_ents_i: number[] = this.geom.query.navAnyToAny(EEntType.WIRE, to_ent_type, wire_i);
-                        for (const attrib_name of attrib_names) {
-                            for (const sub_ent_i of sub_ents_i) {
-                                const attrib_value: TAttribDataTypes = this.attribs.query.getAttribVal(
-                                        to_ent_type, attrib_name, sub_ent_i);
-                                wire_fingerprints.push(this.getAttribValFingerprint(attrib_value));
-                            }
-                        }
-                    }
-                    wire_fingerprints.sort();
-                    for (const wire_fingerprint of wire_fingerprints) {
-                        sub_fingerprints.push(wire_fingerprint);
+                const sub_ents_i: number[] = this.geom.query.navAnyToAny(from_ent_type, to_ent_type, index);
+                // for each attrib, make a finderprint
+                for (const attrib_name of attrib_names) {
+                    for (const sub_ent_i of sub_ents_i) {
+                        const attrib_value: TAttribDataTypes = this.attribs.query.getAttribVal(to_ent_type, attrib_name, sub_ent_i);
+                        sub_fingerprints.push(this.getAttribValFingerprint(attrib_value));
                     }
                 }
             }
@@ -290,9 +357,9 @@ export class GIModel {
         const precision = 1e4;
         if (value === null) { return '.'; }
         if (value === undefined) { return '.'; }
+        if (typeof value === 'number') { return String(Math.round(value * precision) / precision); }
         if (typeof value === 'string') { return value; }
         if (typeof value === 'boolean') { return String(value); }
-        if (typeof value === 'number') { return String(Math.round(value * precision) / precision); }
         if (Array.isArray(value)) {
             const fingerprints = [];
             for (const item of value) {

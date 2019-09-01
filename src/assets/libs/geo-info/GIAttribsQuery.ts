@@ -146,7 +146,7 @@ export class GIAttribsQuery {
     /**
      * Get an entity attrib indexed value.
      * ~
-     * If the attribute does not exist 
+     * If the attribute does not exist
      * ~
      * If the index is out of range, return undefined.
      * ~
@@ -163,7 +163,7 @@ export class GIAttribsQuery {
         /**
      * Get an entity attrib indexed value.
      * ~
-     * If the attribute does not exist 
+     * If the attribute does not exist
      * ~
      * If the index is out of range, return undefined.
      * ~

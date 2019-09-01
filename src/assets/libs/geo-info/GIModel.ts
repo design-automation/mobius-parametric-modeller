@@ -67,13 +67,13 @@ export class GIModel {
      *
      * @param model The model to compare with.
      */
-    public compare(model: GIModel, norm_wires: boolean): {matches: boolean, comment: string} {
+    public compare(model: GIModel, normalize: boolean): {matches: boolean, comment: string} {
         const result_array: {matches: boolean, comment: any} = {matches: true, comment: []};
         // do some basic counting
         this.geom.compare(model, result_array);
         this.attribs.compare(model, result_array);
         // normalize the two models
-        if (norm_wires) {
+        if (normalize) {
             this.normalize();
             model.normalize();
         }
@@ -159,7 +159,7 @@ export class GIModel {
                     fingerprints.push([this.xyzFingerprint(EEntType.WIRE, hole_i), hole_i]);
                 }
                 fingerprints.sort();
-                const reordered_holes_i: number[] = fingerprints.map( fingerprint => fingerprint[1]);
+                const reordered_holes_i: number[] = fingerprints.map( fingerprint => fingerprint[1] );
                 this.geom.modify.setFaceHoles(face_i, reordered_holes_i);
             }
         }

@@ -187,18 +187,11 @@
     {
         "old_func": {
             "name": "Collection",
-            "module": "make",
-            "values": {
-                "parent_coll": "'parent_coll'",
-                "entities": "'entities'"
-            }
+            "module": "make"
         },
         "new_func": {
             "name": "Collection",
-            "module": "make",
-            "values": {
-                "entities": "'entities'"
-            }
+            "module": "make"
         }
     }
 ]

@@ -298,12 +298,12 @@ export class CodeUtils {
             val_0 = val.slice(0, atIndex);
             val_1 = val.slice(atIndex + 1);
         }
-        const bracketIndex = val_1.indexOf('.slice(');
+        const bracketIndex = val_1.indexOf('[pythonList(');
         if (bracketIndex !== -1) {
             const name = val_1.slice(0, bracketIndex);
-            const index = val_1.slice(bracketIndex + 7, -4);
-            // const innerVar = CodeUtils.repGetAttrib(bracketSplit.splice(1, bracketSplit.length - 1).join('['));
-            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0}, '${name}', ${index},`, `);`];
+            const index = val_1.lastIndexOf(name);
+            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0}, '${name}', ` +
+                    `${val_1.substring(bracketIndex + 12, index - 2)},`, `);`];
         } else {
             return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0}, '${val_1}', null, `, ');'];
         }

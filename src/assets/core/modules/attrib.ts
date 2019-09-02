@@ -320,7 +320,7 @@ export function Get(__model__: GIModel, entities: TId|TId[]|TId[][],
     checkAttribName(fn_name, attrib);
     // checkCommTypes(fn_name, 'name', name, [TypeCheckObj.isString]);
     if (index !== null && index !== undefined) {
-        checkCommTypes(fn_name, 'index', index, [TypeCheckObj.isNumber]);
+        checkCommTypes(fn_name, 'index', index, [TypeCheckObj.isNumber, TypeCheckObj.isString]);
     }
     // --- Error Check ---
     return _get(__model__, ents_arr, attrib, index);

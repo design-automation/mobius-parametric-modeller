@@ -186,6 +186,8 @@ export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProd
         return;
     }
 
+    console.log(procedure.args[argIndex].jsValue)
+
     procedure.args[argIndex].value = varResult.str;
     procedure.args[argIndex].jsValue = varResult.jsStr;
     varResult = checkValidVar(varResult.vars, procedure, nodeProdList);
@@ -718,7 +720,7 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
             }
             newString += '@' + result.str.replace(/ /g, '') + ' '; //////////
 
-            const bracketIndex = result.jsStr.indexOf('[pythonList(');
+            let bracketIndex = result.jsStr.indexOf('[pythonList(');
             if (bracketIndex !== -1) {
                 const arrayName = result.jsStr.substring(0, bracketIndex);
                 const index = result.jsStr.lastIndexOf(arrayName);
@@ -726,6 +728,11 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
                            ` '${arrayName}', ${result.jsStr.substring(bracketIndex + 12, index - 2)})`;
                 // jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity},` +
                 //            ` '${result.jsStr.slice(0, bracketIndex)}', ${result.jsStr.slice(bracketIndex + 7, -4)})`;
+            } else if (result.jsStr.indexOf('[') !== 0) {
+                bracketIndex = result.jsStr.indexOf('[');
+                const arrayName = result.jsStr.substring(0, bracketIndex);
+                const index = result.jsStr.slice(bracketIndex + 1, -1);
+                jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${arrayName}', ${index})`; //////////
             } else {
                 jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${result.str}', null)`; //////////
             }
@@ -795,11 +802,15 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
 
             let att_name: string;
             let att_index: string;
-            const bracketIndex = result.jsStr.indexOf('[pythonList(');
+            let bracketIndex = result.jsStr.indexOf('[pythonList(');
             if (bracketIndex !== -1) {
                 att_name = result.jsStr.slice(0, bracketIndex);
                 const index = result.jsStr.lastIndexOf(att_name);
-                att_index = result.jsStr.substring(bracketIndex + 12, index - 2);
+                att_index = result.jsStr.slice(bracketIndex + 12, index - 2);
+            } else if (result.jsStr.indexOf('[') !== 0) {
+                bracketIndex = result.jsStr.indexOf('[');
+                att_name = result.jsStr.slice(0, bracketIndex);
+                att_index = result.jsStr.slice(bracketIndex + 1, -1);
             } else {
                 att_name = result.str;
                 att_index = 'null';

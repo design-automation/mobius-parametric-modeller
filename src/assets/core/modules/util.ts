@@ -292,10 +292,10 @@ export function ModelInfo(__model__: GIModel): string {
  * @param __model__
  * @returns Text that summarises the comparison between the two models.
  */
-export function ModelCompare(__model__: GIModel, gi_model_data: string): string {
+export function ModelCompare(__model__: GIModel, gi_model_data: string, normalize: boolean): string {
     const gi_obj: IModelData = JSON.parse(gi_model_data) as IModelData;
     const other_model = new GIModel(gi_obj);
-    const result: {matches: boolean, comment: string} = __model__.compare(other_model, true);
+    const result: {matches: boolean, comment: string} = __model__.compare(other_model, normalize);
     return result.comment;
 }
 // ================================================================================================

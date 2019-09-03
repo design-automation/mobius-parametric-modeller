@@ -74,7 +74,8 @@ This will result in a popup in your browser, asking you to save the filel.
 ## ModelCompare  
 * **Description:** Compare the GI data in this model to the GI data in another model.  
 * **Parameters:**  
-  * *gi_model_data:* undefined  
+  * *gi_model_data:* model data to compare with.  
+  * *normalizeCheck:* Enum.  
 * **Returns:** Text that summarises the comparison between the two models.  
   
 ## ModelCheck  

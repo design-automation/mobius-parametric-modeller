@@ -286,10 +286,6 @@ export function ModelInfo(__model__: GIModel): string {
     );
 }
 // ================================================================================================
-export enum _NormalizeCheck {
-    FALSE = 'No Normalize',
-    TRUE = 'Normalize',
-}
 /**
  * Compare the GI data in this model to the GI data in another model.
  *
@@ -298,16 +294,11 @@ export enum _NormalizeCheck {
  * @param normalizeCheck Enum.
  * @returns Text that summarises the comparison between the two models.
  */
-export function ModelCompare(__model__: GIModel, gi_model_data: string, normalizeCheck: _NormalizeCheck): string {
+export function ModelCompare(__model__: GIModel, gi_model_data: string): string {
     const gi_obj: IModelData = JSON.parse(gi_model_data) as IModelData;
     const other_model = new GIModel(gi_obj);
 
-    let normalize = false;
-    if (normalizeCheck === _NormalizeCheck.TRUE) {
-        normalize = true;
-    }
-
-    const result: {matches: boolean, comment: string} = __model__.compare(other_model, normalize);
+    const result: {matches: boolean, comment: string} = __model__.compare(other_model, true);
     return result.comment;
 }
 // ================================================================================================

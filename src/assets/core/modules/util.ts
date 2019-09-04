@@ -291,7 +291,6 @@ export function ModelInfo(__model__: GIModel): string {
  *
  * @param __model__
  * @param gi_model_data model data to compare with.
- * @param normalizeCheck Enum.
  * @returns Text that summarises the comparison between the two models.
  */
 export function ModelCompare(__model__: GIModel, gi_model_data: string): string {

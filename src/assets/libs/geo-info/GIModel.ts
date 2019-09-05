@@ -67,17 +67,17 @@ export class GIModel {
      *
      * @param model The model to compare with.
      */
-    public compare(model: GIModel, normalize: boolean, check_equality: boolean): 
+    public compare(model: GIModel, normalize: boolean, check_geom_equality: boolean, check_attrib_equality: boolean):
             {percent: number, score: number, total: number, comment: string} {
         // create the result object
         const result: {percent: number, score: number, total: number, comment: any} = {percent: 0, score: 0, total: 0, comment: []};
-        // if equality, then check we have exact same number of positions, objects, and colletions
-        if (check_equality) {
+        // if check_geom_equality, then check we have exact same number of positions, objects, and colletions
+        if (check_geom_equality) {
             this.geom.compare(model, result);
         }
         // check that the attributes in this model all exist in the other model
         // at the same time get a map of all attribute names in this model
-        const attrib_names: Map<EEntType, string[]> = this.attribs.compare(model, check_equality, result);
+        const attrib_names: Map<EEntType, string[]> = this.attribs.compare(model, check_attrib_equality, result);
         // normalize the two models
         if (normalize) {
             this.normalize();
@@ -93,6 +93,7 @@ export class GIModel {
         }
         // calculate percentage score
         result.percent = Math.round(result.score / result.total * 100);
+        if (result.percent < 0) { result.percent = 0; }
         // html formatting
         let formatted_str = '';
         formatted_str += '<p><b>Percentage: ' + result.percent + '%</b></p>';
@@ -197,6 +198,10 @@ export class GIModel {
     // ============================================================================
     /**
      * Compare the data in two models
+     * ~
+     * This will return a score, indicating how similar the models are.
+     * ~
+     * For the compareData method, total score is equal to number of points, plines, pgons and collections
      */
     private compareData(other_model: GIModel,
             result: {score: number, total: number, comment: any[]}, attrib_names: Map<EEntType, string[]>): void {

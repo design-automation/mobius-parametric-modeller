@@ -304,13 +304,13 @@ export function ModelCompare(__model__: GIModel, gi_model: string, method: _ECOm
     let result: {score: number, total: number, comment: string} = null;
     switch (method) {
         case _ECOmpareMethod.THIS_IS_SUBSET:
-            result = __model__.compare(other_model, true, false);
+            result = __model__.compare(other_model, true, false, false);
             break;
         case _ECOmpareMethod.THIS_IS_SUPERSET:
-            result = other_model.compare(__model__, true, false);
+            result = other_model.compare(__model__, true, false, false);
             break;
         case _ECOmpareMethod.THIS_IS_EQUAL:
-            result = __model__.compare(other_model, true, true);
+            result = __model__.compare(other_model, true, true, false);
             break;
         default:
             throw new Error('Compare method not recognised');

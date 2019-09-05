@@ -59,7 +59,10 @@ export class GIGeom {
     /**
      * Compares this model and another model.
      * ~
-     * This model should be a subset of the other model.
+     * The max total score for this method is equal to 5.
+     * It assigns 1 mark for for each entity type:
+     * posis, points, pline, pgons, and colelctions.
+     * In each case, if the number of entities is equal, 1 mark is given.
      * ~
      * @param other_model The model to compare with.
      */
@@ -81,8 +84,7 @@ export class GIGeom {
         ]);
         const geom_comments: string[] = [];
         for (const ent_type of eny_types) {
-            // update the total
-            result.total += 1;
+            // total marks is not updated, we deduct marks
             // get the number of entitoes in each model
             const this_num_ents: number = this.model.geom.query.numEnts(ent_type, false);
             const other_num_ents: number = other_model.geom.query.numEnts(ent_type, false);
@@ -91,8 +93,8 @@ export class GIGeom {
             } else if (this_num_ents < other_num_ents) {
                 geom_comments.push('Mismatch: Model has too few entities of type: ' + ent_type_strs.get(ent_type) + '.');
             } else {
-                // update the score
-                result.score += 1;
+                // update the score, deduct 1 mark
+                result.score -= 1;
             }
         }
         if (geom_comments.length === 0) {

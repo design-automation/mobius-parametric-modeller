@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import * as OrbitControls from 'three-orbit-controls';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
-import { EEntTypeStr, EEntType } from '@assets/libs/geo-info/common';
+import { EEntTypeStr, EEntType } from '@libs/geo-info/common';
 import { Vector3 } from 'three';
 import { DataService } from '@services';
 import { Vector } from '@assets/core/modules/calc';

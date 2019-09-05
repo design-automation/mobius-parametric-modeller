@@ -14,7 +14,7 @@ import { TId, TQuery, EEntType, ESort, TEntTypeIdx,
     EAttribPush, TAttribDataTypes, EEntTypeStr, EAttribDataTypeStrs} from '@libs/geo-info/common';
 import { idsMake, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
 import { checkIDs, IDcheckObj, checkCommTypes, TypeCheckObj, checkAttribValue, checkAttribName } from './_check_args';
-import { GIAttribMap } from '@assets/libs/geo-info/GIAttribMap';
+import { GIAttribMap } from '@libs/geo-info/GIAttribMap';
 
 // ================================================================================================
 export enum _EEntTypeSel {

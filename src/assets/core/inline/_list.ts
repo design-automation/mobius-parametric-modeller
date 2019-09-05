@@ -2,7 +2,7 @@
  * list functions that obtain and return information from an input list. Does not modify input list.
  */
 import __ from 'underscore';
-import { arrMakeFlat } from '@assets/libs/util/arrs';
+import { arrMakeFlat } from '@libs/util/arrs';
 import { flatten } from '@angular/compiler';
 
 export function range(start: number, end: number, step?: number): number[] {

@@ -11,7 +11,7 @@ import { _model } from '@modules';
 // import * as galleryUrl from '@assets/gallery/__config__.json';
 import { DataOutputService } from '@shared/services/dataOutput.service';
 import { _parameterTypes } from '@assets/core/_parameterTypes';
-import { EEntType } from '@assets/libs/geo-info/common';
+import { EEntType } from '@libs/geo-info/common';
 
 import * as testUrl from '@assets/unit_tests/unit_test.json';
 import * as compUrl from '@assets/unit_tests/unit_test_comp.json';

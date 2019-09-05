@@ -1,5 +1,5 @@
 {
-    "name": "Untitled",
+    "name": "make.Collection",
     "author": "new_user",
     "flowchart": {
         "id": "3a9ed7e9-28cd-f6ec-a9d7-0d946e9df087",
@@ -14,7 +14,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_9w9xlgvvkji",
+                "id": "node_1rf234ipfej",
                 "position": {
                     "x": 5340,
                     "y": 5000
@@ -69,7 +69,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_hoq3aidg1ng",
+                                    "id": "node_c8kc6p28uy",
                                     "position": {
                                         "x": 5340,
                                         "y": 5200
@@ -490,9 +490,9 @@
                                                 },
                                                 {
                                                     "name": "entities",
-                                                    "value": "listFlat([points, line1, polygons])",
+                                                    "value": "[points, [line1], polygons]",
                                                     "linked": false,
-                                                    "jsValue": "listFlat([points_, line1_, polygons_])",
+                                                    "jsValue": "[points_, [line1_], polygons_]",
                                                     "usedVars": [
                                                         "points",
                                                         "line1",
@@ -528,7 +528,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_vm199p4lnro",
+                                                        "id": "node_y02gse7bdu",
                                                         "position": {
                                                             "x": 5340,
                                                             "y": 5400
@@ -629,7 +629,7 @@
         ],
         "functions": [],
         "ordered": true,
-        "last_updated": "2019-09-05T06:57:24.171Z"
+        "last_updated": "2019-09-05T07:00:39.691Z"
     },
     "version": 1,
     "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-80,\"y\":-80,\"z\":80},\"pos_x\":-80,\"pos_y\":-80,\"pos_z\":80,\"target\":{\"x\":18.25,\"y\":10,\"z\":0}},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":5,\"name\":\"Faces\"},\"tab\":\"0\"},\"version\":\"0.4.38\"}"

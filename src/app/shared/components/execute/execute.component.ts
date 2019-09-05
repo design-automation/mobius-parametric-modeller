@@ -499,6 +499,7 @@ export class ExecuteComponent {
             // for (const str of params.console) {
             //     this.dataService.log(str);
             // }
+            document.getElementById('spinner-off').click();
             const endTime = performance.now();
             const duration: number = Math.round(endTime - startTime);
             let duration_msg: string;
@@ -510,7 +511,6 @@ export class ExecuteComponent {
             this.dataService.log(duration_msg);
             this.dataService.log('<br>');
             this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-            document.getElementById('spinner-off').click();
             if (DEBUG) {
                 this.dataService.log('\n=======================================\n' +
                     ex.name +

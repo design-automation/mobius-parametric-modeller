@@ -143,10 +143,15 @@ export class GIAttribs {
                         }
                     }
                     attrib_comments.push('There are additional ' + ent_type_str + ' attributes. ' +
-                        'The following attributes are not required: [' + additional_attribs.join(',') + '].');
-                } else {
+                        'The following attributes are not required: [' + additional_attribs.join(',') + ']. ' +
+                        'A total of 1 mark has been deducted from the score.');
                     // update the score, deduct 1 mark
                     result.score -= 1;
+                } else if (other_attrib_names.length < this_attrib_names.length) {
+                    attrib_comments.push('Mismatch: Model has too few entities of type: ' + ent_type_strs.get(ent_type) + '.' +
+                    'No marks have been deducted from the score.');
+                } else {
+                    // correct
                 }
             }
         }

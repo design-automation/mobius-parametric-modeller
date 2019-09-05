@@ -220,9 +220,9 @@ export class GIModel {
             other_to_com_idx_maps.set(obj_ent_type, other_to_com_idx_map);
             // get the fingerprints
             const [this_fingerprints, this_ents_i]: [string[], number[]] = this.getEntsFingerprint(obj_ent_type, attrib_names);
-            console.log('this_fingerprints:', this_fingerprints, 'this_ents_i:', this_ents_i);
+            // console.log('this_fingerprints:', this_fingerprints, 'this_ents_i:', this_ents_i);
             const [other_fingerprints, other_ents_i]: [string[], number[]] = other_model.getEntsFingerprint(obj_ent_type, attrib_names);
-            console.log('other_fingerprints:', other_fingerprints, 'other_ents_i:', other_ents_i);
+            // console.log('other_fingerprints:', other_fingerprints, 'other_ents_i:', other_ents_i);
             // check that every entity in this model also exists in the other model
             for (let com_idx = 0; com_idx < this_fingerprints.length; com_idx++) {
                 // increment the total by 1
@@ -248,9 +248,9 @@ export class GIModel {
         }
         // compare collections
         const this_colls_fingerprints: string[] = this.getCollFingerprints(this_to_com_idx_maps, attrib_names.get(EEntType.COLL));
-        console.log('this_colls_fingerprints:', this_colls_fingerprints);
+        // console.log('this_colls_fingerprints:', this_colls_fingerprints);
         const other_colls_fingerprints: string[] = other_model.getCollFingerprints(other_to_com_idx_maps, attrib_names.get(EEntType.COLL));
-        console.log('other_colls_fingerprints:', other_colls_fingerprints);
+        // console.log('other_colls_fingerprints:', other_colls_fingerprints);
         // check that every collection in this model also exists in the other model
         for (const this_colls_fingerprint of this_colls_fingerprints) {
             // increment the total score by 1
@@ -311,7 +311,9 @@ export class GIModel {
             for (const attrib_name of attrib_names) {
                 for (const sub_ent_i of sub_ents_i) {
                     const attrib_value: TAttribDataTypes = this.attribs.query.getAttribVal(topo_ent_type, attrib_name, sub_ent_i);
-                    topo_fingerprints.push(this.getAttribValFingerprint(attrib_value));
+                    if (attrib_value !== null && attrib_value !== undefined) {
+                        topo_fingerprints.push(this.getAttribValFingerprint(attrib_value));
+                    }
                 }
             }
             // the order is significant, so we do not sort
@@ -374,7 +376,9 @@ export class GIModel {
         // for each attrib, make a finderprint of the attrib value
         for (const attrib_name of attrib_names) {
             const attrib_value: TAttribDataTypes = this.attribs.query.getAttribVal(EEntType.COLL, attrib_name, coll_i);
-            attribs_vals.push(this.getAttribValFingerprint(attrib_value));
+            if (attrib_value !== null && attrib_value !== undefined) {
+                attribs_vals.push(this.getAttribValFingerprint(attrib_value));
+            }
         }
         fingerprints.push(attribs_vals.join('@'));
         // get all the entities in this collection
@@ -410,7 +414,8 @@ export class GIModel {
         if (Array.isArray(value)) {
             const fingerprints = [];
             for (const item of value) {
-                fingerprints.push(this.getAttribValFingerprint(item));
+                const attrib_value: string = this.getAttribValFingerprint(item);
+                fingerprints.push(attrib_value);
             }
             return fingerprints.join(',');
         }
@@ -419,7 +424,8 @@ export class GIModel {
             const prop_names: string[] = Object.getOwnPropertyNames(value);
             prop_names.sort();
             for (const prop_name of prop_names) {
-                fingerprint += prop_name + '=' + this.getAttribValFingerprint(value[prop_name]);
+                const attrib_value: string = this.getAttribValFingerprint(value[prop_name]);
+                fingerprint += prop_name + '=' + attrib_value;
             }
             return fingerprint;
         }

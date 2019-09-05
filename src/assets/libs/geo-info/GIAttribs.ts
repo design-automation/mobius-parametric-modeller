@@ -96,8 +96,8 @@ export class GIAttribs {
         for (const ent_type of eny_type_array) {
             // get the attrib names
             const ent_type_str: string = ent_type_strs[ent_type];
-            const this_attrib_names: string[] = this._model.attribs.query.getAttribNamesUser(ent_type);
-            const other_attrib_names: string[] = other_model.attribs.query.getAttribNamesUser(ent_type);
+            const this_attrib_names: string[] = this._model.attribs.query.getAttribNames(ent_type);
+            const other_attrib_names: string[] = other_model.attribs.query.getAttribNames(ent_type);
             attrib_names.set(ent_type, this_attrib_names);
             // check that each attribute in this model exists in the other model
             for (const name1 of this_attrib_names) {

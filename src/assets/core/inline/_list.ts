@@ -3,6 +3,7 @@
  */
 import __ from 'underscore';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
+import { flatten } from '@angular/compiler';
 
 export function range(start: number, end: number, step?: number): number[] {
     if (start === undefined) { throw new Error('Invalid inline arg: min must be defined.'); }

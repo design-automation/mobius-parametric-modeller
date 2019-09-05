@@ -1,5 +1,6 @@
 import __ from 'underscore';
 import { deepCopy } from './copy';
+import { isDim2 } from '../geo-info/id';
 
 /**
  * Remove an item from an array
@@ -53,8 +54,10 @@ export function arrMakeFlat(data: any): any[] {
         return [data];
     }
     const depth = arrMaxDepth(data);
+    console.log(depth);
     // @ts-ignore
     const new_array = data.flat(depth - 1);
+    return new_array;
 }
 /**
  * Maximum depth of an array
@@ -63,12 +66,17 @@ export function arrMakeFlat(data: any): any[] {
 export function arrMaxDepth(data: any[]): number {
     let d1 = 0;
     if (Array.isArray(data)) {
+        d1 = 1;
+        let max = 0;
         for (const item of data) {
-            const d2 = arrMaxDepth(item);
-            if (d2 > d1) {
-                d1 = d2;
+            if (Array.isArray(data)) {
+                const d2 = arrMaxDepth(item);
+                if (d2 > max) {
+                    max = d2;
+                }
             }
         }
+        d1 += max;
     }
     return d1;
 }

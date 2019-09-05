@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_puxj6bikp8f",
+                "id": "node_c6330wt6npf",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -67,7 +67,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Generate building massing",
-                                    "id": "node_rv0uddjuvrn",
+                                    "id": "node_huk8i4r9zjo",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -420,12 +420,12 @@
                                                 {
                                                     "type": 8,
                                                     "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~4",
-                                                    "ID": "prod-b0q80ebaye",
+                                                    "ID": "prod-f3w5a5rezqn",
                                                     "enabled": true,
                                                     "print": false,
                                                     "meta": {
                                                         "module": "list",
-                                                        "name": "_Append"
+                                                        "name": "Add"
                                                     },
                                                     "argCount": 4,
                                                     "args": [
@@ -435,34 +435,31 @@
                                                         },
                                                         {
                                                             "name": "list",
-                                                            "default": 0,
                                                             "value": "floors",
+                                                            "linked": false,
                                                             "jsValue": "floors_",
                                                             "usedVars": [
                                                                 "floors"
                                                             ],
-                                                            "invalidVar": false,
-                                                            "linked": false
+                                                            "invalidVar": false
                                                         },
                                                         {
-                                                            "name": "value",
-                                                            "default": 0,
+                                                            "name": "item",
                                                             "value": "pg_floor",
+                                                            "linked": false,
                                                             "jsValue": "pg_floor_",
                                                             "usedVars": [
                                                                 "pg_floor"
                                                             ],
-                                                            "invalidVar": false,
-                                                            "linked": false
+                                                            "invalidVar": false
                                                         },
                                                         {
                                                             "name": "method",
-                                                            "default": 0,
                                                             "value": "'to_end'",
                                                             "jsValue": "'to_end'",
+                                                            "linked": false,
                                                             "usedVars": [],
-                                                            "invalidVar": false,
-                                                            "linked": false
+                                                            "invalidVar": false
                                                         }
                                                     ],
                                                     "selected": false,
@@ -611,7 +608,9 @@
                                                     "name": "ent_type_enum",
                                                     "linked": false,
                                                     "value": "'_w'",
-                                                    "jsValue": "'_w'"
+                                                    "jsValue": "'_w'",
+                                                    "usedVars": [],
+                                                    "invalidVar": false
                                                 },
                                                 {
                                                     "name": "entities",
@@ -859,7 +858,9 @@
                                                             "name": "ent_type_enum",
                                                             "linked": false,
                                                             "value": "'ps'",
-                                                            "jsValue": "'ps'"
+                                                            "jsValue": "'ps'",
+                                                            "usedVars": [],
+                                                            "invalidVar": false
                                                         },
                                                         {
                                                             "name": "entities",
@@ -1000,7 +1001,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_9h8s1mui7y",
+                                                        "id": "node_051nt2xpre42",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -1024,7 +1025,7 @@
                                                             },
                                                             {
                                                                 "type": 11,
-                                                                "ID": "",
+                                                                "ID": "Return",
                                                                 "meta": {
                                                                     "name": "",
                                                                     "module": ""
@@ -1401,7 +1402,7 @@
                                             "name": "positions",
                                             "value": "[g[0], g[2], g[5], g[4], g[7], g[6]]",
                                             "default": 0,
-                                            "jsValue": "[g_.slice(0)[0], g_.slice(2)[0], g_.slice(5)[0], g_.slice(4)[0], g_.slice(7)[0], g_.slice(6)[0]]",
+                                            "jsValue": "[g_[pythonList(0, g_.length)], g_[pythonList(2, g_.length)], g_[pythonList(5, g_.length)], g_[pythonList(4, g_.length)], g_[pythonList(7, g_.length)], g_[pythonList(6, g_.length)]]",
                                             "usedVars": [
                                                 "g"
                                             ],
@@ -1780,7 +1781,9 @@
                                                                         "name": "ent_type_enum",
                                                                         "linked": false,
                                                                         "value": "'_w'",
-                                                                        "jsValue": "'_w'"
+                                                                        "jsValue": "'_w'",
+                                                                        "usedVars": [],
+                                                                        "invalidVar": false
                                                                     },
                                                                     {
                                                                         "name": "entities",
@@ -1895,7 +1898,9 @@
                                                                                 "name": "ent_type_enum",
                                                                                 "linked": false,
                                                                                 "value": "'_v'",
-                                                                                "jsValue": "'_v'"
+                                                                                "jsValue": "'_v'",
+                                                                                "usedVars": [],
+                                                                                "invalidVar": false
                                                                             },
                                                                             {
                                                                                 "name": "entities",
@@ -1973,7 +1978,7 @@
                                                                                     {
                                                                                         "name": "value",
                                                                                         "value": "verts[i]",
-                                                                                        "jsValue": "verts_.slice(i_)[0]",
+                                                                                        "jsValue": "verts_[pythonList(i_, verts_.length)]",
                                                                                         "usedVars": [
                                                                                             "verts",
                                                                                             "i"
@@ -2013,7 +2018,9 @@
                                                                                         "name": "ent_type_enum",
                                                                                         "linked": false,
                                                                                         "value": "'ps'",
-                                                                                        "jsValue": "'ps'"
+                                                                                        "jsValue": "'ps'",
+                                                                                        "usedVars": [],
+                                                                                        "invalidVar": false
                                                                                     },
                                                                                     {
                                                                                         "name": "entities",
@@ -2048,7 +2055,7 @@
                                                                                     {
                                                                                         "name": "value",
                                                                                         "value": "posis[0]",
-                                                                                        "jsValue": "posis_.slice(0)[0]",
+                                                                                        "jsValue": "posis_[pythonList(0, posis_.length)]",
                                                                                         "usedVars": [
                                                                                             "posis"
                                                                                         ],
@@ -2117,7 +2124,9 @@
                                                                                         "name": "ent_type_enum",
                                                                                         "linked": false,
                                                                                         "value": "'_e'",
-                                                                                        "jsValue": "'_e'"
+                                                                                        "jsValue": "'_e'",
+                                                                                        "usedVars": [],
+                                                                                        "invalidVar": false
                                                                                     },
                                                                                     {
                                                                                         "name": "entities",
@@ -2253,7 +2262,7 @@
                                                                                                 "name": "edge",
                                                                                                 "value": "edges[0]",
                                                                                                 "default": 0,
-                                                                                                "jsValue": "edges_.slice(0)[0]",
+                                                                                                "jsValue": "edges_[pythonList(0, edges_.length)]",
                                                                                                 "usedVars": [
                                                                                                     "edges"
                                                                                                 ],
@@ -2293,7 +2302,7 @@
                                                                                                 "name": "edge",
                                                                                                 "value": "edges[1]",
                                                                                                 "default": 0,
-                                                                                                "jsValue": "edges_.slice(1)[0]",
+                                                                                                "jsValue": "edges_[pythonList(1, edges_.length)]",
                                                                                                 "usedVars": [
                                                                                                     "edges"
                                                                                                 ],
@@ -2361,7 +2370,7 @@
                                                                                                 "name": "edge",
                                                                                                 "value": "edges[1]",
                                                                                                 "default": 0,
-                                                                                                "jsValue": "edges_.slice(1)[0]",
+                                                                                                "jsValue": "edges_[pythonList(1, edges_.length)]",
                                                                                                 "usedVars": [
                                                                                                     "edges"
                                                                                                 ],
@@ -2401,7 +2410,7 @@
                                                                                                 "name": "edge",
                                                                                                 "value": "edges[0]",
                                                                                                 "default": 0,
-                                                                                                "jsValue": "edges_.slice(0)[0]",
+                                                                                                "jsValue": "edges_[pythonList(0, edges_.length)]",
                                                                                                 "usedVars": [
                                                                                                     "edges"
                                                                                                 ],
@@ -2930,7 +2939,7 @@
                                                                                         {
                                                                                             "name": "value",
                                                                                             "value": "result[0]",
-                                                                                            "jsValue": "result_.slice(0)[0]",
+                                                                                            "jsValue": "result_[pythonList(0, result_.length)]",
                                                                                             "usedVars": [
                                                                                                 "result"
                                                                                             ],
@@ -3065,7 +3074,7 @@
         "ordered": true,
         "id": "2cfa81af-888a-41bf-7264-ac8e2e5acac0",
         "subFunctions": [],
-        "last_updated": "2019-08-06T05:51:08.864Z"
+        "last_updated": "2019-09-05T06:14:01.113Z"
     },
     "version": 1,
     "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-80,\"y\":-80,\"z\":80},\"pos_x\":-80,\"pos_y\":-80,\"pos_z\":80,\"target\":{\"x\":0,\"y\":0,\"z\":0}},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":5,\"name\":\"Faces\"},\"tab\":\"0\"},\"version\":\"0.4.38\"}"

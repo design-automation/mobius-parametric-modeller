@@ -255,8 +255,12 @@ export class GIModel {
                 }
             }
             if (num_objs_not_found > 0) {
+                const marks_added: number = this_fingerprints.length - num_objs_not_found;
                 data_comments.push('Mismatch: ' + num_objs_not_found + ' ' +
                     obj_ent_type_strs.get(obj_ent_type) + ' entities could not be found.');
+            } else {
+                data_comments.push('All ' +
+                    obj_ent_type_strs.get(obj_ent_type) + ' entities have been found.');
             }
         }
         // compare collections

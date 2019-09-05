@@ -89,13 +89,11 @@ export class GIGeom {
             const this_num_ents: number = this.model.geom.query.numEnts(ent_type, false);
             const other_num_ents: number = other_model.geom.query.numEnts(ent_type, false);
             if (this_num_ents > other_num_ents) {
-                geom_comments.push('Mismatch: Model has too many entities of type: ' + ent_type_strs.get(ent_type) + '.' +
-                'A total of 1 mark has been deducted from the score.');
+                geom_comments.push('Mismatch: Model has too many entities of type: ' + ent_type_strs.get(ent_type) + '.');
                 // update the score, deduct 1 mark
                 result.score -= 1;
             } else if (this_num_ents < other_num_ents) {
-                geom_comments.push('Mismatch: Model has too few entities of type: ' + ent_type_strs.get(ent_type) + '.' +
-                'No marks have been deducted from the score.');
+                geom_comments.push('Mismatch: Model has too few entities of type: ' + ent_type_strs.get(ent_type) + '.');
             } else {
                 // correct
             }

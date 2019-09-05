@@ -117,7 +117,7 @@ export enum _EIOExportDataFormat {
  * Export data from the model as a file.
  * This will result in a popup in your browser, asking you to save the file.
  * @param __model__
- * @param entities Optional. Entities to be exported. If null, the whole model will be exported. 
+ * @param entities Optional. Entities to be exported. If null, the whole model will be exported.
  * @param filename Name of the file as a string.
  * @param data_format Enum, the file format.
  * @param data_target Enum, where the data is to be exported to.
@@ -289,13 +289,13 @@ export function ModelInfo(__model__: GIModel): string {
 /**
  * Compare the GI data in this model to the GI data in another model.
  * ~
- * For specifying the location of the GI Model, you can either specify a URL, 
+ * For specifying the location of the GI Model, you can either specify a URL,
  * or the name of a file in LocalStorage.
  * In the latter case, you do not specify a path, you just specify the file name, e.g. 'my_model.gi'
  *
  * @param __model__
  * @param gi_model The location of the GI Model to compare this model to.
- * @param method Enum, method used to compare this model to the other model.
+ * @param method Enum, method used to compare this model to the other model specified in the gi_model parameter.
  * @returns Text that summarises the comparison between the two models.
  */
 export function ModelCompare(__model__: GIModel, gi_model: string, method: _ECOmpareMethod): string {

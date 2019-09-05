@@ -54,9 +54,13 @@ export class GIAttribs {
     }
     /**
      * Compares this model and another model.
-     * @param model The model to compare with.
+     * ~
+     * This model should be a subset of the other model.
+     * ~
+     * @param other_model The model to compare with.
      */
-    compare(model: GIModel, result: {matches: boolean, comment: any[]}): void {
+    compare(other_model: GIModel, check_equality: boolean,
+            result: {score: number, total: number, comment: any[]}): Map<EEntType, string[]> {
         result.comment.push('Comparing attribute names and types.');
         const eny_type_array: EEntType[] = [
             EEntType.POSI,
@@ -84,45 +88,66 @@ export class GIAttribs {
             'model'
         ];
         // compare all attributes except model attributes
+        // check that this model is a subset of other model
+        // all the attributes in this model must also be in other model
         const attrib_comments: string[] = [];
+        let matches = true;
+        const attrib_names: Map<EEntType, string[]> = new Map();
         for (const ent_type of eny_type_array) {
+            // get the attrib names
             const ent_type_str: string = ent_type_strs[ent_type];
-            const attrib_names_1: string[] = this._model.attribs.query.getAttribNamesUser(ent_type);
-            const attrib_names_2: string[] = model.attribs.query.getAttribNamesUser(ent_type);
-            if (attrib_names_1.length !== attrib_names_2.length) {
-                result.matches = false;
-                attrib_comments.push('The number of ' + ent_type_str + ' attributes do not match.');
-                for (const name2 of attrib_names_2) {
-                    if (attrib_names_1.indexOf(name2) === -1 ) {
-                        result.matches = false;
-                        attrib_comments.push('There is an additional "' + name2 + '" ' + ent_type_str + ' attribute.');
-                    }
-                }
-            } else {
-               // attrib_comments.push('The number of ' + ent_type_str + ' attributes match.');
-            }
-            for (const name1 of attrib_names_1) {
-                const data_type_1: EAttribDataTypeStrs = this._model.attribs.query.getAttribDataType(ent_type, name1);
-                if (attrib_names_2.indexOf(name1) === -1 ) {
-                    result.matches = false;
-                    attrib_comments.push('The "' + name1 + '" ' + ent_type_str + ' attribute with '
-                        + 'datatype "' + data_type_1 + '" is missing.');
+            const this_attrib_names: string[] = this._model.attribs.query.getAttribNamesUser(ent_type);
+            const other_attrib_names: string[] = other_model.attribs.query.getAttribNamesUser(ent_type);
+            attrib_names.set(ent_type, this_attrib_names);
+            // check that each attribute in this model exists in the other model
+            for (const name1 of this_attrib_names) {
+                // update the total
+                result.total += 1;
+                // compare names
+                if (other_attrib_names.indexOf(name1) === -1 ) {
+                    matches = false;
+                    attrib_comments.push('The "' + name1 + '" ' + ent_type_str + ' attribute is missing.');
                 } else {
-                    const data_type_2: EAttribDataTypeStrs = model.attribs.query.getAttribDataType(ent_type, name1);
+                    // get the data types
+                    const data_type_1: EAttribDataTypeStrs = this._model.attribs.query.getAttribDataType(ent_type, name1);
+                    const data_type_2: EAttribDataTypeStrs = other_model.attribs.query.getAttribDataType(ent_type, name1);
+                    // compare data types
                     if (data_type_1 !== data_type_2) {
-                        result.matches = false;
+                        matches = false;
                         attrib_comments.push('The "' + name1 + '" ' + ent_type_str + ' attribute datatype is wrong. '
                             + 'It is "' + data_type_1 + '" but it should be "' + data_type_1 + '".');
                     } else {
-                        // attrib_comments.push('The "' + name1 + '" ' + ent_type_str + ' attribute with '
-                        //    + 'datatype "' + data_type_1 + '" exists.');
+                        // update the score
+                        result.score += 1;
                     }
+                }
+            }
+            // check if we have exact equality in attributes
+            if (check_equality) {
+                // update the score
+                result.total += 1;
+                // check that the other model does not have additional attribs
+                if (other_attrib_names.length > this_attrib_names.length) {
+                    const additional_attribs: string[] = [];
+                    for (const other_attrib_name of other_attrib_names) {
+                        if (this_attrib_names.indexOf(other_attrib_name) === -1) {
+                            additional_attribs.push(other_attrib_name);
+                        }
+                    }
+                    attrib_comments.push('There are additional ' + ent_type_str + ' attributes. ' +
+                        'The following attributes are not required: [' + additional_attribs.join(',') + '].');
+                } else {
+                    // update the score
+                    result.score += 1;
                 }
             }
         }
         if (attrib_comments.length === 0) {
-            attrib_comments.push('Everything matches.');
+            attrib_comments.push('Attributes all match, both name and data type.');
         }
+        // add to result
         result.comment.push(attrib_comments);
+        // return the attrib names in this model
+        return attrib_names;
     }
 }

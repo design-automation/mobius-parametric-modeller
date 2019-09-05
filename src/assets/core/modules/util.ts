@@ -288,15 +288,39 @@ export function ModelInfo(__model__: GIModel): string {
 // ================================================================================================
 /**
  * Compare the GI data in this model to the GI data in another model.
+ * ~
+ * For specifying the location of the GI Model, you can either specify a URL, 
+ * or the name of a file in LocalStorage.
+ * In the latter case, you do not specify a path, you just specify the file name, e.g. 'my_model.gi'
  *
  * @param __model__
+ * @param gi_model The location of the GI Model to compare this model to.
+ * @param method Enum, method used to compare this model to the other model.
  * @returns Text that summarises the comparison between the two models.
  */
-export function ModelCompare(__model__: GIModel, gi_model_data: string): string {
-    const gi_obj: IModelData = JSON.parse(gi_model_data) as IModelData;
+export function ModelCompare(__model__: GIModel, gi_model: string, method: _ECOmpareMethod): string {
+    const gi_obj: IModelData = JSON.parse(gi_model) as IModelData;
     const other_model = new GIModel(gi_obj);
-    const result: {matches: boolean, comment: string} = __model__.compare(other_model, true);
+    let result: {score: number, total: number, comment: string} = null;
+    switch (method) {
+        case _ECOmpareMethod.THIS_IS_SUBSET:
+            result = __model__.compare(other_model, true, false);
+            break;
+        case _ECOmpareMethod.THIS_IS_SUPERSET:
+            result = other_model.compare(__model__, true, false);
+            break;
+        case _ECOmpareMethod.THIS_IS_EQUAL:
+            result = __model__.compare(other_model, true, true);
+            break;
+        default:
+            throw new Error('Compare method not recognised');
+    }
     return result.comment;
+}
+export enum _ECOmpareMethod {
+    THIS_IS_SUBSET = 'subset',
+    THIS_IS_SUPERSET = 'superset',
+    THIS_IS_EQUAL = 'equal'
 }
 // ================================================================================================
 /**

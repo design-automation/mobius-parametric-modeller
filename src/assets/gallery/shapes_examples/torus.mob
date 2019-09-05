@@ -1,5 +1,5 @@
 {
-    "name": "torus",
+    "name": "A torus with holes",
     "author": "new_user",
     "flowchart": {
         "name": "A torus with holes",
@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_49ozrtyymeo",
+                "id": "node_iibwgoyv9hr",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -58,7 +58,7 @@
                             },
                             {
                                 "name": "__input__",
-                                "value": 6,
+                                "value": 4,
                                 "default": 4,
                                 "step": "1",
                                 "min": "4",
@@ -92,7 +92,7 @@
                             },
                             {
                                 "name": "__input__",
-                                "value": 7,
+                                "value": 4,
                                 "default": 4,
                                 "step": "1",
                                 "min": "4",
@@ -135,7 +135,7 @@
                                 },
                                 "parentNode": {
                                     "name": "make torus",
-                                    "id": "node_2l2n0gbmadu",
+                                    "id": "node_gpqtyp7zy5e",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -522,12 +522,12 @@
                                                 {
                                                     "type": 8,
                                                     "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~6",
-                                                    "ID": "prod-akfutr43oxu",
+                                                    "ID": "prod-c3ztu7uu5q",
                                                     "enabled": true,
                                                     "print": false,
                                                     "meta": {
                                                         "module": "list",
-                                                        "name": "_Append"
+                                                        "name": "Add"
                                                     },
                                                     "argCount": 4,
                                                     "args": [
@@ -537,34 +537,31 @@
                                                         },
                                                         {
                                                             "name": "list",
-                                                            "default": 0,
                                                             "value": "circs",
+                                                            "linked": false,
                                                             "jsValue": "circs_",
                                                             "usedVars": [
                                                                 "circs"
                                                             ],
-                                                            "invalidVar": false,
-                                                            "linked": false
+                                                            "invalidVar": false
                                                         },
                                                         {
-                                                            "name": "value",
-                                                            "default": 0,
+                                                            "name": "item",
                                                             "value": "cir_pl2",
+                                                            "linked": false,
                                                             "jsValue": "cir_pl2_",
                                                             "usedVars": [
                                                                 "cir_pl2"
                                                             ],
-                                                            "invalidVar": false,
-                                                            "linked": false
+                                                            "invalidVar": false
                                                         },
                                                         {
                                                             "name": "method",
-                                                            "default": 0,
                                                             "value": "'to_end'",
                                                             "jsValue": "'to_end'",
+                                                            "linked": false,
                                                             "usedVars": [],
-                                                            "invalidVar": false,
-                                                            "linked": false
+                                                            "invalidVar": false
                                                         }
                                                     ],
                                                     "selected": false,
@@ -690,7 +687,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "cut holes",
-                                                        "id": "node_a7vssrm49w",
+                                                        "id": "node_d8nuonwjii6",
                                                         "position": {
                                                             "x": 5349.091796875,
                                                             "y": 5402.365234375
@@ -738,7 +735,9 @@
                                                                         "name": "ent_type_enum",
                                                                         "linked": false,
                                                                         "value": "'pg'",
-                                                                        "jsValue": "'pg'"
+                                                                        "jsValue": "'pg'",
+                                                                        "usedVars": [],
+                                                                        "invalidVar": false
                                                                     },
                                                                     {
                                                                         "name": "entities",
@@ -958,7 +957,9 @@
                                                                                 "name": "ent_type_enum",
                                                                                 "linked": false,
                                                                                 "value": "'ps'",
-                                                                                "jsValue": "'ps'"
+                                                                                "jsValue": "'ps'",
+                                                                                "usedVars": [],
+                                                                                "invalidVar": false
                                                                             },
                                                                             {
                                                                                 "name": "entities",
@@ -1099,7 +1100,7 @@
                                                                         },
                                                                         "parentNode": {
                                                                             "name": "End",
-                                                                            "id": "node_omxbu4ha1ll",
+                                                                            "id": "node_qv243gbiv0m",
                                                                             "position": {
                                                                                 "x": 5349.2265625,
                                                                                 "y": 5597.05908203125
@@ -1123,7 +1124,7 @@
                                                                                 },
                                                                                 {
                                                                                     "type": 11,
-                                                                                    "ID": "",
+                                                                                    "ID": "Return",
                                                                                     "meta": {
                                                                                         "name": "",
                                                                                         "module": ""
@@ -1216,7 +1217,7 @@
         "functions": [],
         "ordered": true,
         "id": "3c1aa92d-50c2-b952-ca90-9e2f3084f4eb",
-        "last_updated": "2019-08-06T05:01:43.262Z"
+        "last_updated": "2019-09-05T07:02:39.214Z"
     },
     "version": 1,
     "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-80,\"y\":-80,\"z\":80},\"pos_x\":-80,\"pos_y\":-80,\"pos_z\":80,\"target\":{\"x\":0,\"y\":0,\"z\":0}},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":5,\"name\":\"Faces\"},\"tab\":\"0\"},\"version\":\"0.4.38\"}"

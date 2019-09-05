@@ -1,5 +1,5 @@
 {
-    "name": "A torus with holes",
+    "name": "torus",
     "author": "new_user",
     "flowchart": {
         "name": "A torus with holes",
@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_iibwgoyv9hr",
+                "id": "node_xi1es25xty",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -135,7 +135,7 @@
                                 },
                                 "parentNode": {
                                     "name": "make torus",
-                                    "id": "node_gpqtyp7zy5e",
+                                    "id": "node_62q4li14iox",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -521,8 +521,7 @@
                                                 },
                                                 {
                                                     "type": 8,
-                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~6",
-                                                    "ID": "prod-c3ztu7uu5q",
+                                                    "ID": "prod-mm5ox07ns2d",
                                                     "enabled": true,
                                                     "print": false,
                                                     "meta": {
@@ -537,8 +536,8 @@
                                                         },
                                                         {
                                                             "name": "list",
-                                                            "value": "circs",
                                                             "linked": false,
+                                                            "value": "circs",
                                                             "jsValue": "circs_",
                                                             "usedVars": [
                                                                 "circs"
@@ -547,8 +546,8 @@
                                                         },
                                                         {
                                                             "name": "item",
-                                                            "value": "cir_pl2",
                                                             "linked": false,
+                                                            "value": "cir_pl2",
                                                             "jsValue": "cir_pl2_",
                                                             "usedVars": [
                                                                 "cir_pl2"
@@ -559,13 +558,14 @@
                                                             "name": "method",
                                                             "value": "'to_end'",
                                                             "jsValue": "'to_end'",
-                                                            "linked": false,
                                                             "usedVars": [],
-                                                            "invalidVar": false
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         }
                                                     ],
                                                     "selected": false,
-                                                    "hasError": false
+                                                    "selectGeom": false,
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~6"
                                                 }
                                             ],
                                             "hasError": false,
@@ -687,7 +687,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "cut holes",
-                                                        "id": "node_d8nuonwjii6",
+                                                        "id": "node_rviq9ygtztm",
                                                         "position": {
                                                             "x": 5349.091796875,
                                                             "y": 5402.365234375
@@ -1100,7 +1100,7 @@
                                                                         },
                                                                         "parentNode": {
                                                                             "name": "End",
-                                                                            "id": "node_qv243gbiv0m",
+                                                                            "id": "node_z2pjr5v7pf",
                                                                             "position": {
                                                                                 "x": 5349.2265625,
                                                                                 "y": 5597.05908203125
@@ -1164,7 +1164,7 @@
                                                                                 "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
                                                                             },
                                                                             "hasError": false,
-                                                                            "hasExecuted": true
+                                                                            "hasExecuted": false
                                                                         }
                                                                     },
                                                                     "selected": false
@@ -1176,7 +1176,7 @@
                                                             "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode",
                                                             "model": null
                                                         },
-                                                        "hasExecuted": true,
+                                                        "hasExecuted": false,
                                                         "hasError": false
                                                     }
                                                 },
@@ -1189,8 +1189,8 @@
                                         "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode",
                                         "model": null
                                     },
-                                    "hasError": false,
-                                    "hasExecuted": true
+                                    "hasError": true,
+                                    "hasExecuted": false
                                 }
                             },
                             "selected": false
@@ -1217,7 +1217,7 @@
         "functions": [],
         "ordered": true,
         "id": "3c1aa92d-50c2-b952-ca90-9e2f3084f4eb",
-        "last_updated": "2019-09-05T07:02:39.214Z"
+        "last_updated": "2019-09-05T07:05:15.049Z"
     },
     "version": 1,
     "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-80,\"y\":-80,\"z\":80},\"pos_x\":-80,\"pos_y\":-80,\"pos_z\":80,\"target\":{\"x\":0,\"y\":0,\"z\":0}},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":5,\"name\":\"Faces\"},\"tab\":\"0\"},\"version\":\"0.4.38\"}"

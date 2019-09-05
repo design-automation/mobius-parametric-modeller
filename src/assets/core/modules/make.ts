@@ -13,10 +13,10 @@ import { isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi,
     isEdge, isFace, idsMake, idIndicies, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
 import { __merge__ } from './_model';
 import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd, vecFromTo } from '@libs/geom/vectors';
-import { _model } from '@modules';
+import { _model } from '.';
 import { checkCommTypes, checkIDs, IDcheckObj, TypeCheckObj } from './_check_args';
-import { distance } from '@assets/libs/geom/distance';
-import { arrMakeFlat } from '@assets/libs/util/arrs';
+import { distance } from '@libs/geom/distance';
+import { arrMakeFlat } from '@libs/util/arrs';
 
 // ================================================================================================
 /**

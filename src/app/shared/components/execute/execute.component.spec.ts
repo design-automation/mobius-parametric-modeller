@@ -11,7 +11,7 @@ import { _model } from '@modules';
 // import * as galleryUrl from '@assets/gallery/__config__.json';
 import { DataOutputService } from '@shared/services/dataOutput.service';
 import { _parameterTypes } from '@assets/core/_parameterTypes';
-import { EEntType } from '@assets/libs/geo-info/common';
+import { EEntType } from '@libs/geo-info/common';
 
 import * as testUrl from '@assets/unit_tests/unit_test.json';
 import * as compUrl from '@assets/unit_tests/unit_test_comp.json';
@@ -63,10 +63,10 @@ describe('Execute Component test', () => {
         }
         it(`load and execute test file: ${testName.split('.mob')[0]}\n` +
         `url: ${test.url}`, async (done: DoneFn) => {
-            await loadURLfixture.componentInstance.loadStartUpURL(`?file=${test.url}`);
+            const loadCheck = await loadURLfixture.componentInstance.loadStartUpURL(`?file=${test.url}`);
+            expect(loadCheck).toBeTruthy(`Unable to load ${testName}`);
             const spy = router.navigate as jasmine.Spy;
-            expect(dataService.file.flowchart).toBeDefined(`Unable to load ${testName}.mob`);
-            if (dataService.file.flowchart) {
+            if (loadCheck) {
                 let nodeProcedures = 0;
                 for (const node of dataService.flowchart.nodes) {
                     nodeProcedures += node.procedure.length;
@@ -238,21 +238,21 @@ describe('Execute Model Comparison test', () => {
 
             const oModel1 = _parameterTypes.newFn();
             const oModel2 = _parameterTypes.newFn();
-            await loadURLfixture.componentInstance.loadStartUpURL(`?file=${test.url1}`);
-            expect(dataService.file.flowchart).toBeDefined(`Unable to load ${testName1}`);
+            let loadCheck = await loadURLfixture.componentInstance.loadStartUpURL(`?file=${test.url1}`);
+            expect(loadCheck).toBeTruthy(`Unable to load ${testName1}`);
             if (dataService.file.flowchart) {
                 await executeFixture.componentInstance.execute(true);
-                const output = dataService.flowchart.nodes[dataService.flowchart.nodes.length - 1];
-                const model = JSON.parse(output.model);
-                oModel1.setData(model);
+                const output1 = dataService.flowchart.nodes[dataService.flowchart.nodes.length - 1];
+                const model1 = JSON.parse(output1.model);
+                oModel1.setData(model1);
             }
-            await loadURLfixture.componentInstance.loadStartUpURL(`?file=${test.url2}`);
-            expect(dataService.file.flowchart).toBeDefined(`Unable to load ${testName1}`);
+            loadCheck = await loadURLfixture.componentInstance.loadStartUpURL(`?file=${test.url2}`);
+            expect(loadCheck).toBeTruthy(`Unable to load ${testName2}`);
             if (dataService.file.flowchart) {
                 await executeFixture.componentInstance.execute(true);
-                const output = dataService.flowchart.nodes[dataService.flowchart.nodes.length - 1];
-                const model = JSON.parse(output.model);
-                oModel2.setData(model);
+                const output2 = dataService.flowchart.nodes[dataService.flowchart.nodes.length - 1];
+                const model2 = JSON.parse(output2.model);
+                oModel2.setData(model2);
             }
             const compResult = oModel1.compare(oModel2, normalize, check_equality);
             expect(compResult.percent).toEqual(test.percent, 'The two percentages do not match');

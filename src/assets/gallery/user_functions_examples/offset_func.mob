@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_fd1cjno0xa",
+                "id": "node_xqvcz61sxi",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -305,7 +305,7 @@
                                 "name": "positions",
                                 "value": "[g[0], g[2], g[5], g[4], g[7], g[6]]",
                                 "default": 0,
-                                "jsValue": "[g_.slice(0)[0], g_.slice(2)[0], g_.slice(5)[0], g_.slice(4)[0], g_.slice(7)[0], g_.slice(6)[0]]",
+                                "jsValue": "[g_[pythonList(0, g_.length)], g_[pythonList(2, g_.length)], g_[pythonList(5, g_.length)], g_[pythonList(4, g_.length)], g_[pythonList(7, g_.length)], g_[pythonList(6, g_.length)]]",
                                 "usedVars": [
                                     "g"
                                 ],
@@ -421,7 +421,7 @@
                                 },
                                 "parentNode": {
                                     "name": "offset closed plines and pgons",
-                                    "id": "node_6yitoknaeov",
+                                    "id": "node_sq248hb9hjp",
                                     "position": {
                                         "x": 5314.8671875,
                                         "y": 5144.19189453125
@@ -652,7 +652,9 @@
                                                                     "name": "ent_type_enum",
                                                                     "linked": false,
                                                                     "value": "'_v'",
-                                                                    "jsValue": "'_v'"
+                                                                    "jsValue": "'_v'",
+                                                                    "usedVars": [],
+                                                                    "invalidVar": false
                                                                 },
                                                                 {
                                                                     "name": "entities",
@@ -776,7 +778,7 @@
                                                                         {
                                                                             "name": "value",
                                                                             "value": "verts[i]",
-                                                                            "jsValue": "verts_.slice(i_)[0]",
+                                                                            "jsValue": "verts_[pythonList(i_, verts_.length)]",
                                                                             "usedVars": [
                                                                                 "verts",
                                                                                 "i"
@@ -816,7 +818,9 @@
                                                                             "name": "ent_type_enum",
                                                                             "linked": false,
                                                                             "value": "'ps'",
-                                                                            "jsValue": "'ps'"
+                                                                            "jsValue": "'ps'",
+                                                                            "usedVars": [],
+                                                                            "invalidVar": false
                                                                         },
                                                                         {
                                                                             "name": "entities",
@@ -851,7 +855,7 @@
                                                                         {
                                                                             "name": "value",
                                                                             "value": "posis[0]",
-                                                                            "jsValue": "posis_.slice(0)[0]",
+                                                                            "jsValue": "posis_[pythonList(0, posis_.length)]",
                                                                             "usedVars": [
                                                                                 "posis"
                                                                             ],
@@ -920,7 +924,9 @@
                                                                             "name": "ent_type_enum",
                                                                             "linked": false,
                                                                             "value": "'_e'",
-                                                                            "jsValue": "'_e'"
+                                                                            "jsValue": "'_e'",
+                                                                            "usedVars": [],
+                                                                            "invalidVar": false
                                                                         },
                                                                         {
                                                                             "name": "entities",
@@ -1056,7 +1062,7 @@
                                                                                     "name": "edge",
                                                                                     "value": "edges[0]",
                                                                                     "default": 0,
-                                                                                    "jsValue": "edges_.slice(0)[0]",
+                                                                                    "jsValue": "edges_[pythonList(0, edges_.length)]",
                                                                                     "usedVars": [
                                                                                         "edges"
                                                                                     ],
@@ -1096,7 +1102,7 @@
                                                                                     "name": "edge",
                                                                                     "value": "edges[1]",
                                                                                     "default": 0,
-                                                                                    "jsValue": "edges_.slice(1)[0]",
+                                                                                    "jsValue": "edges_[pythonList(1, edges_.length)]",
                                                                                     "usedVars": [
                                                                                         "edges"
                                                                                     ],
@@ -1164,7 +1170,7 @@
                                                                                     "name": "edge",
                                                                                     "value": "edges[1]",
                                                                                     "default": 0,
-                                                                                    "jsValue": "edges_.slice(1)[0]",
+                                                                                    "jsValue": "edges_[pythonList(1, edges_.length)]",
                                                                                     "usedVars": [
                                                                                         "edges"
                                                                                     ],
@@ -1204,7 +1210,7 @@
                                                                                     "name": "edge",
                                                                                     "value": "edges[0]",
                                                                                     "default": 0,
-                                                                                    "jsValue": "edges_.slice(0)[0]",
+                                                                                    "jsValue": "edges_[pythonList(0, edges_.length)]",
                                                                                     "usedVars": [
                                                                                         "edges"
                                                                                     ],
@@ -1456,13 +1462,12 @@
                                                                 },
                                                                 {
                                                                     "type": 8,
-                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2~children~2~children~4",
-                                                                    "ID": "prod-app3ehx648",
+                                                                    "ID": "prod-0qupj4mk1eks",
                                                                     "enabled": true,
                                                                     "print": false,
                                                                     "meta": {
                                                                         "module": "list",
-                                                                        "name": "_Append"
+                                                                        "name": "Add"
                                                                     },
                                                                     "argCount": 4,
                                                                     "args": [
@@ -1472,23 +1477,23 @@
                                                                         },
                                                                         {
                                                                             "name": "list",
+                                                                            "linked": false,
                                                                             "value": "new_posis",
                                                                             "jsValue": "new_posis_",
                                                                             "usedVars": [
                                                                                 "new_posis"
                                                                             ],
-                                                                            "invalidVar": false,
-                                                                            "linked": false
+                                                                            "invalidVar": false
                                                                         },
                                                                         {
-                                                                            "name": "value",
+                                                                            "name": "item",
+                                                                            "linked": false,
                                                                             "value": "new_posi",
                                                                             "jsValue": "new_posi_",
                                                                             "usedVars": [
                                                                                 "new_posi"
                                                                             ],
-                                                                            "invalidVar": false,
-                                                                            "linked": false
+                                                                            "invalidVar": false
                                                                         },
                                                                         {
                                                                             "name": "method",
@@ -1500,6 +1505,8 @@
                                                                         }
                                                                     ],
                                                                     "selected": false,
+                                                                    "selectGeom": false,
+                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2~children~2~children~4",
                                                                     "hasError": false
                                                                 }
                                                             ],
@@ -1633,13 +1640,12 @@
                                                                 },
                                                                 {
                                                                     "type": 8,
-                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2~children~2~children~6",
-                                                                    "ID": "prod-je2xnjfdhpl",
+                                                                    "ID": "prod-3p4tm12l00m",
                                                                     "enabled": true,
                                                                     "print": false,
                                                                     "meta": {
                                                                         "module": "list",
-                                                                        "name": "_Append"
+                                                                        "name": "Add"
                                                                     },
                                                                     "argCount": 4,
                                                                     "args": [
@@ -1649,21 +1655,21 @@
                                                                         },
                                                                         {
                                                                             "name": "list",
+                                                                            "linked": false,
                                                                             "value": "@ret_closed",
                                                                             "jsValue": "__modules__.attrib.Get(__params__.model, null, 'ret_closed', null)",
                                                                             "usedVars": [],
-                                                                            "invalidVar": false,
-                                                                            "linked": false
+                                                                            "invalidVar": false
                                                                         },
                                                                         {
-                                                                            "name": "value",
+                                                                            "name": "item",
+                                                                            "linked": false,
                                                                             "value": "pg",
                                                                             "jsValue": "pg_",
                                                                             "usedVars": [
                                                                                 "pg"
                                                                             ],
-                                                                            "invalidVar": false,
-                                                                            "linked": false
+                                                                            "invalidVar": false
                                                                         },
                                                                         {
                                                                             "name": "method",
@@ -1675,6 +1681,8 @@
                                                                         }
                                                                     ],
                                                                     "selected": false,
+                                                                    "selectGeom": false,
+                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2~children~2~children~6",
                                                                     "hasError": false
                                                                 }
                                                             ],
@@ -1756,13 +1764,12 @@
                                                                 },
                                                                 {
                                                                     "type": 8,
-                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2~children~2~children~7",
-                                                                    "ID": "prod-4wnh7wbpdls",
+                                                                    "ID": "prod-iqiy1aeh1xl",
                                                                     "enabled": true,
                                                                     "print": false,
                                                                     "meta": {
                                                                         "module": "list",
-                                                                        "name": "_Append"
+                                                                        "name": "Add"
                                                                     },
                                                                     "argCount": 4,
                                                                     "args": [
@@ -1772,21 +1779,21 @@
                                                                         },
                                                                         {
                                                                             "name": "list",
+                                                                            "linked": false,
                                                                             "value": "@ret_closed",
                                                                             "jsValue": "__modules__.attrib.Get(__params__.model, null, 'ret_closed', null)",
                                                                             "usedVars": [],
-                                                                            "invalidVar": false,
-                                                                            "linked": false
+                                                                            "invalidVar": false
                                                                         },
                                                                         {
-                                                                            "name": "value",
+                                                                            "name": "item",
+                                                                            "linked": false,
                                                                             "value": "pl",
                                                                             "jsValue": "pl_",
                                                                             "usedVars": [
                                                                                 "pl"
                                                                             ],
-                                                                            "invalidVar": false,
-                                                                            "linked": false
+                                                                            "invalidVar": false
                                                                         },
                                                                         {
                                                                             "name": "method",
@@ -1798,6 +1805,8 @@
                                                                         }
                                                                     ],
                                                                     "selected": false,
+                                                                    "selectGeom": false,
+                                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~2~children~2~children~7",
                                                                     "hasError": false
                                                                 }
                                                             ],
@@ -1836,7 +1845,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "offset open plines and pgons",
-                                                        "id": "node_k281uy1iid",
+                                                        "id": "node_ie6huqwtklp",
                                                         "position": {
                                                             "x": 5385.88818359375,
                                                             "y": 5292.32861328125
@@ -2067,7 +2076,9 @@
                                                                                         "name": "ent_type_enum",
                                                                                         "linked": false,
                                                                                         "value": "'_v'",
-                                                                                        "jsValue": "'_v'"
+                                                                                        "jsValue": "'_v'",
+                                                                                        "usedVars": [],
+                                                                                        "invalidVar": false
                                                                                     },
                                                                                     {
                                                                                         "name": "entities",
@@ -2191,7 +2202,7 @@
                                                                                             {
                                                                                                 "name": "value",
                                                                                                 "value": "verts[i]",
-                                                                                                "jsValue": "verts_.slice(i_)[0]",
+                                                                                                "jsValue": "verts_[pythonList(i_, verts_.length)]",
                                                                                                 "usedVars": [
                                                                                                     "verts",
                                                                                                     "i"
@@ -2231,7 +2242,9 @@
                                                                                                 "name": "ent_type_enum",
                                                                                                 "linked": false,
                                                                                                 "value": "'ps'",
-                                                                                                "jsValue": "'ps'"
+                                                                                                "jsValue": "'ps'",
+                                                                                                "usedVars": [],
+                                                                                                "invalidVar": false
                                                                                             },
                                                                                             {
                                                                                                 "name": "entities",
@@ -2266,7 +2279,7 @@
                                                                                             {
                                                                                                 "name": "value",
                                                                                                 "value": "posis[0]",
-                                                                                                "jsValue": "posis_.slice(0)[0]",
+                                                                                                "jsValue": "posis_[pythonList(0, posis_.length)]",
                                                                                                 "usedVars": [
                                                                                                     "posis"
                                                                                                 ],
@@ -2335,7 +2348,9 @@
                                                                                                 "name": "ent_type_enum",
                                                                                                 "linked": false,
                                                                                                 "value": "'_e'",
-                                                                                                "jsValue": "'_e'"
+                                                                                                "jsValue": "'_e'",
+                                                                                                "usedVars": [],
+                                                                                                "invalidVar": false
                                                                                             },
                                                                                             {
                                                                                                 "name": "entities",
@@ -2443,7 +2458,7 @@
                                                                                                         "name": "edge",
                                                                                                         "value": "edges[0]",
                                                                                                         "default": 0,
-                                                                                                        "jsValue": "edges_.slice(0)[0]",
+                                                                                                        "jsValue": "edges_[pythonList(0, edges_.length)]",
                                                                                                         "usedVars": [
                                                                                                             "edges"
                                                                                                         ],
@@ -2596,7 +2611,7 @@
                                                                                                         "name": "edge",
                                                                                                         "value": "edges[0]",
                                                                                                         "default": 0,
-                                                                                                        "jsValue": "edges_.slice(0)[0]",
+                                                                                                        "jsValue": "edges_[pythonList(0, edges_.length)]",
                                                                                                         "usedVars": [
                                                                                                             "edges"
                                                                                                         ],
@@ -2735,7 +2750,7 @@
                                                                                                         "name": "edge",
                                                                                                         "value": "edges[0]",
                                                                                                         "default": 0,
-                                                                                                        "jsValue": "edges_.slice(0)[0]",
+                                                                                                        "jsValue": "edges_[pythonList(0, edges_.length)]",
                                                                                                         "usedVars": [
                                                                                                             "edges"
                                                                                                         ],
@@ -2775,7 +2790,7 @@
                                                                                                         "name": "edge",
                                                                                                         "value": "edges[1]",
                                                                                                         "default": 0,
-                                                                                                        "jsValue": "edges_.slice(1)[0]",
+                                                                                                        "jsValue": "edges_[pythonList(1, edges_.length)]",
                                                                                                         "usedVars": [
                                                                                                             "edges"
                                                                                                         ],
@@ -2898,12 +2913,12 @@
                                                                                     {
                                                                                         "type": 8,
                                                                                         "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~2~children~2~children~4",
-                                                                                        "ID": "prod-app3ehx648",
+                                                                                        "ID": "prod-3cxcfn44xq8",
                                                                                         "enabled": true,
                                                                                         "print": false,
                                                                                         "meta": {
                                                                                             "module": "list",
-                                                                                            "name": "_Append"
+                                                                                            "name": "Add"
                                                                                         },
                                                                                         "argCount": 4,
                                                                                         "args": [
@@ -2914,22 +2929,22 @@
                                                                                             {
                                                                                                 "name": "list",
                                                                                                 "value": "new_posis",
+                                                                                                "linked": false,
                                                                                                 "jsValue": "new_posis_",
                                                                                                 "usedVars": [
                                                                                                     "new_posis"
                                                                                                 ],
-                                                                                                "invalidVar": false,
-                                                                                                "linked": false
+                                                                                                "invalidVar": false
                                                                                             },
                                                                                             {
-                                                                                                "name": "value",
+                                                                                                "name": "item",
                                                                                                 "value": "new_posi",
+                                                                                                "linked": false,
                                                                                                 "jsValue": "new_posi_",
                                                                                                 "usedVars": [
                                                                                                     "new_posi"
                                                                                                 ],
-                                                                                                "invalidVar": false,
-                                                                                                "linked": false
+                                                                                                "invalidVar": false
                                                                                             },
                                                                                             {
                                                                                                 "name": "method",
@@ -3000,12 +3015,12 @@
                                                                             {
                                                                                 "type": 8,
                                                                                 "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~procedure~2~children~2",
-                                                                                "ID": "prod-ksufpqoi5pt",
+                                                                                "ID": "prod-t9p2lt5qq39",
                                                                                 "enabled": true,
                                                                                 "print": false,
                                                                                 "meta": {
                                                                                     "module": "list",
-                                                                                    "name": "_Append"
+                                                                                    "name": "Add"
                                                                                 },
                                                                                 "argCount": 4,
                                                                                 "args": [
@@ -3015,21 +3030,21 @@
                                                                                     },
                                                                                     {
                                                                                         "name": "list",
+                                                                                        "linked": false,
                                                                                         "value": "@ret_open",
                                                                                         "jsValue": "__modules__.attrib.Get(__params__.model, null, 'ret_open', null)",
                                                                                         "usedVars": [],
-                                                                                        "invalidVar": false,
-                                                                                        "linked": false
+                                                                                        "invalidVar": false
                                                                                     },
                                                                                     {
-                                                                                        "name": "value",
+                                                                                        "name": "item",
+                                                                                        "linked": false,
                                                                                         "value": "pl",
                                                                                         "jsValue": "pl_",
                                                                                         "usedVars": [
                                                                                             "pl"
                                                                                         ],
-                                                                                        "invalidVar": false,
-                                                                                        "linked": false
+                                                                                        "invalidVar": false
                                                                                     },
                                                                                     {
                                                                                         "name": "method",
@@ -3041,6 +3056,7 @@
                                                                                     }
                                                                                 ],
                                                                                 "selected": false,
+                                                                                "selectGeom": false,
                                                                                 "hasError": false
                                                                             }
                                                                         ],
@@ -3075,7 +3091,7 @@
                                                                         },
                                                                         "parentNode": {
                                                                             "name": "End",
-                                                                            "id": "node_5de0ehx7o3x",
+                                                                            "id": "node_z4bu1qne8c",
                                                                             "position": {
                                                                                 "x": 5341.8037109375,
                                                                                 "y": 5442.0078125
@@ -3182,7 +3198,7 @@
                                                                                 },
                                                                                 {
                                                                                     "type": 11,
-                                                                                    "ID": "",
+                                                                                    "ID": "Return",
                                                                                     "meta": {
                                                                                         "name": "",
                                                                                         "module": ""
@@ -3200,8 +3216,11 @@
                                                                                             "value": "new_ents",
                                                                                             "default": 0,
                                                                                             "jsValue": "new_ents_",
-                                                                                            "invalidVar": "Error: Invalid vars: new_ents",
-                                                                                            "linked": false
+                                                                                            "invalidVar": false,
+                                                                                            "linked": false,
+                                                                                            "usedVars": [
+                                                                                                "new_ents"
+                                                                                            ]
                                                                                         }
                                                                                     ],
                                                                                     "print": false,
@@ -3278,7 +3297,7 @@
         "ordered": true,
         "returnDescription": "Return the new offset polylines and polygons.",
         "id": "140953ad-ecbc-e45b-5488-bc21ef62803b",
-        "last_updated": "2019-08-06T05:51:56.255Z"
+        "last_updated": "2019-09-05T06:24:33.153Z"
     },
     "version": 1,
     "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-80,\"y\":-80,\"z\":80},\"pos_x\":-80,\"pos_y\":-80,\"pos_z\":80,\"target\":{\"x\":0,\"y\":0,\"z\":0}},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":5,\"name\":\"Faces\"},\"tab\":\"0\"},\"version\":\"0.4.38\"}"

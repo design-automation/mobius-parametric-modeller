@@ -243,6 +243,9 @@ export class GIAttribMap {
         unique_ents_i.forEach( ent_i => {
             const exist_list: any[] = this.getEntVal(ent_i) as any[];
             const new_list: any[] = deepCopy(exist_list); // IMPORTANT clone the array
+            if (idx < 0) {
+                idx += new_list.length;
+            }
             new_list[idx] = val;
             this.setEntVal(ent_i, new_list);
         });
@@ -444,7 +447,7 @@ export class GIAttribMap {
     //  ===============================================================================================================
     /**
      * Convert a value into a map key
-     *  
+     *
      * The key can be either a string or a number.
      * string -> string
      * number -> number

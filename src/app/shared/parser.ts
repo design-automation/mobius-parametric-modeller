@@ -297,7 +297,6 @@ export function parseArgument(str: string): {'error'?: string, 'vars'?: string[]
     let newString = '';
     let jsString = '';
     const check = analyzeComp(comps, 0, vars);
-
     if (check.error) {
         console.log(check.error, '\n', str);
         return check;
@@ -726,7 +725,7 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
                            ` '${arrayName}', ${result.jsStr.substring(bracketIndex + 12, index - 2)})`;
                 // jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity},` +
                 //            ` '${result.jsStr.slice(0, bracketIndex)}', ${result.jsStr.slice(bracketIndex + 7, -4)})`;
-            } else if (result.jsStr.indexOf('[') !== 0) {
+            } else if (result.jsStr.indexOf('[') !== -1) {
                 bracketIndex = result.jsStr.indexOf('[');
                 const arrayName = result.jsStr.substring(0, bracketIndex);
                 const index = result.jsStr.slice(bracketIndex + 1, -1);
@@ -797,7 +796,6 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
             if (newString === '') {
                 entity = 'null';
             }
-
             let att_name: string;
             let att_index: string;
             let bracketIndex = result.jsStr.indexOf('[pythonList(');
@@ -805,7 +803,7 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
                 att_name = result.jsStr.slice(0, bracketIndex);
                 const index = result.jsStr.lastIndexOf(att_name);
                 att_index = result.jsStr.slice(bracketIndex + 12, index - 2);
-            } else if (result.jsStr.indexOf('[') !== 0) {
+            } else if (result.jsStr.indexOf('[') !== -1) {
                 bracketIndex = result.jsStr.indexOf('[');
                 att_name = result.jsStr.slice(0, bracketIndex);
                 att_index = result.jsStr.slice(bracketIndex + 1, -1);
@@ -813,7 +811,6 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
                 att_name = result.str;
                 att_index = 'null';
             }
-
             if (i + 1 >= comps.length || comps[i + 1].type !== strType.OTHER) {
                 return {'error': 'Error: Comparison operator expected after attribute name'};
             }

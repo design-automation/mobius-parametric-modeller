@@ -234,7 +234,8 @@ describe('Execute Model Comparison test', () => {
             const spy = router.navigate as jasmine.Spy;
 
             const normalize = test.normalize || true;
-            const check_equality = test.check_equality || false;
+            const check_geom_equality = test.check_geom_equality || true;
+            const check_attrib_equality = test.check_attrib_equality || false;
 
             const oModel1 = _parameterTypes.newFn();
             const oModel2 = _parameterTypes.newFn();
@@ -254,7 +255,7 @@ describe('Execute Model Comparison test', () => {
                 const model2 = JSON.parse(output2.model);
                 oModel2.setData(model2);
             }
-            const compResult = oModel1.compare(oModel2, normalize, check_equality);
+            const compResult = oModel1.compare(oModel2, normalize, check_geom_equality, check_attrib_equality);
             expect(compResult.percent).toEqual(test.percent, 'The two percentages do not match');
             done();
         });

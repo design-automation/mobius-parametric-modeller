@@ -233,9 +233,11 @@ describe('Execute Model Comparison test', () => {
         it('execute and compare two models: ' + testName1 + ' vs ' + testName2, async (done: DoneFn) => {
             const spy = router.navigate as jasmine.Spy;
 
-            const normalize = test.normalize || true;
-            const check_geom_equality = test.check_geom_equality || true;
-            const check_attrib_equality = test.check_attrib_equality || false;
+            const normalize = test.normalize;
+            const check_geom_equality = test.check_geom_equality;
+            const check_attrib_equality = test.check_attrib_equality;
+
+            console.log(check_geom_equality, check_attrib_equality)
 
             const oModel1 = _parameterTypes.newFn();
             const oModel2 = _parameterTypes.newFn();

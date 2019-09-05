@@ -2,10 +2,17 @@
     "test_data":[
         {
             "normalize":true,
-            "check_equality":false,
-            "url1" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_test/compare/comp_model1.mob",
-            "url2" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_test/compare/comp_model2.mob",
-            "percent": 82.6
+            "check_equality":true,
+            "url1" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_test/compare/pgon_with_holes1.mob",
+            "url2" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_test/compare/pgon_with_holes2.mob",
+            "percent": 100
+        },
+        {
+            "normalize":true,
+            "check_equality":true,
+            "url1" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_test/compare/pgon_edge_order_pline_dir1.mob",
+            "url2" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_test/compare/pgon_edge_order_pline_dir2.mob",
+            "percent": 100
         }
     ]
 }

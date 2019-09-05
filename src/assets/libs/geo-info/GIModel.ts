@@ -224,6 +224,7 @@ export class GIModel {
             const [other_fingerprints, other_ents_i]: [string[], number[]] = other_model.getEntsFingerprint(obj_ent_type, attrib_names);
             // console.log('other_fingerprints:', other_fingerprints, 'other_ents_i:', other_ents_i);
             // check that every entity in this model also exists in the other model
+            let num_objs_not_found = 0;
             for (let com_idx = 0; com_idx < this_fingerprints.length; com_idx++) {
                 // increment the total by 1
                 result.total += 1;
@@ -237,7 +238,7 @@ export class GIModel {
                 const found_other_idx: number = other_fingerprints.indexOf(this_fingerprint);
                 // add mismatch comment or update score
                 if (found_other_idx === -1) {
-                    data_comments.push('Mismatch: An entity of type "' + obj_ent_type_strs.get(obj_ent_type) + '"  could not be found.');
+                    num_objs_not_found++;
                 } else {
                     // we get the idx, which is common for both models
                     const other_ent_i: number = other_ents_i[found_other_idx];
@@ -245,6 +246,8 @@ export class GIModel {
                     result.score += 1;
                 }
             }
+            data_comments.push('Mismatch: ' + num_objs_not_found + ' ' +
+                obj_ent_type_strs.get(obj_ent_type) + ' entities could not be found.');
         }
         // compare collections
         const this_colls_fingerprints: string[] = this.getCollFingerprints(this_to_com_idx_maps, attrib_names.get(EEntType.COLL));
@@ -252,6 +255,7 @@ export class GIModel {
         const other_colls_fingerprints: string[] = other_model.getCollFingerprints(other_to_com_idx_maps, attrib_names.get(EEntType.COLL));
         // console.log('other_colls_fingerprints:', other_colls_fingerprints);
         // check that every collection in this model also exists in the other model
+        let num_colls_not_found = 0;
         for (const this_colls_fingerprint of this_colls_fingerprints) {
             // increment the total score by 1
             result.total += 1;
@@ -259,11 +263,12 @@ export class GIModel {
             const found_other_idx: number = other_colls_fingerprints.indexOf(this_colls_fingerprint);
             // add mismatch comment or update score
             if (found_other_idx === -1) {
-                data_comments.push('Mismatch: A collection could not be found.');
+                num_colls_not_found++;
             } else {
                 result.score += 1;
             }
         }
+        data_comments.push('Mismatch: ' + num_colls_not_found + ' collections could not be found.');
         // cpmpare model attributes
 
         // TODO

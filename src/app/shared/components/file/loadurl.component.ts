@@ -29,14 +29,14 @@ export class LoadUrlComponent {
     constructor(private dataService: DataService, private router: Router) {}
 
 
-    async loadStartUpURL(routerUrl: string) {
+    async loadStartUpURL(routerUrl: string): Promise<boolean> {
         let url: any = routerUrl.split('file=');
         if (url.length <= 1 ) {
-            return;
+            return false;
         }
         if (url[1] === 'temp') {
             this.loadTempFile();
-            return;
+            return false;
         }
         url = url[1].split('&')[0];
         if (url[0] === '_') {
@@ -51,15 +51,15 @@ export class LoadUrlComponent {
         if (routerUrl.indexOf('node=') !== -1) {
             let nodeID: any = routerUrl.split('node=')[1].split('&')[0];
             nodeID = Number(nodeID.replace(/%22|%27|'/g, ''));
-            await this.loadURL(url, nodeID);
+            return await this.loadURL(url, nodeID);
         } else {
-            await this.loadURL(url);
+            return await this.loadURL(url);
         }
     }
 
 
 
-    async loadURL(url: string, nodeID?: number) {
+    async loadURL(url: string, nodeID?: number): Promise<boolean> {
         const p = new Promise((resolve) => {
             const request = new XMLHttpRequest();
 
@@ -101,7 +101,7 @@ export class LoadUrlComponent {
         });
         const loadeddata: any = await p;
         if (loadeddata === 'error happened') {
-            return;
+            return false;
         }
         this.dataService.file = loadeddata;
         if (loadeddata.settings && JSON.stringify(loadeddata.settings) !== '{}') {
@@ -133,6 +133,7 @@ export class LoadUrlComponent {
         if (executeB && this.dataService.mobiusSettings.execute) { executeB.click(); }
         executeB = null;
         this.dataService.clearModifiedNode();
+        return true;
     }
 
     async loadTempFile() {

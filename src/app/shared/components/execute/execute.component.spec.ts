@@ -9,10 +9,12 @@ import { SpinnerComponent } from '../spinner/spinner.component';
 import { FlowchartUtils } from '@models/flowchart';
 import { _model } from '@modules';
 // import * as galleryUrl from '@assets/gallery/__config__.json';
-import * as testUrl from '@assets/unit_tests/unit_test.json';
 import { DataOutputService } from '@shared/services/dataOutput.service';
 import { _parameterTypes } from '@assets/core/_parameterTypes';
 import { EEntType } from '@assets/libs/geo-info/common';
+
+import * as testUrl from '@assets/unit_tests/unit_test.json';
+import * as compUrl from '@assets/unit_tests/unit_test_comp.json';
 
 describe('Execute Component test', () => {
     let loadURLfixture:   ComponentFixture<LoadUrlComponent>;
@@ -59,7 +61,8 @@ describe('Execute Component test', () => {
         if (test.url.indexOf('node=') !== -1) {
             nodeCheck = true;
         }
-        it('load and execute test file: ' + testName.split('.mob')[0], async (done: DoneFn) => {
+        it(`load and execute test file: ${testName.split('.mob')[0]}\n` +
+        `url: ${test.url}`, async (done: DoneFn) => {
             await loadURLfixture.componentInstance.loadStartUpURL(`?file=${test.url}`);
             const spy = router.navigate as jasmine.Spy;
             expect(dataService.file.flowchart).toBeDefined(`Unable to load ${testName}.mob`);
@@ -177,6 +180,82 @@ describe('Execute Component test', () => {
                 }
                 // expect(_model.__checkModel__(oModel)).toEqual([], '_model.__checkModel__ failed');
             }
+            done();
+        });
+
+    }
+});
+
+describe('Execute Model Comparison test', () => {
+    let loadURLfixture:   ComponentFixture<LoadUrlComponent>;
+    let executeFixture:   ComponentFixture<ExecuteComponent>;
+    let spinnerFixture:   ComponentFixture<SpinnerComponent>;
+    let router: Router;
+    let dataService: DataService;
+    let dataOutputService: DataOutputService;
+
+    beforeEach(() => {
+        // jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+        const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+
+        TestBed.configureTestingModule({
+            declarations: [
+                LoadUrlComponent,
+                ExecuteComponent,
+                SpinnerComponent
+            ],
+            imports: [
+                MatIconModule
+            ],
+            providers: [
+                DataService,
+                DataOutputService,
+                { provide: Router,      useValue: routerSpy },
+                GoogleAnalyticsService
+            ]
+        }).compileComponents();
+        loadURLfixture = TestBed.createComponent(LoadUrlComponent);
+        executeFixture = TestBed.createComponent(ExecuteComponent);
+        spinnerFixture = TestBed.createComponent(SpinnerComponent);
+        router = TestBed.get(Router);
+        dataService = TestBed.get(DataService);
+        dataOutputService = TestBed.get(DataOutputService);
+        window['ga'] = function() { };
+        // dataService.file.flowchart = undefined;
+    });
+
+    for (const test of compUrl.test_data) {
+        let testName1: any = test.url1.split('/');
+        testName1 = testName1[testName1.length - 1];
+        let testName2: any = test.url2.split('/');
+        testName2 = testName2[testName2.length - 1];
+
+        it('execute and compare two models: ' + testName1 + ' vs ' + testName2, async (done: DoneFn) => {
+            const spy = router.navigate as jasmine.Spy;
+
+            const normalize = test.normalize || true;
+            const check_equality = test.check_equality || false;
+
+            const oModel1 = _parameterTypes.newFn();
+            const oModel2 = _parameterTypes.newFn();
+            await loadURLfixture.componentInstance.loadStartUpURL(`?file=${test.url1}`);
+            expect(dataService.file.flowchart).toBeDefined(`Unable to load ${testName1}`);
+            if (dataService.file.flowchart) {
+                await executeFixture.componentInstance.execute(true);
+                const output = dataService.flowchart.nodes[dataService.flowchart.nodes.length - 1];
+                const model = JSON.parse(output.model);
+                oModel1.setData(model);
+            }
+            await loadURLfixture.componentInstance.loadStartUpURL(`?file=${test.url2}`);
+            expect(dataService.file.flowchart).toBeDefined(`Unable to load ${testName1}`);
+            if (dataService.file.flowchart) {
+                await executeFixture.componentInstance.execute(true);
+                const output = dataService.flowchart.nodes[dataService.flowchart.nodes.length - 1];
+                const model = JSON.parse(output.model);
+                oModel2.setData(model);
+            }
+            const compResult = oModel1.compare(oModel2, normalize, check_equality);
+            expect(compResult.percent).toEqual(test.percent, 'The two percentages do not match');
             done();
         });
 

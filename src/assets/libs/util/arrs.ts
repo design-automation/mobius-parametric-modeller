@@ -54,7 +54,6 @@ export function arrMakeFlat(data: any): any[] {
         return [data];
     }
     const depth = arrMaxDepth(data);
-    console.log(depth);
     // @ts-ignore
     const new_array = data.flat(depth - 1);
     return new_array;

@@ -105,12 +105,12 @@
                                                 },
                                                 {
                                                     "name": "list",
-                                                    "value": "range(1, 20)",
+                                                    "value": "range(1, 40)",
                                                     "default": [],
                                                     "usedVars": [],
                                                     "invalidVar": false,
                                                     "linked": false,
-                                                    "jsValue": "range(1, 20)"
+                                                    "jsValue": "range(1, 40)"
                                                 }
                                             ],
                                             "children": [

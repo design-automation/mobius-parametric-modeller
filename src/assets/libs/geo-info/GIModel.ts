@@ -71,12 +71,10 @@ export class GIModel {
             {percent: number, score: number, total: number, comment: string} {
         // create the result object
         const result: {percent: number, score: number, total: number, comment: any} = {percent: 0, score: 0, total: 0, comment: []};
-        console.log(result);
         // if check_geom_equality, then check we have exact same number of positions, objects, and colletions
         if (check_geom_equality) {
             this.geom.compare(model, result);
         }
-        console.log(result);
         // check that the attributes in this model all exist in the other model
         // at the same time get a map of all attribute names in this model
         const attrib_names: Map<EEntType, string[]> = this.attribs.compare(model, check_attrib_equality, result);
@@ -93,7 +91,6 @@ export class GIModel {
         } else {
             result.comment.push('RESULT: The two models no not match.');
         }
-        console.log(result);
         // calculate percentage score
         result.percent = Math.round( result.score / result.total * 100);
         if (result.percent < 0) { result.percent = 0; }

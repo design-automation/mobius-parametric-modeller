@@ -79,7 +79,7 @@ or the name of a file in LocalStorage.
 In the latter case, you do not specify a path, you just specify the file name, e.g. 'my_model.gi'  
 * **Parameters:**  
   * *gi_model:* The location of the GI Model to compare this model to.  
-  * *method:* Enum, method used to compare this model to the other model.  
+  * *method:* Enum, method used to compare this model to the other model specified in the gi_model parameter.  
 * **Returns:** Text that summarises the comparison between the two models.  
   
 ## ModelCheck  

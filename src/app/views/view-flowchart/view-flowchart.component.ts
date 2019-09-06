@@ -380,6 +380,11 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
                             textarea.focus();
                             textarea.select();
                             textarea = null;
+                            for (const edgeIndex of this.selectedEdge) {
+                                this.dataService.flowchart.edges[edgeIndex].selected = false;
+                            }
+                        } else if (document.activeElement.nodeName === 'TEXTAREA') {
+                            document.getElementById('executeButton').focus();
                         }
                     } else {
                         document.getElementById('executeButton').focus();

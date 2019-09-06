@@ -77,14 +77,16 @@ export class GIModel {
         }
         // check that the attributes in this model all exist in the other model
         // at the same time get a map of all attribute names in this model
-        const attrib_names: Map<EEntType, string[]> = this.attribs.compare(model, check_attrib_equality, result);
+        if (check_attrib_equality) {
+            this.attribs.compare(model, result);
+        }
         // normalize the two models
         if (normalize) {
             this.normalize();
             model.normalize();
         }
         // compare the actual data
-        this.compareData(model, result, attrib_names);
+        this.compareData(model, result);
         // Add a final msg
         if (result.score === result.total) {
             result.comment = ['RESULT: The two models match.'];
@@ -199,7 +201,7 @@ export class GIModel {
     /**
      * Compare the data in two models. Check that this model is a subset of the other model.
      * So if this is being used to check if the model submitted by a student is the correct answer,
-     * then this model is the answer, and teh student model is the other model
+     * then this model is the answer, and the student model is the other model
      * This method will check that every entity in this model also exists in the other model.
      * This means that the student answer (the other model) can conrain additional data and still get
      * a full score.
@@ -209,9 +211,21 @@ export class GIModel {
      * For the compareData method, total score is equal to number of points, plines, pgons and collections
      */
     private compareData(other_model: GIModel,
-            result: {score: number, total: number, comment: any[]}, attrib_names: Map<EEntType, string[]>): void {
+            result: {score: number, total: number, comment: any[]}): void {
         result.comment.push('Comparing model data.');
         const data_comments: string [] = [];
+        // set attrib names to check when comparing objects and collections
+        const attrib_names: Map<EEntType, string[]> = new Map();
+        attrib_names.set(EEntType.POSI, ['xyz']);
+        if (this.attribs.query.hasAttrib(EEntType.VERT, 'rgb')) {
+            attrib_names.set(EEntType.VERT, ['rgb']);
+        }
+        if (this.attribs.query.hasAttrib(EEntType.PGON, 'material')) {
+            attrib_names.set(EEntType.PGON, ['material']);
+            const pgons_i: number[] = this.geom.query.getEnts(EEntType.PGON, false);
+            const mat_names: Set<string> = new Set(this.attribs.query.getAttribVal(EEntType.PGON, 'material', pgons_i) as string[]);
+            attrib_names.set(EEntType.MOD, Array.from(mat_names));
+        }
         // points, polylines, polygons
         const obj_ent_types: EEntType[] = [EEntType.POINT, EEntType.PLINE, EEntType.PGON];
         const obj_ent_type_strs: Map<EEntType, string> = new Map([
@@ -292,24 +306,26 @@ export class GIModel {
             data_comments.push('Match: The model contains all required entities and collections.');
         }
         // compare model attributes
-        const this_mod_attrib_names: string[] = this.attribs.query.getAttribNames(EEntType.MOD);
-        for (const this_mod_attrib_name of this_mod_attrib_names) {
-            // increment the total by 1
-            result.total += 1;
-            // check if there is a match
-            if (other_model.attribs.query.hasModelAttrib(this_mod_attrib_name)) {
-                const this_value: TAttribDataTypes = this.attribs.query.getModelAttribVal(this_mod_attrib_name);
-                const other_value: TAttribDataTypes = other_model.attribs.query.getModelAttribVal(this_mod_attrib_name);
-                const this_value_fp: string = this.getAttribValFingerprint(this_value);
-                const other_value_fp: string = this.getAttribValFingerprint(other_value);
-                if (this_value_fp === other_value_fp) {
-                    // correct, so increment the score by 1
-                    result.score += 1;
+        const this_mod_attrib_names: string[] = attrib_names.get(EEntType.MOD);
+        if (this_mod_attrib_names !== undefined) {
+            for (const this_mod_attrib_name of this_mod_attrib_names) {
+                // increment the total by 1
+                result.total += 1;
+                // check if there is a match
+                if (other_model.attribs.query.hasModelAttrib(this_mod_attrib_name)) {
+                    const this_value: TAttribDataTypes = this.attribs.query.getModelAttribVal(this_mod_attrib_name);
+                    const other_value: TAttribDataTypes = other_model.attribs.query.getModelAttribVal(this_mod_attrib_name);
+                    const this_value_fp: string = this.getAttribValFingerprint(this_value);
+                    const other_value_fp: string = this.getAttribValFingerprint(other_value);
+                    if (this_value_fp === other_value_fp) {
+                        // correct, so increment the score by 1
+                        result.score += 1;
+                    } else {
+                        data_comments.push('Mismatch: the value for model attribute "' + this_mod_attrib_name + '" is incorrect.');
+                    }
                 } else {
-                    data_comments.push('Mismatch: the value for model attribute "' + this_mod_attrib_name + '" is incorrect.');
+                    data_comments.push('Mismatch: model attribute "' + this_mod_attrib_name + '" not be found.');
                 }
-            } else {
-                data_comments.push('Mismatch: model attribute "' + this_mod_attrib_name + '" not be found.');
             }
         }
         // add a comment if everything matches
@@ -320,7 +336,7 @@ export class GIModel {
         if (result.score === result.total) {
             data_comments.push('Match: Everything matches.');
         }
-        // 
+        // return result
         result.comment.push(data_comments);
     }
     /**
@@ -353,21 +369,23 @@ export class GIModel {
             const topo_fingerprints: string[] = [];
             // get the attribute names array that will be used for matching
             const attrib_names: string[] = attrib_names_map.get(topo_ent_type);
-            // sort the attrib names
-            attrib_names.sort();
-            const sub_ents_i: number[] = this.geom.query.navAnyToAny(from_ent_type, topo_ent_type, index);
-            // for each attrib, make a finderprint
-            for (const attrib_name of attrib_names) {
-                for (const sub_ent_i of sub_ents_i) {
-                    const attrib_value: TAttribDataTypes = this.attribs.query.getAttribVal(topo_ent_type, attrib_name, sub_ent_i);
-                    if (attrib_value !== null && attrib_value !== undefined) {
-                        topo_fingerprints.push(this.getAttribValFingerprint(attrib_value));
+            if (attrib_names !== undefined) {
+                // sort the attrib names
+                attrib_names.sort();
+                const sub_ents_i: number[] = this.geom.query.navAnyToAny(from_ent_type, topo_ent_type, index);
+                // for each attrib, make a finderprint
+                for (const attrib_name of attrib_names) {
+                    for (const sub_ent_i of sub_ents_i) {
+                        const attrib_value: TAttribDataTypes = this.attribs.query.getAttribVal(topo_ent_type, attrib_name, sub_ent_i);
+                        if (attrib_value !== null && attrib_value !== undefined) {
+                            topo_fingerprints.push(this.getAttribValFingerprint(attrib_value));
+                        }
                     }
                 }
+                // the order is significant, so we do not sort
+                // any differences in order (e.g. holes) will already be dealt with by normalization
+                fingerprints.push(topo_fingerprints.join('@'));
             }
-            // the order is significant, so we do not sort
-            // any differences in order (e.g. holes) will already be dealt with by normalization
-            fingerprints.push(topo_fingerprints.join('@'));
         }
         // return the final fingerprint string for the object
         // no need to sort, the order is predefined
@@ -423,13 +441,15 @@ export class GIModel {
         const fingerprints: string[] = [];
         const attribs_vals: string[] = [];
         // for each attrib, make a finderprint of the attrib value
-        for (const attrib_name of attrib_names) {
-            const attrib_value: TAttribDataTypes = this.attribs.query.getAttribVal(EEntType.COLL, attrib_name, coll_i);
-            if (attrib_value !== null && attrib_value !== undefined) {
-                attribs_vals.push(this.getAttribValFingerprint(attrib_value));
+        if (attrib_names !== undefined) {
+            for (const attrib_name of attrib_names) {
+                const attrib_value: TAttribDataTypes = this.attribs.query.getAttribVal(EEntType.COLL, attrib_name, coll_i);
+                if (attrib_value !== null && attrib_value !== undefined) {
+                    attribs_vals.push(this.getAttribValFingerprint(attrib_value));
+                }
             }
+            fingerprints.push(attribs_vals.join('@'));
         }
-        fingerprints.push(attribs_vals.join('@'));
         // get all the entities in this collection
         // if idx_maps is null, then we use teh actual entity numbers
         // if idx_maps is not null, then we map the entity numbers

@@ -64,8 +64,7 @@ export class GIAttribs {
      * ~
      * @param other_model The model to compare with.
      */
-    compare(other_model: GIModel, check_equality: boolean,
-            result: {score: number, total: number, comment: any[]}): Map<EEntType, string[]> {
+    compare(other_model: GIModel, result: {score: number, total: number, comment: any[]}): void {
         result.comment.push('Comparing attribute names and types.');
         const eny_type_array: EEntType[] = [
             EEntType.POSI,
@@ -132,25 +131,23 @@ export class GIAttribs {
                 }
             }
             // check if we have exact equality in attributes
-            if (check_equality) {
-                // total marks is not updated, we deduct marks
-                // check that the other model does not have additional attribs
-                if (other_attrib_names.length > this_attrib_names.length) {
-                    const additional_attribs: string[] = [];
-                    for (const other_attrib_name of other_attrib_names) {
-                        if (this_attrib_names.indexOf(other_attrib_name) === -1) {
-                            additional_attribs.push(other_attrib_name);
-                        }
+            // total marks is not updated, we deduct marks
+            // check that the other model does not have additional attribs
+            if (other_attrib_names.length > this_attrib_names.length) {
+                const additional_attribs: string[] = [];
+                for (const other_attrib_name of other_attrib_names) {
+                    if (this_attrib_names.indexOf(other_attrib_name) === -1) {
+                        additional_attribs.push(other_attrib_name);
                     }
-                    attrib_comments.push('There are additional ' + ent_type_str + ' attributes. ' +
-                        'The following attributes are not required: [' + additional_attribs.join(',') + ']. ');
-                    // update the score, deduct 1 mark
-                    result.score -= 1;
-                } else if (other_attrib_names.length < this_attrib_names.length) {
-                    attrib_comments.push('Mismatch: Model has too few entities of type: ' + ent_type_strs.get(ent_type) + '.');
-                } else {
-                    // correct
                 }
+                attrib_comments.push('There are additional ' + ent_type_str + ' attributes. ' +
+                    'The following attributes are not required: [' + additional_attribs.join(',') + ']. ');
+                // update the score, deduct 1 mark
+                result.score -= 1;
+            } else if (other_attrib_names.length < this_attrib_names.length) {
+                attrib_comments.push('Mismatch: Model has too few entities of type: ' + ent_type_strs.get(ent_type) + '.');
+            } else {
+                // correct
             }
         }
         if (attrib_comments.length === 0) {
@@ -158,7 +155,5 @@ export class GIAttribs {
         }
         // add to result
         result.comment.push(attrib_comments);
-        // return the attrib names in this model
-        return attrib_names;
     }
 }

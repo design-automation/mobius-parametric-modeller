@@ -300,7 +300,9 @@ export class GIModel {
             if (other_model.attribs.query.hasModelAttrib(this_mod_attrib_name)) {
                 const this_value: TAttribDataTypes = this.attribs.query.getModelAttribVal(this_mod_attrib_name);
                 const other_value: TAttribDataTypes = other_model.attribs.query.getModelAttribVal(this_mod_attrib_name);
-                if (this_value === other_value) {
+                const this_value_fp: string = this.getAttribValFingerprint(this_value);
+                const other_value_fp: string = this.getAttribValFingerprint(other_value);
+                if (this_value_fp === other_value_fp) {
                     // correct, so increment the score by 1
                     result.score += 1;
                 } else {

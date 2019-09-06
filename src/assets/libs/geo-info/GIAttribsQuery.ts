@@ -144,9 +144,9 @@ export class GIAttribsQuery {
         return attrib.getEntVal(ents_i);
     }
     /**
-     * Get an entity attrib indexed value.
+     * Get an entity attrib value in a list.
      * ~
-     * If the attribute does not exist
+     * If the attribute does not exist, return undefined.
      * ~
      * If the index is out of range, return undefined.
      * ~
@@ -157,15 +157,15 @@ export class GIAttribsQuery {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         const attrib: GIAttribMap = attribs.get(name);
-        if (attrib === undefined) { return null; }
+        if (attrib === undefined) { return undefined; }
         return attrib.getEntListIdxVal(ents_i, idx);
     }
         /**
-     * Get an entity attrib indexed value.
+     * Get an entity attrib value in a dictionary.
      * ~
-     * If the attribute does not exist
+     * If the attribute does not exist, return undefined.
      * ~
-     * If the index is out of range, return undefined.
+     * If the key does not exist, return undefined.
      * ~
      * @param ent_type
      * @param name
@@ -174,7 +174,7 @@ export class GIAttribsQuery {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         const attrib: GIAttribMap = attribs.get(name);
-        if (attrib === undefined) { return null; }
+        if (attrib === undefined) { return undefined; }
         return attrib.getEntDictKeyVal(ents_i, key);
     }
     /**

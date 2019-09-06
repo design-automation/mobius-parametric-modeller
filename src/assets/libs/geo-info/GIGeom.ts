@@ -61,7 +61,7 @@ export class GIGeom {
      * ~
      * The max total score for this method is equal to 5.
      * It assigns 1 mark for for each entity type:
-     * posis, points, pline, pgons, and colelctions.
+     * points, pline, pgons, and colelctions.
      * In each case, if the number of entities is equal, 1 mark is given.
      * ~
      * @param other_model The model to compare with.
@@ -69,14 +69,12 @@ export class GIGeom {
     compare(other_model: GIModel, result: {score: number, total: number, comment: any[]}): void {
         result.comment.push('Comparing number of geometric entities.');
         const eny_types: EEntType[] = [
-            EEntType.POSI,
             EEntType.POINT,
             EEntType.PLINE,
             EEntType.PGON,
             EEntType.COLL
         ];
         const ent_type_strs: Map<EEntType, string> = new Map([
-            [EEntType.POSI, 'positions'],
             [EEntType.POINT, 'points'],
             [EEntType.PLINE, 'polylines'],
             [EEntType.PGON, 'polygons'],

@@ -863,9 +863,9 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
                         return;
                     }
                 }
-                // check if this edge would form a circular wiring, return if it does
+                // check if this edge would form a circular wiring, return with an error message if it does
                 if (this.checkCircularWiring(this.edge.source.parentNode, this.edge.target.parentNode)) {
-                    this.dataService.notifyMessage('Error: Circular Wiring');
+                    this.dataService.notifyMessage('Invalid flowchart: Cycles detected');
                     this.isDown = 0;
                     return;
                 }

@@ -802,8 +802,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
                 }
             }
 
-    // if drag port
-    } else if (this.isDown === 3) {
+        // if drag port
+        } else if (this.isDown === 3) {
             event.preventDefault();
             const pt = this.canvas.createSVGPoint();
 
@@ -863,6 +863,12 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
                         return;
                     }
                 }
+                // check if this edge would form a circular wiring, return if it does
+                if (this.checkCircularWiring(this.edge.source.parentNode, this.edge.target.parentNode)) {
+                    this.dataService.notifyMessage('Error: Circular Wiring');
+                    this.isDown = 0;
+                    return;
+                }
                 this.edge.target.edges.push(this.edge);
                 this.edge.source.edges.push(this.edge);
                 this.dataService.flowchart.edges.push(this.edge);
@@ -877,6 +883,19 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
 
         }
         this.isDown = 0;
+    }
+
+    checkCircularWiring(source: INode, target: INode): boolean {
+        let check = false;
+        for (const targetEdge of target.output.edges) {
+            if (targetEdge.target.parentNode.type === 'end') {
+                continue;
+            } else if (targetEdge.target.parentNode === source) {
+                return true;
+            }
+            check = this.checkCircularWiring(source, targetEdge.target.parentNode) || check;
+        }
+        return check;
     }
 
     newfile() {

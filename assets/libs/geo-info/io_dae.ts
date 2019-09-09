@@ -166,7 +166,7 @@ function processMaterialPgon(model: GIModel, pgon_i: number, has_color_attrib: b
     if (has_color_attrib) {
         let color: TColor = [0, 0, 0];
         for (const pgon_vert_i of pgon_verts_i) {
-            let vert_color: TColor = model.attribs.query.getAttribValue(EEntType.VERT, EAttribNames.COLOR, pgon_vert_i) as TColor;
+            let vert_color: TColor = model.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, pgon_vert_i) as TColor;
             if (vert_color === null || vert_color === undefined) { vert_color = [1, 1, 1]; }
             color = [color[0] + vert_color[0], color[1] + vert_color[1], color[2] + vert_color[2]];
         }
@@ -225,7 +225,7 @@ function processMaterialPline(model: GIModel, pline_i: number, has_color_attrib:
     if (has_color_attrib) {
         let color: TColor = [0, 0, 0];
         for (const pline_vert_i of pline_verts_i) {
-            let vert_color: TColor = model.attribs.query.getAttribValue(EEntType.VERT, EAttribNames.COLOR, pline_vert_i) as TColor;
+            let vert_color: TColor = model.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, pline_vert_i) as TColor;
             if (vert_color === null || vert_color === undefined) { vert_color = [1, 1, 1]; }
             color = [color[0] + vert_color[0], color[1] + vert_color[1], color[2] + vert_color[2]];
         }

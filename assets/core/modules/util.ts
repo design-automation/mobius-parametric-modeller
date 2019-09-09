@@ -10,11 +10,11 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { importObj, exportObj } from '@libs/geo-info/io_obj';
 import { importDae, exportDae } from '@libs/geo-info/io_dae';
-import { importGeojson } from '@assets/libs/geo-info/io_geojson';
+import { importGeojson } from '@libs/geo-info/io_geojson';
 import { download } from '@libs/filesys/download';
 import { TId, EEntType, Txyz, TPlane, TRay, IGeomPack, IModelData } from '@libs/geo-info/common';
 import { __merge__ } from './_model';
-import { _model } from '@modules';
+import { _model } from '.';
 import { idsMake } from '@libs/geo-info/id';
 
 declare global {
@@ -117,6 +117,7 @@ export enum _EIOExportDataFormat {
  * Export data from the model as a file.
  * This will result in a popup in your browser, asking you to save the file.
  * @param __model__
+ * @param entities Optional. Entities to be exported. If null, the whole model will be exported.
  * @param filename Name of the file as a string.
  * @param data_format Enum, the file format.
  * @param data_target Enum, where the data is to be exported to.
@@ -287,15 +288,39 @@ export function ModelInfo(__model__: GIModel): string {
 // ================================================================================================
 /**
  * Compare the GI data in this model to the GI data in another model.
+ * ~
+ * For specifying the location of the GI Model, you can either specify a URL,
+ * or the name of a file in LocalStorage.
+ * In the latter case, you do not specify a path, you just specify the file name, e.g. 'my_model.gi'
  *
  * @param __model__
+ * @param gi_model The location of the GI Model to compare this model to.
+ * @param method Enum, method used to compare this model to the other model specified in the gi_model parameter.
  * @returns Text that summarises the comparison between the two models.
  */
-export function ModelCompare(__model__: GIModel, gi_model_data: string): string {
-    const gi_obj: IModelData = JSON.parse(gi_model_data) as IModelData;
+export function ModelCompare(__model__: GIModel, gi_model: string, method: _ECOmpareMethod): string {
+    const gi_obj: IModelData = JSON.parse(gi_model) as IModelData;
     const other_model = new GIModel(gi_obj);
-    const result: {matches: boolean, comment: string} = __model__.compare(other_model);
+    let result: {score: number, total: number, comment: string} = null;
+    switch (method) {
+        case _ECOmpareMethod.THIS_IS_SUBSET:
+            result = __model__.compare(other_model, true, false, false);
+            break;
+        case _ECOmpareMethod.THIS_IS_SUPERSET:
+            result = other_model.compare(__model__, true, false, false);
+            break;
+        case _ECOmpareMethod.THIS_IS_EQUAL:
+            result = __model__.compare(other_model, true, true, false);
+            break;
+        default:
+            throw new Error('Compare method not recognised');
+    }
     return result.comment;
+}
+export enum _ECOmpareMethod {
+    THIS_IS_SUBSET = 'subset',
+    THIS_IS_SUPERSET = 'superset',
+    THIS_IS_EQUAL = 'equal'
 }
 // ================================================================================================
 /**

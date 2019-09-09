@@ -26,16 +26,21 @@ export function checkAttribName(fn_name: string, attrib_name: string): void {
     }
 }
 
-export function checkAttribValue(fn_name: string, attrib_value: any, attrib_index?: number): void {
+export function checkAttribValue(fn_name: string, attrib_value: any, idx_or_key?: number|string): void {
     // -- check defined index
-    if (attrib_index !== null && attrib_index !== undefined) {
+    if (typeof idx_or_key === 'number') {
         // check if index is number
-        TypeCheckObj.isNumber(fn_name, 'attrib_index', attrib_index);
+        TypeCheckObj.isNumber(fn_name, 'attrib_index', idx_or_key);
         // this is an item in a list, the item value can be any
+    } if (typeof idx_or_key === 'string') {
+        // check if index is number
+        TypeCheckObj.isString(fn_name, 'attrib_key', idx_or_key);
+        // this is an item in an object, the item value can be any
     } else {
         // check sting, number, string[], number[]
         checkCommTypes(fn_name, 'attrib_value', attrib_value,
-            [TypeCheckObj.isString, TypeCheckObj.isNumber, TypeCheckObj.isNull, TypeCheckObj.isList]);
+            [TypeCheckObj.isString, TypeCheckObj.isNumber, TypeCheckObj.isBoolean, 
+                TypeCheckObj.isNull, TypeCheckObj.isList, TypeCheckObj.isDict]);
     }
 }
 
@@ -182,9 +187,23 @@ export class TypeCheckObj {
         isNullArg(fn_name, arg_name, arg);
         return;
     }
+    // dict
+    static isDict(fn_name: string, arg_name: string, arg: string): void {
+        isDictArg(fn_name, arg_name, arg, 'any');
+        return;
+    }
     // list
     static isList(fn_name: string, arg_name: string, arg: string): void {
         isListArg(fn_name, arg_name, arg, 'any');
+        return;
+    }
+    // booleans
+    static isBoolean(fn_name: string, arg_name: string, arg: string): void {
+        isBooleanArg(fn_name, arg_name, arg, 'boolean');
+        return;
+    }
+    static isBooleanList(fn_name: string, arg_name: string, arg_list: string[]): void {
+        isBooleanListArg(fn_name, arg_name, arg_list, 'boolean');
         return;
     }
     // strings
@@ -479,6 +498,13 @@ export function checkIDnTypes(fn_name: string, arg_name: string, arg: any, check
 // =====================================================================================================================
 // util
 // =====================================================================================================================
+// Dict
+function isDictArg(fn_name: string, arg_name: string, arg: any, typ: string): void {
+    if (Array.isArray(arg) || typeof arg !== 'object') {
+        throw new Error (fn_name + ': ' + arg_name + ' is not a dict');
+    }
+    return;
+}
 // List
 function isListArg(fn_name: string, arg_name: string, arg: any, typ: string): void {
     if (!Array.isArray(arg)) {
@@ -503,6 +529,20 @@ function isAnyArg(fn_name: string, arg_name: string, arg: any): void {
 function isNullArg(fn_name: string, arg_name: string, arg: any): void {
     if (arg !== null) {
         throw new Error(fn_name + ': ' + arg_name + ' is not null');
+    }
+    return;
+}
+// Boolean
+function isBooleanArg(fn_name: string, arg_name: string, arg: any, typ: string): void {
+    if (typeof arg !== 'boolean') {
+        throw new Error(fn_name + ': ' + arg_name + ' is not a ' + typ);
+    }
+    return;
+}
+function isBooleanListArg(fn_name: string, arg_name: string, arg_list: any[], typ: string): void {
+    isListArg(fn_name, arg_name, arg_list, typ);
+    for (let i = 0; i < arg_list.length; i++) {
+        isBooleanArg(fn_name, arg_name + '[' + i + ']', arg_list[i], typ);
     }
     return;
 }

@@ -62,9 +62,6 @@ export class GIModel {
      *
      * Polygons must have the vertices in the same order, and starting at the same position.
      *
-     * TODO: implement model attributes, need to compare values
-     * TODO: implement parents of collections
-     *
      * @param model The model to compare with.
      */
     public compare(model: GIModel, normalize: boolean, check_geom_equality: boolean, check_attrib_equality: boolean):
@@ -86,7 +83,10 @@ export class GIModel {
             model.normalize();
         }
         // compare the actual data
-        this.compareData(model, result);
+        const idx_maps: [Map<EEntType, Map<number, number>>, Map<EEntType, Map<number, number>>] =
+            this.compareObjs(model, result);
+        this.compareColls(model, result, idx_maps);
+        this.compareModelAttribs(model, result);
         // Add a final msg
         if (result.score === result.total) {
             result.comment = ['RESULT: The two models match.'];
@@ -199,20 +199,11 @@ export class GIModel {
     // Private methods for fingerprinting
     // ============================================================================
     /**
-     * Compare the data in two models. Check that this model is a subset of the other model.
-     * So if this is being used to check if the model submitted by a student is the correct answer,
-     * then this model is the answer, and the student model is the other model
-     * This method will check that every entity in this model also exists in the other model.
-     * This means that the student answer (the other model) can conrain additional data and still get
-     * a full score.
-     * ~
-     * This will return a score, indicating how similar the models are.
-     * ~
-     * For the compareData method, total score is equal to number of points, plines, pgons and collections
+     * Compare the objects
      */
-    private compareData(other_model: GIModel,
-            result: {score: number, total: number, comment: any[]}): void {
-        result.comment.push('Comparing model data.');
+    private compareObjs(other_model: GIModel, result: {score: number, total: number, comment: any[]}): 
+            [Map<EEntType, Map<number, number>>, Map<EEntType, Map<number, number>>] {
+        result.comment.push('Comparing objects in the two models.');
         const data_comments: string [] = [];
         // set attrib names to check when comparing objects and collections
         const attrib_names: Map<EEntType, string[]> = new Map();
@@ -222,9 +213,6 @@ export class GIModel {
         }
         if (this.attribs.query.hasAttrib(EEntType.PGON, 'material')) {
             attrib_names.set(EEntType.PGON, ['material']);
-            const pgons_i: number[] = this.geom.query.getEnts(EEntType.PGON, false);
-            const mat_names: Set<string> = new Set(this.attribs.query.getAttribVal(EEntType.PGON, 'material', pgons_i) as string[]);
-            attrib_names.set(EEntType.MOD, Array.from(mat_names));
         }
         // points, polylines, polygons
         const obj_ent_types: EEntType[] = [EEntType.POINT, EEntType.PLINE, EEntType.PGON];
@@ -271,7 +259,6 @@ export class GIModel {
                 }
             }
             if (num_objs_not_found > 0) {
-                const marks_added: number = this_fingerprints.length - num_objs_not_found;
                 data_comments.push('Mismatch: ' + num_objs_not_found + ' ' +
                     obj_ent_type_strs.get(obj_ent_type) + ' entities could not be found.');
             } else {
@@ -279,10 +266,27 @@ export class GIModel {
                     obj_ent_type_strs.get(obj_ent_type) + ' entities have been found.');
             }
         }
+        // return result
+        result.comment.push(data_comments);
+        // return the maps, needed for comparing collections
+        return [this_to_com_idx_maps, other_to_com_idx_maps];
+    }
+    /**
+     * Compare the collections
+     */
+    private compareColls(other_model: GIModel, result: {score: number, total: number, comment: any[]},
+            idx_maps: [Map<EEntType, Map<number, number>>, Map<EEntType, Map<number, number>>]): void {
+        result.comment.push('Comparing collections in the two models.');
+        const data_comments: string [] = [];
+        // set attrib names to check when comparing objects and collections
+        const attrib_names: string[] = []; // no attribs to check
+        // get the maps
+        const this_to_com_idx_maps: Map<EEntType, Map<number, number>> = idx_maps[0];
+        const other_to_com_idx_maps: Map<EEntType, Map<number, number>> = idx_maps[1];
         // compare collections
-        const this_colls_fingerprints: string[] = this.getCollFingerprints(this_to_com_idx_maps, attrib_names.get(EEntType.COLL));
+        const this_colls_fingerprints: string[] = this.getCollFingerprints(this_to_com_idx_maps, attrib_names);
         // console.log('this_colls_fingerprints:', this_colls_fingerprints);
-        const other_colls_fingerprints: string[] = other_model.getCollFingerprints(other_to_com_idx_maps, attrib_names.get(EEntType.COLL));
+        const other_colls_fingerprints: string[] = other_model.getCollFingerprints(other_to_com_idx_maps, attrib_names);
         // console.log('other_colls_fingerprints:', other_colls_fingerprints);
         // check that every collection in this model also exists in the other model
         let num_colls_not_found = 0;
@@ -305,36 +309,49 @@ export class GIModel {
         if (result.score === result.total) {
             data_comments.push('Match: The model contains all required entities and collections.');
         }
-        // compare model attributes
-        const this_mod_attrib_names: string[] = attrib_names.get(EEntType.MOD);
-        if (this_mod_attrib_names !== undefined) {
-            for (const this_mod_attrib_name of this_mod_attrib_names) {
-                // increment the total by 1
-                result.total += 1;
-                // check if there is a match
-                if (other_model.attribs.query.hasModelAttrib(this_mod_attrib_name)) {
-                    const this_value: TAttribDataTypes = this.attribs.query.getModelAttribVal(this_mod_attrib_name);
-                    const other_value: TAttribDataTypes = other_model.attribs.query.getModelAttribVal(this_mod_attrib_name);
-                    const this_value_fp: string = this.getAttribValFingerprint(this_value);
-                    const other_value_fp: string = this.getAttribValFingerprint(other_value);
-                    if (this_value_fp === other_value_fp) {
-                        // correct, so increment the score by 1
-                        result.score += 1;
-                    } else {
-                        data_comments.push('Mismatch: the value for model attribute "' + this_mod_attrib_name + '" is incorrect.');
-                    }
-                } else {
-                    data_comments.push('Mismatch: model attribute "' + this_mod_attrib_name + '" not be found.');
+        // return result
+        result.comment.push(data_comments);
+    }
+    /**
+     * Compare the model attribs
+     */
+    private compareModelAttribs(other_model: GIModel, result: {score: number, total: number, comment: any[]}): void {
+        result.comment.push('Comparing model attributes in the two models.');
+        const data_comments: string [] = [];
+        // set attrib names to check when comparing objects and collections
+        const attrib_names: string[] = [];
+        if (this.attribs.query.hasAttrib(EEntType.PGON, 'material')) {
+            const pgons_i: number[] = this.geom.query.getEnts(EEntType.PGON, false);
+            const mat_names: Set<string> = new Set(this.attribs.query.getAttribVal(EEntType.PGON, 'material', pgons_i) as string[]);
+            for (const mat_name of Array.from(mat_names)) {
+                if (mat_name !== undefined) {
+                    attrib_names.push(mat_name);
                 }
+            }
+        }
+        // compare model attributes
+        for (const this_mod_attrib_name of attrib_names) {
+            // increment the total by 1
+            result.total += 1;
+            // check if there is a match
+            if (other_model.attribs.query.hasModelAttrib(this_mod_attrib_name)) {
+                const this_value: TAttribDataTypes = this.attribs.query.getModelAttribVal(this_mod_attrib_name);
+                const other_value: TAttribDataTypes = other_model.attribs.query.getModelAttribVal(this_mod_attrib_name);
+                const this_value_fp: string = this.getAttribValFingerprint(this_value);
+                const other_value_fp: string = this.getAttribValFingerprint(other_value);
+                if (this_value_fp === other_value_fp) {
+                    // correct, so increment the score by 1
+                    result.score += 1;
+                } else {
+                    data_comments.push('Mismatch: the value for model attribute "' + this_mod_attrib_name + '" is incorrect.');
+                }
+            } else {
+                data_comments.push('Mismatch: model attribute "' + this_mod_attrib_name + '" not be found.');
             }
         }
         // add a comment if everything matches
         if (result.score === result.total) {
             data_comments.push('Match: The model conatins all required model attributes.');
-        }
-        // add a final comment if everything matches
-        if (result.score === result.total) {
-            data_comments.push('Match: Everything matches.');
         }
         // return result
         result.comment.push(data_comments);

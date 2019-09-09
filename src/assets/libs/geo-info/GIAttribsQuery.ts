@@ -36,7 +36,7 @@ export class GIAttribsQuery {
     public getAttribDataType(ent_type: EEntType, name: string): EAttribDataTypeStrs {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap>|Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
-        if (attribs.get(name) === undefined) { throw new Error('Attribute with this name does not exist.'); }
+        if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
         if (ent_type === EEntType.MOD) {
             const mod_attribs: Map<string, TAttribDataTypes> = attribs as Map<string, TAttribDataTypes>;
             const value: TAttribDataTypes = mod_attribs.get(name);
@@ -66,7 +66,7 @@ export class GIAttribsQuery {
     public getAttribDataLength(ent_type: EEntType, name: string): number {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap>|Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
-        if (attribs.get(name) === undefined) { throw new Error('Attribute with this name does not exist.'); }
+        if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
         if (ent_type === EEntType.MOD) {
             const mod_attribs: Map<string, TAttribDataTypes> = attribs as Map<string, TAttribDataTypes>;
             const value: TAttribDataTypes = mod_attribs.get(name);
@@ -97,7 +97,7 @@ export class GIAttribsQuery {
     /**
      * Get a model attrib list value given an index
      * ~
-     * If this attribute is not a list, it will return null
+     * If this attribute is not a list, throw error
      * ~
      * If idx is creater than the length of the list, undefined is returned.
      * ~
@@ -108,16 +108,16 @@ export class GIAttribsQuery {
         const attribs_maps_key: string = EEntTypeStr[EEntType.MOD];
         const attribs: Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
         const list_value: TAttribDataTypes = attribs.get(name);
-        if (list_value === undefined) { return null; }
-        if (!Array.isArray(list_value)) { return null; }
+        if (list_value === undefined) { throw new Error('Attribute does not exist.'); }
+        if (!Array.isArray(list_value)) { throw new Error('Attribute is not a list.'); }
         return list_value[idx];
     }
     /**
      * Get a model attrib dict value given a key
      * ~
-     * If this attribute is not a dict, it will return null
+     * If this attribute is not a dict, throw error
      * ~
-     * If key does not exist, undefined is returned.
+     * If key does not exist, throw error
      * ~
      * @param ent_type
      * @param name
@@ -126,13 +126,15 @@ export class GIAttribsQuery {
         const attribs_maps_key: string = EEntTypeStr[EEntType.MOD];
         const attribs: Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
         const dict_value: TAttribDataTypes = attribs.get(name);
-        if (dict_value === undefined) { return null; }
-        if (Array.isArray(dict_value) || typeof dict_value !== 'object') { return null; }
+        if (dict_value === undefined) { throw new Error('Attribute does not exist.'); }
+        if (Array.isArray(dict_value) || typeof dict_value !== 'object') { throw new Error('Attribute is not a dict.'); }
         return dict_value[key];
     }
     /**
-     * Get an entity attrib value.
-     * If the attribute does not exist, return null.
+     * Get an entity attrib value, or an array of values given an array of entities.
+     * 
+     * If the attribute does not exist, throw an error
+     * 
      * @param ent_type
      * @param name
      */
@@ -140,13 +142,13 @@ export class GIAttribsQuery {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         const attrib: GIAttribMap = attribs.get(name);
-        if (attrib === undefined) { return null; }
+        if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
         return attrib.getEntVal(ents_i);
     }
     /**
      * Get an entity attrib value in a list.
      * ~
-     * If the attribute does not exist, return undefined.
+     * If the attribute does not exist, throw error
      * ~
      * If the index is out of range, return undefined.
      * ~
@@ -157,13 +159,13 @@ export class GIAttribsQuery {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         const attrib: GIAttribMap = attribs.get(name);
-        if (attrib === undefined) { return undefined; }
+        if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
         return attrib.getEntListIdxVal(ents_i, idx);
     }
         /**
      * Get an entity attrib value in a dictionary.
      * ~
-     * If the attribute does not exist, return undefined.
+     * If the attribute does not exist, throw error
      * ~
      * If the key does not exist, return undefined.
      * ~
@@ -174,7 +176,7 @@ export class GIAttribsQuery {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         const attrib: GIAttribMap = attribs.get(name);
-        if (attrib === undefined) { return undefined; }
+        if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
         return attrib.getEntDictKeyVal(ents_i, key);
     }
     /**

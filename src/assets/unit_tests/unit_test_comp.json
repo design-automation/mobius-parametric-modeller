@@ -62,7 +62,7 @@
             "check_attrib_equality":false,
             "url1" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_tests/compare/comp_win_1.mob",
             "url2" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_tests/compare/comp_win_2.mob",
-            "percent": 92
+            "percent": 100
         }
     ],
     "unused": [

@@ -277,7 +277,9 @@ export class GIAttribMap {
     }
     /**
      * Gets the value for a given entity, or an array of values given an array of entities.
-     * Returns undefined if the entity does not exist
+     * ~
+     * Returns undefined if the entity does not exist in this map.
+     * ~
      * @param ent_i
      */
     public getEntVal(ents_i: number|number[]): TAttribDataTypes {
@@ -297,6 +299,9 @@ export class GIAttribMap {
      * @param ent_i
      */
     public getEntListIdxVal(ents_i: number|number[], idx: number): any {
+        if (this._data_type !== EAttribDataTypeStrs.LIST) {
+            throw new Error('Trying to get indexed value, but the attribute data type is not a list.');
+        }
         if (!Array.isArray(ents_i)) {
             const ent_i: number = ents_i as number;
             const exist_value_arr: any[] = this.getEntVal(ent_i) as any[];
@@ -312,6 +317,9 @@ export class GIAttribMap {
      * @param ent_i
      */
     public getEntDictKeyVal(ents_i: number|number[], key: string): any {
+        if (this._data_type !== EAttribDataTypeStrs.DICT) {
+            throw new Error('Trying to get key value, but the attribute data type is not a dict.');
+        }
         if (!Array.isArray(ents_i)) {
             const ent_i: number = ents_i as number;
             const exist_value_arr: any[] = this.getEntVal(ent_i) as any[];

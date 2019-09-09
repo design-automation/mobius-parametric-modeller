@@ -34,6 +34,7 @@ function mergeInputs(models){
 export const printFunc = `
 function printFunc(_console, name, value){
     let val;
+    let padding_style = 'padding: 2px 0px 2px 10px;';
     if (!value) {
         val = value;
     } else if (typeof value === 'number' || value === undefined) {
@@ -41,13 +42,44 @@ function printFunc(_console, name, value){
     } else if (typeof value === 'string') {
         val = '"' + value.replace(/\\n/g, '<br>') + '"';
     } else if (value.constructor === [].constructor) {
-        val = JSON.stringify(value).replace(/,/g, ', ');
+        let __list_check__ = false;
+        let __value_strings__ = [];
+        for (const __item__ of value) {
+            if (__item__.constructor === [].constructor || __item__.constructor === {}.constructor) {
+                __list_check__ = true;
+            }
+            __value_strings__.push(JSON.stringify(__item__).replace(/,/g, ', '));
+        }
+        if (__list_check__) {
+            padding_style = 'padding: 2px 0px 0px 10px;';
+            val = '[<p style="padding: 0px 0px 2px 40px;">' +
+                  __value_strings__.join(',</p><p style="padding: 0px 0px 2px 40px;">') +
+                  '</p><p style="padding: 0px 0px 2px 30px;">]</p>';
+        } else {
+            val = '[' + __value_strings__.join(', ') + ']';
+        }
     } else if (value.constructor === {}.constructor) {
-        val = JSON.stringify(value).replace(/,/g, ', ');
+        let __list_check__ = false;
+        let __value_strings__ = [];
+        for (const __item__ in value) {
+            const __value__ = value[__item__];
+            if (__value__.constructor === [].constructor || __value__.constructor === {}.constructor) {
+                __list_check__ = true;
+            }
+            __value_strings__.push('\\"' + __item__ + '\\"' + ': ' + JSON.stringify(__value__).replace(/,/g, ', '));
+        }
+        if (__list_check__) {
+            padding_style = 'padding: 2px 0px 0px 10px;';
+            val = '{<p style="padding: 0px 0px 2px 40px;">' +
+                  __value_strings__.join(',</p><p style="padding: 0px 0px 2px 40px;">') +
+                  '</p><p style="padding: 0px 0px 2px 30px;">}</p>';
+        } else {
+            val = '{' + __value_strings__.join(', ') + '}';
+        }
     } else {
         val = value;
     }
-    _console.push('<p style="padding: 2px 0px 2px 10px;"><b><i>_ ' + name+':</i></b>  ' + val + '</p>');
+    _console.push('<p style="' + padding_style + '"><b><i>_ ' + name+':</i></b> ' + val + '</p>');
     return val;
 }
 `;

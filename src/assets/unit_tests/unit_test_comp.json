@@ -1,0 +1,71 @@
+{
+    "test_data":[
+        {
+            "normalize":true,
+            "check_geom_equality":true,
+            "check_attrib_equality":true,
+            "url1" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_tests/compare/pgon_with_holes1.mob",
+            "url2" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_tests/compare/pgon_with_holes2.mob",
+            "percent": 100
+        },
+        {
+            "normalize":true,
+            "check_geom_equality":true,
+            "check_attrib_equality":true,
+            "url1" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_tests/compare/pgon_edge_order_pline_dir1.mob",
+            "url2" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_tests/compare/pgon_edge_order_pline_dir2.mob",
+            "percent": 100
+        },
+        {
+            "normalize":true,
+            "check_geom_equality":false,
+            "check_attrib_equality":false,
+            "url1" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_tests/compare/stairs_subset1.mob",
+            "url2" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_tests/compare/stairs_subset2.mob",
+            "percent": 100
+        },
+        {
+            "normalize":true,
+            "check_geom_equality":false,
+            "check_attrib_equality":false,
+            "url1" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_tests/compare/stairs_subset2.mob",
+            "url2" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_tests/compare/stairs_subset1.mob",
+            "percent": 50
+        },
+        {
+            "normalize":true,
+            "check_geom_equality":false,
+            "check_attrib_equality":false,
+            "url1" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_tests/compare/pgon_with_holes1.mob",
+            "url2" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_tests/compare/pgon_edge_order_pline_dir1.mob",
+            "percent": 0
+        },
+        {
+            "normalize":true,
+            "check_geom_equality":true,
+            "check_attrib_equality":false,
+            "url1" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_tests/compare/colls_with_attribs1.mob",
+            "url2" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_tests/compare/colls_with_attribs2.mob",
+            "percent": 92
+        },
+        {
+            "normalize":true,
+            "check_geom_equality":true,
+            "check_attrib_equality":false,
+            "url1" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_tests/compare/colls_with_attribs2.mob",
+            "url2" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_tests/compare/colls_with_attribs1.mob",
+            "percent": 92
+        },
+        {
+            "normalize":true,
+            "check_geom_equality":true,
+            "check_attrib_equality":false,
+            "url1" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_tests/compare/comp_win_1.mob",
+            "url2" : "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/unit_tests/compare/comp_win_2.mob",
+            "percent": 100
+        }
+    ],
+    "unused": [
+        
+    ]
+}

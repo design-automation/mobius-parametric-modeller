@@ -114,7 +114,7 @@ function _createProjection(model: GIModel, geojson_obj: any): proj4.Converter {
         let longitude = LONGLAT[0];
         let latitude = LONGLAT[1];
         if (model.attribs.query.hasModelAttrib('longitude')) {
-            const long_value: TAttribDataTypes  = model.attribs.query.getModelAttribValue('longitude');
+            const long_value: TAttribDataTypes  = model.attribs.query.getModelAttribVal('longitude');
             if (typeof long_value !== 'number') {
                 throw new Error('Longitude attribute must be a number.');
             }
@@ -124,7 +124,7 @@ function _createProjection(model: GIModel, geojson_obj: any): proj4.Converter {
             }
         }
         if (model.attribs.query.hasModelAttrib('latitude')) {
-            const lat_value: TAttribDataTypes = model.attribs.query.getModelAttribValue('latitude');
+            const lat_value: TAttribDataTypes = model.attribs.query.getModelAttribVal('latitude');
             if (typeof lat_value !== 'number') {
                 throw new Error('Latitude attribute must be a number');
             }
@@ -366,7 +366,7 @@ function _addAttribsToModel(model: GIModel, ent_type: EEntType, ent_i: number, f
         if (value_type === 'object') {
             value = JSON.stringify(value);
         }
-        model.attribs.add.setAttribValue(ent_type, ent_i, name, value);
+        model.attribs.add.setAttribVal(ent_type, ent_i, name, value);
     }
 }
 

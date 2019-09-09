@@ -120,61 +120,6 @@ function _get(__model__: GIModel, ent_type: EEntType, ents_arr: TEntTypeIdx[]|TE
 }
 // ================================================================================================
 /**
- * Returns a list of entities that are not part of the specified entities.
- * For example, you can get the position entities that are not part of a list of polygon entities.
- * ~
- * This function does the opposite of query.Get().
- * While query.Get() gets entities that are part of of the list of entities,
- * this function gets the entities that are not part of the list of entities.
- * ~
- * @param __model__
- * @param ent_type_enum Enum, specifies what type of entities will be returned.
- * @param entities List of entities to be excluded.
- * @returns Entities, a list of entities that match the type specified in 'ent_type_enum', and that are not in entities.
- * @example positions = query.Invert('positions', [polyline1, polyline2])
- * @example_info Returns a list of positions that are not part of polyline1 and polyline2.
- */
-export function Invert(__model__: GIModel, ent_type_enum: _EEntTypeEnum, entities: TId|TId[]): TId[] {
-    if (isEmptyArr(entities)) { return []; }
-    // --- Error Check ---
-    let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
-    if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs('query.Invert', 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
-    }
-    // --- Error Check ---
-    const select_ent_types: EEntType|EEntType[] = _entType(ent_type_enum);
-    const found_ents_arr: TEntTypeIdx[] = _invert(__model__, select_ent_types, ents_arr);
-    return idsMake(found_ents_arr) as TId[];
-}
-function _invert(__model__: GIModel, select_ent_types: EEntType|EEntType[], ents_arr: TEntTypeIdx|TEntTypeIdx[]): TEntTypeIdx[] {
-    if (!Array.isArray(select_ent_types)) {
-        const select_ent_type: EEntType = select_ent_types as EEntType;
-        // get the ents to exclude
-        if (!Array.isArray(ents_arr[0])) { ents_arr = [ents_arr] as TEntTypeIdx[]; }
-        const excl_ents_i: number[] = (ents_arr as TEntTypeIdx[])
-            .filter(ent_arr => ent_arr[0] === select_ent_type).map(ent_arr => ent_arr[1]);
-        // get the list of entities
-        const found_entities_i: number[] = [];
-        const ents_i: number[] = __model__.geom.query.getEnts(select_ent_type, false);
-        for (const ent_i of ents_i) {
-            if (excl_ents_i.indexOf(ent_i) === -1) { found_entities_i.push(ent_i); }
-        }
-        return found_entities_i.map( entity_i => [select_ent_type, entity_i]) as TEntTypeIdx[];
-    } else {
-        const query_results_arr: TEntTypeIdx[] = [];
-        for (const select_ent_type of select_ent_types) {
-            const ent_type_query_results: TEntTypeIdx[] = _invert(__model__, select_ent_type, ents_arr);
-            for (const query_result of ent_type_query_results) {
-                query_results_arr.push(query_result);
-            }
-        }
-        return query_results_arr;
-    }
-}
-
-// ================================================================================================
-/**
  * Filter entities based on a query.
  * ~
  * The result will always be a list of entities, even if there is only one entity.
@@ -192,7 +137,7 @@ function _invert(__model__: GIModel, select_ent_types: EEntType|EEntType[], ents
  * If the attribute value is a list, then a list index can be used, e.g.: ps#@xyz[2] > 10.
  * ~
  * @param __model__
- * @param entities Optional, list of entities to filter, or null..
+ * @param entities List of entities to filter, or null..
  * @param name The attribute name to use for filtering.
  * @param index Optional, attribute index to use for filtering (for attributes that are lists), or null to filter all entities the model.
  * @param operator_enum Enum, the operator to use for filtering
@@ -282,6 +227,60 @@ function _filter(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][],
 }
 // ================================================================================================
 /**
+ * Returns a list of entities that are not part of the specified entities.
+ * For example, you can get the position entities that are not part of a list of polygon entities.
+ * ~
+ * This function does the opposite of query.Get().
+ * While query.Get() gets entities that are part of of the list of entities,
+ * this function gets the entities that are not part of the list of entities.
+ * ~
+ * @param __model__
+ * @param ent_type_enum Enum, specifies what type of entities will be returned.
+ * @param entities List of entities to be excluded.
+ * @returns Entities, a list of entities that match the type specified in 'ent_type_enum', and that are not in entities.
+ * @example positions = query.Invert('positions', [polyline1, polyline2])
+ * @example_info Returns a list of positions that are not part of polyline1 and polyline2.
+ */
+export function Invert(__model__: GIModel, ent_type_enum: _EEntTypeEnum, entities: TId|TId[]): TId[] {
+    if (isEmptyArr(entities)) { return []; }
+    // --- Error Check ---
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
+    if (entities !== null && entities !== undefined) {
+        ents_arr = checkIDs('query.Invert', 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+    }
+    // --- Error Check ---
+    const select_ent_types: EEntType|EEntType[] = _entType(ent_type_enum);
+    const found_ents_arr: TEntTypeIdx[] = _invert(__model__, select_ent_types, ents_arr);
+    return idsMake(found_ents_arr) as TId[];
+}
+function _invert(__model__: GIModel, select_ent_types: EEntType|EEntType[], ents_arr: TEntTypeIdx|TEntTypeIdx[]): TEntTypeIdx[] {
+    if (!Array.isArray(select_ent_types)) {
+        const select_ent_type: EEntType = select_ent_types as EEntType;
+        // get the ents to exclude
+        if (!Array.isArray(ents_arr[0])) { ents_arr = [ents_arr] as TEntTypeIdx[]; }
+        const excl_ents_i: number[] = (ents_arr as TEntTypeIdx[])
+            .filter(ent_arr => ent_arr[0] === select_ent_type).map(ent_arr => ent_arr[1]);
+        // get the list of entities
+        const found_entities_i: number[] = [];
+        const ents_i: number[] = __model__.geom.query.getEnts(select_ent_type, false);
+        for (const ent_i of ents_i) {
+            if (excl_ents_i.indexOf(ent_i) === -1) { found_entities_i.push(ent_i); }
+        }
+        return found_entities_i.map( entity_i => [select_ent_type, entity_i]) as TEntTypeIdx[];
+    } else {
+        const query_results_arr: TEntTypeIdx[] = [];
+        for (const select_ent_type of select_ent_types) {
+            const ent_type_query_results: TEntTypeIdx[] = _invert(__model__, select_ent_type, ents_arr);
+            for (const query_result of ent_type_query_results) {
+                query_results_arr.push(query_result);
+            }
+        }
+        return query_results_arr;
+    }
+}
+// ================================================================================================
+/**
  * Sorts entities based on a sort expression.
  * ~
  * The sort expression should use the following format: #@name, where 'name' is the attribute name.
@@ -292,27 +291,27 @@ function _filter(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][],
  * @param __model__
  * @param entities List of two or more entities to be sorted, all of the same entity type.
  * @param name Attribute name to use for sorting.
- * @param index Optional, attribute index to use for sorting (for attributes that are lists), or null.
+ * @param idx_or_key Optional, attribute index to use for sorting (for attributes that are lists), or null.
  * @param method_enum Enum, sort descending or ascending.
  * @returns Entities, a list of sorted entities.
  * @example sorted_list = query.Sort( [pos1, pos2, pos3], #@xyz[2], descending)
  * @example_info Returns a list of three positions, sorted according to the descending z value.
  */
-export function Sort(__model__: GIModel, entities: TId[], name: string, index: number, method_enum: _ESortMethod): TId[] {
+export function Sort(__model__: GIModel, entities: TId[], name: string, idx_or_key: number|string, method_enum: _ESortMethod): TId[] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const ents_arr = checkIDs('query.Sort', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
     // TODO check the sort expression
     // --- Error Check ---
     const sort_method: ESort = (method_enum === _ESortMethod.DESCENDING) ? ESort.DESCENDING : ESort.ASCENDING;
-    const sorted_ents_arr: TEntTypeIdx[] = _sort(__model__, ents_arr, name, index, sort_method);
+    const sorted_ents_arr: TEntTypeIdx[] = _sort(__model__, ents_arr, name, idx_or_key, sort_method);
     return idsMake(sorted_ents_arr) as TId[];
 }
 export enum _ESortMethod {
     DESCENDING = 'descending',
     ASCENDING = 'ascending'
 }
-function _sort(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: string, attrib_index: number, method: ESort): TEntTypeIdx[] {
+function _sort(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: string, idx_or_key: number|string, method: ESort): TEntTypeIdx[] {
     // get the list of ents_i
     const ent_type: EEntType = ents_arr[0][0];
     const ents_i: number[] = ents_arr.filter( ent_arr => ent_arr[0] === ent_type ).map( ent_arr => ent_arr[1] );
@@ -324,7 +323,7 @@ function _sort(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: string,
         return ents_arr_copy;
     }
     // do the sort on the list of entities
-    const sort_result: number[] = __model__.attribs.query.sortByAttribs(ent_type, ents_i, attrib_name, attrib_index, method);
+    const sort_result: number[] = __model__.attribs.query.sortByAttribs(ent_type, ents_i, attrib_name, idx_or_key, method);
     return sort_result.map( entity_i => [ent_type, entity_i]) as TEntTypeIdx[];
 }
 function _compareID(id1: TEntTypeIdx, id2: TEntTypeIdx): number {
@@ -334,8 +333,6 @@ function _compareID(id1: TEntTypeIdx, id2: TEntTypeIdx): number {
     if (index1 !== index2) { return index1 -  index2; }
     return 0;
 }
-
-
 // ================================================================================================
 /**
 * Returns a list of perimeter entities. In order to qualify as a perimeter entity,

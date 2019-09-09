@@ -54,10 +54,13 @@
 )  
   
 ## Collection  
-* **Description:** Adds one or more new collections to the model.  
+* **Description:** Adds one or more new collections to the model.
+~
+If the list of entities contains other collections, these other collections will then become
+children of the new collection that will be created.
+~  
 * **Parameters:**  
-  * *parent_coll:* Optional, collection, the parent collection or null.  
-  * *entities:* List or nested lists of points, polylines, polygons.  
+  * *entities:* List or nested lists of points, polylines, polygons, and other colletions.  
 * **Returns:** Entities, new collection, or a list of new collections.  
 * **Examples:**  
   * collection1 = make.Collection([point1,polyine1,polygon1])  

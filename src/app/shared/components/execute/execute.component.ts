@@ -104,10 +104,13 @@ export class ExecuteComponent {
                         if (backup_list.indexOf(val) !== -1) {
                             const result = await SaveFileComponent.loadFromFileSystem(val);
                             if (!result || result === 'error') {
-                                prod.resolvedValue = arg.value;
+                                throw(new Error(`File named ${val} does not exist in the local storage`));
+                                // prod.resolvedValue = arg.value;
                             } else {
                                 prod.resolvedValue = '`' + result + '`';
                             }
+                        } else {
+                            throw(new Error(`File named ${val} does not exist in the local storage`));
                         }
                     }
                     break;
@@ -144,7 +147,7 @@ export class ExecuteComponent {
                 this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
                 document.getElementById('spinner-off').click();
                 document.getElementById('Console').click();
-                this.dataService.log(ex.message);
+                this.dataService.log(`<h4 style="padding: 2px 0px 2px 0px; color:red;">Error: ${ex.message}</h4>`);
                 const _category = this.isDev ? 'dev' : 'execute';
                 this.googleAnalyticsService.trackEvent(_category, `error: ${ex.name}`, 'click', performance.now() - this.startTime);
                 throw ex;
@@ -174,7 +177,7 @@ export class ExecuteComponent {
                             const _category = this.isDev ? 'dev' : 'execute';
                             this.googleAnalyticsService.trackEvent(_category, `error: Reserved Word Argument`,
                                 'click', performance.now() - this.startTime);
-                            this.dataService.log(ex.message);
+                            this.dataService.log(`<h4 style="padding: 2px 0px 2px 0px; color:red;">Error: ${ex.message}</h4>`);
                             throw(ex);
                         }
                         InvalidECheck = true;
@@ -499,6 +502,7 @@ export class ExecuteComponent {
             // for (const str of params.console) {
             //     this.dataService.log(str);
             // }
+            document.getElementById('spinner-off').click();
             const endTime = performance.now();
             const duration: number = Math.round(endTime - startTime);
             let duration_msg: string;
@@ -510,7 +514,6 @@ export class ExecuteComponent {
             this.dataService.log(duration_msg);
             this.dataService.log('<br>');
             this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-            document.getElementById('spinner-off').click();
             if (DEBUG) {
                 this.dataService.log('\n=======================================\n' +
                     ex.name +

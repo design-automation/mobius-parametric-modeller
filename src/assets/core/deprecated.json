@@ -183,5 +183,15 @@
                 "data_target": "'Save to Hard Disk'"
             }
         }
+    },
+    {
+        "old_func": {
+            "name": "Collection",
+            "module": "make"
+        },
+        "new_func": {
+            "name": "Collection",
+            "module": "make"
+        }
     }
 ]

@@ -1,6 +1,6 @@
 import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz, TColl } from './common';
 import { GIGeom } from './GIGeom';
-import { arrRem, arrIdxAdd } from '../util/arrays';
+import { arrRem, arrIdxAdd } from '../util/arrs';
 import { vecDot } from '../geom/vectors';
 
 /**
@@ -560,7 +560,8 @@ export class GIGeomModify {
     /**
      * Reverse the edges of a wire.
      * This lists the edges in reverse order, and flips each edge.
-     * The attributes ... TODO
+     * ~
+     * The attributes will not be affected. So the order of edge attribtes will also become reversed.
      */
     public reverse(wire_i: number): void {
         const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
@@ -584,11 +585,29 @@ export class GIGeomModify {
     }
     /**
      * Shifts the edges of a wire.
-     * The attributes ... TODO
+     * ~
+     * The attributes will not be affected. For example, lets say a polygon has three edges
+     * e1, e2, e3, with attribute values 5, 6, 7
+     * If teh edges are shifted by 1, the edges will now be
+     * e2, e3, e1, withh attribute values 6, 7, 5
      */
     public shift(wire_i: number, offset: number): void {
         const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
         wire.unshift.apply( wire, wire.splice( offset, wire.length ) );
+    }
+    /**
+     * Set the holes in a face by specifying a list of wires.
+     * ~
+     * This is a low level method used by the compare function to normalize hole order.
+     * For making holes in faces, it is safer to use the cutFaceHoles method.
+     */
+    public setFaceHoles(face_i: number, holes_i: number[]): void {
+        const face: TFace = this._geom_arrays.dn_faces_wirestris[face_i];
+        const boundary_i: number = face[0][0];
+        face[0] = [boundary_i];
+        for (let i = 0; i < holes_i.length; i++) {
+            face[0][i + 1] = holes_i[i];
+        }
     }
     // ============================================================================
     // Private methods

@@ -247,7 +247,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 for (let i = 0; i < allLabels.length; i++) {
                     const element = allLabels[i];
                     const attr = Number(element.getAttribute('data-index'));
-                    const attr_val = this._data_threejs._model.attribs.query.getAttribValue(ent_type, attr_name, attr);
+                    const attr_val = this._data_threejs._model.attribs.query.getAttribVal(ent_type, attr_name, attr);
                     const _attr_val = attr_val !== undefined ? attr_val : '';
                     if (isArr && _attr_val !== '') {
                         const val = String(_attr_val).split(',')[key];

@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import * as OrbitControls from 'three-orbit-controls';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
-import { EEntTypeStr, EEntType } from '@assets/libs/geo-info/common';
+import { EEntTypeStr, EEntType } from '@libs/geo-info/common';
 import { Vector3 } from 'three';
 import { DataService } from '@services';
 import { Vector } from '@assets/core/modules/calc';
@@ -243,7 +243,7 @@ export class DataThreejs {
                 container.removeChild(old);
             }
             if (!this._model.attribs.query.hasAttrib(EEntType.MOD, 'hud')) { return; }
-            const hud = this._model.attribs.query.getModelAttribValue('hud') as string;
+            const hud = this._model.attribs.query.getModelAttribVal('hud') as string;
             const element = this._createHud(hud).element;
             container.appendChild(element);
             old = null;

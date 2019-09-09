@@ -131,7 +131,7 @@ export class GIAttribsThreejs {
         }
         // loop through all the attributes
         attribs.forEach( (attrib, attrib_name) => {
-            const data_size: number = attrib.getDataSize();
+            const data_size: number = attrib.getDataLength();
             for (const ent_i of ents_i) {
                 if (attrib_name.substr(0, 1) === '_' && attrib_name !== '_parent') {
                     const attrib_value = attrib.getEntVal(ent_i);
@@ -150,10 +150,16 @@ export class GIAttribsThreejs {
                             }
                         }
                     } else {
-                        if (attrib_name === 'xyz' && ent_type === EEntType.POSI && Array.isArray(attrib_value)) {
-                            data_obj_map.get(ent_i)['xyz[0]'] = attrib_value[0];
-                            data_obj_map.get(ent_i)['xyz[1]'] = attrib_value[1];
-                            data_obj_map.get(ent_i)['xyz[2]'] = attrib_value[2];
+                        if (ent_type === EEntType.POSI && Array.isArray(attrib_value)) {
+                            if (attrib_value.length < 4) {
+                                for (let index = 0; index < attrib_value.length; index++) {
+                                    const _v = Array.isArray(attrib_value[index]) ?
+                                    JSON.stringify(attrib_value[index]) : attrib_value[index];
+                                    data_obj_map.get(ent_i)[`${attrib_name}[${index}]`] = _v;
+                                }
+                            } else {
+                                data_obj_map.get(ent_i)[attrib_name] = JSON.stringify(attrib_value);
+                            }
                         } else {
                             const _attrib_value = isString(attrib_value) ? `'${attrib_value}'` : attrib_value;
                             data_obj_map.get(ent_i)[`${attrib_name}`] = _attrib_value;
@@ -186,9 +192,8 @@ export class GIAttribsThreejs {
             }
             i++;
         });
-
         attribs.forEach( (attrib, attrib_name) => {
-            const data_size: number = attrib.getDataSize();
+            const data_size: number = attrib.getDataLength();
             for (const ent_i of Array.from(selected_ents.values())) {
                 if (attrib_name.substr(0, 1) === '_') {
                     const attrib_value = attrib.getEntVal(ent_i);
@@ -206,10 +211,16 @@ export class GIAttribsThreejs {
                             }
                         }
                     } else {
-                        if (attrib_name === 'xyz' && ent_type === EEntType.POSI && Array.isArray(attrib_value)) {
-                            data_obj_map.get(ent_i)['xyz[0]'] = attrib_value[0];
-                            data_obj_map.get(ent_i)['xyz[1]'] = attrib_value[1];
-                            data_obj_map.get(ent_i)['xyz[2]'] = attrib_value[2];
+                        if (ent_type === EEntType.POSI && Array.isArray(attrib_value)) {
+                            if (attrib_value.length < 4) {
+                                for (let index = 0; index < attrib_value.length; index++) {
+                                    const _v = Array.isArray(attrib_value[index]) ?
+                                    JSON.stringify(attrib_value[index]) : attrib_value[index];
+                                    data_obj_map.get(ent_i)[`${attrib_name}[${index}]`] = _v;
+                                }
+                            } else {
+                                data_obj_map.get(ent_i)[attrib_name] = JSON.stringify(attrib_value);
+                            }
                         } else {
                             const _attrib_value = isString(attrib_value) ? `'${attrib_value}'` : attrib_value;
                             data_obj_map.get(ent_i)[`${attrib_name}`] = _attrib_value;
@@ -220,10 +231,16 @@ export class GIAttribsThreejs {
         });
         return Array.from(data_obj_map.values());
     }
-
+    /**
+     * TODO
+     * This is confusing... will this not always return the same, i.e. id = index
+     * @param ent_type
+     * @param id
+     */
     public getIdIndex(ent_type: EEntType, id: number) {
         const ents_i = this._model.geom.query.getEnts(ent_type, false);
         const index = ents_i.findIndex(ent_i => ent_i === id);
+        console.log("calling getIdIndex in GIATtribsThreejs", id, index);
         return index;
     }
 }

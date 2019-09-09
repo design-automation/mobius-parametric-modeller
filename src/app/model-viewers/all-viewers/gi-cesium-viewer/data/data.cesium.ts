@@ -1,6 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { CesiumSettings } from '../gi-cesium-viewer.settings';
-import { EEntType, Txyz, TAttribDataTypes, LONGLAT } from '@assets/libs/geo-info/common';
+import { EEntType, Txyz, TAttribDataTypes, LONGLAT } from '@libs/geo-info/common';
 // import { HereMapsImageryProvider } from './HereMapsImageryProvider.js';
 /**
  * Cesium data
@@ -126,7 +126,7 @@ export class DataCesium {
         let longitude = LONGLAT[0];
         let latitude = LONGLAT[1];
         if (model.attribs.query.hasModelAttrib('longitude')) {
-            const long_value: TAttribDataTypes  = model.attribs.query.getModelAttribValue('longitude');
+            const long_value: TAttribDataTypes  = model.attribs.query.getModelAttribVal('longitude');
             if (typeof long_value !== 'number') {
                 throw new Error('Longitude attribute must be a number.');
             }
@@ -136,7 +136,7 @@ export class DataCesium {
             }
         }
         if (model.attribs.query.hasModelAttrib('latitude')) {
-            const lat_value: TAttribDataTypes = model.attribs.query.getModelAttribValue('latitude');
+            const lat_value: TAttribDataTypes = model.attribs.query.getModelAttribVal('latitude');
             if (typeof lat_value !== 'number') {
                 throw new Error('Latitude attribute must be a number');
             }
@@ -178,7 +178,7 @@ export class DataCesium {
                     const verts_i: number[] = model.geom.query.navAnyToVert(EEntType.PGON, pgon_i);
                     const rgb_sum: Txyz = [0, 0, 0];
                     for (const vert_i of verts_i) {
-                        let vert_rgb: Txyz = model.attribs.query.getAttribValue(EEntType.VERT, 'rgb', vert_i) as Txyz;
+                        let vert_rgb: Txyz = model.attribs.query.getAttribVal(EEntType.VERT, 'rgb', vert_i) as Txyz;
                         if (!vert_rgb) { vert_rgb = [1, 1, 1]; }
                         rgb_sum[0] = rgb_sum[0] + vert_rgb[0];
                         rgb_sum[1] = rgb_sum[1] + vert_rgb[1];
@@ -243,7 +243,7 @@ export class DataCesium {
                     const verts_i: number[] = model.geom.query.navAnyToVert(EEntType.PLINE, pline_i);
                     const rgb_sum: Txyz = [0, 0, 0];
                     for (const vert_i of verts_i) {
-                        let vert_rgb: Txyz = model.attribs.query.getAttribValue(EEntType.VERT, 'rgb', vert_i) as Txyz;
+                        let vert_rgb: Txyz = model.attribs.query.getAttribVal(EEntType.VERT, 'rgb', vert_i) as Txyz;
                         if (!vert_rgb) { vert_rgb = [0, 0, 0]; }
                         rgb_sum[0] = rgb_sum[0] + vert_rgb[0];
                         rgb_sum[1] = rgb_sum[1] + vert_rgb[1];

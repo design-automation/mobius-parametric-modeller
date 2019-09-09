@@ -5,7 +5,6 @@ import { GIGeomModify } from './GIGeomModify';
 import { GIGeomQuery } from './GIGeomQuery';
 import { GIGeomThreejs } from './GIGeomThreejs';
 import { GIGeomIO } from './GIGeomIO';
-import { ArrayCamera } from 'three';
 
 /**
  * Class for geometry.
@@ -59,45 +58,48 @@ export class GIGeom {
     }
     /**
      * Compares this model and another model.
-     * @param model The model to compare with.
+     * ~
+     * The max total score for this method is equal to 5.
+     * It assigns 1 mark for for each entity type:
+     * points, pline, pgons, and colelctions.
+     * In each case, if the number of entities is equal, 1 mark is given.
+     * ~
+     * @param other_model The model to compare with.
      */
-    compare(model: GIModel, result: {matches: boolean, comment: any[]}): void {
+    compare(other_model: GIModel, result: {score: number, total: number, comment: any[]}): void {
         result.comment.push('Comparing number of geometric entities.');
-        const eny_type_array: EEntType[] = [
-            EEntType.POSI,
-            EEntType.VERT,
-            EEntType.EDGE,
-            EEntType.WIRE,
-            EEntType.FACE,
+        const eny_types: EEntType[] = [
             EEntType.POINT,
             EEntType.PLINE,
             EEntType.PGON,
             EEntType.COLL
         ];
-        const ent_type_strs: string[] = [
-            'positions',
-            'triangles',
-            'vertices',
-            'edges',
-            'wires',
-            'faces',
-            'points',
-            'polylines',
-            'polygons',
-            'collections'
-        ];
+        const ent_type_strs: Map<EEntType, string> = new Map([
+            [EEntType.POINT, 'points'],
+            [EEntType.PLINE, 'polylines'],
+            [EEntType.PGON, 'polygons'],
+            [EEntType.COLL, 'collections']
+        ]);
         const geom_comments: string[] = [];
-        for (const ent_type of eny_type_array) {
-            if (this.model.geom.query.numEnts(ent_type, false) !== model.geom.query.numEnts(ent_type, false)) {
-                result.matches = false;
-                geom_comments.push('Number of ' + ent_type_strs[ent_type] + ' do not match.');
+        for (const ent_type of eny_types) {
+            // total marks is not updated, we deduct marks
+            // get the number of entitoes in each model
+            const this_num_ents: number = this.model.geom.query.numEnts(ent_type, false);
+            const other_num_ents: number = other_model.geom.query.numEnts(ent_type, false);
+            if (this_num_ents > other_num_ents) {
+                geom_comments.push('Mismatch: Model has too many entities of type: ' + ent_type_strs.get(ent_type) + '.');
+                // update the score, deduct 1 mark
+                result.score -= 1;
+            } else if (this_num_ents < other_num_ents) {
+                geom_comments.push('Mismatch: Model has too few entities of type: ' + ent_type_strs.get(ent_type) + '.');
             } else {
-                // result.comment.push('Number of ' + ent_type_strs[ent_type] + ' match.');
+                // correct
             }
         }
         if (geom_comments.length === 0) {
-            geom_comments.push('Everything matches.');
+            geom_comments.push('Number of entities all match.');
         }
+        // update the comments in the result
         result.comment.push(geom_comments);
     }
     /**

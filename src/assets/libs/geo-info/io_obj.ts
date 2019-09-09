@@ -1,6 +1,5 @@
 import { GIModel } from './GIModel';
 import {  TColor, TNormal, TTexture, EAttribNames, Txyz, EEntType } from './common';
-import { ComponentFactoryResolver } from '@angular/core/src/render3';
 
 /**
  * Import obj
@@ -54,7 +53,7 @@ export function importObj(obj_str: string): GIModel {
     }
     for (const coord of coords) {
         const posi_i: number = model.geom.add.addPosi();
-        model.attribs.add.setAttribValue(EEntType.POSI, posi_i, EAttribNames.COORDS, coord);
+        model.attribs.add.setAttribVal(EEntType.POSI, posi_i, EAttribNames.COORDS, coord);
     }
     for (const face of faces) {
         console.log(face[0]);
@@ -85,7 +84,7 @@ export function exportObj(model: GIModel): string {
     // positions
     if (has_color_attrib) {
         for (const vert_i of verts_i) {
-            const color: TColor = model.attribs.query.getAttribValue(EEntType.VERT, EAttribNames.COLOR, vert_i) as TColor;
+            const color: TColor = model.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, vert_i) as TColor;
             const coord: Txyz = model.attribs.query.getVertCoords(vert_i);
             v_str += 'v ' + coord.map( v => v.toString() ).join(' ') + color.map( c => c.toString() ).join(' ') + '\n';
         }
@@ -98,14 +97,14 @@ export function exportObj(model: GIModel): string {
     // textures, vt
     if (has_texture_attrib) {
         for (const vert_i of verts_i) {
-            const texture: TTexture = model.attribs.query.getAttribValue(EEntType.VERT, EAttribNames.TEXTURE, vert_i) as TTexture;
+            const texture: TTexture = model.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.TEXTURE, vert_i) as TTexture;
             vt_str += 'v ' + texture.map( v => v.toString() ).join(' ') + '\n';
         }
     }
     // normals, vn
     if (has_normal_attrib) {
         for (const vert_i of verts_i) {
-            const normal: TNormal = model.attribs.query.getAttribValue(EEntType.VERT, EAttribNames.NORMAL, vert_i) as TNormal;
+            const normal: TNormal = model.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.NORMAL, vert_i) as TNormal;
             vn_str += 'v ' + normal.map( v => v.toString() ).join(' ') + '\n';
         }
     }

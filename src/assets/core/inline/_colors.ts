@@ -1,5 +1,5 @@
 import * as ch from 'chroma-js';
-import { TColor } from '@assets/libs/geo-info/common';
+import { TColor } from '@libs/geo-info/common';
 
 const false_col  = ch.scale(['blue', 'cyan', 'green', 'yellow', 'red']);
 

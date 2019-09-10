@@ -35,6 +35,8 @@ import { checkMobFile } from '@shared/updateOldMobFile';
              `
           ]
 })
+
+// Component for loading a local .mob file into mobius
 export class LoadFileComponent {
 
     constructor(private dataService: DataService) {}

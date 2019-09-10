@@ -41,6 +41,7 @@ declare global {
              `
     ]
 })
+// component for saving file to the browser local storage and hard disk.
 export class SaveFileComponent {
     constructor(private dataService: DataService) {}
 

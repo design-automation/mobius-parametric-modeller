@@ -27,6 +27,7 @@ import { DataService } from '@services';
              `
           ]
 })
+// Component for creating a new mobius flowchart
 export class NewFileComponent {
 
     @Output() create = new EventEmitter();

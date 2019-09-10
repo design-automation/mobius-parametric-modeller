@@ -24,6 +24,7 @@ import { SaveFileComponent } from './savefile.component';
             `
           ]
 })
+// Component for loading a .mob file from a specific url into mobius.
 export class LoadUrlComponent {
 
     constructor(private dataService: DataService, private router: Router) {}

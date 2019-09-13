@@ -114,15 +114,19 @@ export class GIAttribsThreejs {
         // get the attribs map for this ent type
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+
         // create a map of objects to store the data
-        const data_obj_map: Map< number, { '#': number, _id: string} > = new Map();
+        // const data_obj_map: Map< number, { '#': number, _id: string} > = new Map();
+        const data_obj_map: Map< number, {_id: string} > = new Map();
+
         // create the ID for each table row
         const ents_i: number[] = this._model.geom.query.getEnts(ent_type, false);
 
         // sessionStorage.setItem('attrib_table_ents', JSON.stringify(ents_i));
         let i = 0;
         for (const ent_i of ents_i) {
-            data_obj_map.set(ent_i, { '#': i, _id: `${attribs_maps_key}${ent_i}`} );
+            // data_obj_map.set(ent_i, { '#': i, _id: `${attribs_maps_key}${ent_i}`} );
+            data_obj_map.set(ent_i, {_id: `${attribs_maps_key}${ent_i}`} );
             if (ent_type === EEntType.COLL) {
                 const coll_parent = this._model.geom.query.getCollParent(ent_i);
                 data_obj_map.get(ent_i)['_parent'] = coll_parent === -1 ? '' : coll_parent;

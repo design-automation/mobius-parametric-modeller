@@ -88,7 +88,7 @@ export class GIModel {
         // compare objects
         let idx_maps: [Map<EEntType, Map<number, number>>, Map<EEntType, Map<number, number>>] = null;
         idx_maps = this.compareObjs(model, result);
-        // if the score is sero, maybe one model is translated
+        // check for common erros
         this.checkForErrors(model, result, idx_maps);
         // compare colls and mode attribs
         this.compareColls(model, result, idx_maps);

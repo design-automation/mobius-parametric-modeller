@@ -106,6 +106,9 @@ export class ExecuteComponent {
     static async resolveImportedUrl(prodList: IProcedure[], isMainFlowchart?: boolean) {
         for (const prod of prodList) {
             if (prod.children) {await  ExecuteComponent.resolveImportedUrl(prod.children); }
+            if (!prod.enabled) {
+                continue;
+            }
             if (isMainFlowchart && prod.type === ProcedureTypes.Imported) {
                 for (let i = 1; i < prod.args.length; i++) {
                     const arg = prod.args[i];
@@ -136,12 +139,14 @@ export class ExecuteComponent {
                         if (backup_list.indexOf(val) !== -1) {
                             const result = await SaveFileComponent.loadFromFileSystem(val);
                             if (!result || result === 'error') {
+                                prod.hasError = true;
                                 throw(new Error(`File named ${val} does not exist in the local storage`));
                                 // prod.resolvedValue = arg.value;
                             } else {
                                 prod.resolvedValue = '`' + result + '`';
                             }
                         } else {
+                            prod.hasError = true;
                             throw(new Error(`File named ${val} does not exist in the local storage`));
                         }
                     }
@@ -184,6 +189,7 @@ export class ExecuteComponent {
             try {
                 await  ExecuteComponent.resolveImportedUrl(node.procedure, true);
             } catch (ex) {
+                node.hasError = true;
                 this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
                 document.getElementById('spinner-off').click();
                 document.getElementById('Console').click();

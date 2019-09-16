@@ -159,22 +159,32 @@ export class AttributeComponent implements OnChanges, DoCheck {
           new_columns = columns;
         } else {
           const first = columns.shift();
-          const second = columns.shift();
+          // const second = columns.shift();
           const selected = columns.find(column => column.substr(0, 1) === '_');
           const rest_of_columns = columns.filter(column => column.substr(0, 1) !== '_');
-          new_columns = selected ? [first, second, selected, ...rest_of_columns, ' '] : [first, second, ...rest_of_columns, ' '];
+          // new_columns = selected ? [first, second, selected, ...rest_of_columns, ' '] : [first, second, ...rest_of_columns, ' '];
+          new_columns = selected ? [first, selected, ...rest_of_columns, ' '] : [first, ...rest_of_columns, ' '];
         }
         this.displayedColumns = new_columns;
         this.dataSource = new MatTableDataSource<object>(this.displayData);
+        this.dataSource.sortingDataAccessor = this._sortingDataAccessor;
       } else {
         this.displayedColumns = [];
         this.dataSource = new MatTableDataSource<object>();
+        this.dataSource.sortingDataAccessor = this._sortingDataAccessor;
       }
       this.dataSource.paginator = this.paginator.toArray()[tabIndex];
       this.dataSource.sort = this.sort.toArray()[tabIndex];
 
     }
     return tabIndex;
+  }
+
+  _sortingDataAccessor(data: object, headerID: string): string|number {
+    if (headerID === '_id') {
+      return Number(data[headerID].slice(2));
+    }
+    return data[headerID];
   }
 
   _setDataSource(tabIndex: number) {
@@ -192,6 +202,7 @@ export class AttributeComponent implements OnChanges, DoCheck {
       if (tabIndex === 999) {
         this.displayedColumns = [];
         this.dataSource = new MatTableDataSource<object>();
+        this.dataSource.sortingDataAccessor = this._sortingDataAccessor;
       } else {
         this.generateTable(tabIndex);
       }

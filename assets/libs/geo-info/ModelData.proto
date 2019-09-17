@@ -1,0 +1,229 @@
+syntax = "proto3";
+
+/* ===================================================================================================
+TODO
+
+This does not allow attributes with lists with heterogeneous data types.
+For example @attrib=[1, "a", true, [4,5,6]] is not possible.
+
+A first step is to have each data value in a map, so that we only use ints to ref values:
+[
+  [null, true, false],                   // special, fixed values that do not change
+  [0, 1, 2, 3, 4, 5, 6, 56527....],      // all numbers
+  ["a", "c", "c", "hgs", ...]            // all strings
+]
+
+For lists that are not nested, can do [[type, index], [type, index], ...]
+so that [1, "a", true] becomes [[1,1], [2,0], [0,1]], which can be flattened to [1,1,2,0,0,1]
+
+For nested lists, we can do [[type, depth, index], [type, depth, index], ...]
+[1, "a", true, [4,5,6]] -> [[1,0,1], [2,0,0], [0,0,1], [1,1,4], [1,1,5], [1,1,6]] -> [1,0,1,2,0,0,0,0,1,1,1,4,1,1,5,1,1,6]
+
+Maybe this can be combined with the 'any' data type
+
+=================================================================================================== */
+
+// interface IModelData {
+//    geometry: IGeomData;
+//    attributes: IAttribsData;
+// }
+
+
+message ModelData {
+  GeomData geometry = 1;
+  AttribsData attributes = 2;
+}
+
+// interface IGeomData {
+//    num_positions: number;
+//    triangles: TTri[];
+//    vertices: TVert[];
+//    edges: TEdge[];
+//    wires: TWire[];
+//    faces: TFace[];
+//    points: TPoint[];
+//    polylines: TPline[];
+//    polygons: TPgon[];
+//    collections: TColl[];
+//    selected: TEntTypeIdx[];
+// }
+
+message GeomData {
+  repeated int32 num_positions = 1;
+  repeated Vert vertices = 3;
+  repeated Tri triangles = 2;
+  repeated Edge edges = 4;
+  repeated Wire wires = 5;
+  repeated Face faces = 6;
+  repeated Point  points = 7;
+  repeated Pline  polylines = 8;
+  repeated Pgon polygons = 9;
+  repeated Coll collections = 10;
+  repeated int32  selected = 11;
+}
+
+// type TVert = number; // positions
+message Vert {
+  int32 posi = 1;
+}
+
+// type TTri = [number, number, number]; // [position, position, position]
+message Tri {
+  repeated int32 verts = 1;
+}
+
+// type TEdge = [number, number]; // [vertex, vertex]
+message Edge {
+  repeated int32 verts = 1;
+}
+
+
+// type TWire = number[]; // [edge, edge,....]
+message Wire {
+  repeated int32 edges = 1;
+}
+
+// type TFace = [number[], number[]]; // [[wire, ....], [triangle, ...]]
+message Face {
+  repeated int32 wires = 1;
+  repeated int32 tris = 2;
+}
+
+// type TPoint = number; // [vertex,....]
+message Point {
+  int32 vert = 1;
+}
+
+// type TPline = number; // [wire,....]
+message Pline {
+  int32 wire = 1;
+}
+
+// type TPgon = number; // [face,....]
+message Pgon {
+  int32 face = 1;
+}
+
+// type TColl = [number, number[], number[], number[]]; // [parent, [point, ...], [polyline, ...], [polygon, ....]]
+message Coll {
+  int32 parent = 1;
+  repeated int32 points = 2;
+  repeated int32 plines = 3;
+  repeated int32 pgons = 4;
+}
+
+// interface IAttribsData {
+//    positions: IAttribData[];
+//    vertices: IAttribData[];
+//    edges: IAttribData[];
+//    wires: IAttribData[];
+//    faces: IAttribData[];
+//    points: IAttribData[];
+//    polylines: IAttribData[];
+//    polygons: IAttribData[];
+//    collections: IAttribData[];
+//    model: TModelAttribValuesArr;
+// }
+message AttribsData {
+  AttribData positions = 1;
+  AttribData vertices = 2;
+  AttribData edges = 3;
+  AttribData wires = 4;
+  AttribData faces = 5;
+  AttribData points = 6;
+  AttribData polylines = 7;
+  AttribData polygons = 8;
+  AttribData collections = 9;
+  ModelAttribValuesArr model = 10;
+}
+
+// interface IAttribData {
+//    name: string;
+//    data_type: EAttribDataTypeStrs;
+//    data: TEntAttribValuesArr;
+// }
+message AttribData {
+  string name = 1;
+  EAttribDataTypeStrs data_type = 2;
+  EntAttribValuesArr data = 3;
+}
+
+// enum EAttribDataTypeStrs {
+//  NUMBER = 'Number',
+//  STRING = 'String',
+//  BOOLEAN = 'Boolean',
+//  LIST = 'List', // a list of anything
+//  DICT = 'Dict // an object'
+// }
+enum EAttribDataTypeStrs {
+  Number = 1;
+  String = 2;
+  Boolean = 3;
+  List = 4;
+  Dict = 5;
+};
+
+// type TEntAttribValuesArr = Array<[number[], TAttribDataTypes]>;
+message EntAttribValuesArr {
+  repeated EntAttribValues values= 1;
+}
+message EntAttribValues {
+  repeated int32 ents = 1;
+  AttribDataTypes value = 2;
+}
+
+// type TModelAttribValuesArr = Array<[string, TAttribDataTypes]>;
+message ModelAttribValuesArr {
+  repeated ModelAttribValues values = 1;
+}
+message ModelAttribValues {
+  string name = 1;
+  AttribDataTypes value = 2;
+}
+
+// type TAttribDataTypes = string | number | boolean | any[] | object;
+message AttribDataTypes {
+  oneof value {
+    string str_val = 1;
+    double num_val = 2;
+    bool bool_val = 3;
+    ListOrNestedList list_val = 4;
+    Obj obj_val = 5;
+  }
+}
+// ListOrNestedList for any[]
+message ListOrNestedList {
+  oneof value {
+    FlatList list_val = 1;
+    NestedList nlist_val = 2;
+  }
+}
+// Obj for object
+message Obj {
+  repeated ObjKeyVal key_val = 1;
+}
+message ObjKeyVal {
+  string key = 1;
+  SimpleOrListOrNestedList val = 2;
+}
+// values
+message SimpleOrListOrNestedList {
+  oneof value {
+    Value val = 1;
+    FlatList list_val = 2;
+    NestedList nlist_val = 3;
+  }
+}
+message NestedList {
+  repeated FlatList val = 1;
+}
+message FlatList {
+  repeated Value val = 1;
+}
+message Value {
+  oneof val {
+    string str_val = 1;
+    double num_val = 2;
+    bool bool_val = 3;
+  }
+}

@@ -1166,12 +1166,13 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     private indexAsLabel(ent_type_str: string, ent_id: string, id: number, type: EEntType) {
         let indexAsLabel;
         const showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
-        const sorted = sortByKey(this.dataService.selected_ents.get(ent_type_str));
-        const arr = Array.from(sorted.values());
         if (showSelected) {
+            const sorted = sortByKey(this.dataService.selected_ents.get(ent_type_str));
+            const arr = Array.from(sorted.values());
             indexAsLabel = String(arr.findIndex(ent => ent === id));
         } else {
-            indexAsLabel = String(this._data_threejs._model.attribs.threejs.getIdIndex(type, id));
+            indexAsLabel = ent_id;
+            // indexAsLabel = String(this._data_threejs._model.attribs.threejs.getIdIndex(type, id));
         }
         return indexAsLabel;
     }

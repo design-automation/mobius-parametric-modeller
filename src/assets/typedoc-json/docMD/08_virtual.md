@@ -14,16 +14,17 @@ A ray is defined by a list of two lists, as follows: [origin, direction_vector].
   
   
 ## Plane  
-* **Description:** Creates a plane, centered at the origin.
-A plane is define by a list of three lists, as folows: [origin, x_vector, y_vector].  
+* **Description:** Creates a plane.
+A plane is define by a list of three lists, as folows: [origin, x_vector, xy_vector].  
 * **Parameters:**  
   * *origin:* Origin of plane: Position, Vertex, Point, or a list of three numbers  
-  * *x_vec:* X vector of the plane: List of three numbers  
-  * *xy_vec:* A vector in the xy plane (parallel to teh x vector): List of three numbers  
-* **Returns:** A list consisting of an origin and two vectors, [origin, vector, vector].  
+  * *x_vec:* X axis vector of the plane: List of three numbers  
+  * *xy_vec:* A vector in the xy plane (not parallel to the x axis vector): List of three numbers  
+* **Returns:** A list consisting of an origin and two normalised perpendicular vectors.  
 * **Examples:**  
-  * virtual.Plane ([1,2,3],[4,3,2],[3,3,9])  
-    Creates a plane with its origin positioned at [1,2,3] and two vectors [4,3,2] and [3,3,9] lie on it.
+  * virtual.Plane ([1,2,3],[4,3,2],[1,1,1])  
+    Creates a plane with its origin positioned at [1,2,3] and two normalised perpendicular vectors
+[0.74..., 0.56..., 0.37...] and [-0.53..., 0.15..., 0.83...] representing the X and Y axes of the plane.
   
   
 ## RayFromPlane  

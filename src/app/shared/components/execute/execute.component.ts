@@ -34,6 +34,7 @@ function mergeInputs(models){
 export const printFunc = `
 function printFunc(_console, name, value){
     let val;
+    let padding_style = 'padding: 2px 0px 2px 10px;';
     if (!value) {
         val = value;
     } else if (typeof value === 'number' || value === undefined) {
@@ -41,13 +42,44 @@ function printFunc(_console, name, value){
     } else if (typeof value === 'string') {
         val = '"' + value.replace(/\\n/g, '<br>') + '"';
     } else if (value.constructor === [].constructor) {
-        val = JSON.stringify(value).replace(/,/g, ', ');
+        let __list_check__ = false;
+        let __value_strings__ = [];
+        for (const __item__ of value) {
+            if (__item__.constructor === [].constructor || __item__.constructor === {}.constructor) {
+                __list_check__ = true;
+            }
+            __value_strings__.push(JSON.stringify(__item__).replace(/,/g, ', '));
+        }
+        if (__list_check__) {
+            padding_style = 'padding: 2px 0px 0px 10px;';
+            val = '[<p style="padding: 0px 0px 2px 40px;">' +
+                  __value_strings__.join(',</p><p style="padding: 0px 0px 2px 40px;">') +
+                  '</p><p style="padding: 0px 0px 2px 30px;">]</p>';
+        } else {
+            val = '[' + __value_strings__.join(', ') + ']';
+        }
     } else if (value.constructor === {}.constructor) {
-        val = JSON.stringify(value).replace(/,/g, ', ');
+        let __list_check__ = false;
+        let __value_strings__ = [];
+        for (const __item__ in value) {
+            const __value__ = value[__item__];
+            if (__value__.constructor === [].constructor || __value__.constructor === {}.constructor) {
+                __list_check__ = true;
+            }
+            __value_strings__.push('\\"' + __item__ + '\\"' + ': ' + JSON.stringify(__value__).replace(/,/g, ', '));
+        }
+        if (__list_check__) {
+            padding_style = 'padding: 2px 0px 0px 10px;';
+            val = '{<p style="padding: 0px 0px 2px 40px;">' +
+                  __value_strings__.join(',</p><p style="padding: 0px 0px 2px 40px;">') +
+                  '</p><p style="padding: 0px 0px 2px 30px;">}</p>';
+        } else {
+            val = '{' + __value_strings__.join(', ') + '}';
+        }
     } else {
         val = value;
     }
-    _console.push('<p style="padding: 2px 0px 2px 10px;"><b><i>_ ' + name+':</i></b>  ' + val + '</p>');
+    _console.push('<p style="' + padding_style + '"><b><i>_ ' + name+':</i></b> ' + val + '</p>');
     return val;
 }
 `;
@@ -74,6 +106,9 @@ export class ExecuteComponent {
     static async resolveImportedUrl(prodList: IProcedure[], isMainFlowchart?: boolean) {
         for (const prod of prodList) {
             if (prod.children) {await  ExecuteComponent.resolveImportedUrl(prod.children); }
+            if (!prod.enabled) {
+                continue;
+            }
             if (isMainFlowchart && prod.type === ProcedureTypes.Imported) {
                 for (let i = 1; i < prod.args.length; i++) {
                     const arg = prod.args[i];
@@ -104,12 +139,14 @@ export class ExecuteComponent {
                         if (backup_list.indexOf(val) !== -1) {
                             const result = await SaveFileComponent.loadFromFileSystem(val);
                             if (!result || result === 'error') {
+                                prod.hasError = true;
                                 throw(new Error(`File named ${val} does not exist in the local storage`));
                                 // prod.resolvedValue = arg.value;
                             } else {
                                 prod.resolvedValue = '`' + result + '`';
                             }
                         } else {
+                            prod.hasError = true;
                             throw(new Error(`File named ${val} does not exist in the local storage`));
                         }
                     }
@@ -135,15 +172,24 @@ export class ExecuteComponent {
             node.hasError = false;
             let EmptyECheck = false;
             let InvalidECheck = false;
+
+            // reset node input value to undefined --> save memory
             if (node.type !== 'start') {
                 if (node.input.edges) {
                     node.input.value = undefined;
                 }
             }
 
+            if (!node.enabled) {
+                continue;
+            }
+
+            // resolve all urls (or local storage files) in the node, calling the url and retrieving the data
+            // the data is then saved as resolvedValue in its respective argument in the procedure (in JSON format)
             try {
                 await  ExecuteComponent.resolveImportedUrl(node.procedure, true);
             } catch (ex) {
+                node.hasError = true;
                 this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
                 document.getElementById('spinner-off').click();
                 document.getElementById('Console').click();
@@ -153,18 +199,21 @@ export class ExecuteComponent {
                 throw ex;
             }
 
-            if (!node.enabled) {
-                continue;
-            }
-
             for (const prod of node.procedure) {
+                // ignore the return, comment and disabled procedures
                 if (prod.type === ProcedureTypes.Return || prod.type === ProcedureTypes.Comment || !prod.enabled) { continue; }
+
+                // if there's any invalid argument, flag as having error
                 if (prod.argCount > 0 && prod.args[0].invalidVar) {
                     node.hasError = true;
                     prod.hasError = true;
                     InvalidECheck = true;
                 }
+
+                // for start node constant procedures (start node parameters)
                 if (prod.type === ProcedureTypes.Constant) {
+                    // resolve start node input (URL + File parameters) ... to be revised
+                    // flag error if catch error (invalid argument value)
                     try {
                         prod.resolvedValue = await CodeUtils.getStartInput(prod.args[1], prod.meta.inputMode);
                     } catch (ex) {
@@ -182,16 +231,21 @@ export class ExecuteComponent {
                         }
                         InvalidECheck = true;
                     }
+
+                    // if there's no value for the parameter name or parameter value -> flag error (empty argument)
                     if (!prod.args[0].value || (!prod.args[1].value && prod.args[1].value !== 0 && prod.args[1].value !== false)) {
                         node.hasError = true;
                         prod.hasError = true;
                         EmptyECheck = true;
                     }
+                // any other procedure type that is not start node constant
                 } else {
                     for (const arg of prod.args) {
+                        // ignore arguments that have argument name starting with "_" ("__model__", "__constant__", ...)
                         if (arg.name[0] === '_' || arg.type === 5) {
                             continue;
                         }
+                        // if the argument value is empty -> flag error (empty argument)
                         if (arg.value !== 0 && arg.value !== false && !arg.value) {
                             node.hasError = true;
                             prod.hasError = true;
@@ -200,6 +254,7 @@ export class ExecuteComponent {
                     }
                 }
             }
+            // Empty argument error
             if (EmptyECheck) {
                 document.getElementById('Console').click();
                 this.dataService.log('<h4 style="padding: 2px 0px 2px 0px; color:red;">Error: Empty Argument detected. ' +
@@ -210,6 +265,7 @@ export class ExecuteComponent {
                 this.googleAnalyticsService.trackEvent(_category, `error: Empty Argument`, 'click', performance.now() - this.startTime);
                 throw new Error('Empty Argument');
             }
+            // Invalid argument value error
             if (InvalidECheck) {
                 document.getElementById('Console').click();
                 this.dataService.log('<h4 style="padding: 2px 0px 2px 0px; style="color:red">Error: Invalid Argument or ' +
@@ -223,6 +279,7 @@ export class ExecuteComponent {
             }
         }
 
+        // resolve urls for each imported functions and subFunctions
         for (const func of this.dataService.flowchart.functions) {
             for (const node of func.flowchart.nodes) {
                 await  ExecuteComponent.resolveImportedUrl(node.procedure, false);
@@ -236,6 +293,7 @@ export class ExecuteComponent {
             }
         }
 
+        // execute the flowchart
         try {
             if (testing) {
                 this.executeFlowchart();
@@ -261,7 +319,7 @@ export class ExecuteComponent {
             FlowchartUtils.orderNodes(this.dataService.flowchart);
         }
 
-        // get the string of all imported functions
+        // get the javascript string of all imported functions
         const funcStrings = {};
         for (const func of this.dataService.flowchart.functions) {
             funcStrings[func.name] =  CodeUtils.getFunctionString(func);
@@ -272,8 +330,12 @@ export class ExecuteComponent {
             }
         }
 
+        // execute based on the current url:
+        // _ for "/flowchart" & "/editor": execute the whole flowchart if the whole flowchart is not executed before,
+        //                                 then execute only start node + nodes that are modified after the last execute
+        //                                 and their downstream nodes.
+        // _ for all other url           : execute the whole flowchart
         let executeSet: any;
-        // let startIndex: number;
         let currentUrl = this.router.url;
         if (currentUrl) {
             currentUrl = currentUrl.split('?')[0];
@@ -283,16 +345,8 @@ export class ExecuteComponent {
         if (!this.dataService.flowchart.nodes[0].model || this.dataService.numModifiedNode() === 0
             || (currentUrl !== '/flowchart' && currentUrl !== '/editor')) {
             executeSet = new Set(this.dataService.flowchart.nodes.keys());
-            // startIndex = 0;
         } else {
             executeSet = this.dataService.getExecutableNodes();
-            // startIndex = 0;
-            // for (let i = 0; i < this.dataService.flowchart.nodes.length; i++) {
-            //     if (this.dataService.checkModifiedNode(this.dataService.flowchart.nodes[i].id)) {
-            //         startIndex = i;
-            //         break;
-            //     }
-            // }
             this.dataService.clearModifiedNode();
         }
         for (let i = 0; i < this.dataService.flowchart.nodes.length; i++) {
@@ -302,13 +356,18 @@ export class ExecuteComponent {
                 this.dataService.flowchart.nodes[i].hasExecuted = true;
             }
         }
+
         // execute each node
         for (let i = 0; i < this.dataService.flowchart.nodes.length; i++) {
             const node = this.dataService.flowchart.nodes[i];
+
+            // if disabled node -> continue
             if (!node.enabled) {
                 node.output.value = undefined;
                 continue;
             }
+
+            // if the node is in the to be executed set
             if (!executeSet.has(i)) {
                 let exCheck = false;
                 for (const edge of node.output.edges) {
@@ -325,8 +384,8 @@ export class ExecuteComponent {
             globalVars = this.executeNode(node, funcStrings, globalVars, constantList);
         }
 
+        // delete each node.output.value to save memory
         for (const node of this.dataService.flowchart.nodes) {
-            // delete node.output.value;
             if (node.type === 'end') {
                 if (node.procedure[node.procedure.length - 1].args[1].jsValue) {
                     continue;
@@ -399,7 +458,7 @@ export class ExecuteComponent {
             fnString = pythonList + '\n' + mergeInputsFunc + '\n' + printFunc + '\n' + fnString;
 
             // ==> generated code structure:
-            //  1. mergeInputFunction + printFunc
+            //  1. pythonList + mergeInputFunction + printFunc
             //  2. constants
             //  3. user functions
             //  4. main node code

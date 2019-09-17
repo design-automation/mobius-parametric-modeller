@@ -33,6 +33,7 @@ import { mergeInputsFunc, printFunc, ExecuteComponent } from '../execute/execute
              `
           ]
 })
+// component for saving the javascript code to hard disk
 export class SaveJavascriptComponent {
 
     constructor(private dataService: DataService) {}

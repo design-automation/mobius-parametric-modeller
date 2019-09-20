@@ -111,8 +111,8 @@ export class DataThreejs {
 
         // selecting
         this._raycaster = new THREE.Raycaster();
-        this._raycaster.linePrecision = 0.2; // TODO this need to be set dynamically based on model size and view zoom
-        this._raycaster.params.Points.threshold = 0.2; // TODO this need to be set dynamically based on model size and view zoom
+        this._raycaster.linePrecision = 0.3; // TODO this need to be set dynamically based on model size and view zoom
+        this._raycaster.params.Points.threshold = 0.3; // TODO this need to be set dynamically based on model size and view zoom
 
         // add grid and lights
         this._addGrid();

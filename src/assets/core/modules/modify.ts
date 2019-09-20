@@ -141,13 +141,16 @@ export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId
 // ================================================================================================
 /**
  * Scales entities on plane by factor.
+ * ~
  * @param __model__
  * @param entities Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
  * @param origin Position, point, vertex, list of three numbers, plane.
- * @param scale Scale factor.
+ * @param scale Scale factor, a single number to scale equally, or [scale_x, scale_y, scale_z].
  * @returns void
  * @example modify.Scale(entities, plane1, 0.5)
  * @example_info Scales entities by 0.5 on plane1.
+ * @example modify.Scale(entities, plane1, [0.5, 1, 1])
+ * @example_info Scales entities by 0.5 along the x axis of plane1, with no scaling along the y and z axes.
  */
 export function Scale(__model__: GIModel, entities: TId|TId[], origin: TId|Txyz|TPlane, scale: number|Txyz): void {
     // --- Error Check ---

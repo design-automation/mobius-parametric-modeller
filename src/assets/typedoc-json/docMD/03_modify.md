@@ -36,15 +36,18 @@ then the position will be moved by the average of the vectors.
   
   
 ## Scale  
-* **Description:** Scales entities on plane by factor.  
+* **Description:** Scales entities on plane by factor.
+~  
 * **Parameters:**  
   * *entities:* Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.  
   * *origin:* Position, point, vertex, list of three numbers, plane.  
-  * *scale:* Scale factor.  
+  * *scale:* Scale factor, a single number to scale equally, or [scale_x, scale_y, scale_z].  
 * **Returns:** void  
 * **Examples:**  
   * modify.Scale(entities, plane1, 0.5)  
-    Scales entities by 0.5 on plane1.
+    Scales entities by 0.5 on plane1.  
+  * modify.Scale(entities, plane1, [0.5, 1, 1])  
+    Scales entities by 0.5 along the x axis of plane1, with no scaling along the y and z axes.
   
   
 ## Mirror  

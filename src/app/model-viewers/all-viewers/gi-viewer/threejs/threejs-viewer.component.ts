@@ -864,7 +864,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
                         }
-                        if (pline) {
+                        if (pline !== undefined && pline !== null) {
                             this.selectPLine(pline);
                         } else {
                             this.showMessages('Selection is not a Polyline', 'custom');
@@ -886,7 +886,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                         if (!this.shiftKeyPressed) {
                             this.unselectAll();
                         }
-                        if (point) {
+                        if (point !== undefined && point !== null) {
                             this.selectPoint(point);
                         } else {
                             this.showMessages('Selection is not a Point', 'custom');

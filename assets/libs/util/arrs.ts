@@ -53,10 +53,22 @@ export function arrMakeFlat(data: any): any[] {
     if (!Array.isArray(data)) {
         return [data];
     }
-    const depth = arrMaxDepth(data);
-    // @ts-ignore
-    const new_array = data.flat(depth - 1);
-    return new_array;
+    // const depth = arrMaxDepth(data);
+    // // @ts-ignore
+    // const new_array = data.flat(depth - 1);
+    // return new_array;
+    const flattend = [];
+    function flat(data2: any) {
+        data2.forEach(function(el: any) {
+            if (Array.isArray(el)) {
+                flat(el);
+            } else {
+                flattend.push(el);
+            }
+        });
+    }
+    flat(data);
+    return flattend;
 }
 /**
  * Maximum depth of an array

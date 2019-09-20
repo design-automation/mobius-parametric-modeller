@@ -17907,7 +17907,7 @@
                             "sources": [
                                 {
                                     "fileName": "core/modules/modify.ts",
-                                    "line": 619,
+                                    "line": 622,
                                     "character": 21
                                 }
                             ],
@@ -17924,7 +17924,7 @@
                             "sources": [
                                 {
                                     "fileName": "core/modules/modify.ts",
-                                    "line": 620,
+                                    "line": 623,
                                     "character": 22
                                 }
                             ],
@@ -17944,7 +17944,7 @@
                     "sources": [
                         {
                             "fileName": "core/modules/modify.ts",
-                            "line": 618,
+                            "line": 621,
                             "character": 26
                         }
                     ]
@@ -17969,7 +17969,7 @@
                             "sources": [
                                 {
                                     "fileName": "core/modules/modify.ts",
-                                    "line": 298,
+                                    "line": 301,
                                     "character": 16
                                 }
                             ],
@@ -17986,7 +17986,7 @@
                             "sources": [
                                 {
                                     "fileName": "core/modules/modify.ts",
-                                    "line": 299,
+                                    "line": 302,
                                     "character": 19
                                 }
                             ],
@@ -18003,7 +18003,7 @@
                             "sources": [
                                 {
                                     "fileName": "core/modules/modify.ts",
-                                    "line": 297,
+                                    "line": 300,
                                     "character": 21
                                 }
                             ],
@@ -18024,7 +18024,7 @@
                     "sources": [
                         {
                             "fileName": "core/modules/modify.ts",
-                            "line": 296,
+                            "line": 299,
                             "character": 36
                         }
                     ]
@@ -18110,7 +18110,7 @@
                     "sources": [
                         {
                             "fileName": "core/modules/modify.ts",
-                            "line": 416,
+                            "line": 419,
                             "character": 21
                         }
                     ]
@@ -18216,7 +18216,7 @@
                     "sources": [
                         {
                             "fileName": "core/modules/modify.ts",
-                            "line": 287,
+                            "line": 290,
                             "character": 26
                         }
                     ]
@@ -18317,7 +18317,7 @@
                     "sources": [
                         {
                             "fileName": "core/modules/modify.ts",
-                            "line": 607,
+                            "line": 610,
                             "character": 22
                         }
                     ]
@@ -18403,7 +18403,7 @@
                     "sources": [
                         {
                             "fileName": "core/modules/modify.ts",
-                            "line": 662,
+                            "line": 665,
                             "character": 20
                         }
                     ]
@@ -18529,7 +18529,7 @@
                     "sources": [
                         {
                             "fileName": "core/modules/modify.ts",
-                            "line": 199,
+                            "line": 202,
                             "character": 22
                         }
                     ]
@@ -18750,7 +18750,7 @@
                     "sources": [
                         {
                             "fileName": "core/modules/modify.ts",
-                            "line": 354,
+                            "line": 357,
                             "character": 23
                         }
                     ]
@@ -18916,7 +18916,7 @@
                             "kindString": "Call signature",
                             "flags": {},
                             "comment": {
-                                "shortText": "Scales entities on plane by factor.",
+                                "shortText": "Scales entities on plane by factor.\n~",
                                 "returns": "void",
                                 "tags": [
                                     {
@@ -18925,7 +18925,15 @@
                                     },
                                     {
                                         "tag": "example_info",
-                                        "text": "Scales entities by 0.5 on plane1.\n"
+                                        "text": "Scales entities by 0.5 on plane1."
+                                    },
+                                    {
+                                        "tag": "example",
+                                        "text": "modify.Scale(entities, plane1, [0.5, 1, 1])"
+                                    },
+                                    {
+                                        "tag": "example_info",
+                                        "text": "Scales entities by 0.5 along the x axis of plane1, with no scaling along the y and z axes.\n"
                                     }
                                 ]
                             },
@@ -19008,7 +19016,7 @@
                                     "kindString": "Parameter",
                                     "flags": {},
                                     "comment": {
-                                        "text": "Scale factor."
+                                        "text": "Scale factor, a single number to scale equally, or [scale_x, scale_y, scale_z]."
                                     },
                                     "type": {
                                         "type": "union",
@@ -19035,7 +19043,7 @@
                     "sources": [
                         {
                             "fileName": "core/modules/modify.ts",
-                            "line": 152,
+                            "line": 155,
                             "character": 21
                         }
                     ]
@@ -19140,7 +19148,7 @@
                     "sources": [
                         {
                             "fileName": "core/modules/modify.ts",
-                            "line": 390,
+                            "line": 393,
                             "character": 21
                         }
                     ]
@@ -19256,7 +19264,7 @@
                     "sources": [
                         {
                             "fileName": "core/modules/modify.ts",
-                            "line": 244,
+                            "line": 247,
                             "character": 21
                         }
                     ]
@@ -19332,7 +19340,7 @@
                     "sources": [
                         {
                             "fileName": "core/modules/modify.ts",
-                            "line": 582,
+                            "line": 585,
                             "character": 21
                         }
                     ]
@@ -19398,7 +19406,7 @@
                     "sources": [
                         {
                             "fileName": "core/modules/modify.ts",
-                            "line": 422,
+                            "line": 425,
                             "character": 15
                         }
                     ]
@@ -19488,7 +19496,7 @@
                     "sources": [
                         {
                             "fileName": "core/modules/modify.ts",
-                            "line": 301,
+                            "line": 304,
                             "character": 20
                         }
                     ]
@@ -19565,7 +19573,7 @@
                     "sources": [
                         {
                             "fileName": "core/modules/modify.ts",
-                            "line": 622,
+                            "line": 625,
                             "character": 16
                         }
                     ]
@@ -19631,7 +19639,7 @@
                     "sources": [
                         {
                             "fileName": "core/modules/modify.ts",
-                            "line": 672,
+                            "line": 675,
                             "character": 14
                         }
                     ]
@@ -19697,7 +19705,7 @@
                     "sources": [
                         {
                             "fileName": "core/modules/modify.ts",
-                            "line": 362,
+                            "line": 365,
                             "character": 17
                         }
                     ]
@@ -19774,7 +19782,7 @@
                     "sources": [
                         {
                             "fileName": "core/modules/modify.ts",
-                            "line": 398,
+                            "line": 401,
                             "character": 15
                         }
                     ]
@@ -61270,7 +61278,7 @@
                     "sources": [
                         {
                             "fileName": "libs/util/arrs.ts",
-                            "line": 65,
+                            "line": 77,
                             "character": 27
                         }
                     ]

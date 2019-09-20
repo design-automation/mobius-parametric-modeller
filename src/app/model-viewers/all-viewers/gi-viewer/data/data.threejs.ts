@@ -209,7 +209,7 @@ export class DataThreejs {
 
         const allObjs = this.getAllObjs();
 
-        const center = allObjs.center;
+        const center = new Vector3(0, 0, 0); // allObjs.center;
         this.grid_pos.x = center.x;
         this.grid_pos.y = center.y;
         this.axes_pos.x = center.x;

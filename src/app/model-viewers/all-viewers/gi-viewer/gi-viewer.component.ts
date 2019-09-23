@@ -210,7 +210,8 @@ export class GIViewerComponent implements OnInit {
                 this.temp_target_pos.z = Math.round(value);
                 break;
             case 'camera.get_target_pos':
-                this.temp_target_pos = this.settings.camera.target;
+                this.temp_target_pos = this.dataService.getThreejsScene()._controls.target;
+                this.settings.camera.target = this.temp_target_pos;
                 break;
             case 'ambient_light.show': // Ambient Light
                 this.settings.ambient_light.show = !this.settings.ambient_light.show;

@@ -167,12 +167,11 @@ export class AttributeComponent implements OnChanges, DoCheck {
         }
         this.displayedColumns = new_columns;
         this.dataSource = new MatTableDataSource<object>(this.displayData);
-        this.dataSource.sortingDataAccessor = this._sortingDataAccessor;
       } else {
         this.displayedColumns = [];
         this.dataSource = new MatTableDataSource<object>();
-        this.dataSource.sortingDataAccessor = this._sortingDataAccessor;
       }
+      this.dataSource.sortingDataAccessor = this._sortingDataAccessor;
       this.dataSource.paginator = this.paginator.toArray()[tabIndex];
       this.dataSource.sort = this.sort.toArray()[tabIndex];
 

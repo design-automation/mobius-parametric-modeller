@@ -182,14 +182,14 @@ export class GIAttribsThreejs {
     public getEntsVals(selected_ents: Map<string, number>, ent_type: EEntType): any[] {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
-        const data_obj_map: Map< number, { '#': number, _id: string} > = new Map();
+        const data_obj_map: Map< number, { _id: string} > = new Map();
         if (!selected_ents || selected_ents === undefined) {
             return [];
         }
         let i = 0;
         const selected_ents_sorted = sortByKey(selected_ents);
         selected_ents_sorted.forEach(ent => {
-            data_obj_map.set(ent, { '#': i, _id: `${attribs_maps_key}${ent}` } );
+            data_obj_map.set(ent, { _id: `${attribs_maps_key}${ent}` } );
             if (ent_type === EEntType.COLL) {
                 const coll_parent = this._model.geom.query.getCollParent(ent);
                 data_obj_map.get(ent)['_parent'] = coll_parent === -1 ? '' : coll_parent;

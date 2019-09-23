@@ -1035,20 +1035,21 @@ export class DataThreejs {
 
     private cameraLookat(center, radius = 100) {
         const fov = this._camera.fov * (Math.PI / 180);
-        const vec_centre_to_pos: THREE.Vector3 = new THREE.Vector3();
-        vec_centre_to_pos.subVectors(this._camera.position, vec_centre_to_pos);
-        const tmp_vec = new THREE.Vector3(Math.abs(radius / Math.sin(fov / 2)),
-            Math.abs(radius / Math.sin(fov / 2)),
-            Math.abs(radius / Math.sin(fov / 2)));
-        vec_centre_to_pos.setLength(tmp_vec.length());
+
         const perspectiveNewPos: THREE.Vector3 = new THREE.Vector3();
-        perspectiveNewPos.addVectors(center, vec_centre_to_pos);
-        const newLookAt = this._camera.getWorldDirection(center);
-        // this._camera.position.copy(perspectiveNewPos);
-        this._camera.lookAt(newLookAt);
-        this._camera.updateProjectionMatrix();
+
+        // Find looking direction: current camera position - current control target
+        // Scale looking direction to be of length: radius / sin(fov/2)
+        // New camera position: scaled looking direction + center
+        perspectiveNewPos.subVectors(this._camera.position, this._controls.target);
+        perspectiveNewPos.setLength(radius / Math.sin(fov / 2));
+        perspectiveNewPos.add(center);
+
+        this._camera.position.copy(perspectiveNewPos);
         this._controls.target.set(center.x, center.y, center.z);
+        this._camera.updateProjectionMatrix();
         this._controls.update();
+
         const textLabels = this._textLabels;
         if (textLabels.size !== 0) {
             textLabels.forEach((label) => {
@@ -1056,6 +1057,30 @@ export class DataThreejs {
             });
         }
     }
+
+    // private cameraLookat(center, radius = 100) {
+    //     const fov = this._camera.fov * (Math.PI / 180);
+    //     const vec_centre_to_pos: THREE.Vector3 = new THREE.Vector3();
+    //     vec_centre_to_pos.subVectors(this._camera.position, vec_centre_to_pos);
+    //     const tmp_vec = new THREE.Vector3(Math.abs(radius / Math.sin(fov / 2)),
+    //         Math.abs(radius / Math.sin(fov / 2)),
+    //         Math.abs(radius / Math.sin(fov / 2)));
+    //     vec_centre_to_pos.setLength(tmp_vec.length());
+    //     const perspectiveNewPos: THREE.Vector3 = new THREE.Vector3();
+    //     perspectiveNewPos.addVectors(center, vec_centre_to_pos);
+    //     const newLookAt = this._camera.getWorldDirection(center);
+    //     // this._camera.position.copy(perspectiveNewPos);
+    //     this._camera.lookAt(newLookAt);
+    //     this._camera.updateProjectionMatrix();
+    //     this._controls.target.set(center.x, center.y, center.z);
+    //     this._controls.update();
+    //     const textLabels = this._textLabels;
+    //     if (textLabels.size !== 0) {
+    //         textLabels.forEach((label) => {
+    //             label.updatePosition();
+    //         });
+    //     }
+    // }
 
     private getAllObjs() {
         if (this.sceneObjs.length !== 0) {

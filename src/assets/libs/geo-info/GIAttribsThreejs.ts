@@ -143,15 +143,17 @@ export class GIAttribsThreejs {
                 } else {
                     const attrib_value = attrib.getEntVal(ent_i);
                     if ( data_size > 1 ) {
-                        if (attrib_value !== undefined) {
+                        if (attrib_value === undefined) {
+                            for (let idx = 0; idx < data_size; idx++) {
+                                data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = undefined;
+                            }
+                        } else if (attrib_value.constructor === {}.constructor) {
+                            data_obj_map.get(ent_i)[`${attrib_name}`] = JSON.stringify(attrib_value);
+                        } else {
                             (attrib_value as any[]).forEach( (v, idx) => {
                                 const _v =  v;
                                 data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = _v;
                             });
-                        } else {
-                            for (let idx = 0; idx < data_size; idx++) {
-                                data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = undefined;
-                            }
                         }
                     } else {
                         if (ent_type === EEntType.POSI && Array.isArray(attrib_value)) {
@@ -205,14 +207,17 @@ export class GIAttribsThreejs {
                 } else {
                     const attrib_value = attrib.getEntVal(ent_i);
                     if ( data_size > 1 ) {
-                        if (attrib_value !== undefined) {
-                            (attrib_value as any[]).forEach( (v, idx) => {
-                                data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = v;
-                            });
-                        } else {
+                        if (attrib_value === undefined) {
                             for (let idx = 0; idx < data_size; idx++) {
                                 data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = undefined;
                             }
+                        } else if (attrib_value.constructor === {}.constructor) {
+                            data_obj_map.get(ent_i)[`${attrib_name}`] = JSON.stringify(attrib_value);
+                        } else {
+                            (attrib_value as any[]).forEach( (v, idx) => {
+                                const _v =  v;
+                                data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = _v;
+                            });
                         }
                     } else {
                         if (ent_type === EEntType.POSI && Array.isArray(attrib_value)) {

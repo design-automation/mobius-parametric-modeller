@@ -51,7 +51,7 @@ export class AttributeComponent implements OnChanges, DoCheck {
   displayedColumns: string[] = [];
   displayData: {}[] = [];
   selected_ents = new Map();
-  multi_selection = new Set();
+  multi_selection = new Map();
   last_selected;
   current_selected;
 
@@ -346,7 +346,7 @@ export class AttributeComponent implements OnChanges, DoCheck {
             s.delete(this.current_selected);
         } else {
             this.last_selected = this.current_selected;
-            s.add(this.current_selected);
+            s.set(this.current_selected, this.current_selected);
         }
     // shift + click -> multiple selection, select all in between
     } else if (event.shiftKey) {
@@ -355,23 +355,23 @@ export class AttributeComponent implements OnChanges, DoCheck {
         // if there is no last selected row -> select only the currently selected, set it as last selected for the next selection
         if (this.last_selected === undefined) {
             this.last_selected = this.current_selected;
-            s.add(this.current_selected);
+            s.set(this.current_selected, this.current_selected);
         // if there is a last selected row -> select all in between current and last
         } else {
             // if sort state is based on "_id" -> filter based on table entities' index
             if (this.sorting_header === null || this.sorting_header === '_id' || this.sorting_state === SORT_STATE.DEFAULT) {
                 if (this.current_selected < this.last_selected) { // select upper row
                 attrib_table.ents.filter(ents => ents > this.current_selected && ents < this.last_selected).forEach(item => {
-                    s.add(item);
+                    s.set(item, item);
                 });
-                s.add(this.current_selected);
-                s.add(this.last_selected);
+                s.set(this.current_selected, this.current_selected);
+                s.set(this.last_selected, this.last_selected);
                 } else if (this.current_selected > this.last_selected) { // select lower row
                 attrib_table.ents.filter(ents => ents < this.current_selected && ents > this.last_selected).forEach(item => {
-                    s.add(item);
+                    s.set(item, item);
                 });
-                s.add(this.current_selected);
-                s.add(this.last_selected);
+                s.set(this.current_selected, this.current_selected);
+                s.set(this.last_selected, this.last_selected);
                 }
             // if sort state is not based on "_id"
             // -> filter based on the sorting values, if the sorting values are the same as current or last,
@@ -386,16 +386,16 @@ export class AttributeComponent implements OnChanges, DoCheck {
                 if (lastVal === currentVal) {
                     if (this.current_selected < this.last_selected) { // select upper row
                         attrib_table.ents.filter(ents => ents > this.current_selected && ents < this.last_selected).forEach(item => {
-                            s.add(item);
+                            s.set(item, item);
                         });
-                        s.add(this.current_selected);
-                        s.add(this.last_selected);
+                        s.set(this.current_selected, this.current_selected);
+                        s.set(this.last_selected, this.last_selected);
                     } else if (this.current_selected > this.last_selected) { // select lower row
                         attrib_table.ents.filter(ents => ents < this.current_selected && ents > this.last_selected).forEach(item => {
-                            s.add(item);
+                            s.set(item, item);
                         });
-                        s.add(this.current_selected);
-                        s.add(this.last_selected);
+                        s.set(this.current_selected, this.current_selected);
+                        s.set(this.last_selected, this.last_selected);
                     }
 
                 // filter down the row (last_selected is before current_selected in ordering) if:
@@ -412,7 +412,7 @@ export class AttributeComponent implements OnChanges, DoCheck {
                         if ((compare_val > lowerVal && compare_val < upperVal)
                         || (compare_val === lastVal && i >= lastIndex)
                         || (compare_val === currentVal && i <= currentIndex)) {
-                            s.add(attrib_table.ents[i]);
+                            s.set(attrib_table.ents[i], attrib_table.ents[i]);
                         }
                     }
                 // filter up the row (last_selected is after current_selected in ordering) if:
@@ -428,7 +428,7 @@ export class AttributeComponent implements OnChanges, DoCheck {
                         if ((compare_val > lowerVal && compare_val < upperVal)
                         || (compare_val === lastVal && i <= lastIndex)
                         || (compare_val === currentVal && i >= currentIndex)) {
-                            s.add(attrib_table.ents[i]);
+                            s.set(attrib_table.ents[i], attrib_table.ents[i]);
                         }
                     }
                 }
@@ -437,7 +437,7 @@ export class AttributeComponent implements OnChanges, DoCheck {
     } else {
         this.last_selected = this.current_selected;
         s.clear();
-        s.add(this.current_selected);
+        s.set(this.current_selected, this.current_selected);
     }
 
     const ent_type = ent_id.substr(0, 2);

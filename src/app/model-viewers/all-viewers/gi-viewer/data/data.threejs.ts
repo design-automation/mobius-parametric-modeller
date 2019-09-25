@@ -1134,7 +1134,7 @@ export class DataThreejs {
         if (last_segment === 'editor') {
             return;
         }
-        if (event.ctrlKey) {
+        if (event.ctrlKey || event.metaKey) {
             return;
         }
         const keyCode = event.which;

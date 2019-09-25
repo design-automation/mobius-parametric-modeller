@@ -341,7 +341,7 @@ export class AttributeComponent implements OnChanges, DoCheck {
     const s = this.multi_selection;
 
     // ctrl + click -> multiple selection: if already selected then deselect, if not selected then select
-    if (event.ctrlKey) {
+    if (event.ctrlKey || event.metaKey) {
         if (s.has(this.current_selected)) {
             s.delete(this.current_selected);
         } else {

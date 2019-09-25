@@ -563,10 +563,13 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     }
 
     onKeyDown(event) {
+        if (event.key === 'Control' || event.key === 'Shift' || event.key === 'Meta') {
+            return;
+        }
         const scene = this._data_threejs;
         // keyboard control for camera
         scene.onWindowKeyPress(event);
-        if (event.shiftKey || event.ctrlKey) {
+        if (event.shiftKey || event.ctrlKey || event.metaKey) {
             this.shiftKeyPressed = true;
         }
         this.render(this);

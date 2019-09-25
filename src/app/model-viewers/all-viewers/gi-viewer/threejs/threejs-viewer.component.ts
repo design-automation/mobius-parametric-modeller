@@ -566,7 +566,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const scene = this._data_threejs;
         // keyboard control for camera
         scene.onWindowKeyPress(event);
-        if (event.shiftKey) {
+        if (event.shiftKey || event.ctrlKey) {
             this.shiftKeyPressed = true;
         }
         this.render(this);

@@ -382,20 +382,23 @@ export class AttributeComponent implements OnChanges, DoCheck {
                 const currentIndex = attrib_table.ents.indexOf(this.current_selected);
                 const currentVal = attrib_table.data[currentIndex][this.sorting_header];
 
-                // if same values between last and current, filter based on index
+                // if same values between last and current, filtered values must be the same
+                // while their index must be between last and current indices
                 if (lastVal === currentVal) {
                     if (this.current_selected < this.last_selected) { // select upper row
-                        attrib_table.ents.filter(ents => ents > this.current_selected && ents < this.last_selected).forEach(item => {
-                            s.set(item, item);
-                        });
-                        s.set(this.current_selected, this.current_selected);
-                        s.set(this.last_selected, this.last_selected);
+                        for (let i = 0; i < attrib_table.data.length; i++) {
+                            const compare_val = attrib_table.data[i][this.sorting_header];
+                            if (compare_val === currentVal && i >= currentIndex && i <= lastIndex) {
+                                s.set(attrib_table.ents[i], attrib_table.ents[i]);
+                            }
+                        }
                     } else if (this.current_selected > this.last_selected) { // select lower row
-                        attrib_table.ents.filter(ents => ents < this.current_selected && ents > this.last_selected).forEach(item => {
-                            s.set(item, item);
-                        });
-                        s.set(this.current_selected, this.current_selected);
-                        s.set(this.last_selected, this.last_selected);
+                        for (let i = 0; i < attrib_table.data.length; i++) {
+                            const compare_val = attrib_table.data[i][this.sorting_header];
+                            if (compare_val === currentVal && i >= lastIndex && i <= currentIndex) {
+                                s.set(attrib_table.ents[i], attrib_table.ents[i]);
+                            }
+                        }
                     }
 
                 // filter down the row (last_selected is before current_selected in ordering) if:

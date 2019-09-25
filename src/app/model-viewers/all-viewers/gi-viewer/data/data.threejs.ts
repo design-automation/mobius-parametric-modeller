@@ -1125,17 +1125,17 @@ export class DataThreejs {
         };
     }
 
-    public onWindowKeyPress(event: KeyboardEvent) {
+    public onWindowKeyPress(event: KeyboardEvent): boolean {
         const nodeName = (<Element>event.target).nodeName;
-        if (nodeName === 'TEXTAREA' || nodeName === 'INPUT') { return; }
+        if (nodeName === 'TEXTAREA' || nodeName === 'INPUT') { return false; }
         const segment_str = window.location.pathname;
         const segment_array = segment_str.split('/');
         const last_segment = segment_array[segment_array.length - 1];
         if (last_segment === 'editor') {
-            return;
+            return false;
         }
         if (event.ctrlKey || event.metaKey) {
-            return;
+            return false;
         }
         const keyCode = event.which;
         // console.log(keyCode);
@@ -1187,6 +1187,7 @@ export class DataThreejs {
             default:
                 break;
         }
+        return true;
     }
 }
 

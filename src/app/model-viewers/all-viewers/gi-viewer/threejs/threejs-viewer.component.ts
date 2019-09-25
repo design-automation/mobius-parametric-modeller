@@ -12,6 +12,7 @@ import { DropdownMenuComponent } from '../html/dropdown-menu.component';
 import { ModalService } from '../html/modal-window.service';
 import { ThreeJSViewerService } from './threejs-viewer.service';
 import { sortByKey } from '@libs/util/maps';
+import { KeyboardService } from '@shared/services';
 
 /**
  * A threejs viewer for viewing geo-info (GI) models.
@@ -32,6 +33,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     @ViewChild(DropdownMenuComponent) dropdown = new DropdownMenuComponent();
 
     protected modalWindow: ModalService;
+    protected keyboardService: KeyboardService;
     public container = null;
     public _elem;
     // viewer size
@@ -107,6 +109,11 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this._elem = elem;
         this.dataService = injector.get(DataService);
         this.modalWindow = injector.get(ModalService);
+        this.keyboardService = injector.get(KeyboardService);
+        this.keyboardService.viewerControl$.subscribe(event => {
+            const check = this._data_threejs.onWindowKeyPress(event);
+            if (check) { this.render(this); }
+        });
     }
     /**
      * Called when the viewer is initialised.
@@ -563,25 +570,17 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     }
 
     onKeyDown(event) {
-        if (event.key === 'Control' || event.key === 'Shift' || event.key === 'Meta') {
-            return;
-        }
-        const scene = this._data_threejs;
-        // keyboard control for camera
-        scene.onWindowKeyPress(event);
-        if (event.shiftKey || event.ctrlKey || event.metaKey) {
-            this.shiftKeyPressed = true;
-        }
-        this.render(this);
     }
 
     onKeyUp(event) {
-        this.shiftKeyPressed = false;
     }
 
     public onUserAction(event) {
         // get entities for mouse event
         const intersects = this.threeJSViewerService.initRaycaster(event);
+        if (event.shiftKey || event.ctrlKey || event.metaKey) {
+            this.shiftKeyPressed = true;
+        }
 
         // check intersect exist
         if (intersects.length > 0) {
@@ -605,6 +604,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 }
             }
         }
+        this.shiftKeyPressed = false;
+
         this.refreshTable(event);
     }
 

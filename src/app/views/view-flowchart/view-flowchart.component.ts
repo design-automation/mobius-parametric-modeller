@@ -59,11 +59,11 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
     private copied: string;
     private copySub: any;
     private pasteSub: any;
-    private keydownSub: any;
+    private keyupSub: any;
     private splitDragSub: any;
 
     // listener for events, only activated when the mouse is hovering over the svg component
-    private keydownListener = fromEvent(document, 'keyup');
+    private keyupListener = fromEvent(document, 'keyup');
     private copyListener = fromEvent(document, 'copy');
     private pasteListener = fromEvent(document, 'paste');
     private listenerActive = false;
@@ -212,7 +212,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
         });
 
         // delete: delete selected edge(s)
-        this.keydownSub = this.keydownListener.subscribe((event: KeyboardEvent) => {
+        this.keyupSub = this.keyupListener.subscribe((event: KeyboardEvent) => {
             if (!this.listenerActive || this.router.url !== '/flowchart') { return; }
             if (event.key === 'Delete') {
                 if (this.selectedEdge.length > 0) {
@@ -307,7 +307,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
     ngOnDestroy() {
         this.copySub.unsubscribe();
         this.pasteSub.unsubscribe();
-        this.keydownSub.unsubscribe();
+        this.keyupSub.unsubscribe();
         this.canvas = null;
         this.element = null;
     }

@@ -214,6 +214,7 @@ export class AttributeComponent implements OnChanges, DoCheck {
       } else {
         this.generateTable(tabIndex);
       }
+      this.last_selected = undefined;
     });
     sessionStorage.setItem('mpm_showSelected', JSON.stringify(this.showSelected));
   }

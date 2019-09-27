@@ -9,7 +9,7 @@ import { DataService as MD } from '@services';
 import { ModalService } from './html/modal-window.service';
 import { ColorPickerService } from 'ngx-color-picker';
 import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
-import { Vector3 } from 'three';
+import { Vector3, GridHelper } from 'three';
 // import others
 // import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 
@@ -295,6 +295,24 @@ export class GIViewerComponent implements OnInit {
                 break;
             case 'ground.shininess':
                 this.settings.ground.shininess = Number(value);
+                break;
+            case 'grid.update':
+                const posis_xyz = this.data.threejs.get3jsData().posis_xyz;
+                let max_grid_pos = 0;
+                let i = 0;
+                posis_xyz.forEach(pos => {
+                    if (i === 2) {
+                        i = 0;
+                        return;
+                    }
+                    max_grid_pos = Math.max(max_grid_pos, Math.abs(pos));
+                    i++;
+                });
+                max_grid_pos = Math.ceil(max_grid_pos / 10) * 10 * 2;
+                if (max_grid_pos < this.settings.grid.size) {
+                    max_grid_pos = this.settings.grid.size;
+                }
+                scene._addGrid(max_grid_pos);
                 break;
             default:
                 break;

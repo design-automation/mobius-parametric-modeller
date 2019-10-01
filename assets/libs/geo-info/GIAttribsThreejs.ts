@@ -143,15 +143,17 @@ export class GIAttribsThreejs {
                 } else {
                     const attrib_value = attrib.getEntVal(ent_i);
                     if ( data_size > 1 ) {
-                        if (attrib_value !== undefined) {
+                        if (attrib_value === undefined) {
+                            for (let idx = 0; idx < data_size; idx++) {
+                                data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = undefined;
+                            }
+                        } else if (attrib_value.constructor === {}.constructor) {
+                            data_obj_map.get(ent_i)[`${attrib_name}`] = JSON.stringify(attrib_value);
+                        } else {
                             (attrib_value as any[]).forEach( (v, idx) => {
                                 const _v =  v;
                                 data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = _v;
                             });
-                        } else {
-                            for (let idx = 0; idx < data_size; idx++) {
-                                data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = undefined;
-                            }
                         }
                     } else {
                         if (ent_type === EEntType.POSI && Array.isArray(attrib_value)) {
@@ -182,14 +184,14 @@ export class GIAttribsThreejs {
     public getEntsVals(selected_ents: Map<string, number>, ent_type: EEntType): any[] {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
-        const data_obj_map: Map< number, { '#': number, _id: string} > = new Map();
+        const data_obj_map: Map< number, { _id: string} > = new Map();
         if (!selected_ents || selected_ents === undefined) {
             return [];
         }
         let i = 0;
         const selected_ents_sorted = sortByKey(selected_ents);
         selected_ents_sorted.forEach(ent => {
-            data_obj_map.set(ent, { '#': i, _id: `${attribs_maps_key}${ent}` } );
+            data_obj_map.set(ent, { _id: `${attribs_maps_key}${ent}` } );
             if (ent_type === EEntType.COLL) {
                 const coll_parent = this._model.geom.query.getCollParent(ent);
                 data_obj_map.get(ent)['_parent'] = coll_parent === -1 ? '' : coll_parent;
@@ -205,14 +207,17 @@ export class GIAttribsThreejs {
                 } else {
                     const attrib_value = attrib.getEntVal(ent_i);
                     if ( data_size > 1 ) {
-                        if (attrib_value !== undefined) {
-                            (attrib_value as any[]).forEach( (v, idx) => {
-                                data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = v;
-                            });
-                        } else {
+                        if (attrib_value === undefined) {
                             for (let idx = 0; idx < data_size; idx++) {
                                 data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = undefined;
                             }
+                        } else if (attrib_value.constructor === {}.constructor) {
+                            data_obj_map.get(ent_i)[`${attrib_name}`] = JSON.stringify(attrib_value);
+                        } else {
+                            (attrib_value as any[]).forEach( (v, idx) => {
+                                const _v =  v;
+                                data_obj_map.get(ent_i)[`${attrib_name}[${idx}]`] = _v;
+                            });
                         }
                     } else {
                         if (ent_type === EEntType.POSI && Array.isArray(attrib_value)) {

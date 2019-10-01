@@ -1,6 +1,6 @@
 import { Component, Input, HostListener, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { DataService } from '@shared/services';
+import { DataService, KeyboardService } from '@shared/services';
 import * as circularJSON from 'circular-json';
 import { IFlowchart } from '@models/flowchart';
 import { ProcedureTypes, IFunction } from '@models/procedure';
@@ -25,7 +25,7 @@ export class PanelHeaderComponent implements OnDestroy {
     urlNodes;
     private ctx = document.createElement('canvas').getContext('2d');
 
-    constructor(private dataService: DataService, private router: Router) {
+    constructor(private dataService: DataService, private keyboardService: KeyboardService, private router: Router) {
         if (this.router.url === '/about') {
             this.executeCheck = false;
             this.nodeListCheck = false;
@@ -493,9 +493,7 @@ export class PanelHeaderComponent implements OnDestroy {
 
     @HostListener('window:keydown', ['$event'])
     onKeyDown(event: KeyboardEvent) {
-        if (event.key === 's' && (event.ctrlKey || event.metaKey)) {
-            event.preventDefault();
-        }
+        this.keyboardService.update(event);
     }
 
     validateUrl() {

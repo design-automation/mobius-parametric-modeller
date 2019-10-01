@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 // import app services
-import { DataService } from '@services';
+import { DataService, KeyboardService } from '@services';
 import { DataService as GiViewerDataService } from '../model-viewers/all-viewers/gi-viewer/data/data.service';
 // import app modules
 // import { CoreModule } from '@assets/core/core.module';
@@ -54,7 +54,7 @@ import { DataOutputService } from '@shared/services/dataOutput.service';
         ViewGalleryComponent,
         ViewAboutComponent,
     ],
-    providers: [ DataService, DataOutputService,
+    providers: [ DataService, DataOutputService, KeyboardService,
                  GiViewerDataService, DataCesiumService,
                  GoogleAnalyticsService],
     bootstrap: [ AppComponent ]

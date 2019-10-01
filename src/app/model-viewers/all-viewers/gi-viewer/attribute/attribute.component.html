@@ -10,7 +10,7 @@
           </dl> -->
           <table mat-table [dataSource]="dataSource" matSort [class] = 'columnItalic' id = 'attribTable'>
             <ng-container *ngFor="let column of displayedColumns;" [matColumnDef]="column" [sticky] = 'column === "_id"'>
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{column}} 
+                <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="updateSortHeader($event, column)"> {{column}} 
                   <i class="material-icons" (click)="showAttribLabel($event, column)" [class.active]="currentShowingCol === column">visibility</i>
                 </th>
                 <td mat-cell *matCellDef="let element"> {{element[column]}} </td>

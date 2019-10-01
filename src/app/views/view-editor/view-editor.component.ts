@@ -2,7 +2,7 @@ import { Component, Input, EventEmitter, Output, AfterViewInit, HostListener, On
 import { IFlowchart } from '@models/flowchart';
 import { NodeUtils, INode } from '@models/node';
 import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
-import { DataService } from '@services';
+import { DataService, KeyboardService } from '@services';
 import { Router } from '@angular/router';
 import * as circularJSON from 'circular-json';
 import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
@@ -34,8 +34,12 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
     constructor(private dataService: DataService,
                 private dataOutputService: DataOutputService,
+                private keyboardService: KeyboardService,
                 private router: Router) {
         new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url);
+        this.keyboardService.shiftKeyPushed$.subscribe(() => {
+            this.disableInput = true;
+        });
         this.ctx.font = 'bold 12px arial';
     }
 
@@ -274,7 +278,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         if (this.copyCheck
         && document.activeElement.nodeName !== 'INPUT'
         && document.activeElement.nodeName !== 'TEXTAREA'
-        && this.router.url === '/editor') {
+        && this.router.url.slice(0, 7) === '/editor') {
             const copiedProds = localStorage.getItem('mobius_copied_procedures');
             if (!copiedProds) {
                 this.dataService.notifyMessage('Error: No saved procedure to be pasted!');
@@ -326,16 +330,17 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             }
         }
     }
-    @HostListener('window:keydown', ['$event'])
-    onKeyDown(event: KeyboardEvent) {
-        if (!this.disableInput && (event.key === 'Control' || event.key === 'Shift' || event.key === 'Meta')) {
-            this.disableInput = true;
-        } else if (event.key === 'z' && (event.ctrlKey || event.metaKey)) {
-            if (document.activeElement.nodeName !== 'INPUT') {
-                event.preventDefault();
-            }
-        }
-    }
+    // @HostListener('window:keydown', ['$event'])
+    // onKeyDown(event: KeyboardEvent) {
+    //     // disable text input in textboxes when ctrl/shift/command key is held down
+    //     if (!this.disableInput && (event.key === 'Control' || event.key === 'Shift' || event.key === 'Meta')) {
+    //         this.disableInput = true;
+    //     } else if (event.key === 'z' && (event.ctrlKey || event.metaKey)) {
+    //         if (document.activeElement.nodeName !== 'INPUT') {
+    //             event.preventDefault();
+    //         }
+    //     }
+    // }
 
     regAction(act) {
         this.dataService.registerEdtAction(act);

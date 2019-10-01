@@ -10,6 +10,12 @@ import { GIAttribsThreejs } from '@libs/geo-info/GIAttribsThreejs';
 import { ATabsComponent } from './tabs.component';
 import { sortByKey } from '@libs/util/maps';
 
+enum SORT_STATE {
+    DEFAULT,
+    ASCENDING,
+    DESCENDING
+}
+
 @Component({
   selector: 'attribute',
   templateUrl: './attribute.component.html',
@@ -48,6 +54,9 @@ export class AttributeComponent implements OnChanges, DoCheck {
   multi_selection = new Map();
   last_selected;
   current_selected;
+
+  sorting_header = null;
+  sorting_state: SORT_STATE = SORT_STATE.DEFAULT;
 
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   @ViewChildren(MatSort) sort = new QueryList<MatSort>();
@@ -167,12 +176,11 @@ export class AttributeComponent implements OnChanges, DoCheck {
         }
         this.displayedColumns = new_columns;
         this.dataSource = new MatTableDataSource<object>(this.displayData);
-        this.dataSource.sortingDataAccessor = this._sortingDataAccessor;
       } else {
         this.displayedColumns = [];
         this.dataSource = new MatTableDataSource<object>();
-        this.dataSource.sortingDataAccessor = this._sortingDataAccessor;
       }
+      this.dataSource.sortingDataAccessor = this._sortingDataAccessor;
       this.dataSource.paginator = this.paginator.toArray()[tabIndex];
       this.dataSource.sort = this.sort.toArray()[tabIndex];
 
@@ -206,6 +214,7 @@ export class AttributeComponent implements OnChanges, DoCheck {
       } else {
         this.generateTable(tabIndex);
       }
+      this.last_selected = undefined;
     });
     sessionStorage.setItem('mpm_showSelected', JSON.stringify(this.showSelected));
   }
@@ -259,6 +268,67 @@ export class AttributeComponent implements OnChanges, DoCheck {
     this.multi_selection.clear();
   }
 
+//   selectRow(ent_id: string, event) {
+//     const currentTab = this.getCurrentTab();
+//     if (currentTab === 9) {
+//       return;
+//     }
+//     const id = Number(ent_id.substr(2));
+//     // Multiple row selection
+//     const ThreeJSData = this.data.attribs.threejs;
+//     const attrib_table_ents = ThreeJSData.getAttribsForTable(this.tab_map[currentTab]).ents;
+//     this.current_selected = id;
+//     const s = this.multi_selection;
+
+//     if (event.ctrlKey) {
+//       this.last_selected = this.current_selected;
+//       s.set(this.current_selected, this.current_selected);
+//     } else {
+//       if (!event.shiftKey) {
+//         s.clear();
+//         s.set(this.current_selected, this.current_selected);
+//         this.last_selected = this.current_selected;
+//       } else {
+//         if (this.last_selected === undefined) {
+//           this.last_selected = ThreeJSData.getAttribsForTable(this.tab_map[currentTab]).ents[0];
+//         }
+//         s.clear();
+//         if (this.current_selected < this.last_selected) { // select upper row
+//           attrib_table_ents.filter(ents => ents > this.current_selected && ents < this.last_selected).forEach(item => {
+//             s.set(item, item);
+//           });
+//           s.set(this.current_selected, this.current_selected);
+//           s.set(this.last_selected, this.last_selected);
+//         } else if (this.current_selected > this.last_selected) { // select lower row
+//           attrib_table_ents.filter(ents => ents < this.current_selected && ents > this.last_selected).forEach(item => {
+//             s.set(item, item);
+//           });
+//           s.set(this.current_selected, this.current_selected);
+//           s.set(this.last_selected, this.last_selected);
+//         }
+//       }
+//     }
+
+//     const ent_type = ent_id.substr(0, 2);
+//     const target = event.target;
+//     if (s.size === 1) {
+//       if (this.selected_ents.has(ent_id)) {
+//         this.attrTableSelect.emit({ action: 'unselect', ent_type: ent_type, id: id });
+//         this.selected_ents.delete(ent_id);
+//         target.parentNode.classList.remove('selected-row');
+//       } else {
+//         this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: id });
+//         this.selected_ents.set(ent_id, id);
+//         target.parentNode.classList.add('selected-row');
+//       }
+//     } else {
+//       this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: s });
+//       s.forEach(_id => {
+//         this.selected_ents.set(ent_id, id);
+//       });
+//     }
+//   }
+
   selectRow(ent_id: string, event) {
     const currentTab = this.getCurrentTab();
     if (currentTab === 9) {
@@ -267,51 +337,120 @@ export class AttributeComponent implements OnChanges, DoCheck {
     const id = Number(ent_id.substr(2));
     // Multiple row selection
     const ThreeJSData = this.data.attribs.threejs;
-    const attrib_table_ents = ThreeJSData.getAttribsForTable(this.tab_map[currentTab]).ents;
+    const attrib_table = ThreeJSData.getAttribsForTable(this.tab_map[currentTab]);
     this.current_selected = id;
     const s = this.multi_selection;
 
-    if (event.ctrlKey) {
-      this.last_selected = this.current_selected;
-      s.set(this.current_selected, this.current_selected);
+    // ctrl + click -> multiple selection: if already selected then deselect, if not selected then select
+    if (event.ctrlKey || event.metaKey) {
+        if (s.has(this.current_selected)) {
+            s.delete(this.current_selected);
+        } else {
+            this.last_selected = this.current_selected;
+            s.set(this.current_selected, this.current_selected);
+        }
+    // shift + click -> multiple selection, select all in between
+    } else if (event.shiftKey) {
+        // clear all selected
+        s.clear();
+        // if there is no last selected row -> select only the currently selected, set it as last selected for the next selection
+        if (this.last_selected === undefined) {
+            this.last_selected = this.current_selected;
+            s.set(this.current_selected, this.current_selected);
+        // if there is a last selected row -> select all in between current and last
+        } else {
+            // if sort state is based on "_id" -> filter based on table entities' index
+            if (this.sorting_header === null || this.sorting_header === '_id' || this.sorting_state === SORT_STATE.DEFAULT) {
+                if (this.current_selected < this.last_selected) { // select upper row
+                attrib_table.ents.filter(ents => ents > this.current_selected && ents < this.last_selected).forEach(item => {
+                    s.set(item, item);
+                });
+                s.set(this.current_selected, this.current_selected);
+                s.set(this.last_selected, this.last_selected);
+                } else if (this.current_selected > this.last_selected) { // select lower row
+                attrib_table.ents.filter(ents => ents < this.current_selected && ents > this.last_selected).forEach(item => {
+                    s.set(item, item);
+                });
+                s.set(this.current_selected, this.current_selected);
+                s.set(this.last_selected, this.last_selected);
+                }
+            // if sort state is not based on "_id"
+            // -> filter based on the sorting values, if the sorting values are the same as current or last,
+            // base it on the entities' index according whether the sorting is ascending or descending
+            } else {
+                const lastIndex = attrib_table.ents.indexOf(this.last_selected);
+                const lastVal = attrib_table.data[lastIndex][this.sorting_header];
+                const currentIndex = attrib_table.ents.indexOf(this.current_selected);
+                const currentVal = attrib_table.data[currentIndex][this.sorting_header];
+
+                // if same values between last and current, filtered values must be the same
+                // while their index must be between last and current indices
+                if (lastVal === currentVal) {
+                    if (this.current_selected < this.last_selected) { // select upper row
+                        for (let i = 0; i < attrib_table.data.length; i++) {
+                            const compare_val = attrib_table.data[i][this.sorting_header];
+                            if (compare_val === currentVal && i >= currentIndex && i <= lastIndex) {
+                                s.set(attrib_table.ents[i], attrib_table.ents[i]);
+                            }
+                        }
+                    } else if (this.current_selected > this.last_selected) { // select lower row
+                        for (let i = 0; i < attrib_table.data.length; i++) {
+                            const compare_val = attrib_table.data[i][this.sorting_header];
+                            if (compare_val === currentVal && i >= lastIndex && i <= currentIndex) {
+                                s.set(attrib_table.ents[i], attrib_table.ents[i]);
+                            }
+                        }
+                    }
+
+                // filter down the row (last_selected is before current_selected in ordering) if:
+                //  _ descending and lastVal > currentVal
+                //  _ ascending and lastVal < currentVal
+                // ==> include rows with value = lastVal with index > lastIndex
+                // and rows with value = currentVal with index < currentIndex
+                } else if ((this.sorting_state === SORT_STATE.DESCENDING && lastVal > currentVal) ||
+                (this.sorting_state === SORT_STATE.ASCENDING && lastVal < currentVal)) {
+                    const lowerVal = Math.min(currentVal, lastVal);
+                    const upperVal = Math.max(currentVal, lastVal);
+                    for (let i = 0; i < attrib_table.data.length; i++) {
+                        const compare_val = attrib_table.data[i][this.sorting_header];
+                        if ((compare_val > lowerVal && compare_val < upperVal)
+                        || (compare_val === lastVal && i >= lastIndex)
+                        || (compare_val === currentVal && i <= currentIndex)) {
+                            s.set(attrib_table.ents[i], attrib_table.ents[i]);
+                        }
+                    }
+                // filter up the row (last_selected is after current_selected in ordering) if:
+                //  _ descending and lastVal < currentVal
+                //  _ ascending and lastVal > currentVal
+                // ==> include rows with value = lastVal with index < lastIndex
+                // and rows with value = currentVal with index > currentIndex
+                } else {
+                    const lowerVal = Math.min(currentVal, lastVal);
+                    const upperVal = Math.max(currentVal, lastVal);
+                    for (let i = 0; i < attrib_table.data.length; i++) {
+                        const compare_val = attrib_table.data[i][this.sorting_header];
+                        if ((compare_val > lowerVal && compare_val < upperVal)
+                        || (compare_val === lastVal && i <= lastIndex)
+                        || (compare_val === currentVal && i >= currentIndex)) {
+                            s.set(attrib_table.ents[i], attrib_table.ents[i]);
+                        }
+                    }
+                }
+            }
+        }
     } else {
-      if (!event.shiftKey) {
+        this.last_selected = this.current_selected;
         s.clear();
         s.set(this.current_selected, this.current_selected);
-        this.last_selected = this.current_selected;
-      } else {
-        if (this.last_selected === undefined) {
-          this.last_selected = ThreeJSData.getAttribsForTable(this.tab_map[currentTab]).ents[0];
-        }
-        s.clear();
-        if (this.current_selected < this.last_selected) { // select upper row
-          attrib_table_ents.filter(ents => ents > this.current_selected && ents < this.last_selected).forEach(item => {
-            s.set(item, item);
-          });
-          s.set(this.current_selected, this.current_selected);
-          s.set(this.last_selected, this.last_selected);
-        } else if (this.current_selected > this.last_selected) { // select lower row
-          attrib_table_ents.filter(ents => ents < this.current_selected && ents > this.last_selected).forEach(item => {
-            s.set(item, item);
-          });
-          s.set(this.current_selected, this.current_selected);
-          s.set(this.last_selected, this.last_selected);
-        }
-      }
     }
 
     const ent_type = ent_id.substr(0, 2);
     const target = event.target;
+    this.selected_ents.clear();
     if (s.size === 1) {
-      if (this.selected_ents.has(ent_id)) {
-        this.attrTableSelect.emit({ action: 'unselect', ent_type: ent_type, id: id });
-        this.selected_ents.delete(ent_id);
-        target.parentNode.classList.remove('selected-row');
-      } else {
         this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: id });
         this.selected_ents.set(ent_id, id);
         target.parentNode.classList.add('selected-row');
-      }
     } else {
       this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: s });
       s.forEach(_id => {
@@ -351,4 +490,15 @@ export class AttributeComponent implements OnChanges, DoCheck {
       this.attribLabel.emit(column);
     }
   }
+
+  updateSortHeader($event, column) {
+    if (this.sorting_header === column) {
+      this.sorting_state = (this.sorting_state + 1) % 3;
+    } else {
+      this.sorting_state = SORT_STATE.ASCENDING;
+      this.sorting_header = column;
+    }
+  }
 }
+
+

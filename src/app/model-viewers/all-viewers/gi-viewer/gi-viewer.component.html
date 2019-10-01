@@ -180,7 +180,11 @@
 									(change)="settingOnChange('camera.target_z', $event.target.value)"
 									[value]="formatNumber(settings.camera.target.z)">
 									<button (click)="settingOnChange('camera.get_target_pos')" class="filebtn getbtn">Get</button>
-								</dd>
+                                </dd>
+								<dd id='camera_target'>
+									<div class="label">Grid Size</div>
+                                    <button (click)="settingOnChange('grid.update')" class="filebtn closebtn" style="margin-left: 0px;">Update</button>
+                                </dd>
 							</dl>
 						</div>
 					</tab>

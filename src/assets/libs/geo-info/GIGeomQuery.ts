@@ -467,7 +467,7 @@ export class GIGeomQuery {
             const all_wires_i: number[] = [];
             const plines_i: number[] = this.navCollToPline(index);
             for (const pline_i of plines_i) {
-                const wire_i: number = this.navPlineToWire(index);
+                const wire_i: number = this.navPlineToWire(pline_i);
                 all_wires_i.push(wire_i);
             }
             const pgons_i: number[] = this.navCollToPgon(index);

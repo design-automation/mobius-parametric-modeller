@@ -15,7 +15,7 @@ import { Txyz, TColor, EAttribNames, EAttribDataTypeStrs } from '@libs/geo-info/
 import * as THREE from 'three';
 import { TId, TQuery, EEntType, ESort, TEntTypeIdx } from '@libs/geo-info/common';
 import { idsMake, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
-import { checkIDs, IDcheckObj, checkCommTypes, TypeCheckObj } from './_check_args';
+import { checkIDs, IDcheckObj, checkCommTypes, TypeCheckObj } from '../_check_args';
 
 export enum _ESide {
     FRONT =   'front',

@@ -12,7 +12,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EEntType, TEntTypeIdx} from '@libs/geo-info/common';
 import { getArrDepth, isColl, isPgon, isPline, isPoint, isPosi } from '@libs/geo-info/id';
 import { vecAdd, vecSum, vecDiv } from '@libs/geom/vectors';
-import { checkCommTypes, checkIDs, IDcheckObj, TypeCheckObj} from './_check_args';
+import { checkCommTypes, checkIDs, IDcheckObj, TypeCheckObj} from '../_check_args';
 import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
 import __ from 'underscore';

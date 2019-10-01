@@ -29,12 +29,13 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
      */
     constructor(private injector: Injector, private r: ComponentFactoryResolver, private dataService: DataService,
                 private giDataService: GIDataService, private router: Router) {
+        let viewCheck: any;
         if (this.router.url.split('?')[0] === '/publish') {
             this.Viewers = [];
-            let viewCheck: any = this.router.url.split('viewer=');
+            viewCheck = this.router.url.split('viewer=');
 
-            if (viewCheck.length === 0) { viewCheck = '';
-            } else { viewCheck = viewCheck[1]; }
+            if (viewCheck.length === 1) { viewCheck = '';
+            } else { viewCheck = viewCheck[1].split('&')[0]; }
 
             for (const view of Viewers) {
                 if (view.component.name === 'HelpViewerComponent') { continue; }
@@ -43,6 +44,22 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
                 this.Viewers.push(view);
             }
         }
+        viewCheck = this.router.url.split('defaultViewer=');
+        if (viewCheck.length > 1) {
+            viewCheck = viewCheck[1].split('&')[0];
+            switch (viewCheck) {
+                case '0':
+                    this.dataService.activeView = '3D Viewer';
+                    break;
+                case '1':
+                    this.dataService.activeView = 'Geo Viewer';
+                    break;
+                case '2':
+                    this.dataService.activeView = 'Console';
+                    break;
+            }
+        }
+
     }
     /**
      * ngOnInit

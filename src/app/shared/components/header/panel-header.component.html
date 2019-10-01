@@ -174,11 +174,37 @@
     <div class='settingsDialog' *ngIf='checkDialog("settings")'>
         <p>Mobius Settings:</p>
         <br>
-        <label for='settings-execute'>Execute on file load:</label>
-        <input id='settings-execute' type='checkbox' [checked]='checkSetting("execute", true)'/> <br>
+        <div class='settingLine'>
+            <div class='textdiv'>Execute on file load:</div>
+            
+            <div class='div--chbox'>
+                <input id='settings-execute' 
+                name='settings-execute' 
+                type="checkbox" 
+                [checked]='checkSetting("execute", true)'>
+                <label for='settings-execute'></label>
+            </div>
+        </div>
         <br>
         <br>
+        <div class='settingLine'>
+            <div class='textdiv'>Display Mobius Functions:</div>
+        </div>
         <br>
+        <ng-container *ngFor='let category of func_categories'>
+            <div class='settingLine subsetting'>
+                <div class='textdiv'>{{category}}:</div>
+                <div class='div--chbox'>
+                    <input id='_func_{{category}}' 
+                    name='_func_{{category}}' 
+                    type="checkbox" 
+                    [checked]='checkSetting("_func_" + category, true)'>
+                    <label for='_func_{{category}}'></label>
+                </div>
+            </div>
+            <br>
+        </ng-container>
+
         <br>
         <br>
         <br>

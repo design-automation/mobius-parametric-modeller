@@ -12,7 +12,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, ESort, TEntTypeIdx, EFilterOperatorTypes, TAttribDataTypes} from '@libs/geo-info/common';
 import { idsMake, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
-import { checkIDs, IDcheckObj } from './_check_args';
+import { checkIDs, IDcheckObj } from '../_check_args';
 
 // ================================================================================================
 
@@ -279,6 +279,10 @@ function _invert(__model__: GIModel, select_ent_types: EEntType|EEntType[], ents
         return query_results_arr;
     }
 }
+export enum _ESortMethod {
+    DESCENDING = 'descending',
+    ASCENDING = 'ascending'
+}
 // ================================================================================================
 /**
  * Sorts entities based on a sort expression.
@@ -306,10 +310,6 @@ export function Sort(__model__: GIModel, entities: TId[], name: string, idx_or_k
     const sort_method: ESort = (method_enum === _ESortMethod.DESCENDING) ? ESort.DESCENDING : ESort.ASCENDING;
     const sorted_ents_arr: TEntTypeIdx[] = _sort(__model__, ents_arr, name, idx_or_key, sort_method);
     return idsMake(sorted_ents_arr) as TId[];
-}
-export enum _ESortMethod {
-    DESCENDING = 'descending',
-    ASCENDING = 'ascending'
 }
 function _sort(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: string, idx_or_key: number|string, method: ESort): TEntTypeIdx[] {
     // get the list of ents_i

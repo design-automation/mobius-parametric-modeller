@@ -13,7 +13,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TQuery, EEntType, ESort, TEntTypeIdx,
     EAttribPush, TAttribDataTypes, EEntTypeStr, EAttribDataTypeStrs} from '@libs/geo-info/common';
 import { idsMake, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
-import { checkIDs, IDcheckObj, checkCommTypes, TypeCheckObj, checkAttribValue, checkAttribName } from './_check_args';
+import { checkIDs, IDcheckObj, checkCommTypes, TypeCheckObj, checkAttribValue, checkAttribName } from '../_check_args';
 import { GIAttribMap } from '@libs/geo-info/GIAttribMap';
 
 // ================================================================================================
@@ -55,6 +55,13 @@ function _getEntTypeFromStr(ent_type_str: _EEntTypeSel): EEntType {
         default:
             break;
     }
+}
+export enum _EDataTypeSel {
+    NUMBER =   'number',
+    STRING =   'string',
+    BOOLEAN = 'boolean',
+    LIST =   'list',
+    DICT = 'dict'
 }
 // ================================================================================================
 // ================================================================================================
@@ -112,13 +119,6 @@ export function Add(__model__: GIModel, ent_type_sel: _EEntTypeSel, data_type_se
     for (const attrib of attribs) {
         __model__.attribs.add.addAttrib(ent_type, attrib, data_type);
     }
-}
-export enum _EDataTypeSel {
-    NUMBER =   'number',
-    STRING =   'string',
-    BOOLEAN = 'boolean',
-    LIST =   'list',
-    DICT = 'dict'
 }
 // ================================================================================================
 /**

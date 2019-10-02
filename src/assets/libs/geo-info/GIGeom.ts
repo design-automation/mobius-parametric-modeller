@@ -71,8 +71,7 @@ export class GIGeom {
         const eny_types: EEntType[] = [
             EEntType.POINT,
             EEntType.PLINE,
-            EEntType.PGON,
-            EEntType.COLL
+            EEntType.PGON
         ];
         const ent_type_strs: Map<EEntType, string> = new Map([
             [EEntType.POINT, 'points'],

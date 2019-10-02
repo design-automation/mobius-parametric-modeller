@@ -4,6 +4,7 @@ import { IFlowchart, FlowchartUtils } from '@models/flowchart';
 import { INode } from '@models/node';
 import { IProcedure } from '@models/procedure';
 import { IEdge } from '@models/edge';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class DataService {
@@ -50,7 +51,7 @@ export class DataService {
     private static _dialog: HTMLDialogElement;
     private static _dialogType: string;
 
-    private static _mobiusSettings = {'execute': true};
+    private static _mobiusSettings; // {'execute': true};
 
     private _backupDialogType: any;
 
@@ -62,6 +63,9 @@ export class DataService {
     private _edtNode: string;
 
     private _modifiedNodeSet = new Set([]);
+
+    private toolsetUpdate = new Subject<void>();
+    toolsetUpdate$ = this.toolsetUpdate.asObservable();
 
 
     getLog(): string[] {
@@ -312,6 +316,10 @@ export class DataService {
 
     getbackup() {
         return this._backupDialogType;
+    }
+
+    triggerToolsetUpdate() {
+        this.toolsetUpdate.next();
     }
 
 }

@@ -10,7 +10,7 @@
  *
  */
 
-import { checkCommTypes, TypeCheckObj } from './_check_args';
+import { checkCommTypes, TypeCheckObj } from '../_check_args';
 import { idsBreak } from '@libs/geo-info/id';
 import { TEntTypeIdx } from '@libs/geo-info/common';
 

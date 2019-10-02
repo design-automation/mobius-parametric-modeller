@@ -14,6 +14,7 @@ import { InputType } from '@models/port';
 import { IdGenerator } from '@utils';
 import { SaveFileComponent } from '@shared/components/file';
 import * as Modules from '@modules';
+import * as categorization from '@modules/categorization';
 
 const keys = Object.keys(ProcedureTypes);
 const inputEvent = new Event('input', {
@@ -44,12 +45,23 @@ export class ToolsetComponent implements OnInit {
     inlineSortExpr = inline_sort_expr;
     inlineFunc = inline_func;
 
+    AllModules = {};
     Modules = [];
     ModuleDoc = ModuleDocList;
 
     private timeOut;
 
-    constructor(private dataService: DataService) {}
+    constructor(private dataService: DataService) {
+        this.dataService.toolsetUpdate$.subscribe(() => {
+            this.Modules = [];
+            for (const cat in categorization) {
+                if (!categorization[cat] || !this.dataService.mobiusSettings['_func_' + cat]) { continue; }
+                for (const mod of categorization[cat]) {
+                    this.Modules.push(this.AllModules[mod]);
+                }
+            }
+        });
+    }
 
 
     ngOnInit() {
@@ -87,8 +99,16 @@ export class ToolsetComponent implements OnInit {
                 }
                 nMod.functions.push(fn);
             }
-            this.Modules.push(nMod);
+            this.AllModules[nMod.module] = nMod;
+            // this.Modules.push(nMod);
         }
+        for (const cat in categorization) {
+            if (!categorization[cat] || !this.dataService.mobiusSettings['_func_' + cat]) { continue; }
+            for (const mod of categorization[cat]) {
+                this.Modules.push(this.AllModules[mod]);
+            }
+        }
+
     }
 
 

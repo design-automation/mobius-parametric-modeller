@@ -8,6 +8,7 @@ import { SaveFileComponent } from '../file';
 import { IdGenerator } from '@utils';
 import { InputType } from '@models/port';
 import { IArgument } from '@models/code';
+import * as categorization from '@modules/categorization';
 
 @Component({
     selector: 'panel-header',
@@ -23,6 +24,9 @@ export class PanelHeaderComponent implements OnDestroy {
     urlSet = ['', 'publish', '', '', ''];
     urlValid: boolean;
     urlNodes;
+
+    settings;
+    func_categories = Object.keys(categorization);
     private ctx = document.createElement('canvas').getContext('2d');
 
     constructor(private dataService: DataService, private keyboardService: KeyboardService, private router: Router) {
@@ -37,6 +41,19 @@ export class PanelHeaderComponent implements OnDestroy {
             this.nodeListCheck = true;
         }
         this.ctx.font = '12px sans-serif';
+
+        const settingsString = localStorage.getItem('mobius_settings');
+        if (settingsString) {
+            this.dataService.mobiusSettings = JSON.parse(settingsString);
+        } else {
+            this.dataService.mobiusSettings = {'execute': true};
+        }
+        this.settings = this.dataService.mobiusSettings;
+        for (const cat in categorization) {
+            if (!categorization[cat] || this.settings.hasOwnProperty('_func_' + cat)) { continue; }
+            this.settings['_func_' + cat] = true;
+        }
+        localStorage.setItem('mobius_settings', JSON.stringify(this.settings));
     }
 
     ngOnDestroy() {
@@ -164,17 +181,22 @@ export class PanelHeaderComponent implements OnDestroy {
     }
 
     updateSettings() {
-        const newSettings = { 'execute': (<HTMLInputElement>document.getElementById('settings-execute')).checked };
-        this.dataService.mobiusSettings = newSettings;
+        this.settings.execute = (<HTMLInputElement>document.getElementById('settings-execute')).checked;
+        for (const cat in categorization) {
+            if (!categorization[cat]) { continue; }
+            this.settings['_func_' + cat] = (<HTMLInputElement>document.getElementById(`_func_${cat}`)).checked;
+        }
         this.dataService.dialog.close();
+        this.dataService.triggerToolsetUpdate();
+        localStorage.setItem('mobius_settings', JSON.stringify(this.settings));
+
     }
 
     checkSetting(settingName: string, value: any) {
-        return this.dataService.mobiusSettings[settingName] === value;
+        return this.settings[settingName] === value;
     }
 
     closeDialog() {
-        (<HTMLInputElement>document.getElementById('settings-execute')).checked = this.dataService.mobiusSettings['execute'];
         this.dataService.dialog.close();
     }
 
@@ -189,7 +211,7 @@ export class PanelHeaderComponent implements OnDestroy {
             this.dataService.file = circularJSON.parse(result);
             this.dataService.file.flowchart.meta.selected_nodes = [this.dataService.file.flowchart.nodes.length - 1];
             this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-            if (this.dataService.mobiusSettings.execute) {
+            if (this.settings.execute) {
                 document.getElementById('executeButton').click();
             }
 
@@ -199,7 +221,7 @@ export class PanelHeaderComponent implements OnDestroy {
             //     }
             //     this.dataService.file = circularJSON.parse(file);
             //     this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-            //     if (this.dataService.mobiusSettings.execute) {
+            //     if (this.settings.execute) {
             //         document.getElementById('executeButton').click();
             //     }
             // });

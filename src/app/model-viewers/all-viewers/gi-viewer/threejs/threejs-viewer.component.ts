@@ -655,7 +655,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
     private getSelectingEntityType() {
         const select = JSON.parse(localStorage.getItem('mpm_settings'))['select'];
-        if (select !== undefined) {
+        if (select !== undefined && select.selector) {
             this.SelectingEntityType = select.selector;
         } else {
             this.SelectingEntityType = {id: EEntType.FACE, name: 'Faces'};
@@ -1419,7 +1419,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         localStorage.setItem('mpm_selecting_entity_type', JSON.stringify(selection));
 
         const settings = JSON.parse(localStorage.getItem('mpm_settings'));
-        if (settings !== undefined) {
+        if (settings !== undefined && selection) {
             settings.select.selector = selection;
             localStorage.setItem('mpm_settings', JSON.stringify(settings));
         }

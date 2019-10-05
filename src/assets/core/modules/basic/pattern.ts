@@ -16,9 +16,10 @@ import { xfromSourceTargetMatrix, multMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
 import { __merge__ } from '../_model';
 import { GIModel } from '@libs/geo-info/GIModel';
+import * as THREE from 'three';
 // ================================================================================================
 /**
- * Creates four positions in a rectangle pattern, and returns the list of new positions.
+ * Creates four positions in a rectangle pattern. Returns a list of new positions.
  * @param __model__
  * @param origin XYZ coordinates as a list of three numbers.
  * @param size Size of rectangle. If number, assume square of that length; if list of two numbers, x and y lengths respectively.
@@ -65,7 +66,7 @@ export function Rectangle(__model__: GIModel, origin: Txyz|TPlane, size: number|
 }
 // ================================================================================================
 /**
-* Creates positions in a grid pattern, and returns the list (or list of lists) of new positions.
+* Creates positions in a grid pattern. Returns a list (or list of lists) of new positions.
 * @param __model__
 * @param origin XYZ coordinates as a list of three numbers.
 * @param size Size of grid. If number, assume square grid of that length; if list of two numbers, x and y lengths respectively.
@@ -160,18 +161,18 @@ export enum _EGridMethod {
 }
 // ================================================================================================
 /**
- * Creates positions in an arc pattern, and returns the list of new positions.
+ * Creates positions in an arc pattern. Returns a list of new positions.
  * If the angle of the arc is set to null, then circular patterns will be created.
  * For circular patterns, duplicates at start and end are automatically removed.
  *
  * @param __model__
  * @param origin XYZ coordinates as a list of three numbers.
  * @param radius Radius of circle as a number.
- * @param num_positions Number of positions distributed equally along the arc.
+ * @param num_positions Number of positions to be distributed equally along the arc.
  * @param arc_angle Angle of arc (in radians).
  * @returns Entities, a list of positions.
  * @example coordinates1 = pattern.Arc([0,0,0], 10, 12, PI)
- * @example_info Creates a list of 12 XYZ coordinates distributed equally along a semicircle of radius 10.
+ * @example_info Creates a list of 12 positions distributed equally along a semicircle of radius 10.
  */
 export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num_positions: number, arc_angle: number): TId[] {
     // --- Error Check ---
@@ -207,5 +208,121 @@ export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num
     }
     // return the list of posis
     return idsMakeFromIndicies(EEntType.POSI, posis_i) as TId[];
+}
+// ================================================================================================
+/**
+ * Creates positions in an Bezier curve pattern. Returns a list of new positions.
+ * The Bezier is created as either a qadratic or cubic Bezier. It is always an open curve.
+ * ~
+ * The input is a list of XYZ coordinates. These act as the control points for creating the Bezier curve.
+ * ~
+ * For the quadratic Bezier, three XYZ coordinates are required.
+ * For the cubic Bezier, four XYZ coordinates are required.
+ * ~
+ * @param __model__
+ * @param coords A list of XYZ coordinates (three coords for quadratics, four coords for cubics).
+ * @param type Enum, the type of Catmull-Rom curve.
+ * @param num_positions Number of positions to be distributed along the Bezier.
+ * @returns Entities, a list of positions.
+ * @example coordinates1 = pattern.Bezier([[0,0,0], [10,0,50], [20,0,10]], 'quadratic', 20)
+ * @example_info Creates a list of 20 positions distributed along a Bezier curve pattern.
+ */
+export function Bezier(__model__: GIModel, coords: Txyz[], type: _ECurveBezierType, num_positions: number): TId[] {
+    // --- Error Check ---
+    const fn_name = 'pattern.Arc';
+    checkCommTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
+    checkCommTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+    // --- Error Check ---
+    // create the curve
+    const coords_tjs: THREE.Vector3[] = coords.map(coord => new THREE.Vector3(coord[0], coord[1], coord[2]));
+    let points_tjs: THREE.Vector3[] = [];
+    if (type === _ECurveBezierType.CUBIC) {
+        if (coords.length !== 4) {
+            throw new Error (fn_name + ': "coords" should be a list of four XYZ coords.');
+        }
+        const curve_tjs = new THREE.CubicBezierCurve3(coords_tjs[0], coords_tjs[1], coords_tjs[2], coords_tjs[3]);
+        points_tjs = curve_tjs.getPoints(num_positions - 1);
+    } else {
+        if (coords.length !== 3) {
+            throw new Error (fn_name + ': "coords" should be a list of three XYZ coords.');
+        }
+        const curve_tjs = new THREE.QuadraticBezierCurve3(coords_tjs[0], coords_tjs[1], coords_tjs[2]);
+        points_tjs = curve_tjs.getPoints(num_positions - 1);
+    }
+    // create positions
+    const posis_i: number[] = [];
+    for (let i = 0; i < num_positions; i++) {
+        const posi_i: number = __model__.geom.add.addPosi();
+        __model__.attribs.add.setPosiCoords(posi_i, points_tjs[i].toArray() as Txyz);
+        posis_i.push(posi_i);
+    }
+    // return the list of posis
+    return idsMakeFromIndicies(EEntType.POSI, posis_i) as TId[];
+}
+// Enums for CurveCatRom()
+export enum _ECurveBezierType {
+    QUADRATIC = 'quadratic',
+    CUBIC = 'cubic'
+}
+// ================================================================================================
+/**
+ * Creates positions in an spline pattern. Returns a list of new positions.
+ * The spline is created using the Catmull-Rom algorithm.
+ * ~
+ * The input is a list of XYZ coordinates. These act as the control points for creating the Spline curve.
+ * ~
+ * The spline curve can be created in three ways: 'centripetal', 'chordal', or 'catmullrom'.
+ * <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Catmull-Rom_examples_with_parameters..png" 
+ * alt="Curve types" width="100">
+ * ~
+ * @param __model__
+ * @param coords A list of XYZ coordinates.
+ * @param type Enum, the type of Catmull-Rom curve.
+ * @param close Enum, 'open' or 'close'.
+ * @param tension Curve tension, between 0 and 1. This only has an effect when the 'type' is set to 'catmullrom'.
+ * @param num_positions Number of positions to be distributed distributed along the spline.
+ * @returns Entities, a list of positions.
+ * @example coordinates1 = pattern.Spline([[0,0,0], [10,0,50], [20,0,0], [30,0,20], [40,0,10]], 'chordal','close', 0.2, 50)
+ * @example_info Creates a list of 50 positions distributed along a spline curve pattern.
+ */
+export function Spline(__model__: GIModel, coords: Txyz[], type: _ECurveCatRomType, close: _EClose, tension: number,
+    num_positions: number): TId[] {
+    // --- Error Check ---
+    const fn_name = 'pattern.Spline';
+    checkCommTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
+    checkCommTypes(fn_name, 'tension', tension, [TypeCheckObj.isNumber01]);
+    checkCommTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+    // --- Error Check ---
+    const closed_tjs: boolean = close === _EClose.CLOSE;
+    const num_positions_tjs: number = closed_tjs ? num_positions : num_positions - 1;
+    if (tension === 0) { tension = 1e-16; } // There seems to be a bug in threejs, so this is a fix
+    // Check we have enough coords
+    if (coords.length < 3) {
+        throw new Error(fn_name + ': "coords" should be a list of at least three XYZ coords.');
+    }
+    // create the curve
+    const coords_tjs: THREE.Vector3[] = coords.map(coord => new THREE.Vector3(coord[0], coord[1], coord[2]));
+    const curve_tjs: THREE.CatmullRomCurve3 = new THREE.CatmullRomCurve3(coords_tjs, closed_tjs, type, tension);
+    const points_tjs: THREE.Vector3[] = curve_tjs.getPoints(num_positions_tjs);
+    // create positions
+    const posis_i: number[] = [];
+    for (let i = 0; i < num_positions; i++) {
+        const posi_i: number = __model__.geom.add.addPosi();
+        __model__.attribs.add.setPosiCoords(posi_i, points_tjs[i].toArray() as Txyz);
+        posis_i.push(posi_i);
+    }
+    // return the list of posis
+    return idsMakeFromIndicies(EEntType.POSI, posis_i) as TId[];
+}
+// Enums for CurveCatRom()
+export enum _ECurveCatRomType {
+    CENTRIPETAL = 'centripetal',
+    CHORDAL = 'chordal',
+    UNIFORM = 'catmullrom'
+}
+// ================================================================================================
+export enum _EClose {
+    OPEN = 'open',
+    CLOSE = 'close'
 }
 // ================================================================================================

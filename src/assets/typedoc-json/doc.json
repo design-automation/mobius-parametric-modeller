@@ -20517,7 +20517,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "Enum, the type of Catmull-Rom curve."
+										"text": "Enum, the type of Bezier curve."
 									},
 									"type": {
 										"type": "reference",

@@ -55,7 +55,7 @@ For the cubic Bezier, four XYZ coordinates are required.
 ~  
 * **Parameters:**  
   * *coords:* A list of XYZ coordinates (three coords for quadratics, four coords for cubics).  
-  * *type:* Enum, the type of Catmull-Rom curve.  
+  * *type:* Enum, the type of Bezier curve.  
   * *num_positions:* Number of positions to be distributed along the Bezier.  
 * **Returns:** Entities, a list of positions.  
 * **Examples:**  

@@ -221,7 +221,7 @@ export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num
  * ~
  * @param __model__
  * @param coords A list of XYZ coordinates (three coords for quadratics, four coords for cubics).
- * @param type Enum, the type of Catmull-Rom curve.
+ * @param type Enum, the type of Bezier curve.
  * @param num_positions Number of positions to be distributed along the Bezier.
  * @returns Entities, a list of positions.
  * @example coordinates1 = pattern.Bezier([[0,0,0], [10,0,50], [20,0,10]], 'quadratic', 20)

@@ -229,7 +229,7 @@ export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num
  */
 export function Bezier(__model__: GIModel, coords: Txyz[], type: _ECurveBezierType, num_positions: number): TId[] {
     // --- Error Check ---
-    const fn_name = 'pattern.Arc';
+    const fn_name = 'pattern.Bezier';
     checkCommTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
     checkCommTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
     // --- Error Check ---

@@ -219,6 +219,9 @@ export class TypeCheckObj {
     static isNumber(fn_name: string, arg_name: string, arg: number): void {
         isNumberArg(fn_name, arg_name, arg);
         return;
+    }static isNumber01(fn_name: string, arg_name: string, arg: number): void {
+        isNumber01Arg(fn_name, arg_name, arg);
+        return;
     }
     static isNumberList(fn_name: string, arg_name: string, arg_list: number[]): void {
         isNumberListArg(fn_name, arg_name, arg_list);
@@ -252,7 +255,7 @@ export class TypeCheckObj {
     static isColor(fn_name: string, arg_name: string, arg: [number, number, number]): void { // TColor = [number, number, number]
         isListArg(fn_name, arg_name, arg, 'numbers');
         isListLenArg(fn_name, arg_name, arg, 3);
-        isNumberListArg(fn_name, arg_name, arg);
+        isNumber01ListArg(fn_name, arg_name, arg);
         return;
     }
     static isCoord(fn_name: string, arg_name: string, arg: [number, number, number]): void { // Txyz = [number, number, number]
@@ -567,10 +570,26 @@ function isNumberArg(fn_name: string, arg_name: string, arg: any): void {
     }
     return;
 }
+function isNumber01Arg(fn_name: string, arg_name: string, arg: any): void {
+    if (isNaN(arg) || isNaN(parseInt(arg, 10))) {
+        throw new Error(fn_name + ': ' + arg_name + ' is not a number');
+    }
+    if (arg < 0 || arg > 1) {
+        throw new Error(fn_name + ': ' + arg_name + ' must be between 0 and 1');
+    }
+    return;
+}
 function isNumberListArg(fn_name: string, arg_name: string, arg_list: any): void {
     isListArg(fn_name, arg_name, arg_list, 'numbers');
     for (let i = 0; i < arg_list.length; i++) {
         isNumberArg(fn_name, arg_name + '[' + i + ']', arg_list[i]);
+    }
+    return;
+}
+function isNumber01ListArg(fn_name: string, arg_name: string, arg_list: any): void {
+    isListArg(fn_name, arg_name, arg_list, 'numbers');
+    for (let i = 0; i < arg_list.length; i++) {
+        isNumber01Arg(fn_name, arg_name + '[' + i + ']', arg_list[i]);
     }
     return;
 }

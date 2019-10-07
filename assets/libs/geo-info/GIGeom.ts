@@ -71,14 +71,12 @@ export class GIGeom {
         const eny_types: EEntType[] = [
             EEntType.POINT,
             EEntType.PLINE,
-            EEntType.PGON,
-            EEntType.COLL
+            EEntType.PGON
         ];
         const ent_type_strs: Map<EEntType, string> = new Map([
             [EEntType.POINT, 'points'],
             [EEntType.PLINE, 'polylines'],
-            [EEntType.PGON, 'polygons'],
-            [EEntType.COLL, 'collections']
+            [EEntType.PGON, 'polygons']
         ]);
         const geom_comments: string[] = [];
         for (const ent_type of eny_types) {

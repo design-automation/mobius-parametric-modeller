@@ -331,6 +331,22 @@ button.mat-menu-item:hover{
             color: $color1;
             display: inline-block;
         }
+
+        .textdiv{
+            padding: 0px 5px 0px 5px;
+            height: 20px;
+            display: inline-block;
+        }
+
+        .settingLine {
+            display: inline-flex;
+            height: 20px;
+            line-height: 20px;
+            padding-left: 10px;
+        }
+
+        .subsetting {
+            padding-left: 20px;
+        }
     }
 }
-

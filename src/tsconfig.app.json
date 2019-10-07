@@ -15,9 +15,10 @@
       "@views" : ["app/views"],
       "@services" : ["app/shared/services"],
       "@modules" : ["assets/core/modules"],
+      "@modules/*" : ["assets/core/modules/*"],
       "@libs": ["assets/libs"],
       "@test" : ["app/views"]
-    },
+    }
   },
   "exclude": [
     "test.ts",

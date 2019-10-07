@@ -77,11 +77,10 @@ export class GIGeomThreejs {
                     for (const pgon_mat_name of pgon_mat_names) {
                         let pgon_mat_index: number = material_names.indexOf(pgon_mat_name);
                         if (pgon_mat_index === -1) {
-                            const mat: string = this._geom.model.attribs._attribs_maps.mo.get(pgon_mat_name);
-                            if (mat !== undefined) {
+                            const mat_settings_obj: object = this._geom.model.attribs._attribs_maps.mo.get(pgon_mat_name);
+                            if (mat_settings_obj !== undefined) {
                                 pgon_mat_index = materials.length;
                                 material_names.push(pgon_mat_name);
-                                const mat_settings_obj: object = JSON.parse(mat);
                                 materials.push(this._getMaterial(mat_settings_obj));
                             }
                         }

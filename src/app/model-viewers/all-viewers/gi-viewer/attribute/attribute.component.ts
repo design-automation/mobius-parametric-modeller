@@ -230,7 +230,7 @@ export class AttributeComponent implements OnChanges, DoCheck {
   showSelectedSwitch() {
     this.showSelected = !this.showSelected;
     sessionStorage.setItem('mpm_showSelected', JSON.stringify(this.showSelected));
-    sessionStorage.setItem('mpm_changetab', JSON.stringify(false));
+    sessionStorage.setItem('mpm_changetab', 'false');
     this.selectSwitch.emit(this.showSelected);
     this.refreshTable();
   }
@@ -245,7 +245,7 @@ export class AttributeComponent implements OnChanges, DoCheck {
       if (sessionStorage.getItem('mpm_changetab')) {
         changeTab = JSON.parse(sessionStorage.getItem('mpm_changetab'));
       }
-      // sessionStorage.setItem('mpm_changetab', JSON.stringify(true));
+      // sessionStorage.setItem('mpm_changetab', 'true');
       if (changeTab) {
         if (this.data) {
           if (currentTab === 0 || currentTab === 8 || currentTab === 9) {

@@ -5,7 +5,7 @@ import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
 import { EEntTypeStr, EEntType } from '@libs/geo-info/common';
 import { Vector3 } from 'three';
 import { DataService } from '@services';
-import { Vector } from '@assets/core/modules/calc';
+import { Vector } from '@assets/core/modules/basic/calc';
 /**
  * ThreejsScene
  */

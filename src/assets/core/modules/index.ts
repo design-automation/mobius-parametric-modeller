@@ -12,37 +12,37 @@ export {_model};
 // functions for end users
 
 
-import * as query from './query';
+import * as query from './basic/query';
 export {query};
 
-import * as pattern from './pattern';
+import * as pattern from './basic/pattern';
 export {pattern};
 
-import * as make from './make';
+import * as make from './basic/make';
 export {make};
 
-import * as modify from './modify';
+import * as modify from './basic/modify';
 export {modify};
 
-import * as attrib from './attrib';
+import * as attrib from './basic/attrib';
 export {attrib};
 
 // import * as isect from './isect';
 // export {isect};
 
-import * as calc from './calc';
+import * as calc from './basic/calc';
 export {calc};
 
-import * as virtual from './virtual';
+import * as virtual from './basic/virtual';
 export {virtual};
 
-import * as render from './render';
+import * as render from './basic/render';
 export {render};
 
-import * as list from './list';
+import * as list from './basic/list';
 export {list};
 
-import * as util from './util';
+import * as util from './basic/util';
 export {util};
 
 // helpers

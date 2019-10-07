@@ -112,7 +112,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this.keyboardService = injector.get(KeyboardService);
         this.keyboardService.viewerControl$.subscribe(event => {
             const check = this._data_threejs.onWindowKeyPress(event);
-            if (check) { this.render(this); }
+            if (check) { this.render(); }
         });
     }
     /**
@@ -139,8 +139,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this._threejs_nums = this._data_threejs._threejs_nums;
         // ??? What is happening here?
         const self = this;
-        this._data_threejs._controls.addEventListener('change', function () { self.render(self); });
-        self._data_threejs._renderer.render(self._data_threejs._scene, self._data_threejs._camera);
+        this._data_threejs._controls.addEventListener('change', function () { self.render(); });
+        this._data_threejs._renderer.render(this._data_threejs._scene, this._data_threejs._camera);
 
         if (this._data_threejs.ObjLabelMap.size !== 0) {
             this._data_threejs.ObjLabelMap.forEach((obj, label) => {
@@ -153,14 +153,14 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     /**
      * @param self
      */
-    public render(self) {
+    public render() {
         const textLabels = this._data_threejs._textLabels;
         if (textLabels.size !== 0) {
             textLabels.forEach((label) => {
                 label.updatePosition();
             });
         }
-        self._data_threejs._renderer.render(self._data_threejs._scene, self._data_threejs._camera);
+        this._data_threejs._renderer.render(this._data_threejs._scene, this._data_threejs._camera);
     }
 
     /**
@@ -182,7 +182,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 this._data_threejs._camera.aspect = this._width / this._height;
                 this._data_threejs._camera.updateProjectionMatrix();
                 this._data_threejs._renderer.setSize(this._width, this._height);
-                this.render(this);
+                this.render();
             }, 10);
         }
 
@@ -280,7 +280,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 element.innerHTML = String('');
             }
         }
-        this.render(this);
+        this.render();
     }
 
     labelforindex(showSelected, allLabels, arr) {
@@ -309,7 +309,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     }
 
     attrTableSelect(attrib: { action: string, ent_type: string, id: number | number[] }, flowchart = false) {
-        sessionStorage.setItem('mpm_changetab', JSON.stringify(false));
+        sessionStorage.setItem('mpm_changetab', 'false');
         if (attrib.action === 'select') {
             if (!flowchart) {this.unselectAll(); } // If select from Flowchart, don't unselect all.
             switch (attrib.ent_type) {
@@ -418,7 +418,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             }
         }
         this.refreshLabels(this.tab_map[this.getCurrentTab()]);
-        this.render(this);
+        this.render();
     }
 
     getGISummary(model: GIModel) {
@@ -474,33 +474,27 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     this.dataService.clearAll();
                     if (selected !== undefined && selected.length) {
                         let selectingType;
+                        this._data_threejs.selected_geoms.clear();
                         selected.forEach(s => {
                             const type = EEntTypeStr[s[0]], id = Number(s[1]);
                             if (this.model.geom.query.entExists(s[0], id)) {
                                 this.dataService.selected_ents.get(type).set(`${type}${id}`, id);
+                                this.attrTableSelect({ action: 'select', ent_type: type, id: id }, true);
                             }
                             selectingType = s[0];
                         });
-                        sessionStorage.setItem('mpm_showSelected', JSON.stringify(true));
-                        selected.forEach(s => {
-                            const type = EEntTypeStr[s[0]], id = Number(s[1]);
-                            if (this.model.geom.query.entExists(s[0], id)) {
-                                this.attrTableSelect({ action: 'select', ent_type: type, id: id }, true);
-                            }
-                        });
+                        sessionStorage.setItem('mpm_showSelected', 'true');
 
-                        sessionStorage.setItem('mpm_changetab', JSON.stringify(true));
+                        sessionStorage.setItem('mpm_changetab', 'true');
                         localStorage.setItem('mpm_attrib_current_tab', this.tab_rev_map[selectingType]);
                         this.selectEntityType(this.selections.find(selection => selection.id === selectingType));
-                        this.refreshTable(event);
                     } else {
-                        sessionStorage.setItem('mpm_showSelected', JSON.stringify(false));
-                        sessionStorage.setItem('mpm_changetab', JSON.stringify(false));
-                        this.refreshTable(event);
+                        sessionStorage.setItem('mpm_showSelected', 'false');
+                        sessionStorage.setItem('mpm_changetab', 'false');
                     }
                     this.getSelectingEntityType();
                     this.refreshTable(event);
-                    this.render(this);
+                    this.render();
                 } catch (ex) {
                     console.error('Error displaying model:', ex);
                     this._model_error = true;
@@ -656,12 +650,12 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             scene.unselectObjGroup(wire, this.container, 'face_wires');
         }
 
-        this.render(this);
+        this.render();
     }
 
     private getSelectingEntityType() {
         const select = JSON.parse(localStorage.getItem('mpm_settings'))['select'];
-        if (select !== undefined) {
+        if (select !== undefined && select.selector) {
             this.SelectingEntityType = select.selector;
         } else {
             this.SelectingEntityType = {id: EEntType.FACE, name: 'Faces'};
@@ -904,7 +898,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 this.showMessages('Please choose an Entity type.', 'custom');
                 break;
         }
-        this.render(this);
+        this.render();
     }
 
     private showMessages(msg: string, mode: string = 'notice') {
@@ -1059,7 +1053,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             this.dataService.selected_ents.get(ent_type_str).delete(ent_id);
             this.unselectLabel(ent_id, ent_type_str);
         }
-        this.render(this);
+        this.render();
         this.refreshTable(event);
     }
 
@@ -1391,7 +1385,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this.dataService.selected_ents.get(EEntTypeStr[EEntType.COLL]).set(coll_id, id);
         this.dataService.selected_coll.set(coll_id, children);
         this.refreshTable(null);
-        this.render(this);
+        this.render();
     }
 
     private chooseVertex(id: number) {
@@ -1406,7 +1400,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         posi_ent.set(ent_id, id);
         this.dataService.selected_vertex.set(`_single_v${timestamp}`, [ent_id]);
         this.refreshTable(null);
-        this.render(this);
+        this.render();
     }
 
     public zoomfit() {
@@ -1425,7 +1419,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         localStorage.setItem('mpm_selecting_entity_type', JSON.stringify(selection));
 
         const settings = JSON.parse(localStorage.getItem('mpm_settings'));
-        if (settings !== undefined) {
+        if (settings !== undefined && selection) {
             settings.select.selector = selection;
             localStorage.setItem('mpm_settings', JSON.stringify(settings));
         }

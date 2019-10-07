@@ -48,36 +48,84 @@ For circular patterns, duplicates at start and end are automatically removed.
 * **Description:** Creates positions in an Bezier curve pattern. Returns a list of new positions.
 The Bezier is created as either a qadratic or cubic Bezier. It is always an open curve.
 ~
-The input is a list of XYZ coordinates. These act as the control points for creating the Bezier curve.
+The input is a list of XYZ coordinates (three coords for quadratics, four coords for cubics).
+The first and last coordinates in the list are the start and end positions of the Bezier curve.
+The middle coordinates act as the control points for controlling the shape of the Bezier curve.
 ~
 For the quadratic Bezier, three XYZ coordinates are required.
 For the cubic Bezier, four XYZ coordinates are required.
+~
+For more information, see the wikipedia article: <a href="https://en.wikipedia.org/wiki/B%C3%A9zier_curve">B%C3%A9zier_curve</a>.
 ~  
 * **Parameters:**  
   * *coords:* A list of XYZ coordinates (three coords for quadratics, four coords for cubics).  
-  * *type:* Enum, the type of Bezier curve.  
   * *num_positions:* Number of positions to be distributed along the Bezier.  
 * **Returns:** Entities, a list of positions.  
 * **Examples:**  
-  * coordinates1 = pattern.Bezier([[0,0,0], [10,0,50], [20,0,10]], 'quadratic', 20)  
+  * coordinates1 = pattern.Bezier([[0,0,0], [10,0,50], [20,0,10]], 20)  
     Creates a list of 20 positions distributed along a Bezier curve pattern.
   
   
-## Spline  
+## Nurbs  
+* **Description:** Creates positions in an NURBS curve pattern, by using the XYZ positions as control points.
+Returns a list of new positions.
+~
+The positions are created along the curve at equal parameter values.
+This means that the euclidean distance between the positions will not necessarily be equal.
+~
+The input is a list of XYZ coordinates that will act as control points for the curve.
+If the curve is open, then the first and last coordinates in the list are the start and end positions of the curve.
+~
+The number of positions should be at least one greater than the degree of the curve.
+~
+The degree (between 2 and 5) of the urve defines how smooth the curve is.
+Quadratic: degree = 2
+Cubic: degree = 3
+Quartic: degree = 4.
+~  
+* **Parameters:**  
+  * *coords:* A list of XYZ coordinates (must be at least three XYZ coords).  
+  * *degree:* The degree of the curve, and integer between 2 and 5.  
+  * *close:* Enum, 'close' or 'open'  
+  * *num_positions:* Number of positions to be distributed along the Bezier.  
+* **Returns:** Entities, a list of positions.  
+* **Examples:**  
+  * coordinates1 = pattern.Nurbs([[0,0,0], [10,0,50], [20,0,10]], 20)  
+    Creates a list of 20 positions distributed along a Bezier curve pattern.
+  
+  
+## nurbsToPosis  
+* **Description:** undefined  
+* **Parameters:**  
+  * *curve_verb:* undefined  
+  * *degree:* undefined  
+  * *closed:* undefined  
+  * *num_positions:* undefined  
+  * *start:* undefined  
+  
+## Interpolate  
 * **Description:** Creates positions in an spline pattern. Returns a list of new positions.
 The spline is created using the Catmull-Rom algorithm.
+It is a type of interpolating spline (a curve that goes through its control points).
 ~
 The input is a list of XYZ coordinates. These act as the control points for creating the Spline curve.
+The positions that get generated will be divided equally between the control points.
+For example, if you define 4 control points for a cosed spline, and set 'num_positions' to be 40,
+then you will get 8 positions between each pair of control points,
+irrespective of the distance between the control points.
 ~
 The spline curve can be created in three ways: 'centripetal', 'chordal', or 'catmullrom'.
+~
+For more information, see the wikipedia article: <a href="https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline">Catmull–Rom spline</a>.
+~
 <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Catmull-Rom_examples_with_parameters..png"
 alt="Curve types" width="100">
 ~  
 * **Parameters:**  
   * *coords:* A list of XYZ coordinates.  
-  * *type:* Enum, the type of Catmull-Rom curve.  
-  * *close:* Enum, 'open' or 'close'.  
+  * *type:* Enum, the type of interpolation algorithm.  
   * *tension:* Curve tension, between 0 and 1. This only has an effect when the 'type' is set to 'catmullrom'.  
+  * *close:* Enum, 'open' or 'close'.  
   * *num_positions:* Number of positions to be distributed distributed along the spline.  
 * **Returns:** Entities, a list of positions.  
 * **Examples:**  

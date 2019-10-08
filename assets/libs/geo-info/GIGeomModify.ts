@@ -1,4 +1,4 @@
-import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz, TColl } from './common';
+import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz, TColl, TVert } from './common';
 import { GIGeom } from './GIGeom';
 import { arrRem, arrIdxAdd } from '../util/arrs';
 import { vecDot } from '../geom/vectors';
@@ -416,19 +416,37 @@ export class GIGeomModify {
     }
     /**
      * Insert a vertex into an edge and updates the wire with the new edge
-     * @param edge_i The edge to insert teh vertex into
+     * @param edge_i The edge to insert the vertex into
      */
     public insertVertIntoWire(edge_i: number, posi_i: number): number {
         const wire_i: number = this._geom.query.navEdgeToWire(edge_i);
         const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
-        const old_edge: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
+        const old_edge_verts_i: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
+        const old_and_prev_edge_i: number[] = this._geom_arrays.up_verts_edges[old_edge_verts_i[0]];
+        const old_and_next_edge_i: number[] = this._geom_arrays.up_verts_edges[old_edge_verts_i[1]];
+        // check prev edge
+        if (old_and_prev_edge_i.length === 2) {
+            if (old_and_prev_edge_i[0] === edge_i) {
+                throw new Error('Edges are in wrong order');
+            }
+        }
+        // check next edge amd save the next edge
+        if (old_and_next_edge_i.length === 2) {
+            if (old_and_next_edge_i[1] === edge_i) {
+                throw new Error('Edges are in wrong order');
+            }
+            this._geom_arrays.up_verts_edges[old_edge_verts_i[1]] = [old_and_next_edge_i[1]];
+        } else {
+            this._geom_arrays.up_verts_edges[old_edge_verts_i[1]] = [];
+        }
         // create one new vertex and one new edge
         const new_vert_i: number = this._geom.add._addVertex(posi_i);
-        const new_edge_i: number = this._geom.add._addEdge(new_vert_i, old_edge[1]);
+        this._geom_arrays.up_verts_edges[new_vert_i] = [edge_i];
+        const new_edge_i: number = this._geom.add._addEdge(new_vert_i, old_edge_verts_i[1]);
         // update the down arrays
-        old_edge[1] = new_vert_i;
+        old_edge_verts_i[1] = new_vert_i;
         wire.splice(wire.indexOf(edge_i), 1, edge_i, new_edge_i);
-        // update the up arrays
+        // update the up arrays for edges to wires
         this._geom_arrays.up_edges_wires[new_edge_i] = wire_i;
         // return the new edge
         return new_edge_i;
@@ -570,6 +588,9 @@ export class GIGeomModify {
         for (const edge_i of wire) {
             const edge: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
             edge.reverse();
+            // the verts pointing up to edges also need to be reversed
+            const edges_i: number[] = this._geom_arrays.up_verts_edges[edge[0]];
+            edges_i.reverse();
         }
         // if this is the first wire in a face, reverse the triangles
         const face_i: number = this._geom_arrays.up_wires_faces[wire_i];

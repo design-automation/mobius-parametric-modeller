@@ -38786,7 +38786,7 @@
 									"kindString": "Call signature",
 									"flags": {},
 									"comment": {
-										"shortText": "Adds an edge and updates the arrays."
+										"shortText": "Adds an edge from v1 to v2 and updates the up and down arrays.\nEach vertex passed into this function can have zero or one edges.\nThe new edge is added to v1 and v2\nAny existing edges are not affected"
 									},
 									"parameters": [
 										{
@@ -38825,7 +38825,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomAdd.ts",
-									"line": 303,
+									"line": 306,
 									"character": 19
 								}
 							]
@@ -38875,7 +38875,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomAdd.ts",
-									"line": 380,
+									"line": 410,
 									"character": 19
 								}
 							]
@@ -38939,7 +38939,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomAdd.ts",
-									"line": 399,
+									"line": 429,
 									"character": 28
 								}
 							]
@@ -39042,7 +39042,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomAdd.ts",
-									"line": 336,
+									"line": 366,
 									"character": 19
 								}
 							]
@@ -39157,7 +39157,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomAdd.ts",
-									"line": 323,
+									"line": 353,
 									"character": 19
 								}
 							]
@@ -40486,7 +40486,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 759,
+									"line": 780,
 									"character": 37
 								}
 							]
@@ -40564,7 +40564,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 805,
+									"line": 826,
 									"character": 35
 								}
 							]
@@ -40642,7 +40642,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 781,
+									"line": 802,
 									"character": 37
 								}
 							]
@@ -40692,7 +40692,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 767,
+									"line": 788,
 									"character": 44
 								}
 							]
@@ -40750,7 +40750,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 775,
+									"line": 796,
 									"character": 40
 								}
 							]
@@ -40825,7 +40825,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 830,
+									"line": 851,
 									"character": 35
 								}
 							]
@@ -40886,7 +40886,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 621,
+									"line": 642,
 									"character": 25
 								}
 							]
@@ -40937,7 +40937,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 691,
+									"line": 712,
 									"character": 20
 								}
 							]
@@ -40987,7 +40987,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 866,
+									"line": 887,
 									"character": 27
 								}
 							]
@@ -41059,7 +41059,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 440,
+									"line": 458,
 									"character": 24
 								}
 							]
@@ -41815,7 +41815,7 @@
 											"kindString": "Parameter",
 											"flags": {},
 											"comment": {
-												"text": "The edge to insert teh vertex into\n"
+												"text": "The edge to insert the vertex into\n"
 											},
 											"type": {
 												"type": "intrinsic",
@@ -41971,7 +41971,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 469,
+									"line": 487,
 									"character": 23
 								}
 							]
@@ -42018,7 +42018,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 566,
+									"line": 584,
 									"character": 18
 								}
 							]
@@ -42143,7 +42143,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 604,
+									"line": 625,
 									"character": 23
 								}
 							]
@@ -42201,7 +42201,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 594,
+									"line": 615,
 									"character": 16
 								}
 							]
@@ -42257,7 +42257,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 539,
+									"line": 557,
 									"character": 22
 								}
 							]
@@ -42313,7 +42313,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 496,
+									"line": 514,
 									"character": 29
 								}
 							]

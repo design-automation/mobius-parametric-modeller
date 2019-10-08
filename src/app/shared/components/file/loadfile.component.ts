@@ -103,17 +103,19 @@ export class LoadFileComponent {
                     }
                 }
             }
-            if (this.dataService.mobiusSettings.execute) {
-                document.getElementById('executeButton').click();
-            }
-            const zooming = document.getElementById('zoomToFit');
-            if (zooming) {
-                zooming.click();
-                this.dataService.newFlowchart = false;
-            } else {
-                this.dataService.newFlowchart = true;
-            }
-            this.dataService.clearModifiedNode();
+            setTimeout(() => {
+                if (this.dataService.mobiusSettings.execute) {
+                    document.getElementById('executeButton').click();
+                }
+                const zooming = document.getElementById('zoomToFit');
+                if (zooming) {
+                    zooming.click();
+                    this.dataService.newFlowchart = false;
+                } else {
+                    this.dataService.newFlowchart = true;
+                }
+                this.dataService.clearModifiedNode();
+            }, 1000);
         });
         (<HTMLInputElement>document.getElementById('file-input')).value = '';
     }

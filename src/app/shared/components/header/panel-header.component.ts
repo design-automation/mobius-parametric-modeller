@@ -42,12 +42,6 @@ export class PanelHeaderComponent implements OnDestroy {
         }
         this.ctx.font = '12px sans-serif';
 
-        const settingsString = localStorage.getItem('mobius_settings');
-        if (settingsString) {
-            this.dataService.mobiusSettings = JSON.parse(settingsString);
-        } else {
-            this.dataService.mobiusSettings = {'execute': true};
-        }
         this.settings = this.dataService.mobiusSettings;
         for (const cat in categorization) {
             if (!categorization[cat] || this.settings.hasOwnProperty('_func_' + cat)) { continue; }

@@ -130,10 +130,13 @@ export class LoadUrlComponent {
                 }
             }
         }
-        let executeB = document.getElementById('executeButton');
-        if (executeB && this.dataService.mobiusSettings.execute) { executeB.click(); }
-        executeB = null;
-        this.dataService.clearModifiedNode();
+        setTimeout(() => {
+            let executeB = document.getElementById('executeButton');
+            if (executeB && this.dataService.mobiusSettings.execute) { executeB.click(); }
+            executeB = null;
+            this.dataService.clearModifiedNode();
+        }, 1000);
+
         return true;
     }
 
@@ -187,7 +190,7 @@ export class LoadUrlComponent {
             let executeB = document.getElementById('executeButton');
             if (executeB && this.dataService.mobiusSettings.execute) { executeB.click(); }
             executeB = null;
-        }, 50);
+        }, 1000);
 
         // SaveFileComponent.loadFile('___TEMP___.mob', (f) => {
         //     // let f: any = localStorage.getItem('temp_file');

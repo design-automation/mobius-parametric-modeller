@@ -67,6 +67,14 @@ export class DataService {
     private toolsetUpdate = new Subject<void>();
     toolsetUpdate$ = this.toolsetUpdate.asObservable();
 
+    constructor() {
+        const settingsString = localStorage.getItem('mobius_settings');
+        if (settingsString) {
+            DataService._mobiusSettings = JSON.parse(settingsString);
+        } else {
+            DataService._mobiusSettings = {'execute': true};
+        }
+    }
 
     getLog(): string[] {
         return DataService._consoleLog;

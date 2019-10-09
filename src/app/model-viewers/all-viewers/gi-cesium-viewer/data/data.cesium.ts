@@ -90,9 +90,10 @@ export class DataCesium {
         cameraController.rotateEventTypes = Cesium.CameraEventType.LEFT_DRAG;
         cameraController.tiltEventTypes  = Cesium.CameraEventType.LEFT_DRAG;
         cameraController.translateEventTypes = Cesium.CameraEventType.RIGHT_DRAG;
-        cameraController.lookEventTypes = [Cesium.CameraEventType.RIGHT_DRAG,
-                                            {'eventType': Cesium.CameraEventType.LEFT_DRAG,
-                                             'modifier': Cesium.KeyboardEventModifier.SHIFT}];
+        // cameraController.lookEventTypes = [Cesium.CameraEventType.RIGHT_DRAG,
+        //                                     {'eventType': Cesium.CameraEventType.LEFT_DRAG,
+        //                                      'modifier': Cesium.KeyboardEventModifier.SHIFT}];
+        cameraController.lookEventTypes = Cesium.CameraEventType.RIGHT_DRAG;
         cameraController.zoomEventTypes  = [  Cesium.CameraEventType.MIDDLE_DRAG,
                                                 Cesium.CameraEventType.WHEEL,
                                                 Cesium.CameraEventType.PINCH];

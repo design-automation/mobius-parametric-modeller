@@ -424,7 +424,7 @@ export class GIModel {
     private checkForErrors(other_model: GIModel, result: {score: number, total: number, comment: any[]},
             idx_maps: [Map<EEntType, Map<number, number>>, Map<EEntType, Map<number, number>>]): void {
         // set precision of comparing vectors
-        // this precision should be a little higher than the precision used in 
+        // this precision should be a little higher than the precision used in
         // getAttribValFprint()
         const precision = 1e6;
         // get the maps

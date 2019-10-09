@@ -74,6 +74,17 @@ then the position will be moved by the average of the vectors.
     Transforms polygon1 from plane1 to plane2.
   
   
+## Offset  
+* **Description:** Offsets wires.  
+* **Parameters:**  
+  * *entities:* Edges, wires, faces, polylines, polygons, collections.  
+  * *dist:* The distance to offset by, can be either positive or negative  
+* **Returns:** void  
+* **Examples:**  
+  * modify.Offset(polygon1, 10)  
+    Offsets the wires inside polygon1 by 10 units. Holes will also be offset.
+  
+  
 ## Collection  
 * **Description:** Modifies a collection.
 ~

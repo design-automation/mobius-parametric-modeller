@@ -10,6 +10,7 @@
 
 # dependencies
 /node_modules
+/py_dependencies
 
 # IDEs and editors
 /.idea

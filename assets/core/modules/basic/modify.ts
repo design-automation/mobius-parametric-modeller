@@ -11,10 +11,12 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EEntType, TEntTypeIdx} from '@libs/geo-info/common';
 import { getArrDepth, isColl, isPgon, isPline, isPoint, isPosi } from '@libs/geo-info/id';
-import { vecAdd, vecSum, vecDiv } from '@libs/geom/vectors';
+import { vecAdd, vecSum, vecDiv, vecFromTo, vecNorm, vecCross, vecSetLen, vecLen,
+    vecAng, vecDot, vecRev, vecSub } from '@libs/geom/vectors';
 import { checkCommTypes, checkIDs, IDcheckObj, TypeCheckObj} from '../_check_args';
 import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
+import { distance } from '@assets/libs/geom/distance';
 import __ from 'underscore';
 
 // ================================================================================================
@@ -270,6 +272,135 @@ export function XForm(__model__: GIModel, entities: TId|TId[], from: TPlane, to:
         const old_xyz: Txyz = __model__.attribs.query.getPosiCoords(unique_posi_i);
         const new_xyz: Txyz = multMatrix(old_xyz, matrix);
         __model__.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
+    }
+}
+// ================================================================================================
+/**
+ * Offsets wires.
+ * ~
+ * @param __model__
+ * @param entities Edges, wires, faces, polylines, polygons, collections.
+ * @param dist The distance to offset by, can be either positive or negative
+ * @returns void
+ * @example modify.Offset(polygon1, 10)
+ * @example_info Offsets the wires inside polygon1 by 10 units. Holes will also be offset.
+ */
+export function Offset(__model__: GIModel, entities: TId|TId[], dist: number): void {
+    // --- Error Check ---
+    const fn_name = 'modify.Offset';
+    let ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
+                            [EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]);
+    checkCommTypes(fn_name, 'dist', dist, [TypeCheckObj.isNumber]);
+    // --- Error Check ---
+    // handle geometry type
+    if (!Array.isArray(ents_arr[0])) {
+        ents_arr = [ents_arr] as TEntTypeIdx[];
+    }
+    // get all wires and offset
+    const pgons_i: number[] = [];
+    for (const ents of ents_arr) {
+        const [ent_type, index]: [EEntType, number] = ents as TEntTypeIdx;
+        const wires_i: number[] = __model__.geom.query.navAnyToWire(ent_type, index);
+        for (const wire_i of wires_i) {
+            _offset(__model__, wire_i, dist);
+        }
+        // save all pgons for re-tri
+        const pgon_i: number[] = __model__.geom.query.navAnyToPgon(ent_type, index);
+        if (pgon_i.length === 1) {
+            if (pgons_i.indexOf(pgon_i[0]) === -1) {
+                pgons_i.push(pgon_i[0]);
+            }
+        }
+    }
+    // re-tri all polygons
+    if (pgons_i.length > 0) {
+        __model__.geom.add.triPgons(pgons_i);
+    }
+}
+function _offset(__model__: GIModel, wire_i: number, dist: number): void {
+    // get the normal of the wire
+    let vec_norm: Txyz = __model__.geom.query.getWireNormal(wire_i);
+    if (vecLen(vec_norm) === 0) {
+        vec_norm = [0, 0, 1];
+    }
+    // loop through all edges and collect the required data
+    const edges_i: number[] = __model__.geom.query.navAnyToEdge(EEntType.WIRE, wire_i);
+    const is_closed: boolean = __model__.geom.query.istWireClosed(wire_i);
+    // the index to these arrays is the edge_i
+    let perp_vec: Txyz = null;
+    let has_bad_edges = false;
+    const perp_vecs: Txyz[] = [];       // index is edge_i
+    const pairs_xyzs: [Txyz, Txyz][] = [];        // index is edge_i
+    const pairs_posis_i: [number, number][] = [];   // index is edge_i
+    for (const edge_i of edges_i) {
+        const posis_i: [number, number] = __model__.geom.query.navAnyToPosi(EEntType.EDGE, edge_i) as [number, number];
+        const xyzs: [Txyz, Txyz] = posis_i.map(posi_i => __model__.attribs.query.getPosiCoords(posi_i)) as [Txyz, Txyz];
+        const edge_vec: Txyz = vecFromTo(xyzs[0], xyzs[1]);
+        const edge_len: number = vecLen(edge_vec);
+        pairs_xyzs[edge_i] = xyzs;
+        pairs_posis_i[edge_i] = posis_i;
+        if (edge_len > 0) {
+            perp_vec = vecCross(vecNorm(edge_vec), vec_norm);
+        } else {
+            if (perp_vec === null) {
+                has_bad_edges = true;
+            }
+        }
+        perp_vecs[edge_i] = perp_vec;
+    }
+    // fix any bad edges, by setting the perp vec to its next neighbour
+    if (has_bad_edges) {
+        if (perp_vecs[perp_vecs.length - 1] === null) {
+            throw new Error('Error: could not offset wire.');
+        }
+        for (let i = perp_vecs.length - 1; i >= 0; i--) {
+            if (perp_vecs[i] === null) {
+                perp_vecs[i] = perp_vec;
+            } else {
+                perp_vec = perp_vecs[i];
+            }
+        }
+    }
+    // add edge if this is a closed wire
+    if (is_closed) {
+        edges_i.push(edges_i[0]); // add to the end
+    }
+    // loop through all the valid edges
+    for (let i = 0; i < edges_i.length - 1; i++) {
+        // get the two edges
+        const this_edge_i: number = edges_i[i];
+        const next_edge_i: number = edges_i[i + 1];
+        // get the end xyz of this edge
+        const old_xyz: Txyz = pairs_xyzs[this_edge_i][1];
+        const posi_i: number = pairs_posis_i[this_edge_i][1]; // the end posi of this edge
+        // get the two perpendicular vectors
+        const this_perp_vec: Txyz = perp_vecs[this_edge_i];
+        const next_perp_vec: Txyz = perp_vecs[next_edge_i];
+        // calculate the offset vector
+        let offset_vec: Txyz = vecNorm(vecAdd(this_perp_vec, next_perp_vec));
+        const dot: number = vecDot(this_perp_vec, offset_vec);
+        const vec_len = dist / dot;
+        offset_vec = vecSetLen(offset_vec, vec_len);
+        // move the posi
+        const new_xyz: Txyz = vecAdd(old_xyz, offset_vec);
+        __model__.attribs.add.setPosiCoords(posi_i, new_xyz);
+    }
+    // if this is not a closed wire we have to move first and last posis
+    if (!is_closed) {
+        // first posi
+        const first_edge_i: number = edges_i[0];
+        const first_posi_i: number = pairs_posis_i[first_edge_i][0];
+        const first_old_xyz: Txyz = pairs_xyzs[first_edge_i][0];
+        const first_perp_vec: Txyz =  vecSetLen(perp_vecs[first_edge_i], dist);
+        const first_new_xyz: Txyz = vecAdd(first_old_xyz, first_perp_vec);
+        __model__.attribs.add.setPosiCoords(first_posi_i, first_new_xyz);
+        // last posi
+        const last_edge_i: number = edges_i[edges_i.length - 1];
+        const last_posi_i: number = pairs_posis_i[last_edge_i][1];
+        const last_old_xyz: Txyz = pairs_xyzs[last_edge_i][1];
+        const last_perp_vec: Txyz =  vecSetLen(perp_vecs[last_edge_i], dist);
+        const last_new_xyz: Txyz = vecAdd(last_old_xyz, last_perp_vec);
+        __model__.attribs.add.setPosiCoords(last_posi_i, last_new_xyz);
     }
 }
 // ================================================================================================

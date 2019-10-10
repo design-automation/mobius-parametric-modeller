@@ -5,6 +5,7 @@
 /dist-server
 /tmp
 /out-tsc
+/src/assets/typedoc-json
 
 # dependencies
 /node_modules

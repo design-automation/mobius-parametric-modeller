@@ -363,14 +363,22 @@ export class GIGeomIO {
             }
         });
         // verts->edges, one to two
+        // order is important
         this._geom_arrays.up_verts_edges = [];
         this._geom_arrays.dn_edges_verts.forEach( (vert_i_arr, edge_i) => { // val, index
             if (vert_i_arr !== null) {
-                vert_i_arr.forEach( vert_i => {
+                vert_i_arr.forEach( (vert_i, index) => {
                     if (this._geom_arrays.up_verts_edges[vert_i] === undefined) {
                         this._geom_arrays.up_verts_edges[vert_i] = [];
                     }
-                    this._geom_arrays.up_verts_edges[vert_i].push(edge_i);
+                    if (index === 0) {
+                        this._geom_arrays.up_verts_edges[vert_i].push(edge_i);
+                    } else if (index === 1) {
+                        this._geom_arrays.up_verts_edges[vert_i].splice(0, 0, edge_i);
+                    }
+                    if (index > 1) {
+                        throw new Error('Import data error: Found an edge with more than two vertices.');
+                    }
                 });
             }
         });

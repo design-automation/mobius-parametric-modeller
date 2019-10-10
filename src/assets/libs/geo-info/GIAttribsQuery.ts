@@ -132,9 +132,9 @@ export class GIAttribsQuery {
     }
     /**
      * Get an entity attrib value, or an array of values given an array of entities.
-     * 
+     * ~
      * If the attribute does not exist, throw an error
-     * 
+     * ~
      * @param ent_type
      * @param name
      */

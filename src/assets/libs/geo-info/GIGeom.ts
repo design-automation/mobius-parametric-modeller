@@ -327,17 +327,17 @@ export class GIGeom {
                     errors.push('Open wire ' + wire_i + ': Last vertex does not have one edge.');
                 }
             }
-            console.log("==== ==== ====")
-            console.log("WIRE i", wire_i, "WIRE", wire)
+            // console.log("==== ==== ====")
+            // console.log("WIRE i", wire_i, "WIRE", wire)
             // check the edges of each vertex
             for (const edge_i of wire) {
                 const edge: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
                 const start_vert_i = edge[0];
                 const end_vert_i = edge[1];
-                console.log("====")
-                console.log("EDGE i", edge_i, "EDGE", edge)
-                //console.log("VERT START", start_vert_i)
-                //console.log("VERT END", end_vert_i)
+                // console.log("====")
+                // console.log("EDGE i", edge_i, "EDGE", edge)
+                // console.log("VERT START", start_vert_i)
+                // console.log("VERT END", end_vert_i)
                 let exp_num_edges_vert0 = 2;
                 let exp_num_edges_vert1 = 2;
                 let start_idx = 1;
@@ -353,7 +353,7 @@ export class GIGeom {
                 }
                 // check the start vertex
                 const start_vert_edges_i: number[] = this._geom_arrays.up_verts_edges[start_vert_i];
-                console.log("START VERT EDGES", start_vert_edges_i)
+                // console.log("START VERT EDGES", start_vert_edges_i)
                 if (start_vert_edges_i.length !== exp_num_edges_vert0 ) {
                     errors.push('Wire ' + wire_i + ' Edge ' + edge_i + ' Vert ' + start_vert_i +
                         ': Start vertex does not have correct number of edges.');
@@ -364,7 +364,7 @@ export class GIGeom {
                 }
                 // check the end vertex
                 const end_vert_edges_i: number[] = this._geom_arrays.up_verts_edges[end_vert_i];
-                console.log("END VERT EDGES", end_vert_edges_i)
+                // console.log("END VERT EDGES", end_vert_edges_i)
                 if (end_vert_edges_i.length !== exp_num_edges_vert1 ) {
                     errors.push('Wire ' + wire_i + ' Edge ' + edge_i + ' Vert ' + start_vert_i +
                         ': End vertex does not have correct number of edges.');

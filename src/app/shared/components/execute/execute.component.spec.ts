@@ -182,7 +182,6 @@ describe('Execute Component test', () => {
             }
             done();
         });
-
     }
 });
 
@@ -266,7 +265,5 @@ describe('Execute Model Comparison test', () => {
             expect(_model.__checkModel__(oModel2)).toEqual([], '_model.__checkModel__ failed');
             done();
         });
-
     }
 });
-

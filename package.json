@@ -4,15 +4,19 @@
   "license": "MIT",
   "config": {
     "dev_url": "https://mobius.design-automation.net/",
-    "prod_url": "https://mobius.design-automation.net/"
+    "prod_url": "https://mobius.design-automation.net/",
+    "dev_clone_url": "https://github.com/design-automation/mobius-parametric-modeller-dev.git"
   },
   "scripts": {
     "ng": "ng",
     "start": "node --max_old_space_size=16384 node_modules/@angular/cli/bin/ng serve",
     "docs": "./node_modules/.bin/compodoc -p src/tsconfig.app.json",
-    "deploy": "node version.js && typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/assets/core/modules && node ./src/assets/typedoc-json/docConvert.js && ng build --prod --base-href=%npm_package_config_prod_url% && npx ngh",
-    "deploy1": "node version.js && typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/assets/core/modules && node ./src/assets/typedoc-json/docConvert.js && ng build --prod --base-href=%npm_package_config_prod_url% && ngh",
-    "deploy0": "node version.js && typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/assets/core/modules && node ./src/assets/typedoc-json/docConvert.js && ng build --prod --base-href=%npm_package_config_prod_url%",
+
+    "setup": "git remote add dev %npm_package_config_dev_clone_url%",
+    "deploy":  "git pull dev master && git push && node version.js && typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/assets/core/modules && node ./src/assets/typedoc-json/docConvert.js && ng build --prod --base-href=%npm_package_config_prod_url% && npx ngh",
+    "deploy1": "git pull dev master && git push && node version.js && typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/assets/core/modules && node ./src/assets/typedoc-json/docConvert.js && ng build --prod --base-href=%npm_package_config_prod_url% && ngh",
+    "deploy0": "git pull dev master && git push && node version.js && typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/assets/core/modules && node ./src/assets/typedoc-json/docConvert.js && ng build --prod --base-href=%npm_package_config_prod_url%",
+
     "build": "ng build",
     "build-test": "ng build --prod && http-server ./dist",
     "build-dev": "ng build --base-href=%npm_package_config_dev_url% && rm -r ./docs && cp -r ./dist ./docs && rm -r ./dist",

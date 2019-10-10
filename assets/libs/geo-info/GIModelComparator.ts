@@ -40,7 +40,7 @@ export class GIModelComparator {
         // normalize the two models
         if (normalize) {
             this.norm();
-            model.norm();
+            model.comparator.norm();
         }
         // compare objects
         let idx_maps: [Map<EEntType, Map<number, number>>, Map<EEntType, Map<number, number>>] = null;
@@ -248,7 +248,7 @@ export class GIModelComparator {
             // get the fprints
             const [this_fprints, this_ents_i]: [string[], number[]] = this.getEntsFprint(obj_ent_type, attrib_names);
             // console.log('this_fprints:', this_fprints, 'this_ents_i:', this_ents_i);
-            const [other_fprints, other_ents_i]: [string[], number[]] = other_model.getEntsFprint(obj_ent_type, attrib_names);
+            const [other_fprints, other_ents_i]: [string[], number[]] = other_model.comparator.getEntsFprint(obj_ent_type, attrib_names);
             // console.log('other_fprints:', other_fprints, 'other_ents_i:', other_ents_i);
             // check that every entity in this model also exists in the other model
             let num_objs_not_found = 0;
@@ -305,7 +305,7 @@ export class GIModelComparator {
         // compare collections
         const this_colls_fprints: string[] = this.getCollFprints(this_to_com_idx_maps, attrib_names);
         // console.log('this_colls_fprints:', this_colls_fprints);
-        const other_colls_fprints: string[] = other_model.getCollFprints(other_to_com_idx_maps, attrib_names);
+        const other_colls_fprints: string[] = other_model.comparator.getCollFprints(other_to_com_idx_maps, attrib_names);
         // console.log('other_colls_fprints:', other_colls_fprints);
         // check that every collection in this model also exists in the other model
         let num_colls_not_found = 0;
@@ -445,7 +445,7 @@ export class GIModelComparator {
                             other_xyz[2] - this_xyz[2]
                         ];
                         const this_fp: string = this.xyzFprint(obj_ent_type, this_mia_ent_i, trans_vec);
-                        const other_fp: string = other_model.xyzFprint(obj_ent_type, other_mia_ent_i);
+                        const other_fp: string = other_model.comparator.xyzFprint(obj_ent_type, other_mia_ent_i);
                         if (this_fp === other_fp) {
                             const dist: number = Math.abs(trans_vec[0]) + Math.abs(trans_vec[1]) + Math.abs(trans_vec[2]);
                             if (dist < min_dist) {

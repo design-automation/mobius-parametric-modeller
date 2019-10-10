@@ -75,7 +75,8 @@ then the position will be moved by the average of the vectors.
   
   
 ## Offset  
-* **Description:** Offsets wires.  
+* **Description:** Offsets wires.
+~  
 * **Parameters:**  
   * *entities:* Edges, wires, faces, polylines, polygons, collections.  
   * *dist:* The distance to offset by, can be either positive or negative  

@@ -16,7 +16,7 @@ import { vecAdd, vecSum, vecDiv, vecFromTo, vecNorm, vecCross, vecSetLen, vecLen
 import { checkCommTypes, checkIDs, IDcheckObj, TypeCheckObj} from '../_check_args';
 import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
-import { distance } from '@assets/libs/geom/distance';
+import { distance } from '@libs/geom/distance';
 import __ from 'underscore';
 
 // ================================================================================================

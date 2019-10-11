@@ -17,7 +17,7 @@ import { Matrix4 } from 'three';
 import { __merge__ } from '../_model';
 import { GIModel } from '@libs/geo-info/GIModel';
 import * as THREE from 'three';
-import * as VERB from '@libs/verb/verb';
+import * as VERB from '@assets/libs/verb/verb';
 // import * as VERB from 'verb';
 // ================================================================================================
 /**

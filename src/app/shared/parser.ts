@@ -30,6 +30,7 @@ const noSpaceBefore = new Set(['@', ',', ']', '[']);
 
 const allConstants = (<string[][]>inline_func[0][1]).map(constComp => constComp[0]);
 const specialVars = new Set(['undefined', 'null', 'Infinity', 'true', 'false', 'True', 'False', 'None'].concat(allConstants));
+const constantSet = new Set(allConstants);
 
 const reservedWords = [
     'abstract', 'arguments', 'await', 'boolean',
@@ -485,8 +486,9 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
     //     jsString = 'null';
     // }
 
-
-    if (!disallowAt && !specialVars.has(comp.value)) {
+    if (constantSet.has(comp.value)) {
+        jsString = `JSON.parse(JSON.stringify(${comp.value}))`;
+    } else if (!disallowAt && !specialVars.has(comp.value)) {
         jsString += '_';
     }
 

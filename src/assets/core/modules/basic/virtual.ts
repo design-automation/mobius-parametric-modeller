@@ -195,7 +195,7 @@ function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPl
  * - The second [x, y, z] is the corner of the bounding box with the lowest x, y, z values.
  * - The third [x, y, z] is the corner of the bounding box with the highest x, y, z values.
  * - The fourth [x, y, z] is the dimensions of the bounding box.
- *  
+ * ~
  * @param __model__
  * @param entities The etities for which to calculate the bounding box.
  * @returns The bounding box consisting of a list of four lists.

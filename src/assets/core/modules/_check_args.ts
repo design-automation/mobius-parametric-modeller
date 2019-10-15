@@ -39,7 +39,7 @@ export function checkAttribValue(fn_name: string, attrib_value: any, idx_or_key?
     } else {
         // check sting, number, string[], number[]
         checkCommTypes(fn_name, 'attrib_value', attrib_value,
-            [TypeCheckObj.isString, TypeCheckObj.isNumber, TypeCheckObj.isBoolean, 
+            [TypeCheckObj.isString, TypeCheckObj.isNumber, TypeCheckObj.isBoolean,
                 TypeCheckObj.isNull, TypeCheckObj.isList, TypeCheckObj.isDict]);
     }
 }

@@ -150,30 +150,54 @@ export class GIGeom {
             const vert: TVert = this._geom_arrays.dn_verts_posis[vert_i];
             if (vert === undefined) { errors.push('Vert ' + vert_i + ': Vert->Posi undefined.'); }
             if (vert === null) { continue; } // deleted
-            // up
+            // check if the parent is an edge or a point
+            const point_i: number = this._geom_arrays.up_verts_points[vert_i];
             const edges_i: number[] = this._geom_arrays.up_verts_edges[vert_i];
-            if (edges_i === undefined) {
-                errors.push('Vert ' + vert_i + ': Vert->Edge undefined.');
-                continue;
+            let is_point = false;
+            if (point_i !== undefined && edges_i === undefined) {
+                is_point = true;
+            } else if (point_i === undefined && edges_i !== undefined) {
+                is_point = false;
+            } else if (point_i === undefined && edges_i === undefined) {
+                errors.push('Vert ' + vert_i + ': Vert->Edge undefined and Vert->Point undefined.');
+            } else {
+                errors.push('Vert ' + vert_i + ': Vert->Edge and Vert->Point.');
             }
-            if (edges_i === null) {
-                errors.push('Vert ' + vert_i + ': Vert->Edge null.');
-                continue;
-            }
-            for (const edge_i of edges_i) {
-                if (edge_i === undefined) {
-                    errors.push('Vert ' + vert_i + ': Vert->Edge undefined.');
+            if (is_point) {
+                // up for points
+                if (point_i === null) {
+                    errors.push('Vert ' + vert_i + ': Vert->Point null.');
+                    continue;
                 }
-                if (edge_i === null) {
+                // down for points
+                const point: TVert = this._geom_arrays.dn_points_verts[point_i];
+                if (point === undefined) {
+                    errors.push('Vert ' + vert_i + ': Point->Vert undefined.');
+                }
+                if (point === null) {
+                    errors.push('Vert ' + vert_i + ': Point->Vert null.');
+                }
+            } else {
+                // up for edges
+                if (edges_i === null) {
                     errors.push('Vert ' + vert_i + ': Vert->Edge null.');
+                    continue;
                 }
-                // down
-                const edge: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
-                if (edge === undefined) {
-                    errors.push('Vert ' + vert_i + ': Edge->Vert undefined.');
-                }
-                if (edge === null) {
-                    errors.push('Vert ' + vert_i + ': Edge->Vert null.');
+                for (const edge_i of edges_i) {
+                    if (edge_i === undefined) {
+                        errors.push('Vert ' + vert_i + ': Vert->Edge undefined.');
+                    }
+                    if (edge_i === null) {
+                        errors.push('Vert ' + vert_i + ': Vert->Edge null.');
+                    }
+                    // down for edges
+                    const edge: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
+                    if (edge === undefined) {
+                        errors.push('Vert ' + vert_i + ': Edge->Vert undefined.');
+                    }
+                    if (edge === null) {
+                        errors.push('Vert ' + vert_i + ': Edge->Vert null.');
+                    }
                 }
             }
         }
@@ -316,9 +340,11 @@ export class GIGeom {
             if (wire === undefined) { continue; } // error, will be picked up by _checkWires()
             if (wire === null) { continue; } // deleted
             // check if this is closed or open
-            const first_edge: TEdge = this._geom_arrays.dn_edges_verts[0];
-            const last_edge: TEdge = this._geom_arrays.dn_edges_verts[wire.length - 1];
-            const is_closed: boolean = (first_edge[0] === last_edge[1]);
+            const first_edge: TEdge = this._geom_arrays.dn_edges_verts[wire[0]];
+            const first_vert_i: number = first_edge[0];
+            const last_edge: TEdge = this._geom_arrays.dn_edges_verts[wire[wire.length - 1]];
+            const last_vert_i: number = last_edge[1];
+            const is_closed: boolean = (first_vert_i === last_vert_i);
             if (!is_closed) {
                 if (this._geom_arrays.up_verts_edges[first_edge[0]].length !== 1) {
                     errors.push('Open wire ' + wire_i + ': First vertex does not have one edge.');
@@ -346,7 +372,8 @@ export class GIGeom {
                     if (edge_i === wire[0]) { // first edge
                         exp_num_edges_vert0 = 1;
                         start_idx = 0;
-                    } else if (edge_i === wire[wire.length - 1]) { // last edge
+                    }
+                    if (edge_i === wire[wire.length - 1]) { // last edge
                         exp_num_edges_vert1 = 1;
                         end_idx = 0;
                     }

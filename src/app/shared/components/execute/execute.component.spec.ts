@@ -178,11 +178,10 @@ describe('Execute Component test', () => {
                 if (test.returns) {
                     expect(output.output.value).toBe(test.returns, 'Return values do not match');
                 }
-                // expect(_model.__checkModel__(oModel)).toEqual([], '_model.__checkModel__ failed');
+                expect(_model.__checkModel__(oModel)).toEqual([], '_model.__checkModel__ failed');
             }
             done();
         });
-
     }
 });
 
@@ -262,9 +261,9 @@ describe('Execute Model Comparison test', () => {
             }
             const compResult = oModel1.compare(oModel2, normalize, check_geom_equality, check_attrib_equality);
             expect(compResult.percent).toEqual(test.percent, 'The two percentages do not match');
+            expect(_model.__checkModel__(oModel1)).toEqual([], '_model.__checkModel__ failed');
+            expect(_model.__checkModel__(oModel2)).toEqual([], '_model.__checkModel__ failed');
             done();
         });
-
     }
 });
-

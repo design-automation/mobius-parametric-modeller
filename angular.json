@@ -22,6 +22,7 @@
               { "glob": "**/*", "input": "./node_modules/cesium/Build/Cesium", "output": "/assets/cesium" } 
             ],
             "styles": [
+              "src/CNAME",
               "src/styles.scss",
               "./node_modules/cesium/Build/Cesium/Widgets/widgets.css"
             ],

@@ -587,6 +587,40 @@ export function _Weld(__model__: GIModel, entities: TId[]): void {
     throw new Error('Not implemented.');
 }
 // ================================================================================================
+/**
+ * Retriangulate a face or polygon.
+ * ~
+ * When a face or polygon is deformed, the thriangles that make up that face will sometimes become incorrect.
+ * Retriangulation is not performed automatically as it would degrade performance.
+ * Instead, it is left up to the user to retriangulate only when it is actually required.
+ * ~ 
+ * @param __model__
+ * @param entities Single or list of faces, polygons, collections.
+ * @returns void
+ * @example modify.Retriangulate(polygon1)
+ * @example_info Retriangulates the face of the polygon.
+ */
+export function Retriangulate(__model__: GIModel, entities: TId[]): void {
+    entities = arrMakeFlat(entities) as TId[];
+    if (!isEmptyArr(entities)) {
+        // --- Error Check ---
+        const ents_arr: TEntTypeIdx[] = checkIDs('modify.Retriangulate', 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+        // --- Error Check ---
+        _retriangulate(__model__, ents_arr);
+    }
+}
+function _retriangulate(__model__: GIModel, ents_arr: TEntTypeIdx[]): void {
+    for (const [ent_type, index] of ents_arr) {
+        if (ent_type === EEntType.PGON) {
+            __model__.geom.add.triPgons(index);
+        } else {
+            const pgons_i: number[] = __model__.geom.query.navAnyToPgon(ent_type, index);
+            __model__.geom.add.triPgons(pgons_i);
+        }
+    }
+}
+// ================================================================================================
 
 /**
  * Deletes geometric entities: positions, points, polylines, polygons, and collections.

@@ -17,7 +17,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { idsMake, idsBreak, getArrDepth } from '@libs/geo-info/id';
 import { vecSub, vecMakeOrtho, vecNorm, vecCross, vecAdd, vecMult, vecFromTo, vecDiv, newellNorm, vecSum } from '@libs/geom/vectors';
 import { _normal } from './calc';
-
+import * as THREE from 'three';
 // ================================================================================================
 /**
  * Creates a ray, centered at the origin.
@@ -195,6 +195,7 @@ function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPl
  * - The second [x, y, z] is the corner of the bounding box with the lowest x, y, z values.
  * - The third [x, y, z] is the corner of the bounding box with the highest x, y, z values.
  * - The fourth [x, y, z] is the dimensions of the bounding box.
+ *  
  * @param __model__
  * @param entities The etities for which to calculate the bounding box.
  * @returns The bounding box consisting of a list of four lists.
@@ -232,6 +233,181 @@ function _getBoundingBox(__model__: GIModel, ents_arr: TEntTypeIdx[]): TBBox {
         corner_max,
         [corner_max[0] - corner_min[0], corner_max[1] + corner_min[1], corner_max[2] + corner_min[2]]
     ];
+}
+// ================================================================================================
+/**
+ * Calculates the distance between a ray or plane and a list of positions.
+ * ~
+ * @param __model__
+ * @param ray_or_plane Ray or a plane.
+ * @param entities A position or list of positions.
+ * @param method Enum; all_distances or min_distance.
+ * @returns Distance, or list of distances.
+ * @example distance1 = virtual.Distance(ray, positions, all_distances)
+ * @example_info Returns a list of distances between the ray and each position.
+ */
+export function Distance(__model__: GIModel, ray_or_plane: TRay|TPlane, entities: TId|TId[], method: _EDistanceMethod): number|number[] {
+    // --- Error Check ---
+    const fn_name = 'virtual.Distance';
+    checkCommTypes(fn_name, 'ray_or_plane', ray_or_plane, [TypeCheckObj.isRay, TypeCheckObj.isPlane]);
+    const ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
+        [EEntType.POSI]) as TEntTypeIdx|TEntTypeIdx[];
+    // --- Error Check ---
+    const one_posi: boolean = getArrDepth(ents_arr) === 1;
+    // get the to posis_i
+    let posis_i: number|number[] = null;
+    if (one_posi) {
+        posis_i = ents_arr[1] as number;
+    } else {
+        posis_i = (ents_arr as TEntTypeIdx[]).map( ent_arr => ent_arr[1] ) as number[];
+    }
+    // get a list of distances
+    let dists: number|number[] = null;
+    if (ray_or_plane.length === 2) { // ray
+        const ray_tjs: THREE.Ray = new THREE.Ray(new THREE.Vector3(...ray_or_plane[0]), new THREE.Vector3(...ray_or_plane[1]));
+        dists = _distanceRaytoP(__model__, ray_tjs, posis_i);
+    } else if (ray_or_plane.length === 3) { // plane
+        const plane_normal: Txyz = vecCross(ray_or_plane[1], ray_or_plane[2]);
+        const plane_tjs: THREE.Plane = new THREE.Plane();
+        plane_tjs.setFromNormalAndCoplanarPoint( new THREE.Vector3(...plane_normal), new THREE.Vector3(...ray_or_plane[0]) );
+        dists = _distancePlanetoP(__model__, plane_tjs, posis_i);
+    }
+    // return either the min or the whole list
+    if (method === _EDistanceMethod.MIN_DISTANCE && !one_posi) {
+        return Math.min(...dists as number[]);
+    }
+    return dists;
+}
+function _distanceRaytoP(__model__: GIModel, ray_tjs: THREE.Ray, posis_i: number|number[]): number|number[] {
+    if (!Array.isArray(posis_i)) {
+        const xyz: Txyz = __model__.attribs.query.getPosiCoords(posis_i);
+        return ray_tjs.distanceToPoint( new THREE.Vector3(...xyz) ) as number;
+    } else {
+        return posis_i.map( posi_i => _distanceRaytoP(__model__, ray_tjs, posi_i) ) as number[];
+    }
+}
+function _distancePlanetoP(__model__: GIModel, plane_tjs: THREE.Plane, posis_i: number|number[]): number|number[] {
+    if (!Array.isArray(posis_i)) {
+        const xyz: Txyz = __model__.attribs.query.getPosiCoords(posis_i);
+        return plane_tjs.distanceToPoint( new THREE.Vector3(...xyz) ) as number;
+    } else {
+        return posis_i.map( posi_i => _distancePlanetoP(__model__, plane_tjs, posi_i) ) as number[];
+    }
+}
+export enum _EDistanceMethod {
+    ALL_DISTANCES = 'all_distances',
+    MIN_DISTANCE = 'min_distance'
+}
+// ================================================================================================
+/**
+ * Calculates the xyz intersection between a ray or a plane and a list of entities.
+ * ~
+ * For a ray, the intersection between the ray and one or more faces is return.
+ * The intersection between each face triangle and the ray is caclulated.
+ * This ignores the intersections between rays and edges (including polyline edges).
+ * ~
+ * For a plane, the intersection between the plane and one or more edges is returned.
+ * This ignores the intersections between planes and face triangles (including polygon faces).
+ * ~
+ * @param __model__
+ * @param ray_or_plane Either a ray or a plane.
+ * @param entities List of entities.
+ * @return A list of xyz intersection coordinates.
+ * @example coords = virtual.Intersect(plane, polyline1)
+ * @example_info Returns a list of coordinates where the plane intersects with polyline1.
+ */
+export function Intersect(__model__: GIModel, ray_or_plane: TRay|TPlane, entities: TId|TId[]): Txyz[] {
+    // --- Error Check ---
+    const fn_name = 'virtual.Intersect';
+    checkCommTypes(fn_name, 'virtual', ray_or_plane, [TypeCheckObj.isRay, TypeCheckObj.isPlane]);
+    const ents_arr: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList],
+        [EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+    // --- Error Check ---
+    // create the threejs entity and calc intersections
+    if (ray_or_plane.length === 2) { // ray
+        const ray_tjs: THREE.Ray = new THREE.Ray(new THREE.Vector3(...ray_or_plane[0]), new THREE.Vector3(...ray_or_plane[1]));
+        return _intersectRay(__model__, ents_arr, ray_tjs);
+    } else if (ray_or_plane.length === 3) { // plane
+        const plane_normal: Txyz = vecCross(ray_or_plane[1], ray_or_plane[2]);
+        const plane_tjs: THREE.Plane = new THREE.Plane();
+        plane_tjs.setFromNormalAndCoplanarPoint( new THREE.Vector3(...plane_normal), new THREE.Vector3(...ray_or_plane[0]) );
+        return _intersectPlane(__model__, ents_arr, plane_tjs);
+    }
+}
+function _intersectRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], ray_tjs: THREE.Ray): Txyz[] {
+    if (getArrDepth(ents_arr) === 1) {
+        const [ent_type, index]: [EEntType, number] = ents_arr as TEntTypeIdx;
+        const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
+        const posis_tjs: THREE.Vector3[] = [];
+        for (const posi_i of posis_i) {
+            const xyz: Txyz = __model__.attribs.query.getPosiCoords(posi_i);
+            const posi_tjs: THREE.Vector3 = new THREE.Vector3(...xyz);
+            posis_tjs[posi_i] = posi_tjs;
+        }
+        const isect_xyzs: Txyz[] = [];
+        // triangles
+        const tris_i: number[] = __model__.geom.query.navAnyToTri(ent_type, index);
+        for (const tri_i of tris_i) {
+            const tri_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.TRI, tri_i);
+            const tri_posis_tjs: THREE.Vector3[] = tri_posis_i.map(tri_posi_i => posis_tjs[tri_posi_i]);
+            const isect_tjs: THREE.Vector3 = new THREE.Vector3();
+            const result: THREE.Vector3 = ray_tjs.intersectTriangle(tri_posis_tjs[0], tri_posis_tjs[1], tri_posis_tjs[2], false, isect_tjs);
+            if (result !== undefined && result !== null) {
+                isect_xyzs.push([isect_tjs.x, isect_tjs.y, isect_tjs.z]);
+            }
+        }
+        // return the intersection xyzs
+        return isect_xyzs;
+    } else {
+        const all_isect_xyzs: Txyz[] = [];
+        for (const ent_arr of ents_arr) {
+            const isect_xyzs: Txyz[] = _intersectRay(__model__, ent_arr as TEntTypeIdx, ray_tjs);
+            for (const isect_xyz  of isect_xyzs) {
+                all_isect_xyzs.push(isect_xyz);
+            }
+        }
+        return all_isect_xyzs as Txyz[];
+    }
+}
+function _intersectPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], plane_tjs: THREE.Plane): Txyz[] {
+    if (getArrDepth(ents_arr) === 1) {
+        const [ent_type, index]: [EEntType, number] = ents_arr as TEntTypeIdx;
+        const isect_xyzs: Txyz[] = [];
+        const wires_i: number[] = __model__.geom.query.navAnyToWire(ent_type, index);
+        for (const wire_i of wires_i) {
+            const wire_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, wire_i);
+            // create threejs posis for all posis
+            const posis_tjs: THREE.Vector3[] = [];
+            for (const wire_posi_i of wire_posis_i) {
+                const xyz: Txyz = __model__.attribs.query.getPosiCoords(wire_posi_i);
+                const posi_tjs: THREE.Vector3 = new THREE.Vector3(...xyz);
+                posis_tjs.push(posi_tjs);
+            }
+            if (__model__.geom.query.istWireClosed(wire_i)) {
+                posis_tjs.push(posis_tjs[0]);
+            }
+            // for each pair of posis, create a threejs line and do the intersect
+            for (let i = 0; i < posis_tjs.length - 1; i++) {
+                const line_tjs: THREE.Line3 = new THREE.Line3(posis_tjs[i], posis_tjs[i + 1]);
+                const isect_tjs: THREE.Vector3 = new THREE.Vector3();
+                const result: THREE.Vector3 = plane_tjs.intersectLine(line_tjs, isect_tjs);
+                if (result !== undefined && result !== null) {
+                    isect_xyzs.push([isect_tjs.x, isect_tjs.y, isect_tjs.z]);
+                }
+            }
+        }
+        return isect_xyzs;
+    } else {
+        const all_isect_xyzs: Txyz[] = [];
+        for (const ent_arr of ents_arr) {
+            const isect_xyzs: Txyz[] = _intersectPlane(__model__, ent_arr as TEntTypeIdx, plane_tjs);
+            for (const isect_xyz  of isect_xyzs) {
+                all_isect_xyzs.push(isect_xyz);
+            }
+        }
+        return all_isect_xyzs as Txyz[];
+    }
 }
 // ================================================================================================
 /**
@@ -426,4 +602,3 @@ function _visBBox(__model__: GIModel, bboxs: TBBox|TBBox[]): TEntTypeIdx[] {
         return ents_arr;
     }
 }
-// ================================================================================================

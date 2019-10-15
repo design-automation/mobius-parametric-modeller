@@ -41,7 +41,7 @@ export function Rectangle(__model__: GIModel, origin: Txyz|TPlane, size: number|
     let matrix: Matrix4;
     const origin_is_plane = getArrDepth(origin) === 2;
     if (origin_is_plane) {
-        matrix = xfromSourceTargetMatrix(XYPLANE, origin as  TPlane);
+        matrix = xfromSourceTargetMatrix(XYPLANE, origin as TPlane);
     }
     // create the positions
     const posis_i: number[] = [];

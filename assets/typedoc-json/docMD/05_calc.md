@@ -1,7 +1,8 @@
 # CALC    
 
 ## Distance  
-* **Description:** Calculates the distance between two positions.  
+* **Description:** Calculates the distance to one position or a list of positions.
+~  
 * **Parameters:**  
   * *entities1:* First position.  
   * *entities2:* Second position, or list of positions.  
@@ -13,66 +14,118 @@
   
   
 ## Length  
-* **Description:** Calculates the length of a line or a list of lines.  
+* **Description:** Calculates the length of an entity.
+~
+The entity can be an edge, a wire, a polyline, or anything from which wires can be extracted.
+This includes polylines, polygons, faces, and collections.
+~
+Given a list of edges, wires, or polylines, a list of lengths are returned.
+~
+Given any types of entities from which wires can be extracted, a list of lengths are returned.
+For example, given a single polygon, a list of lengths are returned (since a polygon may have multiple wires).
+~  
 * **Parameters:**  
-  * *entities:* Edge, wire or polyline.  
-* **Returns:** Length.  
+  * *entities:* Single or list of edges, wires, or polylines, or other entities from which wires can be extracted.  
+* **Returns:** Lengths, a number or list of numbers.  
 * **Examples:**  
-  * length1 = calc.Length (line1)
+  * length1 = calc.Length(line1)
   
   
 ## Area  
-* **Description:** Calculates the area of a surface or a list of surfaces.  
+* **Description:** Calculates the area of en entity.
+~
+The entity can be a polygon, a face, a closed polyline, a closed wire, or a collection.
+~
+Given a list of entities, a list of areas are returned.
+~  
 * **Parameters:**  
-  * *entities:* A polygon, a face, a closed polyline, or a closed wire.  
+  * *entities:* Single or list of polygons, faces, closed polylines, closed wires, collections.  
 * **Returns:** Area.  
 * **Examples:**  
   * area1 = calc.Area (surface1)
   
   
 ## Vector  
-* **Description:** Returns a vector along an edge.  
+* **Description:** Returns a vector along an edge, from the start position to the end position.
+The vector is not normalized.
+~
+Given a single edge, a single vector will be returned. Given a list of edges, a list of vectors will be returned.
+~
+Given any entity that has edges (collection, polygons, polylines, faces, and wires),
+a list of edges will be extracted, and a list of vectors will be returned.
+~  
 * **Parameters:**  
-  * *entities:* An edge  
-* **Returns:** The vector [x, y, z] from the start point of an edge to the end point of an edge.  
+  * *entities:* Single or list of edges, or any entity from which edges can be extracted.  
+* **Returns:** The vector [x, y, z] or a list of vectors.  
   
 ## Centroid  
-* **Description:** Calculates the centroid of a list of any entity.  
+* **Description:** Calculates the centroid of an entity.
+~
+The centroid is the average of the positions that make up that entity.
+~
+Given a single entity, a single centroid will be returned.
+~
+Given a list of entities, a list of centroids will be returned.
+~
+Given a list of positions, a single centroid that that is the average of all those positions will be returned.
+~  
 * **Parameters:**  
-  * *entities:* List of positions, vertices, points, edges, wires, polylines, faces, polygons, or collections.  
-* **Returns:** The centroid [x, y, z] of the entities. (No position is created in the model.)  
+  * *entities:* Single or list of entities. (Can be any type of entities.)  
+* **Returns:** A centroid [x, y, z] or a list of centroids.  
 * **Examples:**  
   * centroid1 = calc.Centroid (polygon1)
   
   
 ## Normal  
-* **Description:** Calculates the normal vector of an entity or list of entities.
+* **Description:** Calculates the normal vector of an entity or list of entities. The vector is normalised, and scaled
+by the specified scale factor.
+~
+Given a single entity, a single normal will be returned. Given a list of entities, a list of normals will be returned.
 ~
 For polygons, faces, and face wires the normal is calculated by taking the average of all the normals of the face triangles.
+~
 For polylines and polyline wires, the normal is calculated by triangulating the positions, and then
 taking the average of all the normals of the triangles.
-For edges, the normal is calculated by takingthe avery of teh normals of the two vertices.
+~
+For edges, the normal is calculated by takingthe avery of the normals of the two vertices.
+~
 For vertices, the normal is calculated by creating a triangle out of the two adjacent edges,
 and then calculating the normal of the triangle.
 (If there is only one edge, or if the two adjacent edges are colinear, the the normal of the wire is returned.)
+~
 For positions, the normal is calculated by taking the average of the normals of all the vertices linked to the position.
-For points and positions with no vertices, the normal is [0, 0, 0].  
+~
+If the normal cannot be calculated, [0, 0, 0] will be returned.  
 * **Parameters:**  
-  * *entities:* An entity, or list of entities.  
+  * *entities:* Single or list of entities. (Can be any type of entities.)  
   * *scale:* The scale factor for the normal vector. (This is equivalent to the length of the normal vector.)  
-* **Returns:** The normal vector [x, y, z].  
+* **Returns:** The normal vector [x, y, z] or a list of normal vectors.  
 * **Examples:**  
   * normal1 = calc.Normal (polygon1, 1)  
     If the input is non-planar, the output vector will be an average of all normals vector of the polygon triangles.
   
   
 ## Eval  
-* **Description:** Calculates the xyz location on an entity, given a parameter.  
+* **Description:** Calculates the xyz coord along an edge, wire, or polyline given a t parameter.
+~
+The 't' parameter varies between 0 and 1, where 0 indicates the start and 1 indicates the end.
+For example, given a polyline,
+evaluating at t=0 gives that xyz at the start,
+evaluating at t=0.5 gives the xyz halfway along the polyline,
+evaluating at t=1 gives the xyz at the end of the polyline.
+~
+Given a single edge, wire, or polyline, a single xyz coord will be returned.
+~
+Given a list of edges, wires, or polylines, a list of xyz coords will be returned.
+~
+Given any entity that has wires (faces, polygons and collections),
+a list of wires will be extracted, and a list of coords will be returned.
+~  
 * **Parameters:**  
-  * *entities:* Edge, wire, or polyline.  
-  * *param:* A value between 0 to 1.  
-* **Returns:** The coordinates of the location, [x, y, z]. (No position is created in the model.)  
+  * *entities:* Single or list of edges, wires, polylines, or faces, polygons, or collections.  
+  * *t_param:* A value between 0 to 1.  
+* **Returns:** The coordinates [x, y, z], or a list of coordinates.  
 * **Examples:**  
-  * coord1 = calc.ParamTToXyz (polyline1, 0.23)
+  * coord1 = calc.Eval (polyline1, 0.23)
   
   

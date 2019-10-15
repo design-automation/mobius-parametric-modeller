@@ -69,6 +69,38 @@ The bounding box consists of a list of lists, as follows [[x, y, z], [x, y, z], 
   * *entities:* The etities for which to calculate the bounding box.  
 * **Returns:** The bounding box consisting of a list of four lists.  
   
+## Distance  
+* **Description:** Calculates the distance between a ray or plane and a list of positions.
+~  
+* **Parameters:**  
+  * *ray_or_plane:* Ray or a plane.  
+  * *entities:* A position or list of positions.  
+  * *method:* Enum; all_distances or min_distance.  
+* **Returns:** Distance, or list of distances.  
+* **Examples:**  
+  * distance1 = virtual.Distance(ray, positions, all_distances)  
+    Returns a list of distances between the ray and each position.
+  
+  
+## Intersect  
+* **Description:** Calculates the xyz intersection between a ray or a plane and a list of entities.
+~
+For a ray, the intersection between the ray and one or more faces is return.
+The intersection between each face triangle and the ray is caclulated.
+This ignores the intersections between rays and edges (including polyline edges).
+~
+For a plane, the intersection between the plane and one or more edges is returned.
+This ignores the intersections between planes and face triangles (including polygon faces).
+~  
+* **Parameters:**  
+  * *ray_or_plane:* Either a ray or a plane.  
+  * *entities:* List of entities.  
+* **Returns:** A list of xyz intersection coordinates.  
+* **Examples:**  
+  * coords = virtual.Intersect(plane, polyline1)  
+    Returns a list of coordinates where the plane intersects with polyline1.
+  
+  
 ## VisRay  
 * **Description:** Visualises a ray by creating a line.  
 * **Parameters:**  

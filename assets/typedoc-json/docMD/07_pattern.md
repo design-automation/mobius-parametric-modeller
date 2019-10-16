@@ -116,7 +116,8 @@ irrespective of the distance between the control points.
 ~
 The spline curve can be created in three ways: 'centripetal', 'chordal', or 'catmullrom'.
 ~
-For more information, see the wikipedia article: <a href="https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline">Catmull–Rom spline</a>.
+For more information, see the wikipedia article:
+<a href="https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline">Catmull–Rom spline</a>.
 ~
 <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Catmull-Rom_examples_with_parameters..png"
 alt="Curve types" width="100">

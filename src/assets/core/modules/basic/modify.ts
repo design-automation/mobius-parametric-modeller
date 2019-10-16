@@ -327,7 +327,7 @@ function _offsetWire(__model__: GIModel, wire_i: number, dist: number): void {
         vec_norm = [0, 0, 1];
     }
     // loop through all edges and collect the required data
-    const edges_i: number[] = __model__.geom.query.navAnyToEdge(EEntType.WIRE, wire_i);
+    const edges_i: number[] = __model__.geom.query.navAnyToEdge(EEntType.WIRE, wire_i).slice(); // make a copy
     const is_closed: boolean = __model__.geom.query.istWireClosed(wire_i);
     // the index to these arrays is the edge_i
     let perp_vec: Txyz = null;
@@ -365,6 +365,7 @@ function _offsetWire(__model__: GIModel, wire_i: number, dist: number): void {
         }
     }
     // add edge if this is a closed wire
+    // make sure the edges_i is a copy, otherwise we are pushing into the model data structure
     if (is_closed) {
         edges_i.push(edges_i[0]); // add to the end
     }
@@ -373,9 +374,9 @@ function _offsetWire(__model__: GIModel, wire_i: number, dist: number): void {
         // get the two edges
         const this_edge_i: number = edges_i[i];
         const next_edge_i: number = edges_i[i + 1];
-        // get the end xyz of this edge
+        // get the end posi_i and xyz of this edge
+        const posi_i: number = pairs_posis_i[this_edge_i][1];
         const old_xyz: Txyz = pairs_xyzs[this_edge_i][1];
-        const posi_i: number = pairs_posis_i[this_edge_i][1]; // the end posi of this edge
         // get the two perpendicular vectors
         const this_perp_vec: Txyz = perp_vecs[this_edge_i];
         const next_perp_vec: Txyz = perp_vecs[next_edge_i];

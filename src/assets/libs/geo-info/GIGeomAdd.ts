@@ -283,7 +283,7 @@ export class GIGeomAdd {
                 // verts to tris
                 for (const vertex_i of this._geom_arrays.dn_tris_verts[old_face_tri_i]) {
                     const vert_tris_i: number[] = this._geom_arrays.up_verts_tris[vertex_i];
-                    arrRem(tris_i, old_face_tri_i);
+                    arrRem(vert_tris_i, old_face_tri_i);
                 }
                 // tris to verts
                 this._geom_arrays.dn_tris_verts[old_face_tri_i] = null;

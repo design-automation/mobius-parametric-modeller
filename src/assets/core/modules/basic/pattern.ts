@@ -217,7 +217,7 @@ export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num
  * The Bezier is created as either a qadratic or cubic Bezier. It is always an open curve.
  * ~
  * The input is a list of XYZ coordinates (three coords for quadratics, four coords for cubics).
- * The first and last coordinates in the list are the start and end positions of the Bezier curve. 
+ * The first and last coordinates in the list are the start and end positions of the Bezier curve.
  * The middle coordinates act as the control points for controlling the shape of the Bezier curve.
  * ~
  * For the quadratic Bezier, three XYZ coordinates are required.
@@ -437,7 +437,7 @@ export enum _EClose {
 // ================================================================================================
 /**
  * Creates positions in an spline pattern. Returns a list of new positions.
- * The spline is created using the Catmull-Rom algorithm. 
+ * The spline is created using the Catmull-Rom algorithm.
  * It is a type of interpolating spline (a curve that goes through its control points).
  * ~
  * The input is a list of XYZ coordinates. These act as the control points for creating the Spline curve.
@@ -448,9 +448,10 @@ export enum _EClose {
  * ~
  * The spline curve can be created in three ways: 'centripetal', 'chordal', or 'catmullrom'.
  * ~
- * For more information, see the wikipedia article: <a href="https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline">Catmull–Rom spline</a>.
+ * For more information, see the wikipedia article:
+ * <a href="https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline">Catmull–Rom spline</a>.
  * ~
- * <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Catmull-Rom_examples_with_parameters..png" 
+ * <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Catmull-Rom_examples_with_parameters..png"
  * alt="Curve types" width="100">
  * ~
  * @param __model__

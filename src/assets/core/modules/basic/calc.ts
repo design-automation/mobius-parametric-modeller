@@ -259,7 +259,7 @@ function _vector(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): Txyz
  * ~
  * The centroid is the average of the positions that make up that entity.
  * ~
- * Given a single entity, a single centroid will be returned. 
+ * Given a single entity, a single centroid will be returned.
  * ~
  * Given a list of entities, a list of centroids will be returned.
  * ~
@@ -414,12 +414,12 @@ function _vertNormal(__model__: GIModel, index: number) {
  * Calculates the xyz coord along an edge, wire, or polyline given a t parameter.
  * ~
  * The 't' parameter varies between 0 and 1, where 0 indicates the start and 1 indicates the end.
- * For example, given a polyline, 
+ * For example, given a polyline,
  * evaluating at t=0 gives that xyz at the start,
  * evaluating at t=0.5 gives the xyz halfway along the polyline,
  * evaluating at t=1 gives the xyz at the end of the polyline.
  * ~
- * Given a single edge, wire, or polyline, a single xyz coord will be returned. 
+ * Given a single edge, wire, or polyline, a single xyz coord will be returned.
  * ~
  * Given a list of edges, wires, or polylines, a list of xyz coords will be returned.
  * ~

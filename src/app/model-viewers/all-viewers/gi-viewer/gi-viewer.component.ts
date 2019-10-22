@@ -35,6 +35,7 @@ export class GIViewerComponent implements OnInit {
 
     temp_camera_pos = new Vector3(-80, -80, 80);
     temp_target_pos = new Vector3(0, 0, 0);
+    temp_grid_pos = new Vector3(0, 0, 0);
 
     public clickedEvent: Event;
     public attrTableSelect: Event;
@@ -140,7 +141,19 @@ export class GIViewerComponent implements OnInit {
             this.dataService.getThreejsScene().settings = this.settings;
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
             this.threejs.updateModel(this.data);
+        } else {
+            for (const setting in this.dataService.getThreejsScene().settings) {
+                this.settings[setting] = this.dataService.getThreejsScene().settings[setting];
+            }
+            this.threejs.updateModel(this.data);
         }
+    }
+
+    onCloseModal() {
+        for (const setting in this.dataService.getThreejsScene().settings) {
+            this.settings[setting] = this.dataService.getThreejsScene().settings[setting];
+        }
+        this.threejs.updateModel(this.data);
     }
 
     settingOnChange(setting: string, value?: number) {
@@ -168,6 +181,14 @@ export class GIViewerComponent implements OnInit {
             case 'grid.size':
                 this.settings.grid.size = Number(value);
                 scene._addGrid(this.settings.grid.size);
+                break;
+            case 'grid.update_pos':
+                this.temp_grid_pos = this.dataService.getThreejsScene().getGridPos();
+                if (this.temp_grid_pos) {
+                    this.settings.grid.pos = this.temp_grid_pos;
+                    this.settings.grid.pos_x = this.temp_grid_pos.x;
+                    this.settings.grid.pos_y = this.temp_grid_pos.y;
+                }
                 break;
             case 'positions.show':
                 this.settings.positions.show = !this.settings.positions.show;
@@ -249,6 +270,14 @@ export class GIViewerComponent implements OnInit {
                     this.settings.hemisphere_light.intensity = 0.5;
                 }
                 break;
+            case 'directional_light.type': // Directional Light
+                if (this.settings.directional_light.type === 'directional'){
+                    this.settings.directional_light.type = 'point'
+                } else {
+                    this.settings.directional_light.type = 'directional'
+                }
+                this.threejs.updateModel(this.data);
+                break;
             case 'directional_light.helper':
                 this.settings.directional_light.helper = !this.settings.directional_light.helper;
                 break;
@@ -259,24 +288,26 @@ export class GIViewerComponent implements OnInit {
             case 'directional_light.shadow':
                 this.settings.directional_light.shadow = !this.settings.directional_light.shadow;
                 break;
-            case 'directional_light.shadowSize':
-                this.settings.directional_light.shadowSize = Number(value);
-                setTimeout(() => {
-                    scene.DLMapSize(this.settings.directional_light.shadowSize);
-                }, 10);
-                break;
+            // case 'directional_light.shadowSize':
+            //     this.settings.directional_light.shadowSize = Number(value);
+            //     setTimeout(() => {
+            //         scene.DLMapSize(this.settings.directional_light.shadowSize);
+            //     }, 10);
+            //     break;
             case 'directional_light.azimuth':
                 this.settings.directional_light.azimuth = Number(value);
-                scene.directionalLightMove(this.settings.directional_light.azimuth);
+                console.log('altitude:', this.settings.directional_light.altitude)
+                scene.getDLPosition(null, this.settings.directional_light.azimuth, this.settings.directional_light.altitude);
                 break;
             case 'directional_light.altitude':
                 this.settings.directional_light.altitude = Number(value);
-                scene.directionalLightMove(null, this.settings.directional_light.altitude);
+                console.log('altitude:', this.settings.directional_light.altitude)
+                scene.getDLPosition(null, this.settings.directional_light.azimuth, this.settings.directional_light.altitude);
                 break;
-            case 'directional_light.distance':
-                this.settings.directional_light.distance = Number(value);
-                scene.DLDistance(this.settings.directional_light.distance);
-                break;
+            // case 'directional_light.distance':
+            //     this.settings.directional_light.distance = Number(value);
+            //     scene.DLDistance(this.settings.directional_light.distance);
+            //     break;
             case 'ground.show':
                 this.settings.ground.show = !this.settings.ground.show;
                 // scene.directional_light.visible = this.settings.directional_light.show;
@@ -376,6 +407,7 @@ export class GIViewerComponent implements OnInit {
         scene._camera.updateProjectionMatrix();
     }
     formatNumber(value) {
+        if (!value) { value = 0; }
         return Math.round(value * 100) / 100;
     }
 }
@@ -383,7 +415,14 @@ export class GIViewerComponent implements OnInit {
 interface Settings {
     normals: { show: boolean, size: number };
     axes: { show: boolean, size: number };
-    grid: { show: boolean, size: number };
+    grid: {
+        show: boolean, 
+        size: number,
+        pos: Vector3,
+        pos_x: number,
+        pos_y: number,
+        pos_z: number,
+    };
     positions: { show: boolean, size: number };
     wireframe: { show: boolean };
     tjs_summary: { show: boolean };
@@ -423,10 +462,10 @@ interface Settings {
         color: string,
         intensity: number,
         shadow: boolean,
-        shadowSize: number,
         azimuth: number,
         altitude: number,
-        distance: number
+        distance: number,
+        type: string
     };
     ground: {
         show: boolean,

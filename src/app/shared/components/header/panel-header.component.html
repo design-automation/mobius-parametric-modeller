@@ -145,12 +145,22 @@
                 </ng-container>
             </ng-container>
             <ng-template #publish_template>
-                <input id='radio3D' type='radio' name='showViewer' value='&viewer=0' [(ngModel)]='urlSet[4]'/> <label for='radio3D'>3D Viewer</label> <br>
-                <input id='radioGeo' type='radio' name='showViewer' value='&viewer=1' [(ngModel)]='urlSet[4]'/> <label for='radioGeo'>Geo Viewer</label> <br>
-                <input id='radioBothV' type='radio' name='showViewer' value='' [(ngModel)]='urlSet[4]'/> <label for='radioBothV'>Both</label>
+                <label>3D Viewer Available</label><br>
+                <input id='radio3D' type='radio' name='showViewer' value='&showViewer=1' [(ngModel)]='urlSet[4]'/> <label for='radio3D'>3D Viewer</label> <br>
+                <input id='radioGeo' type='radio' name='showViewer' value='&showViewer=2' [(ngModel)]='urlSet[4]'/> <label for='radioGeo'>Geo Viewer</label> <br>
+                <input id='radioBothV' type='radio' name='showViewer' value='' [(ngModel)]='urlSet[4]'/> <label for='radioBothV'>Both</label><br>
+                <input id='radioNoneV' type='radio' name='showViewer' value='&showViewer=0' [(ngModel)]='urlSet[4]'/> <label for='radioNoneV'>None</label>
                 <hr>
             </ng-template>
-        
+            <label>Default Viewer</label><br>
+            <input id='radioDefault3D' type='radio' name='defaultViewer' value='' [(ngModel)]='urlSet[5]'/>
+            <label for='radioDefault3D'>3D Viewer</label> <br>
+            <input id='radioDefaultGeo' type='radio' name='defaultViewer' value='&defaultViewer=2' [(ngModel)]='urlSet[5]'/>
+            <label for='radioDefaultGeo'>Geo Viewer</label> <br>
+            <input id='radioDefaultConsole' type='radio' name='defaultViewer' value='defaultViewer=0' [(ngModel)]='urlSet[5]'/>
+            <label for='radioDefaultConsole'>Console Viewer</label>
+            <hr>
+
             <button (click)='generateUrl()'>Create Link</button>
             <button (click)='generateEmbed()'>Create Embed Code</button>
     

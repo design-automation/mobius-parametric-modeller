@@ -3,7 +3,14 @@ import { Vector3 } from 'three';
 export const DefaultSettings = {
     normals: { show: false, size: 5 },
     axes: { show: true, size: 50 },
-    grid: { show: true, size: 500 },
+    grid: { 
+        show: true, 
+        size: 500,
+        pos_x: 0,
+        pos_y: 0,
+        pos_z: 0,
+        pos: new Vector3(0, 0, 0)
+    },
     positions: { show: true, size: 0.5 },
     tjs_summary: { show: false },
     gi_summary: { show: false },
@@ -43,10 +50,10 @@ export const DefaultSettings = {
         color: '#FFFFFF',
         intensity: 1,
         shadow: true,
-        shadowSize: 4,
         azimuth: 90,
         altitude: 45,
-        distance: 10000
+        distance: 10,
+        type: 'directional'
     },
     ground: {
         show: false,

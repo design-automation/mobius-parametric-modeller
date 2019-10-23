@@ -422,7 +422,7 @@ export abstract class NodeUtils {
 
             case ProcedureTypes.Function:
                 if (!data) { throw Error('No function data'); }
-
+                console.log(JSON.stringify(data));
                 prod.meta = { module: data.module, name: data.name};
                 prod.argCount = data.argCount + 1;
                 let returnArg = {name: 'var_name', value: undefined};

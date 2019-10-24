@@ -9,6 +9,7 @@ import { ModalService } from './modal-window.service';
 
 export class ModalWindowComponent implements OnInit, OnDestroy {
     @Input() id: string;
+    @Output() closeModal = new EventEmitter<void>();
     private element: any;
     private containerWidth: number;
 
@@ -37,10 +38,12 @@ export class ModalWindowComponent implements OnInit, OnDestroy {
         // move element to bottom of page (just before </body>) so it can be displayed above everything else
         document.body.appendChild(this.element);
 
+        const closeModal = this.closeModal;
         // close modal on background click
         this.element.addEventListener('click', function (e: any) {
             if (e.target.className === 'modal-background') {
                 modal.close();
+                closeModal.emit()
             }
         });
 

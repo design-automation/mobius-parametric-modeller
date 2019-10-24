@@ -21,7 +21,7 @@ export class PanelHeaderComponent implements OnDestroy {
     executeCheck: boolean;
     nodeListCheck: boolean;
 
-    urlSet = ['', 'publish', '', '', ''];
+    urlSet = ['', 'publish', '', '', '', ''];
     urlValid: boolean;
     urlNodes;
 
@@ -591,7 +591,7 @@ export class PanelHeaderComponent implements OnDestroy {
         let txtArea = document.getElementById('generatedLink');
         txtArea.innerHTML = `<iframe width='100%' height='600px' style='border: 1px solid black;' src="` +
             `${window.location.origin}/${this.urlSet[1]}` +
-            `?file=${url}${this.urlSet[2]}${this.urlSet[3]}${this.urlSet[4]}"` +
+            `?file=${url}${this.urlSet[2]}${this.urlSet[3]}${this.urlSet[4]}${this.urlSet[5]}"` +
             `></iframe>`;
         txtArea = null;
     }

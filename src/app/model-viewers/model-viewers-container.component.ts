@@ -32,15 +32,20 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
         let viewCheck: any;
         if (this.router.url.split('?')[0] === '/publish') {
             this.Viewers = [];
-            viewCheck = this.router.url.split('viewer=');
+            viewCheck = this.router.url.split('showViewer=');
 
             if (viewCheck.length === 1) { viewCheck = '';
             } else { viewCheck = viewCheck[1].split('&')[0]; }
 
             for (const view of Viewers) {
                 if (view.component.name === 'HelpViewerComponent') { continue; }
-                if (viewCheck === '0' && view.component.name === 'GICesiumViewerComponent') { continue; }
-                if (viewCheck === '1' && view.component.name === 'GIViewerComponent') { continue; }
+                if (view.component.name === 'ConsoleViewer') {
+                    this.Viewers.push(view);
+                    continue;
+                }
+                if (viewCheck === '0') { continue; }
+                if (viewCheck === '1' && view.component.name === 'GICesiumViewerComponent') { continue; }
+                if (viewCheck === '2' && view.component.name === 'GIViewerComponent') { continue; }
                 this.Viewers.push(view);
             }
         }
@@ -49,13 +54,13 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
             viewCheck = viewCheck[1].split('&')[0];
             switch (viewCheck) {
                 case '0':
-                    this.dataService.activeView = '3D Viewer';
+                    this.dataService.activeView = 'Console';
                     break;
                 case '1':
-                    this.dataService.activeView = 'Geo Viewer';
+                    this.dataService.activeView = '3D Viewer';
                     break;
                 case '2':
-                    this.dataService.activeView = 'Console';
+                    this.dataService.activeView = 'Geo Viewer';
                     break;
             }
         }

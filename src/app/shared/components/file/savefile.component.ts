@@ -7,7 +7,7 @@ import { InputType } from '@models/port';
 import { ProcedureTypes, IProcedure } from '@models/procedure';
 import { IdGenerator } from '@utils';
 import { IMobius } from '@models/mobius';
-import { INode } from '@models/node';
+import { INode, NodeUtils } from '@models/node';
 
 declare global {
     interface Navigator {
@@ -19,7 +19,8 @@ declare global {
 
 @Component({
     selector: 'file-save',
-    template: `<button id='savefile' class='btn' (click)='download()'>Save</button>`,
+    template: `<button id='savefile' class='btn' (click)='download()'>Save</button>
+               <button id='savedata' class='btn' (click)='savedata()'>Save</button>`,
     styles: [
         `
             button.btn{
@@ -331,6 +332,54 @@ export class SaveFileComponent {
 
         DownloadUtils.downloadFile(downloadResult.name, blob);
         this.dataService.file.name = 'Untitled';
+    }
+
+    async savedata() {
+        const newFile: IMobius = {
+            name: this.dataService.file.name,
+            author: 'new_user',
+            version: 1,
+            flowchart: FlowchartUtils.newflowchart(),
+            settings: {}
+        };
+        newFile.flowchart.name = this.dataService.flowchart.name;
+        let flowchart_desc = this.dataService.flowchart.description;
+        for (const prod of this.dataService.flowchart.nodes[0].procedure) {
+            if (prod.type !== ProcedureTypes.Constant) { continue; }
+            flowchart_desc += '\n' + prod.args[0].value + ' = ' + prod.args[1].value;
+        }
+        newFile.flowchart.description = flowchart_desc;
+
+        const node = newFile.flowchart.nodes[1];
+
+        const modelVal = '\'__model_data__' + this.dataService.flowchart.nodes[this.dataService.flowchart.nodes.length - 1].model + '\'';
+        NodeUtils.add_procedure(node, ProcedureTypes.Function, {
+            'module': 'util',
+            'name': 'ImportData',
+            'argCount': 3,
+            'args': [
+                {'name': '__model__'},
+                {
+                    'name': 'model_data',
+                    'value': modelVal
+                }, {
+                    'name': 'data_format',
+                    'value': '\'gi\'',
+                    'jsValue': '\'gi\''
+                }
+            ],
+            'hasReturn': true
+        });
+
+        node.procedure[node.procedure.length - 1].args[0].value = 'mod';
+        node.procedure[node.procedure.length - 1].args[0].jsValue = 'mod';
+
+        const downloadResult = {'name': newFile.name.replace(/\ /g, '_') + '_data.mob', 'file': circularJSON.stringify(newFile, null, 4)};
+
+        const blob = new Blob([downloadResult.file], { type: 'application/json' });
+
+        DownloadUtils.downloadFile(downloadResult.name, blob);
+
     }
 
 }

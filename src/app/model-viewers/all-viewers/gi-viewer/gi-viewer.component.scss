@@ -215,6 +215,7 @@ body.modal-open {
         background: #ccc;
         border: 1px solid #ccc;
     }
+
     
     .onoffswitch-checkbox:hover:not(:checked) + .onoffswitch-label{
         background-color: rgba($selected-color, 0.4);
@@ -340,7 +341,7 @@ body.modal-open {
         float: left;
     }
 
-    #camera, #camera_target{
+    #camera, #camera_target, #grid_pos{
         input{
             width: 65px;
             border: 1px solid #bdbdbd;

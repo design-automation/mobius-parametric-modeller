@@ -38,11 +38,11 @@ export class DataThreejs {
     public _threejs_nums: [number, number, number] = [0, 0, 0];
     // grid
     public grid: THREE.GridHelper;
-    private grid_pos: THREE.Vector3 = new THREE.Vector3();
+    // public grid_pos: THREE.Vector3 = new THREE.Vector3();
     // axes
     public axesHelper: THREE.AxesHelper;
     private axes_pos: THREE.Vector3 = new THREE.Vector3();
-    directional_light: THREE.DirectionalLight;
+    directional_light: THREE.DirectionalLight|THREE.PointLight;
     ambient_light: THREE.AmbientLight;
     hemisphere_light: THREE.HemisphereLight;
     groundObj: THREE.Mesh;
@@ -62,11 +62,16 @@ export class DataThreejs {
 
     // initial origin
     private origin: Vector3 = new Vector3(0, 1, 0);
+    private allObjs: THREE.Sphere;
     /**
      * Constructs a new data subscriber.
      */
     constructor(settings: Settings, private dataService: DataService) {
         this.settings = settings;
+        if (!this.settings.directional_light.type) {
+            this.settings.directional_light.type = 'directional';
+            localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
+        }
         // scene
         this._scene = new THREE.Scene();
         this._scene.background = new THREE.Color(this.settings.colors.viewer_bg);
@@ -145,15 +150,6 @@ export class DataThreejs {
         this._textLabels.clear();
 
         this._addGrid();
-        if (this.settings.ambient_light.show) {
-            this._addAmbientLight();
-        }
-        if (this.settings.hemisphere_light.show) {
-            this._addHemisphereLight();
-        }
-        if (this.settings.directional_light.show) {
-            this._addDirectionalLight();
-        }
         this._addAxes();
 
         // Add geometry
@@ -207,13 +203,23 @@ export class DataThreejs {
             this._scene.add(this.groundObj);
         }
 
-        const allObjs = this.getAllObjs();
+        this.allObjs = this.getAllObjs();
+
+        if (this.settings.ambient_light.show) {
+            this._addAmbientLight();
+        }
+        if (this.settings.hemisphere_light.show) {
+            this._addHemisphereLight();
+        }
+        if (this.settings.directional_light.show) {
+            this._addDirectionalLight();
+        }
+
 
         const center = new Vector3(0, 0, 0); // allObjs.center;
-        this.grid_pos.x = center.x;
-        this.grid_pos.y = center.y;
         this.axes_pos.x = center.x;
         this.axes_pos.y = center.y;
+        this.grid.position.set(this.settings.grid.pos.x, this.settings.grid.pos.y, 0);
 
         if (threejs_data.posis_indices.length !== 0) {
             if (this.dataService.newFlowchart) {
@@ -221,10 +227,8 @@ export class DataThreejs {
                 this.origin = new Vector3(center.x, center.y, 0);
                 this.settings.camera.target = this.origin ;
                 localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
-                this.grid.position.set(center.x, center.y, 0);
                 this.axesHelper.position.set(center.x, center.y, 0);
             } else {
-                this.grid.position.set(this.origin.x, this.origin.y, 0);
                 this.axesHelper.position.set(this.origin.x, this.origin.y, 0);
             }
             // const target = new Vector3(this.settings.camera.target.x, this.settings.camera.target.y, this.settings.camera.target.z);
@@ -651,6 +655,7 @@ export class DataThreejs {
         const color = new THREE.Color(parseInt(this.settings.ambient_light.color.replace('#', '0x'), 16));
         const intensity = this.settings.ambient_light.intensity;
         this.ambient_light = new THREE.AmbientLight(color, intensity); // soft white light
+        this.ambient_light.castShadow = false;
         this._scene.add(this.ambient_light);
     }
 
@@ -674,27 +679,106 @@ export class DataThreejs {
 
     // Creates a Directional Light
     private _addDirectionalLight(): void {
-        this.directional_light = new THREE.DirectionalLight(0xffffff, this.settings.directional_light.intensity);
-        const distance = this.settings.directional_light.distance;
-        this.getDLPosition(distance);
+        if (this.settings.directional_light.type === 'directional') {
+            this.directional_light = new THREE.DirectionalLight(this.settings.directional_light.color,
+                this.settings.directional_light.intensity);
+        } else {
+            this.directional_light = new THREE.PointLight(this.settings.directional_light.color,
+                this.settings.directional_light.intensity);
+        }
+        let distance = 0;
+        if (this.allObjs) {
+            distance = Math.round(this.allObjs.radius * 3);
+            // this.directional_light.target = this.sceneObjs[0];
+            // this.sceneObjs[0].receiveShadow = true;
+        }
+        this.settings.directional_light.distance = distance;
+        // this.getDLPosition(distance);
+        // this.directional_light.shadow.radius = 2
         this.directional_light.castShadow = this.settings.directional_light.shadow;
         this.directional_light.visible = this.settings.directional_light.show;
-        const shadowMapSize = this.settings.directional_light.shadowSize;
-        this.directional_light.shadow.mapSize.width = 1024 * shadowMapSize;  // default
-        this.directional_light.shadow.mapSize.height = 1024 * shadowMapSize; // default
-        this.directional_light.shadow.camera.near = 0.5;    // default
-        this._scene.add(this.directional_light);
+        // this.settings.directional_light.shadowSize = 2;
+        // const shadowMapSize = this.settings.directional_light.shadowSize;
+        // this.directional_light.shadow.bias = -0.00001;  // default
+        this.directional_light.shadow.mapSize.width = 2048;  // default
+        this.directional_light.shadow.mapSize.height = 2048; // default
+        // this.directional_light.shadow.camera.visible = true;
+
         this.DLDistance(distance);
+        this._scene.add(this.directional_light);
     }
 
-    private getDLPosition(scale: number): void {
-        const azimuth = this.settings.directional_light.azimuth,
-            altitude = this.settings.directional_light.altitude,
-            posX = Math.cos(azimuth * Math.PI * 2 / 360) * scale,
-            posY = Math.sin(azimuth * Math.PI * 2 / 360) * scale,
+    public getDLPosition(scale = null, azimuth = null, altitude = null): void {
+        if (!scale) {
+            scale = this.settings.directional_light.distance;
+        }
+        if (!azimuth) {
+            azimuth = this.settings.directional_light.azimuth;
+        }
+        if (!altitude) {
+            altitude = this.settings.directional_light.altitude;
+
+        }
+        let posX = Math.cos(altitude * Math.PI * 2 / 360) * Math.cos(azimuth * Math.PI * 2 / 360) * scale,
+            posY = Math.cos(altitude * Math.PI * 2 / 360) * Math.sin(azimuth * Math.PI * 2 / 360) * scale,
             posZ = Math.sin(altitude * Math.PI * 2 / 360) * scale;
 
+        if (this.allObjs) {
+            posX += this.allObjs.center.x;
+            posY += this.allObjs.center.y;
+            posZ += this.allObjs.center.z;
+        }
         this.directional_light.position.set(posX, posY, posZ);
+    }
+
+    public DLDistance(size = null): void {
+        let scale;
+        if (size) {
+            scale = size;
+        } else {
+            scale = 10000;
+        }
+        if (this.directional_light) {
+            let i = 0;
+            const length = this._scene.children.length;
+            if (length !== 0) {
+                for (; i < length; i++) {
+                    if (this._scene.children[i]) {
+                        if (this._scene.children[i].name === 'DLHelper' || this._scene.children[i].name === 'lightTarget') {
+                            this._scene.remove(this._scene.children[i]);
+                        }
+                    }
+                }
+            }
+            this.directional_light.shadow.camera.near = 0.5;
+            this.directional_light.shadow.camera.far = scale * 3;
+
+            this.directional_light.shadow.bias = -0.001;
+
+            let helper;
+            if (this.settings.directional_light.type === 'directional') {
+                const cam = <THREE.OrthographicCamera> this.directional_light.shadow.camera;
+                cam.left = -scale;
+                cam.right = scale;
+                cam.top = scale;
+                cam.bottom = -scale;
+                if (this.allObjs) {
+                    const lightTarget = new THREE.Object3D();
+                    lightTarget.position.set(this.allObjs.center.x, this.allObjs.center.y, this.allObjs.center.z);
+                    lightTarget.name = 'lightTarget'
+                    this._scene.add(lightTarget);
+                    (<THREE.DirectionalLight>this.directional_light).target = lightTarget;
+                }
+                helper = new THREE.CameraHelper(this.directional_light.shadow.camera);
+            } else {
+                helper = new THREE.PointLightHelper( <THREE.PointLight>this.directional_light );
+            }
+            helper.visible = this.settings.directional_light.helper;
+            helper.name = 'DLHelper';
+            this._scene.add(helper);
+            this.getDLPosition(scale);
+            this._renderer.render(this._scene, this._camera);
+        }
     }
 
     public DLMapSize(size = null): void {
@@ -711,50 +795,6 @@ export class DataThreejs {
         this._renderer.render(this._scene, this._camera);
     }
 
-    public DLDistance(size = null): void {
-        let scale;
-        if (size) {
-            scale = size;
-        } else {
-            scale = 10000;
-        }
-        if (this.directional_light) {
-            let i = 0;
-            const length = this._scene.children.length;
-            if (length !== 0) {
-                for (; i < length; i++) {
-                    if (this._scene.children[i]) {
-                        if (this._scene.children[i].name === 'DLHelper') {
-                            this._scene.remove(this._scene.children[i]);
-                        }
-                    }
-                }
-            }
-            this.directional_light.shadow.camera.far = 3 * scale;
-            this.directional_light.shadow.camera.left = -scale;
-            this.directional_light.shadow.camera.right = scale;
-            this.directional_light.shadow.camera.top = scale;
-            this.directional_light.shadow.camera.bottom = -scale;
-            const helper = new THREE.CameraHelper(this.directional_light.shadow.camera);
-            helper.visible = this.settings.directional_light.helper;
-            helper.name = 'DLHelper';
-            this._scene.add(helper);
-            this.getDLPosition(scale);
-            this._renderer.render(this._scene, this._camera);
-        }
-    }
-
-    public directionalLightMove(azimuth = null, altitude = null): void {
-        const distance = this.settings.directional_light.distance;
-        if (azimuth) {
-            this.directional_light.position.x = Math.cos(azimuth * Math.PI * 2 / 360) * distance;
-            this.directional_light.position.y = Math.sin(azimuth * Math.PI * 2 / 360) * distance;
-        }
-        if (altitude) {
-            this.directional_light.position.x = Math.cos(altitude * Math.PI * 2 / 360) * distance;
-            this.directional_light.position.z = Math.sin(altitude * Math.PI * 2 / 360) * distance;
-        }
-    }
 
     // add axes
     public _addAxes(size: number = this.settings.axes.size) {
@@ -798,7 +838,11 @@ export class DataThreejs {
             this.grid.name = 'GridHelper';
             const vector = new THREE.Vector3(0, 1, 0);
             this.grid.lookAt(vector);
-            this.grid.position.set(this.grid_pos.x, this.grid_pos.y, 0);
+            let pos = this.settings.grid.pos;
+            if (!pos) {
+                pos = new THREE.Vector3();
+            }
+            this.grid.position.set(this.settings.grid.pos.x, this.settings.grid.pos.y, 0);
             this._scene.add(this.grid);
         }
     }
@@ -862,6 +906,7 @@ export class DataThreejs {
         mesh.geometry.computeBoundingSphere();
         mesh.geometry.computeVertexNormals();
         mesh.castShadow = true;
+        mesh.receiveShadow = true;
 
         // show vertex normals
         this.vnh = new THREE.VertexNormalsHelper(mesh, this.settings.normals.size, 0x0000ff);
@@ -1095,6 +1140,17 @@ export class DataThreejs {
         }
     }
 
+    public getGridPos() {
+        if (this.allObjs) {
+            const grid_pos = new THREE.Vector3(this.allObjs.center.x, this.allObjs.center.y, 0);
+            this.grid.position.set(grid_pos.x, grid_pos.y, 0)
+            return grid_pos;
+        }
+        const grid_pos = new THREE.Vector3(0, 0, 0);
+        this.grid.position.set(0, 0, 0)
+        return grid_pos;
+    }
+
     private getSelectedObjs() {
         if (this.sceneObjsSelected.size !== 0) {
             const objs = new THREE.Object3D();
@@ -1212,7 +1268,14 @@ enum MaterialType {
 interface Settings {
     normals: { show: boolean, size: number };
     axes: { show: boolean, size: number };
-    grid: { show: boolean, size: number };
+    grid: {
+        show: boolean, 
+        size: number,
+        pos: Vector3,
+        pos_x: number,
+        pos_y: number,
+        pos_z: number,
+    };
     positions: { show: boolean, size: number };
     tjs_summary: { show: boolean };
     gi_summary: { show: boolean };
@@ -1246,10 +1309,10 @@ interface Settings {
         color: string,
         intensity: number,
         shadow: boolean,
-        shadowSize: number,
         azimuth: number,
         altitude: number,
-        distance: number
+        distance: number,
+        type: string
     };
     ground: {
         show: boolean,

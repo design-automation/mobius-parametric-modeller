@@ -124,7 +124,9 @@ export class ExecuteComponent {
                 if (prod.meta.module === funcMeta[0] && prod.meta.name === funcMeta[1]) {
                     const arg = prod.args[2];
                     if (arg.name[0] === '_') { continue; }
-                    if (arg.value.indexOf('://') !== -1) {
+                    if (arg.value.indexOf('__model_data__') !== -1) {
+                        prod.resolvedValue = arg.value.split('__model_data__').join('');
+                    } else if (arg.value.indexOf('://') !== -1) {
                         const val = <string>(arg.value).replace(/ /g, '');
                         const result = await CodeUtils.getURLContent(val);
                         if (result === undefined) {

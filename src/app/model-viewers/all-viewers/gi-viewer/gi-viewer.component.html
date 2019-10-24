@@ -20,7 +20,7 @@
 				(attribLabel) = "attribLabel($event)"
 			>
 			</attribute>
-			<modal-window id="settings_modal">
+			<modal-window id="settings_modal" (closeModal) = 'onCloseModal()'>
 				<h1>3D Viewer Settings</h1>
 				<tabs id="settingsTab">
 					<tab tabTitle="Scene">
@@ -68,26 +68,6 @@
 									<div class="slidecontainer">
 										<input type="range" min="1" max="1000" step="1" [value]="settings.axes.size" class="slider" id="axesSize" (input)="settingOnChange('axes.size', $event.target.value)">
 										<input type="text" [value]="settings.axes.size" disabled>
-									</div>
-								</dd>
-								<dd>
-									<div class="label">Grid</div>
-									<div class="onoffswitch">
-										<input type="checkbox"
-										name="onoffswitch"
-										class="onoffswitch-checkbox"
-										id="gridOnOff"
-										[checked]='settings.grid.show'
-										(change)="settingOnChange('grid.show')"
-										>
-										<label class="onoffswitch-label" for="gridOnOff">
-											<span class="onoffswitch-inner"></span>
-											<span class="onoffswitch-switch"></span>
-										</label>
-									</div>
-									<div class="slidecontainer">
-										<input type="range" min="10" max="10000" step="10" [value]="settings.grid.size" class="slider" id="gridSize" (input)="settingOnChange('grid.size', $event.target.value)">
-										<input type="text" [value]="settings.grid.size" disabled>
 									</div>
 								</dd>
 								<dd>
@@ -158,6 +138,7 @@
 										</label>
 									</div>
 								</dd>
+								<dd><hr></dd>
 								<dd id='camera'>
 									<div class="label">Camera Position</div>
 									<input type="number" disabled
@@ -181,9 +162,43 @@
 									[value]="formatNumber(settings.camera.target.z)">
 									<button (click)="settingOnChange('camera.get_target_pos')" class="filebtn getbtn">Get</button>
                                 </dd>
-								<dd id='camera_target'>
+								<dd><hr></dd>
+								<dd>
+									<div class="label">Grid</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="gridOnOff"
+										[checked]='settings.grid.show'
+										(change)="settingOnChange('grid.show')"
+										>
+										<label class="onoffswitch-label" for="gridOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+                                        </label>
+
+									</div>
+								</dd>
+								<dd>
 									<div class="label">Grid Size</div>
-                                    <button (click)="settingOnChange('grid.update')" class="filebtn closebtn" style="margin-left: 0px;">Update</button>
+									<!-- <div class="onoffswitch">
+                                    </div> -->
+                                    <div class="slidecontainer light">
+                                        <input type="range" min="10" max="10000" step="10" [value]="settings.grid.size" class="slider" id="gridSize" (input)="settingOnChange('grid.size', $event.target.value)">
+                                        <input type="text" [value]="settings.grid.size" disabled>
+                                    </div>
+                                </dd>
+
+								<dd id='grid_pos'>
+                                    <div class="label">Grid Position</div>
+									<input type="number" disabled
+									[value]="formatNumber(settings.grid.pos_x)">
+									<input type="number" disabled
+									[value]="formatNumber(settings.grid.pos_y)">
+									<input type="number" disabled
+									[value]="formatNumber(settings.grid.pos_z)">
+									<button (click)="settingOnChange('grid.update_pos')" class="filebtn getbtn">Get</button>
                                 </dd>
 							</dl>
 						</div>
@@ -301,7 +316,7 @@
 								</dd>
 								<dd><hr></dd>
 								<dd>
-									<div class="label">Directional Light</div>
+									<div class="label">Light</div>
 									<div class="onoffswitch">
 										<input type="checkbox"
 										name="onoffswitch"
@@ -325,6 +340,39 @@
 										(change)="settingOnChange('directional_light.helper')"
 										>
 										<label class="onoffswitch-label" for="DaylightHelperOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</dd>
+								<dd>
+									<div class="label">Light Type</div>
+									<div class="label">Directional Light</div>
+									<div class="onoffswitch radio">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="DirectionalTypeDir"
+										[checked]='settings.directional_light.type == "directional"'
+										(change)="settingOnChange('directional_light.type')"
+										>
+										<label class="onoffswitch-label" for="DirectionalTypeDir">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+										</label>
+									</div>
+								</dd>
+								<dd>
+									<div class="label" style="margin-left:120px">Point Light</div>
+									<div class="onoffswitch radio">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="DirectionalTypePoint"
+										[checked]='settings.directional_light.type == "point"'
+										(change)="settingOnChange('directional_light.type')"
+										>
+										<label class="onoffswitch-label" for="DirectionalTypePoint">
 											<span class="onoffswitch-inner"></span>
 											<span class="onoffswitch-switch"></span>
 										</label>
@@ -363,13 +411,13 @@
 										</label>
 									</div>
 								</dd>
-								<dd>
+								<!-- <dd>
 									<div class="label">Shadow Size</div>
 									<div class="slidecontainer light">
 										<input type="range" min="1" max="20" step="1" [value]="settings.directional_light.shadowSize" class="slider" (input)="settingOnChange('directional_light.shadowSize', $event.target.value)">
 										<input type="text" [value]="settings.directional_light.shadowSize" disabled>
 									</div>
-								</dd>
+								</dd> -->
 								<dd>
 									<div class="label">Azimuth</div>
 									<div class="slidecontainer light">
@@ -380,17 +428,17 @@
 								<dd>
 									<div class="label">Altitude</div>
 									<div class="slidecontainer light">
-										<input type="range" min="0" max="180" step="1" [value]="settings.directional_light.altitude" class="slider" (input)="settingOnChange('directional_light.altitude', $event.target.value)">
+										<input type="range" min="0" max="90" step="1" [value]="settings.directional_light.altitude" class="slider" (input)="settingOnChange('directional_light.altitude', $event.target.value)">
 										<input type="number" disabled [value]="settings.directional_light.altitude" class="number">
 									</div>
 								</dd>
-								<dd>
+								<!-- <dd>
 									<div class="label">Distance</div>
 									<div class="slidecontainer light">
-										<input type="range" min="1000" max="100000" step="1000" [value]="settings.directional_light.distance" class="slider" (input)="settingOnChange('directional_light.distance', $event.target.value)">
+										<input type="range" min="100" max="1000" step="10" [value]="settings.directional_light.distance" class="slider" (input)="settingOnChange('directional_light.distance', $event.target.value)">
 										<input type="text" [value]="settings.directional_light.distance" disabled>
 									</div>
-								</dd>
+								</dd> -->
 							</dl>
 						</div>
 					</tab>

@@ -142,7 +142,7 @@ export class GIAttribsThreejs {
                     data_obj_map.get(ent_i)[`${attrib_name}`] = attrib_value;
                 } else {
                     const attrib_value = attrib.getEntVal(ent_i);
-                    if (attrib_value !== undefined && attrib_value.constructor === {}.constructor) {
+                    if (attrib_value && attrib_value.constructor === {}.constructor) {
                         data_obj_map.get(ent_i)[`${attrib_name}`] = JSON.stringify(attrib_value);
                     } else if ( data_size > 1 ) {
                         if (attrib_value === undefined) {

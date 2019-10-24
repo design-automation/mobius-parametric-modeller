@@ -115,7 +115,15 @@ const arithmetic = [
     ['distance(c, r)', 'Returns the Eucledian distance between an xyz c and an infinite ray r'],
     ['distance(c, p)', 'Returns the Eucledian distance between an xyz c and an infinite plane p'],
     ['intersect(r1, r2)', 'Returns the intersection xyz between two infinite rays'],
-    ['intersect(r, p)', 'Returns the intersection xyz between a ray r and a plane p'],
+    ['intersect(r1, r2, m)', 'Returns the intersection xyz between two rays, where ' +
+        'if m=2, rays are infinite in both directions, ' +
+        'if m=1 rays are infinite in one direction, ' +
+        'and if m=0, rays are not infinite.'],
+    ['intersect(r, p)', 'Returns the intersection xyz between an infinite ray r and an infinite plane p'],
+    ['intersect(r, p, m)', 'Returns the intersection xyz between a ray r and an infinite plane p, where ' +
+        'if m=2, the ray is infinite in both directions, ' +
+        'if m=1 the ray is infinite in one direction, ' +
+        'and if m=0, the ray is not infinite.'],
     ['project(c, r)', 'Returns the xyz from projecting an xyz c onto an infinite ray r'],
     ['project(c, p)', 'Returns the xyz from projecting an xyz c onto an infinite plane p']
 ];

@@ -1080,15 +1080,48 @@ function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
  * @example_info If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
  */
 export function Divide(__model__: GIModel, entities: TId|TId[], divisor: number, method: _EDivideMethod): TId[] {
+    entities = arrMakeFlat(entities) as TId[];
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'make.Divide';
-    const ents_arr = checkIDs('make.Divide', 'edges', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
+    const ents_arr: TEntTypeIdx[] = checkIDs('make.Divide', 'edges', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
     checkCommTypes(fn_name, 'divisor', divisor, [TypeCheckObj.isNumber]);
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx[] = _divide(__model__, ents_arr, divisor, method);
+    // remesh any polygons
+    // I am not sure about this, you can always to a remesh
+    // const pgons_set_i: Set<number> = new Set();
+    // for (const [ent_type, index] of ents_arr) {
+    //     const pgons_i: number[] = __model__.geom.query.navAnyToPgon(ent_type, index);
+    //     for (const pgon_i of pgons_i) {
+    //         pgons_set_i.add(pgon_i);
+    //     }
+    // }
+    // if (pgons_set_i.size > 0)   {
+    //     __model__.geom.add.triPgons(Array.from(pgons_set_i));
+    // }
+    // return the ids
     return idsMake(new_ents_arr) as TId[];
+}
+function _divide(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], divisor: number, method: _EDivideMethod): TEntTypeIdx[] {
+    if (getArrDepth(ents_arr) === 1) {
+        const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
+        let exist_edges_i: number[];
+        if (!isEdge(ent_type)) {
+            exist_edges_i = __model__.geom.query.navAnyToEdge(ent_type, index).slice();
+        } else {
+            exist_edges_i = [index];
+        }
+        const all_new_edges_i: number[] = [];
+        for (const exist_edge_i of exist_edges_i) {
+            const new_edges_i: number[] = _divideEdge(__model__, exist_edge_i, divisor, method);
+            all_new_edges_i.push(...new_edges_i);
+        }
+        return all_new_edges_i.map(one_edge_i => [EEntType.EDGE, one_edge_i] as TEntTypeIdx);
+    } else {
+        return [].concat(...(ents_arr as TEntTypeIdx[]).map(one_edge => _divide(__model__, one_edge, divisor, method)));
+    }
 }
 // Divide edge modelling operation
 export enum _EDivideMethod {
@@ -1136,25 +1169,6 @@ function _divideEdge(__model__: GIModel, edge_i: number, divisor: number, method
     }
     new_edges_i.push(old_edge_i);
     return new_edges_i;
-}
-function _divide(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], divisor: number, method: _EDivideMethod): TEntTypeIdx[] {
-    if (getArrDepth(ents_arr) === 1) {
-        const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
-        let exist_edges_i: number[];
-        if (!isEdge(ent_type)) {
-            exist_edges_i = __model__.geom.query.navAnyToEdge(ent_type, index).slice();
-        } else {
-            exist_edges_i = [index];
-        }
-        const all_new_edges_i: number[] = [];
-        for (const exist_edge_i of exist_edges_i) {
-            const new_edges_i: number[] = _divideEdge(__model__, exist_edge_i, divisor, method);
-            all_new_edges_i.push(...new_edges_i);
-        }
-        return all_new_edges_i.map(one_edge_i => [EEntType.EDGE, one_edge_i] as TEntTypeIdx);
-    } else {
-        return [].concat(...(ents_arr as TEntTypeIdx[]).map(one_edge => _divide(__model__, one_edge, divisor, method)));
-    }
 }
 // ================================================================================================
 /**

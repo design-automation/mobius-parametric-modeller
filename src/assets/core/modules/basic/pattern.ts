@@ -326,6 +326,13 @@ export function Nurbs(__model__: GIModel, coords: Txyz[], degree: number, close:
         knots.push(1);
     }
     const curve_verb = new VERB.geom.NurbsCurve.byKnotsControlPointsWeights(degree, knots, coords2, weights);
+    // Testing VERB closed curve
+    // const k: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    // const c: number[][] = [[0, 0, 0], [10, 0, 0], [10, 10, 0], [0, 10, 0], [0, 0, 0], [10, 0, 0]];
+    // const w: number[] = [1, 1, 1, 1, 1, 1];
+    // const curve_verb2 = new VERB.geom.NurbsCurve.byKnotsControlPointsWeights(2, k, c, w);
+    // This gives an error: Error:
+    // Invalid knot vector format! Should begin with degree + 1 repeats and end with degree + 1 repeats!
     const posis_i: number[] = nurbsToPosis(__model__, curve_verb, degree, closed, num_positions, coords[0]);
     // return the list of posis
     return idsMakeFromIndicies(EEntType.POSI, posis_i) as TId[];
@@ -387,7 +394,6 @@ export function _Interpolate(__model__: GIModel, coords: Txyz[], degree: number,
     const posis_i: number[] = nurbsToPosis(__model__, curve_verb, degree, closed, num_positions, coords[0]);
     return idsMakeFromIndicies(EEntType.POSI, posis_i) as TId[];
 }
-// ================================================================================================
 function nurbsToPosis(__model__: GIModel, curve_verb: any, degree: number, closed: boolean,
         num_positions: number, start: Txyz, ): number[] {
     // create positions

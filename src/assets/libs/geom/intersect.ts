@@ -6,14 +6,70 @@ type Txyz = [number, number, number];
 type TRay = [Txyz, Txyz];
 type TPlane = [Txyz, Txyz, Txyz];
 
-export function intersect(r1: TRay, r2: TRay|TPlane): number {
+export function intersect(r1: TRay, r2: TRay|TPlane, met: number = 2): Txyz {
+    function isInRange(num: number, range: [number, number]) {
+        range.sort();
+        if ((num < range[0]) || (num > range[1])) { return false; }
+        return true;
+    }
+    function isOnLineSegment(coord: Txyz, start: Txyz, end: Txyz): boolean {
+        const x_range: [number, number] = [start[0], end[0]];
+        if (!isInRange(coord[0], x_range)) { return false; }
+        const y_range: [number, number] = [start[1], end[1]];
+        if (!isInRange(coord[1], y_range)) { return false; }
+        const z_range: [number, number] = [start[2], end[2]];
+        if (!isInRange(coord[2], z_range)) { return false; }
+        return true;
+    }
+    function isOnRay(coord: Txyz, start: Txyz, end: Txyz): boolean {
+        const x_range: [number, number] = [start[0], null];
+        x_range[1] = start[0] === end[0] ? end[0] : start[0] < end[0] ? Infinity : -Infinity;
+        if (!isInRange(coord[0], x_range)) { return false; }
+        const y_range: [number, number] = [start[1], null];
+        y_range[1] = start[1] === end[1] ? end[1] : start[1] < end[1] ? Infinity : -Infinity;
+        if (!isInRange(coord[1], y_range)) { return false; }
+        const z_range: [number, number] = [start[2], null];
+        z_range[1] = start[2] === end[2] ? end[2] : start[2] < end[2] ? Infinity : -Infinity;
+        if (!isInRange(coord[2], z_range)) { return false; }
+        return true;
+    }
     if (r2.length === 2) {
-        return mathjs.intersect(r1[0], vecAdd(r1[0], r1[1]), r2[0], vecAdd(r2[0], r2[1]) );
+        const p0: Txyz = r1[0];
+        const p1: Txyz = vecAdd(r1[0], r1[1]);
+        const p2: Txyz = r2[0];
+        const p3: Txyz = vecAdd(r2[0], r2[1]);
+        const isect: Txyz = mathjs.intersect(p0, p1, p2, p3 );
+        if (isect) {
+            if (met === 2)  {
+                return isect;
+            } else if (met === 1) {
+                if (isOnRay(isect, p0, p1) && isOnRay(isect, p2, p3)) { return isect; }
+            } else if (met === 0) {
+                if (isOnLineSegment(isect, p0, p1) && isOnLineSegment(isect, p2, p3)) { return isect; }
+            } else {
+                throw new Error('Error calculating intersection. Intersection method not valid. Must be 0, 1, or 2.');
+            }
+        }
+        return null;
     } else if (r2.length === 3) {
+        const p0: Txyz = r1[0];
+        const p1: Txyz = vecAdd(r1[0], r1[1]);
         const [a, b, c]: Txyz = vecCross(r2[1], r2[2]);
         const [x1, y1, z1]: Txyz = r2[0];
         const d: number = a * x1 + b * y1 + c * z1;
-        return mathjs.intersect(r1[0], vecAdd(r1[0], r1[1]), [a, b, c, d] );
+        const isect: Txyz = mathjs.intersect(r1[0], vecAdd(r1[0], r1[1]), [a, b, c, d] );
+        if (isect) {
+            if (met === 2)  {
+                return isect;
+            } else if (met === 1) {
+                if (isOnRay(isect, p0, p1)) { return isect; }
+            } else if (met === 0) {
+                if (isOnLineSegment(isect, p0, p1)) { return isect; }
+            } else {
+                throw new Error('Error calculating intersection. Intersection method not valid. Must be 0, 1, or 2.');
+            }
+        }
+        return null;
     } else {
         throw new Error('Error calculating intersection. Elements to intersect must be either rays or planes.');
     }

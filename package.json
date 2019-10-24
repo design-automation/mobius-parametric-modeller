@@ -1,6 +1,6 @@
 {
   "name": "mobius-parametric-modeller",
-  "version": "0.5.9",
+  "version": "0.5.10",
   "license": "MIT",
   "config": {
     "dev_url": "https://mobius.design-automation.net/",
@@ -16,8 +16,7 @@
     "deploy":  "git pull dev master && git push && node version.js && typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/assets/core/modules && node ./src/assets/typedoc-json/docConvert.js && ng build --prod --base-href=%npm_package_config_prod_url% && npx ngh",
     "deploy1": "git pull dev master && git push && node version.js && typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/assets/core/modules && node ./src/assets/typedoc-json/docConvert.js && ng build --prod --base-href=%npm_package_config_prod_url% && ngh",
     "deploy0": "git pull dev master && git push && node version.js && typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/assets/core/modules && node ./src/assets/typedoc-json/docConvert.js && ng build --prod --base-href=%npm_package_config_prod_url%",
-
-    "deployX": "node version.js && typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/assets/core/modules && node ./src/assets/typedoc-json/docConvert.js && ng build --prod --base-href=%npm_package_config_prod_url%",
+    "deployx": "node version.js && typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/assets/core/modules && node ./src/assets/typedoc-json/docConvert.js && ng build --prod --base-href=%npm_package_config_prod_url%",
 
     "build": "ng build",
     "build-test": "ng build --prod && http-server ./dist",

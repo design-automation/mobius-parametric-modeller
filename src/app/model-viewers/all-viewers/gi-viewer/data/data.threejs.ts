@@ -709,13 +709,13 @@ export class DataThreejs {
     }
 
     public getDLPosition(scale = null, azimuth = null, altitude = null): void {
-        if (!scale) {
+        if (!scale && scale !== 0) {
             scale = this.settings.directional_light.distance;
         }
-        if (!azimuth) {
+        if (!azimuth && azimuth !== 0) {
             azimuth = this.settings.directional_light.azimuth;
         }
-        if (!altitude) {
+        if (!altitude && altitude !== 0) {
             altitude = this.settings.directional_light.altitude;
 
         }
@@ -1049,9 +1049,8 @@ export class DataThreejs {
     }
 
     public lookAtObj() {
-        const allObjs = this.getAllObjs();
         const selectedObjs = this.getSelectedObjs();
-        if (allObjs === null && selectedObjs === null) {
+        if (this.allObjs === null && selectedObjs === null) {
             const sceneCenter = this._scene.position;
             this._camera.lookAt(sceneCenter);
             // this._camera.updateProjectionMatrix();
@@ -1064,9 +1063,9 @@ export class DataThreejs {
         if (selectedObjs) {
             center = selectedObjs.center;
             radius = selectedObjs.radius;
-        } else if (allObjs) {
-            center = allObjs.center;
-            radius = allObjs.radius;
+        } else if (this.allObjs) {
+            center = this.allObjs.center;
+            radius = this.allObjs.radius;
         } else {
             center = this._scene.position;
             radius = 50;

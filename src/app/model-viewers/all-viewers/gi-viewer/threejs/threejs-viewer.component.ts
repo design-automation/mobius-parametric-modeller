@@ -1404,9 +1404,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     }
 
     public zoomfit() {
-        if (JSON.stringify(this._data_threejs._threejs_nums) === JSON.stringify([0, 0, 0])) {
-            return;
-        }
+        // if (JSON.stringify(this._data_threejs._threejs_nums) === JSON.stringify([0, 0, 0])) {
+        //     return;
+        // }
         this._data_threejs.lookAtObj();
     }
 

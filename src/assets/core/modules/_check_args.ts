@@ -339,7 +339,7 @@ export class TypeCheckObj {
     static isRayList(fn_name: string, arg_name: string, arg_list: [number, number, number][][]): void {
         isListArg(fn_name, arg_name, arg_list, 'Rays');
         for (let i = 0; i < arg_list.length; i++) {
-            TypeCheckObj.isBBox(fn_name, arg_name + '[' + i + ']', arg_list[i]);
+            TypeCheckObj.isRay(fn_name, arg_name + '[' + i + ']', arg_list[i]);
         }
         return;
     }

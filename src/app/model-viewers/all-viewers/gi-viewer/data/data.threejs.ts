@@ -1050,13 +1050,6 @@ export class DataThreejs {
 
     public lookAtObj() {
         const selectedObjs = this.getSelectedObjs();
-        if (this.allObjs === null && selectedObjs === null) {
-            const sceneCenter = this._scene.position;
-            this._camera.lookAt(sceneCenter);
-            // this._camera.updateProjectionMatrix();
-            this._controls.target.set(sceneCenter.x, sceneCenter.y, sceneCenter.z);
-            this._controls.update();
-        }
 
         let center = null;
         let radius = null;
@@ -1066,9 +1059,12 @@ export class DataThreejs {
         } else if (this.allObjs) {
             center = this.allObjs.center;
             radius = this.allObjs.radius;
+            if (radius === 0) {
+                radius = 10;
+            }
         } else {
             center = this._scene.position;
-            radius = 50;
+            radius = 10;
         }
         // set grid and axeshelper to center of the objs
         // this.grid.position.set(center.x, center.y, 0);

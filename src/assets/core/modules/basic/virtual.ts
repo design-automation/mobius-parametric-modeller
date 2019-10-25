@@ -15,7 +15,7 @@ import { TId, Txyz, EEntType, TPlane, TRay, TEntTypeIdx, TBBox } from '@libs/geo
 import { checkCommTypes, checkIDs, TypeCheckObj, IDcheckObj } from '../_check_args';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { idsMake, idsBreak, getArrDepth } from '@libs/geo-info/id';
-import { vecSub, vecMakeOrtho, vecNorm, vecCross, vecAdd, vecMult, vecFromTo, vecDiv, newellNorm, vecSum } from '@libs/geom/vectors';
+import { vecSub, vecMakeOrtho, vecNorm, vecCross, vecAdd, vecMult, vecFromTo, vecDiv, vecSum, vecEqual, vecSetLen } from '@libs/geom/vectors';
 import { _normal } from './calc';
 import * as THREE from 'three';
 // ================================================================================================
@@ -121,7 +121,7 @@ function _rayFromPlane(planes: TPlane|TPlane[]): TRay|TRay[] {
 export function GetRay(__model__: GIModel, entities: TId|TId[]): TRay|TRay[] {
     // --- Error Check ---
     const ents_arr = checkIDs('virtual.GetRay', 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.FACE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
+        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.PLINE, EEntType.FACE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
     return _getRay(__model__, ents_arr);
 }
@@ -134,11 +134,17 @@ function _getRayFromFace(__model__: GIModel, ent_arr: TEntTypeIdx): TRay {
     const plane: TPlane = _getPlane(__model__, ent_arr) as TPlane;
     return _rayFromPlane(plane) as TRay;
 }
+function _getRayFromPline(__model__: GIModel, ent_arr: TEntTypeIdx): TRay[] {
+    const edges_i: number[] = __model__.geom.query.navAnyToEdge(ent_arr[0], ent_arr[1]);
+    return edges_i.map( edge_i => _getRayFromEdge(__model__, [EEntType.EDGE, edge_i]) ) as TRay[];
+}
 function _getRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TRay|TRay[] {
     if (getArrDepth(ents_arr) === 1) {
         const ent_arr: TEntTypeIdx = ents_arr as TEntTypeIdx;
         if (ent_arr[0] === EEntType.EDGE) {
             return _getRayFromEdge(__model__, ent_arr);
+        } else if (ent_arr[0] === EEntType.PLINE) {
+            return _getRayFromPline(__model__, ent_arr);
         } else if (ent_arr[0] === EEntType.FACE) {
             return _getRayFromFace(__model__, ent_arr);
         } else { // must be a polygon
@@ -421,7 +427,7 @@ function _intersectPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]
 export function VisRay(__model__: GIModel, rays: TRay|TRay[], scale: number): TId[] {
     // --- Error Check ---
     const fn_name = 'virtual.visRay';
-    checkCommTypes(fn_name, 'ray', rays, [TypeCheckObj.isRay]); // TODO rays can be a list // add isRayList to enable check
+    checkCommTypes(fn_name, 'ray', rays, [TypeCheckObj.isRay, TypeCheckObj.isRayList]);
     checkCommTypes(fn_name, 'scale', scale, [TypeCheckObj.isNumber]);
     // --- Error Check ---
    return idsMake(_visRay(__model__, rays, scale)) as TId[];
@@ -435,15 +441,32 @@ function _visRay(__model__: GIModel, rays: TRay|TRay[], scale: number): TEntType
         // create orign point
         const origin_posi_i: number = __model__.geom.add.addPosi();
         __model__.attribs.add.setPosiCoords(origin_posi_i, origin);
-        const point_i = __model__.geom.add.addPoint(origin_posi_i);
         // create pline
         const end_posi_i: number = __model__.geom.add.addPosi();
         __model__.attribs.add.setPosiCoords(end_posi_i, end);
         const pline_i = __model__.geom.add.addPline([origin_posi_i, end_posi_i]);
+        // create the arrow heads
+        const vec_unit: Txyz = vecNorm(ray[1]);
+        let vec_norm: Txyz = null;
+        if (!vecEqual(vec, [0, 0, 1], 0)) {
+            vec_norm = vecSetLen(vecCross(vec_unit, [0, 0, 1]), scale);
+        } else {
+            vec_norm = vecSetLen(vecCross(vec_unit, [1, 0, 0]), scale);
+        }
+        const vec_rev: Txyz = vecSetLen(vecMult(vec, -1), scale);
+        const arrow_a: Txyz = vecAdd(vecAdd(end, vec_rev), vec_norm);
+        const arrow_a_posi_i: number = __model__.geom.add.addPosi();
+        __model__.attribs.add.setPosiCoords(arrow_a_posi_i, arrow_a);
+        const arrow_a_pline_i: number = __model__.geom.add.addPline([end_posi_i, arrow_a_posi_i]);
+        const arrow_b: Txyz = vecSub(vecAdd(end, vec_rev), vec_norm);
+        const arrow_b_posi_i: number = __model__.geom.add.addPosi();
+        __model__.attribs.add.setPosiCoords(arrow_b_posi_i, arrow_b);
+        const arrow_b_pline_i = __model__.geom.add.addPline([end_posi_i, arrow_b_posi_i]);
         // return the geometry IDs
         return [
-            [EEntType.POINT, point_i],
-            [EEntType.PLINE, pline_i]
+            [EEntType.PLINE, pline_i],
+            [EEntType.PLINE, arrow_a_pline_i],
+            [EEntType.PLINE, arrow_b_pline_i]
         ];
     } else {
         const ents_arr: TEntTypeIdx[] = [];

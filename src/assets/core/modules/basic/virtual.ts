@@ -237,7 +237,7 @@ function _getBoundingBox(__model__: GIModel, ents_arr: TEntTypeIdx[]): TBBox {
         [(corner_min[0] + corner_max[0]) / 2, (corner_min[1] + corner_max[1]) / 2, (corner_min[2] + corner_max[2]) / 2],
         corner_min,
         corner_max,
-        [corner_max[0] - corner_min[0], corner_max[1] + corner_min[1], corner_max[2] + corner_min[2]]
+        [corner_max[0] - corner_min[0], corner_max[1] - corner_min[1], corner_max[2] - corner_min[2]]
     ];
 }
 // ================================================================================================

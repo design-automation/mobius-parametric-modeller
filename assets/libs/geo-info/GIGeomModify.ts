@@ -763,7 +763,7 @@ export class GIGeomModify {
         } else {
 
             // standard case, delete the prev edge and reqire the next edge
-            this.__delVert__StandardCase(wire_edges_i, vert_i, index_vert_i === 0);
+            this.__delVert__StandardCase(wire_edges_i, vert_i);
 
             if (face_i !== undefined) {
 
@@ -794,6 +794,8 @@ export class GIGeomModify {
      * @param vert_i
      */
     private __delVert__PgonHoleWire3Edge(face_i: number, wire_i: number) {
+        // TODO
+        console.log('not implemented');
     }
     /**
      * Special case, delete the first edge
@@ -848,19 +850,26 @@ export class GIGeomModify {
      * For pgons, this does not update the tris
      * @param vert_i
      */
-    private __delVert__StandardCase(wire_edges_i: number[], vert_i: number, is_first: boolean) {
+    private __delVert__StandardCase(wire_edges_i: number[], vert_i: number) {
         const posi_i: number = this._geom_arrays.dn_verts_posis[vert_i];
         // vert_i is in the middle of a wire, we must have two edges
         const edges_i: number[] = this._geom_arrays.up_verts_edges[vert_i];
-        const prev_edge_i: number = is_first ? edges_i[1] : edges_i[0];
-        const next_edge_i: number = is_first ? edges_i[0] : edges_i[1];
+        const prev_edge_i: number = edges_i[0]; //is_first ? edges_i[1] : edges_i[0];
+        const next_edge_i: number = edges_i[1]; //is_first ? edges_i[0] : edges_i[1];
         // get the verts of the two edges
         const prev_edge_verts_i: number[] = this._geom_arrays.dn_edges_verts[prev_edge_i];
         const next_edge_verts_i: number[] = this._geom_arrays.dn_edges_verts[next_edge_i];
         const prev_vert_i: number = prev_edge_verts_i[0];
         const next_vert_i: number = next_edge_verts_i[1];
-        // run some checks, TODO this can be removed later
-        if (prev_vert_i === vert_i) { throw new Error('Unexpected vertex ordering 1'); }
+        // console.log(wire_edges_i);
+        // console.log(vert_i);
+        // console.log(is_first);
+        // console.log(edges_i);
+        // console.log(prev_edge_i, next_edge_i)
+        // console.log(prev_edge_verts_i, next_edge_verts_i)
+        // console.log(prev_vert_i, next_vert_i)
+        // run some checks
+        if (prev_vert_i === vert_i) {throw new Error('Unexpected vertex ordering 1'); }
         if (next_vert_i === vert_i) { throw new Error('Unexpected vertex ordering 2'); }
         if (prev_edge_verts_i[1] !== next_edge_verts_i[0]) { throw new Error('Unexpected vertex ordering 3'); }
         if (prev_edge_verts_i[1] !== vert_i) { throw new Error('Unexpected vertex ordering 4'); }

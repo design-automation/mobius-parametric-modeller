@@ -68,7 +68,7 @@ function _position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TEntTypeId
 export function Point(__model__: GIModel, entities: TId|TId[]|TId[][]): TId|TId[]|TId[][] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
-    const ents_arr = checkIDs('make.Point', 'positions', entities,
+    const ents_arr = checkIDs('make.Point', 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
         [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
         EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON])  as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
@@ -110,7 +110,7 @@ function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntType
 export function Polyline(__model__: GIModel, entities: TId|TId[]|TId[][], close: _EClose): TId|TId[] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
-    const ents_arr = checkIDs('make.Polyline', 'positions', entities,
+    const ents_arr = checkIDs('make.Polyline', 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
         [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
         EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
@@ -211,7 +211,7 @@ function _getPlinePosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTy
 export function Polygon(__model__: GIModel, entities: TId|TId[]|TId[][]): TId|TId[] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
-    const ents_arr = checkIDs('make.Polygon', 'positions', entities,
+    const ents_arr = checkIDs('make.Polygon', 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
         [EEntType.POSI, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
     // --- Error Check ---
@@ -288,6 +288,41 @@ function _getPgonPosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTyp
         }
     }
     return posis_arrs;
+}
+// ================================================================================================
+/**
+ * Adds a set of triangular polygons, forming a Triangulated Irregular Network (TIN).
+ *
+ * @param __model__
+ * @param entities List or nested lists of positions, or entities from which positions can be extracted.
+ * @returns Entities, a list of new polygons.
+ */
+export function _Tin(__model__: GIModel, entities: TId[]|TId[][]): TId[] {
+    if (isEmptyArr(entities)) { return []; }
+    // --- Error Check ---
+    const ents_arr = checkIDs('make.Tin', 'entities', entities,
+        [IDcheckObj.isIDList, IDcheckObj.isIDList_list],
+        [EEntType.POSI, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
+    // --- Error Check ---
+    const posis_arrs: TEntTypeIdx[][] = _getPgonPosisFromEnts(__model__, ents_arr);
+    return null;
+}
+function _tin(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx|TEntTypeIdx[] {
+    const depth: number = getArrDepth(ents_arr);
+    if (depth === 2) {
+        const posis_i: number[] = idIndicies(ents_arr as TEntTypeIdx[]);
+        const vtxs_tf: Txyz[] = [];
+        for (const posi_i of posis_i) {
+            const xyz: Txyz = __model__.attribs.query.getPosiCoords(posi_i);
+            vtxs_tf.push(xyz);
+        }
+        // const tin = turf.triangulate(vtxs_tf);
+        // console.log(tin);
+        return null;
+    } else {
+        ents_arr = ents_arr as TEntTypeIdx[][];
+        return ents_arr.map(ents_arr_item => _tin(__model__, ents_arr_item)) as TEntTypeIdx[];
+    }
 }
 // ================================================================================================
 /**

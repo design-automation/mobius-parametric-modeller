@@ -11,14 +11,57 @@
 import { checkCommTypes, TypeCheckObj } from '../_check_args';
 import { Txyz, TPlane, XYPLANE, TId, EEntType } from '@libs/geo-info/common';
 import { getArrDepth, idsMakeFromIndicies } from '@libs/geo-info/id';
-import { vecAdd } from '@libs/geom/vectors';
+import { vecAdd, vecFromTo, vecDiv, vecMult } from '@libs/geom/vectors';
 import { xfromSourceTargetMatrix, multMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
 import { __merge__ } from '../_model';
 import { GIModel } from '@libs/geo-info/GIModel';
 import * as THREE from 'three';
 import * as VERB from '@assets/libs/verb/verb';
+import { arrFill, arrMakeFlat } from '@assets/libs/util/arrs';
 // import * as VERB from 'verb';
+// ================================================================================================
+/**
+ * Creates a row of positions in a line pattern. Returns a list of new positions.
+ * @param __model__
+ * @param origin XYZ coordinates as a list of three numbers.
+ * @param size Size of the line.
+ * @returns Entities, a list of four positions.
+ */
+export function Line(__model__: GIModel, origin: Txyz|TPlane, size: number, num_positions: number): TId[] {
+    // --- Error Check ---
+    const fn_name = 'pattern.Line';
+    checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
+    checkCommTypes(fn_name, 'size', size, [TypeCheckObj.isNumber]);
+    checkCommTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+    // --- Error Check ---
+    // create the matrix one time
+    let matrix: Matrix4;
+    const origin_is_plane = getArrDepth(origin) === 2;
+    if (origin_is_plane) {
+        matrix = xfromSourceTargetMatrix(XYPLANE, origin as TPlane);
+    }
+    // create the positions
+    const posis_i: number[] = [];
+    const coords: Txyz[] = [];
+    const step: number = size / (num_positions - 1);
+    for (let i = 0; i < num_positions; i++) {
+        coords.push([-(size / 2) + i * step, 0, 0]);
+    }
+    for (const coord of coords) {
+        let xyz: Txyz = coord;
+        if (origin_is_plane) {
+            xyz = multMatrix(xyz, matrix);
+        } else { // we have a plane
+            xyz = vecAdd(xyz, origin as Txyz);
+        }
+        const posi_i: number = __model__.geom.add.addPosi();
+        __model__.attribs.add.setPosiCoords(posi_i, xyz);
+        posis_i.push(posi_i);
+    }
+    // return
+    return idsMakeFromIndicies(EEntType.POSI, posis_i) as TId[];
+}
 // ================================================================================================
 /**
  * Creates four positions in a rectangle pattern. Returns a list of new positions.
@@ -71,8 +114,10 @@ export function Rectangle(__model__: GIModel, origin: Txyz|TPlane, size: number|
 * Creates positions in a grid pattern. Returns a list (or list of lists) of new positions.
 * @param __model__
 * @param origin XYZ coordinates as a list of three numbers.
-* @param size Size of grid. If number, assume square grid of that length; if list of two numbers, x and y lengths respectively.
-* @param num_positions Number of positions.
+* @param size Size of grid. If number, assume equal lengths, i.e. a square grid.
+* If list of two numbers, specifies x and y lengths respectively.
+* @param num_positions Number of positions. If a number, assume equal number of positions.
+* If a list of two numbers, specifies x and y number of positions respectivley.
 * @param method Enum, define the way the coords will be return as lists.
 * If integer, same number for x and y; if list of two numbers, number for x and y respectively.
 * @returns Entities, a list of positions, or a list of lists of positions (depending on the 'method' setting).
@@ -160,6 +205,264 @@ export enum _EGridMethod {
     COLUMNS = 'columns',
     ROWS = 'rows',
     SQUARES = 'squares'
+}
+// ================================================================================================
+/**
+ * Creates positions in a box pattern. Returns a list of new positions.
+ * @param __model__
+ * @param origin XYZ coordinates as a list of three numbers.
+ * @param size Size of the box. If one number, assume equal lengths.
+ * If list of two or three numbers, specifies x y z lengths respectively.
+ * @param num_posis Number of positions. If number, assume equal number of positions.
+ * If list of two or three numbers, specifies x y z numbers respectively.
+ * @param method Enum
+ * @returns Entities, a list of 6 positions.
+ */
+export function Box(__model__: GIModel, origin: Txyz | TPlane,
+    size: number | [number, number] | [number, number, number],
+    num_posis: number | [number, number] | [number, number, number],
+    method: _EBoxMethod): TId[] | TId[][] {
+    // --- Error Check ---
+    const fn_name = 'pattern.Box';
+    checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
+    checkCommTypes(fn_name, 'size', size, [TypeCheckObj.isNumber, TypeCheckObj.isXYlist, TypeCheckObj.isXYZlist]);
+    // --- Error Check ---
+    // create the matrix one time
+    let matrix: Matrix4;
+    const origin_is_plane = getArrDepth(origin) === 2;
+    if (origin_is_plane) {
+        matrix = xfromSourceTargetMatrix(XYPLANE, origin as TPlane);
+    }
+    // create params
+    const xyz_size: Txyz = arrFill(size, 3) as [number, number, number];
+    const xyz_num_positions: [number, number, number] = arrFill(num_posis, 3) as [number, number, number];
+    // create the positions
+    const layer_top_posis_i: number[] = [];
+    const layer_bot_posis_i: number[] = [];
+    const posis_i: number[][][] = [];
+    const x_offset: number = xyz_size[0] / (xyz_num_positions[0] - 1);
+    const y_offset: number = xyz_size[1] / (xyz_num_positions[1] - 1);
+    const z_offset: number = xyz_size[2] / (xyz_num_positions[2] - 1);
+    for (let k = 0; k < xyz_num_positions[2]; k++) {
+        const layer_perim_x0_posis_i: number[] = [];
+        const layer_perim_y0_posis_i: number[] = [];
+        const layer_perim_x1_posis_i: number[] = [];
+        const layer_perim_y1_posis_i: number[] = [];
+        const z: number = (k * z_offset) - (xyz_size[2] / 2);
+        for (let i = 0; i < xyz_num_positions[1]; i++) {
+            const y: number = (i * y_offset) - (xyz_size[1] / 2);
+            for (let j = 0; j < xyz_num_positions[0]; j++) {
+                const x: number = (j * x_offset) - (xyz_size[0] / 2);
+                let create_perim_layer = false;
+                // perimeter layers
+                if (i === 0 || i === xyz_num_positions[1] - 1) { create_perim_layer = true; }
+                if (j === 0 || j === xyz_num_positions[0] - 1) { create_perim_layer = true; }
+                // top layer
+                let create_top_layer = false;
+                if (k === xyz_num_positions[2] - 1) { create_top_layer = true; }
+                // bot layer
+                let create_bot_layer = false;
+                if (k === 0) { create_bot_layer = true; }
+                // create posis
+                if (create_perim_layer || create_top_layer || create_bot_layer) {
+                    let xyz: Txyz = [x, y, z];
+                    if (origin_is_plane) {
+                        xyz = multMatrix(xyz, matrix);
+                    } else { // we have a plane
+                        xyz = vecAdd(xyz, origin as Txyz);
+                    }
+                    const posi_i: number = __model__.geom.add.addPosi();
+                    __model__.attribs.add.setPosiCoords(posi_i, xyz);
+                    if (create_perim_layer) {
+                        if (i === 0) {
+                            layer_perim_x0_posis_i.push(posi_i);
+                        } else if (i === xyz_num_positions[1] - 1) {
+                            layer_perim_x1_posis_i.push(posi_i);
+                        } else if (j === xyz_num_positions[0] - 1) {
+                            layer_perim_y0_posis_i.push(posi_i);
+                        } else if (j === 0) {
+                            layer_perim_y1_posis_i.push(posi_i);
+                        }
+                    }
+                    if (create_top_layer) {
+                        layer_top_posis_i.push(posi_i);
+                    }
+                    if (create_bot_layer) {
+                        layer_bot_posis_i.push(posi_i);
+                    }
+                }
+            }
+        }
+        posis_i.push([layer_perim_x0_posis_i, layer_perim_y0_posis_i, layer_perim_x1_posis_i, layer_perim_y1_posis_i]);
+    }
+    // structure the grid of posis, and return
+    if (method === _EBoxMethod.FLAT) {
+        const layers_posis_i: number[][] = [];
+        for (let k = 1; k < posis_i.length - 2; k++) {
+            layers_posis_i.push(
+                arrMakeFlat([
+                    posis_i[k][0],
+                    posis_i[k][1],
+                    posis_i[k][2].reverse(),
+                    posis_i[k][3].reverse(),
+                ])
+            );
+        }
+        const all_posis: number[] = arrMakeFlat([layer_bot_posis_i, layers_posis_i, layer_top_posis_i]);
+        return idsMakeFromIndicies(EEntType.POSI, all_posis) as TId[];
+    } else if (method === _EBoxMethod.ROWS) {
+        // rows that are parallel to x axis
+        const posis_i2: number[][] = [];
+        for (let i = 0; i < xyz_num_positions[1]; i++) {
+            const row: number[] = [];
+            // bottom
+            for (let j = 0; j < xyz_num_positions[0]; j++) {
+                const index: number = (i * xyz_num_positions[0]) + j;
+                row.push(layer_bot_posis_i[index]);
+            }
+            // mid
+            if (posis_i.length > 2) {
+                for (let k = 1; k < posis_i.length - 1; k++) {
+                    if (i === 0) {
+                        row.push(...posis_i[k][0]);
+                    } else if (i === xyz_num_positions[1] - 1) {
+                        row.push(...posis_i[k][2]);
+                    } else {
+                        row.push(posis_i[k][3][i - 1]);
+                        row.push(posis_i[k][1][i - 1]);
+                    }
+                }
+            }
+            // top
+            for (let j = 0; j < xyz_num_positions[0]; j++) {
+                const index: number = (i * xyz_num_positions[0]) + j;
+                row.push(layer_top_posis_i[index]);
+            }
+            posis_i2.push(row);
+        }
+        return idsMakeFromIndicies(EEntType.POSI, posis_i2) as TId[][];
+    } else if (method === _EBoxMethod.COLUMNS) {
+        // columns that are parallel to the y axis
+        // i is moving along x axis
+        const posis_i2: number[][] = [];
+        for (let i = 0; i < xyz_num_positions[0]; i++) {
+            const col: number[] = [];
+            // bot
+            for (let j = 0; j < xyz_num_positions[1]; j++) {
+                const index: number = (j * xyz_num_positions[0]) + i;
+                col.push(layer_bot_posis_i[index]);
+            }
+            // mid
+            if (posis_i.length > 2) {
+                for (let k = 1; k < posis_i.length - 1; k++) {
+                    if (i === 0) {
+                        col.push(posis_i[k][0][0]);
+                        col.push(...posis_i[k][3]);
+                        col.push(posis_i[k][2][0]);
+                    } else if (i === xyz_num_positions[1] - 1) {
+                        col.push(posis_i[k][0][xyz_num_positions[0] - 1]);
+                        col.push(...posis_i[k][1]);
+                        col.push(posis_i[k][0][xyz_num_positions[0] - 1]);
+                    } else {
+                        col.push(posis_i[k][0][i]);
+                        col.push(posis_i[k][2][i]);
+                    }
+                }
+            }
+            // top
+            for (let j = 0; j < xyz_num_positions[1]; j++) {
+                const index: number = (j * xyz_num_positions[0]) + i;
+                col.push(layer_top_posis_i[index]);
+            }
+            posis_i2.push(col);
+        }
+        return idsMakeFromIndicies(EEntType.POSI, posis_i2) as TId[][];
+    } else if (method === _EBoxMethod.LAYERS) {
+        // layers that are parallel to the xy plane
+        // i is moving along z axis
+        // bottom
+        const posis_i2: number[][] = [layer_bot_posis_i];
+        // mid
+        for (let i = 1; i < xyz_num_positions[2] - 1; i++) {
+            if (posis_i.length > 2) {
+                const layer: number[] = posis_i[i][0].slice();
+                for (let j = 0; j < xyz_num_positions[1] - 2; j++) {
+                    layer.push(posis_i[i][3][j]);
+                    layer.push(posis_i[i][1][j]);
+                }
+                layer.push(...posis_i[i][2]);
+                posis_i2.push(layer);
+            }
+        }
+        // top
+        posis_i2.push(layer_top_posis_i);
+        return idsMakeFromIndicies(EEntType.POSI, posis_i2) as TId[][];
+    } else if (method === _EBoxMethod.QUADS) {
+        const posis_i2: number[][] = [];
+        // bottom
+        for (let i = 0; i < xyz_num_positions[1] - 1; i++) {
+            for (let j = 0; j < xyz_num_positions[0] - 1; j++) {
+                const index: number = (i * xyz_num_positions[0]) + j;
+                const quad: number[] = [
+                    layer_bot_posis_i[index],
+                    layer_bot_posis_i[index + xyz_num_positions[0]],
+                    layer_bot_posis_i[index + xyz_num_positions[0] + 1],
+                    layer_bot_posis_i[index + 1]
+                ];
+                posis_i2.push(quad);
+            }
+        }
+        // mid
+        const layers_posis_i: number[][] = [];
+        for (let k = 0; k < posis_i.length; k++) {
+            layers_posis_i.push(
+                arrMakeFlat([
+                    posis_i[k][0],
+                    posis_i[k][1],
+                    posis_i[k][2].reverse(),
+                    posis_i[k][3].reverse(),
+                ])
+            );
+        }
+        for (let k = 0; k < layers_posis_i.length - 1; k++) {
+            const layer_posis_i: number[] = layers_posis_i[k];
+            const next_layer_posis_i: number[] = layers_posis_i[k + 1];
+            for (let i = 0; i < layer_posis_i.length; i++) {
+                const index: number = i;
+                const next_index: number = i === layer_posis_i.length - 1 ? 0 : i + 1;
+                const quad: number[] = [
+                    layer_posis_i[index],
+                    layer_posis_i[next_index],
+                    next_layer_posis_i[next_index],
+                    next_layer_posis_i[index]
+                ];
+                posis_i2.push(quad);
+            }
+        }
+        // top
+        for (let i = 0; i < xyz_num_positions[1] - 1; i++) {
+            for (let j = 0; j < xyz_num_positions[0] - 1; j++) {
+                const index: number = (i * xyz_num_positions[0]) + j;
+                const quad: number[] = [
+                    layer_top_posis_i[index],
+                    layer_top_posis_i[index + 1],
+                    layer_top_posis_i[index + xyz_num_positions[0] + 1],
+                    layer_top_posis_i[index + xyz_num_positions[0]]
+                ];
+                posis_i2.push(quad);
+            }
+        }
+        return idsMakeFromIndicies(EEntType.POSI, posis_i2) as TId[][];
+    }
+    return [];
+}
+export enum _EBoxMethod {
+    FLAT = 'flat',
+    ROWS = 'rows',
+    COLUMNS = 'columns',
+    LAYERS = 'layers',
+    // SIDES = 'sides',
+    QUADS = 'quads'
 }
 // ================================================================================================
 /**

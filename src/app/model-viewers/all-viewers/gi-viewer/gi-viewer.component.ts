@@ -416,7 +416,7 @@ interface Settings {
     normals: { show: boolean, size: number };
     axes: { show: boolean, size: number };
     grid: {
-        show: boolean, 
+        show: boolean,
         size: number,
         pos: Vector3,
         pos_x: number,

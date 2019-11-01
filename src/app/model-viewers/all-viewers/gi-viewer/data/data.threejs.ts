@@ -219,7 +219,11 @@ export class DataThreejs {
         const center = new Vector3(0, 0, 0); // allObjs.center;
         this.axes_pos.x = center.x;
         this.axes_pos.y = center.y;
-        this.grid.position.set(this.settings.grid.pos.x, this.settings.grid.pos.y, 0);
+        let grid_pos = this.settings.grid.pos;
+        if (!grid_pos) {
+            grid_pos = new Vector3(0, 0, 0);
+        }
+        this.grid.position.set(grid_pos.x, grid_pos.y, 0);
 
         if (threejs_data.posis_indices.length !== 0) {
             if (this.dataService.newFlowchart) {
@@ -842,7 +846,7 @@ export class DataThreejs {
             if (!pos) {
                 pos = new THREE.Vector3();
             }
-            this.grid.position.set(this.settings.grid.pos.x, this.settings.grid.pos.y, 0);
+            this.grid.position.set(pos.x, pos.y, 0);
             this._scene.add(this.grid);
         }
     }

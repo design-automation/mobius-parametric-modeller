@@ -124,7 +124,7 @@ export class ProcedureItemComponent implements OnDestroy {
             return;
         }
         try {
-            if (this.data.type === ProcedureTypes.Imported) {
+            if (this.data.type === ProcedureTypes.globalFuncCall) {
                 this.eventAction.emit({
                     'type': 'helpText',
                     'content': this.data.meta.name
@@ -236,7 +236,7 @@ export class ProcedureItemComponent implements OnDestroy {
     canSelectGeom() {
         const check = this.data.argCount > 0 && this.data.args[0].name === 'var_name';
         if (!check) { return false; }
-        if (this.data.type !== ProcedureTypes.Function) { return true; }
+        if (this.data.type !== ProcedureTypes.MainFunction) { return true; }
         const returns = this.ModuleDoc[this.data.meta.module][this.data.meta.name].returns;
         if (returns.length < 5) { return false; }
         if (returns.slice(0, 5).toLowerCase() === 'entit') {return true; }
@@ -249,11 +249,11 @@ export class ProcedureItemComponent implements OnDestroy {
 
 
     // modify variable input: replace space " " with underscore "_"
-    varMod() {
+    varMod(index = 0) {
         // modifyVar(this.data, this.dataService.node.procedure);
         checkNodeValidity(this.dataService.node);
-        if (this.data.args[0].invalidVar) {
-            this.dataService.notifyMessage(this.data.args[0].invalidVar);
+        if (this.data.args[index].invalidVar) {
+            this.dataService.notifyMessage(this.data.args[index].invalidVar);
         }
     }
 

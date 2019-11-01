@@ -4,6 +4,7 @@ import { IArgument } from '@models/code';
 import { INode } from '@models/node';
 import { InputType } from '@models/port';
 import { _parameterTypes } from '@assets/core/_parameterTypes';
+import { modify } from '@assets/core/modules';
 
 enum strType {
     NUM,
@@ -106,6 +107,28 @@ export function modifyVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
     }
     procedure.args[0].invalidVar = false;
 }
+
+export function modifyLocalFuncVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
+    if (!procedure.args[0].value) { return; }
+    procedure.variable = null;
+
+    procedure.args.forEach(arg => {
+        if (!arg.value) { return; }
+        arg.value = modifyVarArg(arg).replace(/[\@\#\?]/g, '_');
+        arg.jsValue = arg.value + '_';
+    });
+    for (const prod of nodeProdList) {
+        if (prod.ID === procedure.ID) {
+            continue;
+        }
+        if (prod.type === ProcedureTypes.LocalFuncDef && procedure.args[0].value === prod.args[0].value) {
+            procedure.args[0].invalidVar = `Error: Function name ${procedure.args[0].value} already exists`;
+            return;
+        }
+    }
+    procedure.args[0].invalidVar = false;
+}
+
 
 export function modifyVarArg(arg: IArgument) {
     let str = arg.value.trim();
@@ -1099,6 +1122,7 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
 export function checkValidVar(vars: string[], procedure: IProcedure, nodeProdList: IProcedure[]): {'error'?: string, 'vars'?: string[]} {
     let current = procedure;
     const validVars = [];
+    // check global variables
     for (const glb of globals) {
         const i = vars.indexOf(glb);
         if (i !== -1) {
@@ -1126,6 +1150,14 @@ export function checkValidVar(vars: string[], procedure: IProcedure, nodeProdLis
             }
         }
         current = current.parent;
+        if (current.type === ProcedureTypes.LocalFuncDef) {
+            for (let i = 1; i < current.args.length; i++) {
+                const index = vars.indexOf(current.args[i].value);
+                if (index !== -1) {
+                    validVars.push(vars.splice(index, 1)[0]);
+                }
+            }
+        }
     }
     if (vars.length === 0) {
         return {'vars': validVars};
@@ -1168,7 +1200,8 @@ export function checkNodeValidity(node: INode) {
     if (node.type === 'start') {
         updateGlobals(node);
     }
-    checkProdListValidity(node.procedure, node.procedure);
+    const full_prod_list = node.localFunc.concat(node.procedure);
+    checkProdListValidity(full_prod_list, full_prod_list);
 }
 
 function checkProdListValidity(prodList: IProcedure[], nodeProdList: IProcedure[]) {
@@ -1179,8 +1212,9 @@ function checkProdListValidity(prodList: IProcedure[], nodeProdList: IProcedure[
                 modifyVar(prod, nodeProdList);
                 modifyArgument(prod, 1, nodeProdList);
                 break;
-            case ProcedureTypes.Function:
-            case ProcedureTypes.Imported:
+            case ProcedureTypes.MainFunction:
+            case ProcedureTypes.globalFuncCall:
+            case ProcedureTypes.LocalFuncCall:
                 if (prod.args[0].name !== '__none__') {
                     modifyVar(prod, nodeProdList);
                 }
@@ -1192,6 +1226,7 @@ function checkProdListValidity(prodList: IProcedure[], nodeProdList: IProcedure[
             case ProcedureTypes.If:
             case ProcedureTypes.Elseif:
             case ProcedureTypes.While:
+            case ProcedureTypes.LocalFuncReturn:
                 modifyArgument(prod, 0, nodeProdList);
                 break;
             case ProcedureTypes.Constant:
@@ -1202,6 +1237,9 @@ function checkProdListValidity(prodList: IProcedure[], nodeProdList: IProcedure[
             case ProcedureTypes.Return:
                 modifyArgument(prod, 1, nodeProdList);
                 break;
+            case ProcedureTypes.LocalFuncDef:
+                modifyLocalFuncVar(prod, nodeProdList);
+
         }
         if (prod.children) {
             checkProdListValidity(prod.children, nodeProdList);
@@ -1227,8 +1265,8 @@ function checkProdShadowingConstant(prodList: IProcedure[]): boolean {
     for (const prod of prodList) {
         switch (prod.type) {
             case ProcedureTypes.Variable:
-            case ProcedureTypes.Function:
-            case ProcedureTypes.Imported:
+            case ProcedureTypes.MainFunction:
+            case ProcedureTypes.globalFuncCall:
                 if (prod.args[0].name !== '__none__' && globals.indexOf(prod.args[0].value) !== -1) {
                     prod.args[0].invalidVar = `Error: Variable shadowing global constant: ${prod.args[0].value}`;
                     check = true;

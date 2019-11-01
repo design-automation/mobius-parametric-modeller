@@ -148,7 +148,7 @@ export class CodeUtils {
                 }
                 break;
 
-            case ProcedureTypes.Function:
+            case ProcedureTypes.MainFunction:
                 const argVals = [];
                 for (const arg of args.slice(1)) {
                     if (arg.name === _parameterTypes.constList) {
@@ -208,7 +208,41 @@ export class CodeUtils {
                     }
                 }
                 break;
-            case ProcedureTypes.Imported:
+            case ProcedureTypes.LocalFuncDef:
+                codeStr.push(`function ${prod.args[0].jsValue}(__params__, ${prod.args.slice(1).map(arg => arg.jsValue).join(', ')}) {`);
+                break;
+            case ProcedureTypes.LocalFuncReturn:
+                codeStr.push(`return ${prod.args[0].jsValue};`);
+                break;
+            case ProcedureTypes.LocalFuncCall:
+                const lArgsVals: any = [];
+                console.log(functionName)
+                // let urlCheck = false;
+                if (isMainFlowchart) {
+                    usedFunctions.push(prod.meta.name);
+                }
+                for (let i = 1; i < args.length; i++) {
+                    lArgsVals.push(args[i].jsValue);
+                }
+
+                const lfn = `${prod.meta.name}_(__params__${lArgsVals.map(val => ', ' + val).join('')})`;
+                if (args[0].name === '__none__' || !args[0].jsValue) {
+                    codeStr.push(`${lfn};`);
+                    break;
+                }
+                const lRepImpVar = this.repSetAttrib(args[0].jsValue);
+                if (!lRepImpVar) {
+                    codeStr.push(`${prefix}${args[0].jsValue} = ${lfn};`);
+                } else {
+                    codeStr.push(`${lRepImpVar[0]} ${lfn} ${lRepImpVar[1]}`);
+                }
+
+                if (prefix === 'let ') {
+                    existingVars.push(args[0].jsValue);
+                }
+                break;
+
+            case ProcedureTypes.globalFuncCall:
                 const argsVals: any = [];
                 const namePrefix = functionName ? `${functionName}_` : '';
 
@@ -240,7 +274,6 @@ export class CodeUtils {
                 // argsVals = argsVals.join(', ');
                 // const fn = `${namePrefix}${prod.meta.name}(__params__, ${argsVals} )`;
                 const fn = `${namePrefix}${prod.meta.name}(__params__${argsVals.map(val => ', ' + val).join('')})`;
-
                 if (args[0].name === '__none__' || !args[0].jsValue) {
                     codeStr.push(`${fn};`);
                     break;
@@ -534,6 +567,10 @@ export class CodeUtils {
 
         codeStr.push(`__modules__.${_parameterTypes.preprocess}( __params__.model);`);
         // procedure
+        for (const prod of node.localFunc) {
+            // if (node.type === 'start' && !isMainFlowchart) { break; }
+            codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName, usedFunctions));
+        }
         for (const prod of node.procedure) {
             // if (node.type === 'start' && !isMainFlowchart) { break; }
             codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName, usedFunctions));

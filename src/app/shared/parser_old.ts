@@ -1443,8 +1443,8 @@ function checkProdListValidity(prodList: IProcedure[], nodeProdList: IProcedure[
                 modifyVar(prod, nodeProdList);
                 modifyArgument(prod, 1, nodeProdList);
                 break;
-            case ProcedureTypes.Function:
-            case ProcedureTypes.Imported:
+            case ProcedureTypes.MainFunction:
+            case ProcedureTypes.globalFuncCall:
                 if (prod.args[0].name !== '__none__') {
                     modifyVar(prod, nodeProdList);
                 }
@@ -1491,8 +1491,8 @@ function checkProdShadowingConstant(prodList: IProcedure[]): boolean {
     for (const prod of prodList) {
         switch (prod.type) {
             case ProcedureTypes.Variable:
-            case ProcedureTypes.Function:
-            case ProcedureTypes.Imported:
+            case ProcedureTypes.MainFunction:
+            case ProcedureTypes.globalFuncCall:
                 if (prod.args[0].name !== '__none__' && globals.indexOf(prod.args[0].value) !== -1) {
                     prod.args[0].invalidVar = `Error: Variable shadowing global constant: ${prod.args[0].value}`;
                     check = true;

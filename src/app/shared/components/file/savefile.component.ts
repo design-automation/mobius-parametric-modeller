@@ -353,7 +353,7 @@ export class SaveFileComponent {
         const node = newFile.flowchart.nodes[1];
 
         const modelVal = '\'__model_data__' + this.dataService.flowchart.nodes[this.dataService.flowchart.nodes.length - 1].model + '\'';
-        NodeUtils.add_procedure(node, ProcedureTypes.Function, {
+        NodeUtils.add_procedure(node, ProcedureTypes.MainFunction, {
             'module': 'util',
             'name': 'ImportData',
             'argCount': 3,

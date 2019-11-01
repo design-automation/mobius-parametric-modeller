@@ -21,6 +21,25 @@ export function checkMobFile(file: any) {
         if (node.type === 'end') {
             node.procedure[node.procedure.length - 1].ID = 'Return';
         }
+
+        if (!node.localFunc) {
+            node.localFunc = [{type: 13, ID: 'local_func_blank',
+            parent: undefined,
+            meta: {name: '', module: ''},
+            variable: undefined,
+            children: undefined,
+            argCount: 0,
+            args: [],
+            print: false,
+            enabled: true,
+            selected: false,
+            selectGeom: false,
+            hasError: false}];
+        }
+
+        if (node.state.show_code === undefined) { node.state.show_code = node.type !== 'start'; }
+        if (node.state.show_func === undefined) { node.state.show_func = node.type !== 'start'; }
+
     }
     if (hasError) {
         alert('The flowchart contains functions that do not exist in the current version of Mobius');
@@ -71,7 +90,7 @@ function checkMissingProd(prodList: any[], fileVersion: number) {
         }
 
         // only continue below for function procedures
-        if (prod.type !== ProcedureTypes.Function) { continue; }
+        if (prod.type !== ProcedureTypes.MainFunction) { continue; }
 
 
         // @ts-ignore

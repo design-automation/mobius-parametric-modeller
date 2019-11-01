@@ -109,7 +109,7 @@ export class ExecuteComponent {
             if (!prod.enabled) {
                 continue;
             }
-            if (isMainFlowchart && prod.type === ProcedureTypes.Imported) {
+            if (isMainFlowchart && prod.type === ProcedureTypes.globalFuncCall) {
                 for (let i = 1; i < prod.args.length; i++) {
                     const arg = prod.args[i];
                     // args.slice(1).map((arg) => {
@@ -118,7 +118,7 @@ export class ExecuteComponent {
                 }
                 continue;
             }
-            if (prod.type !== ProcedureTypes.Function) {continue; }
+            if (prod.type !== ProcedureTypes.MainFunction) {continue; }
             for (const func of _parameterTypes.urlFunctions) {
                 const funcMeta = func.split('.');
                 if (prod.meta.module === funcMeta[0] && prod.meta.name === funcMeta[1]) {
@@ -483,6 +483,7 @@ export class ExecuteComponent {
             _parameterTypes.mergeFn(params['model'], node.input.value);
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
 
+            // #########################################################
             // *********************************************************
             // console.log(fnString);
 

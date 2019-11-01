@@ -27,13 +27,14 @@ export interface INode {
     input: IPortInput;
     output: IPortOutput;
     procedure: IProcedure[];
+    localFunc: IProcedure[];
     model: any;
 
     // stores the state
     state: {
         procedure: IProcedure[],
-        input_port: number,
-        output_port: number
+        show_code: boolean,
+        show_func: boolean
     };
 
     update_properties(data: any);

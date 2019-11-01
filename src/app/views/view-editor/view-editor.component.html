@@ -21,7 +21,7 @@
                             [node]='getNode()'
                             [prodCheck]='false'
                             [disableInput]='disableInput'></parameter-editor>
-                            <ng-container *ngIf='getNode().enabled; else disabled_node'>
+                            <!-- <ng-container *ngIf='getNode().enabled; else disabled_node'>
                                 <div id='modelViewButton--container' *ngIf="getNode().type !== 'start'">
                                     <button (click)='setViewOutput()'>Viewing 
                                         <span *ngIf='!getViewOutput()'>Input Model</span>
@@ -39,17 +39,39 @@
                                 <div id='modelViewButton--container' *ngIf="getNode().type !== 'start'">
                                     <button disabled> Node Disabled </button>
                                 </div>
-                            </ng-template>
+                            </ng-template> -->
                             
-                            <div class = 'procedureln--container' [ngClass]="{'procedureln--container-start': getNode().type == 'start'}">
+                            <div class = 'procedureln--container'  [ngClass]="{'procedureln--container-start': getNode().type == 'start'}">
                                 <!-- list of procedure items for all nodes -->
-                                <div class = 'pro-container' [hidden]="getNode().type == 'start' && !getViewOutput()">
+                                <div id='modelViewButton--container'>
+                                    <button (click)='toggleShowFunc()'>
+                                        <span *ngIf='getNode().state.show_func'>Local Function</span>
+                                        <span *ngIf='!getNode().state.show_func'>Local Function - Hidden</span>
+                                    </button>
+                                </div>
+                                <div class = 'pro-container' *ngIf='getNode().state.show_func' [hidden]="getNode().type == 'start' && !getViewOutput()">
+                                    <procedure-item 
+                                    *ngFor="let line of getNode()?.localFunc; let idx=index" 
+                                    [data]="line"
+                                    [disableInput]='disableInput'
+                                    (eventAction)='performAction_procedure_item($event, idx)'
+                                    ></procedure-item>
+                                    <br>
+                                </div>
+                                <div id='modelViewButton--container'>
+                                    <button (click)='toggleShowCode()'> 
+                                        <span *ngIf='getNode().state.show_code'>Main Code</span>
+                                        <span *ngIf='!getNode().state.show_code'>Main Code - Hidden</span>
+                                    </button>
+                                </div>
+                                <div class = 'pro-container' *ngIf='getNode().state.show_code' [hidden]="getNode().type == 'start' && !getViewOutput()">
                                     <procedure-item 
                                     *ngFor="let line of getNode()?.procedure; let idx=index" 
                                     [data]="line"
                                     [disableInput]='disableInput'
                                     (eventAction)='performAction_procedure_item($event, idx)'
                                     ></procedure-item>
+                                    <br>
                                 </div>
                                 <div class = 'divider--container' *ngIf="getNode().type !== ''">
                                     <div class = 'divider' *ngIf="getNode().type == 'start'"><span>Parameters</span></div>
@@ -63,7 +85,6 @@
                                 (eventAction)='performAction_param_editor($event)'
                                 ></parameter-editor>
                                 <div id = 'spacer'></div>
-                                
                             </div>
                             <!-- <button class='modelViewButton' (click)='setViewOutput(true)'>View Output</button> -->
 

@@ -15,9 +15,45 @@ import { TId, TQuery, EEntType, ESort, TEntTypeIdx,
 import { idsMake, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
 import { checkIDs, IDcheckObj, checkCommTypes, TypeCheckObj, checkAttribValue, checkAttribName } from '../_check_args';
 import { GIAttribMap } from '@libs/geo-info/GIAttribMap';
-
 // ================================================================================================
-export enum _EEntTypeSel {
+function _getEntTypeFromStr(ent_type_str: _EEntType|_EEntTypeAndMod): EEntType {
+    switch (ent_type_str) {
+        case _EEntTypeAndMod.POSI:
+            return EEntType.POSI;
+        case _EEntTypeAndMod.VERT:
+            return EEntType.VERT;
+        case _EEntTypeAndMod.EDGE:
+            return EEntType.EDGE;
+        case _EEntTypeAndMod.WIRE:
+            return EEntType.WIRE;
+        case _EEntTypeAndMod.FACE:
+            return EEntType.FACE;
+        case _EEntTypeAndMod.POINT:
+            return EEntType.POINT;
+        case _EEntTypeAndMod.PLINE:
+            return EEntType.PLINE;
+        case _EEntTypeAndMod.PGON:
+            return EEntType.PGON;
+        case _EEntTypeAndMod.COLL:
+            return EEntType.COLL;
+        case _EEntTypeAndMod.MOD:
+            return EEntType.MOD;
+        default:
+            break;
+    }
+}
+enum _EEntType {
+    POSI =   'ps',
+    VERT =   '_v',
+    EDGE =   '_e',
+    WIRE =   '_w',
+    FACE =   '_f',
+    POINT =  'pt',
+    PLINE =  'pl',
+    PGON =   'pg',
+    COLL =   'co'
+}
+enum _EEntTypeAndMod {
     POSI =   'ps',
     VERT =   '_v',
     EDGE =   '_e',
@@ -29,41 +65,14 @@ export enum _EEntTypeSel {
     COLL =   'co',
     MOD =    'mo'
 }
-
-function _getEntTypeFromStr(ent_type_str: _EEntTypeSel): EEntType {
-    switch (ent_type_str) {
-        case _EEntTypeSel.POSI:
-            return EEntType.POSI;
-        case _EEntTypeSel.VERT:
-            return EEntType.VERT;
-        case _EEntTypeSel.EDGE:
-            return EEntType.EDGE;
-        case _EEntTypeSel.WIRE:
-            return EEntType.WIRE;
-        case _EEntTypeSel.FACE:
-            return EEntType.FACE;
-        case _EEntTypeSel.POINT:
-            return EEntType.POINT;
-        case _EEntTypeSel.PLINE:
-            return EEntType.PLINE;
-        case _EEntTypeSel.PGON:
-            return EEntType.PGON;
-        case _EEntTypeSel.COLL:
-            return EEntType.COLL;
-        case _EEntTypeSel.MOD:
-            return EEntType.MOD;
-        default:
-            break;
-    }
-}
-export enum _EDataTypeSel {
+// ================================================================================================
+export enum _EDataType {
     NUMBER =   'number',
     STRING =   'string',
     BOOLEAN = 'boolean',
     LIST =   'list',
     DICT = 'dict'
 }
-// ================================================================================================
 // ================================================================================================
 /**
  * Add one or more attributes to the model.
@@ -75,7 +84,7 @@ export enum _EDataTypeSel {
  * @param data_type_sel Enum, the data type for this attribute
  * @param attribs A single attribute name, or a list of attribute names.
  */
-export function Add(__model__: GIModel, ent_type_sel: _EEntTypeSel, data_type_sel: _EDataTypeSel, attribs: string|string[]): void {
+export function Add(__model__: GIModel, ent_type_sel: _EEntTypeAndMod, data_type_sel: _EDataType, attribs: string|string[]): void {
     // --- Error Check ---
     const fn_name = 'attrib.Add';
     const arg_name = 'ent_type_sel';
@@ -96,19 +105,19 @@ export function Add(__model__: GIModel, ent_type_sel: _EEntTypeSel, data_type_se
     // set the data type
     let data_type: EAttribDataTypeStrs = null;
     switch (data_type_sel) {
-        case _EDataTypeSel.NUMBER:
+        case _EDataType.NUMBER:
             data_type = EAttribDataTypeStrs.NUMBER;
             break;
-        case _EDataTypeSel.STRING:
+        case _EDataType.STRING:
             data_type = EAttribDataTypeStrs.STRING;
             break;
-        case _EDataTypeSel.BOOLEAN:
+        case _EDataType.BOOLEAN:
             data_type = EAttribDataTypeStrs.BOOLEAN;
             break;
-        case _EDataTypeSel.LIST:
+        case _EDataType.LIST:
             data_type = EAttribDataTypeStrs.LIST;
             break;
-        case _EDataTypeSel.DICT:
+        case _EDataType.DICT:
             data_type = EAttribDataTypeStrs.DICT;
             break;
         default:
@@ -130,7 +139,7 @@ export function Add(__model__: GIModel, ent_type_sel: _EEntTypeSel, data_type_se
  * @param ent_type_sel Enum, the attribute entity type.
  * @param attribs A single attribute name, or a list of attribute names. In 'null' all attributes will be deleted.
  */
-export function Delete(__model__: GIModel, ent_type_sel: _EEntTypeSel, attribs: string|string[]): void {
+export function Delete(__model__: GIModel, ent_type_sel: _EEntTypeAndMod, attribs: string|string[]): void {
     // --- Error Check ---
     const fn_name = 'attrib.Delete';
     const arg_name = 'ent_type_sel';
@@ -165,7 +174,7 @@ export function Delete(__model__: GIModel, ent_type_sel: _EEntTypeSel, attribs: 
  * @param old_attrib The old attribute name.
  * @param new_attrib The old attribute name.
  */
-export function Rename(__model__: GIModel, ent_type_sel: _EEntTypeSel, old_attrib: string, new_attrib: string): void {
+export function Rename(__model__: GIModel, ent_type_sel: _EEntTypeAndMod, old_attrib: string, new_attrib: string): void {
     if (ent_type_sel === 'ps' && old_attrib === 'xyz') { return; }
     // --- Error Check ---
     const fn_name = 'attrib.Rename';
@@ -362,7 +371,7 @@ function _get(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
  * @param method_sel Enum, the method for aggregating attribute values in cases where aggregation is necessary.
  */
 export function Push(__model__: GIModel, entities: TId|TId[],
-        attrib: string|[string, string], ent_type_sel: _EEntTypeSel, method_sel: _EPushMethodSel): void {
+        attrib: string|[string, string], ent_type_sel: _EEntTypeAndMod, method_sel: _EPushMethodSel): void {
     // @ts-ignore
     if (entities !== null && getArrDepth(entities) === 2) { entities = __.flatten(entities); }
     // --- Error Check ---

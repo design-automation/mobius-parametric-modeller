@@ -466,6 +466,102 @@ export enum _EBoxMethod {
 }
 // ================================================================================================
 /**
+ * Creates positions in a polyhedron pattern. Returns a list of new positions.
+ * ~
+ * @param __model__
+ * @param origin XYZ coordinates as a list of three numbers.
+ * @param radius xxx
+ * @param detail xxx
+ * @param method Enum
+ * @returns Entities, a list of positions.
+ */
+export function Polyhedron(__model__: GIModel, origin: Txyz | TPlane, radius: number, detail: number,
+        method: _EPolyhedronMethod): TId[]|TId[][] {
+    // --- Error Check ---
+    const fn_name = 'pattern.Polyhedron';
+    checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
+    checkCommTypes(fn_name, 'radius', radius, [TypeCheckObj.isNumber]);
+    checkCommTypes(fn_name, 'detail', detail, [TypeCheckObj.isInt]);
+    if (detail > 6) {
+        throw new Error('pattern.Polyhedron: setting "Detail" to high will generate too many triangles.');
+    }
+    // --- Error Check ---
+    // create the matrix one time
+    let matrix: Matrix4 = null;
+    const origin_is_plane = getArrDepth(origin) === 2;
+    if (origin_is_plane) {
+        matrix = xfromSourceTargetMatrix(XYPLANE, origin as TPlane);
+    } else {
+        matrix = new Matrix4();
+        matrix.makeTranslation(...origin as Txyz);
+    }
+    // make polyhedron posis
+    const posis_i: number[]|number[][] = _polyhedron(__model__, matrix, radius, detail, method);
+    return idsMakeFromIndicies(EEntType.POSI, posis_i) as TId[][];
+}
+export enum _EPolyhedronMethod {
+    FLAT_TETRA = 'flat_tetra',
+    FLAT_OCTA = 'flat_octa',
+    FLAT_ICOSA = 'flat_icosa',
+    FLAT_DODECA = 'flat_dodeca',
+    FACE_TETRA = 'face_tetra',
+    FACE_OCTA = 'face_octa',
+    FACE_ICOSA = 'face_icosa',
+    FACE_DODECA = 'face_dodeca'
+}
+export function _polyhedron(__model__: GIModel, matrix: Matrix4, radius: number, detail: number,
+    method: _EPolyhedronMethod): number[]|number[][] {
+    // create the posis
+    let hedron_tjs: THREE.TetrahedronGeometry|THREE.OctahedronGeometry|THREE.IcosahedronGeometry|THREE.DodecahedronGeometry = null;
+    switch (method) {
+        case _EPolyhedronMethod.FLAT_TETRA:
+        case _EPolyhedronMethod.FACE_TETRA:
+            hedron_tjs = new THREE.TetrahedronGeometry(radius, detail);
+            break;
+        case _EPolyhedronMethod.FLAT_OCTA:
+        case _EPolyhedronMethod.FACE_OCTA:
+            hedron_tjs = new THREE.OctahedronGeometry(radius, detail);
+            break;
+        case _EPolyhedronMethod.FLAT_ICOSA:
+        case _EPolyhedronMethod.FACE_ICOSA:
+            hedron_tjs = new THREE.IcosahedronGeometry(radius, detail);
+            break;
+        case _EPolyhedronMethod.FLAT_DODECA:
+        case _EPolyhedronMethod.FACE_DODECA:
+            hedron_tjs = new THREE.DodecahedronGeometry(radius, detail);
+            break;
+        default:
+            throw new Error('pattern.Polyhedron: method not recognised.');
+    }
+    // create the posis
+    const posis_i: number[] = [];
+    for (const vert_tjs of hedron_tjs.vertices) {
+        const xyz: Txyz = multMatrix(vert_tjs.toArray() as Txyz, matrix);
+        const posi_i: number = __model__.geom.add.addPosi();
+        __model__.attribs.add.setPosiCoords(posi_i, xyz);
+        posis_i.push(posi_i);
+    }
+    // if the method is flat, then we are done, return the posis
+    switch (method) {
+        case _EPolyhedronMethod.FLAT_TETRA:
+        case _EPolyhedronMethod.FLAT_OCTA:
+        case _EPolyhedronMethod.FLAT_ICOSA:
+        case _EPolyhedronMethod.FLAT_DODECA:
+            return posis_i;
+    }
+    // get the posis into the arrays
+    const posis_arrs_i: number[][] = [];
+    for (const face_tjs of hedron_tjs.faces) {
+        posis_arrs_i.push([
+            posis_i[face_tjs.a],
+            posis_i[face_tjs.b],
+            posis_i[face_tjs.c]
+        ]);
+    }
+    return posis_arrs_i;
+}
+// ================================================================================================
+/**
  * Creates positions in an arc pattern. Returns a list of new positions.
  * If the angle of the arc is set to null, then circular patterns will be created.
  * For circular patterns, duplicates at start and end are automatically removed.

@@ -48,6 +48,21 @@ export function vecSum(vecs: Txyz[], norm: boolean = false): Txyz {
     return vec_sum;
 }
 
+export function vecAvg(vecs: Txyz[]): Txyz {
+    const vec_sum: Txyz = [0, 0, 0];
+    for (const vec of vecs) {
+        vec_sum[0] += vec[0];
+        vec_sum[1] += vec[1];
+        vec_sum[2] += vec[2];
+    }
+    const divisor: number = vecs.length;
+    return [
+        vec_sum[0] / divisor,
+        vec_sum[1] / divisor,
+        vec_sum[2] / divisor
+    ];
+}
+
 export function vecDiv(vec: Txyz, divisor: number): Txyz {
     return [
         vec[0] / divisor,

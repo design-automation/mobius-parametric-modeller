@@ -295,7 +295,7 @@ export class GIGeom {
                 const face: TFace = this._geom_arrays.dn_faces_wirestris[face_i];
                 if (face === undefined) {
                     errors.push('Wire ' + wire_i + ': Face->Wire undefined.');
-                } else if (face === null) { 
+                } else if (face === null) {
                     errors.push('Wire ' + wire_i + ': Face->Wire null.');
                 } else {
                     // check that this face points down to the wire
@@ -374,9 +374,9 @@ export class GIGeom {
             // down from pgon to face
             const pgon: TPgon = this._geom_arrays.dn_pgons_faces[pgon_i];
             if (pgon === undefined) {
-                errors.push('Face ' + face_i + ': Pgon->Face undefined.'); 
+                errors.push('Face ' + face_i + ': Pgon->Face undefined.');
             } else if (pgon === null) {
-                errors.push('Face ' + face_i + ': Pgon->Face null.'); 
+                errors.push('Face ' + face_i + ': Pgon->Face null.');
             } else {
                 // check that this pgon points down to this face
                 if (pgon !== face_i) {

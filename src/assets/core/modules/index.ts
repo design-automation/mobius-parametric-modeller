@@ -36,6 +36,9 @@ export {calc};
 import * as virtual from './basic/virtual';
 export {virtual};
 
+import * as analyze from './basic/analyze';
+export {analyze};
+
 import * as render from './basic/render';
 export {render};
 

@@ -13,10 +13,34 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, ESort, TEntTypeIdx, EFilterOperatorTypes, TAttribDataTypes} from '@libs/geo-info/common';
 import { idsMake, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
 import { checkIDs, IDcheckObj } from '../_check_args';
-
 // ================================================================================================
-
-export enum _EEntTypeEnum {
+function _getEntTypeFromStr(ent_type_str: _EEntType|_EEntTypeAndMod): EEntType {
+    switch (ent_type_str) {
+        case _EEntTypeAndMod.POSI:
+            return EEntType.POSI;
+        case _EEntTypeAndMod.VERT:
+            return EEntType.VERT;
+        case _EEntTypeAndMod.EDGE:
+            return EEntType.EDGE;
+        case _EEntTypeAndMod.WIRE:
+            return EEntType.WIRE;
+        case _EEntTypeAndMod.FACE:
+            return EEntType.FACE;
+        case _EEntTypeAndMod.POINT:
+            return EEntType.POINT;
+        case _EEntTypeAndMod.PLINE:
+            return EEntType.PLINE;
+        case _EEntTypeAndMod.PGON:
+            return EEntType.PGON;
+        case _EEntTypeAndMod.COLL:
+            return EEntType.COLL;
+        case _EEntTypeAndMod.MOD:
+            return EEntType.MOD;
+        default:
+            break;
+    }
+}
+enum _EEntType {
     POSI =   'ps',
     VERT =   '_v',
     EDGE =   '_e',
@@ -27,31 +51,26 @@ export enum _EEntTypeEnum {
     PGON =   'pg',
     COLL =   'co'
 }
-function _entType(select: _EEntTypeEnum): EEntType|EEntType[] {
-    switch (select) {
-        case _EEntTypeEnum.POSI:
-            return EEntType.POSI;
-        case _EEntTypeEnum.VERT:
-            return EEntType.VERT;
-        case _EEntTypeEnum.EDGE:
-            return EEntType.EDGE;
-        case _EEntTypeEnum.WIRE:
-            return EEntType.WIRE;
-        case _EEntTypeEnum.FACE:
-            return EEntType.FACE;
-        case _EEntTypeEnum.POINT:
-            return EEntType.POINT;
-        case _EEntTypeEnum.PLINE:
-            return EEntType.PLINE;
-        case _EEntTypeEnum.PGON:
-            return EEntType.PGON;
-        case _EEntTypeEnum.COLL:
-            return EEntType.COLL;
-        default:
-            throw new Error('Query select parameter not recognised.');
-    }
+enum _EEntTypeAndMod {
+    POSI =   'ps',
+    VERT =   '_v',
+    EDGE =   '_e',
+    WIRE =   '_w',
+    FACE =   '_f',
+    POINT =  'pt',
+    PLINE =  'pl',
+    PGON =   'pg',
+    COLL =   'co',
+    MOD =    'mo'
 }
 // ================================================================================================
+export enum _EDataType {
+    NUMBER =   'number',
+    STRING =   'string',
+    BOOLEAN = 'boolean',
+    LIST =   'list',
+    DICT = 'dict'
+}
 // ================================================================================================
 /**
  * Get entities from a list of entities.
@@ -69,7 +88,7 @@ function _entType(select: _EEntTypeEnum): EEntType|EEntType[] {
  * @example positions = query.Get('positions', [polyline1, polyline2])
  * @example_info Returns a list of positions that are part of polyline1 and polyline2.
  */
-export function Get(__model__: GIModel, ent_type_enum: _EEntTypeEnum, entities: TId|TId[]): TId[]|TId[][] {
+export function Get(__model__: GIModel, ent_type_enum: _EEntType, entities: TId|TId[]): TId[]|TId[][] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     let ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = null;
@@ -78,8 +97,8 @@ export function Get(__model__: GIModel, ent_type_enum: _EEntTypeEnum, entities: 
             [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx|TEntTypeIdx[];
     }
     // --- Error Check ---
-    // get the entity type // TODO deal with nultiple ent types
-    const ent_type: EEntType = _entType(ent_type_enum) as EEntType;
+    // get the entity type // TODO deal with multiple ent types
+    const ent_type: EEntType = _getEntTypeFromStr(ent_type_enum) as EEntType;
     // if ents_arr is null, then get all entities in the model of type ent_type
     if (ents_arr === null) {
         ents_arr = ents_arr as TEntTypeIdx[];
@@ -241,7 +260,7 @@ function _filter(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][],
  * @example positions = query.Invert('positions', [polyline1, polyline2])
  * @example_info Returns a list of positions that are not part of polyline1 and polyline2.
  */
-export function Invert(__model__: GIModel, ent_type_enum: _EEntTypeEnum, entities: TId|TId[]): TId[] {
+export function Invert(__model__: GIModel, ent_type_enum: _EEntType, entities: TId|TId[]): TId[] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
@@ -250,7 +269,7 @@ export function Invert(__model__: GIModel, ent_type_enum: _EEntTypeEnum, entitie
             [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
     }
     // --- Error Check ---
-    const select_ent_types: EEntType|EEntType[] = _entType(ent_type_enum);
+    const select_ent_types: EEntType|EEntType[] = _getEntTypeFromStr(ent_type_enum);
     const found_ents_arr: TEntTypeIdx[] = _invert(__model__, select_ent_types, ents_arr);
     return idsMake(found_ents_arr) as TId[];
 }
@@ -345,7 +364,7 @@ function _compareID(id1: TEntTypeIdx, id2: TEntTypeIdx): number {
 * @example mod.Perimeter('edges', [polygon1,polygon2,polygon])
 * @example_info Returns list of edges that are at the perimeter of polygon1, polygon2, or polygon3.
 */
-export function Perimeter(__model__: GIModel, ent_type: _EEntTypeEnum, entities: TId|TId[]): TId[] {
+export function Perimeter(__model__: GIModel, ent_type: _EEntType, entities: TId|TId[]): TId[] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
@@ -354,7 +373,7 @@ export function Perimeter(__model__: GIModel, ent_type: _EEntTypeEnum, entities:
             [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
     }
     // --- Error Check ---
-    const select_ent_types: EEntType|EEntType[] = _entType(ent_type);
+    const select_ent_types: EEntType|EEntType[] = _getEntTypeFromStr(ent_type);
     const found_ents_arr: TEntTypeIdx[] = _perimeter(__model__, select_ent_types, ents_arr);
     return idsMake(found_ents_arr) as TId[];
 }
@@ -397,7 +416,7 @@ export function _perimeter(__model__: GIModel,  select_ent_types: EEntType|EEntT
 * @example mod.neighbor('edges', [polyline1,polyline2,polyline3])
 * @example_info Returns list of edges that are welded to polyline1, polyline2, or polyline3.
 */
-export function Neighbor(__model__: GIModel, ent_type_enum: _EEntTypeEnum, entities: TId|TId[]): TId[] {
+export function Neighbor(__model__: GIModel, ent_type_enum: _EEntType, entities: TId|TId[]): TId[] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
@@ -406,7 +425,7 @@ export function Neighbor(__model__: GIModel, ent_type_enum: _EEntTypeEnum, entit
             [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
     }
     // --- Error Check ---
-    const select_ent_types: EEntType|EEntType[] = _entType(ent_type_enum);
+    const select_ent_types: EEntType|EEntType[] = _getEntTypeFromStr(ent_type_enum);
     const found_ents_arr: TEntTypeIdx[] = _neighbors(__model__, select_ent_types, ents_arr);
     return idsMake(found_ents_arr) as TId[];
 }

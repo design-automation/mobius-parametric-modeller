@@ -9,7 +9,7 @@
  */
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TPlane, Txyz, EEntType, TEntTypeIdx} from '@libs/geo-info/common';
+import { TId, TPlane, Txyz, EEntType, TEntTypeIdx, TRay} from '@libs/geo-info/common';
 import { getArrDepth, isColl, isPgon, isPline, isPoint, isPosi, isEmptyArr } from '@libs/geo-info/id';
 import { vecAdd, vecSum, vecDiv, vecFromTo, vecNorm, vecCross, vecSetLen, vecLen, vecDot } from '@libs/geom/vectors';
 import { checkCommTypes, checkIDs, IDcheckObj, TypeCheckObj} from '../_check_args';
@@ -17,19 +17,8 @@ import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetM
 import { Matrix4 } from 'three';
 import __ from 'underscore';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
-// ================================================================================================
-// Utility function
-function getOrigin(__model__: GIModel, origin: Txyz|TId|TPlane, fn_name: string): Txyz {
-    const ori_ents_arr = checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isOrigin, TypeCheckObj.isPlane]);
-    let origin_xyz: Txyz = origin as Txyz;
-    if (!Array.isArray(origin)) { // must be TId
-        const origin_posi = __model__.geom.query.navAnyToPosi(ori_ents_arr[0], ori_ents_arr[1]);
-        origin_xyz = __model__.attribs.query.getPosiCoords(origin_posi[0]);
-    } else if (Array.isArray(origin) && Array.isArray(origin[0])) { // handles plane type
-        origin_xyz = origin[0];
-    }
-    return origin_xyz;
-}
+import { getOrigin } from './_common';
+
 // ================================================================================================
 /**
  * Moves entities. The directio and distance if movement is specified as a vector.
@@ -111,14 +100,14 @@ function _move(__model__: GIModel, ents_arr: TEntTypeIdx[], vectors: Txyz|Txyz[]
  * Rotates entities on plane by angle.
  * @param __model__
  * @param entities Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
- * @param origin A list of three numbers (or a position, point, or vertex).
- * @param axis A list of three numbers.
+ * @param origin Origin [x,y,z], a plane, a ray, or entities from which a centroid can be extracted.
+ * @param axis Axuz [x,y,z].
  * @param angle Angle (in radians).
  * @returns void
  * @example modify.Rotate(polyline1, plane1, PI)
  * @example_info Rotates polyline1 on plane1 by PI (i.e. 180 degrees).
  */
-export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId|TPlane, axis: Txyz, angle: number): void {
+export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TRay|TPlane|TId|TId[], axis: Txyz, angle: number): void {
     entities = arrMakeFlat(entities) as TId[];
     if (!isEmptyArr(entities)) {
         // --- Error Check ---
@@ -154,7 +143,7 @@ function _rotate(__model__: GIModel, ents_arr: TEntTypeIdx[], origin: Txyz, axis
  * ~
  * @param __model__
  * @param entities Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
- * @param origin Position, point, vertex, list of three numbers, plane.
+ * @param origin Origin [x,y,z], a plane, a ray, or entities from which a centroid can be extracted.
  * @param scale Scale factor, a single number to scale equally, or [scale_x, scale_y, scale_z].
  * @returns void
  * @example modify.Scale(entities, plane1, 0.5)
@@ -162,7 +151,7 @@ function _rotate(__model__: GIModel, ents_arr: TEntTypeIdx[], origin: Txyz, axis
  * @example modify.Scale(entities, plane1, [0.5, 1, 1])
  * @example_info Scales entities by 0.5 along the x axis of plane1, with no scaling along the y and z axes.
  */
-export function Scale(__model__: GIModel, entities: TId|TId[], origin: TId|Txyz|TPlane, scale: number|Txyz): void {
+export function Scale(__model__: GIModel, entities: TId|TId[], origin: Txyz|TRay|TPlane|TId|TId[], scale: number|Txyz): void {
     entities = arrMakeFlat(entities) as TId[];
     if (!isEmptyArr(entities)) {
         // --- Error Check ---
@@ -200,13 +189,13 @@ function _scale(__model__: GIModel, ents_arr: TEntTypeIdx[], origin: Txyz, scale
  * Mirrors entities across plane.
  * @param __model__
  * @param entities Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
- * @param origin Position, vertex, point, list of three numbers.
- * @param direction Vector or a list of three numbers.
+ * @param origin Origin [x,y,z], a plane, a ray, or entities from which a centroid can be extracted.
+ * @param direction Vector [x,y,z].
  * @returns void
  * @example modify.Mirror(polygon1, plane1)
  * @example_info Mirrors polygon1 across plane1.
  */
-export function Mirror(__model__: GIModel, entities: TId|TId[], origin: Txyz|TId|TPlane, direction: Txyz): void {
+export function Mirror(__model__: GIModel, entities: TId|TId[], origin: Txyz|TRay|TPlane|TId|TId[], direction: Txyz): void {
     entities = arrMakeFlat(entities) as TId[];
     if (!isEmptyArr(entities)) {
         // --- Error Check ---
@@ -595,7 +584,7 @@ export function _Weld(__model__: GIModel, entities: TId[]): void {
  * Remeshing will regenerate the triangulated mesh for the face.
  * Remeshing is not performed automatically as it would degrade performance.
  * Instead, it is left up to the user to remesh only when it is actually required.
- * ~ 
+ * ~
  * @param __model__
  * @param entities Single or list of faces, polygons, collections.
  * @returns void

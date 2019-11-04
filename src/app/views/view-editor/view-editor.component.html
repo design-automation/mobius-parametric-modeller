@@ -43,7 +43,7 @@
                             
                             <div class = 'procedureln--container'  [ngClass]="{'procedureln--container-start': getNode().type == 'start'}">
                                 <!-- list of procedure items for all nodes -->
-                                <div id='modelViewButton--container'>
+                                <div id='modelViewButton--container' *ngIf='getNode().type != "start"'>
                                     <button (click)='toggleShowFunc()'>
                                         <span *ngIf='getNode().state.show_func'>Local Function</span>
                                         <span *ngIf='!getNode().state.show_func'>Local Function - Hidden</span>

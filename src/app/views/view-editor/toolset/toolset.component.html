@@ -177,7 +177,7 @@
         </button>
         <!--Search Bar-->
         <div class = 'searchbar--container'>
-            <input id='searchbarUser' class='searchBar' placeholder='Search' (keyup)='searchUser($event)'/>
+            <input id='searchbarUser' class='searchBar' placeholder='Search' (keyup)='searchUserFuncs($event)'/>
             <div class="panel" [class.opened] = 'true' *ngIf='searchedUserFuncs.length > 0'>
                 <ul class='toolset__functions--subset user_set'>
                     <ng-container *ngFor='let fnString of searchbarUser'>

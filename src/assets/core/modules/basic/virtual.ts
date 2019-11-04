@@ -15,7 +15,8 @@ import { TId, Txyz, EEntType, TPlane, TRay, TEntTypeIdx, TBBox } from '@libs/geo
 import { checkCommTypes, checkIDs, TypeCheckObj, IDcheckObj } from '../_check_args';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { idsMake, idsBreak, getArrDepth } from '@libs/geo-info/id';
-import { vecSub, vecMakeOrtho, vecNorm, vecCross, vecAdd, vecMult, vecFromTo, vecDiv, vecSum, vecEqual, vecSetLen } from '@libs/geom/vectors';
+import { vecSub, vecMakeOrtho, vecNorm, vecCross, vecAdd,
+    vecMult, vecFromTo, vecDiv, vecSum, vecEqual, vecSetLen } from '@libs/geom/vectors';
 import { _normal } from './calc';
 import * as THREE from 'three';
 // ================================================================================================

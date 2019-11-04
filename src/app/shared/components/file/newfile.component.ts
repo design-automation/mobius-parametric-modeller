@@ -41,7 +41,7 @@ export class NewFileComponent {
             name: 'Untitled',
             author: 'new_user',
             flowchart: FlowchartUtils.newflowchart(),
-            version: 3,
+            version: 4,
             settings: {}
         };
         this.dataService.file = file;

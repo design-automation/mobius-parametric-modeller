@@ -50,6 +50,7 @@ export function checkMobFile(file: any) {
             }
         }
     }
+    file.version = 4;
 }
 
 function updateNode(flowchart) {
@@ -89,15 +90,7 @@ function checkMissingProd(prodList: any[], fileVersion: number) {
             }
         }
 
-        // unify value & default of constants (all start node constants i.e. constant/simpleinput/slider/url...)
         prod.hasError = false;
-        if (fileVersion < 3) {
-            if (prod.type === ProcedureTypes.Constant) {
-                if (prod.args[1].default && prod.args[1].value === undefined) {
-                    prod.args[1].value = prod.args[1].default;
-                }
-            }
-        }
 
         // only continue below for function procedures
         if (prod.type !== ProcedureTypes.MainFunction) { continue; }

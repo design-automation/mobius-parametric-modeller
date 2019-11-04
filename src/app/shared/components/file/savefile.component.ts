@@ -338,7 +338,7 @@ export class SaveFileComponent {
         const newFile: IMobius = {
             name: this.dataService.file.name,
             author: 'new_user',
-            version: 1,
+            version: this.dataService.file.version,
             flowchart: FlowchartUtils.newflowchart(),
             settings: {}
         };

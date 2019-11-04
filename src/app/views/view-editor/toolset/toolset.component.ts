@@ -182,7 +182,7 @@ export class ToolsetComponent implements OnInit {
     }
 
     add_searched_user_func(fnData) {
-        if (fnData.type === 'local_func') {
+        if (fnData.type === 'localFunc') {
             this.add_local_func_call(fnData.data);
         } else {
             this.add_global_func(fnData.data);
@@ -220,7 +220,7 @@ export class ToolsetComponent implements OnInit {
                     }
                     const documentation = {
                         name: funcName,
-                        module: 'global_func',
+                        module: 'globalFunc',
                         description: fl.description,
                         summary: fl.description,
                         parameters: [],
@@ -234,7 +234,7 @@ export class ToolsetComponent implements OnInit {
                             edges: fl.edges
                         },
                         name: funcName,
-                        module: 'global_func',
+                        module: 'globalFunc',
                         doc: documentation,
                         importedFile: fileString
                     };
@@ -484,7 +484,7 @@ export class ToolsetComponent implements OnInit {
             if (this.searchedUserFuncs.length >= 10) { break; }
             if (func.args[0].value.toLowerCase().indexOf(str) !== -1) {
                 this.searchedUserFuncs.push({
-                    'type': 'local_func',
+                    'type': 'localFunc',
                     'name': func.args[0].value,
                     'data': func
                 });
@@ -496,7 +496,7 @@ export class ToolsetComponent implements OnInit {
             if (this.searchedUserFuncs.length >= 10) { break; }
             if (func.name.toLowerCase().indexOf(str) !== -1) {
                 this.searchedUserFuncs.push({
-                    'type': 'global_func',
+                    'type': 'globalFunc',
                     'name': func.name,
                     'data': func
                 });
@@ -504,17 +504,24 @@ export class ToolsetComponent implements OnInit {
         }
     }
 
-    assembleImportedTooltip(funcDoc): string {
-        let htmlDesc = `<p class="funcDesc">${funcDoc.name}</p>`;
-        htmlDesc += `<p>${funcDoc.description}</p>`;
-        if (funcDoc.parameters && funcDoc.parameters.length > 0) {
-            htmlDesc += `<p><span>Parameters: </span></p>`;
-            for (const param of funcDoc.parameters) {
-                htmlDesc += `<p class='paramP'><span>${param.name} - </span> ${param.description}</p>`;
+    assembleImportedTooltip(funcData, type = 'globalFunc'): string {
+        let htmlDesc: string;
+        if (type === 'globalFunc') {
+            const funcDoc = funcData.doc;
+            htmlDesc = `<p class="funcDesc">${funcDoc.name}</p>`;
+            htmlDesc += `<p>${funcDoc.description}</p>`;
+            if (funcDoc.parameters && funcDoc.parameters.length > 0) {
+                htmlDesc += `<p><span>Parameters: </span></p>`;
+                for (const param of funcDoc.parameters) {
+                    htmlDesc += `<p class='paramP'><span>${param.name} - </span> ${param.description}</p>`;
+                }
             }
-        }
-        if (funcDoc.returns) {
-            htmlDesc += `<p><span>Returns: </span>${funcDoc.returns}</p>`;
+            if (funcDoc.returns) {
+                htmlDesc += `<p><span>Returns: </span>${funcDoc.returns}</p>`;
+            }
+        } else {
+            htmlDesc = `<p class="funcDesc">Function ${funcData.args[0].value}`
+                     + `(${funcData.args.slice(1).map(arg => arg.value).join(', ')})</p>`;
         }
         return htmlDesc;
     }

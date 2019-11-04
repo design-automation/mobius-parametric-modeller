@@ -255,7 +255,7 @@ export class PanelHeaderComponent implements OnDestroy {
 
             const documentation = {
                 name: funcName,
-                module: 'global_func',
+                module: 'globalFunc',
                 description: fl.description,
                 summary: fl.description,
                 parameters: [],
@@ -269,7 +269,7 @@ export class PanelHeaderComponent implements OnDestroy {
             //         edges: fl.edges
             //     },
             //     name: func.name,
-            //     module: 'global_func',
+            //     module: 'globalFunc',
             //     doc: documentation,
             //     importedFile: file
             // };
@@ -352,7 +352,7 @@ export class PanelHeaderComponent implements OnDestroy {
 
             //     const documentation = {
             //         name: funcName,
-            //         module: 'global_func',
+            //         module: 'globalFunc',
             //         description: fl.description,
             //         summary: fl.description,
             //         parameters: [],
@@ -366,7 +366,7 @@ export class PanelHeaderComponent implements OnDestroy {
             //     //         edges: fl.edges
             //     //     },
             //     //     name: func.name,
-            //     //     module: 'global_func',
+            //     //     module: 'globalFunc',
             //     //     doc: documentation,
             //     //     importedFile: file
             //     // };

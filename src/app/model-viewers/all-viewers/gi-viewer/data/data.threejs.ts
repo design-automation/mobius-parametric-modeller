@@ -621,9 +621,10 @@ export class DataThreejs {
     }
 
     public unselectObj(ent_id, container) {
-        const removing = this.selected_geoms.get(ent_id);
+        const removing = this._scene.getObjectById(this.selected_geoms.get(ent_id)) ;
         // remove Geom from scene
-        this._scene.remove(this._scene.getObjectById(removing));
+        if (removing && removing.hasOwnProperty('dispose')) { removing['dispose'](); }
+        this._scene.remove(removing);
         this.selected_geoms.delete(ent_id);
         // remove Geom from selected Objs Map
         this.sceneObjsSelected.delete(ent_id);
@@ -648,6 +649,7 @@ export class DataThreejs {
         }
         // remove positions from scene
         removing.forEach((v, k) => {
+            console.log(this._scene.getObjectById(v))
             this._scene.remove(this._scene.getObjectById(v));
             this.ObjLabelMap.delete(k);
             if (document.getElementById(`textLabel_${k}`)) {
@@ -767,6 +769,7 @@ export class DataThreejs {
                 for (; i < length; i++) {
                     if (this._scene.children[i]) {
                         if (this._scene.children[i].name === 'DLHelper' || this._scene.children[i].name === 'lightTarget') {
+                            this._scene.children[i]['dispose']();
                             this._scene.remove(this._scene.children[i]);
                         }
                     }
@@ -826,6 +829,7 @@ export class DataThreejs {
             for (; i < length; i++) {
                 if (this._scene.children[i]) {
                     if (this._scene.children[i].name === 'AxesHelper') {
+                        this._scene.children[i]['dispose']();
                         this._scene.remove(this._scene.children[i]);
                     }
                 }
@@ -849,6 +853,7 @@ export class DataThreejs {
         for (; i < length; i++) {
             if (this._scene.children[i]) {
                 if (this._scene.children[i].name === 'GridHelper') {
+                    this._scene.children[i]['dispose']();
                     this._scene.remove(this._scene.children[i]);
                 }
             }
@@ -1061,7 +1066,10 @@ export class DataThreejs {
 
     public disposeWebGL() {
         console.log('this._renderer.info', this._renderer.info.memory.geometries);
-        this.sceneObjs.forEach(obj => this._scene.remove(obj));
+        this.sceneObjs.forEach(obj => {
+            if (obj['dispose']) { obj['dispose'](); }
+            this._scene.remove(obj);
+        });
         const BufferGeoms = this.BufferGeoms;
         BufferGeoms.forEach(geom => {
             geom.dispose();

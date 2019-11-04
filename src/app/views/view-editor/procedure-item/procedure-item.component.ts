@@ -264,6 +264,7 @@ export class ProcedureItemComponent implements OnDestroy {
         this.dataService.focusedInput = event.target;
         if (!this.data.args[argIndex].value) { return; }
         modifyArgument(this.data, argIndex, this.dataService.node.procedure);
+        this.clearLinkedArgs(this.dataService.node.localFunc);
         this.clearLinkedArgs(this.dataService.node.procedure);
         if (this.data.args[argIndex].invalidVar) {
             this.dataService.notifyMessage(this.data.args[argIndex].invalidVar);
@@ -299,18 +300,24 @@ export class ProcedureItemComponent implements OnDestroy {
         for (const prod of this.dataService.node.state.procedure) {
             prod.selected = false;
         }
+
+        let topProd = this.data;
+        while (topProd.parent) { topProd = topProd.parent; }
+        let topProdList = this.dataService.node.procedure;
+        if (topProd.type === ProcedureTypes.LocalFuncDef) { topProdList = [topProd]; }
+
         this.dataService.node.state.procedure = [];
         if (this.data.args[index].invalidVar && typeof this.data.args[index].invalidVar === 'string') {
             this.emitNotifyError(this.data.args[index].invalidVar);
         } else if (isVar) {
             if (this.data.variable) {
-                this.markLinkedArguments(this.data.variable, this.dataService.node.procedure);
+                this.markLinkedArguments(this.data.variable, topProdList);
             } else if (this.data.args[index].usedVars && this.data.args[index].usedVars[0]) {
-                this.markLinkedArguments(this.data.args[index].usedVars[0], this.dataService.node.procedure);
+                this.markLinkedArguments(this.data.args[index].usedVars[0], topProdList);
             }
         } else if (this.data.args[index].usedVars) {
             for (const varName of this.data.args[index].usedVars) {
-                this.markLinkedArguments(varName, this.dataService.node.procedure);
+                this.markLinkedArguments(varName, topProdList);
             }
         }
     }

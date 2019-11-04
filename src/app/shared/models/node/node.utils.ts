@@ -437,7 +437,7 @@ export abstract class NodeUtils {
 
             case ProcedureTypes.LocalFuncCall:
                 prod.argCount = data.args.length;
-                prod.meta = { module: 'local_func', name: data.args[0].value};
+                prod.meta = { module: 'localFunc', name: data.args[0].value};
                 prod.argCount = data.argCount;
 
                 const hasReturn = NodeUtils.checkLocalFuncReturn(data);

@@ -116,6 +116,8 @@ export function modifyLocalFuncVar(procedure: IProcedure, nodeProdList: IProcedu
         if (!arg.value) { return; }
         arg.value = modifyVarArg(arg).replace(/[\@\#\?]/g, '_');
         arg.jsValue = arg.value + '_';
+        if (arg.name === 'func_name') { return; }
+        arg.usedVars = [arg.value];
     });
     for (const prod of nodeProdList) {
         if (prod.ID === procedure.ID) {

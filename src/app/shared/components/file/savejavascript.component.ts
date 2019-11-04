@@ -54,7 +54,7 @@ export class SaveJavascriptComponent {
                 edges: fl.edges
             },
             name: 'exec_' + funcName,
-            module: 'global_func',
+            module: 'globalFunc',
             doc: null,
             importedFile: ''
         };

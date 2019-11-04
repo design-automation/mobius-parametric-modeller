@@ -307,8 +307,7 @@
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>
                 = 
             </ng-container>
-            <div class='function-text'><span class='module-name'>global_func.</span>{{data.meta.name}} </div> 
-            
+            <div class='function-text'><span class='module-name'>globalFunc.</span>{{data.meta.name}}</div> 
             <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
                 <input class='input--arg' 
                     *ngIf='p.type !== 5'
@@ -336,21 +335,20 @@
                     [class.error]='data.args[0].invalidVar'
                     [class.linked]='data.args[0].linked'
                     [class.disabled]='disableInput'
-                    (focus)='onInputFocus(0)'
                     (blur)='varMod(0)'
                     placeholder={{data.args[0].name}}
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
                     >
                 </ng-container>
                 <span class='function-text'>  Function</span>
-                <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
+                <ng-container *ngFor='let p of data.args;let i=index'>
                     <input class='input--arg' 
-                    *ngIf="p.name[0] !== '_'" 
+                    *ngIf="p.name[0] !== '_' && i > 0" 
                     [(ngModel)]='p.value'
                     [class.error]='p.invalidVar'
                     [class.linked]='p.linked'
                     [class.disabled]='disableInput'
-                    (focus)='onInputFocus(i)'
+                    (focus)='onInputFocus(i, true)'
                     (blur)='varMod(i)'
                     placeholder={{p.name}}
                     [style.width.px]='inputSize(p.value||p.name)'
@@ -386,7 +384,7 @@
                     = 
                 </ng-container>
 
-                <div class='function-text'><span class='module-name'>local_func.</span>{{data.meta.name}} </div> 
+                <div class='function-text'><span class='module-name'>local.</span>{{data.meta.name}} </div> 
                 
                 <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
                     <input class='input--arg' 

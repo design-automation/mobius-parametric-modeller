@@ -296,12 +296,10 @@ export class GIViewerComponent implements OnInit {
             //     break;
             case 'directional_light.azimuth':
                 this.settings.directional_light.azimuth = Number(value);
-                console.log('altitude:', this.settings.directional_light.altitude)
                 scene.getDLPosition(null, this.settings.directional_light.azimuth, this.settings.directional_light.altitude);
                 break;
             case 'directional_light.altitude':
                 this.settings.directional_light.altitude = Number(value);
-                console.log('altitude:', this.settings.directional_light.altitude)
                 scene.getDLPosition(null, this.settings.directional_light.azimuth, this.settings.directional_light.altitude);
                 break;
             // case 'directional_light.distance':

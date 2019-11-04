@@ -85,12 +85,6 @@
                         (mouseleave)='turnoffTooltip()'>
                             <span class='module-name'>{{fn.module}}.</span>{{fn.name}}
                         </li>
-                        <li *ngIf='fn.type=="global_func"'
-                        (click)='add_global_func(fn.data)'
-                        (mouseenter)='popupTooltip($event, assembleImportedTooltip(fn.data.doc))'
-                        (mouseleave)='turnoffTooltip()'>
-                            <span class='module-name'>user.</span>{{fn.name}}
-                        </li>
                     </ng-container>
                 </ul>
             </div>
@@ -181,9 +175,13 @@
             <div class="panel" [class.opened] = 'true' *ngIf='searchedUserFuncs.length > 0'>
                 <ul class='toolset__functions--subset user_set'>
                     <ng-container *ngFor='let userFunc of searchedUserFuncs'>
-                        <li (click)='add_searched_user_func(userFunc)' title='{{userFunc.name}}'>
-                            {{userFunc.name}}
+                        <li
+                        (click)='add_searched_user_func(userFunc.data)'
+                        (mouseenter)='popupTooltip($event, assembleImportedTooltip(userFunc.data, userFunc.type))'
+                        (mouseleave)='turnoffTooltip()'>
+                            <span class='module-name'>{{userFunc.type}}.</span>{{userFunc.name}}
                         </li>
+
                     </ng-container>
                 </ul>
             </div>
@@ -206,11 +204,16 @@
                 <button id='localFunc' class="accordion inline--cat"  (click)='toggleAccordion("localFunc", true)'>Local Funcs</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset user_set'>
-                        <li *ngFor='let func_prod of getNode().localFunc.slice(1)' (click)='add_local_func_call(func_prod)'>{{func_prod.args[0].value}}</li>
+                        <li *ngFor='let func_prod of getNode().localFunc.slice(1)' 
+                        (click)='add_local_func_call(func_prod)'
+                        (mouseenter)='popupTooltip($event, assembleImportedTooltip(func_prod, "localFunc"))'
+                        (mouseleave)='turnoffTooltip()'>
+                            {{func_prod.args[0].value}}
+                        </li>
                     </ul>
                 </div>
-                <button id='global_func' class="accordion" 
-                (click)='toggleAccordion("global_func")' >Global Funcs</button>
+                <button id='global_func_list' class="accordion" 
+                (click)='toggleAccordion("global_func_list")'>Global Funcs</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset'>
                         <li class = 'user--add'>
@@ -221,7 +224,7 @@
                         </li>
                         <div class='tooltip user--def' *ngFor='let fn of getFlowchart().functions'>
                             <div class = 'user--def-lnContainer'
-                            (mouseenter)='popupTooltip($event, assembleImportedTooltip(fn.doc))'
+                            (mouseenter)='popupTooltip($event, assembleImportedTooltip(fn))'
                             (mouseleave)='turnoffTooltip()'>
                                 <li (click)='add_global_func(fn)'> {{fn.name}} 
                                 </li>

@@ -93,7 +93,7 @@ function checkMissingProd(prodList: any[], fileVersion: number) {
         prod.hasError = false;
         if (fileVersion < 3) {
             if (prod.type === ProcedureTypes.Constant) {
-                if (prod.args[1].default || prod.args[1].value === undefined) {
+                if (prod.args[1].default && prod.args[1].value === undefined) {
                     prod.args[1].value = prod.args[1].default;
                 }
             }

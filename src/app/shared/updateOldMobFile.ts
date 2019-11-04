@@ -5,6 +5,7 @@ import * as deprecated from '@assets/core/deprecated.json';
 
 import * as circularJSON from 'circular-json';
 import { _parameterTypes } from '@assets/core/_parameterTypes';
+import { fn } from '@angular/compiler/src/output/output_ast';
 
 
 export function checkMobFile(file: any) {
@@ -18,28 +19,11 @@ export function checkMobFile(file: any) {
             node.hasError = true;
             hasError = true;
         }
-        if (node.type === 'end') {
-            node.procedure[node.procedure.length - 1].ID = 'Return';
-        }
-
-        if (!node.localFunc) {
-            node.localFunc = [{type: 13, ID: 'local_func_blank',
-            parent: undefined,
-            meta: {name: '', module: ''},
-            variable: undefined,
-            children: undefined,
-            argCount: 0,
-            args: [],
-            print: false,
-            enabled: true,
-            selected: false,
-            selectGeom: false,
-            hasError: false}];
-        }
-
-        if (node.state.show_code === undefined) { node.state.show_code = node.type !== 'start'; }
-        if (node.state.show_func === undefined) { node.state.show_func = node.type !== 'start'; }
-
+    }
+    updateNode(file.flowchart);
+    for (const ifn of file.flowchart.functions ) { updateNode(ifn.flowchart); }
+    if (file.flowchart.subFunctions) {
+        for (const ifn of file.flowchart.subFunctions) { updateNode(ifn.flowchart); }
     }
     if (hasError) {
         alert('The flowchart contains functions that do not exist in the current version of Mobius');
@@ -65,6 +49,32 @@ export function checkMobFile(file: any) {
                 }
             }
         }
+    }
+}
+
+function updateNode(flowchart) {
+    for (const node of flowchart.nodes) {
+        if (node.type === 'end') {
+            node.procedure[node.procedure.length - 1].ID = 'Return';
+        }
+
+        if (!node.localFunc) {
+            node.localFunc = [{type: 13, ID: 'local_func_blank',
+            parent: undefined,
+            meta: {name: '', module: ''},
+            variable: undefined,
+            children: undefined,
+            argCount: 0,
+            args: [],
+            print: false,
+            enabled: true,
+            selected: false,
+            selectGeom: false,
+            hasError: false}];
+        }
+
+        if (node.state.show_code === undefined) { node.state.show_code = node.type !== 'start'; }
+        if (node.state.show_func === undefined) { node.state.show_func = node.type !== 'start'; }
     }
 }
 

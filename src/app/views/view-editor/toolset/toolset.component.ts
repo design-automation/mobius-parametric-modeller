@@ -55,11 +55,9 @@ export class ToolsetComponent implements OnInit {
     constructor(private dataService: DataService) {
         this.dataService.toolsetUpdate$.subscribe(() => {
             this.Modules = [];
-            for (const cat in categorization) {
-                if (!categorization[cat] || !this.dataService.mobiusSettings['_func_' + cat]) { continue; }
-                for (const mod of categorization[cat]) {
-                    this.Modules.push(this.AllModules[mod]);
-                }
+            for (const cat in this.AllModules) {
+                if (!this.AllModules[cat] || !this.dataService.mobiusSettings['_func_' + cat]) { continue; }
+                this.Modules.push(this.AllModules[cat]);
             }
         });
     }
@@ -103,11 +101,10 @@ export class ToolsetComponent implements OnInit {
             this.AllModules[nMod.module] = nMod;
             // this.Modules.push(nMod);
         }
-        for (const cat in categorization) {
-            if (!categorization[cat] || !this.dataService.mobiusSettings['_func_' + cat]) { continue; }
-            for (const mod of categorization[cat]) {
-                this.Modules.push(this.AllModules[mod]);
-            }
+
+        for (const cat in this.AllModules) {
+            if (!this.AllModules[cat] || !this.dataService.mobiusSettings['_func_' + cat]) { continue; }
+            this.Modules.push(this.AllModules[cat]);
         }
 
     }
@@ -182,6 +179,14 @@ export class ToolsetComponent implements OnInit {
             'type': 'add_prod',
             'content': { type: ProcedureTypes.globalFuncCall, data: fnData }
         });
+    }
+
+    add_searched_user_func(fnData) {
+        if (fnData.type === 'local_func') {
+            this.add_local_func_call(fnData.data);
+        } else {
+            this.add_global_func(fnData.data);
+        }
     }
 
     // delete imported function
@@ -434,17 +439,6 @@ export class ToolsetComponent implements OnInit {
             }
         }
 
-        // Search User Defined Functions
-        for (const func of this.dataService.flowchart.functions) {
-            if (this.searchedMainFuncs.length >= 10) { break; }
-            if (func.name.toLowerCase().indexOf(str) !== -1) {
-                this.searchedMainFuncs.push({
-                    'type': 'global_func',
-                    'name': func.name,
-                    'data': func
-                });
-            }
-        }
     }
 
     searchInlineFuncs(event) {
@@ -483,6 +477,31 @@ export class ToolsetComponent implements OnInit {
         }
     }
     searchUserFuncs(event) {
+        const str = event.target.value.toLowerCase();
+        this.searchedUserFuncs = [];
+        for (const func of this.getNode().localFunc) {
+            if (func.type !== ProcedureTypes.LocalFuncDef) { continue; }
+            if (this.searchedUserFuncs.length >= 10) { break; }
+            if (func.args[0].value.toLowerCase().indexOf(str) !== -1) {
+                this.searchedUserFuncs.push({
+                    'type': 'local_func',
+                    'name': func.args[0].value,
+                    'data': func
+                });
+            }
+
+        }
+        // Search User Defined Functions
+        for (const func of this.dataService.flowchart.functions) {
+            if (this.searchedUserFuncs.length >= 10) { break; }
+            if (func.name.toLowerCase().indexOf(str) !== -1) {
+                this.searchedUserFuncs.push({
+                    'type': 'global_func',
+                    'name': func.name,
+                    'data': func
+                });
+            }
+        }
     }
 
     assembleImportedTooltip(funcDoc): string {

@@ -180,9 +180,9 @@
             <input id='searchbarUser' class='searchBar' placeholder='Search' (keyup)='searchUserFuncs($event)'/>
             <div class="panel" [class.opened] = 'true' *ngIf='searchedUserFuncs.length > 0'>
                 <ul class='toolset__functions--subset user_set'>
-                    <ng-container *ngFor='let fnString of searchbarUser'>
-                        <li (click)='add_inline_func(fnString[0])' title='{{fnString[1]}}'>
-                            {{fnString[0]}}
+                    <ng-container *ngFor='let userFunc of searchedUserFuncs'>
+                        <li (click)='add_searched_user_func(userFunc)' title='{{userFunc.name}}'>
+                            {{userFunc.name}}
                         </li>
                     </ng-container>
                 </ul>

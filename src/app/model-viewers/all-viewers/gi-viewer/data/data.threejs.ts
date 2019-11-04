@@ -132,6 +132,21 @@ export class DataThreejs {
         }
         this._addAxes();
     }
+
+    /**
+     *
+     * @param object
+     * @param property
+     */
+    public static disposeObjectProperty(object: THREE.Object3D, property: string): void {
+        if (object.hasOwnProperty(property)) {
+            if (object[property].constructor === [].constructor) {
+                object[property].forEach(prop => prop.dispose());
+            } else {
+                object[property].dispose();
+            }
+        }
+    }
     /**
      *
      * @param model
@@ -140,6 +155,9 @@ export class DataThreejs {
     public addGeometry(model: GIModel, container): void {
         this._scene.background = new THREE.Color(this.settings.colors.viewer_bg);
         while (this._scene.children.length > 0) {
+            DataThreejs.disposeObjectProperty(this._scene.children[0], 'geometry');
+            DataThreejs.disposeObjectProperty(this._scene.children[0], 'material');
+            DataThreejs.disposeObjectProperty(this._scene.children[0], 'texture');
             this._scene.remove(this._scene.children[0]);
             this.sceneObjs = [];
         }

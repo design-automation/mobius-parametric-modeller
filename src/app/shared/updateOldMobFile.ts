@@ -103,9 +103,9 @@ function checkMissingProd(prodList: any[], fileVersion: number) {
                 let data: any;
                 for (const mod of ModuleList) {
                     if (mod.module.toLowerCase() === dpFn.new_func.module.toLowerCase()) {
-                        for (const fn of mod.functions) {
-                            if (fn.name.toLowerCase() === dpFn.new_func.name.toLowerCase()) {
-                                data = circularJSON.parse(circularJSON.stringify(fn));
+                        for (const modfn of mod.functions) {
+                            if (modfn.name.toLowerCase() === dpFn.new_func.name.toLowerCase()) {
+                                data = circularJSON.parse(circularJSON.stringify(modfn));
                                 break;
                             }
                         }

@@ -98,6 +98,8 @@ export class DataCesium {
                                                 Cesium.CameraEventType.WHEEL,
                                                 Cesium.CameraEventType.PINCH];
 
+        Cesium.Camera.DEFAULT_VIEW_FACTOR = 0;
+
         if (this._primitives) {
             this._viewer.scene.primitives.removeAll();
             for (const primitive of this._primitives) {
@@ -345,11 +347,12 @@ export class DataCesium {
             // }
 
 
-            const extent = new Cesium.Rectangle.fromDegrees(
-                origin[0] - 0.1, origin[1] - 0.1,
-                origin[0] + 0.1, origin[1] + 0.1); // 100.3, 5.4, 100.4, 5.5);
-                // Cesium.Camera.DEFAULT_VIEW_RECTANGLE = extent;
-                // Cesium.Camera.DEFAULT_VIEW_FACTOR = 0;
+            const extent = Cesium.Rectangle.fromDegrees(
+                longitude - 0.01, latitude - 0.01,
+                longitude + 0.01, latitude + 0.01); // 100.3, 5.4, 100.4, 5.5);
+
+            Cesium.Camera.DEFAULT_VIEW_RECTANGLE = extent;
+            // Cesium.Camera.DEFAULT_VIEW_FACTOR = 0;
 
             this._viewer.render();
         }

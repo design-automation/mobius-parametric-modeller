@@ -14,7 +14,6 @@ import { InputType } from '@models/port';
 import { IdGenerator } from '@utils';
 import { SaveFileComponent } from '@shared/components/file';
 import * as Modules from '@modules';
-import * as categorization from '@modules/categorization';
 
 const keys = Object.keys(ProcedureTypes);
 const inputEvent = new Event('input', {

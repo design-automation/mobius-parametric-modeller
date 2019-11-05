@@ -11,12 +11,14 @@
  */
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { Txyz, TColor, EAttribNames, EAttribDataTypeStrs } from '@libs/geo-info/common';
+import { Txyz, TColor, EAttribNames, EAttribDataTypeStrs, TAttribDataTypes, EAttribPush } from '@libs/geo-info/common';
 import * as THREE from 'three';
 import { TId, EEntType, ESort, TEntTypeIdx } from '@libs/geo-info/common';
 import { isEmptyArr } from '@libs/geo-info/id';
 import { checkIDs, IDcheckObj, checkCommTypes, TypeCheckObj } from '../_check_args';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
+import { min, max } from '@assets/core/inline/_math';
+import { colFalse } from '@assets/core/inline/_colors';
 // ================================================================================================
 export enum _ESide {
     FRONT =   'front',
@@ -108,7 +110,7 @@ export function Color(__model__: GIModel, entities: TId|TId[], color: TColor): v
         const ents_arr: TEntTypeIdx[] =
             checkIDs('render.Color', 'entities', entities,
             [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx[];
-        checkCommTypes('make.Position', 'coords', color, [TypeCheckObj.isColor]);
+        checkCommTypes('render.Color', 'color', color, [TypeCheckObj.isColor]);
         // --- Error Check ---
         _color(__model__, ents_arr, color);
     }
@@ -132,6 +134,103 @@ function _color(__model__: GIModel, ents_arr: TEntTypeIdx[], color: TColor): voi
     }
     // set all verts to have same color
     __model__.attribs.add.setAttribVal(EEntType.VERT, all_verts_i, EAttribNames.COLOR, color);
+}
+// ================================================================================================
+/**
+ * Sets color by creating a vertex attribute called 'rgb' and setting the value.
+ * ~
+ * @param entities The entities for which to set the color.
+ * @param attrib
+ * @param range
+ * @param method Enum
+ * @returns void
+ */
+export function Gradient(__model__: GIModel, entities: TId|TId[], attrib: string, range: number|[number, number],
+        method: _EColorRampMethod): void {
+    entities = arrMakeFlat(entities) as TId[];
+    if (!isEmptyArr(entities)) {
+        // --- Error Check ---
+        const fn_name = 'render.Gradient';
+        const ents_arr: TEntTypeIdx[] =
+            checkIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx[];
+        checkCommTypes(fn_name, 'attrib', attrib, [TypeCheckObj.isString]);
+        checkCommTypes(fn_name, 'range', range, [TypeCheckObj.isNull, TypeCheckObj.isNumber, TypeCheckObj.isNumberList]);
+        if (!__model__.attribs.query.hasAttrib(ents_arr[0][0], attrib)) {
+            throw new Error(fn_name + ': The attribute with name "' + attrib + '" does not exist on these entities.');
+        } else {
+            const data_type = __model__.attribs.query.getAttribDataType(ents_arr[0][0], attrib);
+            if (data_type !== EAttribDataTypeStrs.NUMBER) {
+                throw new Error(fn_name + ': The attribute with name "' + attrib + '" is not a number data type.' +
+                'For generating a gradient, the attribute must be a number.');
+            }
+        }
+        // --- Error Check ---
+        if (range === null) {
+            range = [null, null];
+        }
+        range = Array.isArray(range) ? range : [0, range];
+        _gradient(__model__, ents_arr, attrib, range as [number, number], method);
+    }
+}
+export enum _EColorRampMethod {
+    FALSE_COLOR = 'false_color',
+    INFRA_RED = 'infra_red',
+    WHITE_TO_RED = 'white_to_red',
+    GREY_SCALE = 'grey_scale',
+    BLACK_BODY = 'black_body'
+}
+function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib: string, range: [number, number],
+        method: _EColorRampMethod): void {
+    if (!__model__.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOR)) {
+        __model__.attribs.add.addAttrib(EEntType.VERT, EAttribNames.COLOR, EAttribDataTypeStrs.LIST);
+    }
+    // get the ents
+    const first_ent_type: number = ents_arr[0][0];
+    const ents_i: number[] = ents_arr.map( ent_arr => ent_arr[1] );
+    // push the attrib down from the ent to its verts
+    if (first_ent_type !== EEntType.VERT) {
+        __model__.attribs.add.pushAttribVals(first_ent_type, attrib, ents_i, EEntType.VERT, attrib, EAttribPush.AVERAGE);
+    }
+    // make a list of all the verts
+    const all_verts_i: number[] = [];
+    for (const ent_arr of ents_arr) {
+        const [ent_type, ent_i]: [number, number] = ent_arr as TEntTypeIdx;
+        if (ent_type === EEntType.VERT) {
+            all_verts_i.push(ent_i);
+        } else {
+            const verts_i: number[] = __model__.geom.query.navAnyToVert(ent_type, ent_i);
+            for (const vert_i of verts_i) {
+                all_verts_i.push(vert_i);
+            }
+        }
+    }
+    // get the attribute values
+    const vert_values: number[] = __model__.attribs.query.getAttribVal(EEntType.VERT, attrib, all_verts_i) as number[];
+    // if range[0] is null, get min value
+    if (range[0] === null) {
+        range[0] = min(vert_values);
+    }
+    // if range[1] is null. get max value
+    if (range[1] === null) {
+        range[1] = max(vert_values);
+    }
+    // make a values map, grouping together all the verts that have the same value
+    const values_map: Map<number, [TColor, number[]]> = new Map();
+    for (let i = 0; i < all_verts_i.length; i++) {
+        if (!values_map.has(vert_values[i])) {
+            const col: TColor = colFalse(vert_values[i], range[0], range[1]);
+            values_map.set(vert_values[i], [col, [all_verts_i[i]]]);
+        } else {
+            values_map.get(vert_values[i])[1].push(all_verts_i[i]);
+        }
+    }
+    // set color of each group of verts
+    values_map.forEach((col_and_verts_i) => {
+        const col: TColor = col_and_verts_i[0];
+        const verts_i: number[] = col_and_verts_i[1];
+        __model__.attribs.add.setAttribVal(EEntType.VERT, verts_i, EAttribNames.COLOR, col);
+    });
 }
 // ================================================================================================
 /**

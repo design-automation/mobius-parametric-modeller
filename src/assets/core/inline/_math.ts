@@ -1,4 +1,4 @@
-export function min(list: any): boolean {
+export function min(list: any): any {
     const args = Array.prototype.slice.call (arguments, min.length);
     if (args.length === 0) {
         if (list.constructor === [].constructor) {
@@ -9,7 +9,9 @@ export function min(list: any): boolean {
     args.push(list);
     return Math.min.apply(Math, args);
 }
-export function max(list: any): boolean {
+// max(1,2,3)
+// max([1,2,3])
+export function max(list: any): any {
     const args = Array.prototype.slice.call (arguments, min.length);
     if (args.length === 0) {
         if (list.constructor === [].constructor) {

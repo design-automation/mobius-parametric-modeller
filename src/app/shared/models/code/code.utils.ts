@@ -363,7 +363,7 @@ export class CodeUtils {
             att_name = res[1];
             att_index = 'null';
         }
-        return `__modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${att_name}', ${att_index})`;
+        return `__modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${att_name}', ${att_index}, 'one_value')`;
 
         // if (!val) { return; }
         // if (typeof val === 'number') { return val; }

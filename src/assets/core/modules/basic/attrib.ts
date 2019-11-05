@@ -42,7 +42,7 @@ function _getEntTypeFromStr(ent_type_str: _EEntType|_EEntTypeAndMod): EEntType {
             break;
     }
 }
-enum _EEntType {
+export enum _EEntType {
     POSI =   'ps',
     VERT =   '_v',
     EDGE =   '_e',
@@ -53,7 +53,7 @@ enum _EEntType {
     PGON =   'pg',
     COLL =   'co'
 }
-enum _EEntTypeAndMod {
+export enum _EEntTypeAndMod {
     POSI =   'ps',
     VERT =   '_v',
     EDGE =   '_e',
@@ -202,9 +202,10 @@ export function Rename(__model__: GIModel, ent_type_sel: _EEntTypeAndMod, old_at
  * @param attrib The attribute name.
  * @param idx_or_key Optional, The attribute index if setting a value in a list, or null otherwise.
  * @param value The attribute value, or list of values.
+ * @param method Enum
  */
 export function Set(__model__: GIModel, entities: TId|TId[]|TId[][],
-                              attrib: string, idx_or_key: number, value: TAttribDataTypes|TAttribDataTypes[]): void {
+        attrib: string, idx_or_key: number, value: TAttribDataTypes|TAttribDataTypes[], method: _ESet): void {
     // if entities is null, then we are setting model attributes
     // @ts-ignore
     if (entities !== null && getArrDepth(entities) === 2) { entities = __.flatten(entities); }
@@ -216,10 +217,14 @@ export function Set(__model__: GIModel, entities: TId|TId[]|TId[][],
     }
     checkAttribName(fn_name , attrib);
     // --- Error Check ---
-    _setAttrib(__model__, ents_arr, attrib, value, idx_or_key);
+    _setAttrib(__model__, ents_arr, attrib, value, idx_or_key, method);
+}
+export enum _ESet {
+    ONE_VALUE =   'one_value',
+    MANY_VALUES =   'many_values'
 }
 function _setAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
-        attrib_name: string, attrib_values: TAttribDataTypes|TAttribDataTypes[], idx_or_key?: number|string): void {
+        attrib_name: string, attrib_values: TAttribDataTypes|TAttribDataTypes[], idx_or_key: number|string, method: _ESet): void {
     // check the ents_arr
     if (ents_arr === null) {
         _setModelAttrib(__model__, attrib_name, attrib_values as TAttribDataTypes, idx_or_key);
@@ -231,20 +236,24 @@ function _setAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
     }
     ents_arr = ents_arr as TEntTypeIdx[];
     // are we setting a list of ents to a list of values? ie many to many?
-    const attrib_values_depth: number = getArrDepth(attrib_values);
-    const first_ent_type: number = ents_arr[0][0];
-    if (__model__.attribs.query.hasAttrib(first_ent_type, attrib_name)) {
-        const attrib_data_type: EAttribDataTypeStrs = __model__.attribs.query.getAttribDataType(first_ent_type, attrib_name);
-        const attrib_is_list: boolean = attrib_data_type === EAttribDataTypeStrs.LIST;
-        const values_is_list: boolean = attrib_values_depth > 0;
-        // many to many should only be true in cases where the opposite would cause an error
-        if (!attrib_is_list && values_is_list) {
-            _setEachEntDifferentAttribValue(__model__, ents_arr, attrib_name, attrib_values as TAttribDataTypes[], idx_or_key);
-            return;
-        }
-    }
+    // const attrib_values_depth: number = getArrDepth(attrib_values);
+    // const first_ent_type: number = ents_arr[0][0];
+    // if (__model__.attribs.query.hasAttrib(first_ent_type, attrib_name)) {
+    //     const attrib_data_type: EAttribDataTypeStrs = __model__.attribs.query.getAttribDataType(first_ent_type, attrib_name);
+    //     const attrib_is_list: boolean = attrib_data_type === EAttribDataTypeStrs.LIST;
+    //     const values_is_list: boolean = attrib_values_depth > 0;
+    //     // many to many should only be true in cases where the opposite would cause an error
+    //     if (!attrib_is_list && values_is_list) {
+    //         _setEachEntDifferentAttribValue(__model__, ents_arr, attrib_name, attrib_values as TAttribDataTypes[], idx_or_key);
+    //         return;
+    //     }
+    // }
     // all ents get the same attribute value
-    _setEachEntSameAttribValue(__model__, ents_arr, attrib_name, attrib_values as TAttribDataTypes, idx_or_key);
+    if (method === _ESet.MANY_VALUES) {
+        _setEachEntDifferentAttribValue(__model__, ents_arr, attrib_name, attrib_values as TAttribDataTypes[], idx_or_key);
+    } else {
+        _setEachEntSameAttribValue(__model__, ents_arr, attrib_name, attrib_values as TAttribDataTypes, idx_or_key);
+    }
     return;
 }
 function _setModelAttrib(__model__: GIModel, attrib_name: string, attrib_value: TAttribDataTypes, idx_or_key?: number|string): void {

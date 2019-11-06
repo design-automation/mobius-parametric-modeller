@@ -154,7 +154,8 @@ export function Gradient(__model__: GIModel, entities: TId|TId[], attrib: string
         const ents_arr: TEntTypeIdx[] =
             checkIDs(fn_name, 'entities', entities,
             [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx[];
-        checkCommTypes(fn_name, 'attrib', attrib, [TypeCheckObj.isStringStringList, TypeCheckObj.isStringNumberList]);
+        checkCommTypes(fn_name, 'attrib', attrib,
+            [TypeCheckObj.isString, TypeCheckObj.isStringStringList, TypeCheckObj.isStringNumberList]);
         checkCommTypes(fn_name, 'range', range, [TypeCheckObj.isNull, TypeCheckObj.isNumber, TypeCheckObj.isNumberList]);
         const attrib_name: string = Array.isArray(attrib) ? attrib[0] : attrib;
         const attrib_idx_or_key: number|string = Array.isArray(attrib) ? attrib[1] : null;

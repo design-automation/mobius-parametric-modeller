@@ -53,7 +53,10 @@ export function Raytrace(__model__: GIModel, origins: Txyz|Txyz[], directions: T
     const directions_tjs: THREE.Vector3[] = _raytraceDirectionsTjs(__model__, directions);
     const meshes_tjs: THREE.Mesh[] = _meshes_tjs(__model__, ents_arrs);
     limits = Array.isArray(limits) ? limits : [0, limits];
-    return _raytrace(origins_tjs, null, directions_tjs, meshes_tjs, limits, method);
+    const result = _raytrace(origins_tjs, null, directions_tjs, meshes_tjs, limits, method);
+    // cleanup
+    meshes_tjs.forEach(meshe_tjs => { meshe_tjs.geometry.dispose(); (meshe_tjs.material as THREE.Material).dispose(); } );
+    return result;
 }
 function _raytraceOriginsTjs(__model__: GIModel, origins: Txyz|Txyz[]): THREE.Vector3[] {
     origins = Array.isArray(origins[0]) ? origins as Txyz[] : [origins] as Txyz[];
@@ -271,6 +274,8 @@ export function Solar(__model__: GIModel, origins: TPlane[], detail: number,
     const directions_tjs: THREE.Vector3[] = __.flatten(_solarDirectionsTjs(latitude, north, detail, method));
     // run the simulation
     const results: number[] = _solarRaytrace(origins_tjs, directions_tjs, meshes_tjs, limits) as number[];
+    // cleanup
+    meshes_tjs.forEach(meshe_tjs => { meshe_tjs.geometry.dispose(); (meshe_tjs.material as THREE.Material).dispose(); } );
     // return the result
     return results;
 }

@@ -215,6 +215,18 @@ export class TypeCheckObj {
         isStringListArg(fn_name, arg_name, arg_list, 'string');
         return;
     }
+    // special for attrb names with index or key
+    static isStringStringList(fn_name: string, arg_name: string, arg_list: [string, string]): void {
+        isStringListArg(fn_name, arg_name, arg_list, 'string');
+        isListLenArg(fn_name, arg_name, arg_list, 2);
+        return;
+    }
+    static isStringNumberList(fn_name: string, arg_name: string, arg_list: [string, string]): void {
+        isListLenArg(fn_name, arg_name, arg_list, 2);
+        isStringArg(fn_name, arg_name, arg_list[0], 'string');
+        isNumberArg(fn_name, arg_name, arg_list[1]);
+        return;
+    }
     // numbers and special numbers
     static isNumber(fn_name: string, arg_name: string, arg: number): void {
         isNumberArg(fn_name, arg_name, arg);

@@ -145,8 +145,8 @@ function _color(__model__: GIModel, ents_arr: TEntTypeIdx[], color: TColor): voi
  * @param method Enum
  * @returns void
  */
-export function Gradient(__model__: GIModel, entities: TId|TId[], attrib: string, range: number|[number, number],
-        method: _EColorRampMethod): void {
+export function Gradient(__model__: GIModel, entities: TId|TId[], attrib: string|[string, number]|[string, string],
+        range: number|[number, number], method: _EColorRampMethod): void {
     entities = arrMakeFlat(entities) as TId[];
     if (!isEmptyArr(entities)) {
         // --- Error Check ---
@@ -154,14 +154,21 @@ export function Gradient(__model__: GIModel, entities: TId|TId[], attrib: string
         const ents_arr: TEntTypeIdx[] =
             checkIDs(fn_name, 'entities', entities,
             [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx[];
-        checkCommTypes(fn_name, 'attrib', attrib, [TypeCheckObj.isString]);
+        checkCommTypes(fn_name, 'attrib', attrib, [TypeCheckObj.isStringStringList, TypeCheckObj.isStringNumberList]);
         checkCommTypes(fn_name, 'range', range, [TypeCheckObj.isNull, TypeCheckObj.isNumber, TypeCheckObj.isNumberList]);
-        if (!__model__.attribs.query.hasAttrib(ents_arr[0][0], attrib)) {
+        const attrib_name: string = Array.isArray(attrib) ? attrib[0] : attrib;
+        const attrib_idx_or_key: number|string = Array.isArray(attrib) ? attrib[1] : null;
+        if (!__model__.attribs.query.hasAttrib(ents_arr[0][0], attrib_name)) {
             throw new Error(fn_name + ': The attribute with name "' + attrib + '" does not exist on these entities.');
         } else {
-            const data_type = __model__.attribs.query.getAttribDataType(ents_arr[0][0], attrib);
+            let data_type = null;
+            if (attrib_idx_or_key === null) {
+                data_type = __model__.attribs.query.getAttribDataType(ents_arr[0][0], attrib_name);
+            } else {
+                const first_val = __model__.attribs.query.getAttribValAny(ents_arr[0][0], attrib_name, ents_arr[0][1], attrib_idx_or_key);
+            }
             if (data_type !== EAttribDataTypeStrs.NUMBER) {
-                throw new Error(fn_name + ': The attribute with name "' + attrib + '" is not a number data type.' +
+                throw new Error(fn_name + ': The attribute with name "' + attrib_name + '" is not a number data type.' +
                 'For generating a gradient, the attribute must be a number.');
             }
         }
@@ -170,7 +177,7 @@ export function Gradient(__model__: GIModel, entities: TId|TId[], attrib: string
             range = [null, null];
         }
         range = Array.isArray(range) ? range : [0, range];
-        _gradient(__model__, ents_arr, attrib, range as [number, number], method);
+        _gradient(__model__, ents_arr, attrib_name, attrib_idx_or_key, range as [number, number], method);
     }
 }
 export enum _EColorRampMethod {
@@ -180,7 +187,7 @@ export enum _EColorRampMethod {
     GREY_SCALE = 'grey_scale',
     BLACK_BODY = 'black_body'
 }
-function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib: string, range: [number, number],
+function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: string, idx_or_key: number|string, range: [number, number],
         method: _EColorRampMethod): void {
     if (!__model__.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOR)) {
         __model__.attribs.add.addAttrib(EEntType.VERT, EAttribNames.COLOR, EAttribDataTypeStrs.LIST);
@@ -190,7 +197,8 @@ function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib: string, 
     const ents_i: number[] = ents_arr.map( ent_arr => ent_arr[1] );
     // push the attrib down from the ent to its verts
     if (first_ent_type !== EEntType.VERT) {
-        __model__.attribs.add.pushAttribVals(first_ent_type, attrib, ents_i, EEntType.VERT, attrib, EAttribPush.AVERAGE);
+        __model__.attribs.add.pushAttribVals(first_ent_type, attrib_name, idx_or_key, ents_i,
+            EEntType.VERT, attrib_name, EAttribPush.AVERAGE);
     }
     // make a list of all the verts
     const all_verts_i: number[] = [];
@@ -206,7 +214,7 @@ function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib: string, 
         }
     }
     // get the attribute values
-    const vert_values: number[] = __model__.attribs.query.getAttribVal(EEntType.VERT, attrib, all_verts_i) as number[];
+    const vert_values: number[] = __model__.attribs.query.getAttribVal(EEntType.VERT, attrib_name, all_verts_i) as number[];
     // if range[0] is null, get min value
     if (range[0] === null) {
         range[0] = min(vert_values);

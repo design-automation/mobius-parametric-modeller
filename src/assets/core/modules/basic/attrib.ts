@@ -375,12 +375,13 @@ function _get(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
  * ~
  * @param __model__
  * @param entities Entities, the entities to push the attribute values for.
- * @param attrib The attribute name, can be one or two names.
+ * @param attrib The attribute name, can be a list of [source_name, source_key_or_idx, target_name]
  * @param ent_type_sel Enum, the traget entity type where the attribute values should be pushed to.
  * @param method_sel Enum, the method for aggregating attribute values in cases where aggregation is necessary.
  */
 export function Push(__model__: GIModel, entities: TId|TId[],
-        attrib: string|[string, string], ent_type_sel: _EEntTypeAndMod, method_sel: _EPushMethodSel): void {
+        attrib: string|[string, string]|[string, number]|[string, number, string],
+        ent_type_sel: _EEntTypeAndMod, method_sel: _EPushMethodSel): void {
     // @ts-ignore
     if (entities !== null && getArrDepth(entities) === 2) { entities = __.flatten(entities); }
     // --- Error Check ---
@@ -389,6 +390,7 @@ export function Push(__model__: GIModel, entities: TId|TId[],
     if (entities !== null && entities !== undefined) {
         ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
     }
+    checkCommTypes(fn_name, 'attrib', attrib, [TypeCheckObj.isString, TypeCheckObj.isList]);
     // --- Error Check ---
     // get the source ent_type and indices
     const source_ent_type: EEntType = ents_arr[0][0];
@@ -399,11 +401,39 @@ export function Push(__model__: GIModel, entities: TId|TId[],
         }
         indices.push(ent_arr[1]);
     }
-    // get the source and target names
-    const is_array: boolean = Array.isArray(attrib);
-    if (is_array && attrib.length < 2) { throw new Error('Two attribute names must be defined, the existing name and the new name.'); }
-    const source_attrib: string =  is_array ? attrib[0] : attrib as string;
-    const target_attrib: string =  is_array ? attrib[1] : attrib as string;
+    // get the source attrib name, source attrib index_or_key, and the target attrib name
+    let source_attrib: string = null;
+    let source_idx_or_key: number|string = null;
+    let target_attrib: string = null;
+    if (!Array.isArray(attrib)) {
+        source_attrib = attrib;
+        target_attrib = attrib;
+    } else {
+        if (attrib.length >= 1) {
+            source_attrib = attrib[0] as string;
+            source_idx_or_key = null;
+            target_attrib = source_attrib;
+        }
+        if (attrib.length >= 2) {
+            if (typeof attrib[1] === 'string' || typeof attrib[1] === 'number') {
+                source_idx_or_key = attrib[1];
+            } else {
+                throw new Error('The second element in the "attrib" argument list must be a number or string, \
+                    i.e. the index (number) or key (string) for the source attribute.');
+            }
+        }
+        if (attrib.length === 3) {
+            if (typeof attrib[2] === 'string') {
+                target_attrib = attrib[2];
+            } else {
+                throw new Error('The third element in the "attrib" argument list must be a string, \
+                    i.e. the name of the target attribute.');
+            }
+        }
+        if (attrib.length > 3) {
+            throw new Error('The "attrib" argument can be a list of maximum length 3.');
+        }
+    }
     // check the names
     checkAttribName(fn_name, source_attrib);
     checkAttribName(fn_name, target_attrib);
@@ -413,7 +443,8 @@ export function Push(__model__: GIModel, entities: TId|TId[],
     // get the method
     const method: EAttribPush = _convertPushMethod(method_sel);
     // do the push
-    __model__.attribs.add.pushAttribVals(source_ent_type, source_attrib, indices, target_ent_type, target_attrib, method);
+    __model__.attribs.add.pushAttribVals(source_ent_type, source_attrib, source_idx_or_key, indices,
+        target_ent_type, target_attrib, method);
 }
 export enum _EPushMethodSel {
     FIRST = 'first',

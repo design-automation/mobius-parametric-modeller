@@ -45,6 +45,9 @@ export {render};
 import * as list from './basic/list';
 export {list};
 
+import * as dict from './basic/dict';
+export {dict};
+
 import * as util from './basic/util';
 export {util};
 

@@ -103,7 +103,7 @@ export class GIAttribsAdd {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         if (attribs.get(name) === undefined) {
-            const new_data_type: EAttribDataTypeStrs = this._checkDataTypeSize(value);
+            const new_data_type: EAttribDataTypeStrs = this._checkDataType(value);
             this.addAttrib(ent_type, name, new_data_type);
         }
         attribs.get(name).setEntVal(ents_i, value);
@@ -195,30 +195,55 @@ export class GIAttribsAdd {
     /**
      * Promotes attrib values up and down the hierarchy.
      */
-    public pushAttribVals(source_ent_type: EEntType, source_attrib_name: string, source_indices: number[],
-            target_ent_type: EEntType, target_attrib_name: string, method: EAttribPush): void {
+    public pushAttribVals(source_ent_type: EEntType, source_attrib_name: string, source_attrib_idx_or_key: number|string,
+            source_indices: number[], target_ent_type: EEntType, target_attrib_name: string, method: EAttribPush): void {
         if (source_ent_type === target_ent_type) { return; }
         // check that the attribute exists
         if (! this._model.attribs.query.hasAttrib(source_ent_type, source_attrib_name)) {
             throw new Error('The attribute does not exist.');
         }
         // get the data type and data size of the existing attribute
-        const data_type: EAttribDataTypeStrs = this._model.attribs.query.getAttribDataType(source_ent_type, source_attrib_name);
-        const data_size: number = this._model.attribs.query.getAttribDataLength(source_ent_type, source_attrib_name);
+        const source_data_type: EAttribDataTypeStrs = this._model.attribs.query.getAttribDataType(source_ent_type, source_attrib_name);
+        const source_data_size: number = this._model.attribs.query.getAttribDataLength(source_ent_type, source_attrib_name);
+        // get the target data type and size
+        let target_data_type: EAttribDataTypeStrs = source_data_type;
+        let target_data_size: number = source_data_size;
+        if (source_attrib_idx_or_key !== null) {
+            // get the first data item as a template to check data type and data size
+            const first_val: TAttribDataTypes = this._model.attribs.query.getAttribValAny(
+                source_ent_type, source_attrib_name, source_indices[0],
+                source_attrib_idx_or_key) as TAttribDataTypes;
+            target_data_type = this._checkDataType(first_val);
+            if (target_data_type === EAttribDataTypeStrs.LIST) {
+                const first_val_arr = first_val as any[];
+                target_data_size = first_val_arr.length;
+                for (const val of first_val_arr) {
+                    if (typeof val !== 'number') {
+                        throw new Error('The attribute value being pushed is a list but the values in the list are not numbers.');
+                    }
+                }
+            } else if (target_data_type === EAttribDataTypeStrs.NUMBER) {
+                target_data_size = 0;
+            } else {
+                throw new Error('The attribute value being pushed is neither a number nor a list of numbers.');
+            }
+        }
         // move attributes from entities up to the model, or form model down to entities
         if (target_ent_type === EEntType.MOD) {
-            this.addAttrib(target_ent_type, target_attrib_name, data_type);
+            this.addAttrib(target_ent_type, target_attrib_name, target_data_type);
             const attrib_values: TAttribDataTypes[] = [];
             for (const index of source_indices) {
-                attrib_values.push(
-                    this._model.attribs.query.getAttribVal(source_ent_type, source_attrib_name, index) as TAttribDataTypes);
+                const value: TAttribDataTypes =
+                    this._model.attribs.query.getAttribValAny(source_ent_type, source_attrib_name, index,
+                        source_attrib_idx_or_key) as TAttribDataTypes;
+                attrib_values.push(value);
             }
-            const value: TAttribDataTypes = this._aggregateVals(attrib_values, data_size, method);
-            this.setModelAttribVal(target_attrib_name, value);
+            const agg_value: TAttribDataTypes = this._aggregateVals(attrib_values, target_data_size, method);
+            this.setModelAttribVal(target_attrib_name, agg_value);
             return;
         } else if (source_ent_type === EEntType.MOD) {
-            const value: TAttribDataTypes = this._model.attribs.query.getModelAttribVal(source_attrib_name);
-            this.addAttrib(target_ent_type, target_attrib_name, data_type);
+            const value: TAttribDataTypes = this._model.attribs.query.getModelAttribValAny(source_attrib_name, source_attrib_idx_or_key);
+            this.addAttrib(target_ent_type, target_attrib_name, target_data_type);
             const target_ents_i: number[] = this._model.geom.query.getEnts(target_ent_type, false);
             for (const target_ent_i of target_ents_i) {
                 this.setAttribVal(target_ent_type, target_ent_i, target_attrib_name, value);
@@ -229,7 +254,8 @@ export class GIAttribsAdd {
         const attrib_values_map: Map<number, TAttribDataTypes[]> = new Map();
         for (const index of source_indices) {
             const attrib_value: TAttribDataTypes =
-                this._model.attribs.query.getAttribVal(source_ent_type, source_attrib_name, index) as TAttribDataTypes;
+                this._model.attribs.query.getAttribValAny(source_ent_type, source_attrib_name, index,
+                    source_attrib_idx_or_key) as TAttribDataTypes;
             const target_ents_i: number[] = this._model.geom.query.navAnyToAny(source_ent_type, target_ent_type, index);
             for (const target_ent_i of target_ents_i) {
                 if (! attrib_values_map.has(target_ent_i)) {
@@ -239,12 +265,12 @@ export class GIAttribsAdd {
             }
         }
         // create the new target attribute if it does not already exist
-        this.addAttrib(target_ent_type, target_attrib_name, data_type);
+        this.addAttrib(target_ent_type, target_attrib_name, target_data_type);
         // calculate the new value and set the attribute
         attrib_values_map.forEach( (attrib_values, target_ent_i) => {
             let value: TAttribDataTypes = attrib_values[0];
-            if (attrib_values.length > 1 && data_type === EAttribDataTypeStrs.NUMBER) {
-                value = this._aggregateVals(attrib_values, data_size, method);
+            if (attrib_values.length > 1 && source_data_type === EAttribDataTypeStrs.NUMBER) {
+                value = this._aggregateVals(attrib_values, target_data_size, method);
             }
             this.setAttribVal(target_ent_type, target_ent_i, target_attrib_name, value);
         });
@@ -349,7 +375,7 @@ export class GIAttribsAdd {
      * Utility method to check the data type of an attribute.
      * @param value
      */
-    private _checkDataTypeSize(value: TAttribDataTypes): EAttribDataTypeStrs {
+    private _checkDataType(value: TAttribDataTypes): EAttribDataTypeStrs {
         if (typeof value === 'string') {
             return EAttribDataTypeStrs.STRING;
         } else if (typeof value === 'number') {

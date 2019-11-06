@@ -84,6 +84,27 @@ export class GIAttribsQuery {
         }
     }
     /**
+     * Get an model attrib value, or an array of values given an array of entities.
+     * ~
+     * If idx_or_key is null, then this must be a simple attrib.
+     * If idx_or_key is a number, then this must be indexing a list attrib.
+     * if idx_or_key is a string, then this must be indexing a dict attrib.
+     * ~
+     * If the attribute does not exist, throw an error
+     * ~
+     * @param ent_type
+     * @param name
+     */
+    public getModelAttribValAny(name: string, idx_or_key: number|string): any {
+        if (idx_or_key === null) { return this.getModelAttribVal(name); }
+        switch (typeof idx_or_key) {
+            case 'number':
+                return this.getModelAttribListIdxVal(name, idx_or_key as number);
+            case 'string':
+                return this.getModelAttribDictKeyVal(name, idx_or_key as string);
+        }
+    }
+    /**
      * Get a model attrib value
      * @param name
      */
@@ -133,6 +154,28 @@ export class GIAttribsQuery {
     /**
      * Get an entity attrib value, or an array of values given an array of entities.
      * ~
+     * If idx_or_key is null, then this must be a simple attrib.
+     * If idx_or_key is a number, then this must be indexing a list attrib.
+     * if idx_or_key is a string, then this must be indexing a dict attrib.
+     * ~
+     * If the attribute does not exist, throw an error
+     * ~
+     * @param ent_type
+     * @param name
+     */
+    public getAttribValAny(ent_type: EEntType, name: string, ents_i: number|number[],
+            idx_or_key: number|string): any {
+        if (idx_or_key === null) { return this.getAttribVal(ent_type, name, ents_i); }
+        switch (typeof idx_or_key) {
+            case 'number':
+                return this.getAttribListIdxVal(ent_type, name, ents_i, idx_or_key as number);
+            case 'string':
+                return this.getAttribDictKeyVal(ent_type, name, ents_i, idx_or_key as string);
+        }
+    }
+    /**
+     * Get an entity attrib value, or an array of values given an array of entities.
+     * ~
      * If the attribute does not exist, throw an error
      * ~
      * @param ent_type
@@ -155,7 +198,7 @@ export class GIAttribsQuery {
      * @param ent_type
      * @param name
      */
-    public getAttribListIdxVal(ent_type: EEntType, name: string, ents_i: number, idx: number): any {
+    public getAttribListIdxVal(ent_type: EEntType, name: string, ents_i: number|number[], idx: number): any {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         const attrib: GIAttribMap = attribs.get(name);
@@ -172,7 +215,7 @@ export class GIAttribsQuery {
      * @param ent_type
      * @param name
      */
-    public getAttribDictKeyVal(ent_type: EEntType, name: string, ents_i: number, key: string): any {
+    public getAttribDictKeyVal(ent_type: EEntType, name: string, ents_i: number|number[], key: string): any {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         const attrib: GIAttribMap = attribs.get(name);

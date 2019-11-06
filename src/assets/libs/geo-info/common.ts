@@ -254,6 +254,7 @@ export enum EAttribDataTypeStrs {
 }
 
 // types
+export type Txy = [number, number]; // north direction
 export type Txyz = [number, number, number]; // in use
 export type TPosi = number;
 export type TTri = [number, number, number]; // [position, position, position]

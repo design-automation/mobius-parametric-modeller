@@ -483,7 +483,7 @@ export function Polyhedron(__model__: GIModel, origin: Txyz | TPlane, radius: nu
     checkCommTypes(fn_name, 'radius', radius, [TypeCheckObj.isNumber]);
     checkCommTypes(fn_name, 'detail', detail, [TypeCheckObj.isInt]);
     if (detail > 6) {
-        throw new Error('pattern.Polyhedron: setting "Detail" to high will generate too many triangles.');
+        throw new Error('pattern.Polyhedron: The "detail" argument is too high, the maximum is 6.');
     }
     // --- Error Check ---
     // create the matrix one time

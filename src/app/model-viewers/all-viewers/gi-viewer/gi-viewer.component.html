@@ -223,7 +223,7 @@
 					<tab tabTitle="Light & Shadow">
 						<div class="mat-elevation-z1">
 							<dl>
-								<dd>
+                                <dd>
 									<div class="label">Ambient Light</div>
 									<div class="onoffswitch">
 										<input type="checkbox"
@@ -314,9 +314,9 @@
 										<input type="text" [value]="settings.hemisphere_light.intensity" disabled>
 									</div>
 								</dd>
-								<dd><hr></dd>
+                                <dd><hr></dd>
 								<dd>
-									<div class="label">Light</div>
+									<div class="label" title='directional_light'>Light</div>
 									<div class="onoffswitch">
 										<input type="checkbox"
 										name="onoffswitch"
@@ -419,14 +419,14 @@
 									</div>
 								</dd> -->
 								<dd>
-									<div class="label">Azimuth</div>
+									<div class="label" title='directional_light.azimuth'>Azimuth</div>
 									<div class="slidecontainer light">
 										<input type="range" min="0" max="360" step="1" [value]="settings.directional_light.azimuth" class="slider" (input)="settingOnChange('directional_light.azimuth', $event.target.value)">
 										<input type="number" disabled [value]="settings.directional_light.azimuth" class="number">
 									</div>
 								</dd>
 								<dd>
-									<div class="label">Altitude</div>
+									<div class="label" title='directional_light.altitude'>Altitude</div>
 									<div class="slidecontainer light">
 										<input type="range" min="0" max="90" step="1" [value]="settings.directional_light.altitude" class="slider" (input)="settingOnChange('directional_light.altitude', $event.target.value)">
 										<input type="number" disabled [value]="settings.directional_light.altitude" class="number">

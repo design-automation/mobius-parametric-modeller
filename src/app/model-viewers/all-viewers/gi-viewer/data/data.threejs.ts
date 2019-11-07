@@ -43,6 +43,7 @@ export class DataThreejs {
     public axesHelper: THREE.AxesHelper;
     private axes_pos: THREE.Vector3 = new THREE.Vector3();
     directional_light: THREE.DirectionalLight|THREE.PointLight;
+    directional_light_settings: Settings['directional_light'];
     ambient_light: THREE.AmbientLight;
     hemisphere_light: THREE.HemisphereLight;
     groundObj: THREE.Mesh;
@@ -703,12 +704,26 @@ export class DataThreejs {
 
     // Creates a Directional Light
     private _addDirectionalLight(): void {
-        if (this.settings.directional_light.type === 'directional') {
-            this.directional_light = new THREE.DirectionalLight(this.settings.directional_light.color,
-                this.settings.directional_light.intensity);
+        this.directional_light_settings = JSON.parse(JSON.stringify(this.settings.directional_light));
+        if (this._model
+        && this._model.attribs
+        && this._model.attribs.query
+        && this._model.attribs.query.hasModelAttrib('directional_light')) {
+            const model_light_settings: any = this._model.attribs.query.getModelAttribVal('directional_light');
+            if (model_light_settings.constructor === {}.constructor) {
+                for (const i in model_light_settings) {
+                    if (model_light_settings[i]) {
+                        this.directional_light_settings[i] = model_light_settings[i];
+                    }
+                }
+            }
+        }
+        if (this.directional_light_settings.type === 'directional') {
+            this.directional_light = new THREE.DirectionalLight(this.directional_light_settings.color,
+                this.directional_light_settings.intensity);
         } else {
-            this.directional_light = new THREE.PointLight(this.settings.directional_light.color,
-                this.settings.directional_light.intensity);
+            this.directional_light = new THREE.PointLight(this.directional_light_settings.color,
+                this.directional_light_settings.intensity);
         }
         let distance = 0;
         if (this.allObjs) {
@@ -716,13 +731,13 @@ export class DataThreejs {
             // this.directional_light.target = this.sceneObjs[0];
             // this.sceneObjs[0].receiveShadow = true;
         }
-        this.settings.directional_light.distance = distance;
+        this.directional_light_settings.distance = distance;
         // this.getDLPosition(distance);
         // this.directional_light.shadow.radius = 2
-        this.directional_light.castShadow = this.settings.directional_light.shadow;
-        this.directional_light.visible = this.settings.directional_light.show;
-        // this.settings.directional_light.shadowSize = 2;
-        // const shadowMapSize = this.settings.directional_light.shadowSize;
+        this.directional_light.castShadow = this.directional_light_settings.shadow;
+        this.directional_light.visible = this.directional_light_settings.show;
+        // this.directional_light_settings.shadowSize = 2;
+        // const shadowMapSize = this.directional_light_settings.shadowSize;
         // this.directional_light.shadow.bias = -0.00001;  // default
         this.directional_light.shadow.mapSize.width = 2048;  // default
         this.directional_light.shadow.mapSize.height = 2048; // default
@@ -734,15 +749,27 @@ export class DataThreejs {
 
     public getDLPosition(scale = null, azimuth = null, altitude = null): void {
         if (!scale && scale !== 0) {
-            scale = this.settings.directional_light.distance;
+            scale = this.directional_light_settings.distance;
         }
         if (!azimuth && azimuth !== 0) {
-            azimuth = this.settings.directional_light.azimuth;
+            azimuth = this.directional_light_settings.azimuth;
         }
         if (!altitude && altitude !== 0) {
-            altitude = this.settings.directional_light.altitude;
-
+            altitude = this.directional_light_settings.altitude;
         }
+        if (this._model && this._model.attribs && this._model.attribs.query
+            && this._model.attribs.query.hasModelAttrib('directional_light')) {
+                const model_light_settings: any = this._model.attribs.query.getModelAttribVal('directional_light');
+                if (model_light_settings.constructor === {}.constructor) {
+                    if (model_light_settings.hasOwnProperty('altitude')) {
+                        altitude = model_light_settings.altitude;
+                    }
+                    if (model_light_settings.hasOwnProperty('azimuth')) {
+                        azimuth = model_light_settings.azimuth;
+                    }
+                }
+            }
+
         let posX = Math.cos(altitude * Math.PI * 2 / 360) * Math.cos(azimuth * Math.PI * 2 / 360) * scale,
             posY = Math.cos(altitude * Math.PI * 2 / 360) * Math.sin(azimuth * Math.PI * 2 / 360) * scale,
             posZ = Math.sin(altitude * Math.PI * 2 / 360) * scale;
@@ -781,7 +808,7 @@ export class DataThreejs {
             this.directional_light.shadow.bias = -0.001;
 
             let helper;
-            if (this.settings.directional_light.type === 'directional') {
+            if (this.directional_light_settings.type === 'directional') {
                 const cam = <THREE.OrthographicCamera> this.directional_light.shadow.camera;
                 cam.left = -scale;
                 cam.right = scale;
@@ -798,7 +825,7 @@ export class DataThreejs {
             } else {
                 helper = new THREE.PointLightHelper( <THREE.PointLight>this.directional_light );
             }
-            helper.visible = this.settings.directional_light.helper;
+            helper.visible = this.directional_light_settings.helper;
             helper.name = 'DLHelper';
             this._scene.add(helper);
             this.getDLPosition(scale);

@@ -995,6 +995,9 @@ function addVars(varList: string[], varName: string) {
 function splitComponents(str: string): {'type': strType, 'value': string}[] | string {
     const comps = [];
     let i = 0;
+    if (str.indexOf('.') !== -1) {
+        return 'Error: Invalid "."';
+    }
     while (i < str.length) {
         let code = str.charCodeAt(i);
 

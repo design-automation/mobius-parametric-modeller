@@ -26,50 +26,15 @@ import { xfromSourceTargetMatrix, multMatrix } from '@libs/geom/matrix';
 import { XAXIS, YAXIS, ZAXIS } from '@assets/libs/geom/constants';
 
 // ================================================================================================
-/**
- * xxx
- * ~
- * @param __model__
- * @param origins The origins of teh rays
- * @param directions The direction vectors
- * @param entities The obstructions, faces, polygons, or collections of faces or polygons.
- * @param method Enum; raytracing method
- * @returns Distance, or list of distances (if position2 is a list).
- * @example distance1 = calc.Distance (position1, position2, p_to_p_distance)
- * @example_info position1 = [0,0,0], position2 = [[0,0,10],[0,0,20]], Expected value of distance is [10,20].
- */
-export function Raytrace(__model__: GIModel, origins: Txyz|Txyz[], directions: Txyz|Txyz[],
-        entities: TId|TId[]|TId[][], limits: number|[number, number], method: _ERaytraceMethod): number[]|number[][] {
-    entities = arrMakeFlat(entities) as TId[];
-    // --- Error Check ---
-    const fn_name = 'analyze.Raytrace';
-    const ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
-        [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-    // TODO
-    // TODO
-    // --- Error Check ---
-    const origins_tjs: THREE.Vector3[] = _raytraceOriginsTjs(__model__, origins);
-    const directions_tjs: THREE.Vector3[] = _raytraceDirectionsTjs(__model__, directions);
-    const meshes_tjs: THREE.Mesh[] = _meshes_tjs(__model__, ents_arrs);
-    limits = Array.isArray(limits) ? limits : [0, limits];
-    const result = _raytrace(origins_tjs, null, directions_tjs, meshes_tjs, limits, method);
-    // cleanup
-    meshes_tjs.forEach(meshe_tjs => { meshe_tjs.geometry.dispose(); (meshe_tjs.material as THREE.Material).dispose(); } );
-    return result;
-}
-function _raytraceOriginsTjs(__model__: GIModel, origins: Txyz|Txyz[]): THREE.Vector3[] {
-    origins = Array.isArray(origins[0]) ? origins as Txyz[] : [origins] as Txyz[];
-    return origins.map(origin => new THREE.Vector3(...origin));
-}
-function _raytraceDirectionsTjs(__model__: GIModel, directions: Txyz|Txyz[]): THREE.Vector3[] {
-    directions = Array.isArray(directions[0]) ? directions as Txyz[] : [directions] as Txyz[];
-    for (let i = 0; i < directions.length; i++) {
-        directions[i] = vecNorm(directions[i]);
-    }
-    return directions.map(direction => new THREE.Vector3(...direction));
-}
-function _meshes_tjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.Mesh[] {
+// utility function
+// ----
+// here are three different version of the function to create the threejs mesh, used for raycasting
+// the first creates multiple meshes, the second one big mesh, the third one big buffered mesh
+// performance tests are not very clear, in theory the big buffered mesh should be faster, 
+// but it seems that is not the case, the big non-buffered mesh seems faster
+// so for now that is the one that is being used
+// ----
+function _createMeshesTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.Mesh[] {
     // Note that for meshes, faces must be pointed towards the origin of the ray in order to be detected;
     // intersections of the ray passing through the back of a face will not be detected.
     // To raycast against both faces of an object, you'll want to set the material's side property to THREE.DoubleSide.
@@ -120,9 +85,159 @@ function _meshes_tjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.Mesh[]
         // create the mesh, assigning the material
         meshes_tjs.push( new THREE.Mesh(geom_tjs, mat_tjs) );
     }
-    // return an array of meshes
     return meshes_tjs;
 }
+function _createMeshTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.Mesh {
+    // Note that for meshes, faces must be pointed towards the origin of the ray in order to be detected;
+    // intersections of the ray passing through the back of a face will not be detected.
+    // To raycast against both faces of an object, you'll want to set the material's side property to THREE.DoubleSide.
+    const mat_tjs: THREE.Material = new THREE.MeshBasicMaterial();
+    mat_tjs.side = THREE.DoubleSide;
+    // get all unique posis
+    const posis_i_set: Set<number> = new Set();
+    for (const [ent_type, ent_i] of ents_arrs) {
+        const ent_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, ent_i);
+        ent_posis_i.forEach( ent_posi_i => posis_i_set.add(ent_posi_i) );
+    }
+    // create tjs vectors for each posi and save them in a sparse array
+    // the index to the array is the posi_i
+    const posis_tjs: THREE.Vector3[] = [];
+    for (const posi_i of Array.from(posis_i_set)) {
+        const xyz: Txyz = __model__.attribs.query.getPosiCoords(posi_i);
+        const posi_tjs = new THREE.Vector3(...xyz);
+        posis_tjs[posi_i] = posi_tjs;
+    }
+    // get an array of all the faces
+    const faces_i: number[] = [];
+    for (const [ent_type, ent_i] of ents_arrs) {
+        switch (ent_type) {
+            case EEntType.FACE:
+                faces_i.push(ent_i);
+                break;
+            default:
+                const coll_faces_i: number[] = __model__.geom.query.navAnyToFace(ent_type, ent_i);
+                coll_faces_i.forEach( coll_face_i => faces_i.push(coll_face_i) );
+                break;
+        }
+    }
+    // create tjs meshes
+    const geom_tjs = new THREE.Geometry();
+    for (const face_i of faces_i) {
+        // create the tjs geometry
+        const tris_i: number[] = __model__.geom.query.navFaceToTri(face_i);
+        for (const tri_i of tris_i) {
+            const tri_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.TRI, tri_i);
+            // add the three vertices to the geometry
+            const a: number = geom_tjs.vertices.push(posis_tjs[tri_posis_i[0]]) - 1;
+            const b: number = geom_tjs.vertices.push(posis_tjs[tri_posis_i[1]]) - 1;
+            const c: number = geom_tjs.vertices.push(posis_tjs[tri_posis_i[2]]) - 1;
+            // add the tjs tri to the geometry
+            geom_tjs.faces.push( new THREE.Face3( a, b, c ) );
+        }
+        // create the mesh, assigning the material
+    }
+    return new THREE.Mesh(geom_tjs, mat_tjs);
+}
+function _createMeshBufTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.Mesh {
+    // Note that for meshes, faces must be pointed towards the origin of the ray in order to be detected;
+    // intersections of the ray passing through the back of a face will not be detected.
+    // To raycast against both faces of an object, you'll want to set the material's side property to THREE.DoubleSide.
+    const mat_tjs: THREE.Material = new THREE.MeshBasicMaterial();
+    mat_tjs.side = THREE.DoubleSide;
+    // get all unique posis
+    const posis_i_set: Set<number> = new Set();
+    for (const [ent_type, ent_i] of ents_arrs) {
+        const ent_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, ent_i);
+        ent_posis_i.forEach( ent_posi_i => posis_i_set.add(ent_posi_i) );
+    }
+    // create a flat list of xyz coords
+    const xyzs_flat: number[] = [];
+    const posi_i_to_xyzs_map: Map<number, number> = new Map();
+    const unique_posis_i: number[] = Array.from(posis_i_set);
+    for (let i = 0; i < unique_posis_i.length; i++) {
+        const posi_i: number = unique_posis_i[i];
+        const xyz: Txyz = __model__.attribs.query.getPosiCoords(posi_i);
+        xyzs_flat.push(...xyz);
+        posi_i_to_xyzs_map.set(posi_i, i);
+    }
+    // get an array of all the faces
+    const faces_i: number[] = [];
+    for (const [ent_type, ent_i] of ents_arrs) {
+        switch (ent_type) {
+            case EEntType.FACE:
+                faces_i.push(ent_i);
+                break;
+            default:
+                const coll_faces_i: number[] = __model__.geom.query.navAnyToFace(ent_type, ent_i);
+                coll_faces_i.forEach( coll_face_i => faces_i.push(coll_face_i) );
+                break;
+        }
+    }
+    // create tjs meshes
+    const tris_flat: number[] = [];
+    for (const face_i of faces_i) {
+        // create the tjs geometry
+        const tris_i: number[] = __model__.geom.query.navFaceToTri(face_i);
+        for (const tri_i of tris_i) {
+            const tri_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.TRI, tri_i);
+            tris_flat.push( posi_i_to_xyzs_map.get( tri_posis_i[0]) );
+            tris_flat.push( posi_i_to_xyzs_map.get( tri_posis_i[1]) );
+            tris_flat.push( posi_i_to_xyzs_map.get( tri_posis_i[2]) );
+        }
+        // create the mesh, assigning the material
+    }
+    const geom_tjs = new THREE.BufferGeometry();
+    geom_tjs.setIndex( tris_flat );
+    geom_tjs.addAttribute( 'position', new THREE.Float32BufferAttribute( xyzs_flat, 3 ) );
+    return new THREE.Mesh(geom_tjs, mat_tjs);
+}
+// ================================================================================================
+/**
+ * xxx
+ * ~
+ * @param __model__
+ * @param origins The origins of teh rays
+ * @param directions The direction vectors
+ * @param entities The obstructions, faces, polygons, or collections of faces or polygons.
+ * @param method Enum; raytracing method
+ * @returns Distance, or list of distances (if position2 is a list).
+ * @example distance1 = calc.Distance (position1, position2, p_to_p_distance)
+ * @example_info position1 = [0,0,0], position2 = [[0,0,10],[0,0,20]], Expected value of distance is [10,20].
+ */
+export function Raytrace(__model__: GIModel, origins: Txyz|Txyz[], directions: Txyz|Txyz[],
+        entities: TId|TId[]|TId[][], limits: number|[number, number], method: _ERaytraceMethod): number[]|number[][] {
+    entities = arrMakeFlat(entities) as TId[];
+    // --- Error Check ---
+    const fn_name = 'analyze.Raytrace';
+    const ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList],
+        [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+    // TODO
+    // TODO
+    // --- Error Check ---
+    const origins_tjs: THREE.Vector3[] = _raytraceOriginsTjs(__model__, origins);
+    const directions_tjs: THREE.Vector3[] = _raytraceDirectionsTjs(__model__, directions);
+    const mesh_tjs: THREE.Mesh = _createMeshTjs(__model__, ents_arrs);
+    limits = Array.isArray(limits) ? limits : [0, limits];
+    const result = _raytrace(origins_tjs, null, directions_tjs, mesh_tjs, limits, method);
+    // cleanup
+    mesh_tjs.geometry.dispose();
+    (mesh_tjs.material as THREE.Material).dispose();
+    // return teh results
+    return result;
+}
+function _raytraceOriginsTjs(__model__: GIModel, origins: Txyz|Txyz[]): THREE.Vector3[] {
+    origins = Array.isArray(origins[0]) ? origins as Txyz[] : [origins] as Txyz[];
+    return origins.map(origin => new THREE.Vector3(...origin));
+}
+function _raytraceDirectionsTjs(__model__: GIModel, directions: Txyz|Txyz[]): THREE.Vector3[] {
+    directions = Array.isArray(directions[0]) ? directions as Txyz[] : [directions] as Txyz[];
+    for (let i = 0; i < directions.length; i++) {
+        directions[i] = vecNorm(directions[i]);
+    }
+    return directions.map(direction => new THREE.Vector3(...direction));
+}
+
 export enum _ERaytraceMethod {
     HIT_COUNT = 'hit_count',
     MISS_COUNT = 'miss_count',
@@ -132,7 +247,7 @@ export enum _ERaytraceMethod {
     DIST_LIST = 'dist_list',
     ENTS_LIST = 'ents_list'
 }
-function _raytrace(origins_tjs: THREE.Vector3[], matrices_tjs: THREE.Matrix4[], directions_tjs: THREE.Vector3[], meshes_tjs: THREE.Mesh[],
+function _raytrace(origins_tjs: THREE.Vector3[], matrices_tjs: THREE.Matrix4[], directions_tjs: THREE.Vector3[], mesh_tjs: THREE.Mesh,
         limits: [number, number], method: _ERaytraceMethod): number[]|number[][] {
     const result = [];
     for (let i = 0; i < origins_tjs.length; i++) {
@@ -147,7 +262,7 @@ function _raytrace(origins_tjs: THREE.Vector3[], matrices_tjs: THREE.Matrix4[], 
                 xformed_direction_tjs.applyMatrix4(matrices_tjs[i]);
             }
             const ray_tjs: THREE.Raycaster = new THREE.Raycaster(origin_tjs, xformed_direction_tjs, limits[0], limits[1]);
-            const isects: THREE.Intersection[] = ray_tjs.intersectObjects(meshes_tjs, false);
+            const isects: THREE.Intersection[] = ray_tjs.intersectObject(mesh_tjs, false);
             // distance – distance between the origin of the ray and the intersection
             // point – point of intersection, in world coordinates
             // face – intersected face
@@ -268,14 +383,15 @@ export function Solar(__model__: GIModel, origins: TPlane[], detail: number,
     }
     // --- Error Check ---
     const origins_tjs: [THREE.Vector3, THREE.Vector3][] = _solarOriginsTjs(__model__, origins, 0.01);
-    const meshes_tjs: THREE.Mesh[] = _meshes_tjs(__model__, ents_arrs);
+    const mesh_tjs: THREE.Mesh = _createMeshTjs(__model__, ents_arrs);
     limits = Array.isArray(limits) ? limits : [0, limits];
     // get the direction vectors
     const directions_tjs: THREE.Vector3[] = __.flatten(_solarDirectionsTjs(latitude, north, detail, method));
     // run the simulation
-    const results: number[] = _solarRaytrace(origins_tjs, directions_tjs, meshes_tjs, limits) as number[];
+    const results: number[] = _solarRaytrace(origins_tjs, directions_tjs, mesh_tjs, limits) as number[];
     // cleanup
-    meshes_tjs.forEach(meshe_tjs => { meshe_tjs.geometry.dispose(); (meshe_tjs.material as THREE.Material).dispose(); } );
+    mesh_tjs.geometry.dispose();
+    (mesh_tjs.material as THREE.Material).dispose();
     // return the result
     return results;
 }
@@ -387,7 +503,7 @@ function _solarRaytraceMax(directions_tjs: THREE.Vector3[]): number {
     return result;
 }
 function _solarRaytrace(origins_tjs: [THREE.Vector3, THREE.Vector3][],
-        directions_tjs: THREE.Vector3[], meshes_tjs: THREE.Mesh[], limits: [number, number]): number[] {
+        directions_tjs: THREE.Vector3[], mesh_tjs: THREE.Mesh, limits: [number, number]): number[] {
     const results = [];
     const result_max: number = _solarRaytraceMax(directions_tjs);
     for (const [origin_tjs, normal_tjs] of origins_tjs) {
@@ -396,7 +512,7 @@ function _solarRaytrace(origins_tjs: [THREE.Vector3, THREE.Vector3][],
             const dot_normal_direction: number = normal_tjs.dot(direction_tjs);
             if (dot_normal_direction > 0) {
                 const ray_tjs: THREE.Raycaster = new THREE.Raycaster(origin_tjs, direction_tjs, limits[0], limits[1]);
-                const isects: THREE.Intersection[] = ray_tjs.intersectObjects(meshes_tjs, false);
+                const isects: THREE.Intersection[] = ray_tjs.intersectObject(mesh_tjs, false);
                 if (isects.length === 0) {
                     // this applies the cosine weighting rule
                     result = result + dot_normal_direction;

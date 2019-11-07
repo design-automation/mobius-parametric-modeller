@@ -30,7 +30,7 @@ import { XAXIS, YAXIS, ZAXIS } from '@assets/libs/geom/constants';
 // ----
 // here are three different version of the function to create the threejs mesh, used for raycasting
 // the first creates multiple meshes, the second one big mesh, the third one big buffered mesh
-// performance tests are not very clear, in theory the big buffered mesh should be faster, 
+// performance tests are not very clear, in theory the big buffered mesh should be faster,
 // but it seems that is not the case, the big non-buffered mesh seems faster
 // so for now that is the one that is being used
 // ----

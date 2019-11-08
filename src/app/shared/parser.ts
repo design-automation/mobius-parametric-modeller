@@ -271,8 +271,9 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
         return {'error': comps};
     }
 
-    // if (comps[0].value === '@') {
-    //     const i = 1;
+    if (comps[0].value === '.') {
+        return {'error': 'Error: Invalid "."'};
+    }
     if ((comps[0].value === '@' || comps[0].value === '#' || comps[0].value === '?')) {
         let i = 1;
         if (comps[0].value === '?') {
@@ -532,7 +533,8 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
         // }
         return { 'error': 'Error: Variable followed by another variable/number/string \n' +
         `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
-
+    } else if ( comps[i + 1].value === '.') {
+            return {'error': 'Error: Invalid "."'};
     // if variable is followed by "[" --> array/json
     // add the variable to var list and check for validity of the first component inside the bracket
     } else if (comps[i + 1].value === '[' || comps[i + 1].value === '.') {
@@ -995,9 +997,6 @@ function addVars(varList: string[], varName: string) {
 function splitComponents(str: string): {'type': strType, 'value': string}[] | string {
     const comps = [];
     let i = 0;
-    if (str.indexOf('.') !== -1) {
-        return 'Error: Invalid "."';
-    }
     while (i < str.length) {
         let code = str.charCodeAt(i);
 

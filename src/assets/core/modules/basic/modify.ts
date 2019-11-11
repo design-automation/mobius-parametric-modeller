@@ -122,14 +122,14 @@ export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TRa
         _rotate(__model__, ents_arr, origin, axis, angle);
     }
 }
-function _rotate(__model__: GIModel, ents_arr: TEntTypeIdx[], origin: Txyz, axis: Txyz, angle: number): void {
+function _rotate(__model__: GIModel, ents_arr: TEntTypeIdx[], origin: Txyz|TPlane, axis: Txyz, angle: number): void {
     // rotate all positions
     const posis_i: number[] = [];
     for (const ents of ents_arr) {
         posis_i.push(...__model__.geom.query.navAnyToPosi(ents[0], ents[1]));
     }
     const unique_posis_i: number[] = Array.from(new Set(posis_i));
-    const matrix: Matrix4 = rotateMatrix(origin as [number, number, number], axis, angle);
+    const matrix: Matrix4 = rotateMatrix(origin, axis, angle);
     for (const unique_posi_i of unique_posis_i) {
         const old_xyz: Txyz = __model__.attribs.query.getPosiCoords(unique_posi_i);
         const new_xyz: Txyz = multMatrix(old_xyz, matrix);
@@ -165,7 +165,7 @@ export function Scale(__model__: GIModel, entities: TId|TId[], origin: Txyz|TRay
         _scale(__model__, ents_arr, origin, scale);
     }
 }
-function _scale(__model__: GIModel, ents_arr: TEntTypeIdx[], origin: Txyz, scale: number|Txyz): void {
+function _scale(__model__: GIModel, ents_arr: TEntTypeIdx[], origin: Txyz|TPlane, scale: number|Txyz): void {
     // handle scale type
     if (!Array.isArray(scale)) {
         scale = [scale, scale, scale];
@@ -209,7 +209,7 @@ export function Mirror(__model__: GIModel, entities: TId|TId[], origin: Txyz|TRa
         _mirror(__model__, ents_arr, origin, direction);
     }
 }
-function _mirror(__model__: GIModel, ents_arr: TEntTypeIdx[], origin: Txyz, direction: Txyz): void {
+function _mirror(__model__: GIModel, ents_arr: TEntTypeIdx[], origin: Txyz|TPlane, direction: Txyz): void {
     // mirror all positions
     const posis_i: number[] = [];
     for (const ents of ents_arr) {

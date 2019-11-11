@@ -14,7 +14,7 @@ import { vecDiv, vecSum, vecAvg } from '@assets/libs/geom/vectors';
 
 
 // ================================================================================================
-export function getOrigin(__model__: GIModel, origin: Txyz|TRay|TPlane|TId|TId[], fn_name: string): Txyz {
+export function getOrigin(__model__: GIModel, origin: Txyz|TRay|TPlane|TId|TId[], fn_name: string): Txyz|TPlane {
     if (typeof origin === 'string' || (Array.isArray(origin) && typeof origin[0] === 'string'))   {
         // this must be an ID or an array of IDs, so lets get the centroid
         const ent_id: TId|TId[] = origin as TId|TId[];
@@ -28,10 +28,17 @@ export function getOrigin(__model__: GIModel, origin: Txyz|TRay|TPlane|TId|TId[]
         }
         return centroid as Txyz;
     }
-    checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isOrigin, TypeCheckObj.isPlane]);
-    if (Array.isArray(origin) && Array.isArray(origin[0])) { // handles plane and ray types
-        return origin[0];
+    checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isOrigin, TypeCheckObj.isRay, TypeCheckObj.isPlane]);
+    if (Array.isArray(origin) && Array.isArray(origin[0])) { // handles rays and planes
+        if (origin.length === 3) { // planes
+            return origin as TPlane;
+        } else if (origin.length === 2) { // rays
+            return origin[0];
+        } else {
+            throw new Error(fn_name + ': The data seems to be neither a ray nor a plane:' + origin + '.' );
+        }
     }
+    // Origin must be Txyz
     return origin as Txyz;
 }
 // ================================================================================================

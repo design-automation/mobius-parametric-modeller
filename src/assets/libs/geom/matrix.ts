@@ -1,6 +1,5 @@
 import * as three from 'three';
-import { vecNorm, vecCross } from './vectors';
-import { Vector3 } from 'three';
+import { vecNorm } from './vectors';
 import { getArrDepth } from '../geo-info/id';
 type Txyz = [number, number, number]; // x, y, z
 type TPlane = [Txyz, Txyz, Txyz]; // origin, xaxis, yaxis
@@ -12,7 +11,8 @@ export function multMatrix(xyz: Txyz, m: three.Matrix4): Txyz {
     return v2.toArray() as Txyz;
 }
 
-export function mirrorMatrix(origin: Txyz, normal: Txyz): three.Matrix4 {
+export function mirrorMatrix(origin: Txyz|TPlane, normal: Txyz): three.Matrix4 {
+    origin = (Array.isArray(origin[0]) ? origin[0] : origin) as Txyz;
     // plane normal
     const [a, b, c]: number[] = vecNorm(normal);
     // rotation matrix
@@ -34,7 +34,8 @@ export function mirrorMatrix(origin: Txyz, normal: Txyz): three.Matrix4 {
     return move_mirror_move;
 }
 
-export function rotateMatrix(origin: Txyz, axis: Txyz, angle: number): three.Matrix4 {
+export function rotateMatrix(origin: Txyz|TPlane, axis: Txyz, angle: number): three.Matrix4 {
+    origin = (Array.isArray(origin[0]) ? origin[0] : origin) as Txyz;
     // norm the axis
     axis = vecNorm(axis);
     // rotation matrix

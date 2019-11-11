@@ -65,6 +65,12 @@ export {_rand};
 import * as _vec from '../inline/_vec';
 export {_vec};
 
+import * as _ray from '../inline/_ray';
+export {_ray};
+
+import * as _plane from '../inline/_plane';
+export {_plane};
+
 import * as _calc from '../inline/_calc';
 export {_calc};
 

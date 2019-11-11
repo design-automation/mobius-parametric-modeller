@@ -1,5 +1,5 @@
-import { TPlane, Txyz } from '@assets/libs/geo-info/common';
-import { vecCross, vecMult, vecsAdd, vecRot, vecNorm, vecMakeOrtho, vecAdd } from '@assets/libs/geom/vectors';
+import { TPlane, TRay, Txyz } from '@assets/libs/geo-info/common';
+import { vecCross, vecMult, vecsAdd, vecRot, vecNorm, vecMakeOrtho, vecAdd, vecFromTo } from '@assets/libs/geom/vectors';
 
 /**
  * Plane functions that modify planes. These functions do not modify input plane.
@@ -19,8 +19,10 @@ export function plnMove(pln: TPlane, vec: Txyz): TPlane {
     return [vecAdd(pln[0], vec), pln[1].slice() as Txyz, pln[2].slice() as Txyz];
 }
 
-export function plnRot(pln: TPlane, vec: Txyz, ang: number): TPlane {
-    return [pln[0].slice() as Txyz, vecRot(pln[1], vec, ang), vecRot(pln[2], vec, ang)];
+export function plnRot(pln: TPlane, ray: TRay, ang: number): TPlane {
+    const from_ray_o_to_pln_o: Txyz = vecFromTo(ray[0], pln[0]);
+    const rot_pln_origin: Txyz = vecAdd(ray[0], vecRot(from_ray_o_to_pln_o, ray[1], ang));
+    return [rot_pln_origin, vecRot(pln[1], ray[1], ang), vecRot(pln[2], ray[1], ang)];
 }
 
 export function plnLMove(pln: TPlane, vec: Txyz): TPlane {

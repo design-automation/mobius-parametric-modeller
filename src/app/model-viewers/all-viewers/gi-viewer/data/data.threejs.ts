@@ -480,6 +480,7 @@ export class DataThreejs {
         const mat = new THREE.PointsMaterial({
             color: color_rgb,
             size: size,
+            sizeAttenuation: false
             // vertexColors: THREE.VertexColors
         });
         const bg = { geom, mat };
@@ -1013,7 +1014,8 @@ export class DataThreejs {
         const mat = new THREE.PointsMaterial({
             color: new THREE.Color(rgb),
             size: size,
-            vertexColors: THREE.VertexColors
+            vertexColors: THREE.VertexColors,
+            sizeAttenuation: false
         });
         const point = new THREE.Points(geom, mat);
         this.sceneObjs.push(point);

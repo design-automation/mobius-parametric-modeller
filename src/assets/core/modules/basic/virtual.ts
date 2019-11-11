@@ -482,7 +482,7 @@ function _visRay(__model__: GIModel, rays: TRay|TRay[], scale: number): TEntType
 }
 // ================================================================================================
 /**
- * Visualises a plane by creating a polygon and axis lines.
+ * Visualises a plane by creating a polyline and axis lines.
  *
  * @param __model__
  * @param plane A list of lists
@@ -506,7 +506,7 @@ function _visPlane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): 
         const y_vec: Txyz = vecMult(plane[2], scale);
         let x_end: Txyz = vecAdd(origin, x_vec);
         let y_end: Txyz = vecAdd(origin, y_vec);
-        const z_end: Txyz = vecAdd(origin, vecMult(vecCross(x_vec, y_vec), 0.1));
+        const z_end: Txyz = vecAdd(origin, vecCross(x_vec, y_vec));
         const plane_corners: Txyz[] = [
             vecAdd(x_end, y_vec),
             vecSub(y_end, x_vec),
@@ -518,7 +518,6 @@ function _visPlane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): 
         // create the point
         const origin_posi_i: number = __model__.geom.add.addPosi();
         __model__.attribs.add.setPosiCoords(origin_posi_i, origin);
-        const point_i = __model__.geom.add.addPoint(origin_posi_i);
         // create the x axis
         const x_end_posi_i: number = __model__.geom.add.addPosi();
         __model__.attribs.add.setPosiCoords(x_end_posi_i, x_end);
@@ -541,7 +540,6 @@ function _visPlane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): 
         const plane_i = __model__.geom.add.addPline(corner_posis_i, true);
         // return the geometry IDs
         return [
-            [EEntType.POINT, point_i],
             [EEntType.PLINE, x_pline_i],
             [EEntType.PLINE, y_pline_i],
             [EEntType.PLINE, z_pline_i],

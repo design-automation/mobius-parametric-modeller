@@ -558,6 +558,9 @@ export function _polyhedron(__model__: GIModel, matrix: Matrix4, radius: number,
             posis_i[face_tjs.c]
         ]);
     }
+    // dispose the tjs polyhedron
+    hedron_tjs.dispose();
+    // return the result
     return posis_arrs_i;
 }
 // ================================================================================================
@@ -640,11 +643,12 @@ export function Bezier(__model__: GIModel, coords: Txyz[], num_positions: number
     // create the curve
     const coords_tjs: THREE.Vector3[] = coords.map(coord => new THREE.Vector3(coord[0], coord[1], coord[2]));
     let points_tjs: THREE.Vector3[] = [];
+    let curve_tjs: THREE.CubicBezierCurve3|THREE.QuadraticBezierCurve3 = null;
     if (coords.length === 4) {
-        const curve_tjs = new THREE.CubicBezierCurve3(coords_tjs[0], coords_tjs[1], coords_tjs[2], coords_tjs[3]);
+        curve_tjs = new THREE.CubicBezierCurve3(coords_tjs[0], coords_tjs[1], coords_tjs[2], coords_tjs[3]);
         points_tjs = curve_tjs.getPoints(num_positions - 1);
     } else if (coords.length === 3) {
-        const curve_tjs = new THREE.QuadraticBezierCurve3(coords_tjs[0], coords_tjs[1], coords_tjs[2]);
+        curve_tjs = new THREE.QuadraticBezierCurve3(coords_tjs[0], coords_tjs[1], coords_tjs[2]);
         points_tjs = curve_tjs.getPoints(num_positions - 1);
     } else {
         throw new Error (fn_name + ': "coords" should be a list of either three or four XYZ coords.');

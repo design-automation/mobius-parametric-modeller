@@ -1033,6 +1033,7 @@ export class DataThreejs {
         const mat = new THREE.PointsMaterial({
             color: new THREE.Color(parseInt(color.replace('#', '0x'), 16)),
             size: size,
+            sizeAttenuation: false
             // vertexColors: THREE.VertexColors
         });
         const point = new THREE.Points(geom, mat);
@@ -1107,12 +1108,14 @@ export class DataThreejs {
 
     public lookAtObj() {
         const selectedObjs = this.getSelectedObjs();
-
         let center = null;
         let radius = null;
         if (selectedObjs) {
             center = selectedObjs.center;
             radius = selectedObjs.radius;
+            if (radius === 0) {
+                radius = 10;
+            }
         } else if (this.allObjs) {
             center = this.allObjs.center;
             radius = this.allObjs.radius;

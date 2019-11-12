@@ -751,18 +751,18 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
                 const arrayName = result.jsStr.substring(0, bracketIndex);
                 const index = result.jsStr.lastIndexOf(arrayName);
                 jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity},` +
+                           ` ['${arrayName}', ${result.jsStr.substring(bracketIndex + 12, index - 2)}])`;
+                jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity},` +
                            ` '${arrayName}', ${result.jsStr.substring(bracketIndex + 12, index - 2)})`;
-                // jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity},` +
-                //            ` '${result.jsStr.slice(0, bracketIndex)}', ${result.jsStr.slice(bracketIndex + 7, -4)})`;
             } else if (result.jsStr.indexOf('[') !== -1) {
                 bracketIndex = result.jsStr.indexOf('[');
                 const arrayName = result.jsStr.substring(0, bracketIndex);
                 const index = result.jsStr.slice(bracketIndex + 1, -1);
-                // jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, ['${arrayName}', ${index}])`;
-                jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${arrayName}', ${index})`; //////////
+                jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, ['${arrayName}', ${index}])`;
+                // jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${arrayName}', ${index})`; //////////
             } else {
-                // jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${result.str}')`;
-                jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${result.str}', null)`; //////////
+                jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${result.str}')`;
+                // jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${result.str}', null)`; //////////
             }
             // return {'i': i, 'str': newString, 'jsStr': jsString};
 

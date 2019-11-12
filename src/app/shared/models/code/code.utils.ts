@@ -366,54 +366,11 @@ export class CodeUtils {
             att_name = res[1];
             att_index = 'null';
         }
-        return `__modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${att_name}', ${att_index}, 'one_value')`;
-
-        // if (!val) { return; }
-        // if (typeof val === 'number') { return val; }
-
-        // const res = val.split(' ');
-        // for (const i in res) {
-        //     if (!res[i]) {
-        //         continue;
-        //     }
-        //     const atIndex = res[i].indexOf('@');
-        //     if (atIndex !== -1 && atIndex >= 0 && res[i].trim()[0] !== '#') {
-        //         // get two parts, before @ and after @
-        //         let val_0: string;
-        //         let val_1: string;
-        //         let pref = '';
-        //         let postf = '';
-        //         if (atIndex === 0) {
-        //             val_0 = null;
-        //             val_1 = res[i].slice(1);
-        //         } else {
-        //             val_0 = res[i].slice(0, atIndex);
-        //             val_1 = res[i].slice(atIndex + 1);
-        //             while (val_0[0] === '[') {
-        //                 val_0 = val_0.substring(1, val_0.length);
-        //                 pref += '[';
-        //             }
-        //             if (val_0 === '') {
-        //                 val_0 = null;
-        //             }
-        //         }
-        //         const closeBracketMatch = (val_1.match(/\]/g) || []).length;
-        //         const openBracketMatch = (val_1.match(/\[/g) || []).length;
-        //         if (closeBracketMatch > openBracketMatch) {
-        //             val_1 = val_1.substring(0, val_1.length - (closeBracketMatch - openBracketMatch));
-        //             postf = ']'.repeat(closeBracketMatch - openBracketMatch);
-        //         }
-        //         if (openBracketMatch) {
-        //             const bracketSplit = val_1.substring(0, val_1.length - 1).split('[');
-        //             const innerVar = CodeUtils.repGetAttrib(bracketSplit.splice(1, bracketSplit.length - 1).join('['));
-        //             res[i] = `${pref}__modules__.${_parameterTypes.getattrib}` +
-        //                 `(__params__.model, ${val_0}, '${bracketSplit[0]}', ${innerVar})${postf}`;
-        //         } else {
-        //             res[i] = `${pref}__modules__.${_parameterTypes.getattrib}(__params__.model, ${val_0}, '${val_1}')${postf}`;
-        //         }
-        //     }
+        // if (att_index === 'null') {
+        //     return `__modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${att_name}', 'one_value')`;
         // }
-        // return res.join(' ');
+        // return `__modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, ['${att_name}', ${att_index}], 'one_value')`;
+        return `__modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${att_name}', ${att_index}, 'one_value')`;
     }
 
     static async getURLContent(url: string): Promise<any> {

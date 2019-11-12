@@ -758,8 +758,10 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
                 bracketIndex = result.jsStr.indexOf('[');
                 const arrayName = result.jsStr.substring(0, bracketIndex);
                 const index = result.jsStr.slice(bracketIndex + 1, -1);
+                // jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, ['${arrayName}', ${index}])`;
                 jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${arrayName}', ${index})`; //////////
             } else {
+                // jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${result.str}')`;
                 jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${result.str}', null)`; //////////
             }
             // return {'i': i, 'str': newString, 'jsStr': jsString};
@@ -855,8 +857,10 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
             i = nComp.i;
 
             newString += `?@${result.str}${operator}${nComp.str} `;
-            jsString = ` __modules__.${_parameterTypes.queryFilter}(__params__.model, ${entity}, '${att_name}'` +
-                       `, ${att_index}, '${operator}', ${nComp.jsStr})`; //////////
+            // jsString = ` __modules__.${_parameterTypes.queryFilter}(__params__.model, ${entity}, '${att_name}'` +
+            //            `, ${att_index}, '${operator}', ${nComp.jsStr})`; //////////
+            jsString = ` __modules__.${_parameterTypes.queryFilter}(__params__.model, ${entity}, ['${att_name}'` +
+                       `, ${att_index}], '${operator}', ${nComp.jsStr})`; //////////
 
             if (i === comps.length - 1 || (comps[i + 1].value !== '@' && comps[i + 1].value !== '#' && comps[i + 1].value !== '?')) {
                 return {'i': i, 'str': newString, 'jsStr': jsString};

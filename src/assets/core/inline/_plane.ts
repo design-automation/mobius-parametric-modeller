@@ -1,5 +1,5 @@
 import { TPlane, TRay, Txyz } from '@assets/libs/geo-info/common';
-import { vecCross, vecMult, vecsAdd, vecRot, vecNorm, vecMakeOrtho, vecAdd, vecFromTo } from '@assets/libs/geom/vectors';
+import { vecCross, vecMult, vecsAdd, vecRot, vecNorm, vecMakeOrtho, vecAdd, vecFromTo, vecDot } from '@assets/libs/geom/vectors';
 
 /**
  * Plane functions that modify planes. These functions do not modify input plane.
@@ -49,4 +49,15 @@ export function plnLRotZ(pln: TPlane, ang: number): TPlane {
     const x_axis: Txyz = vecRot(pln[1], z_vec, ang);
     const y_axis: Txyz = vecRot(pln[2], z_vec, ang);
     return [pln[0].slice() as Txyz, x_axis, y_axis];
+}
+
+export function plnFromRay(ray: TRay): TPlane {
+    const z_vec: Txyz = vecNorm(ray[1]);
+    let vec: Txyz = [0, 0, 1];
+    if (vecDot(vec, z_vec) === 1) {
+        vec = [1, 0, 0];
+    }
+    const x_axis: Txyz = vecCross(vec, z_vec);
+    const y_axis: Txyz = vecCross(x_axis, z_vec);
+    return [ray[0].slice() as Txyz, x_axis, y_axis];
 }

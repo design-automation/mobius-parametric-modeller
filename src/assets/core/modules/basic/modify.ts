@@ -17,7 +17,7 @@ import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetM
 import { Matrix4 } from 'three';
 import __ from 'underscore';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
-import { getOrigin } from './_common';
+import { getOrigin, getRay, getPlane } from './_common';
 
 // ================================================================================================
 /**
@@ -29,9 +29,9 @@ import { getOrigin } from './_common';
  * ~
  * If a position is shared between entites that are being moved by different vectors,
  * then the position will be moved by the average of the vectors.
- *
+ * ~
  * @param __model__
- * @param entities An entity or list of entities.
+ * @param entities An entity or list of entities to move.
  * @param vector A vector or a list of vectors.
  * @returns void
  * @example modify.Move(pline1, [1,2,3])
@@ -98,16 +98,20 @@ function _move(__model__: GIModel, ents_arr: TEntTypeIdx[], vectors: Txyz|Txyz[]
 // ================================================================================================
 /**
  * Rotates entities on plane by angle.
+ * ~
  * @param __model__
- * @param entities Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
- * @param origin Origin [x,y,z], a plane, a ray, or entities from which a centroid can be extracted.
- * @param axis Axuz [x,y,z].
+ * @param entities  An entity or list of entities to rotate.
+ * @param ray A ray to rotate around. \
+ * Given a plane, a ray will be created from teh plane z axis. \
+ * Given an `xyz` location, a ray will be generated with an origin at this location, and a direction `[0, 0, 1]`. \
+ * Given any entities, the centroid will be extracted, \
+ * and a ray will be generated with an origin at this centroid, and a direction `[0, 0, 1]`.
  * @param angle Angle (in radians).
  * @returns void
  * @example modify.Rotate(polyline1, plane1, PI)
- * @example_info Rotates polyline1 on plane1 by PI (i.e. 180 degrees).
+ * @example_info Rotates polyline1 around the z-axis of plane1 by PI (i.e. 180 degrees).
  */
-export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TRay|TPlane|TId|TId[], axis: Txyz, angle: number): void {
+export function Rotate(__model__: GIModel, entities: TId|TId[], ray: Txyz|TRay|TPlane|TId|TId[], angle: number): void {
     entities = arrMakeFlat(entities) as TId[];
     if (!isEmptyArr(entities)) {
         // --- Error Check ---
@@ -115,21 +119,20 @@ export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TRa
         const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
                                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
                                 EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-        checkArgTypes(fn_name, 'axis', axis, [TypeCheckObj.isXYZlist]);
         checkArgTypes(fn_name, 'angle', angle, [TypeCheckObj.isNumber]);
-        origin = getOrigin(__model__, origin, fn_name);
+        ray = getRay(__model__, ray, fn_name) as TRay;
         // --- Error Check ---
-        _rotate(__model__, ents_arr, origin, axis, angle);
+        _rotate(__model__, ents_arr, ray, angle);
     }
 }
-function _rotate(__model__: GIModel, ents_arr: TEntTypeIdx[], origin: Txyz|TPlane, axis: Txyz, angle: number): void {
+function _rotate(__model__: GIModel, ents_arr: TEntTypeIdx[], ray: TRay, angle: number): void {
     // rotate all positions
     const posis_i: number[] = [];
     for (const ents of ents_arr) {
         posis_i.push(...__model__.geom.query.navAnyToPosi(ents[0], ents[1]));
     }
     const unique_posis_i: number[] = Array.from(new Set(posis_i));
-    const matrix: Matrix4 = rotateMatrix(origin, axis, angle);
+    const matrix: Matrix4 = rotateMatrix(ray, angle);
     for (const unique_posi_i of unique_posis_i) {
         const old_xyz: Txyz = __model__.attribs.query.getPosiCoords(unique_posi_i);
         const new_xyz: Txyz = multMatrix(old_xyz, matrix);
@@ -139,19 +142,23 @@ function _rotate(__model__: GIModel, ents_arr: TEntTypeIdx[], origin: Txyz|TPlan
 }
 // ================================================================================================
 /**
- * Scales entities on plane by factor.
+ * Scales entities relative to a plane.
  * ~
  * @param __model__
- * @param entities Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
- * @param origin Origin [x,y,z], a plane, a ray, or entities from which a centroid can be extracted.
- * @param scale Scale factor, a single number to scale equally, or [scale_x, scale_y, scale_z].
+ * @param entities  An entity or list of entities to scale.
+ * @param plane A plane to scale around. \
+ * Given a ray, a plane will be generated that is perpendicular to the ray. \
+ * Given an `xyz` location, a plane will be generated with an origin at that location and with axes parallel to the global axes. \
+ * Given any entities, the centroid will be extracted, \
+ * and a plane will be generated with an origin at the centroid, and with axes parallel to the global axes.
+ * @param scale Scale factor, a single number to scale equally, or [scale_x, scale_y, scale_z] relative to the plane.
  * @returns void
  * @example modify.Scale(entities, plane1, 0.5)
  * @example_info Scales entities by 0.5 on plane1.
  * @example modify.Scale(entities, plane1, [0.5, 1, 1])
  * @example_info Scales entities by 0.5 along the x axis of plane1, with no scaling along the y and z axes.
  */
-export function Scale(__model__: GIModel, entities: TId|TId[], origin: Txyz|TRay|TPlane|TId|TId[], scale: number|Txyz): void {
+export function Scale(__model__: GIModel, entities: TId|TId[], plane: Txyz|TRay|TPlane|TId|TId[], scale: number|Txyz): void {
     entities = arrMakeFlat(entities) as TId[];
     if (!isEmptyArr(entities)) {
         // --- Error Check ---
@@ -160,12 +167,12 @@ export function Scale(__model__: GIModel, entities: TId|TId[], origin: Txyz|TRay
                                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
                                 EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         checkArgTypes(fn_name, 'scale', scale, [TypeCheckObj.isNumber, TypeCheckObj.isXYZlist]);
-        origin = getOrigin(__model__, origin, fn_name);
+        plane = getPlane(__model__, plane, fn_name) as TPlane;
         // --- Error Check ---
-        _scale(__model__, ents_arr, origin, scale);
+        _scale(__model__, ents_arr, plane, scale);
     }
 }
-function _scale(__model__: GIModel, ents_arr: TEntTypeIdx[], origin: Txyz|TPlane, scale: number|Txyz): void {
+function _scale(__model__: GIModel, ents_arr: TEntTypeIdx[], plane: TPlane, scale: number|Txyz): void {
     // handle scale type
     if (!Array.isArray(scale)) {
         scale = [scale, scale, scale];
@@ -176,7 +183,7 @@ function _scale(__model__: GIModel, ents_arr: TEntTypeIdx[], origin: Txyz|TPlane
         posis_i.push(...__model__.geom.query.navAnyToPosi(ents[0], ents[1]));
     }
     const unique_posis_i: number[] = Array.from(new Set(posis_i));
-    const matrix: Matrix4 = scaleMatrix(origin, scale);
+    const matrix: Matrix4 = scaleMatrix(plane, scale);
     for (const unique_posi_i of unique_posis_i) {
         const old_xyz: Txyz = __model__.attribs.query.getPosiCoords(unique_posi_i);
         const new_xyz: Txyz = multMatrix(old_xyz, matrix);
@@ -186,16 +193,20 @@ function _scale(__model__: GIModel, ents_arr: TEntTypeIdx[], origin: Txyz|TPlane
 }
 // ================================================================================================
 /**
- * Mirrors entities across plane.
+ * Mirrors entities across a plane.
+ * ~
  * @param __model__
- * @param entities Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.
- * @param origin Origin [x,y,z], a plane, a ray, or entities from which a centroid can be extracted.
- * @param direction Vector [x,y,z].
+ * @param entities An entity or list of entities to mirros.
+ * @param plane A plane to scale around. \
+ * Given a ray, a plane will be generated that is perpendicular to the ray. \
+ * Given an `xyz` location, a plane will be generated with an origin at that location and with axes parallel to the global axes. \
+ * Given any entities, the centroid will be extracted, \
+ * and a plane will be generated with an origin at the centroid, and with axes parallel to the global axes.
  * @returns void
  * @example modify.Mirror(polygon1, plane1)
  * @example_info Mirrors polygon1 across plane1.
  */
-export function Mirror(__model__: GIModel, entities: TId|TId[], origin: Txyz|TRay|TPlane|TId|TId[], direction: Txyz): void {
+export function Mirror(__model__: GIModel, entities: TId|TId[], plane: Txyz|TRay|TPlane|TId|TId[]): void {
     entities = arrMakeFlat(entities) as TId[];
     if (!isEmptyArr(entities)) {
         // --- Error Check ---
@@ -203,13 +214,12 @@ export function Mirror(__model__: GIModel, entities: TId|TId[], origin: Txyz|TRa
         const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
                                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
                                 EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-        checkArgTypes(fn_name, 'direction', direction, [TypeCheckObj.isVector]);
-        origin = getOrigin(__model__, origin, fn_name);
+        plane = getPlane(__model__, plane, fn_name) as TPlane;
         // --- Error Check ---
-        _mirror(__model__, ents_arr, origin, direction);
+        _mirror(__model__, ents_arr, plane);
     }
 }
-function _mirror(__model__: GIModel, ents_arr: TEntTypeIdx[], origin: Txyz|TPlane, direction: Txyz): void {
+function _mirror(__model__: GIModel, ents_arr: TEntTypeIdx[], plane: TPlane): void {
     // mirror all positions
     const posis_i: number[] = [];
     for (const ents of ents_arr) {
@@ -217,7 +227,7 @@ function _mirror(__model__: GIModel, ents_arr: TEntTypeIdx[], origin: Txyz|TPlan
         posis_i.push(...__model__.geom.query.navAnyToPosi(ent_type, index));
     }
     const unique_posis_i: number[] = Array.from(new Set(posis_i));
-    const matrix: Matrix4 = mirrorMatrix(origin, direction);
+    const matrix: Matrix4 = mirrorMatrix(plane);
     for (const unique_posi_i of unique_posis_i) {
         const old_xyz: Txyz = __model__.attribs.query.getPosiCoords(unique_posi_i);
         const new_xyz: Txyz = multMatrix(old_xyz, matrix);
@@ -226,16 +236,26 @@ function _mirror(__model__: GIModel, ents_arr: TEntTypeIdx[], origin: Txyz|TPlan
 }
 // ================================================================================================
 /**
- * Transforms entities from one construction plane to another.
+ * Transforms entities from a source plane to a target plane.
+ * ~
  * @param __model__
  * @param entities Vertex, edge, wire, face, position, point, polyline, polygon, collection.
- * @param from Plane defining target construction plane.
- * @param to Plane defining destination construction plane.
+ * @param from_plane Plane defining source plane for the transformation. \
+ * Given a ray, a plane will be generated that is perpendicular to the ray. \
+ * Given an `xyz` location, a plane will be generated with an origin at that location and with axes parallel to the global axes. \
+ * Given any entities, the centroid will be extracted, \
+ * and a plane will be generated with an origin at the centroid, and with axes parallel to the global axes.
+ * @param to_plane Plane defining target plane for the transformation. \
+ * Given a ray, a plane will be generated that is perpendicular to the ray. \
+ * Given an `xyz` location, a plane will be generated with an origin at that location and with axes parallel to the global axes. \
+ * Given any entities, the centroid will be extracted, \
+ * and a plane will be generated with an origin at the centroid, and with axes parallel to the global axes.
  * @returns void
  * @example modify.XForm(polygon1, plane1, plane2)
  * @example_info Transforms polygon1 from plane1 to plane2.
  */
-export function XForm(__model__: GIModel, entities: TId|TId[], from: TPlane, to: TPlane): void {
+export function XForm(__model__: GIModel, entities: TId|TId[],
+        from_plane: Txyz|TRay|TPlane|TId|TId[], to_plane: Txyz|TRay|TPlane|TId|TId[]): void {
     entities = arrMakeFlat(entities) as TId[];
     if (!isEmptyArr(entities)) {
         // --- Error Check ---
@@ -243,10 +263,10 @@ export function XForm(__model__: GIModel, entities: TId|TId[], from: TPlane, to:
         const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
                                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
                                 EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-        checkArgTypes(fn_name, 'from', from, [TypeCheckObj.isPlane]);
-        checkArgTypes(fn_name, 'to', to, [TypeCheckObj.isPlane]);
+        from_plane = getPlane(__model__, from_plane, fn_name) as TPlane;
+        to_plane = getPlane(__model__, to_plane, fn_name) as TPlane;
         // --- Error Check ---
-        _xform(__model__, ents_arr, from, to);
+        _xform(__model__, ents_arr, from_plane, to_plane);
     }
 }
 function _xform(__model__: GIModel, ents_arr: TEntTypeIdx[], from: TPlane, to: TPlane): void {

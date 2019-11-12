@@ -7,7 +7,7 @@
  */
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, EEntType, TEntTypeIdx } from '@libs/geo-info/common';
+import { TId, EEntType, TEntTypeIdx, EFilterOperatorTypes } from '@libs/geo-info/common';
 import { isPoint, isPline, isPgon, isColl, idsMake, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
 import { __merge__} from '../_model';
 import { _model } from '..';
@@ -102,12 +102,18 @@ export function Get(__model__: GIModel, names: string|string[]): TId|TId[] {
     const fn_name = 'collection.Get';
     checkArgTypes(fn_name, 'names', names, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
     // --- Error Check ---
-    const new_ent_arrs: TEntTypeIdx | TEntTypeIdx[] = _get(__model__, name);
+    const new_ent_arrs: TEntTypeIdx | TEntTypeIdx[] = _get(__model__, names);
     return idsMake(new_ent_arrs) as TId|TId[];
 }
 function _get(__model__: GIModel, names: string|string[]): TEntTypeIdx | TEntTypeIdx[] {
     if (!Array.isArray(names)) {
-
+        const colls_i: number[] = __model__.geom.query.getEnts(EEntType.COLL, false);
+        const query_result: number[] = __model__.attribs.query.filterByAttribs(
+            EEntType.COLL, colls_i, 'name', null, EFilterOperatorTypes.IS_EQUAL, names);
+        if (query_result.length > 0) {
+            return [EEntType.COLL, query_result[0]];
+        }
+        return [];
     } else {
         return names.map(name => _get(__model__, name)) as TEntTypeIdx[];
     }

@@ -7,39 +7,55 @@
 /**
  *
  */import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TPlane, Txyz, EEntType, TRay, TEntTypeIdx, EEntTypeStr} from '@libs/geo-info/common';
+import { TId, TPlane, Txyz, EEntType, TRay, TEntTypeIdx, EEntTypeStr, Txy} from '@libs/geo-info/common';
 import { checkArgTypes, TypeCheckObj, checkIDs, IDcheckObj} from '../_check_args';
-import { getArrDepth } from '@assets/libs/geo-info/id';
+import { getArrDepth, isColl } from '@assets/libs/geo-info/id';
 import { vecDiv, vecSum, vecAvg } from '@assets/libs/geom/vectors';
+import { isRay, isPlane, isVec3 } from '@assets/libs/geo-info/virtual';
+import { rayFromPln } from '@assets/core/inline/_ray';
+import { plnFromRay } from '@assets/core/inline/_plane';
 
 
 // ================================================================================================
-export function getOrigin(__model__: GIModel, origin: Txyz|TRay|TPlane|TId|TId[], fn_name: string): Txyz|TPlane {
-    if (typeof origin === 'string' || (Array.isArray(origin) && typeof origin[0] === 'string'))   {
-        // this must be an ID or an array of IDs, so lets get the centroid
-        const ent_id: TId|TId[] = origin as TId|TId[];
-        const ents_arr: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'origin', ent_id,
-            [IDcheckObj.isID, IDcheckObj.isIDList],
-            [EEntType.POSI, EEntType.VERT, EEntType.POINT, EEntType.EDGE, EEntType.WIRE,
-                EEntType.PLINE, EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx;
-        const centroid: Txyz|Txyz[] = getCentroid(__model__, ents_arr);
-        if (Array.isArray(centroid[0])) {
-            return vecAvg(centroid as Txyz[]) as Txyz;
-        }
-        return centroid as Txyz;
-    }
-    checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isOrigin, TypeCheckObj.isRay, TypeCheckObj.isPlane]);
-    if (Array.isArray(origin) && Array.isArray(origin[0])) { // handles rays and planes
-        if (origin.length === 3) { // planes
-            return origin as TPlane;
-        } else if (origin.length === 2) { // rays
-            return origin[0];
-        } else {
-            throw new Error(fn_name + ': The data seems to be neither a ray nor a plane:' + origin + '.' );
-        }
-    }
-    // Origin must be Txyz
+export function getOrigin(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], fn_name: string): Txyz {
+    if (isVec3(data)) { return data as Txyz; }
+    if (isRay(data)) { return data[0] as Txyz; }
+    if (isPlane(data)) { return data[0] as Txyz; }
+    const ents: TId|TId[] = data as TId|TId[];
+    const origin: Txyz = getCentoridFromEnts(__model__, ents, fn_name);
     return origin as Txyz;
+}
+// ================================================================================================
+export function getRay(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], fn_name: string): TRay {
+    if (isVec3(data)) { return [data, [0, 0, 1]] as TRay; }
+    if (isRay(data)) { return data as TRay; }
+    if (isPlane(data)) { return rayFromPln(data as TPlane) as TRay; }
+    const ents: TId|TId[] = data as TId|TId[];
+    const origin: Txyz = getCentoridFromEnts(__model__, ents, fn_name);
+    return [origin, [0, 0, 1]] as TRay;
+}
+// ================================================================================================
+export function getPlane(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], fn_name: string): TPlane {
+    if (isVec3(data)) { return [data, [1, 0, 0], [0, 1, 0]] as TPlane; }
+    if (isRay(data)) { return data as TPlane; }
+    if (isPlane(data)) { return plnFromRay(data as TRay) as TPlane; }
+    const ents: TId|TId[] = data as TId|TId[];
+    const origin: Txyz = getCentoridFromEnts(__model__, ents, fn_name);
+    return [origin, [1, 0, 0], [0, 1, 0]] as TPlane;
+}
+// ================================================================================================
+export function getCentoridFromEnts(__model__: GIModel, ents: TId|TId[], fn_name: string): Txyz {
+    // this must be an ID or an array of IDs, so lets get the centroid
+    const ent_id: TId|TId[] = origin as TId|TId[];
+    const ents_arr: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'origin', ent_id,
+        [IDcheckObj.isID, IDcheckObj.isIDList],
+        [EEntType.POSI, EEntType.VERT, EEntType.POINT, EEntType.EDGE, EEntType.WIRE,
+            EEntType.PLINE, EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx;
+    const centroid: Txyz|Txyz[] = getCentroid(__model__, ents_arr);
+    if (Array.isArray(centroid[0])) {
+        return vecAvg(centroid as Txyz[]) as Txyz;
+    }
+    return centroid as Txyz;
 }
 // ================================================================================================
 export function getCentroid(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): Txyz|Txyz[] {

@@ -1,6 +1,7 @@
 import * as three from 'three';
-import { vecNorm } from './vectors';
+import { vecNorm, vecCross } from './vectors';
 import { getArrDepth } from '../geo-info/id';
+import { Txy, TRay } from '../geo-info/common';
 type Txyz = [number, number, number]; // x, y, z
 type TPlane = [Txyz, Txyz, Txyz]; // origin, xaxis, yaxis
 const EPS = 1e-6;
@@ -11,8 +12,9 @@ export function multMatrix(xyz: Txyz, m: three.Matrix4): Txyz {
     return v2.toArray() as Txyz;
 }
 
-export function mirrorMatrix(origin: Txyz|TPlane, normal: Txyz): three.Matrix4 {
-    origin = (Array.isArray(origin[0]) ? origin[0] : origin) as Txyz;
+export function mirrorMatrix(plane: TPlane): three.Matrix4 {
+    const origin: Txyz = plane[0];
+    const normal: Txyz = vecCross(plane[1], plane[2]);
     // plane normal
     const [a, b, c]: number[] = vecNorm(normal);
     // rotation matrix
@@ -34,10 +36,9 @@ export function mirrorMatrix(origin: Txyz|TPlane, normal: Txyz): three.Matrix4 {
     return move_mirror_move;
 }
 
-export function rotateMatrix(origin: Txyz|TPlane, axis: Txyz, angle: number): three.Matrix4 {
-    origin = (Array.isArray(origin[0]) ? origin[0] : origin) as Txyz;
-    // norm the axis
-    axis = vecNorm(axis);
+export function rotateMatrix(ray: TRay, angle: number): three.Matrix4 {
+    const origin: Txyz = ray[0];
+    const axis: Txyz = vecNorm(ray[1]);
     // rotation matrix
     const matrix_rot: three.Matrix4 = new three.Matrix4();
     matrix_rot.makeRotationAxis(new three.Vector3(...axis), angle);
@@ -52,16 +53,15 @@ export function rotateMatrix(origin: Txyz|TPlane, axis: Txyz, angle: number): th
     return move_rot_move;
 }
 
-export function scaleMatrix(origin: Txyz|TPlane, factor: Txyz): three.Matrix4 {
+export function scaleMatrix(plane: TPlane, factor: Txyz): three.Matrix4 {
     // scale matrix
     const matrix_scale: three.Matrix4 = new three.Matrix4();
     matrix_scale.makeScale(factor[0], factor[1], factor[2]);
     // xform matrix
-    const source_plane: TPlane = (getArrDepth(origin) === 2 ? origin : [origin, [1, 0, 0], [0, 1, 0]]) as TPlane;
     const matrix_xform1: three.Matrix4 = _xformMatrixFromXYZVectors(
-        source_plane[0], source_plane[1], source_plane[2], true);
+        plane[0], plane[1], plane[2], true);
     const matrix_xform2: three.Matrix4 = _xformMatrixFromXYZVectors(
-        source_plane[0], source_plane[1], source_plane[2], false);
+        plane[0], plane[1], plane[2], false);
     // final matrix
     const xform_scale_xform: three.Matrix4 = matrix_xform2.multiply(matrix_scale.multiply(matrix_xform1));
     // do the xform

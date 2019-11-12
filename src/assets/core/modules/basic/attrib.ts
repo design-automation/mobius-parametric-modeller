@@ -13,7 +13,8 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, TEntTypeIdx,
     EAttribPush, TAttribDataTypes, EEntTypeStr, EAttribDataTypeStrs} from '@libs/geo-info/common';
 import { getArrDepth } from '@libs/geo-info/id';
-import { checkIDs, IDcheckObj, checkCommTypes, TypeCheckObj, checkAttribValue, checkAttribName, checkAttribIdxKey } from '../_check_args';
+import { checkIDs, IDcheckObj, checkCommTypes, TypeCheckObj, checkAttribValue, checkAttribName,
+    checkAttribIdxKey, checkAttribNameIdxKey } from '../_check_args';
 // ================================================================================================
 function _getEntTypeFromStr(ent_type_str: _EEntType|_EEntTypeAndMod): EEntType {
     switch (ent_type_str) {
@@ -198,13 +199,12 @@ export function Rename(__model__: GIModel, ent_type_sel: _EEntTypeAndMod, old_at
  * ~
  * @param __model__
  * @param entities Entities, the entities to set the attribute value for.
- * @param attrib The attribute name.
- * @param idx_or_key Optional, The attribute index if setting a value in a list, or null otherwise.
+ * @param attrib The attribute. Can be `name`, `[name, index]`, or `[name, key]`.
  * @param value The attribute value, or list of values.
  * @param method Enum
  */
 export function Set(__model__: GIModel, entities: TId|TId[]|TId[][],
-        attrib: string, idx_or_key: number, value: TAttribDataTypes|TAttribDataTypes[], method: _ESet): void {
+        attrib: string|[string, number|string], value: TAttribDataTypes|TAttribDataTypes[], method: _ESet): void {
     // if entities is null, then we are setting model attributes
     // @ts-ignore
     if (entities !== null && getArrDepth(entities) === 2) { entities = __.flatten(entities); }
@@ -214,9 +214,10 @@ export function Set(__model__: GIModel, entities: TId|TId[]|TId[][],
     if (entities !== null && entities !== undefined) {
         ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
     }
-    checkAttribName(fn_name , attrib);
+    const [attrib_name, attrib_idx_key]: [string, number|string] = checkAttribNameIdxKey(fn_name, attrib);
+    checkAttribName(fn_name , attrib_name);
     // --- Error Check ---
-    _setAttrib(__model__, ents_arr, attrib, value, idx_or_key, method);
+    _setAttrib(__model__, ents_arr, attrib_name, value, attrib_idx_key, method);
 }
 export enum _ESet {
     ONE_VALUE =   'one_value',
@@ -234,19 +235,6 @@ function _setAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
         ents_arr = [ents_arr] as TEntTypeIdx[];
     }
     ents_arr = ents_arr as TEntTypeIdx[];
-    // are we setting a list of ents to a list of values? ie many to many?
-    // const attrib_values_depth: number = getArrDepth(attrib_values);
-    // const first_ent_type: number = ents_arr[0][0];
-    // if (__model__.attribs.query.hasAttrib(first_ent_type, attrib_name)) {
-    //     const attrib_data_type: EAttribDataTypeStrs = __model__.attribs.query.getAttribDataType(first_ent_type, attrib_name);
-    //     const attrib_is_list: boolean = attrib_data_type === EAttribDataTypeStrs.LIST;
-    //     const values_is_list: boolean = attrib_values_depth > 0;
-    //     // many to many should only be true in cases where the opposite would cause an error
-    //     if (!attrib_is_list && values_is_list) {
-    //         _setEachEntDifferentAttribValue(__model__, ents_arr, attrib_name, attrib_values as TAttribDataTypes[], idx_or_key);
-    //         return;
-    //     }
-    // }
     // all ents get the same attribute value
     if (method === _ESet.MANY_VALUES) {
         _setEachEntDifferentAttribValue(__model__, ents_arr, attrib_name, attrib_values as TAttribDataTypes[], idx_or_key);
@@ -268,7 +256,7 @@ function _setEachEntDifferentAttribValue(__model__: GIModel, ents_arr: TEntTypeI
         attrib_name: string, attrib_values: TAttribDataTypes[], idx_or_key?: number|string): void {
     if (ents_arr.length !== attrib_values.length) {
         throw new Error(
-            'If multiple attributes are being set to multiple values, then the number of entities must match the number of values.');
+            'If multiple entities are being set to multiple values, then the number of entities must match the number of values.');
     }
     const ent_type: number = ents_arr[0][0];
     const ents_i: number[] = _getEntsIndices(__model__, ents_arr);
@@ -292,7 +280,6 @@ function _setEachEntSameAttribValue(__model__: GIModel, ents_arr: TEntTypeIdx[],
     // --- Error Check ---
     const fn_name = 'entities@' + attrib_name;
     checkAttribValue(fn_name , attrib_value);
-    if (idx_or_key !== null) { checkAttribIdxKey(fn_name, idx_or_key); }
     // --- Error Check ---
     const ent_type: number = ents_arr[0][0];
     const ents_i: number[] = _getEntsIndices(__model__, ents_arr);
@@ -323,11 +310,11 @@ function _getEntsIndices(__model__: GIModel, ents_arr: TEntTypeIdx[]): number[] 
  * ~
  * @param __model__
  * @param entities Entities, the entities to get the attribute values for.
- * @param attrib The attribute name.
+ * @param attrib The attribute. Can be `name`, `[name, index]`, or `[name, key]`.
  * @returns One attribute value, or a list of attribute values.
  */
 export function Get(__model__: GIModel, entities: TId|TId[]|TId[][],
-        attrib: string, index: number): TAttribDataTypes|TAttribDataTypes[] {
+        attrib: string|[string, number|string]): TAttribDataTypes|TAttribDataTypes[] {
     // @ts-ignore
     if (entities !== null && getArrDepth(entities) === 2) { entities = __.flatten(entities); }
     // --- Error Check ---
@@ -336,20 +323,20 @@ export function Get(__model__: GIModel, entities: TId|TId[]|TId[][],
     if (entities !== null && entities !== undefined) {
         ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
     }
-    checkAttribName(fn_name, attrib);
-    // checkCommTypes(fn_name, 'name', name, [TypeCheckObj.isString]);
-    if (index !== null && index !== undefined) {
-        checkCommTypes(fn_name, 'index', index, [TypeCheckObj.isNumber, TypeCheckObj.isString]);
-    }
+    const [attrib_name, attrib_idx_key]: [string, number|string] = checkAttribNameIdxKey(fn_name, attrib);
+    checkAttribName(fn_name, attrib_name);
     // --- Error Check ---
-    return _get(__model__, ents_arr, attrib, index);
+    return _get(__model__, ents_arr, attrib_name, attrib_idx_key);
 }
 function _get(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
-        attrib_name: string, attrib_index?: number): TAttribDataTypes|TAttribDataTypes[] {
-    const has_index: boolean = attrib_index !== null && attrib_index !== undefined;
+        attrib_name: string, attrib_idx_key?: number|string): TAttribDataTypes|TAttribDataTypes[] {
+    const has_idx_key: boolean = attrib_idx_key !== null && attrib_idx_key !== undefined;
     if (ents_arr === null) {
-        if (has_index) {
-            return __model__.attribs.query.getModelAttribListIdxVal(attrib_name, attrib_index);
+        // get the attrib values from the model
+        if (typeof attrib_idx_key === 'number') {
+            return __model__.attribs.query.getModelAttribListIdxVal(attrib_name, attrib_idx_key);
+        } else if (typeof attrib_idx_key === 'string') {
+            return __model__.attribs.query.getModelAttribDictKeyVal(attrib_name, attrib_idx_key);
         } else {
             return __model__.attribs.query.getModelAttribVal(attrib_name);
         }
@@ -357,17 +344,22 @@ function _get(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
         return [];
     } else if (getArrDepth(ents_arr) === 1) {
         const [ent_type, ent_i]: TEntTypeIdx = ents_arr as TEntTypeIdx;
+        // check if this is ID
         if (attrib_name === '_id') {
-            if (has_index) { throw new Error('The "_id" attribute does have an index.'); }
+            if (has_idx_key) { throw new Error('The "_id" attribute does have an index.'); }
             return EEntTypeStr[ent_type] + ent_i as TAttribDataTypes;
-        } else if (has_index) {
-            return __model__.attribs.query.getAttribListIdxVal(ent_type, attrib_name, ent_i, attrib_index);
+        }
+        // get the attrib values from the ents
+        if (typeof attrib_idx_key === 'number') {
+            return __model__.attribs.query.getAttribListIdxVal(ent_type, attrib_name, ent_i, attrib_idx_key as number);
+        } else if (typeof attrib_idx_key === 'string') {
+            return __model__.attribs.query.getAttribDictKeyVal(ent_type, attrib_name, ent_i, attrib_idx_key as string);
         } else {
             return __model__.attribs.query.getAttribVal(ent_type, attrib_name, ent_i);
         }
     } else {
         return (ents_arr as TEntTypeIdx[]).map( ent_arr =>
-            _get(__model__, ent_arr, attrib_name, attrib_index) ) as TAttribDataTypes[];
+            _get(__model__, ent_arr, attrib_name, attrib_idx_key) ) as TAttribDataTypes[];
     }
 }
 // ================================================================================================
@@ -376,12 +368,13 @@ function _get(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
  * ~
  * @param __model__
  * @param entities Entities, the entities to push the attribute values for.
- * @param attrib The attribute name, can be a list of [source_name, source_key_or_idx, target_name]
+ * @param attrib The attribute. Can be `name`, `[name, index_or_key]`, \
+ * `[source_name, source_index_or_key, target_name]` or `[source_name, source_index_or_key, target_name, target_index_or_key]`.
  * @param ent_type_sel Enum, the traget entity type where the attribute values should be pushed to.
  * @param method_sel Enum, the method for aggregating attribute values in cases where aggregation is necessary.
  */
 export function Push(__model__: GIModel, entities: TId|TId[],
-        attrib: string|[string, string]|[string, number]|[string, number, string],
+        attrib: string|[string, number|string]|[string, number|string, string]|[string, number|string, string, number|string],
         ent_type_sel: _EEntTypeAndMod, method_sel: _EPushMethodSel): void {
     // @ts-ignore
     if (entities !== null && getArrDepth(entities) === 2) { entities = __.flatten(entities); }
@@ -391,7 +384,25 @@ export function Push(__model__: GIModel, entities: TId|TId[],
     if (entities !== null && entities !== undefined) {
         ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
     }
-    checkCommTypes(fn_name, 'attrib', attrib, [TypeCheckObj.isString, TypeCheckObj.isList]);
+    let source_attrib: string|[string, number|string] = null;
+    let target_attrib: string|[string, number|string] = null;
+    if (Array.isArray(attrib)) {
+        // set cource attrib
+        source_attrib = [
+            attrib[0] as string,
+            (attrib.length > 1 ? attrib[1] : null) as number|string
+        ];
+        // set target attrib
+        target_attrib = [
+            (attrib.length > 2 ? attrib[2] : attrib[0]) as string,
+            (attrib.length > 3 ? attrib[3] : null) as number|string
+        ];
+    } else {
+        source_attrib = [attrib, null];
+        target_attrib = [attrib, null];
+    }
+    const [source_attrib_name, source_attrib_idx_key]: [string, number|string] = checkAttribNameIdxKey(fn_name, source_attrib);
+    const [target_attrib_name, target_attrib_idx_key]: [string, number|string] = checkAttribNameIdxKey(fn_name, target_attrib);
     // --- Error Check ---
     // get the source ent_type and indices
     const source_ent_type: EEntType = ents_arr[0][0];
@@ -402,50 +413,17 @@ export function Push(__model__: GIModel, entities: TId|TId[],
         }
         indices.push(ent_arr[1]);
     }
-    // get the source attrib name, source attrib index_or_key, and the target attrib name
-    let source_attrib: string = null;
-    let source_idx_or_key: number|string = null;
-    let target_attrib: string = null;
-    if (!Array.isArray(attrib)) {
-        source_attrib = attrib;
-        target_attrib = attrib;
-    } else {
-        if (attrib.length >= 1) {
-            source_attrib = attrib[0] as string;
-            source_idx_or_key = null;
-            target_attrib = source_attrib;
-        }
-        if (attrib.length >= 2) {
-            if (typeof attrib[1] === 'string' || typeof attrib[1] === 'number') {
-                source_idx_or_key = attrib[1];
-            } else {
-                throw new Error('The second element in the "attrib" argument list must be a number or string, \
-                    i.e. the index (number) or key (string) for the source attribute.');
-            }
-        }
-        if (attrib.length === 3) {
-            if (typeof attrib[2] === 'string') {
-                target_attrib = attrib[2];
-            } else {
-                throw new Error('The third element in the "attrib" argument list must be a string, \
-                    i.e. the name of the target attribute.');
-            }
-        }
-        if (attrib.length > 3) {
-            throw new Error('The "attrib" argument can be a list of maximum length 3.');
-        }
-    }
     // check the names
-    checkAttribName(fn_name, source_attrib);
-    checkAttribName(fn_name, target_attrib);
-    // get the target enty_type
+    checkAttribName(fn_name, source_attrib_name);
+    checkAttribName(fn_name, target_attrib_name);
+    // get the target ent_type
     const target_ent_type: EEntType = _getEntTypeFromStr(ent_type_sel);
     if (source_ent_type === target_ent_type) { throw new Error('The new attribute is at the same level as the existing attribute.'); }
     // get the method
     const method: EAttribPush = _convertPushMethod(method_sel);
     // do the push
-    __model__.attribs.add.pushAttribVals(source_ent_type, source_attrib, source_idx_or_key, indices,
-        target_ent_type, target_attrib, method);
+    __model__.attribs.add.pushAttribVals(source_ent_type, source_attrib_name, source_attrib_idx_key, indices,
+        target_ent_type, target_attrib_name, target_attrib_idx_key, method);
 }
 export enum _EPushMethodSel {
     FIRST = 'first',

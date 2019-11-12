@@ -195,8 +195,9 @@ export class GIAttribsAdd {
     /**
      * Promotes attrib values up and down the hierarchy.
      */
-    public pushAttribVals(source_ent_type: EEntType, source_attrib_name: string, source_attrib_idx_or_key: number|string,
-            source_indices: number[], target_ent_type: EEntType, target_attrib_name: string, method: EAttribPush): void {
+    public pushAttribVals(
+            source_ent_type: EEntType, source_attrib_name: string, source_attrib_idx_key: number|string, source_indices: number[],
+            target_ent_type: EEntType, target_attrib_name: string, target_attrib_idx_key: number|string, method: EAttribPush): void {
         if (source_ent_type === target_ent_type) { return; }
         // check that the attribute exists
         if (! this._model.attribs.query.hasAttrib(source_ent_type, source_attrib_name)) {
@@ -208,11 +209,20 @@ export class GIAttribsAdd {
         // get the target data type and size
         let target_data_type: EAttribDataTypeStrs = source_data_type;
         let target_data_size: number = source_data_size;
-        if (source_attrib_idx_or_key !== null) {
+        if (target_attrib_idx_key !== null) {
+            // so the target data type must be a list or a dict
+            if (typeof target_attrib_idx_key === 'number') {
+                target_data_type = EAttribDataTypeStrs.LIST;
+            } else if (typeof target_attrib_idx_key === 'string') {
+                target_data_type = EAttribDataTypeStrs.DICT;
+            } else {
+                throw new Error('The target attribute index or key is not valid: "' + target_attrib_idx_key + '".');
+            }
+        } else if (source_attrib_idx_key !== null) {
             // get the first data item as a template to check data type and data size
             const first_val: TAttribDataTypes = this._model.attribs.query.getAttribValAny(
                 source_ent_type, source_attrib_name, source_indices[0],
-                source_attrib_idx_or_key) as TAttribDataTypes;
+                source_attrib_idx_key) as TAttribDataTypes;
             target_data_type = this._checkDataType(first_val);
             if (target_data_type === EAttribDataTypeStrs.LIST) {
                 const first_val_arr = first_val as any[];
@@ -235,18 +245,30 @@ export class GIAttribsAdd {
             for (const index of source_indices) {
                 const value: TAttribDataTypes =
                     this._model.attribs.query.getAttribValAny(source_ent_type, source_attrib_name, index,
-                        source_attrib_idx_or_key) as TAttribDataTypes;
+                        source_attrib_idx_key) as TAttribDataTypes;
                 attrib_values.push(value);
             }
             const agg_value: TAttribDataTypes = this._aggregateVals(attrib_values, target_data_size, method);
-            this.setModelAttribVal(target_attrib_name, agg_value);
+            if (typeof target_attrib_idx_key === 'number') {
+                this.setModelAttribListIdxVal(target_attrib_name, target_attrib_idx_key, agg_value);
+            } else if (typeof target_attrib_idx_key === 'string') {
+                this.setModelAttribDictKeyVal(target_attrib_name, target_attrib_idx_key, agg_value);
+            } else {
+                this.setModelAttribVal(target_attrib_name, agg_value);
+            }
             return;
         } else if (source_ent_type === EEntType.MOD) {
-            const value: TAttribDataTypes = this._model.attribs.query.getModelAttribValAny(source_attrib_name, source_attrib_idx_or_key);
+            const value: TAttribDataTypes = this._model.attribs.query.getModelAttribValAny(source_attrib_name, source_attrib_idx_key);
             this.addAttrib(target_ent_type, target_attrib_name, target_data_type);
             const target_ents_i: number[] = this._model.geom.query.getEnts(target_ent_type, false);
             for (const target_ent_i of target_ents_i) {
-                this.setAttribVal(target_ent_type, target_ent_i, target_attrib_name, value);
+                if (typeof target_attrib_idx_key === 'number') {
+                    this.setAttribListIdxVal(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
+                } else if (typeof target_attrib_idx_key === 'string') {
+                    this.setAttribDictKeyVal(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
+                } else {
+                    this.setAttribVal(target_ent_type, target_ent_i, target_attrib_name, value);
+                }
             }
             return;
         }
@@ -255,7 +277,7 @@ export class GIAttribsAdd {
         for (const index of source_indices) {
             const attrib_value: TAttribDataTypes =
                 this._model.attribs.query.getAttribValAny(source_ent_type, source_attrib_name, index,
-                    source_attrib_idx_or_key) as TAttribDataTypes;
+                    source_attrib_idx_key) as TAttribDataTypes;
             const target_ents_i: number[] = this._model.geom.query.navAnyToAny(source_ent_type, target_ent_type, index);
             for (const target_ent_i of target_ents_i) {
                 if (! attrib_values_map.has(target_ent_i)) {
@@ -272,7 +294,13 @@ export class GIAttribsAdd {
             if (attrib_values.length > 1 && source_data_type === EAttribDataTypeStrs.NUMBER) {
                 value = this._aggregateVals(attrib_values, target_data_size, method);
             }
-            this.setAttribVal(target_ent_type, target_ent_i, target_attrib_name, value);
+            if (typeof target_attrib_idx_key === 'number') {
+                this.setAttribListIdxVal(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
+            } else if (typeof target_attrib_idx_key === 'string') {
+                this.setAttribDictKeyVal(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
+            } else {
+                this.setAttribVal(target_ent_type, target_ent_i, target_attrib_name, value);
+            }
         });
     }
     /**

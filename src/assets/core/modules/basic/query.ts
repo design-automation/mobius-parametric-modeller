@@ -158,7 +158,7 @@ function _get(__model__: GIModel, ent_type: EEntType, ents_arr: TEntTypeIdx[]|TE
  * ~
  * @param __model__
  * @param entities List of entities to filter, or null.
- * @param attrib The attribute to use for filtering. Can be `name`, `[name, index]`, or `[name, key]`
+ * @param attrib The attribute to use for filtering. Can be `name`, `[name, index]`, or `[name, key]`.
  * @param operator_enum Enum, the operator to use for filtering
  * @param value The attribute value to use for filtering.
  * @returns Entities, a list of entities that match the conditions specified in 'expr'.
@@ -317,8 +317,7 @@ export enum _ESortMethod {
  * ~
  * @param __model__
  * @param entities List of two or more entities to be sorted, all of the same entity type.
- * @param attrib Attribute name to use for sorting.
- * @param idx_or_key Optional, attribute index to use for sorting (for attributes that are lists), or null.
+ * @param attrib Attribute name to use for sorting. Can be `name`, `[name, index]`, or `[name, key]`.
  * @param method_enum Enum, sort descending or ascending.
  * @returns Entities, a list of sorted entities.
  * @example sorted_list = query.Sort( [pos1, pos2, pos3], #@xyz[2], descending)

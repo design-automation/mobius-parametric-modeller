@@ -10,11 +10,10 @@
  */
 import __ from 'underscore';
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TQuery, EEntType, ESort, TEntTypeIdx,
+import { TId, EEntType, TEntTypeIdx,
     EAttribPush, TAttribDataTypes, EEntTypeStr, EAttribDataTypeStrs} from '@libs/geo-info/common';
-import { idsMake, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
-import { checkIDs, IDcheckObj, checkCommTypes, TypeCheckObj, checkAttribValue, checkAttribName } from '../_check_args';
-import { GIAttribMap } from '@libs/geo-info/GIAttribMap';
+import { getArrDepth } from '@libs/geo-info/id';
+import { checkIDs, IDcheckObj, checkCommTypes, TypeCheckObj, checkAttribValue, checkAttribName, checkAttribIdxKey } from '../_check_args';
 // ================================================================================================
 function _getEntTypeFromStr(ent_type_str: _EEntType|_EEntTypeAndMod): EEntType {
     switch (ent_type_str) {
@@ -276,7 +275,8 @@ function _setEachEntDifferentAttribValue(__model__: GIModel, ents_arr: TEntTypeI
     for (let i = 0; i < ents_arr.length; i++) {
         // --- Error Check ---
         const fn_name = 'entities@' + attrib_name;
-        checkAttribValue(fn_name , attrib_values[i], idx_or_key);
+        checkAttribValue(fn_name, attrib_values[i]);
+        if (idx_or_key !== null) { checkAttribIdxKey(fn_name, idx_or_key); }
         // --- Error Check ---
         if (typeof idx_or_key === 'number') {
             __model__.attribs.add.setAttribListIdxVal(ent_type, ents_i[i], attrib_name, idx_or_key, attrib_values[i]);
@@ -291,7 +291,8 @@ function _setEachEntSameAttribValue(__model__: GIModel, ents_arr: TEntTypeIdx[],
         attrib_name: string, attrib_value: TAttribDataTypes, idx_or_key?: number|string): void {
     // --- Error Check ---
     const fn_name = 'entities@' + attrib_name;
-    checkAttribValue(fn_name , attrib_value, idx_or_key);
+    checkAttribValue(fn_name , attrib_value);
+    if (idx_or_key !== null) { checkAttribIdxKey(fn_name, idx_or_key); }
     // --- Error Check ---
     const ent_type: number = ents_arr[0][0];
     const ents_i: number[] = _getEntsIndices(__model__, ents_arr);

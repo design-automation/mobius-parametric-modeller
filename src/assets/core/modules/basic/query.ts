@@ -12,7 +12,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, ESort, TEntTypeIdx, EFilterOperatorTypes, TAttribDataTypes} from '@libs/geo-info/common';
 import { idsMake, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
-import { checkIDs, IDcheckObj } from '../_check_args';
+import { checkIDs, IDcheckObj, TypeCheckObj, checkCommTypes, checkAttribNameIdxKey, checkAttribValue } from '../_check_args';
 // ================================================================================================
 function _getEntTypeFromStr(ent_type_str: _EEntType|_EEntTypeAndMod): EEntType {
     switch (ent_type_str) {
@@ -40,7 +40,7 @@ function _getEntTypeFromStr(ent_type_str: _EEntType|_EEntTypeAndMod): EEntType {
             break;
     }
 }
-enum _EEntType {
+export enum _EEntType {
     POSI =   'ps',
     VERT =   '_v',
     EDGE =   '_e',
@@ -51,7 +51,7 @@ enum _EEntType {
     PGON =   'pg',
     COLL =   'co'
 }
-enum _EEntTypeAndMod {
+export enum _EEntTypeAndMod {
     POSI =   'ps',
     VERT =   '_v',
     EDGE =   '_e',
@@ -91,9 +91,10 @@ export enum _EDataType {
 export function Get(__model__: GIModel, ent_type_enum: _EEntType, entities: TId|TId[]): TId[]|TId[][] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
+    const fn_name = 'query.Get';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = null;
     if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs('query.Get', 'entities', entities,
+        ents_arr = checkIDs(fn_name, 'entities', entities,
             [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx|TEntTypeIdx[];
     }
     // --- Error Check ---
@@ -156,9 +157,8 @@ function _get(__model__: GIModel, ent_type: EEntType, ents_arr: TEntTypeIdx[]|TE
  * If the attribute value is a list, then a list index can be used, e.g.: ps#@xyz[2] > 10.
  * ~
  * @param __model__
- * @param entities List of entities to filter, or null..
- * @param name The attribute name to use for filtering.
- * @param index Optional, attribute index to use for filtering (for attributes that are lists), or null to filter all entities the model.
+ * @param entities List of entities to filter, or null.
+ * @param attrib The attribute to use for filtering. Can be `name`, `[name, index]`, or `[name, key]`
  * @param operator_enum Enum, the operator to use for filtering
  * @param value The attribute value to use for filtering.
  * @returns Entities, a list of entities that match the conditions specified in 'expr'.
@@ -174,15 +174,19 @@ function _get(__model__: GIModel, ent_type: EEntType, ents_arr: TEntTypeIdx[]|TE
  * @example_info Returns a list of all the collections that have an attribute called "type" with a value "floors".
  */
 export function Filter(__model__: GIModel, entities: TId|TId[],
-        name: string, index: number, operator_enum: _EFilterOperator, value: TAttribDataTypes): TId[]|TId[][] {
+        attrib: string|[string, number|string],
+        operator_enum: _EFilterOperator, value: TAttribDataTypes): TId[]|TId[][] {
     if (entities === null) { return []; }
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
+    const fn_name = 'query.Filter';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = null;
     if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs('query.Get', 'entities', entities,
+        ents_arr = checkIDs(fn_name, 'entities', entities,
             [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx|TEntTypeIdx[];
     }
+    const [attrib_name, attrib_idx_key]: [string, number|string] = checkAttribNameIdxKey(fn_name, attrib);
+    checkAttribValue(fn_name, value);
     // --- Error Check ---
     // make sure that the ents_arr is at least depth 2
     const depth: number = getArrDepth(ents_arr);
@@ -191,7 +195,7 @@ export function Filter(__model__: GIModel, entities: TId|TId[],
     // get the oeprator
     const op_type: EFilterOperatorTypes = _filterOperator(operator_enum);
     // do the query
-    const found_ents_arr: TEntTypeIdx[]|TEntTypeIdx[][] = _filter(__model__, ents_arr, name, index, op_type, value);
+    const found_ents_arr: TEntTypeIdx[]|TEntTypeIdx[][] = _filter(__model__, ents_arr, attrib_name, attrib_idx_key, op_type, value);
     // return the result
     return idsMake(found_ents_arr) as TId[]|TId[][];
 }
@@ -223,7 +227,7 @@ function _filterOperator(select: _EFilterOperator): EFilterOperatorTypes {
     }
 }
 function _filter(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][],
-        name: string, index: number, op_type: EFilterOperatorTypes, value: TAttribDataTypes): TEntTypeIdx[]|TEntTypeIdx[][] {
+        name: string, idx_or_key: number|string, op_type: EFilterOperatorTypes, value: TAttribDataTypes): TEntTypeIdx[]|TEntTypeIdx[][] {
     if (ents_arr.length === 0) { return []; }
     // do the query
     const depth: number = getArrDepth(ents_arr);
@@ -236,12 +240,12 @@ function _filter(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][],
             found_ents_i.push(...__model__.geom.query.navAnyToAny(ent_arr[0], ent_type, ent_arr[1]));
         }
         // do the query on the list of entities
-        const query_result: number[] = __model__.attribs.query.filterByAttribs(ent_type, found_ents_i, name, index, op_type, value);
+        const query_result: number[] = __model__.attribs.query.filterByAttribs(ent_type, found_ents_i, name, idx_or_key, op_type, value);
         if (query_result.length === 0) { return []; }
         return query_result.map( entity_i => [ent_type, entity_i]) as TEntTypeIdx[];
     } else { // depth === 3
         ents_arr = ents_arr as TEntTypeIdx[][];
-        return ents_arr.map(ents_arr_item => _filter(__model__, ents_arr_item, name, index, op_type, value)) as TEntTypeIdx[][];
+        return ents_arr.map(ents_arr_item => _filter(__model__, ents_arr_item, name, idx_or_key, op_type, value)) as TEntTypeIdx[][];
     }
 }
 // ================================================================================================
@@ -313,21 +317,22 @@ export enum _ESortMethod {
  * ~
  * @param __model__
  * @param entities List of two or more entities to be sorted, all of the same entity type.
- * @param name Attribute name to use for sorting.
+ * @param attrib Attribute name to use for sorting.
  * @param idx_or_key Optional, attribute index to use for sorting (for attributes that are lists), or null.
  * @param method_enum Enum, sort descending or ascending.
  * @returns Entities, a list of sorted entities.
  * @example sorted_list = query.Sort( [pos1, pos2, pos3], #@xyz[2], descending)
  * @example_info Returns a list of three positions, sorted according to the descending z value.
  */
-export function Sort(__model__: GIModel, entities: TId[], name: string, idx_or_key: number|string, method_enum: _ESortMethod): TId[] {
+export function Sort(__model__: GIModel, entities: TId[], attrib: string|[string, number|string], method_enum: _ESortMethod): TId[] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
-    const ents_arr = checkIDs('query.Sort', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
-    // TODO check the sort expression
+    const fn_name = 'query.Sort';
+    const ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    const [attrib_name, attrib_idx_key]: [string, number|string] = checkAttribNameIdxKey(fn_name, attrib);
     // --- Error Check ---
     const sort_method: ESort = (method_enum === _ESortMethod.DESCENDING) ? ESort.DESCENDING : ESort.ASCENDING;
-    const sorted_ents_arr: TEntTypeIdx[] = _sort(__model__, ents_arr, name, idx_or_key, sort_method);
+    const sorted_ents_arr: TEntTypeIdx[] = _sort(__model__, ents_arr, attrib_name, attrib_idx_key, sort_method);
     return idsMake(sorted_ents_arr) as TId[];
 }
 function _sort(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: string, idx_or_key: number|string, method: ESort): TEntTypeIdx[] {

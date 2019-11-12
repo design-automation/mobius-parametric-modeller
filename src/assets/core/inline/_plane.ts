@@ -30,7 +30,7 @@ export function plnLMove(pln: TPlane, vec: Txyz): TPlane {
     const x_move_vec: Txyz = vecMult(pln[1], vec[0]);
     const y_move_vec: Txyz = vecMult(pln[2], vec[1]);
     const z_move_vec: Txyz = vecMult(z_vec, vec[2]);
-    const origin: Txyz = vecsAdd([pln[0], x_move_vec, y_move_vec, z_move_vec], false )
+    const origin: Txyz = vecsAdd([pln[0], x_move_vec, y_move_vec, z_move_vec], false);
     return [origin, pln[1].slice() as Txyz, pln[2].slice() as Txyz];
 }
 

@@ -8,7 +8,7 @@
  *
  */
 
-import { checkCommTypes, TypeCheckObj } from '../_check_args';
+import { checkArgTypes, TypeCheckObj } from '../_check_args';
 import { Txyz, TPlane, XYPLANE, TId, EEntType } from '@libs/geo-info/common';
 import { getArrDepth, idsMakeFromIndicies } from '@libs/geo-info/id';
 import { vecAdd, vecFromTo, vecDiv, vecMult } from '@libs/geom/vectors';
@@ -31,9 +31,9 @@ import { arrFill, arrMakeFlat } from '@assets/libs/util/arrs';
 export function Line(__model__: GIModel, origin: Txyz|TPlane, size: number, num_positions: number): TId[] {
     // --- Error Check ---
     const fn_name = 'pattern.Line';
-    checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
-    checkCommTypes(fn_name, 'size', size, [TypeCheckObj.isNumber]);
-    checkCommTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+    checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
+    checkArgTypes(fn_name, 'size', size, [TypeCheckObj.isNumber]);
+    checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
     // --- Error Check ---
     // create the matrix one time
     let matrix: Matrix4;
@@ -77,8 +77,8 @@ export function Line(__model__: GIModel, origin: Txyz|TPlane, size: number, num_
 export function Rectangle(__model__: GIModel, origin: Txyz|TPlane, size: number|[number, number]): TId[] {
     // --- Error Check ---
     const fn_name = 'pattern.Rectangle';
-    checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
-    checkCommTypes(fn_name, 'size', size, [TypeCheckObj.isNumber, TypeCheckObj.isXYlist]);
+    checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
+    checkArgTypes(fn_name, 'size', size, [TypeCheckObj.isNumber, TypeCheckObj.isXYlist]);
     // --- Error Check ---
     // create the matrix one time
     let matrix: Matrix4;
@@ -130,9 +130,9 @@ export function Grid(__model__: GIModel, origin: Txyz|TPlane, size: number|[numb
         num_positions: number|[number, number], method: _EGridMethod): TId[]|TId[][] {
     // --- Error Check ---
     const fn_name = 'pattern.Grid';
-    checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
-    checkCommTypes(fn_name, 'size', size, [TypeCheckObj.isNumber, TypeCheckObj.isXYlist]);
-    checkCommTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt, TypeCheckObj.isXYlistInt]);
+    checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
+    checkArgTypes(fn_name, 'size', size, [TypeCheckObj.isNumber, TypeCheckObj.isXYlist]);
+    checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt, TypeCheckObj.isXYlistInt]);
     // --- Error Check ---
     // create the matrix one time
     let matrix: Matrix4;
@@ -213,19 +213,19 @@ export enum _EGridMethod {
  * @param origin XYZ coordinates as a list of three numbers.
  * @param size Size of the box. If one number, assume equal lengths.
  * If list of two or three numbers, specifies x y z lengths respectively.
- * @param num_posis Number of positions. If number, assume equal number of positions.
+ * @param num_positions Number of positions. If number, assume equal number of positions.
  * If list of two or three numbers, specifies x y z numbers respectively.
  * @param method Enum
  * @returns Entities, a list of 6 positions.
  */
 export function Box(__model__: GIModel, origin: Txyz | TPlane,
     size: number | [number, number] | [number, number, number],
-    num_posis: number | [number, number] | [number, number, number],
+    num_positions: number | [number, number] | [number, number, number],
     method: _EBoxMethod): TId[] | TId[][] {
     // --- Error Check ---
     const fn_name = 'pattern.Box';
-    checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
-    checkCommTypes(fn_name, 'size', size, [TypeCheckObj.isNumber, TypeCheckObj.isXYlist, TypeCheckObj.isXYZlist]);
+    checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
+    checkArgTypes(fn_name, 'size', size, [TypeCheckObj.isNumber, TypeCheckObj.isXYlist, TypeCheckObj.isXYZlist]);
     // --- Error Check ---
     // create the matrix one time
     let matrix: Matrix4;
@@ -235,7 +235,7 @@ export function Box(__model__: GIModel, origin: Txyz | TPlane,
     }
     // create params
     const xyz_size: Txyz = arrFill(size, 3) as [number, number, number];
-    const xyz_num_positions: [number, number, number] = arrFill(num_posis, 3) as [number, number, number];
+    const xyz_num_positions: [number, number, number] = arrFill(num_positions, 3) as [number, number, number];
     // create the positions
     const layer_top_posis_i: number[] = [];
     const layer_bot_posis_i: number[] = [];
@@ -479,9 +479,9 @@ export function Polyhedron(__model__: GIModel, origin: Txyz | TPlane, radius: nu
         method: _EPolyhedronMethod): TId[]|TId[][] {
     // --- Error Check ---
     const fn_name = 'pattern.Polyhedron';
-    checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
-    checkCommTypes(fn_name, 'radius', radius, [TypeCheckObj.isNumber]);
-    checkCommTypes(fn_name, 'detail', detail, [TypeCheckObj.isInt]);
+    checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
+    checkArgTypes(fn_name, 'radius', radius, [TypeCheckObj.isNumber]);
+    checkArgTypes(fn_name, 'detail', detail, [TypeCheckObj.isInt]);
     if (detail > 6) {
         throw new Error('pattern.Polyhedron: The "detail" argument is too high, the maximum is 6.');
     }
@@ -581,10 +581,10 @@ export function _polyhedron(__model__: GIModel, matrix: Matrix4, radius: number,
 export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num_positions: number, arc_angle: number): TId[] {
     // --- Error Check ---
     const fn_name = 'pattern.Arc';
-    checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
-    checkCommTypes(fn_name, 'radius', radius, [TypeCheckObj.isNumber]);
-    checkCommTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
-    checkCommTypes(fn_name, 'arc_angle', arc_angle, [TypeCheckObj.isNumber, TypeCheckObj.isNull]);
+    checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
+    checkArgTypes(fn_name, 'radius', radius, [TypeCheckObj.isNumber]);
+    checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+    checkArgTypes(fn_name, 'arc_angle', arc_angle, [TypeCheckObj.isNumber, TypeCheckObj.isNull]);
     // --- Error Check ---
     // create the matrix one time
     let matrix: Matrix4;
@@ -637,8 +637,8 @@ export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num
 export function Bezier(__model__: GIModel, coords: Txyz[], num_positions: number): TId[] {
     // --- Error Check ---
     const fn_name = 'pattern.Bezier';
-    checkCommTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
-    checkCommTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+    checkArgTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
+    checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
     // --- Error Check ---
     // create the curve
     const coords_tjs: THREE.Vector3[] = coords.map(coord => new THREE.Vector3(coord[0], coord[1], coord[2]));
@@ -693,8 +693,8 @@ export function Bezier(__model__: GIModel, coords: Txyz[], num_positions: number
 export function Nurbs(__model__: GIModel, coords: Txyz[], degree: number, close: _EClose, num_positions: number): TId[] {
     // --- Error Check ---
     const fn_name = 'pattern.Nurbs';
-    checkCommTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
-    checkCommTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+    checkArgTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
+    checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
     // --- Error Check ---
     const closed: boolean = close === _EClose.CLOSE;
     if (coords.length < 3) {
@@ -770,8 +770,8 @@ export function Nurbs(__model__: GIModel, coords: Txyz[], degree: number, close:
 export function _Interpolate(__model__: GIModel, coords: Txyz[], degree: number, close: _EClose, num_positions: number): TId[] {
     // --- Error Check ---
     const fn_name = 'pattern._Interpolate';
-    checkCommTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
-    checkCommTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+    checkArgTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
+    checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
     // --- Error Check ---
     const closed: boolean = close === _EClose.CLOSE;
     if (coords.length < 3) {
@@ -877,9 +877,9 @@ export function Interpolate(__model__: GIModel, coords: Txyz[], type: _ECurveCat
     num_positions: number): TId[] {
     // --- Error Check ---
     const fn_name = 'pattern.Interpolate';
-    checkCommTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
-    checkCommTypes(fn_name, 'tension', tension, [TypeCheckObj.isNumber01]);
-    checkCommTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+    checkArgTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
+    checkArgTypes(fn_name, 'tension', tension, [TypeCheckObj.isNumber01]);
+    checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
     // --- Error Check ---
     const closed_tjs: boolean = close === _EClose.CLOSE;
     const num_positions_tjs: number = closed_tjs ? num_positions : num_positions - 1;

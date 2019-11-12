@@ -10,7 +10,7 @@
  *
  */
 
-import { checkCommTypes, TypeCheckObj } from '../_check_args';
+import { checkArgTypes, TypeCheckObj } from '../_check_args';
 import { idsBreak } from '@libs/geo-info/id';
 import { TEntTypeIdx } from '@libs/geo-info/common';
 
@@ -35,8 +35,8 @@ import { TEntTypeIdx } from '@libs/geo-info/common';
 export function Add(list: any[], item: any|any[], method: _EAddMethod): void {
     // --- Error Check ---
     const fn_name = 'list.Add';
-    checkCommTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
-    checkCommTypes(fn_name, 'value', item, [TypeCheckObj.isAny]);
+    checkArgTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
+    checkArgTypes(fn_name, 'value', item, [TypeCheckObj.isAny]);
     // --- Error Check ---
     let str_value: string;
     switch (method) {
@@ -139,8 +139,8 @@ export enum _EAddMethod {
 export function Remove(list: any[], item: any, method: _ERemoveMethod): void {
     // --- Error Check ---
     const fn_name = 'list.Remove';
-    checkCommTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
-    checkCommTypes(fn_name, 'item', item, [TypeCheckObj.isAny]);
+    checkArgTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
+    checkArgTypes(fn_name, 'item', item, [TypeCheckObj.isAny]);
     // --- Error Check ---
     let index: number;
     switch (method) {
@@ -194,9 +194,9 @@ export enum _ERemoveMethod {
 export function Replace(list: any[], old_item: any, new_item: any, method: _EReplaceMethod): void {
     // --- Error Check ---
     const fn_name = 'list.Replace';
-    checkCommTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
-    checkCommTypes(fn_name, 'item', old_item, [TypeCheckObj.isAny]);
-    checkCommTypes(fn_name, 'new_value', new_item, [TypeCheckObj.isAny]);
+    checkArgTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
+    checkArgTypes(fn_name, 'item', old_item, [TypeCheckObj.isAny]);
+    checkArgTypes(fn_name, 'new_value', new_item, [TypeCheckObj.isAny]);
     // --- Error Check ---
     let index: number;
     switch (method) {
@@ -251,7 +251,7 @@ export enum _EReplaceMethod {
  */
 export function Sort(list: any[], method: _ESortMethod): void {
     // --- Error Check ---
-    checkCommTypes('list.Sort', 'list', list, [TypeCheckObj.isList]);
+    checkArgTypes('list.Sort', 'list', list, [TypeCheckObj.isList]);
     // --- Error Check ---
     _sort(list, method);
 }
@@ -331,10 +331,10 @@ function _sort(list: any[], method: _ESortMethod): void {
 export function Splice(list: any[], index: number, num_to_remove: number, items_to_insert: any[]): void {
     // --- Error Check ---
     const fn_name = 'list.Splice';
-    checkCommTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
-    checkCommTypes(fn_name, 'index', index, [TypeCheckObj.isInt]);
-    checkCommTypes(fn_name, 'num_to_remove', num_to_remove, [TypeCheckObj.isInt]);
-    checkCommTypes(fn_name, 'values_to_add', items_to_insert, [TypeCheckObj.isList]);
+    checkArgTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
+    checkArgTypes(fn_name, 'index', index, [TypeCheckObj.isInt]);
+    checkArgTypes(fn_name, 'num_to_remove', num_to_remove, [TypeCheckObj.isInt]);
+    checkArgTypes(fn_name, 'values_to_add', items_to_insert, [TypeCheckObj.isList]);
     // --- Error Check ---
 
     // avoid the spread operator

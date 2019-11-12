@@ -9,16 +9,16 @@
  */
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane } from '@libs/geo-info/common';
+import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, TBBox } from '@libs/geo-info/common';
 import { isPline, isWire, isEdge, isPgon, isFace, getArrDepth, isVert, isPosi, isPoint } from '@libs/geo-info/id';
 import { distance } from '@libs/geom/distance';
-import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen, vecDot } from '@libs/geom/vectors';
+import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm } from '@libs/geom/vectors';
 import { triangulate } from '@libs/triangulate/triangulate';
 import { area } from '@libs/geom/triangle';
-import { checkIDs, checkCommTypes, IDcheckObj, TypeCheckObj} from '../_check_args';
+import { checkIDs, checkArgTypes, IDcheckObj, TypeCheckObj} from '../_check_args';
 import __ from 'underscore';
-import * as THREE from 'three';
 import { getCentroid } from './_common';
+import { rayFromPln } from '@assets/core/inline/_ray';
 
 
 // ================================================================================================
@@ -316,7 +316,7 @@ export function Normal(__model__: GIModel, entities: TId|TId[], scale: number): 
     const fn_name = 'calc.Normal';
     const ents_arr: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList], null) as  TEntTypeIdx|TEntTypeIdx[];
-    checkCommTypes(fn_name, 'scale', scale, [TypeCheckObj.isNumber]);
+    checkArgTypes(fn_name, 'scale', scale, [TypeCheckObj.isNumber]);
     // --- Error Check ---
     return _normal(__model__, ents_arr, scale);
 }
@@ -404,7 +404,7 @@ export function Eval(__model__: GIModel, entities: TId|TId[], t_param: number): 
     const ents_arrs: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList],
         [EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
-    checkCommTypes(fn_name, 'param', t_param, [TypeCheckObj.isNumber01]);
+    checkArgTypes(fn_name, 'param', t_param, [TypeCheckObj.isNumber01]);
     // --- Error Check ---
     return _eval(__model__, ents_arrs, t_param);
 }
@@ -474,3 +474,206 @@ export function _ParamXyzToT(__model__: GIModel, lines: TId|TId[], locations: TI
     throw new Error('Not implemented.'); return null;
 }
 // ================================================================================================
+
+
+
+// ================================================================================================
+/**
+ * Returns a ray for an edge, a face, or a polygons. For edges, it returns a ray along the edge, from teh start vertex to the end vertex
+ * For a face or polygon, it returns the ray that is the z-axis of the plane.
+ * ~
+ * For an edge, the ray vector is not normalised. For a face or polygon, the ray vector is normalised.
+ *
+ * @param __model__
+ * @param entities An edge, a face, or a polygon, or a list.
+ * @returns The ray.
+ */
+export function Ray(__model__: GIModel, entities: TId|TId[]): TRay|TRay[] {
+    // --- Error Check ---
+    const fn_name = 'calc.Ray';
+    const ents_arr = checkIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.PLINE, EEntType.FACE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
+    // --- Error Check ---
+    return _getRay(__model__, ents_arr);
+}
+function _getRayFromEdge(__model__: GIModel, ent_arr: TEntTypeIdx): TRay {
+    const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_arr[0], ent_arr[1]);
+    const xyzs: Txyz[] = posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+    return [xyzs[0], vecSub(xyzs[1], xyzs[0])];
+}
+function _getRayFromFace(__model__: GIModel, ent_arr: TEntTypeIdx): TRay {
+    const plane: TPlane = _getPlane(__model__, ent_arr) as TPlane;
+    return rayFromPln(plane) as TRay;
+}
+function _getRayFromPline(__model__: GIModel, ent_arr: TEntTypeIdx): TRay[] {
+    const edges_i: number[] = __model__.geom.query.navAnyToEdge(ent_arr[0], ent_arr[1]);
+    return edges_i.map( edge_i => _getRayFromEdge(__model__, [EEntType.EDGE, edge_i]) ) as TRay[];
+}
+function _getRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TRay|TRay[] {
+    if (getArrDepth(ents_arr) === 1) {
+        const ent_arr: TEntTypeIdx = ents_arr as TEntTypeIdx;
+        if (ent_arr[0] === EEntType.EDGE) {
+            return _getRayFromEdge(__model__, ent_arr);
+        } else if (ent_arr[0] === EEntType.PLINE) {
+            return _getRayFromPline(__model__, ent_arr);
+        } else if (ent_arr[0] === EEntType.FACE) {
+            return _getRayFromFace(__model__, ent_arr);
+        } else { // must be a polygon
+            const face_i: number = __model__.geom.query.navPgonToFace(ent_arr[1]);
+            return _getRayFromFace(__model__, [EEntType.FACE, face_i]);
+        }
+    } else {
+        return (ents_arr as TEntTypeIdx[]).map( ent_arr => _getRay(__model__, ent_arr)) as TRay[];
+    }
+}
+// ================================================================================================
+/**
+ * Returns a plane from a polygon, a face, a polyline, or a wire.
+ * For polylines or wires, there must be at least three non-colinear vertices.
+ * ~
+ * The winding order is counter-clockwise.
+ * This means that if the vertices are ordered counter-clockwise relative to your point of view,
+ * then the z axis of the plane will be pointing towards you.
+ *
+ * @param entities Any entities
+ * @returns The plane.
+ */
+export function Plane(__model__: GIModel, entities: TId|TId[]): TPlane|TPlane[] {
+    // --- Error Check ---
+    const fn_name = 'calc.Plane';
+    const ents_arr =  checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null); // takes in any
+    // TODO [EEntType.PGON, EEntType.FACE, EEntType.PLINE, EEntType.WIRE]);
+    // --- Error Check ---
+    return _getPlane(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
+}
+function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPlane|TPlane[] {
+    if (getArrDepth(ents_arr) === 1) {
+        const ent_arr = ents_arr as TEntTypeIdx;
+        const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_arr[0], ent_arr[1]);
+        const unique_posis_i = Array.from(new Set(posis_i));
+        if (unique_posis_i.length < 3) { throw new Error('Too few points to calculate plane.'); }
+        const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+        const origin: Txyz = vecDiv(vecSum(unique_xyzs), unique_xyzs.length);
+        // const normal: Txyz = newellNorm(unique_xyzs);
+        const normal: Txyz = _normal(__model__, ent_arr, 1) as Txyz;
+        const x_vec: Txyz = vecNorm(vecFromTo(unique_xyzs[0], unique_xyzs[1]));
+        const y_vec: Txyz = vecCross(normal, x_vec); // must be z-axis, x-axis
+        return [origin, x_vec, y_vec] as TPlane;
+    } else {
+        return (ents_arr as TEntTypeIdx[]).map(ent_arr => _getPlane(__model__, ent_arr)) as TPlane[];
+    }
+}
+// ================================================================================================
+/**
+ * Returns the bounding box of the entities.
+ * The bounding box is an imaginary box that completley contains all the geometry.
+ * The box is always aligned with the global x, y, and z axes.
+ * The bounding box consists of a list of lists, as follows [[x, y, z], [x, y, z], [x, y, z], [x, y, z]].
+ * - The first [x, y, z] is the coordinates of the centre of the bounding box.
+ * - The second [x, y, z] is the corner of the bounding box with the lowest x, y, z values.
+ * - The third [x, y, z] is the corner of the bounding box with the highest x, y, z values.
+ * - The fourth [x, y, z] is the dimensions of the bounding box.
+ * ~
+ * @param __model__
+ * @param entities The etities for which to calculate the bounding box.
+ * @returns The bounding box consisting of a list of four lists.
+ */
+export function BBox(__model__: GIModel, entities: TId|TId[]): TBBox {
+    if (!Array.isArray(entities)) { entities = [entities]; }
+    // --- Error Check ---
+    const fn_name = 'calc.BBox';
+    const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[]; // all
+    // --- Error Check ---
+    return _getBoundingBox(__model__, ents_arr);
+}
+function _getBoundingBox(__model__: GIModel, ents_arr: TEntTypeIdx[]): TBBox {
+    const posis_set_i: Set<number> = new Set();
+    for (const ent_arr of ents_arr) {
+        const ent_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_arr[0], ent_arr[1]);
+        for (const ent_posi_i of ent_posis_i) {
+            posis_set_i.add(ent_posi_i);
+        }
+    }
+    const unique_posis_i = Array.from(posis_set_i);
+    const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+    const corner_min: Txyz = [Infinity, Infinity, Infinity];
+    const corner_max: Txyz = [-Infinity, -Infinity, -Infinity];
+    for (const unique_xyz of unique_xyzs) {
+        if (unique_xyz[0] < corner_min[0]) { corner_min[0] = unique_xyz[0]; }
+        if (unique_xyz[1] < corner_min[1]) { corner_min[1] = unique_xyz[1]; }
+        if (unique_xyz[2] < corner_min[2]) { corner_min[2] = unique_xyz[2]; }
+        if (unique_xyz[0] > corner_max[0]) { corner_max[0] = unique_xyz[0]; }
+        if (unique_xyz[1] > corner_max[1]) { corner_max[1] = unique_xyz[1]; }
+        if (unique_xyz[2] > corner_max[2]) { corner_max[2] = unique_xyz[2]; }
+    }
+    return [
+        [(corner_min[0] + corner_max[0]) / 2, (corner_min[1] + corner_max[1]) / 2, (corner_min[2] + corner_max[2]) / 2],
+        corner_min,
+        corner_max,
+        [corner_max[0] - corner_min[0], corner_max[1] - corner_min[1], corner_max[2] - corner_min[2]]
+    ];
+}
+// ================================================================================================
+// /**
+//  * Calculates the distance between a ray or plane and a list of positions.
+//  * ~
+//  * @param __model__
+//  * @param ray_or_plane Ray or a plane.
+//  * @param entities A position or list of positions.
+//  * @param method Enum; all_distances or min_distance.
+//  * @returns Distance, or list of distances.
+//  * @example distance1 = virtual.Distance(ray, positions, all_distances)
+//  * @example_info Returns a list of distances between the ray and each position.
+//  */
+// export function Distance(__model__: GIModel, ray_or_plane: TRay|TPlane, entities: TId|TId[], method: _EDistanceMethod): number|number[] {
+//     // --- Error Check ---
+//     const fn_name = 'virtual.Distance';
+//     checkCommTypes(fn_name, 'ray_or_plane', ray_or_plane, [TypeCheckObj.isRay, TypeCheckObj.isPlane]);
+//     const ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
+//         [EEntType.POSI]) as TEntTypeIdx|TEntTypeIdx[];
+//     // --- Error Check ---
+//     const one_posi: boolean = getArrDepth(ents_arr) === 1;
+//     // get the to posis_i
+//     let posis_i: number|number[] = null;
+//     if (one_posi) {
+//         posis_i = ents_arr[1] as number;
+//     } else {
+//         posis_i = (ents_arr as TEntTypeIdx[]).map( ent_arr => ent_arr[1] ) as number[];
+//     }
+//     // get a list of distances
+//     let dists: number|number[] = null;
+//     if (ray_or_plane.length === 2) { // ray
+//         const ray_tjs: THREE.Ray = new THREE.Ray(new THREE.Vector3(...ray_or_plane[0]), new THREE.Vector3(...ray_or_plane[1]));
+//         dists = _distanceRaytoP(__model__, ray_tjs, posis_i);
+//     } else if (ray_or_plane.length === 3) { // plane
+//         const plane_normal: Txyz = vecCross(ray_or_plane[1], ray_or_plane[2]);
+//         const plane_tjs: THREE.Plane = new THREE.Plane();
+//         plane_tjs.setFromNormalAndCoplanarPoint( new THREE.Vector3(...plane_normal), new THREE.Vector3(...ray_or_plane[0]) );
+//         dists = _distancePlanetoP(__model__, plane_tjs, posis_i);
+//     }
+//     // return either the min or the whole list
+//     if (method === _EDistanceMethod.MIN_DISTANCE && !one_posi) {
+//         return Math.min(...dists as number[]);
+//     }
+//     return dists;
+// }
+// function _distanceRaytoP(__model__: GIModel, ray_tjs: THREE.Ray, posis_i: number|number[]): number|number[] {
+//     if (!Array.isArray(posis_i)) {
+//         const xyz: Txyz = __model__.attribs.query.getPosiCoords(posis_i);
+//         return ray_tjs.distanceToPoint( new THREE.Vector3(...xyz) ) as number;
+//     } else {
+//         return posis_i.map( posi_i => _distanceRaytoP(__model__, ray_tjs, posi_i) ) as number[];
+//     }
+// }
+// function _distancePlanetoP(__model__: GIModel, plane_tjs: THREE.Plane, posis_i: number|number[]): number|number[] {
+//     if (!Array.isArray(posis_i)) {
+//         const xyz: Txyz = __model__.attribs.query.getPosiCoords(posis_i);
+//         return plane_tjs.distanceToPoint( new THREE.Vector3(...xyz) ) as number;
+//     } else {
+//         return posis_i.map( posi_i => _distancePlanetoP(__model__, plane_tjs, posi_i) ) as number[];
+//     }
+// }
+// export enum _EDistanceMethod {
+//     ALL_DISTANCES = 'all_distances',
+//     MIN_DISTANCE = 'min_distance'
+// }

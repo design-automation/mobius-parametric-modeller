@@ -12,7 +12,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, ESort, TEntTypeIdx, EFilterOperatorTypes, TAttribDataTypes} from '@libs/geo-info/common';
 import { idsMake, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
-import { checkIDs, IDcheckObj, TypeCheckObj, checkCommTypes, checkAttribNameIdxKey, checkAttribValue } from '../_check_args';
+import { checkIDs, IDcheckObj, TypeCheckObj, checkArgTypes, checkAttribNameIdxKey, checkAttribValue } from '../_check_args';
 // ================================================================================================
 function _getEntTypeFromStr(ent_type_str: _EEntType|_EEntTypeAndMod): EEntType {
     switch (ent_type_str) {

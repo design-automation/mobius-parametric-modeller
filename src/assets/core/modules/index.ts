@@ -27,26 +27,32 @@ export {modify};
 import * as attrib from './basic/attrib';
 export {attrib};
 
-// import * as isect from './isect';
-// export {isect};
-
 import * as calc from './basic/calc';
 export {calc};
 
-import * as virtual from './basic/virtual';
-export {virtual};
+import * as intersect from './basic/intersect';
+export {intersect};
 
 import * as analyze from './basic/analyze';
 export {analyze};
 
-import * as render from './basic/render';
-export {render};
+import * as visualize from './basic/visualize';
+export {visualize};
+
+import * as collection from './basic/collection';
+export {collection};
 
 import * as list from './basic/list';
 export {list};
 
 import * as dict from './basic/dict';
 export {dict};
+
+import * as material from './basic/material';
+export {material};
+
+import * as io from './basic/io';
+export {io};
 
 import * as util from './basic/util';
 export {util};

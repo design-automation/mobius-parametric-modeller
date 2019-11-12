@@ -14,7 +14,7 @@ import { isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi,
 import { __merge__} from '../_model';
 import { _model } from '..';
 import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd, vecFromTo } from '@libs/geom/vectors';
-import { checkCommTypes, checkIDs, IDcheckObj, TypeCheckObj } from '../_check_args';
+import { checkArgTypes, checkIDs, IDcheckObj, TypeCheckObj } from '../_check_args';
 import { distance } from '@libs/geom/distance';
 import { arrMakeFlat } from '@libs/util/arrs';
 
@@ -34,7 +34,7 @@ import { arrMakeFlat } from '@libs/util/arrs';
 export function Position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TId|TId[]|TId[][] {
     if (isEmptyArr(coords)) { return []; }
     // --- Error Check ---
-    checkCommTypes('make.Position', 'coords', coords, [TypeCheckObj.isCoord, TypeCheckObj.isCoordList, TypeCheckObj.isCoordList_List]);
+    checkArgTypes('make.Position', 'coords', coords, [TypeCheckObj.isCoord, TypeCheckObj.isCoordList, TypeCheckObj.isCoordList_List]);
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = _position(__model__, coords);
     return idsMake(new_ents_arr);
@@ -323,59 +323,6 @@ function _tin(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEnt
         ents_arr = ents_arr as TEntTypeIdx[][];
         return ents_arr.map(ents_arr_item => _tin(__model__, ents_arr_item)) as TEntTypeIdx[];
     }
-}
-// ================================================================================================
-/**
- * Adds one or more new collections to the model.
- * ~
- * If the list of entities contains other collections, these other collections will then become 
- * children of the new collection that will be created.
- * ~
- * @param __model__
- * @param entities List or nested lists of points, polylines, polygons, and other colletions.
- * @returns Entities, new collection, or a list of new collections.
- * @example collection1 = make.Collection([point1,polyine1,polygon1])
- * @example_info Creates a collection containing point1, polyline1, polygon1.
- * @example collections = make.Collection([[point1,polyine1],[polygon1]])
- * @example_info Creates two collections, the first containing point1 and polyline1, the second containing polygon1.
- * @example_link make.Collection.mob&node=1
- */
-export function Collection(__model__: GIModel, entities: TId|TId[]|TId[][]): TId|TId[] {
-    // --- Error Check ---
-    const fn_name = 'make.Collection';
-    const ents_arr = checkIDs(fn_name, 'objects', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
-        [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-    // --- Error Check ---
-    const new_ent_arr: TEntTypeIdx|TEntTypeIdx[] = _collection(__model__, ents_arr);
-    return idsMake(new_ent_arr) as TId|TId[];
-}
-export function _collection(__model__: GIModel, ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][]): TEntTypeIdx | TEntTypeIdx[] {
-    const depth: number = getArrDepth(ents_arr);
-    if (depth === 1) {
-        ents_arr = [ents_arr] as TEntTypeIdx[];
-    } else if (depth === 3) {
-        ents_arr = ents_arr as TEntTypeIdx[][];
-        return ents_arr.map(ents_arr_item => _collection(__model__, ents_arr_item)) as TEntTypeIdx[];
-    }
-    const points_i: number[] = [];
-    const plines_i: number[] = [];
-    const pgons_i: number[] = [];
-    const child_colls_i: number[] = [];
-    for (const ent_arr of ents_arr) {
-        if (isPoint(ent_arr[0])) { points_i.push(ent_arr[1]); }
-        if (isPline(ent_arr[0])) { plines_i.push(ent_arr[1]); }
-        if (isPgon(ent_arr[0])) { pgons_i.push(ent_arr[1]); }
-        if (isColl(ent_arr[0])) { child_colls_i.push(ent_arr[1]); }
-    }
-    // create the collection, setting tha parent to -1
-    const coll_i: number = __model__.geom.add.addColl(-1, points_i, plines_i, pgons_i);
-    // set the parents
-    for (const child_coll_i of child_colls_i) {
-        __model__.geom.modify.setCollParent(child_coll_i, coll_i);
-    }
-    // return the new collection
-    return [EEntType.COLL, coll_i];
 }
 // ================================================================================================
 /**
@@ -824,7 +771,7 @@ function _loft(__model__: GIModel, ents_arrs: TEntTypeIdx[]|TEntTypeIdx[][], div
  * ~
  * @param __model__
  * @param entities Vertex, edge, wire, face, position, point, polyline, polygon, collection.
- * @param distance Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).
+ * @param dist Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).
  * @param divisions Number of divisions to divide extrusion by. Minimum is 1.
  * @param method Enum, when extruding edges, select quads, stringers, or ribs
  * @returns Entities, a list of new polygons or polylines resulting from the extrude.
@@ -835,7 +782,7 @@ function _loft(__model__: GIModel, ents_arrs: TEntTypeIdx[]|TEntTypeIdx[][], div
  * @example_info Extrudes polygon1 by 5 in the y-direction, creating a list of quad surfaces.
  */
 export function Extrude(__model__: GIModel, entities: TId|TId[],
-        distance: number|Txyz, divisions: number, method: _EExtrudeMethod): TId|TId[] {
+        dist: number|Txyz, divisions: number, method: _EExtrudeMethod): TId|TId[] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'make.Extrude';
@@ -843,10 +790,10 @@ export function Extrude(__model__: GIModel, entities: TId|TId[],
         [IDcheckObj.isID, IDcheckObj.isIDList],
         [EEntType.VERT, EEntType.EDGE, EEntType.WIRE, EEntType.FACE,
          EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
-    checkCommTypes(fn_name, 'dist', distance, [TypeCheckObj.isNumber, TypeCheckObj.isVector]);
-    checkCommTypes(fn_name, 'divisions', divisions, [TypeCheckObj.isInt]);
+    checkArgTypes(fn_name, 'dist', dist, [TypeCheckObj.isNumber, TypeCheckObj.isVector]);
+    checkArgTypes(fn_name, 'divisions', divisions, [TypeCheckObj.isInt]);
     // --- Error Check ---
-    const new_ents_arr: TEntTypeIdx[] = _extrude(__model__, ents_arr, distance, divisions, method);
+    const new_ents_arr: TEntTypeIdx[] = _extrude(__model__, ents_arr, dist, divisions, method);
     if (!Array.isArray(entities) && new_ents_arr.length === 1) {
         return idsMake(new_ents_arr[0]) as TId;
     } else {
@@ -1121,7 +1068,7 @@ export function Divide(__model__: GIModel, entities: TId|TId[], divisor: number,
     const fn_name = 'make.Divide';
     const ents_arr: TEntTypeIdx[] = checkIDs('make.Divide', 'edges', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
-    checkCommTypes(fn_name, 'divisor', divisor, [TypeCheckObj.isNumber]);
+    checkArgTypes(fn_name, 'divisor', divisor, [TypeCheckObj.isNumber]);
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx[] = _divide(__model__, ents_arr, divisor, method);
     // remesh any polygons

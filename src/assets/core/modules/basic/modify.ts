@@ -12,7 +12,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EEntType, TEntTypeIdx, TRay} from '@libs/geo-info/common';
 import { getArrDepth, isColl, isPgon, isPline, isPoint, isPosi, isEmptyArr } from '@libs/geo-info/id';
 import { vecAdd, vecSum, vecDiv, vecFromTo, vecNorm, vecCross, vecSetLen, vecLen, vecDot } from '@libs/geom/vectors';
-import { checkCommTypes, checkIDs, IDcheckObj, TypeCheckObj} from '../_check_args';
+import { checkArgTypes, checkIDs, IDcheckObj, TypeCheckObj} from '../_check_args';
 import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
 import __ from 'underscore';
@@ -49,7 +49,7 @@ export function Move(__model__: GIModel, entities: TId|TId[], vectors: Txyz|Txyz
         const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
                                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
                                 EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-        checkCommTypes(fn_name, 'vectors', vectors, [TypeCheckObj.isVector, TypeCheckObj.isVectorList]);
+        checkArgTypes(fn_name, 'vectors', vectors, [TypeCheckObj.isVector, TypeCheckObj.isVectorList]);
         // --- Error Check ---
         _move(__model__, ents_arr, vectors);
     }
@@ -115,8 +115,8 @@ export function Rotate(__model__: GIModel, entities: TId|TId[], origin: Txyz|TRa
         const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
                                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
                                 EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-        checkCommTypes(fn_name, 'axis', axis, [TypeCheckObj.isXYZlist]);
-        checkCommTypes(fn_name, 'angle', angle, [TypeCheckObj.isNumber]);
+        checkArgTypes(fn_name, 'axis', axis, [TypeCheckObj.isXYZlist]);
+        checkArgTypes(fn_name, 'angle', angle, [TypeCheckObj.isNumber]);
         origin = getOrigin(__model__, origin, fn_name);
         // --- Error Check ---
         _rotate(__model__, ents_arr, origin, axis, angle);
@@ -159,7 +159,7 @@ export function Scale(__model__: GIModel, entities: TId|TId[], origin: Txyz|TRay
         const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
                                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
                                 EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-        checkCommTypes(fn_name, 'scale', scale, [TypeCheckObj.isNumber, TypeCheckObj.isXYZlist]);
+        checkArgTypes(fn_name, 'scale', scale, [TypeCheckObj.isNumber, TypeCheckObj.isXYZlist]);
         origin = getOrigin(__model__, origin, fn_name);
         // --- Error Check ---
         _scale(__model__, ents_arr, origin, scale);
@@ -203,7 +203,7 @@ export function Mirror(__model__: GIModel, entities: TId|TId[], origin: Txyz|TRa
         const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
                                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
                                 EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-        checkCommTypes(fn_name, 'direction', direction, [TypeCheckObj.isVector]);
+        checkArgTypes(fn_name, 'direction', direction, [TypeCheckObj.isVector]);
         origin = getOrigin(__model__, origin, fn_name);
         // --- Error Check ---
         _mirror(__model__, ents_arr, origin, direction);
@@ -243,8 +243,8 @@ export function XForm(__model__: GIModel, entities: TId|TId[], from: TPlane, to:
         const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
                                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
                                 EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-        checkCommTypes(fn_name, 'from', from, [TypeCheckObj.isPlane]);
-        checkCommTypes(fn_name, 'to', to, [TypeCheckObj.isPlane]);
+        checkArgTypes(fn_name, 'from', from, [TypeCheckObj.isPlane]);
+        checkArgTypes(fn_name, 'to', to, [TypeCheckObj.isPlane]);
         // --- Error Check ---
         _xform(__model__, ents_arr, from, to);
     }
@@ -282,7 +282,7 @@ export function Offset(__model__: GIModel, entities: TId|TId[], dist: number): v
         const fn_name = 'modify.Offset';
         const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
                                 [EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-        checkCommTypes(fn_name, 'dist', dist, [TypeCheckObj.isNumber]);
+        checkArgTypes(fn_name, 'dist', dist, [TypeCheckObj.isNumber]);
         // --- Error Check ---
         _offset(__model__, ents_arr, dist);
     }
@@ -394,75 +394,6 @@ function _offsetWire(__model__: GIModel, wire_i: number, dist: number): void {
         const last_perp_vec: Txyz =  vecSetLen(perp_vecs[last_edge_i], dist);
         const last_new_xyz: Txyz = vecAdd(last_old_xyz, last_perp_vec);
         __model__.attribs.add.setPosiCoords(last_posi_i, last_new_xyz);
-    }
-}
-// ================================================================================================
-/**
- * Modifies a collection.
- * ~
- * If the method is 'set_parent', then the parent can be updated by specifying a parent collection.
- * If the method is 'add_entities', then entities are added to the collection.
- * If the method is 'remove_entities', then entities are removed from the collection.
- * If adding or removing entities, then the entities must be points, polylines, or polygons.
- *
- * @param __model__
- * @param coll The collection to be updated.
- * @param entities Points, polylines, and polygons, or a single collection.
- * @param method Enum, the method to use when modifying the collection.
- * @returns void
- */
-export function Collection(__model__: GIModel, coll: TId, entities: TId|TId[], method: _EModifyCollectionMethod): void {
-    entities = arrMakeFlat(entities) as TId[];
-    if (!isEmptyArr(entities)) {
-        // --- Error Check ---
-        const coll_arr = checkIDs('modify.Collection', 'coll', coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
-        const ents_arr: TEntTypeIdx[] = checkIDs('modify.Collection', 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList],
-            [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-        // --- Error Check ---
-        _collection(__model__, coll_arr, ents_arr, method);
-    }
-}
-export enum _EModifyCollectionMethod {
-    SET_PARENT_ENTITY = 'set_parent',
-    ADD_ENTITIES = 'add_entities',
-    REMOVE_ENTITIES = 'remove_entities'
-}
-function _collection(__model__: GIModel, coll_arr: TEntTypeIdx, ents_arr: TEntTypeIdx[], method: _EModifyCollectionMethod): void {
-    const [_, coll_i]: TEntTypeIdx = coll_arr;
-    if (method === _EModifyCollectionMethod.SET_PARENT_ENTITY) {
-        if (ents_arr.length !== 1) {
-            throw new Error('Error setting collection parent. A collection can only have one parent.');
-        }
-        const [parent_ent_type, parent_coll_i]: TEntTypeIdx = ents_arr[0];
-        if (parent_ent_type !== EEntType.COLL) {
-            throw new Error('Error setting collection parent. The parent must be another collection.');
-        }
-        __model__.geom.modify.setCollParent(coll_i, parent_coll_i);
-        return;
-    }
-    const points_i: number[] = [];
-    const plines_i: number[] = [];
-    const pgons_i: number[] = [];
-    for (const [ent_type, ent_i] of ents_arr) {
-        switch (ent_type) {
-            case EEntType.POINT:
-                points_i.push(ent_i);
-                break;
-            case EEntType.PLINE:
-                plines_i.push(ent_i);
-                break;
-            case EEntType.PGON:
-                pgons_i.push(ent_i);
-                break;
-            default:
-                throw new Error('Error modifying collection. A collection can only contain points, polylines, and polygons.');
-        }
-    }
-    if (method === _EModifyCollectionMethod.ADD_ENTITIES) {
-        __model__.geom.modify.collAddEnts(coll_i, points_i, plines_i, pgons_i);
-    } else { // Remove entities
-        __model__.geom.modify.collRemoveEnts(coll_i, points_i, plines_i, pgons_i);
     }
 }
 // ================================================================================================

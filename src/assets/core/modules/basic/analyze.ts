@@ -15,7 +15,7 @@ import { distance } from '@libs/geom/distance';
 import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm, vecAng2 } from '@libs/geom/vectors';
 import { triangulate } from '@libs/triangulate/triangulate';
 import { area } from '@libs/geom/triangle';
-import { checkIDs, checkCommTypes, IDcheckObj, TypeCheckObj} from '../_check_args';
+import { checkIDs, checkArgTypes, IDcheckObj, TypeCheckObj} from '../_check_args';
 import __ from 'underscore';
 import * as THREE from 'three';
 import { sum } from '@assets/core/inline/_mathjs';

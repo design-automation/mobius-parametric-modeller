@@ -10,34 +10,32 @@
  *
  */
 
-import { checkCommTypes, TypeCheckObj } from '../_check_args';
+import { checkArgTypes, TypeCheckObj } from '../_check_args';
 
 // ================================================================================================
 /**
  * Adds one or more key-value pairs to a dict. Existing keys with the same name will be overwritten.
  * ~
- * @param dict Dictionary to add the key-value to.
- * @param keys_values A key-value pair [key, value], or list of key-value pairs.
+ * @param dict Dictionary to add the key-value pairs to.
+ * @param keys A key or list of keys.
+ * @param values A value of list of values.
  * @returns void
  */
-export function Add(dict: object, keys_values: [string, any]|[string, any][]): void {
+export function Add(dict: object, keys: string|string[], values: any|any[]): void {
     // --- Error Check ---
     const fn_name = 'dict.Add';
-    checkCommTypes(fn_name, 'key_value', keys_values, [TypeCheckObj.isList]);
-    // --- Error Check ---
-    if (keys_values.length > 0) {
-        if (!Array.isArray(keys_values[0])) { keys_values = [keys_values] as [string, any][]; }
+    checkArgTypes(fn_name, 'keys', keys, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
+    checkArgTypes(fn_name, 'values', keys, [TypeCheckObj.isAny, TypeCheckObj.isList]);
+    keys = Array.isArray(keys) ? keys : [keys];
+    values = Array.isArray(values) ? values : [values];
+    if (keys.length !== values.length) {
+        throw new Error(fn_name + ': The list of keys must be the same length as the list of values.');
     }
-    for (const key_value of keys_values) {
-        if (key_value.length !== 2) {
-            throw new Error('dict.Add: Key-value pairs must be of length 2; \
-                the following key-value pair is not valid: "' + key_value + '".');
-        }
-        if (typeof key_value[0] !== 'string') {
-            throw new Error('dict.Add: Keys must be of type string; \
-                the following key is not valid: "' + key_value[0] + '".');
-        }
-        dict[key_value[0]] = key_value[1];
+    // --- Error Check ---
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        const value = values[i];
+        dict[key] = dict[value];
     }
 }
 // ================================================================================================
@@ -45,13 +43,13 @@ export function Add(dict: object, keys_values: [string, any]|[string, any][]): v
  * Removes keys from a dict. If the key does not exist, no action is taken and no error is thrown.
  * ~
  * @param dict The dict in which to remove keys
- * @param key The key or list of keys to remove.
+ * @param keys The key or list of keys to remove.
  * @returns void
  */
 export function Remove(dict: object, keys: string|string[]): void {
     // --- Error Check ---
     const fn_name = 'dict.Remove';
-    checkCommTypes(fn_name, 'key', keys, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
+    checkArgTypes(fn_name, 'key', keys, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
     // --- Error Check ---
     if (!Array.isArray(keys)) { keys = [keys] as string[]; }
     keys = keys as string[];
@@ -70,29 +68,24 @@ export function Remove(dict: object, keys: string|string[]): void {
  * Replaces keys in a dict. If the key does not exist, no action is taken and no error is thrown.
  * ~
  * @param dict The dict in which to replace keys
- * @param key_pairs Pairs of keys, [old_key, new_key], or list of pairs of keys.
+ * @param old_keys The old key or list of keys.
+ * @param new_keys The new key or list of keys.
  * @returns void
  */
-export function Replace(dict: object, key_pairs: [string, string]|[string, string][]): void {
+export function Replace(dict: object, old_keys: string|string[], new_keys: string|string[]): void {
     // --- Error Check ---
     const fn_name = 'dict.Replace';
-    checkCommTypes(fn_name, 'key_pairs', key_pairs, [TypeCheckObj.isStringList, TypeCheckObj.isStringStringList]);
+    checkArgTypes(fn_name, 'old_keys', old_keys, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
+    checkArgTypes(fn_name, 'new_keys', new_keys, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
+    old_keys = Array.isArray(old_keys) ? old_keys : [old_keys];
+    new_keys = Array.isArray(new_keys) ? new_keys : [new_keys];
+    if (old_keys.length !== new_keys.length) {
+        throw new Error(fn_name + ': The list of new keys must be the same length as the list of old keys.');
+    }
     // --- Error Check ---
-    if (!Array.isArray(key_pairs[0])) { key_pairs = [key_pairs] as [string, string][]; }
-    key_pairs = key_pairs as [string, string][];
-    for (let i = 0; i < key_pairs.length; i++) {
-        if (key_pairs[i].length !== 2) {
-            throw new Error('dict.Replace: Key pairs must be of length 2; \
-                the following key pair is not valid: "' + key_pairs[i] + '".');
-        }
-        for (const key of key_pairs[i]) {
-            if (typeof key !== 'string') {
-                throw new Error('dict.Replace: Keys must be strings; \
-                    the following key is not valid:"' + key + '".');
-            }
-        }
-        const old_key: string = key_pairs[i][0];
-        const new_key: string = key_pairs[i][1];
+    for (let i = 0; i < old_keys.length; i++) {
+        const old_key = old_keys[i];
+        const new_key = new_keys[i];
         if (old_key in dict) {
             dict[new_key] = dict[old_key];
             delete dict[old_key];

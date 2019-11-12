@@ -58,7 +58,7 @@ export function checkAttribNameIdxKey(fn_name: string, attrib: string|[string, n
 }
 export function checkAttribValue(fn_name: string, attrib_value: any): void {
     // check the actual value
-    checkCommTypes(fn_name, 'attrib_value', attrib_value,
+    checkArgTypes(fn_name, 'attrib_value', attrib_value,
             [TypeCheckObj.isString, TypeCheckObj.isNumber, TypeCheckObj.isBoolean,
                 TypeCheckObj.isNull, TypeCheckObj.isList, TypeCheckObj.isDict]);
 }
@@ -308,7 +308,7 @@ export class IDcheckObj {
 // =========================================================================================================================================
 // Specific Checks
 // =========================================================================================================================================
-export function checkCommTypes(fn_name: string, arg_name: string, arg: any, check_fns: Function[]): void|TEntTypeIdx|
+export function checkArgTypes(fn_name: string, arg_name: string, arg: any, check_fns: Function[]): void|TEntTypeIdx|
                                TEntTypeIdx[]|TEntTypeIdx[][] {
     let pass = false;
     const err_arr = [];

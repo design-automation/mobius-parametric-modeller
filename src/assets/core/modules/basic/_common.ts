@@ -8,7 +8,7 @@
  *
  */import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EEntType, TRay, TEntTypeIdx, EEntTypeStr} from '@libs/geo-info/common';
-import { checkCommTypes, TypeCheckObj, checkIDs, IDcheckObj} from '../_check_args';
+import { checkArgTypes, TypeCheckObj, checkIDs, IDcheckObj} from '../_check_args';
 import { getArrDepth } from '@assets/libs/geo-info/id';
 import { vecDiv, vecSum, vecAvg } from '@assets/libs/geom/vectors';
 
@@ -28,7 +28,7 @@ export function getOrigin(__model__: GIModel, origin: Txyz|TRay|TPlane|TId|TId[]
         }
         return centroid as Txyz;
     }
-    checkCommTypes(fn_name, 'origin', origin, [TypeCheckObj.isOrigin, TypeCheckObj.isRay, TypeCheckObj.isPlane]);
+    checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isOrigin, TypeCheckObj.isRay, TypeCheckObj.isPlane]);
     if (Array.isArray(origin) && Array.isArray(origin[0])) { // handles rays and planes
         if (origin.length === 3) { // planes
             return origin as TPlane;

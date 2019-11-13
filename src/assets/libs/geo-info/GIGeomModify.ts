@@ -870,8 +870,8 @@ export class GIGeomModify {
         const posi_i: number = this._geom_arrays.dn_verts_posis[vert_i];
         // vert_i is in the middle of a wire, we must have two edges
         const edges_i: number[] = this._geom_arrays.up_verts_edges[vert_i];
-        const prev_edge_i: number = edges_i[0]; //is_first ? edges_i[1] : edges_i[0];
-        const next_edge_i: number = edges_i[1]; //is_first ? edges_i[0] : edges_i[1];
+        const prev_edge_i: number = edges_i[0]; // is_first ? edges_i[1] : edges_i[0];
+        const next_edge_i: number = edges_i[1]; // is_first ? edges_i[0] : edges_i[1];
         // get the verts of the two edges
         const prev_edge_verts_i: number[] = this._geom_arrays.dn_edges_verts[prev_edge_i];
         const next_edge_verts_i: number[] = this._geom_arrays.dn_edges_verts[next_edge_i];

@@ -8,15 +8,19 @@
  */
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { EAttribNames, TId, EEntType, Txyz, TEntTypeIdx } from '@libs/geo-info/common';
+import { EAttribNames, TId, EEntType, Txyz, TEntTypeIdx, TPlane } from '@libs/geo-info/common';
 import { isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi,
     isEdge, isFace, idsMake, idIndicies, getArrDepth, isEmptyArr, isWire } from '@libs/geo-info/id';
 import { __merge__} from '../_model';
 import { _model } from '..';
-import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd, vecFromTo } from '@libs/geom/vectors';
+import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd, vecFromTo, vecLen, vecSetLen } from '@libs/geom/vectors';
 import { checkArgTypes, checkIDs, IDcheckObj, TypeCheckObj } from '../_check_args';
 import { distance } from '@libs/geom/distance';
 import { arrMakeFlat } from '@libs/util/arrs';
+import { getPlanesSeq } from './_common';
+import { xfromSourceTargetMatrix, multMatrix } from '@assets/libs/geom/matrix';
+import { Matrix4 } from 'three';
+import { listZip } from '@assets/core/inline/_list';
 
 // ================================================================================================
 // Utility functions
@@ -1062,8 +1066,9 @@ function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
  * @param divisor Segment length or number of segments.
  * @param div_method Enum, select the method for dividing entities along the sweep direction.
  * @param sweep_method Enum, select the method for sweeping.
+ * @returns Entities, a list of new polygons or polylines resulting from the sweep.
  */
-export function Sweep(__model__: GIModel, entities: TId|TId[], xsextion: TId, divisor: number, 
+export function Sweep(__model__: GIModel, entities: TId|TId[], xsextion: TId, divisor: number,
         div_method: _EDivisorMethod, sweep_method: _EExtrudeMethod): TId[] {
     entities = arrMakeFlat(entities) as TId[];
     if (isEmptyArr(entities)) { return []; }
@@ -1074,6 +1079,9 @@ export function Sweep(__model__: GIModel, entities: TId|TId[], xsextion: TId, di
     const xsection_ent: TEntTypeIdx = checkIDs(fn_name, 'xsextion', xsextion,
         [IDcheckObj.isID], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx;
     checkArgTypes(fn_name, 'divisor', divisor, [TypeCheckObj.isNumber]);
+    if (divisor === 0) {
+        throw new Error(fn_name + ' : Divisor cannot be zero.');
+    }
     // --- Error Check ---
     // the xsection
     const [xsection_ent_type, xsection_index]: TEntTypeIdx = xsection_ent;
@@ -1101,9 +1109,19 @@ export function Sweep(__model__: GIModel, entities: TId|TId[], xsextion: TId, di
 function _sweep(__model__: GIModel, backbone_wires_i: number|number[], xsection_wire_i: number, divisor: number,
         div_method: _EDivisorMethod, sweep_method: _EExtrudeMethod): TEntTypeIdx[] {
     if (!Array.isArray(backbone_wires_i)) {
-        // TODO
-        throw new Error('Not implemented.');
-        // TODO
+        // extrude edges -> polygons
+        switch (sweep_method) {
+            case _EExtrudeMethod.QUADS:
+                return _sweepQuads(__model__, backbone_wires_i, xsection_wire_i, divisor, div_method);
+            case _EExtrudeMethod.STRINGERS:
+                return _sweepStringers(__model__, backbone_wires_i, xsection_wire_i, divisor, div_method);
+            case _EExtrudeMethod.RIBS:
+                return _sweepRibs(__model__, backbone_wires_i, xsection_wire_i, divisor, div_method);
+            case _EExtrudeMethod.COPIES:
+                return _sweepCopies(__model__, backbone_wires_i, xsection_wire_i, divisor, div_method);
+            default:
+                throw new Error('Extrude method not recognised.');
+        }
     } else {
         const new_ents: TEntTypeIdx[] = [];
         for (const wire_i of backbone_wires_i) {
@@ -1114,6 +1132,138 @@ function _sweep(__model__: GIModel, backbone_wires_i: number|number[], xsection_
         }
         return new_ents;
     }
+}
+function _sweepQuads(__model__: GIModel, backbone_wire_i: number, xsection_wire_i: number,
+        divisor: number, div_method: _EDivisorMethod): TEntTypeIdx[] {
+    const strips_posis_i: number[][] = _sweepPosis(__model__, backbone_wire_i, xsection_wire_i, divisor, div_method);
+    const backbone_is_closed: boolean = __model__.geom.query.istWireClosed(backbone_wire_i);
+    const xsection_is_closed: boolean = __model__.geom.query.istWireClosed(xsection_wire_i);
+    // add row if backbone_is_closed
+    if (backbone_is_closed) {
+        strips_posis_i.push(strips_posis_i[0].slice());
+    }
+    // add a posi_i to end of each strip if xsection_is_closed
+    if (xsection_is_closed) {
+        for (const strip_posis_i of strips_posis_i) {
+            strip_posis_i.push(strip_posis_i[0]);
+        }
+    }
+    // create quads
+    const new_pgons: TEntTypeIdx[] = [];
+    for (let i = 0; i < strips_posis_i.length - 1; i++) {
+        const strip1_posis_i: number[] = strips_posis_i[i];
+        const strip2_posis_i: number[] = strips_posis_i[i + 1];
+        for (let j = 0; j < strip1_posis_i.length - 1; j++) {
+            const c1: number = strip1_posis_i[j];
+            const c2: number = strip2_posis_i[j];
+            const c3: number = strip2_posis_i[j + 1];
+            const c4: number = strip1_posis_i[j + 1];
+            const pgon_i: number = __model__.geom.add.addPgon([c1, c2, c3, c4]);
+            new_pgons.push([EEntType.PGON, pgon_i]);
+        }
+    }
+    return new_pgons;
+}
+function _sweepStringers(__model__: GIModel, backbone_wire_i: number, xsection_wire_i: number,
+        divisor: number, div_method: _EDivisorMethod): TEntTypeIdx[] {
+    const backbone_is_closed: boolean = __model__.geom.query.istWireClosed(backbone_wire_i);
+    const ribs_posis_i: number[][] = _sweepPosis(__model__, backbone_wire_i, xsection_wire_i, divisor, div_method);
+    const stringers_posis_i: number[][] = listZip(ribs_posis_i);
+    const plines: TEntTypeIdx[] = [];
+    for (const stringer_posis_i of stringers_posis_i) {
+        const pline_i: number = __model__.geom.add.addPline(stringer_posis_i, backbone_is_closed);
+        plines.push([EEntType.PLINE, pline_i]);
+    }
+    return plines;
+}
+function _sweepRibs(__model__: GIModel, backbone_wire_i: number, xsection_wire_i: number,
+        divisor: number, div_method: _EDivisorMethod): TEntTypeIdx[] {
+    const xsection_is_closed: boolean = __model__.geom.query.istWireClosed(xsection_wire_i);
+    const ribs_posis_i: number[][] = _sweepPosis(__model__, backbone_wire_i, xsection_wire_i, divisor, div_method);
+    const plines: TEntTypeIdx[] = [];
+    for (const rib_posis_i of ribs_posis_i) {
+        const pline_i: number = __model__.geom.add.addPline(rib_posis_i, xsection_is_closed);
+        plines.push([EEntType.PLINE, pline_i]);
+    }
+    return plines;
+}
+function _sweepCopies(__model__: GIModel, backbone_wire_i: number, xsection_wire_i: number,
+        divisor: number, div_method: _EDivisorMethod): TEntTypeIdx[] {
+    const posis_i: number[][] = _sweepPosis(__model__, backbone_wire_i, xsection_wire_i, divisor, div_method);
+    // TODO
+    throw new Error('Not implemented');
+    // TODO
+}
+function _sweepPosis(__model__: GIModel, backbone_wire_i: number, xsection_wire_i: number,
+        divisor: number, div_method: _EDivisorMethod): number[][] {
+    // get the xyzs of the cross section
+    const xsextion_xyzs: Txyz[] = __model__.attribs.query.getEntCoords(EEntType.WIRE, xsection_wire_i);
+    // get the xyzs of the backbone
+    const wire_normal: Txyz = __model__.geom.query.getWireNormal(backbone_wire_i);
+    const wire_is_closed: boolean =  __model__.geom.query.istWireClosed(backbone_wire_i);
+    const wire_xyzs: Txyz[] = __model__.attribs.query.getEntCoords(EEntType.WIRE, backbone_wire_i);
+    let plane_xyzs: Txyz[] = [];
+    // if not divisor === 1 and BY_NUMBER, then we need to add xyzs
+    if (divisor === 1 && div_method === _EDivisorMethod.BY_NUMBER) {
+        plane_xyzs = wire_xyzs;
+    } else {
+        if (wire_is_closed) {
+            wire_xyzs.push(wire_xyzs[0]);
+        }
+        for (let i = 0; i < wire_xyzs.length - 1; i++) {
+            const xyz0: Txyz = wire_xyzs[i];
+            const xyz1: Txyz = wire_xyzs[i + 1];
+            const vec: Txyz = vecFromTo(xyz0, xyz1);
+            const vec_len: number = vecLen(vec);
+            let vec_div: Txyz = null;
+            let num_segs: number = null;
+            switch (div_method) {
+                case _EDivisorMethod.BY_NUMBER:
+                    num_segs = Math.round(divisor);
+                    vec_div = vecDiv(vec, num_segs);
+                    break;
+                case _EDivisorMethod.BY_LENGTH:
+                    vec_div = vecSetLen(vec, divisor);
+                    num_segs = Math.ceil(vec_len / divisor);
+                    break;
+                case _EDivisorMethod.BY_MAX_LENGTH:
+                    num_segs = Math.ceil(vec_len / divisor);
+                    vec_div = vecDiv(vec, num_segs);
+                    break;
+                case _EDivisorMethod.BY_MIN_LENGTH:
+                    num_segs = Math.floor(vec_len / divisor);
+                    vec_div = vecDiv(vec, num_segs);
+                    break;
+                default:
+                    throw new Error('make.Sweep: Divisor method not recognised.');
+            }
+            plane_xyzs.push(xyz0);
+            for (let j = 1; j < num_segs; j++) {
+                plane_xyzs.push(vecAdd(xyz0, vecMult(vec_div, j)));
+            }
+        }
+        if (!wire_is_closed) {
+            plane_xyzs.push(wire_xyzs[wire_xyzs.length - 1]);
+        }
+    }
+    // create the planes
+    const planes: TPlane[] = getPlanesSeq(plane_xyzs, wire_normal, wire_is_closed);
+    // create the new  posis
+    const XY: TPlane = [[0, 0, 0], [1, 0, 0], [0, 1, 0]];
+    const all_new_posis_i: number[][] = [];
+    for (const plane of planes) {
+        const matrix: Matrix4 = xfromSourceTargetMatrix(XY, plane);
+        const xsection_posis_i: number[] = [];
+        for (const xsextion_xyz of xsextion_xyzs) {
+            const new_xyz: Txyz = multMatrix(xsextion_xyz, matrix);
+            const posi_i: number = __model__.geom.add.addPosi();
+            __model__.attribs.add.setPosiCoords(posi_i, new_xyz);
+            xsection_posis_i.push(posi_i);
+        }
+        all_new_posis_i.push(xsection_posis_i);
+    }
+    // return the new posis
+    return all_new_posis_i;
 }
 // ================================================================================================
 /**
@@ -1240,54 +1390,54 @@ function _divideEdge(__model__: GIModel, edge_i: number, divisor: number, method
 
 
 
-// ================================================================================================
-function _polygonHoles(__model__: GIModel, ents_arr: TEntTypeIdx[],
-    holes_ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx {
-if (getArrDepth(holes_ents_arr) === 2) {
-    holes_ents_arr = [holes_ents_arr] as TEntTypeIdx[][];
-}
-const posis_i: number[] = ents_arr.map(ent_arr => ent_arr[1]);
-const holes_posis_i: number[][] = [];
-for (const hole_ents_arr of holes_ents_arr as TEntTypeIdx[][]) {
-    holes_posis_i.push( hole_ents_arr.map(ent_arr => ent_arr[1]) );
-}
-const pgon_i: number = __model__.geom.add.addPgon(posis_i, holes_posis_i);
-return [EEntType.PGON, pgon_i];
-}
-/**
-* Adds a single new polygon to the model with one or more holes.
-* @param __model__
-* @param positions List of positions.
-* @param hole_positions List of positions for the holes. For multiple holes, a list of list can provided.
-* @returns Entities, a list of new polygons.
-* @example polygon1 = make.Polygon([position1,position2,position3], [position4,position5,position6])
-* @example_info Creates a polygon with  a hole, with vertices in sequence from position1 to position6.
-*/
-function _PolygonHoles(__model__: GIModel, positions: TId[], hole_positions: TId[]|TId[][]): TId {
-// --- Error Check ---
-const pgon_ents_arr = checkIDs('make.Polygon', 'positions', positions, [IDcheckObj.isIDList], [EEntType.POSI]) as TEntTypeIdx[];
-const holes_ents_arr = checkIDs('make.Polygon', 'positions', hole_positions,
-    [IDcheckObj.isIDList, IDcheckObj.isIDList_list], [EEntType.POSI]) as TEntTypeIdx[]|TEntTypeIdx[][];
-// --- Error Check ---
-const new_ent_arr: TEntTypeIdx = _polygonHoles(__model__, pgon_ents_arr, holes_ents_arr);
-console.log(__model__);
-return idsMake(new_ent_arr) as TId;
-}
-// ================================================================================================
-/**
- * Joins polylines to polylines or polygons to polygons.
- * ~
- * New polylins or polygons are created. The original polyline or polygons are not affected.
- *
- * @param __model__
- * @param geometry Polylines or polygons.
- * @returns Entities, a list of new joined polylines or polygons.
- * @example joined1 = make.Join([polyline1,polyline2])
- * @example_info Creates a new polyline by joining polyline1 and polyline2. Geometries must be of the same type.
- */
-export function _Join(__model__: GIModel, geometry: TId[]): TId {
-    // --- Error Check ---
-    // const ents_arr =  checkIDs('make.Join', 'geometry', geometry, [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]);
-    // --- Error Check ---
-    throw new Error('Not implemented.'); return null;
-}
+// // ================================================================================================
+// function _polygonHoles(__model__: GIModel, ents_arr: TEntTypeIdx[],
+//     holes_ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx {
+// if (getArrDepth(holes_ents_arr) === 2) {
+//     holes_ents_arr = [holes_ents_arr] as TEntTypeIdx[][];
+// }
+// const posis_i: number[] = ents_arr.map(ent_arr => ent_arr[1]);
+// const holes_posis_i: number[][] = [];
+// for (const hole_ents_arr of holes_ents_arr as TEntTypeIdx[][]) {
+//     holes_posis_i.push( hole_ents_arr.map(ent_arr => ent_arr[1]) );
+// }
+// const pgon_i: number = __model__.geom.add.addPgon(posis_i, holes_posis_i);
+// return [EEntType.PGON, pgon_i];
+// }
+// /**
+// * Adds a single new polygon to the model with one or more holes.
+// * @param __model__
+// * @param positions List of positions.
+// * @param hole_positions List of positions for the holes. For multiple holes, a list of list can provided.
+// * @returns Entities, a list of new polygons.
+// * @example polygon1 = make.Polygon([position1,position2,position3], [position4,position5,position6])
+// * @example_info Creates a polygon with  a hole, with vertices in sequence from position1 to position6.
+// */
+// function _PolygonHoles(__model__: GIModel, positions: TId[], hole_positions: TId[]|TId[][]): TId {
+// // --- Error Check ---
+// const pgon_ents_arr = checkIDs('make.Polygon', 'positions', positions, [IDcheckObj.isIDList], [EEntType.POSI]) as TEntTypeIdx[];
+// const holes_ents_arr = checkIDs('make.Polygon', 'positions', hole_positions,
+//     [IDcheckObj.isIDList, IDcheckObj.isIDList_list], [EEntType.POSI]) as TEntTypeIdx[]|TEntTypeIdx[][];
+// // --- Error Check ---
+// const new_ent_arr: TEntTypeIdx = _polygonHoles(__model__, pgon_ents_arr, holes_ents_arr);
+// console.log(__model__);
+// return idsMake(new_ent_arr) as TId;
+// }
+// // ================================================================================================
+// /**
+//  * Joins polylines to polylines or polygons to polygons.
+//  * ~
+//  * New polylins or polygons are created. The original polyline or polygons are not affected.
+//  *
+//  * @param __model__
+//  * @param geometry Polylines or polygons.
+//  * @returns Entities, a list of new joined polylines or polygons.
+//  * @example joined1 = make.Join([polyline1,polyline2])
+//  * @example_info Creates a new polyline by joining polyline1 and polyline2. Geometries must be of the same type.
+//  */
+// export function _Join(__model__: GIModel, geometry: TId[]): TId {
+//     // --- Error Check ---
+//     // const ents_arr =  checkIDs('make.Join', 'geometry', geometry, [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]);
+//     // --- Error Check ---
+//     throw new Error('Not implemented.'); return null;
+// }

@@ -323,16 +323,36 @@ export class ToolsetComponent implements OnInit {
             return;
         }
         this.dataService.focusedInput.focus();
-        const index = this.dataService.focusedInput.selectionDirection === 'backward' ?
-            this.dataService.focusedInput.selectionStart : this.dataService.focusedInput.selectionEnd;
+        let selStart: number, selEnd: number;
+        if (this.dataService.focusedInput.selectionDirection === 'backward') {
+            selStart = this.dataService.focusedInput.selectionEnd;
+            selEnd = this.dataService.focusedInput.selectionStart;
+        } else {
+            selStart = this.dataService.focusedInput.selectionStart;
+            selEnd = this.dataService.focusedInput.selectionEnd;
+        }
+        const newSelStart = string.indexOf('(');
         this.dataService.focusedInput.value =
-            this.dataService.focusedInput.value.slice(0, index) +
+            this.dataService.focusedInput.value.slice(0, selStart) +
             string +
-            this.dataService.focusedInput.value.slice(index);
-
+            this.dataService.focusedInput.value.slice(selEnd);
         this.dataService.focusedInput.dispatchEvent(inputEvent);
-        this.dataService.focusedInput.selectionStart = index + string.length;
-        // this.dataService.focusedInput.trigger('input');
+        if (newSelStart !== -1) {
+            this.dataService.focusedInput.selectionStart = selStart + newSelStart + 1;
+            this.dataService.focusedInput.selectionEnd = selStart + string.length - 1;
+        } else {
+            this.dataService.focusedInput.selectionStart = selStart + string.length;
+            this.dataService.focusedInput.selectionEnd = selStart + string.length;
+        }
+        // const index = this.dataService.focusedInput.selectionDirection === 'backward' ?
+        //     this.dataService.focusedInput.selectionStart : this.dataService.focusedInput.selectionEnd;
+        // this.dataService.focusedInput.value =
+        //     this.dataService.focusedInput.value.slice(0, index) +
+        //     string +
+        //     this.dataService.focusedInput.value.slice(index);
+
+        // this.dataService.focusedInput.dispatchEvent(inputEvent);
+        // this.dataService.focusedInput.selectionStart = index + string.length;
     }
 
 

@@ -551,10 +551,13 @@ export class GIGeomModify {
         return Array.from(old_to_new_posis_i_map.values());
     }
     /**
-     * Unweld all vertices
+     * Unweld all vertices by cloning the positions that are in the shared.
+     * ~
+     * Attributes on the positions are  copied.
+     * ~
      * @param verts_i
      */
-    public unweldVerts(verts_i: number[]): number[] {
+    public cloneVertPositions(verts_i: number[]): number[] {
         const new_posis_i: number[] = [];
         for (const vert_i of verts_i) {
             const exist_posi_i: number = this._geom.query.navVertToPosi(vert_i);
@@ -572,6 +575,19 @@ export class GIGeomModify {
                 new_posis_i.push(new_posi_i);
             }
         }
+        // return all the new positions
+        return new_posis_i;
+    }
+    /**
+     * Weld all vertices by merging the positions that are equal, so that they become shared.
+     * ~
+     * The old positions are deleted. Attributes on those positions are discarded.
+     * ~
+     * @param verts_i
+     */
+    public mergeVertPositions(verts_i: number[]): number[] {
+        const new_posis_i: number[] = [];
+        throw new Error('Not implemented');
         // return all the new positions
         return new_posis_i;
     }

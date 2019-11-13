@@ -10,7 +10,7 @@
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EEntType, TEntTypeIdx, TRay} from '@libs/geo-info/common';
-import { getArrDepth, isColl, isPgon, isPline, isPoint, isPosi, isEmptyArr } from '@libs/geo-info/id';
+import { getArrDepth, isColl, isPgon, isPline, isPoint, isPosi, isEmptyArr, idsMake } from '@libs/geo-info/id';
 import { vecAdd, vecSum, vecDiv, vecFromTo, vecNorm, vecCross, vecSetLen, vecLen, vecDot } from '@libs/geom/vectors';
 import { checkArgTypes, checkIDs, IDcheckObj, TypeCheckObj} from '../_check_args';
 import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
@@ -512,20 +512,46 @@ function _close(__model__: GIModel, ents_arr: TEntTypeIdx[]): void {
 }
 // ================================================================================================
 /**
- * Welds entities together.
+ * Unweld vertices so that they do not share positions. The new positions that are generated are returned.
+ * ~
  * @param __model__
- * @param entities Vertex, edge, wire, face, position, point, polyline, polygon, collection.
- * @returns void
- * @example modify.Weld([polyline1,polyline2])
- * @example_info Welds both polyline1 and polyline2 together. Entities must be of the same type.
+ * @param entities Entities, a list of vertices, or entities from which vertices can be extracted.
+ * @param method Enum; the method to use for welding.
+ * @returns Entities, a list of new positions resulting from the unweld.
+ * @example mod.Unweld(polyline1)
+ * @example_info Unwelds the vertices of polyline1 from all other vertices that shares the same position.
  */
-export function _Weld(__model__: GIModel, entities: TId[]): void {
+export function Weld(__model__: GIModel, entities: TId|TId[], method: _EWeldMethod): void {
+    entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
-    // const ents_arr = checkIDs('modify.Weld', 'entities', entities, [IDcheckObj.isIDList],
-    //                          [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
-    //                           EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]);
+    const fn_name = 'modify.Weld';
+    const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
+                            [EEntType.VERT, EEntType.EDGE, EEntType.WIRE, EEntType.FACE,
+                            EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
     // --- Error Check ---
-    throw new Error('Not implemented.');
+    _weld(__model__, ents_arr, method);
+}
+export enum _EWeldMethod {
+    MERGE_POSITIONS =  'merge_positions',
+    CLONE_POSITIONS  =  'clone_positions',
+}
+export function _weld(__model__: GIModel, ents_arr: TEntTypeIdx[], method: _EWeldMethod): void {
+    // get verts_i
+    const all_verts_i: number[] = []; // count number of posis
+    for (const ents of ents_arr) {
+        const verts_i: number[] = __model__.geom.query.navAnyToVert(ents[0], ents[1]);
+        for (const vert_i of verts_i) { all_verts_i.push(vert_i); }
+    }
+    switch (method) {
+        case _EWeldMethod.CLONE_POSITIONS:
+            __model__.geom.modify.cloneVertPositions(all_verts_i);
+            break;
+        case _EWeldMethod.MERGE_POSITIONS:
+            __model__.geom.modify.cloneVertPositions(all_verts_i);
+            break;
+        default:
+            break;
+    }
 }
 // ================================================================================================
 /**

@@ -10,7 +10,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EAttribNames, TId, EEntType, Txyz, TEntTypeIdx } from '@libs/geo-info/common';
 import { isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi,
-    isEdge, isFace, idsMake, idIndicies, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
+    isEdge, isFace, idsMake, idIndicies, getArrDepth, isEmptyArr, isWire } from '@libs/geo-info/id';
 import { __merge__} from '../_model';
 import { _model } from '..';
 import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd, vecFromTo } from '@libs/geom/vectors';
@@ -82,7 +82,19 @@ function _copyGeomPosis(__model__: GIModel, ents_arr: TEntTypeIdx | TEntTypeIdx[
     // const all_new_posis_i: number[] = Array.from(old_to_new_posis_i_map.values());
     // return all_new_posis_i.map( posi_i => [EEntType.POSI, posi_i] ) as TEntTypeIdx[];
 }
-
+// Divide edge modelling operation
+export enum _EDivisorMethod {
+    BY_NUMBER =  'by_number',
+    BY_LENGTH  =  'by_length',
+    BY_MAX_LENGTH  =  'by_max_length',
+    BY_MIN_LENGTH  =  'by_min_length'
+}
+export enum _EExtrudeMethod {
+    QUADS =  'quads',
+    STRINGERS = 'stringers',
+    RIBS = 'ribs',
+    COPIES = 'copies'
+}
 // ================================================================================================
 /**
  * Adds one or more new position to the model.
@@ -806,12 +818,6 @@ export function Extrude(__model__: GIModel, entities: TId|TId[],
         return idsMake(new_ents_arr) as TId|TId[];
     }
 }
-export enum _EExtrudeMethod {
-    QUADS =  'quads',
-    STRINGERS = 'stringers',
-    RIBS = 'ribs',
-    COPIES = 'copies'
-}
 function _extrudeColl(__model__: GIModel, index: number,
         extrude_vec: Txyz, divisions: number, method: _EExtrudeMethod): TEntTypeIdx[] {
     const points_i: number[] = __model__.geom.query.navCollToPoint(index);
@@ -1048,6 +1054,69 @@ function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
 }
 // ================================================================================================
 /**
+ * Sweeps a cross section wire along a backbone wire.
+ * ~
+ * @param __model__
+ * @param entities Wires, or entities from which wires can be extracted.
+ * @param xsection Cross section wire to sweep, or entity from which a wire can be extracted.
+ * @param divisor Segment length or number of segments.
+ * @param div_method Enum, select the method for dividing entities along the sweep direction.
+ * @param sweep_method Enum, select the method for sweeping.
+ */
+export function Sweep(__model__: GIModel, entities: TId|TId[], xsextion: TId, divisor: number, 
+        div_method: _EDivisorMethod, sweep_method: _EExtrudeMethod): TId[] {
+    entities = arrMakeFlat(entities) as TId[];
+    if (isEmptyArr(entities)) { return []; }
+    // --- Error Check ---
+    const fn_name = 'make.Sweep';
+    const backbone_ents: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+    const xsection_ent: TEntTypeIdx = checkIDs(fn_name, 'xsextion', xsextion,
+        [IDcheckObj.isID], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx;
+    checkArgTypes(fn_name, 'divisor', divisor, [TypeCheckObj.isNumber]);
+    // --- Error Check ---
+    // the xsection
+    const [xsection_ent_type, xsection_index]: TEntTypeIdx = xsection_ent;
+    let xsection_wire_i: number = null;
+    if (isWire(xsection_ent_type)) {
+        xsection_wire_i = xsection_index;
+    } else {
+        const xsection_wires_i: number[] = __model__.geom.query.navAnyToWire(xsection_ent_type, xsection_index);
+        xsection_wire_i = xsection_wires_i[0]; // select the first wire that is found
+    }
+    // get all the wires and put them into an array
+    const backbone_wires_i: number[] = [];
+    for (const [ent_type, index] of backbone_ents) {
+        if (isWire(ent_type)) {
+            backbone_wires_i.push(index);
+        } else {
+            const ent_wires_i: number[] = __model__.geom.query.navAnyToWire(ent_type, index);
+            backbone_wires_i.push(...ent_wires_i);
+        }
+    }
+    // do the sweep
+    const new_ents: TEntTypeIdx[] = _sweep(__model__, backbone_wires_i, xsection_wire_i, divisor, div_method, sweep_method);
+    return idsMake(new_ents) as TId[];
+}
+function _sweep(__model__: GIModel, backbone_wires_i: number|number[], xsection_wire_i: number, divisor: number,
+        div_method: _EDivisorMethod, sweep_method: _EExtrudeMethod): TEntTypeIdx[] {
+    if (!Array.isArray(backbone_wires_i)) {
+        // TODO
+        throw new Error('Not implemented.');
+        // TODO
+    } else {
+        const new_ents: TEntTypeIdx[] = [];
+        for (const wire_i of backbone_wires_i) {
+            const wire_new_ents: TEntTypeIdx[] = _sweep(__model__, wire_i, xsection_wire_i, divisor, div_method, sweep_method);
+            for (const wire_new_ent of wire_new_ents) {
+                new_ents.push(wire_new_ent);
+            }
+        }
+        return new_ents;
+    }
+}
+// ================================================================================================
+/**
  * Divides edges into a set of shorter edges.
  * ~
  * If the 'by_number' method is selected, then each edge is divided into a fixed number of equal length shorter edges.
@@ -1067,7 +1136,7 @@ function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
  * @example segments2 = make.Divide(edge1, 5, by_length)
  * @example_info If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
  */
-export function Divide(__model__: GIModel, entities: TId|TId[], divisor: number, method: _EDivideMethod): TId[] {
+export function Divide(__model__: GIModel, entities: TId|TId[], divisor: number, method: _EDivisorMethod): TId[] {
     entities = arrMakeFlat(entities) as TId[];
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
@@ -1092,7 +1161,7 @@ export function Divide(__model__: GIModel, entities: TId|TId[], divisor: number,
     // return the ids
     return idsMake(new_ents_arr) as TId[];
 }
-function _divide(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], divisor: number, method: _EDivideMethod): TEntTypeIdx[] {
+function _divide(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], divisor: number, method: _EDivisorMethod): TEntTypeIdx[] {
     if (getArrDepth(ents_arr) === 1) {
         const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
         let exist_edges_i: number[];
@@ -1111,23 +1180,16 @@ function _divide(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], diviso
         return [].concat(...(ents_arr as TEntTypeIdx[]).map(one_edge => _divide(__model__, one_edge, divisor, method)));
     }
 }
-// Divide edge modelling operation
-export enum _EDivideMethod {
-    BY_NUMBER =  'by_number',
-    BY_LENGTH  =  'by_length',
-    BY_MAX_LENGTH  =  'by_max_length',
-    BY_MIN_LENGTH  =  'by_min_length'
-}
-function _divideEdge(__model__: GIModel, edge_i: number, divisor: number, method: _EDivideMethod): number[] {
+function _divideEdge(__model__: GIModel, edge_i: number, divisor: number, method: _EDivisorMethod): number[] {
     const posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.EDGE, edge_i);
     const start = __model__.attribs.query.getPosiCoords(posis_i[0]);
     const end = __model__.attribs.query.getPosiCoords(posis_i[1]);
     let new_xyzs: Txyz[];
-    if (method === _EDivideMethod.BY_NUMBER) {
+    if (method === _EDivisorMethod.BY_NUMBER) {
         new_xyzs = interpByNum(start, end, divisor - 1);
-    } else if (method === _EDivideMethod.BY_LENGTH) {
+    } else if (method === _EDivisorMethod.BY_LENGTH) {
         new_xyzs = interpByLen(start, end, divisor);
-    } else if (method === _EDivideMethod.BY_MAX_LENGTH) {
+    } else if (method === _EDivisorMethod.BY_MAX_LENGTH) {
         const len: number = distance(start, end);
         if (divisor === 0) {
             new_xyzs = [];
@@ -1159,41 +1221,9 @@ function _divideEdge(__model__: GIModel, edge_i: number, divisor: number, method
     return new_edges_i;
 }
 // ================================================================================================
-/**
- * Unweld vertices so that they do not share positions. The new positions that are generated are returned.
- * ~
- * @param __model__
- * @param entities Entities, a list of vertices, or entities from which vertices can be extracted.
- * @param method Enum; the method to use for unweld.
- * @returns Entities, a list of new positions resulting from the unweld.
- * @example mod.Unweld(polyline1)
- * @example_info Unwelds the vertices of polyline1 from all other vertices that shares the same position.
- */
-export function Unweld(__model__: GIModel, entities: TId|TId[]): TId[] {
-    if (isEmptyArr(entities)) { return []; }
-    // --- Error Check ---
-    let ents_arr = checkIDs('modify.Unweld', 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
-                            [EEntType.VERT, EEntType.EDGE, EEntType.WIRE, EEntType.FACE,
-                            EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]);
-    // --- Error Check ---
-    if (!Array.isArray(ents_arr[0])) {
-        ents_arr = [ents_arr] as TEntTypeIdx[];
-    }
-    // get verts_i
-    const all_verts_i: number[] = []; // count number of posis
-    for (const ents of ents_arr) {
-        const verts_i: number[] = __model__.geom.query.navAnyToVert(ents[0], ents[1]);
-        for (const vert_i of verts_i) { all_verts_i.push(vert_i); }
-    }
-    const new_posis_i: number [] = __model__.geom.modify.unweldVerts(all_verts_i);
-    return new_posis_i.map( posi_i => idsMake([EEntType.POSI, posi_i]) ) as TId[];
-}
-// ================================================================================================
+
 // Explode
 
-// Pipe
-
-// Offset
 
 
 

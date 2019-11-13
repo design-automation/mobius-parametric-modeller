@@ -33,12 +33,6 @@ export {calc};
 import * as intersect from './basic/intersect';
 export {intersect};
 
-import * as analyze from './basic/analyze';
-export {analyze};
-
-import * as visualize from './basic/visualize';
-export {visualize};
-
 import * as collection from './basic/collection';
 export {collection};
 
@@ -47,6 +41,12 @@ export {list};
 
 import * as dict from './basic/dict';
 export {dict};
+
+import * as analyze from './basic/analyze';
+export {analyze};
+
+import * as visualize from './basic/visualize';
+export {visualize};
 
 import * as material from './basic/material';
 export {material};

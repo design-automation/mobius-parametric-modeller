@@ -19,6 +19,71 @@ import { distance } from '@libs/geom/distance';
 import { arrMakeFlat } from '@libs/util/arrs';
 
 // ================================================================================================
+// Utility functions
+function _copyGeom(__model__: GIModel,
+    ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][], copy_attributes: boolean): TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][] {
+    const depth: number = getArrDepth(ents_arr);
+    if (depth === 1) {
+        const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
+        if (isColl(ent_type)) {
+            const coll_i: number = __model__.geom.add.copyColls(index, copy_attributes) as number;
+            return [ent_type, coll_i];
+        } else if (isPgon(ent_type)) {
+            const obj_i: number = __model__.geom.add.copyPgons(index, copy_attributes) as number;
+            return [ent_type, obj_i];
+        } else if (isPline(ent_type)) {
+            const obj_i: number = __model__.geom.add.copyPlines(index, copy_attributes) as number;
+            return [ent_type, obj_i];
+        } else if (isPoint(ent_type)) {
+            const obj_i: number = __model__.geom.add.copyPoints(index, copy_attributes) as number;
+            return [ent_type, obj_i];
+        } else if (isPosi(ent_type)) {
+            const posi_i: number = __model__.geom.add.copyPosis(index, copy_attributes) as number;
+            return [ent_type, posi_i];
+        }
+    } else if (depth === 2) {
+        ents_arr = ents_arr as TEntTypeIdx[];
+        return ents_arr.map(ents_arr_item => _copyGeom(__model__, ents_arr_item, copy_attributes)) as TEntTypeIdx[];
+    } else { // depth > 2
+        ents_arr = ents_arr as TEntTypeIdx[][];
+        return ents_arr.map(ents_arr_item => _copyGeom(__model__, ents_arr_item, copy_attributes)) as TEntTypeIdx[][];
+    }
+}
+function _copyGeomPosis(__model__: GIModel, ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][],
+        copy_attributes: boolean, vector: Txyz): void {
+    const depth: number = getArrDepth(ents_arr);
+    if (depth === 1) {
+        ents_arr = [ents_arr] as TEntTypeIdx[];
+    } else if (depth > 2) {
+        // @ts-ignore
+        ents_arr = ents_arr.flat(depth - 2) as TEntTypeIdx[];
+    }
+    // create the new positions
+    const old_to_new_posis_i_map: Map<number, number> = new Map(); // count number of posis
+    for (const ent_arr of ents_arr) {
+        const [ent_type, index]: TEntTypeIdx = ent_arr as TEntTypeIdx;
+        if (!isPosi(ent_type)) { // obj or coll
+            const old_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
+            const ent_new_posis_i: number[] = [];
+            for (const old_posi_i of old_posis_i) {
+                let new_posi_i: number;
+                if (old_to_new_posis_i_map.has(old_posi_i)) {
+                    new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
+                } else {
+                    new_posi_i = __model__.geom.add.copyMovePosis(old_posi_i, vector, copy_attributes) as number;
+                    old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
+                }
+                ent_new_posis_i.push(new_posi_i);
+            }
+            __model__.geom.modify.replacePosis(ent_type, index, ent_new_posis_i);
+        }
+    }
+    // return all the new points
+    // const all_new_posis_i: number[] = Array.from(old_to_new_posis_i_map.values());
+    // return all_new_posis_i.map( posi_i => [EEntType.POSI, posi_i] ) as TEntTypeIdx[];
+}
+
+// ================================================================================================
 /**
  * Adds one or more new position to the model.
  *
@@ -330,87 +395,28 @@ function _tin(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEnt
  *
  * @param __model__
  * @param entities Entity or lists of entities to be copied. Entities can be positions, points, polylines, polygons and collections.
+ * @param vector A vector to move the entities by after copying, can be `null`.
  * @returns Entities, the copied entity or a list of copied entities.
  * @example copies = make.Copy([position1,polyine1,polygon1])
  * @example_info Creates a copy of position1, polyine1, and polygon1.
  */
-export function Copy(__model__: GIModel, entities: TId|TId[]|TId[][]): TId|TId[]|TId[][] {
+export function Copy(__model__: GIModel, entities: TId|TId[]|TId[][], vector: Txyz): TId|TId[]|TId[][] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
-    const ents_arr = checkIDs('make.Copy', 'entities', entities,
+    const fn_name = 'make.Copy';
+    const ents_arr = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, , IDcheckObj.isIDList_list],
         [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
+    checkArgTypes(fn_name, 'move_vector', vector, [TypeCheckObj.isVector, TypeCheckObj.isNull]);
     // --- Error Check ---
     const bool_copy_attribs = true;
     // copy the list of entities
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = _copyGeom(__model__, ents_arr, bool_copy_attribs);
     // copy the positions that belong to the list of entities
-    _copyGeomPosis(__model__, new_ents_arr, bool_copy_attribs);
+    _copyGeomPosis(__model__, new_ents_arr, bool_copy_attribs, vector);
     // return only the new entities
     return idsMake(new_ents_arr) as TId|TId[]|TId[][];
 }
-function _copyGeom(__model__: GIModel,
-    ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][], copy_attributes: boolean): TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][] {
-    const depth: number = getArrDepth(ents_arr);
-    if (depth === 1) {
-        const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
-        if (isColl(ent_type)) {
-            const coll_i: number = __model__.geom.add.copyColls(index, copy_attributes) as number;
-            return [ent_type, coll_i];
-        } else if (isPgon(ent_type)) {
-            const obj_i: number = __model__.geom.add.copyPgons(index, copy_attributes) as number;
-            return [ent_type, obj_i];
-        } else if (isPline(ent_type)) {
-            const obj_i: number = __model__.geom.add.copyPlines(index, copy_attributes) as number;
-            return [ent_type, obj_i];
-        } else if (isPoint(ent_type)) {
-            const obj_i: number = __model__.geom.add.copyPoints(index, copy_attributes) as number;
-            return [ent_type, obj_i];
-        } else if (isPosi(ent_type)) {
-            const posi_i: number = __model__.geom.add.copyPosis(index, copy_attributes) as number;
-            return [ent_type, posi_i];
-        }
-    } else if (depth === 2) {
-        ents_arr = ents_arr as TEntTypeIdx[];
-        return ents_arr.map(ents_arr_item => _copyGeom(__model__, ents_arr_item, copy_attributes)) as TEntTypeIdx[];
-    } else { // depth > 2
-        ents_arr = ents_arr as TEntTypeIdx[][];
-        return ents_arr.map(ents_arr_item => _copyGeom(__model__, ents_arr_item, copy_attributes)) as TEntTypeIdx[][];
-    }
-}
-function _copyGeomPosis(__model__: GIModel, ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][], copy_attributes: boolean): void {
-    const depth: number = getArrDepth(ents_arr);
-    if (depth === 1) {
-        ents_arr = [ents_arr] as TEntTypeIdx[];
-    } else if (depth > 2) {
-        // @ts-ignore
-        ents_arr = ents_arr.flat(depth - 2) as TEntTypeIdx[];
-    }
-    // create the new positions
-    const old_to_new_posis_i_map: Map<number, number> = new Map(); // count number of posis
-    for (const ent_arr of ents_arr) {
-        const [ent_type, index]: TEntTypeIdx = ent_arr as TEntTypeIdx;
-        if (!isPosi(ent_type)) { // obj or coll
-            const old_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
-            const ent_new_posis_i: number[] = [];
-            for (const old_posi_i of old_posis_i) {
-                let new_posi_i: number;
-                if (old_to_new_posis_i_map.has(old_posi_i)) {
-                    new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
-                } else {
-                    new_posi_i = __model__.geom.add.copyPosis(old_posi_i, copy_attributes) as number;
-                    old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
-                }
-                ent_new_posis_i.push(new_posi_i);
-            }
-            __model__.geom.modify.replacePosis(ent_type, index, ent_new_posis_i);
-        }
-    }
-    // return all the new points
-    // const all_new_posis_i: number[] = Array.from(old_to_new_posis_i_map.values());
-    // return all_new_posis_i.map( posi_i => [EEntType.POSI, posi_i] ) as TEntTypeIdx[];
-}
-
 // ================================================================================================
 /**
  * Makes one or more holes in a polygon.
@@ -715,7 +721,7 @@ function _loftCopies(__model__: GIModel, ents_arr: TEntTypeIdx[], divisions: num
             }
             for (let j = 1; j < divisions; j++) {
                 const lofted_ent_arr: TEntTypeIdx = _copyGeom(__model__, ents_arr[i], true) as TEntTypeIdx;
-                _copyGeomPosis(__model__, lofted_ent_arr, true);
+                _copyGeomPosis(__model__, lofted_ent_arr, true, null);
                 const [lofted_ent_type, lofted_ent_i]: [number, number] = lofted_ent_arr;
                 const new_posis_i: number[] = __model__.geom.query.navAnyToPosi(lofted_ent_type, lofted_ent_i);
                 for (let k = 0; k < num_posis; k++) {
@@ -975,7 +981,7 @@ function _extrudeCopies(__model__: GIModel, ent_type: number, index: number, ext
     // make the copies
     for (let i = 1; i < divisions + 1; i++) {
         const extruded_ent_arr: TEntTypeIdx = _copyGeom(__model__, [ent_type, index], true) as TEntTypeIdx;
-        _copyGeomPosis(__model__, extruded_ent_arr, true);
+        _copyGeomPosis(__model__, extruded_ent_arr, true, null);
         const [extruded_ent_type, extruded_ent_i]: [number, number] = extruded_ent_arr;
         const new_posis_i: number[] = __model__.geom.query.navAnyToPosi(extruded_ent_type, extruded_ent_i);
         for (let j = 0; j < new_posis_i.length; j++) {

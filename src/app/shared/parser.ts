@@ -320,7 +320,7 @@ export function parseArgument(str: string): {'error'?: string, 'vars'?: string[]
     if (typeof comps === 'string') {
         return {'error': comps};
     }
-    const vars: string[] = [];
+    let vars: string[] = [];
     let newString = '';
     let jsString = '';
     const check = analyzeComp(comps, 0, vars);
@@ -331,6 +331,25 @@ export function parseArgument(str: string): {'error'?: string, 'vars'?: string[]
     newString += check.str;
     jsString += check.jsStr;
     if (check.i !== comps.length - 1) {
+        if (comps[check.i + 1].value === ',') {
+            const newComps = JSON.parse(JSON.stringify(comps));
+            newComps.unshift({'type': strType.OTHER, 'value': '['});
+            newComps.push({'type': strType.OTHER, 'value': ']'});
+            vars = [];
+            const checkTest = analyzeComp(newComps, 0, vars);
+            if (!checkTest.error) {
+                return {'vars': vars, 'str': checkTest.str.trim(), 'jsStr': checkTest.jsStr.trim()};
+            }
+        } else if (comps[check.i + 1].value === ':') {
+            const newComps = JSON.parse(JSON.stringify(comps));
+            newComps.unshift({'type': strType.OTHER, 'value': '{'});
+            newComps.push({'type': strType.OTHER, 'value': '}'});
+            vars = [];
+            const checkTest = analyzeComp(newComps, 0, vars);
+            if (!checkTest.error) {
+                return {'vars': vars, 'str': checkTest.str.trim(), 'jsStr': checkTest.jsStr.trim()};
+            }
+        }
         return {'error': `Error: Invalid "${comps[check.i + 1].value}"` +
         `at: ... ${comps.slice(check.i + 1).map(cp => cp.value).join(' ')}`};
     }

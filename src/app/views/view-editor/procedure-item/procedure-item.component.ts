@@ -238,7 +238,7 @@ export class ProcedureItemComponent implements OnDestroy {
         if (!check) { return false; }
         if (this.data.type !== ProcedureTypes.MainFunction) { return true; }
         const returns = this.ModuleDoc[this.data.meta.module][this.data.meta.name].returns;
-        if (returns.length < 5) { return false; }
+        if (!returns || returns.length < 5) { return false; }
         if (returns.slice(0, 5).toLowerCase() === 'entit') {return true; }
         return false;
     }

@@ -1,8 +1,8 @@
-import { EEntType, TTri, TVert, TEdge, TWire, TFace,
-    TColl, IGeomData, TPoint, TPline, TPgon, Txyz, IGeomArrays, IGeomCopy, TAttribDataTypes, IGeomPack } from './common';
+import { EEntType, TTri, TFace, Txyz, IGeomArrays, TAttribDataTypes } from './common';
 import { triangulate } from '../triangulate/triangulate';
 import { GIGeom } from './GIGeom';
 import { arrRem } from '../util/arrs';
+import { vecAdd } from '../geom/vectors';
 
 /**
  * Class for geometry.
@@ -144,19 +144,16 @@ export class GIGeomAdd {
         if (!Array.isArray(posis_i)) {
             const posi_i: number = posis_i as number;
             const xyz: Txyz = this._geom.model.attribs.query.getPosiCoords(posi_i);
-            if (move_vector !== null) {
-                xyz[0] += move_vector[0];
-                xyz[1] += move_vector[1];
-                xyz[2] += move_vector[2];
-            }
             const new_posi_i: number = this.addPosi();
-            this._geom.model.attribs.add.setPosiCoords(new_posi_i, xyz);
+            this._geom.model.attribs.add.setPosiCoords(new_posi_i, vecAdd(xyz, move_vector));
             if (copy_attribs) {
                 const attrib_names: string[] = this._geom.model.attribs.query.getAttribNames(EEntType.POSI);
                 for (const attrib_name of attrib_names) {
-                    const value: TAttribDataTypes =
-                        this._geom.model.attribs.query.getAttribVal(EEntType.POSI, attrib_name, posis_i) as TAttribDataTypes;
-                    this._geom.model.attribs.add.setAttribVal(EEntType.POSI, new_posi_i, attrib_name, value);
+                    if (attrib_name !== 'xyz') {
+                        const value: TAttribDataTypes =
+                            this._geom.model.attribs.query.getAttribVal(EEntType.POSI, attrib_name, posis_i) as TAttribDataTypes;
+                        this._geom.model.attribs.add.setAttribVal(EEntType.POSI, new_posi_i, attrib_name, value);
+                    }
                 }
             }
             return new_posi_i;

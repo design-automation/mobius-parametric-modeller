@@ -66,7 +66,21 @@ function _copyGeomPosis(__model__: GIModel, ents_arr: TEntTypeIdx | TEntTypeIdx[
     const old_to_new_posis_i_map: Map<number, number> = new Map(); // count number of posis
     for (const ent_arr of ents_arr) {
         const [ent_type, index]: TEntTypeIdx = ent_arr as TEntTypeIdx;
-        if (!isPosi(ent_type)) { // obj or coll
+        // something may not be right here
+        // if you copy a pgon + posi, if you process the pgon first you wil make a copy of the posis
+        // but the posi may already be copied by the _copyGeom function, then we get two copies of that posi
+        // I think this whole copy-move function need to to be moved to the GI library, can also make it more efficient
+        if (isPosi(ent_type) && vector !== null) { // move the posi, no need to copy
+            const old_posi_i: number = index;
+            let new_posi_i: number;
+            if (old_to_new_posis_i_map.has(old_posi_i)) {
+                new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
+            } else {
+                const xyz: Txyz = __model__.attribs.query.getPosiCoords(old_posi_i);
+                __model__.attribs.add.setPosiCoords(old_posi_i, vecAdd(xyz, vector));
+                old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
+            }
+        } else { // obj or coll
             const old_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
             const ent_new_posis_i: number[] = [];
             for (const old_posi_i of old_posis_i) {
@@ -423,7 +437,7 @@ export function Copy(__model__: GIModel, entities: TId|TId[]|TId[][], vector: Tx
     const ents_arr = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, , IDcheckObj.isIDList_list],
         [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
-    checkArgTypes(fn_name, 'move_vector', vector, [TypeCheckObj.isVector, TypeCheckObj.isNull]);
+    checkArgTypes(fn_name, 'vector', vector, [TypeCheckObj.isVector, TypeCheckObj.isNull]);
     // --- Error Check ---
     const bool_copy_attribs = true;
     // copy the list of entities
@@ -1063,13 +1077,11 @@ function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
  * @param __model__
  * @param entities Wires, or entities from which wires can be extracted.
  * @param xsection Cross section wire to sweep, or entity from which a wire can be extracted.
- * @param divisor Segment length or number of segments.
- * @param div_method Enum, select the method for dividing entities along the sweep direction.
- * @param sweep_method Enum, select the method for sweeping.
+ * @param divisions Segment length or number of segments.
+ * @param method Enum, select the method for sweeping.
  * @returns Entities, a list of new polygons or polylines resulting from the sweep.
  */
-export function Sweep(__model__: GIModel, entities: TId|TId[], xsextion: TId, divisor: number,
-        div_method: _EDivisorMethod, sweep_method: _EExtrudeMethod): TId[] {
+export function Sweep(__model__: GIModel, entities: TId|TId[], xsextion: TId, divisions: number, method: _EExtrudeMethod): TId[] {
     entities = arrMakeFlat(entities) as TId[];
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
@@ -1078,8 +1090,8 @@ export function Sweep(__model__: GIModel, entities: TId|TId[], xsextion: TId, di
         [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
     const xsection_ent: TEntTypeIdx = checkIDs(fn_name, 'xsextion', xsextion,
         [IDcheckObj.isID], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx;
-    checkArgTypes(fn_name, 'divisor', divisor, [TypeCheckObj.isNumber]);
-    if (divisor === 0) {
+    checkArgTypes(fn_name, 'divisions', divisions, [TypeCheckObj.isInt]);
+    if (divisions === 0) {
         throw new Error(fn_name + ' : Divisor cannot be zero.');
     }
     // --- Error Check ---
@@ -1103,29 +1115,29 @@ export function Sweep(__model__: GIModel, entities: TId|TId[], xsextion: TId, di
         }
     }
     // do the sweep
-    const new_ents: TEntTypeIdx[] = _sweep(__model__, backbone_wires_i, xsection_wire_i, divisor, div_method, sweep_method);
+    const new_ents: TEntTypeIdx[] = _sweep(__model__, backbone_wires_i, xsection_wire_i, divisions, method);
     return idsMake(new_ents) as TId[];
 }
-function _sweep(__model__: GIModel, backbone_wires_i: number|number[], xsection_wire_i: number, divisor: number,
-        div_method: _EDivisorMethod, sweep_method: _EExtrudeMethod): TEntTypeIdx[] {
+function _sweep(__model__: GIModel, backbone_wires_i: number|number[], xsection_wire_i: number, 
+        divisions: number, method: _EExtrudeMethod): TEntTypeIdx[] {
     if (!Array.isArray(backbone_wires_i)) {
         // extrude edges -> polygons
-        switch (sweep_method) {
+        switch (method) {
             case _EExtrudeMethod.QUADS:
-                return _sweepQuads(__model__, backbone_wires_i, xsection_wire_i, divisor, div_method);
+                return _sweepQuads(__model__, backbone_wires_i, xsection_wire_i, divisions);
             case _EExtrudeMethod.STRINGERS:
-                return _sweepStringers(__model__, backbone_wires_i, xsection_wire_i, divisor, div_method);
+                return _sweepStringers(__model__, backbone_wires_i, xsection_wire_i, divisions);
             case _EExtrudeMethod.RIBS:
-                return _sweepRibs(__model__, backbone_wires_i, xsection_wire_i, divisor, div_method);
+                return _sweepRibs(__model__, backbone_wires_i, xsection_wire_i, divisions);
             case _EExtrudeMethod.COPIES:
-                return _sweepCopies(__model__, backbone_wires_i, xsection_wire_i, divisor, div_method);
+                return _sweepCopies(__model__, backbone_wires_i, xsection_wire_i, divisions);
             default:
                 throw new Error('Extrude method not recognised.');
         }
     } else {
         const new_ents: TEntTypeIdx[] = [];
         for (const wire_i of backbone_wires_i) {
-            const wire_new_ents: TEntTypeIdx[] = _sweep(__model__, wire_i, xsection_wire_i, divisor, div_method, sweep_method);
+            const wire_new_ents: TEntTypeIdx[] = _sweep(__model__, wire_i, xsection_wire_i, divisions, method);
             for (const wire_new_ent of wire_new_ents) {
                 new_ents.push(wire_new_ent);
             }
@@ -1133,9 +1145,8 @@ function _sweep(__model__: GIModel, backbone_wires_i: number|number[], xsection_
         return new_ents;
     }
 }
-function _sweepQuads(__model__: GIModel, backbone_wire_i: number, xsection_wire_i: number,
-        divisor: number, div_method: _EDivisorMethod): TEntTypeIdx[] {
-    const strips_posis_i: number[][] = _sweepPosis(__model__, backbone_wire_i, xsection_wire_i, divisor, div_method);
+function _sweepQuads(__model__: GIModel, backbone_wire_i: number, xsection_wire_i: number, divisions: number): TEntTypeIdx[] {
+    const strips_posis_i: number[][] = _sweepPosis(__model__, backbone_wire_i, xsection_wire_i, divisions);
     const backbone_is_closed: boolean = __model__.geom.query.istWireClosed(backbone_wire_i);
     const xsection_is_closed: boolean = __model__.geom.query.istWireClosed(xsection_wire_i);
     // add row if backbone_is_closed
@@ -1164,10 +1175,9 @@ function _sweepQuads(__model__: GIModel, backbone_wire_i: number, xsection_wire_
     }
     return new_pgons;
 }
-function _sweepStringers(__model__: GIModel, backbone_wire_i: number, xsection_wire_i: number,
-        divisor: number, div_method: _EDivisorMethod): TEntTypeIdx[] {
+function _sweepStringers(__model__: GIModel, backbone_wire_i: number, xsection_wire_i: number, divisions: number): TEntTypeIdx[] {
     const backbone_is_closed: boolean = __model__.geom.query.istWireClosed(backbone_wire_i);
-    const ribs_posis_i: number[][] = _sweepPosis(__model__, backbone_wire_i, xsection_wire_i, divisor, div_method);
+    const ribs_posis_i: number[][] = _sweepPosis(__model__, backbone_wire_i, xsection_wire_i, divisions);
     const stringers_posis_i: number[][] = listZip(ribs_posis_i);
     const plines: TEntTypeIdx[] = [];
     for (const stringer_posis_i of stringers_posis_i) {
@@ -1176,10 +1186,9 @@ function _sweepStringers(__model__: GIModel, backbone_wire_i: number, xsection_w
     }
     return plines;
 }
-function _sweepRibs(__model__: GIModel, backbone_wire_i: number, xsection_wire_i: number,
-        divisor: number, div_method: _EDivisorMethod): TEntTypeIdx[] {
+function _sweepRibs(__model__: GIModel, backbone_wire_i: number, xsection_wire_i: number, divisions: number): TEntTypeIdx[] {
     const xsection_is_closed: boolean = __model__.geom.query.istWireClosed(xsection_wire_i);
-    const ribs_posis_i: number[][] = _sweepPosis(__model__, backbone_wire_i, xsection_wire_i, divisor, div_method);
+    const ribs_posis_i: number[][] = _sweepPosis(__model__, backbone_wire_i, xsection_wire_i, divisions);
     const plines: TEntTypeIdx[] = [];
     for (const rib_posis_i of ribs_posis_i) {
         const pline_i: number = __model__.geom.add.addPline(rib_posis_i, xsection_is_closed);
@@ -1187,15 +1196,13 @@ function _sweepRibs(__model__: GIModel, backbone_wire_i: number, xsection_wire_i
     }
     return plines;
 }
-function _sweepCopies(__model__: GIModel, backbone_wire_i: number, xsection_wire_i: number,
-        divisor: number, div_method: _EDivisorMethod): TEntTypeIdx[] {
-    const posis_i: number[][] = _sweepPosis(__model__, backbone_wire_i, xsection_wire_i, divisor, div_method);
+function _sweepCopies(__model__: GIModel, backbone_wire_i: number, xsection_wire_i: number, divisions: number): TEntTypeIdx[] {
+    const posis_i: number[][] = _sweepPosis(__model__, backbone_wire_i, xsection_wire_i, divisions);
     // TODO
     throw new Error('Not implemented');
     // TODO
 }
-function _sweepPosis(__model__: GIModel, backbone_wire_i: number, xsection_wire_i: number,
-        divisor: number, div_method: _EDivisorMethod): number[][] {
+function _sweepPosis(__model__: GIModel, backbone_wire_i: number, xsection_wire_i: number, divisions: number): number[][] {
     // get the xyzs of the cross section
     const xsextion_xyzs: Txyz[] = __model__.attribs.query.getEntCoords(EEntType.WIRE, xsection_wire_i);
     // get the xyzs of the backbone
@@ -1203,8 +1210,8 @@ function _sweepPosis(__model__: GIModel, backbone_wire_i: number, xsection_wire_
     const wire_is_closed: boolean =  __model__.geom.query.istWireClosed(backbone_wire_i);
     const wire_xyzs: Txyz[] = __model__.attribs.query.getEntCoords(EEntType.WIRE, backbone_wire_i);
     let plane_xyzs: Txyz[] = [];
-    // if not divisor === 1 and BY_NUMBER, then we need to add xyzs
-    if (divisor === 1 && div_method === _EDivisorMethod.BY_NUMBER) {
+    // if not divisions is not 1, then we need to add xyzs
+    if (divisions === 1) {
         plane_xyzs = wire_xyzs;
     } else {
         if (wire_is_closed) {
@@ -1214,31 +1221,10 @@ function _sweepPosis(__model__: GIModel, backbone_wire_i: number, xsection_wire_
             const xyz0: Txyz = wire_xyzs[i];
             const xyz1: Txyz = wire_xyzs[i + 1];
             const vec: Txyz = vecFromTo(xyz0, xyz1);
-            const vec_len: number = vecLen(vec);
-            let vec_div: Txyz = null;
-            let num_segs: number = null;
-            switch (div_method) {
-                case _EDivisorMethod.BY_NUMBER:
-                    num_segs = Math.round(divisor);
-                    vec_div = vecDiv(vec, num_segs);
-                    break;
-                case _EDivisorMethod.BY_LENGTH:
-                    vec_div = vecSetLen(vec, divisor);
-                    num_segs = Math.ceil(vec_len / divisor);
-                    break;
-                case _EDivisorMethod.BY_MAX_LENGTH:
-                    num_segs = Math.ceil(vec_len / divisor);
-                    vec_div = vecDiv(vec, num_segs);
-                    break;
-                case _EDivisorMethod.BY_MIN_LENGTH:
-                    num_segs = Math.floor(vec_len / divisor);
-                    vec_div = vecDiv(vec, num_segs);
-                    break;
-                default:
-                    throw new Error('make.Sweep: Divisor method not recognised.');
-            }
+            const vec_div: Txyz = vecDiv(vec, divisions);
+            // create additional xyzs for planes
             plane_xyzs.push(xyz0);
-            for (let j = 1; j < num_segs; j++) {
+            for (let j = 1; j < divisions; j++) {
                 plane_xyzs.push(vecAdd(xyz0, vecMult(vec_div, j)));
             }
         }

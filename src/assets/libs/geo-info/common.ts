@@ -149,6 +149,13 @@ export enum EAttribNames {
     MATERIAL = 'material'
 }
 
+// Wire Type
+export enum EWireType {
+    PLINE =  'pline',
+    PGON =  'pgon',
+    PGON_HOLE =   'pgon_hole'
+}
+
 /**
  * The types of operators that can be used in a filter.
  */

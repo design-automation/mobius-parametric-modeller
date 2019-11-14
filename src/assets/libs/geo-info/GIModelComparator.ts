@@ -7,8 +7,7 @@ export class GIModelComparator {
     private _model: GIModel;
 
    /**
-     * Creates an object to store the attribute data.
-     * @param model The JSON data
+     * Constructor
      */
     constructor(model: GIModel) {
         this._model = model;
@@ -30,7 +29,7 @@ export class GIModelComparator {
         const result: {percent: number, score: number, total: number, comment: any} = {percent: 0, score: 0, total: 0, comment: []};
         // if check_geom_equality, then check we have exact same number of positions, objects, and colletions
         if (check_geom_equality) {
-            this._model.geom.compare(model, result);
+            this._model.geom.compare.compare(model, result);
         }
         // check that the attributes in this model all exist in the other model
         // at the same time get a map of all attribute names in this model
@@ -122,9 +121,9 @@ export class GIModelComparator {
      */
     private normOpenWires(trans_padding: [Txyz, number[]]): void {
         for (const wire_i of this._model.geom.query.getEnts(EEntType.WIRE, false)) {
-            if (!this._model.geom.query.istWireClosed(wire_i)) {
+            if (!this._model.geom.query.isWireClosed(wire_i)) {
                 // an open wire can only start at the first or last vertex, but the order can be reversed
-                const verts_i: number[] = this._model.geom.query.navAnyToVert(EEntType.WIRE, wire_i);
+                const verts_i: number[] = this._model.geom.nav.navAnyToVert(EEntType.WIRE, wire_i);
                 const fprint_start: string = this.normXyzFprint(EEntType.VERT, verts_i[0], trans_padding);
                 const fprint_end: string = this.normXyzFprint(EEntType.VERT, verts_i[verts_i.length - 1], trans_padding);
                 if (fprint_start > fprint_end) {
@@ -138,9 +137,9 @@ export class GIModelComparator {
      */
     private normClosedWires(trans_padding: [Txyz, number[]]): void {
         for (const wire_i of this._model.geom.query.getEnts(EEntType.WIRE, false)) {
-            if (this._model.geom.query.istWireClosed(wire_i)) {
+            if (this._model.geom.query.isWireClosed(wire_i)) {
                 // a closed wire can start at any edge, but the order cannot be reversed
-                const edges_i: number[] = this._model.geom.query.navAnyToEdge(EEntType.WIRE, wire_i);
+                const edges_i: number[] = this._model.geom.nav.navAnyToEdge(EEntType.WIRE, wire_i);
                 const fprints: Array<[string, number]> = [];
                 for (let i = 0; i < edges_i.length; i++) {
                     const edge_i: number = edges_i[i];
@@ -164,7 +163,7 @@ export class GIModelComparator {
                 }
                 fprints.sort();
                 const reordered_holes_i: number[] = fprints.map( fprint => fprint[1] );
-                this._model.geom.modify.setFaceHoles(face_i, reordered_holes_i);
+                this._model.geom.compare.setPgonHoles(face_i, reordered_holes_i);
             }
         }
     }
@@ -177,7 +176,7 @@ export class GIModelComparator {
         const precision = 1e4;
         // get the xyzs
         const fprints: string[] = [];
-        const posis_i: number[] = this._model.geom.query.navAnyToPosi(ent_type, ent_i);
+        const posis_i: number[] = this._model.geom.nav.navAnyToPosi(ent_type, ent_i);
         for (const posi_i of posis_i) {
             const xyz: Txyz = this._model.attribs.query.getPosiCoords(posi_i);
             const fprint: string[] = [];
@@ -204,7 +203,7 @@ export class GIModelComparator {
      * @param ent_i
      */
     private xyzFprint(ent_type: EEntType, ent_i: number, trans_vec = [0, 0, 0]): string {
-        const posis_i: number[] = this._model.geom.query.navAnyToPosi(ent_type, ent_i);
+        const posis_i: number[] = this._model.geom.nav.navAnyToPosi(ent_type, ent_i);
         const xyzs: Txyz[] = posis_i.map(posi_i => this._model.attribs.query.getPosiCoords(posi_i));
         const fprints: string[] = xyzs.map(xyz => this.getAttribValFprint([
             xyz[0] + trans_vec[0],
@@ -432,10 +431,10 @@ export class GIModelComparator {
             for (const this_mia_ent_i of this_mia_ents_i) {
                 let min_dist = Infinity;
                 let min_trans_vec: Txyz = null;
-                const this_posis_i: number[] = this._model.geom.query.navAnyToPosi(obj_ent_type, this_mia_ent_i);
+                const this_posis_i: number[] = this._model.geom.nav.navAnyToPosi(obj_ent_type, this_mia_ent_i);
                 let flipped = false;
                 for (const other_mia_ent_i of other_mia_ents_i) {
-                    const other_posis_i: number[] = other_model.geom.query.navAnyToPosi(obj_ent_type, other_mia_ent_i);
+                    const other_posis_i: number[] = other_model.geom.nav.navAnyToPosi(obj_ent_type, other_mia_ent_i);
                     if (this_posis_i.length === other_posis_i.length) {
                         const this_xyz: Txyz = this._model.attribs.query.getPosiCoords(this_posis_i[0]);
                         const other_xyz: Txyz = other_model.attribs.query.getPosiCoords(other_posis_i[0]);
@@ -585,11 +584,11 @@ export class GIModelComparator {
             if (attrib_names !== undefined) {
                 // sort the attrib names
                 attrib_names.sort();
-                const sub_ents_i: number[] = this._model.geom.query.navAnyToAny(from_ent_type, topo_ent_type, index);
+                const sub_ents_i: number[] = this._model.geom.nav.navAnyToAny(from_ent_type, topo_ent_type, index);
                 // for each attrib, make a finderprint
                 for (const attrib_name of attrib_names) {
                     for (const sub_ent_i of sub_ents_i) {
-                        const attrib_value: TAttribDataTypes = 
+                        const attrib_value: TAttribDataTypes =
                             this._model.attribs.query.getAttribVal(topo_ent_type, attrib_name, sub_ent_i);
                         if (attrib_value !== null && attrib_value !== undefined) {
                             topo_fprints.push(this.getAttribValFprint(attrib_value));
@@ -671,7 +670,7 @@ export class GIModelComparator {
             // get the map from ent_i to com_idx
             const com_idx_map: Map<number, number> = com_idx_maps.get(to_ent_type);
             // the the common indexes of the entities
-            const ents_i: number[] = this._model.geom.query.navAnyToAny(EEntType.COLL, to_ent_type, coll_i);
+            const ents_i: number[] = this._model.geom.nav.navAnyToAny(EEntType.COLL, to_ent_type, coll_i);
             const com_idxs: number[] = [];
             for (const ent_i of ents_i) {
                 const com_idx: number = com_idx_map.get(ent_i);

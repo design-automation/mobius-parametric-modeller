@@ -58,7 +58,7 @@ function _color(__model__: GIModel, ents_arr: TEntTypeIdx[], color: TColor): voi
         if (ent_type === EEntType.VERT) {
             all_verts_i.push(ent_i);
         } else {
-            const verts_i: number[] = __model__.geom.query.navAnyToVert(ent_type, ent_i);
+            const verts_i: number[] = __model__.geom.nav.navAnyToVert(ent_type, ent_i);
             for (const vert_i of verts_i) {
                 all_verts_i.push(vert_i);
             }
@@ -140,7 +140,7 @@ function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: str
         if (ent_type === EEntType.VERT) {
             all_verts_i.push(ent_i);
         } else {
-            const verts_i: number[] = __model__.geom.query.navAnyToVert(ent_type, ent_i);
+            const verts_i: number[] = __model__.geom.nav.navAnyToVert(ent_type, ent_i);
             for (const vert_i of verts_i) {
                 all_verts_i.push(vert_i);
             }

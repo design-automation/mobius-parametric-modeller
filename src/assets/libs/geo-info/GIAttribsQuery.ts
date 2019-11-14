@@ -470,7 +470,7 @@ export class GIAttribsQuery {
      * @param vert_i
      */
     public getVertCoords(vert_i: number): Txyz {
-        const posi_i: number = this._model.geom.query.navVertToPosi(vert_i);
+        const posi_i: number = this._model.geom.nav.navVertToPosi(vert_i);
         return this._attribs_maps.ps.get(EAttribNames.COORDS).getEntVal(posi_i) as Txyz;
     }
     /**
@@ -478,7 +478,7 @@ export class GIAttribsQuery {
      * @param posi_i
      */
     public getEntCoords(ent_type: EEntType, ent_i: number): Txyz[] {
-        const posis_i: number[] = this._model.geom.query.navAnyToPosi(ent_type, ent_i);
+        const posis_i: number[] = this._model.geom.nav.navAnyToPosi(ent_type, ent_i);
         const coords_map: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
         return coords_map.getEntVal(posis_i) as Txyz[];
     }
@@ -497,7 +497,7 @@ export class GIAttribsQuery {
     //  */
     // public getAllVertsCoords(attrib_name: string): Txyz[] {
     //     const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT);
-    //     const posis_i: number[] = verts_i.map( vert_i => this._model.geom.query.navVertToPosi(vert_i));
+    //     const posis_i: number[] = verts_i.map( vert_i => this._model.geom.nav.navVertToPosi(vert_i));
     //     const coords_map: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
     //     return coords_map.getEntVal(posis_i) as Txyz[];
     // }

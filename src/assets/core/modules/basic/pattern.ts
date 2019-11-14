@@ -184,7 +184,7 @@ export function Grid(__model__: GIModel, origin: Txyz|TPlane, size: number|[numb
             }
             posis_i2.push(col);
         }
-    } else if (method === _EGridMethod.SQUARES) {
+    } else if (method === _EGridMethod.QUADS) {
         for (let i = 0; i < xy_num_positions[1] - 1; i++) {
             for (let j = 0; j < xy_num_positions[0] - 1; j++) {
                 const index: number = (i * xy_num_positions[0]) + j;
@@ -204,7 +204,7 @@ export enum _EGridMethod {
     FLAT = 'flat',
     COLUMNS = 'columns',
     ROWS = 'rows',
-    SQUARES = 'squares'
+    QUADS = 'quads'
 }
 // ================================================================================================
 /**

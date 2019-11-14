@@ -61,7 +61,7 @@ export function getCentoridFromEnts(__model__: GIModel, ents: TId|TId[], fn_name
 export function getCentroid(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): Txyz|Txyz[] {
     if (getArrDepth(ents_arr) === 1) {
         const [ent_type, index]: [EEntType, number] = ents_arr as TEntTypeIdx;
-        const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
+        const posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, index);
         return _centroidPosis(__model__, posis_i);
     } else {
         // divide the input into posis and non posis

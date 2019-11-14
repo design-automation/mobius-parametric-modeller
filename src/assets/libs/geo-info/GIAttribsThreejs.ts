@@ -56,7 +56,7 @@ export class GIAttribsThreejs {
         const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT, true);
         verts_i.forEach( (vert_i, gi_index) => {
             if (vert_i !== null) {
-                const posi_i: number = this._model.geom.query.navVertToPosi(vert_i);
+                const posi_i: number = this._model.geom.nav.navVertToPosi(vert_i);
                 const tjs_index: number = coords.push( coords_attrib.getEntVal(posi_i) as number[] ) - 1;
                 vertex_map.set(gi_index, tjs_index);
             }

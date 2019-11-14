@@ -387,13 +387,17 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     break;
                 case EEntTypeStr[EEntType.COLL]:
                     if (typeof attrib.id === 'number') {
-                        const coll_parents = this.model.geom.query.getCollParents(attrib.id);
-                        if (coll_parents[0] === -1) { // no parent
+                        // const coll_parents = this.model.geom.query.getCollParents(attrib.id);
+                        // if (coll_parents[0] === -1) { // no parent
+                        //     this.chooseColl(attrib.id);
+                        // } else {
+                        //     coll_parents.forEach(element => {
+                        //         this.chooseColl(element);
+                        //     });
+                        // }
+                        const parent_coll_i: number = this.model.geom.query.getCollParent(attrib.id);
+                        if (parent_coll_i === -1) { // no parent
                             this.chooseColl(attrib.id);
-                        } else {
-                            coll_parents.forEach(element => {
-                                this.chooseColl(element);
-                            });
                         }
                     } else {
                         attrib.id.forEach((_id) => {
@@ -694,7 +698,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     }
                 } else if (intersect0.object.type === 'Mesh') {
                     const tri = scene.tri_select_map.get(intersect0.faceIndex);
-                    const face = this.model.geom.query.navTriToFace(tri);
+                    const face = this.model.geom.nav.navTriToFace(tri);
                     const ent_id = `_f_posi${face}`;
                     if (scene.selected_positions.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.POSI]);
@@ -709,7 +713,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             case EEntType.VERT:
                 if (intersect0.object.type === 'Points') {
                     const vert = scene.vertex_map.get(intersect0.index);
-                    const verts = this.model.geom.query.navPosiToVert(intersect0.index);
+                    const verts = this.model.geom.nav.navPosiToVert(intersect0.index);
                     let point: number;
                     if (verts.length > 1) {
                         this.dropdown.setItems(verts, EEntTypeStr[EEntType.VERT]);
@@ -740,7 +744,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     }
                 } else if (intersect0.object.type === 'Mesh') {
                     const tri = scene.tri_select_map.get(intersect0.faceIndex);
-                    const face = this.model.geom.query.navTriToFace(tri);
+                    const face = this.model.geom.nav.navTriToFace(tri);
                     const ent_id = `_f_v${face}`;
                     if (scene.selected_vertex.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.VERT]);
@@ -761,7 +765,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             case EEntType.FACE:
                 if (intersect0.object.type === 'Mesh') {
                     const tri = scene.tri_select_map.get(intersect0.faceIndex);
-                    const face = this.model.geom.query.navTriToFace(tri);
+                    const face = this.model.geom.nav.navTriToFace(tri);
                     const ent_id = `${EEntTypeStr[EEntType.FACE]}${face}`;
                     if (scene.selected_geoms.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.FACE], true);
@@ -778,8 +782,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             case EEntType.PGON:
                 if (intersect0.object.type === 'Mesh') {
                     const tri = scene.tri_select_map.get(intersect0.faceIndex);
-                    const face = this.model.geom.query.navTriToFace(tri);
-                    const pgon = this.model.geom.query.navFaceToPgon(face);
+                    const face = this.model.geom.nav.navTriToFace(tri);
+                    const pgon = this.model.geom.nav.navFaceToPgon(face);
                     const ent_id = `${EEntTypeStr[EEntType.PGON]}${pgon}`;
                     if (scene.selected_geoms.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.PGON], true);
@@ -807,7 +811,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     }
                 } else if (intersect0.object.type === 'Mesh') {
                     const tri = scene.tri_select_map.get(intersect0.faceIndex);
-                    const face = this.model.geom.query.navTriToFace(tri);
+                    const face = this.model.geom.nav.navTriToFace(tri);
                     const ent_id = `${EEntTypeStr[EEntType.FACE]}${face}`;
                     if (scene.selected_face_edges.has(ent_id)) {
                         this.unselectGeom(ent_id, 'face_edges');
@@ -824,7 +828,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             case EEntType.WIRE:
                 if (intersect0.object.type === 'LineSegments') {
                     const edge = scene.edge_select_map.get(intersect0.index / 2),
-                        wire = this.model.geom.query.navEdgeToWire(edge);
+                        wire = this.model.geom.nav.navEdgeToWire(edge);
                     const ent_id = `${EEntTypeStr[EEntType.WIRE]}${edge}`;
                     if (scene.selected_geoms.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.WIRE], true);
@@ -836,7 +840,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     }
                 } else if (intersect0.object.type === 'Mesh') {
                     const tri = scene.tri_select_map.get(intersect0.faceIndex);
-                    const face = this.model.geom.query.navTriToFace(tri);
+                    const face = this.model.geom.nav.navTriToFace(tri);
                     const ent_id = `${EEntTypeStr[EEntType.FACE]}${face}`;
                     if (scene.selected_face_wires.has(ent_id)) {
                         this.unselectGeom(ent_id, 'face_wires');
@@ -853,8 +857,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             case EEntType.PLINE:
                 if (intersect0.object.type === 'LineSegments') {
                     const edge = scene.edge_select_map.get(intersect0.index / 2);
-                    const wire = this.model.geom.query.navEdgeToWire(edge);
-                    const pline = this.model.geom.query.navWireToPline(wire);
+                    const wire = this.model.geom.nav.navEdgeToWire(edge);
+                    const pline = this.model.geom.nav.navWireToPline(wire);
                     const ent_id = `${EEntTypeStr[EEntType.PLINE]}${pline}`;
                     if (scene.selected_geoms.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.PLINE], true);
@@ -874,8 +878,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 break;
             case EEntType.POINT:
                 if (intersect0.object.type === 'Points') {
-                    const vert = this.model.geom.query.navPosiToVert(intersect0.index);
-                    const _point = this.model.geom.query.navVertToPoint(vert[0]);
+                    const vert = this.model.geom.nav.navPosiToVert(intersect0.index);
+                    const _point = this.model.geom.nav.navVertToPoint(vert[0]);
                     const point = scene.point_select_map.get(_point);
                     const ent_id = `${EEntTypeStr[EEntType.POINT]}${point}`;
                     if (scene.selected_geoms.has(ent_id)) {
@@ -930,8 +934,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             scene.selectObjPosition(null, ent_id, position, this.container, labelText);
             this.dataService.selected_positions.set(`${parent_ent_id}`, [ent_id]);
         } else if (edge !== null) {
-            const verts = this.model.geom.query.navEdgeToVert(edge);
-            const posis = verts.map(v => this.model.geom.query.navVertToPosi(v));
+            const verts = this.model.geom.nav.navEdgeToVert(edge);
+            const posis = verts.map(v => this.model.geom.nav.navVertToPosi(v));
             const children = [];
             posis.map(posi => {
                 const ent_id = `${ent_type_str}${posi}`;
@@ -943,8 +947,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             });
             this.dataService.selected_positions.set(`${parent_ent_id}`, children);
         } else if (face !== null) {
-            const tris = this.model.geom.query.navFaceToTri(face),
-                posis = tris.map(tri => this.model.geom.query.navAnyToPosi(EEntType.TRI, tri)),
+            const tris = this.model.geom.nav.navFaceToTri(face),
+                posis = tris.map(tri => this.model.geom.nav.navAnyToPosi(EEntType.TRI, tri)),
                 posi_flat = [].concat(...posis);
 
             const uniqPositions = this.uniq(posi_flat);
@@ -980,7 +984,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             scene.selectObjVetex(null, ent_id, position, this.container, labelText);
             this.dataService.selected_vertex.set(`${parent_ent_id}`, [ent_id]);
         } else if (edge !== null) {
-            const verts = this.model.geom.query.navEdgeToVert(edge);
+            const verts = this.model.geom.nav.navEdgeToVert(edge);
             const children = [];
             verts.map(vert => {
                 const ent_id = `${ent_type_str}${vert}`;
@@ -993,8 +997,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             this.dataService.selected_vertex.set(`${parent_ent_id}`, children);
 
         } else if (face !== null) {
-            const tris = this.model.geom.query.navFaceToTri(face),
-                verts = tris.map(tri => this.model.geom.query.navTriToVert(tri)),
+            const tris = this.model.geom.nav.navFaceToTri(face),
+                verts = tris.map(tri => this.model.geom.nav.navTriToVert(tri)),
                 verts_flat = [].concat(...verts);
 
             const uniqVerts = this.uniq(verts_flat);
@@ -1067,7 +1071,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
     private selectEdge(line: number) {
         const ent_type_str = EEntTypeStr[EEntType.EDGE],
-            verts = this.model.geom.query.navEdgeToVert(line),
+            verts = this.model.geom.nav.navEdgeToVert(line),
             positions = verts.map(v => this.model.attribs.query.getVertCoords(v)),
             posi_flat = [].concat(...positions),
             ent_id = `${ent_type_str}${line}`;
@@ -1078,12 +1082,12 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
     private selectEdgeByFace(face: number, parent_ent_id: string) {
         const ent_type_str = EEntTypeStr[EEntType.EDGE],
-            edges = this.model.geom.query.navAnyToAny(EEntType.FACE, EEntType.EDGE, face);
+            edges = this.model.geom.nav.navAnyToAny(EEntType.FACE, EEntType.EDGE, face);
         const children = [];
         edges.map(edge => {
             const ent_id = `${ent_type_str}${edge}`;
             children.push(ent_id);
-            const vert = this.model.geom.query.navEdgeToVert(edge);
+            const vert = this.model.geom.nav.navEdgeToVert(edge);
             const position = [];
             const indices = [];
             vert.map((v, i) => {
@@ -1100,8 +1104,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
     private selectWire(wire: number) {
         const ent_type_str = EEntTypeStr[EEntType.WIRE],
-            edges = this.model.geom.query.navWireToEdge(wire),
-            verts = edges.map(e => this.model.geom.query.navEdgeToVert(e)),
+            edges = this.model.geom.nav.navWireToEdge(wire),
+            verts = edges.map(e => this.model.geom.nav.navEdgeToVert(e)),
             verts_flat = [].concat(...[].concat(...verts)),
             indices = [],
             positions = [];
@@ -1118,13 +1122,13 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
     private selectWireByFace(face: number, parent_ent_id: string) {
         const ent_type_str = EEntTypeStr[EEntType.WIRE],
-            wires = this.model.geom.query.navFaceToWire(face);
+            wires = this.model.geom.nav.navFaceToWire(face);
         const children = [];
         wires.map(wire => {
             const ent_id = `${ent_type_str}${wire}`;
             children.push(ent_id);
-            const edges = this.model.geom.query.navWireToEdge(wire),
-                verts = edges.map(e => this.model.geom.query.navEdgeToVert(e));
+            const edges = this.model.geom.nav.navWireToEdge(wire),
+                verts = edges.map(e => this.model.geom.nav.navEdgeToVert(e));
             // @ts-ignore
             const verts_flat = verts.flat(1),
                 indices = [],
@@ -1143,10 +1147,10 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
     private selectFace(face: number) {
         const ent_type_str = EEntTypeStr[EEntType.FACE],
-            tri = this.model.geom.query.navFaceToTri(face),
-            verts = tri.map(index => this.model.geom.query.navTriToVert(index)),
+            tri = this.model.geom.nav.navFaceToTri(face),
+            verts = tri.map(index => this.model.geom.nav.navTriToVert(index)),
             verts_flat = [].concat(...verts),
-            posis = verts_flat.map(v => this.model.geom.query.navAnyToPosi(EEntType.VERT, v)),
+            posis = verts_flat.map(v => this.model.geom.nav.navAnyToPosi(EEntType.VERT, v)),
             posis_flat = [].concat(...posis),
             tri_indices = [],
             positions = [];
@@ -1225,10 +1229,10 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     private getPointPosis(point1: number = null, points: number[] = null) {
         let verts_flat: number[] = null;
         if (point1 !== null) {
-            verts_flat = [this.model.geom.query.navPointToVert(point1)];
+            verts_flat = [this.model.geom.nav.navPointToVert(point1)];
         }
         if (points !== null) {
-            const verts = points.map(p => this.model.geom.query.navPointToVert(p));
+            const verts = points.map(p => this.model.geom.nav.navPointToVert(p));
             verts_flat = [].concat(...verts);
         }
 
@@ -1252,16 +1256,16 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     private getPLinePosis(pline1: number = null, plines: number[] = null) {
         let wires_flat: number[] = null;
         if (pline1 !== null) {
-            wires_flat = [this.model.geom.query.navPlineToWire(pline1)];
+            wires_flat = [this.model.geom.nav.navPlineToWire(pline1)];
         }
         if (plines !== null) {
-            const wires = plines.map(pl => this.model.geom.query.navPlineToWire(pl));
+            const wires = plines.map(pl => this.model.geom.nav.navPlineToWire(pl));
             wires_flat = [].concat(...wires);
         }
 
-        const edges = wires_flat.map(w => this.model.geom.query.navWireToEdge(w));
+        const edges = wires_flat.map(w => this.model.geom.nav.navWireToEdge(w));
         const edges_flat = [].concat(...edges);
-        const verts = edges_flat.map(e => this.model.geom.query.navEdgeToVert(e));
+        const verts = edges_flat.map(e => this.model.geom.nav.navEdgeToVert(e));
         const verts_flat = [].concat(...[].concat(...verts));
         const indices = [];
         const positions = [];
@@ -1283,21 +1287,21 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     private getPGonPosis(face1: number = null, pgons: number[] = null) {
         let faces_flat: number[] = null;
         if (face1 !== null) {
-            const _pgon = this.model.geom.query.navFaceToPgon(face1);
+            const _pgon = this.model.geom.nav.navFaceToPgon(face1);
             if (_pgon === undefined) {
                 return null;
             }
-            faces_flat = [this.model.geom.query.navPgonToFace(_pgon)];
+            faces_flat = [this.model.geom.nav.navPgonToFace(_pgon)];
         }
         if (pgons !== null) {
-            const faces = pgons.map(pgon => this.model.geom.query.navPgonToFace(pgon));
+            const faces = pgons.map(pgon => this.model.geom.nav.navPgonToFace(pgon));
             faces_flat = [].concat(...faces);
         }
-        const tris = faces_flat.map(face => this.model.geom.query.navFaceToTri(face));
+        const tris = faces_flat.map(face => this.model.geom.nav.navFaceToTri(face));
         const tris_flat = [].concat(...tris);
-        const verts = tris_flat.map(tri => this.model.geom.query.navTriToVert(tri));
+        const verts = tris_flat.map(tri => this.model.geom.nav.navTriToVert(tri));
         const verts_flat = [].concat(...verts);
-        const posis = verts_flat.map(v => this.model.geom.query.navAnyToPosi(EEntType.VERT, v));
+        const posis = verts_flat.map(v => this.model.geom.nav.navAnyToPosi(EEntType.VERT, v));
         const posis_flat = [].concat(...posis);
         const indices = [];
         const positions = [];
@@ -1313,13 +1317,13 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     private selectColl(object: THREE.Intersection, type) {
         let colls = [];
         if (type === 'Mesh') {
-            colls = this.model.geom.query.navAnyToColl(EEntType.TRI, object.faceIndex);
+            colls = this.model.geom.nav.navAnyToColl(EEntType.TRI, object.faceIndex);
         } else if (type === 'LineSegments') {
-            colls = this.model.geom.query.navAnyToColl(EEntType.EDGE, object.index / 2);
+            colls = this.model.geom.nav.navAnyToColl(EEntType.EDGE, object.index / 2);
         } else if (type === 'Points') {
-            const vert = this.model.geom.query.navPosiToVert(object.index);
-            const point = this.model.geom.query.navVertToPoint(vert[0]);
-            colls = this.model.geom.query.navAnyToColl(EEntType.POINT, point);
+            const vert = this.model.geom.nav.navPosiToVert(object.index);
+            const point = this.model.geom.nav.navVertToPoint(vert[0]);
+            colls = this.model.geom.nav.navAnyToColl(EEntType.POINT, point);
         }
         /**
          * Show dropdown menu only when Entity belongs to more than 1 Collection.
@@ -1339,7 +1343,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const scene = this._data_threejs;
         const coll_id = `${EEntTypeStr[EEntType.COLL]}${id}`;
         const children = [];
-        const pgons = this.model.geom.query.navCollToPgon(id);
+        const pgons = this.model.geom.nav.navCollToPgon(id);
         const pgons_flat = [].concat(...pgons);
 
         if (pgons_flat.length) {
@@ -1356,7 +1360,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             }
         }
 
-        const plines = this.model.geom.query.navCollToPline(id);
+        const plines = this.model.geom.nav.navCollToPline(id);
         const plines_flat = [].concat(...plines);
         if (plines_flat.length) {
             const plineResult = this.getPLinePosis(null, plines_flat);
@@ -1369,7 +1373,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             }
         }
 
-        const points = this.model.geom.query.navCollToPoint(id);
+        const points = this.model.geom.nav.navCollToPoint(id);
         const points_flat = [].concat(...points);
         if (points_flat.length) {
             const pointResult = this.getPointPosis(null, points_flat);

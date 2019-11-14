@@ -43,7 +43,7 @@ function _createMeshesTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.M
     // get all unique posis
     const posis_i_set: Set<number> = new Set();
     for (const [ent_type, ent_i] of ents_arrs) {
-        const ent_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, ent_i);
+        const ent_posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, ent_i);
         ent_posis_i.forEach( ent_posi_i => posis_i_set.add(ent_posi_i) );
     }
     // create tjs vectors for each posi and save them in a sparse array
@@ -62,7 +62,7 @@ function _createMeshesTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.M
                 faces_i.push(ent_i);
                 break;
             default:
-                const coll_faces_i: number[] = __model__.geom.query.navAnyToFace(ent_type, ent_i);
+                const coll_faces_i: number[] = __model__.geom.nav.navAnyToFace(ent_type, ent_i);
                 coll_faces_i.forEach( coll_face_i => faces_i.push(coll_face_i) );
                 break;
         }
@@ -72,9 +72,9 @@ function _createMeshesTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.M
     for (const face_i of faces_i) {
         // create the tjs geometry
         const geom_tjs = new THREE.Geometry();
-        const tris_i: number[] = __model__.geom.query.navFaceToTri(face_i);
+        const tris_i: number[] = __model__.geom.nav.navFaceToTri(face_i);
         for (const tri_i of tris_i) {
-            const tri_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.TRI, tri_i);
+            const tri_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
             // add the three vertices to the geometry
             const a: number = geom_tjs.vertices.push(posis_tjs[tri_posis_i[0]]) - 1;
             const b: number = geom_tjs.vertices.push(posis_tjs[tri_posis_i[1]]) - 1;
@@ -96,7 +96,7 @@ function _createMeshTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.Mes
     // get all unique posis
     const posis_i_set: Set<number> = new Set();
     for (const [ent_type, ent_i] of ents_arrs) {
-        const ent_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, ent_i);
+        const ent_posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, ent_i);
         ent_posis_i.forEach( ent_posi_i => posis_i_set.add(ent_posi_i) );
     }
     // create tjs vectors for each posi and save them in a sparse array
@@ -115,7 +115,7 @@ function _createMeshTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.Mes
                 faces_i.push(ent_i);
                 break;
             default:
-                const coll_faces_i: number[] = __model__.geom.query.navAnyToFace(ent_type, ent_i);
+                const coll_faces_i: number[] = __model__.geom.nav.navAnyToFace(ent_type, ent_i);
                 coll_faces_i.forEach( coll_face_i => faces_i.push(coll_face_i) );
                 break;
         }
@@ -124,9 +124,9 @@ function _createMeshTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.Mes
     const geom_tjs = new THREE.Geometry();
     for (const face_i of faces_i) {
         // create the tjs geometry
-        const tris_i: number[] = __model__.geom.query.navFaceToTri(face_i);
+        const tris_i: number[] = __model__.geom.nav.navFaceToTri(face_i);
         for (const tri_i of tris_i) {
-            const tri_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.TRI, tri_i);
+            const tri_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
             // add the three vertices to the geometry
             const a: number = geom_tjs.vertices.push(posis_tjs[tri_posis_i[0]]) - 1;
             const b: number = geom_tjs.vertices.push(posis_tjs[tri_posis_i[1]]) - 1;
@@ -147,7 +147,7 @@ function _createMeshBufTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.
     // get all unique posis
     const posis_i_set: Set<number> = new Set();
     for (const [ent_type, ent_i] of ents_arrs) {
-        const ent_posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, ent_i);
+        const ent_posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, ent_i);
         ent_posis_i.forEach( ent_posi_i => posis_i_set.add(ent_posi_i) );
     }
     // create a flat list of xyz coords
@@ -168,7 +168,7 @@ function _createMeshBufTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.
                 faces_i.push(ent_i);
                 break;
             default:
-                const coll_faces_i: number[] = __model__.geom.query.navAnyToFace(ent_type, ent_i);
+                const coll_faces_i: number[] = __model__.geom.nav.navAnyToFace(ent_type, ent_i);
                 coll_faces_i.forEach( coll_face_i => faces_i.push(coll_face_i) );
                 break;
         }
@@ -177,9 +177,9 @@ function _createMeshBufTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.
     const tris_flat: number[] = [];
     for (const face_i of faces_i) {
         // create the tjs geometry
-        const tris_i: number[] = __model__.geom.query.navFaceToTri(face_i);
+        const tris_i: number[] = __model__.geom.nav.navFaceToTri(face_i);
         for (const tri_i of tris_i) {
-            const tri_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.TRI, tri_i);
+            const tri_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
             tris_flat.push( posi_i_to_xyzs_map.get( tri_posis_i[0]) );
             tris_flat.push( posi_i_to_xyzs_map.get( tri_posis_i[1]) );
             tris_flat.push( posi_i_to_xyzs_map.get( tri_posis_i[2]) );

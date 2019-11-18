@@ -278,7 +278,7 @@ export class GIAttribsAdd {
             const attrib_value: TAttribDataTypes =
                 this._model.attribs.query.getAttribValAny(source_ent_type, source_attrib_name, index,
                     source_attrib_idx_key) as TAttribDataTypes;
-            const target_ents_i: number[] = this._model.geom.query.navAnyToAny(source_ent_type, target_ent_type, index);
+            const target_ents_i: number[] = this._model.geom.nav.navAnyToAny(source_ent_type, target_ent_type, index);
             for (const target_ent_i of target_ents_i) {
                 if (! attrib_values_map.has(target_ent_i)) {
                         attrib_values_map.set(target_ent_i, []);

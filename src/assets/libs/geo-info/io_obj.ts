@@ -111,7 +111,7 @@ export function exportObj(model: GIModel): string {
     // polygons, f
     const pgons_i: number[] = model.geom.query.getEnts(EEntType.PGON, false);
     for (const pgon_i of pgons_i) {
-        const pgon_verts_i_outer: number[] = model.geom.query.navAnyToVert(EEntType.PGON, pgon_i);
+        const pgon_verts_i_outer: number[] = model.geom.nav.navAnyToVert(EEntType.PGON, pgon_i);
         // const verts_i_outer = verts_i[0];
         // TODO what about holes
         if (has_texture_attrib) {
@@ -123,13 +123,13 @@ export function exportObj(model: GIModel): string {
         if (has_color_attrib) {
             f_str += 'f ' + pgon_verts_i_outer.map( vert_i => (vert_i + 1).toString() ).join(' ') + '\n';
         } else {
-            f_str += 'f ' + pgon_verts_i_outer.map( vert_i => (model.geom.query.navVertToPosi(vert_i) + 1).toString() ).join(' ') + '\n';
+            f_str += 'f ' + pgon_verts_i_outer.map( vert_i => (model.geom.nav.navVertToPosi(vert_i) + 1).toString() ).join(' ') + '\n';
         }
     }
     // polylines, l
     const plines_i: number[] = model.geom.query.getEnts(EEntType.PLINE, false);
     for (const pline_i of plines_i) {
-        const pline_verts_i: number[] = model.geom.query.navAnyToVert(EEntType.PLINE, pline_i);
+        const pline_verts_i: number[] = model.geom.nav.navAnyToVert(EEntType.PLINE, pline_i);
         l_str += 'l ' + pline_verts_i.map( vert_i => (vert_i + 1).toString() ).join(' ') + '\n';
     }
     // result

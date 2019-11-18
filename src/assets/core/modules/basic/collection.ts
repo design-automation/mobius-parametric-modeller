@@ -84,7 +84,7 @@ function _create(__model__: GIModel, ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEn
     const coll_i: number = __model__.geom.add.addColl(-1, points_i, plines_i, pgons_i);
     // set the parents
     for (const child_coll_i of child_colls_i) {
-        __model__.geom.modify.setCollParent(child_coll_i, coll_i);
+        __model__.geom.modify_coll.setCollParent(child_coll_i, coll_i);
     }
     // return the new collection
     return [EEntType.COLL, coll_i];
@@ -137,8 +137,34 @@ export function Add(__model__: GIModel, coll: TId, entities: TId|TId[]): void {
             [IDcheckObj.isID, IDcheckObj.isIDList],
             [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         // --- Error Check ---
-        _collection(__model__, coll_arr, ents_arr, _EModifyCollectionMethod.ADD_ENTITIES);
+        _collectionAdd(__model__, coll_arr[1], ents_arr);
     }
+}
+
+function _collectionAdd(__model__: GIModel, coll_i: number, ents_arr: TEntTypeIdx[]): void {
+    const points_i: number[] = [];
+    const plines_i: number[] = [];
+    const pgons_i: number[] = [];
+    for (const [ent_type, ent_i] of ents_arr) {
+        switch (ent_type) {
+            case EEntType.POINT:
+                points_i.push(ent_i);
+                break;
+            case EEntType.PLINE:
+                plines_i.push(ent_i);
+                break;
+            case EEntType.PGON:
+                pgons_i.push(ent_i);
+                break;
+            case EEntType.COLL:
+                __model__.geom.modify_coll.setCollParent(ent_i, coll_i);
+                break;
+            default:
+                throw new Error('Error adding entities to a collection. \
+                A collection can only contain points, polylines, polygons, and other collections.');
+        }
+    }
+    __model__.geom.modify_coll.collAddEnts(coll_i, points_i, plines_i, pgons_i);
 }
 // ================================================================================================
 /**
@@ -155,54 +181,20 @@ export function Remove(__model__: GIModel, coll: TId, entities: TId|TId[]): void
         // --- Error Check ---
         const fn_name = 'collection.Remove';
         const coll_arr = checkIDs(fn_name, 'coll', coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
-        const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList],
-            [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+        let ents_arr: TEntTypeIdx[] = null;
+        if (entities !== null) {
+            ents_arr = checkIDs(fn_name, 'entities', entities,
+                [IDcheckObj.isID, IDcheckObj.isIDList],
+                [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+        }
         // --- Error Check ---
-        _collection(__model__, coll_arr, ents_arr, _EModifyCollectionMethod.REMOVE_ENTITIES);
+        if (ents_arr === null) {
+            _collectionEmpty(__model__, coll_arr[1]);
+        }
+        _collectionRemove(__model__, coll_arr[1], ents_arr);
     }
 }
-// ================================================================================================
-// /**
-//  * Set the parent of a collection.
-//  * ~
-//  * @param __model__
-//  * @param coll The collection to be updated.
-//  * @param entities The parent collection.
-//  * @returns void
-//  */
-// export function Parent(__model__: GIModel, coll: TId, parent: TId): void {
-//     parent = arrMakeFlat(parent) as TId[];
-//     if (!isEmptyArr(parent)) {
-//         // --- Error Check ---
-//         const fn_name = 'collection.Parent';
-//         const coll_arr = checkIDs(fn_name, 'coll', coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
-//         const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'parent', parent,
-//             [IDcheckObj.isID, IDcheckObj.isIDList],
-//             [EEntType.COLL]) as TEntTypeIdx[];
-//         // --- Error Check ---
-//         _collection(__model__, coll_arr, ents_arr, _EModifyCollectionMethod.SET_PARENT_ENTITY);
-//     }
-// }
-// ================================================================================================
-export enum _EModifyCollectionMethod {
-    SET_PARENT_ENTITY = 'set_parent',
-    ADD_ENTITIES = 'add_entities',
-    REMOVE_ENTITIES = 'remove_entities'
-}
-function _collection(__model__: GIModel, coll_arr: TEntTypeIdx, ents_arr: TEntTypeIdx[], method: _EModifyCollectionMethod): void {
-    const [_, coll_i]: TEntTypeIdx = coll_arr;
-    if (method === _EModifyCollectionMethod.SET_PARENT_ENTITY) {
-        if (ents_arr.length !== 1) {
-            throw new Error('Error setting collection parent. A collection can only have one parent.');
-        }
-        const [parent_ent_type, parent_coll_i]: TEntTypeIdx = ents_arr[0];
-        if (parent_ent_type !== EEntType.COLL) {
-            throw new Error('Error setting collection parent. The parent must be another collection.');
-        }
-        __model__.geom.modify.setCollParent(coll_i, parent_coll_i);
-        return;
-    }
+function _collectionRemove(__model__: GIModel, coll_i: number, ents_arr: TEntTypeIdx[]): void {
     const points_i: number[] = [];
     const plines_i: number[] = [];
     const pgons_i: number[] = [];
@@ -217,14 +209,27 @@ function _collection(__model__: GIModel, coll_arr: TEntTypeIdx, ents_arr: TEntTy
             case EEntType.PGON:
                 pgons_i.push(ent_i);
                 break;
+            case EEntType.COLL:
+                if (__model__.geom.query.getCollParent(ent_i) === coll_i) {
+                    __model__.geom.modify_coll.setCollParent(ent_i, -1);
+                }
+                break;
             default:
-                throw new Error('Error modifying collection. A collection can only contain points, polylines, and polygons.');
+                throw new Error('Error removing entities from a collection. \
+                A collection can only contain points, polylines, polygons, and other collections.');
         }
     }
-    if (method === _EModifyCollectionMethod.ADD_ENTITIES) {
-        __model__.geom.modify.collAddEnts(coll_i, points_i, plines_i, pgons_i);
-    } else { // Remove entities
-        __model__.geom.modify.collRemoveEnts(coll_i, points_i, plines_i, pgons_i);
+    __model__.geom.modify_coll.collRemoveEnts(coll_i, points_i, plines_i, pgons_i);
+}
+function _collectionEmpty(__model__: GIModel, coll_i: number): void {
+    const points_i: number[] = __model__.geom.nav.navCollToPoint(coll_i);
+    const plines_i: number[] = __model__.geom.nav.navCollToPline(coll_i);
+    const pgons_i: number[] = __model__.geom.nav.navCollToPgon(coll_i);
+    __model__.geom.modify_coll.collRemoveEnts(coll_i, points_i, plines_i, pgons_i);
+    // remove the collections that are children of this collection
+    const child_colls_i: number[] = __model__.geom.query.getCollChildren(coll_i);
+    for (const child_coll_i of child_colls_i) {
+        __model__.geom.modify_coll.setCollParent(child_coll_i, -1);
     }
 }
 // ================================================================================================

@@ -123,7 +123,7 @@ function _material(__model__: GIModel, ents_arr: TEntTypeIdx[], material: string
     }
     for (const ent_arr of ents_arr) {
         const [ent_type, ent_i]: [number, number] = ent_arr as TEntTypeIdx;
-        const pgons_i: number[] = __model__.geom.query.navAnyToPgon(ent_type, ent_i);
+        const pgons_i: number[] = __model__.geom.nav.navAnyToPgon(ent_type, ent_i);
         for (const pgon_i of pgons_i) {
             __model__.attribs.add.setAttribVal(EEntType.PGON, pgon_i, EAttribNames.MATERIAL, material);
         }

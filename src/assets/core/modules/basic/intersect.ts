@@ -47,7 +47,7 @@ export function RayFace(__model__: GIModel, ray: TRay, entities: TId|TId[]): Txy
 function _intersectRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], ray_tjs: THREE.Ray): Txyz[] {
     if (getArrDepth(ents_arr) === 1) {
         const [ent_type, index]: [EEntType, number] = ents_arr as TEntTypeIdx;
-        const posis_i: number[] = __model__.geom.query.navAnyToPosi(ent_type, index);
+        const posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, index);
         const posis_tjs: THREE.Vector3[] = [];
         for (const posi_i of posis_i) {
             const xyz: Txyz = __model__.attribs.query.getPosiCoords(posi_i);
@@ -56,9 +56,9 @@ function _intersectRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], 
         }
         const isect_xyzs: Txyz[] = [];
         // triangles
-        const tris_i: number[] = __model__.geom.query.navAnyToTri(ent_type, index);
+        const tris_i: number[] = __model__.geom.nav.navAnyToTri(ent_type, index);
         for (const tri_i of tris_i) {
-            const tri_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.TRI, tri_i);
+            const tri_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
             const tri_posis_tjs: THREE.Vector3[] = tri_posis_i.map(tri_posi_i => posis_tjs[tri_posi_i]);
             const isect_tjs: THREE.Vector3 = new THREE.Vector3();
             const result: THREE.Vector3 = ray_tjs.intersectTriangle(tri_posis_tjs[0], tri_posis_tjs[1], tri_posis_tjs[2], false, isect_tjs);
@@ -115,9 +115,9 @@ function _intersectPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]
     if (getArrDepth(ents_arr) === 1) {
         const [ent_type, index]: [EEntType, number] = ents_arr as TEntTypeIdx;
         const isect_xyzs: Txyz[] = [];
-        const wires_i: number[] = __model__.geom.query.navAnyToWire(ent_type, index);
+        const wires_i: number[] = __model__.geom.nav.navAnyToWire(ent_type, index);
         for (const wire_i of wires_i) {
-            const wire_posis_i: number[] = __model__.geom.query.navAnyToPosi(EEntType.WIRE, wire_i);
+            const wire_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
             // create threejs posis for all posis
             const posis_tjs: THREE.Vector3[] = [];
             for (const wire_posi_i of wire_posis_i) {
@@ -125,7 +125,7 @@ function _intersectPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]
                 const posi_tjs: THREE.Vector3 = new THREE.Vector3(...xyz);
                 posis_tjs.push(posi_tjs);
             }
-            if (__model__.geom.query.istWireClosed(wire_i)) {
+            if (__model__.geom.query.isWireClosed(wire_i)) {
                 posis_tjs.push(posis_tjs[0]);
             }
             // for each pair of posis, create a threejs line and do the intersect

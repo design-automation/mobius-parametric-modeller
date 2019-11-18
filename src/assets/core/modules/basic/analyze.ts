@@ -188,7 +188,8 @@ function _createMeshBufTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.
     }
     const geom_tjs = new THREE.BufferGeometry();
     geom_tjs.setIndex( tris_flat );
-    geom_tjs.addAttribute( 'position', new THREE.Float32BufferAttribute( xyzs_flat, 3 ) );
+    // geom_tjs.addAttribute( 'position', new THREE.Float32BufferAttribute( xyzs_flat, 3 ) );
+    geom_tjs.setAttribute( 'position', new THREE.Float32BufferAttribute( xyzs_flat, 3 ) );
     return new THREE.Mesh(geom_tjs, mat_tjs);
 }
 // ================================================================================================

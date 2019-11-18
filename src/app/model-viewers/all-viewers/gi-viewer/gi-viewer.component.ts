@@ -43,7 +43,7 @@ export class GIViewerComponent implements OnInit {
     public selectSwitchOnOff: Boolean;
     public attribLabelVal: String;
 
-    @ViewChild(ThreejsViewerComponent) threejs: ThreejsViewerComponent;
+    @ViewChild(ThreejsViewerComponent, { static: true }) threejs: ThreejsViewerComponent;
     /**
      * constructor
      * @param dataService

@@ -2,7 +2,9 @@ import {
   Component, Injector, Input, OnChanges, SimpleChanges,
   ViewChildren, QueryList, Output, EventEmitter, ViewChild, DoCheck
 } from '@angular/core';
-import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { DataService } from '../data/data.service';
 import { EEntType, EEntTypeStr } from '@libs/geo-info/common';
@@ -23,7 +25,7 @@ enum SORT_STATE {
 })
 
 export class AttributeComponent implements OnChanges, DoCheck {
-  @ViewChild(ATabsComponent) child: ATabsComponent;
+  @ViewChild(ATabsComponent, { static: true }) child: ATabsComponent;
 
   @Input() data: GIModel;
   @Input() refresh: Event;

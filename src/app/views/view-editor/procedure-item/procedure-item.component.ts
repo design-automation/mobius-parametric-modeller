@@ -237,6 +237,7 @@ export class ProcedureItemComponent implements OnDestroy {
         const check = this.data.argCount > 0 && this.data.args[0].name === 'var_name';
         if (!check) { return false; }
         if (this.data.type !== ProcedureTypes.MainFunction) { return true; }
+        if (!this.ModuleDoc[this.data.meta.module] || !this.ModuleDoc[this.data.meta.module][this.data.meta.name]) { return false; }
         const returns = this.ModuleDoc[this.data.meta.module][this.data.meta.name].returns;
         if (!returns || returns.length < 5) { return false; }
         if (returns.slice(0, 5).toLowerCase() === 'entit') {return true; }

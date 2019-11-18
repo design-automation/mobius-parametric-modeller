@@ -335,9 +335,12 @@ export class DataThreejs {
         }
         const geom = new THREE.BufferGeometry();
         geom.setIndex(tris_i);
-        geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-        geom.addAttribute('normal', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));
-        geom.addAttribute('color', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));
+        // geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        // geom.addAttribute('normal', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));
+        // geom.addAttribute('color', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));
+        geom.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        geom.setAttribute('normal', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));
+        geom.setAttribute('color', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));
         geom.clearGroups();
         geom.addGroup(0, tris_i.length, 0);
         geom.addGroup(0, tris_i.length, 1);
@@ -378,8 +381,10 @@ export class DataThreejs {
         } else {
             geom.setIndex([0, 1]);
         }
-        geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-        geom.addAttribute('normal', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));
+        // geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        // geom.addAttribute('normal', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));
+        geom.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        geom.setAttribute('normal', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));
         this.BufferGeoms.push(geom);
         const rgb = `rgb(${colors.toString()})`;
         const mat = new THREE.LineBasicMaterial({
@@ -497,10 +502,12 @@ export class DataThreejs {
         if (point_indices) {
             geom.setIndex(point_indices);
         }
-        geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        // geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        geom.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
         const color_rgb = new THREE.Color(parseInt(color.replace('#', '0x'), 16));
         if (colors) {
-            geom.addAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            // geom.addAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            geom.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
         } else {
             let color_data;
             if (positions) {
@@ -512,7 +519,8 @@ export class DataThreejs {
                 }
             }
             const color_buffer = new Uint8Array(color_data);
-            geom.addAttribute('color', new THREE.BufferAttribute(color_buffer, 3, true));
+            // geom.addAttribute('color', new THREE.BufferAttribute(color_buffer, 3, true));
+            geom.setAttribute('color', new THREE.BufferAttribute(color_buffer, 3, true));
         }
         geom.computeBoundingSphere();
         this.BufferGeoms.push(geom);
@@ -950,9 +958,12 @@ export class DataThreejs {
         materials): void {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(tris_i);
-        geom.addAttribute('position', posis_buffer);
-        // geom.addAttribute('normal', normals_buffer);
-        geom.addAttribute('color', colors_buffer);
+        // geom.addAttribute('position', posis_buffer);
+        // // geom.addAttribute('normal', normals_buffer);
+        // geom.addAttribute('color', colors_buffer);
+        geom.setAttribute('position', posis_buffer);
+        // geom.setAttribute('normal', normals_buffer);
+        geom.setAttribute('color', colors_buffer);
         const colorf = new THREE.Color(parseInt(this.settings.colors.face_f.replace('#', '0x'), 16));
         const colorb = new THREE.Color(parseInt(this.settings.colors.face_b.replace('#', '0x'), 16));
         geom.clearGroups();
@@ -1019,10 +1030,12 @@ export class DataThreejs {
         size: number = 1): void {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(lines_i);
-        geom.addAttribute('position', posis_buffer);
-        geom.addAttribute('normal', normals_buffer);
+        // geom.addAttribute('position', posis_buffer);
+        // geom.addAttribute('normal', normals_buffer);
+        geom.setAttribute('position', posis_buffer);
+        geom.setAttribute('normal', normals_buffer);
         this.BufferGeoms.push(geom);
-        // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
+        // // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
         const mat = new THREE.LineBasicMaterial({
             color: 0x000000,
             linewidth: size,
@@ -1044,8 +1057,10 @@ export class DataThreejs {
         size: number = 1): void {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(points_i);
-        geom.addAttribute('position', posis_buffer);
-        geom.addAttribute('color', colors_buffer);
+        // geom.addAttribute('position', posis_buffer);
+        // geom.addAttribute('color', colors_buffer);
+        geom.setAttribute('position', posis_buffer);
+        geom.setAttribute('color', colors_buffer);
         this.BufferGeoms.push(geom);
         // geom.computeBoundingSphere();
         const rgb = `rgb(${color.toString()})`;
@@ -1067,7 +1082,8 @@ export class DataThreejs {
         size: number = 1): void {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(points_i);
-        geom.addAttribute('position', posis_buffer);
+        // geom.addAttribute('position', posis_buffer);
+        geom.setAttribute('position', posis_buffer);
         this.BufferGeoms.push(geom);
         // geom.computeBoundingSphere();
         const mat = new THREE.PointsMaterial({

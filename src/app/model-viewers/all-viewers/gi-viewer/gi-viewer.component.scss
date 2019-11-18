@@ -182,7 +182,7 @@ body.modal-open {
     .filebtn.setting{
         margin-top: 20px;
     }
-    /deep/ .modal-window .modal-body{
+    ::ng-deep .modal-window .modal-body{
         background: $color6;
     }
 
@@ -353,7 +353,7 @@ body.modal-open {
     }
 }
 
-/deep/ #settingsTab{
+::ng-deep #settingsTab{
     height: 100%;
     width: 100%;
     overflow-x: scroll;

@@ -6,7 +6,6 @@ import { DataService, KeyboardService } from '@services';
 import { Router } from '@angular/router';
 import * as circularJSON from 'circular-json';
 import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
-import { nodeChildrenAsMap } from '@angular/router/src/utils/tree';
 import { checkNodeValidity } from '@shared/parser';
 import { DataOutputService } from '@shared/services/dataOutput.service';
 import { SaveFileComponent } from '@shared/components/file';

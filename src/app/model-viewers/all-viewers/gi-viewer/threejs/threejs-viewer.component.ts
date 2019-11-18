@@ -30,7 +30,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     @Input() attr_table_select: { action: string, ent_type: string, id: number | number[] };
     @Input() selectSwitch: Boolean;
     @Input() attribLabel: string;
-    @ViewChild(DropdownMenuComponent) dropdown = new DropdownMenuComponent();
+    @ViewChild(DropdownMenuComponent, { static: true }) dropdown = new DropdownMenuComponent();
 
     protected modalWindow: ModalService;
     protected keyboardService: KeyboardService;

@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
     styleUrls: ['model-viewers-container.component.scss']
 })
 export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy {
-    @ViewChild('vc', {read: ViewContainerRef}) vc: ViewContainerRef;
+    @ViewChild('vc', { read: ViewContainerRef, static: true }) vc: ViewContainerRef;
     @Input() data: any;
     private views = [];
     private activeView: IView;

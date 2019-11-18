@@ -136,7 +136,7 @@ table{
   }
 }
 
-/deep/ table{
+::ng-deep table{
   th:first-child{
     i{
       // display: none;
@@ -150,7 +150,7 @@ table{
 }
 
 
-/deep/ #attribTab{
+::ng-deep #attribTab{
   height: 100%;
   width: 100%;
   overflow-x: scroll;

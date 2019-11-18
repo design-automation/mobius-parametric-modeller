@@ -6,6 +6,19 @@ import { EEntTypeStr, EEntType } from '@libs/geo-info/common';
 import { Vector3 } from 'three';
 import { DataService } from '@services';
 import { Vector } from '@assets/core/modules/basic/calc';
+enum objType {
+    point = 'point',
+    line = 'line',
+    face = 'face'
+}
+enum MaterialType {
+    MeshBasicMaterial = 'MeshBasicMaterial',
+    MeshStandardMaterial = 'MeshStandardMaterial',
+    MeshLambertMaterial = 'MeshLambertMaterial',
+    MeshPhongMaterial = 'MeshPhongMaterial',
+    MeshPhysicalMaterial = 'MeshPhysicalMaterial'
+}
+
 /**
  * ThreejsScene
  */
@@ -15,7 +28,7 @@ export class DataThreejs {
     // public basic_scene: THREE.Scene;
     public _renderer: THREE.WebGLRenderer;
     public _camera;
-    public _controls: THREE.OrbitControls;
+    public _controls: any;
     public _raycaster: THREE.Raycaster;
     public _mouse: THREE.Vector2;
     // interaction and selection
@@ -75,6 +88,32 @@ export class DataThreejs {
         }
         // scene
         this._scene = new THREE.Scene();
+
+        // var path = 'assets/img/cube/';
+        // var format = '.jpg';
+        // var urls = [
+        //     path + 'px' + format, path + 'nx' + format,
+        //     path + 'py' + format, path + 'ny' + format,
+        //     path + 'pz' + format, path + 'nz' + format
+        // ];
+        // var reflectionCube = new THREE.CubeTextureLoader().load( urls );
+        // var loader = new THREE.ImageLoader();
+
+        // for (var i = 0; i < 6; i++) {
+        //     materialArray.push( new THREE.MeshBasicMaterial({
+        //         map: loader.load( urls[i] ),
+        //         side: THREE.BackSide
+        //     }))
+        // }
+
+        // var skyGeometry = new THREE.CubeGeometry( 5000, 5000, 5000 );
+        // var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+        // var skybox = new THREE.Mesh( skyGeometry, skyMaterial );
+
+        // reflectionCube.format = THREE.RGBFormat;
+        // this._scene.background = reflectionCube;
+        // this._scene.rotation.x = Math.PI;
+
         this._scene.background = new THREE.Color(this.settings.colors.viewer_bg);
 
         // this.basic_scene = new THREE.Scene();
@@ -651,7 +690,6 @@ export class DataThreejs {
         }
         // remove positions from scene
         removing.forEach((v, k) => {
-            console.log(this._scene.getObjectById(v))
             this._scene.remove(this._scene.getObjectById(v));
             this.ObjLabelMap.delete(k);
             if (document.getElementById(`textLabel_${k}`)) {
@@ -818,7 +856,7 @@ export class DataThreejs {
                 if (this.allObjs) {
                     const lightTarget = new THREE.Object3D();
                     lightTarget.position.set(this.allObjs.center.x, this.allObjs.center.y, this.allObjs.center.z);
-                    lightTarget.name = 'lightTarget'
+                    lightTarget.name = 'lightTarget';
                     this._scene.add(lightTarget);
                     (<THREE.DirectionalLight>this.directional_light).target = lightTarget;
                 }
@@ -1199,12 +1237,12 @@ export class DataThreejs {
 
     public getGridPos() {
         if (this.allObjs) {
-            const grid_pos = new THREE.Vector3(this.allObjs.center.x, this.allObjs.center.y, 0);
-            this.grid.position.set(grid_pos.x, grid_pos.y, 0)
-            return grid_pos;
+            const grd_pos = new THREE.Vector3(this.allObjs.center.x, this.allObjs.center.y, 0);
+            this.grid.position.set(grd_pos.x, grd_pos.y, 0);
+            return grd_pos;
         }
         const grid_pos = new THREE.Vector3(0, 0, 0);
-        this.grid.position.set(0, 0, 0)
+        this.grid.position.set(0, 0, 0);
         return grid_pos;
     }
 
@@ -1308,25 +1346,13 @@ export class DataThreejs {
  * objType includes point, line, face
  */
 
-enum objType {
-    point = 'point',
-    line = 'line',
-    face = 'face'
-}
 
-enum MaterialType {
-    MeshBasicMaterial = 'MeshBasicMaterial',
-    MeshStandardMaterial = 'MeshStandardMaterial',
-    MeshLambertMaterial = 'MeshLambertMaterial',
-    MeshPhongMaterial = 'MeshPhongMaterial',
-    MeshPhysicalMaterial = 'MeshPhysicalMaterial'
-}
 
 interface Settings {
     normals: { show: boolean, size: number };
     axes: { show: boolean, size: number };
     grid: {
-        show: boolean, 
+        show: boolean,
         size: number,
         pos: Vector3,
         pos_x: number,

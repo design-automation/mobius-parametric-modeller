@@ -43,7 +43,7 @@ export class PanelHeaderComponent implements OnDestroy {
         this.ctx.font = '12px sans-serif';
 
         this.settings = this.dataService.mobiusSettings;
-
+        if (this.settings['debug'] === undefined) { this.settings['debug'] = true; }
         for (const cat in this.func_categories) {
             if (!this.func_categories[cat] || this.settings.hasOwnProperty('_func_' + this.func_categories[cat])) { continue; }
             this.settings['_func_' + this.func_categories[cat]] = true;
@@ -567,7 +567,7 @@ export class PanelHeaderComponent implements OnDestroy {
 
         let txtArea = document.getElementById('generatedLink');
         txtArea.innerHTML = `${window.location.origin}/${this.urlSet[1]}` +
-            `?file=${url}${this.urlSet[2]}${this.urlSet[3]}${this.urlSet[4]}`;
+            `?file=${url}${this.urlSet[2]}${this.urlSet[3]}${this.urlSet[4]}${this.urlSet[5]}`;
         txtArea = null;
     }
 

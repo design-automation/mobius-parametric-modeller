@@ -191,7 +191,7 @@
         <p>Mobius Settings:</p>
         <br>
         <div class='settingLine'>
-            <div class='textdiv'>Execute on file load</div>
+            <div class='textdiv'>Execute on file load:</div>
             
             <div class='div--chbox'>
                 <input id='settings-execute' 
@@ -199,6 +199,18 @@
                 type="checkbox" 
                 [checked]='checkSetting("execute", true)'>
                 <label for='settings-execute'></label>
+            </div>
+        </div>
+        <br>
+        <div class='settingLine'>
+            <div class='textdiv'>Debug Mode:</div>
+            
+            <div class='div--chbox'>
+                <input id='settings-debug' 
+                name='settings-debug' 
+                type="checkbox" 
+                [checked]='checkSetting("debug", true)'>
+                <label for='settings-debug'></label>
             </div>
         </div>
         <br>

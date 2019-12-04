@@ -8,7 +8,7 @@ import { ModuleList } from '@shared/decorators';
 import { checkNodeValidity } from '@shared/parser';
 import { IdGenerator } from '@utils';
 import { checkMobFile } from '@shared/updateOldMobFile';
-import { SaveFileComponent } from '.';
+import { SaveFileComponent } from './savefile.component';
 
 @Component({
   selector: 'file-load',

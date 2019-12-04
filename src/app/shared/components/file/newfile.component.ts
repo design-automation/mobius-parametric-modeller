@@ -2,6 +2,7 @@ import { Component, Output, EventEmitter, ChangeDetectorRef } from '@angular/cor
 import { IMobius } from '@models/mobius';
 import { FlowchartUtils } from '@models/flowchart';
 import { DataService } from '@services';
+import { SaveFileComponent } from './savefile.component';
 
 @Component({
   selector: 'file-new',
@@ -44,6 +45,9 @@ export class NewFileComponent {
             version: 4,
             settings: {}
         };
+
+        SaveFileComponent.clearModelData(this.dataService.file, null);
+        delete this.dataService.file.flowchart;
         this.dataService.file = file;
         let zooming = document.getElementById('zoomToFit');
         if (zooming) {

@@ -204,6 +204,8 @@ export class PanelHeaderComponent implements OnDestroy {
                 return;
             }
 
+            SaveFileComponent.clearModelData(this.dataService.file, null);
+            delete this.dataService.file.flowchart;
             this.dataService.file = circularJSON.parse(result);
             this.dataService.file.flowchart.meta.selected_nodes = [this.dataService.file.flowchart.nodes.length - 1];
             this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);

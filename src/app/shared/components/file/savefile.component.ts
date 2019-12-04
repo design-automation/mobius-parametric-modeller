@@ -199,6 +199,22 @@ export class SaveFileComponent {
         nodeList.splice(nodeList.length - 1, 0, checkNode);
     }
 
+    static clearModelData(f: IMobius, modelMap = null) {
+        for (const node of f.flowchart.nodes) {
+            if (modelMap !== null) {
+                modelMap[node.id] = node.model;
+            }
+            node.model = undefined;
+            if (node.input.hasOwnProperty('value')) {
+                node.input.value = undefined;
+            }
+            if (node.output.hasOwnProperty('value')) {
+                node.output.value = undefined;
+            }
+            SaveFileComponent.clearResolvedValue(node.procedure);
+        }
+    }
+
     static clearResolvedValue(prodList: IProcedure[]) {
         prodList.forEach(prod => {
             if (prod.hasOwnProperty('resolvedValue')) {
@@ -257,17 +273,7 @@ export class SaveFileComponent {
         // clear the nodes' input/output in the flowchart, save them in modelMap
         // (save time on JSON stringify + parse)
         const modelMap = {};
-        for (const node of f.flowchart.nodes) {
-            modelMap[node.id] = node.model;
-            node.model = undefined;
-            if (node.input.hasOwnProperty('value')) {
-                node.input.value = undefined;
-            }
-            if (node.output.hasOwnProperty('value')) {
-                node.output.value = undefined;
-            }
-            SaveFileComponent.clearResolvedValue(node.procedure);
-        }
+        SaveFileComponent.clearModelData(f, modelMap);
 
         // make a copy of the flowchart
         const savedfile = circularJSON.parse(circularJSON.stringify(f));
@@ -275,6 +281,7 @@ export class SaveFileComponent {
         // set the nodes' input/output in the original flowchart again
         for (const node of f.flowchart.nodes) {
             node.model = modelMap[node.id];
+            modelMap[node.id] = null;
         }
 
         // reset each node's id in the new copy of the flowchart --> the same node will

@@ -529,14 +529,16 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             body[0].style.cursor = 'default';
             return null;
         } else {
-            const intersects = this.threeJSViewerService.initRaycaster(event);
-            if (intersects && intersects.length > 0) {
-                body[0].style.cursor = 'pointer';
-            } else {
-                body[0].style.cursor = 'default';
-            }
 
-            if (!this.isDown) { return; }
+            if (!this.isDown) {
+                // const intersects = this.threeJSViewerService.initRaycaster(event);
+                // if (intersects && intersects.length > 0) {
+                //     body[0].style.cursor = 'pointer';
+                // } else {
+                //     body[0].style.cursor = 'default';
+                // }
+                return;
+            }
 
             const mouseX = event.clientX - event.target.getBoundingClientRect().left;
             const mouseY = event.clientY - event.target.getBoundingClientRect().top;

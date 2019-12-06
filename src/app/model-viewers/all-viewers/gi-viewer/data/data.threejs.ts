@@ -89,14 +89,6 @@ export class DataThreejs {
         // scene
         this._scene = new THREE.Scene();
 
-        // var path = 'assets/img/cube/';
-        // var format = '.jpg';
-        // var urls = [
-        //     path + 'px' + format, path + 'nx' + format,
-        //     path + 'py' + format, path + 'ny' + format,
-        //     path + 'pz' + format, path + 'nz' + format
-        // ];
-        // var reflectionCube = new THREE.CubeTextureLoader().load( urls );
         // var loader = new THREE.ImageLoader();
 
         // for (var i = 0; i < 6; i++) {
@@ -110,11 +102,12 @@ export class DataThreejs {
         // var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
         // var skybox = new THREE.Mesh( skyGeometry, skyMaterial );
 
-        // reflectionCube.format = THREE.RGBFormat;
-        // this._scene.background = reflectionCube;
-        // this._scene.rotation.x = Math.PI;
 
-        this._scene.background = new THREE.Color(this.settings.colors.viewer_bg);
+        if (this.settings.background.show) {
+            this.loadBackground(0);
+        } else {
+            this._scene.background = new THREE.Color(this.settings.colors.viewer_bg);
+        }
 
         // this.basic_scene = new THREE.Scene();
         // this.basic_scene.background = new THREE.Color(0xE6E6E6);
@@ -136,7 +129,6 @@ export class DataThreejs {
         //     0.5 * frustumSize * aspect / 2,
         //     frustumSize / 2, frustumSize / - 2, 150, 1000 );
         this._camera = new THREE.PerspectiveCamera(50, 1, 0.01, 1000000);
-        // document.addEventListener( 'keypress', this.onWindowKeyPress, false );
         this._camera.position.x = -80;
         this._camera.position.y = -80;
         this._camera.position.z = 80;
@@ -193,7 +185,11 @@ export class DataThreejs {
      * @param container
      */
     public addGeometry(model: GIModel, container): void {
-        this._scene.background = new THREE.Color(this.settings.colors.viewer_bg);
+        if (this.settings.background.show) {
+            this.loadBackground(0);
+        } else {
+            this._scene.background = new THREE.Color(this.settings.colors.viewer_bg);
+        }
         while (this._scene.children.length > 0) {
             DataThreejs.disposeObjectProperty(this._scene.children[0], 'geometry');
             DataThreejs.disposeObjectProperty(this._scene.children[0], 'material');
@@ -212,7 +208,6 @@ export class DataThreejs {
 
         // Add geometry
         const threejs_data: IThreeJS = model.threejs.get3jsData();
-
         // if (threejs_data.posis_indices.length === 0) {
             // this._camera.position.set(-80, -80, 80);
             // this._camera.lookAt(this._scene.position);
@@ -978,6 +973,11 @@ export class DataThreejs {
         const l = materials.length;
         for (; index < l; index++) {
             const element = materials[index];
+            // if (this.settings.background.show) {
+            //     element.envMap = this._scene.background;
+            //     element.refractionRatio = 1;
+            //     element.envMap.mapping = THREE.CubeRefractionMapping;
+            // }
             let mat;
             if (index === 0) {
                 delete element.type; element.color = colorf;
@@ -1356,6 +1356,20 @@ export class DataThreejs {
         }
         return true;
     }
+
+    loadBackground(background_set: number){
+        const path = 'assets/img/background/bg' + background_set + '/';
+        const format = '.jpg';
+        const urls = [
+            path + 'px' + format, path + 'nx' + format,
+            path + 'py' + format, path + 'ny' + format,
+            path + 'pz' + format, path + 'nz' + format
+        ];
+        const background = new THREE.CubeTextureLoader().load( urls );
+
+        background.format = THREE.RGBFormat;
+        this._scene.background = background;
+    }
 }
 
 /**
@@ -1374,6 +1388,10 @@ interface Settings {
         pos_x: number,
         pos_y: number,
         pos_z: number,
+    };
+    background: {
+        show: boolean,
+        background_set: number
     };
     positions: { show: boolean, size: number };
     tjs_summary: { show: boolean };

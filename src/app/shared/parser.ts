@@ -54,8 +54,13 @@ const reservedWords = [
     'Array', 'Date', 'hasOwnProperty', 'Infinity',
     'isFinite', 'isNaN', 'isPrototypeOf', 'length',
     'Math', 'NaN', 'name', 'Number', 'Object',
-    'prototype', 'String', 'toString', 'undefined', 'valueOf'
+    'prototype', 'String', 'toString', 'undefined', 'valueOf',
+
+    'pythonList', 'JSON', 'stringify', 'parse'
 ];
+const reservedWordsSet = new Set(reservedWords);
+
+const varStartSymbols = new Set(['#', '@', '?']);
 
 const mathFuncs = [];
 for (const funcMod of inline_func) {
@@ -106,6 +111,26 @@ export function modifyVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
         }
     }
     procedure.args[0].invalidVar = false;
+
+    const comps = splitComponents(procedure.args[0].jsValue);
+    // console.log('\n\n',procedure.args[0].jsValue)
+    // if (typeof comps === 'string') {
+    //     return;
+    // }
+    // for (let i = 0; i < comps.length; i ++) {
+    //     const comp = comps[i];
+    //     if (comp.type === strType.OTHER && comp.value === ';' || comp.value === '=') {
+    //         console.log('  .......', comp.value)
+    //     }
+    //     if (comp.type === strType.VAR && comp.value[comp.value.length - 1] !== '_') {
+    //         console.log('  _',comp.value)
+    //         console.log('    keyword1:', specialVars.has(comps[i].value))
+    //         console.log('    keyword2:', reservedWordsSet.has(comps[i].value))
+    //         if (i > 0) {
+    //             console.log('    previous:', comps[i - 1].value)
+    //         }
+    //     }
+    // }
 }
 
 export function modifyLocalFuncVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
@@ -221,6 +246,26 @@ export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProd
     } else {
         procedure.args[argIndex].invalidVar = varResult.error;
     }
+
+    // const comps = splitComponents(procedure.args[argIndex].jsValue);
+    // console.log('\n\n',procedure.args[argIndex].jsValue)
+    // if (typeof comps === 'string') {
+    //     return;
+    // }
+    // for (let i = 0; i < comps.length; i ++) {
+    //     const comp = comps[i];
+    //     if (comp.type === strType.OTHER && comp.value === ';' || comp.value === '=') {
+    //         console.log('  .......', comp.value)
+    //     }
+    //     if (comp.type === strType.VAR && comp.value[comp.value.length - 1] !== '_') {
+    //         console.log('  _',comp.value)
+    //         console.log('    keyword1:', specialVars.has(comps[i].value))
+    //         console.log('    keyword2:', reservedWordsSet.has(comps[i].value))
+    //         if (i > 0) {
+    //             console.log('    previous:', comps[i - 1].value)
+    //         }
+    //     }
+    // }
 
     // REGEX CALL
     // const vals = procedure.args[argIndex].value.split('"');

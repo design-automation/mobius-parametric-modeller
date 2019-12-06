@@ -200,6 +200,40 @@
 									[value]="formatNumber(settings.grid.pos_z)">
 									<button (click)="settingOnChange('grid.update_pos')" class="filebtn getbtn">Get</button>
                                 </dd>
+								<dd><hr></dd>
+								<dd>
+									<div class="label">Background</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="backgroundOnOff"
+										[checked]='settings.background.show'
+										(change)="settingOnChange('background.show')"
+										>
+										<label class="onoffswitch-label" for="backgroundOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+                                        </label>
+									</div>
+								</dd>
+								<!-- <dd>
+									<div class="label">Background Set</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="backgroundSelect"
+										[checked]='settings.grid.show'
+										(change)="settingOnChange('grid.show')"
+										>
+										<label class="onoffswitch-label" for="backgroundSelect">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+                                        </label>
+									</div>
+								</dd> -->
+
 							</dl>
 						</div>
 					</tab>

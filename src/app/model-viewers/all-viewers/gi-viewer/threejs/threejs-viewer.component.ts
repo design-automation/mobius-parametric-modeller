@@ -13,6 +13,9 @@ import { ModalService } from '../html/modal-window.service';
 import { ThreeJSViewerService } from './threejs-viewer.service';
 import { sortByKey } from '@libs/util/maps';
 import { KeyboardService } from '@shared/services';
+import { Subscription } from 'rxjs';
+
+let renderCheck = true;
 
 /**
  * A threejs viewer for viewing geo-info (GI) models.
@@ -33,7 +36,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     @ViewChild(DropdownMenuComponent, { static: true }) dropdown = new DropdownMenuComponent();
 
     protected modalWindow: ModalService;
-    protected keyboardService: KeyboardService;
+    // protected keyboardService: KeyboardService;
+    // private keyboardServiceSub: Subscription;
     public container = null;
     public _elem;
     // viewer size
@@ -100,6 +104,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         9: 8,
         10: 9
     };
+
     /**
      * Creates a new viewer,
      * @param injector
@@ -109,11 +114,10 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this._elem = elem;
         this.dataService = injector.get(DataService);
         this.modalWindow = injector.get(ModalService);
-        this.keyboardService = injector.get(KeyboardService);
-        this.keyboardService.viewerControl$.subscribe(event => {
-            const check = this._data_threejs.onWindowKeyPress(event);
-            if (check) { this.render(); }
-        });
+        // this.keyboardService = injector.get(KeyboardService);
+        // this.keyboardServiceSub = this.keyboardService.viewerControl$.subscribe(event => {
+        //     this._data_threejs.onWindowKeyPress(event);
+        // });
     }
     /**
      * Called when the viewer is initialised.
@@ -138,8 +142,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         // set the numbers of entities
         this._threejs_nums = this._data_threejs._threejs_nums;
         // ??? What is happening here?
-        const self = this;
-        this._data_threejs._controls.addEventListener('change', function () { self.render(); });
+        this._data_threejs._controls.addEventListener('change', this.activateRender);
         this._data_threejs._renderer.render(this._data_threejs._scene, this._data_threejs._camera);
 
         if (this._data_threejs.ObjLabelMap.size !== 0) {
@@ -149,18 +152,13 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }
 
         this.getSelectingEntityType();
-    }
-    /**
-     * @param self
-     */
-    public render() {
-        const textLabels = this._data_threejs._textLabels;
-        if (textLabels.size !== 0) {
-            textLabels.forEach((label) => {
-                label.updatePosition();
-            });
+
+        for (let i = 1; i < 30; i++) {
+            setTimeout(() => {
+                renderCheck = true;
+            }, i * 200);
         }
-        this._data_threejs._renderer.render(this._data_threejs._scene, this._data_threejs._camera);
+
     }
 
     /**
@@ -182,19 +180,16 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 this._data_threejs._camera.aspect = this._width / this._height;
                 this._data_threejs._camera.updateProjectionMatrix();
                 this._data_threejs._renderer.setSize(this._width, this._height);
-                this.render();
+                renderCheck = true;
             }, 10);
         }
 
-
-    }
-
-    getCurrentTab() {
-        if (localStorage.getItem('mpm_attrib_current_tab') !== null) {
-            return Number(localStorage.getItem('mpm_attrib_current_tab'));
-        } else {
-            return 0;
+        if (renderCheck) {
+            this.render();
+            renderCheck = false;
         }
+        // this.render();
+
     }
 
     // receive data -> model from gi-viewer component and update model in the scene
@@ -227,6 +222,42 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             }
         }
     }
+
+    ngOnDestroy() {
+        this._elem = null;
+        this.container = null;
+        this.dataService.switch_page = true;
+        this.model = null;
+        this._data_threejs._controls.removeEventListener('change', this.activateRender);
+        // this.keyboardServiceSub.unsubscribe();
+    }
+
+    private activateRender() {
+        renderCheck = true;
+    }
+
+    /**
+     * @param self
+     */
+    public render() {
+        const textLabels = this._data_threejs._textLabels;
+        if (textLabels.size !== 0) {
+            textLabels.forEach((label) => {
+                label.updatePosition();
+            });
+        }
+        this._data_threejs._renderer.render(this._data_threejs._scene, this._data_threejs._camera);
+    }
+
+
+    getCurrentTab() {
+        if (localStorage.getItem('mpm_attrib_current_tab') !== null) {
+            return Number(localStorage.getItem('mpm_attrib_current_tab'));
+        } else {
+            return 0;
+        }
+    }
+
 
     refreshLabels(ent_type): void {
         const allLabels = document.getElementsByClassName(`text-label${EEntTypeStr[ent_type]}`);
@@ -280,7 +311,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 element.innerHTML = String('');
             }
         }
-        this.render();
+        renderCheck = true;
+        // this.render();
     }
 
     labelforindex(showSelected, allLabels, arr) {
@@ -300,12 +332,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 element.innerHTML = String(index);
             }
         }
-    }
-
-    ngOnDestroy() {
-        this._elem = null;
-        this.container = null;
-        this.dataService.switch_page = true;
     }
 
     attrTableSelect(attrib: { action: string, ent_type: string, id: number | number[] }, flowchart = false) {
@@ -422,7 +448,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             }
         }
         this.refreshLabels(this.tab_map[this.getCurrentTab()]);
-        this.render();
     }
 
     getGISummary(model: GIModel) {
@@ -498,7 +523,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     }
                     this.getSelectingEntityType();
                     this.refreshTable(event);
-                    this.render();
                 } catch (ex) {
                     console.error('Error displaying model:', ex);
                     this._model_error = true;
@@ -526,7 +550,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const body = document.getElementsByTagName('body');
 
         if (event.target.tagName !== 'CANVAS') {
-            body[0].style.cursor = 'default';
+            // body[0].style.cursor = 'default';
             return null;
         } else {
 
@@ -611,6 +635,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
     private refreshTable(event: Event) {
         this.eventClicked.emit(event);
+        renderCheck = true;
+        // this.render();
     }
 
     private resetTable() {
@@ -656,7 +682,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             scene.unselectObjGroup(wire, this.container, 'face_wires');
         }
 
-        this.render();
+        renderCheck = true;
+        // this.render();
     }
 
     private getSelectingEntityType() {
@@ -904,7 +931,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 this.showMessages('Please choose an Entity type.', 'custom');
                 break;
         }
-        this.render();
+
+        renderCheck = true;
+        // this.render();
     }
 
     private showMessages(msg: string, mode: string = 'notice') {
@@ -1059,7 +1088,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             this.dataService.selected_ents.get(ent_type_str).delete(ent_id);
             this.unselectLabel(ent_id, ent_type_str);
         }
-        this.render();
         this.refreshTable(event);
     }
 
@@ -1391,7 +1419,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this.dataService.selected_ents.get(EEntTypeStr[EEntType.COLL]).set(coll_id, id);
         this.dataService.selected_coll.set(coll_id, children);
         this.refreshTable(null);
-        this.render();
     }
 
     private chooseVertex(id: number) {
@@ -1406,7 +1433,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         posi_ent.set(ent_id, id);
         this.dataService.selected_vertex.set(`_single_v${timestamp}`, [ent_id]);
         this.refreshTable(null);
-        this.render();
     }
 
     public zoomfit() {
@@ -1439,6 +1465,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             this.chooseVertex(id);
         }
     }
+
 }
 
 enum mouseLabel {

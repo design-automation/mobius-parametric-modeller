@@ -3,13 +3,17 @@ import { Vector3 } from 'three';
 export const DefaultSettings = {
     normals: { show: false, size: 5 },
     axes: { show: true, size: 50 },
-    grid: { 
-        show: true, 
+    grid: {
+        show: true,
         size: 500,
         pos_x: 0,
         pos_y: 0,
         pos_z: 0,
         pos: new Vector3(0, 0, 0)
+    },
+    background: {
+        show: false,
+        background_set: 0
     },
     positions: { show: true, size: 0.5 },
     tjs_summary: { show: false },

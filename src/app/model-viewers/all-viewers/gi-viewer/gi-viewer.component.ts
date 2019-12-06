@@ -142,6 +142,7 @@ export class GIViewerComponent implements OnInit {
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
             this.threejs.updateModel(this.data);
         } else {
+            // tslint:disable-next-line: forin
             for (const setting in this.dataService.getThreejsScene().settings) {
                 this.settings[setting] = this.dataService.getThreejsScene().settings[setting];
             }
@@ -150,6 +151,7 @@ export class GIViewerComponent implements OnInit {
     }
 
     onCloseModal() {
+        // tslint:disable-next-line: forin
         for (const setting in this.dataService.getThreejsScene().settings) {
             this.settings[setting] = this.dataService.getThreejsScene().settings[setting];
         }
@@ -196,6 +198,11 @@ export class GIViewerComponent implements OnInit {
                 break;
             case 'positions.size':
                 this.settings.positions.size = Number(value);
+                break;
+            case 'background.show':
+                this.settings.background.show = !this.settings.background.show;
+                break;
+            case 'background.set':
                 break;
             case 'tjs_summary.show':
                 this.settings.gi_summary.show = false;
@@ -420,6 +427,10 @@ interface Settings {
         pos_x: number,
         pos_y: number,
         pos_z: number,
+    };
+    background: {
+        show: boolean,
+        background_set: number
     };
     positions: { show: boolean, size: number };
     wireframe: { show: boolean };

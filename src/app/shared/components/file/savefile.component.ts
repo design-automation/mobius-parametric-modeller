@@ -350,12 +350,33 @@ export class SaveFileComponent {
             settings: {}
         };
         newFile.flowchart.name = this.dataService.flowchart.name;
-        let flowchart_desc = this.dataService.flowchart.description;
+
+        const splitDesc = this.dataService.flowchart.description.split('\n');
+        let i = 0;
+        while (i < splitDesc.length) {
+            const trimmedLine = splitDesc[i].replace(/ /g, '');
+            if (trimmedLine.startsWith('console:')
+            ||  trimmedLine.startsWith('model:')
+            ||  trimmedLine.startsWith('normalize:')) {
+                splitDesc.splice(i, 1);
+            } else {
+                i += 1;
+            }
+        }
+        let flowchart_desc = '';
+
         for (const prod of this.dataService.flowchart.nodes[0].procedure) {
             if (prod.type !== ProcedureTypes.Constant) { continue; }
+            for (let j = 0; j < splitDesc.length; j ++) {
+                const trimmedLine = splitDesc[j].replace(/ /g, '');
+                if (trimmedLine.startsWith(prod.args[0].value + ':[')) {
+                    splitDesc.splice(j, 1);
+                    break;
+                }
+            }
             flowchart_desc += '\n' + prod.args[0].value + ' = ' + prod.args[1].value;
         }
-        newFile.flowchart.description = flowchart_desc;
+        newFile.flowchart.description = splitDesc.join('\n') + flowchart_desc;
 
         const node = newFile.flowchart.nodes[1];
 

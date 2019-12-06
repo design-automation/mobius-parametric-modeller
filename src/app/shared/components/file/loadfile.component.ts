@@ -45,7 +45,7 @@ export class LoadFileComponent {
 
     sendloadfile() {
         const selectedFile = (<HTMLInputElement>document.getElementById('file-input')).files[0];
-        const stream = Observable.create(observer => {
+        const stream = new Observable<IMobius>(observer => {
             const reader = new FileReader();
             reader.onloadend = () => {
                 // if (typeof reader.result === 'string') {}

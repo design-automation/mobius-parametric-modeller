@@ -203,10 +203,13 @@ export class PanelHeaderComponent implements OnDestroy {
             if (result === 'error') {
                 return;
             }
-
             SaveFileComponent.clearModelData(this.dataService.file, null);
-            delete this.dataService.file.flowchart;
-            this.dataService.file = circularJSON.parse(result);
+            try {
+                this.dataService.file = circularJSON.parse(result);
+            } catch (ex) {
+                this.dataService.notifyMessage('ERROR: Corrupted local file');
+                return;
+            }
             this.dataService.file.flowchart.meta.selected_nodes = [this.dataService.file.flowchart.nodes.length - 1];
             this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
             if (this.settings.execute) {

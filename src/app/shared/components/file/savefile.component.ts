@@ -79,8 +79,6 @@ export class SaveFileComponent {
         // }
         const downloadResult = SaveFileComponent.fileDownloadString(f);
         SaveFileComponent.saveToLocalStorage(downloadResult.name, downloadResult.file);
-
-
     }
 
     static saveToLocalStorage(name: string, file: string) {
@@ -126,7 +124,7 @@ export class SaveFileComponent {
 
     static saveToFS(fs) {
         fs.root.getFile(window['_code__'], { create: true}, function (fileEntry) {
-            fileEntry.createWriter(function (fileWriter) {
+            fileEntry.createWriter(async function (fileWriter) {
                 // fileWriter.onwriteend = function (e) {
                 //     console.log('Write completed.');
                 // };
@@ -134,8 +132,8 @@ export class SaveFileComponent {
                 // fileWriter.onerror = function (e) {
                 //     console.log('Write failed: ' + e.toString());
                 // };
-                const bb = new Blob([window['_file__']], {type: 'text/plain;charset=utf-8'});
-                fileWriter.write(bb);
+                const bb = new Blob([window['_file__'] + '_|_|_'], {type: 'text/plain;charset=utf-8'});
+                await fileWriter.write(bb);
                 window['_code__'] = undefined;
                 window['_file__'] = undefined;
             }, (e) => { console.log(e); });
@@ -143,25 +141,30 @@ export class SaveFileComponent {
     }
 
     static deleteFile(filecode) {
+        window['_code__'] = filecode;
         const requestedBytes = 1024 * 1024 * 50;
         navigator.webkitPersistentStorage.requestQuota (
             requestedBytes, function(grantedBytes) {
                 // @ts-ignore
-                window.webkitRequestFileSystem(PERSISTENT, grantedBytes, function(fs) {
-                    fs.root.getFile(filecode, {create: false}, function(fileEntry) {
-                      fileEntry.remove(function() {
-                        // console.log('File removed.');
-                        const items: string[] = JSON.parse(localStorage.getItem('mobius_backup_list'));
-                        const i = items.indexOf(filecode);
-                        if (i !== -1) {
-                            items.splice(i, 1);
-                            localStorage.setItem('mobius_backup_list', JSON.stringify(items));
-                        }
-                      }, (e) => { console.log('Error', e); });
-                    });
-                });
+                window.webkitRequestFileSystem(PERSISTENT, grantedBytes, SaveFileComponent.removeFromFS);
             }, function(e) { console.log('Error', e); }
         );
+    }
+
+    static removeFromFS(fs) {
+        const filecode = window['_code__'];
+        fs.root.getFile(filecode, {create: false}, function(fileEntry) {
+            fileEntry.remove(function() {
+                // console.log('File removed.');
+                const items: string[] = JSON.parse(localStorage.getItem('mobius_backup_list'));
+                const i = items.indexOf(filecode);
+                if (i !== -1) {
+                    items.splice(i, 1);
+                    localStorage.setItem('mobius_backup_list', JSON.stringify(items));
+                }
+                window['_code__'] = undefined;
+            }, (e) => { console.log('Error', e); });
+        });
     }
 
     static async loadFromFileSystem(filecode): Promise<any> {
@@ -178,7 +181,12 @@ export class SaveFileComponent {
                                     resolve('error');
                                 };
                                 reader.onloadend = () => {
-                                    resolve(reader.result);
+                                    console.log(reader.result.slice(-30))
+                                    if ((typeof reader.result) === 'string') {
+                                        resolve((<string>reader.result).split('_|_|_')[0]);
+                                    } else {
+                                        resolve(reader.result);
+                                    }
                                 };
                                 reader.readAsText(file, 'text/plain;charset=utf-8');
                             });

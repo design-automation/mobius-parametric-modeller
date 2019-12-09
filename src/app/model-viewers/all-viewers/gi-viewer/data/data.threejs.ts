@@ -871,7 +871,7 @@ export class DataThreejs {
             helper.name = 'DLHelper';
             this._scene.add(helper);
             this.getDLPosition(scale);
-            this._renderer.render(this._scene, this._camera);
+            // this._renderer.render(this._scene, this._camera);
         }
     }
 
@@ -886,7 +886,7 @@ export class DataThreejs {
             this.directional_light.shadow.mapSize.width = _size;
             this.directional_light.shadow.mapSize.width = _size;
         }
-        this._renderer.render(this._scene, this._camera);
+        // this._renderer.render(this._scene, this._camera);
     }
 
 
@@ -995,6 +995,11 @@ export class DataThreejs {
                     mat = new THREE.MeshPhongMaterial(element);
                 } else if (element.type === MaterialType.MeshPhysicalMaterial) {
                     delete element.type;
+                    // if (this.settings.background.show) {
+                    //     element.envMap = this._scene.background;
+                    //     // element.refractionRatio = 1;
+                    //     // element.envMap.mapping = THREE.CubeRefractionMapping;
+                    // }
                     mat = new THREE.MeshPhysicalMaterial(element);
                 } else if (element.type === MaterialType.MeshLambertMaterial) {
                     delete element.type;

@@ -181,7 +181,6 @@ export class SaveFileComponent {
                                     resolve('error');
                                 };
                                 reader.onloadend = () => {
-                                    console.log(reader.result.slice(-30))
                                     if ((typeof reader.result) === 'string') {
                                         resolve((<string>reader.result).split('_|_|_')[0]);
                                     } else {

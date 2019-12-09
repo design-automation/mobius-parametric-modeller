@@ -630,6 +630,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     this.dropdownPosition = { x: pos_x, y: pos_y };
                 }
                 this.selectObj(intersects[0]);
+                setTimeout(() => {
+                    this.activateRender();
+                }, 50);
             }
         } else {
             if (event.target.tagName === 'CANVAS') {

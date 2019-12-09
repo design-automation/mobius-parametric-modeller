@@ -71,6 +71,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
     public dropdownPosition = { x: 0, y: 0 };
 
+    private renderInterval;
     private isDown = false;
     private lastX: number;
     private lastY: number;
@@ -153,12 +154,19 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
         this.getSelectingEntityType();
 
-        for (let i = 1; i < 30; i++) {
+        for (let i = 1; i < 10; i++) {
             setTimeout(() => {
-                renderCheck = true;
-            }, i * 200);
+                this.activateRender();
+            }, i * 100);
         }
 
+        this.renderInterval = setInterval(() => {
+            // this.render();
+            if (renderCheck) {
+                this.render();
+                renderCheck = false;
+            }
+        }, 20);
     }
 
     /**
@@ -180,7 +188,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 this._data_threejs._camera.aspect = this._width / this._height;
                 this._data_threejs._camera.updateProjectionMatrix();
                 this._data_threejs._renderer.setSize(this._width, this._height);
-                renderCheck = true;
+                this.activateRender();
             }, 10);
         }
 
@@ -228,12 +236,17 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this.container = null;
         this.dataService.switch_page = true;
         this.model = null;
+        clearInterval(this.renderInterval);
+        this.renderInterval = null;
         this._data_threejs._controls.removeEventListener('change', this.activateRender);
         // this.keyboardServiceSub.unsubscribe();
     }
 
     private activateRender() {
         renderCheck = true;
+        // setTimeout(() => {
+        //     renderCheck = true;
+        // }, time);
     }
 
     /**
@@ -311,7 +324,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 element.innerHTML = String('');
             }
         }
-        renderCheck = true;
+        this.activateRender();
         // this.render();
     }
 
@@ -523,6 +536,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     }
                     this.getSelectingEntityType();
                     this.refreshTable(event);
+
                 } catch (ex) {
                     console.error('Error displaying model:', ex);
                     this._model_error = true;
@@ -635,8 +649,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
     private refreshTable(event: Event) {
         this.eventClicked.emit(event);
-        renderCheck = true;
-        // this.render();
+        this.activateRender();
     }
 
     private resetTable() {
@@ -682,8 +695,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             scene.unselectObjGroup(wire, this.container, 'face_wires');
         }
 
-        renderCheck = true;
-        // this.render();
+        this.activateRender();
     }
 
     private getSelectingEntityType() {
@@ -931,8 +943,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 this.showMessages('Please choose an Entity type.', 'custom');
                 break;
         }
-
-        renderCheck = true;
+        // this.activateRender();
         // this.render();
     }
 

@@ -242,11 +242,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         // this.keyboardServiceSub.unsubscribe();
     }
 
-    private activateRender() {
+    public activateRender() {
         renderCheck = true;
-        // setTimeout(() => {
-        //     renderCheck = true;
-        // }, time);
     }
 
     /**
@@ -325,6 +322,10 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             }
         }
         this.activateRender();
+        setTimeout(() => {
+            this.activateRender();
+        }, 50);
+
         // this.render();
     }
 
@@ -630,9 +631,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     this.dropdownPosition = { x: pos_x, y: pos_y };
                 }
                 this.selectObj(intersects[0]);
-                setTimeout(() => {
-                    this.activateRender();
-                }, 50);
+                // setTimeout(() => {
+                //     this.activateRender();
+                // }, 50);
             }
         } else {
             if (event.target.tagName === 'CANVAS') {
@@ -1102,6 +1103,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             this.dataService.selected_ents.get(ent_type_str).delete(ent_id);
             this.unselectLabel(ent_id, ent_type_str);
         }
+        console.log('.....',event)
         this.refreshTable(event);
     }
 

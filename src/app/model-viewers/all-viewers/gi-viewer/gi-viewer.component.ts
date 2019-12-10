@@ -148,6 +148,9 @@ export class GIViewerComponent implements OnInit {
             }
             this.threejs.updateModel(this.data);
         }
+        setTimeout(() => {
+            this.threejs.activateRender();
+        }, 100);
     }
 
     onCloseModal() {
@@ -203,6 +206,7 @@ export class GIViewerComponent implements OnInit {
                 this.settings.background.show = !this.settings.background.show;
                 break;
             case 'background.set':
+                this.settings.background.background_set = Number(value);
                 break;
             case 'tjs_summary.show':
                 this.settings.gi_summary.show = false;
@@ -353,7 +357,7 @@ export class GIViewerComponent implements OnInit {
             default:
                 break;
         }
-        scene._renderer.render(scene._scene, scene._camera);
+        this.threejs.activateRender();
     }
 
     // resetDefault(setting, value) {

@@ -24,7 +24,7 @@ enum SORT_STATE {
     styleUrls: ['./attribute.component.scss'],
 })
 
-export class AttributeComponent implements OnChanges, DoCheck {
+export class AttributeComponent implements OnChanges {
     @ViewChild(ATabsComponent, { static: true }) child: ATabsComponent;
 
     @Input() data: GIModel;
@@ -101,26 +101,26 @@ export class AttributeComponent implements OnChanges, DoCheck {
         }
     }
 
-    ngDoCheck() {
-        const attrib = document.getElementById('attribTable');
-        if (attrib) {
-            const paginators = document.getElementsByClassName('mat-paginator');
-            const l = paginators.length;
-            if (attrib.clientWidth < 600) {
-                let index = 0;
-                for (; index < l; index++) {
-                    const p = paginators[index];
-                    p.className = 'mat-paginator '; // hide
-                }
-            } else {
-                let index = 0;
-                for (; index < l; index++) {
-                    const p = paginators[index];
-                    p.className = 'mat-paginator';
-                }
-            }
-        }
-    }
+    // ngDoCheck() {
+    //     const attrib = document.getElementById('attribTable');
+    //     if (attrib) {
+    //         const paginators = document.getElementsByClassName('mat-paginator');
+    //         const l = paginators.length;
+    //         if (attrib.clientWidth < 600) {
+    //             let index = 0;
+    //             for (; index < l; index++) {
+    //                 const p = paginators[index];
+    //                 p.className = 'mat-paginator '; // hide
+    //             }
+    //         } else {
+    //             let index = 0;
+    //             for (; index < l; index++) {
+    //                 const p = paginators[index];
+    //                 p.className = 'mat-paginator';
+    //             }
+    //         }
+    //     }
+    // }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['data'] && this.data) {

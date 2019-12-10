@@ -104,7 +104,7 @@ export class DataThreejs {
 
 
         if (this.settings.background.show) {
-            this.loadBackground(0);
+            this.loadBackground(this.settings.background.background_set);
         } else {
             this._scene.background = new THREE.Color(this.settings.colors.viewer_bg);
         }
@@ -186,7 +186,7 @@ export class DataThreejs {
      */
     public addGeometry(model: GIModel, container): void {
         if (this.settings.background.show) {
-            this.loadBackground(0);
+            this.loadBackground(this.settings.background.background_set);
         } else {
             this._scene.background = new THREE.Color(this.settings.colors.viewer_bg);
         }
@@ -1362,7 +1362,7 @@ export class DataThreejs {
         return true;
     }
 
-    loadBackground(background_set: number){
+    loadBackground(background_set: number) {
         const path = 'assets/img/background/bg' + background_set + '/';
         const format = '.jpg';
         const urls = [
@@ -1374,6 +1374,7 @@ export class DataThreejs {
 
         background.format = THREE.RGBFormat;
         this._scene.background = background;
+        // this._renderer.render(this._scene, this._camera);
     }
 }
 

@@ -202,7 +202,7 @@
                                 </dd>
 								<dd><hr></dd>
 								<dd>
-									<div class="label">Background</div>
+									<div class="label">Preset Background</div>
 									<div class="onoffswitch">
 										<input type="checkbox"
 										name="onoffswitch"
@@ -217,9 +217,16 @@
                                         </label>
 									</div>
 								</dd>
-								<!-- <dd>
-									<div class="label">Background Set</div>
-									<div class="onoffswitch">
+								<dd>
+                                    <div class="label">Background Set</div>
+                                    <select value={{settings.background.background_set}}
+                                    (change)="settingOnChange('background.set', $event.target.value)">
+                                        <option value=0>Sunny Sky</option>
+                                        <option value=1>Cloudy Sky</option>
+                                    </select>
+                                    
+
+									<!-- <div class="onoffswitch">
 										<input type="checkbox"
 										name="onoffswitch"
 										class="onoffswitch-checkbox"
@@ -231,8 +238,8 @@
 											<span class="onoffswitch-inner"></span>
 											<span class="onoffswitch-switch"></span>
                                         </label>
-									</div>
-								</dd> -->
+									</div> -->
+								</dd>
 
 							</dl>
 						</div>

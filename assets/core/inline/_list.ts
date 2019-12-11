@@ -86,6 +86,17 @@ export function listSlice(list: any[], start: number, end?: number): any[] {
     return list.slice(start, end);
 }
 
+export function listCull(list: any[], list2?: any[]): any[] {
+    list2 = list2 ? list2 : list;
+    const result: any[] = [];
+    for (let i = 0; i < list.length; i++) {
+        if (list2[i]) {
+            result.push(list[i]);
+        }
+    }
+    return result;
+}
+
 export function listZip(lists: any[][]): any[] {
     const shortest = lists.length === 0 ? [] : lists.reduce((a, b) => {
         return a.length < b.length ? a : b;

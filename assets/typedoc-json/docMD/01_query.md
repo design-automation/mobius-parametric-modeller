@@ -36,9 +36,8 @@ If the attribute value is a number, then any comparison operator can be used: ==
 If the attribute value is a list, then a list index can be used, e.g.: ps#@xyz[2] > 10.
 ~  
 * **Parameters:**  
-  * *entities:* List of entities to filter, or null..  
-  * *name:* The attribute name to use for filtering.  
-  * *index:* Optional, attribute index to use for filtering (for attributes that are lists), or null to filter all entities the model.  
+  * *entities:* List of entities to filter, or null.  
+  * *attrib:* The attribute to use for filtering. Can be `name`, `[name, index]`, or `[name, key]`.  
   * *operator_enum:* Enum, the operator to use for filtering  
   * *value:* The attribute value to use for filtering.  
 * **Returns:** Entities, a list of entities that match the conditions specified in 'expr'.  
@@ -82,8 +81,7 @@ If the attribute is a list, and index can also be specified as follows: #@name1[
 ~  
 * **Parameters:**  
   * *entities:* List of two or more entities to be sorted, all of the same entity type.  
-  * *name:* Attribute name to use for sorting.  
-  * *idx_or_key:* Optional, attribute index to use for sorting (for attributes that are lists), or null.  
+  * *attrib:* Attribute name to use for sorting. Can be `name`, `[name, index]`, or `[name, key]`.  
   * *method_enum:* Enum, sort descending or ascending.  
 * **Returns:** Entities, a list of sorted entities.  
 * **Examples:**  

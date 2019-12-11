@@ -45,6 +45,8 @@ const lists = [
     ['listFlat(list)', 'Returns a copy of the nested list, flattened to a depth of 1'],
     ['listFlat(list, depth)', 'Returns a copy of the nested list, reduced to the specified depth'],
     ['listSlice(list, start, end?)', 'Return a sub-list from the list'],
+    ['listCull(list)', 'Returns a new list of all the values that evaluate to true.'],
+    ['listCull(list1, list2)', 'Returns a new list of all the values in list1 that evaluate to true in list2.'],
     ['listZip(lists)', 'Converts a set of lists from rows into columns, based on the shortest list'],
     ['listZip2(lists)', 'Converts a set of lists from rows into columns, based on the longest list']
  ];
@@ -75,6 +77,27 @@ const lists = [
 
 const colors = [
     ['colFalse(val, min, max)', 'Creates a colour from a value in the range between min and max.']
+];
+
+const planes = [
+    ['plnMake(o, x, xy)', 'Creates a plane from an origin "o", an "x" axis vector, and any other vector in the "xy" plane.'],
+    ['plnCopy(p)', 'Make a copy of the plane "p"'],
+    ['plnMove(p, v)', 'Move the plane "p" relative to the global X, Y, and Z axes, by vector "v".'],
+    ['plnRot(p, r, a)', 'Rotate the plane "p" around the ray "r", by angle "a" (in radians).'],
+    ['plnLMove(p, v)', 'Move the plane "p" relative to the local X, Y, and Z axes, by vector "v".'],
+    ['plnLRotX(p, a)', 'Rotate the plane "p" around the local X axis, by angle "a" (in radians).'],
+    ['plnLRotY(p, a)', 'Rotate the plane "p" around the local Y axis, by angle "a" (in radians).'],
+    ['plnLRotZ(p, a)', 'Rotate the plane "p" around the local Z axis, by angle "a" (in radians).']
+];
+
+const rays = [
+    ['rayMake(o, d)', 'Creates a ray from an origin "o" and a direction vector "d".'],
+    ['rayMake(o, d, l)', 'Creates a ray from an origin "o", a direction vector "d", and length "l".'],
+    ['rayCopy(r)', 'Make a copy of the ray "r"'],
+    ['rayMove(r, v)', 'Move the ray "r" relativr to the global X, Y, and Z axes, by vector "v".'],
+    ['rayRot(r1, r2, a)', 'Rotate the ray "r1" around the ray "r2", by angle "a" (in radians).'],
+    ['rayLMove(r, d)', 'Move the ray "r" relative to the ray dircetion vector, by distance "d".'],
+    ['rayFromPln(p)', 'Create a ray from a plane "p", with the same origin and with a direction along the plane z axis.']
 ];
 
 const conversion = [
@@ -172,6 +195,8 @@ export const inline_func = [
     ['sets', sets],
     ['conversion', conversion],
     ['vectors', vectors],
+    ['rays', rays],
+    ['planes', planes],
     ['colors', colors],
     ['arithmetic', arithmetic],
     ['statistics', statistics],

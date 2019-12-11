@@ -84,6 +84,27 @@ export class GIAttribsQuery {
         }
     }
     /**
+     * Get an model attrib value, or an array of values given an array of entities.
+     * ~
+     * If idx_or_key is null, then this must be a simple attrib.
+     * If idx_or_key is a number, then this must be indexing a list attrib.
+     * if idx_or_key is a string, then this must be indexing a dict attrib.
+     * ~
+     * If the attribute does not exist, throw an error
+     * ~
+     * @param ent_type
+     * @param name
+     */
+    public getModelAttribValAny(name: string, idx_or_key: number|string): any {
+        if (idx_or_key === null) { return this.getModelAttribVal(name); }
+        switch (typeof idx_or_key) {
+            case 'number':
+                return this.getModelAttribListIdxVal(name, idx_or_key as number);
+            case 'string':
+                return this.getModelAttribDictKeyVal(name, idx_or_key as string);
+        }
+    }
+    /**
      * Get a model attrib value
      * @param name
      */
@@ -133,6 +154,28 @@ export class GIAttribsQuery {
     /**
      * Get an entity attrib value, or an array of values given an array of entities.
      * ~
+     * If idx_or_key is null, then this must be a simple attrib.
+     * If idx_or_key is a number, then this must be indexing a list attrib.
+     * if idx_or_key is a string, then this must be indexing a dict attrib.
+     * ~
+     * If the attribute does not exist, throw an error
+     * ~
+     * @param ent_type
+     * @param name
+     */
+    public getAttribValAny(ent_type: EEntType, name: string, ents_i: number|number[],
+            idx_or_key: number|string): any {
+        if (idx_or_key === null) { return this.getAttribVal(ent_type, name, ents_i); }
+        switch (typeof idx_or_key) {
+            case 'number':
+                return this.getAttribListIdxVal(ent_type, name, ents_i, idx_or_key as number);
+            case 'string':
+                return this.getAttribDictKeyVal(ent_type, name, ents_i, idx_or_key as string);
+        }
+    }
+    /**
+     * Get an entity attrib value, or an array of values given an array of entities.
+     * ~
      * If the attribute does not exist, throw an error
      * ~
      * @param ent_type
@@ -155,7 +198,7 @@ export class GIAttribsQuery {
      * @param ent_type
      * @param name
      */
-    public getAttribListIdxVal(ent_type: EEntType, name: string, ents_i: number, idx: number): any {
+    public getAttribListIdxVal(ent_type: EEntType, name: string, ents_i: number|number[], idx: number): any {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         const attrib: GIAttribMap = attribs.get(name);
@@ -172,7 +215,7 @@ export class GIAttribsQuery {
      * @param ent_type
      * @param name
      */
-    public getAttribDictKeyVal(ent_type: EEntType, name: string, ents_i: number, key: string): any {
+    public getAttribDictKeyVal(ent_type: EEntType, name: string, ents_i: number|number[], key: string): any {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
         const attrib: GIAttribMap = attribs.get(name);
@@ -415,12 +458,29 @@ export class GIAttribsQuery {
     // Shortcuts for getting xyz
     // ============================================================================
     /**
-     * Shortcut for getting a coordinate from a numeric position index (i.e. this is not an ID)
+     * Shortcut for getting a coordinate from a posi_i
      * @param posi_i
      */
     public getPosiCoords(posi_i: number): Txyz {
         const result = this._attribs_maps.ps.get(EAttribNames.COORDS).getEntVal(posi_i) as Txyz;
         return result;
+    }
+    /**
+     * Shortcut for getting a coordinate from a numeric vertex index (i.e. this is not an ID)
+     * @param vert_i
+     */
+    public getVertCoords(vert_i: number): Txyz {
+        const posi_i: number = this._model.geom.nav.navVertToPosi(vert_i);
+        return this._attribs_maps.ps.get(EAttribNames.COORDS).getEntVal(posi_i) as Txyz;
+    }
+    /**
+     * Shortcut for getting all the xyz coordinates from an ent_i
+     * @param posi_i
+     */
+    public getEntCoords(ent_type: EEntType, ent_i: number): Txyz[] {
+        const posis_i: number[] = this._model.geom.nav.navAnyToPosi(ent_type, ent_i);
+        const coords_map: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
+        return coords_map.getEntVal(posis_i) as Txyz[];
     }
     // /**
     //  * Shortcut for getting all coordinates
@@ -431,21 +491,13 @@ export class GIAttribsQuery {
     //     const coords_map: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
     //     return coords_map.getEntVal(posis_i) as Txyz[];
     // }
-    /**
-     * Shortcut for getting a coordinate from a numeric vertex index (i.e. this is not an ID)
-     * @param vert_i
-     */
-    public getVertCoords(vert_i: number): Txyz {
-        const posi_i: number = this._model.geom.query.navVertToPosi(vert_i);
-        return this._attribs_maps.ps.get(EAttribNames.COORDS).getEntVal(posi_i) as Txyz;
-    }
     // /**
     //  * Shortcut for getting coords for all verts
     //  * @param attrib_name
     //  */
     // public getAllVertsCoords(attrib_name: string): Txyz[] {
     //     const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT);
-    //     const posis_i: number[] = verts_i.map( vert_i => this._model.geom.query.navVertToPosi(vert_i));
+    //     const posis_i: number[] = verts_i.map( vert_i => this._model.geom.nav.navVertToPosi(vert_i));
     //     const coords_map: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
     //     return coords_map.getEntVal(posis_i) as Txyz[];
     // }

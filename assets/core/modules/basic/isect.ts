@@ -11,7 +11,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane } from '@libs/geo-info/common';
 import { __merge__ } from '../_model';
-import { checkIDs, checkCommTypes, checkIDnTypes, IDcheckObj} from '../_check_args';
+import { checkIDs, checkArgTypes, checkIDnTypes, IDcheckObj} from '../_check_args';
 
 /**
  * Adds positions by intersecting polylines, planes, and polygons.

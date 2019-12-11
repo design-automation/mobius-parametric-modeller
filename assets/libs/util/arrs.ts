@@ -91,3 +91,24 @@ export function arrMaxDepth(data: any[]): number {
     }
     return d1;
 }
+
+/**
+ * Converts a value to an array of specified length.
+ * ~
+ * @param data
+ */
+export function arrFill(data: any, length: number): any[] {
+    if (! Array.isArray(data)) {
+        data = [data];
+    }
+    data = data as any[];
+    const last = data[data.length - 1];
+    for (let i = data.length; i < length; i++)  {
+        data[i] = last;
+    }
+    if (data.length > length)   {
+        data = data.slice(0, length);
+    }
+    return data;
+}
+

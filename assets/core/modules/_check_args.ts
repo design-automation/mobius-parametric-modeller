@@ -1,183 +1,71 @@
 import { EEntType, EAttribNames, TEntTypeIdx, EEntTypeStr } from '@libs/geo-info/common';
-// import { isDim0, isDim1, isDim2 } from '@libs/geo-info/id';
 import { idsBreak } from '@libs/geo-info/id';
 
 // =========================================================================================================================================
 // Attribute Checks
 // =========================================================================================================================================
-function isValidName(fn_name: string, arg_name: string, arg: string): void {
-    TypeCheckObj.isString(fn_name, arg_name, arg); // check arg is string
-    if (arg.length === 0) {
-        throw new Error (fn_name + ': ' + arg_name + ' not specified');
-    }
-    if (arg.search(/\W/) !== -1) {
-        throw new Error (fn_name + ': ' + arg_name + ' contains restricted characters');
-    }
-    if (arg[0].search(/[0-9]/) !== -1) {
-        throw new Error (fn_name + ': ' + arg_name + ' should not start with numbers');
-    }
-    return;
-}
 export function checkAttribName(fn_name: string, attrib_name: string): void {
-    isValidName(fn_name, 'attrib_name', attrib_name);
+    TypeCheckObj.isString(fn_name, 'attrib_name', attrib_name); // check arg is string
+    if (attrib_name.length === 0) {
+        throw new Error (fn_name + ': ' + 'attrib_name not specified');
+    }
+    if (attrib_name.search(/\W/) !== -1) {
+        throw new Error (fn_name + ': ' + 'attrib_name contains restricted characters');
+    }
+    if (attrib_name[0].search(/[0-9]/) !== -1) {
+        throw new Error (fn_name + ': ' + 'attrib_name should not start with numbers');
+    }
     // blocks writing to id
     if (attrib_name === 'id') {
         throw new Error(fn_name + ': id is not modifiable!');
     }
 }
-
-export function checkAttribValue(fn_name: string, attrib_value: any, idx_or_key?: number|string): void {
+export function checkAttribIdxKey(fn_name: string, idx_or_key?: number|string): void {
     // -- check defined index
     if (typeof idx_or_key === 'number') {
         // check if index is number
         TypeCheckObj.isNumber(fn_name, 'attrib_index', idx_or_key);
         // this is an item in a list, the item value can be any
-    } if (typeof idx_or_key === 'string') {
+    } else if (typeof idx_or_key === 'string') {
         // check if index is number
         TypeCheckObj.isString(fn_name, 'attrib_key', idx_or_key);
         // this is an item in an object, the item value can be any
     } else {
-        // check sting, number, string[], number[]
-        checkCommTypes(fn_name, 'attrib_value', attrib_value,
-            [TypeCheckObj.isString, TypeCheckObj.isNumber, TypeCheckObj.isBoolean,
-                TypeCheckObj.isNull, TypeCheckObj.isList, TypeCheckObj.isDict]);
+        throw new Error(fn_name + ': index or key is not a valid type: ' + idx_or_key);
     }
 }
-
-// export function checkAttribNameValue(fn_name: string, attrib_name: string, attrib_value: any, attrib_index?: number): void {
-//     isValidName(fn_name, 'attrib_name', attrib_name);
-//     // blocks writing to id
-//     if (attrib_name === 'id') {
-//         throw new Error(fn_name + ': id is not modifiable!');
-//     }
-//     // -- check defined index
-//     let ind = false;
-//     if (attrib_index !== null && attrib_index !== undefined) {
-//         ind = true;
-//         // check if index is number
-//         TypeCheckObj.isNumber(fn_name, 'attrib_index', attrib_index);
-//     }
-//     // -- check blocked name
-//     const blk_att_nm_lst = Object.values(EAttribNames);
-//     let blocked = false;
-//     let isTexture = false;
-//     let isName = false;
-//     for (let i = 0; i < blk_att_nm_lst.length; i++) {
-//         if (attrib_name === 'texture') {
-//             isTexture = true;
-//             blocked = true;
-//             break;
-//         }
-//         if (attrib_name === 'name') {
-//             isName = true;
-//             blocked = true;
-//             break;
-//         }
-//         if (attrib_name === blk_att_nm_lst[i]) {
-//             blocked = true;
-//             break;
-//         }
-//     }
-//     let check_fns = [];
-//     if (attrib_value !== null && attrib_value !== undefined) {
-//         if (blocked === true) {
-//             let pass = false;
-//             const err_arr = [fn_name + ': ' + 'attrib_name is one of the reserved attribute names - '
-//                             + Object.values(EAttribNames).toString() + '<br>'];
-//             if (isName) {
-//                 try {
-//                     isValidName(fn_name, 'attrib_value', attrib_value);
-//                     pass = true;
-//                 } catch (err) {
-//                     err_arr.push(err);
-//                 }
-//             } else {
-//                 if (ind === false) {
-//                     try {
-//                         isListArg(fn_name, 'attrib_value', attrib_value, 'numbers');
-//                         let chkLstLen;
-//                         if (isTexture) {
-//                             chkLstLen = 2;
-//                         } else {
-//                             chkLstLen = 3;
-//                         }
-//                         isListLenArg(fn_name, 'attrib_value', attrib_value, chkLstLen);
-//                     } catch (err) {
-//                         err_arr.push(err.message);
-//                         throw new Error(err_arr.join(''));
-//                     }
-//                     check_fns = [TypeCheckObj.isNumberList];
-//                     for (let i = 0; i < check_fns.length; i++) {
-//                         try {
-//                             check_fns[i](fn_name + '.' + check_fns[i], 'attrib_value', attrib_value);
-//                         } catch (err) {
-//                             err_arr.push(err.message + '<br>');
-//                             continue;
-//                         }
-//                         pass = true;
-//                         break; // passed
-//                     }
-//                 } else {
-//                     if (isTexture) {
-//                         if (attrib_index > 1 || attrib_index < 0) {
-//                             err_arr.push(fn_name + '.validIndex: attrib_index is not between 0 and 1 (inclusive)');
-//                             throw new Error(err_arr.join(''));
-//                         }
-//                     } else {
-//                         if (attrib_index > 2 || attrib_index < 0) {
-//                             err_arr.push(fn_name + '.validIndex: attrib_index is not between 0 and 2 (inclusive)');
-//                             throw new Error(err_arr.join(''));
-//                         }
-//                     }
-//                     check_fns = [TypeCheckObj.isNumber];
-//                     for (let i = 0; i < check_fns.length; i++) {
-//                         try {
-//                             check_fns[i](fn_name + '[' + attrib_index + ']' + '.' + check_fns[i],
-//                                                       'attrib_value', attrib_value);
-//                         } catch (err) {
-//                             err_arr.push(err.message + '<br>');
-//                             continue;
-//                         }
-//                         pass = true;
-//                         break; // passed
-//                     }
-//                 }
-//             }
-//             if (pass === false) {
-//                 throw new Error(err_arr.join(''));
-//             }
-//         } else {
-//             if (ind === false) {
-//                 checkCommTypes(fn_name, 'attrib_value', attrib_value,
-//                     [TypeCheckObj.isString, TypeCheckObj.isNumber, TypeCheckObj.isStringList, TypeCheckObj.isNumberList]);
-//             } else { // no nested lists
-//                 checkCommTypes(fn_name  + '[' + attrib_index + ']', 'attrib_value', attrib_value,
-//                     [TypeCheckObj.isString, TypeCheckObj.isNumber]);
-//             }
-//         }
-//     }
-//     return;
-// }
+export function checkAttribNameIdxKey(fn_name: string, attrib: string|[string, number|string]): [string, number|string] {
+    let attrib_name: string = null;
+    let attrib_idx_key: number|string = null;
+    // deconstruct the attrib arg
+    if (Array.isArray(attrib)) {
+        if (attrib.length !== 2) {
+            throw new Error (fn_name + ': ' + 'attrib_name not specified');
+        }
+        attrib_name = attrib[0] as string;
+        attrib_idx_key = attrib[1] as number|string;
+    } else {
+        attrib_name = attrib as string;
+    }
+    // check that the name is ok
+    checkAttribName(fn_name, attrib_name);
+    // check that the array index or object key is ok
+    if (attrib_idx_key !== null) {
+        checkAttribIdxKey(fn_name, attrib_idx_key);
+    }
+    // return the deconstructed attrib arg, attrib_idx_key may be null
+    return [attrib_name, attrib_idx_key];
+}
+export function checkAttribValue(fn_name: string, attrib_value: any): void {
+    // check the actual value
+    checkArgTypes(fn_name, 'attrib_value', attrib_value,
+            [TypeCheckObj.isString, TypeCheckObj.isNumber, TypeCheckObj.isBoolean,
+                TypeCheckObj.isNull, TypeCheckObj.isList, TypeCheckObj.isDict]);
+}
 // =========================================================================================================================================
 // Function Dictionaries
 // =========================================================================================================================================
 export class TypeCheckObj {
-    // entities: Check if string
-    // static isEntity(fn_name: string, arg_name: string, arg: string): void {
-    //     isStringArg(fn_name, arg_name, arg, 'entity');
-    //     if (arg.slice(2).length === 0) {
-    //         throw new Error(fn_name + ': ' + arg_name + ' needs to have an index specified');
-    //     }
-    //     return;
-    // }
-    // static isEntityList(fn_name: string, arg_name: string, arg_list: string[]): void {
-    //     isListArg(fn_name, arg_name, arg_list, 'entity');
-    //     for (let i = 0; i < arg_list.length; i++) {
-    //         TypeCheckObj.isEntity(fn_name, arg_name + '[' + i + ']', arg_list[i]);
-    //     }
-    //     return;
-    // }
-    // any: to catch undefined
     static isAny(fn_name: string, arg_name: string, arg: string): void {
         isAnyArg(fn_name, arg_name, arg);
         return;
@@ -213,6 +101,18 @@ export class TypeCheckObj {
     }
     static isStringList(fn_name: string, arg_name: string, arg_list: string[]): void {
         isStringListArg(fn_name, arg_name, arg_list, 'string');
+        return;
+    }
+    // special for attrb names with index or key
+    static isStringStringList(fn_name: string, arg_name: string, arg_list: [string, string]): void {
+        isStringListArg(fn_name, arg_name, arg_list, 'string');
+        isListLenArg(fn_name, arg_name, arg_list, 2);
+        return;
+    }
+    static isStringNumberList(fn_name: string, arg_name: string, arg_list: [string, string]): void {
+        isListLenArg(fn_name, arg_name, arg_list, 2);
+        isStringArg(fn_name, arg_name, arg_list[0], 'string');
+        isNumberArg(fn_name, arg_name, arg_list[1]);
         return;
     }
     // numbers and special numbers
@@ -408,7 +308,7 @@ export class IDcheckObj {
 // =========================================================================================================================================
 // Specific Checks
 // =========================================================================================================================================
-export function checkCommTypes(fn_name: string, arg_name: string, arg: any, check_fns: Function[]): void|TEntTypeIdx|
+export function checkArgTypes(fn_name: string, arg_name: string, arg: any, check_fns: Function[]): void|TEntTypeIdx|
                                TEntTypeIdx[]|TEntTypeIdx[][] {
     let pass = false;
     const err_arr = [];

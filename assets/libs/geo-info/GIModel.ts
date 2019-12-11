@@ -14,8 +14,7 @@ export class GIModel {
     public comparator: GIModelComparator;
     public threejs: GIModelThreejs;
     /**
-     * Creates a model.
-     * @param model_data The JSON data
+     * Constructor
      */
     constructor(model_data?: IModelData) {
         this.geom = new GIGeom(this);
@@ -58,7 +57,7 @@ export class GIModel {
      * Check model for internal consistency
      */
     public check(): string[] {
-        return this.geom.check();
+        return this.geomCheck.check();
     }
         /**
      * Compares this model and another model.

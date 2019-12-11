@@ -53,28 +53,11 @@
   1. [make.Polygon.mob](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/make.Polygon.mob&node=1
 )  
   
-## Collection  
-* **Description:** Adds one or more new collections to the model.
-~
-If the list of entities contains other collections, these other collections will then become
-children of the new collection that will be created.
-~  
-* **Parameters:**  
-  * *entities:* List or nested lists of points, polylines, polygons, and other colletions.  
-* **Returns:** Entities, new collection, or a list of new collections.  
-* **Examples:**  
-  * collection1 = make.Collection([point1,polyine1,polygon1])  
-    Creates a collection containing point1, polyline1, polygon1.  
-  * collections = make.Collection([[point1,polyine1],[polygon1]])  
-    Creates two collections, the first containing point1 and polyline1, the second containing polygon1.  
-* **Example URLs:**  
-  1. [make.Collection.mob](https://mobius.design-automation.net/flowchart?file=https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/make.Collection.mob&node=1
-)  
-  
 ## Copy  
 * **Description:** Adds a new copy of specified entities to the model.  
 * **Parameters:**  
   * *entities:* Entity or lists of entities to be copied. Entities can be positions, points, polylines, polygons and collections.  
+  * *vector:* A vector to move the entities by after copying, can be `null`.  
 * **Returns:** Entities, the copied entity or a list of copied entities.  
 * **Examples:**  
   * copies = make.Copy([position1,polyine1,polygon1])  
@@ -91,7 +74,7 @@ If the list of positions consists of a single list, then one hole will be genera
 If the list of positions consists of a list of lists, then multiple holes will be generated.
 ~  
 * **Parameters:**  
-  * *face:* A face or polygon to make holes in.  
+  * *pgon:* A face or polygon to make holes in.  
   * *entities:* List of positions, or nested lists of positions, or entities from which positions can be extracted.  
 * **Returns:** Entities, a list of wires resulting from the hole(s).  
   
@@ -129,7 +112,7 @@ The geometry that is generated depends on the method that is selected.
 ~  
 * **Parameters:**  
   * *entities:* Vertex, edge, wire, face, position, point, polyline, polygon, collection.  
-  * *distance:* Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).  
+  * *dist:* Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).  
   * *divisions:* Number of divisions to divide extrusion by. Minimum is 1.  
   * *method:* Enum, when extruding edges, select quads, stringers, or ribs  
 * **Returns:** Entities, a list of new polygons or polylines resulting from the extrude.  
@@ -140,6 +123,16 @@ In this case, the 'quads' setting is ignored.
   * extrusion2 = make.Extrude(polygon1, [0,5,0], 1, 'quads')  
     Extrudes polygon1 by 5 in the y-direction, creating a list of quad surfaces.
   
+  
+## Sweep  
+* **Description:** Sweeps a cross section wire along a backbone wire.
+~  
+* **Parameters:**  
+  * *entities:* Wires, or entities from which wires can be extracted.  
+  * *xsextion:* undefined  
+  * *divisions:* Segment length or number of segments.  
+  * *method:* Enum, select the method for sweeping.  
+* **Returns:** Entities, a list of new polygons or polylines resulting from the sweep.  
   
 ## Divide  
 * **Description:** Divides edges into a set of shorter edges.
@@ -161,16 +154,5 @@ that have a new length that is equal to or greater than the minimum.
     Creates a list of 5 equal segments from edge1.  
   * segments2 = make.Divide(edge1, 5, by_length)  
     If edge1 has length 13, creates from edge a list of two segments of length 5 and one segment of length 3.
-  
-  
-## Unweld  
-* **Description:** Unweld vertices so that they do not share positions. The new positions that are generated are returned.
-~  
-* **Parameters:**  
-  * *entities:* Entities, a list of vertices, or entities from which vertices can be extracted.  
-* **Returns:** Entities, a list of new positions resulting from the unweld.  
-* **Examples:**  
-  * mod.Unweld(polyline1)  
-    Unwelds the vertices of polyline1 from all other vertices that shares the same position.
   
   

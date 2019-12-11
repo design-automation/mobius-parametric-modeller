@@ -8,8 +8,7 @@ export class GIModelThreejs {
     private _model: GIModel;
 
    /**
-     * Creates an object to store the attribute data.
-     * @param model The JSON data
+     * Constructor
      */
     constructor(model: GIModel) {
         this._model = model;

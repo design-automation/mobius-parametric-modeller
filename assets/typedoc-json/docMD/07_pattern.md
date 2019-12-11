@@ -1,5 +1,13 @@
 # PATTERN    
 
+## Line  
+* **Description:** Creates a row of positions in a line pattern. Returns a list of new positions.  
+* **Parameters:**  
+  * *origin:* XYZ coordinates as a list of three numbers.  
+  * *size:* Size of the line.  
+  * *num_positions:* undefined  
+* **Returns:** Entities, a list of four positions.  
+  
 ## Rectangle  
 * **Description:** Creates four positions in a rectangle pattern. Returns a list of new positions.  
 * **Parameters:**  
@@ -17,8 +25,10 @@
 * **Description:** Creates positions in a grid pattern. Returns a list (or list of lists) of new positions.  
 * **Parameters:**  
   * *origin:* XYZ coordinates as a list of three numbers.  
-  * *size:* Size of grid. If number, assume square grid of that length; if list of two numbers, x and y lengths respectively.  
-  * *num_positions:* Number of positions.  
+  * *size:* Size of grid. If number, assume equal lengths, i.e. a square grid.
+If list of two numbers, specifies x and y lengths respectively.  
+  * *num_positions:* Number of positions. If a number, assume equal number of positions.
+If a list of two numbers, specifies x and y number of positions respectivley.  
   * *method:* Enum, define the way the coords will be return as lists.
 If integer, same number for x and y; if list of two numbers, number for x and y respectively.  
 * **Returns:** Entities, a list of positions, or a list of lists of positions (depending on the 'method' setting).  
@@ -28,6 +38,27 @@ If integer, same number for x and y; if list of two numbers, number for x and y 
   * coordinates1 = pattern.Grid([0,0,0], [10,20], [2,4])  
     Creates a list of 8 XYZ coordinates on a 2x4 grid of length 10 by 20.
   
+  
+## Box  
+* **Description:** Creates positions in a box pattern. Returns a list of new positions.  
+* **Parameters:**  
+  * *origin:* XYZ coordinates as a list of three numbers.  
+  * *size:* Size of the box. If one number, assume equal lengths.
+If list of two or three numbers, specifies x y z lengths respectively.  
+  * *num_positions:* Number of positions. If number, assume equal number of positions.
+If list of two or three numbers, specifies x y z numbers respectively.  
+  * *method:* Enum  
+* **Returns:** Entities, a list of 6 positions.  
+  
+## Polyhedron  
+* **Description:** Creates positions in a polyhedron pattern. Returns a list of new positions.
+~  
+* **Parameters:**  
+  * *origin:* XYZ coordinates as a list of three numbers.  
+  * *radius:* xxx  
+  * *detail:* xxx  
+  * *method:* Enum  
+* **Returns:** Entities, a list of positions.  
   
 ## Arc  
 * **Description:** Creates positions in an arc pattern. Returns a list of new positions.

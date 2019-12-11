@@ -10,9 +10,7 @@ export class GIGeomThreejs {
     private _geom: GIGeom;
     private _geom_arrays: IGeomArrays;
     /**
-     * Creates an object to store the geometry data.
-     * @param geom The GIGeom obect
-     * @param geom_arrays The geometry arrays
+     * Constructor
      */
     constructor(geom: GIGeom, geom_arrays: IGeomArrays) {
         this._geom = geom;

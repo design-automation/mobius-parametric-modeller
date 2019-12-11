@@ -129,3 +129,37 @@ a list of wires will be extracted, and a list of coords will be returned.
   * coord1 = calc.Eval (polyline1, 0.23)
   
   
+## Ray  
+* **Description:** Returns a ray for an edge, a face, or a polygons. For edges, it returns a ray along the edge, from teh start vertex to the end vertex
+For a face or polygon, it returns the ray that is the z-axis of the plane.
+~
+For an edge, the ray vector is not normalised. For a face or polygon, the ray vector is normalised.  
+* **Parameters:**  
+  * *entities:* An edge, a face, or a polygon, or a list.  
+* **Returns:** The ray.  
+  
+## Plane  
+* **Description:** Returns a plane from a polygon, a face, a polyline, or a wire.
+For polylines or wires, there must be at least three non-colinear vertices.
+~
+The winding order is counter-clockwise.
+This means that if the vertices are ordered counter-clockwise relative to your point of view,
+then the z axis of the plane will be pointing towards you.  
+* **Parameters:**  
+  * *entities:* Any entities  
+* **Returns:** The plane.  
+  
+## BBox  
+* **Description:** Returns the bounding box of the entities.
+The bounding box is an imaginary box that completley contains all the geometry.
+The box is always aligned with the global x, y, and z axes.
+The bounding box consists of a list of lists, as follows [[x, y, z], [x, y, z], [x, y, z], [x, y, z]].
+- The first [x, y, z] is the coordinates of the centre of the bounding box.
+- The second [x, y, z] is the corner of the bounding box with the lowest x, y, z values.
+- The third [x, y, z] is the corner of the bounding box with the highest x, y, z values.
+- The fourth [x, y, z] is the dimensions of the bounding box.
+~  
+* **Parameters:**  
+  * *entities:* The etities for which to calculate the bounding box.  
+* **Returns:** The bounding box consisting of a list of four lists.  
+  

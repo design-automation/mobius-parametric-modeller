@@ -9,8 +9,7 @@ export class GIGeomIO {
     private _geom: GIGeom;
     private _geom_arrays: IGeomArrays;
     /**
-     * Creates an object to store the geometry data.
-     * @param geom_data The JSON data
+     * Constructor
      */
     constructor(geom: GIGeom, geom_arrays: IGeomArrays) {
         this._geom = geom;

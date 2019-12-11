@@ -1,11 +1,5 @@
 # MODIFY    
 
-## getOrigin  
-* **Description:** undefined  
-* **Parameters:**  
-  * *origin:* undefined  
-  * *fn_name:* undefined  
-  
 ## Move  
 * **Description:** Moves entities. The directio and distance if movement is specified as a vector.
 ~
@@ -14,9 +8,10 @@ If a list of vectors is given, the each entity will be moved by a different vect
 In this case, the number of vectors should be equal to the number of entities.
 ~
 If a position is shared between entites that are being moved by different vectors,
-then the position will be moved by the average of the vectors.  
+then the position will be moved by the average of the vectors.
+~  
 * **Parameters:**  
-  * *entities:* An entity or list of entities.  
+  * *entities:* An entity or list of entities to move.  
   * *vectors:* undefined  
 * **Returns:** void  
 * **Examples:**  
@@ -29,25 +24,33 @@ then the position will be moved by the average of the vectors.
   
   
 ## Rotate  
-* **Description:** Rotates entities on plane by angle.  
+* **Description:** Rotates entities on plane by angle.
+~  
 * **Parameters:**  
-  * *entities:* Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.  
-  * *origin:* A list of three numbers (or a position, point, or vertex).  
-  * *axis:* A list of three numbers.  
+  * *entities:* An entity or list of entities to rotate.  
+  * *ray:* A ray to rotate around. \
+Given a plane, a ray will be created from teh plane z axis. \
+Given an `xyz` location, a ray will be generated with an origin at this location, and a direction `[0, 0, 1]`. \
+Given any entities, the centroid will be extracted, \
+and a ray will be generated with an origin at this centroid, and a direction `[0, 0, 1]`.  
   * *angle:* Angle (in radians).  
 * **Returns:** void  
 * **Examples:**  
   * modify.Rotate(polyline1, plane1, PI)  
-    Rotates polyline1 on plane1 by PI (i.e. 180 degrees).
+    Rotates polyline1 around the z-axis of plane1 by PI (i.e. 180 degrees).
   
   
 ## Scale  
-* **Description:** Scales entities on plane by factor.
+* **Description:** Scales entities relative to a plane.
 ~  
 * **Parameters:**  
-  * *entities:* Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.  
-  * *origin:* Position, point, vertex, list of three numbers, plane.  
-  * *scale:* Scale factor, a single number to scale equally, or [scale_x, scale_y, scale_z].  
+  * *entities:* An entity or list of entities to scale.  
+  * *plane:* A plane to scale around. \
+Given a ray, a plane will be generated that is perpendicular to the ray. \
+Given an `xyz` location, a plane will be generated with an origin at that location and with axes parallel to the global axes. \
+Given any entities, the centroid will be extracted, \
+and a plane will be generated with an origin at the centroid, and with axes parallel to the global axes.  
+  * *scale:* Scale factor, a single number to scale equally, or [scale_x, scale_y, scale_z] relative to the plane.  
 * **Returns:** void  
 * **Examples:**  
   * modify.Scale(entities, plane1, 0.5)  
@@ -57,11 +60,15 @@ then the position will be moved by the average of the vectors.
   
   
 ## Mirror  
-* **Description:** Mirrors entities across plane.  
+* **Description:** Mirrors entities across a plane.
+~  
 * **Parameters:**  
-  * *entities:* Vertex, edge, wire, face, plane, position, point, polyline, polygon, collection.  
-  * *origin:* Position, vertex, point, list of three numbers.  
-  * *direction:* Vector or a list of three numbers.  
+  * *entities:* An entity or list of entities to mirros.  
+  * *plane:* A plane to scale around. \
+Given a ray, a plane will be generated that is perpendicular to the ray. \
+Given an `xyz` location, a plane will be generated with an origin at that location and with axes parallel to the global axes. \
+Given any entities, the centroid will be extracted, \
+and a plane will be generated with an origin at the centroid, and with axes parallel to the global axes.  
 * **Returns:** void  
 * **Examples:**  
   * modify.Mirror(polygon1, plane1)  
@@ -69,11 +76,20 @@ then the position will be moved by the average of the vectors.
   
   
 ## XForm  
-* **Description:** Transforms entities from one construction plane to another.  
+* **Description:** Transforms entities from a source plane to a target plane.
+~  
 * **Parameters:**  
   * *entities:* Vertex, edge, wire, face, position, point, polyline, polygon, collection.  
-  * *from:* Plane defining target construction plane.  
-  * *to:* Plane defining destination construction plane.  
+  * *from_plane:* Plane defining source plane for the transformation. \
+Given a ray, a plane will be generated that is perpendicular to the ray. \
+Given an `xyz` location, a plane will be generated with an origin at that location and with axes parallel to the global axes. \
+Given any entities, the centroid will be extracted, \
+and a plane will be generated with an origin at the centroid, and with axes parallel to the global axes.  
+  * *to_plane:* Plane defining target plane for the transformation. \
+Given a ray, a plane will be generated that is perpendicular to the ray. \
+Given an `xyz` location, a plane will be generated with an origin at that location and with axes parallel to the global axes. \
+Given any entities, the centroid will be extracted, \
+and a plane will be generated with an origin at the centroid, and with axes parallel to the global axes.  
 * **Returns:** void  
 * **Examples:**  
   * modify.XForm(polygon1, plane1, plane2)  
@@ -91,19 +107,6 @@ then the position will be moved by the average of the vectors.
   * modify.Offset(polygon1, 10)  
     Offsets the wires inside polygon1 by 10 units. Holes will also be offset.
   
-  
-## Collection  
-* **Description:** Modifies a collection.
-~
-If the method is 'set_parent', then the parent can be updated by specifying a parent collection.
-If the method is 'add_entities', then entities are added to the collection.
-If the method is 'remove_entities', then entities are removed from the collection.
-If adding or removing entities, then the entities must be points, polylines, or polygons.  
-* **Parameters:**  
-  * *coll:* The collection to be updated.  
-  * *entities:* Points, polylines, and polygons, or a single collection.  
-  * *method:* Enum, the method to use when modifying the collection.  
-* **Returns:** void  
   
 ## Reverse  
 * **Description:** Reverses direction of entities.  
@@ -137,14 +140,28 @@ in the ring. The last edge will become the first edge .
 in the ring. The first edge will become the last edge.
   
   
-## Close  
-* **Description:** Closes polyline(s) if open.  
+## Ring  
+* **Description:** Opens or closes a polyline.
+~  
 * **Parameters:**  
   * *entities:* undefined  
+  * *method:* undefined  
 * **Returns:** void  
 * **Examples:**  
-  * modify.Close([polyline1,polyline2,...])  
+  * modify.Close([polyline1,polyline2,...], method='close')  
     If open, polylines are changed to closed; if already closed, nothing happens.
+  
+  
+## Weld  
+* **Description:** Unweld vertices so that they do not share positions. The new positions that are generated are returned.
+~  
+* **Parameters:**  
+  * *entities:* Entities, a list of vertices, or entities from which vertices can be extracted.  
+  * *method:* Enum; the method to use for welding.  
+* **Returns:** Entities, a list of new positions resulting from the unweld.  
+* **Examples:**  
+  * mod.Unweld(polyline1)  
+    Unwelds the vertices of polyline1 from all other vertices that shares the same position.
   
   
 ## Remesh  
@@ -165,28 +182,18 @@ Instead, it is left up to the user to remesh only when it is actually required.
   
 ## Delete  
 * **Description:** Deletes geometric entities: positions, points, polylines, polygons, and collections.
+~
 When deleting positions, any topology that requires those positions will also be deleted.
 (For example, any vertices linked to the deleted position will also be deleted,
 which may in turn result in some edges being deleted, and so forth.)
-For positions, the selection to delete or keep unused positions is ignored.
+~
 When deleting objects (point, polyline, and polygons), topology is also deleted.
-When deleting collections, none of the objects in the collection are deleted.  
+~
+When deleting collections, the objects and other collections in the collection are also deleted.
+~  
 * **Parameters:**  
   * *entities:* Position, point, polyline, polygon, collection.  
-  * *del_unused_posis:* Enum, delete or keep unused positions.  
-* **Returns:** void  
-* **Examples:**  
-  * modify.Delete(polygon1)  
-    Deletes polygon1 from the model.
-  
-  
-## Keep  
-* **Description:** Keeps the specified geometric entities: positions, points, polylines, polygons, and collections.
-Everything else in the model is deleted.
-When a collection is kept, all objects inside the collection are also kept.
-When an object is kept, all positions used by the object are also kept.  
-* **Parameters:**  
-  * *entities:* Position, point, polyline, polygon, collection.  
+  * *method:* Enum, delete or keep unused positions.  
 * **Returns:** void  
 * **Examples:**  
   * modify.Delete(polygon1)  

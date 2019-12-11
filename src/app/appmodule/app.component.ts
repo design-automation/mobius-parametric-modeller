@@ -39,6 +39,8 @@ export class AppComponent implements OnInit, OnDestroy {
         this.matIconRegistry.addSvgIcon('cDashboard', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Dashboard.svg'));
         this.matIconRegistry.addSvgIcon('cFlowchart', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Flowchart.svg'));
         this.matIconRegistry.addSvgIcon('cEditor', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Node.svg'));
+        this.matIconRegistry.addSvgIcon('cAdd', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/add.svg'));
+        this.matIconRegistry.addSvgIcon('cRemove', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/remove.svg'));
 
         // const source = timer(600000, 600000);
         // this.subscribe = source.subscribe(val => {

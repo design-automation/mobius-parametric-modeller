@@ -52,7 +52,7 @@
     "ngx-color-picker": "^7.5.0",
     "ngx-pagination": "^3.2.0",
     "ngx-web-worker": "^8.0.0",
-    "npm": "^6.13.2",
+    "npm": "^6.13.3",
     "proj4": "^2.5.0",
     "rxjs": "^6.5.1",
     "rxjs-compat": "^6.5.1",

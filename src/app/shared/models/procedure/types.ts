@@ -8,15 +8,21 @@ export enum ProcedureTypes {
     Break,      // 6
     Continue,   // 7
 
-    Function,   // 8
-    Imported,   // 9
+    MainFunction,   // 8 (previously Function)
+    globalFuncCall,   // 9 (previously Imported)
 
     Constant,   // 10
     Return,     // 11
 
-    AddData,    // 12
+    AddData,    // 12 !Obsolete!
+
     Blank,      // 13
+
     Comment,    // 14
     Terminate,  // 15
+
+    LocalFuncDef,  // 16
+    LocalFuncReturn, // 17
+    LocalFuncCall, // 18
 }
 

@@ -79,8 +79,6 @@ export class SaveFileComponent {
         // }
         const downloadResult = SaveFileComponent.fileDownloadString(f);
         SaveFileComponent.saveToLocalStorage(downloadResult.name, downloadResult.file);
-
-
     }
 
     static saveToLocalStorage(name: string, file: string) {
@@ -126,7 +124,7 @@ export class SaveFileComponent {
 
     static saveToFS(fs) {
         fs.root.getFile(window['_code__'], { create: true}, function (fileEntry) {
-            fileEntry.createWriter(function (fileWriter) {
+            fileEntry.createWriter(async function (fileWriter) {
                 // fileWriter.onwriteend = function (e) {
                 //     console.log('Write completed.');
                 // };
@@ -134,8 +132,8 @@ export class SaveFileComponent {
                 // fileWriter.onerror = function (e) {
                 //     console.log('Write failed: ' + e.toString());
                 // };
-                const bb = new Blob([window['_file__']], {type: 'text/plain;charset=utf-8'});
-                fileWriter.write(bb);
+                const bb = new Blob([window['_file__'] + '_|_|_'], {type: 'text/plain;charset=utf-8'});
+                await fileWriter.write(bb);
                 window['_code__'] = undefined;
                 window['_file__'] = undefined;
             }, (e) => { console.log(e); });
@@ -143,25 +141,30 @@ export class SaveFileComponent {
     }
 
     static deleteFile(filecode) {
+        window['_code__'] = filecode;
         const requestedBytes = 1024 * 1024 * 50;
         navigator.webkitPersistentStorage.requestQuota (
             requestedBytes, function(grantedBytes) {
                 // @ts-ignore
-                window.webkitRequestFileSystem(PERSISTENT, grantedBytes, function(fs) {
-                    fs.root.getFile(filecode, {create: false}, function(fileEntry) {
-                      fileEntry.remove(function() {
-                        // console.log('File removed.');
-                        const items: string[] = JSON.parse(localStorage.getItem('mobius_backup_list'));
-                        const i = items.indexOf(filecode);
-                        if (i !== -1) {
-                            items.splice(i, 1);
-                            localStorage.setItem('mobius_backup_list', JSON.stringify(items));
-                        }
-                      }, (e) => { console.log('Error', e); });
-                    });
-                });
+                window.webkitRequestFileSystem(PERSISTENT, grantedBytes, SaveFileComponent.removeFromFS);
             }, function(e) { console.log('Error', e); }
         );
+    }
+
+    static removeFromFS(fs) {
+        const filecode = window['_code__'];
+        fs.root.getFile(filecode, {create: false}, function(fileEntry) {
+            fileEntry.remove(function() {
+                // console.log('File removed.');
+                const items: string[] = JSON.parse(localStorage.getItem('mobius_backup_list'));
+                const i = items.indexOf(filecode);
+                if (i !== -1) {
+                    items.splice(i, 1);
+                    localStorage.setItem('mobius_backup_list', JSON.stringify(items));
+                }
+                window['_code__'] = undefined;
+            }, (e) => { console.log('Error', e); });
+        });
     }
 
     static async loadFromFileSystem(filecode): Promise<any> {
@@ -178,7 +181,11 @@ export class SaveFileComponent {
                                     resolve('error');
                                 };
                                 reader.onloadend = () => {
-                                    resolve(reader.result);
+                                    if ((typeof reader.result) === 'string') {
+                                        resolve((<string>reader.result).split('_|_|_')[0]);
+                                    } else {
+                                        resolve(reader.result);
+                                    }
                                 };
                                 reader.readAsText(file, 'text/plain;charset=utf-8');
                             });
@@ -197,6 +204,22 @@ export class SaveFileComponent {
             }
         }
         nodeList.splice(nodeList.length - 1, 0, checkNode);
+    }
+
+    static clearModelData(f: IMobius, modelMap = null) {
+        for (const node of f.flowchart.nodes) {
+            if (modelMap !== null) {
+                modelMap[node.id] = node.model;
+            }
+            node.model = undefined;
+            if (node.input.hasOwnProperty('value')) {
+                node.input.value = undefined;
+            }
+            if (node.output.hasOwnProperty('value')) {
+                node.output.value = undefined;
+            }
+            SaveFileComponent.clearResolvedValue(node.procedure);
+        }
     }
 
     static clearResolvedValue(prodList: IProcedure[]) {
@@ -257,17 +280,7 @@ export class SaveFileComponent {
         // clear the nodes' input/output in the flowchart, save them in modelMap
         // (save time on JSON stringify + parse)
         const modelMap = {};
-        for (const node of f.flowchart.nodes) {
-            modelMap[node.id] = node.model;
-            node.model = undefined;
-            if (node.input.hasOwnProperty('value')) {
-                node.input.value = undefined;
-            }
-            if (node.output.hasOwnProperty('value')) {
-                node.output.value = undefined;
-            }
-            SaveFileComponent.clearResolvedValue(node.procedure);
-        }
+        SaveFileComponent.clearModelData(f, modelMap);
 
         // make a copy of the flowchart
         const savedfile = circularJSON.parse(circularJSON.stringify(f));
@@ -275,6 +288,7 @@ export class SaveFileComponent {
         // set the nodes' input/output in the original flowchart again
         for (const node of f.flowchart.nodes) {
             node.model = modelMap[node.id];
+            modelMap[node.id] = null;
         }
 
         // reset each node's id in the new copy of the flowchart --> the same node will
@@ -338,22 +352,43 @@ export class SaveFileComponent {
         const newFile: IMobius = {
             name: this.dataService.file.name,
             author: 'new_user',
-            version: 1,
+            version: this.dataService.file.version,
             flowchart: FlowchartUtils.newflowchart(),
             settings: {}
         };
         newFile.flowchart.name = this.dataService.flowchart.name;
-        let flowchart_desc = this.dataService.flowchart.description;
+
+        const splitDesc = this.dataService.flowchart.description.split('\n');
+        let i = 0;
+        while (i < splitDesc.length) {
+            const trimmedLine = splitDesc[i].replace(/ /g, '');
+            if (trimmedLine.startsWith('console:')
+            ||  trimmedLine.startsWith('model:')
+            ||  trimmedLine.startsWith('normalize:')) {
+                splitDesc.splice(i, 1);
+            } else {
+                i += 1;
+            }
+        }
+        let flowchart_desc = '';
+
         for (const prod of this.dataService.flowchart.nodes[0].procedure) {
             if (prod.type !== ProcedureTypes.Constant) { continue; }
+            for (let j = 0; j < splitDesc.length; j ++) {
+                const trimmedLine = splitDesc[j].replace(/ /g, '');
+                if (trimmedLine.startsWith(prod.args[0].value + ':[')) {
+                    splitDesc.splice(j, 1);
+                    break;
+                }
+            }
             flowchart_desc += '\n' + prod.args[0].value + ' = ' + prod.args[1].value;
         }
-        newFile.flowchart.description = flowchart_desc;
+        newFile.flowchart.description = splitDesc.join('\n') + flowchart_desc;
 
         const node = newFile.flowchart.nodes[1];
 
         const modelVal = '\'__model_data__' + this.dataService.flowchart.nodes[this.dataService.flowchart.nodes.length - 1].model + '\'';
-        NodeUtils.add_procedure(node, ProcedureTypes.Function, {
+        NodeUtils.add_procedure(node, ProcedureTypes.MainFunction, {
             'module': 'util',
             'name': 'ImportData',
             'argCount': 3,

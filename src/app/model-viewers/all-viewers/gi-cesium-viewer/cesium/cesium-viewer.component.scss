@@ -17,7 +17,7 @@ button{
     overflow:hidden;
 }
 
-/deep/ #cesium-container {
+::ng-deep #cesium-container {
     position: relative;
     // padding:50px;
     height: 100%;

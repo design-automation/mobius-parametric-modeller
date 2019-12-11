@@ -14,7 +14,6 @@ import { InputType } from '@models/port';
 import { IdGenerator } from '@utils';
 import { SaveFileComponent } from '@shared/components/file';
 import * as Modules from '@modules';
-import * as categorization from '@modules/categorization';
 
 const keys = Object.keys(ProcedureTypes);
 const inputEvent = new Event('input', {
@@ -38,8 +37,9 @@ export class ToolsetComponent implements OnInit {
 
     ProcedureTypes = ProcedureTypes;
     ProcedureTypesArr = keys.slice(keys.length / 2);
-    searchedFunctions = [];
-    searchedInlines = [];
+    searchedMainFuncs = [];
+    searchedInlineFuncs = [];
+    searchedUserFuncs = [];
 
     inlineQueryExpr = inline_query_expr;
     inlineSortExpr = inline_sort_expr;
@@ -54,11 +54,9 @@ export class ToolsetComponent implements OnInit {
     constructor(private dataService: DataService) {
         this.dataService.toolsetUpdate$.subscribe(() => {
             this.Modules = [];
-            for (const cat in categorization) {
-                if (!categorization[cat] || !this.dataService.mobiusSettings['_func_' + cat]) { continue; }
-                for (const mod of categorization[cat]) {
-                    this.Modules.push(this.AllModules[mod]);
-                }
+            for (const cat in this.AllModules) {
+                if (!this.AllModules[cat] || !this.dataService.mobiusSettings['_func_' + cat]) { continue; }
+                this.Modules.push(this.AllModules[cat]);
             }
         });
     }
@@ -102,26 +100,24 @@ export class ToolsetComponent implements OnInit {
             this.AllModules[nMod.module] = nMod;
             // this.Modules.push(nMod);
         }
-        for (const cat in categorization) {
-            if (!categorization[cat] || !this.dataService.mobiusSettings['_func_' + cat]) { continue; }
-            for (const mod of categorization[cat]) {
-                this.Modules.push(this.AllModules[mod]);
-            }
+
+        for (const cat in this.AllModules) {
+            if (!this.AllModules[cat] || !this.dataService.mobiusSettings['_func_' + cat]) { continue; }
+            this.Modules.push(this.AllModules[cat]);
         }
 
     }
 
-
     // add selected basic function as a new procedure
-    add(type: ProcedureTypes, data?): void {
+    add_basic_func(type: ProcedureTypes, data?): void {
         this.eventAction.emit({
-            'type': 'selected',
+            'type': 'add_prod',
             'content': { type: type, data: data }
         });
     }
 
     // add selected function from core.modules as a new procedure
-    add_function(fnData) {
+    add_main_func(fnData) {
 
         // fnData.args = fnData.args.map( (arg) => {
         //     return {name: arg.name, value: arg.value};
@@ -150,13 +146,28 @@ export class ToolsetComponent implements OnInit {
         fnData.args = newArgs;
 
         this.eventAction.emit({
-            'type': 'selected',
-            'content': { type: ProcedureTypes.Function, data: fnData }
+            'type': 'add_prod',
+            'content': { type: ProcedureTypes.MainFunction, data: fnData }
+        });
+    }
+
+    add_local_func_def(numArgs: number) {
+        this.eventAction.emit({
+            'type': 'add_prod',
+            'content': { type: ProcedureTypes.LocalFuncDef, data: numArgs }
         });
     }
 
     // add selected imported function as a new procedure
-    add_imported_function(fnData) {
+    add_local_func_call(funcProd) {
+        this.eventAction.emit({
+            'type': 'add_prod',
+            'content': { type: ProcedureTypes.LocalFuncCall, data: funcProd }
+        });
+    }
+
+    // add selected imported function as a new procedure
+    add_global_func(fnData) {
         fnData.args = fnData.args.map( (arg) => {
             if (arg.type === InputType.Constant) {
                 return {name: arg.name, value: arg.value, type: arg.type};
@@ -164,24 +175,31 @@ export class ToolsetComponent implements OnInit {
             return {name: arg.name, value: arg.value, type: arg.type};
         });
         this.eventAction.emit({
-            'type': 'selected',
-            'content': { type: ProcedureTypes.Imported, data: fnData }
+            'type': 'add_prod',
+            'content': { type: ProcedureTypes.globalFuncCall, data: fnData }
         });
     }
 
+    add_searched_user_func(fnData) {
+        if (fnData.type === 'localFunc') {
+            this.add_local_func_call(fnData.data);
+        } else {
+            this.add_global_func(fnData.data);
+        }
+    }
+
     // delete imported function
-    delete_imported_function(fnData) {
+    delete_global_func(fnData) {
         this.eventAction.emit({
-            'type': 'delete',
+            'type': 'delete_global_func',
             'content': fnData
         });
         this.turnoffTooltip();
     }
 
 
-
     // import a flowchart as function
-    async import_function(event) {
+    async import_global_func(event) {
         // read the file and create the function based on the flowchart
         const p = new Promise((resolve) => {
             let numFiles = 0;
@@ -201,7 +219,7 @@ export class ToolsetComponent implements OnInit {
                     }
                     const documentation = {
                         name: funcName,
-                        module: 'Imported',
+                        module: 'globalFunc',
                         description: fl.description,
                         summary: fl.description,
                         parameters: [],
@@ -215,7 +233,7 @@ export class ToolsetComponent implements OnInit {
                             edges: fl.edges
                         },
                         name: funcName,
-                        module: 'Imported',
+                        module: 'globalFunc',
                         doc: documentation,
                         importedFile: fileString
                     };
@@ -284,7 +302,7 @@ export class ToolsetComponent implements OnInit {
                 continue;
             }
             this.eventAction.emit({
-                'type': 'imported',
+                'type': 'import_global_func',
                 'content': fnc
             });
         }
@@ -300,21 +318,41 @@ export class ToolsetComponent implements OnInit {
         }
     }
 
-    add_inline(string) {
+    add_inline_func(string) {
         if (!this.dataService.focusedInput) {
             return;
         }
         this.dataService.focusedInput.focus();
-        const index = this.dataService.focusedInput.selectionDirection === 'backward' ?
-            this.dataService.focusedInput.selectionStart : this.dataService.focusedInput.selectionEnd;
+        let selStart: number, selEnd: number;
+        if (this.dataService.focusedInput.selectionDirection === 'backward') {
+            selStart = this.dataService.focusedInput.selectionEnd;
+            selEnd = this.dataService.focusedInput.selectionStart;
+        } else {
+            selStart = this.dataService.focusedInput.selectionStart;
+            selEnd = this.dataService.focusedInput.selectionEnd;
+        }
+        const newSelStart = string.indexOf('(');
         this.dataService.focusedInput.value =
-            this.dataService.focusedInput.value.slice(0, index) +
+            this.dataService.focusedInput.value.slice(0, selStart) +
             string +
-            this.dataService.focusedInput.value.slice(index);
-
+            this.dataService.focusedInput.value.slice(selEnd);
         this.dataService.focusedInput.dispatchEvent(inputEvent);
-        this.dataService.focusedInput.selectionStart = index + string.length;
-        // this.dataService.focusedInput.trigger('input');
+        if (newSelStart !== -1) {
+            this.dataService.focusedInput.selectionStart = selStart + newSelStart + 1;
+            this.dataService.focusedInput.selectionEnd = selStart + string.length - 1;
+        } else {
+            this.dataService.focusedInput.selectionStart = selStart + string.length;
+            this.dataService.focusedInput.selectionEnd = selStart + string.length;
+        }
+        // const index = this.dataService.focusedInput.selectionDirection === 'backward' ?
+        //     this.dataService.focusedInput.selectionStart : this.dataService.focusedInput.selectionEnd;
+        // this.dataService.focusedInput.value =
+        //     this.dataService.focusedInput.value.slice(0, index) +
+        //     string +
+        //     this.dataService.focusedInput.value.slice(index);
+
+        // this.dataService.focusedInput.dispatchEvent(inputEvent);
+        // this.dataService.focusedInput.selectionStart = index + string.length;
     }
 
 
@@ -384,18 +422,18 @@ export class ToolsetComponent implements OnInit {
         return NodeUtils.checkInvalid(type, this.dataService.node);
     }
 
-    searchFunction(event) {
+    searchMainFunc(event) {
         const str = event.target.value.toLowerCase().replace(/ /g, '_');
-        this.searchedFunctions = [];
+        this.searchedMainFuncs = [];
         if (str.length === 0) {
             return;
         }
 
         // Search Basic Functions: Variable, If, ElseIf, Else, ...
         // for (let i = 0; i < 8; i++) {
-        //     if (this.searchedFunctions.length >= 10) { break; }
+        //     if (this.searchedMainFuncs.length >= 10) { break; }
         //     if (this.ProcedureTypesArr[i].toLowerCase().indexOf(str) !== -1) {
-        //         this.searchedFunctions.push({
+        //         this.searchedMainFuncs.push({
         //             'type': 'basic',
         //             'name': this.ProcedureTypesArr[i],
         //         });
@@ -404,13 +442,13 @@ export class ToolsetComponent implements OnInit {
 
         // Search Core Functions
         for (const mod of this.Modules) {
-            if (this.searchedFunctions.length >= 10) { break; }
+            if (this.searchedMainFuncs.length >= 10) { break; }
             if (mod.module[0] === '_' || mod.module === 'Input' || mod.module === 'Output') {continue; }
             for (const func of mod.functions) {
-                if (this.searchedFunctions.length >= 10) { break; }
+                if (this.searchedMainFuncs.length >= 10) { break; }
                 if (func.name[0] === '_') {continue; }
                 if (func.name.toLowerCase().indexOf(str) !== -1) {
-                    this.searchedFunctions.push({
+                    this.searchedMainFuncs.push({
                         'type': 'function',
                         'name': func.name,
                         'module': mod.module,
@@ -420,12 +458,64 @@ export class ToolsetComponent implements OnInit {
             }
         }
 
+    }
+
+    searchInlineFuncs(event) {
+        const str = event.target.value.toLowerCase();
+        this.searchedInlineFuncs = [];
+        if (str.length === 0) {
+            return;
+        }
+        // search Global Variables
+        for (const cnst of this.dataService.flowchart.nodes[0].procedure) {
+            if (this.searchedInlineFuncs.length >= 10) { break; }
+            if (cnst.type !== ProcedureTypes.Constant) { continue; }
+            const cnstString = cnst.args[cnst.argCount - 2].value;
+            if (cnstString.toLowerCase().indexOf(str) !== -1) {
+                this.searchedInlineFuncs.push([cnstString, `Global Variable ${cnstString}`]);
+            }
+        }
+
+        // // search inline query expressions
+        // for (const expr of this.inlineQueryExpr) {
+        //     if (this.searchedInlineFuncs.length >= 10) { break; }
+        //     if (expr[0].toLowerCase().indexOf(str) !== -1) {
+        //         this.searchedInlineFuncs.push([expr, '']);
+        //     }
+        // }
+
+        // search inline functions
+        for (const category of this.inlineFunc) {
+            for (const funcString of category[1]) {
+                if (this.searchedInlineFuncs.length >= 10) { break; }
+                if (funcString[0].toLowerCase().indexOf(str) !== -1) {
+                    this.searchedInlineFuncs.push(funcString);
+                }
+            }
+            if (this.searchedInlineFuncs.length >= 10) { break; }
+        }
+    }
+    searchUserFuncs(event) {
+        const str = event.target.value.toLowerCase();
+        this.searchedUserFuncs = [];
+        for (const func of this.getNode().localFunc) {
+            if (func.type !== ProcedureTypes.LocalFuncDef) { continue; }
+            if (this.searchedUserFuncs.length >= 10) { break; }
+            if (func.args[0].value.toLowerCase().indexOf(str) !== -1) {
+                this.searchedUserFuncs.push({
+                    'type': 'localFunc',
+                    'name': func.args[0].value,
+                    'data': func
+                });
+            }
+
+        }
         // Search User Defined Functions
         for (const func of this.dataService.flowchart.functions) {
-            if (this.searchedFunctions.length >= 10) { break; }
+            if (this.searchedUserFuncs.length >= 10) { break; }
             if (func.name.toLowerCase().indexOf(str) !== -1) {
-                this.searchedFunctions.push({
-                    'type': 'imported',
+                this.searchedUserFuncs.push({
+                    'type': 'globalFunc',
                     'name': func.name,
                     'data': func
                 });
@@ -433,53 +523,24 @@ export class ToolsetComponent implements OnInit {
         }
     }
 
-    searchInline(event) {
-        const str = event.target.value.toLowerCase();
-        this.searchedInlines = [];
-        if (str.length === 0) {
-            return;
-        }
-        // search Global Variables
-        for (const cnst of this.dataService.flowchart.nodes[0].procedure) {
-            if (this.searchedInlines.length >= 10) { break; }
-            if (cnst.type !== ProcedureTypes.Constant) { continue; }
-            const cnstString = cnst.args[cnst.argCount - 2].value;
-            if (cnstString.toLowerCase().indexOf(str) !== -1) {
-                this.searchedInlines.push([cnstString, `Global Variable ${cnstString}`]);
-            }
-        }
-
-        // // search inline query expressions
-        // for (const expr of this.inlineQueryExpr) {
-        //     if (this.searchedInlines.length >= 10) { break; }
-        //     if (expr[0].toLowerCase().indexOf(str) !== -1) {
-        //         this.searchedInlines.push([expr, '']);
-        //     }
-        // }
-
-        // search inline functions
-        for (const category of this.inlineFunc) {
-            for (const funcString of category[1]) {
-                if (this.searchedInlines.length >= 10) { break; }
-                if (funcString[0].toLowerCase().indexOf(str) !== -1) {
-                    this.searchedInlines.push(funcString);
+    assembleImportedTooltip(funcData, type = 'globalFunc'): string {
+        let htmlDesc: string;
+        if (type === 'globalFunc') {
+            const funcDoc = funcData.doc;
+            htmlDesc = `<p class="funcDesc">${funcDoc.name}</p>`;
+            htmlDesc += `<p>${funcDoc.description}</p>`;
+            if (funcDoc.parameters && funcDoc.parameters.length > 0) {
+                htmlDesc += `<p><span>Parameters: </span></p>`;
+                for (const param of funcDoc.parameters) {
+                    htmlDesc += `<p class='paramP'><span>${param.name} - </span> ${param.description}</p>`;
                 }
             }
-            if (this.searchedInlines.length >= 10) { break; }
-        }
-    }
-
-    assembleImportedTooltip(funcDoc): string {
-        let htmlDesc = `<p class="funcDesc">${funcDoc.name}</p>`;
-        htmlDesc += `<p>${funcDoc.description}</p>`;
-        if (funcDoc.parameters && funcDoc.parameters.length > 0) {
-            htmlDesc += `<p><span>Parameters: </span></p>`;
-            for (const param of funcDoc.parameters) {
-                htmlDesc += `<p class='paramP'><span>${param.name} - </span> ${param.description}</p>`;
+            if (funcDoc.returns) {
+                htmlDesc += `<p><span>Returns: </span>${funcDoc.returns}</p>`;
             }
-        }
-        if (funcDoc.returns) {
-            htmlDesc += `<p><span>Returns: </span>${funcDoc.returns}</p>`;
+        } else {
+            htmlDesc = `<p class="funcDesc">Function ${funcData.args[0].value}`
+                     + `(${funcData.args.slice(1).map(arg => arg.value).join(', ')})</p>`;
         }
         return htmlDesc;
     }

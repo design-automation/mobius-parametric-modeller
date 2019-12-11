@@ -8,6 +8,7 @@ import { ModuleList } from '@shared/decorators';
 import { checkNodeValidity } from '@shared/parser';
 import { IdGenerator } from '@utils';
 import { checkMobFile } from '@shared/updateOldMobFile';
+import { SaveFileComponent } from './savefile.component';
 
 @Component({
   selector: 'file-load',
@@ -44,7 +45,7 @@ export class LoadFileComponent {
 
     sendloadfile() {
         const selectedFile = (<HTMLInputElement>document.getElementById('file-input')).files[0];
-        const stream = Observable.create(observer => {
+        const stream = new Observable<IMobius>(observer => {
             const reader = new FileReader();
             reader.onloadend = () => {
                 // if (typeof reader.result === 'string') {}
@@ -74,6 +75,8 @@ export class LoadFileComponent {
             reader.readAsText(selectedFile);
         });
         stream.subscribe(loadeddata => {
+            SaveFileComponent.clearModelData(this.dataService.file, null);
+            delete this.dataService.file.flowchart;
             this.dataService.file = loadeddata;
             if (loadeddata.settings && JSON.stringify(loadeddata.settings) !== '{}') {
                 window.localStorage.setItem('mpm_settings', loadeddata.settings);

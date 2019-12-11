@@ -124,7 +124,7 @@ export class ProcedureItemComponent implements OnDestroy {
             return;
         }
         try {
-            if (this.data.type === ProcedureTypes.Imported) {
+            if (this.data.type === ProcedureTypes.globalFuncCall) {
                 this.eventAction.emit({
                     'type': 'helpText',
                     'content': this.data.meta.name
@@ -236,9 +236,10 @@ export class ProcedureItemComponent implements OnDestroy {
     canSelectGeom() {
         const check = this.data.argCount > 0 && this.data.args[0].name === 'var_name';
         if (!check) { return false; }
-        if (this.data.type !== ProcedureTypes.Function) { return true; }
+        if (this.data.type !== ProcedureTypes.MainFunction) { return true; }
+        if (!this.ModuleDoc[this.data.meta.module] || !this.ModuleDoc[this.data.meta.module][this.data.meta.name]) { return false; }
         const returns = this.ModuleDoc[this.data.meta.module][this.data.meta.name].returns;
-        if (returns.length < 5) { return false; }
+        if (!returns || returns.length < 5) { return false; }
         if (returns.slice(0, 5).toLowerCase() === 'entit') {return true; }
         return false;
     }
@@ -249,11 +250,11 @@ export class ProcedureItemComponent implements OnDestroy {
 
 
     // modify variable input: replace space " " with underscore "_"
-    varMod() {
+    varMod(index = 0) {
         // modifyVar(this.data, this.dataService.node.procedure);
         checkNodeValidity(this.dataService.node);
-        if (this.data.args[0].invalidVar) {
-            this.dataService.notifyMessage(this.data.args[0].invalidVar);
+        if (this.data.args[index].invalidVar) {
+            this.dataService.notifyMessage(this.data.args[index].invalidVar);
         }
     }
 
@@ -264,6 +265,7 @@ export class ProcedureItemComponent implements OnDestroy {
         this.dataService.focusedInput = event.target;
         if (!this.data.args[argIndex].value) { return; }
         modifyArgument(this.data, argIndex, this.dataService.node.procedure);
+        this.clearLinkedArgs(this.dataService.node.localFunc);
         this.clearLinkedArgs(this.dataService.node.procedure);
         if (this.data.args[argIndex].invalidVar) {
             this.dataService.notifyMessage(this.data.args[argIndex].invalidVar);
@@ -299,18 +301,24 @@ export class ProcedureItemComponent implements OnDestroy {
         for (const prod of this.dataService.node.state.procedure) {
             prod.selected = false;
         }
+
+        let topProd = this.data;
+        while (topProd.parent) { topProd = topProd.parent; }
+        let topProdList = this.dataService.node.procedure;
+        if (topProd.type === ProcedureTypes.LocalFuncDef) { topProdList = [topProd]; }
+
         this.dataService.node.state.procedure = [];
         if (this.data.args[index].invalidVar && typeof this.data.args[index].invalidVar === 'string') {
             this.emitNotifyError(this.data.args[index].invalidVar);
         } else if (isVar) {
             if (this.data.variable) {
-                this.markLinkedArguments(this.data.variable, this.dataService.node.procedure);
+                this.markLinkedArguments(this.data.variable, topProdList);
             } else if (this.data.args[index].usedVars && this.data.args[index].usedVars[0]) {
-                this.markLinkedArguments(this.data.args[index].usedVars[0], this.dataService.node.procedure);
+                this.markLinkedArguments(this.data.args[index].usedVars[0], topProdList);
             }
         } else if (this.data.args[index].usedVars) {
             for (const varName of this.data.args[index].usedVars) {
-                this.markLinkedArguments(varName, this.dataService.node.procedure);
+                this.markLinkedArguments(varName, topProdList);
             }
         }
     }

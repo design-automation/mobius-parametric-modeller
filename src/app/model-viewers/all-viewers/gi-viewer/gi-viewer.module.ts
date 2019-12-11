@@ -6,7 +6,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatTooltipModule} from '@angular/material/tooltip';
-import { MatIconModule} from '@angular/material';
+import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule} from '@angular/material/expansion';
 import { ColorPickerModule } from 'ngx-color-picker';
 

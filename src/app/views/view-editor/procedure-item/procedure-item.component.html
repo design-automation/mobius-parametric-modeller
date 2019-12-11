@@ -36,7 +36,7 @@
                 [style.width.px]='inputSize(data.args[1].value||data.args[1].name)'>
                 <!-- <p class='input--arg input--arg--p' [innerHTML]='argHighlight(data.args[1].value)'></p> -->
             </div>
-            </div>
+        </div>
 
         <!-- IF Template -->
         <ng-container *ngSwitchCase="ProcedureTypes.If">
@@ -216,6 +216,22 @@
         <div class='line--blank' *ngSwitchCase="ProcedureTypes.Blank">
         </div>
 
+        <!-- Variable Assignment Template -->
+        <div class='line--item' *ngSwitchCase="ProcedureTypes.LocalFuncReturn">
+            <div class='basic-function-text'>Return </div>
+            <div style='position:relative; display:inline-block;'>
+                <input class='input--arg'
+                [(ngModel)]='data.args[0].value'
+                [class.error]='data.args[0].invalidVar'
+                [class.linked]='data.args[0].linked'
+                [class.disabled]='disableInput'
+                (focus)='onInputFocus(0)'
+                (blur)='argMod($event, 0)'
+                placeholder={{data.args[0].name}}
+                [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>
+            </div>
+        </div>
+
         <!-- Comment -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Comment">
             <input class='input--comment' 
@@ -235,7 +251,7 @@
 
         
         <!-- Function Template -->
-        <div class='line--item' *ngSwitchCase="ProcedureTypes.Function">
+        <div class='line--item' *ngSwitchCase="ProcedureTypes.MainFunction">
             <ng-container *ngIf="data.args[0].name !=='__none__'">
                 <input class='input--var'
                 [(ngModel)]='data.args[0].value'
@@ -278,7 +294,7 @@
         </div>
 
         <!-- Imported Function Template -->
-        <div class='line--item' *ngSwitchCase="ProcedureTypes.Imported">
+        <div class='line--item' *ngSwitchCase="ProcedureTypes.globalFuncCall">
             <ng-container *ngIf="data.args[0].name !=='__none__'">
                 <input class='input--var'
                     [(ngModel)]='data.args[0].value'
@@ -291,8 +307,7 @@
                     [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>
                 = 
             </ng-container>
-            <div class='function-text'><span class='module-name'>user.</span>{{data.meta.name}} </div> 
-            
+            <div class='function-text'><span class='module-name'>globalFunc.</span>{{data.meta.name}}</div> 
             <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
                 <input class='input--arg' 
                     *ngIf='p.type !== 5'
@@ -306,6 +321,97 @@
                     [style.width.px]='inputSize(p.value||p.name)'>    
             </ng-container>
         </div>
+
+
+        <!-- FOREACH Template -->
+        <ng-container *ngSwitchCase="ProcedureTypes.LocalFuncDef">
+            <div class='line--item'>
+                <div class='basic-function-text'>Def  </div>
+                
+                <ng-container>
+                    <input class='input--arg' 
+                    *ngIf="data.args[0].name[0] !== '_'" 
+                    [(ngModel)]='data.args[0].value'
+                    [class.error]='data.args[0].invalidVar'
+                    [class.linked]='data.args[0].linked'
+                    [class.disabled]='disableInput'
+                    (blur)='varMod(0)'
+                    placeholder={{data.args[0].name}}
+                    [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
+                    >
+                </ng-container>
+                <span class='function-text'>  Function</span>
+                <ng-container *ngFor='let p of data.args;let i=index'>
+                    <input class='input--arg' 
+                    *ngIf="p.name[0] !== '_' && i > 0" 
+                    [(ngModel)]='p.value'
+                    [class.error]='p.invalidVar'
+                    [class.linked]='p.linked'
+                    [class.disabled]='disableInput'
+                    (focus)='onInputFocus(i, true)'
+                    (blur)='varMod(i)'
+                    placeholder={{p.name}}
+                    [style.width.px]='inputSize(p.value||p.name)'
+                    >
+                </ng-container>
+    
+
+            </div>
+                                
+            <div class='container--nested'>
+                <procedure-item 
+                    *ngFor="let line of data?.children; let idx=index" 
+                    [data]="line"
+                    [disableInput]="disableInput"
+                    (eventAction)='performAction($event, idx)'
+                    ></procedure-item>
+            </div>
+        </ng-container>
+
+        <!-- FOREACH Template -->
+        <ng-container *ngSwitchCase="ProcedureTypes.LocalFuncCall">
+            <div class='line--item'>
+                <ng-container *ngIf="data.args[0].name !=='__none__'">
+                    <input class='input--var'
+                        [(ngModel)]='data.args[0].value'
+                        [class.error]='data.args[0].invalidVar'
+                        [class.linked]='data.args[0].linked'
+                        [class.disabled]='disableInput'
+                        (focus)='onInputFocus(0, true)'
+                        (blur)='varMod()'
+                        placeholder={{data.args[0].name}}
+                        [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>
+                    = 
+                </ng-container>
+
+                <div class='function-text'><span class='module-name'>local.</span>{{data.meta.name}} </div> 
+                
+                <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
+                    <input class='input--arg' 
+                        *ngIf='p.type !== 5'
+                        [(ngModel)]='p.value'
+                        [class.error]='p.invalidVar'
+                        [class.linked]='p.linked'
+                        [class.disabled]='disableInput'
+                        (focus)='onInputFocus(i+1)'
+                        (blur)='argMod($event, i+1)'
+                        placeholder={{p.name}}
+                        [style.width.px]='inputSize(p.value||p.name)'>    
+                </ng-container>
+        
+            </div>
+                                
+            <div class='container--nested'>
+                <procedure-item 
+                    *ngFor="let line of data?.children; let idx=index" 
+                    [data]="line"
+                    [disableInput]="disableInput"
+                    (eventAction)='performAction($event, idx)'
+                    ></procedure-item>
+            </div>
+        </ng-container>
+
+
     </div>
     <div class = "btn-container">
         <div class = "btns">

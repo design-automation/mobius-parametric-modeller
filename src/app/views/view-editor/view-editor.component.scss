@@ -209,10 +209,10 @@ procedure-item.ng-star-inserted{
         width: 100%;
         margin: 0px 5px 2px 8px;
     
-        background-color: $color5;
+        background-color: $color3;
         color: $color8;
     
-        text-align: center;
+        text-align: left;
         text-decoration: none;
     
         font-size: $fsize2;
@@ -225,7 +225,7 @@ procedure-item.ng-star-inserted{
         }
         &:hover, &:active {
             // border-color: $selected-color;
-            background-color: $color4;
+            background-color: $color2;
             color: $color8;
         }
     }

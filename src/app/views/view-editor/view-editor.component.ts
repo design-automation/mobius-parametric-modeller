@@ -6,7 +6,6 @@ import { DataService, KeyboardService } from '@services';
 import { Router } from '@angular/router';
 import * as circularJSON from 'circular-json';
 import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
-import { nodeChildrenAsMap } from '@angular/router/src/utils/tree';
 import { checkNodeValidity } from '@shared/parser';
 import { DataOutputService } from '@shared/services/dataOutput.service';
 import { SaveFileComponent } from '@shared/components/file';
@@ -80,18 +79,18 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     }
 
     performAction_toolset(event: any) {
-        // (delete)='deleteFunction($event)'
-        // (selected)='add($event)'
-        // (imported)='importFunction($event)'
+        // (delete_global_func)='delete_global_func($event)'
+        // (import_global_func)='import_global_func($event)'
+        // (add_prod)='add_prod($event)'
         switch (event.type) {
-            case 'delete' :
-                this.deleteFunction(event.content);
+            case 'delete_global_func' :
+                this.delete_global_Func(event.content);
                 break;
-            case 'selected' :
-                this.add(event.content);
+            case 'import_global_func' :
+                this.import_global_func(event.content);
                 break;
-            case 'imported' :
-                this.importFunction(event.content);
+            case 'add_prod' :
+                this.add_prod(event.content);
                 break;
         }
     }
@@ -172,7 +171,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
 
     // add a procedure
-    add(data: {type: ProcedureTypes, data: IFunction}): void {
+    add_prod(data: {type: ProcedureTypes, data: IFunction}): void {
         NodeUtils.add_procedure(this.dataService.node, data.type, data.data);
         let prod = this.dataService.node.state.procedure[0];
         if (prod.type === ProcedureTypes.Blank) {
@@ -218,7 +217,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
         const temp = node.state.procedure.slice();
         const copiedProds = [];
-        NodeUtils.rearrangeProcedures(copiedProds, temp, node.procedure);
+        NodeUtils.rearrangeProcedures(copiedProds, temp, node.localFunc.concat(node.procedure));
         SaveFileComponent.clearResolvedValue(copiedProds);
         localStorage.setItem('mobius_copied_procedures', circularJSON.stringify(copiedProds));
         // this.notificationMessage = `Copied ${this.dataService.copiedProd.length} Procedures`;
@@ -242,7 +241,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
         const temp = node.state.procedure.slice();
         const copiedProds = [];
-        NodeUtils.rearrangeProcedures(copiedProds, temp, node.procedure);
+        NodeUtils.rearrangeProcedures(copiedProds, temp, node.localFunc.concat(node.procedure));
         SaveFileComponent.clearResolvedValue(copiedProds);
 
         let parentArray: IProcedure[];
@@ -251,6 +250,8 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             if (prod.type === ProcedureTypes.Blank) { continue; }
             if (prod.parent) {
                 parentArray = prod.parent.children;
+            } else if (prod.type === ProcedureTypes.LocalFuncDef) {
+                parentArray = node.localFunc;
             } else { parentArray = node.procedure; }
 
             for (let j = 0; j < parentArray.length; j++ ) {
@@ -365,6 +366,8 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             let prodList: IProcedure[];
             if (prod.parent) {
                 prodList = prod.parent.children;
+            } else if (prod.type === ProcedureTypes.LocalFuncDef) {
+                prodList = node.localFunc;
             } else {
                 prodList = node.procedure;
             }
@@ -400,13 +403,23 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 for (const act of actions) {
                     if (act.type === 'del') {
                         let prodList: IProcedure[];
-                        if (!act.parent) { prodList = this.dataService.node.procedure;
-                        } else { prodList = act.parent.children; }
+                        if (act.parent) {
+                            prodList = act.parent.children;
+                        } else if (act.prod.type === ProcedureTypes.LocalFuncDef) {
+                            prodList = this.dataService.node.localFunc;
+                        } else {
+                            prodList = this.dataService.node.procedure;
+                        }
                         prodList.splice(act.index, 1);
                     } else {
                         let prodList: IProcedure[];
-                        if (!act.parent) { prodList = this.dataService.node.procedure;
-                        } else { prodList = act.parent.children; }
+                        if (act.parent) {
+                            prodList = act.parent.children;
+                        } else if (act.prod.type === ProcedureTypes.LocalFuncDef) {
+                            prodList = this.dataService.node.localFunc;
+                        } else {
+                            prodList = this.dataService.node.procedure;
+                        }
                         prodList.splice(act.index, 0, act.prod);
                     }
                 }
@@ -416,8 +429,13 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 for (const act of actions) {
                     if (act.type === 'add') {
                         let prodList: IProcedure[];
-                        if (!act.parent) { prodList = this.dataService.node.procedure;
-                        } else { prodList = act.parent.children; }
+                        if (act.parent) {
+                            prodList = act.parent.children;
+                        } else if (act.prod.type === ProcedureTypes.LocalFuncDef) {
+                            prodList = this.dataService.node.localFunc;
+                        } else {
+                            prodList = this.dataService.node.procedure;
+                        }
                         if (act.index) {
                             prodList.splice(act.index, 1);
                         } else {
@@ -431,8 +449,13 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                         }
                     } else {
                         let prodList: IProcedure[];
-                        if (!act.parent) { prodList = this.dataService.node.procedure;
-                        } else { prodList = act.parent.children; }
+                        if (act.parent) {
+                            prodList = act.parent.children;
+                        } else if (act.prod.type === ProcedureTypes.LocalFuncDef) {
+                            prodList = this.dataService.node.localFunc;
+                        } else {
+                            prodList = this.dataService.node.procedure;
+                        }
                         prodList.splice(act.index, 0, act.prod);
                     }
                 }
@@ -461,7 +484,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
 
     // import a flowchart as function
-    importFunction(event) {
+    import_global_func(event) {
         this.dataService.flowchart.functions.push(event.main);
         if (!this.dataService.flowchart.subFunctions) {
             this.dataService.flowchart.subFunctions = [];
@@ -472,7 +495,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     }
 
     // delete an imported function
-    deleteFunction(event) {
+    delete_global_Func(event) {
         for (let i = 0; i < this.dataService.flowchart.functions.length; i++) {
             if (this.dataService.flowchart.functions[i] === event) {
                 this.dataService.flowchart.functions.splice(i, 1);
@@ -511,6 +534,14 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
     getViewOutput() {
         return this.dataService.getModelOutputView(this.dataService.node.id);
+    }
+
+    toggleShowCode() {
+        this.dataService.node.state.show_code = !this.dataService.node.state.show_code;
+    }
+
+    toggleShowFunc() {
+        this.dataService.node.state.show_func = !this.dataService.node.state.show_func;
     }
 
     // setTestModel() {

@@ -5,6 +5,7 @@ const basic = [
     'modify',
     'attrib',
     'calc',
+    'analyze',
     'virtual',
     'render',
     'list',

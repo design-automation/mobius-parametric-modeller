@@ -23,6 +23,19 @@ export function vecSub(v1: Txyz, v2: Txyz, norm: boolean = false): Txyz {
     return v3;
 }
 
+export function vecsSub(vecs: Txyz[], norm: boolean = false): Txyz {
+    const vec_sub: Txyz = [0, 0, 0];
+    for (const vec of vecs) {
+        vec_sub[0] = vec_sub[0] - vec[0];
+        vec_sub[1] = vec_sub[1] - vec[1];
+        vec_sub[2] = vec_sub[2] - vec[2];
+    }
+    if (norm) {
+        this.vectorNorm(vec_sub);
+    }
+    return vec_sub;
+}
+
 export function vecAdd(v1: Txyz, v2: Txyz, norm: boolean = false): Txyz {
     const v3: Txyz = [
         v1[0] + v2[0],
@@ -33,6 +46,19 @@ export function vecAdd(v1: Txyz, v2: Txyz, norm: boolean = false): Txyz {
         this.vectorNorm(v3);
     }
     return v3;
+}
+
+export function vecsAdd(vecs: Txyz[], norm: boolean = false): Txyz {
+    const vec_add: Txyz = [0, 0, 0];
+    for (const vec of vecs) {
+        vec_add[0] = vec_add[0] + vec[0];
+        vec_add[1] = vec_add[1] + vec[1];
+        vec_add[2] = vec_add[2] + vec[2];
+    }
+    if (norm) {
+        this.vectorNorm(vec_add);
+    }
+    return vec_add;
 }
 
 export function vecSum(vecs: Txyz[], norm: boolean = false): Txyz {
@@ -46,6 +72,21 @@ export function vecSum(vecs: Txyz[], norm: boolean = false): Txyz {
         this.vectorNorm(vec_sum);
     }
     return vec_sum;
+}
+
+export function vecAvg(vecs: Txyz[]): Txyz {
+    const vec_sum: Txyz = [0, 0, 0];
+    for (const vec of vecs) {
+        vec_sum[0] += vec[0];
+        vec_sum[1] += vec[1];
+        vec_sum[2] += vec[2];
+    }
+    const divisor: number = vecs.length;
+    return [
+        vec_sum[0] / divisor,
+        vec_sum[1] / divisor,
+        vec_sum[2] / divisor
+    ];
 }
 
 export function vecDiv(vec: Txyz, divisor: number): Txyz {
@@ -80,6 +121,13 @@ export function vecNorm(v: Txyz): Txyz {
     const length: number = Math.hypot(...v);
     if (length === 0) {return [0, 0, 0]; }
     return [v[0] / length, v[1] / length, v[2] / length];
+}
+
+export function vecRot(vec: Txyz, axis: Txyz, ang: number): Txyz {
+    const vec_tjs: three.Vector3 = new three.Vector3(...vec);
+    const axis_tjs: three.Vector3 = new three.Vector3(...axis);
+    vec_tjs.applyAxisAngle(axis_tjs, ang);
+    return [vec_tjs.x, vec_tjs.y, vec_tjs.z];
 }
 
 export function vecAng(v1: Txyz, v2: Txyz): number {

@@ -30,7 +30,7 @@
     width="100" height = "80"
     >
         <xhtml:div class='textdiv'>
-            <xhtml:textarea 
+            <textarea 
                 id={{node.id}}
                 autocomplete=off 
                 [(ngModel)]='node.name'
@@ -40,7 +40,7 @@
                 (blur)='editing = false'
                 title={{node.name}}
                 style="font-weight: 600;"
-                placeholder='Description of Node'/>  
+                placeholder='Description of Node'></textarea>
         </xhtml:div>
     </svg:foreignObject>
 </svg:g>
@@ -89,12 +89,12 @@
     [attr.x]="node.position.x" [attr.y]="node.position.y + 18" 
     width="100" height = "20">
         <xhtml:div class='textdiv'>
-            <xhtml:textarea 
+            <textarea 
                 id={{node.id}}
                 class='textarea_startend'
                 autocomplete=off 
                 [class.selected]='selected'
-                [(ngModel)]='node.name'/>  
+                [(ngModel)]='node.name'></textarea>
         </xhtml:div>
     </svg:foreignObject>
 </svg:g>
@@ -138,14 +138,31 @@
     <!-- node description inside end node -->
     <svg:foreignObject [attr.x]="node.position.x" [attr.y]="node.position.y + 38" 
     width="100" height = "20">
-        <xhtml:div class='textdiv'>
-            <xhtml:textarea 
+        <!-- <div class='textdiv'>
+            <textarea 
                 id={{node.id}}
                 class='textarea_startend'
                 autocomplete=off 
                 [class.selected]='selected'
                 [class.disabled]='!node.enabled'
-                [(ngModel)]='node.name'/>  
+                [(ngModel)]='node.name'>
+        </div> -->
+        <xhtml:div class='textdiv'>
+            <textarea 
+            id={{node.id}}
+            class='textarea_startend'
+            autocomplete=off 
+            [class.selected]='selected'
+            [class.disabled]='!node.enabled'
+            [(ngModel)]='node.name'></textarea>
+
+            <!-- <xhtml:textarea 
+                id={{node.id}}
+                class='textarea_startend'
+                autocomplete=off 
+                [class.selected]='selected'
+                [class.disabled]='!node.enabled'
+                [(ngModel)]='node.name'></xhtml:textarea> -->
         </xhtml:div>
     </svg:foreignObject>
 </svg:g>

@@ -234,6 +234,11 @@ export class GIAttribMap {
      * @param val
      */
     public setEntListIdxVal(ents_i: number|number[], idx: number, val: any): void {
+        // check this is a list
+        if (this._data_type !== EAttribDataTypeStrs.LIST) {
+            throw new Error('Setting indexed attribute, but the attribute is not a list: "' + this._name + '".');
+        }
+        // make sure we have an array of ents_i
         ents_i = (Array.isArray(ents_i)) ? ents_i : [ents_i];
         // loop through all the unique ents, and setEntVal
         let unique_ents_i: number[] = ents_i;
@@ -242,7 +247,10 @@ export class GIAttribMap {
         }
         unique_ents_i.forEach( ent_i => {
             const exist_list: any[] = this.getEntVal(ent_i) as any[];
-            const new_list: any[] = deepCopy(exist_list); // IMPORTANT clone the array
+            let new_list: any[] = [];
+            if (exist_list !== undefined) {
+                new_list = deepCopy(exist_list); // IMPORTANT clone the array
+            }
             if (idx < 0) {
                 idx += new_list.length;
             }
@@ -260,6 +268,11 @@ export class GIAttribMap {
      * @param val
      */
     public setEntDictKeyVal(ents_i: number|number[], key: string, val: any): void {
+        // check this is a dict
+        if (this._data_type !== EAttribDataTypeStrs.DICT) {
+            throw new Error('Setting keyed attribute, but the attribute is not a dict: "' + this._name + '".');
+        }
+        // make sure we have an array of ents_i
         ents_i = (Array.isArray(ents_i)) ? ents_i : [ents_i];
         // loop through all the unique ents, and setEntVal
         let unique_ents_i: number[] = ents_i;
@@ -267,8 +280,11 @@ export class GIAttribMap {
             unique_ents_i = Array.from(new Set(ents_i));
         }
         unique_ents_i.forEach( ent_i => {
-            const exist_dict: any[] = this.getEntVal(ent_i) as any[];
-            const new_dict: any[] = deepCopy(exist_dict); // IMPORTANT clone the dict
+            const exist_dict: object = this.getEntVal(ent_i) as object;
+            let new_dict: object = {};
+            if (exist_dict !== undefined) {
+                new_dict = deepCopy(exist_dict); // IMPORTANT clone the dict
+            }
             new_dict[key] = val;
             this.setEntVal(ent_i, new_dict);
         });

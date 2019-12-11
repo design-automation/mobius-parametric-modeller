@@ -148,7 +148,7 @@ export class CodeUtils {
                 }
                 break;
 
-            case ProcedureTypes.Function:
+            case ProcedureTypes.MainFunction:
                 const argVals = [];
                 for (const arg of args.slice(1)) {
                     if (arg.name === _parameterTypes.constList) {
@@ -208,7 +208,41 @@ export class CodeUtils {
                     }
                 }
                 break;
-            case ProcedureTypes.Imported:
+            case ProcedureTypes.LocalFuncDef:
+                codeStr.push(`function ${prod.args[0].jsValue}(__params__, ${prod.args.slice(1).map(arg => arg.jsValue).join(', ')}) {`);
+                break;
+            case ProcedureTypes.LocalFuncReturn:
+                codeStr.push(`return ${prod.args[0].jsValue};`);
+                break;
+            case ProcedureTypes.LocalFuncCall:
+                const lArgsVals: any = [];
+                console.log(functionName)
+                // let urlCheck = false;
+                if (isMainFlowchart) {
+                    usedFunctions.push(prod.meta.name);
+                }
+                for (let i = 1; i < args.length; i++) {
+                    lArgsVals.push(args[i].jsValue);
+                }
+
+                const lfn = `${prod.meta.name}_(__params__${lArgsVals.map(val => ', ' + val).join('')})`;
+                if (args[0].name === '__none__' || !args[0].jsValue) {
+                    codeStr.push(`${lfn};`);
+                    break;
+                }
+                const lRepImpVar = this.repSetAttrib(args[0].jsValue);
+                if (!lRepImpVar) {
+                    codeStr.push(`${prefix}${args[0].jsValue} = ${lfn};`);
+                } else {
+                    codeStr.push(`${lRepImpVar[0]} ${lfn} ${lRepImpVar[1]}`);
+                }
+
+                if (prefix === 'let ') {
+                    existingVars.push(args[0].jsValue);
+                }
+                break;
+
+            case ProcedureTypes.globalFuncCall:
                 const argsVals: any = [];
                 const namePrefix = functionName ? `${functionName}_` : '';
 
@@ -240,7 +274,6 @@ export class CodeUtils {
                 // argsVals = argsVals.join(', ');
                 // const fn = `${namePrefix}${prod.meta.name}(__params__, ${argsVals} )`;
                 const fn = `${namePrefix}${prod.meta.name}(__params__${argsVals.map(val => ', ' + val).join('')})`;
-
                 if (args[0].name === '__none__' || !args[0].jsValue) {
                     codeStr.push(`${fn};`);
                     break;
@@ -302,10 +335,13 @@ export class CodeUtils {
         if (bracketIndex !== -1) {
             const name = val_1.slice(0, bracketIndex);
             const index = val_1.lastIndexOf(name);
-            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0}, '${name}', ` +
-                    `${val_1.substring(bracketIndex + 12, index - 2)},`, `);`];
+            // return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0}, '${name}', ` +
+            //         `${val_1.substring(bracketIndex + 12, index - 2)},`, `);`];
+            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0},` +
+                    `['${name}', ${val_1.substring(bracketIndex + 12, index - 2)}], `, `);`];
         } else {
-            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0}, '${val_1}', null, `, ');'];
+            // return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0}, '${val_1}', null, `, ');'];
+            return [`__modules__.${_parameterTypes.setattrib}(__params__.model, ${val_0}, '${val_1}', `, ');'];
         }
     }
 
@@ -330,54 +366,11 @@ export class CodeUtils {
             att_name = res[1];
             att_index = 'null';
         }
-        return `__modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${att_name}', ${att_index})`;
-
-        // if (!val) { return; }
-        // if (typeof val === 'number') { return val; }
-
-        // const res = val.split(' ');
-        // for (const i in res) {
-        //     if (!res[i]) {
-        //         continue;
-        //     }
-        //     const atIndex = res[i].indexOf('@');
-        //     if (atIndex !== -1 && atIndex >= 0 && res[i].trim()[0] !== '#') {
-        //         // get two parts, before @ and after @
-        //         let val_0: string;
-        //         let val_1: string;
-        //         let pref = '';
-        //         let postf = '';
-        //         if (atIndex === 0) {
-        //             val_0 = null;
-        //             val_1 = res[i].slice(1);
-        //         } else {
-        //             val_0 = res[i].slice(0, atIndex);
-        //             val_1 = res[i].slice(atIndex + 1);
-        //             while (val_0[0] === '[') {
-        //                 val_0 = val_0.substring(1, val_0.length);
-        //                 pref += '[';
-        //             }
-        //             if (val_0 === '') {
-        //                 val_0 = null;
-        //             }
-        //         }
-        //         const closeBracketMatch = (val_1.match(/\]/g) || []).length;
-        //         const openBracketMatch = (val_1.match(/\[/g) || []).length;
-        //         if (closeBracketMatch > openBracketMatch) {
-        //             val_1 = val_1.substring(0, val_1.length - (closeBracketMatch - openBracketMatch));
-        //             postf = ']'.repeat(closeBracketMatch - openBracketMatch);
-        //         }
-        //         if (openBracketMatch) {
-        //             const bracketSplit = val_1.substring(0, val_1.length - 1).split('[');
-        //             const innerVar = CodeUtils.repGetAttrib(bracketSplit.splice(1, bracketSplit.length - 1).join('['));
-        //             res[i] = `${pref}__modules__.${_parameterTypes.getattrib}` +
-        //                 `(__params__.model, ${val_0}, '${bracketSplit[0]}', ${innerVar})${postf}`;
-        //         } else {
-        //             res[i] = `${pref}__modules__.${_parameterTypes.getattrib}(__params__.model, ${val_0}, '${val_1}')${postf}`;
-        //         }
-        //     }
-        // }
-        // return res.join(' ');
+        if (att_index === 'null') {
+            return `__modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${att_name}', 'one_value')`;
+        }
+        return `__modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, ['${att_name}', ${att_index}], 'one_value')`;
+        // return `__modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${att_name}', ${att_index}, 'one_value')`;
     }
 
     static async getURLContent(url: string): Promise<any> {
@@ -534,6 +527,10 @@ export class CodeUtils {
 
         codeStr.push(`__modules__.${_parameterTypes.preprocess}( __params__.model);`);
         // procedure
+        for (const prod of node.localFunc) {
+            // if (node.type === 'start' && !isMainFlowchart) { break; }
+            codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName, usedFunctions));
+        }
         for (const prod of node.procedure) {
             // if (node.type === 'start' && !isMainFlowchart) { break; }
             codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName, usedFunctions));

@@ -200,6 +200,47 @@
 									[value]="formatNumber(settings.grid.pos_z)">
 									<button (click)="settingOnChange('grid.update_pos')" class="filebtn getbtn">Get</button>
                                 </dd>
+								<dd><hr></dd>
+								<dd>
+									<div class="label">Preset Background</div>
+									<div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="backgroundOnOff"
+										[checked]='settings.background.show'
+										(change)="settingOnChange('background.show')"
+										>
+										<label class="onoffswitch-label" for="backgroundOnOff">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+                                        </label>
+									</div>
+								</dd>
+								<dd>
+                                    <div class="label">Background Set</div>
+                                    <select value={{settings.background.background_set}}
+                                    (change)="settingOnChange('background.set', $event.target.value)">
+                                        <option value=0>Sunny Sky</option>
+                                        <option value=1>Cloudy Sky</option>
+                                    </select>
+                                    
+
+									<!-- <div class="onoffswitch">
+										<input type="checkbox"
+										name="onoffswitch"
+										class="onoffswitch-checkbox"
+										id="backgroundSelect"
+										[checked]='settings.grid.show'
+										(change)="settingOnChange('grid.show')"
+										>
+										<label class="onoffswitch-label" for="backgroundSelect">
+											<span class="onoffswitch-inner"></span>
+											<span class="onoffswitch-switch"></span>
+                                        </label>
+									</div> -->
+								</dd>
+
 							</dl>
 						</div>
 					</tab>
@@ -223,7 +264,7 @@
 					<tab tabTitle="Light & Shadow">
 						<div class="mat-elevation-z1">
 							<dl>
-								<dd>
+                                <dd>
 									<div class="label">Ambient Light</div>
 									<div class="onoffswitch">
 										<input type="checkbox"
@@ -314,9 +355,9 @@
 										<input type="text" [value]="settings.hemisphere_light.intensity" disabled>
 									</div>
 								</dd>
-								<dd><hr></dd>
+                                <dd><hr></dd>
 								<dd>
-									<div class="label">Light</div>
+									<div class="label" title='directional_light'>Light</div>
 									<div class="onoffswitch">
 										<input type="checkbox"
 										name="onoffswitch"
@@ -419,14 +460,14 @@
 									</div>
 								</dd> -->
 								<dd>
-									<div class="label">Azimuth</div>
+									<div class="label" title='directional_light.azimuth'>Azimuth</div>
 									<div class="slidecontainer light">
 										<input type="range" min="0" max="360" step="1" [value]="settings.directional_light.azimuth" class="slider" (input)="settingOnChange('directional_light.azimuth', $event.target.value)">
 										<input type="number" disabled [value]="settings.directional_light.azimuth" class="number">
 									</div>
 								</dd>
 								<dd>
-									<div class="label">Altitude</div>
+									<div class="label" title='directional_light.altitude'>Altitude</div>
 									<div class="slidecontainer light">
 										<input type="range" min="0" max="90" step="1" [value]="settings.directional_light.altitude" class="slider" (input)="settingOnChange('directional_light.altitude', $event.target.value)">
 										<input type="number" disabled [value]="settings.directional_light.altitude" class="number">

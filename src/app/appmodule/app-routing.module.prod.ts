@@ -12,12 +12,12 @@ import { ViewFlowchartModule, ViewGalleryModule, ViewDashboardModule, ViewEditor
 // the app-routing.module.ts must also be changed accordingly to any changes done in this file
 
 const appRoutes: Routes = [
-    { path: 'flowchart', loadChildren: '../views/view-flowchart/view-flowchart.module#ViewFlowchartModule' },
-    { path: 'gallery', loadChildren: '../views/view-gallery/view-gallery.module#ViewGalleryModule' },
-    { path: 'dashboard', loadChildren: '../views/view-dashboard/view-dashboard.module#ViewDashboardModule' },
-    { path: 'publish', loadChildren: '../views/view-publish/view-publish.module#ViewPublishModule' },
-    { path: 'editor', loadChildren: '../views/view-editor/view-editor.module#ViewEditorModule' },
-    { path: 'about', loadChildren: '../views/view-about/view-about.module#ViewAboutModule' },
+    { path: 'flowchart', loadChildren: () => import('../views/view-flowchart/view-flowchart.module').then(m => m.ViewFlowchartModule) },
+    { path: 'gallery', loadChildren: () => import('../views/view-gallery/view-gallery.module').then(m => m.ViewGalleryModule) },
+    { path: 'dashboard', loadChildren: () => import('../views/view-dashboard/view-dashboard.module').then(m => m.ViewDashboardModule) },
+    { path: 'publish', loadChildren: () => import('../views/view-publish/view-publish.module').then(m => m.ViewPublishModule) },
+    { path: 'editor', loadChildren: () => import('../views/view-editor/view-editor.module').then(m => m.ViewEditorModule) },
+    { path: 'about', loadChildren: () => import('../views/view-about/view-about.module').then(m => m.ViewAboutModule) },
     { path: '',     redirectTo: '/gallery', pathMatch: 'full' },
     { path: '**', component: ViewGalleryModule }
 ];

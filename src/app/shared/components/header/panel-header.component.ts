@@ -8,7 +8,7 @@ import { SaveFileComponent } from '../file';
 import { IdGenerator } from '@utils';
 import { InputType } from '@models/port';
 import { IArgument } from '@models/code';
-import * as categorization from '@modules/categorization';
+import * as Modules from '@modules';
 
 @Component({
     selector: 'panel-header',
@@ -26,7 +26,7 @@ export class PanelHeaderComponent implements OnDestroy {
     urlNodes;
 
     settings;
-    func_categories = Object.keys(categorization);
+    func_categories = Object.keys(Modules).filter(cat => cat[0] !== '_');
     private ctx = document.createElement('canvas').getContext('2d');
 
     constructor(private dataService: DataService, private keyboardService: KeyboardService, private router: Router) {
@@ -43,9 +43,10 @@ export class PanelHeaderComponent implements OnDestroy {
         this.ctx.font = '12px sans-serif';
 
         this.settings = this.dataService.mobiusSettings;
-        for (const cat in categorization) {
-            if (!categorization[cat] || this.settings.hasOwnProperty('_func_' + cat)) { continue; }
-            this.settings['_func_' + cat] = true;
+        if (this.settings['debug'] === undefined) { this.settings['debug'] = true; }
+        for (const cat in this.func_categories) {
+            if (!this.func_categories[cat] || this.settings.hasOwnProperty('_func_' + this.func_categories[cat])) { continue; }
+            this.settings['_func_' + this.func_categories[cat]] = true;
         }
         localStorage.setItem('mobius_settings', JSON.stringify(this.settings));
     }
@@ -176,9 +177,10 @@ export class PanelHeaderComponent implements OnDestroy {
 
     updateSettings() {
         this.settings.execute = (<HTMLInputElement>document.getElementById('settings-execute')).checked;
-        for (const cat in categorization) {
-            if (!categorization[cat]) { continue; }
-            this.settings['_func_' + cat] = (<HTMLInputElement>document.getElementById(`_func_${cat}`)).checked;
+
+        for (const cat in this.func_categories) {
+            if (!this.func_categories[cat]) { continue; }
+            this.settings['_func_' + this.func_categories[cat]] = (<HTMLInputElement>document.getElementById(`_func_${this.func_categories[cat]}`)).checked;
         }
         this.dataService.dialog.close();
         this.dataService.triggerToolsetUpdate();
@@ -201,8 +203,13 @@ export class PanelHeaderComponent implements OnDestroy {
             if (result === 'error') {
                 return;
             }
-
-            this.dataService.file = circularJSON.parse(result);
+            SaveFileComponent.clearModelData(this.dataService.file, null);
+            try {
+                this.dataService.file = circularJSON.parse(result);
+            } catch (ex) {
+                this.dataService.notifyMessage('ERROR: Corrupted local file');
+                return;
+            }
             this.dataService.file.flowchart.meta.selected_nodes = [this.dataService.file.flowchart.nodes.length - 1];
             this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
             if (this.settings.execute) {
@@ -253,7 +260,7 @@ export class PanelHeaderComponent implements OnDestroy {
 
             const documentation = {
                 name: funcName,
-                module: 'Imported',
+                module: 'globalFunc',
                 description: fl.description,
                 summary: fl.description,
                 parameters: [],
@@ -267,7 +274,7 @@ export class PanelHeaderComponent implements OnDestroy {
             //         edges: fl.edges
             //     },
             //     name: func.name,
-            //     module: 'Imported',
+            //     module: 'globalFunc',
             //     doc: documentation,
             //     importedFile: file
             // };
@@ -350,7 +357,7 @@ export class PanelHeaderComponent implements OnDestroy {
 
             //     const documentation = {
             //         name: funcName,
-            //         module: 'Imported',
+            //         module: 'globalFunc',
             //         description: fl.description,
             //         summary: fl.description,
             //         parameters: [],
@@ -364,7 +371,7 @@ export class PanelHeaderComponent implements OnDestroy {
             //     //         edges: fl.edges
             //     //     },
             //     //     name: func.name,
-            //     //     module: 'Imported',
+            //     //     module: 'globalFunc',
             //     //     doc: documentation,
             //     //     importedFile: file
             //     // };
@@ -565,7 +572,7 @@ export class PanelHeaderComponent implements OnDestroy {
 
         let txtArea = document.getElementById('generatedLink');
         txtArea.innerHTML = `${window.location.origin}/${this.urlSet[1]}` +
-            `?file=${url}${this.urlSet[2]}${this.urlSet[3]}${this.urlSet[4]}`;
+            `?file=${url}${this.urlSet[2]}${this.urlSet[3]}${this.urlSet[4]}${this.urlSet[5]}`;
         txtArea = null;
     }
 

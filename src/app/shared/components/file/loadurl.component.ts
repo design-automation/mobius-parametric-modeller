@@ -104,6 +104,9 @@ export class LoadUrlComponent {
         if (loadeddata === 'error happened') {
             return false;
         }
+
+        SaveFileComponent.clearModelData(this.dataService.file, null);
+        delete this.dataService.file.flowchart;
         this.dataService.file = loadeddata;
         if (loadeddata.settings && JSON.stringify(loadeddata.settings) !== '{}') {
             window.localStorage.setItem('mpm_settings', loadeddata.settings);
@@ -161,6 +164,8 @@ export class LoadUrlComponent {
 
         checkMobFile(loadeddata);
 
+        SaveFileComponent.clearModelData(this.dataService.file, null);
+        delete this.dataService.file.flowchart;
         this.dataService.file = loadeddata;
         if (loadeddata.settings && JSON.stringify(loadeddata.settings) !== '{}') {
             window.localStorage.setItem('mpm_settings', loadeddata.settings);

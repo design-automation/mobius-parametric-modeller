@@ -109,7 +109,7 @@ export class ExecuteComponent {
             if (!prod.enabled) {
                 continue;
             }
-            if (isMainFlowchart && prod.type === ProcedureTypes.Imported) {
+            if (isMainFlowchart && prod.type === ProcedureTypes.globalFuncCall) {
                 for (let i = 1; i < prod.args.length; i++) {
                     const arg = prod.args[i];
                     // args.slice(1).map((arg) => {
@@ -118,7 +118,7 @@ export class ExecuteComponent {
                 }
                 continue;
             }
-            if (prod.type !== ProcedureTypes.Function) {continue; }
+            if (prod.type !== ProcedureTypes.MainFunction) {continue; }
             for (const func of _parameterTypes.urlFunctions) {
                 const funcMeta = func.split('.');
                 if (prod.meta.module === funcMeta[0] && prod.meta.name === funcMeta[1]) {
@@ -165,6 +165,7 @@ export class ExecuteComponent {
         if (this.dataService.consoleClear) {
             this.dataService.clearLog();
         }
+        SaveFileComponent.clearModelData(this.dataService.file, null);
 
         document.getElementById('spinner-on').click();
         this.dataService.log('<br><hr>');
@@ -312,9 +313,76 @@ export class ExecuteComponent {
         }
     }
 
+
+    extractAnswerList(flowchart: any): any {
+        const answerList = {'params': []};
+        const paramList = [];
+        const lines = flowchart.description.split('\n');
+        for (const line of lines) {
+            let splittedLine = line.split(':');
+            if (splittedLine.length < 2) {
+                splittedLine = line.split('=');
+                if (splittedLine.length < 2){
+                    continue;
+                }
+            }
+            const param = splittedLine[0].trim();
+            if (this.isParamName(param, flowchart)) {
+                let paramVal;
+                try {
+                    paramVal = JSON.parse(splittedLine[1]);
+                } catch (ex) {
+                    paramVal = JSON.parse('[' + splittedLine[1] + ']');
+                }
+                if (!paramVal) { continue; }
+                if (paramVal.constructor !== [].constructor) {
+                    paramVal = [paramVal];
+                }
+                paramList.push([param, paramVal]);
+            } else if (param !== 'params') {
+                try {
+                    answerList[param] = JSON.parse(splittedLine[1]);
+                } catch (ex) {
+                    answerList[param] = JSON.parse('[' + splittedLine[1] + ']');
+                }
+            }
+        }
+        if (paramList.length === 0) {
+            return answerList;
+        }
+
+        for (let i = 0; i < paramList[0][1].length; i++) {
+            const paramSet = {};
+            let check = true;
+            for (const param of paramList) {
+                if (i >= param[1].length) {
+                    check = false;
+                    break;
+                }
+                paramSet[param[0]] = param[1][i];
+            }
+            if (!check) { break; }
+            answerList.params.push(paramSet);
+        }
+        return answerList;
+    }
+
+    isParamName(str: string, flowchart: any): boolean {
+        for (const prod of flowchart.nodes[0].procedure) {
+            if (prod.type === ProcedureTypes.Constant && (prod.args[0].value === str || prod.args[0].jsValue === str)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
     executeFlowchart() {
         let globalVars = '';
         const constantList = {};
+
+        // console.log(this.extractAnswerList(this.dataService.flowchart))
 
         // reordering the flowchart
         if (!this.dataService.flowchart.ordered) {
@@ -483,6 +551,7 @@ export class ExecuteComponent {
             _parameterTypes.mergeFn(params['model'], node.input.value);
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
 
+            // #########################################################
             // *********************************************************
             // console.log(fnString);
 

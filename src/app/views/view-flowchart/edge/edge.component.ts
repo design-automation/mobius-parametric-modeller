@@ -8,7 +8,7 @@ import { IEdge } from '@models/edge';
 })
 export class EdgeComponent {
 
-    @ViewChild('canvas') canvas: ElementRef;
+    @ViewChild('canvas', { static: false }) canvas: ElementRef;
     @Input() edge: IEdge;
     @Input() inputOffset;
     @Input() outputOffset;

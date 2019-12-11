@@ -1,8 +1,7 @@
-import { EEntType, TTri, TVert, TEdge, TWire, TFace,
-    TColl, IGeomData, TPoint, TPline, TPgon, Txyz, IGeomArrays, IGeomCopy, TAttribDataTypes, IGeomPack } from './common';
+import { EEntType, TTri, TFace, Txyz, IGeomArrays, TAttribDataTypes } from './common';
 import { triangulate } from '../triangulate/triangulate';
 import { GIGeom } from './GIGeom';
-import { arrRem } from '../util/arrs';
+import { vecAdd } from '../geom/vectors';
 
 /**
  * Class for geometry.
@@ -11,8 +10,7 @@ export class GIGeomAdd {
     private _geom: GIGeom;
     private _geom_arrays: IGeomArrays;
     /**
-     * Creates an object to store the geometry data.
-     * @param geom_data The JSON data
+     * Constructor
      */
     constructor(geom: GIGeom, geom_arrays: IGeomArrays) {
         this._geom = geom;
@@ -140,6 +138,32 @@ export class GIGeomAdd {
      * @param posis_i
      * @param copy_attribs
      */
+    public copyMovePosis(posis_i: number|number[], move_vector: Txyz, copy_attribs: boolean): number|number[] {
+        if (!Array.isArray(posis_i)) {
+            const posi_i: number = posis_i as number;
+            const xyz: Txyz = this._geom.model.attribs.query.getPosiCoords(posi_i);
+            const new_posi_i: number = this.addPosi();
+            this._geom.model.attribs.add.setPosiCoords(new_posi_i, vecAdd(xyz, move_vector));
+            if (copy_attribs) {
+                const attrib_names: string[] = this._geom.model.attribs.query.getAttribNames(EEntType.POSI);
+                for (const attrib_name of attrib_names) {
+                    if (attrib_name !== 'xyz') {
+                        const value: TAttribDataTypes =
+                            this._geom.model.attribs.query.getAttribVal(EEntType.POSI, attrib_name, posis_i) as TAttribDataTypes;
+                        this._geom.model.attribs.add.setAttribVal(EEntType.POSI, new_posi_i, attrib_name, value);
+                    }
+                }
+            }
+            return new_posi_i;
+        } else {
+            return (posis_i as number[]).map(posi_i => this.copyPosis(posi_i, copy_attribs)) as number[];
+        }
+    }
+    /**
+     * Copy positions.
+     * @param posis_i
+     * @param copy_attribs
+     */
     public copyPosis(posis_i: number|number[], copy_attribs: boolean): number|number[] {
         if (!Array.isArray(posis_i)) {
             const posi_i: number = posis_i as number;
@@ -169,7 +193,7 @@ export class GIGeomAdd {
         // make copies
         if (!Array.isArray(points_i)) {
             const old_point_i: number = points_i as number;
-            const posis_i: number[] = this._geom.query.navAnyToPosi(EEntType.POINT, old_point_i);
+            const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.POINT, old_point_i);
             const new_point_i: number = this.addPoint(posis_i[0]);
             if (copy_attribs) {
                 this._geom.model.attribs.add.copyAttribs(EEntType.POINT, old_point_i, new_point_i);
@@ -189,9 +213,9 @@ export class GIGeomAdd {
         // make copies
         if (!Array.isArray(plines_i)) {
             const old_pline_i: number = plines_i as number;
-            const posis_i: number[] = this._geom.query.navAnyToPosi(EEntType.PLINE, old_pline_i);
-            const wire_i: number = this._geom.query.navPlineToWire(old_pline_i);
-            const is_closed: boolean = this._geom.query.istWireClosed(wire_i);
+            const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PLINE, old_pline_i);
+            const wire_i: number = this._geom.nav.navPlineToWire(old_pline_i);
+            const is_closed: boolean = this._geom.query.isWireClosed(wire_i);
             const new_pline_i: number = this.addPline(posis_i, is_closed);
             if (copy_attribs) {
                 this._geom.model.attribs.add.copyAttribs(EEntType.PLINE, old_pline_i, new_pline_i);
@@ -211,15 +235,15 @@ export class GIGeomAdd {
         // make copies
         if (!Array.isArray(pgons_i)) {
             const old_pgon_i: number = pgons_i as number;
-            const wires_i: number[] = this._geom.query.navAnyToWire(EEntType.PGON, old_pgon_i);
-            const posis_i: number[] = this._geom.query.navAnyToPosi(EEntType.WIRE, wires_i[0] as number);
+            const wires_i: number[] = this._geom.nav.navAnyToWire(EEntType.PGON, old_pgon_i);
+            const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.WIRE, wires_i[0] as number);
             let new_pgon_i: number;
             if (wires_i.length === 1) {
                 new_pgon_i = this.addPgon(posis_i);
             } else {
                 const holes_posis_i: number[][] = [];
                 for (let i = 1; i < wires_i.length; i++) {
-                    const hole_posis_i: number[] = this._geom.query.navAnyToPosi(EEntType.WIRE, wires_i[i] as number);
+                    const hole_posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.WIRE, wires_i[i] as number);
                     holes_posis_i.push(hole_posis_i);
                 }
                 new_pgon_i = this.addPgon(posis_i, holes_posis_i);
@@ -245,11 +269,11 @@ export class GIGeomAdd {
         if (!Array.isArray(colls_i)) {
             const old_coll_i: number = colls_i as number;
             // make a deep copy of the objects in the collection
-            const points_i: number[] = this._geom.query.navCollToPoint(old_coll_i);
+            const points_i: number[] = this._geom.nav.navCollToPoint(old_coll_i);
             const res1 = this.copyPoints(points_i, copy_attribs) as number[];
-            const plines_i: number[] = this._geom.query.navCollToPline(old_coll_i);
+            const plines_i: number[] = this._geom.nav.navCollToPline(old_coll_i);
             const res2 = this.copyPlines(plines_i, copy_attribs) as number[];
-            const pgons_i: number[] = this._geom.query.navCollToPgon(old_coll_i);
+            const pgons_i: number[] = this._geom.nav.navCollToPgon(old_coll_i);
             const res3 = this.copyPgons(pgons_i, copy_attribs) as number[];
             const parent: number = this._geom.query.getCollParent(old_coll_i);
             // add the new collection
@@ -262,38 +286,6 @@ export class GIGeomAdd {
             return new_coll_i;
         } else {
             return (colls_i as number[]).map(coll_i => this.copyColls(coll_i, copy_attribs)) as number[];
-        }
-    }
-   /**
-     * Retriangulate the polygons
-     * @param pgons_i
-     */
-    public triPgons(pgons_i: number|number[]): void {
-        if (!Array.isArray(pgons_i)) {
-            const wires_i: number[] = this._geom.query.navAnyToWire(EEntType.PGON, pgons_i);
-            const outer_i: number = wires_i[0];
-            const holes_i: number[] = wires_i.slice(1);
-            // get the face
-            const face_i: number = this._geom.query.navPgonToFace(pgons_i);
-            // create the triangles
-            const tris_i: number[] = this._addTris(outer_i, holes_i);
-            // delete the old trianges
-            const old_face_tris_i: number[] = this._geom_arrays.dn_faces_wirestris[face_i][1];
-            for (const old_face_tri_i of old_face_tris_i) {
-                // verts to tris
-                for (const vertex_i of this._geom_arrays.dn_tris_verts[old_face_tri_i]) {
-                    const vert_tris_i: number[] = this._geom_arrays.up_verts_tris[vertex_i];
-                    arrRem(vert_tris_i, old_face_tri_i);
-                }
-                // tris to verts
-                this._geom_arrays.dn_tris_verts[old_face_tri_i] = null;
-                // tris to faces
-                delete this._geom_arrays.up_tris_faces[old_face_tri_i];
-            }
-            // update down array for face to tri
-            this._geom_arrays.dn_faces_wirestris[face_i][1] = tris_i;
-        } else { // An array of pgons
-            pgons_i.forEach(pgon_i => this.triPgons(pgon_i));
         }
     }
     // ============================================================================
@@ -391,51 +383,6 @@ export class GIGeomAdd {
         return wire_i;
     }
     /**
-     * Adds trangles and updates the arrays.
-     * Wires are assumed to be closed!
-     * This updates the trie->verts and the verts->tris
-     * This does not update the face to which this wire belongs!
-     * @param wire_i
-     */
-    public _addTris(wire_i: number, hole_wires_i?: number[]): number[] {
-        // save all verts
-        const all_verts_i: number[] = [];
-        // get the coords of the outer perimeter edge
-        const wire_verts_i: number[] = this._geom.query.navAnyToVert(EEntType.WIRE, wire_i);
-        wire_verts_i.forEach(wire_vert_i => all_verts_i.push(wire_vert_i));
-        const wire_posis_i: number[] = wire_verts_i.map( vert_i => this._geom_arrays.dn_verts_posis[vert_i] );
-        const wire_coords: Txyz[] = wire_posis_i.map( posi_i => this._geom.model.attribs.query.getPosiCoords(posi_i) );
-        // get the coords of the holes
-        const all_hole_coords: Txyz[][] = [];
-        if (hole_wires_i !== undefined) {
-            for (const hole_wire_i of hole_wires_i) {
-                const hole_wire_verts_i: number[] = this._geom.query.navAnyToVert(EEntType.WIRE, hole_wire_i);
-                hole_wire_verts_i.forEach(wire_vert_i => all_verts_i.push(wire_vert_i));
-                const hole_wire_posis_i: number[] = hole_wire_verts_i.map( vert_i => this._geom_arrays.dn_verts_posis[vert_i] );
-                const hole_wire_coords: Txyz[] = hole_wire_posis_i.map( posi_i => this._geom.model.attribs.query.getPosiCoords(posi_i) );
-                all_hole_coords.push(hole_wire_coords);
-            }
-        }
-        // create the triangles
-        const tris_corners: number[][] = triangulate(wire_coords, all_hole_coords);
-        const tris_verts_i: TTri[] = tris_corners.map(tri_corners => tri_corners.map( corner => all_verts_i[corner] ) as TTri );
-        // update down arrays, tris->verts
-        const tris_i: number[] = tris_verts_i.map(tri_verts_i => this._geom_arrays.dn_tris_verts.push(tri_verts_i) - 1);
-        // update up arrays, verts->tris
-        for (let i = 0; i < tris_verts_i.length; i++) {
-            const tri_verts_i: TTri = tris_verts_i[i];
-            const tri_i: number = tris_i[i];
-            for (const tri_vert_i of tri_verts_i) {
-                if (this._geom_arrays.up_verts_tris[tri_vert_i] === undefined) {
-                    this._geom_arrays.up_verts_tris[tri_vert_i] = [];
-                }
-                this._geom_arrays.up_verts_tris[tri_vert_i].push(tri_i);
-            }
-        }
-        // return an array of numeric indices of the triangles
-        return tris_i;
-    }
-    /**
      * Adds a face and updates the arrays.
      * Wires are assumed to be closed!
      * This also calls addTris()
@@ -473,5 +420,50 @@ export class GIGeomAdd {
         tris_i.forEach( tri_i => this._geom_arrays.up_tris_faces[tri_i] = face_i );
         // return the numeric index of the face
         return face_i;
+    }
+    /**
+     * Adds trangles and updates the arrays.
+     * Wires are assumed to be closed!
+     * This updates the trie->verts and the verts->tris
+     * This does not update the face to which this wire belongs!
+     * @param wire_i
+     */
+    public _addTris(wire_i: number, hole_wires_i?: number[]): number[] {
+        // save all verts
+        const all_verts_i: number[] = [];
+        // get the coords of the outer perimeter edge
+        const wire_verts_i: number[] = this._geom.nav.navAnyToVert(EEntType.WIRE, wire_i);
+        wire_verts_i.forEach(wire_vert_i => all_verts_i.push(wire_vert_i));
+        const wire_posis_i: number[] = wire_verts_i.map( vert_i => this._geom_arrays.dn_verts_posis[vert_i] );
+        const wire_coords: Txyz[] = wire_posis_i.map( posi_i => this._geom.model.attribs.query.getPosiCoords(posi_i) );
+        // get the coords of the holes
+        const all_hole_coords: Txyz[][] = [];
+        if (hole_wires_i !== undefined) {
+            for (const hole_wire_i of hole_wires_i) {
+                const hole_wire_verts_i: number[] = this._geom.nav.navAnyToVert(EEntType.WIRE, hole_wire_i);
+                hole_wire_verts_i.forEach(wire_vert_i => all_verts_i.push(wire_vert_i));
+                const hole_wire_posis_i: number[] = hole_wire_verts_i.map( vert_i => this._geom_arrays.dn_verts_posis[vert_i] );
+                const hole_wire_coords: Txyz[] = hole_wire_posis_i.map( posi_i => this._geom.model.attribs.query.getPosiCoords(posi_i) );
+                all_hole_coords.push(hole_wire_coords);
+            }
+        }
+        // create the triangles
+        const tris_corners: number[][] = triangulate(wire_coords, all_hole_coords);
+        const tris_verts_i: TTri[] = tris_corners.map(tri_corners => tri_corners.map( corner => all_verts_i[corner] ) as TTri );
+        // update down arrays, tris->verts
+        const tris_i: number[] = tris_verts_i.map(tri_verts_i => this._geom_arrays.dn_tris_verts.push(tri_verts_i) - 1);
+        // update up arrays, verts->tris
+        for (let i = 0; i < tris_verts_i.length; i++) {
+            const tri_verts_i: TTri = tris_verts_i[i];
+            const tri_i: number = tris_i[i];
+            for (const tri_vert_i of tri_verts_i) {
+                if (this._geom_arrays.up_verts_tris[tri_vert_i] === undefined) {
+                    this._geom_arrays.up_verts_tris[tri_vert_i] = [];
+                }
+                this._geom_arrays.up_verts_tris[tri_vert_i].push(tri_i);
+            }
+        }
+        // return an array of numeric indices of the triangles
+        return tris_i;
     }
 }

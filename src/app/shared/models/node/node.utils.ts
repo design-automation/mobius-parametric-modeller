@@ -27,17 +27,28 @@ export abstract class NodeUtils {
                 selected: false,
                 selectGeom: false,
                 hasError: false}],
+            localFunc: [{type: 13, ID: 'local_func_blank',
+                parent: undefined,
+                meta: {name: '', module: ''},
+                variable: undefined,
+                children: undefined,
+                argCount: 0,
+                args: [],
+                print: false,
+                enabled: true,
+                selected: false,
+                selectGeom: false,
+                hasError: false}],
             state: {
                 procedure: [],
-                input_port: undefined,
-                output_port: undefined
+                show_code: true,
+                show_func: true
             },
             input: PortUtils.getNewInput(),
             output: PortUtils.getNewOutput()
         };
         node.input.parentNode = node;
         node.output.parentNode = node;
-
         return node;
     }
 
@@ -45,6 +56,8 @@ export abstract class NodeUtils {
         const node = NodeUtils.getNewNode();
         // node.procedure = [];
         node.enabled = true;
+        node.state.show_code = false;
+        node.state.show_func = false;
         node.name = 'Start';
         node.type = 'start';
         return node;
@@ -169,7 +182,7 @@ export abstract class NodeUtils {
 
             // removing the common parents in the fromProd-toProd path
             // env would be the list of procedure containing the first different parents between fromProd and toProd
-            let env = node.procedure;
+            let env = node.localFunc.concat(node.procedure);
             while (fromTree[0] === toTree[0]) {
                 env = fromTree[0].children;
                 fromTree.splice(0, 1);
@@ -261,7 +274,7 @@ export abstract class NodeUtils {
     static insert_procedure(node: INode, prod: IProcedure) {
         if (prod.type === ProcedureTypes.Constant) {
             if (node.type !== 'start') { return; }
-            if (node.state.procedure[node.state.procedure.length - 1]) {
+            if (node.state.procedure.length > 0 && node.state.procedure[node.state.procedure.length - 1]) {
                 if (node.state.procedure[node.state.procedure.length - 1].type === ProcedureTypes.Constant) {
                     for (const index in node.procedure) {
                         if (node.procedure[index].selected) {
@@ -287,9 +300,28 @@ export abstract class NodeUtils {
             }
             return;
         }
+        if (prod.type === ProcedureTypes.LocalFuncDef) {
+            if (node.type === 'start') { return; }
+            const last_prod = node.state.procedure[node.state.procedure.length - 1]
+            if (node.state.procedure.length > 0 && last_prod
+            && (last_prod.type === ProcedureTypes.LocalFuncDef
+            || (last_prod.type === ProcedureTypes.Blank && last_prod.ID === 'local_func_blank'))) {
+                for (let index = 0; index < node.localFunc.length; index ++) {
+                    if (node.localFunc[index].ID === node.state.procedure[node.state.procedure.length - 1].ID) {
+                        node.localFunc.splice(index + 1, 0, prod);
+                        break;
+                    }
+                }
+            } else {
+                node.localFunc.push(prod);
+            }
+            return;
+        }
         const lastNode = node.state.procedure[node.state.procedure.length - 1];
-        if (lastNode &&
-            lastNode.type !== ProcedureTypes.Constant) {
+        if (lastNode && lastNode.type !== ProcedureTypes.Constant) {
+            if (lastNode.type === ProcedureTypes.LocalFuncDef || (lastNode.type === ProcedureTypes.Blank && lastNode.ID === 'local_func_blank')) {
+                node.procedure.splice(1, 0, prod);
+            }
             let list: IProcedure[];
             if (lastNode.parent) {
                 prod.parent = lastNode.parent;
@@ -388,6 +420,37 @@ export abstract class NodeUtils {
                 prod.args = [];
                 break;
 
+            case ProcedureTypes.LocalFuncDef:
+                prod.argCount = data + 1;
+                prod.args = [{name: 'func_name', value: undefined}];
+                for (let argIndex = 0; argIndex < data; argIndex ++) {
+                    prod.args.push({name: `arg_name_${argIndex}`, value: undefined});
+                }
+                this.initiateChildren(prod);
+                break;
+
+            case ProcedureTypes.LocalFuncReturn:
+                prod.argCount = 1;
+                prod.args = [ {name: 'Value', value: undefined} ];
+                break;
+
+
+            case ProcedureTypes.LocalFuncCall:
+                prod.argCount = data.args.length;
+                prod.meta = { module: 'localFunc', name: data.args[0].value};
+                prod.argCount = data.argCount;
+
+                const hasReturn = NodeUtils.checkLocalFuncReturn(data);
+                if (hasReturn) {
+                    prod.args = [ {name: 'var_name', value: undefined} ];
+                } else {
+                    prod.args = [ {name: '__none__', value: undefined} ];
+                }
+                data.args.slice(1).forEach(arg => {
+                    prod.args.push({name: arg.value, value: undefined});
+                });
+                break;
+
             case ProcedureTypes.Constant:
                 prod.argCount = 2;
                 prod.meta = { module: 'Input', name: 'Constant', inputMode: data, description: ''};
@@ -420,7 +483,7 @@ export abstract class NodeUtils {
                 prod.args = [ {name: 'index', value: undefined} ];
                 break;
 
-            case ProcedureTypes.Function:
+            case ProcedureTypes.MainFunction:
                 if (!data) { throw Error('No function data'); }
                 prod.meta = { module: data.module, name: data.name};
                 prod.argCount = data.argCount + 1;
@@ -432,7 +495,7 @@ export abstract class NodeUtils {
                 prod.args = [ returnArg, ...data.args];
                 break;
 
-            case ProcedureTypes.Imported:
+            case ProcedureTypes.globalFuncCall:
                 prod.meta = { module: data.module, name: data.name};
                 prod.argCount = data.argCount + 1;
 
@@ -443,6 +506,7 @@ export abstract class NodeUtils {
 
                 prod.args = [ iReturnArg, ...data.args];
                 break;
+
         }
         // select the procedure
         if (prod.children) {
@@ -450,6 +514,23 @@ export abstract class NodeUtils {
         } else {
             NodeUtils.select_procedure(node, prod, false, false);
         }
+    }
+
+    static checkLocalFuncReturn(prod): boolean {
+        if (!prod.children) { return false; }
+        for (const child_prod of prod.children){
+            if (child_prod.type === ProcedureTypes.LocalFuncReturn
+            && child_prod.args[0].value
+            && child_prod.args[0].value !== 'null'
+            && child_prod.args[0].value !== 'undefined'
+            && child_prod.args[0].value !== '') {
+                return true;
+            }
+            if (child_prod.children && NodeUtils.checkLocalFuncReturn(child_prod)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     static updateNode(newNode: INode, newPos): INode {
@@ -523,6 +604,14 @@ export abstract class NodeUtils {
             const checkNode = node.state.procedure[node.state.procedure.length - 1];
             return (checkNode.type.toString() !== ProcedureTypes.If.toString()
             && checkNode.type.toString() !== ProcedureTypes.Elseif.toString());
+        } else if (tp === 'RETURN') {
+            let checkNode = node.state.procedure[node.state.procedure.length - 1];
+            if (!checkNode || checkNode.type === ProcedureTypes.LocalFuncDef) { return true; }
+            while (checkNode.parent) {
+                checkNode = checkNode.parent;
+            }
+            if (checkNode.type === ProcedureTypes.LocalFuncDef) { return false; }
+            return true;
         } else {
             let checkNode = node.state.procedure[node.state.procedure.length - 1];
             if (tp === 'BREAK' || tp === 'CONTINUE') {

@@ -98,6 +98,8 @@ export class DataCesium {
                                                 Cesium.CameraEventType.WHEEL,
                                                 Cesium.CameraEventType.PINCH];
 
+        Cesium.Camera.DEFAULT_VIEW_FACTOR = 0;
+
         if (this._primitives) {
             this._viewer.scene.primitives.removeAll();
             for (const primitive of this._primitives) {
@@ -139,8 +141,9 @@ export class DataCesium {
         // the origin of the model
         let longitude = LONGLAT[0];
         let latitude = LONGLAT[1];
-        if (model.attribs.query.hasModelAttrib('longitude')) {
-            const long_value: TAttribDataTypes  = model.attribs.query.getModelAttribVal('longitude');
+        if (model.attribs.query.hasModelAttrib('geolocation')) {
+            const geoloc: any = model.attribs.query.getModelAttribVal('geolocation');
+            const long_value: TAttribDataTypes  = geoloc.longitude;
             if (typeof long_value !== 'number') {
                 throw new Error('Longitude attribute must be a number.');
             }
@@ -148,9 +151,7 @@ export class DataCesium {
             if (longitude < -180 || longitude > 180) {
                 throw new Error('Longitude attribute must be between -180 and 180.');
             }
-        }
-        if (model.attribs.query.hasModelAttrib('latitude')) {
-            const lat_value: TAttribDataTypes = model.attribs.query.getModelAttribVal('latitude');
+            const lat_value: TAttribDataTypes = geoloc.latitude;
             if (typeof lat_value !== 'number') {
                 throw new Error('Latitude attribute must be a number');
             }
@@ -159,6 +160,26 @@ export class DataCesium {
                 throw new Error('Latitude attribute must be between 0 and 90.');
             }
         }
+        // if (model.attribs.query.hasModelAttrib('longitude')) {
+        //     const long_value: TAttribDataTypes  = model.attribs.query.getModelAttribVal('longitude');
+        //     if (typeof long_value !== 'number') {
+        //         throw new Error('Longitude attribute must be a number.');
+        //     }
+        //     longitude = long_value as number;
+        //     if (longitude < -180 || longitude > 180) {
+        //         throw new Error('Longitude attribute must be between -180 and 180.');
+        //     }
+        // }
+        // if (model.attribs.query.hasModelAttrib('latitude')) {
+        //     const lat_value: TAttribDataTypes = model.attribs.query.getModelAttribVal('latitude');
+        //     if (typeof lat_value !== 'number') {
+        //         throw new Error('Latitude attribute must be a number');
+        //     }
+        //     latitude = lat_value as number;
+        //     if (latitude < 0 || latitude > 90) {
+        //         throw new Error('Latitude attribute must be between 0 and 90.');
+        //     }
+        // }
         const origin = Cesium.Cartesian3.fromDegrees(longitude, latitude);
         // create a matrix to transform points
         const xform_matrix: any = Cesium.Matrix4.multiplyByTranslation(
@@ -189,7 +210,7 @@ export class DataCesium {
                 // get the colour of the vertices
                 let pgon_colour = Cesium.Color.WHITE;
                 if (model.attribs.query.hasAttrib(EEntType.VERT, 'rgb')) {
-                    const verts_i: number[] = model.geom.query.navAnyToVert(EEntType.PGON, pgon_i);
+                    const verts_i: number[] = model.geom.nav.navAnyToVert(EEntType.PGON, pgon_i);
                     const rgb_sum: Txyz = [0, 0, 0];
                     for (const vert_i of verts_i) {
                         let vert_rgb: Txyz = model.attribs.query.getAttribVal(EEntType.VERT, 'rgb', vert_i) as Txyz;
@@ -202,37 +223,38 @@ export class DataCesium {
                     pgon_colour = new Cesium.Color(rgb_sum[0] / num_verts, rgb_sum[1] / num_verts, rgb_sum[2] / num_verts, 1.0);
                 }
                 // create the edges
-                const wires_i: number[] = model.geom.query.navAnyToWire(EEntType.PGON, pgon_i);
-                for (const wire_i of wires_i) {
-                    const wire_posis_i: number[] = model.geom.query.navAnyToPosi(EEntType.WIRE, wire_i);
-                    if (wire_posis_i.length > 2) {
-                        // const wire_verts_i: number[] = model.geom.query.navAnyToVert(EEntType.WIRE, wire_i);
-                        // const wire_posis_i: number[] = wire_verts_i.map( wire_vert_i => model.geom.query.navVertToPosi(wire_vert_i) );
-                        const wire_points: any[] = wire_posis_i.map( wire_posi_i => posi_to_point_map.get(wire_posi_i) );
-                        if (model.geom.query.istWireClosed(wire_i)) {
-                            wire_points.push(wire_points[0]);
-                        }
-                        const line_geom = new Cesium.SimplePolylineGeometry({
-                            positions: wire_points,
-                            vertexFormat: Cesium.PerInstanceColorAppearance.VERTEX_FORMAT,
-                            perPositionHeight: true,
-                            // arcType: Cesium.ArcType.NONE,
-                            width: 1.0
-                        });
-                        const line_instance = new Cesium.GeometryInstance({
-                            geometry : line_geom,
-                            attributes : {
-                                color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.BLACK)
-                            }
-                        });
-                        lines_instances.push(line_instance);
-                    }
-                }
+                // const wires_i: number[] = model.geom.nav.navAnyToWire(EEntType.PGON, pgon_i);
+                // for (const wire_i of wires_i) {
+                //     const wire_posis_i: number[] = model.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
+                //     if (wire_posis_i.length > 2) {
+                //         // const wire_verts_i: number[] = model.geom.nav.navAnyToVert(EEntType.WIRE, wire_i);
+                //         // const wire_posis_i: number[] = wire_verts_i.map( wire_vert_i => model.geom.nav.navVertToPosi(wire_vert_i) );
+                //         const wire_points: any[] = wire_posis_i.map( wire_posi_i => posi_to_point_map.get(wire_posi_i) );
+                //         if (model.geom.query.istWireClosed(wire_i)) {
+                //             wire_points.push(wire_points[0]);
+                //         }
+                //         const line_geom = new Cesium.SimplePolylineGeometry({
+                //             positions: wire_points,
+                //             vertexFormat: Cesium.PerInstanceColorAppearance.VERTEX_FORMAT,
+                //             perPositionHeight: true,
+                //             // arcType: Cesium.ArcType.NONE,
+                //             width: 1.0
+                //         });
+                //         const line_instance = new Cesium.GeometryInstance({
+                //             geometry : line_geom,
+                //             attributes : {
+                //                 color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.BLACK)
+                //             }
+                //         });
+                //         lines_instances.push(line_instance);
+                //     }
+                // }
+
                 // create the triangles
-                const pgon_tris_i: number[] = model.geom.query.navAnyToTri(EEntType.PGON, pgon_i);
+                const pgon_tris_i: number[] = model.geom.nav.navAnyToTri(EEntType.PGON, pgon_i);
                 for (const pgon_tri_i of pgon_tris_i) {
                     // tris_i.push(pgon_tri_i);
-                    const tri_posis_i: number[] = model.geom.query.navAnyToPosi(EEntType.TRI, pgon_tri_i);
+                    const tri_posis_i: number[] = model.geom.nav.navAnyToPosi(EEntType.TRI, pgon_tri_i);
                     const tri_points: any[] = tri_posis_i.map( posi_i => posi_to_point_map.get(posi_i) );
                     const tri_geom = new Cesium.PolygonGeometry({
                         perPositionHeight : true,
@@ -254,7 +276,7 @@ export class DataCesium {
             for (const pline_i of plines_i) {
                 let pline_colour = Cesium.Color.BLACK;
                 if (model.attribs.query.hasAttrib(EEntType.VERT, 'rgb')) {
-                    const verts_i: number[] = model.geom.query.navAnyToVert(EEntType.PLINE, pline_i);
+                    const verts_i: number[] = model.geom.nav.navAnyToVert(EEntType.PLINE, pline_i);
                     const rgb_sum: Txyz = [0, 0, 0];
                     for (const vert_i of verts_i) {
                         let vert_rgb: Txyz = model.attribs.query.getAttribVal(EEntType.VERT, 'rgb', vert_i) as Txyz;
@@ -267,11 +289,11 @@ export class DataCesium {
                     pline_colour = new Cesium.Color(rgb_sum[0] / num_verts, rgb_sum[1] / num_verts, rgb_sum[2] / num_verts, 1.0);
                 }
                 // create the edges
-                const wire_i: number = model.geom.query.navPlineToWire(pline_i);
-                const wire_posis_i: number[] = model.geom.query.navAnyToPosi(EEntType.WIRE, wire_i);
+                const wire_i: number = model.geom.nav.navPlineToWire(pline_i);
+                const wire_posis_i: number[] = model.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
                 if (wire_posis_i.length > 1) {
                     const wire_points: any[] = wire_posis_i.map( wire_posi_i => posi_to_point_map.get(wire_posi_i) );
-                    if (model.geom.query.istWireClosed(wire_i)) {
+                    if (model.geom.query.isWireClosed(wire_i)) {
                         wire_points.push(wire_points[0]);
                     }
                     const line_geom = new Cesium.SimplePolylineGeometry({
@@ -307,6 +329,7 @@ export class DataCesium {
                                             translucent : false
                                         })
                                     });
+            // this._primitives = [tris_primitive];
             this._primitives = [lines_primitive, tris_primitive];
             for (const primitive of this._primitives) {
                 this._viewer.scene.primitives.add(Cesium.clone(primitive));
@@ -324,11 +347,12 @@ export class DataCesium {
             // }
 
 
-            const extent = new Cesium.Rectangle.fromDegrees(
-                origin[0] - 0.1, origin[1] - 0.1,
-                origin[0] + 0.1, origin[1] + 0.1); // 100.3, 5.4, 100.4, 5.5);
-                // Cesium.Camera.DEFAULT_VIEW_RECTANGLE = extent;
-                // Cesium.Camera.DEFAULT_VIEW_FACTOR = 0;
+            const extent = Cesium.Rectangle.fromDegrees(
+                longitude - 0.01, latitude - 0.01,
+                longitude + 0.01, latitude + 0.01); // 100.3, 5.4, 100.4, 5.5);
+
+            Cesium.Camera.DEFAULT_VIEW_RECTANGLE = extent;
+            // Cesium.Camera.DEFAULT_VIEW_FACTOR = 0;
 
             this._viewer.render();
         }

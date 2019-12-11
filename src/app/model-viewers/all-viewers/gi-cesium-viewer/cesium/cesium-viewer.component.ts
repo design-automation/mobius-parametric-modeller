@@ -95,7 +95,7 @@ export class CesiumViewerComponent implements OnInit, DoCheck, OnChanges {
         // this.container.appendChild(this._data_cesium._renderer.domElement);
 
         // ??? What is happening here?
-        const self = this;
+        // const self = this;
         // this._data_cesium._controls.addEventListener('change', function () { self.render(self); });
         // self._data_cesium._renderer.render(self._data_cesium._scene, self._data_cesium._camera);
 

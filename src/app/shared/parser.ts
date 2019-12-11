@@ -4,6 +4,7 @@ import { IArgument } from '@models/code';
 import { INode } from '@models/node';
 import { InputType } from '@models/port';
 import { _parameterTypes } from '@assets/core/_parameterTypes';
+import { modify } from '@assets/core/modules';
 
 enum strType {
     NUM,
@@ -53,8 +54,13 @@ const reservedWords = [
     'Array', 'Date', 'hasOwnProperty', 'Infinity',
     'isFinite', 'isNaN', 'isPrototypeOf', 'length',
     'Math', 'NaN', 'name', 'Number', 'Object',
-    'prototype', 'String', 'toString', 'undefined', 'valueOf'
+    'prototype', 'String', 'toString', 'undefined', 'valueOf',
+
+    'pythonList', 'JSON', 'stringify', 'parse'
 ];
+const reservedWordsSet = new Set(reservedWords);
+
+const varStartSymbols = new Set(['#', '@', '?']);
 
 const mathFuncs = [];
 for (const funcMod of inline_func) {
@@ -105,7 +111,51 @@ export function modifyVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
         }
     }
     procedure.args[0].invalidVar = false;
+
+    const comps = splitComponents(procedure.args[0].jsValue);
+    // console.log('\n\n',procedure.args[0].jsValue)
+    // if (typeof comps === 'string') {
+    //     return;
+    // }
+    // for (let i = 0; i < comps.length; i ++) {
+    //     const comp = comps[i];
+    //     if (comp.type === strType.OTHER && comp.value === ';' || comp.value === '=') {
+    //         console.log('  .......', comp.value)
+    //     }
+    //     if (comp.type === strType.VAR && comp.value[comp.value.length - 1] !== '_') {
+    //         console.log('  _',comp.value)
+    //         console.log('    keyword1:', specialVars.has(comps[i].value))
+    //         console.log('    keyword2:', reservedWordsSet.has(comps[i].value))
+    //         if (i > 0) {
+    //             console.log('    previous:', comps[i - 1].value)
+    //         }
+    //     }
+    // }
 }
+
+export function modifyLocalFuncVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
+    if (!procedure.args[0].value) { return; }
+    procedure.variable = null;
+
+    procedure.args.forEach(arg => {
+        if (!arg.value) { return; }
+        arg.value = modifyVarArg(arg).replace(/[\@\#\?]/g, '_');
+        arg.jsValue = arg.value + '_';
+        if (arg.name === 'func_name') { return; }
+        arg.usedVars = [arg.value];
+    });
+    for (const prod of nodeProdList) {
+        if (prod.ID === procedure.ID) {
+            continue;
+        }
+        if (prod.type === ProcedureTypes.LocalFuncDef && procedure.args[0].value === prod.args[0].value) {
+            procedure.args[0].invalidVar = `Error: Function name ${procedure.args[0].value} already exists`;
+            return;
+        }
+    }
+    procedure.args[0].invalidVar = false;
+}
+
 
 export function modifyVarArg(arg: IArgument) {
     let str = arg.value.trim();
@@ -197,6 +247,26 @@ export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProd
         procedure.args[argIndex].invalidVar = varResult.error;
     }
 
+    // const comps = splitComponents(procedure.args[argIndex].jsValue);
+    // console.log('\n\n',procedure.args[argIndex].jsValue)
+    // if (typeof comps === 'string') {
+    //     return;
+    // }
+    // for (let i = 0; i < comps.length; i ++) {
+    //     const comp = comps[i];
+    //     if (comp.type === strType.OTHER && comp.value === ';' || comp.value === '=') {
+    //         console.log('  .......', comp.value)
+    //     }
+    //     if (comp.type === strType.VAR && comp.value[comp.value.length - 1] !== '_') {
+    //         console.log('  _',comp.value)
+    //         console.log('    keyword1:', specialVars.has(comps[i].value))
+    //         console.log('    keyword2:', reservedWordsSet.has(comps[i].value))
+    //         if (i > 0) {
+    //             console.log('    previous:', comps[i - 1].value)
+    //         }
+    //     }
+    // }
+
     // REGEX CALL
     // const vals = procedure.args[argIndex].value.split('"');
     // let result = '';
@@ -246,8 +316,9 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
         return {'error': comps};
     }
 
-    // if (comps[0].value === '@') {
-    //     const i = 1;
+    if (comps[0].value === '.') {
+        return {'error': 'Error: Invalid "."'};
+    }
     if ((comps[0].value === '@' || comps[0].value === '#' || comps[0].value === '?')) {
         let i = 1;
         if (comps[0].value === '?') {
@@ -294,7 +365,7 @@ export function parseArgument(str: string): {'error'?: string, 'vars'?: string[]
     if (typeof comps === 'string') {
         return {'error': comps};
     }
-    const vars: string[] = [];
+    let vars: string[] = [];
     let newString = '';
     let jsString = '';
     const check = analyzeComp(comps, 0, vars);
@@ -305,6 +376,25 @@ export function parseArgument(str: string): {'error'?: string, 'vars'?: string[]
     newString += check.str;
     jsString += check.jsStr;
     if (check.i !== comps.length - 1) {
+        if (comps[check.i + 1].value === ',') {
+            const newComps = JSON.parse(JSON.stringify(comps));
+            newComps.unshift({'type': strType.OTHER, 'value': '['});
+            newComps.push({'type': strType.OTHER, 'value': ']'});
+            vars = [];
+            const checkTest = analyzeComp(newComps, 0, vars);
+            if (!checkTest.error) {
+                return {'vars': vars, 'str': checkTest.str.trim(), 'jsStr': checkTest.jsStr.trim()};
+            }
+        } else if (comps[check.i + 1].value === ':') {
+            const newComps = JSON.parse(JSON.stringify(comps));
+            newComps.unshift({'type': strType.OTHER, 'value': '{'});
+            newComps.push({'type': strType.OTHER, 'value': '}'});
+            vars = [];
+            const checkTest = analyzeComp(newComps, 0, vars);
+            if (!checkTest.error) {
+                return {'vars': vars, 'str': checkTest.str.trim(), 'jsStr': checkTest.jsStr.trim()};
+            }
+        }
         return {'error': `Error: Invalid "${comps[check.i + 1].value}"` +
         `at: ... ${comps.slice(check.i + 1).map(cp => cp.value).join(' ')}`};
     }
@@ -507,7 +597,8 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
         // }
         return { 'error': 'Error: Variable followed by another variable/number/string \n' +
         `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
-
+    } else if ( comps[i + 1].value === '.') {
+            return {'error': 'Error: Invalid "."'};
     // if variable is followed by "[" --> array/json
     // add the variable to var list and check for validity of the first component inside the bracket
     } else if (comps[i + 1].value === '[' || comps[i + 1].value === '.') {
@@ -724,16 +815,18 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
                 const arrayName = result.jsStr.substring(0, bracketIndex);
                 const index = result.jsStr.lastIndexOf(arrayName);
                 jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity},` +
+                           ` ['${arrayName}', ${result.jsStr.substring(bracketIndex + 12, index - 2)}])`;
+                jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity},` +
                            ` '${arrayName}', ${result.jsStr.substring(bracketIndex + 12, index - 2)})`;
-                // jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity},` +
-                //            ` '${result.jsStr.slice(0, bracketIndex)}', ${result.jsStr.slice(bracketIndex + 7, -4)})`;
             } else if (result.jsStr.indexOf('[') !== -1) {
                 bracketIndex = result.jsStr.indexOf('[');
                 const arrayName = result.jsStr.substring(0, bracketIndex);
                 const index = result.jsStr.slice(bracketIndex + 1, -1);
-                jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${arrayName}', ${index})`; //////////
+                jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, ['${arrayName}', ${index}])`;
+                // jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${arrayName}', ${index})`; //////////
             } else {
-                jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${result.str}', null)`; //////////
+                jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${result.str}')`;
+                // jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity}, '${result.str}', null)`; //////////
             }
             // return {'i': i, 'str': newString, 'jsStr': jsString};
 
@@ -828,8 +921,10 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
             i = nComp.i;
 
             newString += `?@${result.str}${operator}${nComp.str} `;
-            jsString = ` __modules__.${_parameterTypes.queryFilter}(__params__.model, ${entity}, '${att_name}'` +
-                       `, ${att_index}, '${operator}', ${nComp.jsStr})`; //////////
+            // jsString = ` __modules__.${_parameterTypes.queryFilter}(__params__.model, ${entity}, '${att_name}'` +
+            //            `, ${att_index}, '${operator}', ${nComp.jsStr})`; //////////
+            jsString = ` __modules__.${_parameterTypes.queryFilter}(__params__.model, ${entity}, ['${att_name}'` +
+                       `, ${att_index}], '${operator}', ${nComp.jsStr})`; //////////
 
             if (i === comps.length - 1 || (comps[i + 1].value !== '@' && comps[i + 1].value !== '#' && comps[i + 1].value !== '?')) {
                 return {'i': i, 'str': newString, 'jsStr': jsString};
@@ -1099,6 +1194,7 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
 export function checkValidVar(vars: string[], procedure: IProcedure, nodeProdList: IProcedure[]): {'error'?: string, 'vars'?: string[]} {
     let current = procedure;
     const validVars = [];
+    // check global variables
     for (const glb of globals) {
         const i = vars.indexOf(glb);
         if (i !== -1) {
@@ -1126,6 +1222,14 @@ export function checkValidVar(vars: string[], procedure: IProcedure, nodeProdLis
             }
         }
         current = current.parent;
+        if (current.type === ProcedureTypes.LocalFuncDef) {
+            for (let i = 1; i < current.args.length; i++) {
+                const index = vars.indexOf(current.args[i].value);
+                if (index !== -1) {
+                    validVars.push(vars.splice(index, 1)[0]);
+                }
+            }
+        }
     }
     if (vars.length === 0) {
         return {'vars': validVars};
@@ -1168,7 +1272,8 @@ export function checkNodeValidity(node: INode) {
     if (node.type === 'start') {
         updateGlobals(node);
     }
-    checkProdListValidity(node.procedure, node.procedure);
+    const full_prod_list = node.localFunc.concat(node.procedure);
+    checkProdListValidity(full_prod_list, full_prod_list);
 }
 
 function checkProdListValidity(prodList: IProcedure[], nodeProdList: IProcedure[]) {
@@ -1179,8 +1284,9 @@ function checkProdListValidity(prodList: IProcedure[], nodeProdList: IProcedure[
                 modifyVar(prod, nodeProdList);
                 modifyArgument(prod, 1, nodeProdList);
                 break;
-            case ProcedureTypes.Function:
-            case ProcedureTypes.Imported:
+            case ProcedureTypes.MainFunction:
+            case ProcedureTypes.globalFuncCall:
+            case ProcedureTypes.LocalFuncCall:
                 if (prod.args[0].name !== '__none__') {
                     modifyVar(prod, nodeProdList);
                 }
@@ -1192,6 +1298,7 @@ function checkProdListValidity(prodList: IProcedure[], nodeProdList: IProcedure[
             case ProcedureTypes.If:
             case ProcedureTypes.Elseif:
             case ProcedureTypes.While:
+            case ProcedureTypes.LocalFuncReturn:
                 modifyArgument(prod, 0, nodeProdList);
                 break;
             case ProcedureTypes.Constant:
@@ -1202,6 +1309,9 @@ function checkProdListValidity(prodList: IProcedure[], nodeProdList: IProcedure[
             case ProcedureTypes.Return:
                 modifyArgument(prod, 1, nodeProdList);
                 break;
+            case ProcedureTypes.LocalFuncDef:
+                modifyLocalFuncVar(prod, nodeProdList);
+
         }
         if (prod.children) {
             checkProdListValidity(prod.children, nodeProdList);
@@ -1227,8 +1337,8 @@ function checkProdShadowingConstant(prodList: IProcedure[]): boolean {
     for (const prod of prodList) {
         switch (prod.type) {
             case ProcedureTypes.Variable:
-            case ProcedureTypes.Function:
-            case ProcedureTypes.Imported:
+            case ProcedureTypes.MainFunction:
+            case ProcedureTypes.globalFuncCall:
                 if (prod.args[0].name !== '__none__' && globals.indexOf(prod.args[0].value) !== -1) {
                     prod.args[0].invalidVar = `Error: Variable shadowing global constant: ${prod.args[0].value}`;
                     check = true;

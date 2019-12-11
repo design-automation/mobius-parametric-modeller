@@ -27,7 +27,7 @@ declare const InstallTrigger: any;
 export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @Output() switch = new EventEmitter();
-    @ViewChild('flowchartSplit') flowchartSplit: SplitComponent;
+    @ViewChild('flowchartSplit', { static: true }) flowchartSplit: SplitComponent;
 
     constructor(private dataService: DataService,
                 private dataOutputService: DataOutputService,

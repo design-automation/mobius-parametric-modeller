@@ -9,6 +9,7 @@ import { IdGenerator } from '@utils';
 import { InputType } from '@models/port';
 import { IArgument } from '@models/code';
 import * as Modules from '@modules';
+import { checkNodeValidity } from '@shared/parser';
 
 @Component({
     selector: 'panel-header',
@@ -212,20 +213,25 @@ export class PanelHeaderComponent implements OnDestroy {
             }
             this.dataService.file.flowchart.meta.selected_nodes = [this.dataService.file.flowchart.nodes.length - 1];
             this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
+            for (const node of this.dataService.flowchart.nodes) {
+                checkNodeValidity(node);
+            }
+            for (const func of this.dataService.flowchart.functions) {
+                for (const node of func.flowchart.nodes) {
+                    checkNodeValidity(node);
+                }
+            }
+            if (this.dataService.flowchart.subFunctions) {
+                for (const func of this.dataService.flowchart.subFunctions) {
+                    for (const node of func.flowchart.nodes) {
+                        checkNodeValidity(node);
+                    }
+                }
+            }
             if (this.settings.execute) {
                 document.getElementById('executeButton').click();
             }
 
-            // SaveFileComponent.loadFile(filecode, (file) => {
-            //     if (file === 'error') {
-            //         return;
-            //     }
-            //     this.dataService.file = circularJSON.parse(file);
-            //     this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-            //     if (this.settings.execute) {
-            //         document.getElementById('executeButton').click();
-            //     }
-            // });
         } else {
             const func = this.dataService.getbackup();
             // const fileString: any = localStorage.getItem(filecode);
@@ -266,18 +272,6 @@ export class PanelHeaderComponent implements OnDestroy {
                 parameters: [],
                 returns: fl.returnDescription
             };
-            // func = <IFunction>{
-            //     flowchart: <IFlowchart>{
-            //         id: fl.id ? fl.id : IdGenerator.getId(),
-            //         name: fl.name,
-            //         nodes: fl.nodes,
-            //         edges: fl.edges
-            //     },
-            //     name: func.name,
-            //     module: 'globalFunc',
-            //     doc: documentation,
-            //     importedFile: file
-            // };
             func.flowchart = <IFlowchart>{
                 id: fl.id ? fl.id : IdGenerator.getId(),
                 name: fl.name,

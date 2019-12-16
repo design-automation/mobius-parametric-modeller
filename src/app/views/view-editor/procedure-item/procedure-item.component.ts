@@ -221,6 +221,24 @@ export class ProcedureItemComponent implements OnDestroy {
         // this.data.enabled = !this.data.enabled;
     }
 
+    addArg(event: MouseEvent) {
+        event.stopPropagation();
+        this.data.args.push( <IArgument> {
+            'name': 'arg_' + this.data.argCount,
+            'value': '',
+            'jsValue': ''
+        });
+        this.data.argCount += 1;
+    }
+
+
+    rmArg(event: MouseEvent) {
+        event.stopPropagation();
+        this.data.args.pop();
+        this.data.argCount -= 1;
+        return ;
+    }
+
     // delete child procedure (after receiving emitDelete from child procedure)
     deleteChild(index: number): void {
         this.dataService.registerEdtAction([{'type': 'del', 'parent': this.data, 'index': index, 'prod': this.data.children[index]}]);
@@ -246,6 +264,13 @@ export class ProcedureItemComponent implements OnDestroy {
 
     haveHelpText() {
         return (this.data.type === 8 || this.data.type ===  9);
+    }
+
+    isLocalFunc(isRemove = false) {
+        if (isRemove) {
+            return this.data.type === 16 && this.data.argCount > 1;
+        }
+        return this.data.type === 16;
     }
 
 

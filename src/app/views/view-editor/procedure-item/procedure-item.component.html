@@ -435,6 +435,14 @@
             <button *ngIf='haveHelpText()' class='btn' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText(undefined)'>
                 <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
             </button>
+            <!-- add arg button-->
+            <button *ngIf='isLocalFunc()' class='btn' mat-icon-button title="Add Argument" (click)='addArg($event)'>
+                <mat-icon class='icon' svgIcon='cAdd'></mat-icon>
+            </button>
+            <!-- remove arg button-->
+            <button *ngIf='isLocalFunc(true)' class='btn' mat-icon-button title="Remove Argument" (click)='rmArg($event)'>
+                <mat-icon class='icon' svgIcon='cRemove'></mat-icon>
+            </button>
         </div>
     </div>
 </div>

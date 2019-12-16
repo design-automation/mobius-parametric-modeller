@@ -191,10 +191,7 @@
                 <button id='CreateLocal' class="accordion inline--cat"  (click)='toggleAccordion("CreateLocal", true)'>Create Local</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset user_set'>
-                        <li (click)='add_local_func_def(0)'>Def Func0</li>
-                        <li (click)='add_local_func_def(1)'>Def Func1</li>
-                        <li (click)='add_local_func_def(2)'>Def Func2</li>
-                        <li (click)='add_local_func_def(3)'>Def Func3</li>
+                        <li (click)='add_local_func_def(0)'>Def Func</li>
                         <li class='tooltip-basic' [class.invalid]='checkInvalid("RETURN")'
                         (click)='add_basic_func(ProcedureTypes.LocalFuncReturn)'>Return</li>
                     </ul>

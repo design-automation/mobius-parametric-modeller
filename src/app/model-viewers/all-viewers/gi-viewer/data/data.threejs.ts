@@ -185,6 +185,7 @@ export class DataThreejs {
      * @param container
      */
     public addGeometry(model: GIModel, container): void {
+        this.updateSettings(JSON.parse(localStorage.getItem('mpm_settings')));
         if (this.settings.background.show) {
             this.loadBackground(this.settings.background.background_set);
         } else {
@@ -1376,6 +1377,19 @@ export class DataThreejs {
         this._scene.background = background;
         // this._renderer.render(this._scene, this._camera);
     }
+
+    updateSettings(settings: Settings) {
+        if (settings === null ||
+            this.hasDiffProps(settings, this.settings)) {
+            localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
+            return;
+        }
+        this.settings = settings;
+    }
+
+    hasDiffProps(obj1, obj2) {
+        return !Object.keys(obj2).every(e => Object.keys(obj1).includes(e));
+    }
 }
 
 /**
@@ -1400,10 +1414,16 @@ interface Settings {
         background_set: number
     };
     positions: { show: boolean, size: number };
+    wireframe: { show: boolean };
     tjs_summary: { show: boolean };
     gi_summary: { show: boolean };
-    wireframe: { show: boolean };
-    camera: { pos: Vector3, target: Vector3 };
+    camera: {
+        pos: Vector3,
+        pos_x: number,
+        pos_y: number,
+        pos_z: number,
+        target: Vector3
+    };
     colors: {
         viewer_bg: string,
         position: string,
@@ -1445,4 +1465,9 @@ interface Settings {
         color: string,
         shininess: number
     };
+    select: {
+        selector: object,
+        tab: number
+    };
+    version: string;
 }

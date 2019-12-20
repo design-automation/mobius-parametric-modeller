@@ -3,6 +3,7 @@ import { IMobius } from '@models/mobius';
 import { FlowchartUtils } from '@models/flowchart';
 import { DataService } from '@services';
 import { SaveFileComponent } from './savefile.component';
+import { VERSION } from '@env/version';
 
 @Component({
   selector: 'file-new',
@@ -42,7 +43,7 @@ export class NewFileComponent {
             name: 'Untitled',
             author: 'new_user',
             flowchart: FlowchartUtils.newflowchart(),
-            version: 4,
+            version: VERSION.version,
             settings: {}
         };
 

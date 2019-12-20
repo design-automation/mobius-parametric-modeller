@@ -6,9 +6,14 @@ import * as deprecated from '@assets/core/deprecated.json';
 import * as circularJSON from 'circular-json';
 import { _parameterTypes } from '@assets/core/_parameterTypes';
 import { fn } from '@angular/compiler/src/output/output_ast';
+import { VERSION } from '@env/version';
+import { IMobius } from '@models/mobius';
 
 
-export function checkMobFile(file: any) {
+export function checkMobFile(file: IMobius) {
+    if (file.version === VERSION.version) {
+        return;
+    }
     // check the end node
     // checkEndReturn(file);
 
@@ -16,6 +21,10 @@ export function checkMobFile(file: any) {
     let hasError = false;
     for (const node of file.flowchart.nodes) {
         if (!checkMissingProd(node.procedure, file.version)) {
+            node.hasError = true;
+            hasError = true;
+        }
+        if (node.localFunc && !checkMissingProd(node.localFunc, file.version)) {
             node.hasError = true;
             hasError = true;
         }
@@ -50,7 +59,7 @@ export function checkMobFile(file: any) {
             }
         }
     }
-    file.version = 4;
+    file.version = VERSION.version;
 }
 
 function updateNode(flowchart) {
@@ -79,7 +88,7 @@ function updateNode(flowchart) {
     }
 }
 
-function checkMissingProd(prodList: any[], fileVersion: number) {
+function checkMissingProd(prodList: any[], fileVersion: string) {
     let check = true;
     for (const prod of prodList) {
 
@@ -92,7 +101,7 @@ function checkMissingProd(prodList: any[], fileVersion: number) {
 
         prod.hasError = false;
 
-        // only continue below for function procedures
+        // the part below is only for function procedures, skip everything else
         if (prod.type !== ProcedureTypes.MainFunction) { continue; }
 
 
@@ -112,7 +121,9 @@ function checkMissingProd(prodList: any[], fileVersion: number) {
                         break;
                     }
                 }
-                if (dpFn.old_func.name === dpFn.new_func.name && prod.argCount === (data.argCount + 1)) { break; }
+                if (dpFn.old_func.name === dpFn.new_func.name && prod.argCount === (data.argCount + 1)
+                && !dpFn.new_func.values && !dpFn.new_func.replace) { break; }
+
                 prod.meta = { module: data.module, name: data.name};
                 prod.argCount = data.argCount + 1;
                 let returnArg = {name: 'var_name', value: undefined};
@@ -123,17 +134,38 @@ function checkMissingProd(prodList: any[], fileVersion: number) {
                 }
                 for (const arg of data.args) {
                     let UpdateCheck = false;
+                    for (const oldArg of prod.args) {
+                        if (arg.name.toLowerCase() === oldArg.name.toLowerCase()) {
+                            arg.value = oldArg.value;
+                            break;
+                        }
+                    }
+                    for (const updatedArg in dpFn.new_func.replace) {
+                        if (updatedArg.toLowerCase() === arg.name.toLowerCase()) {
+                            if (typeof dpFn.new_func.replace[updatedArg] === 'string') {
+                                for (const oldArg of prod.args) {
+                                    if ( dpFn.new_func.replace[updatedArg].toLowerCase() === oldArg.name.toLowerCase()) {
+                                        arg.value = oldArg.value;
+                                        break;
+                                    }
+                                }
+                            } else {
+                                for (const rep_set of dpFn.new_func.replace[updatedArg]) {
+                                    if (rep_set[0] === '*' || arg.value === rep_set[0]) {
+                                        arg.value = rep_set[1];
+                                        UpdateCheck = true;
+                                        break;
+                                    }
+                                }
+                                if (UpdateCheck) { break; }
+                            }
+                        }
+                    }
+                    if (arg.value) { continue; }
                     for (const updatedArg in dpFn.new_func.values) {
                         if (updatedArg.toLowerCase() === arg.name.toLowerCase()) {
                             arg.value = dpFn.new_func.values[updatedArg];
                             UpdateCheck = true;
-                            break;
-                        }
-                    }
-                    if (UpdateCheck) { continue; }
-                    for (const oldArg of prod.args) {
-                        if (arg.name.toLowerCase() === oldArg.name.toLowerCase()) {
-                            arg.value = oldArg.value;
                             break;
                         }
                     }

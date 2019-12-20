@@ -72,15 +72,15 @@ const doc = dc;
 const docs = [];
 
 for (const mod of doc.children) {
-    let modName = mod.name.split('/');
-
-    if (modName.length < 3 || modName[0] !== '"assets' || modName[1] !== 'core' || modName[2] !== 'modules') { continue; }
+    let modName = mod.name.replace(/"/g, '').replace(/'/g, '').split('/');
+    const coreIndex = modName.indexOf('core');
+    if (modName.length < 3 || coreIndex === -1  || modName[coreIndex + 1] !== 'modules') { continue; }
     modName = modName[modName.length - 1];
-    if (modName.substr(0, 1) === '"' || modName.substr(0, 1) === '\'') {
-        modName = modName.substr(1, modName.length - 2);
-    } else {
-        modName = modName.substr(0, modName.length - 1);
-    }
+    // if (modName.substr(0, 1) === '"' || modName.substr(0, 1) === '\'') {
+    //     modName = modName.substr(1, modName.length - 2);
+    // } else {
+    //     modName = modName.substr(0, modName.length - 1);
+    // }
     if (modName.substr(0, 1) === '_' || modName === 'index' || modName === 'categorization') {
         continue;
     }

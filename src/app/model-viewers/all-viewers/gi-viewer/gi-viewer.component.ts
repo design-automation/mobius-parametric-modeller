@@ -57,9 +57,7 @@ export class GIViewerComponent implements OnInit {
         // const devMode = isDevMode();
         const devMode = false;
         if (previous_settings === null ||
-            this.hasDiffProps(previous_settings, this.settings) ||
-            this.settings.version !== previous_settings.version ||
-            devMode) {
+            this.hasDiffProps(previous_settings, this.settings)) {
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
         }
     }

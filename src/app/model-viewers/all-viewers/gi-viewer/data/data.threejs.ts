@@ -185,7 +185,14 @@ export class DataThreejs {
      * @param container
      */
     public addGeometry(model: GIModel, container): void {
-        this.updateSettings(JSON.parse(localStorage.getItem('mpm_settings')));
+        if (this.dataService.viewerSettingsUpdated) {
+            this.settings = JSON.parse(localStorage.getItem('mpm_settings'));
+            this._camera.position.copy(this.settings.camera.pos);
+            this._camera.lookAt(this.settings.camera.target);
+            this._camera.updateProjectionMatrix();
+            this._controls.update();
+            this.dataService.viewerSettingsUpdated = false;
+        }
         if (this.settings.background.show) {
             this.loadBackground(this.settings.background.background_set);
         } else {
@@ -283,7 +290,7 @@ export class DataThreejs {
             if (this.dataService.newFlowchart) {
                 this.dataService.newFlowchart = false;
                 this.origin = new Vector3(center.x, center.y, 0);
-                this.settings.camera.target = this.origin ;
+                // this.settings.camera.target = this.origin ;
                 localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
                 this.axesHelper.position.set(center.x, center.y, 0);
             } else {
@@ -1378,18 +1385,6 @@ export class DataThreejs {
         // this._renderer.render(this._scene, this._camera);
     }
 
-    updateSettings(settings: Settings) {
-        if (settings === null ||
-            this.hasDiffProps(settings, this.settings)) {
-            localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
-            return;
-        }
-        this.settings = settings;
-    }
-
-    hasDiffProps(obj1, obj2) {
-        return !Object.keys(obj2).every(e => Object.keys(obj1).includes(e));
-    }
 }
 
 /**

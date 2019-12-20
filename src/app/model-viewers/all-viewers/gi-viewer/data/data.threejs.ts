@@ -185,6 +185,14 @@ export class DataThreejs {
      * @param container
      */
     public addGeometry(model: GIModel, container): void {
+        if (this.dataService.viewerSettingsUpdated) {
+            this.settings = JSON.parse(localStorage.getItem('mpm_settings'));
+            this._camera.position.copy(this.settings.camera.pos);
+            this._camera.lookAt(this.settings.camera.target);
+            this._camera.updateProjectionMatrix();
+            this._controls.update();
+            this.dataService.viewerSettingsUpdated = false;
+        }
         if (this.settings.background.show) {
             this.loadBackground(this.settings.background.background_set);
         } else {
@@ -282,7 +290,7 @@ export class DataThreejs {
             if (this.dataService.newFlowchart) {
                 this.dataService.newFlowchart = false;
                 this.origin = new Vector3(center.x, center.y, 0);
-                this.settings.camera.target = this.origin ;
+                // this.settings.camera.target = this.origin ;
                 localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
                 this.axesHelper.position.set(center.x, center.y, 0);
             } else {
@@ -1376,6 +1384,7 @@ export class DataThreejs {
         this._scene.background = background;
         // this._renderer.render(this._scene, this._camera);
     }
+
 }
 
 /**
@@ -1400,10 +1409,16 @@ interface Settings {
         background_set: number
     };
     positions: { show: boolean, size: number };
+    wireframe: { show: boolean };
     tjs_summary: { show: boolean };
     gi_summary: { show: boolean };
-    wireframe: { show: boolean };
-    camera: { pos: Vector3, target: Vector3 };
+    camera: {
+        pos: Vector3,
+        pos_x: number,
+        pos_y: number,
+        pos_z: number,
+        target: Vector3
+    };
     colors: {
         viewer_bg: string,
         position: string,
@@ -1445,4 +1460,9 @@ interface Settings {
         color: string,
         shininess: number
     };
+    select: {
+        selector: object,
+        tab: number
+    };
+    version: string;
 }

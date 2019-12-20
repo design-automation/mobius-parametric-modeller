@@ -73,19 +73,22 @@ const docs = [];
 
 for (const mod of doc.children) {
     let modName = mod.name.split('/');
+
+    if (modName.length < 3 || modName[0] !== '"assets' || modName[1] !== 'core' || modName[2] !== 'modules') { continue; }
     modName = modName[modName.length - 1];
     if (modName.substr(0, 1) === '"' || modName.substr(0, 1) === '\'') {
         modName = modName.substr(1, modName.length - 2);
     } else {
         modName = modName.substr(0, modName.length - 1);
     }
-    if (modName.substr(0, 1) === '_' || modName === 'index') {
+    if (modName.substr(0, 1) === '_' || modName === 'index' || modName === 'categorization') {
         continue;
     }
     const moduleDoc = {};
     moduleDoc['id'] = mod.id;
     moduleDoc['name'] = modName;
     moduleDoc['func'] = [];
+    if (!mod.children) { continue; }
     for (const func of mod.children) {
         if (func.name[0] === '_') { continue; }
         const fn = {};

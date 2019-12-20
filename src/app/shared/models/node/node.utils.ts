@@ -5,6 +5,7 @@ import * as circularJSON from 'circular-json';
 import { IdGenerator } from '@utils';
 import { ModuleList, ModuleDocList } from '@shared/decorators';
 import { _parameterTypes } from '@assets/core/_parameterTypes';
+import { modifyLocalFuncVar } from '@shared/parser';
 
 export abstract class NodeUtils {
 
@@ -422,6 +423,7 @@ export abstract class NodeUtils {
 
             case ProcedureTypes.LocalFuncDef:
                 prod.argCount = data + 1;
+                prod.meta = { module: '', name: '', otherInfo: { 'prev_name': '', 'num_returns': 0}};
                 prod.args = [{name: 'func_name', value: undefined}];
                 for (let argIndex = 0; argIndex < data; argIndex ++) {
                     prod.args.push({name: `arg_name_${argIndex}`, value: undefined});
@@ -432,6 +434,13 @@ export abstract class NodeUtils {
             case ProcedureTypes.LocalFuncReturn:
                 prod.argCount = 1;
                 prod.args = [ {name: 'Value', value: undefined} ];
+                let funcDef = prod.parent;
+                while (funcDef.parent) { funcDef = funcDef.parent; }
+                if (!funcDef.meta || !funcDef.meta.otherInfo) { break; }
+                funcDef.meta.otherInfo.num_returns ++;
+                if (funcDef.meta.otherInfo.num_returns === 1) {
+                    modifyLocalFuncVar(funcDef, node.localFunc.concat(node.procedure));
+                }
                 break;
 
 

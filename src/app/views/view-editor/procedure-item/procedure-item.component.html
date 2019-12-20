@@ -250,7 +250,7 @@
         </div>
 
         
-        <!-- Function Template -->
+        <!-- MainFunction -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.MainFunction">
             <ng-container *ngIf="data.args[0].name !=='__none__'">
                 <input class='input--var'
@@ -293,7 +293,7 @@
 
         </div>
 
-        <!-- Imported Function Template -->
+        <!-- globalFuncCall -->
         <div class='line--item' *ngSwitchCase="ProcedureTypes.globalFuncCall">
             <ng-container *ngIf="data.args[0].name !=='__none__'">
                 <input class='input--var'
@@ -323,7 +323,7 @@
         </div>
 
 
-        <!-- FOREACH Template -->
+        <!-- LocalFuncDef -->
         <ng-container *ngSwitchCase="ProcedureTypes.LocalFuncDef">
             <div class='line--item'>
                 <div class='basic-function-text'>Def  </div>
@@ -342,7 +342,7 @@
                 </ng-container>
                 <span class='function-text'>  Function</span>
                 <ng-container *ngFor='let p of data.args;let i=index'>
-                    <input class='input--arg' 
+                    <input class='input--var' 
                     *ngIf="p.name[0] !== '_' && i > 0" 
                     [(ngModel)]='p.value'
                     [class.error]='p.invalidVar'
@@ -368,7 +368,7 @@
             </div>
         </ng-container>
 
-        <!-- FOREACH Template -->
+        <!-- LocalFuncCall -->
         <ng-container *ngSwitchCase="ProcedureTypes.LocalFuncCall">
             <div class='line--item'>
                 <ng-container *ngIf="data.args[0].name !=='__none__'">
@@ -420,7 +420,7 @@
                 <mat-icon class='icon'>delete_outline</mat-icon>
             </button> -->
             <!-- Disable button-->
-            <button id = 'disable-btn' *ngIf='13 > data.type || data.type === 15' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+            <button id = 'disable-btn' *ngIf='13 > data.type || data.type === 15 || data.type > 16' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                 <mat-icon class='icon' svgIcon='disabled'></mat-icon>
             </button>
             <!-- Select button -->

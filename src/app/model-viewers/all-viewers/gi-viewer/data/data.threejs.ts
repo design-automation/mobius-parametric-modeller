@@ -188,7 +188,7 @@ export class DataThreejs {
         if (this.dataService.viewerSettingsUpdated) {
             this.settings = JSON.parse(localStorage.getItem('mpm_settings'));
             this._camera.position.copy(this.settings.camera.pos);
-            this._camera.lookAt(this.settings.camera.target);
+            this._controls.target.copy(this.settings.camera.target);
             this._camera.updateProjectionMatrix();
             this._controls.update();
             this.dataService.viewerSettingsUpdated = false;

@@ -470,7 +470,7 @@
 									"name": "string"
 								}
 							},
-							"defaultValue": " ['util.WriteData', 'util.ReadData', 'util.ImportData', 'util.ModelCompare']"
+							"defaultValue": " ['util.WriteData', 'util.ReadData', 'util.ImportData', 'util.ModelCompare', 'io.ImportToModel']"
 						}
 					],
 					"groups": [

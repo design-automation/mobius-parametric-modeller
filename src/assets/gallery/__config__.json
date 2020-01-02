@@ -24,21 +24,21 @@
         {
             "name": "Shapes Examples",
             "files": [
-                "torus.mob&node=1"
+                "torus.mob&node=2"
             ],
             "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/shapes_examples/"
         },
         {
             "name": "Flow Examples",
             "files": [
-                "podium_with_towers.mob&node=3"
+                "podium_with_towers.mob"
             ],
             "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/flow_examples/"
         },
         {
             "name": "Rendering Examples",
             "files": [
-                "glass_materials.mob&node=1",
+                "glass_materials.mob&node=2",
                 "front_and_back_materials.mob&node=1"
             ],
             "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/rendering_examples/"
@@ -57,13 +57,6 @@
                 "offset_pgons_func.mob&node=0"
             ],
             "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/user_functions_examples/"
-        },
-        {
-            "name": "AR2524, Examples Exercise 1",
-            "files": [
-                "jiaying.mob&node=1"
-            ],
-            "link": "https://raw.githubusercontent.com/design-automation-edu/spatial-computational-thinking-2019/master/exercise1/"
         }
     ]
 }

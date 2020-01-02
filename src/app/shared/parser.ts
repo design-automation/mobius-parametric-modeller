@@ -83,8 +83,8 @@ export function updateGlobals(startNode: INode) {
 }
 
 export function modifyVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
-    if (!procedure.args[0].value) { return; }
     procedure.variable = null;
+    if (!procedure.args[0].value) { return; }
 
     procedure.args[0].value = modifyVarArg(procedure.args[0]);
     const modifiedVar = parseVariable(procedure.args[0].value);
@@ -114,8 +114,8 @@ export function modifyVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
 }
 
 export function modifyLocalFuncVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
-    if (!procedure.args[0].value) { return; }
     procedure.variable = null;
+    if (!procedure.args[0].value) { return; }
     if (!procedure.meta) {
         procedure.meta = {
             'name': '',
@@ -288,6 +288,7 @@ export function modifyVarArg(arg: IArgument) {
 }
 
 export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProdList: IProcedure[]) {
+    procedure.args[argIndex].usedVars = [];
     if (!procedure.args[argIndex].value) { return; }
     // PARSER CALL
     let varResult = parseArgument(procedure.args[argIndex].value);

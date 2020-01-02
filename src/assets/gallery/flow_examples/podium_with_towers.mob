@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_drxbeilxk2h",
+                "id": "node_iwuni8f5ku",
                 "position": {
                     "x": 4964.228515625,
                     "y": 4809.43603515625
@@ -103,7 +103,7 @@
                                 },
                                 "parentNode": {
                                     "name": "podium massing",
-                                    "id": "node_fsv7hrse0jw",
+                                    "id": "node_chmimveac5v",
                                     "position": {
                                         "x": 5186.3505859375,
                                         "y": 4958.6728515625
@@ -392,7 +392,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "podium divide",
-                                                        "id": "node_qgocaeziwxe",
+                                                        "id": "node_jt09or9qbs",
                                                         "position": {
                                                             "x": 5441.09521484375,
                                                             "y": 5102.306640625
@@ -956,7 +956,7 @@
                                                                         },
                                                                         "parentNode": {
                                                                             "name": "tower base",
-                                                                            "id": "node_gfiekmnxw96",
+                                                                            "id": "node_8omdjte9bv3",
                                                                             "position": {
                                                                                 "x": 5442.19091796875,
                                                                                 "y": 5251.3896484375
@@ -1215,7 +1215,7 @@
                                                                                             },
                                                                                             "parentNode": {
                                                                                                 "name": "tower",
-                                                                                                "id": "node_iuj1oq9mw6r",
+                                                                                                "id": "node_uu9j6sitn",
                                                                                                 "position": {
                                                                                                     "x": 5340,
                                                                                                     "y": 5400
@@ -1813,7 +1813,7 @@
                                                                                                                             },
                                                                                                                             "parentNode": {
                                                                                                                                 "name": "podium facades",
-                                                                                                                                "id": "node_axyuc2xc5en",
+                                                                                                                                "id": "node_x44p9c7oudd",
                                                                                                                                 "position": {
                                                                                                                                     "x": 4900,
                                                                                                                                     "y": 5280
@@ -2152,7 +2152,7 @@
                                                                                                                                                 "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target~edges~0~source~parentNode~procedure~6",
                                                                                                                                                 "ID": "prod-mytddlq7os9",
                                                                                                                                                 "enabled": true,
-                                                                                                                                                "print": true,
+                                                                                                                                                "print": false,
                                                                                                                                                 "meta": {
                                                                                                                                                     "module": "make",
                                                                                                                                                     "name": "Polyline"
@@ -2202,7 +2202,7 @@
                                                                                                                                                 "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target~edges~0~source~parentNode~procedure~6",
                                                                                                                                                 "ID": "prod-n7sgohz5e6j",
                                                                                                                                                 "enabled": true,
-                                                                                                                                                "print": true,
+                                                                                                                                                "print": false,
                                                                                                                                                 "meta": {
                                                                                                                                                     "module": "calc",
                                                                                                                                                     "name": "Length"
@@ -2241,7 +2241,7 @@
                                                                                                                                                 "type": 8,
                                                                                                                                                 "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target~edges~0~source~parentNode~procedure~6",
                                                                                                                                                 "ID": "prod-yzm03ccp46r",
-                                                                                                                                                "enabled": false,
+                                                                                                                                                "enabled": true,
                                                                                                                                                 "print": false,
                                                                                                                                                 "meta": {
                                                                                                                                                     "module": "make",
@@ -2464,7 +2464,7 @@
                                                                                                                             },
                                                                                                                             "parentNode": {
                                                                                                                                 "name": "roof slab",
-                                                                                                                                "id": "node_0lbf5i6bjsl",
+                                                                                                                                "id": "node_07vzieow2v6u",
                                                                                                                                 "position": {
                                                                                                                                     "x": 5140,
                                                                                                                                     "y": 5520
@@ -2938,7 +2938,7 @@
                                                                                                                             },
                                                                                                                             "parentNode": {
                                                                                                                                 "name": "tower columns",
-                                                                                                                                "id": "node_10e7i3y6dev",
+                                                                                                                                "id": "node_lnseouw2gvo",
                                                                                                                                 "position": {
                                                                                                                                     "x": 5520,
                                                                                                                                     "y": 5400
@@ -3620,7 +3620,7 @@
                                                                                                                 },
                                                                                                                 "parentNode": {
                                                                                                                     "name": "colours",
-                                                                                                                    "id": "node_scwvlm8j05",
+                                                                                                                    "id": "node_mhcf11ht16",
                                                                                                                     "position": {
                                                                                                                         "x": 5100,
                                                                                                                         "y": 5820
@@ -3873,7 +3873,7 @@
                                                                                                                                     },
                                                                                                                                     "parentNode": {
                                                                                                                                         "name": "End",
-                                                                                                                                        "id": "node_r0vb4hiq10k",
+                                                                                                                                        "id": "node_o3ddu4nhmvc",
                                                                                                                                         "position": {
                                                                                                                                             "x": 5108.3369140625,
                                                                                                                                             "y": 5972.98486328125
@@ -3914,7 +3914,8 @@
                                                                                                                                                         "name": "value",
                                                                                                                                                         "value": "",
                                                                                                                                                         "default": 0,
-                                                                                                                                                        "linked": false
+                                                                                                                                                        "linked": false,
+                                                                                                                                                        "usedVars": []
                                                                                                                                                     }
                                                                                                                                                 ],
                                                                                                                                                 "print": false,
@@ -4170,7 +4171,7 @@
         "functions": [],
         "ordered": true,
         "id": "080e9c35-c00f-949e-793b-2796e604fa3e",
-        "last_updated": "2019-12-26T02:10:43.512Z"
+        "last_updated": "2020-01-02T07:41:03.715Z"
     },
     "version": "0.5.12",
     "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500,\"pos_x\":0,\"pos_y\":0,\"pos_z\":0,\"pos\":{\"x\":0,\"y\":0,\"z\":0}},\"background\":{\"show\":false,\"background_set\":0},\"positions\":{\"show\":true,\"size\":8},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-146.02329428307564,\"y\":-1.3787849061536832,\"z\":134.33458436254148},\"pos_x\":-146.02329428307564,\"pos_y\":-1.3787849061536832,\"pos_z\":134.33458436254148,\"target\":{\"x\":0,\"y\":0,\"z\":0}},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"azimuth\":90,\"altitude\":45,\"distance\":10,\"type\":\"directional\"},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":8,\"name\":\"Polygons\"},\"tab\":\"0\"},\"version\":\"0.5.12\"}"

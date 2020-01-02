@@ -292,9 +292,9 @@ export class DataThreejs {
                 this.origin = new Vector3(center.x, center.y, 0);
                 // this.settings.camera.target = this.origin ;
                 localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
-                this.axesHelper.position.set(center.x, center.y, 0);
+                this.axesHelper.position.set(center.x, center.y, 0.01);
             } else {
-                this.axesHelper.position.set(this.origin.x, this.origin.y, 0);
+                this.axesHelper.position.set(this.origin.x, this.origin.y, 0.01);
             }
             // const target = new Vector3(this.settings.camera.target.x, this.settings.camera.target.y, this.settings.camera.target.z);
             // this._camera.position.x += target.x;
@@ -913,13 +913,16 @@ export class DataThreejs {
             }
         }
         this.axesHelper = new THREE.AxesHelper(size);
+        this.axesHelper.geometry['attributes'].color = new THREE.Int16BufferAttribute(
+            [1, 0, 0, 1, 0, 0,
+             0, 1, 0, 0, 1, 0,
+             0, 0, 1, 0, 0, 1], 3 );
         this.axesHelper.visible = this.settings.axes.show;
         if (this.axesHelper.visible) {
             this.axesHelper.name = 'AxesHelper';
-            this.axesHelper.position.set(this.axes_pos.x, this.axes_pos.y, 0);
+            this.axesHelper.position.set(this.axes_pos.x, this.axes_pos.y, 0.01);
             this._scene.add(this.axesHelper);
         }
-        // this.axesHelper.position.set(0, 0, 0);
     }
     /**
      * Draws a grid on the XY plane.
@@ -1195,9 +1198,6 @@ export class DataThreejs {
             center = this._scene.position;
             radius = 10;
         }
-        // set grid and axeshelper to center of the objs
-        // this.grid.position.set(center.x, center.y, 0);
-        // this.axesHelper.position.set(center.x, center.y, 0);
 
         this.cameraLookat(center, radius);
     }

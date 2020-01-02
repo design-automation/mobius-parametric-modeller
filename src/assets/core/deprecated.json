@@ -6,7 +6,17 @@
         },
         "new_func": {
             "module": "io",
-            "name": "ImportToModel",
+            "name": "ImportToModel"
+        }
+    },
+    {
+        "old_func": {
+            "module": "pattern",
+            "name": "Grid"
+        },
+        "new_func": {
+            "module": "pattern",
+            "name": "Grid",
             "replace": {
                 "method": [["'squares'", "'quads'"]]
             }
@@ -159,6 +169,16 @@
         "new_func": {
             "module": "material",
             "name": "Standard"
+        }
+    },
+    {
+        "old_func": {
+            "module": "virtual",
+            "name": "GetBBox"
+        },
+        "new_func": {
+            "module": "calc",
+            "name": "BBox"
         }
     }
 ]

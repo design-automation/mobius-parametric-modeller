@@ -56,6 +56,8 @@ export class AttributeComponent implements OnChanges {
     last_selected;
     current_selected;
 
+    table_scroll = null;
+
     sorting_header = null;
     sorting_state: SORT_STATE = SORT_STATE.DEFAULT;
 
@@ -130,6 +132,10 @@ export class AttributeComponent implements OnChanges {
             this.resetTable();
         }
         if (changes['refresh']) {
+            if (document.getElementsByClassName('table--container')[this.getCurrentTab()]) {
+                console.log('>>>>>>>>>>>')
+                this.table_scroll = document.getElementsByClassName('table--container')[this.getCurrentTab()].scrollTop;
+            }
             this.refreshTable();
         }
     }
@@ -185,7 +191,12 @@ export class AttributeComponent implements OnChanges {
             this.dataSource.sortingDataAccessor = this._sortingDataAccessor;
             this.dataSource.paginator = this.paginator.toArray()[tabIndex];
             this.dataSource.sort = this.sort.toArray()[tabIndex];
-
+            if (this.table_scroll) {
+                setTimeout(() => {
+                    document.getElementsByClassName('table--container')[this.getCurrentTab()].scrollTop = this.table_scroll;
+                    this.table_scroll = null;
+                }, 0);
+            }
         }
         return tabIndex;
     }

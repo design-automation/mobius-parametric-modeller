@@ -117,6 +117,8 @@
         </div>
     </div>
 </div>
+<button id='openCredits' (click)="openHeaderDialog($event, 'credits')"></button>
+
 <dialog id='headerDialog'>
     <div class='genUrlDialog' *ngIf='checkDialog("url")'>
         <p>To publish your model, please upload your Möbius (.mob) file to an online file server to allows
@@ -238,5 +240,8 @@
         <br>
         <button class='settingsButton' (click)="updateSettings($event, backup)">Apply</button>
         <button class='settingsButton' (click)="closeDialog()">Cancel</button>
+    </div>
+    <div class='creditsDialog' *ngIf='checkDialog("credits")'>
+        <p>Credits to: </p>
     </div>
 </dialog>

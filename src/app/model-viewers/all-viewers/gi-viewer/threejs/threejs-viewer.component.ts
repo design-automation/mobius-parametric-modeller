@@ -1520,6 +1520,13 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this.selectDropdownVisible = false;
     }
 
+    public openCredit() {
+        const el = document.getElementById('openCredits');
+        if (el) {
+            el.click();
+        }
+    }
+
     selectEntity(id: number) {
         if (this.SelectingEntityType.id === EEntType.COLL) {
             this.chooseColl(id);
@@ -1527,6 +1534,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             this.chooseVertex(id);
         }
     }
+
 
 }
 

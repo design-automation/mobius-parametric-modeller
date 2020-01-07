@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_2onw5p0qoqn",
+                "id": "node_b6myk5s7vf",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -37,7 +37,9 @@
                     }
                 ],
                 "state": {
-                    "procedure": []
+                    "procedure": [],
+                    "show_code": false,
+                    "show_func": false
                 },
                 "input": {
                     "name": "input",
@@ -67,7 +69,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_hrrc5r9nusu",
+                                    "id": "node_75pinivihww",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -116,7 +118,7 @@
                                                     "name": "origin",
                                                     "value": "XY",
                                                     "default": 0,
-                                                    "jsValue": "XY",
+                                                    "jsValue": "JSON.parse(JSON.stringify(XY))",
                                                     "usedVars": [],
                                                     "invalidVar": false,
                                                     "linked": false
@@ -280,8 +282,8 @@
                                             "enabled": true,
                                             "print": false,
                                             "meta": {
-                                                "module": "render",
-                                                "name": "BasicMaterial"
+                                                "module": "material",
+                                                "name": "Basic"
                                             },
                                             "argCount": 7,
                                             "args": [
@@ -291,22 +293,19 @@
                                                 },
                                                 {
                                                     "name": "__model__",
-                                                    "default": 0,
                                                     "linked": false
                                                 },
                                                 {
                                                     "name": "name",
                                                     "value": "\"mat_f\"",
-                                                    "default": 0,
                                                     "jsValue": "\"mat_f\"",
                                                     "usedVars": [],
                                                     "invalidVar": false,
                                                     "linked": false
                                                 },
                                                 {
-                                                    "name": "colour",
+                                                    "name": "color",
                                                     "value": "[0, 1, 0]",
-                                                    "default": 0,
                                                     "jsValue": "[0, 1, 0]",
                                                     "usedVars": [],
                                                     "invalidVar": false,
@@ -315,7 +314,6 @@
                                                 {
                                                     "name": "opacity",
                                                     "value": "0.7",
-                                                    "default": 0,
                                                     "jsValue": "0.7",
                                                     "usedVars": [],
                                                     "invalidVar": false,
@@ -324,16 +322,14 @@
                                                 {
                                                     "name": "select_side",
                                                     "value": "'front'",
-                                                    "default": 0,
                                                     "jsValue": "'front'",
                                                     "usedVars": [],
                                                     "invalidVar": false,
                                                     "linked": false
                                                 },
                                                 {
-                                                    "name": "select_vert_colours",
+                                                    "name": "select_vert_colors",
                                                     "value": "'none'",
-                                                    "default": 0,
                                                     "jsValue": "'none'",
                                                     "usedVars": [],
                                                     "invalidVar": false,
@@ -349,8 +345,8 @@
                                             "enabled": true,
                                             "print": false,
                                             "meta": {
-                                                "module": "render",
-                                                "name": "PhongMaterial"
+                                                "module": "material",
+                                                "name": "Phong"
                                             },
                                             "argCount": 6,
                                             "args": [
@@ -360,13 +356,11 @@
                                                 },
                                                 {
                                                     "name": "__model__",
-                                                    "default": 0,
                                                     "linked": false
                                                 },
                                                 {
                                                     "name": "name",
                                                     "value": "\"mat_f\"",
-                                                    "default": 0,
                                                     "jsValue": "\"mat_f\"",
                                                     "usedVars": [],
                                                     "invalidVar": false,
@@ -375,7 +369,6 @@
                                                 {
                                                     "name": "emissive",
                                                     "value": "[0, 0, 0]",
-                                                    "default": 0,
                                                     "jsValue": "[0, 0, 0]",
                                                     "usedVars": [],
                                                     "invalidVar": false,
@@ -384,7 +377,6 @@
                                                 {
                                                     "name": "specular",
                                                     "value": "[1, 1, 1]",
-                                                    "default": 0,
                                                     "jsValue": "[1, 1, 1]",
                                                     "usedVars": [],
                                                     "invalidVar": false,
@@ -393,7 +385,6 @@
                                                 {
                                                     "name": "shininess",
                                                     "value": "10",
-                                                    "default": 0,
                                                     "jsValue": "10",
                                                     "usedVars": [],
                                                     "invalidVar": false,
@@ -409,8 +400,8 @@
                                             "enabled": true,
                                             "print": false,
                                             "meta": {
-                                                "module": "render",
-                                                "name": "BasicMaterial"
+                                                "module": "material",
+                                                "name": "Basic"
                                             },
                                             "argCount": 7,
                                             "args": [
@@ -420,49 +411,43 @@
                                                 },
                                                 {
                                                     "name": "__model__",
-                                                    "default": 0,
                                                     "linked": false
                                                 },
                                                 {
                                                     "name": "name",
                                                     "value": "\"mat_b\"",
-                                                    "default": 0,
                                                     "jsValue": "\"mat_b\"",
                                                     "usedVars": [],
                                                     "invalidVar": false,
                                                     "linked": false
                                                 },
                                                 {
-                                                    "name": "select_side",
+                                                    "name": "color",
                                                     "value": "[0, 0, 1]",
-                                                    "default": 0,
                                                     "jsValue": "[0, 0, 1]",
                                                     "usedVars": [],
                                                     "invalidVar": false,
                                                     "linked": false
                                                 },
                                                 {
-                                                    "name": "select_vert_colours",
-                                                    "value": "1",
-                                                    "default": 0,
-                                                    "jsValue": "1",
+                                                    "name": "opacity",
+                                                    "value": "0.3",
+                                                    "jsValue": "0.3",
                                                     "usedVars": [],
                                                     "invalidVar": false,
                                                     "linked": false
                                                 },
                                                 {
-                                                    "name": "opacity",
+                                                    "name": "select_side",
                                                     "value": "'back'",
-                                                    "default": 0,
                                                     "jsValue": "'back'",
                                                     "usedVars": [],
                                                     "invalidVar": false,
                                                     "linked": false
                                                 },
                                                 {
-                                                    "name": "colour",
+                                                    "name": "select_vert_colors",
                                                     "value": "'none'",
-                                                    "default": 0,
                                                     "jsValue": "'none'",
                                                     "usedVars": [],
                                                     "invalidVar": false,
@@ -478,8 +463,8 @@
                                             "enabled": true,
                                             "print": false,
                                             "meta": {
-                                                "module": "render",
-                                                "name": "PhysicalMaterial"
+                                                "module": "material",
+                                                "name": "Physical"
                                             },
                                             "argCount": 7,
                                             "args": [
@@ -489,13 +474,11 @@
                                                 },
                                                 {
                                                     "name": "__model__",
-                                                    "default": 0,
                                                     "linked": false
                                                 },
                                                 {
                                                     "name": "name",
                                                     "value": "\"mat_b\"",
-                                                    "default": 0,
                                                     "jsValue": "\"mat_b\"",
                                                     "usedVars": [],
                                                     "invalidVar": false,
@@ -504,7 +487,6 @@
                                                 {
                                                     "name": "emissive",
                                                     "value": "[0, 0, 0]",
-                                                    "default": 0,
                                                     "jsValue": "[0, 0, 0]",
                                                     "usedVars": [],
                                                     "invalidVar": false,
@@ -513,7 +495,6 @@
                                                 {
                                                     "name": "roughness",
                                                     "value": "0.6",
-                                                    "default": 0,
                                                     "jsValue": "0.6",
                                                     "usedVars": [],
                                                     "invalidVar": false,
@@ -522,7 +503,6 @@
                                                 {
                                                     "name": "metalness",
                                                     "value": "0.1",
-                                                    "default": 0,
                                                     "jsValue": "0.1",
                                                     "usedVars": [],
                                                     "invalidVar": false,
@@ -531,7 +511,6 @@
                                                 {
                                                     "name": "reflectivity",
                                                     "value": "1",
-                                                    "default": 0,
                                                     "jsValue": "1",
                                                     "usedVars": [],
                                                     "invalidVar": false,
@@ -543,7 +522,9 @@
                                         }
                                     ],
                                     "state": {
-                                        "procedure": []
+                                        "procedure": [],
+                                        "show_code": true,
+                                        "show_func": true
                                     },
                                     "input": "~flowchart~nodes~0~output~edges~0~target",
                                     "output": {
@@ -564,7 +545,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_nx07wuzivud",
+                                                        "id": "node_y4apckvrzm",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -588,7 +569,7 @@
                                                             },
                                                             {
                                                                 "type": 11,
-                                                                "ID": "",
+                                                                "ID": "Return",
                                                                 "meta": {
                                                                     "name": "",
                                                                     "module": ""
@@ -615,7 +596,9 @@
                                                             }
                                                         ],
                                                         "state": {
-                                                            "procedure": []
+                                                            "procedure": [],
+                                                            "show_code": true,
+                                                            "show_func": true
                                                         },
                                                         "input": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target",
                                                         "output": {
@@ -628,7 +611,24 @@
                                                             "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
                                                         },
                                                         "hasError": false,
-                                                        "hasExecuted": true
+                                                        "hasExecuted": true,
+                                                        "localFunc": [
+                                                            {
+                                                                "type": 13,
+                                                                "ID": "local_func_blank",
+                                                                "meta": {
+                                                                    "name": "",
+                                                                    "module": ""
+                                                                },
+                                                                "argCount": 0,
+                                                                "args": [],
+                                                                "print": false,
+                                                                "enabled": true,
+                                                                "selected": false,
+                                                                "selectGeom": false,
+                                                                "hasError": false
+                                                            }
+                                                        ]
                                                     }
                                                 },
                                                 "selected": false
@@ -641,7 +641,24 @@
                                         "model": null
                                     },
                                     "hasError": false,
-                                    "hasExecuted": true
+                                    "hasExecuted": true,
+                                    "localFunc": [
+                                        {
+                                            "type": 13,
+                                            "ID": "local_func_blank",
+                                            "meta": {
+                                                "name": "",
+                                                "module": ""
+                                            },
+                                            "argCount": 0,
+                                            "args": [],
+                                            "print": false,
+                                            "enabled": true,
+                                            "selected": false,
+                                            "selectGeom": false,
+                                            "hasError": false
+                                        }
+                                    ]
                                 }
                             },
                             "selected": false
@@ -654,7 +671,24 @@
                     "model": null
                 },
                 "hasError": false,
-                "hasExecuted": true
+                "hasExecuted": true,
+                "localFunc": [
+                    {
+                        "type": 13,
+                        "ID": "local_func_blank",
+                        "meta": {
+                            "name": "",
+                            "module": ""
+                        },
+                        "argCount": 0,
+                        "args": [],
+                        "print": false,
+                        "enabled": true,
+                        "selected": false,
+                        "selectGeom": false,
+                        "hasError": false
+                    }
+                ]
             },
             "~flowchart~nodes~0~output~edges~0~target~parentNode",
             "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
@@ -666,8 +700,8 @@
         "functions": [],
         "ordered": true,
         "id": "7d59235c-0133-2f1b-a491-0c23b0717b83",
-        "last_updated": "2019-08-06T05:21:25.357Z"
+        "last_updated": "2019-12-26T04:17:21.618Z"
     },
-    "version": 1,
-    "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-80,\"y\":-80,\"z\":80},\"pos_x\":-80,\"pos_y\":-80,\"pos_z\":80,\"target\":{\"x\":0,\"y\":0,\"z\":0}},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":5,\"name\":\"Faces\"},\"tab\":\"0\"},\"version\":\"0.4.38\"}"
+    "version": "0.5.12",
+    "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500,\"pos_x\":0,\"pos_y\":0,\"pos_z\":0,\"pos\":{\"x\":0,\"y\":0,\"z\":0}},\"background\":{\"show\":false,\"background_set\":0},\"positions\":{\"show\":true,\"size\":8},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-146.02329428307564,\"y\":-1.3787849061536832,\"z\":134.33458436254148},\"pos_x\":-146.02329428307564,\"pos_y\":-1.3787849061536832,\"pos_z\":134.33458436254148,\"target\":{\"x\":0,\"y\":0,\"z\":0}},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"azimuth\":90,\"altitude\":45,\"distance\":10,\"type\":\"directional\"},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":8,\"name\":\"Polygons\"},\"tab\":\"0\"},\"version\":\"0.5.12\"}"
 }

@@ -94,8 +94,9 @@ function xformMatrix(plane: TPlane, neg: boolean): three.Matrix4 {
     // combine two matrices
     const m3: three.Matrix4 = new three.Matrix4();
     if (neg) {
+        const m2x = (new three.Matrix4()).getInverse(m2);
         // first translate to origin, then xform, so m2 x m1
-        m3.multiplyMatrices(m2, m1);
+        m3.multiplyMatrices(m2x, m1);
     } else {
         // first xform, then translate to origin, so m1 x m2
         m3.multiplyMatrices(m1, m2);

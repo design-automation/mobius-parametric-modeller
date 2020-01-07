@@ -78,7 +78,11 @@ export class SaveFileComponent {
         //     node.output.value = mod.output;
         // }
         const downloadResult = SaveFileComponent.fileDownloadString(f);
-        SaveFileComponent.saveToLocalStorage(downloadResult.name, downloadResult.file);
+        let fileName = f.flowchart.name;
+        if (fileName.slice(-4) !== '.mob') {
+            fileName += '.mob';
+        }
+        SaveFileComponent.saveToLocalStorage(fileName, downloadResult.file);
     }
 
     static saveToLocalStorage(name: string, file: string) {

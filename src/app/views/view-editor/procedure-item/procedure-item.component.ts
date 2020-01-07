@@ -327,10 +327,10 @@ export class ProcedureItemComponent implements OnDestroy {
     argMod(event: Event, argIndex: number) {
         // this.dataService.focusedInput = [event.target, (<HTMLInputElement>event.target).selectionStart];
         this.dataService.focusedInput = event.target;
-        if (!this.data.args[argIndex].value) { return; }
-        modifyArgument(this.data, argIndex, this.dataService.node.procedure);
         this.clearLinkedArgs(this.dataService.node.localFunc);
         this.clearLinkedArgs(this.dataService.node.procedure);
+        if (!this.data.args[argIndex].value) { return; }
+        modifyArgument(this.data, argIndex, this.dataService.node.procedure);
         if (this.data.args[argIndex].invalidVar) {
             this.dataService.notifyMessage(this.data.args[argIndex].invalidVar);
         }
@@ -387,8 +387,8 @@ export class ProcedureItemComponent implements OnDestroy {
         }
     }
 
-    markLinkedArguments(varName: string, nodeList: IProcedure[]) {
-        for (const prod of nodeList) {
+    markLinkedArguments(varName: string, prodList: IProcedure[]) {
+        for (const prod of prodList) {
             if (prod.children) {
                 this.markLinkedArguments(varName, prod.children);
             }

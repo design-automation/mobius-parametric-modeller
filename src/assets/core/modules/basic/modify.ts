@@ -650,7 +650,7 @@ function _delete(__model__: GIModel, ents_arr: TEntTypeIdx[], invert: boolean): 
     __model__.geom.del.delPgons(gp.pgons_i, true);
     __model__.geom.del.delPlines(gp.plines_i, true);
     __model__.geom.del.delPoints(gp.points_i, true);
-    __model__.geom.del.delPosis(gp.posis_i);
+    __model__.geom.del.delUnusedPosis(gp.posis_i);
 }
 
 

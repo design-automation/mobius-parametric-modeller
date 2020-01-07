@@ -835,12 +835,39 @@ export function Extrude(__model__: GIModel, entities: TId|TId[],
     checkArgTypes(fn_name, 'dist', dist, [TypeCheckObj.isNumber, TypeCheckObj.isVector]);
     checkArgTypes(fn_name, 'divisions', divisions, [TypeCheckObj.isInt]);
     // --- Error Check ---
-    const new_ents_arr: TEntTypeIdx[] = _extrude(__model__, ents_arr, dist, divisions, method);
+    let new_ents_arr: TEntTypeIdx[] = null;
+    // extrude
+    if (method === _EExtrudeMethod.COPIES) {
+        new_ents_arr = _extrudeCopies(__model__, ents_arr, dist, divisions);
+    } else {
+        new_ents_arr = _extrude(__model__, ents_arr, dist, divisions, method);
+    }
+    // create IDs
     if (!Array.isArray(entities) && new_ents_arr.length === 1) {
         return idsMake(new_ents_arr[0]) as TId;
     } else {
         return idsMake(new_ents_arr) as TId|TId[];
     }
+}
+function _extrudeCopies(__model__: GIModel, ents: TEntTypeIdx|TEntTypeIdx[],
+        dist: number|Txyz, divisions: number): TEntTypeIdx[] {
+    const ents_arr: TEntTypeIdx[] = (getArrDepth(ents) === 1 ? [ents] : ents) as TEntTypeIdx[];
+    const extrude_vec: Txyz = (Array.isArray(dist) ? dist : [0, 0, dist]) as Txyz;
+    const extrude_vec_div: Txyz = vecDiv(extrude_vec, divisions);
+    const copies: TEntTypeIdx[] = ents_arr.slice();
+    // make the copies
+    for (let i = 1; i < divisions + 1; i++) {
+        // copy the list of entities
+        const copied_ents_arr: TEntTypeIdx[] = _copyGeom(__model__, ents_arr, true) as TEntTypeIdx[];
+        // copy the positions that belong to the list of entities
+        _copyGeomPosis(__model__, copied_ents_arr, true, vecMult(extrude_vec_div, i));
+        // add to the array
+        for (const copied_ent_arr of copied_ents_arr) {
+            copies.push(copied_ent_arr);
+        }
+    }
+    // return the copies
+    return copies;
 }
 function _extrudeColl(__model__: GIModel, index: number,
         extrude_vec: Txyz, divisions: number, method: _EExtrudeMethod): TEntTypeIdx[] {
@@ -1003,26 +1030,6 @@ function _extrudeRibs(__model__: GIModel, ent_type: number, index: number, extru
     // return the ribs
     return new_plines_i.map(pline_i => [EEntType.PLINE, pline_i] as TEntTypeIdx);
 }
-function _extrudeCopies(__model__: GIModel, ent_type: number, index: number, extrude_vec: Txyz, divisions: number): TEntTypeIdx[] {
-    const copies: TEntTypeIdx[] = [[ent_type, index]];
-    const vec: Txyz = vecDiv(extrude_vec, divisions);
-    const posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, index);
-    const xyzs: Txyz[] = posis_i.map(posi_i => __model__.attribs.query.getPosiCoords(posi_i));
-    // make the copies
-    for (let i = 1; i < divisions + 1; i++) {
-        const extruded_ent_arr: TEntTypeIdx = _copyGeom(__model__, [ent_type, index], true) as TEntTypeIdx;
-        _copyGeomPosis(__model__, extruded_ent_arr, true, null);
-        const [extruded_ent_type, extruded_ent_i]: [number, number] = extruded_ent_arr;
-        const new_posis_i: number[] = __model__.geom.nav.navAnyToPosi(extruded_ent_type, extruded_ent_i);
-        for (let j = 0; j < new_posis_i.length; j++) {
-            const new_xyz: Txyz = vecAdd(xyzs[j], vecMult(vec, i));
-            __model__.attribs.add.setPosiCoords(new_posis_i[j], new_xyz);
-        }
-        copies.push(extruded_ent_arr);
-    }
-    // return the copies
-    return copies;
-}
 function _extrudeCap(__model__: GIModel, index: number, strip_posis_map: Map<number, number[]>, divisions: number): number {
     const face_i: number = __model__.geom.nav.navPgonToFace(index);
     // get positions on boundary
@@ -1062,8 +1069,6 @@ function _extrude(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
                 return _extrudeStringers(__model__, ent_type, index, extrude_vec, divisions);
             case _EExtrudeMethod.RIBS:
                 return _extrudeRibs(__model__, ent_type, index, extrude_vec, divisions);
-            case _EExtrudeMethod.COPIES:
-                return _extrudeCopies(__model__, ent_type, index, extrude_vec, divisions);
             default:
                 throw new Error('Extrude method not recognised.');
         }

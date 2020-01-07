@@ -33,7 +33,7 @@ export class GIGeomDel {
         for (const posi_i of posis_i) {
             // update up arrays
             const verts_i: number[] = this._geom_arrays.up_posis_verts[posi_i];
-            if (verts_i.length === 0) { // only delete posis with no verts
+            if ( !verts_i || verts_i.length === 0) { // only delete posis with no verts
                 this._geom_arrays.up_posis_verts[posi_i] = null;
                 deleted_posis_i.push(posi_i);
             }

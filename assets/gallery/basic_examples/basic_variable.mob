@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_t5m0n4lvdr",
+                "id": "node_nja4pmu2fvc",
                 "position": {
                     "x": 5350,
                     "y": 4999.1787109375
@@ -184,7 +184,9 @@
                     }
                 ],
                 "state": {
-                    "procedure": []
+                    "procedure": [],
+                    "show_code": false,
+                    "show_func": false
                 },
                 "input": {
                     "name": "input",
@@ -214,7 +216,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Create some local variables",
-                                    "id": "node_bg4mowdxgvn",
+                                    "id": "node_yyat0mwi",
                                     "position": {
                                         "x": 5350.81982421875,
                                         "y": 5201.63916015625
@@ -461,7 +463,9 @@
                                         }
                                     ],
                                     "state": {
-                                        "procedure": []
+                                        "procedure": [],
+                                        "show_code": true,
+                                        "show_func": true
                                     },
                                     "input": "~flowchart~nodes~0~output~edges~0~target",
                                     "output": {
@@ -482,7 +486,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_47b2h1kzet6",
+                                                        "id": "node_iikq4hvdx2",
                                                         "position": {
                                                             "x": 5349.18017578125,
                                                             "y": 5400.81982421875
@@ -506,7 +510,7 @@
                                                             },
                                                             {
                                                                 "type": 11,
-                                                                "ID": "",
+                                                                "ID": "Return",
                                                                 "meta": {
                                                                     "name": "",
                                                                     "module": ""
@@ -533,7 +537,9 @@
                                                             }
                                                         ],
                                                         "state": {
-                                                            "procedure": []
+                                                            "procedure": [],
+                                                            "show_code": true,
+                                                            "show_func": true
                                                         },
                                                         "input": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target",
                                                         "output": {
@@ -546,7 +552,24 @@
                                                             "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
                                                         },
                                                         "hasError": false,
-                                                        "hasExecuted": true
+                                                        "hasExecuted": true,
+                                                        "localFunc": [
+                                                            {
+                                                                "type": 13,
+                                                                "ID": "local_func_blank",
+                                                                "meta": {
+                                                                    "name": "",
+                                                                    "module": ""
+                                                                },
+                                                                "argCount": 0,
+                                                                "args": [],
+                                                                "print": false,
+                                                                "enabled": true,
+                                                                "selected": false,
+                                                                "selectGeom": false,
+                                                                "hasError": false
+                                                            }
+                                                        ]
                                                     }
                                                 },
                                                 "selected": false
@@ -559,7 +582,24 @@
                                         "model": null
                                     },
                                     "hasExecuted": true,
-                                    "hasError": false
+                                    "hasError": false,
+                                    "localFunc": [
+                                        {
+                                            "type": 13,
+                                            "ID": "local_func_blank",
+                                            "meta": {
+                                                "name": "",
+                                                "module": ""
+                                            },
+                                            "argCount": 0,
+                                            "args": [],
+                                            "print": false,
+                                            "enabled": true,
+                                            "selected": false,
+                                            "selectGeom": false,
+                                            "hasError": false
+                                        }
+                                    ]
                                 }
                             },
                             "selected": false
@@ -572,7 +612,24 @@
                     "model": null
                 },
                 "hasError": false,
-                "hasExecuted": true
+                "hasExecuted": true,
+                "localFunc": [
+                    {
+                        "type": 13,
+                        "ID": "local_func_blank",
+                        "meta": {
+                            "name": "",
+                            "module": ""
+                        },
+                        "argCount": 0,
+                        "args": [],
+                        "print": false,
+                        "enabled": true,
+                        "selected": false,
+                        "selectGeom": false,
+                        "hasError": false
+                    }
+                ]
             },
             "~flowchart~nodes~0~output~edges~0~target~parentNode",
             "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
@@ -584,8 +641,8 @@
         "functions": [],
         "ordered": true,
         "id": "2ba6f0e8-7f7b-4fd5-3375-c9e9fd1fff6e",
-        "last_updated": "2019-08-06T03:54:30.243Z"
+        "last_updated": "2019-12-18T02:57:17.020Z"
     },
-    "version": 1,
+    "version": "0.5.12",
     "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-80,\"y\":-80,\"z\":80},\"pos_x\":-80,\"pos_y\":-80,\"pos_z\":80,\"target\":{\"x\":0,\"y\":0,\"z\":0}},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":5,\"name\":\"Faces\"},\"tab\":\"0\"},\"version\":\"0.4.38\"}"
 }

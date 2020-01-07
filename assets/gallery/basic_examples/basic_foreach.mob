@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_zxmm9kl8km",
+                "id": "node_5q5n058a1l",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -69,7 +69,7 @@
                                 },
                                 "parentNode": {
                                     "name": "Node",
-                                    "id": "node_wm65g1m3oy",
+                                    "id": "node_oa0eurrjeo",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -395,20 +395,20 @@
                                                         {
                                                             "name": "ray",
                                                             "value": "XY",
-                                                            "linked": false,
                                                             "jsValue": "JSON.parse(JSON.stringify(XY))",
                                                             "usedVars": [],
-                                                            "invalidVar": false
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         },
                                                         {
                                                             "name": "angle",
                                                             "value": "(PI / 8) * i",
-                                                            "linked": false,
                                                             "jsValue": "(JSON.parse(JSON.stringify(PI)) / 8) * i_",
                                                             "usedVars": [
                                                                 "i"
                                                             ],
-                                                            "invalidVar": false
+                                                            "invalidVar": false,
+                                                            "linked": false
                                                         }
                                                     ],
                                                     "selected": false,
@@ -444,7 +444,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "End",
-                                                        "id": "node_j2w5ry50afg",
+                                                        "id": "node_6xq66acopcy",
                                                         "position": {
                                                             "x": 5350,
                                                             "y": 5400
@@ -597,8 +597,8 @@
         "functions": [],
         "ordered": true,
         "id": "e75c4f8e-24f6-09ce-0297-b719e30336e7",
-        "last_updated": "2019-11-14T19:04:41.661Z"
+        "last_updated": "2019-12-18T02:56:39.782Z"
     },
-    "version": 4,
-    "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500,\"pos_x\":0,\"pos_y\":0,\"pos_z\":0,\"pos\":{\"x\":0,\"y\":0,\"z\":0}},\"positions\":{\"show\":false,\"size\":4.7},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":true},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-144.37479840591365,\"y\":-175.19169334372287,\"z\":322.6422537939746},\"pos_x\":-144.37479840591365,\"pos_y\":-175.19169334372287,\"pos_z\":322.6422537939746,\"target\":{\"x\":0,\"y\":0,\"z\":0}},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"azimuth\":90,\"altitude\":45,\"distance\":10,\"type\":\"directional\"},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":0,\"name\":\"Positions\"},\"tab\":\"0\"},\"version\":\"0.4.38\"}"
+    "version": "0.5.12",
+    "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500,\"pos_x\":0,\"pos_y\":0,\"pos_z\":0,\"pos\":{\"x\":0,\"y\":0,\"z\":0}},\"background\":{\"show\":false,\"background_set\":0},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-80,\"y\":-80,\"z\":80},\"pos_x\":-80,\"pos_y\":-80,\"pos_z\":80,\"target\":{\"x\":0,\"y\":0,\"z\":0}},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"azimuth\":90,\"altitude\":45,\"distance\":10,\"type\":\"directional\"},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":5,\"name\":\"Faces\"},\"tab\":\"0\"},\"version\":\"0.5.12\"}"
 }

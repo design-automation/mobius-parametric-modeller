@@ -13,7 +13,7 @@
         "nodes": [
             {
                 "name": "Start",
-                "id": "node_xi1es25xty",
+                "id": "node_4p8iz602ctf",
                 "position": {
                     "x": 5350,
                     "y": 5000
@@ -105,7 +105,9 @@
                     }
                 ],
                 "state": {
-                    "procedure": []
+                    "procedure": [],
+                    "show_code": false,
+                    "show_func": false
                 },
                 "input": {
                     "name": "input",
@@ -135,7 +137,7 @@
                                 },
                                 "parentNode": {
                                     "name": "make torus",
-                                    "id": "node_62q4li14iox",
+                                    "id": "node_b6z5olmgso",
                                     "position": {
                                         "x": 5350,
                                         "y": 5200
@@ -184,7 +186,7 @@
                                                     "name": "origin",
                                                     "value": "YZ",
                                                     "default": 0,
-                                                    "jsValue": "YZ",
+                                                    "jsValue": "JSON.parse(JSON.stringify(YZ))",
                                                     "usedVars": [],
                                                     "invalidVar": false,
                                                     "linked": false
@@ -423,7 +425,7 @@
                                                         "module": "make",
                                                         "name": "Copy"
                                                     },
-                                                    "argCount": 3,
+                                                    "argCount": 4,
                                                     "args": [
                                                         {
                                                             "name": "var_name",
@@ -434,17 +436,23 @@
                                                         },
                                                         {
                                                             "name": "__model__",
-                                                            "default": 0,
                                                             "linked": false
                                                         },
                                                         {
                                                             "name": "entities",
                                                             "value": "cir_pl",
-                                                            "default": 0,
                                                             "jsValue": "cir_pl_",
                                                             "usedVars": [
                                                                 "cir_pl"
                                                             ],
+                                                            "invalidVar": false,
+                                                            "linked": false
+                                                        },
+                                                        {
+                                                            "name": "vector",
+                                                            "value": "[0, 0, 0]",
+                                                            "jsValue": "[0, 0, 0]",
+                                                            "usedVars": [],
                                                             "invalidVar": false,
                                                             "linked": false
                                                         }
@@ -463,7 +471,7 @@
                                                         "module": "modify",
                                                         "name": "Rotate"
                                                     },
-                                                    "argCount": 6,
+                                                    "argCount": 5,
                                                     "args": [
                                                         {
                                                             "name": "__none__",
@@ -471,13 +479,11 @@
                                                         },
                                                         {
                                                             "name": "__model__",
-                                                            "default": 0,
                                                             "linked": false
                                                         },
                                                         {
                                                             "name": "entities",
                                                             "value": "cir_pl2",
-                                                            "default": 0,
                                                             "jsValue": "cir_pl2_",
                                                             "usedVars": [
                                                                 "cir_pl2"
@@ -486,18 +492,8 @@
                                                             "linked": false
                                                         },
                                                         {
-                                                            "name": "origin",
-                                                            "value": "XY",
-                                                            "default": 0,
-                                                            "jsValue": "XY",
-                                                            "usedVars": [],
-                                                            "invalidVar": false,
-                                                            "linked": false
-                                                        },
-                                                        {
-                                                            "name": "axis",
+                                                            "name": "ray",
                                                             "value": "[0, 0, 1]",
-                                                            "default": 0,
                                                             "jsValue": "[0, 0, 1]",
                                                             "usedVars": [],
                                                             "invalidVar": false,
@@ -506,8 +502,7 @@
                                                         {
                                                             "name": "angle",
                                                             "value": "(2 * PI / num) * i",
-                                                            "default": 0,
-                                                            "jsValue": "(2 * PI / num_) * i_",
+                                                            "jsValue": "(2 * JSON.parse(JSON.stringify(PI)) / num_) * i_",
                                                             "usedVars": [
                                                                 "num",
                                                                 "i"
@@ -565,7 +560,8 @@
                                                     ],
                                                     "selected": false,
                                                     "selectGeom": false,
-                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~6"
+                                                    "parent": "~flowchart~nodes~0~output~edges~0~target~parentNode~procedure~6",
+                                                    "hasError": false
                                                 }
                                             ],
                                             "hasError": false,
@@ -666,7 +662,9 @@
                                         }
                                     ],
                                     "state": {
-                                        "procedure": []
+                                        "procedure": [],
+                                        "show_code": true,
+                                        "show_func": true
                                     },
                                     "input": "~flowchart~nodes~0~output~edges~0~target",
                                     "output": {
@@ -687,7 +685,7 @@
                                                     },
                                                     "parentNode": {
                                                         "name": "cut holes",
-                                                        "id": "node_rviq9ygtztm",
+                                                        "id": "node_sa6ynit0zvi",
                                                         "position": {
                                                             "x": 5349.091796875,
                                                             "y": 5402.365234375
@@ -804,7 +802,7 @@
                                                                             "module": "make",
                                                                             "name": "Copy"
                                                                         },
-                                                                        "argCount": 3,
+                                                                        "argCount": 4,
                                                                         "args": [
                                                                             {
                                                                                 "name": "var_name",
@@ -815,17 +813,23 @@
                                                                             },
                                                                             {
                                                                                 "name": "__model__",
-                                                                                "default": 0,
                                                                                 "linked": false
                                                                             },
                                                                             {
                                                                                 "name": "entities",
                                                                                 "value": "pgon",
-                                                                                "default": 0,
                                                                                 "jsValue": "pgon_",
                                                                                 "usedVars": [
                                                                                     "pgon"
                                                                                 ],
+                                                                                "invalidVar": false,
+                                                                                "linked": false
+                                                                            },
+                                                                            {
+                                                                                "name": "vector",
+                                                                                "value": "[0, 0, 0]",
+                                                                                "jsValue": "[0, 0, 0]",
+                                                                                "usedVars": [],
                                                                                 "invalidVar": false,
                                                                                 "linked": false
                                                                             }
@@ -841,8 +845,8 @@
                                                                         "enabled": true,
                                                                         "print": false,
                                                                         "meta": {
-                                                                            "module": "virtual",
-                                                                            "name": "GetPlane"
+                                                                            "module": "calc",
+                                                                            "name": "Plane"
                                                                         },
                                                                         "argCount": 3,
                                                                         "args": [
@@ -855,13 +859,11 @@
                                                                             },
                                                                             {
                                                                                 "name": "__model__",
-                                                                                "default": 0,
                                                                                 "linked": false
                                                                             },
                                                                             {
                                                                                 "name": "entities",
                                                                                 "value": "pgon_cp",
-                                                                                "default": 0,
                                                                                 "jsValue": "pgon_cp_",
                                                                                 "usedVars": [
                                                                                     "pgon_cp"
@@ -1045,13 +1047,11 @@
                                                                             },
                                                                             {
                                                                                 "name": "__model__",
-                                                                                "default": 0,
                                                                                 "linked": false
                                                                             },
                                                                             {
                                                                                 "name": "entities",
                                                                                 "value": "pgon_cp",
-                                                                                "default": 0,
                                                                                 "jsValue": "pgon_cp_",
                                                                                 "usedVars": [
                                                                                     "pgon_cp"
@@ -1060,10 +1060,9 @@
                                                                                 "linked": false
                                                                             },
                                                                             {
-                                                                                "name": "del_unused_posis",
-                                                                                "value": "'del_unused_posis'",
-                                                                                "default": 0,
-                                                                                "jsValue": "'del_unused_posis'",
+                                                                                "name": "method",
+                                                                                "value": "'delete_selected'",
+                                                                                "jsValue": "'delete_selected'",
                                                                                 "usedVars": [],
                                                                                 "invalidVar": false,
                                                                                 "linked": false
@@ -1079,7 +1078,9 @@
                                                             }
                                                         ],
                                                         "state": {
-                                                            "procedure": []
+                                                            "procedure": [],
+                                                            "show_code": true,
+                                                            "show_func": true
                                                         },
                                                         "input": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target",
                                                         "output": {
@@ -1100,7 +1101,7 @@
                                                                         },
                                                                         "parentNode": {
                                                                             "name": "End",
-                                                                            "id": "node_z2pjr5v7pf",
+                                                                            "id": "node_b4ykupgumav",
                                                                             "position": {
                                                                                 "x": 5349.2265625,
                                                                                 "y": 5597.05908203125
@@ -1151,7 +1152,9 @@
                                                                                 }
                                                                             ],
                                                                             "state": {
-                                                                                "procedure": []
+                                                                                "procedure": [],
+                                                                                "show_code": true,
+                                                                                "show_func": true
                                                                             },
                                                                             "input": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target",
                                                                             "output": {
@@ -1164,7 +1167,24 @@
                                                                                 "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode~output~edges~0~target~parentNode"
                                                                             },
                                                                             "hasError": false,
-                                                                            "hasExecuted": false
+                                                                            "hasExecuted": true,
+                                                                            "localFunc": [
+                                                                                {
+                                                                                    "type": 13,
+                                                                                    "ID": "local_func_blank",
+                                                                                    "meta": {
+                                                                                        "name": "",
+                                                                                        "module": ""
+                                                                                    },
+                                                                                    "argCount": 0,
+                                                                                    "args": [],
+                                                                                    "print": false,
+                                                                                    "enabled": true,
+                                                                                    "selected": false,
+                                                                                    "selectGeom": false,
+                                                                                    "hasError": false
+                                                                                }
+                                                                            ]
                                                                         }
                                                                     },
                                                                     "selected": false
@@ -1176,8 +1196,25 @@
                                                             "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode",
                                                             "model": null
                                                         },
-                                                        "hasExecuted": false,
-                                                        "hasError": false
+                                                        "hasExecuted": true,
+                                                        "hasError": false,
+                                                        "localFunc": [
+                                                            {
+                                                                "type": 13,
+                                                                "ID": "local_func_blank",
+                                                                "meta": {
+                                                                    "name": "",
+                                                                    "module": ""
+                                                                },
+                                                                "argCount": 0,
+                                                                "args": [],
+                                                                "print": false,
+                                                                "enabled": true,
+                                                                "selected": false,
+                                                                "selectGeom": false,
+                                                                "hasError": false
+                                                            }
+                                                        ]
                                                     }
                                                 },
                                                 "selected": false
@@ -1189,8 +1226,25 @@
                                         "parentNode": "~flowchart~nodes~0~output~edges~0~target~parentNode",
                                         "model": null
                                     },
-                                    "hasError": true,
-                                    "hasExecuted": false
+                                    "hasError": false,
+                                    "hasExecuted": true,
+                                    "localFunc": [
+                                        {
+                                            "type": 13,
+                                            "ID": "local_func_blank",
+                                            "meta": {
+                                                "name": "",
+                                                "module": ""
+                                            },
+                                            "argCount": 0,
+                                            "args": [],
+                                            "print": false,
+                                            "enabled": true,
+                                            "selected": false,
+                                            "selectGeom": false,
+                                            "hasError": false
+                                        }
+                                    ]
                                 }
                             },
                             "selected": false
@@ -1203,7 +1257,24 @@
                     "model": null
                 },
                 "hasError": false,
-                "hasExecuted": true
+                "hasExecuted": true,
+                "localFunc": [
+                    {
+                        "type": 13,
+                        "ID": "local_func_blank",
+                        "meta": {
+                            "name": "",
+                            "module": ""
+                        },
+                        "argCount": 0,
+                        "args": [],
+                        "print": false,
+                        "enabled": true,
+                        "selected": false,
+                        "selectGeom": false,
+                        "hasError": false
+                    }
+                ]
             },
             "~flowchart~nodes~0~output~edges~0~target~parentNode",
             "~flowchart~nodes~0~output~edges~0~target~parentNode~output~edges~0~target~parentNode",
@@ -1217,8 +1288,8 @@
         "functions": [],
         "ordered": true,
         "id": "3c1aa92d-50c2-b952-ca90-9e2f3084f4eb",
-        "last_updated": "2019-09-05T07:05:15.049Z"
+        "last_updated": "2020-01-02T03:37:48.716Z"
     },
-    "version": 1,
-    "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500},\"positions\":{\"show\":true,\"size\":0.5},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-80,\"y\":-80,\"z\":80},\"pos_x\":-80,\"pos_y\":-80,\"pos_z\":80,\"target\":{\"x\":0,\"y\":0,\"z\":0}},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"shadowSize\":4,\"azimuth\":90,\"altitude\":45,\"distance\":10000},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":{\"id\":5,\"name\":\"Faces\"},\"tab\":\"0\"},\"version\":\"0.4.38\"}"
+    "version": "0.5.12",
+    "settings": "{\"normals\":{\"show\":false,\"size\":5},\"axes\":{\"show\":true,\"size\":50},\"grid\":{\"show\":true,\"size\":500,\"pos_x\":0,\"pos_y\":0,\"pos_z\":0,\"pos\":{\"x\":0,\"y\":0,\"z\":0}},\"background\":{\"show\":false,\"background_set\":0},\"positions\":{\"show\":true,\"size\":3},\"tjs_summary\":{\"show\":false},\"gi_summary\":{\"show\":false},\"wireframe\":{\"show\":false},\"camera\":{\"pos\":{\"x\":-45.23941516579876,\"y\":-107.6726248631173,\"z\":76.85519832403851},\"pos_x\":-45.23941516579876,\"pos_y\":-107.6726248631173,\"pos_z\":76.85519832403851,\"target\":{\"x\":0,\"y\":0,\"z\":0}},\"colors\":{\"viewer_bg\":\"#E6E6E6\",\"position\":\"#000000\",\"position_s\":\"#0033FF\",\"vertex_s\":\"#FFCC00\",\"face_f\":\"#FFFFFF\",\"face_f_s\":\"#4949BD\",\"face_b\":\"#DDDDDD\",\"face_b_s\":\"#00006D\"},\"ambient_light\":{\"show\":true,\"color\":\"#FFFFFF\",\"intensity\":0.5},\"hemisphere_light\":{\"show\":true,\"helper\":false,\"skyColor\":\"#FFFFFF\",\"groundColor\":\"#FFFFFF\",\"intensity\":0.5},\"directional_light\":{\"show\":false,\"helper\":false,\"color\":\"#FFFFFF\",\"intensity\":1,\"shadow\":true,\"azimuth\":90,\"altitude\":45,\"distance\":10,\"type\":\"directional\"},\"ground\":{\"show\":false,\"width\":1000,\"length\":1000,\"height\":-0.5,\"color\":\"#FFFFFF\",\"shininess\":0},\"select\":{\"selector\":null,\"tab\":\"0\"},\"version\":\"0.5.12\"}"
 }

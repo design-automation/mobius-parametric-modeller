@@ -158,7 +158,6 @@ export class PanelHeaderComponent implements OnDestroy {
         event.stopPropagation();
         this.dataService.dialogType = dialogType;
         this.dataService.dialog = <HTMLDialogElement>document.getElementById('headerDialog');
-        console.log(this.dataService.dialog)
         this.dataService.dialog.showModal();
         if (dialogType === 'backup') {
             this.dataService.setbackup_header();

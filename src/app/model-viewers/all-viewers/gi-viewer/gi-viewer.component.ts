@@ -90,6 +90,21 @@ export class GIViewerComponent implements OnInit {
         }
     }
 
+    threejsAction(action: {'type': string, 'event': any}) {
+        // <threejs-viewer [model]='data'
+        // (eventClicked)="childEventClicked($event)"
+        // [attr_table_select]='attrTableSelect'
+        // [selectSwitch] = 'selectSwitchOnOff'
+        // [attribLabel] = 'attribLabelVal'
+        // (resetTableEvent) = "resetTable()"
+        // ></threejs-viewer>
+        if (action.type === 'resetTableEvent') {
+            this.resetTable();
+        } else if (action.type === 'eventClicked') {
+            this.childEventClicked(action.event);
+        }
+    }
+
     childEventClicked(event: Event) {
         this.clickedEvent = event;
     }

@@ -117,7 +117,7 @@
         </div>
     </div>
 </div>
-<button id='openCredits' (click)="openHeaderDialog($event, 'credits')"></button>
+<button id='openCredits' (click)="openHeaderDialog($event, 'credits')" title="credits"></button>
 
 <dialog id='headerDialog'>
     <div class='genUrlDialog' *ngIf='checkDialog("url")'>
@@ -243,5 +243,12 @@
     </div>
     <div class='creditsDialog' *ngIf='checkDialog("credits")'>
         <p>Credits to: </p>
+        <br>
+        <p>Skybox background:</p>
+        <p>&nbsp; _ "stars" by Quinton Reeves</p>
+        <p>&nbsp; _ "sunsetflat" by LedIris (07/08/2009)</p>
+        <p>&nbsp; _ "skyhigh" by Pieter Verhoeven</p>
+        <p>&nbsp; _ "interstellar", "miramar", and "stormydays" by Jockum "hipshot" Skoglund</p>
+        <p>&nbsp; &nbsp; &nbsp; &nbsp; hipshot@zfight.com / www.zfight.com</p>
     </div>
 </dialog>

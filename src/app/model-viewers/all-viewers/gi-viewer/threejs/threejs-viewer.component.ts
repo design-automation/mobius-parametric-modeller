@@ -27,8 +27,9 @@ let renderCheck = true;
     styleUrls: ['./threejs-viewer.component.scss']
 })
 export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
-    @Output() eventClicked = new EventEmitter<Event>();
-    @Output() resetTableEvent = new EventEmitter<number>();
+    @Output() action = new EventEmitter<{'type': string, 'event': Event}>();
+    // @Output() eventClicked = new EventEmitter<Event>();
+    // @Output() resetTableEvent = new EventEmitter<number>();
     @Input() model: GIModel;
     @Input() attr_table_select: { action: string, ent_type: string, id: number | number[] };
     @Input() selectSwitch: Boolean;
@@ -677,12 +678,12 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     }
 
     private refreshTable(event: Event) {
-        this.eventClicked.emit(event);
+        this.action.emit({'type': 'eventClicked', 'event': event});
         this.activateRender();
     }
 
     private resetTable() {
-        this.resetTableEvent.emit();
+        this.action.emit({'type': 'resetTableEvent', 'event': null});
     }
 
     private unselectAll() {
@@ -1520,7 +1521,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this.selectDropdownVisible = false;
     }
 
-    public openCredit() {
+    public openCredits(event) {
+        event.stopPropagation();
         const el = document.getElementById('openCredits');
         if (el) {
             el.click();

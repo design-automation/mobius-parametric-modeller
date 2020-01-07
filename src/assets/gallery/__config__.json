@@ -56,7 +56,7 @@
                 "glass_materials.mob&node=2",
                 "front_and_back_materials.mob&node=1"
             ],
-            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/rendering_examples/"
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/rendering_examples/"
         }
     ]
 }

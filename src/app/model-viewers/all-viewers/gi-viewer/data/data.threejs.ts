@@ -608,7 +608,7 @@ export class DataThreejs {
         }
     }
 
-    public selectObjVetex(parent_ent_id: string, ent_id: string, positions, container, labelText = null) {
+    public selectObjvertex(parent_ent_id: string, ent_id: string, positions, container, labelText = null) {
         const bg = this.initBufferPoint(positions, null, null, this.settings.colors.vertex_s, this.settings.positions.size + 0.1);
         if (parent_ent_id === null) {
             const point = new THREE.Points(bg.geom, bg.mat);

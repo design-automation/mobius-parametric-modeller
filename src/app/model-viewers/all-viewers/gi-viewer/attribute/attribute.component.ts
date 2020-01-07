@@ -133,7 +133,6 @@ export class AttributeComponent implements OnChanges {
         }
         if (changes['refresh']) {
             if (document.getElementsByClassName('table--container')[this.getCurrentTab()]) {
-                console.log('>>>>>>>>>>>')
                 this.table_scroll = document.getElementsByClassName('table--container')[this.getCurrentTab()].scrollTop;
             }
             this.refreshTable();

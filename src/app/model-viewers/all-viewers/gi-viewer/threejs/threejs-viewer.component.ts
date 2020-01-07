@@ -63,7 +63,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     public SelectingEntityType: { id: number, name: string } = { id: EEntType.FACE, name: 'Faces' };
     public selectDropdownVisible = false;
     public selections = [
-        { id: EEntType.POSI, name: 'Positions' }, { id: EEntType.VERT, name: 'Vetex' },
+        { id: EEntType.POSI, name: 'Positions' }, { id: EEntType.VERT, name: 'Vertex' },
         { id: EEntType.EDGE, name: 'Edges' }, { id: EEntType.WIRE, name: 'Wires' },
         { id: EEntType.FACE, name: 'Faces' }, { id: EEntType.POINT, name: 'Points' },
         { id: EEntType.PLINE, name: 'Polylines' }, { id: EEntType.PGON, name: 'Polygons' },
@@ -1074,7 +1074,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             const ent_id = parent_ent_id;
             posi_ent.set(ent_id, point);
             const labelText = this.indexAsLabel(ent_type_str, ent_id, point, EEntType.VERT);
-            scene.selectObjVetex(null, ent_id, position, this.container, labelText);
+            scene.selectObjvertex(null, ent_id, position, this.container, labelText);
             this.dataService.selected_vertex.set(`${parent_ent_id}`, [ent_id]);
         } else if (edge !== null) {
             const verts = this.model.geom.nav.navEdgeToVert(edge);
@@ -1084,7 +1084,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 const position = this.model.attribs.query.getVertCoords(vert);
                 posi_ent.set(ent_id, vert);
                 const labelText = this.indexAsLabel(ent_type_str, ent_id, vert, EEntType.VERT);
-                scene.selectObjVetex(parent_ent_id, ent_id, position, this.container, labelText);
+                scene.selectObjvertex(parent_ent_id, ent_id, position, this.container, labelText);
                 children.push(ent_id);
             });
             this.dataService.selected_vertex.set(`${parent_ent_id}`, children);
@@ -1101,7 +1101,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 const position = this.model.attribs.query.getVertCoords(vert);
                 posi_ent.set(ent_id, vert);
                 const labelText = this.indexAsLabel(ent_type_str, ent_id, vert, EEntType.VERT);
-                scene.selectObjVetex(parent_ent_id, ent_id, position, this.container, labelText);
+                scene.selectObjvertex(parent_ent_id, ent_id, position, this.container, labelText);
                 children.push(ent_id);
             });
             this.dataService.selected_vertex.set(`${parent_ent_id}`, children);
@@ -1491,7 +1491,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const position = this.model.attribs.query.getVertCoords(id);
         const ent_id = `${ent_type_str}${id}`;
         const labelText = this.indexAsLabel(ent_type_str, ent_id, id, EEntType.VERT);
-        scene.selectObjVetex(`_single_v${timestamp}`, ent_id, position, this.container, labelText);
+        scene.selectObjvertex(`_single_v${timestamp}`, ent_id, position, this.container, labelText);
         posi_ent.set(ent_id, id);
         this.dataService.selected_vertex.set(`_single_v${timestamp}`, [ent_id]);
         this.refreshTable(null);

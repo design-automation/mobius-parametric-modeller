@@ -1,5 +1,6 @@
 import { GIModel } from './GIModel';
 import { EEntType, Txyz, TAttribDataTypes } from './common';
+import { vecDot } from '../geom/vectors';
 /**
  * Geo-info model class.
  */
@@ -138,7 +139,7 @@ export class GIModelComparator {
     private normClosedWires(trans_padding: [Txyz, number[]]): void {
         for (const wire_i of this._model.geom.query.getEnts(EEntType.WIRE, false)) {
             if (this._model.geom.query.isWireClosed(wire_i)) {
-                // a closed wire can start at any edge, but the order cannot be reversed
+                // a closed wire can start at any edge
                 const edges_i: number[] = this._model.geom.nav.navAnyToEdge(EEntType.WIRE, wire_i);
                 const fprints: Array<[string, number]> = [];
                 for (let i = 0; i < edges_i.length; i++) {
@@ -147,6 +148,18 @@ export class GIModelComparator {
                 }
                 fprints.sort();
                 this._model.geom.modify.shift(wire_i, fprints[0][1]);
+                // if polyline, the direction can be any
+                // so normalise direction
+                if (this._model.geom.nav.navWireToPline(wire_i) !== undefined) {
+                    const normal: Txyz = this._model.geom.query.getWireNormal(wire_i);
+                    let dot: number = vecDot(normal, [0, 0, 1]);
+                    if (Math.abs(dot) < 1e-6) {
+                        dot = vecDot(normal, [1, 0, 0]);
+                    }
+                    if (dot < 0) {
+                        this._model.geom.modify.reverse(wire_i);
+                    }
+                }
             }
         }
     }

@@ -600,11 +600,13 @@ export class GIModelComparator {
                 const sub_ents_i: number[] = this._model.geom.nav.navAnyToAny(from_ent_type, topo_ent_type, index);
                 // for each attrib, make a finderprint
                 for (const attrib_name of attrib_names) {
-                    for (const sub_ent_i of sub_ents_i) {
-                        const attrib_value: TAttribDataTypes =
-                            this._model.attribs.query.getAttribVal(topo_ent_type, attrib_name, sub_ent_i);
-                        if (attrib_value !== null && attrib_value !== undefined) {
-                            topo_fprints.push(this.getAttribValFprint(attrib_value));
+                    if (this._model.attribs.query.hasAttrib(topo_ent_type, attrib_name)) {
+                        for (const sub_ent_i of sub_ents_i) {
+                            const attrib_value: TAttribDataTypes =
+                                this._model.attribs.query.getAttribVal(topo_ent_type, attrib_name, sub_ent_i);
+                            if (attrib_value !== null && attrib_value !== undefined) {
+                                topo_fprints.push(this.getAttribValFprint(attrib_value));
+                            }
                         }
                     }
                 }

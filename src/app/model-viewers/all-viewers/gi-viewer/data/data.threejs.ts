@@ -265,7 +265,7 @@ export class DataThreejs {
         }
 
         this.allObjs = this.getAllObjs();
-
+        console.log(this.allObjs)
         if (this.settings.ambient_light.show) {
             this._addAmbientLight();
         }
@@ -277,34 +277,35 @@ export class DataThreejs {
         }
 
 
-        const center = new Vector3(0, 0, 0); // allObjs.center;
-        this.axes_pos.x = center.x;
-        this.axes_pos.y = center.y;
+        // const center = new Vector3(0, 0, 0); // allObjs.center;
+        // this.axes_pos.x = center.x;
+        // this.axes_pos.y = center.y;
         let grid_pos = this.settings.grid.pos;
         if (!grid_pos) {
             grid_pos = new Vector3(0, 0, 0);
         }
         this.grid.position.set(grid_pos.x, grid_pos.y, 0);
+        this.axesHelper.position.set(grid_pos.x, grid_pos.y, 0.01);
 
-        if (threejs_data.posis_indices.length !== 0) {
-            if (this.dataService.newFlowchart) {
-                this.dataService.newFlowchart = false;
-                this.origin = new Vector3(center.x, center.y, 0);
-                // this.settings.camera.target = this.origin ;
-                localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
-                this.axesHelper.position.set(center.x, center.y, 0.01);
-            } else {
-                this.axesHelper.position.set(this.origin.x, this.origin.y, 0.01);
-            }
-            // const target = new Vector3(this.settings.camera.target.x, this.settings.camera.target.y, this.settings.camera.target.z);
-            // this._camera.position.x += target.x;
-            // this._camera.position.y += target.y;
-            // this._camera.position.z += target.z;
-            // this._camera.lookAt(target);
-            // this._camera.updateProjectionMatrix();
-            // this._controls.target.set(target.x, target.y, target.z);
-            // this._controls.update();
-        }
+        // if (threejs_data.posis_indices.length !== 0) {
+        //     if (this.dataService.newFlowchart) {
+        //         this.dataService.newFlowchart = false;
+        //         this.origin = new Vector3(center.x, center.y, 0);
+        //         // this.settings.camera.target = this.origin ;
+        //         localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
+        //         this.axesHelper.position.set(center.x, center.y, 0.01);
+        //     } else {
+        //         this.axesHelper.position.set(grid_pos.x, grid_pos.y, 0.01);
+        //     }
+        //     // const target = new Vector3(this.settings.camera.target.x, this.settings.camera.target.y, this.settings.camera.target.z);
+        //     // this._camera.position.x += target.x;
+        //     // this._camera.position.y += target.y;
+        //     // this._camera.position.z += target.z;
+        //     // this._camera.lookAt(target);
+        //     // this._camera.updateProjectionMatrix();
+        //     // this._controls.target.set(target.x, target.y, target.z);
+        //     // this._controls.update();
+        // }
 
         setTimeout(() => {
             let old = document.getElementById('hud');

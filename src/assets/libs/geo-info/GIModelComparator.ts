@@ -1,5 +1,6 @@
 import { GIModel } from './GIModel';
-import { EEntType, Txyz, TAttribDataTypes } from './common';
+import { EEntType, Txyz, TAttribDataTypes, EEntTypeStr } from './common';
+import { vecDot } from '../geom/vectors';
 /**
  * Geo-info model class.
  */
@@ -19,45 +20,59 @@ export class GIModelComparator {
      * This is the answer model.
      * The other model is the submitted model.
      * ~
+     * This method checks that every entity in the answer model is also in the submitted model.
+     * ~
      * Both models will be modified in the process.
      * ~
      * @param model The model to compare with.
      */
     public compare(model: GIModel, normalize: boolean, check_geom_equality: boolean, check_attrib_equality: boolean):
             {percent: number, score: number, total: number, comment: string} {
+
         // create the result object
         const result: {percent: number, score: number, total: number, comment: any} = {percent: 0, score: 0, total: 0, comment: []};
-        // if check_geom_equality, then check we have exact same number of positions, objects, and colletions
+
+        // check we have exact same number of positions, objects, and colletions
         if (check_geom_equality) {
             this._model.geom.compare.compare(model, result);
         }
+
         // check that the attributes in this model all exist in the other model
-        // at the same time get a map of all attribute names in this model
         if (check_attrib_equality) {
             this._model.attribs.compare(model, result);
         }
+
         // normalize the two models
         if (normalize) {
             this.norm();
             model.comparator.norm();
         }
+
         // compare objects
         let idx_maps: [Map<EEntType, Map<number, number>>, Map<EEntType, Map<number, number>>] = null;
         idx_maps = this.compareObjs(model, result);
+
         // check for common erros
-        this.checkForErrors(model, result, idx_maps);
-        // compare colls and mode attribs
+        // SLOW....
+        // this.checkForErrors(model, result, idx_maps);
+
+        // compare colls
         this.compareColls(model, result, idx_maps);
+
+        // compare the material attribs in the model
         this.compareModelAttribs(model, result);
+
         // Add a final msg
         if (result.score === result.total) {
             result.comment = ['RESULT: The two models match.'];
         } else {
             result.comment.push('RESULT: The two models no not match.');
         }
+
         // calculate percentage score
         result.percent = Math.round( result.score / result.total * 100);
         if (result.percent < 0) { result.percent = 0; }
+
         // html formatting
         let formatted_str = '';
         formatted_str += '<p><b>Percentage: ' + result.percent + '%</b></p>';
@@ -138,7 +153,7 @@ export class GIModelComparator {
     private normClosedWires(trans_padding: [Txyz, number[]]): void {
         for (const wire_i of this._model.geom.query.getEnts(EEntType.WIRE, false)) {
             if (this._model.geom.query.isWireClosed(wire_i)) {
-                // a closed wire can start at any edge, but the order cannot be reversed
+                // a closed wire can start at any edge
                 const edges_i: number[] = this._model.geom.nav.navAnyToEdge(EEntType.WIRE, wire_i);
                 const fprints: Array<[string, number]> = [];
                 for (let i = 0; i < edges_i.length; i++) {
@@ -147,6 +162,18 @@ export class GIModelComparator {
                 }
                 fprints.sort();
                 this._model.geom.modify.shift(wire_i, fprints[0][1]);
+                // if polyline, the direction can be any
+                // so normalise direction
+                if (this._model.geom.nav.navWireToPline(wire_i) !== undefined) {
+                    const normal: Txyz = this._model.geom.query.getWireNormal(wire_i);
+                    let dot: number = vecDot(normal, [0, 0, 1]);
+                    if (Math.abs(dot) < 1e-6) {
+                        dot = vecDot(normal, [1, 0, 0]);
+                    }
+                    if (dot < 0) {
+                        this._model.geom.modify.reverse(wire_i);
+                    }
+                }
             }
         }
     }
@@ -213,12 +240,18 @@ export class GIModelComparator {
         return fprints.join('|');
     }
     /**
-     * Compare the objects
+     * Compare the objects.
+     * ~
+     * This will also check the following attributes:
+     * For posis, it will check the xyz attribute.
+     * For vertices, it will check the rgb attribute, if such an attribute exists in the answer model.
+     * For polygons, it will check the material attribute, if such an attribute exists in the answer model.
      */
     private compareObjs(other_model: GIModel, result: {score: number, total: number, comment: any[]}):
             [Map<EEntType, Map<number, number>>, Map<EEntType, Map<number, number>>] {
         result.comment.push('Comparing objects in the two models.');
         const data_comments: string [] = [];
+
         // set attrib names to check when comparing objects and collections
         const attrib_names: Map<EEntType, string[]> = new Map();
         attrib_names.set(EEntType.POSI, ['xyz']);
@@ -228,6 +261,7 @@ export class GIModelComparator {
         if (this._model.attribs.query.hasAttrib(EEntType.PGON, 'material')) {
             attrib_names.set(EEntType.PGON, ['material']);
         }
+
         // points, polylines, polygons
         const obj_ent_types: EEntType[] = [EEntType.POINT, EEntType.PLINE, EEntType.PGON];
         const obj_ent_type_strs: Map<EEntType, string> = new Map([
@@ -235,54 +269,91 @@ export class GIModelComparator {
             [EEntType.PLINE, 'polylines'],
             [EEntType.PGON, 'polygons']
         ]);
+
         // compare points, plines, pgons
         const this_to_com_idx_maps: Map<EEntType, Map<number, number>> = new Map();
         const other_to_com_idx_maps: Map<EEntType, Map<number, number>> = new Map();
         for (const obj_ent_type of obj_ent_types) {
+
             // create the two maps, and store them in the map of maps
             const this_to_com_idx_map: Map<number, number> = new Map();
             this_to_com_idx_maps.set(obj_ent_type, this_to_com_idx_map);
             const other_to_com_idx_map: Map<number, number> = new Map();
             other_to_com_idx_maps.set(obj_ent_type, other_to_com_idx_map);
-            // get the fprints
-            const [this_fprints, this_ents_i]: [string[], number[]] = this.getEntsFprint(obj_ent_type, attrib_names);
-            // console.log('this_fprints:', this_fprints, 'this_ents_i:', this_ents_i);
-            const [other_fprints, other_ents_i]: [string[], number[]] = other_model.comparator.getEntsFprint(obj_ent_type, attrib_names);
-            // console.log('other_fprints:', other_fprints, 'other_ents_i:', other_ents_i);
+
+            // get the fprints for this model
+            const [this_fprints_arr, this_ents_i]: [Array<Map<string, string>>, number[]] =
+                this.getEntsFprint(obj_ent_type, attrib_names);
+
+            // get the fprints for the other model
+            const [other_fprints_arr, other_ents_i]: [Array<Map<string, string>>, number[]] =
+                other_model.comparator.getEntsFprint(obj_ent_type, attrib_names);
+
             // check that every entity in this model also exists in the other model
-            let num_objs_not_found = 0;
-            for (let com_idx = 0; com_idx < this_fprints.length; com_idx++) {
+            let num_xyz_not_found = 0;
+            const num_attribs_not_found: Map<string, number> = new Map();
+            for (let com_idx = 0; com_idx < this_fprints_arr.length; com_idx++) {
+
                 // increment the total by 1
                 result.total += 1;
+
                 // get this fprint, i.e. the one we are looking for in the other model
-                const this_fprint: string = this_fprints[com_idx];
+                const this_fprint: string = this_fprints_arr[com_idx].get('ps:xyz');
+                const all_other_fprints: string[] = other_fprints_arr.map(att_map => att_map.get('ps:xyz'));
+
                 // get this index and set the map
                 const this_ent_i: number = this_ents_i[com_idx];
                 this_to_com_idx_map.set(this_ent_i, com_idx);
+
                 // for other...
                 // get the index of this_fprint in the list of other_fprints
-                const found_other_idx: number = other_fprints.indexOf(this_fprint);
-                // add mismatch comment or update score
+                const found_other_idx: number = all_other_fprints.indexOf(this_fprint);
+                // update num_objs_not_found or update result.score
                 if (found_other_idx === -1) {
-                    num_objs_not_found++;
+                    num_xyz_not_found++;
                 } else {
+                    // check the attributes
+                    const keys: string[] = Array.from(this_fprints_arr[com_idx].keys());
+                    const ent_num_attribs: number = keys.length;
+                    let ent_num_attribs_mismatch = 0;
+                    for (const key of keys) {
+                        if (key !== 'ps:xyz') {
+                            if (
+                                !other_fprints_arr[com_idx].has(key) ||
+                                this_fprints_arr[com_idx].get(key) !== other_fprints_arr[com_idx].get(key)
+                            ) {
+                                ent_num_attribs_mismatch += 1;
+                                if (!num_attribs_not_found.has(key)) {
+                                    num_attribs_not_found.set(key, 1);
+                                } else {
+                                    num_attribs_not_found.set(key, num_attribs_not_found.get(key) + 1);
+                                }
+                            }
+                        }
+                    }
                     // we other index and set the map
                     const other_ent_i: number = other_ents_i[found_other_idx];
                     other_to_com_idx_map.set(other_ent_i, com_idx);
                     // update the score
-                    result.score += 1;
+                    const ent_num_attribs_match = ent_num_attribs - ent_num_attribs_mismatch;
+                    result.score = result.score + (ent_num_attribs_match / ent_num_attribs);
                 }
             }
-            // only write a msg for the case when there are actually some objs to be found
-            if (this_fprints.length > 0) {
-                if (num_objs_not_found > 0) {
-                    data_comments.push('Mismatch: ' + num_objs_not_found + ' ' +
+            // write a msg
+            if (this_fprints_arr.length > 0) {
+                if (num_xyz_not_found > 0) {
+                    data_comments.push('Mismatch: ' + num_xyz_not_found + ' ' +
                         obj_ent_type_strs.get(obj_ent_type) + ' entities could not be found.');
                 } else {
                     data_comments.push('All ' +
                     obj_ent_type_strs.get(obj_ent_type) + ' entities have been found.');
                 }
+                for (const key of Array.from(num_attribs_not_found.keys())) {
+                    data_comments.push('Mismatch in attribute data: ' + num_attribs_not_found.get(key) + ' ' +
+                        obj_ent_type_strs.get(obj_ent_type) + ' entities had mismatched attribute data for: ' + key + '.');
+                }
             }
+
         }
         // return result
         result.comment.push(data_comments);
@@ -332,6 +403,7 @@ export class GIModelComparator {
     }
     /**
      * Compare the model attribs
+     * At the moment, this seems to only compare the material attribute in the model
      */
     private compareModelAttribs(other_model: GIModel, result: {score: number, total: number, comment: any[]}): void {
         result.comment.push('Comparing model attributes in the two models.');
@@ -553,11 +625,11 @@ export class GIModelComparator {
     // ============================================================================
     /**
      * Get a fprint of all geometric entities of a certain type in the model.
-     * This returns a fprint string, and the entity indexes
+     * This returns a fprint array, and the entity indexes
      * The two arrays are in the same order
      */
-    private getEntsFprint(ent_type: EEntType, attrib_names: Map<EEntType, string[]>): [string[], number[]] {
-        const fprints: string[]  = [];
+    private getEntsFprint(ent_type: EEntType, attrib_names: Map<EEntType, string[]>): [Array<Map<string, string>>, number[]] {
+        const fprints: Array<Map<string, string>>  = [];
         const ents_i: number[] = this._model.geom.query.getEnts(ent_type, false);
         for (const ent_i of ents_i) {
             fprints.push(this.getEntFprint(ent_type, ent_i, attrib_names));
@@ -567,10 +639,12 @@ export class GIModelComparator {
     }
     /**
      * Get a fprint of one geometric entity: point, polyline, polygon
-     * Returns a string, something like '#a@b@c#x@y@z'
+     * Returns a map of strings.
+     * Keys are attribtes, like this 'ps:xyz'.
+     * Values are fprints, as strings.
      */
-    private getEntFprint(from_ent_type: EEntType, index: number, attrib_names_map: Map<EEntType, string[]>): string {
-        const fprints = [];
+    private getEntFprint(from_ent_type: EEntType, index: number, attrib_names_map: Map<EEntType, string[]>): Map<string, string> {
+        const fprints: Map<string, string> = new Map();
         // define topo entities for each obj (starts with posis and ends with objs)
         const topo_ent_types_map: Map<EEntType, EEntType[]> = new Map();
         topo_ent_types_map.set(EEntType.POINT, [EEntType.POSI, EEntType.VERT, EEntType.POINT]);
@@ -578,31 +652,32 @@ export class GIModelComparator {
         topo_ent_types_map.set(EEntType.PGON, [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PGON]);
         // create fprints of topological entities
         for (const topo_ent_type of topo_ent_types_map.get(from_ent_type)) {
-            const topo_fprints: string[] = [];
+            const ent_type_str: string = EEntTypeStr[topo_ent_type];
             // get the attribute names array that will be used for matching
             const attrib_names: string[] = attrib_names_map.get(topo_ent_type);
             if (attrib_names !== undefined) {
                 // sort the attrib names
                 attrib_names.sort();
                 const sub_ents_i: number[] = this._model.geom.nav.navAnyToAny(from_ent_type, topo_ent_type, index);
-                // for each attrib, make a finderprint
+                // for each attrib, make a fingerprint
                 for (const attrib_name of attrib_names) {
-                    for (const sub_ent_i of sub_ents_i) {
-                        const attrib_value: TAttribDataTypes =
-                            this._model.attribs.query.getAttribVal(topo_ent_type, attrib_name, sub_ent_i);
-                        if (attrib_value !== null && attrib_value !== undefined) {
-                            topo_fprints.push(this.getAttribValFprint(attrib_value));
+                    if (this._model.attribs.query.hasAttrib(topo_ent_type, attrib_name)) {
+                        const topo_fprints: string[] = [];
+                        for (const sub_ent_i of sub_ents_i) {
+                            const attrib_value: TAttribDataTypes =
+                                this._model.attribs.query.getAttribVal(topo_ent_type, attrib_name, sub_ent_i);
+                            if (attrib_value !== null && attrib_value !== undefined) {
+                                topo_fprints.push(this.getAttribValFprint(attrib_value));
+                            }
                         }
+                        fprints.set(ent_type_str + ':' + attrib_name, topo_fprints.join('#'));
                     }
                 }
-                // the order is significant, so we do not sort
-                // any differences in order (e.g. holes) will already be dealt with by normalization
-                fprints.push(topo_fprints.join('@'));
             }
         }
-        // return the final fprint string for the object
+        // return the final fprint maps for the object
         // no need to sort, the order is predefined
-        return fprints.join('#');
+        return fprints;
     }
     /**
      * Get one fprint for all collections

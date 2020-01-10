@@ -347,7 +347,7 @@ export class SaveFileComponent {
         } catch (ex) {
             console.log('Unable to save file to local storage');
         }
-
+        console.log()
         DownloadUtils.downloadFile(downloadResult.name, blob);
         this.dataService.file.name = 'Untitled';
     }
@@ -361,7 +361,7 @@ export class SaveFileComponent {
             settings: {}
         };
         newFile.flowchart.name = this.dataService.flowchart.name;
-
+        newFile.settings = localStorage.getItem('mpm_settings');
         const splitDesc = this.dataService.flowchart.description.split('\n');
         let i = 0;
         while (i < splitDesc.length) {

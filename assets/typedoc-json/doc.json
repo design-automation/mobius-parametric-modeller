@@ -36180,7 +36180,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/util.ts",
-							"line": 185,
+							"line": 195,
 							"character": 26
 						}
 					]
@@ -36201,7 +36201,7 @@
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Compare the GI data in this model to the GI data in another model.\n~\nFor specifying the location of the GI Model, you can either specify a URL,\nor the name of a file in LocalStorage.\nIn the latter case, you do not specify a path, you just specify the file name, e.g. 'my_model.gi'",
+								"shortText": "Compare the GI data in this model to the GI data in another model.\n~\nIf method = subset, then this model is the answer, and the other model is the submitted model.\nIt will check that all entites in this model also exist in the other model.\n~\nIf method = superset, then this model is the submitted model, and the other model is the answer model.\nIt will check that all entites in the other model also exist in this model.\n~\nFor specifying the location of the GI Model, you can either specify a URL,\nor the name of a file in LocalStorage.\nIn the latter case, you do not specify a path, you just specify the file name, e.g. 'my_model.gi'",
 								"returns": "Text that summarises the comparison between the two models.\n"
 							},
 							"parameters": [
@@ -36257,7 +36257,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/util.ts",
-							"line": 159,
+							"line": 165,
 							"character": 28
 						}
 					]
@@ -40823,7 +40823,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribs.ts",
-									"line": 42,
+									"line": 41,
 									"character": 37
 								}
 							]
@@ -40841,7 +40841,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribs.ts",
-									"line": 23,
+									"line": 22,
 									"character": 18
 								}
 							],
@@ -40864,7 +40864,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribs.ts",
-									"line": 39,
+									"line": 38,
 									"character": 14
 								}
 							],
@@ -40887,7 +40887,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribs.ts",
-									"line": 38,
+									"line": 37,
 									"character": 13
 								}
 							],
@@ -40910,7 +40910,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribs.ts",
-									"line": 40,
+									"line": 39,
 									"character": 17
 								}
 							],
@@ -40933,7 +40933,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribs.ts",
-									"line": 41,
+									"line": 40,
 									"character": 16
 								}
 							],
@@ -40956,7 +40956,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribs.ts",
-									"line": 42,
+									"line": 41,
 									"character": 18
 								}
 							],
@@ -41027,7 +41027,7 @@
 															"sources": [
 																{
 																	"fileName": "libs/geo-info/GIAttribs.ts",
-																	"line": 67,
+																	"line": 66,
 																	"character": 80
 																}
 															],
@@ -41050,7 +41050,7 @@
 															"sources": [
 																{
 																	"fileName": "libs/geo-info/GIAttribs.ts",
-																	"line": 67,
+																	"line": 66,
 																	"character": 48
 																}
 															],
@@ -41070,7 +41070,7 @@
 															"sources": [
 																{
 																	"fileName": "libs/geo-info/GIAttribs.ts",
-																	"line": 67,
+																	"line": 66,
 																	"character": 63
 																}
 															],
@@ -41094,7 +41094,7 @@
 													"sources": [
 														{
 															"fileName": "libs/geo-info/GIAttribs.ts",
-															"line": 67,
+															"line": 66,
 															"character": 41
 														}
 													]
@@ -41111,7 +41111,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribs.ts",
-									"line": 67,
+									"line": 66,
 									"character": 11
 								}
 							]
@@ -41139,7 +41139,7 @@
 									"sources": [
 										{
 											"fileName": "libs/geo-info/GIAttribs.ts",
-											"line": 28,
+											"line": 27,
 											"character": 10
 										}
 									],
@@ -41171,7 +41171,7 @@
 									"sources": [
 										{
 											"fileName": "libs/geo-info/GIAttribs.ts",
-											"line": 30,
+											"line": 29,
 											"character": 10
 										}
 									],
@@ -41203,7 +41203,7 @@
 									"sources": [
 										{
 											"fileName": "libs/geo-info/GIAttribs.ts",
-											"line": 27,
+											"line": 26,
 											"character": 10
 										}
 									],
@@ -41235,7 +41235,7 @@
 									"sources": [
 										{
 											"fileName": "libs/geo-info/GIAttribs.ts",
-											"line": 29,
+											"line": 28,
 											"character": 10
 										}
 									],
@@ -41267,7 +41267,7 @@
 									"sources": [
 										{
 											"fileName": "libs/geo-info/GIAttribs.ts",
-											"line": 34,
+											"line": 33,
 											"character": 10
 										}
 									],
@@ -41299,7 +41299,7 @@
 									"sources": [
 										{
 											"fileName": "libs/geo-info/GIAttribs.ts",
-											"line": 35,
+											"line": 34,
 											"character": 10
 										}
 									],
@@ -41331,7 +41331,7 @@
 									"sources": [
 										{
 											"fileName": "libs/geo-info/GIAttribs.ts",
-											"line": 33,
+											"line": 32,
 											"character": 10
 										}
 									],
@@ -41363,7 +41363,7 @@
 									"sources": [
 										{
 											"fileName": "libs/geo-info/GIAttribs.ts",
-											"line": 32,
+											"line": 31,
 											"character": 10
 										}
 									],
@@ -41395,7 +41395,7 @@
 									"sources": [
 										{
 											"fileName": "libs/geo-info/GIAttribs.ts",
-											"line": 26,
+											"line": 25,
 											"character": 10
 										}
 									],
@@ -41427,7 +41427,7 @@
 									"sources": [
 										{
 											"fileName": "libs/geo-info/GIAttribs.ts",
-											"line": 31,
+											"line": 30,
 											"character": 10
 										}
 									],
@@ -41469,7 +41469,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribs.ts",
-									"line": 25,
+									"line": 24,
 									"character": 24
 								}
 							],
@@ -41517,7 +41517,7 @@
 					"sources": [
 						{
 							"fileName": "libs/geo-info/GIAttribs.ts",
-							"line": 22,
+							"line": 21,
 							"character": 22
 						}
 					]
@@ -41559,7 +41559,7 @@
 					"sources": [
 						{
 							"fileName": "libs/geo-info/GIAttribs.ts",
-							"line": 10,
+							"line": 9,
 							"character": 17
 						}
 					]
@@ -57753,7 +57753,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModelComparator.ts",
-									"line": 7,
+									"line": 8,
 									"character": 28
 								}
 							]
@@ -57771,7 +57771,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModelComparator.ts",
-									"line": 7,
+									"line": 8,
 									"character": 18
 								}
 							],
@@ -57840,7 +57840,7 @@
 															"sources": [
 																{
 																	"fileName": "libs/geo-info/GIModelComparator.ts",
-																	"line": 380,
+																	"line": 452,
 																	"character": 95
 																}
 															],
@@ -57863,7 +57863,7 @@
 															"sources": [
 																{
 																	"fileName": "libs/geo-info/GIModelComparator.ts",
-																	"line": 380,
+																	"line": 452,
 																	"character": 63
 																}
 															],
@@ -57883,7 +57883,7 @@
 															"sources": [
 																{
 																	"fileName": "libs/geo-info/GIModelComparator.ts",
-																	"line": 380,
+																	"line": 452,
 																	"character": 78
 																}
 															],
@@ -57907,7 +57907,7 @@
 													"sources": [
 														{
 															"fileName": "libs/geo-info/GIModelComparator.ts",
-															"line": 380,
+															"line": 452,
 															"character": 56
 														}
 													]
@@ -57986,7 +57986,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModelComparator.ts",
-									"line": 380,
+									"line": 452,
 									"character": 26
 								}
 							]
@@ -58009,7 +58009,7 @@
 									"kindString": "Call signature",
 									"flags": {},
 									"comment": {
-										"shortText": "Compares this model and another model.\n~\nThis is the answer model.\nThe other model is the submitted model.\n~\nBoth models will be modified in the process.\n~"
+										"shortText": "Compares this model and another model.\n~\nThis is the answer model.\nThe other model is the submitted model.\n~\nThis method checks that every entity in the answer model is also in the submitted model.\n~\nBoth models will be modified in the process.\n~"
 									},
 									"parameters": [
 										{
@@ -58081,7 +58081,7 @@
 													"sources": [
 														{
 															"fileName": "libs/geo-info/GIModelComparator.ts",
-															"line": 27,
+															"line": 30,
 															"character": 67
 														}
 													],
@@ -58101,7 +58101,7 @@
 													"sources": [
 														{
 															"fileName": "libs/geo-info/GIModelComparator.ts",
-															"line": 27,
+															"line": 30,
 															"character": 20
 														}
 													],
@@ -58121,7 +58121,7 @@
 													"sources": [
 														{
 															"fileName": "libs/geo-info/GIModelComparator.ts",
-															"line": 27,
+															"line": 30,
 															"character": 35
 														}
 													],
@@ -58141,7 +58141,7 @@
 													"sources": [
 														{
 															"fileName": "libs/geo-info/GIModelComparator.ts",
-															"line": 27,
+															"line": 30,
 															"character": 50
 														}
 													],
@@ -58166,7 +58166,7 @@
 											"sources": [
 												{
 													"fileName": "libs/geo-info/GIModelComparator.ts",
-													"line": 26,
+													"line": 29,
 													"character": 117
 												}
 											]
@@ -58177,7 +58177,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModelComparator.ts",
-									"line": 26,
+									"line": 29,
 									"character": 18
 								}
 							]
@@ -58241,7 +58241,7 @@
 															"sources": [
 																{
 																	"fileName": "libs/geo-info/GIModelComparator.ts",
-																	"line": 295,
+																	"line": 366,
 																	"character": 93
 																}
 															],
@@ -58264,7 +58264,7 @@
 															"sources": [
 																{
 																	"fileName": "libs/geo-info/GIModelComparator.ts",
-																	"line": 295,
+																	"line": 366,
 																	"character": 61
 																}
 															],
@@ -58284,7 +58284,7 @@
 															"sources": [
 																{
 																	"fileName": "libs/geo-info/GIModelComparator.ts",
-																	"line": 295,
+																	"line": 366,
 																	"character": 76
 																}
 															],
@@ -58308,7 +58308,7 @@
 													"sources": [
 														{
 															"fileName": "libs/geo-info/GIModelComparator.ts",
-															"line": 295,
+															"line": 366,
 															"character": 54
 														}
 													]
@@ -58387,7 +58387,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModelComparator.ts",
-									"line": 295,
+									"line": 366,
 									"character": 24
 								}
 							]
@@ -58410,7 +58410,7 @@
 									"kindString": "Call signature",
 									"flags": {},
 									"comment": {
-										"shortText": "Compare the model attribs"
+										"shortText": "Compare the model attribs\nAt the moment, this seems to only compare the material attribute in the model"
 									},
 									"parameters": [
 										{
@@ -58451,7 +58451,7 @@
 															"sources": [
 																{
 																	"fileName": "libs/geo-info/GIModelComparator.ts",
-																	"line": 336,
+																	"line": 408,
 																	"character": 100
 																}
 															],
@@ -58474,7 +58474,7 @@
 															"sources": [
 																{
 																	"fileName": "libs/geo-info/GIModelComparator.ts",
-																	"line": 336,
+																	"line": 408,
 																	"character": 68
 																}
 															],
@@ -58494,7 +58494,7 @@
 															"sources": [
 																{
 																	"fileName": "libs/geo-info/GIModelComparator.ts",
-																	"line": 336,
+																	"line": 408,
 																	"character": 83
 																}
 															],
@@ -58518,7 +58518,7 @@
 													"sources": [
 														{
 															"fileName": "libs/geo-info/GIModelComparator.ts",
-															"line": 336,
+															"line": 408,
 															"character": 61
 														}
 													]
@@ -58535,7 +58535,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModelComparator.ts",
-									"line": 336,
+									"line": 408,
 									"character": 31
 								}
 							]
@@ -58558,7 +58558,7 @@
 									"kindString": "Call signature",
 									"flags": {},
 									"comment": {
-										"shortText": "Compare the objects"
+										"shortText": "Compare the objects.\n~\nThis will also check the following attributes:\nFor posis, it will check the xyz attribute.\nFor vertices, it will check the rgb attribute, if such an attribute exists in the answer model.\nFor polygons, it will check the material attribute, if such an attribute exists in the answer model."
 									},
 									"parameters": [
 										{
@@ -58599,7 +58599,7 @@
 															"sources": [
 																{
 																	"fileName": "libs/geo-info/GIModelComparator.ts",
-																	"line": 218,
+																	"line": 250,
 																	"character": 92
 																}
 															],
@@ -58622,7 +58622,7 @@
 															"sources": [
 																{
 																	"fileName": "libs/geo-info/GIModelComparator.ts",
-																	"line": 218,
+																	"line": 250,
 																	"character": 60
 																}
 															],
@@ -58642,7 +58642,7 @@
 															"sources": [
 																{
 																	"fileName": "libs/geo-info/GIModelComparator.ts",
-																	"line": 218,
+																	"line": 250,
 																	"character": 75
 																}
 															],
@@ -58666,7 +58666,7 @@
 													"sources": [
 														{
 															"fileName": "libs/geo-info/GIModelComparator.ts",
-															"line": 218,
+															"line": 250,
 															"character": 53
 														}
 													]
@@ -58734,7 +58734,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModelComparator.ts",
-									"line": 218,
+									"line": 250,
 									"character": 23
 								}
 							]
@@ -58781,7 +58781,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModelComparator.ts",
-									"line": 691,
+									"line": 766,
 									"character": 30
 								}
 							]
@@ -58874,7 +58874,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModelComparator.ts",
-									"line": 652,
+									"line": 727,
 									"character": 25
 								}
 							]
@@ -58959,7 +58959,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModelComparator.ts",
-									"line": 610,
+									"line": 685,
 									"character": 26
 								}
 							]
@@ -58982,7 +58982,7 @@
 									"kindString": "Call signature",
 									"flags": {},
 									"comment": {
-										"shortText": "Get a fprint of one geometric entity: point, polyline, polygon\nReturns a string, something like '#a@b@c#x@y@z'"
+										"shortText": "Get a fprint of one geometric entity: point, polyline, polygon\nReturns a map of strings.\nKeys are attribtes, like this 'ps:xyz'.\nValues are fprints, as strings."
 									},
 									"parameters": [
 										{
@@ -59035,15 +59035,25 @@
 										}
 									],
 									"type": {
-										"type": "intrinsic",
-										"name": "string"
+										"type": "reference",
+										"name": "Map",
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											},
+											{
+												"type": "intrinsic",
+												"name": "string"
+											}
+										]
 									}
 								}
 							],
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModelComparator.ts",
-									"line": 572,
+									"line": 646,
 									"character": 24
 								}
 							]
@@ -59066,7 +59076,7 @@
 									"kindString": "Call signature",
 									"flags": {},
 									"comment": {
-										"shortText": "Get a fprint of all geometric entities of a certain type in the model.\nThis returns a fprint string, and the entity indexes\nThe two arrays are in the same order"
+										"shortText": "Get a fprint of all geometric entities of a certain type in the model.\nThis returns a fprint array, and the entity indexes\nThe two arrays are in the same order"
 									},
 									"parameters": [
 										{
@@ -59111,11 +59121,24 @@
 										"type": "tuple",
 										"elements": [
 											{
-												"type": "array",
-												"elementType": {
-													"type": "intrinsic",
-													"name": "string"
-												}
+												"type": "reference",
+												"name": "Array",
+												"typeArguments": [
+													{
+														"type": "reference",
+														"name": "Map",
+														"typeArguments": [
+															{
+																"type": "intrinsic",
+																"name": "string"
+															},
+															{
+																"type": "intrinsic",
+																"name": "string"
+															}
+														]
+													}
+												]
 											},
 											{
 												"type": "array",
@@ -59131,7 +59154,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModelComparator.ts",
-									"line": 559,
+									"line": 631,
 									"character": 25
 								}
 							]
@@ -59178,7 +59201,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModelComparator.ts",
-									"line": 97,
+									"line": 112,
 									"character": 27
 								}
 							]
@@ -59212,7 +59235,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModelComparator.ts",
-									"line": 88,
+									"line": 103,
 									"character": 16
 								}
 							]
@@ -59272,7 +59295,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModelComparator.ts",
-									"line": 138,
+									"line": 153,
 									"character": 27
 								}
 							]
@@ -59332,7 +59355,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModelComparator.ts",
-									"line": 156,
+									"line": 183,
 									"character": 21
 								}
 							]
@@ -59392,7 +59415,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModelComparator.ts",
-									"line": 122,
+									"line": 137,
 									"character": 25
 								}
 							]
@@ -59475,7 +59498,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModelComparator.ts",
-									"line": 175,
+									"line": 202,
 									"character": 25
 								}
 							]
@@ -59553,7 +59576,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModelComparator.ts",
-									"line": 205,
+									"line": 232,
 									"character": 21
 								}
 							]
@@ -59601,7 +59624,7 @@
 					"sources": [
 						{
 							"fileName": "libs/geo-info/GIModelComparator.ts",
-							"line": 6,
+							"line": 7,
 							"character": 30
 						}
 					]

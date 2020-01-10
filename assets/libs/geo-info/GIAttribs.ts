@@ -5,7 +5,6 @@ import { GIModel } from './GIModel';
 import { EEntType, EAttribNames,  IAttribsData, EAttribDataTypeStrs, IAttribsMaps } from './common';
 import { GIAttribsIO } from './GIAttribsIO';
 import { GIAttribsModify } from './GIAttribModify';
-import { strictEqual } from 'assert';
 
 function hashCode(s: string) {
     let h: number;

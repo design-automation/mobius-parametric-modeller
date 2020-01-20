@@ -1154,7 +1154,6 @@ export class DataThreejs {
     }
 
     public disposeWebGL() {
-        console.log('this._renderer.info', this._renderer.info.memory.geometries);
         this.sceneObjs.forEach(obj => {
             if (obj['dispose']) { obj['dispose'](); }
             this._scene.remove(obj);
@@ -1164,7 +1163,6 @@ export class DataThreejs {
             geom.dispose();
         });
         this.BufferGeoms = [];
-        console.log('this._renderer.info', this._renderer.info.memory.geometries);
     }
 
     public lookAtObj() {

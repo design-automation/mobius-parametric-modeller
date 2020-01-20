@@ -1103,7 +1103,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             this.dataService.selected_ents.get(ent_type_str).delete(ent_id);
             this.unselectLabel(ent_id, ent_type_str);
         }
-        console.log('.....',event)
         this.refreshTable(event);
     }
 

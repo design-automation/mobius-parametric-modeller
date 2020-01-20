@@ -216,7 +216,7 @@ export class CodeUtils {
                 break;
             case ProcedureTypes.LocalFuncCall:
                 const lArgsVals: any = [];
-                console.log(functionName)
+                // console.log(functionName)
                 // let urlCheck = false;
                 if (isMainFlowchart) {
                     usedFunctions.push(prod.meta.name);

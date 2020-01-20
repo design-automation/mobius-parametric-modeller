@@ -45,6 +45,10 @@ function printFunc(_console, name, value){
         let __list_check__ = false;
         let __value_strings__ = [];
         for (const __item__ of value) {
+            if (!__item__) {
+                __value_strings__.push('' + __item__);
+                continue;
+            }
             if (__item__.constructor === [].constructor || __item__.constructor === {}.constructor) {
                 __list_check__ = true;
             }
@@ -63,6 +67,10 @@ function printFunc(_console, name, value){
         let __value_strings__ = [];
         for (const __item__ in value) {
             const __value__ = value[__item__];
+            if (!__value__) {
+                __value_strings__.push('\\"' + __item__ + '\\"' + ': ' + __value__);
+                continue;
+            }
             if (__value__.constructor === [].constructor || __value__.constructor === {}.constructor) {
                 __list_check__ = true;
             }

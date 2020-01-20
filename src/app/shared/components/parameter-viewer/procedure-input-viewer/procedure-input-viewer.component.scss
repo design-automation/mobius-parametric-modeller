@@ -44,6 +44,13 @@
         position: relative;
         bottom: 7px;
     }
+    .input-const-name{
+        width: 100px;
+        text-overflow: ellipsis;
+    }
+    .input-const-colon{
+        width: 3px;
+    }
 }
 
 input{

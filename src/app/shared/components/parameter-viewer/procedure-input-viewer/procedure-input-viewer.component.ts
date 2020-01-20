@@ -38,7 +38,7 @@ export class ProcedureInputViewerComponent implements OnDestroy {
             val = val.substring(1, val.length - 1);
         }
         // return val.replace(/_/g, ' ') + ':';
-        return val + ':';
+        return val;
     }
 
     inputSize(val) {

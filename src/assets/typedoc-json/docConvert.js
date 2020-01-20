@@ -72,20 +72,23 @@ const doc = dc;
 const docs = [];
 
 for (const mod of doc.children) {
-    let modName = mod.name.split('/');
+    let modName = mod.name.replace(/"/g, '').replace(/'/g, '').split('/');
+    const coreIndex = modName.indexOf('core');
+    if (modName.length < 3 || coreIndex === -1  || modName[coreIndex + 1] !== 'modules') { continue; }
     modName = modName[modName.length - 1];
-    if (modName.substr(0, 1) === '"' || modName.substr(0, 1) === '\'') {
-        modName = modName.substr(1, modName.length - 2);
-    } else {
-        modName = modName.substr(0, modName.length - 1);
-    }
-    if (modName.substr(0, 1) === '_' || modName === 'index') {
+    // if (modName.substr(0, 1) === '"' || modName.substr(0, 1) === '\'') {
+    //     modName = modName.substr(1, modName.length - 2);
+    // } else {
+    //     modName = modName.substr(0, modName.length - 1);
+    // }
+    if (modName.substr(0, 1) === '_' || modName === 'index' || modName === 'categorization') {
         continue;
     }
     const moduleDoc = {};
     moduleDoc['id'] = mod.id;
     moduleDoc['name'] = modName;
     moduleDoc['func'] = [];
+    if (!mod.children) { continue; }
     for (const func of mod.children) {
         if (func.name[0] === '_') { continue; }
         const fn = {};

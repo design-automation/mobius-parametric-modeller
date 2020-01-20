@@ -78,7 +78,11 @@ export class SaveFileComponent {
         //     node.output.value = mod.output;
         // }
         const downloadResult = SaveFileComponent.fileDownloadString(f);
-        SaveFileComponent.saveToLocalStorage(downloadResult.name, downloadResult.file);
+        let fileName = f.flowchart.name;
+        if (fileName.slice(-4) !== '.mob') {
+            fileName += '.mob';
+        }
+        SaveFileComponent.saveToLocalStorage(fileName, downloadResult.file);
     }
 
     static saveToLocalStorage(name: string, file: string) {
@@ -343,7 +347,7 @@ export class SaveFileComponent {
         } catch (ex) {
             console.log('Unable to save file to local storage');
         }
-
+        console.log()
         DownloadUtils.downloadFile(downloadResult.name, blob);
         this.dataService.file.name = 'Untitled';
     }
@@ -357,7 +361,7 @@ export class SaveFileComponent {
             settings: {}
         };
         newFile.flowchart.name = this.dataService.flowchart.name;
-
+        newFile.settings = localStorage.getItem('mpm_settings');
         const splitDesc = this.dataService.flowchart.description.split('\n');
         let i = 0;
         while (i < splitDesc.length) {
@@ -389,8 +393,8 @@ export class SaveFileComponent {
 
         const modelVal = '\'__model_data__' + this.dataService.flowchart.nodes[this.dataService.flowchart.nodes.length - 1].model + '\'';
         NodeUtils.add_procedure(node, ProcedureTypes.MainFunction, {
-            'module': 'util',
-            'name': 'ImportData',
+            'module': 'io',
+            'name': 'ImportToModel',
             'argCount': 3,
             'args': [
                 {'name': '__model__'},

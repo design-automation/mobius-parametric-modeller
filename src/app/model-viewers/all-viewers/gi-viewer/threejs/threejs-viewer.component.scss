@@ -188,6 +188,21 @@ button{
 }
 
 
+#credit{
+    width: 40px;
+    height: 30px;
+    font-size:$fsize1;
+    position: absolute;
+    bottom:10px;
+    right:0px; 
+    text-align:center;
+    color: $color1;
+    background-color:transparent;
+    border:0;
+    &:hover {
+        color:$selected-color;
+    }
+}
 
 .visible{
     color: grey;

@@ -185,6 +185,14 @@ export class DataThreejs {
      * @param container
      */
     public addGeometry(model: GIModel, container): void {
+        if (this.dataService.viewerSettingsUpdated) {
+            this.settings = JSON.parse(localStorage.getItem('mpm_settings'));
+            this._camera.position.copy(this.settings.camera.pos);
+            this._controls.target.copy(this.settings.camera.target);
+            this._camera.updateProjectionMatrix();
+            this._controls.update();
+            this.dataService.viewerSettingsUpdated = false;
+        }
         if (this.settings.background.show) {
             this.loadBackground(this.settings.background.background_set);
         } else {
@@ -257,7 +265,7 @@ export class DataThreejs {
         }
 
         this.allObjs = this.getAllObjs();
-
+        console.log(this.allObjs)
         if (this.settings.ambient_light.show) {
             this._addAmbientLight();
         }
@@ -269,34 +277,35 @@ export class DataThreejs {
         }
 
 
-        const center = new Vector3(0, 0, 0); // allObjs.center;
-        this.axes_pos.x = center.x;
-        this.axes_pos.y = center.y;
+        // const center = new Vector3(0, 0, 0); // allObjs.center;
+        // this.axes_pos.x = center.x;
+        // this.axes_pos.y = center.y;
         let grid_pos = this.settings.grid.pos;
         if (!grid_pos) {
             grid_pos = new Vector3(0, 0, 0);
         }
         this.grid.position.set(grid_pos.x, grid_pos.y, 0);
+        this.axesHelper.position.set(grid_pos.x, grid_pos.y, 0.01);
 
-        if (threejs_data.posis_indices.length !== 0) {
-            if (this.dataService.newFlowchart) {
-                this.dataService.newFlowchart = false;
-                this.origin = new Vector3(center.x, center.y, 0);
-                this.settings.camera.target = this.origin ;
-                localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
-                this.axesHelper.position.set(center.x, center.y, 0);
-            } else {
-                this.axesHelper.position.set(this.origin.x, this.origin.y, 0);
-            }
-            // const target = new Vector3(this.settings.camera.target.x, this.settings.camera.target.y, this.settings.camera.target.z);
-            // this._camera.position.x += target.x;
-            // this._camera.position.y += target.y;
-            // this._camera.position.z += target.z;
-            // this._camera.lookAt(target);
-            // this._camera.updateProjectionMatrix();
-            // this._controls.target.set(target.x, target.y, target.z);
-            // this._controls.update();
-        }
+        // if (threejs_data.posis_indices.length !== 0) {
+        //     if (this.dataService.newFlowchart) {
+        //         this.dataService.newFlowchart = false;
+        //         this.origin = new Vector3(center.x, center.y, 0);
+        //         // this.settings.camera.target = this.origin ;
+        //         localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
+        //         this.axesHelper.position.set(center.x, center.y, 0.01);
+        //     } else {
+        //         this.axesHelper.position.set(grid_pos.x, grid_pos.y, 0.01);
+        //     }
+        //     // const target = new Vector3(this.settings.camera.target.x, this.settings.camera.target.y, this.settings.camera.target.z);
+        //     // this._camera.position.x += target.x;
+        //     // this._camera.position.y += target.y;
+        //     // this._camera.position.z += target.z;
+        //     // this._camera.lookAt(target);
+        //     // this._camera.updateProjectionMatrix();
+        //     // this._controls.target.set(target.x, target.y, target.z);
+        //     // this._controls.update();
+        // }
 
         setTimeout(() => {
             let old = document.getElementById('hud');
@@ -600,7 +609,7 @@ export class DataThreejs {
         }
     }
 
-    public selectObjVetex(parent_ent_id: string, ent_id: string, positions, container, labelText = null) {
+    public selectObjvertex(parent_ent_id: string, ent_id: string, positions, container, labelText = null) {
         const bg = this.initBufferPoint(positions, null, null, this.settings.colors.vertex_s, this.settings.positions.size + 0.1);
         if (parent_ent_id === null) {
             const point = new THREE.Points(bg.geom, bg.mat);
@@ -905,13 +914,16 @@ export class DataThreejs {
             }
         }
         this.axesHelper = new THREE.AxesHelper(size);
+        this.axesHelper.geometry['attributes'].color = new THREE.Int16BufferAttribute(
+            [1, 0, 0, 1, 0, 0,
+             0, 1, 0, 0, 1, 0,
+             0, 0, 1, 0, 0, 1], 3 );
         this.axesHelper.visible = this.settings.axes.show;
         if (this.axesHelper.visible) {
             this.axesHelper.name = 'AxesHelper';
-            this.axesHelper.position.set(this.axes_pos.x, this.axes_pos.y, 0);
+            this.axesHelper.position.set(this.axes_pos.x, this.axes_pos.y, 0.01);
             this._scene.add(this.axesHelper);
         }
-        // this.axesHelper.position.set(0, 0, 0);
     }
     /**
      * Draws a grid on the XY plane.
@@ -1185,9 +1197,6 @@ export class DataThreejs {
             center = this._scene.position;
             radius = 10;
         }
-        // set grid and axeshelper to center of the objs
-        // this.grid.position.set(center.x, center.y, 0);
-        // this.axesHelper.position.set(center.x, center.y, 0);
 
         this.cameraLookat(center, radius);
     }
@@ -1374,6 +1383,7 @@ export class DataThreejs {
         this._scene.background = background;
         // this._renderer.render(this._scene, this._camera);
     }
+
 }
 
 /**
@@ -1398,10 +1408,16 @@ interface Settings {
         background_set: number
     };
     positions: { show: boolean, size: number };
+    wireframe: { show: boolean };
     tjs_summary: { show: boolean };
     gi_summary: { show: boolean };
-    wireframe: { show: boolean };
-    camera: { pos: Vector3, target: Vector3 };
+    camera: {
+        pos: Vector3,
+        pos_x: number,
+        pos_y: number,
+        pos_z: number,
+        target: Vector3
+    };
     colors: {
         viewer_bg: string,
         position: string,
@@ -1443,4 +1459,9 @@ interface Settings {
         color: string,
         shininess: number
     };
+    select: {
+        selector: object,
+        tab: number
+    };
+    version: string;
 }

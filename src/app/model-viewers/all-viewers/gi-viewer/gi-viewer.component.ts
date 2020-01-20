@@ -57,9 +57,7 @@ export class GIViewerComponent implements OnInit {
         // const devMode = isDevMode();
         const devMode = false;
         if (previous_settings === null ||
-            this.hasDiffProps(previous_settings, this.settings) ||
-            this.settings.version !== previous_settings.version ||
-            devMode) {
+            this.hasDiffProps(previous_settings, this.settings)) {
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
         }
     }
@@ -89,6 +87,21 @@ export class GIViewerComponent implements OnInit {
     private getSettings() {
         if (localStorage.getItem('mpm_settings') !== null) {
             this.settings = JSON.parse(localStorage.getItem('mpm_settings'));
+        }
+    }
+
+    threejsAction(action: {'type': string, 'event': any}) {
+        // <threejs-viewer [model]='data'
+        // (eventClicked)="childEventClicked($event)"
+        // [attr_table_select]='attrTableSelect'
+        // [selectSwitch] = 'selectSwitchOnOff'
+        // [attribLabel] = 'attribLabelVal'
+        // (resetTableEvent) = "resetTable()"
+        // ></threejs-viewer>
+        if (action.type === 'resetTableEvent') {
+            this.resetTable();
+        } else if (action.type === 'eventClicked') {
+            this.childEventClicked(action.event);
         }
     }
 

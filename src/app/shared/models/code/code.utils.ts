@@ -1,7 +1,6 @@
 import { INode } from '@models/node';
 import { IProcedure, ProcedureTypes, IFunction } from '@models/procedure';
 import { IPortInput, InputType } from '@models/port';
-import { pythonicReplace } from '@shared/parser';
 import { Observable } from 'rxjs';
 import * as circularJSON from 'circular-json';
 import { _parameterTypes } from '@assets/core/_parameterTypes';
@@ -216,7 +215,6 @@ export class CodeUtils {
                 break;
             case ProcedureTypes.LocalFuncCall:
                 const lArgsVals: any = [];
-                // console.log(functionName)
                 // let urlCheck = false;
                 if (isMainFlowchart) {
                     usedFunctions.push(prod.meta.name);
@@ -292,7 +290,7 @@ export class CodeUtils {
 
         }
 
-        if (isMainFlowchart && prod.print && prod.args[0].jsValue) {
+        if (isMainFlowchart && prod.print && prod.args[0].name !== '__none__' && prod.args[0].jsValue) {
             // const repGet = prod.args[0].jsValue;
             const repGet = this.repGetAttrib(prod.args[0].jsValue);
             codeStr.push(`printFunc(__params__.console,'${prod.args[0].value}', ${repGet});`);
@@ -503,7 +501,6 @@ export class CodeUtils {
                                     functionName?: string, usedFunctions?: string[]): [string[][], string] {
         node.hasError = false;
         let codeStr = [];
-        const varsDefined: string[] = [];
 
         // reset terminate check to false at start node (only in main flowchart's start node).
         // for every node after that, if terminate check is true, do not execute the node.
@@ -526,11 +523,18 @@ export class CodeUtils {
         }
 
         codeStr.push(`__modules__.${_parameterTypes.preprocess}( __params__.model);`);
+
+        let varsDefined: string[];
         // procedure
         for (const prod of node.localFunc) {
+            varsDefined = [];
+            for (const arg of prod.args.slice(1)) {
+                varsDefined.push(arg.jsValue);
+            }
             // if (node.type === 'start' && !isMainFlowchart) { break; }
             codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName, usedFunctions));
         }
+        varsDefined = [];
         for (const prod of node.procedure) {
             // if (node.type === 'start' && !isMainFlowchart) { break; }
             codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName, usedFunctions));

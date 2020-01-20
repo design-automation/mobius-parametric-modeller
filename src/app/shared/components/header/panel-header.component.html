@@ -117,6 +117,8 @@
         </div>
     </div>
 </div>
+<button id='openCredits' (click)="openHeaderDialog($event, 'credits')" title="credits"></button>
+
 <dialog id='headerDialog'>
     <div class='genUrlDialog' *ngIf='checkDialog("url")'>
         <p>To publish your model, please upload your Möbius (.mob) file to an online file server to allows
@@ -191,8 +193,6 @@
         <p>Mobius Settings:</p>
         <br>
         <div class='settingLine'>
-            <div class='textdiv'>Execute on file load:</div>
-            
             <div class='div--chbox'>
                 <input id='settings-execute' 
                 name='settings-execute' 
@@ -200,11 +200,12 @@
                 [checked]='checkSetting("execute", true)'>
                 <label for='settings-execute'></label>
             </div>
+
+            <div class='textdiv'>Execute on file load:</div>
+            
         </div>
         <br>
         <div class='settingLine'>
-            <div class='textdiv'>Debug Mode:</div>
-            
             <div class='div--chbox'>
                 <input id='settings-debug' 
                 name='settings-debug' 
@@ -212,16 +213,16 @@
                 [checked]='checkSetting("debug", true)'>
                 <label for='settings-debug'></label>
             </div>
+            <div class='textdiv'>Debug Mode</div>
         </div>
         <br>
         <br>
         <div class='settingLine'>
-            <div class='textdiv'>Display Mobius Functions:</div>
+            <div class='textdiv'>Display Mobius Functions</div>
         </div>
         <br>
         <ng-container *ngFor='let category of func_categories'>
             <div class='settingLine subsetting'>
-                <div class='textdiv'>{{category}}</div>
                 <div class='div--chbox'>
                     <input id='_func_{{category}}' 
                     name='_func_{{category}}' 
@@ -229,6 +230,7 @@
                     [checked]='checkSetting("_func_" + category, true)'>
                     <label for='_func_{{category}}'></label>
                 </div>
+                <div class='textdiv'>{{category}}</div>
             </div>
             <br>
         </ng-container>
@@ -238,5 +240,15 @@
         <br>
         <button class='settingsButton' (click)="updateSettings($event, backup)">Apply</button>
         <button class='settingsButton' (click)="closeDialog()">Cancel</button>
+    </div>
+    <div class='creditsDialog' *ngIf='checkDialog("credits")'>
+        <p>Credits to: </p>
+        <br>
+        <p>Skybox background:</p>
+        <p>&nbsp; _ "stars" by Quinton Reeves</p>
+        <p>&nbsp; _ "sunsetflat" by LedIris (07/08/2009)</p>
+        <p>&nbsp; _ "skyhigh" by Pieter Verhoeven</p>
+        <p>&nbsp; _ "interstellar", "miramar", and "stormydays" by Jockum "hipshot" Skoglund</p>
+        <p>&nbsp; &nbsp; &nbsp; &nbsp; hipshot@zfight.com / www.zfight.com</p>
     </div>
 </dialog>

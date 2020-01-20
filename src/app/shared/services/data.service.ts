@@ -5,13 +5,14 @@ import { INode } from '@models/node';
 import { IProcedure } from '@models/procedure';
 import { IEdge } from '@models/edge';
 import { Subject } from 'rxjs';
+import { VERSION } from '@env/version';
 
 @Injectable()
 export class DataService {
     private static _data: IMobius = {
         name: 'Untitled',
         author: 'new_user',
-        version: 1,
+        version: VERSION.version,
         flowchart: FlowchartUtils.newflowchart(),
         settings: {}
     };
@@ -52,6 +53,7 @@ export class DataService {
     private static _dialogType: string;
 
     private static _mobiusSettings; // {'execute': true};
+    private static _viewerSettingsUpdated = false;
 
     private _backupDialogType: any;
 
@@ -104,6 +106,9 @@ export class DataService {
     }
     get settings() {return DataService._data.settings; }
     set settings(settings: any) {DataService._data.settings = settings; }
+
+    get viewerSettingsUpdated() {return DataService._viewerSettingsUpdated; }
+    set viewerSettingsUpdated(updated: boolean) {DataService._viewerSettingsUpdated = updated; }
 
     get flowchartPos() {return DataService._flowchartPosition; }
     set flowchartPos(transf: string) {DataService._flowchartPosition = transf; }

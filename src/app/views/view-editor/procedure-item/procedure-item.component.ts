@@ -10,7 +10,7 @@ import * as Modules from '@modules';
 import { DataService } from '@services';
 import { IArgument } from '@models/code';
 
-import { parseArgument, parseVariable, checkValidVar, modifyVar, modifyArgument, checkNodeValidity} from '@shared/parser';
+import { parseArgument, parseVariable, checkValidVar, modifyVar, modifyArgument, checkNodeValidity, modifyLocalFuncVar} from '@shared/parser';
 
 @Component({
     selector: 'procedure-item',
@@ -209,16 +209,48 @@ export class ProcedureItemComponent implements OnDestroy {
     markDisabled(event: MouseEvent) {
         event.stopPropagation();
         if (!this.data.selected) {
+            if (this.data.type === ProcedureTypes.LocalFuncReturn) {
+                this.updateNumReturn(this.data, !this.data.enabled);
+                return;
+            }
             this.data.enabled = !this.data.enabled;
             return;
         }
         const prodList = this.dataService.node.state.procedure;
         const newEnabled = ! prodList[prodList.length - 1].enabled;
         for (const prod of prodList) {
-            if (prod.type === ProcedureTypes.Blank || prod.type === ProcedureTypes.Comment) { continue; }
+            if (prod.type === ProcedureTypes.Blank ||
+            prod.type === ProcedureTypes.Comment ||
+            prod.type === ProcedureTypes.LocalFuncDef) {
+                continue;
+            // for local func return, update the local func def if
+            } else if (prod.type === ProcedureTypes.LocalFuncReturn) {
+                this.updateNumReturn(prod, newEnabled);
+                continue;
+            }
             prod.enabled = newEnabled;
         }
         // this.data.enabled = !this.data.enabled;
+    }
+
+    updateNumReturn(prod: IProcedure, newEnabled: boolean) {
+        if (prod.enabled === newEnabled) { return; }
+        prod.enabled = newEnabled;
+        let funcDef = prod.parent;
+        while (funcDef.parent) { funcDef = funcDef.parent; }
+        if (!funcDef.meta || !funcDef.meta.otherInfo) { return; }
+        if (prod.enabled) {
+            funcDef.meta.otherInfo.num_returns ++;
+            if (funcDef.meta.otherInfo.num_returns === 1) {
+                modifyLocalFuncVar(funcDef, this.dataService.node.localFunc.concat(this.dataService.node.procedure));
+            }
+        } else {
+            funcDef.meta.otherInfo.num_returns --;
+            if (funcDef.meta.otherInfo.num_returns === 0) {
+                modifyLocalFuncVar(funcDef, this.dataService.node.localFunc.concat(this.dataService.node.procedure));
+            }
+        }
+
     }
 
     addArg(event: MouseEvent) {
@@ -229,6 +261,10 @@ export class ProcedureItemComponent implements OnDestroy {
             'jsValue': ''
         });
         this.data.argCount += 1;
+        this.eventAction.emit({
+            'type': 'addArg',
+            'data': this.data.args[0].value
+        });
     }
 
 
@@ -236,7 +272,10 @@ export class ProcedureItemComponent implements OnDestroy {
         event.stopPropagation();
         this.data.args.pop();
         this.data.argCount -= 1;
-        return ;
+        this.eventAction.emit({
+            'type': 'delArg',
+            'data': this.data.args[0].value
+        });
     }
 
     // delete child procedure (after receiving emitDelete from child procedure)
@@ -288,10 +327,10 @@ export class ProcedureItemComponent implements OnDestroy {
     argMod(event: Event, argIndex: number) {
         // this.dataService.focusedInput = [event.target, (<HTMLInputElement>event.target).selectionStart];
         this.dataService.focusedInput = event.target;
-        if (!this.data.args[argIndex].value) { return; }
-        modifyArgument(this.data, argIndex, this.dataService.node.procedure);
         this.clearLinkedArgs(this.dataService.node.localFunc);
         this.clearLinkedArgs(this.dataService.node.procedure);
+        if (!this.data.args[argIndex].value) { return; }
+        modifyArgument(this.data, argIndex, this.dataService.node.procedure);
         if (this.data.args[argIndex].invalidVar) {
             this.dataService.notifyMessage(this.data.args[argIndex].invalidVar);
         }
@@ -348,8 +387,8 @@ export class ProcedureItemComponent implements OnDestroy {
         }
     }
 
-    markLinkedArguments(varName: string, nodeList: IProcedure[]) {
-        for (const prod of nodeList) {
+    markLinkedArguments(varName: string, prodList: IProcedure[]) {
+        for (const prod of prodList) {
             if (prod.children) {
                 this.markLinkedArguments(varName, prod.children);
             }

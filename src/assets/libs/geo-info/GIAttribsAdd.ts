@@ -291,7 +291,7 @@ export class GIAttribsAdd {
         // calculate the new value and set the attribute
         attrib_values_map.forEach( (attrib_values, target_ent_i) => {
             let value: TAttribDataTypes = attrib_values[0];
-            if (attrib_values.length > 1 && source_data_type === EAttribDataTypeStrs.NUMBER) {
+            if (attrib_values.length > 1) {
                 value = this._aggregateVals(attrib_values, target_data_size, method);
             }
             if (typeof target_attrib_idx_key === 'number') {
@@ -313,6 +313,7 @@ export class GIAttribsAdd {
     // ============================================================================
     // Private methods
     // ============================================================================
+    // TODO for mathjs operations, check the values are numbers...
     private _aggregateVals(values: TAttribDataTypes[], data_size: number, method: EAttribPush): TAttribDataTypes {
         switch (method) {
             case EAttribPush.AVERAGE:

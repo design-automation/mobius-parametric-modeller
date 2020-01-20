@@ -233,6 +233,7 @@
 
         &.linked{
             border: 2px solid $selectGeom-color;
+            // border: 2px solid $print-color-dk;
         }
         &.error{
             border: 2px solid $error-color;

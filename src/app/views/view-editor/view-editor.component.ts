@@ -9,6 +9,7 @@ import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
 import { checkNodeValidity } from '@shared/parser';
 import { DataOutputService } from '@shared/services/dataOutput.service';
 import { SaveFileComponent } from '@shared/components/file';
+import { IArgument } from '@models/code';
 
 @Component({
   selector: 'view-editor',
@@ -96,11 +97,6 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     }
 
     performAction_procedure_item(event: any, idx) {
-        // (select)="selectProcedure($event)"
-        // (delete)="deleteSelectedProds()"
-        // (deleteC)='deleteChild(idx)'
-        // (notifyError)='notifyError($event)'
-        // (helpText)='updateHelpView($event)'
         switch (event.type) {
             case 'select' :
                 this.selectProcedure(event.content);
@@ -110,6 +106,14 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 break;
             case 'deleteC' :
                 this.deleteChild(idx);
+                break;
+            case 'addArg' :
+                this.updateLocalFuncArg(this.dataService.node.localFunc, event.data, true);
+                this.updateLocalFuncArg(this.dataService.node.procedure, event.data, true);
+                break;
+            case 'delArg' :
+                this.updateLocalFuncArg(this.dataService.node.localFunc, event.data, false);
+                this.updateLocalFuncArg(this.dataService.node.procedure, event.data, false);
                 break;
             case 'notifyError' :
                 this.notifyError(event.content);
@@ -187,6 +191,30 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             'parent': undefined, 'index': index, 'prod': this.dataService.node.procedure[index]}]);
         this.dataService.node.procedure.splice(index, 1);
         NodeUtils.deselect_procedure(this.dataService.node);
+    }
+
+    updateLocalFuncArg(prodList: IProcedure[], funcName: string, addArg: boolean) {
+        for (const prod of prodList) {
+            if (prod.type === ProcedureTypes.LocalFuncCall && prod.meta.name === funcName) {
+                if (addArg) {
+                    prod.args.push(<IArgument>{
+                        'name': 'arg_' + prod.argCount,
+                        'value': '',
+                        'jsValue': '',
+                        'usedVars': [],
+                        'linked': false,
+                        'invalidVar': false
+                    });
+                    prod.argCount += 1;
+                } else {
+                    prod.args.pop();
+                    prod.argCount -= 1;
+                }
+            }
+            if (prod.children) {
+                this.updateLocalFuncArg(prod.children, funcName, addArg)
+            }
+        }
     }
 
     // select a procedure

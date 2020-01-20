@@ -4,6 +4,6 @@ export interface IMobius {
     name: string;
     author: string;
     flowchart: IFlowchart;
-    version: number;
+    version: string;
     settings: any;
 }

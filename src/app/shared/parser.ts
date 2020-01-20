@@ -83,8 +83,8 @@ export function updateGlobals(startNode: INode) {
 }
 
 export function modifyVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
-    if (!procedure.args[0].value) { return; }
     procedure.variable = null;
+    if (!procedure.args[0].value) { return; }
 
     procedure.args[0].value = modifyVarArg(procedure.args[0]);
     const modifiedVar = parseVariable(procedure.args[0].value);
@@ -111,49 +111,108 @@ export function modifyVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
         }
     }
     procedure.args[0].invalidVar = false;
-
-    const comps = splitComponents(procedure.args[0].jsValue);
-    // console.log('\n\n',procedure.args[0].jsValue)
-    // if (typeof comps === 'string') {
-    //     return;
-    // }
-    // for (let i = 0; i < comps.length; i ++) {
-    //     const comp = comps[i];
-    //     if (comp.type === strType.OTHER && comp.value === ';' || comp.value === '=') {
-    //         console.log('  .......', comp.value)
-    //     }
-    //     if (comp.type === strType.VAR && comp.value[comp.value.length - 1] !== '_') {
-    //         console.log('  _',comp.value)
-    //         console.log('    keyword1:', specialVars.has(comps[i].value))
-    //         console.log('    keyword2:', reservedWordsSet.has(comps[i].value))
-    //         if (i > 0) {
-    //             console.log('    previous:', comps[i - 1].value)
-    //         }
-    //     }
-    // }
 }
 
 export function modifyLocalFuncVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
-    if (!procedure.args[0].value) { return; }
     procedure.variable = null;
+    if (!procedure.args[0].value) { return; }
+    if (!procedure.meta) {
+        procedure.meta = {
+            'name': '',
+            'module': '',
+            'otherInfo': {
+                'prev_name': procedure.args[0].value,
+                'num_returns': null
+            }
+        };
+    } else if (!procedure.meta.otherInfo) {
+        procedure.meta.otherInfo = {
+            'prev_name': procedure.args[0].value,
+            'num_returns': null
+        };
+    }
+    procedure.meta.otherInfo.num_returns = findLocalFuncNumReturns(procedure.children);
 
+    const declaredVars = [];
     procedure.args.forEach(arg => {
         if (!arg.value) { return; }
         arg.value = modifyVarArg(arg).replace(/[\@\#\?]/g, '_');
         arg.jsValue = arg.value + '_';
         if (arg.name === 'func_name') { return; }
         arg.usedVars = [arg.value];
+
+        const existingCheck = declaredVars.indexOf(arg.value);
+        if (existingCheck !== -1) {
+            arg.invalidVar = `Error: Argument name "${arg.value}" already exists`;
+            procedure.args[existingCheck + 1].invalidVar = `Error: Argument name "${arg.value}" already exists`;
+        }
+        declaredVars.push(arg.value);
     });
     for (const prod of nodeProdList) {
         if (prod.ID === procedure.ID) {
             continue;
         }
         if (prod.type === ProcedureTypes.LocalFuncDef && procedure.args[0].value === prod.args[0].value) {
-            procedure.args[0].invalidVar = `Error: Function name ${procedure.args[0].value} already exists`;
+            procedure.args[0].invalidVar = `Error: Function name "${procedure.args[0].value}" already exists`;
             return;
         }
     }
+    updateLocalFuncProperties(nodeProdList, procedure.meta.otherInfo, procedure.args);
     procedure.args[0].invalidVar = false;
+    procedure.meta.otherInfo.prev_name = procedure.args[0].value;
+}
+
+function findLocalFuncNumReturns(procedureList: IProcedure[]): number {
+    let num_returns = 0;
+    for (const prod of procedureList) {
+        if (prod.type === ProcedureTypes.LocalFuncReturn && prod.enabled) {
+            num_returns ++;
+        }
+        if (prod.children) {
+            num_returns += findLocalFuncNumReturns(prod.children);
+        }
+    }
+    return num_returns;
+}
+
+function updateLocalFuncProperties(prodList: IProcedure[],
+                                   oldFuncInfo: {'prev_name': string, 'num_returns': number},
+                                   newFuncArgs: IArgument[]) {
+    for (const prod of prodList) {
+        if (prod.children) {
+            updateLocalFuncProperties(prod.children, oldFuncInfo, newFuncArgs);
+            continue;
+        }
+        if (prod.type === ProcedureTypes.LocalFuncCall && prod.meta.name === oldFuncInfo.prev_name) {
+
+            if (oldFuncInfo.num_returns > 0 && prod.args[0].name === '__none__') {
+                prod.args[0].name = 'var_name';
+            } else if (oldFuncInfo.num_returns === 0 && prod.args[0].name === 'var_name') {
+                prod.args[0].name = '__none__';
+            }
+            prod.meta.name = newFuncArgs[0].value;
+            let i = 1;
+            for (; i < newFuncArgs.length; i++) {
+                if (i >= prod.args.length) {
+                    prod.args.push(<IArgument> {
+                        'name': 'arg_' + prod.argCount,
+                        'value': '',
+                        'jsValue': '',
+                        'usedVars': [],
+                        'linked': false,
+                        'invalidVar': false
+                    });
+                    prod.argCount++;
+                    continue;
+                }
+                prod.args[i].name = newFuncArgs[i].value;
+            }
+            while (i < prod.argCount - 1) {
+                prod.args.pop();
+                prod.argCount--;
+            }
+        }
+    }
 }
 
 
@@ -174,7 +233,7 @@ export function modifyVarArg(arg: IArgument) {
     str = repSplit.map(splt => splt.join(']')).join('[');
 
     if ((str.match(/\[/g) || []).length !== (str.match(/\]/g) || []).length) {
-        arg.invalidVar = true;
+        arg.invalidVar = 'Error: Invalid variable name';
         return str;
     }
     const strSplit = str.split(/[\@\[\]]/g);
@@ -185,7 +244,7 @@ export function modifyVarArg(arg: IArgument) {
             const sStr = `[${i}]`;
             const ind = teststr.indexOf(sStr);
             if (ind === -1) {
-                arg.invalidVar = true;
+                arg.invalidVar = 'Error: Invalid variable name - cannot be a number';
                 return str;
             }
             teststr = teststr.slice(0, ind) + teststr.slice(ind + sStr.length);
@@ -193,18 +252,18 @@ export function modifyVarArg(arg: IArgument) {
         }
         try {
             if (i[0] === '_') {
-                arg.invalidVar = true;
+                arg.invalidVar = 'Error: Invalid variable name - cannot start variable name with "_"';
                 return str;
             }
             for (const reserved of reservedWords) {
                 if (i === reserved) {
-                    arg.invalidVar = true;
+                    arg.invalidVar = 'Error: Invalid variable name - reserved word';
                     return str;
                 }
             }
             for (const funcName of mathFuncs) {
                 if (i === funcName) {
-                    arg.invalidVar = true;
+                    arg.invalidVar = 'Error: Invalid variable name - existing math function name';
                     return str;
                 }
             }
@@ -221,7 +280,7 @@ export function modifyVarArg(arg: IArgument) {
 
             arg.invalidVar = false;
         } catch (ex) {
-            arg.invalidVar = true;
+            arg.invalidVar = 'Error: Invalid variable name';
             return str;
         }
     }
@@ -229,6 +288,7 @@ export function modifyVarArg(arg: IArgument) {
 }
 
 export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProdList: IProcedure[]) {
+    procedure.args[argIndex].usedVars = [];
     if (!procedure.args[argIndex].value) { return; }
     // PARSER CALL
     let varResult = parseArgument(procedure.args[argIndex].value);

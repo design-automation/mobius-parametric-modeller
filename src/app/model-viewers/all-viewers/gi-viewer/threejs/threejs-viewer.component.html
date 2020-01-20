@@ -26,14 +26,25 @@
         id="zoomingfit"
         mat-icon-button
         (click)="zoomfit()"
+        title='Zoom to Fit Model'
     >
         <mat-icon svgIcon="cZoom"></mat-icon>
+    </button>
+
+    <button
+        id="credit"
+        mat-icon-button
+        (click)="openCredits($event)"
+        title='Credits'
+    >
+        <mat-icon svgIcon="cCredits"></mat-icon>
     </button>
 
     <button
         id="EntitySelection"
         mat-icon-button
         (click)="selectDropdownVisible = !selectDropdownVisible"
+        title='Selection Type'
     >
         <mat-icon svgIcon="select"></mat-icon>
 

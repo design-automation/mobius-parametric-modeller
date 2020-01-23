@@ -135,6 +135,7 @@ rayRot = __modules__._ray.rayRot;
 rayLMove = __modules__._ray.rayLMove;
 rayFromPln = __modules__._ray.rayFromPln;
 colFalse = __modules__._colors.colFalse;
+colScale = __modules__._colors.colScale;
 radToDeg = __modules__._conversion.radToDeg;
 degToRad = __modules__._conversion.degToRad;
 rand = __modules__._rand.rand;

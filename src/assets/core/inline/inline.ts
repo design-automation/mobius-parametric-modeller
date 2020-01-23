@@ -76,7 +76,8 @@ const lists = [
 ];
 
 const colors = [
-    ['colFalse(val, min, max)', 'Creates a colour from a value in the range between min and max.']
+    ['colFalse(val, min, max)', 'Creates a colour from a value in the range between min and max.'],
+    ['colScale(val, min, max, sc)', 'Creates a colour from a value in the range between min and max, given a Brewer color scale.']
 ];
 
 const planes = [

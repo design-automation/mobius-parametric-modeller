@@ -1,6 +1,6 @@
 {
 	"id": 0,
-	"name": "mobius-parametric-modeller - v0.5.18",
+	"name": "mobius-parametric-modeller - v0.5.19",
 	"kind": 0,
 	"flags": {},
 	"children": [
@@ -13110,7 +13110,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/attrib.ts",
-									"line": 430,
+									"line": 437,
 									"character": 11
 								}
 							],
@@ -13127,7 +13127,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/attrib.ts",
-									"line": 428,
+									"line": 435,
 									"character": 9
 								}
 							],
@@ -13144,7 +13144,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/attrib.ts",
-									"line": 429,
+									"line": 436,
 									"character": 8
 								}
 							],
@@ -13161,7 +13161,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/attrib.ts",
-									"line": 434,
+									"line": 441,
 									"character": 7
 								}
 							],
@@ -13178,7 +13178,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/attrib.ts",
-									"line": 431,
+									"line": 438,
 									"character": 10
 								}
 							],
@@ -13195,7 +13195,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/attrib.ts",
-									"line": 433,
+									"line": 440,
 									"character": 7
 								}
 							],
@@ -13212,7 +13212,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/attrib.ts",
-									"line": 432,
+									"line": 439,
 									"character": 7
 								}
 							],
@@ -13237,7 +13237,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/attrib.ts",
-							"line": 427,
+							"line": 434,
 							"character": 27
 						}
 					]
@@ -13704,7 +13704,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "The attribute. Can be `name`, `[name, index_or_key]`, \\\n`[source_name, source_index_or_key, target_name]` or `[source_name, source_index_or_key, target_name, target_index_or_key]`."
+										"text": "The attribute. Can be `name`, `[name, index_or_key]`,\n`[source_name, source_index_or_key, target_name]` or `[source_name, source_index_or_key, target_name, target_index_or_key]`."
 									},
 									"type": {
 										"type": "union",
@@ -13810,7 +13810,7 @@
 									"kindString": "Parameter",
 									"flags": {},
 									"comment": {
-										"text": "Enum, the traget entity type where the attribute values should be pushed to."
+										"text": "Enum, the target entity type where the attribute values should be pushed to."
 									},
 									"type": {
 										"type": "reference",
@@ -14145,7 +14145,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/attrib.ts",
-							"line": 436,
+							"line": 443,
 							"character": 27
 						}
 					]

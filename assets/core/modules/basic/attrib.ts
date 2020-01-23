@@ -367,26 +367,33 @@ export function Rename(__model__: GIModel, ent_type_sel: _EEntTypeAndMod, old_at
  * ~
  * @param __model__
  * @param entities Entities, the entities to push the attribute values for.
- * @param attrib The attribute. Can be `name`, `[name, index_or_key]`, \
+ * @param attrib The attribute. Can be `name`, `[name, index_or_key]`,
  * `[source_name, source_index_or_key, target_name]` or `[source_name, source_index_or_key, target_name, target_index_or_key]`.
- * @param ent_type_sel Enum, the traget entity type where the attribute values should be pushed to.
+ * @param ent_type_sel Enum, the target entity type where the attribute values should be pushed to.
  * @param method_sel Enum, the method for aggregating attribute values in cases where aggregation is necessary.
  */
 export function Push(__model__: GIModel, entities: TId|TId[],
         attrib: string|[string, number|string]|[string, number|string, string]|[string, number|string, string, number|string],
         ent_type_sel: _EEntTypeAndMod, method_sel: _EPushMethodSel): void {
-    // @ts-ignore
-    if (entities !== null && getArrDepth(entities) === 2) { entities = __.flatten(entities); }
+    if (entities !== null) {
+        const depth = getArrDepth(entities);
+        if (depth === 0) {
+            entities = [entities] as TId[];
+        } else if (depth === 2) {
+            // @ts-ignore
+            entities = __.flatten(entities) as TId[];
+        }
+    }
     // --- Error Check ---
     const fn_name = 'attrib.Push';
-    let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
+    let ents_arr: TEntTypeIdx[] = null;
     if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
     }
-    let source_attrib: string|[string, number|string] = null;
-    let target_attrib: string|[string, number|string] = null;
+    let source_attrib: [string, number|string] = null;
+    let target_attrib: [string, number|string] = null;
     if (Array.isArray(attrib)) {
-        // set cource attrib
+        // set source attrib
         source_attrib = [
             attrib[0] as string,
             (attrib.length > 1 ? attrib[1] : null) as number|string

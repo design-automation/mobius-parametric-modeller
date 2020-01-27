@@ -240,12 +240,12 @@ function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: str
 }
 // ================================================================================================
 /**
- * Visualises a ray by creating a line.
+ * Visualises a ray or a list of rays by creating a polyline with an arrow head.
  *
  * @param __model__
- * @param rays A list of two list of three coordinates [origin, vector]: [[x,y,z],[x',y',z']]
+ * @param rays Polylines representing the ray or rays.
  * @returns entities, a line representing the ray.
- * @example ray1 = virtual.visRay([[1,2,3],[0,0,1]])
+ * @example ray1 = visualize.Ray([[1,2,3],[0,0,1]])
  */
 export function Ray(__model__: GIModel, rays: TRay|TRay[], scale: number): TId[] {
     // --- Error Check ---
@@ -304,18 +304,19 @@ function _visRay(__model__: GIModel, rays: TRay|TRay[], scale: number): TEntType
 }
 // ================================================================================================
 /**
- * Visualises a plane by creating a polyline and axis lines.
+ * Visualises a plane or a list of planes by creating polylines.
  *
  * @param __model__
- * @param plane A list of lists
- * @returns Entities, a polygon and two polyline representing the plane.
- * @example plane1 = virtual.visPlane(position1, vector1, [0,1,0])
+ * @param plane A plane or a list of planes.
+ * @returns Entities, a square plane polyline and three axis polyline.
+ * @example plane1 = visualize.Plane(position1, vector1, [0,1,0])
  * @example_info Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
  */
 export function Plane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): TId[] {
     // --- Error Check ---
     const fn_name = 'visualize.Plane';
-    checkArgTypes(fn_name, 'planes', planes, [TypeCheckObj.isPlane]); // TODO planes can be a list // add isPlaneList to enable check
+    checkArgTypes(fn_name, 'planes', planes,
+        [TypeCheckObj.isPlane, TypeCheckObj.isPlaneList]);
     checkArgTypes(fn_name, 'scale', scale, [TypeCheckObj.isNumber]);
     // --- Error Check ---
     return idsMake(_visPlane(__model__, planes, scale)) as TId[];
@@ -328,7 +329,7 @@ function _visPlane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): 
         const y_vec: Txyz = vecMult(plane[2], scale);
         let x_end: Txyz = vecAdd(origin, x_vec);
         let y_end: Txyz = vecAdd(origin, y_vec);
-        const z_end: Txyz = vecAdd(origin, vecCross(x_vec, y_vec));
+        const z_end: Txyz = vecAdd(origin, vecSetLen(vecCross(x_vec, y_vec), scale) );
         const plane_corners: Txyz[] = [
             vecAdd(x_end, y_vec),
             vecSub(y_end, x_vec),

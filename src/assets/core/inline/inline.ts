@@ -70,9 +70,9 @@ const lists = [
     ['vecFromTo(pt1, pt2)', 'Creates a vector between two points'],
     ['vecAng(v1, v2)', 'Calculate the angle (0 to PI) between two vectors'],
     ['vecAng2(v1, v2, n)', 'Calculate the angle (0 to 2PI) between two vectors, relative to the plane normal'],
-    ['vecDot(v1, v2)', 'Calculates the cross product of thre vectors'],
-    ['vecCross(v1, v2)', 'Calculates the dot product of two vectors'],
-    ['vecEqual(v1, v2, tol)', 'Returns true if the difference between two vectors is smaler than a specified tolerance']
+    ['vecDot(v1, v2)', 'Calculates the dot product of two vectors'],
+    ['vecCross(v1, v2)', 'Calculates the cross product of two vectors'],
+    ['vecEqual(v1, v2, tol)', 'Returns true if the difference between two vectors is smaller than a specified tolerance']
 ];
 
 const colors = [
@@ -95,16 +95,16 @@ const rays = [
     ['rayMake(o, d)', 'Creates a ray from an origin "o" and a direction vector "d".'],
     ['rayMake(o, d, l)', 'Creates a ray from an origin "o", a direction vector "d", and length "l".'],
     ['rayCopy(r)', 'Make a copy of the ray "r"'],
-    ['rayMove(r, v)', 'Move the ray "r" relativr to the global X, Y, and Z axes, by vector "v".'],
+    ['rayMove(r, v)', 'Move the ray "r" relative to the global X, Y, and Z axes, by vector "v".'],
     ['rayRot(r1, r2, a)', 'Rotate the ray "r1" around the ray "r2", by angle "a" (in radians).'],
-    ['rayLMove(r, d)', 'Move the ray "r" relative to the ray dircetion vector, by distance "d".'],
+    ['rayLMove(r, d)', 'Move the ray "r" relative to the ray direction vector, by distance "d".'],
     ['rayFromPln(p)', 'Create a ray from a plane "p", with the same origin and with a direction along the plane z axis.']
 ];
 
 const conversion = [
-    ['boolean(val)', 'Converts the value to a boolean'],
-    ['number(val)', 'Converts the value to a number'],
-    ['string(val)', 'Converts the value to a string'],
+    ['boolean(v)', 'Converts the value to a boolean'],
+    ['number(v)', 'Converts the value to a number'],
+    ['string(v)', 'Converts the value to a string'],
     ['radToDeg(rad)', 'Converts radians to degrees'],
     ['degToRad(deg)', 'Converts degrees to radians']
 ];
@@ -131,13 +131,14 @@ const arithmetic = [
     ['ceil(num)', 'Returns the value of the number rounded up to its nearest integer'],
     ['floor(num)', 'Returns the value of the number rounded down to its nearest integer'],
     ['mod(num1, num2)', 'Returns the remainder after division of num1 by num2'],
+    ['remap(num, d1, d2)', 'Maps a number from the d1 domain to the d2 domain.'],
     ['sum(list)', 'Returns the sum of all values in a list'],
     ['prod(list)', 'Returns the product of all values in a list'],
-    ['hypot(list)', 'Returns the hypothenuse of all values in a list'],
+    ['hypot(list)', 'Returns the hypotenuse of all values in a list'],
     ['norm(list)', 'Returns the norm of a list'],
-    ['distance(c1, c2)', 'Returns the Eucledian distance between two xyzs, c1 and c2'],
-    ['distance(c, r)', 'Returns the Eucledian distance between an xyz c and an infinite ray r'],
-    ['distance(c, p)', 'Returns the Eucledian distance between an xyz c and an infinite plane p'],
+    ['distance(c1, c2)', 'Returns the Euclidean distance between two xyzs, c1 and c2'],
+    ['distance(c, r)', 'Returns the Euclidean distance between an xyz c and an infinite ray r'],
+    ['distance(c, p)', 'Returns the Euclidean distance between an xyz c and an infinite plane p'],
     ['intersect(r1, r2)', 'Returns the intersection xyz between two infinite rays'],
     ['intersect(r1, r2, m)', 'Returns the intersection xyz between two rays, where ' +
         'if m=2, rays are infinite in both directions, ' +

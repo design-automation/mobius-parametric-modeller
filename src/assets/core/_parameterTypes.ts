@@ -78,6 +78,7 @@ norm = __modules__._mathjs.norm;
 mod = __modules__._mathjs.mod;
 square = __modules__._mathjs.square;
 cube = __modules__._mathjs.cube;
+remap = __modules__._arithmetic.remap;
 distance = __modules__._calc.distance;
 intersect = __modules__._calc.intersect;
 project = __modules__._calc.project;

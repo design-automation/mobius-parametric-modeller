@@ -270,13 +270,14 @@ function _visRay(__model__: GIModel, rays: TRay|TRay[], scale: number): TEntType
         const pline_i = __model__.geom.add.addPline([origin_posi_i, end_posi_i]);
         // create the arrow heads
         const vec_unit: Txyz = vecNorm(ray[1]);
+        const head_scale = scale / 5;
         let vec_norm: Txyz = null;
-        if (!vecEqual(vec, [0, 0, 1], 0)) {
-            vec_norm = vecSetLen(vecCross(vec_unit, [0, 0, 1]), scale);
+        if (vecEqual(vec, [0, 0, 1], 0)) {
+            vec_norm = vecSetLen(vecCross(vec_unit, [0, 1, 0]), head_scale);
         } else {
-            vec_norm = vecSetLen(vecCross(vec_unit, [1, 0, 0]), scale);
+            vec_norm = vecSetLen(vecCross(vec_unit, [0, 0, 1]), head_scale);
         }
-        const vec_rev: Txyz = vecSetLen(vecMult(vec, -1), scale);
+        const vec_rev: Txyz = vecSetLen(vecMult(vec, -1), head_scale);
         const arrow_a: Txyz = vecAdd(vecAdd(end, vec_rev), vec_norm);
         const arrow_a_posi_i: number = __model__.geom.add.addPosi();
         __model__.attribs.add.setPosiCoords(arrow_a_posi_i, arrow_a);

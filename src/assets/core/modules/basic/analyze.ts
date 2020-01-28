@@ -441,10 +441,10 @@ function _solarDirectTjs(latitude: number, north: Txy, detail: number): THREE.Ve
     const num_day_steps: number = Math.round(182 / day_step) + 1;
     const hour_step = [0.25 * 6, 0.25 * 5, 0.25 * 4, 0.25 * 3, 0.25 * 2, 0.25 * 1, 0.25 * 0.5][detail];
     // get the angles in radians
-    const day_ang_rad: number = degToRad(47) / 182;
+    const day_ang_rad: number = degToRad(47) as number / 182;
     const hour_ang_rad: number = (2 * Math.PI) / 24;
     // get the atitude angle in radians
-    const latitude_rad: number = degToRad(latitude);
+    const latitude_rad: number = degToRad(latitude) as number;
     // get the angle from y-axis to north vector in radians
     const north_rad = vecAng2([north[0], north[1], 0], [0, 1, 0], [0, 0, 1]);
     // create the vectors

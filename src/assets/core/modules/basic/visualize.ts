@@ -16,6 +16,7 @@ import { arrMakeFlat } from '@assets/libs/util/arrs';
 import { min, max } from '@assets/core/inline/_math';
 import { colFalse } from '@assets/core/inline/_colors';
 import { vecMult, vecAdd, vecEqual, vecSetLen, vecCross, vecNorm, vecSub } from '@assets/libs/geom/vectors';
+import * as ch from 'chroma-js';
 // ================================================================================================
 export enum _ESide {
     FRONT =   'front',
@@ -113,12 +114,53 @@ export function Gradient(__model__: GIModel, entities: TId|TId[], attrib: string
         _gradient(__model__, ents_arr, attrib_name, attrib_idx_or_key, range as [number, number], method);
     }
 }
+// https://codesandbox.io/s/5w573r54w4
 export enum _EColorRampMethod {
     FALSE_COLOR = 'false_color',
-    INFRA_RED = 'infra_red',
-    WHITE_TO_RED = 'white_to_red',
+    BLACK_BODY = 'black_body',
+    WHITE_RED = 'white_red',
+    WHITE_GREEN = 'white_green',
+    WHITE_BLUE = 'white_blue',
+    BLUE_RED = 'blue_red',
+    GREEN_RED = 'green_red',
+    BLUE_GREEN = 'blue_green',
     GREY_SCALE = 'grey_scale',
-    BLACK_BODY = 'black_body'
+    ORRD="OrRd",
+    PUBU="PuBu",
+    BUPU="BuPu",
+    ORANGES="Oranges",
+    BUGN="BuGn",
+    YLORBR="YlOrBr",
+    YLGN="YlGn",
+    REDS="Reds",
+    RDPU="RdPu",
+    GREENS="Greens",
+    YLGNBU="YlGnBu",
+    PURPLES="Purples",
+    GNBU="GnBu",
+    GREYS="Greys",
+    YLORRD="YlOrRd",
+    PURD="PuRd",
+    BLUES="Blues",
+    PUBUGN="PuBuGn",
+    VIRIDIS="Viridis",
+    SPECTRAL="Spectral",
+    RDYLGN="RdYlGn",
+    RDBU="RdBu",
+    PIYG="PiYG",
+    PRGN="PRGn",
+    RDYLBU="RdYlBu",
+    BRBG="BrBG",
+    RDGY="RdGy",
+    PUOR="PuOr",
+    SET2="Set2",
+    ACCENT="Accent",
+    SET1="Set1",
+    SET3="Set3",
+    DARK2="Dark2",
+    PAIRED="Paired",
+    PASTEL2="Pastel2",
+    PASTEL1="Pastel1",
 }
 function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: string, idx_or_key: number|string, range: [number, number],
         method: _EColorRampMethod): void {
@@ -156,11 +198,34 @@ function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: str
     if (range[1] === null) {
         range[1] = max(vert_values);
     }
+    // create color scale
+    const scales = {
+        'false_color': ['blue', 'cyan', 'green', 'yellow', 'red'],
+        'black_body': ['black', 'red', 'yellow', 'white'],
+        'white_red': ['white', 'red'],
+        'white_blue': ['white', 'blue'],
+        'white_green': ['white', 'green'],
+        'blue_red': ['blue', 'red'],
+        'green_red': ['green', 'red'],
+        'blue_green': ['blue', 'green'],
+        'grey_scale': ['white', 'black']
+    }
+    let scale: any = null;
+    if (method in scales) {
+        scale = scales[method];
+    } else {
+        scale = method;
+    }
+    const col_scale = ch.scale(scale);
+    const col_domain  = col_scale.domain(range);
+
     // make a values map, grouping together all the verts that have the same value
     const values_map: Map<number, [TColor, number[]]> = new Map();
     for (let i = 0; i < all_verts_i.length; i++) {
         if (!values_map.has(vert_values[i])) {
-            const col: TColor = colFalse(vert_values[i], range[0], range[1]);
+            // const col: TColor = colFalse(vert_values[i], range[0], range[1]);
+            const ch_col = col_domain(vert_values[i]).gl();
+            const col: TColor = [ch_col[0], ch_col[1], ch_col[2]];
             values_map.set(vert_values[i], [col, [all_verts_i[i]]]);
         } else {
             values_map.get(vert_values[i])[1].push(all_verts_i[i]);
@@ -175,12 +240,12 @@ function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: str
 }
 // ================================================================================================
 /**
- * Visualises a ray by creating a line.
+ * Visualises a ray or a list of rays by creating a polyline with an arrow head.
  *
  * @param __model__
- * @param rays A list of two list of three coordinates [origin, vector]: [[x,y,z],[x',y',z']]
+ * @param rays Polylines representing the ray or rays.
  * @returns entities, a line representing the ray.
- * @example ray1 = virtual.visRay([[1,2,3],[0,0,1]])
+ * @example ray1 = visualize.Ray([[1,2,3],[0,0,1]])
  */
 export function Ray(__model__: GIModel, rays: TRay|TRay[], scale: number): TId[] {
     // --- Error Check ---
@@ -239,18 +304,19 @@ function _visRay(__model__: GIModel, rays: TRay|TRay[], scale: number): TEntType
 }
 // ================================================================================================
 /**
- * Visualises a plane by creating a polyline and axis lines.
+ * Visualises a plane or a list of planes by creating polylines.
  *
  * @param __model__
- * @param plane A list of lists
- * @returns Entities, a polygon and two polyline representing the plane.
- * @example plane1 = virtual.visPlane(position1, vector1, [0,1,0])
+ * @param plane A plane or a list of planes.
+ * @returns Entities, a square plane polyline and three axis polyline.
+ * @example plane1 = visualize.Plane(position1, vector1, [0,1,0])
  * @example_info Creates a plane with position1 on it and normal = cross product of vector1 with y-axis.
  */
 export function Plane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): TId[] {
     // --- Error Check ---
     const fn_name = 'visualize.Plane';
-    checkArgTypes(fn_name, 'planes', planes, [TypeCheckObj.isPlane]); // TODO planes can be a list // add isPlaneList to enable check
+    checkArgTypes(fn_name, 'planes', planes,
+        [TypeCheckObj.isPlane, TypeCheckObj.isPlaneList]);
     checkArgTypes(fn_name, 'scale', scale, [TypeCheckObj.isNumber]);
     // --- Error Check ---
     return idsMake(_visPlane(__model__, planes, scale)) as TId[];
@@ -263,7 +329,7 @@ function _visPlane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): 
         const y_vec: Txyz = vecMult(plane[2], scale);
         let x_end: Txyz = vecAdd(origin, x_vec);
         let y_end: Txyz = vecAdd(origin, y_vec);
-        const z_end: Txyz = vecAdd(origin, vecCross(x_vec, y_vec));
+        const z_end: Txyz = vecAdd(origin, vecSetLen(vecCross(x_vec, y_vec), scale) );
         const plane_corners: Txyz[] = [
             vecAdd(x_end, y_vec),
             vecSub(y_end, x_vec),

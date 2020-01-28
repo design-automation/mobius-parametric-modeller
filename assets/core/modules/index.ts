@@ -57,6 +57,7 @@ export {io};
 import * as util from './basic/util';
 export {util};
 
+
 // helpers
 
 import * as _math from '../inline/_math';
@@ -98,6 +99,8 @@ export {_constants};
 import * as _util from '../inline/_util';
 export {_util};
 
+import * as _arithmetic from '../inline/_arithmetic';
+export {_arithmetic};
 
 // input, output ports
 

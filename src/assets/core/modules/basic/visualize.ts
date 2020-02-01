@@ -15,7 +15,7 @@ import { checkIDs, IDcheckObj, checkArgTypes, TypeCheckObj } from '../_check_arg
 import { arrMakeFlat } from '@assets/libs/util/arrs';
 import { min, max } from '@assets/core/inline/_math';
 import { colFalse } from '@assets/core/inline/_colors';
-import { vecMult, vecAdd, vecEqual, vecSetLen, vecCross, vecNorm, vecSub } from '@assets/libs/geom/vectors';
+import { vecMult, vecAdd, vecEqual, vecSetLen, vecCross, vecNorm, vecSub, vecDot } from '@assets/libs/geom/vectors';
 import * as ch from 'chroma-js';
 // ================================================================================================
 export enum _ESide {
@@ -272,7 +272,7 @@ function _visRay(__model__: GIModel, rays: TRay|TRay[], scale: number): TEntType
         const vec_unit: Txyz = vecNorm(ray[1]);
         const head_scale = scale / 5;
         let vec_norm: Txyz = null;
-        if (vecEqual(vec, [0, 0, 1], 0)) {
+        if (vecDot([0, 0, 1], vec)) {
             vec_norm = vecSetLen(vecCross(vec_unit, [0, 1, 0]), head_scale);
         } else {
             vec_norm = vecSetLen(vecCross(vec_unit, [0, 0, 1]), head_scale);

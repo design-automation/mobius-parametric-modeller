@@ -244,7 +244,8 @@ function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: str
  *
  * @param __model__
  * @param rays Polylines representing the ray or rays.
- * @returns entities, a line representing the ray.
+ * @param scale Scales the arrow head of the vector.
+ * @returns entities, a line with an arrow head representing the ray.
  * @example ray1 = visualize.Ray([[1,2,3],[0,0,1]])
  */
 export function Ray(__model__: GIModel, rays: TRay|TRay[], scale: number): TId[] {
@@ -259,7 +260,7 @@ function _visRay(__model__: GIModel, rays: TRay|TRay[], scale: number): TEntType
     if (getArrDepth(rays) === 2) {
         const ray: TRay = rays as TRay;
         const origin: Txyz = ray[0];
-        const vec: Txyz = vecMult(ray[1], scale);
+        const vec: Txyz = ray[1]; // vecMult(ray[1], scale);
         const end: Txyz = vecAdd(origin, vec);
         // create orign point
         const origin_posi_i: number = __model__.geom.add.addPosi();
@@ -270,7 +271,7 @@ function _visRay(__model__: GIModel, rays: TRay|TRay[], scale: number): TEntType
         const pline_i = __model__.geom.add.addPline([origin_posi_i, end_posi_i]);
         // create the arrow heads
         const vec_unit: Txyz = vecNorm(ray[1]);
-        const head_scale = scale / 5;
+        const head_scale = scale;
         let vec_norm: Txyz = null;
         if (vecDot([0, 0, 1], vec)) {
             vec_norm = vecSetLen(vecCross(vec_unit, [0, 1, 0]), head_scale);

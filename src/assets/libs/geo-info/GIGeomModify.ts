@@ -1,4 +1,4 @@
-import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz, TColl, TVert } from './common';
+import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz, TColl, TVert, Txy } from './common';
 import { GIGeom } from './GIGeom';
 import { arrRem, arrIdxAdd } from '../util/arrs';
 import { vecDot } from '../geom/vectors';
@@ -133,7 +133,7 @@ export class GIGeomModify {
     /**
      * Unweld all vertices by cloning the positions that are shared.
      * ~
-     * Attributes on the positions are  copied.
+     * Attributes on the positions are copied.
      * ~
      * @param verts_i
      */
@@ -161,15 +161,58 @@ export class GIGeomModify {
     /**
      * Weld all vertices by merging the positions that are equal, so that they become shared.
      * ~
-     * The old positions are deleted. Attributes on those positions are discarded.
+     * The old positions are deleted if unused. Attributes on those positions are discarded.
      * ~
      * @param verts_i
      */
-    public mergeVertPositions(verts_i: number[]): number[] {
-        const new_posis_i: number[] = [];
-        throw new Error('Not implemented');
+    public mergeVertPositions(verts_i: number[]): number {
+        // get a list of unique posis to merge
+        // at the same time, make a sparse array vert_i -> posi_i
+        const map_posis_to_merge_i: Map<number, number[]> = new Map();
+        const vert_i_to_posi_i: number[] = []; // sparese array
+        for (const vert_i of verts_i) {
+            const exist_posi_i: number = this._geom.nav.navVertToPosi(vert_i);
+            vert_i_to_posi_i[vert_i] = exist_posi_i;
+            if (!map_posis_to_merge_i.has(exist_posi_i)) {
+                map_posis_to_merge_i.set(exist_posi_i, []);
+            }
+            map_posis_to_merge_i.get(exist_posi_i).push(vert_i);
+        }
+        // calculate the new xyz
+        // at the same time make a list of posis to del
+        const posis_to_del_i: number[] = [];
+        const new_xyz: Txyz = [0, 0, 0];
+        for (const [exist_posi_i, merge_verts_i] of Array.from(map_posis_to_merge_i)) {
+            const posi_xyz: Txyz = this._geom.model.attribs.query.getPosiCoords(exist_posi_i);
+            new_xyz[0] += posi_xyz[0];
+            new_xyz[1] += posi_xyz[1];
+            new_xyz[2] += posi_xyz[2];
+            const all_verts_i: number[] = this._geom.nav.navPosiToVert(exist_posi_i);
+            const all_verts_count: number = all_verts_i.length;
+            if (all_verts_count === merge_verts_i.length) {
+                posis_to_del_i.push(exist_posi_i);
+            }
+        }
+        // make the new posi
+        const num_posis: number = map_posis_to_merge_i.size;
+        new_xyz[0] = new_xyz[0] / num_posis;
+        new_xyz[1] = new_xyz[1] / num_posis;
+        new_xyz[2] = new_xyz[2] / num_posis;
+        const new_posi_i: number = this._geom.add.addPosi() as number;
+        this._geom.model.attribs.add.setPosiCoords(new_posi_i, new_xyz);
+        // replace the verts posi
+        for (const vert_i of verts_i) {
+            // update the down arrays
+            this._geom_arrays.dn_verts_posis[vert_i] = new_posi_i;
+            // update the up arrays for the old posi, i.e. remove this vert
+            arrRem(this._geom_arrays.up_posis_verts[vert_i_to_posi_i[vert_i]], vert_i);
+            // update the up arrays for the new posi, i.e. add this vert
+            this._geom_arrays.up_posis_verts[new_posi_i].push(vert_i);
+        }
+        // del the posis that are no longer used, i.e. have zero verts
+        this._geom.del.delPosis(posis_to_del_i);
         // return all the new positions
-        return new_posis_i;
+        return new_posi_i;
     }
     /**
      * Reverse the edges of a wire.

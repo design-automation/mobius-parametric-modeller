@@ -6,7 +6,6 @@ import * as circularJSON from 'circular-json';
 import { _parameterTypes } from '@assets/core/_parameterTypes';
 
 let _terminateCheck: string;
-
 export class CodeUtils {
 
 
@@ -18,8 +17,8 @@ export class CodeUtils {
 
         // mark _terminateCheck to terminate all process after this
         if (prod.type === ProcedureTypes.Terminate && prod.enabled) {
-            _terminateCheck = '';
-            return ['return __params__.model;'];
+            // _terminateCheck = '';
+            return ['__params__.terminated = true;', 'return __params__.model;'];
         }
 
         prod.hasError = false;
@@ -226,6 +225,7 @@ export class CodeUtils {
                 const lfn = `${prod.meta.name}_(__params__${lArgsVals.map(val => ', ' + val).join('')})`;
                 if (args[0].name === '__none__' || !args[0].jsValue) {
                     codeStr.push(`${lfn};`);
+                    codeStr.push('if (__params__.terminated) { return __params__.model;}')
                     break;
                 }
                 const lRepImpVar = this.repSetAttrib(args[0].jsValue);
@@ -238,6 +238,7 @@ export class CodeUtils {
                 if (prefix === 'let ') {
                     existingVars.push(args[0].jsValue);
                 }
+                codeStr.push('if (__params__.terminated) { return __params__.model;}')
                 break;
 
             case ProcedureTypes.globalFuncCall:
@@ -531,7 +532,6 @@ export class CodeUtils {
             for (const arg of prod.args.slice(1)) {
                 varsDefined.push(arg.jsValue);
             }
-            // if (node.type === 'start' && !isMainFlowchart) { break; }
             codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName, usedFunctions));
         }
         varsDefined = [];

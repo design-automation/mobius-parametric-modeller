@@ -103,6 +103,7 @@ export class ExecuteComponent {
     private startTime;
     private isDev = true;
     private triggerCheck: boolean;
+    private terminated: string;
 
     constructor(private dataService: DataService,
                 private dataOutputService: DataOutputService,
@@ -169,6 +170,7 @@ export class ExecuteComponent {
     async execute(testing?: boolean) {
         this.startTime = performance.now();
         this.triggerCheck = false;
+        this.terminated = null;
 
         if (this.dataService.consoleClear) {
             this.dataService.clearLog();
@@ -489,13 +491,20 @@ export class ExecuteComponent {
             'console': this.dataService.getLog(),
             'constants': constantList,
             'fileName': this.dataService.flowchart.name,
-            'message': null
+            'message': null,
+            'terminated': false
         };
         // const consoleLength = params.console.length;
 
         let fnString = '';
         const startTime = performance.now();
         try {
+            if (this.terminated) {
+                this.dataService.notifyMessage(`PROCESS TERMINATED IN NODE: "${this.terminated}"`);
+                this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
+                node.model = undefined;
+                return;
+            }
             const usedFuncs: string[] = [];
             const codeResult = CodeUtils.getNodeCode(node, true, undefined, usedFuncs);
             const usedFuncsSet = new Set(usedFuncs);
@@ -566,6 +575,11 @@ export class ExecuteComponent {
             const fn = new Function('__modules__', '__params__', fnString);
             // execute the function
             const result = fn(Modules, params);
+            if (params['terminated']) {
+                this.terminated = node.name;
+                this.dataService.notifyMessage(`PROCESS TERMINATED IN NODE: "${this.terminated}"`);
+                this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
+            }
 
             if (params.message && !this.triggerCheck) {
                 this.triggerCheck = true;

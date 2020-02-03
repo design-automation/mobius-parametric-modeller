@@ -163,6 +163,7 @@ export class ProcedureItemComponent implements OnDestroy {
         event.stopPropagation();
         if (!this.data.selectGeom) {
             this.unselectGeomRecursive(this.dataService.node.procedure);
+            this.unselectGeomRecursive(this.dataService.node.localFunc);
         }
         this.data.selectGeom = !this.data.selectGeom;
     }

@@ -134,9 +134,11 @@ export function modifyLocalFuncVar(procedure: IProcedure, nodeProdList: IProcedu
     procedure.meta.otherInfo.num_returns = findLocalFuncNumReturns(procedure.children);
 
     const declaredVars = [];
+    let argToLower = false;
     procedure.args.forEach(arg => {
         if (!arg.value) { return; }
-        arg.value = modifyVarArg(arg).replace(/[\@\#\?]/g, '_');
+        arg.value = modifyVarArg(arg, argToLower).replace(/[\@\#\?]/g, '_');
+        argToLower = true;
         arg.jsValue = arg.value + '_';
         if (arg.name === 'func_name') { return; }
         arg.usedVars = [arg.value];
@@ -216,7 +218,7 @@ function updateLocalFuncProperties(prodList: IProcedure[],
 }
 
 
-export function modifyVarArg(arg: IArgument) {
+export function modifyVarArg(arg: IArgument, toLower = true) {
     let str = arg.value.trim();
     const repSplit = str.split(/\[/g);
     let bracketCount = -1;
@@ -225,7 +227,10 @@ export function modifyVarArg(arg: IArgument) {
         repSplit[i] = repSplit[i].split(/\]/g);
         bracketCount -= repSplit[i].length - 1;
         if (bracketCount === 0) {
-            repSplit[i][repSplit[i].length - 1] = repSplit[i][repSplit[i].length - 1].replace(/ /g, '_').toLowerCase();
+            repSplit[i][repSplit[i].length - 1] = repSplit[i][repSplit[i].length - 1].replace(/ /g, '_');
+            if (toLower) {
+                repSplit[i][repSplit[i].length - 1] = repSplit[i][repSplit[i].length - 1].toLowerCase();
+            }
         } else if (bracketCount < 0) {
             throw(new Error('Error: bracket closed before opening'));
         }
@@ -369,8 +374,6 @@ export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProd
 // VAR INPUT
 export function parseVariable(value: string): {'error'?: string, 'declaredVar'?: string, 'usedVars'?: string[], 'jsStr'?: string} {
     const str = value.trim();
-    // str = str.replace(/ /g, '_');
-    // str = str.toLowerCase();
     const comps = splitComponents(str);
     if (typeof comps === 'string') {
         return {'error': comps};

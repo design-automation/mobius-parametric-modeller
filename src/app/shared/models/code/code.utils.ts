@@ -208,7 +208,7 @@ export class CodeUtils {
                 }
                 break;
             case ProcedureTypes.LocalFuncDef:
-                codeStr.push(`function ${prod.args[0].jsValue}(__params__, ${prod.args.slice(1).map(arg => arg.jsValue).join(', ')}) {`);
+                codeStr.push(`\nfunction ${prod.args[0].jsValue}(__params__, ${prod.args.slice(1).map(arg => arg.jsValue).join(', ')}) {`);
                 break;
             case ProcedureTypes.LocalFuncReturn:
                 codeStr.push(`return ${prod.args[0].jsValue};`);
@@ -564,7 +564,7 @@ export class CodeUtils {
                 fnCode += `let result_${nodeFuncName} = __params__.model;\n`;
             } else {
                 const codeRes = CodeUtils.getNodeCode(node, false, func.name)[0];
-                fullCode += `function ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){\n` +
+                fullCode += `\nfunction ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){` +
                             codeRes[0].join('\n') + `\n}\n\n`;
 
                 const activeNodes = [];

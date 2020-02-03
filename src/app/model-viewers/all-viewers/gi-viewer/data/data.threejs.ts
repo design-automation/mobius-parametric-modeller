@@ -265,7 +265,6 @@ export class DataThreejs {
         }
 
         this.allObjs = this.getAllObjs();
-        console.log(this.allObjs)
         if (this.settings.ambient_light.show) {
             this._addAmbientLight();
         }

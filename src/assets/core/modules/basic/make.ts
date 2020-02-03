@@ -430,20 +430,21 @@ function _tin(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEnt
  * @example copies = make.Copy([position1,polyine1,polygon1])
  * @example_info Creates a copy of position1, polyine1, and polygon1.
  */
-export function Copy(__model__: GIModel, entities: TId|TId[]|TId[][], vector: Txyz): TId|TId[]|TId[][] {
+export function Copy(__model__: GIModel, entities: TId|TId[]|TId[][], vector: Txyz|number): TId|TId[]|TId[][] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'make.Copy';
     const ents_arr = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, , IDcheckObj.isIDList_list],
         [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
-    checkArgTypes(fn_name, 'vector', vector, [TypeCheckObj.isVector, TypeCheckObj.isNull]);
+    checkArgTypes(fn_name, 'vector', vector, [TypeCheckObj.isNumber, TypeCheckObj.isVector, TypeCheckObj.isNull]);
     // --- Error Check ---
+    const move_vec: Txyz = (Array.isArray(vector) ? vector : [0, 0, vector]) as Txyz;
     const bool_copy_attribs = true;
     // copy the list of entities
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = _copyGeom(__model__, ents_arr, bool_copy_attribs);
     // copy the positions that belong to the list of entities
-    _copyGeomPosis(__model__, new_ents_arr, bool_copy_attribs, vector);
+    _copyGeomPosis(__model__, new_ents_arr, bool_copy_attribs, move_vec);
     // return only the new entities
     return idsMake(new_ents_arr) as TId|TId[]|TId[][];
 }

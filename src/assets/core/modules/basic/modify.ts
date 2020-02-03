@@ -556,7 +556,7 @@ export function _weld(__model__: GIModel, ents_arr: TEntTypeIdx[], method: _EWel
             __model__.geom.modify.cloneVertPositions(all_verts_i);
             break;
         case _EWeldMethod.MERGE_POSITIONS:
-            __model__.geom.modify.cloneVertPositions(all_verts_i);
+            __model__.geom.modify.mergeVertPositions(all_verts_i);
             break;
         default:
             break;

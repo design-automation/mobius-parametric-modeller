@@ -1,11 +1,11 @@
 {
 	"id": 0,
-	"name": "mobius-parametric-modeller - v0.5.20",
+	"name": "mobius-parametric-modeller - v0.5.21",
 	"kind": 0,
 	"flags": {},
 	"children": [
 		{
-			"id": 4075,
+			"id": 4118,
 			"name": "\"core/_parameterTypes\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -16,7 +16,7 @@
 			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/_parameterTypes.ts",
 			"children": [
 				{
-					"id": 4096,
+					"id": 4139,
 					"name": "_varString",
 					"kind": 32,
 					"kindString": "Variable",
@@ -39,7 +39,7 @@
 					"defaultValue": " `\r\nPI = Math.PI;\r\nXY = __modules__._constants.XY;\r\nYZ = __modules__._constants.YZ;\r\nZX = __modules__._constants.ZX;\r\nYX = __modules__._constants.YX;\r\nZY = __modules__._constants.ZY;\r\nXZ = __modules__._constants.XZ;\r\napprox = __modules__._util.approx;\r\nmin = __modules__._math.min;\r\nmax = __modules__._math.max;\r\npow = Math.pow;\r\nsqrt = Math.sqrt;\r\nexp = Math.exp;\r\nlog = Math.log;\r\nround = Math.round;\r\nceil = Math.ceil;\r\nfloor = Math.floor;\r\nabs = Math.abs;\r\nsin = Math.sin;\r\nasin = Math.asin;\r\nsinh = Math.sinh;\r\nasinh = Math.asinh;\r\ncos = Math.cos;\r\nacos = Math.acos;\r\ncosh = Math.cosh;\r\nacosh = Math.acosh;\r\ntan = Math.tan;\r\natan = Math.atan;\r\ntanh = Math.tanh;\r\natanh = Math.atanh;\r\natan2 = Math.atan2;\r\nboolean = __modules__._mathjs.boolean;\r\nnumber = __modules__._mathjs.number;\r\nstring = __modules__._mathjs.string;\r\nmad = __modules__._mathjs.mad;\r\nmean = __modules__._mathjs.mean;\r\nmedian = __modules__._mathjs.median;\r\nmode = __modules__._mathjs.mode;\r\nprod = __modules__._mathjs.prod;\r\nstd = __modules__._mathjs.std;\r\nvari = __modules__._mathjs.var;\r\nsum = __modules__._mathjs.sum;\r\nhypot = __modules__._mathjs.hypot;\r\nnorm = __modules__._mathjs.norm;\r\nmod = __modules__._mathjs.mod;\r\nsquare = __modules__._mathjs.square;\r\ncube = __modules__._mathjs.cube;\r\nremap = __modules__._arithmetic.remap;\r\ndistance = __modules__._calc.distance;\r\nintersect = __modules__._calc.intersect;\r\nproject = __modules__._calc.project;\r\nrange = __modules__._list.range;\r\nisList = __modules__._list.isList;\r\nlen = __modules__._list.listLen;\r\nlistLen = __modules__._list.listLen;\r\nlistCount = __modules__._list.listCount;\r\nlistCopy = __modules__._list.listCopy;\r\nlistLast = __modules__._list.listLast;\r\nlistGet = __modules__._list.listGet;\r\nlistFind = __modules__._list.listFind;\r\nlistHas = __modules__._list.listHas;\r\nlistJoin = __modules__._list.listJoin;\r\nlistFlat = __modules__._list.listFlat;\r\nlistSlice = __modules__._list.listSlice;\r\nlistCull = __modules__._list.listCull;\r\nlistZip = __modules__._list.listZip;\r\nlistZip2 = __modules__._list.listZip2;\r\nsetMake = __modules__._set.setMake;\r\nsetUni = __modules__._set.setUni;\r\nsetInt = __modules__._set.setInt;\r\nsetDif = __modules__._set.setDif;\r\nlength = __modules__._list.length;\r\nshuffle = __modules__._list.shuffle;\r\nconcat = __modules__._list.concat;\r\nzip = __modules__._list.zip;\r\nzip2 = __modules__._list.zip2;\r\nvecAdd = __modules__._vec.vecAdd;\r\nvecSub = __modules__._vec.vecSub;\r\nvecDiv = __modules__._vec.vecDiv;\r\nvecMult = __modules__._vec.vecMult;\r\nvecLen = __modules__._vec.vecLen;\r\nvecSetLen = __modules__._vec.vecSetLen;\r\nvecNorm = __modules__._vec.vecNorm;\r\nvecRev = __modules__._vec.vecRev;\r\nvecFromTo = __modules__._vec.vecFromTo;\r\nvecAng = __modules__._vec.vecAng;\r\nvecAng2 = __modules__._vec.vecAng2;\r\nvecDot = __modules__._vec.vecDot;\r\nvecCross = __modules__._vec.vecCross;\r\nvecEqual = __modules__._vec.vecEqual;\r\nplnMake = __modules__._plane.plnMake;\r\nplnCopy = __modules__._plane.plnCopy;\r\nplnMove = __modules__._plane.plnMove;\r\nplnRot = __modules__._plane.plnRot;\r\nplnLMove = __modules__._plane.plnLMove;\r\nplnLRotX = __modules__._plane.plnLRotX;\r\nplnLRotY = __modules__._plane.plnLRotY;\r\nplnLRotZ = __modules__._plane.plnLRotZ;\r\nrayMake = __modules__._ray.rayMake;\r\nrayCopy = __modules__._ray.rayCopy;\r\nrayMove = __modules__._ray.rayMove;\r\nrayRot = __modules__._ray.rayRot;\r\nrayLMove = __modules__._ray.rayLMove;\r\nrayFromPln = __modules__._ray.rayFromPln;\r\ncolFalse = __modules__._colors.colFalse;\r\ncolScale = __modules__._colors.colScale;\r\nradToDeg = __modules__._conversion.radToDeg;\r\ndegToRad = __modules__._conversion.degToRad;\r\nrand = __modules__._rand.rand;\r\nrandInt = __modules__._rand.randInt;\r\nrandPick = __modules__._rand.randPick;\r\nsetattr = __modules__._model.__setAttrib__;\r\ngetattr = __modules__._model.__getAttrib__;\r\n`"
 				},
 				{
-					"id": 4076,
+					"id": 4119,
 					"name": "_parameterTypes",
 					"kind": 2097152,
 					"kindString": "Object literal",
@@ -50,7 +50,7 @@
 					},
 					"children": [
 						{
-							"id": 4086,
+							"id": 4129,
 							"name": "addData",
 							"kind": 32,
 							"kindString": "Variable",
@@ -72,7 +72,7 @@
 							"defaultValue": "\"_model.addGiData\""
 						},
 						{
-							"id": 4080,
+							"id": 4123,
 							"name": "console",
 							"kind": 32,
 							"kindString": "Variable",
@@ -94,7 +94,7 @@
 							"defaultValue": "\"__console__\""
 						},
 						{
-							"id": 4077,
+							"id": 4120,
 							"name": "constList",
 							"kind": 32,
 							"kindString": "Variable",
@@ -116,7 +116,7 @@
 							"defaultValue": "\"__constList__\""
 						},
 						{
-							"id": 4081,
+							"id": 4124,
 							"name": "fileName",
 							"kind": 32,
 							"kindString": "Variable",
@@ -138,7 +138,7 @@
 							"defaultValue": "\"__fileName__\""
 						},
 						{
-							"id": 4090,
+							"id": 4133,
 							"name": "getattrib",
 							"kind": 32,
 							"kindString": "Variable",
@@ -160,7 +160,7 @@
 							"defaultValue": "\"attrib.Get\""
 						},
 						{
-							"id": 4079,
+							"id": 4122,
 							"name": "input",
 							"kind": 32,
 							"kindString": "Variable",
@@ -182,7 +182,7 @@
 							"defaultValue": "\"__input__\""
 						},
 						{
-							"id": 4084,
+							"id": 4127,
 							"name": "merge",
 							"kind": 32,
 							"kindString": "Variable",
@@ -204,7 +204,7 @@
 							"defaultValue": "\"_model.__merge__\""
 						},
 						{
-							"id": 4085,
+							"id": 4128,
 							"name": "mergeFn",
 							"kind": 32,
 							"kindString": "Variable",
@@ -227,7 +227,7 @@
 							"defaultValue": " __merge__"
 						},
 						{
-							"id": 4078,
+							"id": 4121,
 							"name": "model",
 							"kind": 32,
 							"kindString": "Variable",
@@ -249,7 +249,7 @@
 							"defaultValue": "\"__model__\""
 						},
 						{
-							"id": 4082,
+							"id": 4125,
 							"name": "new",
 							"kind": 32,
 							"kindString": "Variable",
@@ -271,7 +271,7 @@
 							"defaultValue": "\"_model.__new__\""
 						},
 						{
-							"id": 4083,
+							"id": 4126,
 							"name": "newFn",
 							"kind": 32,
 							"kindString": "Variable",
@@ -294,7 +294,7 @@
 							"defaultValue": " __new__"
 						},
 						{
-							"id": 4088,
+							"id": 4131,
 							"name": "postprocess",
 							"kind": 32,
 							"kindString": "Variable",
@@ -316,7 +316,7 @@
 							"defaultValue": "\"_model.__postprocess__\""
 						},
 						{
-							"id": 4087,
+							"id": 4130,
 							"name": "preprocess",
 							"kind": 32,
 							"kindString": "Variable",
@@ -338,7 +338,7 @@
 							"defaultValue": "\"_model.__preprocess__\""
 						},
 						{
-							"id": 4092,
+							"id": 4135,
 							"name": "queryFilter",
 							"kind": 32,
 							"kindString": "Variable",
@@ -360,7 +360,7 @@
 							"defaultValue": "\"query.Filter\""
 						},
 						{
-							"id": 4091,
+							"id": 4134,
 							"name": "queryGet",
 							"kind": 32,
 							"kindString": "Variable",
@@ -382,7 +382,7 @@
 							"defaultValue": "\"query.Get\""
 						},
 						{
-							"id": 4094,
+							"id": 4137,
 							"name": "return",
 							"kind": 32,
 							"kindString": "Variable",
@@ -404,7 +404,7 @@
 							"defaultValue": "\"_Output.Return\""
 						},
 						{
-							"id": 4093,
+							"id": 4136,
 							"name": "select",
 							"kind": 32,
 							"kindString": "Variable",
@@ -426,7 +426,7 @@
 							"defaultValue": "\"_model.__select__\""
 						},
 						{
-							"id": 4089,
+							"id": 4132,
 							"name": "setattrib",
 							"kind": 32,
 							"kindString": "Variable",
@@ -448,7 +448,7 @@
 							"defaultValue": "\"attrib.Set\""
 						},
 						{
-							"id": 4095,
+							"id": 4138,
 							"name": "urlFunctions",
 							"kind": 32,
 							"kindString": "Variable",
@@ -478,25 +478,25 @@
 							"title": "Variables",
 							"kind": 32,
 							"children": [
-								4086,
-								4080,
-								4077,
-								4081,
-								4090,
-								4079,
-								4084,
-								4085,
-								4078,
-								4082,
-								4083,
-								4088,
-								4087,
-								4092,
-								4091,
-								4094,
-								4093,
-								4089,
-								4095
+								4129,
+								4123,
+								4120,
+								4124,
+								4133,
+								4122,
+								4127,
+								4128,
+								4121,
+								4125,
+								4126,
+								4131,
+								4130,
+								4135,
+								4134,
+								4137,
+								4136,
+								4132,
+								4138
 							]
 						}
 					],
@@ -518,14 +518,14 @@
 					"title": "Variables",
 					"kind": 32,
 					"children": [
-						4096
+						4139
 					]
 				},
 				{
 					"title": "Object literals",
 					"kind": 2097152,
 					"children": [
-						4076
+						4119
 					]
 				}
 			],
@@ -538,7 +538,7 @@
 			]
 		},
 		{
-			"id": 4064,
+			"id": 4107,
 			"name": "\"core/inline/_arithmetic\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -549,7 +549,7 @@
 			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_arithmetic.ts",
 			"children": [
 				{
-					"id": 4065,
+					"id": 4108,
 					"name": "remap",
 					"kind": 64,
 					"kindString": "Function",
@@ -559,14 +559,14 @@
 					},
 					"signatures": [
 						{
-							"id": 4066,
+							"id": 4109,
 							"name": "remap",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 4067,
+									"id": 4110,
 									"name": "num",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -589,7 +589,7 @@
 									}
 								},
 								{
-									"id": 4068,
+									"id": 4111,
 									"name": "d1",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -603,7 +603,7 @@
 									}
 								},
 								{
-									"id": 4069,
+									"id": 4112,
 									"name": "d2",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -649,7 +649,7 @@
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						4065
+						4108
 					]
 				}
 			],
@@ -662,7 +662,7 @@
 			]
 		},
 		{
-			"id": 4031,
+			"id": 4074,
 			"name": "\"core/inline/_calc\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -673,7 +673,7 @@
 			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_calc.ts",
 			"children": [
 				{
-					"id": 4034,
+					"id": 4077,
 					"name": "distance",
 					"kind": 32,
 					"kindString": "Variable",
@@ -697,7 +697,7 @@
 					"defaultValue": " dist.distance"
 				},
 				{
-					"id": 4032,
+					"id": 4075,
 					"name": "intersect",
 					"kind": 32,
 					"kindString": "Variable",
@@ -716,12 +716,12 @@
 					"type": {
 						"type": "reference",
 						"name": "intersect",
-						"id": 4022
+						"id": 4065
 					},
 					"defaultValue": " isect.intersect"
 				},
 				{
-					"id": 4033,
+					"id": 4076,
 					"name": "project",
 					"kind": 32,
 					"kindString": "Variable",
@@ -740,7 +740,7 @@
 					"type": {
 						"type": "reference",
 						"name": "project",
-						"id": 4027
+						"id": 4070
 					},
 					"defaultValue": " isect.project"
 				}
@@ -750,9 +750,9 @@
 					"title": "Variables",
 					"kind": 32,
 					"children": [
-						4034,
-						4032,
-						4033
+						4077,
+						4075,
+						4076
 					]
 				}
 			],
@@ -1023,7 +1023,7 @@
 			]
 		},
 		{
-			"id": 4051,
+			"id": 4094,
 			"name": "\"core/inline/_constants\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -1034,7 +1034,7 @@
 			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_constants.ts",
 			"children": [
 				{
-					"id": 4052,
+					"id": 4095,
 					"name": "XY",
 					"kind": 32,
 					"kindString": "Variable",
@@ -1109,7 +1109,7 @@
 					"defaultValue": " XYPLANE"
 				},
 				{
-					"id": 4057,
+					"id": 4100,
 					"name": "XZ",
 					"kind": 32,
 					"kindString": "Variable",
@@ -1184,7 +1184,7 @@
 					"defaultValue": " XZPLANE"
 				},
 				{
-					"id": 4055,
+					"id": 4098,
 					"name": "YX",
 					"kind": 32,
 					"kindString": "Variable",
@@ -1259,7 +1259,7 @@
 					"defaultValue": " YXPLANE"
 				},
 				{
-					"id": 4053,
+					"id": 4096,
 					"name": "YZ",
 					"kind": 32,
 					"kindString": "Variable",
@@ -1334,7 +1334,7 @@
 					"defaultValue": " YZPLANE"
 				},
 				{
-					"id": 4054,
+					"id": 4097,
 					"name": "ZX",
 					"kind": 32,
 					"kindString": "Variable",
@@ -1409,7 +1409,7 @@
 					"defaultValue": " ZXPLANE"
 				},
 				{
-					"id": 4056,
+					"id": 4099,
 					"name": "ZY",
 					"kind": 32,
 					"kindString": "Variable",
@@ -1489,12 +1489,12 @@
 					"title": "Variables",
 					"kind": 32,
 					"children": [
-						4052,
-						4057,
-						4055,
-						4053,
-						4054,
-						4056
+						4095,
+						4100,
+						4098,
+						4096,
+						4097,
+						4099
 					]
 				}
 			],
@@ -5276,7 +5276,7 @@
 			]
 		},
 		{
-			"id": 4035,
+			"id": 4078,
 			"name": "\"core/inline/_set\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -5287,7 +5287,7 @@
 			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_set.ts",
 			"children": [
 				{
-					"id": 4047,
+					"id": 4090,
 					"name": "setDif",
 					"kind": 64,
 					"kindString": "Function",
@@ -5297,14 +5297,14 @@
 					},
 					"signatures": [
 						{
-							"id": 4048,
+							"id": 4091,
 							"name": "setDif",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 4049,
+									"id": 4092,
 									"name": "list1",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -5318,7 +5318,7 @@
 									}
 								},
 								{
-									"id": 4050,
+									"id": 4093,
 									"name": "list2",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -5350,7 +5350,7 @@
 					]
 				},
 				{
-					"id": 4043,
+					"id": 4086,
 					"name": "setInt",
 					"kind": 64,
 					"kindString": "Function",
@@ -5360,14 +5360,14 @@
 					},
 					"signatures": [
 						{
-							"id": 4044,
+							"id": 4087,
 							"name": "setInt",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 4045,
+									"id": 4088,
 									"name": "list1",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -5381,7 +5381,7 @@
 									}
 								},
 								{
-									"id": 4046,
+									"id": 4089,
 									"name": "list2",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -5413,7 +5413,7 @@
 					]
 				},
 				{
-					"id": 4036,
+					"id": 4079,
 					"name": "setMake",
 					"kind": 64,
 					"kindString": "Function",
@@ -5423,14 +5423,14 @@
 					},
 					"signatures": [
 						{
-							"id": 4037,
+							"id": 4080,
 							"name": "setMake",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 4038,
+									"id": 4081,
 									"name": "list",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -5462,7 +5462,7 @@
 					]
 				},
 				{
-					"id": 4039,
+					"id": 4082,
 					"name": "setUni",
 					"kind": 64,
 					"kindString": "Function",
@@ -5472,14 +5472,14 @@
 					},
 					"signatures": [
 						{
-							"id": 4040,
+							"id": 4083,
 							"name": "setUni",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 4041,
+									"id": 4084,
 									"name": "list1",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -5493,7 +5493,7 @@
 									}
 								},
 								{
-									"id": 4042,
+									"id": 4085,
 									"name": "list2",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -5530,10 +5530,10 @@
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						4047,
-						4043,
-						4036,
-						4039
+						4090,
+						4086,
+						4079,
+						4082
 					]
 				}
 			],
@@ -5546,7 +5546,7 @@
 			]
 		},
 		{
-			"id": 4058,
+			"id": 4101,
 			"name": "\"core/inline/_util\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -5557,7 +5557,7 @@
 			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_util.ts",
 			"children": [
 				{
-					"id": 4059,
+					"id": 4102,
 					"name": "approx",
 					"kind": 64,
 					"kindString": "Function",
@@ -5567,14 +5567,14 @@
 					},
 					"signatures": [
 						{
-							"id": 4060,
+							"id": 4103,
 							"name": "approx",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 4061,
+									"id": 4104,
 									"name": "n1",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -5585,7 +5585,7 @@
 									}
 								},
 								{
-									"id": 4062,
+									"id": 4105,
 									"name": "n2",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -5596,7 +5596,7 @@
 									}
 								},
 								{
-									"id": 4063,
+									"id": 4106,
 									"name": "t",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -5627,7 +5627,7 @@
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						4059
+						4102
 					]
 				}
 			],
@@ -5651,343 +5651,7 @@
 			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_vec.ts",
 			"children": [
 				{
-					"id": 4007,
-					"name": "vecAng",
-					"kind": 32,
-					"kindString": "Variable",
-					"flags": {
-						"isExported": true,
-						"isExternal": true,
-						"isConst": true
-					},
-					"sources": [
-						{
-							"fileName": "core/inline/_vec.ts",
-							"line": 14,
-							"character": 19
-						}
-					],
-					"type": {
-						"type": "reference",
-						"name": "vecAng",
-						"id": 683
-					},
-					"defaultValue": " vec.vecAng"
-				},
-				{
-					"id": 4008,
-					"name": "vecAng2",
-					"kind": 32,
-					"kindString": "Variable",
-					"flags": {
-						"isExported": true,
-						"isExternal": true,
-						"isConst": true
-					},
-					"sources": [
-						{
-							"fileName": "core/inline/_vec.ts",
-							"line": 15,
-							"character": 20
-						}
-					],
-					"type": {
-						"type": "reference",
-						"name": "vecAng2",
-						"id": 687
-					},
-					"defaultValue": " vec.vecAng2"
-				},
-				{
-					"id": 4010,
-					"name": "vecCross",
-					"kind": 32,
-					"kindString": "Variable",
-					"flags": {
-						"isExported": true,
-						"isExternal": true,
-						"isConst": true
-					},
-					"sources": [
-						{
-							"fileName": "core/inline/_vec.ts",
-							"line": 17,
-							"character": 21
-						}
-					],
-					"type": {
-						"type": "reference",
-						"name": "vecCross",
-						"id": 666
-					},
-					"defaultValue": " vec.vecCross"
-				},
-				{
-					"id": 4000,
-					"name": "vecDiv",
-					"kind": 32,
-					"kindString": "Variable",
-					"flags": {
-						"isExported": true,
-						"isExternal": true,
-						"isConst": true
-					},
-					"sources": [
-						{
-							"fileName": "core/inline/_vec.ts",
-							"line": 7,
-							"character": 19
-						}
-					],
-					"type": {
-						"type": "reference",
-						"name": "vecDiv",
-						"id": 658
-					},
-					"defaultValue": " vec.vecDiv"
-				},
-				{
-					"id": 4009,
-					"name": "vecDot",
-					"kind": 32,
-					"kindString": "Variable",
-					"flags": {
-						"isExported": true,
-						"isExternal": true,
-						"isConst": true
-					},
-					"sources": [
-						{
-							"fileName": "core/inline/_vec.ts",
-							"line": 16,
-							"character": 19
-						}
-					],
-					"type": {
-						"type": "reference",
-						"name": "vecDot",
-						"id": 671
-					},
-					"defaultValue": " vec.vecDot"
-				},
-				{
-					"id": 4012,
-					"name": "vecEqual",
-					"kind": 32,
-					"kindString": "Variable",
-					"flags": {
-						"isExported": true,
-						"isExternal": true,
-						"isConst": true
-					},
-					"sources": [
-						{
-							"fileName": "core/inline/_vec.ts",
-							"line": 19,
-							"character": 21
-						}
-					],
-					"type": {
-						"type": "reference",
-						"name": "vecEqual",
-						"id": 628
-					},
-					"defaultValue": " vec.vecEqual"
-				},
-				{
-					"id": 4006,
-					"name": "vecFromTo",
-					"kind": 32,
-					"kindString": "Variable",
-					"flags": {
-						"isExported": true,
-						"isExternal": true,
-						"isConst": true
-					},
-					"sources": [
-						{
-							"fileName": "core/inline/_vec.ts",
-							"line": 13,
-							"character": 22
-						}
-					],
-					"type": {
-						"type": "reference",
-						"name": "vecFromTo",
-						"id": 702
-					},
-					"defaultValue": " vec.vecFromTo"
-				},
-				{
-					"id": 4002,
-					"name": "vecLen",
-					"kind": 32,
-					"kindString": "Variable",
-					"flags": {
-						"isExported": true,
-						"isExternal": true,
-						"isConst": true
-					},
-					"sources": [
-						{
-							"fileName": "core/inline/_vec.ts",
-							"line": 9,
-							"character": 19
-						}
-					],
-					"type": {
-						"type": "reference",
-						"name": "vecLen",
-						"id": 692
-					},
-					"defaultValue": " vec.vecLen"
-				},
-				{
-					"id": 4001,
-					"name": "vecMult",
-					"kind": 32,
-					"kindString": "Variable",
-					"flags": {
-						"isExported": true,
-						"isExternal": true,
-						"isConst": true
-					},
-					"sources": [
-						{
-							"fileName": "core/inline/_vec.ts",
-							"line": 8,
-							"character": 20
-						}
-					],
-					"type": {
-						"type": "reference",
-						"name": "vecMult",
-						"id": 662
-					},
-					"defaultValue": " vec.vecMult"
-				},
-				{
-					"id": 4004,
-					"name": "vecNorm",
-					"kind": 32,
-					"kindString": "Variable",
-					"flags": {
-						"isExported": true,
-						"isExternal": true,
-						"isConst": true
-					},
-					"sources": [
-						{
-							"fileName": "core/inline/_vec.ts",
-							"line": 11,
-							"character": 20
-						}
-					],
-					"type": {
-						"type": "reference",
-						"name": "vecNorm",
-						"id": 675
-					},
-					"defaultValue": " vec.vecNorm"
-				},
-				{
-					"id": 4005,
-					"name": "vecRev",
-					"kind": 32,
-					"kindString": "Variable",
-					"flags": {
-						"isExported": true,
-						"isExternal": true,
-						"isConst": true
-					},
-					"sources": [
-						{
-							"fileName": "core/inline/_vec.ts",
-							"line": 12,
-							"character": 19
-						}
-					],
-					"type": {
-						"type": "reference",
-						"name": "vecRev",
-						"id": 699
-					},
-					"defaultValue": " vec.vecRev"
-				},
-				{
-					"id": 4011,
-					"name": "vecRot",
-					"kind": 32,
-					"kindString": "Variable",
-					"flags": {
-						"isExported": true,
-						"isExternal": true,
-						"isConst": true
-					},
-					"sources": [
-						{
-							"fileName": "core/inline/_vec.ts",
-							"line": 18,
-							"character": 19
-						}
-					],
-					"type": {
-						"type": "reference",
-						"name": "vecRot",
-						"id": 678
-					},
-					"defaultValue": " vec.vecRot"
-				},
-				{
-					"id": 4003,
-					"name": "vecSetLen",
-					"kind": 32,
-					"kindString": "Variable",
-					"flags": {
-						"isExported": true,
-						"isExternal": true,
-						"isConst": true
-					},
-					"sources": [
-						{
-							"fileName": "core/inline/_vec.ts",
-							"line": 10,
-							"character": 22
-						}
-					],
-					"type": {
-						"type": "reference",
-						"name": "vecSetLen",
-						"id": 695
-					},
-					"defaultValue": " vec.vecSetLen"
-				},
-				{
 					"id": 3999,
-					"name": "vecSub",
-					"kind": 32,
-					"kindString": "Variable",
-					"flags": {
-						"isExported": true,
-						"isExternal": true,
-						"isConst": true
-					},
-					"sources": [
-						{
-							"fileName": "core/inline/_vec.ts",
-							"line": 6,
-							"character": 19
-						}
-					],
-					"type": {
-						"type": "reference",
-						"name": "vecSub",
-						"id": 633
-					},
-					"defaultValue": " vec.vecSub"
-				},
-				{
-					"id": 4013,
 					"name": "vecAdd",
 					"kind": 64,
 					"kindString": "Function",
@@ -5997,14 +5661,14 @@
 					},
 					"signatures": [
 						{
-							"id": 4014,
+							"id": 4000,
 							"name": "vecAdd",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 4015,
+									"id": 4001,
 									"name": "v1",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -6029,7 +5693,7 @@
 									}
 								},
 								{
-									"id": 4016,
+									"id": 4002,
 									"name": "v2",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -6054,7 +5718,7 @@
 									}
 								},
 								{
-									"id": 4017,
+									"id": 4003,
 									"name": "norm",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -6089,7 +5753,1331 @@
 					"sources": [
 						{
 							"fileName": "core/inline/_vec.ts",
-							"line": 25,
+							"line": 24,
+							"character": 22
+						}
+					]
+				},
+				{
+					"id": 4029,
+					"name": "vecAng",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {
+						"isExported": true,
+						"isExternal": true
+					},
+					"signatures": [
+						{
+							"id": 4030,
+							"name": "vecAng",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 4031,
+									"name": "v1",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								},
+								{
+									"id": 4032,
+									"name": "v2",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "array",
+										"elementType": {
+											"type": "intrinsic",
+											"name": "number"
+										}
+									}
+								]
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/inline/_vec.ts",
+							"line": 237,
+							"character": 22
+						}
+					]
+				},
+				{
+					"id": 4042,
+					"name": "vecAng2",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {
+						"isExported": true,
+						"isExternal": true
+					},
+					"signatures": [
+						{
+							"id": 4043,
+							"name": "vecAng2",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 4044,
+									"name": "v1",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								},
+								{
+									"id": 4045,
+									"name": "v2",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								},
+								{
+									"id": 4046,
+									"name": "v3",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "array",
+										"elementType": {
+											"type": "intrinsic",
+											"name": "number"
+										}
+									}
+								]
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/inline/_vec.ts",
+							"line": 324,
+							"character": 23
+						}
+					]
+				},
+				{
+					"id": 4025,
+					"name": "vecCross",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {
+						"isExported": true,
+						"isExternal": true
+					},
+					"signatures": [
+						{
+							"id": 4026,
+							"name": "vecCross",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 4027,
+									"name": "v1",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								},
+								{
+									"id": 4028,
+									"name": "v2",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "reference",
+										"name": "Txyz",
+										"id": 406
+									},
+									{
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"name": "Txyz",
+											"id": 406
+										}
+									}
+								]
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/inline/_vec.ts",
+							"line": 207,
+							"character": 24
+						}
+					]
+				},
+				{
+					"id": 4009,
+					"name": "vecDiv",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {
+						"isExported": true,
+						"isExternal": true
+					},
+					"signatures": [
+						{
+							"id": 4010,
+							"name": "vecDiv",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 4011,
+									"name": "v",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								},
+								{
+									"id": 4012,
+									"name": "num",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "intrinsic",
+												"name": "number"
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "number"
+												}
+											}
+										]
+									}
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "reference",
+										"name": "Txyz",
+										"id": 406
+									},
+									{
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"name": "Txyz",
+											"id": 406
+										}
+									}
+								]
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/inline/_vec.ts",
+							"line": 84,
+							"character": 22
+						}
+					]
+				},
+				{
+					"id": 4021,
+					"name": "vecDot",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {
+						"isExported": true,
+						"isExternal": true
+					},
+					"signatures": [
+						{
+							"id": 4022,
+							"name": "vecDot",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 4023,
+									"name": "v1",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								},
+								{
+									"id": 4024,
+									"name": "v2",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "array",
+										"elementType": {
+											"type": "intrinsic",
+											"name": "number"
+										}
+									}
+								]
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/inline/_vec.ts",
+							"line": 177,
+							"character": 22
+						}
+					]
+				},
+				{
+					"id": 4037,
+					"name": "vecEqual",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {
+						"isExported": true,
+						"isExternal": true
+					},
+					"signatures": [
+						{
+							"id": 4038,
+							"name": "vecEqual",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 4039,
+									"name": "v1",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								},
+								{
+									"id": 4040,
+									"name": "v2",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								},
+								{
+									"id": 4041,
+									"name": "tol",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "intrinsic",
+										"name": "boolean"
+									},
+									{
+										"type": "array",
+										"elementType": {
+											"type": "intrinsic",
+											"name": "boolean"
+										}
+									}
+								]
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/inline/_vec.ts",
+							"line": 297,
+							"character": 24
+						}
+					]
+				},
+				{
+					"id": 4033,
+					"name": "vecFromTo",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {
+						"isExported": true,
+						"isExternal": true
+					},
+					"signatures": [
+						{
+							"id": 4034,
+							"name": "vecFromTo",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 4035,
+									"name": "v1",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								},
+								{
+									"id": 4036,
+									"name": "v2",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "reference",
+										"name": "Txyz",
+										"id": 406
+									},
+									{
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"name": "Txyz",
+											"id": 406
+										}
+									}
+								]
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/inline/_vec.ts",
+							"line": 267,
+							"character": 25
+						}
+					]
+				},
+				{
+					"id": 4052,
+					"name": "vecLen",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {
+						"isExported": true,
+						"isExternal": true
+					},
+					"signatures": [
+						{
+							"id": 4053,
+							"name": "vecLen",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 4054,
+									"name": "v",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "intrinsic",
+										"name": "number"
+									},
+									{
+										"type": "array",
+										"elementType": {
+											"type": "intrinsic",
+											"name": "number"
+										}
+									}
+								]
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/inline/_vec.ts",
+							"line": 467,
+							"character": 22
+						}
+					]
+				},
+				{
+					"id": 4013,
+					"name": "vecMult",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {
+						"isExported": true,
+						"isExternal": true
+					},
+					"signatures": [
+						{
+							"id": 4014,
+							"name": "vecMult",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 4015,
+									"name": "v",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								},
+								{
+									"id": 4016,
+									"name": "num",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "intrinsic",
+												"name": "number"
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "number"
+												}
+											}
+										]
+									}
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "reference",
+										"name": "Txyz",
+										"id": 406
+									},
+									{
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"name": "Txyz",
+											"id": 406
+										}
+									}
+								]
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/inline/_vec.ts",
+							"line": 115,
+							"character": 23
+						}
+					]
+				},
+				{
+					"id": 4055,
+					"name": "vecNorm",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {
+						"isExported": true,
+						"isExternal": true
+					},
+					"signatures": [
+						{
+							"id": 4056,
+							"name": "vecNorm",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 4057,
+									"name": "v",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "reference",
+										"name": "Txyz",
+										"id": 406
+									},
+									{
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"name": "Txyz",
+											"id": 406
+										}
+									}
+								]
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/inline/_vec.ts",
+							"line": 478,
+							"character": 23
+						}
+					]
+				},
+				{
+					"id": 4058,
+					"name": "vecRev",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {
+						"isExported": true,
+						"isExternal": true
+					},
+					"signatures": [
+						{
+							"id": 4059,
+							"name": "vecRev",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 4060,
+									"name": "v",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "reference",
+										"name": "Txyz",
+										"id": 406
+									},
+									{
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"name": "Txyz",
+											"id": 406
+										}
+									}
+								]
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/inline/_vec.ts",
+							"line": 489,
+							"character": 22
+						}
+					]
+				},
+				{
+					"id": 4047,
+					"name": "vecRot",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {
+						"isExported": true,
+						"isExternal": true
+					},
+					"signatures": [
+						{
+							"id": 4048,
+							"name": "vecRot",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 4049,
+									"name": "v1",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								},
+								{
+									"id": 4050,
+									"name": "v2",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								},
+								{
+									"id": 4051,
+									"name": "ang",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "intrinsic",
+												"name": "number"
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "number"
+												}
+											}
+										]
+									}
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "reference",
+										"name": "Txyz",
+										"id": 406
+									},
+									{
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"name": "Txyz",
+											"id": 406
+										}
+									}
+								]
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/inline/_vec.ts",
+							"line": 394,
+							"character": 22
+						}
+					]
+				},
+				{
+					"id": 4017,
+					"name": "vecSetLen",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {
+						"isExported": true,
+						"isExternal": true
+					},
+					"signatures": [
+						{
+							"id": 4018,
+							"name": "vecSetLen",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 4019,
+									"name": "v",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								},
+								{
+									"id": 4020,
+									"name": "num",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "intrinsic",
+												"name": "number"
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "intrinsic",
+													"name": "number"
+												}
+											}
+										]
+									}
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "reference",
+										"name": "Txyz",
+										"id": 406
+									},
+									{
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"name": "Txyz",
+											"id": 406
+										}
+									}
+								]
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/inline/_vec.ts",
+							"line": 146,
+							"character": 25
+						}
+					]
+				},
+				{
+					"id": 4004,
+					"name": "vecSub",
+					"kind": 64,
+					"kindString": "Function",
+					"flags": {
+						"isExported": true,
+						"isExternal": true
+					},
+					"signatures": [
+						{
+							"id": 4005,
+							"name": "vecSub",
+							"kind": 4096,
+							"kindString": "Call signature",
+							"flags": {},
+							"parameters": [
+								{
+									"id": 4006,
+									"name": "v1",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								},
+								{
+									"id": 4007,
+									"name": "v2",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "array",
+												"elementType": {
+													"type": "reference",
+													"name": "Txyz",
+													"id": 406
+												}
+											}
+										]
+									}
+								},
+								{
+									"id": 4008,
+									"name": "norm",
+									"kind": 32768,
+									"kindString": "Parameter",
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "boolean"
+									},
+									"defaultValue": "false"
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "reference",
+										"name": "Txyz",
+										"id": 406
+									},
+									{
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"name": "Txyz",
+											"id": 406
+										}
+									}
+								]
+							}
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/inline/_vec.ts",
+							"line": 54,
 							"character": 22
 						}
 					]
@@ -6097,30 +7085,24 @@
 			],
 			"groups": [
 				{
-					"title": "Variables",
-					"kind": 32,
-					"children": [
-						4007,
-						4008,
-						4010,
-						4000,
-						4009,
-						4012,
-						4006,
-						4002,
-						4001,
-						4004,
-						4005,
-						4011,
-						4003,
-						3999
-					]
-				},
-				{
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						4013
+						3999,
+						4029,
+						4042,
+						4025,
+						4009,
+						4021,
+						4037,
+						4033,
+						4052,
+						4013,
+						4055,
+						4058,
+						4047,
+						4017,
+						4004
 					]
 				}
 			],
@@ -11078,7 +12060,7 @@
 			]
 		},
 		{
-			"id": 4070,
+			"id": 4113,
 			"name": "\"core/modules/_output\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -11088,7 +12070,7 @@
 			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/_output.ts",
 			"children": [
 				{
-					"id": 4071,
+					"id": 4114,
 					"name": "Return",
 					"kind": 64,
 					"kindString": "Function",
@@ -11097,7 +12079,7 @@
 					},
 					"signatures": [
 						{
-							"id": 4072,
+							"id": 4115,
 							"name": "Return",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -11114,7 +12096,7 @@
 							},
 							"parameters": [
 								{
-									"id": 4073,
+									"id": 4116,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -11129,7 +12111,7 @@
 									}
 								},
 								{
-									"id": 4074,
+									"id": 4117,
 									"name": "value",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -11163,7 +12145,7 @@
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						4071
+						4114
 					]
 				}
 			],
@@ -18100,7 +19082,7 @@
 			]
 		},
 		{
-			"id": 4098,
+			"id": 4141,
 			"name": "\"core/modules/basic/collection\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -18113,7 +19095,7 @@
 			},
 			"children": [
 				{
-					"id": 4116,
+					"id": 4159,
 					"name": "Add",
 					"kind": 64,
 					"kindString": "Function",
@@ -18122,7 +19104,7 @@
 					},
 					"signatures": [
 						{
-							"id": 4117,
+							"id": 4160,
 							"name": "Add",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -18133,7 +19115,7 @@
 							},
 							"parameters": [
 								{
-									"id": 4118,
+									"id": 4161,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18146,7 +19128,7 @@
 									}
 								},
 								{
-									"id": 4119,
+									"id": 4162,
 									"name": "coll",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18161,7 +19143,7 @@
 									}
 								},
 								{
-									"id": 4120,
+									"id": 4163,
 									"name": "entities",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18204,7 +19186,7 @@
 					]
 				},
 				{
-					"id": 4099,
+					"id": 4142,
 					"name": "Create",
 					"kind": 64,
 					"kindString": "Function",
@@ -18213,7 +19195,7 @@
 					},
 					"signatures": [
 						{
-							"id": 4100,
+							"id": 4143,
 							"name": "Create",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -18242,7 +19224,7 @@
 							},
 							"parameters": [
 								{
-									"id": 4101,
+									"id": 4144,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18255,7 +19237,7 @@
 									}
 								},
 								{
-									"id": 4102,
+									"id": 4145,
 									"name": "entities",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18294,7 +19276,7 @@
 									}
 								},
 								{
-									"id": 4103,
+									"id": 4146,
 									"name": "name",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18349,7 +19331,7 @@
 					]
 				},
 				{
-					"id": 4108,
+					"id": 4151,
 					"name": "Get",
 					"kind": 64,
 					"kindString": "Function",
@@ -18358,7 +19340,7 @@
 					},
 					"signatures": [
 						{
-							"id": 4109,
+							"id": 4152,
 							"name": "Get",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -18369,7 +19351,7 @@
 							},
 							"parameters": [
 								{
-									"id": 4110,
+									"id": 4153,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18382,7 +19364,7 @@
 									}
 								},
 								{
-									"id": 4111,
+									"id": 4154,
 									"name": "names",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18437,7 +19419,7 @@
 					]
 				},
 				{
-					"id": 4126,
+					"id": 4169,
 					"name": "Remove",
 					"kind": 64,
 					"kindString": "Function",
@@ -18446,7 +19428,7 @@
 					},
 					"signatures": [
 						{
-							"id": 4127,
+							"id": 4170,
 							"name": "Remove",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -18457,7 +19439,7 @@
 							},
 							"parameters": [
 								{
-									"id": 4128,
+									"id": 4171,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18470,7 +19452,7 @@
 									}
 								},
 								{
-									"id": 4129,
+									"id": 4172,
 									"name": "coll",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18485,7 +19467,7 @@
 									}
 								},
 								{
-									"id": 4130,
+									"id": 4173,
 									"name": "entities",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18528,21 +19510,21 @@
 					]
 				},
 				{
-					"id": 4121,
+					"id": 4164,
 					"name": "_collectionAdd",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 4122,
+							"id": 4165,
 							"name": "_collectionAdd",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 4123,
+									"id": 4166,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18554,7 +19536,7 @@
 									}
 								},
 								{
-									"id": 4124,
+									"id": 4167,
 									"name": "coll_i",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18565,7 +19547,7 @@
 									}
 								},
 								{
-									"id": 4125,
+									"id": 4168,
 									"name": "ents_arr",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18595,21 +19577,21 @@
 					]
 				},
 				{
-					"id": 4136,
+					"id": 4179,
 					"name": "_collectionEmpty",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 4137,
+							"id": 4180,
 							"name": "_collectionEmpty",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 4138,
+									"id": 4181,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18621,7 +19603,7 @@
 									}
 								},
 								{
-									"id": 4139,
+									"id": 4182,
 									"name": "coll_i",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18647,21 +19629,21 @@
 					]
 				},
 				{
-					"id": 4131,
+					"id": 4174,
 					"name": "_collectionRemove",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 4132,
+							"id": 4175,
 							"name": "_collectionRemove",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 4133,
+									"id": 4176,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18673,7 +19655,7 @@
 									}
 								},
 								{
-									"id": 4134,
+									"id": 4177,
 									"name": "coll_i",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18684,7 +19666,7 @@
 									}
 								},
 								{
-									"id": 4135,
+									"id": 4178,
 									"name": "ents_arr",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18714,21 +19696,21 @@
 					]
 				},
 				{
-					"id": 4104,
+					"id": 4147,
 					"name": "_create",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 4105,
+							"id": 4148,
 							"name": "_create",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 4106,
+									"id": 4149,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18740,7 +19722,7 @@
 									}
 								},
 								{
-									"id": 4107,
+									"id": 4150,
 									"name": "ents_arr",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18805,21 +19787,21 @@
 					]
 				},
 				{
-					"id": 4112,
+					"id": 4155,
 					"name": "_get",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 4113,
+							"id": 4156,
 							"name": "_get",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 4114,
+									"id": 4157,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18831,7 +19813,7 @@
 									}
 								},
 								{
-									"id": 4115,
+									"id": 4158,
 									"name": "names",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18888,15 +19870,15 @@
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						4116,
-						4099,
-						4108,
-						4126,
-						4121,
-						4136,
-						4131,
-						4104,
-						4112
+						4159,
+						4142,
+						4151,
+						4169,
+						4164,
+						4179,
+						4174,
+						4147,
+						4155
 					]
 				}
 			],
@@ -20637,7 +21619,7 @@
 			]
 		},
 		{
-			"id": 4140,
+			"id": 4183,
 			"name": "\"core/modules/basic/isect\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -20650,7 +21632,7 @@
 			},
 			"children": [
 				{
-					"id": 4141,
+					"id": 4184,
 					"name": "_EKnifeKeep",
 					"kind": 4,
 					"kindString": "Enumeration",
@@ -20659,7 +21641,7 @@
 					},
 					"children": [
 						{
-							"id": 4142,
+							"id": 4185,
 							"name": "KEEP_ABOVE",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -20676,7 +21658,7 @@
 							"defaultValue": "\"keep above the plane\""
 						},
 						{
-							"id": 4144,
+							"id": 4187,
 							"name": "KEEP_ALL",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -20693,7 +21675,7 @@
 							"defaultValue": "\"keep all\""
 						},
 						{
-							"id": 4143,
+							"id": 4186,
 							"name": "KEEP_BELOW",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -20715,9 +21697,9 @@
 							"title": "Enumeration members",
 							"kind": 16,
 							"children": [
-								4142,
-								4144,
-								4143
+								4185,
+								4187,
+								4186
 							]
 						}
 					],
@@ -20730,7 +21712,7 @@
 					]
 				},
 				{
-					"id": 4145,
+					"id": 4188,
 					"name": "Intersect",
 					"kind": 64,
 					"kindString": "Function",
@@ -20739,7 +21721,7 @@
 					},
 					"signatures": [
 						{
-							"id": 4146,
+							"id": 4189,
 							"name": "Intersect",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -20760,7 +21742,7 @@
 							},
 							"parameters": [
 								{
-									"id": 4147,
+									"id": 4190,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20773,7 +21755,7 @@
 									}
 								},
 								{
-									"id": 4148,
+									"id": 4191,
 									"name": "entities1",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20788,7 +21770,7 @@
 									}
 								},
 								{
-									"id": 4149,
+									"id": 4192,
 									"name": "entities2",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20822,7 +21804,7 @@
 					]
 				},
 				{
-					"id": 4150,
+					"id": 4193,
 					"name": "Knife",
 					"kind": 64,
 					"kindString": "Function",
@@ -20831,7 +21813,7 @@
 					},
 					"signatures": [
 						{
-							"id": 4151,
+							"id": 4194,
 							"name": "Knife",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -20852,7 +21834,7 @@
 							},
 							"parameters": [
 								{
-									"id": 4152,
+									"id": 4195,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20865,7 +21847,7 @@
 									}
 								},
 								{
-									"id": 4153,
+									"id": 4196,
 									"name": "geometry",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20883,7 +21865,7 @@
 									}
 								},
 								{
-									"id": 4154,
+									"id": 4197,
 									"name": "plane",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20898,7 +21880,7 @@
 									}
 								},
 								{
-									"id": 4155,
+									"id": 4198,
 									"name": "keep",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20909,7 +21891,7 @@
 									"type": {
 										"type": "reference",
 										"name": "_EKnifeKeep",
-										"id": 4141
+										"id": 4184
 									}
 								}
 							],
@@ -20932,7 +21914,7 @@
 					]
 				},
 				{
-					"id": 4156,
+					"id": 4199,
 					"name": "Split",
 					"kind": 64,
 					"kindString": "Function",
@@ -20941,7 +21923,7 @@
 					},
 					"signatures": [
 						{
-							"id": 4157,
+							"id": 4200,
 							"name": "Split",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -20962,7 +21944,7 @@
 							},
 							"parameters": [
 								{
-									"id": 4158,
+									"id": 4201,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20975,7 +21957,7 @@
 									}
 								},
 								{
-									"id": 4159,
+									"id": 4202,
 									"name": "geometry",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20993,7 +21975,7 @@
 									}
 								},
 								{
-									"id": 4160,
+									"id": 4203,
 									"name": "polyline",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -21032,16 +22014,16 @@
 					"title": "Enumerations",
 					"kind": 4,
 					"children": [
-						4141
+						4184
 					]
 				},
 				{
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						4145,
-						4150,
-						4156
+						4188,
+						4193,
+						4199
 					]
 				}
 			],
@@ -22600,7 +23582,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/make.ts",
-									"line": 557,
+									"line": 558,
 									"character": 16
 								}
 							],
@@ -22617,7 +23599,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/make.ts",
-									"line": 561,
+									"line": 562,
 									"character": 15
 								}
 							],
@@ -22634,7 +23616,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/make.ts",
-									"line": 559,
+									"line": 560,
 									"character": 20
 								}
 							],
@@ -22651,7 +23633,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/make.ts",
-									"line": 562,
+									"line": 563,
 									"character": 10
 								}
 							],
@@ -22668,7 +23650,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/make.ts",
-									"line": 556,
+									"line": 557,
 									"character": 14
 								}
 							],
@@ -22685,7 +23667,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/make.ts",
-									"line": 560,
+									"line": 561,
 									"character": 13
 								}
 							],
@@ -22702,7 +23684,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/make.ts",
-									"line": 558,
+									"line": 559,
 									"character": 18
 								}
 							],
@@ -22727,7 +23709,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 555,
+							"line": 556,
 							"character": 24
 						}
 					]
@@ -22824,9 +23806,18 @@
 										"text": "A vector to move the entities by after copying, can be `null`."
 									},
 									"type": {
-										"type": "reference",
-										"name": "Txyz",
-										"id": 406
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"name": "Txyz",
+												"id": 406
+											},
+											{
+												"type": "intrinsic",
+												"name": "number"
+											}
+										]
 									}
 								}
 							],
@@ -22991,7 +23982,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 1286,
+							"line": 1287,
 							"character": 22
 						}
 					]
@@ -23152,7 +24143,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 826,
+							"line": 827,
 							"character": 23
 						}
 					]
@@ -23258,7 +24249,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 465,
+							"line": 466,
 							"character": 20
 						}
 					]
@@ -23396,7 +24387,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 545,
+							"line": 546,
 							"character": 20
 						}
 					]
@@ -24030,7 +25021,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 1095,
+							"line": 1096,
 							"character": 21
 						}
 					]
@@ -24422,7 +25413,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 1311,
+							"line": 1312,
 							"character": 16
 						}
 					]
@@ -24500,7 +25491,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 1330,
+							"line": 1331,
 							"character": 20
 						}
 					]
@@ -24614,7 +25605,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 1051,
+							"line": 1052,
 							"character": 17
 						}
 					]
@@ -24701,7 +25692,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 1033,
+							"line": 1034,
 							"character": 20
 						}
 					]
@@ -24792,7 +25783,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 872,
+							"line": 873,
 							"character": 21
 						}
 					]
@@ -24894,7 +25885,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 852,
+							"line": 853,
 							"character": 23
 						}
 					]
@@ -24984,7 +25975,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 882,
+							"line": 883,
 							"character": 21
 						}
 					]
@@ -25074,7 +26065,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 897,
+							"line": 898,
 							"character": 22
 						}
 					]
@@ -25164,7 +26155,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 970,
+							"line": 971,
 							"character": 21
 						}
 					]
@@ -25254,7 +26245,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 939,
+							"line": 940,
 							"character": 26
 						}
 					]
@@ -25326,7 +26317,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 498,
+							"line": 499,
 							"character": 30
 						}
 					]
@@ -25581,7 +26572,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 485,
+							"line": 486,
 							"character": 14
 						}
 					]
@@ -25680,7 +26671,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 774,
+							"line": 775,
 							"character": 14
 						}
 					]
@@ -25751,7 +26742,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 735,
+							"line": 736,
 							"character": 20
 						}
 					]
@@ -25834,7 +26825,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 564,
+							"line": 565,
 							"character": 19
 						}
 					]
@@ -25917,7 +26908,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 672,
+							"line": 673,
 							"character": 18
 						}
 					]
@@ -26000,7 +26991,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 631,
+							"line": 632,
 							"character": 23
 						}
 					]
@@ -26490,7 +27481,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 1132,
+							"line": 1133,
 							"character": 15
 						}
 					]
@@ -26568,7 +27559,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 1210,
+							"line": 1211,
 							"character": 21
 						}
 					]
@@ -26648,7 +27639,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 1216,
+							"line": 1217,
 							"character": 20
 						}
 					]
@@ -26726,7 +27717,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 1159,
+							"line": 1160,
 							"character": 20
 						}
 					]
@@ -26804,7 +27795,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 1200,
+							"line": 1201,
 							"character": 19
 						}
 					]
@@ -26882,7 +27873,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/make.ts",
-							"line": 1189,
+							"line": 1190,
 							"character": 24
 						}
 					]
@@ -38473,7 +39464,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/visualize.ts",
-							"line": 392,
+							"line": 394,
 							"character": 20
 						}
 					]
@@ -38824,7 +39815,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/visualize.ts",
-							"line": 315,
+							"line": 317,
 							"character": 21
 						}
 					]
@@ -38846,7 +39837,7 @@
 							"flags": {},
 							"comment": {
 								"shortText": "Visualises a ray or a list of rays by creating a polyline with an arrow head.",
-								"returns": "entities, a line representing the ray.",
+								"returns": "entities, a line with an arrow head representing the ray.",
 								"tags": [
 									{
 										"tag": "example",
@@ -38902,6 +39893,9 @@
 									"kind": 32768,
 									"kindString": "Parameter",
 									"flags": {},
+									"comment": {
+										"text": "Scales the arrow head of the vector."
+									},
 									"type": {
 										"type": "intrinsic",
 										"name": "number"
@@ -38921,7 +39915,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/visualize.ts",
-							"line": 250,
+							"line": 251,
 							"character": 19
 						}
 					]
@@ -39178,7 +40172,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/visualize.ts",
-							"line": 399,
+							"line": 401,
 							"character": 17
 						}
 					]
@@ -39259,7 +40253,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/visualize.ts",
-							"line": 324,
+							"line": 326,
 							"character": 18
 						}
 					]
@@ -39340,7 +40334,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/visualize.ts",
-							"line": 258,
+							"line": 259,
 							"character": 16
 						}
 					]
@@ -39382,7 +40376,7 @@
 			]
 		},
 		{
-			"id": 4161,
+			"id": 4204,
 			"name": "\"core/modules/categorization\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -39392,7 +40386,7 @@
 			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/categorization.ts",
 			"children": [
 				{
-					"id": 4162,
+					"id": 4205,
 					"name": "basic",
 					"kind": 32,
 					"kindString": "Variable",
@@ -39416,7 +40410,7 @@
 					"defaultValue": " [\r\n    'query',\r\n    'pattern',\r\n    'make',\r\n    'modify',\r\n    'attrib',\r\n    'calc',\r\n    'analyze',\r\n    'virtual',\r\n    'render',\r\n    'list',\r\n    'util'\r\n]"
 				},
 				{
-					"id": 4163,
+					"id": 4206,
 					"name": "test1",
 					"kind": 32,
 					"kindString": "Variable",
@@ -39440,7 +40434,7 @@
 					"defaultValue": " [\r\n    'query',\r\n    'pattern',\r\n    'make',\r\n]"
 				},
 				{
-					"id": 4164,
+					"id": 4207,
 					"name": "test2",
 					"kind": 32,
 					"kindString": "Variable",
@@ -39464,7 +40458,7 @@
 					"defaultValue": " [\r\n    'modify',\r\n    'attrib',\r\n    'calc',\r\n]"
 				},
 				{
-					"id": 4165,
+					"id": 4208,
 					"name": "test3",
 					"kind": 32,
 					"kindString": "Variable",
@@ -39493,10 +40487,10 @@
 					"title": "Variables",
 					"kind": 32,
 					"children": [
-						4162,
-						4163,
-						4164,
-						4165
+						4205,
+						4206,
+						4207,
+						4208
 					]
 				}
 			],
@@ -39509,7 +40503,7 @@
 			]
 		},
 		{
-			"id": 4097,
+			"id": 4140,
 			"name": "\"core/modules/index\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -52691,7 +53685,7 @@
 									"kindString": "Call signature",
 									"flags": {},
 									"comment": {
-										"shortText": "Unweld all vertices by cloning the positions that are shared.\n~\nAttributes on the positions are  copied.\n~"
+										"shortText": "Unweld all vertices by cloning the positions that are shared.\n~\nAttributes on the positions are copied.\n~"
 									},
 									"parameters": [
 										{
@@ -52805,7 +53799,7 @@
 									"kindString": "Call signature",
 									"flags": {},
 									"comment": {
-										"shortText": "Weld all vertices by merging the positions that are equal, so that they become shared.\n~\nThe old positions are deleted. Attributes on those positions are discarded.\n~"
+										"shortText": "Weld all vertices by merging the positions that are equal, so that they become shared.\n~\nThe old positions are deleted if unused. Attributes on those positions are discarded.\n~"
 									},
 									"parameters": [
 										{
@@ -52827,11 +53821,8 @@
 										}
 									],
 									"type": {
-										"type": "array",
-										"elementType": {
-											"type": "intrinsic",
-											"name": "number"
-										}
+										"type": "intrinsic",
+										"name": "number"
 									}
 								}
 							],
@@ -52958,7 +53949,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 180,
+									"line": 223,
 									"character": 18
 								}
 							]
@@ -53016,7 +54007,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIGeomModify.ts",
-									"line": 211,
+									"line": 254,
 									"character": 16
 								}
 							]
@@ -70986,7 +71977,7 @@
 			]
 		},
 		{
-			"id": 4018,
+			"id": 4061,
 			"name": "\"libs/geom/intersect\"",
 			"kind": 1,
 			"kindString": "External module",
@@ -70997,7 +71988,7 @@
 			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geom/intersect.ts",
 			"children": [
 				{
-					"id": 4021,
+					"id": 4064,
 					"name": "TPlane",
 					"kind": 4194304,
 					"kindString": "Type alias",
@@ -71017,23 +72008,23 @@
 							{
 								"type": "reference",
 								"name": "Txyz",
-								"id": 4019
+								"id": 4062
 							},
 							{
 								"type": "reference",
 								"name": "Txyz",
-								"id": 4019
+								"id": 4062
 							},
 							{
 								"type": "reference",
 								"name": "Txyz",
-								"id": 4019
+								"id": 4062
 							}
 						]
 					}
 				},
 				{
-					"id": 4020,
+					"id": 4063,
 					"name": "TRay",
 					"kind": 4194304,
 					"kindString": "Type alias",
@@ -71053,18 +72044,18 @@
 							{
 								"type": "reference",
 								"name": "Txyz",
-								"id": 4019
+								"id": 4062
 							},
 							{
 								"type": "reference",
 								"name": "Txyz",
-								"id": 4019
+								"id": 4062
 							}
 						]
 					}
 				},
 				{
-					"id": 4019,
+					"id": 4062,
 					"name": "Txyz",
 					"kind": 4194304,
 					"kindString": "Type alias",
@@ -71097,7 +72088,7 @@
 					}
 				},
 				{
-					"id": 4022,
+					"id": 4065,
 					"name": "intersect",
 					"kind": 64,
 					"kindString": "Function",
@@ -71107,14 +72098,14 @@
 					},
 					"signatures": [
 						{
-							"id": 4023,
+							"id": 4066,
 							"name": "intersect",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 4024,
+									"id": 4067,
 									"name": "r1",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -71122,11 +72113,11 @@
 									"type": {
 										"type": "reference",
 										"name": "TRay",
-										"id": 4020
+										"id": 4063
 									}
 								},
 								{
-									"id": 4025,
+									"id": 4068,
 									"name": "r2",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -71137,18 +72128,18 @@
 											{
 												"type": "reference",
 												"name": "TRay",
-												"id": 4020
+												"id": 4063
 											},
 											{
 												"type": "reference",
 												"name": "TPlane",
-												"id": 4021
+												"id": 4064
 											}
 										]
 									}
 								},
 								{
-									"id": 4026,
+									"id": 4069,
 									"name": "met",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -71163,7 +72154,7 @@
 							"type": {
 								"type": "reference",
 								"name": "Txyz",
-								"id": 4019
+								"id": 4062
 							}
 						}
 					],
@@ -71176,7 +72167,7 @@
 					]
 				},
 				{
-					"id": 4027,
+					"id": 4070,
 					"name": "project",
 					"kind": 64,
 					"kindString": "Function",
@@ -71186,14 +72177,14 @@
 					},
 					"signatures": [
 						{
-							"id": 4028,
+							"id": 4071,
 							"name": "project",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 4029,
+									"id": 4072,
 									"name": "c",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -71201,11 +72192,11 @@
 									"type": {
 										"type": "reference",
 										"name": "Txyz",
-										"id": 4019
+										"id": 4062
 									}
 								},
 								{
-									"id": 4030,
+									"id": 4073,
 									"name": "r",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -71216,12 +72207,12 @@
 											{
 												"type": "reference",
 												"name": "TRay",
-												"id": 4020
+												"id": 4063
 											},
 											{
 												"type": "reference",
 												"name": "TPlane",
-												"id": 4021
+												"id": 4064
 											}
 										]
 									}
@@ -71230,7 +72221,7 @@
 							"type": {
 								"type": "reference",
 								"name": "Txyz",
-								"id": 4019
+								"id": 4062
 							}
 						}
 					],
@@ -71248,17 +72239,17 @@
 					"title": "Type aliases",
 					"kind": 4194304,
 					"children": [
-						4021,
-						4020,
-						4019
+						4064,
+						4063,
+						4062
 					]
 				},
 				{
 					"title": "Functions",
 					"kind": 64,
 					"children": [
-						4022,
-						4027
+						4065,
+						4070
 					]
 				}
 			],
@@ -76866,11 +77857,11 @@
 			"title": "External modules",
 			"kind": 1,
 			"children": [
-				4075,
-				4064,
-				4031,
+				4118,
+				4107,
+				4074,
 				3517,
-				4051,
+				4094,
 				2139,
 				2948,
 				2132,
@@ -76878,21 +77869,21 @@
 				2430,
 				3975,
 				2405,
-				4035,
-				4058,
+				4078,
+				4101,
 				3998,
 				1810,
 				2618,
-				4070,
+				4113,
 				2467,
 				2177,
 				2273,
 				2502,
-				4098,
+				4141,
 				3502,
 				3414,
 				3881,
-				4140,
+				4183,
 				3435,
 				3017,
 				3637,
@@ -76901,8 +77892,8 @@
 				2645,
 				3936,
 				3530,
-				4161,
-				4097,
+				4204,
+				4140,
 				3876,
 				102,
 				1597,
@@ -76938,7 +77929,7 @@
 				2392,
 				2173,
 				1801,
-				4018,
+				4061,
 				2146,
 				603,
 				625,

@@ -74,7 +74,6 @@ export class ProcedureInputViewerComponent implements OnDestroy {
 
     // modify argument input: check if input is valid
     argMod() {
-        // this.dataService.focusedInput = [event.target, (<HTMLInputElement>event.target).selectionStart];
         if (!this.prod.args[1].value) { return; }
         this.eventAction.emit({
             'type': 'argMod',

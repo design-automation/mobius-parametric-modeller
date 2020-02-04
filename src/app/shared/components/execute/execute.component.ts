@@ -211,85 +211,35 @@ export class ExecuteComponent {
                 this.googleAnalyticsService.trackEvent(_category, `error: ${ex.name}`, 'click', performance.now() - this.startTime);
                 throw ex;
             }
-
-            for (const prod of node.procedure) {
-                // ignore the return, comment and disabled procedures
-                if (prod.type === ProcedureTypes.Return || prod.type === ProcedureTypes.Comment || !prod.enabled) { continue; }
-
-                // if there's any invalid argument, flag as having error
-                if (prod.argCount > 0 && prod.args[0].invalidVar) {
-                    node.hasError = true;
-                    prod.hasError = true;
-                    InvalidECheck = true;
-                }
-
-                // for start node constant procedures (start node parameters)
-                if (prod.type === ProcedureTypes.Constant) {
-                    // resolve start node input (URL + File parameters) ... to be revised
-                    // flag error if catch error (invalid argument value)
-                    try {
-                        prod.resolvedValue = await CodeUtils.getStartInput(prod.args[1], prod.meta.inputMode);
-                    } catch (ex) {
-                        node.hasError = true;
-                        prod.hasError = true;
-                        if (ex.message.indexOf('HTTP') !== -1 || ex.message.indexOf('File Reading') !== -1) {
-                            document.getElementById('spinner-off').click();
-                            document.getElementById('Console').click();
-                            this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-                            const _category = this.isDev ? 'dev' : 'execute';
-                            this.googleAnalyticsService.trackEvent(_category, `error: Reserved Word Argument`,
-                                'click', performance.now() - this.startTime);
-                            this.dataService.log(`<h4 style="padding: 2px 0px 2px 0px; color:red;">Error: ${ex.message}</h4>`);
-                            throw(ex);
-                        }
-                        InvalidECheck = true;
-                    }
-
-                    // if there's no value for the parameter name or parameter value -> flag error (empty argument)
-                    if (!prod.args[0].value || (!prod.args[1].value && prod.args[1].value !== 0 && prod.args[1].value !== false)) {
-                        node.hasError = true;
-                        prod.hasError = true;
-                        EmptyECheck = true;
-                    }
-                // any other procedure type that is not start node constant
-                } else {
-                    for (const arg of prod.args) {
-                        // ignore arguments that have argument name starting with "_" ("__model__", "__constant__", ...)
-                        if (arg.name[0] === '_' || arg.type === 5) {
-                            continue;
-                        }
-                        // if the argument value is empty -> flag error (empty argument)
-                        if (arg.value !== 0 && arg.value !== false && !arg.value) {
-                            node.hasError = true;
-                            prod.hasError = true;
-                            EmptyECheck = true;
-                        }
-                    }
-                }
-            }
-            // Empty argument error
-            if (EmptyECheck) {
-                document.getElementById('Console').click();
-                this.dataService.log('<h4 style="padding: 2px 0px 2px 0px; color:red;">Error: Empty Argument detected. ' +
-                                     'Check marked node(s) and procedure(s)!</h5>');
-                this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-                document.getElementById('spinner-off').click();
-                const _category = this.isDev ? 'dev' : 'execute';
-                this.googleAnalyticsService.trackEvent(_category, `error: Empty Argument`, 'click', performance.now() - this.startTime);
-                throw new Error('Empty Argument');
-            }
-            // Invalid argument value error
-            if (InvalidECheck) {
-                document.getElementById('Console').click();
-                this.dataService.log('<h4 style="padding: 2px 0px 2px 0px; style="color:red">Error: Invalid Argument or ' +
-                                     'Argument with Reserved Word detected. Check marked node(s) and procedure(s)!</h5>');
-                document.getElementById('spinner-off').click();
-                this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-                const _category = this.isDev ? 'dev' : 'execute';
-                this.googleAnalyticsService.trackEvent(_category, `error: Reserved Word Argument`,
-                    'click', performance.now() - this.startTime);
-                throw new Error('Reserved Word Argument');
-            }
+            let validCheck = await this.checkProdValidity(node, node.localFunc);
+            InvalidECheck = InvalidECheck || validCheck[0];
+            EmptyECheck = EmptyECheck || validCheck[1];
+            validCheck = await this.checkProdValidity(node, node.procedure);
+            InvalidECheck = InvalidECheck || validCheck[0];
+            EmptyECheck = EmptyECheck || validCheck[1];
+            // // Empty argument error
+            // if (EmptyECheck) {
+            //     document.getElementById('Console').click();
+            //     this.dataService.log('<h4 style="padding: 2px 0px 2px 0px; color:red;">Error: Empty Argument detected. ' +
+            //                          'Check marked node(s) and procedure(s)!</h5>');
+            //     this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
+            //     document.getElementById('spinner-off').click();
+            //     const _category = this.isDev ? 'dev' : 'execute';
+            //     this.googleAnalyticsService.trackEvent(_category, `error: Empty Argument`, 'click', performance.now() - this.startTime);
+            //     throw new Error('Empty Argument');
+            // }
+            // // Invalid argument value error
+            // if (InvalidECheck) {
+            //     document.getElementById('Console').click();
+            //     this.dataService.log('<h4 style="padding: 2px 0px 2px 0px; style="color:red">Error: Invalid Argument or ' +
+            //                          'Argument with Reserved Word detected. Check marked node(s) and procedure(s)!</h5>');
+            //     document.getElementById('spinner-off').click();
+            //     this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
+            //     const _category = this.isDev ? 'dev' : 'execute';
+            //     this.googleAnalyticsService.trackEvent(_category, `error: Reserved Word Argument`,
+            //         'click', performance.now() - this.startTime);
+            //     throw new Error('Reserved Word Argument');
+            // }
         }
 
         // resolve urls for each imported functions and subFunctions
@@ -323,6 +273,78 @@ export class ExecuteComponent {
         }
     }
 
+    async checkProdValidity(node: INode, prodList: IProcedure[]) {
+        let InvalidECheck = false;
+        let EmptyECheck = false;
+        
+        for (const prod of prodList) {
+            // ignore the return, comment and disabled procedures
+            if (prod.type === ProcedureTypes.Return || prod.type === ProcedureTypes.Comment || !prod.enabled) { continue; }
+            // if there's any invalid argument, flag as having error
+            for (const arg of prod.args) {
+                if (arg.invalidVar) {
+                    node.hasError = true;
+                    prod.hasError = true;
+                    InvalidECheck = true;
+                }
+            }
+            // if (prod.argCount > 0 && prod.args[0].invalidVar) {
+            //     node.hasError = true;
+            //     prod.hasError = true;
+            //     InvalidECheck = true;
+            // }
+
+            // for start node constant procedures (start node parameters)
+            if (prod.type === ProcedureTypes.Constant) {
+                // resolve start node input (URL + File parameters) ... to be revised
+                // flag error if catch error (invalid argument value)
+                try {
+                    prod.resolvedValue = await CodeUtils.getStartInput(prod.args[1], prod.meta.inputMode);
+                } catch (ex) {
+                    node.hasError = true;
+                    prod.hasError = true;
+                    if (ex.message.indexOf('HTTP') !== -1 || ex.message.indexOf('File Reading') !== -1) {
+                        document.getElementById('spinner-off').click();
+                        document.getElementById('Console').click();
+                        this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
+                        const _category = this.isDev ? 'dev' : 'execute';
+                        this.googleAnalyticsService.trackEvent(_category, `error: Reserved Word Argument`,
+                            'click', performance.now() - this.startTime);
+                        this.dataService.log(`<h4 style="padding: 2px 0px 2px 0px; color:red;">Error: ${ex.message}</h4>`);
+                        throw(ex);
+                    }
+                    InvalidECheck = true;
+                }
+
+                // if there's no value for the parameter name or parameter value -> flag error (empty argument)
+                if (!prod.args[0].value || (!prod.args[1].value && prod.args[1].value !== 0 && prod.args[1].value !== false)) {
+                    node.hasError = true;
+                    prod.hasError = true;
+                    EmptyECheck = true;
+                }
+            // any other procedure type that is not start node constant
+            } else {
+                for (const arg of prod.args) {
+                    // ignore arguments that have argument name starting with "_" ("__model__", "__constant__", ...)
+                    if (arg.name[0] === '_' || arg.type === 5) {
+                        continue;
+                    }
+                    // if the argument value is empty -> flag error (empty argument)
+                    if (arg.value !== 0 && arg.value !== false && !arg.value) {
+                        node.hasError = true;
+                        prod.hasError = true;
+                        EmptyECheck = true;
+                    }
+                }
+            }
+            if (prod.children) {
+                const childrenCheck = this.checkProdValidity(node, prod.children);
+                InvalidECheck = InvalidECheck || childrenCheck[0];
+                EmptyECheck = EmptyECheck || childrenCheck[1];
+            }
+        }
+        return [InvalidECheck, EmptyECheck]
+    }
 
     extractAnswerList(flowchart: any): any {
         const answerList = {'params': []};
@@ -494,6 +516,18 @@ export class ExecuteComponent {
             'message': null,
             'terminated': false
         };
+
+        if (node.hasError){
+            document.getElementById('Console').click();
+            this.dataService.log('<h4 style="padding: 2px 0px 2px 0px; style="color:red">Error: Invalid Argument ' +
+                                    'detected. Check marked node(s) and procedure(s)!</h5>');
+            document.getElementById('spinner-off').click();
+            this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
+            const _category = this.isDev ? 'dev' : 'execute';
+            this.googleAnalyticsService.trackEvent(_category, `error: Reserved Word Argument`,
+                'click', performance.now() - this.startTime);
+            throw new Error('Reserved Word Argument');
+        }
         // const consoleLength = params.console.length;
 
         let fnString = '';

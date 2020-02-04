@@ -326,8 +326,8 @@ export class ProcedureItemComponent implements OnDestroy {
 
     // modify argument input: check if input is valid
     argMod(event: Event, argIndex: number) {
-        // this.dataService.focusedInput = [event.target, (<HTMLInputElement>event.target).selectionStart];
         this.dataService.focusedInput = event.target;
+        this.dataService.focusedInputProd = this.data;
         this.clearLinkedArgs(this.dataService.node.localFunc);
         this.clearLinkedArgs(this.dataService.node.procedure);
         if (!this.data.args[argIndex].value) { return; }

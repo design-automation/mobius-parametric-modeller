@@ -108,6 +108,11 @@ export class ToolsetComponent implements OnInit {
 
     }
 
+    selectPrevProd(event: MouseEvent){
+        // event.preventDefault();
+        this.dataService.focusedInputProd = null;
+    }
+
     // add selected basic function as a new procedure
     add_basic_func(type: ProcedureTypes, data?): void {
         this.eventAction.emit({
@@ -186,6 +191,43 @@ export class ToolsetComponent implements OnInit {
         } else {
             this.add_global_func(fnData.data);
         }
+    }
+
+    add_inline_func(string) {
+        if (!this.dataService.focusedInput) {
+            return;
+        }
+        this.dataService.focusedInput.focus();
+        let selStart: number, selEnd: number;
+        if (this.dataService.focusedInput.selectionDirection === 'backward') {
+            selStart = this.dataService.focusedInput.selectionEnd;
+            selEnd = this.dataService.focusedInput.selectionStart;
+        } else {
+            selStart = this.dataService.focusedInput.selectionStart;
+            selEnd = this.dataService.focusedInput.selectionEnd;
+        }
+        const newSelStart = string.indexOf('(');
+        this.dataService.focusedInput.value =
+            this.dataService.focusedInput.value.slice(0, selStart) +
+            string +
+            this.dataService.focusedInput.value.slice(selEnd);
+        this.dataService.focusedInput.dispatchEvent(inputEvent);
+        if (newSelStart !== -1) {
+            this.dataService.focusedInput.selectionStart = selStart + newSelStart + 1;
+            this.dataService.focusedInput.selectionEnd = selStart + string.length - 1;
+        } else {
+            this.dataService.focusedInput.selectionStart = selStart + string.length;
+            this.dataService.focusedInput.selectionEnd = selStart + string.length;
+        }
+        // const index = this.dataService.focusedInput.selectionDirection === 'backward' ?
+        //     this.dataService.focusedInput.selectionStart : this.dataService.focusedInput.selectionEnd;
+        // this.dataService.focusedInput.value =
+        //     this.dataService.focusedInput.value.slice(0, index) +
+        //     string +
+        //     this.dataService.focusedInput.value.slice(index);
+
+        // this.dataService.focusedInput.dispatchEvent(inputEvent);
+        // this.dataService.focusedInput.selectionStart = index + string.length;
     }
 
     // delete imported function
@@ -311,49 +353,10 @@ export class ToolsetComponent implements OnInit {
 
     setCurrent(event) {
         if (document.activeElement.tagName === 'INPUT' && document.activeElement.className !== 'searchBar') {
-            // this.dataService.focusedInput = [document.activeElement, (<HTMLInputElement>document.activeElement).selectionStart];
             this.dataService.focusedInput = document.activeElement;
-        } else {
-            // this.dataService.focusedInput = undefined;
         }
     }
 
-    add_inline_func(string) {
-        if (!this.dataService.focusedInput) {
-            return;
-        }
-        this.dataService.focusedInput.focus();
-        let selStart: number, selEnd: number;
-        if (this.dataService.focusedInput.selectionDirection === 'backward') {
-            selStart = this.dataService.focusedInput.selectionEnd;
-            selEnd = this.dataService.focusedInput.selectionStart;
-        } else {
-            selStart = this.dataService.focusedInput.selectionStart;
-            selEnd = this.dataService.focusedInput.selectionEnd;
-        }
-        const newSelStart = string.indexOf('(');
-        this.dataService.focusedInput.value =
-            this.dataService.focusedInput.value.slice(0, selStart) +
-            string +
-            this.dataService.focusedInput.value.slice(selEnd);
-        this.dataService.focusedInput.dispatchEvent(inputEvent);
-        if (newSelStart !== -1) {
-            this.dataService.focusedInput.selectionStart = selStart + newSelStart + 1;
-            this.dataService.focusedInput.selectionEnd = selStart + string.length - 1;
-        } else {
-            this.dataService.focusedInput.selectionStart = selStart + string.length;
-            this.dataService.focusedInput.selectionEnd = selStart + string.length;
-        }
-        // const index = this.dataService.focusedInput.selectionDirection === 'backward' ?
-        //     this.dataService.focusedInput.selectionStart : this.dataService.focusedInput.selectionEnd;
-        // this.dataService.focusedInput.value =
-        //     this.dataService.focusedInput.value.slice(0, index) +
-        //     string +
-        //     this.dataService.focusedInput.value.slice(index);
-
-        // this.dataService.focusedInput.dispatchEvent(inputEvent);
-        // this.dataService.focusedInput.selectionStart = index + string.length;
-    }
 
 
 
@@ -381,6 +384,10 @@ export class ToolsetComponent implements OnInit {
         this.dataService.dialog = <HTMLDialogElement>document.getElementById('headerDialog');
         this.dataService.dialog.showModal();
         this.dataService.setbackup_updateImported(fnData);
+    }
+    
+    preventfocus() {
+        event.preventDefault()
     }
 
     toggleAccordion(id: string, inline?: boolean) {

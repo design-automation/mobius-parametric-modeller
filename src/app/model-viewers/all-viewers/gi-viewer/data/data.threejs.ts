@@ -200,7 +200,7 @@ export class DataThreejs {
         }
         while (this._scene.children.length > 0) {
             DataThreejs.disposeObjectProperty(this._scene.children[0], 'geometry');
-            DataThreejs.disposeObjectProperty(this._scene.children[0], 'material');
+            // DataThreejs.disposeObjectProperty(this._scene.children[0], 'material');
             DataThreejs.disposeObjectProperty(this._scene.children[0], 'texture');
             this._scene.remove(this._scene.children[0]);
             this.sceneObjs = [];

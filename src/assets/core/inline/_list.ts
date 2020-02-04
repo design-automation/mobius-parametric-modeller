@@ -7,12 +7,16 @@ import { arrMakeFlat } from '@libs/util/arrs';
 export function range(start: number, end: number, step?: number): number[] {
     if (start === undefined) { throw new Error('Invalid inline arg: min must be defined.'); }
     if (end === undefined) { throw new Error('Invalid inline arg: max must be defined.'); }
+    if (step === 0) { throw new Error('Invalid inline arg: step must not be 0.'); }
     const len: number = end - start;
-    if (len <= 0) {return []; }
-    if (step === undefined) { step = 1; }
+    if (step === undefined) { 
+        step = len > 0 ? 1 : -1;
+    }
+    const negStep = step < 0;
+    if (len > 0 !== step > 0) { return []; }
     const list: number[] = [];
     let current: number = start;
-    while (current < end) {
+    while (current !== end && (current < end) !== negStep) {
         list.push(current);
         current += step;
     }

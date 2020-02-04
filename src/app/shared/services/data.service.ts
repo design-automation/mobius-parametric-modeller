@@ -32,6 +32,7 @@ export class DataService {
     private static _activeGallery: any = undefined;
 
     private static _focusedInput: any;
+    private static _focusedInputProd: any;
     private static _highlightedProd: any[] = [];
 
     private static _splitVal = 60;
@@ -144,6 +145,9 @@ export class DataService {
 
     get focusedInput() {return DataService._focusedInput; }
     set focusedInput(input: any) {DataService._focusedInput = input; }
+
+    get focusedInputProd() {return DataService._focusedInputProd; }
+    set focusedInputProd(input: any) {DataService._focusedInputProd = input; }
 
     getHighlightedProd() {
         if (DataService._highlightedProd.length > 0) {

@@ -6,11 +6,14 @@
         <!-- basic functions: variable, if, else, else if, for, while, continue, break -->
         <ul class='toolset__functions--subset'>
             <li class='tooltip-variable' [class.invalid]='checkInvalid("Variable")'
-                [class.basic]='true' (click)='add_basic_func(0)'> 
+                [class.basic]='true' 
+                (mousedown)='selectPrevProd($event)'
+                (click)='add_basic_func(0)'> 
                     Variable
             </li>
             <li class='tooltip-variable'
                 [class.basic]='true'
+                (mousedown)='selectPrevProd($event)'
                 (click)='add_basic_func(ProcedureTypes.Comment)'> 
                     Comment
             </li>
@@ -19,50 +22,55 @@
         <div class = "divider"></div>
 
         <button id='basic-funcs' class="accordion mainAccordion" 
+        (mousedown)='preventfocus()'
         (click)='toggleAccordion("basic-funcs")' >Control Flow</button>
         <div class="panel">
             <ul class='toolset__functions--subset'>
                 <li class='tooltip-basic' [class.invalid]='checkInvalid("If")'
-                    [class.basic]='true' (click)='add_basic_func(1)'> 
+                    [class.basic]='true' 
+                    (mousedown)='selectPrevProd($event)'
+                    (click)='add_basic_func(1)'> 
                         If
                 </li>
                 <li class='tooltip-basic' [class.invalid]='checkInvalid("Elseif")'
-                    [class.basic]='true' (click)='add_basic_func(2)'> 
+                    [class.basic]='true' 
+                    (mousedown)='selectPrevProd($event)'
+                    (click)='add_basic_func(2)'> 
                         Else if
                 </li>
                 <li class='tooltip-basic' [class.invalid]='checkInvalid("Else")'
-                    [class.basic]='true' (click)='add_basic_func(3)'> 
+                    [class.basic]='true' 
+                    (mousedown)='selectPrevProd($event)'
+                    (click)='add_basic_func(3)'> 
                         Else
                 </li>
                 <li class='tooltip-basic' [class.invalid]='checkInvalid("Foreach")'
-                    [class.basic]='true' (click)='add_basic_func(4)'> 
+                    [class.basic]='true' 
+                    (mousedown)='selectPrevProd($event)'
+                    (click)='add_basic_func(4)'> 
                         For Each
                 </li>
                 <li class='tooltip-basic' [class.invalid]='checkInvalid("While")'
-                    [class.basic]='true' (click)='add_basic_func(5)'> 
+                    [class.basic]='true' 
+                    (mousedown)='selectPrevProd($event)'
+                    (click)='add_basic_func(5)'> 
                         While
                 </li>
                 <li class='tooltip-basic' [class.invalid]='checkInvalid("Break")'
-                    [class.basic]='true' (click)='add_basic_func(6)'> 
+                    [class.basic]='true' 
+                    (mousedown)='selectPrevProd($event)'
+                    (click)='add_basic_func(6)'> 
                         Break
                 </li>
                 <li class='tooltip-basic' [class.invalid]='checkInvalid("Continue")'
-                    [class.basic]='true' (click)='add_basic_func(7)'> 
+                    [class.basic]='true' 
+                    (mousedown)='selectPrevProd($event)'
+                    (click)='add_basic_func(7)'> 
                         Continue
                 </li>
-    
-                <!-- <ng-container *ngFor="let type of ProcedureTypesArr">
-                    <li *ngIf="8 > ProcedureTypes[type]"
-                    class='tooltip-basic'
-                    [class.invalid]='checkInvalid(type)'
-                    [class.basic]='true'
-                    (click)='add_basic_func(ProcedureTypes[type])'> 
-                        {{type}}
-                    </li>
-                </ng-container> -->
-
                 <li class='tooltip-basic'
                     [class.basic]='true'
+                    (mousedown)='selectPrevProd($event)'
                     (click)='add_basic_func(ProcedureTypes.Terminate)'> 
                         Terminate
                 </li>
@@ -71,7 +79,9 @@
         
         <!--Divider-->
         <div class = "divider"></div>
-        <button id='Functions' class="accordion mainAccordion"  (click)='toggleAccordionHead("Functions")'>Main Funcs
+        <button id='Functions' class="accordion mainAccordion"  
+        (mousedown)='preventfocus()'
+        (click)='toggleAccordionHead("Functions")'>Main Funcs
         </button>
         <!--Search Bar-->
         <div class = 'searchbar--container'>
@@ -80,6 +90,7 @@
                 <ul class='toolset__functions--subset'>
                     <ng-container *ngFor='let fn of searchedMainFuncs'>
                         <li *ngIf='fn.type=="function"'
+                        (mousedown)='selectPrevProd($event)'
                         (click)='add_main_func(fn.data)'
                         (mouseenter)='popupTooltip($event, fn.data.doc)'
                         (mouseleave)='turnoffTooltip()'>
@@ -94,6 +105,7 @@
             <!-- functions from core.modules -->
             <ng-container *ngFor='let mod of Modules' >
                 <button id='{{mod.module}}' class="accordion" 
+                (mousedown)='preventfocus()'
                 (click)='toggleAccordion(mod.module)' >{{ mod.module }}</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset'>
@@ -101,7 +113,9 @@
                             <div class='tooltip'
                             (mouseenter)='popupTooltip($event, fn.doc)'
                             (mouseleave)='turnoffTooltip()'>
-                                <li (click)='add_main_func(fn)'> 
+                                <li 
+                                (mousedown)='selectPrevProd($event)'
+                                (click)='add_main_func(fn)'> 
                                     {{fn.name}} 
                                 </li>
                                 <!-- <span class="tooltiptext" [innerHTML]='fn.doc'></span> -->
@@ -121,7 +135,9 @@
         <!--Divider-->
         <div class = "divider"></div>
         
-        <button id='Inline' class="accordion mainAccordion"  (click)='toggleAccordionHead("Inline")'>Inline Funcs
+        <button id='Inline' class="accordion mainAccordion" 
+        (mousedown)='preventfocus()'
+        (click)='toggleAccordionHead("Inline")'>Inline Funcs
         </button>
         <!--Search Bar-->
         <div class = 'searchbar--container'>
@@ -137,7 +153,9 @@
             </div>
         </div>
         <div class="panel">
-            <button id='globalParameters' class="accordion inline--cat"  (click)='toggleAccordion("globalParameters", true)'>parameters</button>
+            <button id='globalParameters' class="accordion inline--cat" 
+            (mousedown)='preventfocus()'
+            (click)='toggleAccordion("globalParameters", true)'>parameters</button>
             <div class="panel">
                 <ul class='toolset__functions--subset inline_set'>
                     <ng-container *ngFor='let cnst of getFlowchart().nodes[0].procedure'>
@@ -150,7 +168,9 @@
                 <div class = "divider--in"></div>
             </div>
             <ng-container *ngFor='let category of inlineFunc'>
-                <button id='inlineFunc_{{category[0]}}' class="accordion inline--cat" (click)='toggleAccordion("inlineFunc_"+category[0], true)'>{{category[0]}}</button>
+                <button id='inlineFunc_{{category[0]}}' class="accordion inline--cat" 
+                (mousedown)='preventfocus()'
+                (click)='toggleAccordion("inlineFunc_"+category[0], true)'>{{category[0]}}</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset inline_set'>
                         <li *ngFor='let funcString of category[1]' (click)='add_inline_func(funcString[0])' title='{{funcString[1]}}'>
@@ -167,7 +187,9 @@
         <div class = "divider"></div>
     </div>
     <div [hidden]="!getNode().state.show_func && !getNode().state.show_code">
-        <button id='User' class="accordion mainAccordion"  (click)='toggleAccordionHead("User")'>User Funcs
+        <button id='User' class="accordion mainAccordion" 
+        (mousedown)='preventfocus()'
+        (click)='toggleAccordionHead("User")'>User Funcs
         </button>
         <!--Search Bar-->
         <div class = 'searchbar--container'>
@@ -176,6 +198,7 @@
                 <ul class='toolset__functions--subset user_set'>
                     <ng-container *ngFor='let userFunc of searchedUserFuncs'>
                         <li
+                        (mousedown)='selectPrevProd($event)'
                         (click)='add_searched_user_func(userFunc.data)'
                         (mouseenter)='popupTooltip($event, assembleImportedTooltip(userFunc.data, userFunc.type))'
                         (mouseleave)='turnoffTooltip()'>
@@ -188,20 +211,28 @@
         </div>
         <div class="panel">
             <div [hidden]="!getNode().state.show_func">
-                <button id='CreateLocal' class="accordion inline--cat"  (click)='toggleAccordion("CreateLocal", true)'>Create Local</button>
+                <button id='CreateLocal' class="accordion inline--cat" 
+                (mousedown)='preventfocus()'
+                (click)='toggleAccordion("CreateLocal", true)'>Create Local</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset user_set'>
-                        <li (click)='add_local_func_def(0)'>Def Func</li>
+                        <li 
+                        (mousedown)='selectPrevProd($event)'
+                        (click)='add_local_func_def(0)'>Def Func</li>
                         <li class='tooltip-basic' [class.invalid]='checkInvalid("RETURN")'
+                        (mousedown)='selectPrevProd($event)'
                         (click)='add_basic_func(ProcedureTypes.LocalFuncReturn)'>Return</li>
                     </ul>
                 </div>
             </div>
             <div [hidden]="!getNode().state.show_code">
-                <button id='localFunc' class="accordion inline--cat"  (click)='toggleAccordion("localFunc", true)'>Local Funcs</button>
+                <button id='localFunc' class="accordion inline--cat" 
+                (mousedown)='preventfocus()'
+                (click)='toggleAccordion("localFunc", true)'>Local Funcs</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset user_set'>
                         <li *ngFor='let func_prod of getNode().localFunc.slice(1)' 
+                        (mousedown)='selectPrevProd($event)'
                         (click)='add_local_func_call(func_prod)'
                         (mouseenter)='popupTooltip($event, assembleImportedTooltip(func_prod, "localFunc"))'
                         (mouseleave)='turnoffTooltip()'>
@@ -210,6 +241,7 @@
                     </ul>
                 </div>
                 <button id='global_func_list' class="accordion" 
+                (mousedown)='preventfocus()'        
                 (click)='toggleAccordion("global_func_list")'>Global Funcs</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset'>
@@ -223,7 +255,9 @@
                             <div class = 'user--def-lnContainer'
                             (mouseenter)='popupTooltip($event, assembleImportedTooltip(fn))'
                             (mouseleave)='turnoffTooltip()'>
-                                <li (click)='add_global_func(fn)'> {{fn.name}} 
+                                <li 
+                                (mousedown)='selectPrevProd($event)'
+                                (click)='add_global_func(fn)'> {{fn.name}} 
                                 </li>
                                 <div class = 'btn--container'>
                                     <button class='importedFunc-btn' (click)='open_update_dialog($event, fn)'>
@@ -254,18 +288,20 @@
 
     <!-- functions for input nodes -->
     <div id='toolset_inp' class = 'toolset' *ngIf="getNode().type == 'start'">
-        <button id='startFuncs' class="accordion inline--cat" (click)='toggleAccordion("startFuncs")'>Parameters</button>
+        <button id='startFuncs' class="accordion inline--cat" 
+        (mousedown)='preventfocus()'
+        (click)='toggleAccordion("startFuncs")'>Parameters</button>
         <div class="panel">
         <!-- <div class='toolset__functions'> -->
             <section *ngFor='let type of ProcedureTypesArr' >
                 <div *ngIf='type.toUpperCase() == "CONSTANT"'>
                     <ul class='toolset__functions--subset'>
-                        <li (click)='add_basic_func(ProcedureTypes[type], 5)'> Constant </li>
-                        <li (click)='add_basic_func(ProcedureTypes[type], 0)'> Simple Input </li>
-                        <li (click)='add_basic_func(ProcedureTypes[type], 1)'> Slider </li>
-                        <li (click)='add_basic_func(ProcedureTypes[type], 2)'> Checkbox </li>
-                        <li (click)='add_basic_func(ProcedureTypes[type], 6)'> Dropdown </li>
-                        <li (click)='add_basic_func(ProcedureTypes[type], 3)'> URL </li>
+                        <li (mousedown)='selectPrevProd($event)' (click)='add_basic_func(ProcedureTypes[type], 5)'> Constant </li>
+                        <li (mousedown)='selectPrevProd($event)' (click)='add_basic_func(ProcedureTypes[type], 0)'> Simple Input </li>
+                        <li (mousedown)='selectPrevProd($event)' (click)='add_basic_func(ProcedureTypes[type], 1)'> Slider </li>
+                        <li (mousedown)='selectPrevProd($event)' (click)='add_basic_func(ProcedureTypes[type], 2)'> Checkbox </li>
+                        <li (mousedown)='selectPrevProd($event)' (click)='add_basic_func(ProcedureTypes[type], 6)'> Dropdown </li>
+                        <li (mousedown)='selectPrevProd($event)' (click)='add_basic_func(ProcedureTypes[type], 3)'> URL </li>
                         <!-- <li (click)='add_basic_func(ProcedureTypes[type], 4)'> File </li> -->
                     </ul>
                 </div>

@@ -332,7 +332,15 @@ export class ProcedureItemComponent implements OnDestroy {
         this.clearLinkedArgs(this.dataService.node.localFunc);
         this.clearLinkedArgs(this.dataService.node.procedure);
         if (!this.data.args[argIndex].value) { return; }
-        modifyArgument(this.data, argIndex, this.dataService.node.procedure);
+        let topProd = this.data;
+        while (topProd.parent) {
+            topProd = topProd.parent;
+        }
+        let prodList = this.dataService.node.procedure;
+        if (topProd.type === ProcedureTypes.LocalFuncDef) {
+            prodList = this.dataService.node.localFunc;
+        }
+        modifyArgument(this.data, argIndex, prodList);
         if (this.data.args[argIndex].invalidVar) {
             this.dataService.notifyMessage(this.data.args[argIndex].invalidVar);
         }

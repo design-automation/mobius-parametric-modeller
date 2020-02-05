@@ -281,7 +281,6 @@ export class ProcedureItemComponent implements OnDestroy {
 
     toggleCollapse() {
         event.stopPropagation();
-        console.log(this.data.meta.otherInfo)
         if (!this.data.meta.otherInfo) { return; }
         this.data.meta.otherInfo['collapsed'] = !this.data.meta.otherInfo['collapsed']
     }

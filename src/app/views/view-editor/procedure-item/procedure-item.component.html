@@ -70,7 +70,7 @@
         <ng-container *ngSwitchCase="ProcedureTypes.Elseif">
             <div class='line--item'>
                 <div class='basic-function-text'>
-                    Else if
+                    Else-if
                 </div>
             
                 <input class='input--arg'
@@ -134,7 +134,7 @@
         <ng-container *ngSwitchCase="ProcedureTypes.Foreach">
             <div class='line--item'>
                 <div class='basic-function-text'>
-                    For Each
+                    For-each
                 </div>
                 <input class='input--arg'
                     [(ngModel)]='data.args[0].value'
@@ -212,7 +212,7 @@
         <div class='line--item' *ngSwitchCase="ProcedureTypes.Return">
         </div>
         
-        <!-- Blank (always the first procedure of if/else/else if/for/while) -->
+        <!-- Blank (always the first procedure of if/else/else-if/for/while) -->
         <div class='line--blank' *ngSwitchCase="ProcedureTypes.Blank">
         </div>
 

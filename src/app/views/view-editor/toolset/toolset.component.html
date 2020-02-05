@@ -3,7 +3,7 @@
 <div class = "toolset--body" (mouseover)='setCurrent($event)'>
     <!-- <div [hidden]="getNode().type == 'start' && !getNode().state.show_code"> -->
     <div [hidden]="!getNode().state.show_code">
-        <!-- basic functions: variable, if, else, else if, for, while, continue, break -->
+        <!-- basic functions: variable, if, else, else-if, for, while, continue, break -->
         <ul class='toolset__functions--subset'>
             <li class='tooltip-variable' [class.invalid]='checkInvalid("Variable")'
                 [class.basic]='true' 
@@ -36,7 +36,7 @@
                     [class.basic]='true' 
                     (mousedown)='selectPrevProd()'
                     (click)='add_basic_func(2)'> 
-                        Else if
+                        Else-if
                 </li>
                 <li class='tooltip-basic' [class.invalid]='checkInvalid("Else")'
                     [class.basic]='true' 
@@ -48,7 +48,7 @@
                     [class.basic]='true' 
                     (mousedown)='selectPrevProd()'
                     (click)='add_basic_func(4)'> 
-                        For Each
+                        For-each
                 </li>
                 <li class='tooltip-basic' [class.invalid]='checkInvalid("While")'
                     [class.basic]='true' 

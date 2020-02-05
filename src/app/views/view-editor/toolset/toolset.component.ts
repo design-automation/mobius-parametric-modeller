@@ -535,11 +535,11 @@ export class ToolsetComponent implements OnInit {
     }
 
     updateFocusProd() {
-        // if (this.dataService.focusedInputProd && this.dataService.node.state.procedure.length === 0) {
-        //     this.dataService.focusedInputProd.selected = true;
-        //     this.dataService.node.state.procedure.push(this.dataService.focusedInputProd);
-        //     this.dataService.focusedInputProd = null;
-        // }
+        if (this.dataService.focusedInputProd && this.dataService.node.state.procedure.length === 0) {
+            this.dataService.focusedInputProd.selected = true;
+            this.dataService.node.state.procedure.push(this.dataService.focusedInputProd);
+            this.dataService.focusedInputProd = null;
+        }
     }
 
     assembleImportedTooltip(funcData, type = 'globalFunc'): string {

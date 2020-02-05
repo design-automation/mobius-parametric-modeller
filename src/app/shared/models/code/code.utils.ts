@@ -531,7 +531,7 @@ export class CodeUtils {
         }
 
 
-        codeStr.push('_-_-_-_-_')
+        codeStr.push('_-_-_+_-_-_')
         codeStr.push(`__modules__.${_parameterTypes.preprocess}( __params__.model);`);
         varsDefined = [];
         for (const prod of node.procedure) {
@@ -562,7 +562,7 @@ export class CodeUtils {
                 fnCode += `let result_${nodeFuncName} = __params__.model;\n`;
             } else {
                 const codeRes = CodeUtils.getNodeCode(node, false, func.name)[0];
-                const nodecode = codeRes[0].join('\n').split('_-_-_-_-_');
+                const nodecode = codeRes[0].join('\n').split('_-_-_+_-_-_');
                 fullCode += `\n${nodecode[0]}\nfunction ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){` +
                             nodecode[1] + `\n}\n\n`;
 

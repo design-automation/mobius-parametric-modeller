@@ -553,7 +553,7 @@ export class ExecuteComponent {
             }
 
             const codeRes = codeResult[0];
-            const nodeCode = codeRes[0].join('\n').split('_-_-_-_-_');
+            const nodeCode = codeRes[0].join('\n').split('_-_-_+_-_-_');
             const varsDefined = codeRes[1];
 
             // Create function string:

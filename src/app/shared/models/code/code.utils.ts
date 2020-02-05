@@ -67,6 +67,7 @@ export class CodeUtils {
 
             case ProcedureTypes.Foreach:
                 codeStr.push(`for (${prefix} ${args[0].jsValue} of ${args[1].jsValue}){`);
+                existingVars.push(args[0].jsValue);
                 break;
 
             case ProcedureTypes.While:
@@ -215,9 +216,6 @@ export class CodeUtils {
             case ProcedureTypes.LocalFuncCall:
                 const lArgsVals: any = [];
                 // let urlCheck = false;
-                if (isMainFlowchart) {
-                    usedFunctions.push(prod.meta.name);
-                }
                 for (let i = 1; i < args.length; i++) {
                     lArgsVals.push(args[i].jsValue);
                 }
@@ -555,10 +553,9 @@ export class CodeUtils {
     }
 
     static getFunctionString(func: IFunction): string {
-        let fullCode = '';
+        let fullCode = `function ${func.name}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){\n`;
 
-        let fnCode = `function ${func.name}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')})` + `{\nvar merged;\n`;
-
+        let fnCode = `var merged;\n`;
         for (const node of func.flowchart.nodes) {
             const nodeFuncName = `${func.name}_${node.id}`;
             if (node.type === 'start') {
@@ -567,7 +564,7 @@ export class CodeUtils {
                 const codeRes = CodeUtils.getNodeCode(node, false, func.name)[0];
                 const nodecode = codeRes[0].join('\n').split('_-_-_-_-_');
                 fullCode += `\n${nodecode[0]}\nfunction ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){` +
-                             nodecode[1] + `\n}\n\n`;
+                            nodecode[1] + `\n}\n\n`;
 
                 const activeNodes = [];
                 for (const nodeEdge of node.input.edges) {
@@ -589,6 +586,7 @@ export class CodeUtils {
         }
         fnCode += '}\n\n';
         fullCode += fnCode;
+
         return fullCode;
     }
 

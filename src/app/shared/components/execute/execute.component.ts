@@ -565,9 +565,11 @@ export class ExecuteComponent {
                         '\n}\nreturn __main_node_code__();';
 
             // add the user defined functions that are used in the node
+            const addedFunc = new Set([]);
             usedFuncsSet.forEach((funcName) => {
                 for (const otherFunc in funcStrings) {
-                    if (otherFunc.substring(0, funcName.length) === funcName) {
+                    if (!addedFunc.has(otherFunc) && otherFunc.substring(0, funcName.length) === funcName) {
+                        addedFunc.add(otherFunc);
                         fnString = funcStrings[otherFunc] + fnString;
                     }
                 }
@@ -605,7 +607,7 @@ export class ExecuteComponent {
 
             // #########################################################
             // *********************************************************
-            // console.log(fnString);
+            console.log(fnString);
 
             const fn = new Function('__modules__', '__params__', fnString);
             // execute the function

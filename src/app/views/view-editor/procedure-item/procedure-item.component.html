@@ -358,7 +358,7 @@
 
             </div>
                                 
-            <div class='container--nested'>
+            <div class='container--nested' *ngIf='checkCollapse()'>
                 <procedure-item 
                     *ngFor="let line of data?.children; let idx=index" 
                     [data]="line"
@@ -434,6 +434,11 @@
             <!-- help button-->
             <button *ngIf='haveHelpText()' class='btn' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText(undefined)'>
                 <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
+            </button>
+            <!-- collapse/expand local function button-->
+            <button *ngIf='isLocalFunc()' class='btn' mat-icon-button title="collapse/expand function" (click)='toggleCollapse()'>
+                <mat-icon class='icon' svgIcon='cDnArrow' *ngIf='data.meta.otherInfo["collapsed"]'></mat-icon>
+                <mat-icon class='icon' svgIcon='cUpArrow' *ngIf='!data.meta.otherInfo["collapsed"]'></mat-icon>
             </button>
             <!-- add arg button-->
             <button *ngIf='isLocalFunc()' class='btn' mat-icon-button title="Add Argument" (click)='addArg($event)'>

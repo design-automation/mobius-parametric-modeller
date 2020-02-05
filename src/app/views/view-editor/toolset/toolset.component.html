@@ -85,7 +85,7 @@
         </button>
         <!--Search Bar-->
         <div class = 'searchbar--container'>
-            <input id='searchbarFunction' class='searchBar' placeholder='Search' (keyup)='searchMainFunc($event)'/>
+            <input id='searchbarFunction' class='searchBar' placeholder='Search' (mousedown)='selectPrevProd()' (keyup)='searchMainFunc($event)'/>
             <div class="panel" [class.opened] = 'true' *ngIf='searchedMainFuncs.length > 0'>
                 <ul class='toolset__functions--subset'>
                     <ng-container *ngFor='let fn of searchedMainFuncs'>
@@ -141,7 +141,7 @@
         </button>
         <!--Search Bar-->
         <div class = 'searchbar--container'>
-            <input id='searchbarInline' class='searchBar' placeholder='Search' (keyup)='searchInlineFuncs($event)'/>
+            <input id='searchbarInline' class='searchBar' placeholder='Search' (mousedown)='selectPrevProd()' (keyup)='searchInlineFuncs($event)'/>
             <div class="panel" [class.opened] = 'true' *ngIf='searchedInlineFuncs.length > 0'>
                 <ul class='toolset__functions--subset inline_set'>
                     <ng-container *ngFor='let fnString of searchedInlineFuncs'>
@@ -193,7 +193,7 @@
         </button>
         <!--Search Bar-->
         <div class = 'searchbar--container'>
-            <input id='searchbarUser' class='searchBar' placeholder='Search' (keyup)='searchUserFuncs($event)'/>
+            <input id='searchbarUser' class='searchBar' placeholder='Search' (mousedown)='selectPrevProd()' (keyup)='searchUserFuncs($event)'/>
             <div class="panel" [class.opened] = 'true' *ngIf='searchedUserFuncs.length > 0'>
                 <ul class='toolset__functions--subset user_set'>
                     <ng-container *ngFor='let userFunc of searchedUserFuncs'>

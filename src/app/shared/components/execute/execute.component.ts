@@ -553,20 +553,23 @@ export class ExecuteComponent {
             }
 
             const codeRes = codeResult[0];
-            const nodeCode = codeRes[0];
+            const nodeCode = codeRes[0].join('\n').split('_-_-_+_-_-_');
             const varsDefined = codeRes[1];
 
             // Create function string:
             // start with asembling the node's code
             fnString =  '\n\n//  ------ MAIN CODE ------\n' +
+                        nodeCode[0] +
                         '\nfunction __main_node_code__(){\n' +
-                        nodeCode.join('\n') +
+                        nodeCode[1] +
                         '\n}\nreturn __main_node_code__();';
 
             // add the user defined functions that are used in the node
+            const addedFunc = new Set([]);
             usedFuncsSet.forEach((funcName) => {
                 for (const otherFunc in funcStrings) {
-                    if (otherFunc.substring(0, funcName.length) === funcName) {
+                    if (!addedFunc.has(otherFunc) && otherFunc.substring(0, funcName.length) === funcName) {
+                        addedFunc.add(otherFunc);
                         fnString = funcStrings[otherFunc] + fnString;
                     }
                 }
@@ -724,7 +727,7 @@ export class ExecuteComponent {
                 }
             };
             if (prodWithError !== '') {
-                node.procedure.map(function(prod: IProcedure) {
+                node.procedure.concat(node.localFunc).map(function(prod: IProcedure) {
                     if (prod['ID'] === prodWithError) {
                         prod.hasError = true;
                     }

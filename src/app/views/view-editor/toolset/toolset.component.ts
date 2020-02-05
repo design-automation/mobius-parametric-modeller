@@ -430,6 +430,7 @@ export class ToolsetComponent implements OnInit {
     }
 
     searchMainFunc(event) {
+        this.updateFocusProd()
         const str = event.target.value.toLowerCase().replace(/ /g, '_');
         this.searchedMainFuncs = [];
         if (str.length === 0) {
@@ -468,6 +469,7 @@ export class ToolsetComponent implements OnInit {
     }
 
     searchInlineFuncs(event) {
+        this.updateFocusProd()
         const str = event.target.value.toLowerCase();
         this.searchedInlineFuncs = [];
         if (str.length === 0) {
@@ -502,7 +504,9 @@ export class ToolsetComponent implements OnInit {
             if (this.searchedInlineFuncs.length >= 10) { break; }
         }
     }
+
     searchUserFuncs(event) {
+        this.updateFocusProd()
         const str = event.target.value.toLowerCase();
         this.searchedUserFuncs = [];
         for (const func of this.getNode().localFunc) {
@@ -527,6 +531,14 @@ export class ToolsetComponent implements OnInit {
                     'data': func
                 });
             }
+        }
+    }
+
+    updateFocusProd() {
+        if (this.dataService.focusedInputProd && this.dataService.node.state.procedure.length === 0) {
+            this.dataService.focusedInputProd.selected = true;
+            this.dataService.node.state.procedure.push(this.dataService.focusedInputProd);
+            this.dataService.focusedInputProd = null;
         }
     }
 

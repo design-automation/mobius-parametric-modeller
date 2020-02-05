@@ -423,7 +423,7 @@ export abstract class NodeUtils {
 
             case ProcedureTypes.LocalFuncDef:
                 prod.argCount = data + 1;
-                prod.meta = { module: '', name: '', otherInfo: { 'prev_name': '', 'num_returns': 0}};
+                prod.meta = { module: '', name: '', otherInfo: { 'prev_name': '', 'num_returns': 0, 'collapsed': false}};
                 prod.args = [{name: 'func_name', value: undefined}];
                 for (let argIndex = 0; argIndex < data; argIndex ++) {
                     prod.args.push({name: `arg_name_${argIndex}`, value: undefined});

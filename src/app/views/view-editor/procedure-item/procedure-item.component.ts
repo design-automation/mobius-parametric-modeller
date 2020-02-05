@@ -10,7 +10,7 @@ import * as Modules from '@modules';
 import { DataService } from '@services';
 import { IArgument } from '@models/code';
 
-import { parseArgument, parseVariable, checkValidVar, modifyVar, modifyArgument, checkNodeValidity, modifyLocalFuncVar} from '@shared/parser';
+import { modifyArgument, checkNodeValidity, modifyLocalFuncVar} from '@shared/parser';
 
 @Component({
     selector: 'procedure-item',
@@ -279,6 +279,20 @@ export class ProcedureItemComponent implements OnDestroy {
         });
     }
 
+    toggleCollapse() {
+        event.stopPropagation();
+        console.log(this.data.meta.otherInfo)
+        if (!this.data.meta.otherInfo) { return; }
+        this.data.meta.otherInfo['collapsed'] = !this.data.meta.otherInfo['collapsed']
+    }
+
+    checkCollapse() {
+        if (this.data.meta.otherInfo['collapsed']) {
+            return false;
+        }
+        return true;
+    }
+
     // delete child procedure (after receiving emitDelete from child procedure)
     deleteChild(index: number): void {
         this.dataService.registerEdtAction([{'type': 'del', 'parent': this.data, 'index': index, 'prod': this.data.children[index]}]);
@@ -313,9 +327,10 @@ export class ProcedureItemComponent implements OnDestroy {
         return this.data.type === 16;
     }
 
-
+    
     // modify variable input: replace space " " with underscore "_"
     varMod(index = 0) {
+        this.assignFocusInputProd();
         // modifyVar(this.data, this.dataService.node.procedure);
         checkNodeValidity(this.dataService.node);
         if (this.data.args[index].invalidVar) {
@@ -327,13 +342,30 @@ export class ProcedureItemComponent implements OnDestroy {
     // modify argument input: check if input is valid
     argMod(event: Event, argIndex: number) {
         this.dataService.focusedInput = event.target;
-        this.dataService.focusedInputProd = this.data;
+        this.assignFocusInputProd();
         this.clearLinkedArgs(this.dataService.node.localFunc);
         this.clearLinkedArgs(this.dataService.node.procedure);
         if (!this.data.args[argIndex].value) { return; }
-        modifyArgument(this.data, argIndex, this.dataService.node.procedure);
+        let topProd = this.data;
+        while (topProd.parent) {
+            topProd = topProd.parent;
+        }
+        let prodList = this.dataService.node.procedure;
+        if (topProd.type === ProcedureTypes.LocalFuncDef) {
+            prodList = this.dataService.node.localFunc;
+        }
+        modifyArgument(this.data, argIndex, prodList);
         if (this.data.args[argIndex].invalidVar) {
             this.dataService.notifyMessage(this.data.args[argIndex].invalidVar);
+        }
+    }
+
+    // assign focus input procedure to the dataservice
+    assignFocusInputProd() {
+        if (this.data.children && this.data.children.length > 0) {
+            this.dataService.focusedInputProd = this.data.children[this.data.children.length - 1];
+        } else {
+            this.dataService.focusedInputProd = this.data;
         }
     }
 

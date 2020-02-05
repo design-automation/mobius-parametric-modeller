@@ -108,7 +108,7 @@ export class ToolsetComponent implements OnInit {
 
     }
 
-    selectPrevProd(event: MouseEvent){
+    selectPrevProd(){
         // event.preventDefault();
         this.dataService.focusedInputProd = null;
     }

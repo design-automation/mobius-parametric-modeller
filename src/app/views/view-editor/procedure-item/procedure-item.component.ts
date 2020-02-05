@@ -316,6 +316,7 @@ export class ProcedureItemComponent implements OnDestroy {
 
     // modify variable input: replace space " " with underscore "_"
     varMod(index = 0) {
+        this.assignFocusInputProd();
         // modifyVar(this.data, this.dataService.node.procedure);
         checkNodeValidity(this.dataService.node);
         if (this.data.args[index].invalidVar) {
@@ -327,13 +328,22 @@ export class ProcedureItemComponent implements OnDestroy {
     // modify argument input: check if input is valid
     argMod(event: Event, argIndex: number) {
         this.dataService.focusedInput = event.target;
-        this.dataService.focusedInputProd = this.data;
+        this.assignFocusInputProd();
         this.clearLinkedArgs(this.dataService.node.localFunc);
         this.clearLinkedArgs(this.dataService.node.procedure);
         if (!this.data.args[argIndex].value) { return; }
         modifyArgument(this.data, argIndex, this.dataService.node.procedure);
         if (this.data.args[argIndex].invalidVar) {
             this.dataService.notifyMessage(this.data.args[argIndex].invalidVar);
+        }
+    }
+
+    // assign focus input procedure to the dataservice
+    assignFocusInputProd() {
+        if (this.data.children && this.data.children.length > 0) {
+            this.dataService.focusedInputProd = this.data.children[this.data.children.length - 1];
+        } else {
+            this.dataService.focusedInputProd = this.data;
         }
     }
 

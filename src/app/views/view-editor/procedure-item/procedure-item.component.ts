@@ -10,7 +10,7 @@ import * as Modules from '@modules';
 import { DataService } from '@services';
 import { IArgument } from '@models/code';
 
-import { parseArgument, parseVariable, checkValidVar, modifyVar, modifyArgument, checkNodeValidity, modifyLocalFuncVar} from '@shared/parser';
+import { modifyArgument, checkNodeValidity, modifyLocalFuncVar} from '@shared/parser';
 
 @Component({
     selector: 'procedure-item',
@@ -279,6 +279,20 @@ export class ProcedureItemComponent implements OnDestroy {
         });
     }
 
+    toggleCollapse() {
+        event.stopPropagation();
+        console.log(this.data.meta.otherInfo)
+        if (!this.data.meta.otherInfo) { return; }
+        this.data.meta.otherInfo['collapsed'] = !this.data.meta.otherInfo['collapsed']
+    }
+
+    checkCollapse() {
+        if (this.data.meta.otherInfo['collapsed']) {
+            return false;
+        }
+        return true;
+    }
+
     // delete child procedure (after receiving emitDelete from child procedure)
     deleteChild(index: number): void {
         this.dataService.registerEdtAction([{'type': 'del', 'parent': this.data, 'index': index, 'prod': this.data.children[index]}]);
@@ -313,7 +327,7 @@ export class ProcedureItemComponent implements OnDestroy {
         return this.data.type === 16;
     }
 
-
+    
     // modify variable input: replace space " " with underscore "_"
     varMod(index = 0) {
         this.assignFocusInputProd();

@@ -62,7 +62,7 @@ export class DataCesium {
                 navigationHelpButton: false,
                 fullscreenButton: false,
                 animation: false,
-                timeline: false,
+                timeline: true,
                 geocoder: false,
                 imageryProviderViewModels : view_models,
                 selectedImageryProviderViewModel : view_models[0],

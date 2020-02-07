@@ -283,8 +283,8 @@ export class DataThreejs {
         if (!grid_pos) {
             grid_pos = new Vector3(0, 0, 0);
         }
-        this.grid.position.set(grid_pos.x, grid_pos.y, 0);
-        this.axesHelper.position.set(grid_pos.x, grid_pos.y, 0.01);
+        this.grid.position.set(grid_pos.x, grid_pos.y, -0.01);
+        this.axesHelper.position.set(grid_pos.x, grid_pos.y, 0);
 
         // if (threejs_data.posis_indices.length !== 0) {
         //     if (this.dataService.newFlowchart) {
@@ -920,7 +920,7 @@ export class DataThreejs {
         this.axesHelper.visible = this.settings.axes.show;
         if (this.axesHelper.visible) {
             this.axesHelper.name = 'AxesHelper';
-            this.axesHelper.position.set(this.axes_pos.x, this.axes_pos.y, 0.01);
+            this.axesHelper.position.set(this.axes_pos.x, this.axes_pos.y, 0);
             this._scene.add(this.axesHelper);
         }
     }
@@ -949,7 +949,7 @@ export class DataThreejs {
             if (!pos) {
                 pos = new THREE.Vector3();
             }
-            this.grid.position.set(pos.x, pos.y, 0);
+            this.grid.position.set(pos.x, pos.y, -0.01);
             this._scene.add(this.grid);
         }
     }
@@ -1264,11 +1264,11 @@ export class DataThreejs {
     public getGridPos() {
         if (this.allObjs) {
             const grd_pos = new THREE.Vector3(this.allObjs.center.x, this.allObjs.center.y, 0);
-            this.grid.position.set(grd_pos.x, grd_pos.y, 0);
+            this.grid.position.set(grd_pos.x, grd_pos.y, -0.01);
             return grd_pos;
         }
         const grid_pos = new THREE.Vector3(0, 0, 0);
-        this.grid.position.set(0, 0, 0);
+        this.grid.position.set(0, 0, -0.01);
         return grid_pos;
     }
 

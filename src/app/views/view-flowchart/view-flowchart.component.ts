@@ -200,9 +200,6 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
                 }
                 this.dataService.flowchart.nodes.splice(this.dataService.flowchart.nodes.length - 1, 0, newNode);
 
-                // this.notificationMessage = `Pasted Node`;
-                // this.notificationTrigger = !this.notificationTrigger;
-
                 // ViewFlowchartComponent.enableNode(newNode);
                 // FlowchartUtils.orderNodes(this.dataService.flowchart);
 
@@ -946,6 +943,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
 
     disablePrint() {
         for (const node of this.dataService.flowchart.nodes) {
+            this.recursiveDisablePrint(node.localFunc);
             this.recursiveDisablePrint(node.procedure);
         }
         this.dataService.notifyMessage('Cleared All Print Statements in Flowchart');

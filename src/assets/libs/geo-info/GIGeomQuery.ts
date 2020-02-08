@@ -1,8 +1,8 @@
 
-import {  EEntType, IGeomArrays, EEntStrToGeomArray, TWire, Txyz, TColl, TEntTypeIdx, IGeomPack, TFace, EWireType } from './common';
+import {  EEntType, IGeomArrays, EEntStrToGeomArray, TWire, Txyz, TColl, TEntTypeIdx, IGeomPack, TFace, EWireType, Txy } from './common';
 import { isPosi, isVert, isPoint, isEdge, isWire, isPline, isFace, isPgon, isColl, isTri } from './id';
 import { GIGeom } from './GIGeom';
-import { vecFromTo, vecCross, vecDiv } from '../geom/vectors';
+import { vecFromTo, vecCross, vecDiv, vecNorm, vecLen, vecDot } from '../geom/vectors';
 /**
  * Class for geometry.
  */
@@ -433,14 +433,45 @@ export class GIGeomQuery {
         return vecDiv(centroid, posis_i.length);
     }
     /**
+     * Gets a normal from a wire.
+     *
+     * It triangulates the wire and then adds up all the normals of all the triangles.
+     * Each edge has equal weight, irrespective of length.
+     *
+     * In some cases, the triangles may cancel each other out.
+     * In such a case, it will choose the side' where the wire edges are the longest.
      *
      * @param wire_i
      */
     public getWireNormal(wire_i: number): Txyz {
         const centroid: Txyz = this.getCentroid(EEntType.WIRE, wire_i);
         const edges_i: number[] = this._geom._geom_arrays.dn_wires_edges[wire_i];
-        const normal: Txyz = [0, 0, 0];
-        let count = 0;
+        let normal: Txyz = [0, 0, 0];
+        const tri_normals: Txyz[] = [];
+        // let count = 0;
+        for (const edge_i of edges_i) {
+            const posis_i: number[] = this._geom_arrays.dn_edges_verts[edge_i].map(vert_i => this._geom_arrays.dn_verts_posis[vert_i]);
+            const xyzs: Txyz[] = posis_i.map(posi_i => this._geom.model.attribs.query.getPosiCoords(posi_i));
+            const vec_a: Txyz = vecFromTo(centroid, xyzs[0]);
+            const vec_b: Txyz = vecFromTo(centroid, xyzs[1]); // CCW
+            const tri_normal: Txyz = vecCross(vec_a, vec_b, true);
+            tri_normals.push(tri_normal);
+            normal[0] += tri_normal[0];
+            normal[1] += tri_normal[1];
+            normal[2] += tri_normal[2];
+        }
+        // if we have a non-zero normal, then return it
+        if (Math.abs(normal[0]) > 1e-6 || Math.abs(normal[1]) > 1e-6 || Math.abs(normal[2]) > 1e-6) {
+            normal =  vecNorm(normal);
+            return normal;
+        }
+        // check for special case of a symmetrical shape where all triangle normals are
+        // cancelling each other out, we need to look at both 'sides', see which is bigger
+        const normal_a: Txyz = [0, 0, 0];
+        const normal_b: Txyz = [0, 0, 0];
+        let len_a = 0;
+        let len_b = 0;
+        let first_normal_a = null;
         for (const edge_i of edges_i) {
             const posis_i: number[] = this._geom_arrays.dn_edges_verts[edge_i].map(vert_i => this._geom_arrays.dn_verts_posis[vert_i]);
             const xyzs: Txyz[] = posis_i.map(posi_i => this._geom.model.attribs.query.getPosiCoords(posi_i));
@@ -448,14 +479,33 @@ export class GIGeomQuery {
             const vec_b: Txyz = vecFromTo(centroid, xyzs[1]); // CCW
             const tri_normal: Txyz = vecCross(vec_a, vec_b, true);
             if (!(tri_normal[0] === 0 && tri_normal[1] === 0 && tri_normal[2] === 0)) {
-                count += 1;
-                normal[0] += tri_normal[0];
-                normal[1] += tri_normal[1];
-                normal[2] += tri_normal[2];
+                if (first_normal_a === null) {
+                    first_normal_a = tri_normal;
+                    normal_a[0] = tri_normal[0];
+                    normal_a[1] = tri_normal[1];
+                    normal_a[2] = tri_normal[2];
+                    len_a += vecLen(vecFromTo(xyzs[0], xyzs[1]));
+                } else {
+                    if (vecDot(first_normal_a, tri_normal) > 0) {
+                        normal_a[0] += tri_normal[0];
+                        normal_a[1] += tri_normal[1];
+                        normal_a[2] += tri_normal[2];
+                        len_a += vecLen(vecFromTo(xyzs[0], xyzs[1]));
+                    } else {
+                        normal_b[0] += tri_normal[0];
+                        normal_b[1] += tri_normal[1];
+                        normal_b[2] += tri_normal[2];
+                        len_b += vecLen(vecFromTo(xyzs[0], xyzs[1]));
+                    }
+                }
             }
         }
-        if (count === 0) { return [0, 0, 0]; }
-        return vecDiv(normal, count);
+        // return the normal for the longest set of edges in the wire
+        // if they are the same length, return the normal associated with the start of the wire
+        if (len_a >= len_b) {
+            return vecNorm(normal_a);
+        }
+        return vecNorm(normal_b);
     }
     // ============================================================================
     // Other methods

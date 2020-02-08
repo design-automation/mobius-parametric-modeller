@@ -253,8 +253,6 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         NodeUtils.rearrangeProcedures(copiedProds, temp, node.localFunc.concat(node.procedure));
         SaveFileComponent.clearResolvedValue(copiedProds);
         localStorage.setItem('mobius_copied_procedures', circularJSON.stringify(copiedProds));
-        // this.notificationMessage = `Copied ${this.dataService.copiedProd.length} Procedures`;
-        // this.notificationTrigger = !this.notificationTrigger;
         this.dataService.notifyMessage(`Copied ${copiedProds.length} Procedures`);
     }
 
@@ -301,8 +299,6 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
         NodeUtils.deselect_procedure(node);
 
-        // this.notificationMessage = `Cut ${this.dataService.copiedProd.length} Procedures`;
-        // this.notificationTrigger = !this.notificationTrigger;
         this.dataService.notifyMessage(`Cut ${copiedProds.length} Procedures`);
     }
 
@@ -357,8 +353,6 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             this.dataService.registerEdtAction(redoActions);
             checkNodeValidity(this.dataService.node);
             // toBePasted = undefined;
-            // this.notificationMessage = `Pasted ${toBePasted.length} Procedures`;
-            // this.notificationTrigger = !this.notificationTrigger;
             if (!notified) {
                 this.dataService.notifyMessage(`Pasted ${toBePasted.length} Procedures`);
             }
@@ -499,8 +493,6 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     }
 
     notifyError(message) {
-        // this.notificationMessage = message;
-        // this.notificationTrigger = !this.notificationTrigger;
         this.dataService.notifyMessage(message);
     }
 

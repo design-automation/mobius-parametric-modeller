@@ -3,17 +3,17 @@
 <div class = "toolset--body" (mouseover)='setCurrent($event)'>
     <!-- <div [hidden]="getNode().type == 'start' && !getNode().state.show_code"> -->
     <div [hidden]="!getNode().state.show_code">
-        <!-- basic functions: variable, if, else, else if, for, while, continue, break -->
+        <!-- basic functions: variable, if, else, else-if, for, while, continue, break -->
         <ul class='toolset__functions--subset'>
             <li class='tooltip-variable' [class.invalid]='checkInvalid("Variable")'
                 [class.basic]='true' 
-                (mousedown)='selectPrevProd($event)'
+                (mousedown)='selectPrevProd()'
                 (click)='add_basic_func(0)'> 
                     Variable
             </li>
             <li class='tooltip-variable'
                 [class.basic]='true'
-                (mousedown)='selectPrevProd($event)'
+                (mousedown)='selectPrevProd()'
                 (click)='add_basic_func(ProcedureTypes.Comment)'> 
                     Comment
             </li>
@@ -28,49 +28,49 @@
             <ul class='toolset__functions--subset'>
                 <li class='tooltip-basic' [class.invalid]='checkInvalid("If")'
                     [class.basic]='true' 
-                    (mousedown)='selectPrevProd($event)'
+                    (mousedown)='selectPrevProd()'
                     (click)='add_basic_func(1)'> 
                         If
                 </li>
                 <li class='tooltip-basic' [class.invalid]='checkInvalid("Elseif")'
                     [class.basic]='true' 
-                    (mousedown)='selectPrevProd($event)'
+                    (mousedown)='selectPrevProd()'
                     (click)='add_basic_func(2)'> 
-                        Else if
+                        Else-if
                 </li>
                 <li class='tooltip-basic' [class.invalid]='checkInvalid("Else")'
                     [class.basic]='true' 
-                    (mousedown)='selectPrevProd($event)'
+                    (mousedown)='selectPrevProd()'
                     (click)='add_basic_func(3)'> 
                         Else
                 </li>
                 <li class='tooltip-basic' [class.invalid]='checkInvalid("Foreach")'
                     [class.basic]='true' 
-                    (mousedown)='selectPrevProd($event)'
+                    (mousedown)='selectPrevProd()'
                     (click)='add_basic_func(4)'> 
-                        For Each
+                        For-each
                 </li>
                 <li class='tooltip-basic' [class.invalid]='checkInvalid("While")'
                     [class.basic]='true' 
-                    (mousedown)='selectPrevProd($event)'
+                    (mousedown)='selectPrevProd()'
                     (click)='add_basic_func(5)'> 
                         While
                 </li>
                 <li class='tooltip-basic' [class.invalid]='checkInvalid("Break")'
                     [class.basic]='true' 
-                    (mousedown)='selectPrevProd($event)'
+                    (mousedown)='selectPrevProd()'
                     (click)='add_basic_func(6)'> 
                         Break
                 </li>
                 <li class='tooltip-basic' [class.invalid]='checkInvalid("Continue")'
                     [class.basic]='true' 
-                    (mousedown)='selectPrevProd($event)'
+                    (mousedown)='selectPrevProd()'
                     (click)='add_basic_func(7)'> 
                         Continue
                 </li>
                 <li class='tooltip-basic'
                     [class.basic]='true'
-                    (mousedown)='selectPrevProd($event)'
+                    (mousedown)='selectPrevProd()'
                     (click)='add_basic_func(ProcedureTypes.Terminate)'> 
                         Terminate
                 </li>
@@ -90,7 +90,7 @@
                 <ul class='toolset__functions--subset'>
                     <ng-container *ngFor='let fn of searchedMainFuncs'>
                         <li *ngIf='fn.type=="function"'
-                        (mousedown)='selectPrevProd($event)'
+                        (mousedown)='selectPrevProd()'
                         (click)='add_main_func(fn.data)'
                         (mouseenter)='popupTooltip($event, fn.data.doc)'
                         (mouseleave)='turnoffTooltip()'>
@@ -114,7 +114,7 @@
                             (mouseenter)='popupTooltip($event, fn.doc)'
                             (mouseleave)='turnoffTooltip()'>
                                 <li 
-                                (mousedown)='selectPrevProd($event)'
+                                (mousedown)='selectPrevProd()'
                                 (click)='add_main_func(fn)'> 
                                     {{fn.name}} 
                                 </li>
@@ -198,7 +198,7 @@
                 <ul class='toolset__functions--subset user_set'>
                     <ng-container *ngFor='let userFunc of searchedUserFuncs'>
                         <li
-                        (mousedown)='selectPrevProd($event)'
+                        (mousedown)='selectPrevProd()'
                         (click)='add_searched_user_func(userFunc.data)'
                         (mouseenter)='popupTooltip($event, assembleImportedTooltip(userFunc.data, userFunc.type))'
                         (mouseleave)='turnoffTooltip()'>
@@ -217,10 +217,10 @@
                 <div class="panel">
                     <ul class='toolset__functions--subset user_set'>
                         <li 
-                        (mousedown)='selectPrevProd($event)'
+                        (mousedown)='selectPrevProd()'
                         (click)='add_local_func_def(0)'>Def Func</li>
                         <li class='tooltip-basic' [class.invalid]='checkInvalid("RETURN")'
-                        (mousedown)='selectPrevProd($event)'
+                        (mousedown)='selectPrevProd()'
                         (click)='add_basic_func(ProcedureTypes.LocalFuncReturn)'>Return</li>
                     </ul>
                 </div>
@@ -232,7 +232,7 @@
                 <div class="panel">
                     <ul class='toolset__functions--subset user_set'>
                         <li *ngFor='let func_prod of getNode().localFunc.slice(1)' 
-                        (mousedown)='selectPrevProd($event)'
+                        (mousedown)='selectPrevProd()'
                         (click)='add_local_func_call(func_prod)'
                         (mouseenter)='popupTooltip($event, assembleImportedTooltip(func_prod, "localFunc"))'
                         (mouseleave)='turnoffTooltip()'>
@@ -256,7 +256,7 @@
                             (mouseenter)='popupTooltip($event, assembleImportedTooltip(fn))'
                             (mouseleave)='turnoffTooltip()'>
                                 <li 
-                                (mousedown)='selectPrevProd($event)'
+                                (mousedown)='selectPrevProd()'
                                 (click)='add_global_func(fn)'> {{fn.name}} 
                                 </li>
                                 <div class = 'btn--container'>
@@ -296,12 +296,12 @@
             <section *ngFor='let type of ProcedureTypesArr' >
                 <div *ngIf='type.toUpperCase() == "CONSTANT"'>
                     <ul class='toolset__functions--subset'>
-                        <li (mousedown)='selectPrevProd($event)' (click)='add_basic_func(ProcedureTypes[type], 5)'> Constant </li>
-                        <li (mousedown)='selectPrevProd($event)' (click)='add_basic_func(ProcedureTypes[type], 0)'> Simple Input </li>
-                        <li (mousedown)='selectPrevProd($event)' (click)='add_basic_func(ProcedureTypes[type], 1)'> Slider </li>
-                        <li (mousedown)='selectPrevProd($event)' (click)='add_basic_func(ProcedureTypes[type], 2)'> Checkbox </li>
-                        <li (mousedown)='selectPrevProd($event)' (click)='add_basic_func(ProcedureTypes[type], 6)'> Dropdown </li>
-                        <li (mousedown)='selectPrevProd($event)' (click)='add_basic_func(ProcedureTypes[type], 3)'> URL </li>
+                        <li (mousedown)='selectPrevProd()' (click)='add_basic_func(ProcedureTypes[type], 5)'> Constant </li>
+                        <li (mousedown)='selectPrevProd()' (click)='add_basic_func(ProcedureTypes[type], 0)'> Simple Input </li>
+                        <li (mousedown)='selectPrevProd()' (click)='add_basic_func(ProcedureTypes[type], 1)'> Slider </li>
+                        <li (mousedown)='selectPrevProd()' (click)='add_basic_func(ProcedureTypes[type], 2)'> Checkbox </li>
+                        <li (mousedown)='selectPrevProd()' (click)='add_basic_func(ProcedureTypes[type], 6)'> Dropdown </li>
+                        <li (mousedown)='selectPrevProd()' (click)='add_basic_func(ProcedureTypes[type], 3)'> URL </li>
                         <!-- <li (click)='add_basic_func(ProcedureTypes[type], 4)'> File </li> -->
                     </ul>
                 </div>

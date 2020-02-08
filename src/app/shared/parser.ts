@@ -89,6 +89,9 @@ export function modifyVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
     procedure.args[0].value = modifyVarArg(procedure.args[0]);
     const modifiedVar = parseVariable(procedure.args[0].value);
     procedure.args[0].jsValue = modifiedVar.jsStr;
+    if (modifiedVar.valueStr) {
+        procedure.args[0].value = modifiedVar.valueStr;
+    }
 
     if (modifiedVar.error) {
         procedure.args[0].invalidVar = modifiedVar.error;
@@ -372,7 +375,8 @@ export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProd
 }
 
 // VAR INPUT
-export function parseVariable(value: string): {'error'?: string, 'declaredVar'?: string, 'usedVars'?: string[], 'jsStr'?: string} {
+export function parseVariable(value: string): {'error'?: string, 'declaredVar'?: string, 
+                                               'usedVars'?: string[], 'jsStr'?: string, 'valueStr'?: string} {
     const str = value.trim();
     const comps = splitComponents(str);
     if (typeof comps === 'string') {
@@ -400,7 +404,31 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
     }
 
     if (comps[0].type !== strType.VAR) {
-        return {'error': `Error: Expect a Variable at the start of the input`};
+        if (comps[0].value === '[') {
+            let newString = ``;
+            let jsString = ``;
+
+            const usedVars = [];
+            let result = analyzeArray(comps, 1, usedVars);
+            if (result.error) { return result; }
+            if (result.i + 1 >= comps.length || comps[result.i + 1].value !== ']') {
+                return {'error': 'Error: Closing Bracket "]" expected\n' +
+                `at: ... ${comps.slice(result.i + 1).map(cp => cp.value).join(' ')}`};
+            }
+            const i = result.i + 2;
+            newString += `[${result.str}]`;
+            jsString += `[${result.jsStr}]`;
+            if (i >= comps.length || comps[i].value !== '@') {
+                return {'error': `Error: Expect @ after an array in variable input`};
+            }
+            result = analyzeQuery(comps, i, usedVars, newString, jsString, true);
+            if (result.error) { return result; }
+            newString = result.str;
+            jsString = result.jsStr;
+            return {'usedVars': usedVars, 'jsStr': jsString.trim(), 'valueStr': newString};
+        } else {
+            return {'error': `Error: Expect a Variable at the start of the input`};
+        }
     }
     if (comps.length === 1) {
         return {'declaredVar': comps[0].value, 'jsStr': value + '_'};

@@ -446,7 +446,7 @@ export class GIGeomQuery {
     public getWireNormal(wire_i: number): Txyz {
         const centroid: Txyz = this.getCentroid(EEntType.WIRE, wire_i);
         const edges_i: number[] = this._geom._geom_arrays.dn_wires_edges[wire_i];
-        let normal: Txyz = [0, 0, 0];
+        const normal: Txyz = [0, 0, 0];
         const tri_normals: Txyz[] = [];
         // let count = 0;
         for (const edge_i of edges_i) {
@@ -462,8 +462,7 @@ export class GIGeomQuery {
         }
         // if we have a non-zero normal, then return it
         if (Math.abs(normal[0]) > 1e-6 || Math.abs(normal[1]) > 1e-6 || Math.abs(normal[2]) > 1e-6) {
-            normal =  vecNorm(normal);
-            return normal;
+            return vecNorm(normal);
         }
         // check for special case of a symmetrical shape where all triangle normals are
         // cancelling each other out, we need to look at both 'sides', see which is bigger

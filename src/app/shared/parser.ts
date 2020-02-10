@@ -907,8 +907,8 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
                 const index = result.jsStr.lastIndexOf(arrayName);
                 jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity},` +
                            ` ['${arrayName}', ${result.jsStr.substring(bracketIndex + 12, index - 2)}])`;
-                jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity},` +
-                           ` '${arrayName}', ${result.jsStr.substring(bracketIndex + 12, index - 2)})`;
+                // jsString = ` __modules__.${_parameterTypes.getattrib}(__params__.model, ${entity},` +
+                //            ` '${arrayName}', ${result.jsStr.substring(bracketIndex + 12, index - 2)})`;
             } else if (result.jsStr.indexOf('[') !== -1) {
                 bracketIndex = result.jsStr.indexOf('[');
                 const arrayName = result.jsStr.substring(0, bracketIndex);

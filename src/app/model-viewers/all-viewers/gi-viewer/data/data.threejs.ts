@@ -84,6 +84,9 @@ export class DataThreejs extends DataThreejsLookAt {
         this.ObjLabelMap.clear();
         this.textLabels.clear();
 
+        // add the axes, ground, lights, etc
+        this._addEnv();
+
         // Add geometry
         const threejs_data: IThreeJS = model.threejs.get3jsData();
 
@@ -112,8 +115,6 @@ export class DataThreejs extends DataThreejsLookAt {
 
 
         this._all_objs_sphere = this._getAllObjsSphere();
-        // add the axes, ground, lights, etc
-        this._addEnv();
 
 
         setTimeout(() => {
@@ -511,7 +512,7 @@ export class DataThreejs extends DataThreejsLookAt {
         material_groups.forEach(element => {
             geom.addGroup(element[0], element[1], element[2]);
         });
-
+        console.log('...................')
         this._buffer_geoms.push(geom);
 
         const material_arr = [];
@@ -553,6 +554,7 @@ export class DataThreejs extends DataThreejsLookAt {
             material_arr.push(mat);
         }
         const mesh = new THREE.Mesh(geom, material_arr);
+
         mesh.geometry.computeBoundingSphere();
         mesh.geometry.computeVertexNormals();
         mesh.castShadow = true;

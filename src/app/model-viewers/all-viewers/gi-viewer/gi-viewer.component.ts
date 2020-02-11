@@ -81,7 +81,7 @@ export class GIViewerComponent implements OnInit {
             this.dataService.setThreejsScene(this.settings);
         }
         localStorage.setItem('mpm_default_settings', JSON.stringify(DefaultSettings));
-        this.temp_camera_pos = this.dataService.getThreejsScene()._camera.position;
+        this.temp_camera_pos = this.dataService.getThreejsScene().camera.position;
     }
 
     private getSettings() {
@@ -132,7 +132,7 @@ export class GIViewerComponent implements OnInit {
         } else {
             this.modalService.open(id);
             const scene = this.dataService.getThreejsScene();
-            if (scene._threejs_nums.reduce((a, b) => a + b, 0) !== 0) {
+            if (scene.threejs_nums.reduce((a, b) => a + b, 0) !== 0) {
                 scene.vnh !== undefined ? this.normalsEnabled = true : this.normalsEnabled = false;
             }
         }
@@ -210,7 +210,7 @@ export class GIViewerComponent implements OnInit {
                 break;
             case 'positions.show':
                 this.settings.positions.show = !this.settings.positions.show;
-                scene._positions.map(p => p.visible = this.settings.positions.show);
+                scene.positions.map(p => p.visible = this.settings.positions.show);
                 break;
             case 'positions.size':
                 this.settings.positions.size = Number(value);
@@ -233,7 +233,7 @@ export class GIViewerComponent implements OnInit {
                 this.wireframeToggle();
                 break;
             case 'camera.get_camera_pos':
-                this.temp_camera_pos = this.dataService.getThreejsScene()._camera.position;
+                this.temp_camera_pos = this.dataService.getThreejsScene().camera.position;
                 this.settings.camera.pos = this.temp_camera_pos;
                 break;
             case 'camera.target_x':
@@ -255,7 +255,7 @@ export class GIViewerComponent implements OnInit {
                 this.temp_target_pos.z = Math.round(value);
                 break;
             case 'camera.get_target_pos':
-                this.temp_target_pos = this.dataService.getThreejsScene()._controls.target;
+                this.temp_target_pos = this.dataService.getThreejsScene().controls.target;
                 this.settings.camera.target = this.temp_target_pos;
                 break;
             case 'ambient_light.show': // Ambient Light
@@ -295,10 +295,10 @@ export class GIViewerComponent implements OnInit {
                 }
                 break;
             case 'directional_light.type': // Directional Light
-                if (this.settings.directional_light.type === 'directional'){
-                    this.settings.directional_light.type = 'point'
+                if (this.settings.directional_light.type === 'directional') {
+                    this.settings.directional_light.type = 'point';
                 } else {
-                    this.settings.directional_light.type = 'directional'
+                    this.settings.directional_light.type = 'directional';
                 }
                 this.threejs.updateModel(this.data);
                 break;
@@ -349,24 +349,6 @@ export class GIViewerComponent implements OnInit {
             case 'ground.shininess':
                 this.settings.ground.shininess = Number(value);
                 break;
-            case 'grid.update':
-                const posis_xyz = this.data.threejs.get3jsData().posis_xyz;
-                let max_grid_pos = 0;
-                let i = 0;
-                posis_xyz.forEach(pos => {
-                    if (i === 2) {
-                        i = 0;
-                        return;
-                    }
-                    max_grid_pos = Math.max(max_grid_pos, Math.abs(pos));
-                    i++;
-                });
-                max_grid_pos = Math.ceil(max_grid_pos / 10) * 10 * 2;
-                if (max_grid_pos < this.settings.grid.size) {
-                    max_grid_pos = this.settings.grid.size;
-                }
-                scene._addGrid(max_grid_pos);
-                break;
             default:
                 break;
         }
@@ -394,7 +376,7 @@ export class GIViewerComponent implements OnInit {
 
     wireframeToggle() {
         const scene = this.dataService.getThreejsScene();
-        scene.sceneObjs.forEach(obj => {
+        scene.scene_objs.forEach(obj => {
             if (obj.type === 'Mesh') {
                 this.settings.wireframe.show = !this.settings.wireframe.show;
                 // @ts-ignore
@@ -417,16 +399,16 @@ export class GIViewerComponent implements OnInit {
     setCamera(x = null, y = null, z = null) {
         const scene = this.dataService.getThreejsScene();
         if (x) {
-            scene._camera.position.x = x;
+            scene.camera.position.x = x;
         }
         if (y) {
-            scene._camera.position.y = y;
+            scene.camera.position.y = y;
         }
         if (z) {
-            scene._camera.position.z = z;
+            scene.camera.position.z = z;
         }
-        scene._camera.lookAt(scene._scene.position);
-        scene._camera.updateProjectionMatrix();
+        scene.camera.lookAt(scene.scene.position);
+        scene.camera.updateProjectionMatrix();
     }
     formatNumber(value) {
         if (!value) { value = 0; }

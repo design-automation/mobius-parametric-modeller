@@ -76,7 +76,8 @@ export class GIModelThreejs {
         // str += vertex_xyz[last * 3] + ',' + vertex_xyz[last * 3 + 1] + ',' + vertex_xyz[last * 3 + 2] + ' _SelPolyline _PlanarSrf _Delete'
         // console.log(str);
 
-        const [edges_verts_i, edge_select_map]: [number[], Map<number, number>] = this._model.geom.threejs.get3jsEdges(vertex_map);
+        const [edges_verts_i, edge_select_map]: [number[], Map<number, number>] = this._model.geom.threejs.get3jsPlines(vertex_map);
+        // const [edges_verts_i, edge_select_map]: [number[], Map<number, number>] = this._model.geom.threejs.get3jsEdges(vertex_map);
         const [points_verts_i, point_select_map]: [number[], Map<number, number>] = this._model.geom.threejs.get3jsPoints(vertex_map);
         // return an object containing all the data
         const data: IThreeJS = {

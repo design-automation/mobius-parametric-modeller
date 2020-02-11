@@ -519,11 +519,11 @@ export class DataThreejs extends DataThreejsLookAt {
         const l = materials.length;
         for (; index < l; index++) {
             const element = materials[index];
-            // if (this.settings.background.show) {
-            //     element.envMap = this.scene.background;
-            //     element.refractionRatio = 1;
-            //     element.envMap.mapping = THREE.CubeRefractionMapping;
-            // }
+            if (this.settings.background.show) {
+                element.envMap = this.scene.background;
+                // element.refractionRatio = 1;
+                // element.envMap.mapping = THREE.CubeRefractionMapping;
+            }
             let mat;
             if (index === 0) {
                 delete element.type; element.color = colorf;
@@ -541,11 +541,6 @@ export class DataThreejs extends DataThreejsLookAt {
                     mat = new THREE.MeshPhongMaterial(element);
                 } else if (element.type === MaterialType.MeshPhysicalMaterial) {
                     delete element.type;
-                    // if (this.settings.background.show) {
-                    //     element.envMap = this.scene.background;
-                    //     // element.refractionRatio = 1;
-                    //     // element.envMap.mapping = THREE.CubeRefractionMapping;
-                    // }
                     mat = new THREE.MeshPhysicalMaterial(element);
                 } else if (element.type === MaterialType.MeshLambertMaterial) {
                     delete element.type;

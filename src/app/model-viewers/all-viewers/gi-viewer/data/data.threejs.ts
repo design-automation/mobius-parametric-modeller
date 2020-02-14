@@ -589,7 +589,7 @@ export class DataThreejs extends DataThreejsLookAt {
         this._buffer_geoms.push(geom);
         // // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
         const mat = new THREE.LineBasicMaterial({
-            color: 0x000000,
+            color: 0xFFFFFF,
             vertexColors: THREE.VertexColors
         });
         const line = new THREE.LineSegments(geom, mat);

@@ -58,7 +58,8 @@ export class CodeUtils {
             case ProcedureTypes.If:
                 specialPrint = true;
                 if (isMainFlowchart && prod.print) {
-                    codeStr.push(`printFunc(__params__.console, 'Evaluating If: ${args[0].value} = ' + (${args[0].jsValue}), '__null__');`);
+                    codeStr.push(`printFunc(__params__.console,` +
+                    `'Evaluating If: (${args[0].value}) = ' + (${args[0].jsValue}), '__null__');`);
                 }
                 codeStr.push(`if (${args[0].jsValue}){`);
                 if (isMainFlowchart && prod.print) {
@@ -80,7 +81,8 @@ export class CodeUtils {
                 if (isMainFlowchart) {
                     codeStr.push(`__params__.currentProcedure[0] = "${prod.ID}";`);
                     if (prod.print) {
-                        codeStr.push(`printFunc(__params__.console, 'Evaluating Else-if: ${args[0].value} = ' + (${args[0].jsValue}), '__null__');`);
+                        codeStr.push(`printFunc(__params__.console,` +
+                        `'Evaluating Else-if: (${args[0].value}) = ' + (${args[0].jsValue}), '__null__');`);
                     }
                 }
                 codeStr.push(`if(${args[0].jsValue}){`);
@@ -104,7 +106,7 @@ export class CodeUtils {
                 codeStr.push(`while (${args[0].jsValue}){`);
                 if (isMainFlowchart && prod.print) {
                     codeStr.push(`printFunc(__params__.console,` +
-                        `'Executing While: ${args[0].value} = ' + (${args[0].jsValue}), '__null__');`);
+                        `'Executing While: (${args[0].value}) = ' + (${args[0].jsValue}), '__null__');`);
                 }
                 break;
 

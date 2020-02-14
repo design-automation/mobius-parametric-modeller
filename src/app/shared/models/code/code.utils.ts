@@ -6,6 +6,7 @@ import * as circularJSON from 'circular-json';
 import { _parameterTypes } from '@assets/core/_parameterTypes';
 
 let _terminateCheck: string;
+
 export class CodeUtils {
 
 
@@ -22,6 +23,7 @@ export class CodeUtils {
         }
 
         prod.hasError = false;
+        let specialPrint = false;
 
         let codeStr: string[] = [];
         const args = prod.args;
@@ -54,24 +56,54 @@ export class CodeUtils {
                 break;
 
             case ProcedureTypes.If:
+                specialPrint = true;
+                if (isMainFlowchart && prod.print) {
+                    codeStr.push(`printFunc(__params__.console,'Evaluating If', ${args[0].jsValue});`);
+                }
                 codeStr.push(`if (${args[0].jsValue}){`);
+                if (isMainFlowchart && prod.print) {
+                    codeStr.push(`printFunc(__params__.console,'Executing If', '__null__');`);
+                }
                 break;
 
             case ProcedureTypes.Else:
+                specialPrint = true;
                 codeStr.push(`else {`);
+                if (isMainFlowchart && prod.print) {
+                    codeStr.push(`printFunc(__params__.console,'Executing Else', '__null__');`);
+                }
                 break;
 
             case ProcedureTypes.Elseif:
-                codeStr.push(`else if(${args[0].jsValue}){`);
+                specialPrint = true;
+                codeStr.push(`else {`);
+                if (isMainFlowchart) {
+                    codeStr.push(`__params__.currentProcedure[0] = "${prod.ID}";`);
+                    if (prod.print) {
+                        codeStr.push(`printFunc(__params__.console,'Evaluating Else-if', ${args[0].jsValue});`);
+                    }
+                }
+                codeStr.push(`if(${args[0].jsValue}){`);
+                if (isMainFlowchart && prod.print) {
+                    codeStr.push(`printFunc(__params__.console,'Executing Else-if', '__null__');`);
+                }
                 break;
 
             case ProcedureTypes.Foreach:
+                specialPrint = true;
                 codeStr.push(`for (${prefix} ${args[0].jsValue} of ${args[1].jsValue}){`);
+                if (isMainFlowchart && prod.print) {
+                    codeStr.push(`printFunc(__params__.console,'Executing For-each; ${args[0].value}', ${args[0].jsValue});`);
+                }
                 existingVars.push(args[0].jsValue);
                 break;
 
             case ProcedureTypes.While:
+                specialPrint = true;
                 codeStr.push(`while (${args[0].jsValue}){`);
+                if (isMainFlowchart && prod.print) {
+                    codeStr.push(`printFunc(__params__.console,'Executing While; ${args[0].value}', ${args[0].jsValue});`);
+                }
                 break;
 
             case ProcedureTypes.Break:
@@ -289,7 +321,7 @@ export class CodeUtils {
 
         }
 
-        if (isMainFlowchart && prod.print && prod.args[0].name !== '__none__' && prod.args[0].jsValue) {
+        if (isMainFlowchart && prod.print && !specialPrint && prod.args[0].name !== '__none__' && prod.args[0].jsValue) {
             // const repGet = prod.args[0].jsValue;
             const repGet = this.repGetAttrib(prod.args[0].jsValue);
             codeStr.push(`printFunc(__params__.console,'${prod.args[0].value}', ${repGet});`);
@@ -306,13 +338,37 @@ export class CodeUtils {
         }
 
         if (prod.children) {
-            for (const p of prod.children) {
-                codeStr = codeStr.concat(CodeUtils.getProcedureCode(p, existingVars, isMainFlowchart, functionName, usedFunctions));
-            }
+            codeStr = codeStr.concat(CodeUtils.getProdListCode(prod.children, existingVars, isMainFlowchart, functionName, usedFunctions))
+            // for (const p of prod.children) {
+            //     codeStr = codeStr.concat(CodeUtils.getProcedureCode(p, existingVars, isMainFlowchart, functionName, usedFunctions));
+            // }
             codeStr.push(`}`);
         }
         return codeStr;
     }
+
+    static getProdListCode(prodList: IProcedure[], existingVars: string[], isMainFlowchart: Boolean,
+                           functionName?: string, usedFunctions?: string[]): string[] {
+        let codeStr = [];
+        let elifcount = 0;
+        for (const p of prodList) {
+            codeStr = codeStr.concat(CodeUtils.getProcedureCode(p, existingVars, isMainFlowchart, functionName, usedFunctions));
+            if ( p.type === ProcedureTypes.Elseif ) {
+                elifcount++;
+            } else {
+                while (elifcount > 0) {
+                    codeStr.push('}');
+                    elifcount--;
+                }
+            }
+        }
+        while (elifcount > 0) {
+            codeStr.push('}');
+            elifcount--;
+        }
+        return codeStr;
+    }
+
     static repSetAttrib(val: string) {
         if (!val || val.indexOf('@') === -1) {
             return false;
@@ -511,6 +567,7 @@ export class CodeUtils {
             return [undefined, _terminateCheck];
         }
         let varsDefined: string[];
+
         // procedure
         for (const prod of node.localFunc) {
             varsDefined = [];
@@ -534,10 +591,12 @@ export class CodeUtils {
         codeStr.push('_-_-_+_-_-_')
         codeStr.push(`__modules__.${_parameterTypes.preprocess}( __params__.model);`);
         varsDefined = [];
-        for (const prod of node.procedure) {
-            // if (node.type === 'start' && !isMainFlowchart) { break; }
-            codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName, usedFunctions));
-        }
+
+        codeStr = codeStr.concat(CodeUtils.getProdListCode(node.procedure, varsDefined, isMainFlowchart, functionName, usedFunctions))
+        // for (const prod of node.procedure) {
+        //     // if (node.type === 'start' && !isMainFlowchart) { break; }
+        //     codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName, usedFunctions));
+        // }
         if (node.type === 'end' && node.procedure.length > 0) {
             // return [[codeStr, varsDefined], _terminateCheck];
         } else {

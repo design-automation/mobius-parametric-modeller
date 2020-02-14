@@ -301,6 +301,7 @@ export class ProcedureItemComponent implements OnDestroy {
 
     canBePrinted(prod = this.data) {
         // return prod.argCount > 0 && prod.args[0].name === 'var_name';
+        if (prod.type > 0 && prod.type < 6) {return true;}
         return prod.argCount > 0 && (prod.args[0].name === 'var_name' || prod.args[0].name === 'item');
     }
 

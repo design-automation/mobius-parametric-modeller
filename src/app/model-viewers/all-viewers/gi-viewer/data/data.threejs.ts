@@ -512,7 +512,6 @@ export class DataThreejs extends DataThreejsLookAt {
         material_groups.forEach(element => {
             geom.addGroup(element[0], element[1], element[2]);
         });
-        console.log('...................')
         this._buffer_geoms.push(geom);
 
         const material_arr = [];

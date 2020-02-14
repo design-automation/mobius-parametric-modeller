@@ -90,7 +90,7 @@ function printFunc(_console, name, value){
     } else {
         val = value;
     }
-    _console.push('<p style="' + padding_style + '"><b><i>_ ' + name+':</i></b> ' + val + '</p>');
+    _console.push('<p style="' + padding_style + '"><b><i>_ ' + name+'</i></b>  = ' + val + '</p>');
     return val;
 }
 `;

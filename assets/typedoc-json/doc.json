@@ -48288,7 +48288,7 @@
 													"sources": [
 														{
 															"fileName": "libs/geo-info/GIAttribsThreejs.ts",
-															"line": 126,
+															"line": 134,
 															"character": 56
 														}
 													],
@@ -48311,7 +48311,7 @@
 													"sources": [
 														{
 															"fileName": "libs/geo-info/GIAttribsThreejs.ts",
-															"line": 126,
+															"line": 134,
 															"character": 69
 														}
 													],
@@ -48337,7 +48337,7 @@
 											"sources": [
 												{
 													"fileName": "libs/geo-info/GIAttribsThreejs.ts",
-													"line": 126,
+													"line": 134,
 													"character": 50
 												}
 											]
@@ -48348,7 +48348,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsThreejs.ts",
-									"line": 126,
+									"line": 134,
 									"character": 29
 								}
 							]
@@ -48419,7 +48419,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsThreejs.ts",
-									"line": 204,
+									"line": 212,
 									"character": 22
 								}
 							]
@@ -48482,7 +48482,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsThreejs.ts",
-									"line": 269,
+									"line": 277,
 									"character": 21
 								}
 							]
@@ -48517,7 +48517,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIAttribsThreejs.ts",
-									"line": 108,
+									"line": 116,
 									"character": 34
 								}
 							]
@@ -62564,7 +62564,7 @@
 							"sources": [
 								{
 									"fileName": "libs/geo-info/GIModelThreejs.ts",
-									"line": 52,
+									"line": 60,
 									"character": 21
 								}
 							]

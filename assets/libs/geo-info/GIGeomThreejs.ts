@@ -1,5 +1,5 @@
 import { GIGeom } from './GIGeom';
-import { IGeomArrays, TTri, TEdge, TPoint } from './common';
+import { IGeomArrays, TTri, TEdge, TPoint, TPline, TWire } from './common';
 import { GIAttribMap } from './GIAttribMap';
 import * as THREE from 'three';
 
@@ -178,6 +178,46 @@ export class GIGeomThreejs {
                 edge_select_map.set(tjs_i, gi_i);
             }
         }
+        // @ts-ignore
+        return [edges_verts_i_filt.flat(1), edge_select_map];
+
+        // @ts-ignore
+        // return this._geom_arrays.dn_edges_verts.flat(1);
+        // return [].concat(...this._geom_arrays.dn_edges_verts);
+    }
+    /**
+     * Returns a flat list of the sequence of verices for all the edges.
+     * This list will be assumed to be in pairs.
+     * The indices in the list point to the vertices.
+     */
+    public get3jsPlines(vertex_map: Map<number, number>): [number[], Map<number, number>] {
+        const edges_verts_i_filt: TEdge[] = [];
+        const edge_select_map: Map<number, number> = new Map();
+        let pw_i = 0;
+        let gi_i = 0;
+        const l = this._geom_arrays.dn_plines_wires.length;
+        for (; pw_i < l; pw_i++) {
+            const plines_wires_i: TPline = this._geom_arrays.dn_plines_wires[pw_i];
+            if (plines_wires_i !== null) {
+                const wires_edge_i: TWire = this._geom_arrays.dn_wires_edges[plines_wires_i];
+                for (const we_i of wires_edge_i) {
+                    const edge_verts_i: TEdge = this._geom_arrays.dn_edges_verts[we_i];
+                    const new_edge_verts_i: TEdge = edge_verts_i.map(e => vertex_map.get(e)) as TEdge;
+                    const tjs_i = edges_verts_i_filt.push(new_edge_verts_i) - 1;
+                    edge_select_map.set(tjs_i, gi_i);
+                    gi_i++;
+                }
+            }
+        }
+        // const l = this._geom_arrays.dn_edges_verts.length;
+        // for (; gi_i < l; gi_i++) {
+        //     const edge_verts_i: TEdge = this._geom_arrays.dn_edges_verts[gi_i];
+        //     if (edge_verts_i !== null) {
+        //         const new_edge_verts_i: TEdge = edge_verts_i.map(e => vertex_map.get(e)) as TEdge;
+        //         const tjs_i = edges_verts_i_filt.push(new_edge_verts_i) - 1;
+        //         edge_select_map.set(tjs_i, gi_i);
+        //     }
+        // }
         // @ts-ignore
         return [edges_verts_i_filt.flat(1), edge_select_map];
 

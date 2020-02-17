@@ -519,11 +519,11 @@ export class DataThreejs extends DataThreejsLookAt {
         const l = materials.length;
         for (; index < l; index++) {
             const element = materials[index];
-            if (this.settings.background.show) {
-                element.envMap = this.scene.background;
-                // element.refractionRatio = 1;
-                // element.envMap.mapping = THREE.CubeRefractionMapping;
-            }
+            // if (this.settings.background.show) {
+            //     element.envMap = this.scene.background;
+            //     // element.refractionRatio = 1;
+            //     // element.envMap.mapping = THREE.CubeRefractionMapping;
+            // }
             let mat;
             if (index === 0) {
                 delete element.type; element.color = colorf;
@@ -589,7 +589,8 @@ export class DataThreejs extends DataThreejsLookAt {
         this._buffer_geoms.push(geom);
         // // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
         const mat = new THREE.LineBasicMaterial({
-            color: 0xFFFFFF,
+            // color: 0xFFFFFF,
+            color: 0x000000,
             vertexColors: THREE.VertexColors
         });
         const line = new THREE.LineSegments(geom, mat);

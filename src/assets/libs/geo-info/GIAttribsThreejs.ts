@@ -86,18 +86,26 @@ export class GIAttribsThreejs {
                 }
             }
         });
+        // const geom_array = this._model.geom._geom_arrays;
+        // for (const e of geom_array.dn_edges_verts) {
+        //     for (const v of e) {
+        //         const vert_attrb = verts_attribs_values[v];
+        //         if (vert_attrb[0] === 1 && vert_attrb[1] === 1 && vert_attrb[2] === 1) {
+        //             verts_attribs_values[v] = [0, 0, 0];
+        //         }
+        //     }
+        // }
 
-        const geom_array = this._model.geom._geom_arrays;
-        for (const w of geom_array.dn_plines_wires) {
-            for (const e of geom_array.dn_wires_edges[w]) {
-                for (const v of geom_array.dn_edges_verts[e]) {
-                    const vert_attrb = verts_attribs_values[v];
-                    if (vert_attrb[0] === 1 && vert_attrb[1] === 1 && vert_attrb[2] === 1) {
-                        verts_attribs_values[v] = [0, 0, 0];
-                    }
-                }
-            }
-        }
+        // for (const w of geom_array.dn_plines_wires) {
+        //     for (const e of geom_array.dn_wires_edges[w]) {
+        //         for (const v of geom_array.dn_edges_verts[e]) {
+        //             const vert_attrb = verts_attribs_values[v];
+        //             if (vert_attrb[0] === 1 && vert_attrb[1] === 1 && vert_attrb[2] === 1) {
+        //                 verts_attribs_values[v] = [0, 0, 0];
+        //             }
+        //         }
+        //     }
+        // }
 
         // @ts-ignore
         return verts_attribs_values.flat(1);

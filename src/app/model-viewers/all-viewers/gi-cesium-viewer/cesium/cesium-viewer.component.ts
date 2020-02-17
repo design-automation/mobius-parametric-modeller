@@ -8,6 +8,7 @@ import { DataCesium } from '../data/data.cesium';
 import { DataCesiumService } from '../data/data.cesium.service';
 import { CesiumViewerService } from './cesium-viewer.service';
 import { ModalService } from '../html/modal-window.service';
+import { DataService } from '@shared/services';
 
 // import { IModel } from 'gs-json';
 // import { DropdownMenuComponent } from '../html/dropdown-menu.component';
@@ -70,7 +71,9 @@ export class CesiumViewerComponent implements OnInit, DoCheck, OnChanges {
      * @param injector
      * @param elem
      */
-    constructor(injector: Injector, elem: ElementRef, private cesiumViewerService: CesiumViewerService) {
+    constructor(injector: Injector, elem: ElementRef,
+                private cesiumViewerService: CesiumViewerService,
+                private mainDataService: DataService) {
         this._elem = elem;
         this.dataService = injector.get(DataCesiumService);
         // this.modalWindow = injector.get(ModalService);
@@ -163,9 +166,10 @@ export class CesiumViewerComponent implements OnInit, DoCheck, OnChanges {
                     this._no_model = false;
                     // this.render(this);
                 } catch (ex) {
-                    console.error('Error displaying model:', ex);
+                    console.error(ex);
                     this._model_error = true;
                     this._data_cesium._text = ex;
+                    this.mainDataService.notifyMessage(this._data_cesium._text);
                 }
             }
         }

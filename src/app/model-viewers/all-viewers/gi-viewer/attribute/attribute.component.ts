@@ -153,7 +153,7 @@ export class AttributeComponent implements OnChanges {
                     const SelectedAttribData = ThreeJSData.getEntsVals(this.selected_ents, this.tab_map[tabIndex]);
                     SelectedAttribData.map(row => {
                         if (this.selected_ents.has(row._id)) {
-                        return row.selected = true;
+                            return row.selected = true;
                         }
                     });
                     this.displayData = SelectedAttribData;
@@ -161,7 +161,7 @@ export class AttributeComponent implements OnChanges {
                     const AllAttribData = ThreeJSData.getAttribsForTable(this.tab_map[tabIndex]).data;
                     AllAttribData.map(row => {
                         if (this.selected_ents.has(row._id)) {
-                        return row.selected = true;
+                            return row.selected = true;
                         }
                     });
                     this.displayData = AllAttribData;
@@ -213,7 +213,7 @@ export class AttributeComponent implements OnChanges {
             const settings = JSON.parse(localStorage.getItem('mpm_settings'));
             if (settings !== undefined) {
                 if (settings.select !== undefined) {
-                settings.select.tab = tabIndex.toString();
+                    settings.select.tab = tabIndex.toString();
                 } else {
                     settings.select = {selector: {id: '_f', name: 'Faces'}, tab: '0'};
                 }

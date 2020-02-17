@@ -2,7 +2,7 @@
 	<as-split direction="vertical" (dragEnd)='dragSplitEnd($event)' [disabled]='checkPublish()'>
 		<as-split-area [size]="100 - getSplit()" id="three-js">
 			<threejs-viewer [model]='data'
-				(action)="threejsAction($event)"
+			(action)="threejsAction($event)"
 				[attr_table_select]='attrTableSelect'
 				[selectSwitch] = 'selectSwitchOnOff'
 				[attribLabel] = 'attribLabelVal'
@@ -24,7 +24,7 @@
 					<tab tabTitle="Scene">
 						<div class="mat-elevation-z1">
 							<dl>
-								<dd [title] = "!normalsEnabled?'No models available':''">
+								<!-- <dd [title] = "!normalsEnabled?'No models available':''">
 									<div class="label">Normals</div>
 									<div class="onoffswitch">
 										<input type="checkbox"
@@ -48,7 +48,7 @@
 										[disabled] = "!normalsEnabled">
 										<input type="text" [value]="settings.normals.size" disabled>
 									</div>
-								</dd>
+								</dd> -->
 								<dd>
 									<div class="label">Axes</div>
 									<div class="onoffswitch">
@@ -64,8 +64,11 @@
 										</label>
 									</div>
 									<div class="slidecontainer">
-										<input type="range" min="1" max="1000" step="1" [value]="settings.axes.size" class="slider" id="axesSize" (input)="settingOnChange('axes.size', $event.target.value)">
-										<input type="text" [value]="settings.axes.size" disabled>
+                                        <input type="range" min="1" max="1000" step="1" 
+                                        [value]="settings.axes.size" class="slider" id="axesSize" 
+                                        (input)="settingOnChange('axes.size', $event.target.value)">
+                                        <input type="text" [value]="settings.axes.size" 
+                                        (input)="settingOnChange('axes.size', $event.target.value)">
 									</div>
 								</dd>
 								<dd>
@@ -219,6 +222,13 @@
                                     <div class="label">Background Set</div>
                                     <select value={{settings.background.background_set}}
                                     (change)="settingOnChange('background.set', $event.target.value)">
+                                    <!--
+                                        background folder: "\src\assets\img\background\"
+                                        each background corresponds to a folder in the directory:
+                                            option value = 0 -> folder bg0
+                                            option value = 1 -> folder bg1
+                                            ...
+                                    -->
                                         <option value=0>Sky 1</option>
                                         <option value=1>Sky 2</option>
                                         <option value=2>Sky 3</option>

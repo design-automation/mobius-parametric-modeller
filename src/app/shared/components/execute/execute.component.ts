@@ -37,6 +37,9 @@ function printFunc(_console, name, value){
     let padding_style = 'padding: 2px 0px 2px 10px;';
     if (!value) {
         val = value;
+    } else if (value === '__null__') {
+        _console.push('<p style="' + padding_style + '"><b><i>_ ' + name + '</i></b></p>');
+        return value;
     } else if (typeof value === 'number' || value === undefined) {
         val = value;
     } else if (typeof value === 'string') {
@@ -87,7 +90,7 @@ function printFunc(_console, name, value){
     } else {
         val = value;
     }
-    _console.push('<p style="' + padding_style + '"><b><i>_ ' + name+':</i></b> ' + val + '</p>');
+    _console.push('<p style="' + padding_style + '"><b><i>_ ' + name+'</i></b>  = ' + val + '</p>');
     return val;
 }
 `;

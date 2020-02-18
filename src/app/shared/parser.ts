@@ -735,7 +735,7 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
             newString += '()';
             jsString += '()';
         } else {
-            const result = analyzeArray(comps, i + 2, vars);
+            const result = analyzeArray(comps, i + 2, vars, true);
             if (result.error) { return result; }
             if (result.i + 1 >= comps.length || comps[result.i + 1].value !== ')') {
                 return { 'error': `Error: ")" expected \nat: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`}; }
@@ -776,7 +776,7 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
     return {'i': i, 'str': newString, 'jsStr': jsString};
 }
 
-function analyzeArray(comps: {'type': strType, 'value': string}[], i: number, vars: string[]):
+function analyzeArray(comps: {'type': strType, 'value': string}[], i: number, vars: string[], acceptFunc = false):
                 {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string, 'jsStr'?: string} {
     if (comps[i].type === strType.OTHER && !componentStartSymbols.has(comps[i].value)) {
         return {'i': i, 'str': '', 'jsStr': ''};
@@ -797,6 +797,30 @@ function analyzeArray(comps: {'type': strType, 'value': string}[], i: number, va
         if (result.str[0] !== ' ') {
             newString += ' ';
             jsString += ' ';
+        }
+        if (acceptFunc && comps[result.i + 1].value === '=>') {
+            const varIndex = vars.indexOf(result.str);
+            if (varIndex !== -1) {
+                vars.splice(varIndex, 1);
+            }
+            newString += result.str + ' => ';
+            jsString += result.str + ' => ';
+            i = result.i + 2;
+            let bracketCount = 0;
+            while (bracketCount > 0 || (comps[i].value !== ')' && comps[i].value !== ',')) {
+                if (comps[i].value !== '(' || comps[i].value !== '[' || comps[i].value !== '{') {
+                    bracketCount++;
+                }
+                if (comps[i].value !== ')' || comps[i].value !== ']' || comps[i].value !== '}') {
+                    bracketCount--;
+                }
+                newString += comps[i].value;
+                jsString += comps[i].value;
+                i++;
+            }
+            newString = newString.trim();
+            jsString = jsString.trim();
+            continue;
         }
         newString += result.str;
         jsString += result.jsStr;
@@ -1226,14 +1250,18 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
         // comparison operator (!, <, =, >)
         } else if (code === 33 || (code > 59 && code < 63)) {
             const startI = i;
-            i++;
-            if (str.charCodeAt(i) === 61) { // !=, <=, >=, ==
+            if (str.charCodeAt(i) === 61 && str.charCodeAt(i + 1) === 62) {
+                i += 2;
+            } else {
                 i++;
-                if (str.charCodeAt(i) === 61) { // !==, ===
-                    if (code === 60 || code === 62) { // mark invalid for <== and >==
-                        return 'Error: <== and >== not acceptable.';
-                    }
+                if (str.charCodeAt(i) === 61) { // !=, <=, >=, ==
                     i++;
+                    if (str.charCodeAt(i) === 61) { // !==, ===
+                        if (code === 60 || code === 62) { // mark invalid for <== and >==
+                            return 'Error: <== and >== not acceptable.';
+                        }
+                        i++;
+                    }
                 }
             }
             const stringCode = str.substring(startI, i);

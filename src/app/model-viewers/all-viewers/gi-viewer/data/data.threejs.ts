@@ -93,6 +93,7 @@ export class DataThreejs extends DataThreejsLookAt {
 
         this.tri_select_map = threejs_data.triangle_select_map;
         this.edge_select_map = threejs_data.edge_select_map;
+        this.white_edge_select_map = threejs_data.white_edge_select_map;
         this.point_select_map = threejs_data.point_select_map;
         this.posis_map = threejs_data.posis_map;
         this.vertex_map = threejs_data.vertex_map;
@@ -106,7 +107,7 @@ export class DataThreejs extends DataThreejsLookAt {
         const colors_buffer = new THREE.Float32BufferAttribute(threejs_data.colors, 3);
         const posis_xyz_buffer = new THREE.Float32BufferAttribute(threejs_data.posis_xyz, 3);
         this._addTris(threejs_data.triangle_indices, verts_xyz_buffer, colors_buffer, material_groups, materials);
-        this._addLines(threejs_data.edge_indices, verts_xyz_buffer, colors_buffer, normals_buffer);
+        this._addLines(threejs_data.edge_indices, threejs_data.white_edge_indices, verts_xyz_buffer, colors_buffer, normals_buffer);
         this._addPoints(threejs_data.point_indices, verts_xyz_buffer, colors_buffer, [255, 255, 255], this.settings.positions.size + 1);
         this._addPosis(threejs_data.posis_indices, posis_xyz_buffer, this.settings.colors.position, this.settings.positions.size);
 
@@ -541,6 +542,9 @@ export class DataThreejs extends DataThreejsLookAt {
                     mat = new THREE.MeshPhongMaterial(element);
                 } else if (element.type === MaterialType.MeshPhysicalMaterial) {
                     delete element.type;
+                    if (this.settings.background.show) {
+                        element.envMap = this.scene.background;
+                    }
                     mat = new THREE.MeshPhysicalMaterial(element);
                 } else if (element.type === MaterialType.MeshLambertMaterial) {
                     delete element.type;
@@ -573,7 +577,7 @@ export class DataThreejs extends DataThreejsLookAt {
     /**
      * Add threejs lines to the scene
      */
-    private _addLines(lines_i: number[],
+    private _addLines(lines_i: number[], white_line_i: number[],
                     posis_buffer: THREE.Float32BufferAttribute,
                     color_buffer: THREE.Float32BufferAttribute,
                     normals_buffer: THREE.Float32BufferAttribute,
@@ -585,18 +589,37 @@ export class DataThreejs extends DataThreejsLookAt {
         geom.setAttribute('position', posis_buffer);
         geom.setAttribute('normal', normals_buffer);
         geom.setAttribute('color', color_buffer);
-
         this._buffer_geoms.push(geom);
+
         // // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
         const mat = new THREE.LineBasicMaterial({
-            // color: 0xFFFFFF,
-            color: 0x000000,
+            color: 0xFFFFFF,
+            // color: 0x000000,
             vertexColors: THREE.VertexColors
         });
         const line = new THREE.LineSegments(geom, mat);
         this.scene_objs.push(line);
         this.scene.add(line);
-        this.threejs_nums[1] = lines_i.length / 2;
+
+        const geom_white = new THREE.BufferGeometry();
+        geom_white.setIndex(lines_i);
+        // geom.addAttribute('position', posis_buffer);
+        // geom.addAttribute('normal', normals_buffer);
+        geom_white.setAttribute('position', posis_buffer);
+        geom_white.setAttribute('normal', normals_buffer);
+        geom_white.setAttribute('color', color_buffer);
+        this._buffer_geoms.push(geom_white);
+
+        // // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
+        const mat_white = new THREE.LineBasicMaterial({
+            color: 0x000000,
+            vertexColors: THREE.VertexColors
+        });
+        const line_white = new THREE.LineSegments(geom_white, mat_white);
+        this.scene_objs.push(line_white);
+        this.scene.add(line_white);
+
+        this.threejs_nums[1] = (lines_i.length + white_line_i.length) / 2;
     }
     // ============================================================================
     /**

@@ -1425,7 +1425,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     private selectColl(object: THREE.Intersection, type) {
         let colls = [];
         if (type === 'Mesh') {
-            colls = this.model.geom.nav.navAnyToColl(EEntType.TRI, object.faceIndex);
+            const tri = this._data_threejs.tri_select_map.get(object.faceIndex);
+            colls = this.model.geom.nav.navAnyToColl(EEntType.TRI, tri);
         } else if (type === 'LineSegments') {
             colls = this.model.geom.nav.navAnyToColl(EEntType.EDGE, object.index / 2);
         } else if (type === 'Points') {

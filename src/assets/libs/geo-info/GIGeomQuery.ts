@@ -328,7 +328,7 @@ export class GIGeomQuery {
         const descendent_colls_i: number[] = [];
         for (let i = 0; i < this._geom_arrays.dn_colls_objs.length; i++) {
             const coll: TColl = this._geom_arrays.dn_colls_objs[i];
-            if (coll !== null && coll[0] !== -1) {
+            if (coll !== null && coll[0] !== -1 && i !== coll_i) {
                 if (this.isCollDescendent(i, coll_i)) {
                     descendent_colls_i.push(i);
                 }
@@ -343,8 +343,8 @@ export class GIGeomQuery {
     public isCollDescendent(coll1_i: number, coll2_i: number): boolean {
         let parent_coll_i: number = this._geom_arrays.dn_colls_objs[coll1_i][0];
         while (parent_coll_i !== -1) {
-            parent_coll_i = this._geom_arrays.dn_colls_objs[parent_coll_i][0];
             if (parent_coll_i === coll2_i) { return true; }
+            parent_coll_i = this._geom_arrays.dn_colls_objs[parent_coll_i][0];
         }
         return false;
     }
@@ -355,8 +355,8 @@ export class GIGeomQuery {
     public isCollAncestor(coll1_i: number, coll2_i: number): boolean {
         let parent_coll_i: number = this._geom_arrays.dn_colls_objs[coll2_i][0];
         while (parent_coll_i !== -1) {
-            parent_coll_i = this._geom_arrays.dn_colls_objs[parent_coll_i][0];
             if (parent_coll_i === coll1_i) { return true; }
+            parent_coll_i = this._geom_arrays.dn_colls_objs[parent_coll_i][0];
         }
         return false;
     }

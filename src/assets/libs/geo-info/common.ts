@@ -94,6 +94,21 @@ export enum EEntType {
     COLL,
     MOD
 }
+export enum EEntTypeCollCP {
+    POSI,
+    TRI,
+    VERT,
+    EDGE,
+    WIRE,
+    FACE,
+    POINT,
+    PLINE,
+    PGON,
+    COLL,
+    COLLC,
+    COLLP,
+    MOD
+}
 
 // Types of entities
 export enum EEntTypeStr {

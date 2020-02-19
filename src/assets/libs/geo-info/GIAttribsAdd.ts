@@ -197,11 +197,24 @@ export class GIAttribsAdd {
      */
     public pushAttribVals(
             source_ent_type: EEntType, source_attrib_name: string, source_attrib_idx_key: number|string, source_indices: number[],
-            target_ent_type: EEntType, target_attrib_name: string, target_attrib_idx_key: number|string, method: EAttribPush): void {
-        if (source_ent_type === target_ent_type) { return; }
+            target: EEntType|string,   target_attrib_name: string, target_attrib_idx_key: number|string, method: EAttribPush): void {
+        // if source and target are same, then return
+        if (source_ent_type === target) { return; }
         // check that the attribute exists
         if (! this._model.attribs.query.hasAttrib(source_ent_type, source_attrib_name)) {
-            throw new Error('The attribute does not exist.');
+            throw new Error('Error pushing attributes: The attribute does not exist.');
+        }
+        let target_ent_type: EEntType = null;
+        let target_coll: string = null;
+        // check if this is coll -> coll
+        if (target === 'coll_parent' || target === 'coll_children') {
+            if (source_ent_type !== EEntType.COLL) {
+                throw new Error('Error pushing attributes between collections: The source and target must both be collections.');
+            }
+            target_coll = target as string;
+            target_ent_type = EEntType.COLL;
+        } else {
+            target_ent_type = target as EEntType;
         }
         // get the data type and data size of the existing attribute
         const source_data_type: EAttribDataTypeStrs = this._model.attribs.query.getAttribDataType(source_ent_type, source_attrib_name);
@@ -278,7 +291,16 @@ export class GIAttribsAdd {
             const attrib_value: TAttribDataTypes =
                 this._model.attribs.query.getAttribValAny(source_ent_type, source_attrib_name, index,
                     source_attrib_idx_key) as TAttribDataTypes;
-            const target_ents_i: number[] = this._model.geom.nav.navAnyToAny(source_ent_type, target_ent_type, index);
+            let target_ents_i: number[] = null;
+            if (target_coll === 'coll_parent') {
+                const parent = this._model.geom.nav.navCollToCollParent(index);
+                target_ents_i = (parent === -1) ? [] : [parent];
+            } else if (target_coll === 'coll_children') {
+                target_ents_i = this._model.geom.nav.navCollToCollChildren(index);
+            } else {
+                target_ent_type =  target_ent_type as EEntType;
+                target_ents_i = this._model.geom.nav.navAnyToAny(source_ent_type, target_ent_type, index);
+            }
             for (const target_ent_i of target_ents_i) {
                 if (! attrib_values_map.has(target_ent_i)) {
                         attrib_values_map.set(target_ent_i, []);
@@ -287,7 +309,10 @@ export class GIAttribsAdd {
             }
         }
         // create the new target attribute if it does not already exist
-        this.addAttrib(target_ent_type, target_attrib_name, target_data_type);
+        if (target_coll !== null) {
+            target_ent_type =  target_ent_type as EEntType;
+            this.addAttrib(target_ent_type, target_attrib_name, target_data_type);
+        }
         // calculate the new value and set the attribute
         attrib_values_map.forEach( (attrib_values, target_ent_i) => {
             let value: TAttribDataTypes = attrib_values[0];
@@ -303,13 +328,7 @@ export class GIAttribsAdd {
             }
         });
     }
-    /**
-     * Transfer attrib values to neighbouring entities of the same type.
-     * Neighbouring entities are those that share the same positions.
-     */
-    public transferAttribValues(ent_type: EEntType, attrib_name: string, indices: number[], method: number): void {
-        throw new Error('Attribute transfer is not yet implemented.');
-    }
+
     // ============================================================================
     // Private methods
     // ============================================================================

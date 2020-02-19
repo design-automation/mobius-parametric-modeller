@@ -166,7 +166,7 @@ export class GIGeomNav {
         return this._geom_arrays.up_pgons_colls[pgon_i];
     }
     public navCollToCollParent(coll_i: number): number {
-        return coll_i[0]; // coll parent
+        return this._geom.query.getCollParent(coll_i); // coll parent
     }
     // ============================================================================
     // Navigate from any level to ? (up or down)

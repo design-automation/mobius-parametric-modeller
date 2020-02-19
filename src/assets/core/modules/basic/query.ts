@@ -102,9 +102,8 @@ export function Get(__model__: GIModel, ent_type_enum: _EEntType, entities: TId|
     const ent_type: EEntType = _getEntTypeFromStr(ent_type_enum) as EEntType;
     // if ents_arr is null, then get all entities in the model of type ent_type
     if (ents_arr === null) {
-        ents_arr = ents_arr as TEntTypeIdx[];
-        const ents_i: number[] = __model__.geom.query.getEnts(ent_type, false);
-        ents_arr = ents_i.map(ent_i => [ent_type, ent_i]) as TEntTypeIdx[];
+        // return the result
+        return idsMake(_getAll(__model__, ent_type)) as TId[];
     }
     if (isEmptyArr(ents_arr)) { return []; }
     // make sure that the ents_arr is at least depth 2
@@ -112,11 +111,15 @@ export function Get(__model__: GIModel, ent_type_enum: _EEntType, entities: TId|
     if (depth === 1) { ents_arr = [ents_arr] as TEntTypeIdx[]; }
     ents_arr = ents_arr as TEntTypeIdx[]|TEntTypeIdx[][];
     // get the entities
-    const found_ents_arr: TEntTypeIdx[]|TEntTypeIdx[][] = _get(__model__, ent_type, ents_arr);
+    const found_ents_arr: TEntTypeIdx[]|TEntTypeIdx[][] = _getFrom(__model__, ent_type, ents_arr);
     // return the result
     return idsMake(found_ents_arr) as TId[]|TId[][];
 }
-function _get(__model__: GIModel, ent_type: EEntType, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx[]|TEntTypeIdx[][] {
+function _getAll(__model__: GIModel, ent_type: EEntType): TEntTypeIdx[] {
+    const ents_i: number[] = __model__.geom.query.getEnts(ent_type, false);
+    return ents_i.map(ent_i => [ent_type, ent_i]) as TEntTypeIdx[];
+}
+function _getFrom(__model__: GIModel, ent_type: EEntType, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx[]|TEntTypeIdx[][] {
     if (ents_arr.length === 0) { return []; }
     // do the query
     const depth: number = getArrDepth(ents_arr);
@@ -134,46 +137,28 @@ function _get(__model__: GIModel, ent_type: EEntType, ents_arr: TEntTypeIdx[]|TE
         const found_ents_i: number[] = Array.from(found_ents_i_set);
         return found_ents_i.map( entity_i => [ent_type, entity_i]) as TEntTypeIdx[];
     } else { // depth === 3
+        // TODO Why do we want this option?
+        // TODO I cannot see any reason to return anything buy a flat list
         ents_arr = ents_arr as TEntTypeIdx[][];
-        return ents_arr.map(ents_arr_item => _get(__model__, ent_type, ents_arr_item)) as TEntTypeIdx[][];
+        return ents_arr.map(ents_arr_item => _getFrom(__model__, ent_type, ents_arr_item)) as TEntTypeIdx[][];
     }
 }
 // ================================================================================================
 /**
- * Filter entities based on a query.
+ * Filter a list of entities based on an attribute value.
  * ~
  * The result will always be a list of entities, even if there is only one entity.
  * In a case where you want only one entity, remember to get the first item in the list.
  * ~
- * The filter expression can use the following format: ab#@name == value, where
- * 'ab' is the two letter identifier of the entity type ('ps', '_v', '_e', '_w', '_f', 'pt', 'pl', 'pg', 'co')
- * 'name' is the attribute name, and
- * 'value' is the attribute value that you are searching for.
- * ~
- * If the attribute value is a string, then in must be in quotes, e.g.: pg#@name == 'str_value'.
- * ~
- * If the attribute value is a number, then any comparison operator can be used: ==, !=, >, >=, <, =<.
- * ~
- * If the attribute value is a list, then a list index can be used, e.g.: ps#@xyz[2] > 10.
- * ~
  * @param __model__
- * @param entities List of entities to filter, or null.
+ * @param entities List of entities to filter. The entities must all be of the same type
  * @param attrib The attribute to use for filtering. Can be `name`, `[name, index]`, or `[name, key]`.
  * @param operator_enum Enum, the operator to use for filtering
  * @param value The attribute value to use for filtering.
  * @returns Entities, a list of entities that match the conditions specified in 'expr'.
- * @example positions = query.Get(polyline1, ps#@xyz[2]>10)
- * @example_info Returns a list of positions that are part of polyline1 where the z-coordinate is more than 10.
- * @example positions = query.Get(null, ps#@xyz[2]>10)
- * @example_info Returns a list of positions in the model where the z-coordinate is more than 10.
- * @example positions = query.Get(polyline1, ps#)
- * @example_info Returns a list of all of the positions that are part of polyline1.
- * @example polylines = query.Get(position1, pl#)
- * @example_info Returns a list of all of the polylines that use position1.
- * @example collections = query.Get(null, co#@type=="floors")
- * @example_info Returns a list of all the collections that have an attribute called "type" with a value "floors".
  */
-export function Filter(__model__: GIModel, entities: TId|TId[],
+export function Filter(__model__: GIModel,
+        entities: TId|TId[],
         attrib: string|[string, number|string],
         operator_enum: _EFilterOperator, value: TAttribDataTypes): TId[]|TId[][] {
     if (entities === null) { return []; }
@@ -229,21 +214,30 @@ function _filterOperator(select: _EFilterOperator): EFilterOperatorTypes {
 function _filter(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][],
         name: string, idx_or_key: number|string, op_type: EFilterOperatorTypes, value: TAttribDataTypes): TEntTypeIdx[]|TEntTypeIdx[][] {
     if (ents_arr.length === 0) { return []; }
-    // do the query
+    // do the filter
     const depth: number = getArrDepth(ents_arr);
     if (depth === 2) {
         ents_arr = ents_arr as TEntTypeIdx[];
         const ent_type: EEntType = ents_arr[0][0];
         // get the list of entities
-        const found_ents_i: number[] = [];
+        // const found_ents_i: number[] = [];
+        // for (const ent_arr of ents_arr) {
+        //     found_ents_i.push(...__model__.geom.nav.navAnyToAny(ent_arr[0], ent_type, ent_arr[1]));
+        // }
+        const ents_i: number[] = [];
         for (const ent_arr of ents_arr) {
-            found_ents_i.push(...__model__.geom.nav.navAnyToAny(ent_arr[0], ent_type, ent_arr[1]));
+            if (ent_arr[0] !== ent_type) {
+                throw new Error('Error filtering list of entities: The entities must all be of the same type.');
+            }
+            ents_i.push(ent_arr[1]);
         }
-        // do the query on the list of entities
-        const query_result: number[] = __model__.attribs.query.filterByAttribs(ent_type, found_ents_i, name, idx_or_key, op_type, value);
+        // filter the entities
+        const query_result: number[] = __model__.attribs.query.filterByAttribs(ent_type, ents_i, name, idx_or_key, op_type, value);
         if (query_result.length === 0) { return []; }
         return query_result.map( entity_i => [ent_type, entity_i]) as TEntTypeIdx[];
     } else { // depth === 3
+        // TODO Why do we want this option?
+        // TODO I cannot see any reason to return anything buy a flat list
         ents_arr = ents_arr as TEntTypeIdx[][];
         return ents_arr.map(ents_arr_item => _filter(__model__, ents_arr_item, name, idx_or_key, op_type, value)) as TEntTypeIdx[][];
     }

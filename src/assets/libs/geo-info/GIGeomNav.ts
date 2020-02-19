@@ -73,10 +73,38 @@ export class GIGeomNav {
         return this._geom_arrays.dn_pgons_faces[pgon_i];
     }
     public navCollToPoint(coll_i: number): number[] {
-        return this._geom_arrays.dn_colls_objs[coll_i][1]; // coll points
+        // get the descendants of this collection
+        const coll_and_desc_i: number[] = this._geom.query.getCollDescendents(coll_i);
+        // if no descendants, just return the the ents in this coll
+        if (coll_and_desc_i.length === 0) {
+            return this._geom_arrays.dn_colls_objs[coll_i][1]; // coll points
+        }
+        // we have descendants, so get all points
+        coll_and_desc_i.splice(0, 0, coll_i);
+        const points_i_set: Set<number> = new Set();
+        for (const one_coll_i of coll_and_desc_i) {
+            for (const point_i of this._geom_arrays.dn_colls_objs[one_coll_i][1]) {
+                points_i_set.add(point_i);
+            }
+        }
+        return Array.from(points_i_set);
     }
     public navCollToPline(coll_i: number): number[] {
-        return this._geom_arrays.dn_colls_objs[coll_i][2]; // coll lines
+        // get the descendants of this collection
+        const coll_and_desc_i: number[] = this._geom.query.getCollDescendents(coll_i);
+        // if no descendants, just return the the ents in this coll
+        if (coll_and_desc_i.length === 0) {
+            return this._geom_arrays.dn_colls_objs[coll_i][2]; // coll lines
+        }
+        // we have descendants, so get all plines
+        coll_and_desc_i.splice(0, 0, coll_i);
+        const plines_i_set: Set<number> = new Set();
+        for (const one_coll_i of coll_and_desc_i) {
+            for (const pline_i of this._geom_arrays.dn_colls_objs[one_coll_i][2]) {
+                plines_i_set.add(pline_i);
+            }
+        }
+        return Array.from(plines_i_set);
     }
     public navCollToPgon(coll_i: number): number[] {
         // get the descendants of this collection
@@ -86,7 +114,7 @@ export class GIGeomNav {
             return this._geom_arrays.dn_colls_objs[coll_i][3]; // coll pgons
         }
         // we have descendants, so get all pgons
-        coll_and_desc_i.push(coll_i);
+        coll_and_desc_i.splice(0, 0, coll_i);
         const pgons_i_set: Set<number> = new Set();
         for (const one_coll_i of coll_and_desc_i) {
             for (const pgon_i of this._geom_arrays.dn_colls_objs[one_coll_i][3]) {

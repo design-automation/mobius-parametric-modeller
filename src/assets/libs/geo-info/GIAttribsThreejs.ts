@@ -150,7 +150,7 @@ export class GIAttribsThreejs {
             data_obj_map.set(ent_i, {_id: `${attribs_maps_key}${ent_i}`} );
             if (ent_type === EEntType.COLL) {
                 const coll_parent = this._model.geom.query.getCollParent(ent_i);
-                data_obj_map.get(ent_i)['_parent'] = coll_parent === -1 ? '' : coll_parent;
+                data_obj_map.get(ent_i)['_parent'] = coll_parent === -1 ? '' : 'co' + coll_parent;
             }
             i++;
         }

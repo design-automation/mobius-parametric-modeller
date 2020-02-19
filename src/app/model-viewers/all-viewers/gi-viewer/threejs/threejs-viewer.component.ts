@@ -436,10 +436,11 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                         //         this.chooseColl(element);
                         //     });
                         // }
-                        const parent_coll_i: number = this.model.geom.query.getCollParent(attrib.id);
-                        if (parent_coll_i === -1) { // no parent
-                            this.chooseColl(attrib.id);
-                        }
+                        this.chooseColl(attrib.id);
+                        // const parent_coll_i: number = this.model.geom.query.getCollParent(attrib.id);
+                        // if (parent_coll_i === -1) { // no parent
+                        //     this.chooseColl(attrib.id);
+                        // }
                     } else {
                         attrib.id.forEach((_id) => {
                             this.chooseColl(_id);
@@ -1495,7 +1496,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
         this.dataService.selected_ents.get(EEntTypeStr[EEntType.COLL]).set(coll_id, id);
         this.dataService.selected_coll.set(coll_id, children);
-        this.refreshTable(null);
+        // this.refreshTable(null);
     }
 
     private chooseVertex(id: number) {

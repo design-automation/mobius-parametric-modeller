@@ -79,10 +79,24 @@ export class GIGeomNav {
         return this._geom_arrays.dn_colls_objs[coll_i][2]; // coll lines
     }
     public navCollToPgon(coll_i: number): number[] {
-        return this._geom_arrays.dn_colls_objs[coll_i][3]; // coll pgons
+        // get the descendants of this collection
+        const coll_and_desc_i: number[] = this._geom.query.getCollDescendents(coll_i);
+        // if no descendants, just return the the ents in this coll
+        if (coll_and_desc_i.length === 0) {
+            return this._geom_arrays.dn_colls_objs[coll_i][3]; // coll pgons
+        }
+        // we have descendants, so get all pgons
+        coll_and_desc_i.push(coll_i);
+        const pgons_i_set: Set<number> = new Set();
+        for (const one_coll_i of coll_and_desc_i) {
+            for (const pgon_i of this._geom_arrays.dn_colls_objs[one_coll_i][3]) {
+                pgons_i_set.add(pgon_i);
+            }
+        }
+        return Array.from(pgons_i_set);
     }
-    public navCollToColl(coll_i: number): number {
-        return coll_i[0]; // coll parent
+    public navCollToCollChildren(coll_i: number): number[] {
+        return this._geom.query.getCollChildren(coll_i); // coll children
     }
     // ============================================================================
     // Navigate up the hierarchy
@@ -122,6 +136,9 @@ export class GIGeomNav {
     }
     public navPgonToColl(pgon_i: number): number[] {
         return this._geom_arrays.up_pgons_colls[pgon_i];
+    }
+    public navCollToCollParent(coll_i: number): number {
+        return coll_i[0]; // coll parent
     }
     // ============================================================================
     // Navigate from any level to ? (up or down)
@@ -428,6 +445,11 @@ export class GIGeomNav {
      * @param index
      */
     public navAnyToAny(from_ets: EEntType, to_ets: EEntType, index: number): number[] {
+        // check if this is nav coll to coll
+        // for coll to coll, we assume we are going down, from parent to children
+        if (from_ets === EEntType.COLL && to_ets === EEntType.COLL) {
+            return this.navCollToCollChildren(index);
+        }
         // same level
         if (from_ets === to_ets) { return [index]; }
         // from -> to

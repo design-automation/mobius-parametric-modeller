@@ -12,7 +12,7 @@ import { isPoint, isPline, isPgon, isColl, idsMake, getArrDepth, isEmptyArr } fr
 import { __merge__} from '../_model';
 import { _model } from '..';
 import { checkArgTypes, checkIDs, IDcheckObj, TypeCheckObj } from '../_check_args';
-import { arrMakeFlat } from '@libs/util/arrs';
+import { arrMakeFlat, getArrDepth2 } from '@libs/util/arrs';
 
 // ================================================================================================
 /**
@@ -233,3 +233,5 @@ function _collectionEmpty(__model__: GIModel, coll_i: number): void {
     }
 }
 // ================================================================================================
+// ================================================================================================
+

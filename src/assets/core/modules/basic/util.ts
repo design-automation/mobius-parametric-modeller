@@ -9,11 +9,238 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 
 import { download } from '@libs/filesys/download';
-import { EEntType, IModelData } from '@libs/geo-info/common';
+import { EEntType, IModelData, TId, TEntTypeIdx } from '@libs/geo-info/common';
 import { __merge__ } from '../_model';
 import { _model } from '..';
+import { arrMakeFlat } from '@assets/libs/util/arrs';
+import { checkIDs, IDcheckObj } from '../_check_args';
 
 
+// ================================================================================================
+/**
+ * Returns an html string representation of the contents of this model
+ *
+ * @param __model__
+ * @returns Text that summarises what is in the model, click print to see this text.
+ */
+export function ModelInfo(__model__: GIModel): string {
+    return JSON.stringify(
+        {
+            'geometry': {
+                'num_positions': __model__.geom.query.numEnts(EEntType.POSI, false),
+                'num_vertices': __model__.geom.query.numEnts(EEntType.VERT, false),
+                'num_edges': __model__.geom.query.numEnts(EEntType.EDGE, false),
+                'num_wires': __model__.geom.query.numEnts(EEntType.WIRE, false),
+                'num_faces': __model__.geom.query.numEnts(EEntType.FACE, false),
+                'num_points': __model__.geom.query.numEnts(EEntType.POINT, false),
+                'num_polylines': __model__.geom.query.numEnts(EEntType.PLINE, false),
+                'num_polygons': __model__.geom.query.numEnts(EEntType.PGON, false),
+                'num_collections': __model__.geom.query.numEnts(EEntType.COLL, false)
+            },
+            'attributes': {
+                'position_attribs': __model__.attribs.query.getAttribNames(EEntType.POSI),
+                'vertex_attribs': __model__.attribs.query.getAttribNames(EEntType.VERT),
+                'edge_attribs': __model__.attribs.query.getAttribNames(EEntType.EDGE),
+                'wire_attribs': __model__.attribs.query.getAttribNames(EEntType.WIRE),
+                'face_attribs': __model__.attribs.query.getAttribNames(EEntType.FACE),
+                'point_attribs': __model__.attribs.query.getAttribNames(EEntType.POINT),
+                'polyline_attribs': __model__.attribs.query.getAttribNames(EEntType.PLINE),
+                'polygon_attribs': __model__.attribs.query.getAttribNames(EEntType.PGON),
+                'collection_attribs': __model__.attribs.query.getAttribNames(EEntType.COLL),
+                'model_attribs': __model__.attribs.query.getAttribNames(EEntType.MOD)
+            }
+        },
+    );
+}
+export enum _ECOmpareMethod {
+    THIS_IS_SUBSET = 'subset',
+    THIS_IS_SUPERSET = 'superset',
+    THIS_IS_EQUAL = 'equal'
+}
+
+// ================================================================================================
+/**
+ * Returns am html string representation of the parameters in this model
+ *
+ * @param __model__
+ * @param __constList__
+ * @returns Text that summarises what is in the model.
+ */
+export function ParamInfo(__model__: GIModel, __constList__: {}): string {
+    return JSON.stringify(__constList__);
+}
+// ================================================================================================
+/**
+ * Returns an html string representation of one or more entities in the model.
+ * ~
+ * @param __model__
+ * @param entities One or more objects ot collections.
+ * @returns void
+ */
+export function EntityInfo(__model__: GIModel, entities: TId|TId[]): string {
+    entities = arrMakeFlat(entities) as TId[];
+    // --- Error Check ---
+    const fn_name = 'collection.Info';
+    const ents_arr = checkIDs(fn_name, 'coll', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList],
+        [EEntType.COLL, EEntType.PGON, EEntType.PLINE, EEntType.POINT]) as TEntTypeIdx[];
+    // --- Error Check ---
+    let result = '<h4>Entity Information:</h4>';
+    for (const ent_arr of ents_arr) {
+        const [ent_type, ent_i] = ent_arr;
+        switch (ent_type) {
+            case EEntType.COLL:
+                result += _collInfo(__model__, ent_i);
+                break;
+            case EEntType.PGON:
+                result += _pgonInfo(__model__, ent_i);
+                break;
+            case EEntType.PLINE:
+                result += _plineInfo(__model__, ent_i);
+                break;
+            case EEntType.POINT:
+                result += _pointInfo(__model__, ent_i);
+                break;
+            default:
+                break;
+        }
+    }
+    return result;
+}
+function _getAttribs(__model__: GIModel, ent_type: EEntType, ent_i: number): string[] {
+    const names: string[] = __model__.attribs.query.getAttribNames(ent_type);
+    const attribs_with_vals = [];
+    for (const name of names) {
+        const val = __model__.attribs.query.getAttribVal(ent_type, name, ent_i);
+        if (val !== undefined) {
+            attribs_with_vals.push(name);
+        }
+    }
+    return attribs_with_vals;
+}
+function _getColls(__model__: GIModel, ent_type: EEntType, ent_i: number): string[] {
+    let colls_i: number[] = [];
+    if (ent_type === EEntType.COLL) {
+        const parent: number = __model__.geom.query.getCollParent(ent_i);
+        if (parent !== -1) { colls_i = [parent]; }
+    } else {
+        colls_i = __model__.geom.nav.navAnyToColl(ent_type, ent_i);
+    }
+    const colls_names = [];
+    for (const coll_i of colls_i) {
+        let coll_name = 'No name';
+        if (__model__.attribs.query.hasAttrib(EEntType.COLL, 'name')) {
+            coll_name = __model__.attribs.query.getAttribVal(EEntType.COLL, 'name', coll_i) as string;
+        }
+        colls_names.push(coll_name);
+    }
+    return colls_names;
+}
+function _pointInfo(__model__: GIModel, point_i: number): string {
+    let info = '';
+    // get the data
+    const attribs: string[] = _getAttribs(__model__, EEntType.POINT, point_i);
+    const colls_names = _getColls(__model__, EEntType.POINT, point_i);
+    // make str
+    info += '<ul>';
+    info += '<li>Type: <b>Point</b></li>';
+    info += '<ul>';
+    if (attribs.length !== 0) { info += '<li>Attribs: ' + attribs.join(', ') + '</li>'; }
+    if (colls_names.length === 1) {
+        info += '<li>In collection: ' + colls_names[0] + '</li>';
+    } else if (colls_names.length > 1) {
+        info += '<li>In ' + colls_names.length + ' collections: ' + colls_names.join(', ') + '</li>';
+    }
+    info += '</ul>';
+    info += '</ul>';
+    return info;
+}
+function _plineInfo(__model__: GIModel, pline_i: number): string {
+    let info = '';
+    // get the data
+    const attribs: string[] = _getAttribs(__model__, EEntType.PLINE, pline_i);
+    const num_verts: number = __model__.geom.nav.navAnyToVert(EEntType.PLINE, pline_i).length;
+    const num_edges: number = __model__.geom.nav.navAnyToEdge(EEntType.PLINE, pline_i).length;
+    const colls_names = _getColls(__model__, EEntType.PLINE, pline_i);
+    // make str
+    info += '<ul>';
+    info += '<li>Type: <b>Polyline</b></li>';
+    info += '<ul>';
+    if (attribs.length !== 0) { info += '<li>Attribs: ' + attribs.join(', ') + '</li>'; }
+    if (num_verts) { info += '<li>Num verts: ' + num_verts + '</li>'; }
+    if (num_edges) { info += '<li>Num edges: ' + num_edges + '</li>'; }
+    if (colls_names.length === 1) {
+        info += '<li>In collection: ' + colls_names[0] + '</li>';
+    } else if (colls_names.length > 1) {
+        info += '<li>In ' + colls_names.length + ' collections: ' + colls_names.join(', ') + '</li>';
+    }
+    info += '</ul>';
+    info += '</ul>';
+    return info;
+}
+function _pgonInfo(__model__: GIModel, pgon_i: number): string {
+    let info = '';
+    // get the data
+    const attribs: string[] = _getAttribs(__model__, EEntType.PGON, pgon_i);
+    const num_verts: number = __model__.geom.nav.navAnyToVert(EEntType.PGON, pgon_i).length;
+    const num_edges: number = __model__.geom.nav.navAnyToEdge(EEntType.PGON, pgon_i).length;
+    const num_wires: number = __model__.geom.nav.navAnyToWire(EEntType.PGON, pgon_i).length;
+    const colls_i: number[] = __model__.geom.nav.navPgonToColl(pgon_i);
+    const colls_names = _getColls(__model__, EEntType.PGON, pgon_i);
+    // make str
+    info += '<ul>';
+    info += '<li>Type: <b>Polygon</b></li>';
+    info += '<ul>';
+    if (attribs.length !== 0) { info += '<li>Attribs: ' + attribs.join(', ') + '</li>'; }
+    if (num_verts) { info += '<li>Num verts: ' + num_verts + '</li>'; }
+    if (num_edges) { info += '<li>Num edges: ' + num_edges + '</li>'; }
+    if (num_wires) { info += '<li>Num wires: ' + num_wires + '</li>'; }
+    if (colls_i.length === 1) {
+        info += '<li>In collection: ' + colls_names[0] + '</li>';
+    } else if (colls_i.length > 1) {
+        info += '<li>In ' + colls_i.length + ' collections: ' + colls_names.join(', ') + '</li>';
+    }
+    info += '</ul>';
+    info += '</ul>';
+    return info;
+}
+function _collInfo(__model__: GIModel, coll_i: number): string {
+    let info = '';
+    // get the data
+    let coll_name = 'None';
+    if (__model__.attribs.query.hasAttrib(EEntType.COLL, 'name')) {
+        coll_name = __model__.attribs.query.getAttribVal(EEntType.COLL, 'name', coll_i) as string;
+    }
+    const attribs: string[] = _getAttribs(__model__, EEntType.COLL, coll_i);
+    const num_pgons: number = __model__.geom.nav.navCollToPgon(coll_i).length;
+    const num_plines: number = __model__.geom.nav.navCollToPline(coll_i).length;
+    const num_points: number = __model__.geom.nav.navCollToPoint(coll_i).length;
+    const colls_names = _getColls(__model__, EEntType.COLL, coll_i);
+    // make str
+    info += '<ul>';
+    info += '<li>Type: <b>Collection</b></li>';
+    info += '<ul>';
+    info += '<li>Name: <b>' + coll_name + '</b></li>';
+    if (attribs.length !== 0) { info += '<li>Attribs: ' + attribs.join(', ') + '</li>'; }
+    if (num_pgons) { info += '<li>Num pgons: ' + num_pgons + '</li>'; }
+    if (num_plines) { info += '<li>Num plines: ' + num_plines + '</li>'; }
+    if (num_points) { info += '<li>Num points: ' + num_points + '</li>'; }
+    if (colls_names.length === 1) {
+        info += '<li>In collection: ' + colls_names[0] + '</li>';
+    } else if (colls_names.length > 1) {
+        info += '<li>In ' + colls_names.length + ' collections: ' + colls_names.join(', ') + '</li>';
+    }
+    const children: number[] = __model__.geom.query.getCollChildren(coll_i);
+    if (children.length > 0) {
+        info += '<li>Child collections: </li>';
+        for (const child of children) {
+            info += _collInfo(__model__, child);
+        }
+    }
+    info += '</ul>';
+    info += '</ul>';
+    return info;
+}
 // ================================================================================================
 /**
  * Export data from the model as a file.
@@ -90,58 +317,6 @@ function convertString(value) {
         val = value;
     }
     return val;
-}
-// ================================================================================================
-/**
- * Returns a text summary of the contents of this model
- *
- * @param __model__
- * @param __constList__
- * @returns Text that summarises what is in the model.
- */
-export function ParamInfo(__model__: GIModel, __constList__: {}): string {
-    return JSON.stringify(__constList__);
-}
-// ================================================================================================
-/**
- * Returns a text summary of the contents of this model
- *
- * @param __model__
- * @returns Text that summarises what is in the model, click print to see this text.
- */
-export function ModelInfo(__model__: GIModel): string {
-    return JSON.stringify(
-        {
-            'geometry': {
-                'num_positions': __model__.geom.query.numEnts(EEntType.POSI, false),
-                'num_vertices': __model__.geom.query.numEnts(EEntType.VERT, false),
-                'num_edges': __model__.geom.query.numEnts(EEntType.EDGE, false),
-                'num_wires': __model__.geom.query.numEnts(EEntType.WIRE, false),
-                'num_faces': __model__.geom.query.numEnts(EEntType.FACE, false),
-                'num_points': __model__.geom.query.numEnts(EEntType.POINT, false),
-                'num_polylines': __model__.geom.query.numEnts(EEntType.PLINE, false),
-                'num_polygons': __model__.geom.query.numEnts(EEntType.PGON, false),
-                'num_collections': __model__.geom.query.numEnts(EEntType.COLL, false)
-            },
-            'attributes': {
-                'position_attribs': __model__.attribs.query.getAttribNames(EEntType.POSI),
-                'vertex_attribs': __model__.attribs.query.getAttribNames(EEntType.VERT),
-                'edge_attribs': __model__.attribs.query.getAttribNames(EEntType.EDGE),
-                'wire_attribs': __model__.attribs.query.getAttribNames(EEntType.WIRE),
-                'face_attribs': __model__.attribs.query.getAttribNames(EEntType.FACE),
-                'point_attribs': __model__.attribs.query.getAttribNames(EEntType.POINT),
-                'polyline_attribs': __model__.attribs.query.getAttribNames(EEntType.PLINE),
-                'polygon_attribs': __model__.attribs.query.getAttribNames(EEntType.PGON),
-                'collection_attribs': __model__.attribs.query.getAttribNames(EEntType.COLL),
-                'model_attribs': __model__.attribs.query.getAttribNames(EEntType.MOD)
-            }
-        },
-    );
-}
-export enum _ECOmpareMethod {
-    THIS_IS_SUBSET = 'subset',
-    THIS_IS_SUPERSET = 'superset',
-    THIS_IS_EQUAL = 'equal'
 }
 // ================================================================================================
 /**

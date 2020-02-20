@@ -593,8 +593,7 @@ export class DataThreejs extends DataThreejsLookAt {
 
         // // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
         const mat = new THREE.LineBasicMaterial({
-            color: 0xFFFFFF,
-            // color: 0x000000,
+            color: 0x000000,
             vertexColors: THREE.VertexColors
         });
         const line = new THREE.LineSegments(geom, mat);
@@ -602,7 +601,7 @@ export class DataThreejs extends DataThreejsLookAt {
         this.scene.add(line);
 
         const geom_white = new THREE.BufferGeometry();
-        geom_white.setIndex(lines_i);
+        geom_white.setIndex(white_line_i);
         // geom.addAttribute('position', posis_buffer);
         // geom.addAttribute('normal', normals_buffer);
         geom_white.setAttribute('position', posis_buffer);
@@ -612,7 +611,7 @@ export class DataThreejs extends DataThreejsLookAt {
 
         // // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
         const mat_white = new THREE.LineBasicMaterial({
-            color: 0x000000,
+            color: 0xFFFFFF,
             vertexColors: THREE.VertexColors
         });
         const line_white = new THREE.LineSegments(geom_white, mat_white);

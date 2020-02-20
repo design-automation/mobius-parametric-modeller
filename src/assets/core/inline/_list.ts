@@ -4,12 +4,12 @@
 import __ from 'underscore';
 import { arrMakeFlat } from '@libs/util/arrs';
 
-export function range(start: number, end: number, step?: number): number[] {
+export function range(start: number, end?: number, step?: number): number[] {
     if (start === undefined) { throw new Error('Invalid inline arg: min must be defined.'); }
-    if (end === undefined) { throw new Error('Invalid inline arg: max must be defined.'); }
+    if (end === undefined) { end = start; start = 0; }
     if (step === 0) { throw new Error('Invalid inline arg: step must not be 0.'); }
     const len: number = end - start;
-    if (step === undefined) { 
+    if (step === undefined) {
         step = len > 0 ? 1 : -1;
     }
     const negStep = step < 0;
@@ -93,8 +93,10 @@ export function listSlice(list: any[], start: number, end?: number): any[] {
 export function listCull(list: any[], list2?: any[]): any[] {
     list2 = list2 ? list2 : list;
     const result: any[] = [];
+    const list2_len =  list2.length;
     for (let i = 0; i < list.length; i++) {
-        if (list2[i]) {
+        const val = (i < list2_len) ? list2[i] : list2[i % list2_len];
+        if (val) {
             result.push(list[i]);
         }
     }

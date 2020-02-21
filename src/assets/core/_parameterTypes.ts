@@ -111,6 +111,7 @@ vecAdd = __modules__._vec.vecAdd;
 vecSub = __modules__._vec.vecSub;
 vecDiv = __modules__._vec.vecDiv;
 vecMult = __modules__._vec.vecMult;
+vecSum = __modules__._vec.vecSum;
 vecLen = __modules__._vec.vecLen;
 vecSetLen = __modules__._vec.vecSetLen;
 vecNorm = __modules__._vec.vecNorm;

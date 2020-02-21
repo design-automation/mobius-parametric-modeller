@@ -63,6 +63,7 @@ const lists = [
     ['vecSub(v1, v2)', 'Subtracts vec2 from vec1'],
     ['vecDiv(v, num)', 'Divides a vector by a number'],
     ['vecMult(v, num)', 'Multiplies a vector by a number'],
+    ['vecSum(...v)', 'Add multiple vectors'],
     ['vecLen(v)', 'Calculates the magnitude of a vector'],
     ['vecSetLen(v, num)', 'Sets the magnitude of a vector'],
     ['vecNorm(v)', 'Sets the magnitude of a vector to 1'],

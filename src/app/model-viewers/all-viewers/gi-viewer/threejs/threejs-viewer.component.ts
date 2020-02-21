@@ -1494,6 +1494,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const children = [];
         const pgons = this.model.geom.nav.navCollToPgon(id);
         const pgons_flat = [].concat(...pgons);
+        let labelText = this.indexAsLabel(EEntTypeStr[EEntType.COLL], coll_id, id, EEntType.COLL);
 
         if (pgons_flat.length) {
             const pgonResult = this.getPGonPosis(null, pgons_flat);
@@ -1504,8 +1505,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 // const attrib_val = this.model.attribs.query.getAttribValue(EEntType.COLL, EAttribNames.NAME, id);
                 // const selecting = attrib_val ? attrib_val.toString() : `${EEntType.COLL}${id}`;
                 const pgon_id = `${EEntTypeStr[EEntType.COLL]}_pg_${id}`;
-                scene.selectObjFace(pgon_id, pgons_indices, pgons_posi, this.container, false);
+                scene.selectObjFace(coll_id, pgons_indices, pgons_posi, this.container, labelText);
                 children.push(pgon_id);
+                labelText = false;
             }
         }
 
@@ -1517,8 +1519,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             const plines_indices = plineResult.indices;
             if (plines_indices.length !== 0) {
                 const pline_id = `${EEntTypeStr[EEntType.COLL]}_pl_${id}`;
-                scene.selectObjLine(pline_id, plines_indices, plines_posi, this.container, false);
+                scene.selectObjLine(coll_id, plines_indices, plines_posi, this.container, labelText);
                 children.push(pline_id);
+                labelText = false;
             }
         }
 
@@ -1530,8 +1533,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             const point_indices = pointResult.point_indices;
             if (point_indices.length !== 0) {
                 const point_id = `${EEntTypeStr[EEntType.COLL]}_pt_${id}`;
-                scene.selectObjPoint(point_id, point_indices, point_posi, this.container, false);
+                scene.selectObjPoint(coll_id, point_indices, point_posi, this.container, labelText);
                 children.push(point_id);
+                labelText = false;
             }
         }
 

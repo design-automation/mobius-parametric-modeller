@@ -436,10 +436,11 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                         //         this.chooseColl(element);
                         //     });
                         // }
-                        const parent_coll_i: number = this.model.geom.query.getCollParent(attrib.id);
-                        if (parent_coll_i === -1) { // no parent
-                            this.chooseColl(attrib.id);
-                        }
+                        this.chooseColl(attrib.id);
+                        // const parent_coll_i: number = this.model.geom.query.getCollParent(attrib.id);
+                        // if (parent_coll_i === -1) { // no parent
+                        //     this.chooseColl(attrib.id);
+                        // }
                     } else {
                         attrib.id.forEach((_id) => {
                             this.chooseColl(_id);
@@ -764,8 +765,15 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                         this.selectPositions(posi, null, null, ent_id);
                     }
                 } else if (intersect0.object.type === 'LineSegments') {
-                    const edge = scene.edge_select_map.get(intersect0.index / 2);
-                    // const edge = scene.edges_select_idx_to_i[intersect0.index / 2];
+                    let edge;
+                    const edge_color = (<THREE.LineBasicMaterial>(<THREE.LineSegments> intersect0.object).material).color;
+                    if (edge_color['r'] === 1 && edge_color['b'] === 1 && edge_color['g'] === 1) {
+                        edge = scene.white_edge_select_map.get(intersect0.index / 2);
+                    } else {
+                        edge = scene.edge_select_map.get(intersect0.index / 2);
+                    }
+
+                    // const edge = scene.edge_select_map.get(intersect0.index / 2);
                     const ent_id = `_e_posi${edge}`;
                     if (scene.selected_positions.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.POSI]);
@@ -827,8 +835,14 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                         this.selectVertex(point, null, null, ent_id);
                     }
                 } else if (intersect0.object.type === 'LineSegments') {
-                    const edge = scene.edge_select_map.get(intersect0.index / 2);
-                    // const edge = scene.edges_select_idx_to_i[intersect0.index / 2];
+                    let edge;
+                    const edge_color = (<THREE.LineBasicMaterial>(<THREE.LineSegments> intersect0.object).material).color;
+                    if (edge_color['r'] === 1 && edge_color['b'] === 1 && edge_color['g'] === 1) {
+                        edge = scene.white_edge_select_map.get(intersect0.index / 2);
+                    } else {
+                        edge = scene.edge_select_map.get(intersect0.index / 2);
+                    }
+                    // const edge = scene.edge_select_map.get(intersect0.index / 2);
                     const ent_id = `_e_v${edge}`;
                     if (scene.selected_vertex.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.VERT]);
@@ -900,8 +914,14 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 break;
             case EEntType.EDGE:
                 if (intersect0.object.type === 'LineSegments') {
-                    const edge = scene.edge_select_map.get(intersect0.index / 2);
-                    // const edge = scene.edges_select_idx_to_i[intersect0.index / 2];
+                    let edge;
+                    const edge_color = (<THREE.LineBasicMaterial>(<THREE.LineSegments> intersect0.object).material).color;
+                    if (edge_color['r'] === 1 && edge_color['b'] === 1 && edge_color['g'] === 1) {
+                        edge = scene.white_edge_select_map.get(intersect0.index / 2);
+                    } else {
+                        edge = scene.edge_select_map.get(intersect0.index / 2);
+                    }
+                    // const edge = scene.edge_select_map.get(intersect0.index / 2);
                     const ent_id = `${EEntTypeStr[EEntType.EDGE]}${edge}`;
                     if (scene.selected_geoms.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.EDGE], true);
@@ -930,8 +950,15 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 break;
             case EEntType.WIRE:
                 if (intersect0.object.type === 'LineSegments') {
-                    const edge = scene.edge_select_map.get(intersect0.index / 2),
-                        wire = this.model.geom.nav.navEdgeToWire(edge);
+                    let edge;
+                    const edge_color = (<THREE.LineBasicMaterial>(<THREE.LineSegments> intersect0.object).material).color;
+                    if (edge_color['r'] === 1 && edge_color['b'] === 1 && edge_color['g'] === 1) {
+                        edge = scene.white_edge_select_map.get(intersect0.index / 2);
+                    } else {
+                        edge = scene.edge_select_map.get(intersect0.index / 2);
+                    }
+                    const wire = this.model.geom.nav.navEdgeToWire(edge);
+                    // const edge = scene.edge_select_map.get(intersect0.index / 2)
                     // const edge = scene.edges_select_idx_to_i[intersect0.index / 2],
                     const ent_id = `${EEntTypeStr[EEntType.WIRE]}${edge}`;
                     if (scene.selected_geoms.has(ent_id)) {
@@ -961,7 +988,14 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 break;
             case EEntType.PLINE:
                 if (intersect0.object.type === 'LineSegments') {
-                    const edge = scene.edge_select_map.get(intersect0.index / 2);
+                    let edge;
+                    const edge_color = (<THREE.LineBasicMaterial>(<THREE.LineSegments> intersect0.object).material).color;
+                    if (edge_color['r'] === 1 && edge_color['b'] === 1 && edge_color['g'] === 1) {
+                        edge = scene.white_edge_select_map.get(intersect0.index / 2);
+                    } else {
+                        edge = scene.edge_select_map.get(intersect0.index / 2);
+                    }
+                    // const edge = scene.edge_select_map.get(intersect0.index / 2);
                     const wire = this.model.geom.nav.navEdgeToWire(edge);
                     const pline = this.model.geom.nav.navWireToPline(wire);
                     // const edge = scene.edges_select_idx_to_i[intersect0.index / 2];
@@ -1424,9 +1458,17 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     private selectColl(object: THREE.Intersection, type) {
         let colls = [];
         if (type === 'Mesh') {
-            colls = this.model.geom.nav.navAnyToColl(EEntType.TRI, object.faceIndex);
+            const tri = this._data_threejs.tri_select_map.get(object.faceIndex);
+            colls = this.model.geom.nav.navAnyToColl(EEntType.TRI, tri);
         } else if (type === 'LineSegments') {
-            colls = this.model.geom.nav.navAnyToColl(EEntType.EDGE, object.index / 2);
+            let edge;
+            const edge_color = (<THREE.LineBasicMaterial>(<THREE.LineSegments> object.object).material).color;
+            if (edge_color['r'] === 1 && edge_color['b'] === 1 && edge_color['g'] === 1) {
+                edge = this._data_threejs.white_edge_select_map.get(object.index / 2);
+            } else {
+                edge = this._data_threejs.edge_select_map.get(object.index / 2);
+            }
+            colls = this.model.geom.nav.navAnyToColl(EEntType.EDGE, edge);
         } else if (type === 'Points') {
             const vert = this.model.geom.nav.navPosiToVert(object.index);
             const point = this.model.geom.nav.navVertToPoint(vert[0]);
@@ -1452,6 +1494,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const children = [];
         const pgons = this.model.geom.nav.navCollToPgon(id);
         const pgons_flat = [].concat(...pgons);
+        let labelText = this.indexAsLabel(EEntTypeStr[EEntType.COLL], coll_id, id, EEntType.COLL);
 
         if (pgons_flat.length) {
             const pgonResult = this.getPGonPosis(null, pgons_flat);
@@ -1462,8 +1505,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 // const attrib_val = this.model.attribs.query.getAttribValue(EEntType.COLL, EAttribNames.NAME, id);
                 // const selecting = attrib_val ? attrib_val.toString() : `${EEntType.COLL}${id}`;
                 const pgon_id = `${EEntTypeStr[EEntType.COLL]}_pg_${id}`;
-                scene.selectObjFace(pgon_id, pgons_indices, pgons_posi, this.container, false);
+                scene.selectObjFace(coll_id, pgons_indices, pgons_posi, this.container, labelText);
                 children.push(pgon_id);
+                labelText = false;
             }
         }
 
@@ -1475,8 +1519,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             const plines_indices = plineResult.indices;
             if (plines_indices.length !== 0) {
                 const pline_id = `${EEntTypeStr[EEntType.COLL]}_pl_${id}`;
-                scene.selectObjLine(pline_id, plines_indices, plines_posi, this.container, false);
+                scene.selectObjLine(coll_id, plines_indices, plines_posi, this.container, labelText);
                 children.push(pline_id);
+                labelText = false;
             }
         }
 
@@ -1488,14 +1533,15 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             const point_indices = pointResult.point_indices;
             if (point_indices.length !== 0) {
                 const point_id = `${EEntTypeStr[EEntType.COLL]}_pt_${id}`;
-                scene.selectObjPoint(point_id, point_indices, point_posi, this.container, false);
+                scene.selectObjPoint(coll_id, point_indices, point_posi, this.container, labelText);
                 children.push(point_id);
+                labelText = false;
             }
         }
 
         this.dataService.selected_ents.get(EEntTypeStr[EEntType.COLL]).set(coll_id, id);
         this.dataService.selected_coll.set(coll_id, children);
-        this.refreshTable(null);
+        // this.refreshTable(null);
     }
 
     private chooseVertex(id: number) {

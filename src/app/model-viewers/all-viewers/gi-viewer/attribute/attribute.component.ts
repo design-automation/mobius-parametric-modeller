@@ -203,6 +203,9 @@ export class AttributeComponent implements OnChanges {
     _sortingDataAccessor(data: object, headerID: string): string|number {
         if (headerID === '_id') {
             return Number(data[headerID].slice(2));
+        } else if (headerID === '_parent') {
+            if (data[headerID] === '') { return -1; }
+            return Number(data[headerID].slice(2));
         }
         return data[headerID];
     }

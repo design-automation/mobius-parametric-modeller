@@ -11,7 +11,7 @@
 import __ from 'underscore';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, TEntTypeIdx,
-    EAttribPush, TAttribDataTypes, EEntTypeStr, EAttribDataTypeStrs} from '@libs/geo-info/common';
+    EAttribPush, TAttribDataTypes, EEntTypeStr, EAttribDataTypeStrs, EEntTypeCollCP} from '@libs/geo-info/common';
 import { getArrDepth } from '@libs/geo-info/id';
 import { checkIDs, IDcheckObj, checkAttribValue, checkAttribName,
     checkAttribIdxKey, checkAttribNameIdxKey } from '../_check_args';
@@ -42,6 +42,36 @@ function _getEntTypeFromStr(ent_type_str: _EEntType|_EEntTypeAndMod): EEntType {
             break;
     }
 }
+function _getAttribPushTarget(ent_type_str: _EAttribPushTarget): EEntType|string {
+    switch (ent_type_str) {
+        case _EAttribPushTarget.POSI:
+            return EEntType.POSI;
+        case _EAttribPushTarget.VERT:
+            return EEntType.VERT;
+        case _EAttribPushTarget.EDGE:
+            return EEntType.EDGE;
+        case _EAttribPushTarget.WIRE:
+            return EEntType.WIRE;
+        case _EAttribPushTarget.FACE:
+            return EEntType.FACE;
+        case _EAttribPushTarget.POINT:
+            return EEntType.POINT;
+        case _EAttribPushTarget.PLINE:
+            return EEntType.PLINE;
+        case _EAttribPushTarget.PGON:
+            return EEntType.PGON;
+        case _EAttribPushTarget.COLL:
+            return EEntType.COLL;
+        case _EAttribPushTarget.COLLC:
+            return "coll_children";
+        case _EAttribPushTarget.COLLP:
+            return "coll_parent";
+        case _EAttribPushTarget.MOD:
+            return EEntType.MOD;
+        default:
+            break;
+    }
+}
 export enum _EEntType {
     POSI =   'ps',
     VERT =   '_v',
@@ -63,6 +93,20 @@ export enum _EEntTypeAndMod {
     PLINE =  'pl',
     PGON =   'pg',
     COLL =   'co',
+    MOD =    'mo'
+}
+export enum _EAttribPushTarget {
+    POSI =   'ps',
+    VERT =   '_v',
+    EDGE =   '_e',
+    WIRE =   '_w',
+    FACE =   '_f',
+    POINT =  'pt',
+    PLINE =  'pl',
+    PGON =   'pg',
+    COLL =   'co',
+    COLLP =  'cop',
+    COLLC =  'coc',
     MOD =    'mo'
 }
 export enum _EDataType {
@@ -374,7 +418,7 @@ export function Rename(__model__: GIModel, ent_type_sel: _EEntTypeAndMod, old_at
  */
 export function Push(__model__: GIModel, entities: TId|TId[],
         attrib: string|[string, number|string]|[string, number|string, string]|[string, number|string, string, number|string],
-        ent_type_sel: _EEntTypeAndMod, method_sel: _EPushMethodSel): void {
+        ent_type_sel: _EAttribPushTarget, method_sel: _EPushMethodSel): void {
     if (entities !== null) {
         const depth = getArrDepth(entities);
         if (depth === 0) {
@@ -423,13 +467,15 @@ export function Push(__model__: GIModel, entities: TId|TId[],
     checkAttribName(fn_name, source_attrib_name);
     checkAttribName(fn_name, target_attrib_name);
     // get the target ent_type
-    const target_ent_type: EEntType = _getEntTypeFromStr(ent_type_sel);
-    if (source_ent_type === target_ent_type) { throw new Error('The new attribute is at the same level as the existing attribute.'); }
+    const target: EEntType|string = _getAttribPushTarget(ent_type_sel);
+    if (source_ent_type === target) {
+        throw new Error('The new attribute is at the same level as the existing attribute.');
+    }
     // get the method
     const method: EAttribPush = _convertPushMethod(method_sel);
     // do the push
     __model__.attribs.add.pushAttribVals(source_ent_type, source_attrib_name, source_attrib_idx_key, indices,
-        target_ent_type, target_attrib_name, target_attrib_idx_key, method);
+                                         target,          target_attrib_name, target_attrib_idx_key, method);
 }
 export enum _EPushMethodSel {
     FIRST = 'first',

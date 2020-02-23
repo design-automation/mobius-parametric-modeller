@@ -1,6 +1,7 @@
 import { EAttribNames, EEntType } from './common';
 import { IThreeJS } from './ThreejsJSON';
 import { GIModel } from './GIModel';
+import { mapToMapExpression } from '@angular/compiler/src/render3/util';
 /**
  * Geo-info model class.
  */
@@ -25,18 +26,26 @@ export class GIModelThreejs {
         // const geom_array = this._model.geom._geom_arrays;
         // for (const e of geom_array.dn_edges_verts) {
         //     for (const v of e) {
-        //         const vert_attrb = colors[v];
-        //         if (vert_attrb[0] === 1 && vert_attrb[1] === 1 && vert_attrb[2] === 1) {
-        //             colors[v] = [0, 0, 0];
+        //         const vert_attrb0 = colors[v * 3];
+        //         const vert_attrb1 = colors[v * 3 + 1];
+        //         const vert_attrb2 = colors[v * 3 + 2];
+        //         if (vert_attrb0 === 1 && vert_attrb1 === 1 && vert_attrb2 === 1) {
+        //             colors[v * 3] = 0;
+        //             colors[v * 3 + 1] = 0;
+        //             colors[v * 3 + 2] = 0;
         //         }
         //     }
         // }
         // for (const w of geom_array.dn_plines_wires) {
         //     for (const e of geom_array.dn_wires_edges[w]) {
         //         for (const v of geom_array.dn_edges_verts[e]) {
-        //             const vert_attrb = colors[v];
-        //             if (vert_attrb[0] === 1 && vert_attrb[1] === 1 && vert_attrb[2] === 1) {
-        //                 colors[v] = [0, 0, 0];
+        //             const vert_attrb0 = colors[v * 3];
+        //             const vert_attrb1 = colors[v * 3 + 1];
+        //             const vert_attrb2 = colors[v * 3 + 2];
+        //             if (vert_attrb0 === 1 && vert_attrb1 === 1 && vert_attrb2 === 1) {
+        //                 colors[v * 3] = 0;
+        //                 colors[v * 3 + 1] = 0;
+        //                 colors[v * 3 + 2] = 0;
         //             }
         //         }
         //     }
@@ -96,7 +105,8 @@ export class GIModelThreejs {
         // console.log(str);
 
         // const [edges_verts_i, edge_select_map]: [number[], Map<number, number>] = this._model.geom.threejs.get3jsPlines(vertex_map);
-        const [edges_verts_i, edge_select_map]: [number[], Map<number, number>] = this._model.geom.threejs.get3jsEdges(vertex_map);
+        const [edges_verts_i, edge_select_map, white_edges_verts_i, white_edge_select_map]:
+            [number[], Map<number, number>, number[], Map<number, number>] = this._model.geom.threejs.get3jsEdges(vertex_map);
         const [points_verts_i, point_select_map]: [number[], Map<number, number>] = this._model.geom.threejs.get3jsPoints(vertex_map);
         // return an object containing all the data
         const data: IThreeJS = {
@@ -111,6 +121,8 @@ export class GIModelThreejs {
             point_select_map: point_select_map,
             edge_indices: edges_verts_i,
             edge_select_map: edge_select_map,
+            white_edge_indices: white_edges_verts_i,
+            white_edge_select_map: white_edge_select_map,
             triangle_indices: tris_verts_i,
             triangle_select_map: triangle_select_map,
             materials: materials,

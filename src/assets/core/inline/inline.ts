@@ -41,6 +41,7 @@ const lists = [
     ['listHas(list, val)', 'Returns true if the list contains the value, false otherwise'],
     ['listCount(list, val)', 'Returns the number of times the value is in the list'],
     ['listCopy(list)', 'Returns a copy of the list'],
+    ['listRep(list, n)', 'Returns a new list that repeats the contents of the input list n times.'],
     ['listJoin(list1, list2)', 'Joins two lists into a single list'],
     ['listFlat(list)', 'Returns a copy of the nested list, flattened to a depth of 1'],
     ['listFlat(list, depth)', 'Returns a copy of the nested list, reduced to the specified depth'],

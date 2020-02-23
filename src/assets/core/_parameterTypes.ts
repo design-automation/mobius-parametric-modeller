@@ -88,6 +88,7 @@ len = __modules__._list.listLen;
 listLen = __modules__._list.listLen;
 listCount = __modules__._list.listCount;
 listCopy = __modules__._list.listCopy;
+listRep = __modules__._list.listRep;
 listLast = __modules__._list.listLast;
 listGet = __modules__._list.listGet;
 listFind = __modules__._list.listFind;

@@ -13,7 +13,31 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, ESort, TEntTypeIdx, EFilterOperatorTypes, TAttribDataTypes} from '@libs/geo-info/common';
 import { idsMake, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
 import { checkIDs, IDcheckObj, TypeCheckObj, checkArgTypes, checkAttribNameIdxKey, checkAttribValue } from '../_check_args';
+import { isEmptyArr2, arrMakeFlat } from '@assets/libs/util/arrs';
 // ================================================================================================
+export enum _EEntType {
+    POSI =   'ps',
+    VERT =   '_v',
+    EDGE =   '_e',
+    WIRE =   '_w',
+    FACE =   '_f',
+    POINT =  'pt',
+    PLINE =  'pl',
+    PGON =   'pg',
+    COLL =   'co'
+}
+export enum _EEntTypeAndMod {
+    POSI =   'ps',
+    VERT =   '_v',
+    EDGE =   '_e',
+    WIRE =   '_w',
+    FACE =   '_f',
+    POINT =  'pt',
+    PLINE =  'pl',
+    PGON =   'pg',
+    COLL =   'co',
+    MOD =    'mo'
+}
 function _getEntTypeFromStr(ent_type_str: _EEntType|_EEntTypeAndMod): EEntType {
     switch (ent_type_str) {
         case _EEntTypeAndMod.POSI:
@@ -39,29 +63,6 @@ function _getEntTypeFromStr(ent_type_str: _EEntType|_EEntTypeAndMod): EEntType {
         default:
             break;
     }
-}
-export enum _EEntType {
-    POSI =   'ps',
-    VERT =   '_v',
-    EDGE =   '_e',
-    WIRE =   '_w',
-    FACE =   '_f',
-    POINT =  'pt',
-    PLINE =  'pl',
-    PGON =   'pg',
-    COLL =   'co'
-}
-export enum _EEntTypeAndMod {
-    POSI =   'ps',
-    VERT =   '_v',
-    EDGE =   '_e',
-    WIRE =   '_w',
-    FACE =   '_f',
-    POINT =  'pt',
-    PLINE =  'pl',
-    PGON =   'pg',
-    COLL =   'co',
-    MOD =    'mo'
 }
 // ================================================================================================
 export enum _EDataType {
@@ -260,52 +261,36 @@ function _filter(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][],
  */
 export function Invert(__model__: GIModel, ent_type_enum: _EEntType, entities: TId|TId[]): TId[] {
     if (isEmptyArr(entities)) { return []; }
+    entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
-    let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
+    let ents_arr: TEntTypeIdx[] = null;
     if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs('query.Invert', 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = checkIDs('query.Invert', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
     }
     // --- Error Check ---
-    const select_ent_types: EEntType|EEntType[] = _getEntTypeFromStr(ent_type_enum);
+    const select_ent_types: EEntType = _getEntTypeFromStr(ent_type_enum);
     const found_ents_arr: TEntTypeIdx[] = _invert(__model__, select_ent_types, ents_arr);
     return idsMake(found_ents_arr) as TId[];
 }
-function _invert(__model__: GIModel, select_ent_types: EEntType|EEntType[], ents_arr: TEntTypeIdx|TEntTypeIdx[]): TEntTypeIdx[] {
-    if (!Array.isArray(select_ent_types)) {
-        const select_ent_type: EEntType = select_ent_types as EEntType;
-        // get the ents to exclude
-        if (!Array.isArray(ents_arr[0])) { ents_arr = [ents_arr] as TEntTypeIdx[]; }
-        const excl_ents_i: number[] = (ents_arr as TEntTypeIdx[])
-            .filter(ent_arr => ent_arr[0] === select_ent_type).map(ent_arr => ent_arr[1]);
-        // get the list of entities
-        const found_entities_i: number[] = [];
-        const ents_i: number[] = __model__.geom.query.getEnts(select_ent_type, false);
-        for (const ent_i of ents_i) {
-            if (excl_ents_i.indexOf(ent_i) === -1) { found_entities_i.push(ent_i); }
-        }
-        return found_entities_i.map( entity_i => [select_ent_type, entity_i]) as TEntTypeIdx[];
-    } else {
-        const query_results_arr: TEntTypeIdx[] = [];
-        for (const select_ent_type of select_ent_types) {
-            const ent_type_query_results: TEntTypeIdx[] = _invert(__model__, select_ent_type, ents_arr);
-            for (const query_result of ent_type_query_results) {
-                query_results_arr.push(query_result);
-            }
-        }
-        return query_results_arr;
+function _invert(__model__: GIModel, select_ent_type: EEntType, ents_arr: TEntTypeIdx[]): TEntTypeIdx[] {
+    // get the ents to exclude
+    const excl_ents_i: number[] = (ents_arr as TEntTypeIdx[])
+        .filter(ent_arr => ent_arr[0] === select_ent_type).map(ent_arr => ent_arr[1]);
+    // get the list of entities
+    const found_entities_i: number[] = [];
+    const ents_i: number[] = __model__.geom.query.getEnts(select_ent_type, false);
+    for (const ent_i of ents_i) {
+        if (excl_ents_i.indexOf(ent_i) === -1) { found_entities_i.push(ent_i); }
     }
+    return found_entities_i.map( entity_i => [select_ent_type, entity_i]) as TEntTypeIdx[];
 }
+// ================================================================================================
 export enum _ESortMethod {
     DESCENDING = 'descending',
     ASCENDING = 'ascending'
 }
-// ================================================================================================
 /**
- * Sorts entities based on a sort expression.
- * ~
- * The sort expression should use the following format: #@name, where 'name' is the attribute name.
- * Entities can be sorted using multiple sort expresssions as follows: #@name1 && #@name2.
+ * Sorts entities based on an attribute.
  * ~
  * If the attribute is a list, and index can also be specified as follows: #@name1[index].
  * ~
@@ -319,6 +304,7 @@ export enum _ESortMethod {
  */
 export function Sort(__model__: GIModel, entities: TId[], attrib: string|[string, number|string], method_enum: _ESortMethod): TId[] {
     if (isEmptyArr(entities)) { return []; }
+    entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
     const fn_name = 'query.Sort';
     const ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
@@ -356,51 +342,38 @@ function _compareID(id1: TEntTypeIdx, id2: TEntTypeIdx): number {
 * entities must be part of the set of input entities and must have naked edges.
 * ~
 * @param __model__
-* @param ent_type Enum, select the types of entities to return
+* @param ent_type Enum, select the type of perimeter entities to return
 * @param entities List of entities.
 * @returns Entities, a list of perimeter entities.
-* @example mod.Perimeter('edges', [polygon1,polygon2,polygon])
+* @example query.Perimeter('edges', [polygon1,polygon2,polygon])
 * @example_info Returns list of edges that are at the perimeter of polygon1, polygon2, or polygon3.
 */
 export function Perimeter(__model__: GIModel, ent_type: _EEntType, entities: TId|TId[]): TId[] {
-    if (isEmptyArr(entities)) { return []; }
+    if (isEmptyArr2(entities)) { return []; }
+    entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
-    let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
+    let ents_arr: TEntTypeIdx[] = null;
     if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs('query.Perimeter', 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = checkIDs('query.Perimeter', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
     }
     // --- Error Check ---
-    const select_ent_types: EEntType|EEntType[] = _getEntTypeFromStr(ent_type);
-    const found_ents_arr: TEntTypeIdx[] = _perimeter(__model__, select_ent_types, ents_arr);
+    const select_ent_type: EEntType = _getEntTypeFromStr(ent_type);
+    const found_ents_arr: TEntTypeIdx[] = _perimeter(__model__, select_ent_type, ents_arr);
     return idsMake(found_ents_arr) as TId[];
 }
-export function _perimeter(__model__: GIModel,  select_ent_types: EEntType|EEntType[],
-    ents_arr: TEntTypeIdx|TEntTypeIdx[]): TEntTypeIdx[] {
-    if (!Array.isArray(select_ent_types)) {
-        const select_ent_type: EEntType = select_ent_types as EEntType;
-        if (!Array.isArray(ents_arr[0])) {
-            ents_arr = [ents_arr] as TEntTypeIdx[];
+export function _perimeter(__model__: GIModel,  select_ent_type: EEntType, ents_arr: TEntTypeIdx[]): TEntTypeIdx[] {
+    // get an array of all edges
+    const edges_i: number[] = [];
+    for (const ent_arr of ents_arr) {
+        const [ent_type, index]: TEntTypeIdx = ent_arr as TEntTypeIdx ;
+        const edges_ent_i: number[] = __model__.geom.nav.navAnyToEdge(ent_type, index);
+        for (const edge_ent_i of edges_ent_i) {
+            edges_i.push(edge_ent_i);
         }
-        // get an array of all edges
-        const edges_i: number[] = [];
-        for (const ent_arr of ents_arr) {
-            const [ent_type, index]: TEntTypeIdx = ent_arr as TEntTypeIdx ;
-            const edges_ent_i: number[] = __model__.geom.nav.navAnyToEdge(ent_type, index);
-            for (const edge_ent_i of edges_ent_i) {
-                edges_i.push(edge_ent_i);
-            }
-        }
-        // get the perimeter entities
-        const all_perim_ents_i: number[] = __model__.geom.query.perimeter(select_ent_type, edges_i);
-        return all_perim_ents_i.map(perim_ent_i => [select_ent_type, perim_ent_i]) as TEntTypeIdx[];
-    } else {
-        const query_results: TEntTypeIdx[] = [];
-        for (const select_ent_type of select_ent_types) {
-            query_results.push(..._perimeter(__model__, select_ent_type, ents_arr));
-        }
-        return query_results;
     }
+    // get the perimeter entities
+    const all_perim_ents_i: number[] = __model__.geom.query.perimeter(select_ent_type, edges_i);
+    return all_perim_ents_i.map(perim_ent_i => [select_ent_type, perim_ent_i]) as TEntTypeIdx[];
 }
 // ================================================================================================
 /**
@@ -411,49 +384,35 @@ export function _perimeter(__model__: GIModel,  select_ent_types: EEntType|EEntT
 * @param ent_type_enum Enum, select the types of neighbors to return
 * @param entities List of entities.
 * @returns Entities, a list of welded neighbors
-* @example mod.neighbor('edges', [polyline1,polyline2,polyline3])
+* @example query.neighbor('edges', [polyline1,polyline2,polyline3])
 * @example_info Returns list of edges that are welded to polyline1, polyline2, or polyline3.
 */
 export function Neighbor(__model__: GIModel, ent_type_enum: _EEntType, entities: TId|TId[]): TId[] {
     if (isEmptyArr(entities)) { return []; }
+    entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
-    let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
+    let ents_arr: TEntTypeIdx[] = null;
     if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs('query.neighbor', 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = checkIDs('query.neighbor', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
     }
     // --- Error Check ---
-    const select_ent_types: EEntType|EEntType[] = _getEntTypeFromStr(ent_type_enum);
-    const found_ents_arr: TEntTypeIdx[] = _neighbors(__model__, select_ent_types, ents_arr);
+    const select_ent_type: EEntType = _getEntTypeFromStr(ent_type_enum);
+    const found_ents_arr: TEntTypeIdx[] = _neighbors(__model__, select_ent_type, ents_arr);
     return idsMake(found_ents_arr) as TId[];
 }
-export function _neighbors(__model__: GIModel,  select_ent_types: EEntType|EEntType[],
-    ents_arr: TEntTypeIdx|TEntTypeIdx[]): TEntTypeIdx[] {
-    if (!Array.isArray(select_ent_types)) {
-        const select_ent_type: EEntType = select_ent_types as EEntType;
-        if (!Array.isArray(ents_arr[0])) {
-            ents_arr = [ents_arr] as TEntTypeIdx[];
+export function _neighbors(__model__: GIModel,  select_ent_type: EEntType, ents_arr: TEntTypeIdx[]): TEntTypeIdx[] {
+    // get an array of all vertices
+    const verts_i: number[] = [];
+    for (const ent_arr of ents_arr) {
+        const [ent_type, index]: TEntTypeIdx = ent_arr as TEntTypeIdx ;
+        const verts_ent_i: number[] = __model__.geom.nav.navAnyToVert(ent_type, index);
+        for (const vert_ent_i of verts_ent_i) {
+            verts_i.push(vert_ent_i);
         }
-        // get an array of all vertices
-        const verts_i: number[] = [];
-        for (const ent_arr of ents_arr) {
-            const [ent_type, index]: TEntTypeIdx = ent_arr as TEntTypeIdx ;
-            const verts_ent_i: number[] = __model__.geom.nav.navAnyToVert(ent_type, index);
-            for (const vert_ent_i of verts_ent_i) {
-                verts_i.push(vert_ent_i);
-            }
-        }
-        console.log(verts_i);
-        // get the neighbor entities
-        const all_nbor_ents_i: number[] = __model__.geom.query.neighbor(select_ent_type, verts_i);
-        return all_nbor_ents_i.map(nbor_ent_i => [select_ent_type, nbor_ent_i]) as TEntTypeIdx[];
-    } else {
-        const query_results: TEntTypeIdx[] = [];
-        for (const select_ent_type of select_ent_types) {
-            query_results.push(..._neighbors(__model__, select_ent_type, ents_arr));
-        }
-        return query_results;
     }
+    // get the neighbor entities
+    const all_nbor_ents_i: number[] = __model__.geom.query.neighbor(select_ent_type, verts_i);
+    return all_nbor_ents_i.map(nbor_ent_i => [select_ent_type, nbor_ent_i]) as TEntTypeIdx[];
 }
 // ================================================================================================
 /**

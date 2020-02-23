@@ -114,6 +114,7 @@ export class GIGeomQuery {
      */
     public createGeomPack(ents: TEntTypeIdx[], invert: boolean = false): IGeomPack {
         const set_posis_i: Set<number> = new Set();
+        const set_posis2_i: Set<number> = new Set();
         const set_points_i: Set<number> = new Set();
         const set_plines_i: Set<number> = new Set();
         const set_pgons_i: Set<number> = new Set();
@@ -149,29 +150,29 @@ export class GIGeomQuery {
             }
         }
         // now get all the posis of the ents and add them to the list
-        const posis_i_set: Set<number> = new Set();
         set_points_i.forEach( point_i => {
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.POINT, point_i);
             for (const posi_i of posis_i) {
-                posis_i_set.add(posi_i);
+                set_posis2_i.add(posi_i);
             }
         });
         set_plines_i.forEach( pline_i => {
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PLINE, pline_i);
             for (const posi_i of posis_i) {
-                posis_i_set.add(posi_i);
+                set_posis2_i.add(posi_i);
             }
         });
         set_pgons_i.forEach( pgon_i => {
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PGON, pgon_i);
             for (const posi_i of posis_i) {
-                posis_i_set.add(posi_i);
+                set_posis2_i.add(posi_i);
             }
         });
         // if no invert, then return the result
         if (!invert) {
             return {
                 posis_i: Array.from(set_posis_i),
+                posis2_i: Array.from(set_posis2_i),
                 points_i: Array.from(set_points_i),
                 plines_i: Array.from(set_plines_i),
                 pgons_i: Array.from(set_pgons_i),
@@ -195,12 +196,17 @@ export class GIGeomQuery {
         for (let i = 0; i < this._geom_arrays.dn_points_verts.length; i++) {
             if (this._geom_arrays.dn_points_verts[i] !== null && !set_points_i.has(i)) { inv_points_i.push(i); }
         }
-        const inv_posis_i: number[] = [];
+        const inv_posis2_i: number[] = [];
         for (let i = 0; i < this._geom_arrays.up_posis_verts.length; i++) {
-            if (this._geom_arrays.up_posis_verts[i] !== null && !set_posis_i.has(i)) { inv_posis_i.push(i); }
+            if (
+                this._geom_arrays.up_posis_verts[i] !== null &&
+                !set_posis2_i.has(i) && !set_posis_i.has(i) ) {
+                    inv_posis2_i.push(i);
+                }
         }
         return {
-            posis_i: inv_posis_i,
+            posis_i: [],
+            posis2_i: inv_posis2_i,
             points_i: inv_points_i,
             plines_i: inv_plines_i,
             pgons_i: inv_pgons_i,

@@ -45,6 +45,17 @@ export function listCopy(list: any[]): any[] {
     return list.slice();
 }
 
+export function listRep(list: any[], n: number): any[] {
+    list = Array.isArray(list) ? list : [list];
+    const result: any[] = [];
+    for (let i = 0; i < n; i++) {
+        for (let j = 0; j < list.length; j++) {
+            result.push(list[j]);
+        }
+    }
+    return result;
+}
+
 export function listLast(list: any[]): number {
     return list[list.length - 1];
 }

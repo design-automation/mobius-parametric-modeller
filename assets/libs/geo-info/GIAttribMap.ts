@@ -385,7 +385,7 @@ export class GIAttribMap {
         }
         // search
         if (this._data_type === EAttribDataTypeStrs.NUMBER) {
-            if (typeof search_val !== 'number') {
+            if (search_val !== null && typeof search_val !== 'number') {
                 throw new Error('Query search value "' + search_val + '" is not a number.');
             }
             return this._searchNumVal(ents_i, operator, search_val as number);
@@ -393,22 +393,22 @@ export class GIAttribMap {
             if (operator !== EFilterOperatorTypes.IS_EQUAL && operator !== EFilterOperatorTypes.IS_NOT_EQUAL) {
                 throw new Error('Query operator "' + operator + '" and query "' + search_val + '" value are incompatible.');
             }
-            if (typeof search_val !== 'string') {
+            if (search_val !== null && typeof search_val !== 'string') {
                 throw new Error('Query search value "' + search_val + '" is not a string.');
             }
             return this._searchStrVal(ents_i, operator, search_val as string);
         } else if (this._data_type === EAttribDataTypeStrs.BOOLEAN) {
-            if (typeof search_val !== 'boolean') {
+            if (search_val !== null && typeof search_val !== 'boolean') {
                 throw new Error('Query search value "' + search_val + '" is not a boolean.');
             }
             return this._searchBoolVal(ents_i, operator, search_val as boolean);
         } else if (this._data_type === EAttribDataTypeStrs.LIST) {
-            if (!Array.isArray(search_val)) {
+            if (search_val !== null && !Array.isArray(search_val)) {
                 throw new Error('Query search value "' + search_val + '" is not a list.');
             }
             return this._searchListVal(ents_i, operator, search_val as any[]);
         } else if (this._data_type === EAttribDataTypeStrs.DICT) {
-            if (typeof search_val !== 'object') {
+            if (search_val !== null && typeof search_val !== 'object') {
                 throw new Error('Query search value "' + search_val + '" is not an dictionary.');
             }
             return this._searchObjVal(ents_i, operator, search_val as object);

@@ -87,6 +87,7 @@ function _flatten(arrs: string|string[]|string[][]): [string[], number[][]] {
         if (Array.isArray(item)) {
             const [arr_flat2, arr_indices2] = _flatten(item);
             for (let i = 0; i < arr_flat2.length; i++) {
+                if (arr_flat.indexOf(arr_flat2[i]) !== -1) { continue; }
                 arr_flat.push(arr_flat2[i]);
                 arr_indices2[i].unshift(count);
                 arr_indices.push(arr_indices2[i]);

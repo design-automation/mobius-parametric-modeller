@@ -19,40 +19,17 @@ The resulting list of entities will not contain duplicate entities.
   
   
 ## Filter  
-* **Description:** Filter entities based on a query.
+* **Description:** Filter a list of entities based on an attribute value.
 ~
 The result will always be a list of entities, even if there is only one entity.
 In a case where you want only one entity, remember to get the first item in the list.
-~
-The filter expression can use the following format: ab#@name == value, where
-'ab' is the two letter identifier of the entity type ('ps', '_v', '_e', '_w', '_f', 'pt', 'pl', 'pg', 'co')
-'name' is the attribute name, and
-'value' is the attribute value that you are searching for.
-~
-If the attribute value is a string, then in must be in quotes, e.g.: pg#@name == 'str_value'.
-~
-If the attribute value is a number, then any comparison operator can be used: ==, !=, >, >=, <, =<.
-~
-If the attribute value is a list, then a list index can be used, e.g.: ps#@xyz[2] > 10.
 ~  
 * **Parameters:**  
-  * *entities:* List of entities to filter, or null.  
+  * *entities:* List of entities to filter. The entities must all be of the same type  
   * *attrib:* The attribute to use for filtering. Can be `name`, `[name, index]`, or `[name, key]`.  
   * *operator_enum:* Enum, the operator to use for filtering  
   * *value:* The attribute value to use for filtering.  
 * **Returns:** Entities, a list of entities that match the conditions specified in 'expr'.  
-* **Examples:**  
-  * positions = query.Get(polyline1, ps#@xyz[2]>10)  
-    Returns a list of positions that are part of polyline1 where the z-coordinate is more than 10.  
-  * positions = query.Get(null, ps#@xyz[2]>10)  
-    Returns a list of positions in the model where the z-coordinate is more than 10.  
-  * positions = query.Get(polyline1, ps#)  
-    Returns a list of all of the positions that are part of polyline1.  
-  * polylines = query.Get(position1, pl#)  
-    Returns a list of all of the polylines that use position1.  
-  * collections = query.Get(null, co#@type=="floors")  
-    Returns a list of all the collections that have an attribute called "type" with a value "floors".
-  
   
 ## Invert  
 * **Description:** Returns a list of entities that are not part of the specified entities.
@@ -72,10 +49,7 @@ this function gets the entities that are not part of the list of entities.
   
   
 ## Sort  
-* **Description:** Sorts entities based on a sort expression.
-~
-The sort expression should use the following format: #@name, where 'name' is the attribute name.
-Entities can be sorted using multiple sort expresssions as follows: #@name1 && #@name2.
+* **Description:** Sorts entities based on an attribute.
 ~
 If the attribute is a list, and index can also be specified as follows: #@name1[index].
 ~  
@@ -94,11 +68,11 @@ If the attribute is a list, and index can also be specified as follows: #@name1[
 entities must be part of the set of input entities and must have naked edges.
 ~  
 * **Parameters:**  
-  * *ent_type:* Enum, select the types of entities to return  
+  * *ent_type:* Enum, select the type of perimeter entities to return  
   * *entities:* List of entities.  
 * **Returns:** Entities, a list of perimeter entities.  
 * **Examples:**  
-  * mod.Perimeter('edges', [polygon1,polygon2,polygon])  
+  * query.Perimeter('edges', [polygon1,polygon2,polygon])  
     Returns list of edges that are at the perimeter of polygon1, polygon2, or polygon3.
   
   
@@ -111,7 +85,7 @@ entities must not be part of the set of input entities, but must be welded to on
   * *entities:* List of entities.  
 * **Returns:** Entities, a list of welded neighbors  
 * **Examples:**  
-  * mod.neighbor('edges', [polyline1,polyline2,polyline3])  
+  * query.neighbor('edges', [polyline1,polyline2,polyline3])  
     Returns list of edges that are welded to polyline1, polyline2, or polyline3.
   
   

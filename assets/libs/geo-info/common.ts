@@ -18,6 +18,7 @@ export type TEntTypeIdx = [EEntType, number];
 // Object for entities
 export interface IGeomPack {
     posis_i: number[];
+    posis2_i?: number[];
     points_i: number[];
     plines_i: number[];
     pgons_i: number[];
@@ -92,6 +93,21 @@ export enum EEntType {
     PLINE,
     PGON,
     COLL,
+    MOD
+}
+export enum EEntTypeCollCP {
+    POSI,
+    TRI,
+    VERT,
+    EDGE,
+    WIRE,
+    FACE,
+    POINT,
+    PLINE,
+    PGON,
+    COLL,
+    COLLC,
+    COLLP,
     MOD
 }
 

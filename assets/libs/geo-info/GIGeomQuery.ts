@@ -101,7 +101,6 @@ export class GIGeomQuery {
             this._geom_arrays[geom_arrays_key][index] !== null
         );
     }
-
     /**
      * Returns a geompack of unique indexes, given an array of TEntTypeIdx.
      * ~
@@ -114,95 +113,104 @@ export class GIGeomQuery {
      * Used for deleting all entities.
      */
     public createGeomPack(ents: TEntTypeIdx[], invert: boolean = false): IGeomPack {
-        function _getCollEnts(coll_i: number): void {
-            // get all the descendents of this collection
-            const desc_colls_i: number[] = this.getCollDescendents(coll_i);
-            // add this coll the head of the list
-            desc_colls_i.splice(0, 0, coll_i);
-            // go through each coll
-            for (const desc_coll_i of desc_colls_i) {
-                set_colls_i.add(desc_coll_i);
-                for (const pgon_i of this._geom.nav.navCollToPgon(desc_coll_i)) {
-                    set_pgons_i.add(pgon_i);
-                    this._geom.nav.navAnyToPosi(EEntType.PGON, pgon_i).forEach( posi_i => set_posis_i.add(posi_i) );
-                }
-                for (const pline_i of this._geom.nav.navCollToPline(desc_coll_i)) {
-                    set_plines_i.add(pline_i);
-                    this._geom.nav.navAnyToPosi(EEntType.PLINE, pline_i).forEach( posi_i => set_posis_i.add(posi_i) );
-                }
-                for (const point_i of this._geom.nav.navCollToPoint(desc_coll_i)) {
-                    set_points_i.add(point_i);
-                    this._geom.nav.navAnyToPosi(EEntType.POINT, point_i).forEach( posi_i => set_posis_i.add(posi_i) );
-                }
-            }
-        }
-        const set_colls_i: Set<number> = new Set();
-        const set_pgons_i: Set<number> = new Set();
-        const set_plines_i: Set<number> = new Set();
-        const set_points_i: Set<number> = new Set();
         const set_posis_i: Set<number> = new Set();
+        const set_posis2_i: Set<number> = new Set();
+        const set_points_i: Set<number> = new Set();
+        const set_plines_i: Set<number> = new Set();
+        const set_pgons_i: Set<number> = new Set();
+        const set_colls_i: Set<number> = new Set();
+        // process all the ents, but not posis of the ents, we will do that at the end
         for (const ent_arr of ents) {
-            const [ent_type, index]: TEntTypeIdx = ent_arr as TEntTypeIdx;
+            const [ent_type, ent_i]: TEntTypeIdx = ent_arr as TEntTypeIdx;
             if (isColl(ent_type)) {
-                _getCollEnts(index);
+                // get the descendants of this collection
+                const coll_and_desc_i: number[] = this._geom.query.getCollDescendents(ent_i);
+                coll_and_desc_i.splice(0, 0, ent_i);
+                // get all the objs
+                for (const one_coll_i of coll_and_desc_i) {
+                    for (const point_i of this._geom_arrays.dn_colls_objs[one_coll_i][1]) {
+                        set_points_i.add(point_i);
+                    }
+                    for (const pline_i of this._geom_arrays.dn_colls_objs[one_coll_i][2]) {
+                        set_plines_i.add(pline_i);
+                    }
+                    for (const pgon_i of this._geom_arrays.dn_colls_objs[one_coll_i][3]) {
+                        set_pgons_i.add(pgon_i);
+                    }
+                    set_colls_i.add(one_coll_i);
+                }
             } else if (isPgon(ent_type)) {
-                set_pgons_i.add(index);
-                this._geom.nav.navAnyToPosi(EEntType.PGON, index).forEach( posi_i => set_posis_i.add(posi_i) );
+                set_pgons_i.add(ent_i);
             } else if (isPline(ent_type)) {
-                set_plines_i.add(index);
-                this._geom.nav.navAnyToPosi(EEntType.PLINE, index).forEach( posi_i => set_posis_i.add(posi_i) );
+                set_plines_i.add(ent_i);
             } else if (isPoint(ent_type)) {
-                set_points_i.add(index);
-                this._geom.nav.navAnyToPosi(EEntType.POINT, index).forEach( posi_i => set_posis_i.add(posi_i) );
+                set_points_i.add(ent_i);
             } else if (isPosi(ent_type)) {
-                set_posis_i.add(index);
+                set_posis_i.add(ent_i);
             }
         }
-        if (invert) {
-            // const all_colls_i: number[] = this.getEnts(EEntType.COLL, false);
-            // const inv_colls_i: number[] = all_colls_i.filter( coll_i => !set_colls_i.has(coll_i) );
-            // const all_pgons_i: number[] = this.getEnts(EEntType.PGON, false);
-            // const inv_pgons_i: number[] = all_pgons_i.filter( pgon_i => !set_pgons_i.has(pgon_i) );
-            // const all_plines_i: number[] = this.getEnts(EEntType.PLINE, false);
-            // const inv_plines_i: number[] = all_plines_i.filter( pline_i => !set_plines_i.has(pline_i) );
-            // const all_points_i: number[] = this.getEnts(EEntType.POINT, false);
-            // const inv_points_i: number[] = all_points_i.filter( point_i => !set_points_i.has(point_i) );
-            // const all_posis_i: number[] = this.getEnts(EEntType.POSI, false);
-            // const inv_posis_i: number[] = all_posis_i.filter( posi_i => !set_posis_i.has(posi_i) );
-            const inv_colls_i: number[] = [];
-            for (let i = 0; i < this._geom_arrays.dn_colls_objs.length; i++) {
-                if (this._geom_arrays.dn_colls_objs[i] !== null && !set_colls_i.has(i)) { inv_colls_i.push(i); }
+        // now get all the posis of the ents and add them to the list
+        set_points_i.forEach( point_i => {
+            const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.POINT, point_i);
+            for (const posi_i of posis_i) {
+                set_posis2_i.add(posi_i);
             }
-            const inv_pgons_i: number[] = [];
-            for (let i = 0; i < this._geom_arrays.dn_pgons_faces.length; i++) {
-                if (this._geom_arrays.dn_pgons_faces[i] !== null && !set_pgons_i.has(i)) { inv_pgons_i.push(i); }
+        });
+        set_plines_i.forEach( pline_i => {
+            const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PLINE, pline_i);
+            for (const posi_i of posis_i) {
+                set_posis2_i.add(posi_i);
             }
-            const inv_plines_i: number[] = [];
-            for (let i = 0; i < this._geom_arrays.dn_plines_wires.length; i++) {
-                if (this._geom_arrays.dn_plines_wires[i] !== null && !set_plines_i.has(i)) { inv_plines_i.push(i); }
+        });
+        set_pgons_i.forEach( pgon_i => {
+            const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PGON, pgon_i);
+            for (const posi_i of posis_i) {
+                set_posis2_i.add(posi_i);
             }
-            const inv_points_i: number[] = [];
-            for (let i = 0; i < this._geom_arrays.dn_points_verts.length; i++) {
-                if (this._geom_arrays.dn_points_verts[i] !== null && !set_points_i.has(i)) { inv_points_i.push(i); }
-            }
-            const inv_posis_i: number[] = [];
-            for (let i = 0; i < this._geom_arrays.up_posis_verts.length; i++) {
-                if (this._geom_arrays.up_posis_verts[i] !== null && !set_posis_i.has(i)) { inv_posis_i.push(i); }
-            }
+        });
+        // if no invert, then return the result
+        if (!invert) {
             return {
-                posis_i: inv_posis_i,
-                points_i: inv_points_i,
-                plines_i: inv_plines_i,
-                pgons_i: inv_pgons_i,
-                colls_i: inv_colls_i
+                posis_i: Array.from(set_posis_i),
+                posis2_i: Array.from(set_posis2_i),
+                points_i: Array.from(set_points_i),
+                plines_i: Array.from(set_plines_i),
+                pgons_i: Array.from(set_pgons_i),
+                colls_i: Array.from(set_colls_i)
             };
         }
+        // invert
+        const inv_colls_i: number[] = [];
+        for (let i = 0; i < this._geom_arrays.dn_colls_objs.length; i++) {
+            if (this._geom_arrays.dn_colls_objs[i] !== null && !set_colls_i.has(i)) { inv_colls_i.push(i); }
+        }
+        const inv_pgons_i: number[] = [];
+        for (let i = 0; i < this._geom_arrays.dn_pgons_faces.length; i++) {
+            if (this._geom_arrays.dn_pgons_faces[i] !== null && !set_pgons_i.has(i)) { inv_pgons_i.push(i); }
+        }
+        const inv_plines_i: number[] = [];
+        for (let i = 0; i < this._geom_arrays.dn_plines_wires.length; i++) {
+            if (this._geom_arrays.dn_plines_wires[i] !== null && !set_plines_i.has(i)) { inv_plines_i.push(i); }
+        }
+        const inv_points_i: number[] = [];
+        for (let i = 0; i < this._geom_arrays.dn_points_verts.length; i++) {
+            if (this._geom_arrays.dn_points_verts[i] !== null && !set_points_i.has(i)) { inv_points_i.push(i); }
+        }
+        const inv_posis2_i: number[] = [];
+        for (let i = 0; i < this._geom_arrays.up_posis_verts.length; i++) {
+            if (
+                this._geom_arrays.up_posis_verts[i] !== null &&
+                !set_posis2_i.has(i) && !set_posis_i.has(i) ) {
+                    inv_posis2_i.push(i);
+                }
+        }
         return {
-            posis_i: Array.from(set_posis_i),
-            points_i: Array.from(set_points_i),
-            plines_i: Array.from(set_plines_i),
-            pgons_i: Array.from(set_pgons_i),
-            colls_i: Array.from(set_colls_i)
+            posis_i: [],
+            posis2_i: inv_posis2_i,
+            points_i: inv_points_i,
+            plines_i: inv_plines_i,
+            pgons_i: inv_pgons_i,
+            colls_i: inv_colls_i
         };
     }
     // ============================================================================
@@ -328,7 +336,7 @@ export class GIGeomQuery {
         const descendent_colls_i: number[] = [];
         for (let i = 0; i < this._geom_arrays.dn_colls_objs.length; i++) {
             const coll: TColl = this._geom_arrays.dn_colls_objs[i];
-            if (coll !== null && coll[0] !== -1) {
+            if (coll !== null && coll[0] !== -1 && i !== coll_i) {
                 if (this.isCollDescendent(i, coll_i)) {
                     descendent_colls_i.push(i);
                 }
@@ -343,8 +351,8 @@ export class GIGeomQuery {
     public isCollDescendent(coll1_i: number, coll2_i: number): boolean {
         let parent_coll_i: number = this._geom_arrays.dn_colls_objs[coll1_i][0];
         while (parent_coll_i !== -1) {
-            parent_coll_i = this._geom_arrays.dn_colls_objs[parent_coll_i][0];
             if (parent_coll_i === coll2_i) { return true; }
+            parent_coll_i = this._geom_arrays.dn_colls_objs[parent_coll_i][0];
         }
         return false;
     }
@@ -355,8 +363,8 @@ export class GIGeomQuery {
     public isCollAncestor(coll1_i: number, coll2_i: number): boolean {
         let parent_coll_i: number = this._geom_arrays.dn_colls_objs[coll2_i][0];
         while (parent_coll_i !== -1) {
-            parent_coll_i = this._geom_arrays.dn_colls_objs[parent_coll_i][0];
             if (parent_coll_i === coll1_i) { return true; }
+            parent_coll_i = this._geom_arrays.dn_colls_objs[parent_coll_i][0];
         }
         return false;
     }

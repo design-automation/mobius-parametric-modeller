@@ -10,7 +10,7 @@
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, TBBox } from '@libs/geo-info/common';
-import { isPline, isWire, isEdge, isPgon, isFace, getArrDepth, isVert, isPosi, isPoint } from '@libs/geo-info/id';
+import { isPline, isWire, isEdge, isPgon, isFace, getArrDepth, isVert, isPosi, isPoint, isEmptyArr } from '@libs/geo-info/id';
 import { distance } from '@libs/geom/distance';
 import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm } from '@libs/geom/vectors';
 import { triangulate } from '@libs/triangulate/triangulate';
@@ -19,6 +19,7 @@ import { checkIDs, checkArgTypes, IDcheckObj, TypeCheckObj} from '../_check_args
 import __ from 'underscore';
 import { getCentroid } from './_common';
 import { rayFromPln } from '@assets/core/inline/_ray';
+import { isEmptyArr2 } from '@assets/libs/util/arrs';
 
 
 // ================================================================================================
@@ -34,6 +35,7 @@ import { rayFromPln } from '@assets/core/inline/_ray';
  * @example_info position1 = [0,0,0], position2 = [[0,0,10],[0,0,20]], Expected value of distance is [10,20].
  */
 export function Distance(__model__: GIModel, entities1: TId, entities2: TId|TId[], method: _EDistanceMethod): number|number[] {
+    if (isEmptyArr2(entities2)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Distance';
     const ents_arr1 = checkIDs(fn_name, 'entities1', entities1, [IDcheckObj.isID], [EEntType.POSI])  as TEntTypeIdx;
@@ -86,6 +88,7 @@ export enum _EDistanceMethod {
  * @example length1 = calc.Length(line1)
  */
 export function Length(__model__: GIModel, entities: TId|TId[]): number|number[] {
+    if (isEmptyArr2(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Length';
     const ents_arr =  checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
@@ -148,6 +151,7 @@ function _wireLength(__model__: GIModel, wire_i: number): number {
  * @example area1 = calc.Area (surface1)
  */
 export function Area(__model__: GIModel, entities: TId|TId[]): number|number[] {
+    if (isEmptyArr2(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Area';
     const ents_arr = checkIDs(fn_name, 'entities', entities,
@@ -217,6 +221,7 @@ function _area(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): number
  * @returns The vector [x, y, z] or a list of vectors.
  */
 export function Vector(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
+    if (isEmptyArr2(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Vector';
     const ents_arrs: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
@@ -272,6 +277,7 @@ function _vector(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): Txyz
  * @example centroid1 = calc.Centroid (polygon1)
  */
 export function Centroid(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
+    if (isEmptyArr2(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Centroid';
     const ents_arrs: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
@@ -312,6 +318,7 @@ export function Centroid(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
  * @example_info If the input is non-planar, the output vector will be an average of all normals vector of the polygon triangles.
  */
 export function Normal(__model__: GIModel, entities: TId|TId[], scale: number): Txyz|Txyz[] {
+    if (isEmptyArr2(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Normal';
     const ents_arr: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
@@ -399,6 +406,7 @@ function _vertNormal(__model__: GIModel, index: number) {
  * @example coord1 = calc.Eval (polyline1, 0.23)
  */
 export function Eval(__model__: GIModel, entities: TId|TId[], t_param: number): Txyz|Txyz[] {
+    if (isEmptyArr2(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Eval';
     const ents_arrs: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
@@ -489,6 +497,7 @@ export function _ParamXyzToT(__model__: GIModel, lines: TId|TId[], locations: TI
  * @returns The ray.
  */
 export function Ray(__model__: GIModel, entities: TId|TId[]): TRay|TRay[] {
+    if (isEmptyArr2(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Ray';
     const ents_arr = checkIDs(fn_name, 'entities', entities,
@@ -539,6 +548,7 @@ function _getRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TRay|
  * @returns The plane.
  */
 export function Plane(__model__: GIModel, entities: TId|TId[]): TPlane|TPlane[] {
+    if (isEmptyArr2(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Plane';
     const ents_arr =  checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null); // takes in any

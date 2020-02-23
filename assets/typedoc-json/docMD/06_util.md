@@ -1,5 +1,22 @@
 # UTIL    
 
+## ModelInfo  
+* **Description:** Returns an html string representation of the contents of this model  
+* **Parameters:**  
+* **Returns:** Text that summarises what is in the model, click print to see this text.  
+  
+## ParamInfo  
+* **Description:** Returns am html string representation of the parameters in this model  
+* **Parameters:**  
+* **Returns:** Text that summarises what is in the model.  
+  
+## EntityInfo  
+* **Description:** Returns an html string representation of one or more entities in the model.
+~  
+* **Parameters:**  
+  * *entities:* One or more objects ot collections.  
+* **Returns:** void  
+  
 ## ExportIO  
 * **Description:** Export data from the model as a file.
 This will result in a popup in your browser, asking you to save the filel.  
@@ -19,16 +36,6 @@ This will result in a popup in your browser, asking you to save the filel.
 * **Description:** undefined  
 * **Parameters:**  
   * *value:* undefined  
-  
-## ParamInfo  
-* **Description:** Returns a text summary of the contents of this model  
-* **Parameters:**  
-* **Returns:** Text that summarises what is in the model.  
-  
-## ModelInfo  
-* **Description:** Returns a text summary of the contents of this model  
-* **Parameters:**  
-* **Returns:** Text that summarises what is in the model, click print to see this text.  
   
 ## ModelCompare  
 * **Description:** Compare the GI data in this model to the GI data in another model.

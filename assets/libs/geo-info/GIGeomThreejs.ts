@@ -165,21 +165,37 @@ export class GIGeomThreejs {
      * This list will be assumed to be in pairs.
      * The indices in the list point to the vertices.
      */
-    public get3jsEdges(vertex_map: Map<number, number>): [number[], Map<number, number>] {
+    public get3jsEdges(vertex_map: Map<number, number>): [number[], Map<number, number>, number[], Map<number, number>] {
         const edges_verts_i_filt: TEdge[] = [];
         const edge_select_map: Map<number, number> = new Map();
+        const white_edges_verts_i_filt: TEdge[] = [];
+        const white_edge_select_map: Map<number, number> = new Map();
         let gi_i = 0;
         const l = this._geom_arrays.dn_edges_verts.length;
+        const edge_attrib = this._geom.model.attribs._attribs_maps._e.get('material');
+        let edge_material_attrib;
+        if (edge_attrib) {
+            edge_material_attrib = edge_attrib.getEntsFromVal('white');
+        }
         for (; gi_i < l; gi_i++) {
             const edge_verts_i: TEdge = this._geom_arrays.dn_edges_verts[gi_i];
+            let color_check;
+            if (edge_material_attrib) {
+                color_check = edge_material_attrib.indexOf(gi_i) !== -1;
+            }
             if (edge_verts_i !== null) {
                 const new_edge_verts_i: TEdge = edge_verts_i.map(e => vertex_map.get(e)) as TEdge;
-                const tjs_i = edges_verts_i_filt.push(new_edge_verts_i) - 1;
-                edge_select_map.set(tjs_i, gi_i);
+                if (color_check) {
+                    const tjs_i = white_edges_verts_i_filt.push(new_edge_verts_i) - 1;
+                    white_edge_select_map.set(tjs_i, gi_i);
+                } else {
+                    const tjs_i = edges_verts_i_filt.push(new_edge_verts_i) - 1;
+                    edge_select_map.set(tjs_i, gi_i);
+                }
             }
         }
         // @ts-ignore
-        return [edges_verts_i_filt.flat(1), edge_select_map];
+        return [edges_verts_i_filt.flat(1), edge_select_map, white_edges_verts_i_filt.flat(1), white_edge_select_map];
 
         // @ts-ignore
         // return this._geom_arrays.dn_edges_verts.flat(1);

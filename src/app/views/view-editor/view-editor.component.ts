@@ -202,17 +202,24 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         for (const prod of prodList) {
             if (prod.type === ProcedureTypes.LocalFuncCall && prod.meta.name === funcName) {
                 if (addArg) {
-                    prod.args.push(<IArgument>{
-                        'name': 'arg_' + prod.argCount,
-                        'value': '',
-                        'jsValue': '',
-                        'usedVars': [],
-                        'linked': false,
-                        'invalidVar': false
-                    });
+                    if (!prod.meta.otherInfo.deletedArgs || prod.meta.otherInfo.deletedArgs.length === 0) {
+                        prod.args.push(<IArgument>{
+                            'name': 'arg_' + prod.argCount,
+                            'value': '',
+                            'jsValue': '',
+                            'usedVars': [],
+                            'linked': false,
+                            'invalidVar': false
+                        });
+                    } else {
+                        const old_arg = prod.meta.otherInfo.deletedArgs.pop();
+                        prod.args.push(old_arg);
+                    }
                     prod.argCount += 1;
                 } else {
-                    prod.args.pop();
+                    if (!prod.meta.otherInfo) { prod.meta.otherInfo = {}; }
+                    if (!prod.meta.otherInfo.deletedArgs) { prod.meta.otherInfo.deletedArgs = []; }
+                    prod.meta.otherInfo.deletedArgs.push(prod.args.pop());
                     prod.argCount -= 1;
                 }
             }

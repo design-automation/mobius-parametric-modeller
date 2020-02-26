@@ -1595,6 +1595,12 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         } else if (this.SelectingEntityType.id === EEntType.VERT) {
             this.chooseVertex(id);
         }
+        // not sure why but this has to be done
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => {
+                this.activateRender();
+            }, 0);
+        }
     }
 
 

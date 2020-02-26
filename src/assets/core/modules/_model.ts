@@ -63,6 +63,7 @@ export function __stringify__(__model__: GIModel): string {
  * @param __model__
  */
 export function __select__(__model__: GIModel, ents_id: string|string[]|string[][], var_name: string): void {
+    const start = performance.now();
     __model__.geom.selected = [];
     ents_id = ((Array.isArray(ents_id)) ? ents_id : [ents_id]) as string[];
     const [ents_id_flat, ents_indices] = _flatten(ents_id);

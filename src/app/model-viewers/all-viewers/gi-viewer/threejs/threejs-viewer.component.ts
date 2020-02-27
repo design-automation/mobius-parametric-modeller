@@ -565,6 +565,11 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         if (event.target.tagName !== 'CANVAS') {
             return null;
         } else {
+            for (const htmlElement of this.container.children){
+                if (htmlElement.id.slice(0, 9) === 'textLabel') {
+                    htmlElement.style.display = '';
+                }
+            }
             if (this.dragHash < 10) {
                 this.onUserAction(event);
                 this.refreshLabels(this.tab_map[this.getCurrentTab()]);
@@ -612,9 +617,14 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             return null;
         } else {
             event.stopPropagation();
-
             this.lastX = event.clientX - event.target.getBoundingClientRect().left;
             this.lastY = event.clientY - event.target.getBoundingClientRect().top;
+
+            for (const htmlElement of this.container.children){
+                if (htmlElement.id.slice(0, 9) === 'textLabel') {
+                    htmlElement.style.display = 'none';
+                }
+            }
 
             // Put your mousedown stuff here
             this.dragHash = 0;

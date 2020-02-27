@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import * as OrbitControls from 'three-orbit-controls';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
 import { EEntTypeStr, EEntType } from '@libs/geo-info/common';

@@ -405,7 +405,7 @@ export class DataCesium {
             tooltip: 'OpenStreetMap (OSM) is a collaborative project to create a free editable \
                  map of the world.\nhttp://www.openstreetmap.org',
             creationFunction: function () {
-                return Cesium.createOpenStreetMapImageryProvider({
+                return new Cesium.OpenStreetMapImageryProvider({
                     url: 'https://a.tile.openstreetmap.org/',
                 });
             },
@@ -415,7 +415,7 @@ export class DataCesium {
             iconUrl: Cesium.buildModuleUrl('Widgets/Images/ImageryProviders/stamenToner.png'),
             tooltip: 'A high contrast black and white map.\nhttp://www.maps.stamen.com/',
             creationFunction: function () {
-                return Cesium.createOpenStreetMapImageryProvider({
+                return new Cesium.OpenStreetMapImageryProvider({
                     url: 'https://stamen-tiles.a.ssl.fastly.net/toner/',
                 });
             },
@@ -425,7 +425,7 @@ export class DataCesium {
             iconUrl: Cesium.buildModuleUrl('Widgets/Images/ImageryProviders/stamenToner.png'),
             tooltip: 'A high contrast black and white map(Lite).\nhttp://www.maps.stamen.com/',
             creationFunction: function () {
-                return Cesium.createOpenStreetMapImageryProvider({
+                return new Cesium.OpenStreetMapImageryProvider({
                     url: 'https://stamen-tiles.a.ssl.fastly.net/toner-lite/',
                 });
             },
@@ -435,7 +435,7 @@ export class DataCesium {
             iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
             tooltip: 'A high contrast black and white map(Standard).\nhttp://www.maps.stamen.com/',
             creationFunction: function () {
-                return Cesium.createOpenStreetMapImageryProvider({
+                return new Cesium.OpenStreetMapImageryProvider({
                     url: 'https://stamen-tiles.a.ssl.fastly.net/terrain/',
                 });
             },
@@ -445,7 +445,7 @@ export class DataCesium {
             iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
             tooltip: 'A high contrast black and white map(Background).\nhttp://www.maps.stamen.com/',
             creationFunction: function () {
-                return Cesium.createOpenStreetMapImageryProvider({
+                return new Cesium.OpenStreetMapImageryProvider({
                     url: 'https://stamen-tiles.a.ssl.fastly.net/terrain-background/',
                 });
             },

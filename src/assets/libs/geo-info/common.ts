@@ -25,6 +25,15 @@ export interface IGeomPack {
     colls_i: number[];
 }
 
+// Object for entities
+export interface IGeomPackTId {
+    ps: TId[];
+    po: TId[];
+    pl: TId[];
+    pg: TId[];
+    co: TId[];
+}
+
 // Types
 export type TRay = [Txyz, Txyz]; // an origin and a direction vector
 export type TPlane = [Txyz, Txyz, Txyz]; // an origin, an x vec and a y vec

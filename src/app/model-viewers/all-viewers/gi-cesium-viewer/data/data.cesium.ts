@@ -208,7 +208,7 @@ export class DataCesium {
 
         const xform_matrix: any = Cesium.Matrix4.multiplyByTranslation(
             east_north_up,
-            new Cesium.Cartesian3(0, 0, 1),
+            new Cesium.Cartesian3(0, 0, 0),
             new Cesium.Matrix4()
         );
         // create all positions

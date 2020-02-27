@@ -182,8 +182,32 @@ export class DataCesium {
         // }
         const origin = Cesium.Cartesian3.fromDegrees(longitude, latitude);
         // create a matrix to transform points
+
+        // if there's a north attribute
+        const east_north_up = Cesium.Transforms.eastNorthUpToFixedFrame(origin);
+        if (model.attribs.query.hasModelAttrib('north')) {
+
+            // get north attribute
+            const north_dir: any = model.attribs.query.getModelAttribVal('north');
+
+            if (north_dir.constructor === [].constructor && north_dir.length === 2) {
+                // make the north vector and the default north vector
+                const north_cartesian = new Cesium.Cartesian3(north_dir[0], north_dir[1], 0);
+                const model_cartesian = new Cesium.Cartesian3(0, 1, 0);
+
+                // find the angle between them and its sign
+                const angle = Cesium.Cartesian3.angleBetween(north_cartesian, model_cartesian);
+                const angle_sign = north_cartesian.x < 0 ? -1 : 1;
+
+                // make rotation matrix
+                const m = Cesium.Matrix3.fromRotationZ(angle_sign * angle);
+                Cesium.Matrix4.multiplyByMatrix3(east_north_up, m, east_north_up);
+            }
+
+        }
+
         const xform_matrix: any = Cesium.Matrix4.multiplyByTranslation(
-            Cesium.Transforms.eastNorthUpToFixedFrame(origin),
+            east_north_up,
             new Cesium.Cartesian3(0, 0, 1),
             new Cesium.Matrix4()
         );

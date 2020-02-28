@@ -105,7 +105,7 @@ export class DataThreejs extends DataThreejsLookAt {
         const normals_buffer = new THREE.Float32BufferAttribute(threejs_data.normals, 3);
         const colors_buffer = new THREE.Float32BufferAttribute(threejs_data.colors, 3);
         const posis_xyz_buffer = new THREE.Float32BufferAttribute(threejs_data.posis_xyz, 3);
-        this._addTris(threejs_data.triangle_indices, verts_xyz_buffer, colors_buffer, material_groups, materials);
+        this._addTris(threejs_data.triangle_indices, verts_xyz_buffer, colors_buffer, normals_buffer, material_groups, materials);
         this._addLines(threejs_data.edge_indices, threejs_data.white_edge_indices, verts_xyz_buffer, colors_buffer, normals_buffer);
         this._addPoints(threejs_data.point_indices, verts_xyz_buffer, colors_buffer, [255, 255, 255], this.settings.positions.size + 1);
         this._addPosis(threejs_data.posis_indices, posis_xyz_buffer, this.settings.colors.position, this.settings.positions.size);
@@ -496,15 +496,15 @@ export class DataThreejs extends DataThreejsLookAt {
      * Add threejs triangles to the scene
      */
     private _addTris(tris_i: number[], posis_buffer: THREE.Float32BufferAttribute,
-                    // normals_buffer: THREE.Float32BufferAttribute,
-                     colors_buffer: THREE.Float32BufferAttribute, material_groups, materials): void {
+                     colors_buffer: THREE.Float32BufferAttribute,
+                     normals_buffer: THREE.Float32BufferAttribute,
+                     material_groups, materials): void {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(tris_i);
-        // geom.addAttribute('position', posis_buffer);
-        // // geom.addAttribute('normal', normals_buffer);
-        // geom.addAttribute('color', colors_buffer);
         geom.setAttribute('position', posis_buffer);
-        // geom.setAttribute('normal', normals_buffer);
+        if (normals_buffer.count > 0) {
+            geom.setAttribute('normal', normals_buffer);
+        }
         geom.setAttribute('color', colors_buffer);
         const colorf = new THREE.Color(parseInt(this.settings.colors.face_f.replace('#', '0x'), 16));
         const colorb = new THREE.Color(parseInt(this.settings.colors.face_b.replace('#', '0x'), 16));
@@ -558,7 +558,9 @@ export class DataThreejs extends DataThreejsLookAt {
         const mesh = new THREE.Mesh(geom, material_arr);
 
         mesh.geometry.computeBoundingSphere();
-        mesh.geometry.computeVertexNormals();
+        if (normals_buffer.count === 0) {
+            mesh.geometry.computeVertexNormals();
+        }
         mesh.castShadow = true;
         mesh.receiveShadow = true;
 
@@ -583,10 +585,7 @@ export class DataThreejs extends DataThreejsLookAt {
                     size: number = 1): void {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(lines_i);
-        // geom.addAttribute('position', posis_buffer);
-        // geom.addAttribute('normal', normals_buffer);
         geom.setAttribute('position', posis_buffer);
-        geom.setAttribute('normal', normals_buffer);
         geom.setAttribute('color', color_buffer);
         this._buffer_geoms.push(geom);
 
@@ -601,10 +600,7 @@ export class DataThreejs extends DataThreejsLookAt {
 
         const geom_white = new THREE.BufferGeometry();
         geom_white.setIndex(white_line_i);
-        // geom.addAttribute('position', posis_buffer);
-        // geom.addAttribute('normal', normals_buffer);
         geom_white.setAttribute('position', posis_buffer);
-        geom_white.setAttribute('normal', normals_buffer);
         geom_white.setAttribute('color', color_buffer);
         this._buffer_geoms.push(geom_white);
 
@@ -630,8 +626,6 @@ export class DataThreejs extends DataThreejsLookAt {
                         size: number = 1): void {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(points_i);
-        // geom.addAttribute('position', posis_buffer);
-        // geom.addAttribute('color', colors_buffer);
         geom.setAttribute('position', posis_buffer);
         geom.setAttribute('color', colors_buffer);
 

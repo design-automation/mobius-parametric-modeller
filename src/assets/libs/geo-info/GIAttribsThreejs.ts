@@ -92,7 +92,7 @@ export class GIAttribsThreejs {
         const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT, false);
         for (const vert_i of verts_i) {
             if (vert_i !== null) {
-                let normal = verts_attrib.getEntVal(vert_i) as TAttribDataTypes;
+                let normal: Txyz = normals[vert_i];
                 normal = normal === undefined ? [0, 0, 0] : normal;
                 verts_normals.push(normal);
             }

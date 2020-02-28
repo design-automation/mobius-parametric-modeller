@@ -81,6 +81,9 @@ export class GIAttribsThreejs {
                 if (attrib_name === EAttribNames.COLOR) {
                     const _value = value === undefined ? [1, 1, 1] : value;
                     verts_attribs_values.push(_value);
+                } else if (attrib_name === EAttribNames.NORMAL) {
+                    const _value = value === undefined ? [0, 0, 0] : value;
+                    verts_attribs_values.push(_value);
                 } else {
                     verts_attribs_values.push(value);
                 }

@@ -2,7 +2,7 @@ import { GIModel } from './GIModel';
 import { TNormal, TTexture, EAttribNames, Txyz, EEntType, EAttribDataTypeStrs, TAttribDataTypes, LONGLAT, IGeomPack, Txy } from './common';
 import { getArrDepth } from './id';
 import proj4 from 'proj4';
-import { vecAng2 } from '../geom/vectors';
+import { vecAng2, vecDot } from '../geom/vectors';
 import { rotateMatrix, multMatrix } from '../geom/matrix';
 import { Matrix4 } from 'three';
 
@@ -284,7 +284,13 @@ function _addPgonToModel(model: GIModel, polygon: any,
     }
     // create the pgon
     const pgon_i: number = model.geom.add.addPgon(rings[0], rings.slice(1));
-
+    // check if it needs flipping
+    // TODO there may be a faster way to do this
+    const face_i: number = model.geom.nav.navPgonToFace(pgon_i);
+    const normal: Txyz = model.geom.query.getFaceNormal(face_i);
+    if (vecDot(normal, [0, 0, 1]) < 0) {
+        model.geom.modify.reverse(model.geom.nav.navFaceToWire(face_i)[0]);
+    }
     // add attribs
     _addAttribsToModel(model, EEntType.PGON, pgon_i, polygon);
     // return the index

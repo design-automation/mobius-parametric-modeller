@@ -286,8 +286,8 @@ export class GIViewerComponent implements OnInit {
                     scene.directional_light.visible = this.settings.directional_light.show;
                 }
                 if (this.settings.directional_light.show) {
-                    this.settings.ambient_light.intensity = 0.3;
-                    this.settings.hemisphere_light.intensity = 0.3;
+                    this.settings.ambient_light.intensity = 0.1;
+                    this.settings.hemisphere_light.intensity = 0.1;
                 } else {
                     this.settings.ambient_light.intensity = 0.5;
                     this.settings.hemisphere_light.intensity = 0.5;

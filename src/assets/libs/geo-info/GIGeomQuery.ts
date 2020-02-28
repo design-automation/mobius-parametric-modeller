@@ -1,5 +1,5 @@
 
-import {  EEntType, IGeomArrays, EEntStrToGeomArray, TWire, Txyz, TColl, TEntTypeIdx, IGeomPack, TFace, EWireType, Txy } from './common';
+import {  EEntType, IGeomArrays, EEntStrToGeomArray, TWire, Txyz, TColl, TEntTypeIdx, IGeomPack, TFace, EWireType, Txy, TEdge, TPosi, TVert } from './common';
 import { isPosi, isVert, isPoint, isEdge, isWire, isPline, isFace, isPgon, isColl, isTri } from './id';
 import { GIGeom } from './GIGeom';
 import { vecFromTo, vecCross, vecDiv, vecNorm, vecLen, vecDot } from '../geom/vectors';
@@ -293,6 +293,81 @@ export class GIGeomQuery {
             }
         }
         return posis_i;
+    }
+    // ============================================================================
+    // Verts
+    // ============================================================================
+    /**
+     * Get two edges that are adjacent to this vertex that are both not zero length.
+     * In some cases wires and polygons have edges that are zero length.
+     * This causes problems for calculating normals etc.
+     * The return value can be either one edge (in open polyline [null, edge_i], [edge_i, null])
+     * or two edges (in all other cases) [edge_i, edge_i].
+     * If the vert has no non-zero edges, then [null, null] is returned.
+     * @param vert_i
+     */
+    public getVertNonZeroEdges(vert_i: number): number[] {
+        // get the wire start and end verts
+        const edges_i: number[] = this._geom_arrays.up_verts_edges[vert_i];
+        const posi_coords: Txyz[] = [];
+        // get the first edge
+        let edge0 = null;
+        if (edges_i[0] !== null || edges_i[0] !== undefined) {
+            let prev_edge_i: number = edges_i[0];
+            while (edge0 === null) {
+                if (prev_edge_i === edges_i[1]) { break; }
+                const edge_verts_i: number[] = this._geom_arrays.dn_edges_verts[prev_edge_i];
+                // first
+                const posi0_i: number =  this._geom_arrays.dn_verts_posis[edge_verts_i[0]];
+                if ( posi_coords[posi0_i] === undefined) {
+                    posi_coords[posi0_i] = this._geom.model.attribs.query.getPosiCoords(posi0_i);
+                }
+                const xyz0: Txyz = posi_coords[posi0_i];
+                // second
+                const posi1_i: number =  this._geom_arrays.dn_verts_posis[edge_verts_i[1]];
+                if ( posi_coords[posi1_i] === undefined) {
+                    posi_coords[posi1_i] = this._geom.model.attribs.query.getPosiCoords(posi1_i);
+                }
+                const xyz1: Txyz = posi_coords[posi1_i];
+                // check
+                if (Math.abs(xyz0[0] - xyz1[0]) > 0 || Math.abs(xyz0[1] - xyz1[1]) > 0 || Math.abs(xyz0[2] - xyz1[2]) > 0) {
+                    edge0 = prev_edge_i;
+                } else {
+                    prev_edge_i = this._geom_arrays.up_verts_edges[edge_verts_i[0]][0];
+                    if (prev_edge_i === null || prev_edge_i === undefined) { break; }
+                }
+            }
+        }
+        // get the second edge
+        let edge1 = null;
+        if (edges_i[1] !== null || edges_i[1] !== undefined) {
+            let next_edge_i: number = edges_i[1];
+            while (edge1 === null) {
+                if (next_edge_i === edges_i[0]) { break; }
+                const edge_verts_i: number[] = this._geom_arrays.dn_edges_verts[next_edge_i];
+                // first
+                const posi0_i: number =  this._geom_arrays.dn_verts_posis[edge_verts_i[0]];
+                if ( posi_coords[posi0_i] === undefined) {
+                    posi_coords[posi0_i] = this._geom.model.attribs.query.getPosiCoords(posi0_i);
+                }
+                const xyz0: Txyz = posi_coords[posi0_i];
+                // second
+                const posi1_i: number =  this._geom_arrays.dn_verts_posis[edge_verts_i[1]];
+                if ( posi_coords[posi1_i] === undefined) {
+                    posi_coords[posi1_i] = this._geom.model.attribs.query.getPosiCoords(posi1_i);
+                }
+                const xyz1: Txyz = posi_coords[posi1_i];
+                // check
+                if (Math.abs(xyz0[0] - xyz1[0]) > 0 || Math.abs(xyz0[1] - xyz1[1]) > 0 || Math.abs(xyz0[2] - xyz1[2]) > 0) {
+                    edge1 = next_edge_i;
+                } else {
+                    next_edge_i = this._geom_arrays.up_verts_edges[edge_verts_i[1]][1];
+                    if (next_edge_i === null || next_edge_i === undefined) { break; }
+                }
+            }
+        }
+        // return the two edges, they can be null
+        return [edge0, edge1];
     }
     // ============================================================================
     // Wires

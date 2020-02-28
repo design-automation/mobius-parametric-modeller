@@ -105,6 +105,7 @@ export class GIGeomAdd {
      * @param pgons_i
      */
     public addColl(parent_i: number, points_i: number[], plines_i: number[], pgons_i: number[]): number {
+        parent_i = parent_i === null ? -1 : parent_i;
         // create collection
         const coll_i: number = this._geom_arrays.dn_colls_objs.push([parent_i, points_i, plines_i, pgons_i]) - 1;
         for (const point_i of points_i) {

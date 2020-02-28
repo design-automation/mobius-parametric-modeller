@@ -56,8 +56,7 @@ export class GIViewerComponent implements OnInit {
         const previous_settings = JSON.parse(localStorage.getItem('mpm_settings'));
         // const devMode = isDevMode();
         const devMode = false;
-        if (previous_settings === null ||
-            this.hasDiffProps(previous_settings, this.settings)) {
+        if (previous_settings === null || this.hasDiffProps(previous_settings, this.settings)) {
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
         }
     }

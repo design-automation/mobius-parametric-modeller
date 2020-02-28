@@ -75,8 +75,9 @@ export class DataThreejs extends DataThreejsLookAt {
             DataThreejs.disposeObjectProperty(this.scene.children[0], 'geometry');
             DataThreejs.disposeObjectProperty(this.scene.children[0], 'texture');
             this.scene.remove(this.scene.children[0]);
-            this.scene_objs = [];
         }
+        this.scene_objs = [];
+
         document.querySelectorAll('[id^=textLabel_]').forEach(value => {
             container.removeChild(value);
         });
@@ -263,90 +264,6 @@ export class DataThreejs extends DataThreejsLookAt {
             this._addDirectionalLight();
         }
     }
-    // /**
-    //  * Add the model
-    //  */
-    // private _addModel(model: GIModel): number {
-
-    //     // get the data from the model
-    //     const [fb_tjs_bytes, tris_mat_arr]: [Uint8Array, THREE.Material[]] = model.threejs.getTjsData();
-
-    //     // create flatbuffer
-    //     const fb_tjs_buf = new flatbuffers.ByteBuffer(fb_tjs_bytes);
-    //     const fb_tjs_data = tjs.data.TjsData.getRootAsTjsData(fb_tjs_buf);
-
-    //     // console.log("fb_tjs_data.trisSelectIdxToIArray()", fb_tjs_data.trisSelectIdxToIArray());
-    //     // console.log("fb_tjs_data.edgesSelectIdxToIArray()", fb_tjs_data.edgesSelectIdxToIArray());
-    //     // console.log("fb_tjs_data.pointsSelectIdxToIArray()", fb_tjs_data.pointsSelectIdxToIArray());
-    //     // console.log("fb_tjs_data.posisIdxToIArray()", fb_tjs_data.posisIdxToIArray());
-    //     // console.log("fb_tjs_data.vertsIdxToIArray()", fb_tjs_data.vertsIdxToIArray());
-    //     // console.log("fb_tjs_data.coordsFlatArray()", fb_tjs_data.coordsFlatArray());
-    //     // console.log("fb_tjs_data.colorsFlatArray()", fb_tjs_data.colorsFlatArray());
-    //     // console.log("fb_tjs_data.trisVertsIdxFlatArray()", fb_tjs_data.trisVertsIdxFlatArray());
-    //     // console.log("fb_tjs_data.edgesVertsIdxFlatArray()", fb_tjs_data.edgesVertsIdxFlatArray());
-    //     // console.log("fb_tjs_data.pointsVertsIdxFlatArray()", fb_tjs_data.pointsVertsIdxFlatArray());
-    //     // console.log("fb_tjs_data.posisIdxToIArray()", fb_tjs_data.posisIdxToIArray());
-
-    //     // create the data from the flatbuffer
-    //     this.tris_select_idx_to_i = fb_tjs_data.trisSelectIdxToIArray();
-    //     this.edges_select_idx_to_i = fb_tjs_data.edgesSelectIdxToIArray();
-    //     this.points_select_idx_to_i = fb_tjs_data.pointsSelectIdxToIArray();
-    //     this.posis_idx_to_i = fb_tjs_data.posisIdxToIArray();
-    //     this.verts_idx_to_i = fb_tjs_data.vertsIdxToIArray();
-    //     const coords_buff_attrib = new THREE.BufferAttribute( fb_tjs_data.coordsFlatArray(), 3 );
-    //     const colors_buff_attrib = new THREE.BufferAttribute( fb_tjs_data.colorsFlatArray(), 3 );
-    //     const normals_buff_attrib = fb_tjs_data.normalsFlatArray() === null ?
-    //         null : new THREE.BufferAttribute( fb_tjs_data.normalsFlatArray(), 3 );
-    //     const tris_idx_buff_attrib  = new THREE.BufferAttribute(fb_tjs_data.trisVertsIdxFlatArray(), 1);
-    //     const edges_idx_buff_attrib  = new THREE.BufferAttribute(fb_tjs_data.edgesVertsIdxFlatArray(), 1);
-    //     const points_idx_buff_attrib  = new THREE.BufferAttribute(fb_tjs_data.pointsVertsIdxFlatArray(), 1);
-    //     const posis_idx_buff_attrib  = new THREE.BufferAttribute(fb_tjs_data.posisIdxToIArray(), 1);
-    //     const material_groups: Uint32Array  = fb_tjs_data.materialGroupsFlatArray();
-    //     const num_posis: number = fb_tjs_data.posisIdxToILength();
-    //     const num_points: number = fb_tjs_data.pointsVertsIdxFlatLength();
-    //     const num_edges: number = fb_tjs_data.edgesVertsIdxFlatLength() / 2;
-    //     const num_tris: number = fb_tjs_data.trisVertsIdxFlatLength() / 3;
-
-    //     // make the geometry buffers from the attribute buffers
-
-    //     // triangles
-    //     const tris_geom_buff: THREE.BufferGeometry = this._createTrisBuffGeom(
-    //         tris_idx_buff_attrib,
-    //         coords_buff_attrib, colors_buff_attrib, normals_buff_attrib,
-    //         material_groups);
-    //     // lines
-    //     const edges_geom_buff: THREE.BufferGeometry = this._createLinesBuffGeom(
-    //         edges_idx_buff_attrib,
-    //         coords_buff_attrib, colors_buff_attrib);
-    //     // points
-    //     const points_geom_buff: THREE.BufferGeometry = this._createPointsBuffGeom(
-    //         points_idx_buff_attrib,
-    //         coords_buff_attrib, colors_buff_attrib);
-    //     // positions
-    //     const posis_geom_buff: THREE.BufferGeometry = this._createPosisBuffGeom(
-    //         posis_idx_buff_attrib,
-    //         coords_buff_attrib);
-
-    //     // update threejs numbers
-    //     this.threejs_nums[0] = num_points;
-    //     this.threejs_nums[1] = num_edges;
-    //     this.threejs_nums[2] = num_tris;
-
-    //     // triangles
-    //     this._addTris(tris_geom_buff, tris_mat_arr);
-    //     // lines
-    //     this._addLines(edges_geom_buff);
-    //     // points
-    //     this._addPoints(points_geom_buff, [255, 255, 255], this.settings.positions.size + 1);
-    //     // positions
-    //     this._addPosis(posis_geom_buff, this.settings.colors.position, this.settings.positions.size);
-
-    //     // sphere
-    //     this._all_objs_sphere = this._getAllObjsSphere();
-
-    //     // return nuber of positions added
-    //     return num_posis;
-    // }
     /**
      *
      * @param scale
@@ -454,7 +371,6 @@ export class DataThreejs extends DataThreejsLookAt {
      *
      */
     public getGridPos() {
-        console.log(this._all_objs_sphere)
         if (this._all_objs_sphere) {
             const grd_pos = new THREE.Vector3(this._all_objs_sphere.center.x, this._all_objs_sphere.center.y, 0);
             this.grid.position.set(grd_pos.x, grd_pos.y, -0.01);
@@ -764,6 +680,7 @@ export class DataThreejs extends DataThreejsLookAt {
         let distance = 0;
         if (this._all_objs_sphere) {
             distance = Math.round(this._all_objs_sphere.radius * 3);
+            if (distance < 10000) { distance = 10000; }
         }
         this.directional_light_settings.distance = distance;
         // this.getDLPosition(distance);

@@ -189,7 +189,7 @@ function _createProjection(model: GIModel, geojson_obj: any): proj4.Converter {
 function _addPointToModel(model: GIModel, point: any,
         proj_obj: proj4.Converter, rot_matrix: Matrix4, elevation: number): number {
     // add feature
-    const xyz: Txyz = _xformLongLat(point.geometry.coordinates, proj_obj, elevation) as Txyz;
+    let xyz: Txyz = _xformLongLat(point.geometry.coordinates, proj_obj, elevation) as Txyz;
     // rotate to north
     if (rot_matrix !== null) {
         xyz = multMatrix(xyz, rot_matrix);

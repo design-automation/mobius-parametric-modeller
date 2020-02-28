@@ -1,7 +1,10 @@
 import { GIModel } from './GIModel';
-import { TNormal, TTexture, EAttribNames, Txyz, EEntType, EAttribDataTypeStrs, TAttribDataTypes, LONGLAT, IGeomPack } from './common';
+import { TNormal, TTexture, EAttribNames, Txyz, EEntType, EAttribDataTypeStrs, TAttribDataTypes, LONGLAT, IGeomPack, Txy } from './common';
 import { getArrDepth } from './id';
 import proj4 from 'proj4';
+import { vecAng2 } from '../geom/vectors';
+import { rotateMatrix, multMatrix } from '../geom/matrix';
+import { Matrix4 } from 'three';
 
 
 enum EGeojsoFeatureType {
@@ -20,6 +23,15 @@ export function importGeojson(model: GIModel, geojson_str: string, elevation: nu
     // parse the json data str
     const geojson_obj: any = JSON.parse(geojson_str);
     const proj_obj: proj4.Converter = _createProjection(model, geojson_obj);
+    // calculate angle of rotation
+    let rot_matrix: Matrix4 = null;
+    if (model.attribs.query.hasModelAttrib('north')) {
+        const north: Txy = model.attribs.query.getModelAttribVal('north') as Txy;
+        if (Array.isArray(north)) {
+            const rot_ang: number = vecAng2([0, 1, 0], [north[0], north[1], 0], [0, 0, 1]);
+            rot_matrix = rotateMatrix([[0, 0, 0], [0, 0, 1]], rot_ang);
+        }
+    }
     // arrays for features
     const point_f: any[] = [];
     const linestring_f: any[] = [];
@@ -39,22 +51,22 @@ export function importGeojson(model: GIModel, geojson_str: string, elevation: nu
         switch (feature.geometry.type) {
             case EGeojsoFeatureType.POINT:
                 point_f.push(feature);
-                const point_i: number = _addPointToModel(model, feature, proj_obj, elevation);
+                const point_i: number = _addPointToModel(model, feature, proj_obj, rot_matrix, elevation);
                 points_i.push(point_i);
                 break;
             case EGeojsoFeatureType.LINESTRING:
                 linestring_f.push(feature);
-                const pline_i: number = _addPlineToModel(model, feature, proj_obj, elevation);
+                const pline_i: number = _addPlineToModel(model, feature, proj_obj, rot_matrix, elevation);
                 plines_i.push(pline_i);
                 break;
             case EGeojsoFeatureType.POLYGON:
                 polygon_f.push(feature);
-                const pgon_i: number = _addPgonToModel(model, feature, proj_obj, elevation);
+                const pgon_i: number = _addPgonToModel(model, feature, proj_obj, rot_matrix, elevation);
                 pgons_i.push(pgon_i);
                 break;
             case EGeojsoFeatureType.MULTIPOINT:
                 multipoint_f.push(feature);
-                const points_coll_i: [number[], number] = _addPointCollToModel(model, feature, proj_obj, elevation);
+                const points_coll_i: [number[], number] = _addPointCollToModel(model, feature, proj_obj, rot_matrix, elevation);
                 for (const point_coll_i of points_coll_i[0]) {
                     points_i.push(point_coll_i);
                 }
@@ -62,7 +74,7 @@ export function importGeojson(model: GIModel, geojson_str: string, elevation: nu
                 break;
             case EGeojsoFeatureType.MULTILINESTRING:
                 multilinestring_f.push(feature);
-                const plines_coll_i: [number[], number] = _addPlineCollToModel(model, feature, proj_obj, elevation);
+                const plines_coll_i: [number[], number] = _addPlineCollToModel(model, feature, proj_obj, rot_matrix, elevation);
                 for (const pline_coll_i of plines_coll_i[0]) {
                     plines_i.push(pline_coll_i);
                 }
@@ -70,7 +82,7 @@ export function importGeojson(model: GIModel, geojson_str: string, elevation: nu
                 break;
             case EGeojsoFeatureType.MULTIPOLYGON:
                 multipolygon_f.push(feature);
-                const pgons_coll_i: [number[], number] = _addPgonCollToModel(model, feature, proj_obj, elevation);
+                const pgons_coll_i: [number[], number] = _addPgonCollToModel(model, feature, proj_obj, rot_matrix, elevation);
                 for (const pgon_coll_i of pgons_coll_i[0]) {
                     pgons_i.push(pgon_coll_i);
                 }
@@ -113,8 +125,9 @@ function _createProjection(model: GIModel, geojson_obj: any): proj4.Converter {
         const proj_str_c = '+k=1 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs';
         let longitude = LONGLAT[0];
         let latitude = LONGLAT[1];
-        if (model.attribs.query.hasModelAttrib('longitude')) {
-            const long_value: TAttribDataTypes  = model.attribs.query.getModelAttribVal('longitude');
+        if (model.attribs.query.hasModelAttrib('geolocation')) {
+            const geolocation = model.attribs.query.getModelAttribVal('geolocation');
+            const long_value: TAttribDataTypes = geolocation['longitude'];
             if (typeof long_value !== 'number') {
                 throw new Error('Longitude attribute must be a number.');
             }
@@ -122,9 +135,7 @@ function _createProjection(model: GIModel, geojson_obj: any): proj4.Converter {
             if (longitude < -180 || longitude > 180) {
                 throw new Error('Longitude attribute must be between -180 and 180.');
             }
-        }
-        if (model.attribs.query.hasModelAttrib('latitude')) {
-            const lat_value: TAttribDataTypes = model.attribs.query.getModelAttribVal('latitude');
+            const lat_value: TAttribDataTypes = geolocation['latitude'];
             if (typeof lat_value !== 'number') {
                 throw new Error('Latitude attribute must be a number');
             }
@@ -175,9 +186,14 @@ function _createProjection(model: GIModel, geojson_obj: any): proj4.Converter {
  * @param model The model.
  * @param point The features to add.
  */
-function _addPointToModel(model: GIModel, point: any, proj_obj: proj4.Converter, elevation: number): number {
+function _addPointToModel(model: GIModel, point: any,
+        proj_obj: proj4.Converter, rot_matrix: Matrix4, elevation: number): number {
     // add feature
     const xyz: Txyz = _xformLongLat(point.geometry.coordinates, proj_obj, elevation) as Txyz;
+    // rotate to north
+    if (rot_matrix !== null) {
+        xyz = multMatrix(xyz, rot_matrix);
+    }
     // create the posi
     const posi_i: number = model.geom.add.addPosi();
     model.attribs.add.setPosiCoords(posi_i, xyz);
@@ -202,13 +218,20 @@ function _addPointToModel(model: GIModel, point: any, proj_obj: proj4.Converter,
  * @param model The model
  * @param linestrings The features to add.
  */
-function _addPlineToModel(model: GIModel, linestring: any, proj_obj: proj4.Converter, elevation: number): number {
+function _addPlineToModel(model: GIModel, linestring: any,
+        proj_obj: proj4.Converter, rot_matrix: Matrix4, elevation: number): number {
     // add feature
     let xyzs: Txyz[] = _xformLongLat(linestring.geometry.coordinates, proj_obj, elevation) as Txyz[];
     const first_xyz: Txyz = xyzs[0];
     const last_xyz: Txyz = xyzs[xyzs.length - 1];
     const close = xyzs.length > 2 && first_xyz[0] === last_xyz[0] && first_xyz[1] === last_xyz[1];
     if (close) { xyzs = xyzs.slice(0, xyzs.length - 1); }
+    // rotate to north
+    if (rot_matrix !== null) {
+        for (let i = 0; i < xyzs.length; i++) {
+            xyzs[i] = multMatrix(xyzs[i], rot_matrix);
+        }
+    }
     // create the posis
     const posis_i: number[] = [];
     for (const xyz of xyzs) {
@@ -238,11 +261,18 @@ function _addPlineToModel(model: GIModel, linestring: any, proj_obj: proj4.Conve
  * @param model The model
  * @param polygons The features to add.
  */
-function _addPgonToModel(model: GIModel, polygon: any, proj_obj: proj4.Converter, elevation: number): number {
+function _addPgonToModel(model: GIModel, polygon: any,
+        proj_obj: proj4.Converter, rot_matrix: Matrix4, elevation: number): number {
     // add feature
     const rings: number[][] = [];
     for (const ring of polygon.geometry.coordinates) {
         const xyzs: Txyz[] = _xformLongLat(ring, proj_obj, elevation) as Txyz[];
+        // rotate to north
+        if (rot_matrix !== null) {
+            for (let i = 0; i < xyzs.length; i++) {
+                xyzs[i] = multMatrix(xyzs[i], rot_matrix);
+            }
+        }
         // create the posis
         const posis_i: number[] = [];
         for (const xyz of xyzs) {
@@ -254,6 +284,7 @@ function _addPgonToModel(model: GIModel, polygon: any, proj_obj: proj4.Converter
     }
     // create the pgon
     const pgon_i: number = model.geom.add.addPgon(rings[0], rings.slice(1));
+
     // add attribs
     _addAttribsToModel(model, EEntType.PGON, pgon_i, polygon);
     // return the index
@@ -275,11 +306,12 @@ function _addPgonToModel(model: GIModel, polygon: any, proj_obj: proj4.Converter
  * @param model The model
  * @param multipoint The features to add.
  */
-function _addPointCollToModel(model: GIModel, multipoint: any, proj_obj: proj4.Converter, elevation: number): [number[], number] {
+function _addPointCollToModel(model: GIModel, multipoint: any,
+        proj_obj: proj4.Converter, rot_matrix: Matrix4, elevation: number): [number[], number] {
     // add features
     const points_i: number[] = [];
     for (const coordinates of multipoint.geometry.coordinates) {
-        const point_i: number = _addPointToModel(model, {'geometry': {'coordinates': coordinates}}, proj_obj, elevation);
+        const point_i: number = _addPointToModel(model, {'geometry': {'coordinates': coordinates}}, proj_obj, rot_matrix, elevation);
         points_i.push(point_i);
     }
     // create the collection
@@ -304,11 +336,12 @@ function _addPointCollToModel(model: GIModel, multipoint: any, proj_obj: proj4.C
  * @param multilinestrings The features to add.
  * @param model The model
  */
-function _addPlineCollToModel(model: GIModel, multilinestring: any, proj_obj: proj4.Converter, elevation: number): [number[], number] {
+function _addPlineCollToModel(model: GIModel, multilinestring: any,
+        proj_obj: proj4.Converter, rot_matrix: Matrix4, elevation: number): [number[], number] {
     // add features
     const plines_i: number[] = [];
     for (const coordinates of multilinestring.geometry.coordinates) {
-        const pline_i: number = _addPlineToModel(model, {'geometry': {'coordinates': coordinates}}, proj_obj, elevation);
+        const pline_i: number = _addPlineToModel(model, {'geometry': {'coordinates': coordinates}}, proj_obj, rot_matrix, elevation);
         plines_i.push(pline_i);
     }
     // create the collection
@@ -338,11 +371,12 @@ function _addPlineCollToModel(model: GIModel, multilinestring: any, proj_obj: pr
  * @param model The model
  * @param multipolygons The features to add.
  */
-function _addPgonCollToModel(model: GIModel, multipolygon: any, proj_obj: proj4.Converter, elevation: number): [number[], number] {
+function _addPgonCollToModel(model: GIModel, multipolygon: any,
+        proj_obj: proj4.Converter, rot_matrix: Matrix4, elevation: number): [number[], number] {
     // add features
     const pgons_i: number[] = [];
     for (const coordinates of multipolygon.geometry.coordinates) {
-        const pgon_i: number = _addPgonToModel(model, {'geometry': {'coordinates': coordinates}}, proj_obj, elevation);
+        const pgon_i: number = _addPgonToModel(model, {'geometry': {'coordinates': coordinates}}, proj_obj, rot_matrix, elevation);
         pgons_i.push(pgon_i);
     }
     // create the collection

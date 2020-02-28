@@ -256,11 +256,16 @@ export class ProcedureItemComponent implements OnDestroy {
 
     addArg(event: MouseEvent) {
         event.stopPropagation();
-        this.data.args.push( <IArgument> {
-            'name': 'arg_' + this.data.argCount,
-            'value': '',
-            'jsValue': ''
-        });
+        if (!this.data.meta.otherInfo.deletedArgs || this.data.meta.otherInfo.deletedArgs.length === 0) {
+            this.data.args.push( <IArgument> {
+                'name': 'arg_' + this.data.argCount,
+                'value': '',
+                'jsValue': ''
+            });
+        } else {
+            const old_arg = this.data.meta.otherInfo.deletedArgs.pop();
+            this.data.args.push(old_arg);
+        }
         this.data.argCount += 1;
         this.eventAction.emit({
             'type': 'addArg',
@@ -271,7 +276,8 @@ export class ProcedureItemComponent implements OnDestroy {
 
     rmArg(event: MouseEvent) {
         event.stopPropagation();
-        this.data.args.pop();
+        if (!this.data.meta.otherInfo.deletedArgs) { this.data.meta.otherInfo.deletedArgs = []; }
+        this.data.meta.otherInfo.deletedArgs.push(this.data.args.pop());
         this.data.argCount -= 1;
         this.eventAction.emit({
             'type': 'delArg',

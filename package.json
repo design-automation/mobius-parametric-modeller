@@ -1,6 +1,6 @@
 {
   "name": "mobius-parametric-modeller",
-  "version": "0.5.26",
+  "version": "0.5.27",
   "license": "MIT",
   "config": {
     "dev_url": "https://mobius.design-automation.net/",
@@ -47,7 +47,7 @@
     "@types/proj4": "^2.5.0",
     "@types/webgl2": "0.0.5",
     "angular-split": "^1.0.4",
-    "cesium": "^1.57.0",
+    "cesium": "^1.66.0",
     "chroma-js": "^1.4.1",
     "circular-json": "^0.4.0",
     "core-js": "^2.6.5",

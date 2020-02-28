@@ -510,6 +510,7 @@ export class DataThreejsSelect extends DataThreejsBase {
         div.style.position = 'absolute';
         div.style.background = 'rgba(255, 255, 255, 0.3)';
         div.style.padding = '1px';
+        div.style.pointerEvents = 'none';
         div.innerHTML = labelText;
         div.style.top = '-1000';
         div.style.left = '-1000';

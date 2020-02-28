@@ -519,14 +519,28 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 if (selected !== undefined && selected.length) {
                     let selectingType;
                     this._data_threejs.selected_geoms.clear();
+                    const select_groups = {};
                     selected.forEach(s => {
                         const type = EEntTypeStr[s[0]], id = Number(s[1]);
+                        let idList;
+                        if (!select_groups[type]) {
+                            idList = [];
+                        } else {
+                            idList = select_groups[type];
+                        }
                         if (this.model.geom.query.entExists(s[0], id)) {
                             this.dataService.selected_ents.get(type).set(`${type}${id}`, id);
-                            this.attrTableSelect({ action: 'select', ent_type: type, id: id }, true);
+                            idList.push(id);
+                            // this.attrTableSelect({ action: 'select', ent_type: type, id: id }, true);
                         }
+                        select_groups[type] = idList;
                         selectingType = s[0];
                     });
+                    for (const type in select_groups) {
+                        if (!select_groups[type]) { continue; }
+                        this.attrTableSelect({ action: 'select', ent_type: type, id: select_groups[type] }, true);
+                    }
+
                     sessionStorage.setItem('mpm_showSelected', 'true');
 
                     sessionStorage.setItem('mpm_changetab', 'true');
@@ -551,6 +565,11 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         if (event.target.tagName !== 'CANVAS') {
             return null;
         } else {
+            for (const htmlElement of this.container.children){
+                if (htmlElement.id.slice(0, 9) === 'textLabel') {
+                    htmlElement.style.display = '';
+                }
+            }
             if (this.dragHash < 10) {
                 this.onUserAction(event);
                 this.refreshLabels(this.tab_map[this.getCurrentTab()]);
@@ -598,9 +617,14 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             return null;
         } else {
             event.stopPropagation();
-
             this.lastX = event.clientX - event.target.getBoundingClientRect().left;
             this.lastY = event.clientY - event.target.getBoundingClientRect().top;
+
+            for (const htmlElement of this.container.children){
+                if (htmlElement.id.slice(0, 9) === 'textLabel') {
+                    htmlElement.style.display = 'none';
+                }
+            }
 
             // Put your mousedown stuff here
             this.dragHash = 0;
@@ -1594,6 +1618,12 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             this.chooseColl(id);
         } else if (this.SelectingEntityType.id === EEntType.VERT) {
             this.chooseVertex(id);
+        }
+        // not sure why but this has to be done
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => {
+                this.activateRender();
+            }, 0);
         }
     }
 

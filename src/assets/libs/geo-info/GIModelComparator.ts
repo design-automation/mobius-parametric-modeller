@@ -706,7 +706,8 @@ export class GIModelComparator {
         }
         // for each collection, we now add the parent id, using the new index
         for (let i = 0; i < fprints.length; i++) {
-            const coll_old_i: number = fprint_to_old_i_map.get(fprints[i]);
+            const idx: number = fprint_to_old_i_map.get(fprints[i]);
+            const coll_old_i: number = colls_i[idx];
             const coll_parent_old_i: number = this._model.geom.query.getCollParent(coll_old_i);
             let parent_str = '';
             if (coll_parent_old_i === -1) {

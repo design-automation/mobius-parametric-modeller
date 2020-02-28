@@ -742,6 +742,21 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
             i = result.i + 1;
             newString += `(${result.str})`;
             jsString += `(${result.jsStr})`;
+
+            if (i + 1 < comps.length && comps[i + 1].value === '[') {
+                // look for all subsequent "." or "[]" for the variable
+                // e.g. a[:][0].b.x[-1]
+                while (i + 1 < comps.length && (comps[i + 1].value === '[')) {
+                    if (comps[i + 1].value === '[') {
+                        const sliceresult = analyzePythonSlicing(comps, i + 1, vars, jsString, isVariable);
+                        if (sliceresult.error) { return sliceresult; }
+                        newString += sliceresult.str;
+                        jsString +=  sliceresult.jsStr;
+                        // arrayName = sliceresult.arrayName;
+                        i = sliceresult.i;
+                    }
+                }
+            }
             return {'i': i, 'str': newString, 'jsStr': jsString};
         }
     // if variable is followed by "{" --> not allowed

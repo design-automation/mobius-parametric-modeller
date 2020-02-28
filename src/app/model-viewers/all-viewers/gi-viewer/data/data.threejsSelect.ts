@@ -38,9 +38,6 @@ export class DataThreejsSelect extends DataThreejsBase {
         }
         const geom = new THREE.BufferGeometry();
         geom.setIndex(tris_i);
-        // geom.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-        // geom.addAttribute('normal', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));
-        // geom.addAttribute('color', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));
         geom.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
         geom.setAttribute('normal', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));
         geom.setAttribute('color', new THREE.Float32BufferAttribute(Array(positions.length).fill(0), 3));

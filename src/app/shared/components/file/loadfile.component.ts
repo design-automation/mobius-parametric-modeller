@@ -91,9 +91,6 @@ export class LoadFileComponent {
                 //     }
                 // }
             }
-            for (const node of loadeddata.flowchart.nodes) {
-                checkNodeValidity(node);
-            }
             for (const func of this.dataService.flowchart.functions) {
                 for (const node of func.flowchart.nodes) {
                     checkNodeValidity(node);
@@ -105,6 +102,9 @@ export class LoadFileComponent {
                         checkNodeValidity(node);
                     }
                 }
+            }
+            for (const node of loadeddata.flowchart.nodes) {
+                checkNodeValidity(node);
             }
             setTimeout(() => {
                 if (this.dataService.mobiusSettings.execute) {

@@ -118,9 +118,6 @@ export class LoadUrlComponent {
         } else if (this.dataService.node.type !== 'end') {
             loadeddata.flowchart.meta.selected_nodes = [loadeddata.flowchart.nodes.length - 1];
         }
-        for (const node of loadeddata.flowchart.nodes) {
-            checkNodeValidity(node);
-        }
         for (const func of this.dataService.flowchart.functions) {
             for (const node of func.flowchart.nodes) {
                 checkNodeValidity(node);
@@ -132,6 +129,9 @@ export class LoadUrlComponent {
                     checkNodeValidity(node);
                 }
             }
+        }
+        for (const node of loadeddata.flowchart.nodes) {
+            checkNodeValidity(node);
         }
         setTimeout(() => {
             let executeB = document.getElementById('executeButton');
@@ -172,9 +172,6 @@ export class LoadUrlComponent {
         }
         this.dataService.newFlowchart = true;
         this.router.navigate(['/editor']);
-        for (const node of loadeddata.flowchart.nodes) {
-            checkNodeValidity(node);
-        }
         for (const func of this.dataService.flowchart.functions) {
             for (const node of func.flowchart.nodes) {
                 checkNodeValidity(node);
@@ -186,6 +183,9 @@ export class LoadUrlComponent {
                     checkNodeValidity(node);
                 }
             }
+        }
+        for (const node of loadeddata.flowchart.nodes) {
+            checkNodeValidity(node);
         }
         this.dataService.clearModifiedNode();
         // localStorage.removeItem('temp_file');
@@ -223,9 +223,6 @@ export class LoadUrlComponent {
         //     }
         //     this.dataService.newFlowchart = true;
         //     this.router.navigate(['/editor']);
-        //     for (const node of loadeddata.flowchart.nodes) {
-        //         checkNodeValidity(node);
-        //     }
         //     for (const func of this.dataService.flowchart.functions) {
         //         for (const node of func.flowchart.nodes) {
         //             checkNodeValidity(node);
@@ -237,6 +234,9 @@ export class LoadUrlComponent {
         //                 checkNodeValidity(node);
         //             }
         //         }
+        //     }
+        //     for (const node of loadeddata.flowchart.nodes) {
+        //         checkNodeValidity(node);
         //     }
         //     this.dataService.clearModifiedNode();
         //     // localStorage.removeItem('temp_file');

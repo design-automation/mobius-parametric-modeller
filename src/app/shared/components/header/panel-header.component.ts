@@ -213,9 +213,6 @@ export class PanelHeaderComponent implements OnDestroy {
             }
             this.dataService.file.flowchart.meta.selected_nodes = [this.dataService.file.flowchart.nodes.length - 1];
             this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-            for (const node of this.dataService.flowchart.nodes) {
-                checkNodeValidity(node);
-            }
             for (const func of this.dataService.flowchart.functions) {
                 for (const node of func.flowchart.nodes) {
                     checkNodeValidity(node);
@@ -227,6 +224,9 @@ export class PanelHeaderComponent implements OnDestroy {
                         checkNodeValidity(node);
                     }
                 }
+            }
+            for (const node of this.dataService.flowchart.nodes) {
+                checkNodeValidity(node);
             }
             if (this.settings.execute) {
                 document.getElementById('executeButton').click();

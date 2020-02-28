@@ -1,7 +1,7 @@
 import { EAttribNames, EEntType } from './common';
 import { IThreeJS } from './ThreejsJSON';
 import { GIModel } from './GIModel';
-import { mapToMapExpression } from '@angular/compiler/src/render3/util';
+
 /**
  * Geo-info model class.
  */

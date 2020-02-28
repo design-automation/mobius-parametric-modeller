@@ -57,7 +57,7 @@ export class GIModel {
      * Check model for internal consistency
      */
     public check(): string[] {
-        return this.geomCheck.check();
+        return this.geom.check.check();
     }
         /**
      * Compares this model and another model.

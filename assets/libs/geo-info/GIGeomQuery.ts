@@ -19,6 +19,7 @@ export class GIGeomQuery {
     // ============================================================================
     // Entities
     // ============================================================================
+
     /**
      * Returns a list of indices for all.
      * ~
@@ -80,9 +81,60 @@ export class GIGeomQuery {
      * Returns the number of entities
      */
     public numEnts(ent_type: EEntType, include_deleted: boolean): number {
-        return this.getEnts(ent_type, include_deleted).length;
+        if (include_deleted) {
+            return this.getNumEntsInclDel(ent_type);
+        }
+        return this.getNumEntsExcDel(ent_type);
     }
-
+    /**
+     * Returns the number of entities for [posis, point, polylines, polygons, collections].
+     */
+    public numEntsAll(include_deleted: boolean): number[] {
+        if (include_deleted) {
+            return [
+                this.getNumEntsInclDel(EEntType.POSI),
+                this.getNumEntsInclDel(EEntType.POINT),
+                this.getNumEntsInclDel(EEntType.PLINE),
+                this.getNumEntsInclDel(EEntType.PGON),
+                this.getNumEntsInclDel(EEntType.COLL)
+            ];
+        }
+        return [
+            this.getNumEntsExcDel(EEntType.POSI),
+            this.getNumEntsExcDel(EEntType.POINT),
+            this.getNumEntsExcDel(EEntType.PLINE),
+            this.getNumEntsExcDel(EEntType.PGON),
+            this.getNumEntsExcDel(EEntType.COLL)
+        ];
+    }
+    private getNumEntsInclDel(ent_type: EEntType): number {
+        // get posis count from up array: up_posis_verts
+        if (isPosi(ent_type)) {
+            return this._geom_arrays.up_posis_verts.length;
+        }
+        // get ents count from down arrays
+        const geom_array_key: string = EEntStrToGeomArray[ent_type];
+        const geom_array: any[] = this._geom_arrays[geom_array_key];
+        return geom_array.length;
+    }
+    private getNumEntsExcDel(ent_type: EEntType): number {
+        let count = 0;
+        let geom_array: any[] = null;
+        if (isPosi(ent_type)) {
+            // get posis count from up array: up_posis_verts
+            geom_array = this._geom_arrays.up_posis_verts;
+        } else {
+            // get ents count from down arrays
+            const geom_array_key: string = EEntStrToGeomArray[ent_type];
+            geom_array = this._geom_arrays[geom_array_key];
+        }
+        for (let i = 0; i < geom_array.length; i++) {
+            if (geom_array[i] !== null) {
+                count += 1;
+            }
+        }
+        return count;
+    }
     /**
      * Check if an entity exists
      * @param ent_type

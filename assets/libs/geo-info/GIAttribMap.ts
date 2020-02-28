@@ -90,6 +90,12 @@ export class GIAttribMap {
         return this._data_length;
     }
     /**
+     * Returns true if the data has non null/undefined value.
+     */
+    public hasNonNullVal(): boolean {
+        return this._num_vals > 0;
+    }
+    /**
      * Returns true if this value exists in the attributes.
      */
     public hasVal(val: TAttribDataTypes): boolean {

@@ -157,6 +157,7 @@ export class GIAttribsThreejs {
         // loop through all the attributes
         attribs.forEach( (attrib, attrib_name) => {
             const data_size: number = attrib.getDataLength();
+            if (!attrib.hasNonNullVal()) { return; }
             for (const ent_i of ents_i) {
                 if (attrib_name.substr(0, 1) === '_' && attrib_name !== '_parent') {
                     const attrib_value = attrib.getEntVal(ent_i);
@@ -226,14 +227,19 @@ export class GIAttribsThreejs {
             }
             i++;
         });
+        const nullAttribs = new Set();
         attribs.forEach( (attrib, attrib_name) => {
             const data_size: number = attrib.getDataLength();
+            if (!attrib.hasNonNullVal()) { return; }
+            nullAttribs.add(attrib_name);
             for (const ent_i of Array.from(selected_ents.values())) {
                 if (attrib_name.substr(0, 1) === '_') {
                     const attrib_value = attrib.getEntVal(ent_i);
                     data_obj_map.get(ent_i)[`${attrib_name}`] = attrib_value;
+                    nullAttribs.delete(attrib_name);
                 } else {
                     const attrib_value = attrib.getEntVal(ent_i);
+                    if (attrib_value !== undefined) { nullAttribs.delete(attrib_name); }
                     if ( data_size > 1 ) {
                         if (attrib_value === undefined) {
                             for (let idx = 0; idx < data_size; idx++) {
@@ -266,6 +272,14 @@ export class GIAttribsThreejs {
                 }
             }
         });
+        for (const attrib of nullAttribs) {
+            data_obj_map.forEach( (val, index) => {
+                try {
+                    // @ts-ignore
+                    delete val[attrib];
+                } catch (ex) {}
+            })
+        }
         return Array.from(data_obj_map.values());
     }
     /**

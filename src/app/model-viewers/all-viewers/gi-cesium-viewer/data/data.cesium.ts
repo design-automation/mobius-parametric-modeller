@@ -197,7 +197,7 @@ export class DataCesium {
 
                 // find the angle between them and its sign
                 const angle = Cesium.Cartesian3.angleBetween(north_cartesian, model_cartesian);
-                const angle_sign = north_cartesian.x < 0 ? 1 : -1;
+                const angle_sign = north_cartesian.x < 0 ? -1 : 1;
 
                 // make rotation matrix
                 const m = Cesium.Matrix3.fromRotationZ(angle_sign * angle);

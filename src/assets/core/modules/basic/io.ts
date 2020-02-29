@@ -14,7 +14,7 @@ import { download } from '@libs/filesys/download';
 import { TId, EEntType, Txyz, TPlane, TRay, IGeomPack, IModelData, IGeomPackTId } from '@libs/geo-info/common';
 import { __merge__ } from '../_model';
 import { _model } from '..';
-import { idsMake } from '@libs/geo-info/id';
+import { idsMake, idsMakeFromIndicies } from '@libs/geo-info/id';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
 
 // ================================================================================================
@@ -72,30 +72,40 @@ export function WriteData(__model__: GIModel, data: string, file_name: string, d
 // ================================================================================================
 /**
  * Imports data into the model.
- * In order to get the model data from a file, you need to define the File or URL parameter
- * in the Start node of the flowchart.
- *
+ * ~
+ * Model data can be pasted in directly as a string, or can be retrieved as a file.
+ * ~
+ * If model data is retrieved from a file, there are two ways of specifying the file location:
+ * - A url, e.g. "https://www.dropbox.com/xxxx/my_data.obj"
+ * - A file name in the local storage, e.g. "my_data.obj".
+ * ~
+ * To place a file in local storage, go to the Mobius menu, and select 'Local Storage' from the dropdown.
+ * Note that a codescript using a file in local storage will not be shareable with others.
+ * ~
  * @param model_data The model data
  * @param data_format Enum, the file format.
  * @returns A list of the positions, points, polylines, polygons and collections added to the model.
  * @example util.ImportData (file1_data, obj)
  * @example_info Imports the data from file1 (defining the .obj file uploaded in 'Start' node).
  */
-export function ImportToModel(__model__: GIModel, model_data: string, data_format: _EIODataFormat): IGeomPackTId {
+export function ImportToModel(__model__: GIModel, model_data: string, data_format: _EIODataFormat): TId {
+    let coll_i: number = null;
     switch (data_format) {
         case _EIODataFormat.GI:
-            return _importGI(__model__, model_data);
+            coll_i  = _importGI(__model__, model_data);
+            break;
         case _EIODataFormat.OBJ:
-            return _importObj(__model__, model_data);
+            coll_i  = _importObj(__model__, model_data);
+            break;
         case _EIODataFormat.GEOJSON:
-            return _importGeojson(__model__, model_data);
+            coll_i  = _importGeojson(__model__, model_data);
             break;
         default:
-            throw new Error('Data type not recognised');
-            break;
+            throw new Error('Import type not recognised');
     }
+    return idsMake([EEntType.COLL, coll_i]) as TId;
 }
-function _importGI(__model__: GIModel, model_data: string): IGeomPackTId {
+function _importGI(__model__: GIModel, model_data: string): number {
     // get number of ents before merge
     const num_ents_before: number[] = __model__.geom.query.numEntsAll(true);
     // import
@@ -105,9 +115,9 @@ function _importGI(__model__: GIModel, model_data: string): IGeomPackTId {
     // get number of ents after merge
     const num_ents_after: number[] = __model__.geom.query.numEntsAll(true);
     // return the result
-    return getNewTId(num_ents_before, num_ents_after);
+    return _createColl(__model__, num_ents_before, num_ents_after);
 }
-function _importObj(__model__: GIModel, model_data: string): IGeomPackTId {
+function _importObj(__model__: GIModel, model_data: string): number {
     // get number of ents before merge
     const num_ents_before: number[] = __model__.geom.query.numEntsAll(true);
     // import
@@ -116,9 +126,9 @@ function _importObj(__model__: GIModel, model_data: string): IGeomPackTId {
     // get number of ents after merge
     const num_ents_after: number[] = __model__.geom.query.numEntsAll(true);
     // return the result
-    return getNewTId(num_ents_before, num_ents_after);
+    return _createColl(__model__, num_ents_before, num_ents_after);
 }
-function _importGeojson(__model__: GIModel, model_data: string): IGeomPackTId {
+function _importGeojson(__model__: GIModel, model_data: string): number {
     // get number of ents before merge
     const num_ents_before: number[] = __model__.geom.query.numEntsAll(true);
     // import
@@ -126,36 +136,27 @@ function _importGeojson(__model__: GIModel, model_data: string): IGeomPackTId {
     // get number of ents after merge
     const num_ents_after: number[] = __model__.geom.query.numEntsAll(true);
     // return the result
-    return getNewTId(num_ents_before, num_ents_after);
+    return _createColl(__model__, num_ents_before, num_ents_after);
 }
-function getNewTId(before: number[], after: number[]): IGeomPackTId {
-    const posis_id: TId[] = [];
-    const points_id: TId[] = [];
-    const plines_id: TId[] = [];
-    const pgons_id: TId[] = [];
-    const colls_id: TId[] = [];
-    for (let posi_i = before[0]; posi_i < after[0]; posi_i++) {
-        posis_id.push( idsMake([EEntType.POSI,  posi_i]) as string );
-    }
+function _createColl(__model__: GIModel, before: number[], after: number[]): number {
+    const points_i: number[] = [];
+    const plines_i: number[] = [];
+    const pgons_i: number[] = [];
     for (let point_i = before[1]; point_i < after[1]; point_i++) {
-        points_id.push( idsMake([EEntType.POINT,  point_i]) as string );
+        points_i.push( point_i );
     }
     for (let pline_i = before[2]; pline_i < after[2]; pline_i++) {
-        plines_id.push( idsMake([EEntType.PLINE,  pline_i]) as string );
+        plines_i.push( pline_i );
     }
     for (let pgon_i = before[3]; pgon_i < after[3]; pgon_i++) {
-        pgons_id.push( idsMake([EEntType.PGON,  pgon_i]) as string );
+        pgons_i.push( pgon_i );
     }
+    if (points_i.length + plines_i.length + pgons_i.length === 0) { return null; }
+    const container_coll_i: number = __model__.geom.add.addColl(null, points_i, plines_i, pgons_i);
     for (let coll_i = before[4]; coll_i < after[4]; coll_i++) {
-        colls_id.push( idsMake([EEntType.COLL,  coll_i]) as string );
+        __model__.geom.modify_coll.setCollParent(coll_i, container_coll_i);
     }
-    return {
-        'ps': posis_id,
-        'po': points_id,
-        'pl': plines_id,
-        'pg': pgons_id,
-        'co': colls_id
-    }
+    return container_coll_i;
 }
 // ================================================================================================
 export enum _EIOExportDataFormat {

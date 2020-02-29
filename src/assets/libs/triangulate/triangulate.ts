@@ -10,38 +10,129 @@ import { area } from '../geom/triangle';
 /**
  * Function that returns a matrix to transform a set of vertices in 3d space onto the xy plane.
  * This function assumes that the vertices are more or less co-planar.
- * Returns a set of three Vectors that represent points on the xy plane.
+ * Returns null if the plane cannot be found, e.g. points are all colinear.
+ */
+// function _getMatrixOld(points: three.Vector3[]): three.Matrix4 {
+//     // calculate origin
+//     const o: three.Vector3 = new three.Vector3();
+//     for (const v of points) {
+//         o.add(v);
+//     }
+//     o.divideScalar(points.length);
+//     // find three vectors
+//     let vx: three.Vector3;
+//     let vz: three.Vector3;
+//     let got_vx = false;
+//     for (let i = 0; i < points.length; i++) {
+//         if (!got_vx) {
+//             vx =  threex.subVectors(points[i], o);
+//             if (vx.lengthSq() !== 0) {got_vx = true; }
+//         } else {
+//             vz = threex.crossVectors(vx, threex.subVectors(points[i], o));
+//             if (vz.lengthSq() !== 0) { break; }
+//         }
+//         if (i === points.length - 1) { return null; } // could not find any pair of vectors
+//     }
+//     const vy: three.Vector3 =  threex.crossVectors(vz, vx);
+//     // create matrix
+//     vx.normalize();
+//     vy.normalize();
+//     vz.normalize();
+//     const m2: three.Matrix4 = new three.Matrix4();
+//     m2.makeBasis(vx, vy, vz);
+//     m2.getInverse(m2);
+//     return m2;
+// }
+
+
+/**
+ * Function that returns a matrix to transform a set of vertices in 3d space onto the xy plane.
+ * This function assumes that the vertices are more or less co-planar.
  * Returns null if the plane cannot be found, e.g. points are all colinear.
  */
 function _getMatrix(points: three.Vector3[]): three.Matrix4 {
 
-    // calculate origin
-    const o: three.Vector3 = new three.Vector3();
-    for (const v of points) {
-        o.add(v);
-    }
-    o.divideScalar(points.length);
-
-    // find three vectors
-    let vx: three.Vector3;
-    let vz: three.Vector3;
-    let got_vx = false;
+    // find the extreme points
+    const extremes: number[] = [0, 0, 0, 0, 0, 0];
+    // min x, min y, min z, max x, max y, max z
     for (let i = 0; i < points.length; i++) {
-        if (!got_vx) {
-            vx =  threex.subVectors(points[i], o);
-            if (vx.lengthSq() !== 0) {got_vx = true; }
-        } else {
-            vz = threex.crossVectors(vx, threex.subVectors(points[i], o));
-            if (vz.lengthSq() !== 0) { break; }
+        if (points[i].x < points[extremes[0]].x) {
+            extremes[0] = i;
         }
-        if (i === points.length - 1) { return null; } // could not find any pair of vectors
+        if (points[i].y < points[extremes[1]].y) {
+            extremes[1] = i;
+        }
+        if (points[i].z < points[extremes[2]].z) {
+            extremes[2] = i;
+        }
+        if (points[i].x > points[extremes[3]].x) {
+            extremes[3] = i;
+        }
+        if (points[i].y > points[extremes[4]].y) {
+            extremes[4] = i;
+        }
+        if (points[i].z > points[extremes[5]].z) {
+            extremes[5] = i;
+        }
     }
-    const vy: three.Vector3 =  threex.crossVectors(vz, vx);
+    // calc sizes
+    const x_size: number = points[extremes[3]].x - points[extremes[0]].x;
+    const y_size: number = points[extremes[4]].x - points[extremes[1]].x;
+    const z_size: number = points[extremes[5]].x - points[extremes[2]].x;
+    // add the extreme points
+    const selected: Set<number> = new Set();
+    if (x_size > 0) { selected.add(extremes[0]); selected.add(extremes[3]); }
+    if (y_size > 0) { selected.add(extremes[1]); selected.add(extremes[4]); }
+    if (z_size > 0) { selected.add(extremes[2]); selected.add(extremes[5]); }
+    // get three points
+    let points2: three.Vector3[] = [];
+    // TODO optimize...
+    if (selected.size >= 3) { // ok
+        points2 = Array.from(selected).sort((a, b) => a - b ).map( i => points[i] );
+        // TODO maybe we should check if the dit between oints is not too small
+    } else if (selected.size === 2) { // special diagonal case
+        // TODO replace with convex hull
+        const pair_idxs: number[] = Array.from(selected.values());
+        const line: three.Line3 = new three.Line3(points[pair_idxs[0]], points[pair_idxs[1]]);
+        const line_len: number = line.delta(new three.Vector3()).manhattanLength();
+        let max_dist = 1e-4;
+        let third_point_idx = null;
+        for (let i = 0; i < points.length; i++) {
+            if (i !== pair_idxs[0] && i !== pair_idxs[1]) {
+                const point_on_line: three.Vector3 = line.closestPointToPoint(points[i], false, new three.Vector3());
+                const dist_to_line: number = point_on_line.manhattanDistanceTo(points[i]);
+                if (dist_to_line > max_dist) {
+                    third_point_idx = i;
+                    max_dist = dist_to_line;
+                }
+                if (dist_to_line / line_len > 0.01) { break; }
+            }
+        }
+        if (third_point_idx === null) { return null; }
+        points2 = [pair_idxs[0], pair_idxs[1], third_point_idx].sort((a, b) => a - b ).map( i => points[i] );
+    } else if  (selected.size < 2) {
+        return null;  // could not find points
+    }
+
+    // console.log("points", points)
+    // console.log("extremes", extremes)
+    // console.log("selected", selected)
+    // console.log("points2", points2)
+
+    // calculate origin
+    // const o: three.Vector3 = new three.Vector3();
+    // o.x = (points2[0].x + points2[0].x + points2[0].x) / 3;
+    // o.y = (points2[1].y + points2[1].y + points2[1].y) / 3;
+    // o.z = (points2[2].z + points2[2].z + points2[2].z) / 3;
+
+    const vx: three.Vector3 = threex.subVectors(points2[1], points2[0]).normalize();
+    const v2: three.Vector3 = threex.subVectors(points2[2], points2[1]).normalize();
+    const vz: three.Vector3 = threex.crossVectors(vx, v2).normalize();
+    const vy: three.Vector3 =  threex.crossVectors(vz, vx).normalize();
+    
+    // console.log(vx, vy, vz)
 
     // create matrix
-    vx.normalize();
-    vy.normalize();
-    vz.normalize();
     const m2: three.Matrix4 = new three.Matrix4();
     m2.makeBasis(vx, vy, vz);
     m2.getInverse(m2);
@@ -70,10 +161,10 @@ export function triangulate(coords: Txyz[], holes?: Txyz[][]): number[][] {
         // TODO Three points that are colinear
         const area1: number = area(coords[0], coords[1], coords[2]) + area(coords[2], coords[3], coords[0]);
         const area2: number = area(coords[0], coords[1], coords[3]) + area(coords[1], coords[2], coords[3]);
-        const tri1a: Txyz[] = [coords[0], coords[1], coords[2]];
-        const tri1b: Txyz[] = [coords[2], coords[3], coords[0]];
-        const tri2a: Txyz[] = [coords[0], coords[1], coords[3]];
-        const tri2b: Txyz[] = [coords[1], coords[2], coords[3]];
+        // const tri1a: Txyz[] = [coords[0], coords[1], coords[2]];
+        // const tri1b: Txyz[] = [coords[2], coords[3], coords[0]];
+        // const tri2a: Txyz[] = [coords[0], coords[1], coords[3]];
+        // const tri2b: Txyz[] = [coords[1], coords[2], coords[3]];
         if (area1 < area2) {
             return [[0, 1, 2], [2, 3, 0]];
         } else {

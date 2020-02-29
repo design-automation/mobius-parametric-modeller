@@ -3,6 +3,7 @@ import {  EEntType, IGeomArrays, EEntStrToGeomArray, TWire, Txyz, TColl, TEntTyp
 import { isPosi, isVert, isPoint, isEdge, isWire, isPline, isFace, isPgon, isColl, isTri } from './id';
 import { GIGeom } from './GIGeom';
 import { vecFromTo, vecCross, vecDiv, vecNorm, vecLen, vecDot } from '../geom/vectors';
+import { VectorKeyframeTrack } from 'three';
 /**
  * Class for geometry.
  */
@@ -370,6 +371,31 @@ export class GIGeomQuery {
         return [edge0, edge1];
     }
     // ============================================================================
+    // Edges
+    // ============================================================================
+    /**
+     * Get the next edge in a sequence of edges
+     * @param edge_i
+     */
+    public getNextEdge(edge_i: number): number {
+        // get the wire start and end verts
+        const edge: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
+        const edges_i: number[] = this._geom_arrays.up_verts_edges[edge[1]];
+        if (edges_i.length === 1) { return null; }
+        return edges_i[1];
+    }
+    /**
+     * Get the previous edge in a sequence of edges
+     * @param edge_i
+     */
+    public getPrevEdge(edge_i: number): number {
+        // get the wire start and end verts
+        const edge: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
+        const edges_i: number[] = this._geom_arrays.up_verts_edges[edge[0]];
+        if (edges_i.length === 1) { return null; }
+        return edges_i[1];
+    }
+    // ============================================================================
     // Wires
     // ============================================================================
     /**
@@ -411,13 +437,32 @@ export class GIGeomQuery {
      */
     public getWireVerts(wire_i: number): number[] {
         const edges_i: number[] = this._geom_arrays.dn_wires_edges[wire_i];
-        const verts_i: number[] = edges_i.map(edge_i => this._geom_arrays.dn_edges_verts[edge_i][0]);
-        // if wire is open, then add final vertex
-        if (this._geom_arrays.dn_edges_verts[edges_i[0]][0] !== this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]) {
-            verts_i.push(this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]);
+        const verts_i: number[] = [];
+        // walk the edges chain
+        let next_edge_i: number = edges_i[0];
+        for (let i = 0; i < edges_i.length; i++) {
+            const edge_verts_i: number[] = this._geom_arrays.dn_edges_verts[next_edge_i];
+            verts_i.push(edge_verts_i[0]);
+            next_edge_i = this.getNextEdge(next_edge_i);
+            // are we at the end of the chain
+            if (next_edge_i === null) { // open wire
+                verts_i.push(edge_verts_i[1]);
+                break;
+            } else if (next_edge_i === edges_i[0]) { // closed wire
+                break;
+            }
         }
         return verts_i;
     }
+    // public getWireVerts(wire_i: number): number[] {
+    //     const edges_i: number[] = this._geom_arrays.dn_wires_edges[wire_i];
+    //     const verts_i: number[] = edges_i.map(edge_i => this._geom_arrays.dn_edges_verts[edge_i][0]);
+    //     // if wire is open, then add final vertex
+    //     if (this._geom_arrays.dn_edges_verts[edges_i[0]][0] !== this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]) {
+    //         verts_i.push(this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]);
+    //     }
+    //     return verts_i;
+    // }
     // ============================================================================
     // Collections
     // ============================================================================

@@ -10,12 +10,12 @@
     background-color: transparent;
     font-size: $fsize2;
     margin: 0px 5px 2px 8px;
-    padding: 0px;
-    padding-bottom: 1px;
-    padding-left: 2px;
+    padding: 0px 0px 0px 2px;
+    // padding-bottom: 1px;
+    // padding-left: 2px;
     //border-bottom: 1px solid red;
-    border-bottom: 1px solid $color2;
-    border-left: 1px solid $color2;
+    border-bottom: 1px solid $color5;
+    border-left: 1px solid $color5;
     color: $color1;
     //min-height: 22px;
     opacity: 1;
@@ -228,7 +228,7 @@
         background-color: $color6; 
         //border-bottom: 1px solid $color1;
         margin-right: 5px;
-        border: 2px solid $color5;
+        border: 1px solid $color5;
         padding-left: 6px;
 
         &.linked{
@@ -255,7 +255,7 @@
         background-color: $color6; 
         //border-bottom: 1px solid $color1;
         margin-left: 5px;
-        border: 2px solid $color5;
+        border: 1px solid $color5;
         padding-left: 6px;
 
         &.linked{
@@ -344,7 +344,8 @@
 .container--item{
     position: relative;
 
-    padding-bottom: 2px;
+    padding-top: 1px;
+    padding-bottom: 1px;
     border: none;
 
     display: inline-block;

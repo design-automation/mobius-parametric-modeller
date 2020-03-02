@@ -737,7 +737,6 @@
 
     <!-- LocalFuncCall -->
     <div class='container--line' 
-    [class.strong]="true"
     [class.selected]="data.selected"
     [class.error]="data.hasError"
     [class.disabled]="!data.enabled"
@@ -779,14 +778,6 @@
                         [style.width.px]='inputSize(p.value||p.name)'>    
                 </ng-container>
         
-            </div>
-            <div class='container--nested'>
-                <procedure-item 
-                    *ngFor="let line of data?.children; let idx=index" 
-                    [data]="line"
-                    [disableInput]="disableInput"
-                    (eventAction)='performAction($event, idx)'
-                    ></procedure-item>
             </div>
         </div>
         <div class = "btn-container">

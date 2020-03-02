@@ -8,7 +8,7 @@
  */
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { Txyz, TColor, EAttribNames, EAttribDataTypeStrs, EAttribPush, TRay, TPlane, TBBox } from '@libs/geo-info/common';
+import { Txyz, TColor, EAttribNames, EAttribDataTypeStrs, EAttribPush, TRay, TPlane, TBBox, Txy } from '@libs/geo-info/common';
 import { TId, EEntType, ESort, TEntTypeIdx } from '@libs/geo-info/common';
 import { isEmptyArr, getArrDepth, idsMake } from '@libs/geo-info/id';
 import { checkIDs, IDcheckObj, checkArgTypes, TypeCheckObj } from '../_check_args';
@@ -37,31 +37,36 @@ export enum _Ecolors {
  */
 export function Color(__model__: GIModel, entities: TId|TId[], color: TColor): void {
     entities = arrMakeFlat(entities) as TId[];
-    if (!isEmptyArr(entities)) {
-        // --- Error Check ---
-        const fn_name = 'visualize.Color';
-        const ents_arr: TEntTypeIdx[] =
-            checkIDs(fn_name, 'entities', entities,
+    if (isEmptyArr(entities)) { return; }
+    // --- Error Check ---
+    const fn_name = 'visualize.Color';
+    let ents_arr: TEntTypeIdx[] = null;
+    if (entities !== null) {
+        ents_arr = checkIDs(fn_name, 'entities', entities,
             [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx[];
-        checkArgTypes(fn_name, 'color', color, [TypeCheckObj.isColor]);
-        // --- Error Check ---
-        _color(__model__, ents_arr, color);
     }
+    checkArgTypes(fn_name, 'color', color, [TypeCheckObj.isColor]);
+    // --- Error Check ---
+    _color(__model__, ents_arr, color);
 }
 function _color(__model__: GIModel, ents_arr: TEntTypeIdx[], color: TColor): void {
     if (!__model__.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOR)) {
         __model__.attribs.add.addAttrib(EEntType.VERT, EAttribNames.COLOR, EAttribDataTypeStrs.LIST);
     }
     // make a list of all the verts
-    const all_verts_i: number[] = [];
-    for (const ent_arr of ents_arr) {
-        const [ent_type, ent_i]: [number, number] = ent_arr as TEntTypeIdx;
-        if (ent_type === EEntType.VERT) {
-            all_verts_i.push(ent_i);
-        } else {
-            const verts_i: number[] = __model__.geom.nav.navAnyToVert(ent_type, ent_i);
-            for (const vert_i of verts_i) {
-                all_verts_i.push(vert_i);
+    let all_verts_i: number[] = [];
+    if (ents_arr === null) {
+        all_verts_i = __model__.geom.query.getEnts(EEntType.VERT, false);
+    } else {
+        for (const ent_arr of ents_arr) {
+            const [ent_type, ent_i]: [number, number] = ent_arr as TEntTypeIdx;
+            if (ent_type === EEntType.VERT) {
+                all_verts_i.push(ent_i);
+            } else {
+                const verts_i: number[] = __model__.geom.nav.navAnyToVert(ent_type, ent_i);
+                for (const vert_i of verts_i) {
+                    all_verts_i.push(vert_i);
+                }
             }
         }
     }
@@ -70,12 +75,15 @@ function _color(__model__: GIModel, ents_arr: TEntTypeIdx[], color: TColor): voi
 }
 // ================================================================================================
 /**
- * Sets color by creating a vertex attribute called 'rgb' and setting the value.
+ * Generates a colour range based on a numeric attribute.
+ * Sets the color by creating a vertex attribute called 'rgb' and setting the value.
  * ~
  * @param entities The entities for which to set the color.
- * @param attrib
- * @param range
- * @param method Enum
+ * @param attrib The numeric attribute to be used to create the gradient.
+ * You can spacify an attribute with an index. For example, ['xyz', 2] will create a gradient based on height.
+ * @param range The range of the attribute, [minimum, maximum].
+ * If only one number, it defaults to [0, maximum]. If null, then the range will be auto-calculated.
+ * @param method Enum, the colour gradient to use.
  * @returns void
  */
 export function Gradient(__model__: GIModel, entities: TId|TId[], attrib: string|[string, number]|[string, string],
@@ -237,6 +245,210 @@ function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: str
         const verts_i: number[] = col_and_verts_i[1];
         __model__.attribs.add.setAttribVal(EEntType.VERT, verts_i, EAttribNames.COLOR, col);
     });
+}
+// ================================================================================================
+export enum _EEdgeMethod {
+    VISIBLE = 'visible',
+    HIDDEN = 'hidden'
+}
+
+/**
+ * Controls how edges are visualized by setting the visibility of the edge.
+ * ~
+ * The method can either be 'visible' or 'hidden'.
+ * 'visible' means that an edge line will be visible.
+ * 'hidden' means that no edge lines will be visible.
+ * ~
+ * @param entities A list of edges, or other entities from which edges can be extracted.
+ * @param method Enum, visible or hidden.
+ * @returns void
+ */
+export function Edge(__model__: GIModel, entities: TId|TId[], method: _EEdgeMethod): void {
+    entities = arrMakeFlat(entities) as TId[];
+    if (isEmptyArr(entities)) { return; }
+    // --- Error Check ---
+    const fn_name = 'visualize.Edge';
+    let ents_arr: TEntTypeIdx[] = null;
+    if (entities !== null) {
+        ents_arr = checkIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    }
+    // --- Error Check ---
+    if (!__model__.attribs.query.hasAttrib(EEntType.EDGE, EAttribNames.VISIBILITY)) {
+        if (method === _EEdgeMethod.VISIBLE) {
+            return;
+        } else {
+            __model__.attribs.add.addAttrib(EEntType.EDGE, EAttribNames.VISIBILITY, EAttribDataTypeStrs.STRING);
+        }
+    }
+    // Get the unique edges
+    let edges_i: number[] = [];
+    if (ents_arr !== null) {
+        const set_edges_i: Set<number> = new Set();
+        for (const [ent_type, ent_i] of ents_arr) {
+            if (ent_type === EEntType.EDGE) {
+                set_edges_i.add(ent_i);
+            } else {
+                const ent_edges_i: number[] = __model__.geom.nav.navAnyToEdge(ent_type, ent_i);
+                for (const ent_edge_i of ent_edges_i) {
+                    set_edges_i.add(ent_edge_i);
+                }
+            }
+        }
+        edges_i = Array.from(set_edges_i);
+    } else {
+        edges_i = __model__.geom.query.getEnts(EEntType.EDGE, false);
+    }
+    // Set edge visibility
+    const setting: string = method === _EEdgeMethod.VISIBLE ? null : 'hidden';
+    __model__.attribs.add.setAttribVal(EEntType.EDGE, edges_i, EAttribNames.VISIBILITY, setting);
+}
+// ================================================================================================
+export enum _EMeshMethod {
+    FACETED = 'faceted',
+    SMOOTH = 'smooth'
+}
+/**
+ * Controls how polygon meshes are visualized by creating normals on vertices.
+ * ~
+ * The method can either be 'faceted' or 'smooth'.
+ * 'faceted' means that the normal direction for each vertex will be perpendicular to the polygon to which it belongs.
+ * 'smooth' means that the normal direction for each vertex will be the average of all polygons welded to this vertex.
+ * ~
+ * @param entities Vertices belonging to polygons, or entities from which polygon vertices can be extracted.
+ * @param method Enum, the types of normals to create, faceted or smooth.
+ * @returns void
+ */
+export function Mesh(__model__: GIModel, entities: TId|TId[], method: _EMeshMethod): void {
+    entities = arrMakeFlat(entities) as TId[];
+    if (isEmptyArr(entities)) { return; }
+    // --- Error Check ---
+    const fn_name = 'visualize.Mesh';
+    let ents_arr: TEntTypeIdx[] = null;
+    if (entities !== null) {
+        ents_arr = checkIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    }
+    // --- Error Check ---
+    // Get the unique verts that belong to pgons
+    let verts_i: number[] = [];
+    if (ents_arr !== null) {
+        const set_verts_i: Set<number> = new Set();
+        for (const [ent_type, ent_i] of ents_arr) {
+            if (ent_type === EEntType.VERT) {
+                if (__model__.geom.query.getTopoObjType(EEntType.VERT, ent_i) === EEntType.PGON) {
+                    set_verts_i.add(ent_i);
+                }
+            } else if (ent_type === EEntType.POINT) {
+                 // skip
+            } else if (ent_type === EEntType.PLINE) {
+                // skip
+            } else if (ent_type === EEntType.PGON) {
+                const ent_verts_i: number[] = __model__.geom.nav.navAnyToVert(EEntType.PGON, ent_i);
+                for (const ent_vert_i of ent_verts_i) {
+                    set_verts_i.add(ent_vert_i);
+                }
+            } else if (ent_type === EEntType.COLL) {
+                const coll_pgons_i: number[] = __model__.geom.nav.navCollToPgon(ent_i);
+                for (const coll_pgon_i of coll_pgons_i) {
+                    const ent_verts_i: number[] = __model__.geom.nav.navAnyToVert(EEntType.PGON, coll_pgon_i);
+                    for (const ent_vert_i of ent_verts_i) {
+                        set_verts_i.add(ent_vert_i);
+                    }
+                }
+            }  else {
+                const ent_verts_i: number[] = __model__.geom.nav.navAnyToVert(ent_type, ent_i);
+                for (const ent_vert_i of ent_verts_i) {
+                    if (__model__.geom.query.getTopoObjType(EEntType.VERT, ent_vert_i) === EEntType.PGON) {
+                        set_verts_i.add(ent_vert_i);
+                    }
+                }
+            }
+        }
+        verts_i = Array.from(set_verts_i);
+    } else {
+        verts_i = __model__.geom.query.getEnts(EEntType.VERT, false);
+    }
+    // calc vertex normals and set edge visibility
+    switch (method) {
+        case _EMeshMethod.FACETED:
+            _meshFaceted(__model__, verts_i);
+            break;
+        case _EMeshMethod.SMOOTH:
+            _meshSmooth(__model__, verts_i);
+            break;
+        default:
+            break;
+    }
+}
+function _meshFaceted(__model__: GIModel, verts_i: number[]): void {
+    if (!__model__.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.NORMAL)) {
+        __model__.attribs.add.addAttrib(EEntType.VERT, EAttribNames.NORMAL, EAttribDataTypeStrs.LIST);
+    }
+    // get the polygons
+    const map_vert_pgons: Map<number, number> = new Map();
+    const set_pgons_i: Set<number> = new Set();
+    for (const vert_i of verts_i) {
+        const pgons_i: number[] = __model__.geom.nav.navAnyToPgon(EEntType.VERT, vert_i); // TODO optimize
+        if (pgons_i.length === 1) { // one polygon
+            map_vert_pgons.set(vert_i, pgons_i[0]);
+            set_pgons_i.add(pgons_i[0]);
+        }
+    }
+    // calc the normals one time
+    const normals: Txyz[] = [];
+    for (const pgon_i of Array.from(set_pgons_i)) {
+        const normal: Txyz = __model__.geom.query.getFaceNormal(__model__.geom.nav.navPgonToFace(pgon_i));
+        normals[pgon_i] = normal;
+    }
+    // set the normal
+    map_vert_pgons.forEach( (pgon_i, vert_i) => {
+        const normal: Txyz = normals[pgon_i];
+        __model__.attribs.add.setAttribVal(EEntType.VERT, vert_i, EAttribNames.NORMAL, normal);
+    });
+}
+function _meshSmooth(__model__: GIModel, verts_i: number[]): void {
+    if (!__model__.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.NORMAL)) {
+        __model__.attribs.add.addAttrib(EEntType.VERT, EAttribNames.NORMAL, EAttribDataTypeStrs.LIST);
+    }
+    // get the polygons
+    const map_posi_pgons: Map<number, number[]> = new Map();
+    const set_pgons_i: Set<number> = new Set();
+    const vert_to_posi: number[] = [];
+    for (const vert_i of verts_i) {
+        const posi_i: number = __model__.geom.nav.navVertToPosi(vert_i);
+        vert_to_posi[vert_i] = posi_i;
+        if (!map_posi_pgons.has(posi_i)) {
+            const posi_pgons_i: number[] = __model__.geom.nav.navAnyToPgon(EEntType.VERT, vert_i);
+            map_posi_pgons.set(posi_i, posi_pgons_i);
+            for (const posi_pgon_i of posi_pgons_i) {
+                set_pgons_i.add(posi_pgon_i);
+            }
+        }
+    }
+    // calc all normals one time
+    const normals: Txyz[] = [];
+    for (const pgon_i of Array.from(set_pgons_i)) {
+        const normal: Txyz = __model__.geom.query.getFaceNormal(__model__.geom.nav.navPgonToFace(pgon_i));
+        normals[pgon_i] = normal;
+    }
+    // set normals on all verts
+    for (const vert_i of verts_i) {
+        const posi_i: number = vert_to_posi[vert_i];
+        let normal: Txyz = [0, 0, 0];
+        const posi_pgons_i: number[] = map_posi_pgons.get(posi_i);
+        for (const posi_pgon_i of posi_pgons_i) {
+            normal = [
+                normal[0] + normals[posi_pgon_i][0],
+                normal[1] + normals[posi_pgon_i][1],
+                normal[2] + normals[posi_pgon_i][2]
+            ];
+        }
+        const div: number = posi_pgons_i.length;
+        normal = [normal[0] / div, normal[1] / div, normal[2] / div];
+        normal = vecNorm(normal);
+        __model__.attribs.add.setAttribVal(EEntType.VERT, vert_i, EAttribNames.NORMAL, normal);
+    }
 }
 // ================================================================================================
 /**

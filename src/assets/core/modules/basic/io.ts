@@ -7,15 +7,16 @@
  */
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { importObj, exportObj } from '@libs/geo-info/io_obj';
+import { importObj, exportPosiBasedObj, exportVertBasedObj } from '@libs/geo-info/io_obj';
 import { importDae, exportDae } from '@libs/geo-info/io_dae';
 import { importGeojson } from '@libs/geo-info/io_geojson';
 import { download } from '@libs/filesys/download';
-import { TId, EEntType, Txyz, TPlane, TRay, IGeomPack, IModelData, IGeomPackTId } from '@libs/geo-info/common';
+import { TId, EEntType, Txyz, TPlane, TRay, IGeomPack, IModelData, IGeomPackTId, TEntTypeIdx } from '@libs/geo-info/common';
 import { __merge__ } from '../_model';
 import { _model } from '..';
 import { idsMake, idsMakeFromIndicies } from '@libs/geo-info/id';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
+import { IDcheckObj, checkIDs, checkArgTypes, TypeCheckObj } from '../_check_args';
 
 // ================================================================================================
 declare global {
@@ -161,7 +162,8 @@ function _createColl(__model__: GIModel, before: number[], after: number[]): num
 // ================================================================================================
 export enum _EIOExportDataFormat {
     GI = 'gi',
-    OBJ = 'obj',
+    OBJ_VERT = 'obj_v',
+    OBJ_POSI = 'obj_ps',
     // DAE = 'dae',
     GEOJSON = 'geojson'
 }
@@ -179,10 +181,16 @@ export enum _EIOExportDataFormat {
  */
 export function ExportFromModel(__model__: GIModel, entities: TId|TId[]|TId[][],
         file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): boolean {
+    // --- Error Check ---
+    const fn_name = 'io.ExportFromModel';
+    let ents_arr = null;
     if (entities !== null) {
         entities = arrMakeFlat(entities) as TId[];
+        ents_arr = checkIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON, EEntType.COLL])  as TEntTypeIdx[];
     }
-    // TODO implement export of entities
+    checkArgTypes(fn_name, 'file_name', file_name, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
+    // --- Error Check ---
     switch (data_format) {
         case _EIOExportDataFormat.GI:
             let gi_data: string = JSON.stringify(__model__.getData());
@@ -191,15 +199,20 @@ export function ExportFromModel(__model__: GIModel, entities: TId|TId[]|TId[][],
                 return download(gi_data , file_name);
             }
             return saveResource(gi_data, file_name);
-            break;
-        case _EIOExportDataFormat.OBJ:
-            const obj_data: string = exportObj(__model__, entities as TId[]);
+        case _EIOExportDataFormat.OBJ_VERT:
+            const obj_verts_data: string = exportVertBasedObj(__model__, ents_arr);
             // obj_data = obj_data.replace(/#/g, '%23'); // TODO temporary fix
             if (data_target === _EIODataTarget.DEFAULT) {
-                return download(obj_data , file_name);
+                return download(obj_verts_data , file_name);
             }
-            return saveResource(obj_data, file_name);
-            break;
+            return saveResource(obj_verts_data, file_name);
+        case _EIOExportDataFormat.OBJ_POSI:
+            const obj_posis_data: string = exportPosiBasedObj(__model__, ents_arr);
+            // obj_data = obj_data.replace(/#/g, '%23'); // TODO temporary fix
+            if (data_target === _EIODataTarget.DEFAULT) {
+                return download(obj_posis_data , file_name);
+            }
+            return saveResource(obj_posis_data, file_name);
         // case _EIOExportDataFormat.DAE:
         //     const dae_data: string = exportDae(__model__);
         //     // dae_data = dae_data.replace(/#/g, '%23'); // TODO temporary fix

@@ -3,7 +3,7 @@ import {  EEntType, IGeomArrays, EEntStrToGeomArray, TWire, Txyz, TColl, TEntTyp
 import { isPosi, isVert, isPoint, isEdge, isWire, isPline, isFace, isPgon, isColl, isTri } from './id';
 import { GIGeom } from './GIGeom';
 import { vecFromTo, vecCross, vecDiv, vecNorm, vecLen, vecDot } from '../geom/vectors';
-import { VectorKeyframeTrack } from 'three';
+import * as Mathjs from 'mathjs';
 /**
  * Class for geometry.
  */
@@ -395,6 +395,20 @@ export class GIGeomQuery {
         if (edges_i.length === 1) { return null; }
         return edges_i[1];
     }
+    /**
+     * Get a list of edges that are neighbours ()
+     * The list will include the input edge.
+     * @param edge_i
+     */
+    public getNeighborEdges(edge_i: number): number[] {
+        // get the wire start and end verts
+        const edge: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
+        const start_posi_i: number = this._geom_arrays.dn_verts_posis[edge[0]];
+        const end_posi_i: number = this._geom_arrays.dn_verts_posis[edge[1]];
+        const start_edges_i: number[] = this._geom.nav.navAnyToEdge(EEntType.POSI, start_posi_i);
+        const end_edges_i: number[] = this._geom.nav.navAnyToEdge(EEntType.POSI, end_posi_i);
+        return Mathjs.setIntersect(start_edges_i, end_edges_i);
+    }
     // ============================================================================
     // Wires
     // ============================================================================
@@ -733,5 +747,29 @@ export class GIGeomQuery {
             }
         }
         return Array.from(perimeter_ents_i);
+    }
+    /**
+     * Get the object type of a topo entity.
+     * @param ent_type
+     * @param index
+     */
+    public getTopoObjType(ent_type: EEntType, index: number): EEntType {
+        switch (ent_type) {
+            case EEntType.FACE:
+                return EEntType.PGON;
+            case EEntType.WIRE:
+            case EEntType.EDGE:
+            case EEntType.VERT:
+                if (this._geom.nav.navAnyToFace(ent_type, index).length !== 0) {
+                    return EEntType.PGON;
+                } else if (this._geom.nav.navAnyToWire(ent_type, index).length !== 0) {
+                    return EEntType.PLINE;
+                } else if (this._geom.nav.navAnyToVert(ent_type, index).length !== 0) {
+                    return EEntType.POINT;
+                }
+                break;
+            default:
+                throw new Error('Invalid entity type: Must be a topo entity.');
+        }
     }
 }

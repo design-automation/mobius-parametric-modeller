@@ -72,7 +72,7 @@ export class DataCesium {
         );
         this._viewer.scene.globe.depthTestAgainstTerrain = true;
         this._viewer.clock.currentTime.secondsOfDay = 50000;
-        this._viewer.shadowMap.maxmimumDistance = 10000.0;
+        this._viewer.shadowMap.maxmimumDistance = 10000;
         this._viewer.shadowMap.size = 2048;
         this._viewer.shadowMap.softShadows = false; // if true, causes some strange effects
         // document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
@@ -141,6 +141,7 @@ export class DataCesium {
         // the origin of the model
         let longitude = LONGLAT[0];
         let latitude = LONGLAT[1];
+        let elevation = 0;
         if (model.attribs.query.hasModelAttrib('geolocation')) {
             const geoloc: any = model.attribs.query.getModelAttribVal('geolocation');
             const long_value: TAttribDataTypes  = geoloc.longitude;
@@ -158,6 +159,13 @@ export class DataCesium {
             latitude = lat_value as number;
             if (latitude < 0 || latitude > 90) {
                 throw new Error('Latitude attribute must be between 0 and 90.');
+            }
+            if (geoloc.elevation) {
+                const ele_value: TAttribDataTypes = geoloc.elevation;
+                if (typeof ele_value !== 'number') {
+                    throw new Error('Elevation attribute must be a number');
+                }
+                elevation = ele_value as number;
             }
         }
         // if (model.attribs.query.hasModelAttrib('longitude')) {
@@ -180,7 +188,7 @@ export class DataCesium {
         //         throw new Error('Latitude attribute must be between 0 and 90.');
         //     }
         // }
-        const origin = Cesium.Cartesian3.fromDegrees(longitude, latitude);
+        const origin = Cesium.Cartesian3.fromDegrees(longitude, latitude, elevation);
         // create a matrix to transform points
 
         // if there's a north attribute
@@ -211,16 +219,26 @@ export class DataCesium {
             new Cesium.Cartesian3(0, 0, 0),
             new Cesium.Matrix4()
         );
+        xform_matrix[12] = 0;
+        xform_matrix[13] = 0;
+        xform_matrix[14] = 0;
         // create all positions
         const posis_i: number[] = model.geom.query.getEnts(EEntType.POSI, false);
+        const posis_n = model.attribs.query.getAttrib(EEntType.POSI, 'normal');
+
         const posi_to_point_map: Map<number, any> = new Map();
+        const posi_to_normal_map: Map<number, any> = new Map();
         for (const posi_i of posis_i) {
             if (!posi_to_point_map.has(posi_i)) {
                 const xyz: Txyz = model.attribs.query.getPosiCoords(posi_i);
-                const pnt: any = Cesium.Cartesian3.fromArray(xyz);
-                const xform_pnt: any = new Cesium.Cartesian3();
-                Cesium.Matrix4.multiplyByPoint(xform_matrix, pnt, xform_pnt);
+                const xform_pnt: any = Cesium.Cartesian3.fromArray(xyz);
+                Cesium.Matrix4.multiplyByPoint(east_north_up, xform_pnt, xform_pnt);
                 posi_to_point_map.set(posi_i, xform_pnt);
+                if (posis_n) {
+                    const normal_val = Cesium.Cartesian3.fromArray(posis_n.getEntVal(posi_i));
+                    Cesium.Matrix4.multiplyByPoint(xform_matrix, normal_val, normal_val);
+                    posi_to_normal_map.set(posi_i, normal_val);
+                }
             }
         }
         // add geom
@@ -230,6 +248,7 @@ export class DataCesium {
             // get each triangle
             const lines_instances: any[] = [];
             const tris_instances: any[] = [];
+            // get each polygon
             for (const pgon_i of pgons_i) {
                 // get the colour of the vertices
                 let pgon_colour = Cesium.Color.WHITE;
@@ -246,45 +265,56 @@ export class DataCesium {
                     const num_verts: number = verts_i.length;
                     pgon_colour = new Cesium.Color(rgb_sum[0] / num_verts, rgb_sum[1] / num_verts, rgb_sum[2] / num_verts, 1.0);
                 }
-                // create the edges
-                // const wires_i: number[] = model.geom.nav.navAnyToWire(EEntType.PGON, pgon_i);
-                // for (const wire_i of wires_i) {
-                //     const wire_posis_i: number[] = model.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
-                //     if (wire_posis_i.length > 2) {
-                //         // const wire_verts_i: number[] = model.geom.nav.navAnyToVert(EEntType.WIRE, wire_i);
-                //         // const wire_posis_i: number[] = wire_verts_i.map( wire_vert_i => model.geom.nav.navVertToPosi(wire_vert_i) );
-                //         const wire_points: any[] = wire_posis_i.map( wire_posi_i => posi_to_point_map.get(wire_posi_i) );
-                //         if (model.geom.query.istWireClosed(wire_i)) {
-                //             wire_points.push(wire_points[0]);
-                //         }
-                //         const line_geom = new Cesium.SimplePolylineGeometry({
-                //             positions: wire_points,
-                //             vertexFormat: Cesium.PerInstanceColorAppearance.VERTEX_FORMAT,
-                //             perPositionHeight: true,
-                //             // arcType: Cesium.ArcType.NONE,
-                //             width: 1.0
-                //         });
-                //         const line_instance = new Cesium.GeometryInstance({
-                //             geometry : line_geom,
-                //             attributes : {
-                //                 color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.BLACK)
-                //             }
-                //         });
-                //         lines_instances.push(line_instance);
-                //     }
-                // }
 
-                // create the triangles
                 const pgon_tris_i: number[] = model.geom.nav.navAnyToTri(EEntType.PGON, pgon_i);
                 for (const pgon_tri_i of pgon_tris_i) {
                     // tris_i.push(pgon_tri_i);
                     const tri_posis_i: number[] = model.geom.nav.navAnyToPosi(EEntType.TRI, pgon_tri_i);
-                    const tri_points: any[] = tri_posis_i.map( posi_i => posi_to_point_map.get(posi_i) );
-                    const tri_geom = new Cesium.PolygonGeometry({
-                        perPositionHeight : true,
-                        polygonHierarchy: new Cesium.PolygonHierarchy(tri_points),
-                        vertexFormat : Cesium.PerInstanceColorAppearance.VERTEX_FORMAT
+                    // const tri_points = tri_posis_i.map( posi_i => posi_to_point_map.get(posi_i) );
+                    // const norm_vecs = tri_posis_i.map( posi_i => posi_to_normal_map.get(posi_i) );
+                    // const tri_geom = new Cesium.PolygonGeometry({
+                    //     perPositionHeight : true,
+                    //     polygonHierarchy: new Cesium.PolygonHierarchy(tri_points),
+                    //     vertexFormat : Cesium.PerInstanceColorAppearance.VERTEX_FORMAT
+                    // });
+                    let posis: any = [];
+                    let normal: any = [];
+                    // tslint:disable-next-line: forin
+                    for (const i of tri_posis_i) {
+                        if (posis_n) {
+                            const norm_vec = posi_to_normal_map.get(i);
+                            normal.push(norm_vec.x);
+                            normal.push(norm_vec.y);
+                            normal.push(norm_vec.z);
+                        }
+                        const tri_point = posi_to_point_map.get(i);
+                        posis.push(tri_point.x);
+                        posis.push(tri_point.y);
+                        posis.push(tri_point.z);
+                    }
+                    posis = new Float64Array(posis);
+                    normal = new Float32Array(normal);
+                    let tri_geom = new Cesium.Geometry({
+                        attributes : new Cesium.GeometryAttributes({
+                            position : new Cesium.GeometryAttribute({
+                                componentDatatype : Cesium.ComponentDatatype.DOUBLE,
+                                componentsPerAttribute : 3,
+                                values : posis
+                            })
+                        }),
+                        primitiveType: Cesium.PrimitiveType.TRIANGLES,
+                        indices: [0, 1, 2],
+                        boundingSphere: Cesium.BoundingSphere.fromVertices(posis)
                     });
+                    if (posis_n) {
+                        tri_geom.attributes.normal = new Cesium.GeometryAttribute({
+                            componentDatatype : Cesium.ComponentDatatype.FLOAT,
+                            componentsPerAttribute : 3,
+                            values : normal
+                        });
+                    } else {
+                        tri_geom = Cesium.GeometryPipeline.computeNormal(tri_geom);
+                    }
                     const instance = new Cesium.GeometryInstance({
                         geometry : tri_geom,
                         attributes : {
@@ -294,7 +324,6 @@ export class DataCesium {
                     tris_instances.push(instance);
                 }
             }
-            // get each polygon
             const plines_i: number[] = model.geom.query.getEnts(EEntType.PLINE, false);
             // get each pline
             for (const pline_i of plines_i) {
@@ -341,7 +370,6 @@ export class DataCesium {
                                         geometryInstances : lines_instances,
                                         shadows : Cesium.ShadowMode.DISABLED,
                                         appearance : new Cesium.PerInstanceColorAppearance({
-                                            flat: true,
                                             translucent : false
                                         })
                                     });

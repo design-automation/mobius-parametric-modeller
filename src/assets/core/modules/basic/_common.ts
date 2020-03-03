@@ -6,7 +6,8 @@
 
 /**
  *
- */import { GIModel } from '@libs/geo-info/GIModel';
+ */
+import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EEntType, TRay, TEntTypeIdx, EEntTypeStr, Txy} from '@libs/geo-info/common';
 import { checkArgTypes, TypeCheckObj, checkIDs, IDcheckObj} from '../_check_args';
 import { getArrDepth, isColl } from '@assets/libs/geo-info/id';
@@ -46,8 +47,8 @@ export function getPlane(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], f
 // ================================================================================================
 export function getCentoridFromEnts(__model__: GIModel, ents: TId|TId[], fn_name: string): Txyz {
     // this must be an ID or an array of IDs, so lets get the centroid
-    const ent_id: TId|TId[] = origin as TId|TId[];
-    const ents_arr: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'origin', ent_id,
+    // TODO this error message is confusing
+    const ents_arr: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'ents', ents,
         [IDcheckObj.isID, IDcheckObj.isIDList],
         [EEntType.POSI, EEntType.VERT, EEntType.POINT, EEntType.EDGE, EEntType.WIRE,
             EEntType.PLINE, EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx;

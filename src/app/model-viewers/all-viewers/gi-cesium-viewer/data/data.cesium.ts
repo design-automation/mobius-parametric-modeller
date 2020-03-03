@@ -141,6 +141,7 @@ export class DataCesium {
         // the origin of the model
         let longitude = LONGLAT[0];
         let latitude = LONGLAT[1];
+        let elevation = 0;
         if (model.attribs.query.hasModelAttrib('geolocation')) {
             const geoloc: any = model.attribs.query.getModelAttribVal('geolocation');
             const long_value: TAttribDataTypes  = geoloc.longitude;
@@ -158,6 +159,13 @@ export class DataCesium {
             latitude = lat_value as number;
             if (latitude < 0 || latitude > 90) {
                 throw new Error('Latitude attribute must be between 0 and 90.');
+            }
+            if (geoloc.elevation) {
+                const ele_value: TAttribDataTypes = geoloc.elevation;
+                if (typeof ele_value !== 'number') {
+                    throw new Error('Elevation attribute must be a number');
+                }
+                elevation = ele_value as number;
             }
         }
         // if (model.attribs.query.hasModelAttrib('longitude')) {
@@ -180,7 +188,7 @@ export class DataCesium {
         //         throw new Error('Latitude attribute must be between 0 and 90.');
         //     }
         // }
-        const origin = Cesium.Cartesian3.fromDegrees(longitude, latitude);
+        const origin = Cesium.Cartesian3.fromDegrees(longitude, latitude, elevation);
         // create a matrix to transform points
 
         // if there's a north attribute

@@ -274,7 +274,9 @@ export class DataCesium {
                         if (mat_name.constructor === [].constructor) { mat_name = mat_name[0]; }
                         const pgon_mat: any = model.attribs.query.getModelAttribVal(mat_name);
                         if (pgon_mat.color && pgon_mat.color !== 16777215) {
-                            pgon_colour = new Cesium.Color.fromRgba(pgon_mat.color);
+                            let cString = pgon_mat.color.toString(16);
+                            while (cString.length < 6) { cString = '0' + cString; }
+                            pgon_colour = Cesium.Color.fromCssColorString('#' + cString);
                         }
                         if (pgon_mat.opacity && pgon_mat.opacity !== 1) {
                             pgon_colour.alpha = pgon_mat.opacity;

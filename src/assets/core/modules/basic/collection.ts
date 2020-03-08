@@ -13,7 +13,7 @@ import { __merge__} from '../_model';
 import { _model } from '..';
 import { checkArgTypes, checkIDs, IDcheckObj, TypeCheckObj } from '../_check_args';
 import { arrMakeFlat, getArrDepth2 } from '@libs/util/arrs';
-
+ 
 // ================================================================================================
 /**
  * Adds one or more new collections to the model.
@@ -91,10 +91,19 @@ function _create(__model__: GIModel, ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEn
 }
 // ================================================================================================
 /**
- * Get a collection from the model, given the `name` attribute.
+ * Get one or more collections from the model, given a name or list of names.
+ * Collections with an attribute called 'name' and with a value that matches teh given vale will be returned.
+ * ~
+ * The value for name can include wildcards: '?' matches any single character and '*' matches any sequence of characters.
+ * For example, 'coll?' will match 'coll1' and 'colla'. 'coll*' matches any name that starts with 'coll'.
+ * ~
+ * If a single collection is found, the collection will be returned as a single item (not a list).
+ * This is a convenience so that there is no need to get the first item out of the returned list.
+ * ~
+ * If no collections are found, then an empty list is returned.
  * ~
  * @param __model__
- * @param names The name of the collection to get.
+ * @param names A name or list of names. May include wildcards, '?' and '*'.
  * @returns The collection, or a list of collections.
  */
 export function Get(__model__: GIModel, names: string|string[]): TId|TId[] {
@@ -102,20 +111,40 @@ export function Get(__model__: GIModel, names: string|string[]): TId|TId[] {
     const fn_name = 'collection.Get';
     checkArgTypes(fn_name, 'names', names, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
     // --- Error Check ---
-    const new_ent_arrs: TEntTypeIdx | TEntTypeIdx[] = _get(__model__, names);
-    return idsMake(new_ent_arrs) as TId|TId[];
+    const colls_i: number[] = _get(__model__, names);
+    if (colls_i.length === 0) {
+        return []; // return an empty list
+    } else if (colls_i.length === 1) {
+        return idsMake([EEntType.COLL, colls_i[0]]) as TId;
+    }
+    return idsMake(colls_i.map(coll_i => [EEntType.COLL, coll_i]) as TEntTypeIdx[]) as TId[];
 }
-function _get(__model__: GIModel, names: string|string[]): TEntTypeIdx | TEntTypeIdx[] {
+function _get(__model__: GIModel, names: string|string[]): number[] {
     if (!Array.isArray(names)) {
+        // wildcards
+        if (names.indexOf('*') !== -1 || names.indexOf('?') !== -1) {
+            const reg_exp = new RegExp(names.replace('?', '\\w').replace('*', '\\w*'));
+            const all_colls_i: number[] = __model__.geom.query.getEnts(EEntType.COLL, false);
+            const all_names: string[] = __model__.attribs.query.getAttribVal(EEntType.COLL, 'name', all_colls_i) as string[];
+            const unique_names: string[] = Array.from(new Set(all_names));
+            const match_names: string[] = [];
+            for (const name1 of unique_names) {
+                if (reg_exp.test(name1)) { match_names.push(name1); }
+            }
+            return _get(__model__, match_names);
+        }
         const colls_i: number[] = __model__.geom.query.getEnts(EEntType.COLL, false);
         const query_result: number[] = __model__.attribs.query.filterByAttribs(
             EEntType.COLL, colls_i, 'name', null, EFilterOperatorTypes.IS_EQUAL, names);
-        if (query_result.length > 0) {
-            return [EEntType.COLL, query_result[0]];
-        }
-        return [];
+        return query_result;
     } else {
-        return names.map(name => _get(__model__, name)) as TEntTypeIdx[];
+        const all_colls_i: number[] = [];
+        for (const name1 of names) {
+            for (const coll_i of _get(__model__, name1)) {
+                all_colls_i.push(coll_i);
+            }
+        }
+        return all_colls_i;
     }
 }
 // ================================================================================================

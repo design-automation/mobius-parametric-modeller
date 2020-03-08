@@ -248,10 +248,12 @@ export class DataCesium {
             // get each triangle
             const lines_instances: any[] = [];
             const tris_instances: any[] = [];
+            const transparent_instances: any[] = [];
             // get each polygon
             for (const pgon_i of pgons_i) {
                 // get the colour of the vertices
                 let pgon_colour = Cesium.Color.WHITE;
+                let transparentCheck = false;
                 if (model.attribs.query.hasAttrib(EEntType.VERT, 'rgb')) {
                     const verts_i: number[] = model.geom.nav.navAnyToVert(EEntType.PGON, pgon_i);
                     const rgb_sum: Txyz = [0, 0, 0];
@@ -264,6 +266,23 @@ export class DataCesium {
                     }
                     const num_verts: number = verts_i.length;
                     pgon_colour = new Cesium.Color(rgb_sum[0] / num_verts, rgb_sum[1] / num_verts, rgb_sum[2] / num_verts, 1.0);
+                }
+
+                if (model.attribs.query.hasAttrib(EEntType.PGON, 'material')) {
+                    let mat_name: any = model.attribs.query.getAttribVal(EEntType.PGON, 'material', pgon_i);
+                    if (mat_name) {
+                        if (mat_name.constructor === [].constructor) { mat_name = mat_name[0]; }
+                        const pgon_mat: any = model.attribs.query.getModelAttribVal(mat_name);
+                        if (pgon_mat.color && pgon_mat.color !== 16777215) {
+                            let cString = pgon_mat.color.toString(16);
+                            while (cString.length < 6) { cString = '0' + cString; }
+                            pgon_colour = Cesium.Color.fromCssColorString('#' + cString);
+                        }
+                        if (pgon_mat.opacity && pgon_mat.opacity !== 1) {
+                            pgon_colour.alpha = pgon_mat.opacity;
+                            transparentCheck = true;
+                        }
+                    }
                 }
 
                 const pgon_tris_i: number[] = model.geom.nav.navAnyToTri(EEntType.PGON, pgon_i);
@@ -321,7 +340,11 @@ export class DataCesium {
                             color : Cesium.ColorGeometryInstanceAttribute.fromColor(pgon_colour)
                         }
                     });
-                    tris_instances.push(instance);
+                    if (transparentCheck) {
+                        transparent_instances.push(instance);
+                    } else {
+                        tris_instances.push(instance);
+                    }
                 }
             }
             const plines_i: number[] = model.geom.query.getEnts(EEntType.PLINE, false);
@@ -381,8 +404,17 @@ export class DataCesium {
                                             translucent : false
                                         })
                                     });
+            const transparent_primitive =  new Cesium.Primitive({
+                                        allowPicking: true,
+                                        geometryInstances : transparent_instances,
+                                        shadows : Cesium.ShadowMode.ENABLED,
+                                        appearance : new Cesium.PerInstanceColorAppearance({
+                                            translucent : true
+                                        })
+                                    });
+
             // this._primitives = [tris_primitive];
-            this._primitives = [lines_primitive, tris_primitive];
+            this._primitives = [lines_primitive, tris_primitive, transparent_primitive];
             for (const primitive of this._primitives) {
                 this._viewer.scene.primitives.add(Cesium.clone(primitive));
             }

@@ -175,12 +175,12 @@ export enum _EIOExportDataFormat {
  * @param file_name Name of the file as a string.
  * @param data_format Enum, the file format.
  * @param data_target Enum, where the data is to be exported to.
- * @returns Boolean.
+ * @returns void.
  * @example io.Export (#pg, 'my_model.obj', obj)
  * @example_info Exports all the polgons in the model as an OBJ.
  */
 export function Export(__model__: GIModel, entities: TId|TId[]|TId[][],
-        file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): boolean {
+        file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): void {
     // --- Error Check ---
     const fn_name = 'io.Export';
     let ents_arr = null;
@@ -191,6 +191,10 @@ export function Export(__model__: GIModel, entities: TId|TId[]|TId[][],
     }
     checkArgTypes(fn_name, 'file_name', file_name, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
     // --- Error Check ---
+    _export(__model__, ents_arr, file_name, data_format, data_target);
+}
+function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
+    file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): boolean {
     switch (data_format) {
         case _EIOExportDataFormat.GI:
             let gi_data: string = JSON.stringify(__model__.getData());
@@ -227,7 +231,6 @@ export function Export(__model__: GIModel, entities: TId|TId[]|TId[][],
         //     break;
         default:
             throw new Error('Data type not recognised');
-            break;
     }
 }
 

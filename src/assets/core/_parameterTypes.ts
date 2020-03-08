@@ -27,7 +27,7 @@ export const _parameterTypes = {
 
     return: '_Output.Return',
 
-    urlFunctions: ['util.Write', 'util.Read', 'util.ModelCompare', 'io.Import', 'io.Export']
+    urlFunctions: ['util.Write', 'util.Read', 'util.ModelCompare', 'io.Import']
 };
 
 export const _varString = `

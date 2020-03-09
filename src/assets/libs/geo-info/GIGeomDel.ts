@@ -86,8 +86,10 @@ export class GIGeomDel {
             // delete the point and check collections
             this._geom_arrays.dn_points_verts[point_i] = null;
             for (const coll of this._geom_arrays.dn_colls_objs) {
-                const coll_points_i: number[] = coll[1];
-                arrRem(coll_points_i, point_i);
+                if (coll !== null) {
+                    const coll_points_i: number[] = coll[1];
+                    arrRem(coll_points_i, point_i);
+                }
             }
             // delete the vert by setting the up and down arrays to null
             this._geom_arrays.dn_verts_posis[vert_i] = null;

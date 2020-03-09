@@ -3,7 +3,6 @@
 
 
 .container--nested{
-    overflow: visible;
     padding-left: 0px;
 }
 
@@ -28,7 +27,7 @@
     flex-grow: 0;
     flex-shrink: 0;
 
-    overflow-x: visible;
+    overflow-x: hidden;
     width: calc(100% - 15px);
     // min-width: fit-content; // for global side scroll
 
@@ -368,9 +367,25 @@
     display: inline-block;
     width: 100%;
     // min-width: fit-content; // for global side scroll
-    overflow: visible;
 
     white-space: nowrap;
+    overflow-x: scroll;
+
+    &::-webkit-scrollbar {
+        height: 3px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: transparent; 
+    }
+    
+    &::-webkit-scrollbar-thumb:hover {
+        background: $color1; 
+    }
 
     &:hover{
         &::-webkit-scrollbar-thumb {
@@ -413,7 +428,7 @@
 
 .btns{
     position: absolute;
-    top: 2px;
+
     display: none;
     flex-flow: row-reverse nowrap;
     justify-content: flex-end;
@@ -465,27 +480,8 @@
 
 .line--item{
     color: $color1;
-    width: calc(100% - 60px);
     display: inline-block;
     padding-right: 60px;
-    overflow: scroll;
-    // overflow-y: visible;
-
-    &::-webkit-scrollbar {
-        height: 3px;
-    }
-    
-    &::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    
-    &::-webkit-scrollbar-thumb {
-        background: transparent; 
-    }
-    
-    &::-webkit-scrollbar-thumb:hover {
-        background: $color1; 
-    }
 }
 
 .line--terminate{

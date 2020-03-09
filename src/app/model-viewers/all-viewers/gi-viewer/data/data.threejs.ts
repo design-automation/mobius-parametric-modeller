@@ -293,6 +293,9 @@ export class DataThreejs extends DataThreejsLookAt {
                     }
                 }
             }
+        if (azimuth === 360) {
+            azimuth = 0;
+        }
 
         let posX = Math.cos(altitude * Math.PI * 2 / 360) * Math.cos(azimuth * Math.PI * 2 / 360) * scale,
             posY = Math.cos(altitude * Math.PI * 2 / 360) * Math.sin(azimuth * Math.PI * 2 / 360) * scale,
@@ -607,7 +610,8 @@ export class DataThreejs extends DataThreejsLookAt {
         return {
             element: div
         };
-    }/**
+    }
+    /**
      *
      * @param background_set
      */

@@ -442,6 +442,22 @@ export class DataCesium {
             // Cesium.Camera.DEFAULT_VIEW_FACTOR = 0;
 
             this._viewer.render();
+
+            setTimeout(() => {
+                // model: GIModel, container: any
+                if (container === null) {
+                    container = document.getElementById('cesium-container');
+                }
+                let old = document.getElementById('hud');
+                if (old) {
+                    container.removeChild(old);
+                }
+                if (!model.attribs.query.hasAttrib(EEntType.MOD, 'hud')) { return; }
+                const hud = model.attribs.query.getModelAttribVal('hud') as string;
+                const element = this._createHud(hud).element;
+                container.appendChild(element);
+                old = null;
+            }, 0);
         }
     }
     // PRIVATE METHODS
@@ -541,6 +557,22 @@ export class DataCesium {
         //     },
         // }));
         return view_models;
+    }
+    private _createHud(text: string) {
+        const div = document.createElement('div');
+        div.id = `hud`;
+        div.style.position = 'absolute';
+        div.style.background = 'rgba(255, 255, 255, 0.3)';
+        div.style.padding = '5px';
+        div.innerHTML = text;
+        div.style.top = '40px';
+        div.style.left = '5px';
+        div.style.maxWidth = '200px';
+        div.style.whiteSpace = 'pre-wrap';
+        div.style.fontSize = '14px';
+        return {
+            element: div
+        };
     }
 }
 

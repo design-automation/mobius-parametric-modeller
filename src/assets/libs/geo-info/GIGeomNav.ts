@@ -234,8 +234,8 @@ export class GIGeomNav {
             }
             return Array.from(new Set(faces_i_set));
         } else if (isVert(ent_type)) {
-            const edges_i: number[] = this.navVertToEdge(index);
-            return [].concat(...edges_i.map( edge_i => this.navAnyToFace(EEntType.EDGE, edge_i) ));
+            const edges_i: number[] = this.navVertToEdge(index); // two edges
+            return this.navAnyToFace(EEntType.EDGE, edges_i[0]);
         } else if (isTri(ent_type)) {
             return [this.navTriToFace(index)];
         } else if (isEdge(ent_type)) {

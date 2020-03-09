@@ -230,7 +230,7 @@ export class DataCesium {
         const vert_n = model.attribs.query.getAttrib(EEntType.VERT, 'normal');
 
         const posi_to_point_map: Map<number, any> = new Map();
-        const posi_to_normal_map: Map<number, any> = new Map();
+        const vert_to_normal_map: Map<number, any> = new Map();
         for (const posi_i of posis_i) {
             if (!posi_to_point_map.has(posi_i)) {
                 const xyz: Txyz = model.attribs.query.getPosiCoords(posi_i);
@@ -241,10 +241,13 @@ export class DataCesium {
         }
         if (vert_n) {
             for (const vert_i of model.geom.query.getEnts(EEntType.VERT, false)) {
-                const pos = model.geom.nav.navVertToPosi(vert_i);
-                const normal_val = Cesium.Cartesian3.fromArray(vert_n.getEntVal(vert_i));
-                Cesium.Matrix4.multiplyByPoint(xform_matrix, normal_val, normal_val);
-                posi_to_normal_map.set(pos, normal_val);
+                // const pos = model.geom.nav.navVertToPosi(vert_i);
+                const normal_attr = vert_n.getEntVal(vert_i) as Txyz;
+                if (normal_attr && normal_attr.constructor === [].constructor && normal_attr.length === 3) {
+                    const normal_val = Cesium.Cartesian3.fromArray(normal_attr);
+                    Cesium.Matrix4.multiplyByPoint(xform_matrix, normal_val, normal_val);
+                    vert_to_normal_map.set(vert_i, normal_val);
+                }
             }
         }
         // add geom
@@ -260,6 +263,7 @@ export class DataCesium {
                 // get the colour of the vertices
                 let pgon_colour = Cesium.Color.WHITE;
                 let transparentCheck = false;
+                let normalCheck = !!vert_n;
                 if (model.attribs.query.hasAttrib(EEntType.VERT, 'rgb')) {
                     const verts_i: number[] = model.geom.nav.navAnyToVert(EEntType.PGON, pgon_i);
                     const rgb_sum: Txyz = [0, 0, 0];
@@ -294,7 +298,8 @@ export class DataCesium {
                 const pgon_tris_i: number[] = model.geom.nav.navAnyToTri(EEntType.PGON, pgon_i);
                 for (const pgon_tri_i of pgon_tris_i) {
                     // tris_i.push(pgon_tri_i);
-                    const tri_posis_i: number[] = model.geom.nav.navAnyToPosi(EEntType.TRI, pgon_tri_i);
+                    const vert_posis_i: number[] = model.geom.nav.navTriToVert(pgon_tri_i);
+                    // const tri_posis_i: number[] = model.geom.nav.navAnyToPosi(EEntType.TRI, pgon_tri_i);
                     // const tri_points = tri_posis_i.map( posi_i => posi_to_point_map.get(posi_i) );
                     // const norm_vecs = tri_posis_i.map( posi_i => posi_to_normal_map.get(posi_i) );
                     // const tri_geom = new Cesium.PolygonGeometry({
@@ -305,14 +310,19 @@ export class DataCesium {
                     let posis: any = [];
                     let normal: any = [];
                     // tslint:disable-next-line: forin
-                    for (const i of tri_posis_i) {
+                    for (const v_i of vert_posis_i) {
                         if (vert_n) {
-                            const norm_vec = posi_to_normal_map.get(i);
-                            normal.push(norm_vec.x);
-                            normal.push(norm_vec.y);
-                            normal.push(norm_vec.z);
+                            const norm_vec = vert_to_normal_map.get(v_i);
+                            if (norm_vec) {
+                                normal.push(norm_vec.x);
+                                normal.push(norm_vec.y);
+                                normal.push(norm_vec.z);
+                            } else {
+                                normalCheck = false;
+                            }
                         }
-                        const tri_point = posi_to_point_map.get(i);
+                        const p_i = model.geom.nav.navVertToPosi(v_i);
+                        const tri_point = posi_to_point_map.get(p_i);
                         posis.push(tri_point.x);
                         posis.push(tri_point.y);
                         posis.push(tri_point.z);
@@ -331,7 +341,7 @@ export class DataCesium {
                         indices: [0, 1, 2],
                         boundingSphere: Cesium.BoundingSphere.fromVertices(posis)
                     });
-                    if (vert_n) {
+                    if (normalCheck) {
                         tri_geom.attributes.normal = new Cesium.GeometryAttribute({
                             componentDatatype : Cesium.ComponentDatatype.FLOAT,
                             componentsPerAttribute : 3,

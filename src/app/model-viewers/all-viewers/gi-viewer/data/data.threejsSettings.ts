@@ -52,7 +52,8 @@ export interface ISettings {
         azimuth: number,
         altitude: number,
         distance: number,
-        type: string
+        type: string,
+        shadowSize: number
     };
     ground: {
         show: boolean,

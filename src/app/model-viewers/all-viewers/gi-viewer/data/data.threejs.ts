@@ -84,8 +84,6 @@ export class DataThreejs extends DataThreejsLookAt {
         this.ObjLabelMap.clear();
         this.textLabels.clear();
 
-        // add the axes, ground, lights, etc
-        this._addEnv();
 
         // Add geometry
         const threejs_data: IThreeJS = model.threejs.get3jsData();
@@ -116,6 +114,9 @@ export class DataThreejs extends DataThreejsLookAt {
 
 
         this._all_objs_sphere = this._getAllObjsSphere();
+
+        // add the axes, ground, lights, etc
+        this._addEnv();
 
 
         setTimeout(() => {
@@ -670,28 +671,35 @@ export class DataThreejs extends DataThreejsLookAt {
                 }
             }
         }
-        if (this.directional_light_settings.type === 'directional') {
-            this.directional_light = new THREE.DirectionalLight(this.directional_light_settings.color,
-                this.directional_light_settings.intensity);
-        } else {
-            this.directional_light = new THREE.PointLight(this.directional_light_settings.color,
-                this.directional_light_settings.intensity);
-        }
+
+        this.directional_light = new THREE.DirectionalLight(this.directional_light_settings.color,
+            this.directional_light_settings.intensity);
+
+        // if (this.directional_light_settings.type === 'directional') {
+        //     this.directional_light = new THREE.DirectionalLight(this.directional_light_settings.color,
+        //         this.directional_light_settings.intensity);
+        // } else {
+        //     this.directional_light = new THREE.PointLight(this.directional_light_settings.color,
+        //         this.directional_light_settings.intensity);
+        // }
         let distance = 0;
+
         if (this._all_objs_sphere) {
+            console.log(this._all_objs_sphere)
             distance = Math.round(this._all_objs_sphere.radius * 3);
-            if (distance < 10000) { distance = 10000; }
+            // if (distance < 10000) { distance = 10000; }
         }
         this.directional_light_settings.distance = distance;
         // this.getDLPosition(distance);
-        // this.directional_light.shadow.radius = 2
         this.directional_light.castShadow = this.directional_light_settings.shadow;
         this.directional_light.visible = this.directional_light_settings.show;
         // this.directional_light_settings.shadowSize = 2;
         // const shadowMapSize = this.directional_light_settings.shadowSize;
-        // this.directional_light.shadow.bias = -0.00001;  // default
-        this.directional_light.shadow.mapSize.width = 2048;  // default
-        this.directional_light.shadow.mapSize.height = 2048; // default
+        this.directional_light.shadow.radius = 1.2;  // default
+        this.directional_light.shadow.bias = -0.00001;  // default
+        console.log(this.directional_light_settings.shadowSize);
+        this.directional_light.shadow.mapSize.width = 5120;  // default
+        this.directional_light.shadow.mapSize.height = 5120; // default
         // this.directional_light.shadow.camera.visible = true;
 
         this._setDLDistance(distance);
@@ -743,24 +751,40 @@ export class DataThreejs extends DataThreejsLookAt {
             this.directional_light.shadow.bias = -0.001;
 
             let helper;
-            if (this.directional_light_settings.type === 'directional') {
-                const cam = <THREE.OrthographicCamera> this.directional_light.shadow.camera;
-                cam.left = -scale;
-                cam.right = scale;
-                cam.top = scale;
-                cam.bottom = -scale;
-                if (this._all_objs_sphere) {
-                    const lightTarget = new THREE.Object3D();
-                    lightTarget.position.set(
-                        this._all_objs_sphere.center.x, this._all_objs_sphere.center.y, this._all_objs_sphere.center.z);
-                    lightTarget.name = 'lightTarget';
-                    this.scene.add(lightTarget);
-                    (<THREE.DirectionalLight>this.directional_light).target = lightTarget;
-                }
-                helper = new THREE.CameraHelper(this.directional_light.shadow.camera);
-            } else {
-                helper = new THREE.PointLightHelper( <THREE.PointLight>this.directional_light );
+
+            const cam = <THREE.OrthographicCamera> this.directional_light.shadow.camera;
+            cam.left = -scale;
+            cam.right = scale;
+            cam.top = scale;
+            cam.bottom = -scale;
+            if (this._all_objs_sphere) {
+                const lightTarget = new THREE.Object3D();
+                lightTarget.position.set(
+                    this._all_objs_sphere.center.x, this._all_objs_sphere.center.y, this._all_objs_sphere.center.z);
+                lightTarget.name = 'lightTarget';
+                this.scene.add(lightTarget);
+                (<THREE.DirectionalLight>this.directional_light).target = lightTarget;
             }
+            helper = new THREE.CameraHelper(this.directional_light.shadow.camera);
+
+            // if (this.directional_light_settings.type === 'directional') {
+            //     const cam = <THREE.OrthographicCamera> this.directional_light.shadow.camera;
+            //     cam.left = -scale;
+            //     cam.right = scale;
+            //     cam.top = scale;
+            //     cam.bottom = -scale;
+            //     if (this._all_objs_sphere) {
+            //         const lightTarget = new THREE.Object3D();
+            //         lightTarget.position.set(
+            //             this._all_objs_sphere.center.x, this._all_objs_sphere.center.y, this._all_objs_sphere.center.z);
+            //         lightTarget.name = 'lightTarget';
+            //         this.scene.add(lightTarget);
+            //         (<THREE.DirectionalLight>this.directional_light).target = lightTarget;
+            //     }
+            //     helper = new THREE.CameraHelper(this.directional_light.shadow.camera);
+            // } else {
+            //     helper = new THREE.PointLightHelper( <THREE.PointLight>this.directional_light );
+            // }
             helper.visible = this.directional_light_settings.helper;
             helper.name = 'DLHelper';
             this.scene.add(helper);

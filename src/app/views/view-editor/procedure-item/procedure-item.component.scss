@@ -3,6 +3,7 @@
 
 
 .container--nested{
+    overflow: visible;
     padding-left: 0px;
 }
 
@@ -27,7 +28,7 @@
     flex-grow: 0;
     flex-shrink: 0;
 
-    overflow-x: hidden;
+    overflow-x: visible;
     width: calc(100% - 15px);
     // min-width: fit-content; // for global side scroll
 
@@ -361,31 +362,15 @@
     position: relative;
 
     padding-top: 1px;
-    padding-bottom: 1px;
+    // padding-bottom: 1px;
     border: none;
 
     display: inline-block;
     width: 100%;
     // min-width: fit-content; // for global side scroll
+    overflow: visible;
 
     white-space: nowrap;
-    overflow-x: scroll;
-
-    &::-webkit-scrollbar {
-        height: 3px;
-    }
-    
-    &::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    
-    &::-webkit-scrollbar-thumb {
-        background: transparent; 
-    }
-    
-    &::-webkit-scrollbar-thumb:hover {
-        background: $color1; 
-    }
 
     &:hover{
         &::-webkit-scrollbar-thumb {
@@ -428,6 +413,7 @@
 
 .btns{
     position: absolute;
+    top: 19px;
 
     display: none;
     flex-flow: row-reverse nowrap;
@@ -480,8 +466,27 @@
 
 .line--item{
     color: $color1;
+    width: calc(100% - 20px);
     display: inline-block;
-    padding-right: 60px;
+    padding-right: 20px;
+    overflow: scroll;
+    // overflow-y: visible;
+
+    &::-webkit-scrollbar {
+        height: 3px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: transparent; 
+    }
+    
+    &::-webkit-scrollbar-thumb:hover {
+        background: $color1; 
+    }
 }
 
 .line--terminate{

@@ -42,7 +42,7 @@
         .btns{
             display: inline-flex;
             #disable-btn{
-                display: flex;
+                // display: flex;
                 justify-content: center;
                 &:hover{
                     color: $selected-color;
@@ -413,7 +413,7 @@
 
 .btns{
     position: absolute;
-    top: 19px;
+    // top: 19px;
 
     display: none;
     flex-flow: row-reverse nowrap;

@@ -89,7 +89,8 @@ export function exportVertBasedObj(model: GIModel, entities: TEntTypeIdx[]): str
         const vert_i: number =  verts_i[i];
         const coord: Txyz = model.attribs.query.getVertCoords(vert_i);
         if (has_color_attrib) {
-            const color: TColor = model.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, vert_i) as TColor;
+            let color: TColor = model.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, vert_i) as TColor;
+            if (color === undefined) { color = [1, 1, 1]; }
             v_str += 'v ' + coord.map( v => v.toString() ).join(' ')  + ' ' + color.map( c => c.toString() ).join(' ') + '\n';
         } else {
             v_str += 'v ' + coord.map( v => v.toString() ).join(' ') + '\n';
@@ -183,8 +184,9 @@ export function exportPosiBasedObj(model: GIModel, entities: TEntTypeIdx[]): str
             const posi_verts_i: number[] = model.geom.nav.navPosiToVert(posi_i);
             let color: TColor = [0, 0, 0];
             for (const posi_vert_i of posi_verts_i) {
-                const c: TColor = model.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, posi_vert_i) as TColor;
-                color = [color[0] + c[0], color[1] + c[1], color[2] + c[2]];
+                let vert_color: TColor = model.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, posi_vert_i) as TColor;
+                if (vert_color === undefined) { vert_color = [1, 1, 1]; }
+                color = [color[0] + vert_color[0], color[1] + vert_color[1], color[2] + vert_color[2]];
             }
             const div: number = posi_verts_i.length;
             color = [color[0] / div, color[1] / div, color[2] / div];

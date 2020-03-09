@@ -48,19 +48,19 @@ export enum _EIODataTarget {
  * @param data The data to be read (from URL or from Local Storage).
  * @returns the data.
  */
-export function ReadData(__model__: GIModel, data: string): string {
+export function Read(__model__: GIModel, data: string): string {
     return data;
 }
 // ================================================================================================
 /**
- * Save data to the hard disk or to the local storage.
+ * Write data to the hard disk or to the local storage.
  *
  * @param data The data to be saved (can be the url to the file).
  * @param file_name The name to be saved in the file system (file extension should be included).
  * @param data_target Enum, where the data is to be exported to.
  * @returns whether the data is successfully saved.
  */
-export function WriteData(__model__: GIModel, data: string, file_name: string, data_target: _EIODataTarget): Boolean {
+export function Write(__model__: GIModel, data: string, file_name: string, data_target: _EIODataTarget): Boolean {
     try {
         if (data_target === _EIODataTarget.DEFAULT) {
             return download(data, file_name);
@@ -86,10 +86,10 @@ export function WriteData(__model__: GIModel, data: string, file_name: string, d
  * @param model_data The model data
  * @param data_format Enum, the file format.
  * @returns A list of the positions, points, polylines, polygons and collections added to the model.
- * @example util.ImportData (file1_data, obj)
- * @example_info Imports the data from file1 (defining the .obj file uploaded in 'Start' node).
+ * @example io.Import ("my_data.obj", obj)
+ * @example_info Imports the data from my_data.obj, from local storage.
  */
-export function ImportToModel(__model__: GIModel, model_data: string, data_format: _EIODataFormat): TId {
+export function Import(__model__: GIModel, model_data: string, data_format: _EIODataFormat): TId {
     let coll_i: number = null;
     switch (data_format) {
         case _EIODataFormat.GI:
@@ -175,14 +175,14 @@ export enum _EIOExportDataFormat {
  * @param file_name Name of the file as a string.
  * @param data_format Enum, the file format.
  * @param data_target Enum, where the data is to be exported to.
- * @returns Boolean.
- * @example util.ExportData ('my_model.obj', obj)
- * @example_info Exports all the data in the model as an OBJ.
+ * @returns void.
+ * @example io.Export (#pg, 'my_model.obj', obj)
+ * @example_info Exports all the polgons in the model as an OBJ.
  */
-export function ExportFromModel(__model__: GIModel, entities: TId|TId[]|TId[][],
-        file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): boolean {
+export function Export(__model__: GIModel, entities: TId|TId[]|TId[][],
+        file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): void {
     // --- Error Check ---
-    const fn_name = 'io.ExportFromModel';
+    const fn_name = 'io.Export';
     let ents_arr = null;
     if (entities !== null) {
         entities = arrMakeFlat(entities) as TId[];
@@ -191,6 +191,10 @@ export function ExportFromModel(__model__: GIModel, entities: TId|TId[]|TId[][],
     }
     checkArgTypes(fn_name, 'file_name', file_name, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
     // --- Error Check ---
+    _export(__model__, ents_arr, file_name, data_format, data_target);
+}
+function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
+    file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): boolean {
     switch (data_format) {
         case _EIOExportDataFormat.GI:
             let gi_data: string = JSON.stringify(__model__.getData());
@@ -227,7 +231,6 @@ export function ExportFromModel(__model__: GIModel, entities: TId|TId[]|TId[][],
         //     break;
         default:
             throw new Error('Data type not recognised');
-            break;
     }
 }
 

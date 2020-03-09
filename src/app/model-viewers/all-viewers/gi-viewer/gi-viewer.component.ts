@@ -56,9 +56,15 @@ export class GIViewerComponent implements OnInit {
         const previous_settings = JSON.parse(localStorage.getItem('mpm_settings'));
         // const devMode = isDevMode();
         const devMode = false;
-        if (previous_settings === null || this.hasDiffProps(previous_settings, this.settings)) {
+        if (previous_settings === null) {
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
+        } else {
+            this.propCheck(previous_settings, this.settings);
+            localStorage.setItem('mpm_settings', JSON.stringify(previous_settings));
         }
+        // if (previous_settings === null || this.hasDiffProps(previous_settings, this.settings)) {
+        //     localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
+        // }
     }
 
     /**
@@ -69,6 +75,22 @@ export class GIViewerComponent implements OnInit {
      */
     hasDiffProps(obj1, obj2) {
         return !Object.keys(obj2).every(e => Object.keys(obj1).includes(e));
+    }
+
+    /**
+     * Check whether the current settings has same structure with
+     * the previous settings saved in local storage. If not, replace the local storage.
+     * @param obj1
+     * @param obj2
+     */
+    propCheck(obj1, obj2, checkChildren = true) {
+        for (const i in obj2) {
+            if (!obj1.hasOwnProperty(i)) {
+                obj1[i] = JSON.parse(JSON.stringify(obj2[i]));
+            } else if (checkChildren && obj1[i].constructor === {}.constructor && obj2[i].constructor === {}.constructor) {
+                this.propCheck(obj1[i], obj2[i], false);
+            }
+        }
     }
 
     /**
@@ -286,21 +308,21 @@ export class GIViewerComponent implements OnInit {
                     scene.directional_light.visible = this.settings.directional_light.show;
                 }
                 if (this.settings.directional_light.show) {
-                    this.settings.ambient_light.intensity = 0.1;
-                    this.settings.hemisphere_light.intensity = 0.1;
+                    this.settings.ambient_light.intensity = 0.15;
+                    this.settings.hemisphere_light.intensity = 0.15;
                 } else {
                     this.settings.ambient_light.intensity = 0.5;
                     this.settings.hemisphere_light.intensity = 0.5;
                 }
                 break;
-            case 'directional_light.type': // Directional Light
-                if (this.settings.directional_light.type === 'directional') {
-                    this.settings.directional_light.type = 'point';
-                } else {
-                    this.settings.directional_light.type = 'directional';
-                }
-                this.threejs.updateModel(this.data);
-                break;
+            // case 'directional_light.type': // Directional Light
+            //     if (this.settings.directional_light.type === 'directional') {
+            //         this.settings.directional_light.type = 'point';
+            //     } else {
+            //         this.settings.directional_light.type = 'directional';
+            //     }
+            //     this.threejs.updateModel(this.data);
+            //     break;
             case 'directional_light.helper':
                 this.settings.directional_light.helper = !this.settings.directional_light.helper;
                 break;
@@ -311,12 +333,9 @@ export class GIViewerComponent implements OnInit {
             case 'directional_light.shadow':
                 this.settings.directional_light.shadow = !this.settings.directional_light.shadow;
                 break;
-            // case 'directional_light.shadowSize':
-            //     this.settings.directional_light.shadowSize = Number(value);
-            //     setTimeout(() => {
-            //         scene.DLMapSize(this.settings.directional_light.shadowSize);
-            //     }, 10);
-            //     break;
+            case 'directional_light.shadowSize':
+                this.settings.directional_light.shadowSize = Number(value);
+                break;
             case 'directional_light.azimuth':
                 this.settings.directional_light.azimuth = Number(value);
                 scene.getDLPosition(null, this.settings.directional_light.azimuth, this.settings.directional_light.altitude);
@@ -472,7 +491,8 @@ interface Settings {
         azimuth: number,
         altitude: number,
         distance: number,
-        type: string
+        type: string,
+        shadowSize: number
     };
     ground: {
         show: boolean,

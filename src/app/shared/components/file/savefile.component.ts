@@ -413,7 +413,10 @@ export class SaveFileComponent {
         node.procedure[node.procedure.length - 1].args[0].value = 'mod';
         node.procedure[node.procedure.length - 1].args[0].jsValue = 'mod';
 
-        const downloadResult = {'name': newFile.name.replace(/\ /g, '_') + '_data.mob', 'file': circularJSON.stringify(newFile, null, 4)};
+        const downloadResult = {
+            'name': newFile.name.replace(/\ /g, '_') + '_data.mobdata',
+            'file': circularJSON.stringify(newFile, null, 4)
+        };
 
         const blob = new Blob([downloadResult.file], { type: 'application/json' });
 

@@ -1,7 +1,7 @@
 @import '~scss/colors';
 @import '~scss/variables';
 
-#gi-viewer-container {
+#cesium-viewer-container {
     // position: absolute;
     width: 100%;
     height: 100%;
@@ -17,28 +17,21 @@ as-split-area{
     overflow: hidden auto !important;
 }
 
-#settings_button {
-    position: absolute;
-    top: 2px;
-    right: 10px;
-    cursor: pointer;
-    z-index: 800;
-    display: inline-block;
-    vertical-align: bottom;
-    background-color: transparent;
-    color: $color1;
-    border: none;
+#cesium_settings_button{
     outline: none;
-    padding: 0px;
     width: 40px;
-    height: 40px;
-    transition: 0.3s;
-    font-size: 14px;
+    height: 30px;
+    font-size:$fsize1;
+    position: absolute;
+    top:0px;
+    right:0px; 
+    text-align:center;
+    color: $color1;
+    background-color:transparent;
+    border:0;
+    cursor: pointer;
     &:hover {
-        color:$color5;
-    }
-    &.active {
-        color: $selected-color;
+        color:$selected-color;
     }
 }
 
@@ -56,8 +49,8 @@ as-split-area{
 modal-window {
     display: none;
     h1{
-        font-size: $fsize1;
-        font-weight: 550;
+        font-size: 14px;
+        font-weight: 700;
         line-height: 35px;
     }
     dl{
@@ -68,7 +61,6 @@ modal-window {
             list-style: none;
             padding: 8px 0;
             margin-left: 20px;
-            margin-right: 20px;
             background-color: inherit;
             // height: $fsize1;
             min-height: 12px;
@@ -113,12 +105,19 @@ modal-window {
             }
         }
     }
-
+    .save {
+        cursor: pointer;
+        background: $selected-color;
+        color: #ffffff;
+        height: 20px;
+    }
     .closebtn{
+        cursor: pointer;
         background: $color7;
         border: 1px solid $color4;
         box-sizing: border-box;
         margin-left: 10px;
+        height: 20px;
         // padding: 3px 10px;
         // cursor: pointer;
         // margin-right: 10px;
@@ -136,6 +135,16 @@ modal-window {
         //     outline: none;
         // }
     }
+
+    .getbtn{
+        cursor: pointer;
+        background: $color7;
+        border: 1px solid $color4;
+        box-sizing: border-box;
+        margin-left: 10px;
+        height: 20px;
+        width: 50px;
+    }
 }
 
 body.modal-open {
@@ -143,7 +152,7 @@ body.modal-open {
 }
 
 
-#settings_modal{
+#cesium_settings_modal{
     .filebtn.setting{
         margin-top: 20px;
     }
@@ -153,8 +162,9 @@ body.modal-open {
 
     .onoffswitch {
         position: relative; 
-        width: 2 * $fsize1;
-        height: $fsize1;
+        width: 17px;
+        height: 6px;
+        top: 4px;
         box-sizing: border-box;
         vertical-align: middle;
         -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
@@ -166,28 +176,30 @@ body.modal-open {
         display: block;
         overflow: hidden;
         height: inherit;
-        background-color: $color4;
+        background-color: #dedede;
         cursor: pointer;
     }
 
     .onoffswitch-switch {
         position: absolute;
-        top: 1px;
-        left: 1px;
-        width: $fsize1 - 2px;
-        height: $fsize1 - 2px;
-        background: $color5;
+        top: -4px;
+        left: 0px;
+        width: 3px;
+        height: 12px;
+        background: #ccc;
+        border: 1px solid #ccc;
     }
+
     
     .onoffswitch-checkbox:hover:not(:checked) + .onoffswitch-label{
         background-color: rgba($selected-color, 0.4);
         .onoffswitch-switch{
-            box-shadow: 2px 0px 0px 0px;
+            // box-shadow: 2px 0px 0px 0px;
         }
     }
 
     .onoffswitch-checkbox:disabled + .onoffswitch-label{
-        background-color: $color4 !important;
+        background-color: #dedede !important;
         .onoffswitch-switch{
             box-shadow: none !important;
         }
@@ -198,7 +210,7 @@ body.modal-open {
         .onoffswitch-switch {
             right: 0px; 
             
-            left: calc(100% - 2px);
+            left: calc(100% + 1px);
             transform: translateX(-100%);
         }
     }
@@ -232,7 +244,7 @@ body.modal-open {
     .slider {
         -webkit-appearance: none;  /* Override default CSS styles */
         appearance: none;
-        width: calc(100% - 230px);
+        width: 210px;
         max-width: 500px;
         height: $fsize1; /* Specified height */
         background: $color5-5; /* Grey background */
@@ -288,7 +300,7 @@ body.modal-open {
         border: none;
         line-height: 20px;
         background: transparent;
-        width: 60px;
+        width: 55px;
         margin-left: 10px !important;
         height: 14px;
     }
@@ -303,6 +315,16 @@ body.modal-open {
         float: left;
     }
 
+    #camera, #camera_target, #grid_pos{
+        input{
+            width: 65px;
+            border: 1px solid #bdbdbd;
+            height: 16px;
+            margin-right: 3px;
+            text-align: right;
+            padding-right: 3px
+        }
+    }
 }
 
 ::ng-deep #settingsTab{
@@ -385,3 +407,4 @@ body.modal-open {
         background: #dfdfdf;
     }
   }
+

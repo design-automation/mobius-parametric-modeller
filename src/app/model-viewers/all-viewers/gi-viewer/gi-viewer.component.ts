@@ -339,6 +339,7 @@ export class GIViewerComponent implements OnInit {
             case 'directional_light.azimuth':
                 this.settings.directional_light.azimuth = Number(value);
                 scene.getDLPosition(null, this.settings.directional_light.azimuth, this.settings.directional_light.altitude);
+                setTimeout(() => { this.threejs.activateRender(); }, 0);
                 break;
             case 'directional_light.altitude':
                 this.settings.directional_light.altitude = Number(value);

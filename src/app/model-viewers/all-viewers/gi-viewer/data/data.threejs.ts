@@ -282,23 +282,33 @@ export class DataThreejs extends DataThreejsLookAt {
             altitude = this.directional_light_settings.altitude;
         }
         if (this.model && this.model.attribs && this.model.attribs.query
-            && this.model.attribs.query.hasModelAttrib('directional_light')) {
-                const model_light_settings: any = this.model.attribs.query.getModelAttribVal('directional_light');
-                if (model_light_settings.constructor === {}.constructor) {
-                    if (model_light_settings.hasOwnProperty('altitude')) {
-                        altitude = model_light_settings.altitude;
-                    }
-                    if (model_light_settings.hasOwnProperty('azimuth')) {
-                        azimuth = model_light_settings.azimuth;
-                    }
+        && this.model.attribs.query.hasModelAttrib('directional_light')) {
+            const model_light_settings: any = this.model.attribs.query.getModelAttribVal('directional_light');
+            if (model_light_settings.constructor === {}.constructor) {
+                if (model_light_settings.hasOwnProperty('altitude')) {
+                    altitude = model_light_settings.altitude;
+                }
+                if (model_light_settings.hasOwnProperty('azimuth')) {
+                    azimuth = model_light_settings.azimuth;
                 }
             }
-        if (azimuth === 360) {
-            azimuth = 0;
         }
-
-        let posX = Math.cos(altitude * Math.PI * 2 / 360) * Math.cos(azimuth * Math.PI * 2 / 360) * scale,
-            posY = Math.cos(altitude * Math.PI * 2 / 360) * Math.sin(azimuth * Math.PI * 2 / 360) * scale,
+        if (scale === 0) { scale = 10000; }
+        let azimuth_calc = 90 - azimuth;
+        if (this.model && this.model.attribs && this.model.attribs.query
+        && this.model.attribs.query.hasModelAttrib('north')) {
+            const north_attr: number[] = this.model.attribs.query.getModelAttribVal('north') as number[];
+            const north_vec = new THREE.Vector3(north_attr[0], north_attr[1], 0);
+            const y_vec = new THREE.Vector3(0, 1, 0);
+            const angle = north_vec.angleTo(y_vec) * 180 / Math.PI;
+            if (north_attr[0] > 0) {
+                azimuth_calc -= angle;
+            } else {
+                azimuth_calc += angle;
+            }
+        }
+        let posX = Math.cos(altitude * Math.PI * 2 / 360) * Math.cos(azimuth_calc * Math.PI * 2 / 360) * scale,
+            posY = Math.cos(altitude * Math.PI * 2 / 360) * Math.sin(azimuth_calc * Math.PI * 2 / 360) * scale,
             posZ = Math.sin(altitude * Math.PI * 2 / 360) * scale;
 
         if (this._all_objs_sphere) {

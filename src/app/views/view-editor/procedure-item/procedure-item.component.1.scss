@@ -3,6 +3,7 @@
 
 
 .container--nested{
+    overflow: visible;
     padding-left: 0px;
 }
 
@@ -10,12 +11,12 @@
     background-color: transparent;
     font-size: $fsize2;
     margin: 0px 5px 2px 8px;
-    padding: 0px;
-    padding-bottom: 1px;
-    padding-left: 2px;
+    padding: 0px 0px 1px 3px;
+    // padding-bottom: 1px;
+    // padding-left: 2px;
     //border-bottom: 1px solid red;
-    border-bottom: 1px solid $color2;
-    border-left: 1px solid $color2;
+    border-bottom: 1px solid $color5;
+    border-left: 1px solid $color5;
     color: $color1;
     //min-height: 22px;
     opacity: 1;
@@ -27,16 +28,21 @@
     flex-grow: 0;
     flex-shrink: 0;
 
-    overflow-x: hidden;
+    overflow-x: visible;
     width: calc(100% - 15px);
     // min-width: fit-content; // for global side scroll
+
+    &.strong{
+        border-bottom: 1px solid $color2;
+        border-left: 1px solid $color2;
+    }
 
     &.disabled{
         opacity: $disabled-opacity;
         .btns{
             display: inline-flex;
             #disable-btn{
-                display: flex;
+                // display: flex;
                 justify-content: center;
                 &:hover{
                     color: $selected-color;
@@ -44,6 +50,7 @@
             }
         }
         &.selected{
+            padding-bottom: 0px;
             border-bottom: 2px solid $selected-color;
         }
         &.onhover{
@@ -60,15 +67,15 @@
         // }
     }
 
-    &.disabled .input--var, &.disabled .input--arg{
-        border: 2px solid $color5 !important;
-    }
+    // &.disabled .input--var, &.disabled .input--arg{
+    //     border: 2px solid $color5 !important;
+    // }
 
     &.selected{
         border-bottom: 2px solid $selected-color;
         border-left: 2px solid $selected-color;
         padding-bottom: 0px;
-        padding-left: 1px;
+        padding-left: 2px;
 
         // &:hover > .btn-container {
         //     .btns{
@@ -82,7 +89,7 @@
         border-bottom: 2px solid $print-color;
         border-left: 2px solid $print-color;
         padding-bottom: 0px;
-        padding-left: 1px;
+        padding-left: 2px;
         // #print-btn{
         //     color: $print-color;
         //     background-color: $color6;
@@ -100,6 +107,7 @@
         //     }
         // }
         &.selected{
+            padding-bottom: 0px;
             border-bottom: 2px solid $selected-color;
             background-color: $print-color-lt;
             #print-btn{
@@ -123,6 +131,7 @@
             // }
         }
         &.selected{
+            padding-bottom: 0px;
             border-bottom: 2px solid $selected-color;
             background-color: $print-color-lt;
         }
@@ -144,7 +153,7 @@
         border-bottom: 2px solid $selectGeom-color;
         // border-left: 2px solid $selectGeom-color;
         padding-bottom: 0px;
-        padding-left: 1px;
+        // padding-left: 1px;
         #selectGeom-btn{
             color: $selectGeom-color;
             background-color: $color6;
@@ -162,6 +171,7 @@
         //     }
         // }
         &.selected{
+            padding-bottom: 0px;
             border-bottom: 2px solid $selected-color;
             background-color: $selectGeom-color-lt;
             #selectGeom-btn{
@@ -185,6 +195,7 @@
             }
         }
         &.selected{
+            padding-bottom: 0px;
             border-bottom: 2px solid $selected-color;
             background-color: $selectGeom-color-lt;
         }
@@ -206,11 +217,12 @@
         border-bottom: 2px solid $error-color;
         border-left: 2px solid $error-color;
         padding-bottom: 0px;
-        padding-left: 1px;
+        padding-left: 0px;
         .btn{
             background-color: inherit;
         }
         &.selected{
+            padding-bottom: 0px;
             border-bottom: 2px solid $selected-color;
             background-color: $error-color-lt;
         }
@@ -228,14 +240,17 @@
         background-color: $color6; 
         //border-bottom: 1px solid $color1;
         margin-right: 5px;
-        border: 2px solid $color5;
-        padding-left: 6px;
+        border: 1px solid $color5;
+        padding: 1px 1px 1px 6px;
+        // padding-left: 6px;
 
         &.linked{
             border: 2px solid $selectGeom-color;
+            padding: 0px 0px 0px 5px;
             // border: 2px solid $print-color-dk;
         }
         &.error{
+            padding: 0px 0px 0px 5px;
             border: 2px solid $error-color;
         }
         &:focus, &:hover{
@@ -255,14 +270,16 @@
         background-color: $color6; 
         //border-bottom: 1px solid $color1;
         margin-left: 5px;
-        border: 2px solid $color5;
-        padding-left: 6px;
+        border: 1px solid $color5;
+        padding: 1px 1px 1px 6px;
 
         &.linked{
             border: 2px solid $selectGeom-color;
+            padding: 0px 0px 0px 5px;
         }
         &.error{
             border: 2px solid $error-color;
+            padding: 0px 0px 0px 5px;
         }
         &:focus, &:hover{
             border-color: $selected-color;
@@ -344,31 +361,16 @@
 .container--item{
     position: relative;
 
-    padding-bottom: 2px;
+    padding-top: 1px;
+    // padding-bottom: 1px;
     border: none;
 
     display: inline-block;
     width: 100%;
     // min-width: fit-content; // for global side scroll
+    overflow: visible;
 
     white-space: nowrap;
-    overflow-x: scroll;
-
-    &::-webkit-scrollbar {
-        height: 3px;
-    }
-    
-    &::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    
-    &::-webkit-scrollbar-thumb {
-        background: transparent; 
-    }
-    
-    &::-webkit-scrollbar-thumb:hover {
-        background: $color1; 
-    }
 
     &:hover{
         &::-webkit-scrollbar-thumb {
@@ -411,7 +413,7 @@
 
 .btns{
     position: absolute;
-
+    top: 2px;
     display: none;
     flex-flow: row-reverse nowrap;
     justify-content: flex-end;
@@ -463,8 +465,27 @@
 
 .line--item{
     color: $color1;
+    width: calc(100% - 60px);
     display: inline-block;
     padding-right: 60px;
+    overflow: scroll;
+    // overflow-y: visible;
+
+    &::-webkit-scrollbar {
+        height: 3px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: transparent; 
+    }
+    
+    &::-webkit-scrollbar-thumb:hover {
+        background: $color1; 
+    }
 }
 
 .line--terminate{

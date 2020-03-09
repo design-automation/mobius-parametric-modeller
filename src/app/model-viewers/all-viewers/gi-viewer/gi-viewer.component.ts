@@ -56,9 +56,15 @@ export class GIViewerComponent implements OnInit {
         const previous_settings = JSON.parse(localStorage.getItem('mpm_settings'));
         // const devMode = isDevMode();
         const devMode = false;
-        if (previous_settings === null || this.hasDiffProps(previous_settings, this.settings)) {
+        if (previous_settings === null) {
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
+        } else {
+            this.propCheck(previous_settings, this.settings);
+            localStorage.setItem('mpm_settings', JSON.stringify(previous_settings));
         }
+        // if (previous_settings === null || this.hasDiffProps(previous_settings, this.settings)) {
+        //     localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
+        // }
     }
 
     /**
@@ -69,6 +75,22 @@ export class GIViewerComponent implements OnInit {
      */
     hasDiffProps(obj1, obj2) {
         return !Object.keys(obj2).every(e => Object.keys(obj1).includes(e));
+    }
+
+    /**
+     * Check whether the current settings has same structure with
+     * the previous settings saved in local storage. If not, replace the local storage.
+     * @param obj1
+     * @param obj2
+     */
+    propCheck(obj1, obj2, checkChildren = true) {
+        for (const i in obj2) {
+            if (!obj1.hasOwnProperty(i)) {
+                obj1[i] = JSON.parse(JSON.stringify(obj2[i]));
+            } else if (checkChildren && obj1[i].constructor === {}.constructor && obj2[i].constructor === {}.constructor) {
+                this.propCheck(obj1[i], obj2[i], false);
+            }
+        }
     }
 
     /**

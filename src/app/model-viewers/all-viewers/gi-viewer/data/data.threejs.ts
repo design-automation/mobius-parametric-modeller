@@ -685,7 +685,6 @@ export class DataThreejs extends DataThreejsLookAt {
         let distance = 0;
 
         if (this._all_objs_sphere) {
-            console.log(this._all_objs_sphere)
             distance = Math.round(this._all_objs_sphere.radius * 3);
             // if (distance < 10000) { distance = 10000; }
         }
@@ -695,11 +694,10 @@ export class DataThreejs extends DataThreejsLookAt {
         this.directional_light.visible = this.directional_light_settings.show;
         // this.directional_light_settings.shadowSize = 2;
         // const shadowMapSize = this.directional_light_settings.shadowSize;
-        this.directional_light.shadow.radius = 1.2;  // default
+        // this.directional_light.shadow.radius = 1.2;  // default
         this.directional_light.shadow.bias = -0.00001;  // default
-        console.log(this.directional_light_settings.shadowSize);
-        this.directional_light.shadow.mapSize.width = 5120;  // default
-        this.directional_light.shadow.mapSize.height = 5120; // default
+        this.directional_light.shadow.mapSize.width = this.directional_light_settings.shadowSize;  // default
+        this.directional_light.shadow.mapSize.height = this.directional_light_settings.shadowSize; // default
         // this.directional_light.shadow.camera.visible = true;
 
         this._setDLDistance(distance);

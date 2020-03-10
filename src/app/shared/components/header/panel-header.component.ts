@@ -44,6 +44,7 @@ export class PanelHeaderComponent implements OnDestroy {
         this.ctx.font = '12px sans-serif';
 
         this.settings = this.dataService.mobiusSettings;
+        if (this.settings['autosave'] === undefined) { this.settings['autosave'] = true; }
         if (this.settings['debug'] === undefined) { this.settings['debug'] = true; }
         for (const cat in this.func_categories) {
             if (!this.func_categories[cat] || this.settings.hasOwnProperty('_func_' + this.func_categories[cat])) { continue; }
@@ -178,6 +179,8 @@ export class PanelHeaderComponent implements OnDestroy {
 
     updateSettings() {
         this.settings.execute = (<HTMLInputElement>document.getElementById('settings-execute')).checked;
+        // this.settings.debug = (<HTMLInputElement>document.getElementById('settings-debug')).checked;
+        this.settings.autosave = (<HTMLInputElement>document.getElementById('settings-autosave')).checked;
 
         for (const cat in this.func_categories) {
             if (!this.func_categories[cat]) { continue; }

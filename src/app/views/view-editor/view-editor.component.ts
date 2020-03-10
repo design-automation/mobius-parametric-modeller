@@ -202,6 +202,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         for (const prod of prodList) {
             if (prod.type === ProcedureTypes.LocalFuncCall && prod.meta.name === funcName) {
                 if (addArg) {
+                    if (!prod.meta.otherInfo) { prod.meta.otherInfo = {}; }
                     if (!prod.meta.otherInfo.deletedArgs || prod.meta.otherInfo.deletedArgs.length === 0) {
                         prod.args.push(<IArgument>{
                             'name': 'arg_' + prod.argCount,

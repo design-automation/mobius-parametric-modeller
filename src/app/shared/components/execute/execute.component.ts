@@ -719,9 +719,11 @@ export class ExecuteComponent {
             // Unexpected Identifier
             // Unexpected token
             const prodWithError: string = params['currentProcedure'][0];
-            const markError = function(prod: IProcedure, id: string) {
+            let localFunc: string;
+            const markError = function(prod: IProcedure, id: string, localFuncName = null) {
                 if (prod['ID'] && id && prod['ID'] === id) {
                     prod.hasError = true;
+                    localFunc = localFuncName;
                 }
                 if (prod.children) {
                     prod.children.map(function(p) {
@@ -740,6 +742,22 @@ export class ExecuteComponent {
                         });
                     }
                 });
+                node.localFunc.map(function(prod: IProcedure) {
+                    if (prod['ID'] === prodWithError) {
+                        prod.hasError = true;
+                        localFunc = prod.args[0].value;
+                    }
+                    if (prod.children) {
+                        prod.children.map(function(p) {
+                            markError(p, prodWithError, prod.args[0].value);
+                        });
+                    }
+                });
+                if (localFunc) {
+                    this.dataService.notifyMessage(`Error in local function "${localFunc}" of node "${node.name}"`);
+                } else {
+                    this.dataService.notifyMessage(`Error in main code of node "${node.name}"`);
+                }
             }
 
             if (ex.toString().indexOf('Unexpected identifier') > -1) {

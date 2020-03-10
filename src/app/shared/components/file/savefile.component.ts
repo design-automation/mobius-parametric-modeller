@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { DownloadUtils } from './download.utils';
 import * as circularJSON from 'circular-json';
 import { FlowchartUtils } from '@models/flowchart';
@@ -43,8 +43,21 @@ declare global {
     ]
 })
 // component for saving file to the browser local storage and hard disk.
-export class SaveFileComponent {
-    constructor(private dataService: DataService) {}
+export class SaveFileComponent implements OnDestroy{
+    _interval_: NodeJS.Timer;
+    constructor(private dataService: DataService) {
+        const settings = this.dataService.mobiusSettings;
+        if (settings['autosave'] === undefined) {
+            settings['autosave'] = true;
+        }
+        this._interval_ = setInterval(() => {
+            const mobius_settings = this.dataService.mobiusSettings;
+            if (!mobius_settings['autosave']) { return; }
+            SaveFileComponent.saveFileToLocal(this.dataService.file);
+            this.dataService.notifyMessage(`Auto-saving Flowchart as ${this.dataService.flowchart.name}`);
+        }, 300000);
+    }
+
 
     static saveFileToLocal(f: IMobius) {
         // const models = [];
@@ -335,6 +348,12 @@ export class SaveFileComponent {
         }
 
         return {'name': fname, 'file': fileString};
+    }
+
+    ngOnDestroy() {
+        if (this._interval_) {
+            clearInterval(this._interval_);
+        }
     }
 
     async download() {

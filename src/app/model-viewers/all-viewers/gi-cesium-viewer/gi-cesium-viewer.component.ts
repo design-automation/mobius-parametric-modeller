@@ -63,7 +63,6 @@ export class GICesiumViewerComponent implements OnInit {
      */
     public settingOnChange(setting: string, value?: number) {
         const scene = this.dataService.getCesiumScene();
-        // scene._renderer.render(scene._scene, scene._camera);
     }
     /**
      *

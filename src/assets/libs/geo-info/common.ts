@@ -171,7 +171,8 @@ export enum EAttribNames {
     COLOR =   'rgb',
     TEXTURE = 'uv',
     NAME = 'name',
-    MATERIAL = 'material'
+    MATERIAL = 'material',
+    VISIBILITY = 'visibility'
 }
 
 // Wire Type

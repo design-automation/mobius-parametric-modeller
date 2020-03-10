@@ -13,7 +13,7 @@ import { SaveFileComponent } from './savefile.component';
 @Component({
   selector: 'file-load',
   template:  `<button id='loadfile' class='btn' onclick="document.getElementById('file-input').click();">Load</button>
-              <input id="file-input" type="file" (change)="sendloadfile()" style=" display: none;" accept=".mob"/>`,
+              <input id="file-input" type="file" (change)="sendloadfile()" style=" display: none;" accept=".mob,.mobdata"/>`,
   styles: [
             `
             button.btn{
@@ -91,9 +91,6 @@ export class LoadFileComponent {
                 //     }
                 // }
             }
-            for (const node of loadeddata.flowchart.nodes) {
-                checkNodeValidity(node);
-            }
             for (const func of this.dataService.flowchart.functions) {
                 for (const node of func.flowchart.nodes) {
                     checkNodeValidity(node);
@@ -105,6 +102,9 @@ export class LoadFileComponent {
                         checkNodeValidity(node);
                     }
                 }
+            }
+            for (const node of loadeddata.flowchart.nodes) {
+                checkNodeValidity(node);
             }
             setTimeout(() => {
                 if (this.dataService.mobiusSettings.execute) {

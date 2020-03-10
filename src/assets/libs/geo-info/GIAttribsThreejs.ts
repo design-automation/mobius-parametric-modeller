@@ -1,5 +1,5 @@
 import { GIModel } from './GIModel';
-import { TAttribDataTypes, EEntType, IAttribsMaps, EAttribNames, EEntTypeStr } from './common';
+import { TAttribDataTypes, EEntType, IAttribsMaps, EAttribNames, EEntTypeStr, Txy, Txyz} from './common';
 import { GIAttribMap } from './GIAttribMap';
 import { isString } from 'util';
 import { sortByKey } from '../util/maps';
@@ -65,51 +65,64 @@ export class GIAttribsThreejs {
         return [coords.flat(1), vertex_map];
     }
     /**
-     * Get a flat array of attribute values for all the vertices.
+     * Get a flat array of normals values for all the vertices.
      * Verts that have been deleted will not be included
-     * @param attrib_name The name of the vertex attribute. Either NORMAL or COLOR.
      */
-    public get3jsSeqVertsAttrib(attrib_name: EAttribNames): number[] {
-        if (!this._attribs_maps._v.has(attrib_name)) { return null; }
-        const verts_attrib: GIAttribMap = this._attribs_maps._v.get(attrib_name);
-        //
-        const verts_attribs_values: TAttribDataTypes[] = [];
-        const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT, true);
-        verts_i.forEach( (vert_i, gi_index) => {
+    public get3jsSeqVertsNormals(): number[] {
+        if (!this._attribs_maps._v.has(EAttribNames.NORMAL)) { return null; }
+        // create a sparse arrays of normals of all verts of polygons
+        const verts_attrib: GIAttribMap = this._attribs_maps._v.get(EAttribNames.NORMAL);
+        const normals: Txyz[] = [];
+        for (const pgon_i of this._model.geom.query.getEnts(EEntType.PGON, false)) {
+            let pgon_normal: Txyz = null;
+            for (const vert_i of this._model.geom.nav.navAnyToVert(EEntType.PGON, pgon_i)) {
+                let normal: Txyz = verts_attrib.getEntVal(vert_i) as Txyz;
+                if (!Array.isArray(normal)) {
+                    if (pgon_normal === null) {
+                        const face_i: number = this._model.geom.nav.navPgonToFace(pgon_i);
+                        pgon_normal = this._model.geom.query.getFaceNormal(face_i);
+                    }
+                    normal = pgon_normal;
+                }
+                normals[vert_i] = normal;
+            }
+        }
+        // get all the normals
+        const verts_normals: TAttribDataTypes[] = [];
+        const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT, false);
+        for (const vert_i of verts_i) {
+            if (vert_i !== null) {
+                let normal: Txyz = normals[vert_i];
+                normal = normal === undefined ? [0, 0, 0] : normal;
+                verts_normals.push(normal);
+            }
+        }
+        // @ts-ignore
+        return verts_normals.flat(1);
+    }
+
+    /**
+     * Get a flat array of colors values for all the vertices.
+     * Verts that have been deleted will not be included
+     */
+    public get3jsSeqVertsColors(): number[] {
+        if (!this._attribs_maps._v.has(EAttribNames.COLOR)) { return null; }
+        const verts_attrib: GIAttribMap = this._attribs_maps._v.get(EAttribNames.COLOR);
+        // get all the colors
+        const verts_colors: TAttribDataTypes[] = [];
+        const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT, false);
+        for (const vert_i of verts_i) {
             if (vert_i !== null) {
                 const value = verts_attrib.getEntVal(vert_i) as TAttribDataTypes;
-                if (attrib_name === EAttribNames.COLOR) {
-                    const _value = value === undefined ? [1, 1, 1] : value;
-                    verts_attribs_values.push(_value);
-                } else {
-                    verts_attribs_values.push(value);
-                }
+                const _value = value === undefined ? [1, 1, 1] : value;
+                verts_colors.push(_value);
             }
-        });
-        // const geom_array = this._model.geom._geom_arrays;
-        // for (const e of geom_array.dn_edges_verts) {
-        //     for (const v of e) {
-        //         const vert_attrb = verts_attribs_values[v];
-        //         if (vert_attrb[0] === 1 && vert_attrb[1] === 1 && vert_attrb[2] === 1) {
-        //             verts_attribs_values[v] = [0, 0, 0];
-        //         }
-        //     }
-        // }
-
-        // for (const w of geom_array.dn_plines_wires) {
-        //     for (const e of geom_array.dn_wires_edges[w]) {
-        //         for (const v of geom_array.dn_edges_verts[e]) {
-        //             const vert_attrb = verts_attribs_values[v];
-        //             if (vert_attrb[0] === 1 && vert_attrb[1] === 1 && vert_attrb[2] === 1) {
-        //                 verts_attribs_values[v] = [0, 0, 0];
-        //             }
-        //         }
-        //     }
-        // }
-
+        }
         // @ts-ignore
-        return verts_attribs_values.flat(1);
+        return verts_colors.flat(1);
     }
+
+
     /**
      *
      */

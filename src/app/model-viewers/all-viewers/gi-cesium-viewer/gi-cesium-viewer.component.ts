@@ -70,7 +70,7 @@ export class GICesiumViewerComponent implements OnInit {
      * @param id
      */
     public openModal(id: string) {
-        if (localStorage.getItem('mpm_settings') !== null) {
+        if (localStorage.getItem('cesium_settings') !== null) {
             // this.settings = JSON.parse(localStorage.getItem('mpm_settings'));
         }
         if (document.body.className === 'modal-open') {

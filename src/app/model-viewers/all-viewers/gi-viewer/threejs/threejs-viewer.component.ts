@@ -702,7 +702,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
     private refreshTable(event: Event) {
         this.action.emit({'type': 'eventClicked', 'event': event});
-        this.activateRender();
+        setTimeout(() => {
+            this.activateRender();
+        }, 0);
     }
 
     private resetTable() {
@@ -748,7 +750,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             scene.unselectObjGroup(wire, this.container, 'face_wires');
         }
 
-        this.activateRender();
+        setTimeout(() => {
+            this.activateRender();
+        }, 0);
     }
 
     private getSelectingEntityType() {

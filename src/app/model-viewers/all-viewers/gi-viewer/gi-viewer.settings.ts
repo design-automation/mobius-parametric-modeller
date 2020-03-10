@@ -57,7 +57,8 @@ export const DefaultSettings = {
         azimuth: 90,
         altitude: 45,
         distance: 10,
-        type: 'directional'
+        type: 'directional',
+        shadowSize: 2048
     },
     ground: {
         show: false,

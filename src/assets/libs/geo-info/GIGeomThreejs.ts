@@ -172,12 +172,18 @@ export class GIGeomThreejs {
         const white_edge_select_map: Map<number, number> = new Map();
         let gi_i = 0;
         const l = this._geom_arrays.dn_edges_verts.length;
+        const visibility_attrib = this._geom.model.attribs._attribs_maps._e.get('visibility');
+        let hidden_attrib;
+        if (visibility_attrib) {
+            hidden_attrib = visibility_attrib.getEntsFromVal('hidden');
+        }
         const edge_attrib = this._geom.model.attribs._attribs_maps._e.get('material');
         let edge_material_attrib;
         if (edge_attrib) {
             edge_material_attrib = edge_attrib.getEntsFromVal('white');
         }
         for (; gi_i < l; gi_i++) {
+            if (hidden_attrib && hidden_attrib.indexOf(gi_i) !== -1) { continue; }
             const edge_verts_i: TEdge = this._geom_arrays.dn_edges_verts[gi_i];
             let color_check;
             if (edge_material_attrib) {

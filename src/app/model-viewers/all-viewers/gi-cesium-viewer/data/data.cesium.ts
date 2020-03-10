@@ -72,7 +72,7 @@ export class DataCesium {
         );
         this._viewer.scene.globe.depthTestAgainstTerrain = true;
         this._viewer.clock.currentTime.secondsOfDay = 50000;
-        this._viewer.shadowMap.maxmimumDistance = 10000.0;
+        this._viewer.shadowMap.maxmimumDistance = 10000;
         this._viewer.shadowMap.size = 2048;
         this._viewer.shadowMap.softShadows = false; // if true, causes some strange effects
         // document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
@@ -117,14 +117,17 @@ export class DataCesium {
         // tslint:disable-next-line
         homeBtn.getElementsByTagName('path')[0].setAttribute('d', 'M15 3l2.3 2.3-2.89 2.87 1.42 1.42L18.7 6.7 21 9V3zM3 9l2.3-2.3 2.87 2.89 1.42-1.42L6.7 5.3 9 3H3zm6 12l-2.3-2.3 2.89-2.87-1.42-1.42L5.3 17.3 3 15v6zm12-6l-2.3 2.3-2.87-2.89-1.42 1.42 2.89 2.87L15 21h6z');
         // settings button
-        const settingsBtn = homeBtn.nextElementSibling;
+        const settingsBtn = homeBtn.nextElementSibling as HTMLElement;
         settingsBtn.getElementsByTagName('img')[0].remove();
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         // tslint:disable-next-line
+        // path.setAttribute('d', 'M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z')
+        // tslint:disable-next-line
         path.setAttribute('d', 'M19.43 12.98c.04-.32.07-.64.07-.98 0-.34-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.09-.16-.26-.25-.44-.25-.06 0-.12.01-.17.03l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.06-.02-.12-.03-.18-.03-.17 0-.34.09-.43.25l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98 0 .33.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.09.16.26.25.44.25.06 0 .12-.01.17-.03l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.06.02.12.03.18.03.17 0 .34-.09.43-.25l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zm-1.98-1.71c.04.31.05.52.05.73 0 .21-.02.43-.05.73l-.14 1.13.89.7 1.08.84-.7 1.21-1.27-.51-1.04-.42-.9.68c-.43.32-.84.56-1.25.73l-1.06.43-.16 1.13-.2 1.35h-1.4l-.19-1.35-.16-1.13-1.06-.43c-.43-.18-.83-.41-1.23-.71l-.91-.7-1.06.43-1.27.51-.7-1.21 1.08-.84.89-.7-.14-1.13c-.03-.31-.05-.54-.05-.74s.02-.43.05-.73l.14-1.13-.89-.7-1.08-.84.7-1.21 1.27.51 1.04.42.9-.68c.43-.32.84-.56 1.25-.73l1.06-.43.16-1.13.2-1.35h1.39l.19 1.35.16 1.13 1.06.43c.43.18.83.41 1.23.71l.91.7 1.06-.43 1.27-.51.7 1.21-1.07.85-.89.7.14 1.13zM12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z')
         svg.append(path);
         settingsBtn.append(svg);
+        // settingsBtn.style.top = '58px';
 
         // const btn = document.getElementById('attribToggle');
         // if (btn) {
@@ -141,6 +144,7 @@ export class DataCesium {
         // the origin of the model
         let longitude = LONGLAT[0];
         let latitude = LONGLAT[1];
+        let elevation = 0;
         if (model.attribs.query.hasModelAttrib('geolocation')) {
             const geoloc: any = model.attribs.query.getModelAttribVal('geolocation');
             const long_value: TAttribDataTypes  = geoloc.longitude;
@@ -158,6 +162,13 @@ export class DataCesium {
             latitude = lat_value as number;
             if (latitude < 0 || latitude > 90) {
                 throw new Error('Latitude attribute must be between 0 and 90.');
+            }
+            if (geoloc.elevation) {
+                const ele_value: TAttribDataTypes = geoloc.elevation;
+                if (typeof ele_value !== 'number') {
+                    throw new Error('Elevation attribute must be a number');
+                }
+                elevation = ele_value as number;
             }
         }
         // if (model.attribs.query.hasModelAttrib('longitude')) {
@@ -180,7 +191,7 @@ export class DataCesium {
         //         throw new Error('Latitude attribute must be between 0 and 90.');
         //     }
         // }
-        const origin = Cesium.Cartesian3.fromDegrees(longitude, latitude);
+        const origin = Cesium.Cartesian3.fromDegrees(longitude, latitude, elevation);
         // create a matrix to transform points
 
         // if there's a north attribute
@@ -197,7 +208,7 @@ export class DataCesium {
 
                 // find the angle between them and its sign
                 const angle = Cesium.Cartesian3.angleBetween(north_cartesian, model_cartesian);
-                const angle_sign = north_cartesian.x < 0 ? 1 : -1;
+                const angle_sign = north_cartesian.x < 0 ? -1 : 1;
 
                 // make rotation matrix
                 const m = Cesium.Matrix3.fromRotationZ(angle_sign * angle);
@@ -211,16 +222,32 @@ export class DataCesium {
             new Cesium.Cartesian3(0, 0, 0),
             new Cesium.Matrix4()
         );
+        xform_matrix[12] = 0;
+        xform_matrix[13] = 0;
+        xform_matrix[14] = 0;
         // create all positions
         const posis_i: number[] = model.geom.query.getEnts(EEntType.POSI, false);
+        const vert_n = model.attribs.query.getAttrib(EEntType.VERT, 'normal');
+
         const posi_to_point_map: Map<number, any> = new Map();
+        const vert_to_normal_map: Map<number, any> = new Map();
         for (const posi_i of posis_i) {
             if (!posi_to_point_map.has(posi_i)) {
                 const xyz: Txyz = model.attribs.query.getPosiCoords(posi_i);
-                const pnt: any = Cesium.Cartesian3.fromArray(xyz);
-                const xform_pnt: any = new Cesium.Cartesian3();
-                Cesium.Matrix4.multiplyByPoint(xform_matrix, pnt, xform_pnt);
+                const xform_pnt: any = Cesium.Cartesian3.fromArray(xyz);
+                Cesium.Matrix4.multiplyByPoint(east_north_up, xform_pnt, xform_pnt);
                 posi_to_point_map.set(posi_i, xform_pnt);
+            }
+        }
+        if (vert_n) {
+            for (const vert_i of model.geom.query.getEnts(EEntType.VERT, false)) {
+                // const pos = model.geom.nav.navVertToPosi(vert_i);
+                const normal_attr = vert_n.getEntVal(vert_i) as Txyz;
+                if (normal_attr && normal_attr.constructor === [].constructor && normal_attr.length === 3) {
+                    const normal_val = Cesium.Cartesian3.fromArray(normal_attr);
+                    Cesium.Matrix4.multiplyByPoint(xform_matrix, normal_val, normal_val);
+                    vert_to_normal_map.set(vert_i, normal_val);
+                }
             }
         }
         // add geom
@@ -230,9 +257,13 @@ export class DataCesium {
             // get each triangle
             const lines_instances: any[] = [];
             const tris_instances: any[] = [];
+            const transparent_instances: any[] = [];
+            // get each polygon
             for (const pgon_i of pgons_i) {
                 // get the colour of the vertices
                 let pgon_colour = Cesium.Color.WHITE;
+                let transparentCheck = false;
+                let normalCheck = !!vert_n;
                 if (model.attribs.query.hasAttrib(EEntType.VERT, 'rgb')) {
                     const verts_i: number[] = model.geom.nav.navAnyToVert(EEntType.PGON, pgon_i);
                     const rgb_sum: Txyz = [0, 0, 0];
@@ -246,55 +277,92 @@ export class DataCesium {
                     const num_verts: number = verts_i.length;
                     pgon_colour = new Cesium.Color(rgb_sum[0] / num_verts, rgb_sum[1] / num_verts, rgb_sum[2] / num_verts, 1.0);
                 }
-                // create the edges
-                // const wires_i: number[] = model.geom.nav.navAnyToWire(EEntType.PGON, pgon_i);
-                // for (const wire_i of wires_i) {
-                //     const wire_posis_i: number[] = model.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
-                //     if (wire_posis_i.length > 2) {
-                //         // const wire_verts_i: number[] = model.geom.nav.navAnyToVert(EEntType.WIRE, wire_i);
-                //         // const wire_posis_i: number[] = wire_verts_i.map( wire_vert_i => model.geom.nav.navVertToPosi(wire_vert_i) );
-                //         const wire_points: any[] = wire_posis_i.map( wire_posi_i => posi_to_point_map.get(wire_posi_i) );
-                //         if (model.geom.query.istWireClosed(wire_i)) {
-                //             wire_points.push(wire_points[0]);
-                //         }
-                //         const line_geom = new Cesium.SimplePolylineGeometry({
-                //             positions: wire_points,
-                //             vertexFormat: Cesium.PerInstanceColorAppearance.VERTEX_FORMAT,
-                //             perPositionHeight: true,
-                //             // arcType: Cesium.ArcType.NONE,
-                //             width: 1.0
-                //         });
-                //         const line_instance = new Cesium.GeometryInstance({
-                //             geometry : line_geom,
-                //             attributes : {
-                //                 color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.BLACK)
-                //             }
-                //         });
-                //         lines_instances.push(line_instance);
-                //     }
-                // }
 
-                // create the triangles
+                if (model.attribs.query.hasAttrib(EEntType.PGON, 'material')) {
+                    let mat_name: any = model.attribs.query.getAttribVal(EEntType.PGON, 'material', pgon_i);
+                    if (mat_name) {
+                        if (mat_name.constructor === [].constructor) { mat_name = mat_name[0]; }
+                        const pgon_mat: any = model.attribs.query.getModelAttribVal(mat_name);
+                        if (pgon_mat.color && pgon_mat.color !== 16777215) {
+                            let cString = pgon_mat.color.toString(16);
+                            while (cString.length < 6) { cString = '0' + cString; }
+                            pgon_colour = Cesium.Color.fromCssColorString('#' + cString);
+                        }
+                        if (pgon_mat.opacity && pgon_mat.opacity !== 1) {
+                            pgon_colour.alpha = pgon_mat.opacity;
+                            transparentCheck = true;
+                        }
+                    }
+                }
+
                 const pgon_tris_i: number[] = model.geom.nav.navAnyToTri(EEntType.PGON, pgon_i);
                 for (const pgon_tri_i of pgon_tris_i) {
                     // tris_i.push(pgon_tri_i);
-                    const tri_posis_i: number[] = model.geom.nav.navAnyToPosi(EEntType.TRI, pgon_tri_i);
-                    const tri_points: any[] = tri_posis_i.map( posi_i => posi_to_point_map.get(posi_i) );
-                    const tri_geom = new Cesium.PolygonGeometry({
-                        perPositionHeight : true,
-                        polygonHierarchy: new Cesium.PolygonHierarchy(tri_points),
-                        vertexFormat : Cesium.PerInstanceColorAppearance.VERTEX_FORMAT
+                    const vert_posis_i: number[] = model.geom.nav.navTriToVert(pgon_tri_i);
+                    // const tri_posis_i: number[] = model.geom.nav.navAnyToPosi(EEntType.TRI, pgon_tri_i);
+                    // const tri_points = tri_posis_i.map( posi_i => posi_to_point_map.get(posi_i) );
+                    // const norm_vecs = tri_posis_i.map( posi_i => posi_to_normal_map.get(posi_i) );
+                    // const tri_geom = new Cesium.PolygonGeometry({
+                    //     perPositionHeight : true,
+                    //     polygonHierarchy: new Cesium.PolygonHierarchy(tri_points),
+                    //     vertexFormat : Cesium.PerInstanceColorAppearance.VERTEX_FORMAT
+                    // });
+                    let posis: any = [];
+                    let normal: any = [];
+                    // tslint:disable-next-line: forin
+                    for (const v_i of vert_posis_i) {
+                        if (vert_n) {
+                            const norm_vec = vert_to_normal_map.get(v_i);
+                            if (norm_vec) {
+                                normal.push(norm_vec.x);
+                                normal.push(norm_vec.y);
+                                normal.push(norm_vec.z);
+                            } else {
+                                normalCheck = false;
+                            }
+                        }
+                        const p_i = model.geom.nav.navVertToPosi(v_i);
+                        const tri_point = posi_to_point_map.get(p_i);
+                        posis.push(tri_point.x);
+                        posis.push(tri_point.y);
+                        posis.push(tri_point.z);
+                    }
+                    posis = new Float64Array(posis);
+                    normal = new Float32Array(normal);
+                    let tri_geom = new Cesium.Geometry({
+                        attributes : new Cesium.GeometryAttributes({
+                            position : new Cesium.GeometryAttribute({
+                                componentDatatype : Cesium.ComponentDatatype.DOUBLE,
+                                componentsPerAttribute : 3,
+                                values : posis
+                            })
+                        }),
+                        primitiveType: Cesium.PrimitiveType.TRIANGLES,
+                        indices: [0, 1, 2],
+                        boundingSphere: Cesium.BoundingSphere.fromVertices(posis)
                     });
+                    if (normalCheck) {
+                        tri_geom.attributes.normal = new Cesium.GeometryAttribute({
+                            componentDatatype : Cesium.ComponentDatatype.FLOAT,
+                            componentsPerAttribute : 3,
+                            values : normal
+                        });
+                    } else {
+                        tri_geom = Cesium.GeometryPipeline.computeNormal(tri_geom);
+                    }
                     const instance = new Cesium.GeometryInstance({
                         geometry : tri_geom,
                         attributes : {
                             color : Cesium.ColorGeometryInstanceAttribute.fromColor(pgon_colour)
                         }
                     });
-                    tris_instances.push(instance);
+                    if (transparentCheck) {
+                        transparent_instances.push(instance);
+                    } else {
+                        tris_instances.push(instance);
+                    }
                 }
             }
-            // get each polygon
             const plines_i: number[] = model.geom.query.getEnts(EEntType.PLINE, false);
             // get each pline
             for (const pline_i of plines_i) {
@@ -341,7 +409,6 @@ export class DataCesium {
                                         geometryInstances : lines_instances,
                                         shadows : Cesium.ShadowMode.DISABLED,
                                         appearance : new Cesium.PerInstanceColorAppearance({
-                                            flat: true,
                                             translucent : false
                                         })
                                     });
@@ -353,8 +420,17 @@ export class DataCesium {
                                             translucent : false
                                         })
                                     });
+            const transparent_primitive =  new Cesium.Primitive({
+                                        allowPicking: true,
+                                        geometryInstances : transparent_instances,
+                                        shadows : Cesium.ShadowMode.ENABLED,
+                                        appearance : new Cesium.PerInstanceColorAppearance({
+                                            translucent : true
+                                        })
+                                    });
+
             // this._primitives = [tris_primitive];
-            this._primitives = [lines_primitive, tris_primitive];
+            this._primitives = [lines_primitive, tris_primitive, transparent_primitive];
             for (const primitive of this._primitives) {
                 this._viewer.scene.primitives.add(Cesium.clone(primitive));
             }
@@ -379,6 +455,22 @@ export class DataCesium {
             // Cesium.Camera.DEFAULT_VIEW_FACTOR = 0;
 
             this._viewer.render();
+
+            setTimeout(() => {
+                // model: GIModel, container: any
+                if (container === null) {
+                    container = document.getElementById('cesium-container');
+                }
+                let old = document.getElementById('hud');
+                if (old) {
+                    container.removeChild(old);
+                }
+                if (!model.attribs.query.hasAttrib(EEntType.MOD, 'hud')) { return; }
+                const hud = model.attribs.query.getModelAttribVal('hud') as string;
+                const element = this._createHud(hud).element;
+                container.appendChild(element);
+                old = null;
+            }, 0);
         }
     }
     // PRIVATE METHODS
@@ -478,6 +570,22 @@ export class DataCesium {
         //     },
         // }));
         return view_models;
+    }
+    private _createHud(text: string) {
+        const div = document.createElement('div');
+        div.id = `hud`;
+        div.style.position = 'absolute';
+        div.style.background = 'rgba(255, 255, 255, 0.3)';
+        div.style.padding = '5px';
+        div.innerHTML = text;
+        div.style.top = '40px';
+        div.style.left = '5px';
+        div.style.maxWidth = '200px';
+        div.style.whiteSpace = 'pre-wrap';
+        div.style.fontSize = '14px';
+        return {
+            element: div
+        };
     }
 }
 

@@ -201,8 +201,19 @@
                 <label for='settings-execute'></label>
             </div>
 
-            <div class='textdiv'>Execute on file load:</div>
+            <div class='textdiv'>Execute on file load</div>
             
+        </div>
+        <br>
+        <div class='settingLine'>
+            <div class='div--chbox'>
+                <input id='settings-autosave' 
+                name='settings-autosave' 
+                type="checkbox" 
+                [checked]='checkSetting("autosave", true)'>
+                <label for='settings-autosave'></label>
+            </div>
+            <div class='textdiv'>Auto-saving file (5-min interval)</div>
         </div>
         <br>
         <div class='settingLine'>

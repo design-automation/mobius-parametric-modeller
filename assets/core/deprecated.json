@@ -6,7 +6,17 @@
         },
         "new_func": {
             "module": "io",
+            "name": "Import"
+        }
+    },
+    {
+        "old_func": {
+            "module": "io",
             "name": "ImportToModel"
+        },
+        "new_func": {
+            "module": "io",
+            "name": "Import"
         }
     },
     {

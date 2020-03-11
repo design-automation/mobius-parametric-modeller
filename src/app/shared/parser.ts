@@ -297,7 +297,7 @@ export function modifyVarArg(arg: IArgument, toLower = true) {
 
 export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProdList: IProcedure[]) {
     procedure.args[argIndex].usedVars = [];
-    if (!procedure.args[argIndex].value) { return; }
+    if (!procedure.args[argIndex].value || procedure.args[argIndex].value === '"___LONG_STRING_DATA___"') { return; }
     // PARSER CALL
     let varResult = parseArgument(procedure.args[argIndex].value);
     if (varResult.error) {
@@ -507,9 +507,18 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
         jsString += result.jsStr;
 
     // if number/string ==> basic
-    } else if (comps[i].type === strType.NUM || comps[i].type === strType.STR) {
+    } else if (comps[i].type === strType.NUM) {
         newString += comps[i].value;
         jsString += comps[i].value;
+
+    } else if (comps[i].type === strType.STR) {
+        if (comps[i].value.length > 1000) {
+            newString += '"___LONG_STRING_DATA___"';
+            jsString += comps[i].value;
+        } else {
+            newString += comps[i].value;
+            jsString += comps[i].value;
+        }
 
     // if "-" or "!" or "not" ==> add the operator then analyzeComp the next
     } else if (prefixUnaryOperators.has(comps[i].value)) {

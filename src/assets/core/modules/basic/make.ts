@@ -1364,7 +1364,7 @@ export enum _ESliceMethod {
     BOTH = 'both'
 }
 /**
- * Slices polygons and polylines using a plane
+ * Slices polygons and polylines using a plane as a knife.
  * ~
  * If the 'keep_above' method is selected, then only the entities above the plane are kept.
  * If the 'keep_below' method is selected, then only the entities above the plane are kept.
@@ -1379,11 +1379,11 @@ export enum _ESliceMethod {
  * @returns Entities, a list of new edges resulting from the divide.
 
  */
-export function Slice(__model__: GIModel, entities: TId|TId[], plane: TPlane, method: _ESliceMethod): TId[]|[TId[], TId[]] {
+export function Knife(__model__: GIModel, entities: TId|TId[], plane: TPlane, method: _ESliceMethod): TId[]|[TId[], TId[]] {
     entities = arrMakeFlat(entities) as TId[];
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
-    const fn_name = 'make.Slice';
+    const fn_name = 'make.Knife';
     const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
     checkArgTypes(fn_name, 'plane', plane, [TypeCheckObj.isPlane]);

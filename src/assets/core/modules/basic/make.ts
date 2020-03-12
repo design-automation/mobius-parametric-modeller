@@ -1364,7 +1364,7 @@ export enum _ESliceMethod {
     BOTH = 'both'
 }
 /**
- * Slices polygons and polylines using a plane as a knife.
+ * Cuts polygons and polylines using a plane.
  * ~
  * If the 'keep_above' method is selected, then only the entities above the plane are kept.
  * If the 'keep_below' method is selected, then only the entities above the plane are kept.
@@ -1374,16 +1374,16 @@ export enum _ESliceMethod {
  *
  * @param __model__
  * @param entities Polylines or polygons, or entities from which polyline or polygons can be extracted.
- * @param plane The plane to slice with.
- * @param method Enum, select the method for slicing.
- * @returns Entities, a list of new edges resulting from the divide.
+ * @param plane The plane to cut with.
+ * @param method Enum, select the method for cutting.
+ * @returns Entities, a list of new entities resulting from the cut.
 
  */
-export function Knife(__model__: GIModel, entities: TId|TId[], plane: TPlane, method: _ESliceMethod): TId[]|[TId[], TId[]] {
+export function Cut(__model__: GIModel, entities: TId|TId[], plane: TPlane, method: _ESliceMethod): TId[]|[TId[], TId[]] {
     entities = arrMakeFlat(entities) as TId[];
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
-    const fn_name = 'make.Knife';
+    const fn_name = 'make.Cut';
     const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
     checkArgTypes(fn_name, 'plane', plane, [TypeCheckObj.isPlane]);

@@ -23,7 +23,7 @@ as-split-area{
     height: 30px;
     font-size:$fsize1;
     position: absolute;
-    top:0px;
+    top: 100px;
     right:0px; 
     text-align:center;
     color: $color1;
@@ -46,7 +46,7 @@ as-split-area{
 }
 
 
-modal-window {
+cesium-modal-window {
     display: none;
     h1{
         font-size: 14px;
@@ -102,6 +102,11 @@ modal-window {
                         color: #ffffff !important;
                     }
                 }
+            }
+            .tArea {
+                width: 400px;
+                max-width: 400px;
+                height: 100px;
             }
         }
     }

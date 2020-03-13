@@ -1,13 +1,18 @@
 import { VERSION } from '@env/version';
 
 export interface CesiumSettings {
-    normals: { show: boolean, size: number };
-    axes: { show: boolean, size: number };
-    grid: { show: boolean, size: number };
-    positions: { show: boolean, size: number };
-    wireframe: { show: boolean };
-    version: string;
+    cesium: {
+        ion: string,
+        save: boolean
+    };
 }
+
+export const cesium_default_settings: CesiumSettings = {
+    'cesium': {
+        'ion': '',
+        'save': true
+    }
+};
 
 export const Locale = [{
     name: 'Singapore',

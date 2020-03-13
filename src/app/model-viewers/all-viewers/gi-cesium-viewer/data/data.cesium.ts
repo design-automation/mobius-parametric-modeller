@@ -2,6 +2,8 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { CesiumSettings } from '../gi-cesium-viewer.settings';
 import { EEntType, Txyz, TAttribDataTypes, LONGLAT } from '@libs/geo-info/common';
 // import { HereMapsImageryProvider } from './HereMapsImageryProvider.js';
+import Shape from '@doodle3d/clipper-js';
+
 /**
  * Cesium data
  */
@@ -26,7 +28,7 @@ export class DataCesium {
      * Constructs a new data subscriber.
      */
     constructor(settings: CesiumSettings) {
-        this.settings = settings;
+        this.settings = JSON.parse(JSON.stringify(settings));
         // renderer
         // camera settings
         // orbit controls
@@ -114,7 +116,6 @@ export class DataCesium {
             // this._viewer.camera.up = this._camera[1].up;
             this._viewer.render();
         }
-
         const homeBtn = document.getElementsByClassName('cesium-home-button')[0];
         // tslint:disable-next-line
         homeBtn.getElementsByTagName('path')[0].setAttribute('d', 'M15 3l2.3 2.3-2.89 2.87 1.42 1.42L18.7 6.7 21 9V3zM3 9l2.3-2.3 2.87 2.89 1.42-1.42L6.7 5.3 9 3H3zm6 12l-2.3-2.3 2.89-2.87-1.42-1.42L5.3 17.3 3 15v6zm12-6l-2.3 2.3-2.87-2.89-1.42 1.42 2.89 2.87L15 21h6z');
@@ -130,7 +131,6 @@ export class DataCesium {
         svg.append(path);
         settingsBtn.append(svg);
         // settingsBtn.style.top = '58px';
-
         // const btn = document.getElementById('attribToggle');
         // if (btn) {
         //     btn.style.display = 'none';
@@ -585,6 +585,23 @@ export class DataCesium {
         return {
             element: div
         };
+    }
+
+    public updateSettings(settings) {
+        const newSetting = <CesiumSettings> JSON.parse(JSON.stringify(settings));
+        newSetting.cesium.ion = newSetting.cesium.ion.trim();
+        if (newSetting.cesium) {
+            if (newSetting.cesium.ion !== Cesium.Ion.defaultAccessToken && newSetting.cesium.ion !== '') {
+                Cesium.Ion.defaultAccessToken = newSetting.cesium.ion;
+            }
+            if (newSetting.cesium.hasOwnProperty('save')) {
+                this.settings.cesium.save = newSetting.cesium.save;
+                if (this.settings.cesium.save) {
+                    this.settings.cesium.ion = newSetting.cesium.ion;
+                }
+            }
+        }
+        localStorage.setItem('cesium_settings', JSON.stringify(this.settings));
     }
 }
 

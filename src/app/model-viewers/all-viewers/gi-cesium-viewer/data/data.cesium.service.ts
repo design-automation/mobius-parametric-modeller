@@ -11,6 +11,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class DataCesiumService {
     private _data_cesium: DataCesium;
+    private _cesium_settings: CesiumSettings;
 
     /**
      * Create a data service.
@@ -29,6 +30,20 @@ export class DataCesiumService {
      */
     setCesiumScene(settings: CesiumSettings) {
         this._data_cesium = new DataCesium(settings);
+    }
+
+    /**
+     * Get the Cesium Scene
+     */
+    getCesiumSettings(): CesiumSettings {
+        return this._cesium_settings;
+    }
+
+    /**
+     * Set the Cesium Scene
+     */
+    setCesiumSettings(settings: CesiumSettings) {
+        this._cesium_settings = settings;
     }
 
     createCesiumViewer() {

@@ -4,6 +4,12 @@ import * as threex from './threex';
 import * as earcut from './earcut';
 import { Txyz } from '../geo-info/common';
 import { area } from '../geom/triangle';
+// import { ConvexHull } from 'three/examples/jsm/math/ConvexHull';
+// import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry';
+// import { Earcut } from 'three/Earcut';
+
+const EPS = 1e-6;
+
 
 //  3D to 2D ======================================================================================================
 
@@ -44,14 +50,15 @@ import { area } from '../geom/triangle';
 //     return m2;
 // }
 
-
 /**
- * Function that returns a matrix to transform a set of vertices in 3d space onto the xy plane.
- * This function assumes that the vertices are more or less co-planar.
- * Returns null if the plane cannot be found, e.g. points are all colinear.
+ * Gtes three extreme points that can be used to calculate the transform matrix
  */
-function _getMatrix(points: three.Vector3[]): three.Matrix4 {
-
+function _getThreePoints(points: three.Vector3[]): three.Vector3[] {
+    // console.log("_getExtremePoints")
+    // basic case, a triangle with holes
+    if (points.length === 3) {
+        return points;
+    }
     // find the extreme points
     const extremes: number[] = [0, 0, 0, 0, 0, 0];
     // min x, min y, min z, max x, max y, max z
@@ -76,43 +83,97 @@ function _getMatrix(points: three.Vector3[]): three.Matrix4 {
         }
     }
     // calc sizes
-    const x_size: number = points[extremes[3]].x - points[extremes[0]].x;
-    const y_size: number = points[extremes[4]].x - points[extremes[1]].x;
-    const z_size: number = points[extremes[5]].x - points[extremes[2]].x;
+    const x_size: number = Math.abs(points[extremes[3]].x - points[extremes[0]].x);
+    const y_size: number = Math.abs(points[extremes[4]].x - points[extremes[1]].x);
+    const z_size: number = Math.abs(points[extremes[5]].x - points[extremes[2]].x);
     // add the extreme points
-    const selected: Set<number> = new Set();
-    if (x_size > 0) { selected.add(extremes[0]); selected.add(extremes[3]); }
-    if (y_size > 0) { selected.add(extremes[1]); selected.add(extremes[4]); }
-    if (z_size > 0) { selected.add(extremes[2]); selected.add(extremes[5]); }
-    // get three points
-    let points2: three.Vector3[] = [];
-    // TODO optimize...
-    if (selected.size >= 3) { // ok
-        points2 = Array.from(selected).sort((a, b) => a - b ).map( i => points[i] );
-        // TODO maybe we should check if the dit between oints is not too small
-    } else if (selected.size === 2) { // special diagonal case
-        // TODO replace with convex hull
-        const pair_idxs: number[] = Array.from(selected.values());
-        const line: three.Line3 = new three.Line3(points[pair_idxs[0]], points[pair_idxs[1]]);
-        const line_len: number = line.delta(new three.Vector3()).manhattanLength();
-        let max_dist = 1e-4;
-        let third_point_idx = null;
-        for (let i = 0; i < points.length; i++) {
-            if (i !== pair_idxs[0] && i !== pair_idxs[1]) {
-                const point_on_line: three.Vector3 = line.closestPointToPoint(points[i], false, new three.Vector3());
-                const dist_to_line: number = point_on_line.manhattanDistanceTo(points[i]);
-                if (dist_to_line > max_dist) {
-                    third_point_idx = i;
-                    max_dist = dist_to_line;
-                }
-                if (dist_to_line / line_len > 0.01) { break; }
-            }
+    const set_selected: Set<number> = new Set();
+    if (x_size > 0) { set_selected.add(extremes[0]); set_selected.add(extremes[3]); }
+    if (y_size > 0) { set_selected.add(extremes[1]); set_selected.add(extremes[4]); }
+    if (z_size > 0) { set_selected.add(extremes[2]); set_selected.add(extremes[5]); }
+    // get three points that are not too close together
+    const LIMIT = 0.0001; /// I am not sure what to set this to
+    const selected: number[] = Array.from(set_selected).sort((a, b) => a - b );
+    let three_selected: number[] = [selected[0]];
+    for (let i = 1; i < selected.length; i++) {
+        // I am not really sure if this distance check is needed
+        // we already got extreme points
+        // but it is possible that two or even three extreme points are right next to each other
+        // squashed together in a corner... so I leave this check for now
+        if (points[selected[i - 1]].manhattanDistanceTo(points[selected[i]]) > LIMIT) {
+            three_selected.push(selected[i]);
         }
-        if (third_point_idx === null) { return null; }
-        points2 = [pair_idxs[0], pair_idxs[1], third_point_idx].sort((a, b) => a - b ).map( i => points[i] );
-    } else if  (selected.size < 2) {
-        return null;  // could not find points
+        if (three_selected.length === 3) { break; }
     }
+    // we should now have three points
+    if (three_selected.length === 3) {
+        // console.log("FAST METHOD");
+        return three_selected.map( i => points[i] );
+    } else if (three_selected.length === 2) {
+        // there is always a special case... the dreaded diagonal shape
+        // console.log("SLOW METHOD", [first, second]);
+        const [first, second]: [number, number] = three_selected as [number, number];
+        const line: three.Line3 = new three.Line3(points[first], points[second]);
+        let third: number;
+        let dist = 0;
+        for (let i = 0; i < points.length; i++) {
+            const cur_point: three.Vector3 = points[i];
+            if (cur_point !== points[first] && cur_point !== points[second]) {
+                const dummy: three.Vector3 = new three.Vector3();
+                const close_point: three.Vector3   = line.closestPointToPoint(cur_point, true, dummy);
+                const cur_dist = cur_point.manhattanDistanceTo(close_point);
+                if (dist < cur_dist) {
+                    third = i;
+                    dist = cur_dist;
+                }
+            }
+            if (dist > LIMIT) { break; }
+        }
+        if (third === undefined) { return null; }
+        three_selected = [first, second, third].sort((a, b) => a - b );
+        return three_selected.map( i => points[i] );
+    }
+    // else if (selected.size === 2) { // special diagonal case
+    //     console.log("XXXXXXXXXXXXXXX")
+    //     return null;
+    //     // TODO replace with convex hull
+    //     const pair_idxs: number[] = Array.from(selected.values());
+    //     const line: three.Line3 = new three.Line3(points[pair_idxs[0]], points[pair_idxs[1]]);
+    //     const line_len: number = line.delta(new three.Vector3()).manhattanLength();
+    //     let max_dist = 1e-4;
+    //     let third_point_idx = null;
+    //     for (let i = 0; i < points.length; i++) {
+    //         if (i !== pair_idxs[0] && i !== pair_idxs[1]) {
+    //             const point_on_line: three.Vector3 = line.closestPointToPoint(points[i], false, new three.Vector3());
+    //             const dist_to_line: number = point_on_line.manhattanDistanceTo(points[i]);
+    //             if (dist_to_line > max_dist) {
+    //                 third_point_idx = i;
+    //                 max_dist = dist_to_line;
+    //             }
+    //             if (dist_to_line / line_len > 0.01) { break; }
+    //         }
+    //     }
+    //     if (third_point_idx === null) { return null; }
+    //     const extreme_points: three.Vector3[] = [pair_idxs[0], pair_idxs[1], third_point_idx].sort((a, b) => a - b ).map( i => points[i] );
+    //     return extreme_points;
+    // }
+    // could not find points
+    return null;
+}
+
+/**
+ * Function that returns a matrix to transform a set of vertices in 3d space onto the xy plane.
+ * This function assumes that the vertices are more or less co-planar.
+ * Returns null if the plane cannot be found, e.g. points are all colinear.
+ */
+function _getMatrix(points: three.Vector3[]): three.Matrix4 {
+
+    const three_points: three.Vector3[] = _getThreePoints(points);
+    // if (extreme_points === null) {
+    //     console.log("POINTS = ",points)
+    //     extreme_points = _getExtremePointsConvex(points);
+    // }
+    if (three_points === null) { return null; }
 
     // console.log("points", points)
     // console.log("extremes", extremes)
@@ -125,11 +186,11 @@ function _getMatrix(points: three.Vector3[]): three.Matrix4 {
     // o.y = (points2[1].y + points2[1].y + points2[1].y) / 3;
     // o.z = (points2[2].z + points2[2].z + points2[2].z) / 3;
 
-    const vx: three.Vector3 = threex.subVectors(points2[1], points2[0]).normalize();
-    const v2: three.Vector3 = threex.subVectors(points2[2], points2[1]).normalize();
+    const vx: three.Vector3 = threex.subVectors(three_points[1], three_points[0]).normalize();
+    const v2: three.Vector3 = threex.subVectors(three_points[2], three_points[1]).normalize();
     const vz: three.Vector3 = threex.crossVectors(vx, v2).normalize();
     const vy: three.Vector3 =  threex.crossVectors(vz, vx).normalize();
-    
+
     // console.log(vx, vy, vz)
 
     // create matrix
@@ -137,6 +198,27 @@ function _getMatrix(points: three.Vector3[]): three.Matrix4 {
     m2.makeBasis(vx, vy, vz);
     m2.getInverse(m2);
     return m2;
+}
+
+/**
+ * Triangulate a 4 sided shape
+ * @param coords
+ */
+export function triangulateQuad(coords: Txyz[]): number[][] {
+    // TODO this does not take into account degenerate cases
+    // TODO two points in same location
+    // TODO Three points that are colinear
+    const area1: number = area(coords[0], coords[1], coords[2]) + area(coords[2], coords[3], coords[0]);
+    const area2: number = area(coords[0], coords[1], coords[3]) + area(coords[1], coords[2], coords[3]);
+    // const tri1a: Txyz[] = [coords[0], coords[1], coords[2]];
+    // const tri1b: Txyz[] = [coords[2], coords[3], coords[0]];
+    // const tri2a: Txyz[] = [coords[0], coords[1], coords[3]];
+    // const tri2b: Txyz[] = [coords[1], coords[2], coords[3]];
+    if (area1 < area2) {
+        return [[0, 1, 2], [2, 3, 0]];
+    } else {
+        return [[0, 1, 3], [1, 2, 3]];
+    }
 }
 
 /**
@@ -156,20 +238,7 @@ export function triangulate(coords: Txyz[], holes?: Txyz[][]): number[][] {
 
     // basic case, a quad with no holes
     if (coords.length === 4 && !has_holes) {
-        // TODO this does not take into account degenerate cases
-        // TODO two points in same location
-        // TODO Three points that are colinear
-        const area1: number = area(coords[0], coords[1], coords[2]) + area(coords[2], coords[3], coords[0]);
-        const area2: number = area(coords[0], coords[1], coords[3]) + area(coords[1], coords[2], coords[3]);
-        // const tri1a: Txyz[] = [coords[0], coords[1], coords[2]];
-        // const tri1b: Txyz[] = [coords[2], coords[3], coords[0]];
-        // const tri2a: Txyz[] = [coords[0], coords[1], coords[3]];
-        // const tri2b: Txyz[] = [coords[1], coords[2], coords[3]];
-        if (area1 < area2) {
-            return [[0, 1, 2], [2, 3, 0]];
-        } else {
-            return [[0, 1, 3], [1, 2, 3]];
-        }
+        return triangulateQuad(coords);
     }
 
     // get the matrix to transform from 2D to 3D

@@ -43,10 +43,10 @@ export class GICesiumViewerComponent implements OnInit {
      * ngOnInit
      */
     ngOnInit() {
-        // if (localStorage.getItem('cesium_settings') !== null) {
-        //     const parsedSettings = JSON.parse(localStorage.getItem('cesium_settings'));
-        //     this.updateSettings(this.settings, parsedSettings);
-        // }
+        if (localStorage.getItem('cesium_settings') !== null) {
+            const parsedSettings = JSON.parse(localStorage.getItem('cesium_settings'));
+            this.updateSettings(this.settings, parsedSettings);
+        }
         if (this.dataService.getCesiumScene() === undefined) {
             this.dataService.setCesiumScene(this.settings);
         }

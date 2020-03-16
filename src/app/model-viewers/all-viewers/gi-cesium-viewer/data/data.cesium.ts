@@ -43,11 +43,15 @@ export class DataCesium {
      */
     public createCesiumViewer() {
         // add Cesium Access Token
-        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' +
-                                        '.eyJqdGkiOiI2MGMxNGYwMS1jZjYyLTQyNjM' +
-                                        'tOGNkYy1hOTRiYTk4ZGEzZDUiLCJpZCI6MTY' +
-                                        '4MSwiaWF0IjoxNTI5NTY4OTc4fQ.lL2fzwOZ' +
-                                        '6EQuL5BqXG5qIwlBn-P_DTbClhVYCIyCgS0';
+        if (this.settings.cesium.ion !== Cesium.Ion.defaultAccessToken && this.settings.cesium.ion !== '') {
+            Cesium.Ion.defaultAccessToken = this.settings.cesium.ion;
+        }
+
+        // Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' +
+        //                                 '.eyJqdGkiOiI2MGMxNGYwMS1jZjYyLTQyNjM' +
+        //                                 'tOGNkYy1hOTRiYTk4ZGEzZDUiLCJpZCI6MTY' +
+        //                                 '4MSwiaWF0IjoxNTI5NTY4OTc4fQ.lL2fzwOZ' +
+        //                                 '6EQuL5BqXG5qIwlBn-P_DTbClhVYCIyCgS0';
         // create the viewer
         // https://cesiumjs.org/Cesium/Build/Documentation/Viewer.html
         // https://cesium.com/docs/tutorials/getting-started/
@@ -116,9 +120,10 @@ export class DataCesium {
             // this._viewer.camera.up = this._camera[1].up;
             this._viewer.render();
         }
-        const homeBtn = document.getElementsByClassName('cesium-home-button')[0];
+        const homeBtn = <HTMLButtonElement> document.getElementsByClassName('cesium-home-button')[0];
         // tslint:disable-next-line
         homeBtn.getElementsByTagName('path')[0].setAttribute('d', 'M15 3l2.3 2.3-2.89 2.87 1.42 1.42L18.7 6.7 21 9V3zM3 9l2.3-2.3 2.87 2.89 1.42-1.42L6.7 5.3 9 3H3zm6 12l-2.3-2.3 2.89-2.87-1.42-1.42L5.3 17.3 3 15v6zm12-6l-2.3 2.3-2.87-2.89-1.42 1.42 2.89 2.87L15 21h6z');
+        homeBtn.title = 'Zoom to Fit Model';
         // settings button
         const settingsBtn = homeBtn.nextElementSibling as HTMLElement;
         settingsBtn.getElementsByTagName('img')[0].remove();
@@ -436,6 +441,9 @@ export class DataCesium {
             for (const primitive of this._primitives) {
                 this._viewer.scene.primitives.add(Cesium.clone(primitive));
             }
+            if (Cesium.Ion.defaultAccessToken && this.settings.cesium && this.settings.cesium.assetid) {
+                this._addAssets(this.settings.cesium.assetid);
+            }
 
             // set up the camera
             const sphere = new Cesium.BoundingSphere(origin, 1e2);
@@ -472,6 +480,17 @@ export class DataCesium {
             }, 0);
         }
     }
+
+    private _addAssets(assetIDString) {
+        const assets = assetIDString.split(/[\s\,\;]/g);
+        for (const asset of assets) {
+            const assetid =  asset.replace(/[\'\"]/g, '');
+            this._viewer.scene.primitives.add(new Cesium.Cesium3DTileset({
+                url: Cesium.IonResource.fromAssetId(assetid)
+            }));
+        }
+    }
+
     // PRIVATE METHODS
     /**
      * Get a set of image layers
@@ -598,8 +617,12 @@ export class DataCesium {
                 this.settings.cesium.save = newSetting.cesium.save;
                 if (this.settings.cesium.save) {
                     this.settings.cesium.ion = newSetting.cesium.ion;
+                    this.settings.cesium.assetid = newSetting.cesium.assetid;
                 }
             }
+        }
+        if (Cesium.Ion.defaultAccessToken && newSetting.cesium && newSetting.cesium.assetid) {
+            this._addAssets(newSetting.cesium.assetid);
         }
         localStorage.setItem('cesium_settings', JSON.stringify(this.settings));
     }

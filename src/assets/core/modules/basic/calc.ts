@@ -17,7 +17,7 @@ import { triangulate } from '@libs/triangulate/triangulate';
 import { area } from '@libs/geom/triangle';
 import { checkIDs, checkArgTypes, IDcheckObj, TypeCheckObj} from '../_check_args';
 import __ from 'underscore';
-import { getCentroid } from './_common';
+import { getCentroid, getCenterOfMass } from './_common';
 import { rayFromPln } from '@assets/core/inline/_ray';
 import { isEmptyArr2, arrMakeFlat, arrMaxDepth } from '@assets/libs/util/arrs';
 import * as THREE from 'three';
@@ -380,32 +380,43 @@ function _vector(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): Txyz
     }
 }
 // ================================================================================================
+export enum _ECentroidMethod {
+    PS_AVERAGE = 'ps_average',
+    CENTER_OF_MASS = 'center_of_mass'
+}
 /**
  * Calculates the centroid of an entity.
  * ~
- * The centroid is the average of the positions that make up that entity.
+ * If 'ps_average' is selected, the centroid is the average of the positions that make up that entity.
  * ~
- * Given a single entity, a single centroid will be returned.
+ * If 'center_of_mass' is selected, the centroid is the centre of mass of the faces that make up that entity.
+ * Note that only faces are deemed to have mass.
  * ~
  * Given a list of entities, a list of centroids will be returned.
  * ~
- * Given a list of positions, a single centroid that that is the average of all those positions will be returned.
+ * Given a list of positions, a single centroid that is the average of all those positions will be returned.
  * ~
  * @param __model__
  * @param entities Single or list of entities. (Can be any type of entities.)
+ * @param method Enum, the method for calculating the centroid.
  * @returns A centroid [x, y, z] or a list of centroids.
  * @example centroid1 = calc.Centroid (polygon1)
  */
-export function Centroid(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
+export function Centroid(__model__: GIModel, entities: TId|TId[], method: _ECentroidMethod): Txyz|Txyz[] {
     if (isEmptyArr2(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Centroid';
     const ents_arrs: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
-        [EEntType.POSI, EEntType.VERT, EEntType.POINT, EEntType.EDGE, EEntType.WIRE,
-            EEntType.PLINE, EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
-    return getCentroid(__model__, ents_arrs);
+    switch (method) {
+        case _ECentroidMethod.PS_AVERAGE:
+            return getCentroid(__model__, ents_arrs);
+        case _ECentroidMethod.CENTER_OF_MASS:
+            return getCenterOfMass(__model__, ents_arrs);
+        default:
+            break;
+    }
 }
 
 // ================================================================================================

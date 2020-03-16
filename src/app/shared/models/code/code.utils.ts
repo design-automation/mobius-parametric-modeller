@@ -431,6 +431,7 @@ export class CodeUtils {
     }
 
     static async getURLContent(url: string): Promise<any> {
+        url = url.replace('http://', 'https://');
         if (url.indexOf('dropbox') !== -1) {
             url = url.replace('www', 'dl').replace('dl=0', 'dl=1');
         }

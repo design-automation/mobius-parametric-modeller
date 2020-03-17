@@ -449,7 +449,6 @@ export class CodeUtils {
                 }
                 return res.text();
             }).then(body => {
-                console.log(body);
                 resolve(body.replace(/(\\[bfnrtv\'\"\\])/g, '\\$1'));
             });
 

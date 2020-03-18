@@ -304,31 +304,24 @@ function _printPaths(paths: TClipPaths, mesage: string) {
 // ================================================================================================
 // d3
 // ================================================================================================
-export enum _EVoronoiMethod {
-    VORONOI = 'voronoi',
-    DELAUNY = 'delauny'
-}
 /**
- * Create a voronoi subdivision of a polygon.
+ * Create a voronoi subdivision of one or more polygons.
  * ~
- * Holes are currently not supported.
- *
  * @param __model__
- * @param pgons A list of polygons, or entities from which polygons can bet extracted.
- * @param posis A list of positione, or entities from which positions can be extracted.
- * @param method Enum, the output, either 'voronoi' or 'delauny'.
+ * @param pgons A list of polygons, or entities from which polygons can be extracted.
+ * @param entities A list of positions, or entities from which positions can be extracted.
  * @returns A list of new polygons.
  */
-export function Voronoi(__model__: GIModel, pgons: TId|TId[], posis: TId|TId[], method: _EVoronoiMethod): TId[] {
+export function Voronoi(__model__: GIModel, pgons: TId|TId[], entities: TId|TId[]): TId[] {
     pgons = arrMakeFlat(pgons) as TId[];
-    posis = arrMakeFlat(posis) as TId[];
+    entities = arrMakeFlat(entities) as TId[];
     if (isEmptyArr(pgons)) { return []; }
-    if (isEmptyArr(posis)) { return []; }
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'poly2d.Voronoi';
-    const pgons_ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities1', pgons,
+    const pgons_ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'pgons', pgons,
         [IDcheckObj.isIDList], null) as TEntTypeIdx[];
-    const posis_ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities1', posis,
+    const posis_ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isIDList], null) as TEntTypeIdx[];
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();
@@ -362,17 +355,7 @@ export function Voronoi(__model__: GIModel, pgons: TId|TId[], posis: TId|TId[], 
         const pgon_shape: Shape = _convertPgonToShape(__model__, pgon_i, posis_map);
         // pgon_shape.scaleUp(SCALE);
         // create voronoi
-        let cells_i: number[];
-        switch (method) {
-            case _EVoronoiMethod.DELAUNY:
-                cells_i = _voronoiDelauny(__model__, cell_points, posis_map);
-                break;
-            case _EVoronoiMethod.VORONOI:
-                cells_i = _voronoi(__model__, pgon_shape, cell_points, bounds, posis_map);
-                break;
-            default:
-                break;
-        }
+        const cells_i: number[] = _voronoi(__model__, pgon_shape, cell_points, bounds, posis_map);
         for (const cell_i of cells_i) {
             all_cells_i.push(cell_i);
         }
@@ -380,33 +363,11 @@ export function Voronoi(__model__: GIModel, pgons: TId|TId[], posis: TId|TId[], 
     // return cell pgons
     return idsMake(all_cells_i.map( cell_i => [EEntType.PGON, cell_i] as TEntTypeIdx )) as TId[];
 }
-function _voronoiDelauny(__model__: GIModel, cell_points: [number, number][], posis_map: TPosisMap): number[] {
-    const new_pgons_i: number[] = [];
-    const delaunay = Delaunay.from(cell_points);
-    const deauny_posis_i: number[] = [];
-    for (const point of cell_points) {
-        // TODO use the posis_map!!
-        // const deauny_posi_i: number = __model__.geom.add.addPosi();
-        // __model__.attribs.add.setPosiCoords(deauny_posi_i, [point[0], point[1], 0]);
-        const delauny_posi_i: number = _getPosiFromMap(__model__, point[0], point[1], posis_map);
-        deauny_posis_i.push(delauny_posi_i);
-    }
-    for (let i = 0; i < delaunay.triangles.length; i += 3) {
-        const a: number = deauny_posis_i[delaunay.triangles[i]];
-        const b: number = deauny_posis_i[delaunay.triangles[i + 1]];
-        const c: number = deauny_posis_i[delaunay.triangles[i + 2]];
-        __model__.geom.add.addPgon([c, b, a]);
-    }
-    return new_pgons_i;
-}
+
 function _voronoi(__model__: GIModel, pgon_shape: Shape, cell_points: [number, number][],
         bounds: number[], posis_map: TPosisMap): number[] {
     const delaunay = Delaunay.from(cell_points);
     const v = delaunay.voronoi(bounds);
-    // console.log(v.circumcenters);
-    // console.log(v.vectors);
-    // console.log(v.cellPolygons())
-    // console.log(v.cellPolygon(0))
     const bound_shape_coords: IClipCoord[] = [];
     for (const coord of bound_shape_coords) {
         bound_shape_coords.push( {X: coord[0], Y: coord[1] } );
@@ -427,6 +388,57 @@ function _voronoiClip(__model__: GIModel, pgon_shape: Shape, cell_coords: [numbe
     cell_shape.scaleUp(SCALE);
     const clipped_shape: Shape = pgon_shape.intersect(cell_shape);
     return clipped_shape;
+}
+// ================================================================================================
+/**
+ * Create a delauny triangulation of set of positions.
+ * ~
+ * @param __model__
+ * @param entities A list of positions, or entities from which positions can be extracted.
+ * @returns A list of new polygons.
+ */
+export function Delauny(__model__: GIModel, entities: TId|TId[]): TId[] {
+    entities = arrMakeFlat(entities) as TId[];
+    if (isEmptyArr(entities)) { return []; }
+    // --- Error Check ---
+    const fn_name = 'poly2d.Delauny';
+    const posis_ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities1', entities,
+        [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    // --- Error Check ---
+    const posis_map: TPosisMap = new Map();
+    // posis
+    const posis_i: number[] = _getPosis(__model__, posis_ents_arr);
+    if (posis_i.length === 0) { return []; }
+    // posis
+    const cell_points: [number, number][] = [];
+    for (const posi_i of posis_i) {
+        const xyz: Txyz = __model__.attribs.query.getPosiCoords(posi_i);
+        cell_points.push([xyz[0], xyz[1]]);
+        _putPosiInMap(xyz[0], xyz[1], posi_i, posis_map);
+    }
+    // create delauny triangulation
+    const cells_i: number[] = _delauny(__model__, cell_points, posis_map);
+    // return cell pgons
+    return idsMake(cells_i.map( cell_i => [EEntType.PGON, cell_i] as TEntTypeIdx )) as TId[];
+}
+function _delauny(__model__: GIModel, cell_points: [number, number][], posis_map: TPosisMap): number[] {
+    const new_pgons_i: number[] = [];
+    const delaunay = Delaunay.from(cell_points);
+    const deauny_posis_i: number[] = [];
+    for (const point of cell_points) {
+        // TODO use the posis_map!!
+        // const deauny_posi_i: number = __model__.geom.add.addPosi();
+        // __model__.attribs.add.setPosiCoords(deauny_posi_i, [point[0], point[1], 0]);
+        const delauny_posi_i: number = _getPosiFromMap(__model__, point[0], point[1], posis_map);
+        deauny_posis_i.push(delauny_posi_i);
+    }
+    for (let i = 0; i < delaunay.triangles.length; i += 3) {
+        const a: number = deauny_posis_i[delaunay.triangles[i]];
+        const b: number = deauny_posis_i[delaunay.triangles[i + 1]];
+        const c: number = deauny_posis_i[delaunay.triangles[i + 2]];
+        __model__.geom.add.addPgon([c, b, a]);
+    }
+    return new_pgons_i;
 }
 // ================================================================================================
 /**

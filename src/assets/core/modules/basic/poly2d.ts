@@ -646,12 +646,12 @@ export function Union(__model__: GIModel, entities: TId|TId[]): TId[] {
 /**
  * Perform a boolean operation on a set of polygons.
  * ~
- * The polygons in A and B are first each unioned.
- * The boolean operation is then performed between the unioned A polygons and the unioned B polygons.
+ * The polygons in B are first unioned.
+ * The boolean operation is then performed between each polygon in A, and the unioned B polygons.
  * ~
  * @param __model__
- * @param a_entities A list of polygons, or entities from which polygons can bet extracted.
- * @param b_entities A list of polygons, or entities from which polygons can bet extracted.
+ * @param a_entities A list of polygons, or entities from which polygons can be extracted.
+ * @param b_entities A list of polygons, or entities from which polygons can be extracted.
  * @param method Enum, the boolean operator to apply.
  * @returns A list of new polygons.
  */
@@ -672,25 +672,59 @@ export function Boolean(__model__: GIModel, a_entities: TId|TId[], b_entities: T
     const b_pgons_i: number[] = _getPgons(__model__, b_ents_arr);
     if (a_pgons_i.length === 0) { return []; }
     if (b_pgons_i.length === 0) { return []; }
-    const a_shape: Shape = _convertPgonsToShapeUnion(__model__, a_pgons_i, posis_map);
+    // const a_shape: Shape = _convertPgonsToShapeUnion(__model__, a_pgons_i, posis_map);
     const b_shape: Shape = _convertPgonsToShapeUnion(__model__, b_pgons_i, posis_map);
-    // const b_shape: Shape = _convertPgonsToShapeJoin(__model__, a_pgons_i, posis_map);
-    let result_shape: Shape;
-    switch (method) {
-        case _EBooleanMethod.INTERSECT:
-            result_shape = a_shape.intersect(b_shape);
-            break;
-        case _EBooleanMethod.DIFFERENCE:
-            result_shape = a_shape.difference(b_shape);
-            break;
-        case _EBooleanMethod.SYMMETRIC:
-            result_shape = a_shape.xor(b_shape);
-            break;
-        default:
-            break;
+    // // const b_shape: Shape = _convertPgonsToShapeJoin(__model__, a_pgons_i, posis_map);
+    // let result_shape: Shape;
+    // switch (method) {
+    //     case _EBooleanMethod.INTERSECT:
+    //         result_shape = a_shape.intersect(b_shape);
+    //         break;
+    //     case _EBooleanMethod.DIFFERENCE:
+    //         result_shape = a_shape.difference(b_shape);
+    //         break;
+    //     case _EBooleanMethod.SYMMETRIC:
+    //         result_shape = a_shape.xor(b_shape);
+    //         break;
+    //     default:
+    //         break;
+    // }
+    // call the boolean function
+    const new_pgons: number[] = _boolean(__model__, a_pgons_i, b_shape, method, posis_map);
+    // always return a list
+    return idsMake(new_pgons.map( pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx )) as TId[];
+}
+function _boolean(__model__: GIModel, pgons_i: number|number[], b_shape: Shape,
+        method: _EBooleanMethod, posis_map: TPosisMap): number[] {
+    if (!Array.isArray(pgons_i)) {
+        pgons_i = pgons_i as number;
+        const a_shape: Shape = _convertPgonToShape(__model__, pgons_i, posis_map);
+        let result_shape: Shape;
+        switch (method) {
+            case _EBooleanMethod.INTERSECT:
+                result_shape = a_shape.intersect(b_shape);
+                break;
+            case _EBooleanMethod.DIFFERENCE:
+                result_shape = a_shape.difference(b_shape);
+                break;
+            case _EBooleanMethod.SYMMETRIC:
+                result_shape = a_shape.xor(b_shape);
+                break;
+            default:
+                break;
+        }
+        return _convertShapesToPgons(__model__, result_shape, posis_map);
+    } else {
+        pgons_i = pgons_i as number[];
+        const all_new_pgons: number[] = [];
+        for (const pgon_i of pgons_i) {
+            const result_pgons_i: number[] = _boolean(__model__, pgon_i, b_shape, method, posis_map);
+            for (const result_pgon_i of result_pgons_i) {
+                all_new_pgons.push(result_pgon_i);
+            }
+        }
+        return all_new_pgons;
     }
-    const all_new_pgons: number[] = _convertShapesToPgons(__model__, result_shape, posis_map);
-    return idsMake(all_new_pgons.map( pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx )) as TId[];
 }
 // ================================================================================================
 /**

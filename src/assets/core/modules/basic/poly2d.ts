@@ -14,12 +14,11 @@ import Shape from '@doodle3d/clipper-js';
 import { isEmptyArr, isPgon, idsMake } from '@assets/libs/geo-info/id';
 import {Delaunay} from 'd3-delaunay';
 import * as d3 from 'd3-polygon';
-import { inflate } from 'zlib';
+import * as d3vor from 'd3-voronoi';
 import { distance } from '@assets/libs/geom/distance';
 import { vecFromTo, vecNorm, vecCross, vecMult, vecAdd, vecSub } from '@assets/libs/geom/vectors';
 import { xfromSourceTargetMatrix, multMatrix } from '@assets/libs/geom/matrix';
 import { Matrix4 } from 'three';
-import { number } from '@assets/core/inline/_mathjs';
 
 const SCALE = 1e9;
 type TPosisMap = Map<number, Map<number, number>>;
@@ -332,10 +331,10 @@ export function Voronoi(__model__: GIModel, pgons: TId|TId[], entities: TId|TId[
     const posis_i: number[] = _getPosis(__model__, posis_ents_arr);
     if (posis_i.length === 0) { return []; }
     // posis
-    const cell_points: [number, number][] = [];
+    const d3_cell_points: [number, number][] = [];
     for (const posi_i of posis_i) {
         const xyz: Txyz = __model__.attribs.query.getPosiCoords(posi_i);
-        cell_points.push([xyz[0], xyz[1]]);
+        d3_cell_points.push([xyz[0], xyz[1]]);
     }
     // loop and create cells
     const all_cells_i: number[] = [];
@@ -355,7 +354,7 @@ export function Voronoi(__model__: GIModel, pgons: TId|TId[], entities: TId|TId[
         const pgon_shape: Shape = _convertPgonToShape(__model__, pgon_i, posis_map);
         // pgon_shape.scaleUp(SCALE);
         // create voronoi
-        const cells_i: number[] = _voronoi(__model__, pgon_shape, cell_points, bounds, posis_map);
+        const cells_i: number[] = _voronoiOld(__model__, pgon_shape, d3_cell_points, bounds, posis_map);
         for (const cell_i of cells_i) {
             all_cells_i.push(cell_i);
         }
@@ -363,26 +362,45 @@ export function Voronoi(__model__: GIModel, pgons: TId|TId[], entities: TId|TId[
     // return cell pgons
     return idsMake(all_cells_i.map( cell_i => [EEntType.PGON, cell_i] as TEntTypeIdx )) as TId[];
 }
-
-function _voronoi(__model__: GIModel, pgon_shape: Shape, cell_points: [number, number][],
+// There is a bug in d3 new voronoi, it produces wrong results...
+// function _voronoi(__model__: GIModel, pgon_shape: Shape, d3_cell_points: [number, number][],
+//         bounds: number[], posis_map: TPosisMap): number[] {
+//     const d3_delaunay = Delaunay.from(d3_cell_points);
+//     const d3_voronoi = d3_delaunay.voronoi(bounds);
+//     const shapes: Shape[] = [];
+//     for (const d3_cell_coords of Array.from(d3_voronoi.cellPolygons())) {
+//         const clipped_shape: Shape = _voronoiClip(__model__, pgon_shape, d3_cell_coords as [number, number][]);
+//         shapes.push(clipped_shape);
+//     }
+//     return _convertShapesToPgons(__model__, shapes, posis_map);
+// }
+// function _voronoiClip(__model__: GIModel, pgon_shape: Shape, d3_cell_coords: [number, number][]): Shape {
+//     const cell_shape_coords: IClipCoord[] = [];
+//     // for (const d3_cell_coord of d3_cell_coords) {
+//     for (let i = 0; i < d3_cell_coords.length - 1; i++) {
+//         cell_shape_coords.push( {X: d3_cell_coords[i][0], Y: d3_cell_coords[i][1]} );
+//     }
+//     const cell_shape: Shape = new Shape([cell_shape_coords], true);
+//     cell_shape.scaleUp(SCALE);
+//     const clipped_shape: Shape = pgon_shape.intersect(cell_shape);
+//     return clipped_shape;
+// }
+function _voronoiOld(__model__: GIModel, pgon_shape: Shape, d3_cell_points: [number, number][],
         bounds: number[], posis_map: TPosisMap): number[] {
-    const delaunay = Delaunay.from(cell_points);
-    const v = delaunay.voronoi(bounds);
-    const bound_shape_coords: IClipCoord[] = [];
-    for (const coord of bound_shape_coords) {
-        bound_shape_coords.push( {X: coord[0], Y: coord[1] } );
-    }
+    const d3_voronoi = d3vor.voronoi().extent([   [bounds[0], bounds[1]],    [bounds[2], bounds[3]]   ]);
+    const d3_voronoi_diag = d3_voronoi(d3_cell_points);
     const shapes: Shape[] = [];
-    for (const cell_coords of Array.from(v.cellPolygons())) {
-        const clipped_shape: Shape = _voronoiClip(__model__, pgon_shape, cell_coords as [number, number][]);
+    for (const d3_cell_coords of d3_voronoi_diag.polygons()) {
+        const clipped_shape: Shape = _voronoiClipOld(__model__, pgon_shape, d3_cell_coords as [number, number][]);
         shapes.push(clipped_shape);
     }
     return _convertShapesToPgons(__model__, shapes, posis_map);
 }
-function _voronoiClip(__model__: GIModel, pgon_shape: Shape, cell_coords: [number, number][]): Shape {
+function _voronoiClipOld(__model__: GIModel, pgon_shape: Shape, d3_cell_coords: [number, number][]): Shape {
     const cell_shape_coords: IClipCoord[] = [];
-    for (const cell_coord of cell_coords) {
-        cell_shape_coords.push( {X: cell_coord[0], Y: cell_coord[1]} );
+    // for (const d3_cell_coord of d3_cell_coords) {
+    for (let i = 0; i < d3_cell_coords.length; i++) {
+        cell_shape_coords.push( {X: d3_cell_coords[i][0], Y: d3_cell_coords[i][1]} );
     }
     const cell_shape: Shape = new Shape([cell_shape_coords], true);
     cell_shape.scaleUp(SCALE);
@@ -410,33 +428,33 @@ export function Delauny(__model__: GIModel, entities: TId|TId[]): TId[] {
     const posis_i: number[] = _getPosis(__model__, posis_ents_arr);
     if (posis_i.length === 0) { return []; }
     // posis
-    const cell_points: [number, number][] = [];
+    const d3_tri_coords: [number, number][] = [];
     for (const posi_i of posis_i) {
         const xyz: Txyz = __model__.attribs.query.getPosiCoords(posi_i);
-        cell_points.push([xyz[0], xyz[1]]);
+        d3_tri_coords.push([xyz[0], xyz[1]]);
         _putPosiInMap(xyz[0], xyz[1], posi_i, posis_map);
     }
     // create delauny triangulation
-    const cells_i: number[] = _delauny(__model__, cell_points, posis_map);
+    const cells_i: number[] = _delauny(__model__, d3_tri_coords, posis_map);
     // return cell pgons
     return idsMake(cells_i.map( cell_i => [EEntType.PGON, cell_i] as TEntTypeIdx )) as TId[];
 }
-function _delauny(__model__: GIModel, cell_points: [number, number][], posis_map: TPosisMap): number[] {
+function _delauny(__model__: GIModel, d3_tri_coords: [number, number][], posis_map: TPosisMap): number[] {
     const new_pgons_i: number[] = [];
-    const delaunay = Delaunay.from(cell_points);
+    const delaunay = Delaunay.from(d3_tri_coords);
     const deauny_posis_i: number[] = [];
-    for (const point of cell_points) {
+    for (const d3_tri_coord of d3_tri_coords) {
         // TODO use the posis_map!!
         // const deauny_posi_i: number = __model__.geom.add.addPosi();
         // __model__.attribs.add.setPosiCoords(deauny_posi_i, [point[0], point[1], 0]);
-        const delauny_posi_i: number = _getPosiFromMap(__model__, point[0], point[1], posis_map);
+        const delauny_posi_i: number = _getPosiFromMap(__model__, d3_tri_coord[0], d3_tri_coord[1], posis_map);
         deauny_posis_i.push(delauny_posi_i);
     }
     for (let i = 0; i < delaunay.triangles.length; i += 3) {
         const a: number = deauny_posis_i[delaunay.triangles[i]];
         const b: number = deauny_posis_i[delaunay.triangles[i + 1]];
         const c: number = deauny_posis_i[delaunay.triangles[i + 2]];
-        __model__.geom.add.addPgon([c, b, a]);
+        new_pgons_i.push(__model__.geom.add.addPgon([c, b, a]));
     }
     return new_pgons_i;
 }

@@ -1,6 +1,6 @@
 <div id="cesium-viewer-container">
     <cesium-viewer [model]='data' (eventClicked)="childEventClicked($event)"></cesium-viewer>
-    <button class='btn' id="cesium_settings_button" mat-icon-button (click)="openModal('cesium_settings_modal')" title="Settings"><mat-icon svgIcon="settings"></mat-icon></button>
+    <!-- <button class='btn' id="cesium_settings_button" mat-icon-button (click)="openModal('cesium_settings_modal')" title="Settings"><mat-icon svgIcon="settings"></mat-icon></button>
     <cesium-modal-window id="cesium_settings_modal" (closeModal) = 'onCloseModal()'>
         <h1>Cesium Viewer Settings</h1>
         <tabs id="settingsTab">
@@ -41,7 +41,7 @@
         <button (click)="closeModal('cesium_settings_modal', true);" class="filebtn closebtn setting">Apply</button>
         <button (click)="closeModal('cesium_settings_modal');" class='filebtn closebtn setting'>Cancel</button>
         <button (click)="resetToDefault();" class='filebtn closebtn setting' style="float: right;">Default</button>
-    </cesium-modal-window>
+    </cesium-modal-window> -->
 
 
 </div>

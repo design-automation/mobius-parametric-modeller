@@ -1,6 +1,6 @@
 {
   "name": "mobius-parametric-modeller",
-  "version": "0.5.32",
+  "version": "0.5.33",
   "license": "MIT",
   "config": {
     "dev_url": "https://design-automation.github.io/mobius-parametric-modeller/",
@@ -72,6 +72,7 @@
     "@angular/language-service": "^8.2.13",
     "@types/d3-delaunay": "^4.1.0",
     "@types/d3-polygon": "^1.0.7",
+    "@types/d3-voronoi": "^1.1.9",
     "@types/jasmine": "^2.8.16",
     "@types/jasminewd2": "^2.0.6",
     "@types/node": "^9.6.48",

@@ -19,6 +19,11 @@ export class DataCesium {
     public _text: string;
     public _primitives: any[];
     public _camera: any[];
+    public _viewModel = {
+        layers : [],
+        baseLayers : [],
+        selectedLayer : null
+    };
     // interaction and selection
     // text labels
     // number of cesium points, lines, triangles
@@ -63,6 +68,7 @@ export class DataCesium {
                 shadows : true,
                 terrainShadows: Cesium.ShadowMode.ENABLED,
                 scene3DOnly: false,
+                baseLayerPicker: true,
                 sceneModePicker: false,
                 homeButton: true,
                 navigationHelpButton: false,
@@ -523,7 +529,7 @@ export class DataCesium {
         view_models.push(new Cesium.ProviderViewModel({
             name: 'Stamen Toner',
             iconUrl: Cesium.buildModuleUrl('Widgets/Images/ImageryProviders/stamenToner.png'),
-            tooltip: 'A high contrast black and white map.\nhttp://www.maps.stamen.com/',
+            tooltip: 'Stamen high contrast black and white map.\nhttp://www.maps.stamen.com/',
             creationFunction: function () {
                 return new Cesium.OpenStreetMapImageryProvider({
                     url: 'https://stamen-tiles.a.ssl.fastly.net/toner/',
@@ -533,7 +539,7 @@ export class DataCesium {
         view_models.push(new Cesium.ProviderViewModel({
             name: 'Stamen Toner(Lite)',
             iconUrl: Cesium.buildModuleUrl('Widgets/Images/ImageryProviders/stamenToner.png'),
-            tooltip: 'A high contrast black and white map(Lite).\nhttp://www.maps.stamen.com/',
+            tooltip: 'Stamen high contrast black and white map(Lite).\nhttp://www.maps.stamen.com/',
             creationFunction: function () {
                 return new Cesium.OpenStreetMapImageryProvider({
                     url: 'https://stamen-tiles.a.ssl.fastly.net/toner-lite/',
@@ -543,7 +549,7 @@ export class DataCesium {
         view_models.push(new Cesium.ProviderViewModel({
             name: 'Terrain(Standard)',
             iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
-            tooltip: 'A high contrast black and white map(Standard).\nhttp://www.maps.stamen.com/',
+            tooltip: 'Stamen World terrain.\nhttp://www.maps.stamen.com/',
             creationFunction: function () {
                 return new Cesium.OpenStreetMapImageryProvider({
                     url: 'https://stamen-tiles.a.ssl.fastly.net/terrain/',
@@ -553,7 +559,7 @@ export class DataCesium {
         view_models.push(new Cesium.ProviderViewModel({
             name: 'Terrain(Background)',
             iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
-            tooltip: 'A high contrast black and white map(Background).\nhttp://www.maps.stamen.com/',
+            tooltip: 'Stamen World terrain (Background).\nhttp://www.maps.stamen.com/',
             creationFunction: function () {
                 return new Cesium.OpenStreetMapImageryProvider({
                     url: 'https://stamen-tiles.a.ssl.fastly.net/terrain-background/',

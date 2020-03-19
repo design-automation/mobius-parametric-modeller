@@ -15,7 +15,7 @@ export interface CesiumSettings {
 export const cesium_default_settings: CesiumSettings = {
     'imagery': {
         'layer': 'Open Street Map',
-        'terrain': 'Ellipsoid Terrain'
+        'terrain': 'Ellipsoid'
     },
     'cesium': {
         'ion': '',

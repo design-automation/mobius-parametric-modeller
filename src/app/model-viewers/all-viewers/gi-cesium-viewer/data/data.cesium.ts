@@ -521,9 +521,11 @@ export class DataCesium {
     public updateSettings(settings) {
         const newSetting = <CesiumSettings> JSON.parse(JSON.stringify(settings));
         newSetting.cesium.ion = newSetting.cesium.ion.trim();
+        let ionChange = false;
         if (newSetting.cesium) {
             if (newSetting.cesium.ion !== Cesium.Ion.defaultAccessToken && newSetting.cesium.ion !== '') {
                 Cesium.Ion.defaultAccessToken = newSetting.cesium.ion;
+                ionChange = true;
             }
             if (newSetting.cesium.hasOwnProperty('save')) {
                 this.settings.cesium.save = newSetting.cesium.save;
@@ -534,7 +536,7 @@ export class DataCesium {
             }
         }
         if (newSetting.imagery) {
-            if (newSetting.imagery.layer) {
+            if (newSetting.imagery.layer && this.settings.imagery.layer !== newSetting.imagery.layer) {
                 for (const layerProvider of this._viewLayerProviders) {
                     if (layerProvider.name === newSetting.imagery.layer) {
                         const viewer_layers = this._viewer.imageryLayers;
@@ -545,7 +547,7 @@ export class DataCesium {
                     }
                 }
             }
-            if (newSetting.imagery.terrain) {
+            if (newSetting.imagery.terrain && (this.settings.imagery.terrain !== newSetting.imagery.terrain || ionChange)) {
                 for (const terrainProvider of this._viewTerrainProviders) {
                     if (terrainProvider.name === newSetting.imagery.terrain) {
                         this._viewer.terrainProvider = terrainProvider.creationCommand();
@@ -717,7 +719,7 @@ export class DataCesium {
 
     private _getTerrains() {
         this._viewTerrainProviders.push(new Cesium.ProviderViewModel({
-            name: 'Ellipsoid Terrain',
+            name: 'Ellipsoid',
             iconUrl: Cesium.buildModuleUrl('Widgets/Images/ImageryProviders/openStreetMap.png'),
             tooltip: 'Ellipsoid Terrain',
             creationFunction: function () {

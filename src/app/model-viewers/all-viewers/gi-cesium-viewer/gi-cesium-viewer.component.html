@@ -1,23 +1,38 @@
 <div id="cesium-viewer-container">
     <cesium-viewer [model]='data' (eventClicked)="childEventClicked($event)"></cesium-viewer>
     <!-- <button class='btn' id="cesium_settings_button" mat-icon-button (click)="openModal('cesium_settings_modal')" title="Settings"><mat-icon svgIcon="settings"></mat-icon></button>
-    <modal-window id="cesium_settings_modal" (closeModal) = 'onCloseModal()'>
-        <h1>3D Viewer Settings</h1>
+    <cesium-modal-window id="cesium_settings_modal" (closeModal) = 'onCloseModal()'>
+        <h1>Cesium Viewer Settings</h1>
         <tabs id="settingsTab">
-            <tab tabTitle="Environment">
+            <tab tabTitle="Cesium">
                 <div class="mat-elevation-z1">
                     <dl>
                         <dd>
-                            <div class="label">Ground</div>
+                            <div class="label">Cesium Ion Access:</div>
                         </dd>
                         <dd>
-                            <div class="label">Width</div>
+                            <textarea class="tArea" [(ngModel)]='settings.cesium.ion'></textarea>
                         </dd>
                         <dd>
-                            <div class="label">Length</div>
+                            <div class="label">Cesium Ion Asset IDs:</div>
                         </dd>
                         <dd>
-                            <div class="label">Height</div>
+                            <textarea class="tArea" [(ngModel)]='settings.cesium.assetid'></textarea>
+                        </dd>
+                        <dd>
+                            <div class="label">Save Ion Access to local storage:</div>
+                            <div class="onoffswitch">
+                                <input type="checkbox"
+                                name="onoffswitch"
+                                class="onoffswitch-checkbox"
+                                id="saveIonAccess"
+                                [(ngModel)]='settings.cesium.save'
+                                >
+                                <label class="onoffswitch-label" for="saveIonAccess">
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                            </div>
                         </dd>
                     </dl>
                 </div>
@@ -26,7 +41,7 @@
         <button (click)="closeModal('cesium_settings_modal', true);" class="filebtn closebtn setting">Apply</button>
         <button (click)="closeModal('cesium_settings_modal');" class='filebtn closebtn setting'>Cancel</button>
         <button (click)="resetToDefault();" class='filebtn closebtn setting' style="float: right;">Default</button>
-    </modal-window> -->
+    </cesium-modal-window> -->
 
 
 </div>

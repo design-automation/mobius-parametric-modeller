@@ -431,6 +431,7 @@ export class CodeUtils {
     }
 
     static async getURLContent(url: string): Promise<any> {
+        url = url.replace('http://', 'https://');
         if (url.indexOf('dropbox') !== -1) {
             url = url.replace('www', 'dl').replace('dl=0', 'dl=1');
         }
@@ -441,16 +442,31 @@ export class CodeUtils {
             url = url.substring(0, url.length - 1);
         }
         const p = new Promise((resolve) => {
-            const request = new XMLHttpRequest();
-            request.open('GET', url);
-            // request.overrideMimeType('text/plain; charset=x-user-defined');
-            request.onload = () => {
-                resolve(request.responseText.replace(/(\\[bfnrtv\'\"\\])/g, '\\$1'));
-            };
-            request.onerror = () => {
-                resolve('HTTP Request Error: unable to retrieve file from url ' + url);
-            };
-            request.send();
+            fetch(url).then(res => {
+                if (!res.ok) {
+                    resolve('HTTP Request Error: request file timeout from url ' + url);
+                    return '';
+                }
+                return res.text();
+            }).then(body => {
+                resolve(body.replace(/(\\[bfnrtv\'\"\\])/g, '\\$1'));
+            });
+
+            // const request = new XMLHttpRequest();
+            // request.open('GET', url);
+            // request.onreadystatechange =  () => {
+            //     setTimeout(() => {
+            //         resolve('HTTP Request Error: request file timeout from url ' + url);
+            //     }, 5000);
+            // };
+            // // request.overrideMimeType('text/plain; charset=x-user-defined');
+            // request.onload = () => {
+            //     resolve(request.responseText.replace(/(\\[bfnrtv\'\"\\])/g, '\\$1'));
+            // };
+            // request.onerror = () => {
+            //     resolve('HTTP Request Error: unable to retrieve file from url ' + url);
+            // };
+            // request.send();
         });
         return await p;
     }

@@ -48,15 +48,15 @@ export class DataCesium {
      */
     public createCesiumViewer() {
         // add Cesium Access Token
-        if (this.settings.cesium.ion !== Cesium.Ion.defaultAccessToken && this.settings.cesium.ion !== '') {
-            Cesium.Ion.defaultAccessToken = this.settings.cesium.ion;
-        }
+        // if (this.settings.cesium.ion !== Cesium.Ion.defaultAccessToken && this.settings.cesium.ion !== '') {
+        //     Cesium.Ion.defaultAccessToken = this.settings.cesium.ion;
+        // }
 
-        // Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' +
-        //                                 '.eyJqdGkiOiI2MGMxNGYwMS1jZjYyLTQyNjM' +
-        //                                 'tOGNkYy1hOTRiYTk4ZGEzZDUiLCJpZCI6MTY' +
-        //                                 '4MSwiaWF0IjoxNTI5NTY4OTc4fQ.lL2fzwOZ' +
-        //                                 '6EQuL5BqXG5qIwlBn-P_DTbClhVYCIyCgS0';
+        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' +
+                                        '.eyJqdGkiOiI2MGMxNGYwMS1jZjYyLTQyNjM' +
+                                        'tOGNkYy1hOTRiYTk4ZGEzZDUiLCJpZCI6MTY' +
+                                        '4MSwiaWF0IjoxNTI5NTY4OTc4fQ.lL2fzwOZ' +
+                                        '6EQuL5BqXG5qIwlBn-P_DTbClhVYCIyCgS0';
         // create the viewer
         // https://cesiumjs.org/Cesium/Build/Documentation/Viewer.html
         // https://cesium.com/docs/tutorials/getting-started/

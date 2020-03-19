@@ -58,7 +58,6 @@ export function importObj(obj_str: string): GIModel {
         model.attribs.add.setAttribVal(EEntType.POSI, posi_i, EAttribNames.COORDS, coord);
     }
     for (const face of faces) {
-        console.log(face[0]);
         const face_i: number = model.geom.add.addPgon(face[0]);
         // TODO: texture uv
         // TODO: normals

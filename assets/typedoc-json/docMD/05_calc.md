@@ -1,16 +1,16 @@
 # CALC    
 
 ## Distance  
-* **Description:** Calculates the distance to one position or a list of positions.
+* **Description:** Calculates the minimum distance from one position to other entities in the model.
 ~  
 * **Parameters:**  
-  * *entities1:* First position.  
-  * *entities2:* Second position, or list of positions.  
-  * *method:* Enum; distance or min_distance.  
+  * *entities1:* Position to calculate distance from.  
+  * *entities2:* List of entities to calculate distance to.  
+  * *method:* Enum; distance method.  
 * **Returns:** Distance, or list of distances (if position2 is a list).  
 * **Examples:**  
   * distance1 = calc.Distance (position1, position2, p_to_p_distance)  
-    position1 = [0,0,0], position2 = [[0,0,10],[0,0,20]], Expected value of distance is [10,20].
+    position1 = [0,0,0], position2 = [[0,0,10],[0,0,20]], Expected value of distance is 10.
   
   
 ## Length  
@@ -61,16 +61,18 @@ a list of edges will be extracted, and a list of vectors will be returned.
 ## Centroid  
 * **Description:** Calculates the centroid of an entity.
 ~
-The centroid is the average of the positions that make up that entity.
+If 'ps_average' is selected, the centroid is the average of the positions that make up that entity.
 ~
-Given a single entity, a single centroid will be returned.
+If 'center_of_mass' is selected, the centroid is the centre of mass of the faces that make up that entity.
+Note that only faces are deemed to have mass.
 ~
 Given a list of entities, a list of centroids will be returned.
 ~
-Given a list of positions, a single centroid that that is the average of all those positions will be returned.
+Given a list of positions, a single centroid that is the average of all those positions will be returned.
 ~  
 * **Parameters:**  
   * *entities:* Single or list of entities. (Can be any type of entities.)  
+  * *method:* Enum, the method for calculating the centroid.  
 * **Returns:** A centroid [x, y, z] or a list of centroids.  
 * **Examples:**  
   * centroid1 = calc.Centroid (polygon1)

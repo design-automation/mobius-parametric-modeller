@@ -190,5 +190,18 @@
             "module": "calc",
             "name": "BBox"
         }
+    },
+    {
+        "old_func": {
+            "module": "calc",
+            "name": "Centroid"
+        },
+        "new_func": {
+            "module": "calc",
+            "name": "Centroid",
+            "values": {
+                "method": "'ps_average'"
+            }
+        }
     }
 ]

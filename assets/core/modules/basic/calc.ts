@@ -9,66 +9,186 @@
  */
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, TBBox } from '@libs/geo-info/common';
+import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, TBBox, Txy } from '@libs/geo-info/common';
 import { isPline, isWire, isEdge, isPgon, isFace, getArrDepth, isVert, isPosi, isPoint, isEmptyArr } from '@libs/geo-info/id';
 import { distance } from '@libs/geom/distance';
-import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm } from '@libs/geom/vectors';
+import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm, vecSetLen } from '@libs/geom/vectors';
 import { triangulate } from '@libs/triangulate/triangulate';
 import { area } from '@libs/geom/triangle';
 import { checkIDs, checkArgTypes, IDcheckObj, TypeCheckObj} from '../_check_args';
 import __ from 'underscore';
-import { getCentroid } from './_common';
+import { getCentroid, getCenterOfMass } from './_common';
 import { rayFromPln } from '@assets/core/inline/_ray';
-import { isEmptyArr2 } from '@assets/libs/util/arrs';
-
-
+import { isEmptyArr2, arrMakeFlat, arrMaxDepth } from '@assets/libs/util/arrs';
+import * as THREE from 'three';
 // ================================================================================================
+export enum _EDistanceMethod {
+    PS_PS_DISTANCE = 'ps_to_ps_distance',
+    PS_W_DISTANCE = 'ps_to_w_distance'
+}
 /**
- * Calculates the distance to one position or a list of positions.
+ * Calculates the minimum distance from one position to other entities in the model.
  * ~
  * @param __model__
- * @param entities1 First position.
- * @param entities2 Second position, or list of positions.
- * @param method Enum; distance or min_distance.
+ * @param entities1 Position to calculate distance from.
+ * @param entities2 List of entities to calculate distance to.
+ * @param method Enum; distance method.
  * @returns Distance, or list of distances (if position2 is a list).
  * @example distance1 = calc.Distance (position1, position2, p_to_p_distance)
- * @example_info position1 = [0,0,0], position2 = [[0,0,10],[0,0,20]], Expected value of distance is [10,20].
+ * @example_info position1 = [0,0,0], position2 = [[0,0,10],[0,0,20]], Expected value of distance is 10.
  */
-export function Distance(__model__: GIModel, entities1: TId, entities2: TId|TId[], method: _EDistanceMethod): number|number[] {
+export function Distance(__model__: GIModel, entities1: TId|TId[], entities2: TId|TId[], method: _EDistanceMethod): number|number[] {
+    if (isEmptyArr2(entities1)) { return []; }
     if (isEmptyArr2(entities2)) { return []; }
+    if (Array.isArray(entities1)) { entities1 = arrMakeFlat(entities1); }
+    entities2 = arrMakeFlat(entities2);
     // --- Error Check ---
     const fn_name = 'calc.Distance';
-    const ents_arr1 = checkIDs(fn_name, 'entities1', entities1, [IDcheckObj.isID], [EEntType.POSI])  as TEntTypeIdx;
-    const ents_arr2 = checkIDs(fn_name, 'entities2', entities2, [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.POSI]) as
-    TEntTypeIdx|TEntTypeIdx[];
+    const ents_arr1 = checkIDs(fn_name, 'entities1', entities1, [IDcheckObj.isID, IDcheckObj.isIDList],
+        null)  as TEntTypeIdx|TEntTypeIdx[];
+    const ents_arr2 = checkIDs(fn_name, 'entities2', entities2, [IDcheckObj.isIDList],
+        null) as TEntTypeIdx[];
     // --- Error Check ---
-    // check what from is based on list length
-    const from_posi_i: number = ents_arr1[1];
-    const depth2: number = getArrDepth(ents_arr2);
-    if (depth2 === 1) {
-        return _distancePtoP(__model__, from_posi_i, ents_arr2[1]) as number;
+    // get the from posis
+    let from_posis_i: number|number[];
+    if (arrMaxDepth(ents_arr1) === 1 && ents_arr1[0] === EEntType.POSI) {
+        from_posis_i = ents_arr1[1];
     } else {
-        const to_posis_i: number[] = (ents_arr2 as TEntTypeIdx[]).map( ent_arr2 => ent_arr2[1] );
-        const dists: number[] = _distancePtoP(__model__, from_posi_i, to_posis_i) as number[];
-        if (method === _EDistanceMethod.P_P_DISTANCE) {
-            return dists;
-        } else if (method === _EDistanceMethod.MIN_DISTANCE) {
-            return Math.min(...dists);
+        from_posis_i = [];
+        for (const [ent_type, ent_i] of ents_arr1 as TEntTypeIdx[]) {
+            if (ent_type === EEntType.POSI) {
+                from_posis_i.push(ent_i);
+            } else {
+                const ent_posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, ent_i);
+                for (const ent_posi_i of ent_posis_i) {
+                    from_posis_i.push(ent_posi_i);
+                }
+            }
         }
     }
-}
-function _distancePtoP(__model__: GIModel, from: number, to: number|number[]): number|number[] {
-    if (!Array.isArray(to)) {
-        const ps1_xyz: Txyz = __model__.attribs.query.getPosiCoords(from);
-        const ps2_xyz: Txyz = __model__.attribs.query.getPosiCoords(to);
-        return distance(ps1_xyz, ps2_xyz) as number;
-    } else  {
-        return to.map( to2 => _distancePtoP(__model__, from, to2) ) as number[];
+    // get the to ents
+    let to_ent_type: number;
+    switch (method) {
+        case _EDistanceMethod.PS_PS_DISTANCE:
+            to_ent_type = EEntType.POSI;
+            break;
+        case _EDistanceMethod.PS_W_DISTANCE:
+            to_ent_type = EEntType.WIRE;
+            break;
+        default:
+            break;
+    }
+    const to_ents_i: number[] = [];
+    for (const [ent_type, ent_i] of ents_arr2 as TEntTypeIdx[]) {
+        if (ent_type === to_ent_type) {
+            to_ents_i.push(ent_i);
+        } else {
+            const sub_ents_i: number[] = __model__.geom.nav.navAnyToAny(ent_type, to_ent_type, ent_i);
+            for (const sub_ent_i of sub_ents_i) {
+                to_ents_i.push(sub_ent_i);
+            }
+        }
+    }
+    // calc the distance
+    switch (method) {
+        case _EDistanceMethod.PS_PS_DISTANCE:
+            return _distanceManyPosisToPosis(__model__, from_posis_i, to_ents_i, method);
+        case _EDistanceMethod.PS_W_DISTANCE:
+            return _distanceManyPosisToWires(__model__, from_posis_i, to_ents_i, method);
+        default:
+            break;
     }
 }
-export enum _EDistanceMethod {
-    P_P_DISTANCE = 'p_to_p_distance',
-    MIN_DISTANCE = 'min_distance'
+function _distanceManyPosisToPosis(__model__: GIModel, from_posi_i: number|number[], to_ents_i: number[],
+        method: _EDistanceMethod): number|number[] {
+    if (!Array.isArray(from_posi_i)) {
+        from_posi_i = from_posi_i as number;
+        return _distancePstoPs(__model__, from_posi_i, to_ents_i) as number;
+    } else  {
+        from_posi_i = from_posi_i as number[];
+        return from_posi_i.map( one_from => _distanceManyPosisToPosis(__model__, one_from, to_ents_i, method) ) as number[];
+    }
+}
+function _distanceManyPosisToWires(__model__: GIModel, from_posi_i: number|number[], to_ents_i: number[],
+        method: _EDistanceMethod): number|number[] {
+    if (!Array.isArray(from_posi_i)) {
+        from_posi_i = from_posi_i as number;
+        return _distancePstoW(__model__, from_posi_i, to_ents_i) as number;
+    } else  {
+        from_posi_i = from_posi_i as number[];
+        // TODO This can be optimised
+        // There is some vector stuff that gets repeated for each posi to line dist calc
+        return from_posi_i.map( one_from => _distanceManyPosisToWires(__model__, one_from, to_ents_i, method) ) as number[];
+    }
+}
+function _distancePstoPs(__model__: GIModel, from_posi_i: number, to_posis_i: number[]): number {
+    const from_xyz: Txyz = __model__.attribs.query.getPosiCoords(from_posi_i);
+    let min_dist = Infinity;
+    const map_posi_xyz: Map<number, Txyz> = new Map();
+    // loop, measure dist
+    for (const to_posi_i of to_posis_i) {
+        // create xyz
+        let to_xyz: Txyz = map_posi_xyz.get(to_posi_i);
+        if (to_xyz === undefined) {
+            to_xyz = __model__.attribs.query.getPosiCoords(to_posi_i);
+            map_posi_xyz.set(to_posi_i, to_xyz);
+        }
+        // calc dist
+        const dist: number = _distancePointToPoint(from_xyz, to_xyz);
+        if (dist < min_dist) { min_dist = dist; }
+    }
+    return min_dist;
+}
+function _distancePstoW(__model__: GIModel, from_posi_i: number, to_wires_i: number[]): number {
+    const from_xyz: Txyz = __model__.attribs.query.getPosiCoords(from_posi_i);
+    let min_dist = Infinity;
+    const map_posi_xyz: Map<number, Txyz> = new Map();
+    for (const wire_i of to_wires_i) {
+        // get the posis
+        const to_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
+        // if closed, add first posi to end
+        if (__model__.geom.query.isWireClosed(wire_i)) { to_posis_i.push(to_posis_i[0]); }
+        // add the first xyz to the list, this will be prev
+        let prev_xyz: Txyz = __model__.attribs.query.getPosiCoords(to_posis_i[0]);
+        map_posi_xyz.set(to_posis_i[0], prev_xyz);
+        // loop, measure dist
+        for (let i = 1; i < to_posis_i.length; i++) {
+            // get xyz
+            const curr_posi_i: number = to_posis_i[i];
+            let curr_xyz: Txyz = map_posi_xyz.get(curr_posi_i);
+            if (curr_xyz === undefined) {
+                curr_xyz = __model__.attribs.query.getPosiCoords(curr_posi_i);
+                map_posi_xyz.set(curr_posi_i, curr_xyz);
+            }
+            // calc dist
+            const dist: number = _distancePointToLine(from_xyz, prev_xyz, curr_xyz);
+            if (dist < min_dist) { min_dist = dist; }
+            // next
+            prev_xyz = curr_xyz;
+        }
+    }
+    return min_dist;
+}
+
+function _distancePointToPoint(from: Txyz, to: Txyz) {
+    const a: number = from[0] - to[0];
+    const b: number = from[1] - to[1];
+    const c: number = from[2] - to[2];
+    return Math.sqrt(a * a + b * b + c * c);
+}
+function _distancePointToLine(from: Txyz, start: Txyz, end: Txyz) {
+    const vec_from: Txyz = vecFromTo(start, from);
+    const vec_line: Txyz = vecFromTo(start, end);
+    const len: number = vecLen(vec_line);
+    const vec_line_norm = vecDiv(vec_line, len);
+    const dot: number = vecDot(vec_from, vec_line_norm);
+    if (dot <= 0) {
+        return  _distancePointToPoint(from, start);
+    } else if (dot >= len) {
+        return  _distancePointToPoint(from, end);
+    }
+    const close: Txyz = vecAdd(start, vecSetLen(vec_line, dot));
+    return _distancePointToPoint(from, close);
 }
 // ================================================================================================
 /**
@@ -260,32 +380,43 @@ function _vector(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): Txyz
     }
 }
 // ================================================================================================
+export enum _ECentroidMethod {
+    PS_AVERAGE = 'ps_average',
+    CENTER_OF_MASS = 'center_of_mass'
+}
 /**
  * Calculates the centroid of an entity.
  * ~
- * The centroid is the average of the positions that make up that entity.
+ * If 'ps_average' is selected, the centroid is the average of the positions that make up that entity.
  * ~
- * Given a single entity, a single centroid will be returned.
+ * If 'center_of_mass' is selected, the centroid is the centre of mass of the faces that make up that entity.
+ * Note that only faces are deemed to have mass.
  * ~
  * Given a list of entities, a list of centroids will be returned.
  * ~
- * Given a list of positions, a single centroid that that is the average of all those positions will be returned.
+ * Given a list of positions, a single centroid that is the average of all those positions will be returned.
  * ~
  * @param __model__
  * @param entities Single or list of entities. (Can be any type of entities.)
+ * @param method Enum, the method for calculating the centroid.
  * @returns A centroid [x, y, z] or a list of centroids.
  * @example centroid1 = calc.Centroid (polygon1)
  */
-export function Centroid(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
+export function Centroid(__model__: GIModel, entities: TId|TId[], method: _ECentroidMethod): Txyz|Txyz[] {
     if (isEmptyArr2(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Centroid';
     const ents_arrs: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
-        [EEntType.POSI, EEntType.VERT, EEntType.POINT, EEntType.EDGE, EEntType.WIRE,
-            EEntType.PLINE, EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
     // --- Error Check ---
-    return getCentroid(__model__, ents_arrs);
+    switch (method) {
+        case _ECentroidMethod.PS_AVERAGE:
+            return getCentroid(__model__, ents_arrs);
+        case _ECentroidMethod.CENTER_OF_MASS:
+            return getCenterOfMass(__model__, ents_arrs);
+        default:
+            break;
+    }
 }
 
 // ================================================================================================

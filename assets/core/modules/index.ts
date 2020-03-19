@@ -57,6 +57,8 @@ export {io};
 import * as util from './basic/util';
 export {util};
 
+import * as poly2d from './basic/poly2d';
+export {poly2d};
 
 // helpers
 

@@ -13,7 +13,7 @@ import { isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi,
     isEdge, isFace, idsMake, idIndicies, getArrDepth, isEmptyArr, isWire } from '@libs/geo-info/id';
 import { __merge__} from '../_model';
 import { _model } from '..';
-import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd, vecFromTo, vecLen, vecSetLen } from '@libs/geom/vectors';
+import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd, vecFromTo, vecLen, vecSetLen, vecCross } from '@libs/geom/vectors';
 import { checkArgTypes, checkIDs, IDcheckObj, TypeCheckObj } from '../_check_args';
 import { distance } from '@libs/geom/distance';
 import { arrMakeFlat } from '@libs/util/arrs';
@@ -21,6 +21,7 @@ import { getPlanesSeq } from './_common';
 import { xfromSourceTargetMatrix, multMatrix } from '@assets/libs/geom/matrix';
 import { Matrix4 } from 'three';
 import { listZip } from '@assets/core/inline/_list';
+import * as THREE from 'three';
 
 // ================================================================================================
 // Utility functions
@@ -1289,23 +1290,11 @@ export function Divide(__model__: GIModel, entities: TId|TId[], divisor: number,
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'make.Divide';
-    const ents_arr: TEntTypeIdx[] = checkIDs('make.Divide', 'edges', entities,
+    const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
     checkArgTypes(fn_name, 'divisor', divisor, [TypeCheckObj.isNumber]);
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx[] = _divide(__model__, ents_arr, divisor, method);
-    // remesh any polygons
-    // I am not sure about this, you can always to a remesh
-    // const pgons_set_i: Set<number> = new Set();
-    // for (const [ent_type, index] of ents_arr) {
-    //     const pgons_i: number[] = __model__.geom.nav.navAnyToPgon(ent_type, index);
-    //     for (const pgon_i of pgons_i) {
-    //         pgons_set_i.add(pgon_i);
-    //     }
-    // }
-    // if (pgons_set_i.size > 0)   {
-    //     __model__.geom.add.triPgons(Array.from(pgons_set_i));
-    // }
     // return the ids
     return idsMake(new_ents_arr) as TId[];
 }
@@ -1369,10 +1358,293 @@ function _divideEdge(__model__: GIModel, edge_i: number, divisor: number, method
     return new_edges_i;
 }
 // ================================================================================================
+export enum _ECutMethod {
+    KEEP_ABOVE =  'keep_above',
+    KEEP_BELOW = 'keep_below',
+    KEEP_BOTH = 'keep_both'
+}
+/**
+ * Cuts polygons and polylines using a plane.
+ * ~
+ * If the 'keep_above' method is selected, then only the part of the cut entities above the plane are kept.
+ * If the 'keep_below' method is selected, then only the part of the cut entities below the plane are kept.
+ * If the 'keep_both' method is selected, then both the parts of the cut entities are kept.
+ * ~
+ * Currently does not support cutting polygons with holes. TODO
+ * ~
+ * If 'keep_both' is selected, returns a list of two lists.
+ * [[entities above the plane], [entities below the plane]].
+ * ~
+ * @param __model__
+ * @param entities Polylines or polygons, or entities from which polyline or polygons can be extracted.
+ * @param plane The plane to cut with.
+ * @param method Enum, select the method for cutting.
+ * @returns Entities, a list of three lists of entities resulting from the cut.
 
-// Explode
+ */
+export function Cut(__model__: GIModel, entities: TId|TId[], plane: TPlane, method: _ECutMethod): TId[]|[TId[], TId[]] {
+    entities = arrMakeFlat(entities) as TId[];
+    if (isEmptyArr(entities)) {
+        if (method === _ECutMethod.KEEP_BOTH) { return [[], []]; }
+        return [];
+    }
+    // --- Error Check ---
+    const fn_name = 'make.Cut';
+    const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    checkArgTypes(fn_name, 'plane', plane, [TypeCheckObj.isPlane]);
+    // --- Error Check ---
+    // create the threejs entity and calc intersections
+    const plane_normal: Txyz = vecCross(plane[1], plane[2]);
+    const plane_tjs: THREE.Plane = new THREE.Plane();
+    plane_tjs.setFromNormalAndCoplanarPoint( new THREE.Vector3(...plane_normal), new THREE.Vector3(...plane[0]) );
+    // get polylines and polygons
+    const set_plines: Set<number> = new Set();
+    const set_pgons: Set<number> = new Set();
+    const edges_i: number[] = []; // all edges
+    for (const [ent_type, ent_i] of ents_arr) {
+        if (ent_type === EEntType.PLINE) {
+            set_plines.add(ent_i);
+        } else if (ent_type === EEntType.PGON) {
+            set_pgons.add(ent_i);
+        } else {
+            const plines: number[] = __model__.geom.nav.navAnyToPline(ent_type, ent_i);
+            for (const pline of plines) { set_plines.add(pline); }
+            const pgons: number[] = __model__.geom.nav.navAnyToPline(ent_type, ent_i);
+            for (const pgon of pgons) { set_pgons.add(pgon); }
+        }
+        const ent_edges_i: number[] = __model__.geom.nav.navAnyToEdge(ent_type, ent_i);
+        for (const ent_edge_i of ent_edges_i) { edges_i.push(ent_edge_i); }
+    }
+    const above: TEntTypeIdx[] = [];
+    const below: TEntTypeIdx[] = [];
+    // cut each edge and store the results
+    const [edge_to_isect_posis, cut_posi_to_copies, posi_to_tjs]: [number[][], number[], THREE.Vector3[]] =
+        _cutEdges(__model__, edges_i, plane_tjs, method);
+    // create array to store new posis
+    const posi_to_copies: number[] = [];
+    // slice polylines
+    for (const exist_pline_i of Array.from(set_plines)) {
+        const sliced: [number[], number[]] =
+            _cutCreateEnts(__model__, EEntType.PLINE, exist_pline_i, plane_tjs, edge_to_isect_posis,
+                posi_to_copies, cut_posi_to_copies, posi_to_tjs, method);
+        for (const new_pline_i of sliced[0]) { above.push([EEntType.PLINE, new_pline_i]); }
+        for (const new_pline_i of sliced[1]) { below.push([EEntType.PLINE, new_pline_i]); }
+    }
+    // slice polygons
+    for (const exist_pgon_i of Array.from(set_pgons)) {
+        // TODO slice polygons with holes
+        const sliced: [number[], number[]] =
+            _cutCreateEnts(__model__, EEntType.PGON, exist_pgon_i, plane_tjs, edge_to_isect_posis,
+                posi_to_copies, cut_posi_to_copies, posi_to_tjs, method);
+        for (const new_pgon_i of sliced[0]) { above.push([EEntType.PGON, new_pgon_i]); }
+        for (const new_pgon_i of sliced[1]) { below.push([EEntType.PGON, new_pgon_i]); }
+    }
+    // return the result
+    switch (method) {
+        case _ECutMethod.KEEP_ABOVE:
+            return idsMake(above) as TId[];
+        case _ECutMethod.KEEP_BELOW:
+            return idsMake(below) as TId[];
+        default:
+            return [idsMake(above), idsMake(below)] as [TId[], TId[]];
+    }
+}
+// cut each edge in the input geometry and store teh intersection posi in a sparse array
+// the array is nested, the two indexes [i1][i2] is the two posi ends of the edge, the value is the isect posi
+// also returns some other data
+// if method is "both", then we need copies of the isect posis, so these are also generated
+// finally, the tjs points that are created are also returned, they are used later for checking "starts_above"
+function _cutEdges(__model__: GIModel, edges_i: number[], plane_tjs: THREE.Plane, method: _ECutMethod):
+        [number[][], number[], THREE.Vector3[]] {
+    // create sparse arrays for storing data
+    const posi_to_tjs: THREE.Vector3[] = []; // sparse array
+    const edge_to_isect_posis: number[][] = []; // sparse array, map_posis[2][3] is the edge from posi 2 to posi 3 (and 3 to 2)
+    const cut_posi_to_copies: number[] = []; // sparse array
+    // loop through each edge
+    for (const edge_i of edges_i) {
+        const edge_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
+        edge_posis_i.sort();
+        // get the edge isect point
+        if (edge_to_isect_posis[edge_posis_i[0]] === undefined) { edge_to_isect_posis[edge_posis_i[0]] = []; }
+        const posi_i: number = edge_to_isect_posis[edge_posis_i[0]][edge_posis_i[1]];
+        if (posi_i === undefined) {
+            const posi0_tjs: THREE.Vector3 = _cutGetTjsPoint(__model__, edge_posis_i[0], posi_to_tjs);
+            const posi1_tjs: THREE.Vector3 = _cutGetTjsPoint(__model__, edge_posis_i[1], posi_to_tjs);
+            const line_tjs: THREE.Line3 = new THREE.Line3(posi0_tjs, posi1_tjs);
+            const isect_tjs: THREE.Vector3 = new THREE.Vector3();
+            const result: THREE.Vector3 = plane_tjs.intersectLine(line_tjs, isect_tjs);
+            if (result !== undefined && result !== null) {
+                const new_posi_i: number = __model__.geom.add.addPosi();
+                __model__.attribs.add.setPosiCoords(new_posi_i, [isect_tjs.x, isect_tjs.y, isect_tjs.z]);
+                edge_to_isect_posis[edge_posis_i[0]][edge_posis_i[1]] = new_posi_i;
+                if (method === _ECutMethod.KEEP_BOTH) {
+                    const copy_posi_i: number = __model__.geom.add.addPosi();
+                    __model__.attribs.add.setPosiCoords(copy_posi_i, [isect_tjs.x, isect_tjs.y, isect_tjs.z]);
+                    cut_posi_to_copies[new_posi_i] = copy_posi_i;
+                }
+            } else {
+                edge_to_isect_posis[edge_posis_i[0]][edge_posis_i[1]] = null;
+            }
+        }
+    }
+    return [edge_to_isect_posis, cut_posi_to_copies, posi_to_tjs] ;
+}
+// given an exist posis, returns a tjs point
+// if necessary, a new tjs point will be created
+// creates a map from exist posi to tjs
+function _cutGetTjsPoint(__model__: GIModel, posi_i: number, posi_to_tjs: THREE.Vector3[]): THREE.Vector3 {
+    if (posi_to_tjs[posi_i] !== undefined) { return posi_to_tjs[posi_i]; }
+    const xyz: Txyz = __model__.attribs.query.getPosiCoords(posi_i);
+    const posi_tjs: THREE.Vector3 = new THREE.Vector3(...xyz);
+    posi_to_tjs[posi_i] = posi_tjs;
+    return posi_tjs;
+}
+// given an exist posis, returns a new posi
+// if necessary, a new posi point be created
+// creates a map from exist posi to new posi
+function _cutGetPosi(__model__: GIModel, posi_i: number, posi_to_copies: number[]): number {
+    if (posi_to_copies[posi_i] !== undefined) { return posi_to_copies[posi_i]; }
+    const new_posi_i: number = __model__.geom.add.copyPosis(posi_i, true) as number;
+    posi_to_copies[posi_i] = new_posi_i;
+    return new_posi_i;
+}
+// given a list of exist posis, returns a list of new posi
+// if necessary, new posi will be creates
+function _cutGetPosis(__model__: GIModel, posis_i: number[], posi_to_copies: number[]): number[] {
+    return posis_i.map(posi_i => _cutGetPosi(__model__, posi_i, posi_to_copies) );
+}
+// makes a copy of an existing ent
+// all posis in the exist ent will be replaced by new posis
+function _cutCopyEnt(__model__: GIModel, ent_type: EEntType, ent_i: number, exist_posis_i: number[], posi_to_copies: number[]): number {
+    const new_posis_i: number[] = _cutGetPosis(__model__, exist_posis_i, posi_to_copies);
+    switch (ent_type) {
+        case EEntType.PLINE:
+            const new_pline_i: number = __model__.geom.add.copyPlines(ent_i, true) as number;
+            __model__.geom.modify.replacePosis(ent_type, new_pline_i, new_posis_i);
+            return new_pline_i;
+        case EEntType.PGON:
+            const new_pgon_i: number = __model__.geom.add.copyPgons(ent_i, true) as number;
+            __model__.geom.modify.replacePosis(ent_type, new_pgon_i, new_posis_i);
+            return new_pgon_i;
+        default:
+            break;
+    }
+}
+// creates new ents
+// if the ent is not cut by the plane, the ent will be copies (with new posis)
+// if the ent is cut, a new ent will be created
+function _cutCreateEnts(__model__: GIModel, ent_type: EEntType, ent_i: number, plane_tjs: THREE.Plane,
+        edge_to_isect_posis: number[][], posi_to_copies: number[], cut_posi_to_copies: number[], posi_to_tjs: THREE.Vector3[],
+        method: _ECutMethod): [number[], number[]] {
+    // get wire and posis
+    const wire_i: number = __model__.geom.nav.navAnyToWire(ent_type, ent_i)[0];
+    const wire_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
+    const wire_posis_ex_i: number[] = wire_posis_i.slice();
+    const is_closed: boolean = __model__.geom.query.isWireClosed(wire_i);
+    if (is_closed) {
+        wire_posis_ex_i.push(wire_posis_ex_i[0]);
+    }
+    const num_posis: number = wire_posis_ex_i.length;
+    // create lists to store posis
+    const slice_posis_i: number[][][] = [[], []];
+    // analyze the first point
+    const dist: number = plane_tjs.distanceToPoint(posi_to_tjs[wire_posis_ex_i[0]]);
+    const start_above = dist > 0; // is the first point above the plane?
+    const first = start_above ? 0 : 1; // the first list to start adding posis
+    const second = 1 - first; // the second list to add posis, after you cross the plane
+    let index = first;
+    // for each pair of posis, get the posi_i intersection or null
+    slice_posis_i[index].push([]);
+    for (let i = 0; i < num_posis - 1; i++) {
+        const edge_posis_i: [number, number] = [wire_posis_ex_i[i], wire_posis_ex_i[i + 1]];
+        edge_posis_i.sort();
+        const isect_posi_i: number = edge_to_isect_posis[edge_posis_i[0]][edge_posis_i[1]];
+        slice_posis_i[index][slice_posis_i[index].length - 1].push(wire_posis_ex_i[i]);
+        if (isect_posi_i !== null) {
+            // add posi before cut
+            if (method === _ECutMethod.KEEP_BOTH && index === 0) {
+                const isect_posi2_i: number = cut_posi_to_copies[isect_posi_i];
+                slice_posis_i[index][slice_posis_i[index].length - 1].push(isect_posi2_i);
+                posi_to_copies[isect_posi2_i] = isect_posi2_i;
+            } else {
+                slice_posis_i[index][slice_posis_i[index].length - 1].push(isect_posi_i);
+                posi_to_copies[isect_posi_i] = isect_posi_i;
+            }
+            // switch
+            index = 1 - index;
+            slice_posis_i[index].push([]);
+            // add posi after cut
+            if (method === _ECutMethod.KEEP_BOTH && index === 0) {
+                const isect_posi2_i: number = cut_posi_to_copies[isect_posi_i];
+                slice_posis_i[index][slice_posis_i[index].length - 1].push(isect_posi2_i);
+                posi_to_copies[isect_posi2_i] = isect_posi2_i;
+            } else {
+                slice_posis_i[index][slice_posis_i[index].length - 1].push(isect_posi_i);
+                posi_to_copies[isect_posi_i] = isect_posi_i;
+            }
+        }
+    }
+    // deal with cases where the entity was not cut
+    // make a copy of the ent, with new posis
+    if (slice_posis_i[second].length === 0) {
+        if ( start_above && (method === _ECutMethod.KEEP_BOTH || method === _ECutMethod.KEEP_ABOVE)) {
+            return [[_cutCopyEnt(__model__, ent_type, ent_i, wire_posis_i, posi_to_copies)], []];
+        } else if ( !start_above && (method === _ECutMethod.KEEP_BOTH || method === _ECutMethod.KEEP_BELOW)) {
+            return [[], [_cutCopyEnt(__model__, ent_type, ent_i, wire_posis_i, posi_to_copies)]];
+        }
+        return [[], []];
+    }
+    // update the lists, to deal with the end cases
+    if (is_closed) {
+        // add the last list of posis to the the first list of posis
+        for (const slice_posi_i of slice_posis_i[index][slice_posis_i[index].length - 1]) {
+            slice_posis_i[index][0].push(slice_posi_i);
+        }
+        slice_posis_i[index] = slice_posis_i[index].slice(0, -1);
+    } else {
+        // add the last posi to the last list
+        slice_posis_i[index][slice_posis_i[index].length - 1].push(wire_posis_ex_i[num_posis - 1]);
+    }
+    // make the cut entities
+    const above: number[] = [];
+    const below: number[] = [];
+    switch (method) {
+        case _ECutMethod.KEEP_BOTH:
+        case _ECutMethod.KEEP_ABOVE:
+            for (const posis_i of slice_posis_i[0]) {
+                if (ent_type === EEntType.PLINE) {
+                    const copy_posis_i: number[] = _cutGetPosis(__model__, posis_i, posi_to_copies);
+                    above.push( __model__.geom.add.addPline(copy_posis_i, false));
+                } else {
+                    const copy_posis_i: number[] = _cutGetPosis(__model__, posis_i, posi_to_copies);
+                    above.push( __model__.geom.add.addPgon(copy_posis_i));
+                }
+            }
+            break;
+        default:
+            break;
+    }
+    switch (method) {
+        case _ECutMethod.KEEP_BOTH:
+        case _ECutMethod.KEEP_BELOW:
+            for (const posis_i of slice_posis_i[1]) {
+                if (ent_type === EEntType.PLINE) {
+                    const copy_posis_i: number[] = _cutGetPosis(__model__, posis_i, posi_to_copies);
+                    below.push( __model__.geom.add.addPline(copy_posis_i, false));
+                } else {
+                    const copy_posis_i: number[] = _cutGetPosis(__model__, posis_i, posi_to_copies);
+                    below.push( __model__.geom.add.addPgon(copy_posis_i));
+                }
+            }
+            break;
+        default:
+            break;
+    }
+    return [above, below];
+}
 
-
+// ================================================================================================
 
 
 

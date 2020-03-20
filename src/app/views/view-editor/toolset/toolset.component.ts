@@ -175,9 +175,9 @@ export class ToolsetComponent implements OnInit {
     add_global_func(fnData) {
         fnData.args = fnData.args.map( (arg) => {
             if (arg.type === InputType.Constant) {
-                return {name: arg.name, value: arg.value, type: arg.type};
+                return {name: arg.name, value: arg.value, jsValue: arg.value, type: arg.type};
             }
-            return {name: arg.name, value: arg.value, type: arg.type};
+            return {name: arg.name, value: arg.value, jsValue: arg.value, type: arg.type};
         });
         this.eventAction.emit({
             'type': 'add_prod',

@@ -331,7 +331,7 @@ function _offset(__model__: GIModel, ents_arr: TEntTypeIdx[], dist: number): voi
 }
 function _offsetWire(__model__: GIModel, wire_i: number, dist: number): void {
     // get the normal of the wire
-    let vec_norm: Txyz = __model__.geom.query.getWireNormal(wire_i);
+    const vec_norm: Txyz = __model__.geom.query.getWireNormal(wire_i);
     // if (vecLen(vec_norm) === 0) {
     //     vec_norm = [0, 0, 1];
     // }

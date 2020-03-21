@@ -639,6 +639,7 @@ export class GIGeomQuery {
      */
     public getWireNormal(wire_i: number): Txyz {
         const edges_i: number[] = this._geom._geom_arrays.dn_wires_edges[wire_i];
+        // deal with special case, just a single edge
         if (edges_i.length === 1) {
             const posis_i: number[] = this._geom_arrays.dn_edges_verts[edges_i[0]].map(vert_i => this._geom_arrays.dn_verts_posis[vert_i]);
             const xyz0: Txyz = this._geom.model.attribs.query.getPosiCoords(posis_i[0]);
@@ -648,6 +649,7 @@ export class GIGeomQuery {
             if (xyz0[0] === xyz1[0]) { return [1, 0, 0]; }
             return vecNorm(vecCross(vecFromTo(xyz0, xyz1), [0, 0, 1]));
         }
+        // proceed with multiple edges
         const centroid: Txyz = this.getCentroid(EEntType.WIRE, wire_i);
         const normal: Txyz = [0, 0, 0];
         const tri_normals: Txyz[] = [];

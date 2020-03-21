@@ -1,10 +1,30 @@
 <div id="cesium-viewer-container">
+    <!-- Cesium Viewer -->
     <cesium-viewer [model]='data' (eventClicked)="childEventClicked($event)"></cesium-viewer>
+    <!-- Settings Button & Settings Panel -->
     <button class='btn' id="cesium_settings_button" mat-icon-button (click)="openModal('cesium_settings_modal')" title="Settings"><mat-icon svgIcon="settings"></mat-icon></button>
     <cesium-modal-window id="cesium_settings_modal" (closeModal) = 'onCloseModal()'>
         <h1>Cesium Viewer Settings</h1>
         <tabs id="settingsTab">
-            <tab tabTitle="Cesium">
+            <tab tabTitle="Image Tiles">
+                <div class="mat-elevation-z1">
+                    <dl>
+                        <dd>
+                            <div class="label">Imagery tile:</div>
+                            <select [(ngModel)]='settings.imagery.layer'>
+                                <option *ngFor="let item of layerList" value ={{item}}>{{item}}</option>
+                            </select>
+                        </dd>
+                        <dd>
+                            <div class="label">Terrain:</div>
+                            <select [(ngModel)]='settings.imagery.terrain'>
+                                <option *ngFor="let item of terrainList" value ={{item}}>{{item}}</option>
+                            </select>
+                        </dd>
+                    </dl>
+                </div>
+            </tab>
+            <tab tabTitle="Cesium Ion">
                 <div class="mat-elevation-z1">
                     <dl>
                         <dd>

@@ -543,8 +543,6 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 j++;
             }
         }
-        console.log(this.dataService.flowchart.functions);
-        console.log(this.dataService.flowchart.subFunctions);
     }
 
     updateHelpView(event) {

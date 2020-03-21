@@ -332,9 +332,9 @@ function _offset(__model__: GIModel, ents_arr: TEntTypeIdx[], dist: number): voi
 function _offsetWire(__model__: GIModel, wire_i: number, dist: number): void {
     // get the normal of the wire
     let vec_norm: Txyz = __model__.geom.query.getWireNormal(wire_i);
-    if (vecLen(vec_norm) === 0) {
-        vec_norm = [0, 0, 1];
-    }
+    // if (vecLen(vec_norm) === 0) {
+    //     vec_norm = [0, 0, 1];
+    // }
     // loop through all edges and collect the required data
     const edges_i: number[] = __model__.geom.nav.navAnyToEdge(EEntType.WIRE, wire_i).slice(); // make a copy
     const is_closed: boolean = __model__.geom.query.isWireClosed(wire_i);

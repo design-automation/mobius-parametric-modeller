@@ -272,11 +272,13 @@ function _convertShapesToPgons(__model__: GIModel, shapes: Shape|Shape[], posis_
 // clipperjs
 function _convertShapeToPlines(__model__: GIModel, shape: Shape, is_closed: boolean, posis_map: TPosisMap): number[] {
     shape.scaleDown(SCALE);
+    console.log("SHAPE = ", shape)
     const sep_shapes: Shape[] = shape.separateShapes();
     const plines_i: number[] = [];
     for (const sep_shape of sep_shapes) {
         const paths: TClipPaths = sep_shape.paths;
         for (const path of paths) {
+            console.log("PATH = ", path)
             if (path.length === 0) { continue; }
             const list_posis_i: number[] = [];
             for (const coord of path) {
@@ -644,16 +646,18 @@ export function Union(__model__: GIModel, entities: TId|TId[]): TId[] {
 }
 // ================================================================================================
 /**
- * Perform a boolean operation on a set of polygons.
+ * Perform a boolean operation on polylines or polygons.
  * ~
- * The polygons in B are first unioned.
- * The boolean operation is then performed between each polygon in A, and the unioned B polygons.
+ * The entities in A can be either polyline or polygons.
+ * The entities in B must be polygons.
+ * The polygons in B are first unioned before the operation is performed.
+ * The boolean operation is then performed between each polyline or polygon in A, and the unioned B polygons.
  * ~
  * @param __model__
- * @param a_entities A list of polygons, or entities from which polygons can be extracted.
+ * @param a_entities A list of polyline or polygons, or entities from which polyline or polygons can be extracted.
  * @param b_entities A list of polygons, or entities from which polygons can be extracted.
  * @param method Enum, the boolean operator to apply.
- * @returns A list of new polygons.
+ * @returns A list of new polylines and polygons.
  */
 export function Boolean(__model__: GIModel, a_entities: TId|TId[], b_entities: TId|TId[], method: _EBooleanMethod): TId[] {
     a_entities = arrMakeFlat(a_entities) as TId[];
@@ -663,38 +667,34 @@ export function Boolean(__model__: GIModel, a_entities: TId|TId[], b_entities: T
     // --- Error Check ---
     const fn_name = 'poly2d.Boolean';
     const a_ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'a_entities', a_entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PGON]) as TEntTypeIdx[];
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
     const b_ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'b_entities', b_entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PGON]) as TEntTypeIdx[];
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();
-    const a_pgons_i: number[] = _getPgons(__model__, a_ents_arr);
+    const [a_pgons_i, a_plines_i]: [number[], number[]] = _getPgonsPlines(__model__, a_ents_arr);
     const b_pgons_i: number[] = _getPgons(__model__, b_ents_arr);
-    if (a_pgons_i.length === 0) { return []; }
+    if (a_pgons_i.length === 0 && a_plines_i.length === 0) { return []; }
     if (b_pgons_i.length === 0) { return []; }
     // const a_shape: Shape = _convertPgonsToShapeUnion(__model__, a_pgons_i, posis_map);
     const b_shape: Shape = _convertPgonsToShapeUnion(__model__, b_pgons_i, posis_map);
-    // // const b_shape: Shape = _convertPgonsToShapeJoin(__model__, a_pgons_i, posis_map);
-    // let result_shape: Shape;
-    // switch (method) {
-    //     case _EBooleanMethod.INTERSECT:
-    //         result_shape = a_shape.intersect(b_shape);
-    //         break;
-    //     case _EBooleanMethod.DIFFERENCE:
-    //         result_shape = a_shape.difference(b_shape);
-    //         break;
-    //     case _EBooleanMethod.SYMMETRIC:
-    //         result_shape = a_shape.xor(b_shape);
-    //         break;
-    //     default:
-    //         break;
-    // }
     // call the boolean function
-    const new_pgons: number[] = _boolean(__model__, a_pgons_i, b_shape, method, posis_map);
+    const new_pgons_i: number[] = _booleanPgons(__model__, a_pgons_i, b_shape, method, posis_map);
+    const new_plines_i: number[] = _booleanPlines(__model__, a_plines_i, b_shape, method, posis_map);
+    // make the list of polylines and polygons
+    const result_ents: TId[] = [];
+    const new_pgons: TId[] = idsMake(new_pgons_i.map( pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx )) as TId[];
+    for (const new_pgon of new_pgons) {
+        result_ents.push(new_pgon);
+    }
+    const new_plines: TId[] = idsMake(new_plines_i.map( pline_i => [EEntType.PLINE, pline_i] as TEntTypeIdx )) as TId[];
+    for (const new_pline of new_plines) {
+        result_ents.push(new_pline);
+    }
     // always return a list
-    return idsMake(new_pgons.map( pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx )) as TId[];
+    return result_ents;
 }
-function _boolean(__model__: GIModel, pgons_i: number|number[], b_shape: Shape,
+function _booleanPgons(__model__: GIModel, pgons_i: number|number[], b_shape: Shape,
         method: _EBooleanMethod, posis_map: TPosisMap): number[] {
     if (!Array.isArray(pgons_i)) {
         pgons_i = pgons_i as number;
@@ -718,12 +718,48 @@ function _boolean(__model__: GIModel, pgons_i: number|number[], b_shape: Shape,
         pgons_i = pgons_i as number[];
         const all_new_pgons: number[] = [];
         for (const pgon_i of pgons_i) {
-            const result_pgons_i: number[] = _boolean(__model__, pgon_i, b_shape, method, posis_map);
+            const result_pgons_i: number[] = _booleanPgons(__model__, pgon_i, b_shape, method, posis_map);
             for (const result_pgon_i of result_pgons_i) {
                 all_new_pgons.push(result_pgon_i);
             }
         }
         return all_new_pgons;
+    }
+}
+function _booleanPlines(__model__: GIModel, plines_i: number|number[], b_shape: Shape,
+        method: _EBooleanMethod, posis_map: TPosisMap): number[] {
+    if (!Array.isArray(plines_i)) {
+        plines_i = plines_i as number;
+        const wire_i: number = __model__.geom.nav.navPlineToWire(plines_i);
+        const is_closed: boolean = __model__.geom.query.isWireClosed(wire_i);
+        const a_shape: Shape = _convertWireToShape(__model__, wire_i, is_closed, posis_map);
+        let result_shape: Shape;
+        switch (method) {
+            case _EBooleanMethod.INTERSECT:
+                result_shape = a_shape.intersect(b_shape);
+                break;
+            case _EBooleanMethod.DIFFERENCE:
+                result_shape = a_shape.difference(b_shape);
+                break;
+            case _EBooleanMethod.SYMMETRIC:
+                // the perimeter of the B polygon is included in the output
+                // but the perimeter is not closed, which seems strange
+                result_shape = a_shape.xor(b_shape);
+                break;
+            default:
+                break;
+        }
+        return _convertShapeToPlines(__model__, result_shape, is_closed, posis_map);
+    } else {
+        plines_i = plines_i as number[];
+        const all_new_plines: number[] = [];
+        for (const pline_i of plines_i) {
+            const result_plines_i: number[] = _booleanPlines(__model__, pline_i, b_shape, method, posis_map);
+            for (const result_pline_i of result_plines_i) {
+                all_new_plines.push(result_pline_i);
+            }
+        }
+        return all_new_plines;
     }
 }
 // ================================================================================================

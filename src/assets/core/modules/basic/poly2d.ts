@@ -12,8 +12,8 @@ import { arrMakeFlat } from '@assets/libs/util/arrs';
 import { checkIDs, IDcheckObj, TypeCheckObj, checkArgTypes } from '../_check_args';
 import Shape from '@doodle3d/clipper-js';
 import { isEmptyArr, isPgon, idsMake } from '@assets/libs/geo-info/id';
-import {Delaunay} from 'd3-delaunay';
-import * as d3 from 'd3-polygon';
+import * as d3del from 'd3-delaunay';
+import * as d3poly from 'd3-polygon';
 import * as d3vor from 'd3-voronoi';
 import { distance } from '@assets/libs/geom/distance';
 import { vecFromTo, vecNorm, vecCross, vecMult, vecAdd, vecSub } from '@assets/libs/geom/vectors';
@@ -272,13 +272,11 @@ function _convertShapesToPgons(__model__: GIModel, shapes: Shape|Shape[], posis_
 // clipperjs
 function _convertShapeToPlines(__model__: GIModel, shape: Shape, is_closed: boolean, posis_map: TPosisMap): number[] {
     shape.scaleDown(SCALE);
-    console.log("SHAPE = ", shape)
     const sep_shapes: Shape[] = shape.separateShapes();
     const plines_i: number[] = [];
     for (const sep_shape of sep_shapes) {
         const paths: TClipPaths = sep_shape.paths;
         for (const path of paths) {
-            console.log("PATH = ", path)
             if (path.length === 0) { continue; }
             const list_posis_i: number[] = [];
             for (const coord of path) {
@@ -413,17 +411,17 @@ function _voronoiClipOld(__model__: GIModel, pgon_shape: Shape, d3_cell_coords: 
 }
 // ================================================================================================
 /**
- * Create a delauny triangulation of set of positions.
+ * Create a delaunay triangulation of set of positions.
  * ~
  * @param __model__
  * @param entities A list of positions, or entities from which positions can be extracted.
  * @returns A list of new polygons.
  */
-export function Delauny(__model__: GIModel, entities: TId|TId[]): TId[] {
+export function Delaunay(__model__: GIModel, entities: TId|TId[]): TId[] {
     entities = arrMakeFlat(entities) as TId[];
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
-    const fn_name = 'poly2d.Delauny';
+    const fn_name = 'poly2d.Delaunay';
     const posis_ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities1', entities,
         [IDcheckObj.isIDList], null) as TEntTypeIdx[];
     // --- Error Check ---
@@ -438,26 +436,26 @@ export function Delauny(__model__: GIModel, entities: TId|TId[]): TId[] {
         d3_tri_coords.push([xyz[0], xyz[1]]);
         _putPosiInMap(xyz[0], xyz[1], posi_i, posis_map);
     }
-    // create delauny triangulation
-    const cells_i: number[] = _delauny(__model__, d3_tri_coords, posis_map);
+    // create delaunay triangulation
+    const cells_i: number[] = _delaunay(__model__, d3_tri_coords, posis_map);
     // return cell pgons
     return idsMake(cells_i.map( cell_i => [EEntType.PGON, cell_i] as TEntTypeIdx )) as TId[];
 }
-function _delauny(__model__: GIModel, d3_tri_coords: [number, number][], posis_map: TPosisMap): number[] {
+function _delaunay(__model__: GIModel, d3_tri_coords: [number, number][], posis_map: TPosisMap): number[] {
     const new_pgons_i: number[] = [];
-    const delaunay = Delaunay.from(d3_tri_coords);
-    const deauny_posis_i: number[] = [];
+    const delaunay = d3del.Delaunay.from(d3_tri_coords);
+    const delaunay_posis_i: number[] = [];
     for (const d3_tri_coord of d3_tri_coords) {
         // TODO use the posis_map!!
         // const deauny_posi_i: number = __model__.geom.add.addPosi();
         // __model__.attribs.add.setPosiCoords(deauny_posi_i, [point[0], point[1], 0]);
-        const delauny_posi_i: number = _getPosiFromMap(__model__, d3_tri_coord[0], d3_tri_coord[1], posis_map);
-        deauny_posis_i.push(delauny_posi_i);
+        const delaunay_posi_i: number = _getPosiFromMap(__model__, d3_tri_coord[0], d3_tri_coord[1], posis_map);
+        delaunay_posis_i.push(delaunay_posi_i);
     }
     for (let i = 0; i < delaunay.triangles.length; i += 3) {
-        const a: number = deauny_posis_i[delaunay.triangles[i]];
-        const b: number = deauny_posis_i[delaunay.triangles[i + 1]];
-        const c: number = deauny_posis_i[delaunay.triangles[i + 2]];
+        const a: number = delaunay_posis_i[delaunay.triangles[i]];
+        const b: number = delaunay_posis_i[delaunay.triangles[i + 1]];
+        const c: number = delaunay_posis_i[delaunay.triangles[i + 2]];
         new_pgons_i.push(__model__.geom.add.addPgon([c, b, a]));
     }
     return new_pgons_i;
@@ -496,7 +494,7 @@ function _convexHull(__model__: GIModel, posis_i: number[]): number[] {
     }
     if (points.length < 3) { return null; }
     // loop and create hull
-    const hull_points: [number, number][] = d3.polygonHull(points);
+    const hull_points: [number, number][] = d3poly.polygonHull(points);
     const hull_posis_i: number[] = [];
     for (const hull_point of hull_points) {
         const hull_posi_i: number = _getPosiFromMap(__model__, hull_point[0], hull_point[1], posis_map);

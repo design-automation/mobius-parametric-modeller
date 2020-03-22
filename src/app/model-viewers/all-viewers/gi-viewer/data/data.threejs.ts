@@ -220,12 +220,12 @@ export class DataThreejs extends DataThreejsLookAt {
         // const center = new THREE.Vector3(0, 0, 0); // allObjs.center;
         // this.axes_pos.x = center.x;
         // this.axes_pos.y = center.y;
-        let grid_pos = this.settings.grid.pos;
-        if (!grid_pos) {
-            grid_pos = new Vector3(0, 0, 0);
-        }
-        this.grid.position.set(grid_pos.x, grid_pos.y, -0.01);
-        this.axesHelper.position.set(grid_pos.x, grid_pos.y, 0);
+        // let grid_pos = this.settings.grid.pos;
+        // if (!grid_pos) {
+        //     grid_pos = new Vector3(0, 0, 0);
+        // }
+        // this.grid.position.set(grid_pos.x, grid_pos.y, -0.01);
+        // this.axesHelper.position.set(grid_pos.x, grid_pos.y, 0);
 
         // // settings
         // // if (num_posis !== 0) {
@@ -344,7 +344,8 @@ export class DataThreejs extends DataThreejsLookAt {
         this.axesHelper.visible = this.settings.axes.show;
         if (this.axesHelper.visible) {
             this.axesHelper.name = 'AxesHelper';
-            this.axesHelper.position.set(this.axes_pos.x, this.axes_pos.y, 0);
+            this.axesHelper.position.set(this.axes_pos.x, this.axes_pos.y, this.axes_pos.z);
+            this.axesHelper.position.set(0, 0, 0);
             this.scene.add(this.axesHelper);
         }
     }
@@ -377,7 +378,11 @@ export class DataThreejs extends DataThreejsLookAt {
             if (!pos) {
                 pos = new THREE.Vector3();
             }
-            this.grid.position.set(pos.x, pos.y, -0.01);
+            if (!pos.z) {
+                this.grid.position.set(pos.x, pos.y, -0.01);
+            } else {
+                this.grid.position.set(pos.x, pos.y, pos.z);
+            }
             this.scene.add(this.grid);
         }
     }

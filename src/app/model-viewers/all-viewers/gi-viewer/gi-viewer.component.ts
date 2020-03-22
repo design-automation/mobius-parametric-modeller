@@ -229,6 +229,27 @@ export class GIViewerComponent implements OnInit {
                     this.settings.grid.pos_y = this.temp_grid_pos.y;
                 }
                 break;
+            case 'grid.update_pos_x':
+                if (isNaN(value)) {
+                    return;
+                }
+                this.settings.grid.pos_x = Number(value);
+                this.settings.grid.pos.x = Number(value);
+                break;
+            case 'grid.update_pos_y':
+                if (isNaN(value)) {
+                    return;
+                }
+                this.settings.grid.pos_y = Number(value);
+                this.settings.grid.pos.y = Number(value);
+                break;
+            case 'grid.update_pos_z':
+                if (isNaN(value)) {
+                    return;
+                }
+                this.settings.grid.pos_z = Number(value);
+                this.settings.grid.pos.z = Number(value);
+                break;
             case 'positions.show':
                 this.settings.positions.show = !this.settings.positions.show;
                 scene.positions.map(p => p.visible = this.settings.positions.show);

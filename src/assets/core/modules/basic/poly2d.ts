@@ -393,8 +393,10 @@ function _voronoiOld(__model__: GIModel, pgon_shape: Shape, d3_cell_points: [num
     const d3_voronoi_diag = d3_voronoi(d3_cell_points);
     const shapes: Shape[] = [];
     for (const d3_cell_coords of d3_voronoi_diag.polygons()) {
-        const clipped_shape: Shape = _voronoiClipOld(__model__, pgon_shape, d3_cell_coords as [number, number][]);
-        shapes.push(clipped_shape);
+        if (d3_cell_coords !== undefined) {
+            const clipped_shape: Shape = _voronoiClipOld(__model__, pgon_shape, d3_cell_coords as [number, number][]);
+            shapes.push(clipped_shape);
+        }
     }
     return _convertShapesToPgons(__model__, shapes, posis_map);
 }

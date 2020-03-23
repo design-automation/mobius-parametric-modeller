@@ -654,8 +654,6 @@ export abstract class NodeUtils {
                     }
                 }
             }
-
-
         }
         return false;
     }

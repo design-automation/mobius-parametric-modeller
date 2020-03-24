@@ -7,7 +7,7 @@ import { IArgument, CodeUtils } from '@models/code';
 import { DownloadUtils } from './download.utils';
 import { _varString } from '@assets/core/modules';
 // import {js as beautify} from 'js-beautify';
-import { mergeInputsFunc, printFunc, ExecuteComponent } from '../execute/execute.component';
+import { mergeInputsFunc, printFunc, pythonList, ExecuteComponent } from '../execute/execute.component';
 
 @Component({
   selector: 'javascript-save',
@@ -128,8 +128,10 @@ export class SaveJavascriptComponent {
             ` *   _ result.result -> returned output of the flowchart, if the flowchart does not return any value,` +
             ` result.result is the model of the flowchart\n */\n\n` +
             `function ${funcName}(__modules__` + func.args.map(arg => ', ' + arg.name).join('') + `) {\n\n` +
+            '/** * **/' +
             _varString + `\n\n` +
             fnString +
+            pythonList +
             mergeInputsFunc +
             printFunc +
             `\n\nconst __params__ = {};\n` +
@@ -139,7 +141,9 @@ export class SaveJavascriptComponent {
             func.args.map(arg => ', ' + arg.name).join('') +
             `);\n` +
             `if (result === __params__.model) { return { "model": __params__.model, "result": null };}\n` +
-            `return {"model": __params__.model, "result": result};\n}\n\n` +
+            `return {"model": __params__.model, "result": result};\n` +
+            '/** * **/' +
+            `\n\n}\n\n` +
             `module.exports = ${funcName};\n`;
 
         // fnString = beautify(fnString, { indent_size: 4, space_in_empty_paren: true });

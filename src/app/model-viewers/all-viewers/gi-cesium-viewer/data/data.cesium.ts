@@ -100,7 +100,7 @@ export class DataCesium {
                 }
             }
             if (this.settings.imagery.terrain) {
-                for (const terrainProvider of this._viewLayerProviders) {
+                for (const terrainProvider of this._viewTerrainProviders) {
                     if (terrainProvider.name === this.settings.imagery.terrain) {
                         this._viewer.terrainProvider = terrainProvider.creationCommand();
                     }

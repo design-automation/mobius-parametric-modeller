@@ -30,6 +30,9 @@ export class GICesiumViewerComponent implements OnInit {
     public backup_settings: CesiumSettings;
     public clickedEvent: Event;
 
+    public layerList: string[];
+    public terrainList: string[];
+
     /**
      * constructor
      * @param dataService
@@ -43,10 +46,10 @@ export class GICesiumViewerComponent implements OnInit {
      * ngOnInit
      */
     ngOnInit() {
-        // if (localStorage.getItem('cesium_settings') !== null) {
-        //     const parsedSettings = JSON.parse(localStorage.getItem('cesium_settings'));
-        //     this.updateSettings(this.settings, parsedSettings);
-        // }
+        if (localStorage.getItem('cesium_settings') !== null) {
+            const parsedSettings = JSON.parse(localStorage.getItem('cesium_settings'));
+            this.updateSettings(this.settings, parsedSettings);
+        }
         if (this.dataService.getCesiumScene() === undefined) {
             this.dataService.setCesiumScene(this.settings);
         }
@@ -78,9 +81,11 @@ export class GICesiumViewerComponent implements OnInit {
         if (document.body.className === 'modal-open') {
             this.modalService.close(id);
         } else {
-            this.modalService.open(id);
             this.backup_settings = <CesiumSettings> JSON.parse(JSON.stringify(this.settings));
             const scene = this.dataService.getCesiumScene();
+            this.layerList = scene._viewLayerProviders.map(provider => provider.name);
+            this.terrainList = scene._viewTerrainProviders.map(provider => provider.name);
+            this.modalService.open(id);
         }
     }
     /**

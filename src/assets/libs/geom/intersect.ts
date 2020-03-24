@@ -8,10 +8,13 @@ type TPlane = [Txyz, Txyz, Txyz];
 
 export function intersect(r1: TRay, r2: TRay|TPlane, met: number = 2): Txyz {
     function isInRange(num: number, range: [number, number]) {
-        range.sort();
-        if ((num < range[0]) || (num > range[1])) { return false; }
+        const range2: [number, number] = range[0] < range[1] ? range : [range[1], range[0]];
+        if ((num < range2[0]) || (num > range2[1])) { return false; }
         return true;
     }
+    // TODO
+    // This has problems with rounding errors
+    // Especially when lines are orthogonal
     function isOnLineSegment(coord: Txyz, start: Txyz, end: Txyz): boolean {
         const x_range: [number, number] = [start[0], end[0]];
         if (!isInRange(coord[0], x_range)) { return false; }
@@ -21,6 +24,9 @@ export function intersect(r1: TRay, r2: TRay|TPlane, met: number = 2): Txyz {
         if (!isInRange(coord[2], z_range)) { return false; }
         return true;
     }
+    // TODO
+    // This has problems with rounding errors
+    // Especially when lines are orthogonal
     function isOnRay(coord: Txyz, start: Txyz, end: Txyz): boolean {
         const x_range: [number, number] = [start[0], null];
         x_range[1] = start[0] === end[0] ? end[0] : start[0] < end[0] ? Infinity : -Infinity;

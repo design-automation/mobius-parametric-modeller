@@ -226,7 +226,8 @@ function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
     switch (data_format) {
         case _EIOExportDataFormat.GI:
             let gi_data: string = JSON.stringify(__model__.getData());
-            gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
+            // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
+            gi_data = gi_data.replace(/\\/g, '\\\\'); // TODO temporary fix
             if (data_target === _EIODataTarget.DEFAULT) {
                 return download(gi_data , file_name);
             }

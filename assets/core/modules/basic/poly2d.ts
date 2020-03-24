@@ -12,8 +12,8 @@ import { arrMakeFlat } from '@assets/libs/util/arrs';
 import { checkIDs, IDcheckObj, TypeCheckObj, checkArgTypes } from '../_check_args';
 import Shape from '@doodle3d/clipper-js';
 import { isEmptyArr, isPgon, idsMake } from '@assets/libs/geo-info/id';
-import {Delaunay} from 'd3-delaunay';
-import * as d3 from 'd3-polygon';
+import * as d3del from 'd3-delaunay';
+import * as d3poly from 'd3-polygon';
 import * as d3vor from 'd3-voronoi';
 import { distance } from '@assets/libs/geom/distance';
 import { vecFromTo, vecNorm, vecCross, vecMult, vecAdd, vecSub } from '@assets/libs/geom/vectors';
@@ -391,8 +391,10 @@ function _voronoiOld(__model__: GIModel, pgon_shape: Shape, d3_cell_points: [num
     const d3_voronoi_diag = d3_voronoi(d3_cell_points);
     const shapes: Shape[] = [];
     for (const d3_cell_coords of d3_voronoi_diag.polygons()) {
-        const clipped_shape: Shape = _voronoiClipOld(__model__, pgon_shape, d3_cell_coords as [number, number][]);
-        shapes.push(clipped_shape);
+        if (d3_cell_coords !== undefined) {
+            const clipped_shape: Shape = _voronoiClipOld(__model__, pgon_shape, d3_cell_coords as [number, number][]);
+            shapes.push(clipped_shape);
+        }
     }
     return _convertShapesToPgons(__model__, shapes, posis_map);
 }
@@ -409,17 +411,17 @@ function _voronoiClipOld(__model__: GIModel, pgon_shape: Shape, d3_cell_coords: 
 }
 // ================================================================================================
 /**
- * Create a delauny triangulation of set of positions.
+ * Create a delaunay triangulation of set of positions.
  * ~
  * @param __model__
  * @param entities A list of positions, or entities from which positions can be extracted.
  * @returns A list of new polygons.
  */
-export function Delauny(__model__: GIModel, entities: TId|TId[]): TId[] {
+export function Delaunay(__model__: GIModel, entities: TId|TId[]): TId[] {
     entities = arrMakeFlat(entities) as TId[];
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
-    const fn_name = 'poly2d.Delauny';
+    const fn_name = 'poly2d.Delaunay';
     const posis_ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities1', entities,
         [IDcheckObj.isIDList], null) as TEntTypeIdx[];
     // --- Error Check ---
@@ -434,26 +436,26 @@ export function Delauny(__model__: GIModel, entities: TId|TId[]): TId[] {
         d3_tri_coords.push([xyz[0], xyz[1]]);
         _putPosiInMap(xyz[0], xyz[1], posi_i, posis_map);
     }
-    // create delauny triangulation
-    const cells_i: number[] = _delauny(__model__, d3_tri_coords, posis_map);
+    // create delaunay triangulation
+    const cells_i: number[] = _delaunay(__model__, d3_tri_coords, posis_map);
     // return cell pgons
     return idsMake(cells_i.map( cell_i => [EEntType.PGON, cell_i] as TEntTypeIdx )) as TId[];
 }
-function _delauny(__model__: GIModel, d3_tri_coords: [number, number][], posis_map: TPosisMap): number[] {
+function _delaunay(__model__: GIModel, d3_tri_coords: [number, number][], posis_map: TPosisMap): number[] {
     const new_pgons_i: number[] = [];
-    const delaunay = Delaunay.from(d3_tri_coords);
-    const deauny_posis_i: number[] = [];
+    const delaunay = d3del.Delaunay.from(d3_tri_coords);
+    const delaunay_posis_i: number[] = [];
     for (const d3_tri_coord of d3_tri_coords) {
         // TODO use the posis_map!!
         // const deauny_posi_i: number = __model__.geom.add.addPosi();
         // __model__.attribs.add.setPosiCoords(deauny_posi_i, [point[0], point[1], 0]);
-        const delauny_posi_i: number = _getPosiFromMap(__model__, d3_tri_coord[0], d3_tri_coord[1], posis_map);
-        deauny_posis_i.push(delauny_posi_i);
+        const delaunay_posi_i: number = _getPosiFromMap(__model__, d3_tri_coord[0], d3_tri_coord[1], posis_map);
+        delaunay_posis_i.push(delaunay_posi_i);
     }
     for (let i = 0; i < delaunay.triangles.length; i += 3) {
-        const a: number = deauny_posis_i[delaunay.triangles[i]];
-        const b: number = deauny_posis_i[delaunay.triangles[i + 1]];
-        const c: number = deauny_posis_i[delaunay.triangles[i + 2]];
+        const a: number = delaunay_posis_i[delaunay.triangles[i]];
+        const b: number = delaunay_posis_i[delaunay.triangles[i + 1]];
+        const c: number = delaunay_posis_i[delaunay.triangles[i + 2]];
         new_pgons_i.push(__model__.geom.add.addPgon([c, b, a]));
     }
     return new_pgons_i;
@@ -492,7 +494,7 @@ function _convexHull(__model__: GIModel, posis_i: number[]): number[] {
     }
     if (points.length < 3) { return null; }
     // loop and create hull
-    const hull_points: [number, number][] = d3.polygonHull(points);
+    const hull_points: [number, number][] = d3poly.polygonHull(points);
     const hull_posis_i: number[] = [];
     for (const hull_point of hull_points) {
         const hull_posi_i: number = _getPosiFromMap(__model__, hull_point[0], hull_point[1], posis_map);
@@ -644,16 +646,18 @@ export function Union(__model__: GIModel, entities: TId|TId[]): TId[] {
 }
 // ================================================================================================
 /**
- * Perform a boolean operation on a set of polygons.
+ * Perform a boolean operation on polylines or polygons.
  * ~
- * The polygons in B are first unioned.
- * The boolean operation is then performed between each polygon in A, and the unioned B polygons.
+ * The entities in A can be either polyline or polygons.
+ * The entities in B must be polygons.
+ * The polygons in B are first unioned before the operation is performed.
+ * The boolean operation is then performed between each polyline or polygon in A, and the unioned B polygons.
  * ~
  * @param __model__
- * @param a_entities A list of polygons, or entities from which polygons can be extracted.
+ * @param a_entities A list of polyline or polygons, or entities from which polyline or polygons can be extracted.
  * @param b_entities A list of polygons, or entities from which polygons can be extracted.
  * @param method Enum, the boolean operator to apply.
- * @returns A list of new polygons.
+ * @returns A list of new polylines and polygons.
  */
 export function Boolean(__model__: GIModel, a_entities: TId|TId[], b_entities: TId|TId[], method: _EBooleanMethod): TId[] {
     a_entities = arrMakeFlat(a_entities) as TId[];
@@ -663,38 +667,34 @@ export function Boolean(__model__: GIModel, a_entities: TId|TId[], b_entities: T
     // --- Error Check ---
     const fn_name = 'poly2d.Boolean';
     const a_ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'a_entities', a_entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PGON]) as TEntTypeIdx[];
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
     const b_ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'b_entities', b_entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PGON]) as TEntTypeIdx[];
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();
-    const a_pgons_i: number[] = _getPgons(__model__, a_ents_arr);
+    const [a_pgons_i, a_plines_i]: [number[], number[]] = _getPgonsPlines(__model__, a_ents_arr);
     const b_pgons_i: number[] = _getPgons(__model__, b_ents_arr);
-    if (a_pgons_i.length === 0) { return []; }
+    if (a_pgons_i.length === 0 && a_plines_i.length === 0) { return []; }
     if (b_pgons_i.length === 0) { return []; }
     // const a_shape: Shape = _convertPgonsToShapeUnion(__model__, a_pgons_i, posis_map);
     const b_shape: Shape = _convertPgonsToShapeUnion(__model__, b_pgons_i, posis_map);
-    // // const b_shape: Shape = _convertPgonsToShapeJoin(__model__, a_pgons_i, posis_map);
-    // let result_shape: Shape;
-    // switch (method) {
-    //     case _EBooleanMethod.INTERSECT:
-    //         result_shape = a_shape.intersect(b_shape);
-    //         break;
-    //     case _EBooleanMethod.DIFFERENCE:
-    //         result_shape = a_shape.difference(b_shape);
-    //         break;
-    //     case _EBooleanMethod.SYMMETRIC:
-    //         result_shape = a_shape.xor(b_shape);
-    //         break;
-    //     default:
-    //         break;
-    // }
     // call the boolean function
-    const new_pgons: number[] = _boolean(__model__, a_pgons_i, b_shape, method, posis_map);
+    const new_pgons_i: number[] = _booleanPgons(__model__, a_pgons_i, b_shape, method, posis_map);
+    const new_plines_i: number[] = _booleanPlines(__model__, a_plines_i, b_shape, method, posis_map);
+    // make the list of polylines and polygons
+    const result_ents: TId[] = [];
+    const new_pgons: TId[] = idsMake(new_pgons_i.map( pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx )) as TId[];
+    for (const new_pgon of new_pgons) {
+        result_ents.push(new_pgon);
+    }
+    const new_plines: TId[] = idsMake(new_plines_i.map( pline_i => [EEntType.PLINE, pline_i] as TEntTypeIdx )) as TId[];
+    for (const new_pline of new_plines) {
+        result_ents.push(new_pline);
+    }
     // always return a list
-    return idsMake(new_pgons.map( pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx )) as TId[];
+    return result_ents;
 }
-function _boolean(__model__: GIModel, pgons_i: number|number[], b_shape: Shape,
+function _booleanPgons(__model__: GIModel, pgons_i: number|number[], b_shape: Shape,
         method: _EBooleanMethod, posis_map: TPosisMap): number[] {
     if (!Array.isArray(pgons_i)) {
         pgons_i = pgons_i as number;
@@ -718,12 +718,48 @@ function _boolean(__model__: GIModel, pgons_i: number|number[], b_shape: Shape,
         pgons_i = pgons_i as number[];
         const all_new_pgons: number[] = [];
         for (const pgon_i of pgons_i) {
-            const result_pgons_i: number[] = _boolean(__model__, pgon_i, b_shape, method, posis_map);
+            const result_pgons_i: number[] = _booleanPgons(__model__, pgon_i, b_shape, method, posis_map);
             for (const result_pgon_i of result_pgons_i) {
                 all_new_pgons.push(result_pgon_i);
             }
         }
         return all_new_pgons;
+    }
+}
+function _booleanPlines(__model__: GIModel, plines_i: number|number[], b_shape: Shape,
+        method: _EBooleanMethod, posis_map: TPosisMap): number[] {
+    if (!Array.isArray(plines_i)) {
+        plines_i = plines_i as number;
+        const wire_i: number = __model__.geom.nav.navPlineToWire(plines_i);
+        const is_closed: boolean = __model__.geom.query.isWireClosed(wire_i);
+        const a_shape: Shape = _convertWireToShape(__model__, wire_i, is_closed, posis_map);
+        let result_shape: Shape;
+        switch (method) {
+            case _EBooleanMethod.INTERSECT:
+                result_shape = a_shape.intersect(b_shape);
+                break;
+            case _EBooleanMethod.DIFFERENCE:
+                result_shape = a_shape.difference(b_shape);
+                break;
+            case _EBooleanMethod.SYMMETRIC:
+                // the perimeter of the B polygon is included in the output
+                // but the perimeter is not closed, which seems strange
+                result_shape = a_shape.xor(b_shape);
+                break;
+            default:
+                break;
+        }
+        return _convertShapeToPlines(__model__, result_shape, is_closed, posis_map);
+    } else {
+        plines_i = plines_i as number[];
+        const all_new_plines: number[] = [];
+        for (const pline_i of plines_i) {
+            const result_plines_i: number[] = _booleanPlines(__model__, pline_i, b_shape, method, posis_map);
+            for (const result_pline_i of result_plines_i) {
+                all_new_plines.push(result_pline_i);
+            }
+        }
+        return all_new_plines;
     }
 }
 // ================================================================================================

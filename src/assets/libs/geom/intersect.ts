@@ -136,7 +136,7 @@ export function intersectRayPlane(r: TRay, p: TPlane, met: number): Txyz {
 
 export function project(c: Txyz, r: TRay|TPlane, met: number = 2): Txyz {
     if (r.length === 2) {
-        return projectCoordRay(c, r, met);
+        return projectCoordOntoRay(c, r, met);
         // const tjs_point_proj: three.Vector3 = new three.Vector3(c[0], c[1], c[2]);
         // const tjs_origin: three.Vector3 =  new three.Vector3(r[0][0], r[0][1], r[0][2]);
         // const p2: Txyz = vecAdd(r[0], r[1]);
@@ -147,22 +147,23 @@ export function project(c: Txyz, r: TRay|TPlane, met: number = 2): Txyz {
         // tjs_line.closestPointToPoint( tjs_point_proj, false, tjs_new_point );
         // return [tjs_new_point.x, tjs_new_point.y, tjs_new_point.z];
     } else if (r.length === 3) {
-        const tjs_point_proj: three.Vector3 = new three.Vector3(c[0], c[1], c[2]);
-        const tjs_new_point: three.Vector3 = new three.Vector3();
-        const normal: Txyz = vecCross(r[1], r[2]);
-        const tjs_normal: three.Vector3 = new three.Vector3(normal[0], normal[1], normal[2]);
-        const tjs_origin: three.Vector3 = new three.Vector3(r[0][0], r[0][1], r[0][2]);
-        const tjs_plane: three.Plane = new three.Plane();
-        // project
-        tjs_plane.setFromNormalAndCoplanarPoint( tjs_normal, tjs_origin );
-        tjs_plane.projectPoint(tjs_point_proj, tjs_new_point);
-        return [tjs_new_point.x, tjs_new_point.y, tjs_new_point.z];
+        return projectCoordOntoPlane(c, r);
+        // const tjs_point_proj: three.Vector3 = new three.Vector3(c[0], c[1], c[2]);
+        // const tjs_new_point: three.Vector3 = new three.Vector3();
+        // const normal: Txyz = vecCross(r[1], r[2]);
+        // const tjs_normal: three.Vector3 = new three.Vector3(normal[0], normal[1], normal[2]);
+        // const tjs_origin: three.Vector3 = new three.Vector3(r[0][0], r[0][1], r[0][2]);
+        // const tjs_plane: three.Plane = new three.Plane();
+        // // project
+        // tjs_plane.setFromNormalAndCoplanarPoint( tjs_normal, tjs_origin );
+        // tjs_plane.projectPoint(tjs_point_proj, tjs_new_point);
+        // return [tjs_new_point.x, tjs_new_point.y, tjs_new_point.z];
     } else {
         throw new Error('Error calculating projection. Projection must be onto either rays or planes.');
     }
 }
 
-export function projectCoordRay(c: Txyz, r: TRay, met: number): Txyz {
+export function projectCoordOntoRay(c: Txyz, r: TRay, met: number): Txyz {
     const vec: Txyz = vecFromTo(r[0], c);
     const dot: number = vecDot(vec, vecNorm(r[1]));
     switch (met) {
@@ -184,4 +185,14 @@ export function projectCoordRay(c: Txyz, r: TRay, met: number): Txyz {
         default:
             return null;
     }
+}
+
+export function projectCoordOntoPlane(c: Txyz, p: TPlane): Txyz {
+    const vec_to_c: Txyz = vecFromTo(p[0], c);
+    const pln_z_vec: Txyz = vecCross(p[1], p[2]);
+    const vec_a: Txyz = vecCross(vec_to_c, pln_z_vec);
+    if (vecLen(vec_a) === 0) { return p[0].slice() as Txyz; }
+    const vec_b: Txyz = vecCross(vec_a, pln_z_vec);
+    const dot: number = vecDot(vec_to_c, vecNorm(vec_b));
+    return vecAdd(p[0], vecSetLen(vec_b, dot));
 }

@@ -163,8 +163,8 @@ export function project(c: Txyz, r: TRay|TPlane, met: number = 2): Txyz {
 }
 
 export function projectCoordRay(c: Txyz, r: TRay, met: number): Txyz {
-    const vec: Txyz = vecFromTo(c, r[0]);
-    const dot: number = vecDot(vec, r[1]);
+    const vec: Txyz = vecFromTo(r[0], c);
+    const dot: number = vecDot(vec, vecNorm(r[1]));
     switch (met) {
         case 2:
             return vecAdd(r[0], vecSetLen(r[1], dot));

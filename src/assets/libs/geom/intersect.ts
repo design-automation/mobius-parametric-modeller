@@ -1,6 +1,6 @@
 import * as mathjs from 'mathjs';
 import * as three from 'three';
-import { vecAdd, vecCross, vecLen, vecFromTo, vecDot, vecNorm, vecMult } from './vectors';
+import { vecAdd, vecCross, vecLen, vecFromTo, vecDot, vecNorm, vecMult, vecSetLen } from './vectors';
 
 type Txyz = [number, number, number];
 type TRay = [Txyz, Txyz];
@@ -134,17 +134,18 @@ export function intersectRayPlane(r: TRay, p: TPlane, met: number): Txyz {
     }
 }
 
-export function project(c: Txyz, r: TRay|TPlane): Txyz {
+export function project(c: Txyz, r: TRay|TPlane, met: number = 2): Txyz {
     if (r.length === 2) {
-        const tjs_point_proj: three.Vector3 = new three.Vector3(c[0], c[1], c[2]);
-        const tjs_origin: three.Vector3 =  new three.Vector3(r[0][0], r[0][1], r[0][2]);
-        const p2: Txyz = vecAdd(r[0], r[1]);
-        const tjs_point2: three.Vector3 =  new three.Vector3(p2[0], p2[1], p2[2]);
-        const tjs_new_point: three.Vector3 = new three.Vector3();
-        const tjs_line: three.Line3 = new three.Line3(tjs_origin, tjs_point2);
-        // project
-        tjs_line.closestPointToPoint( tjs_point_proj, false, tjs_new_point );
-        return [tjs_new_point.x, tjs_new_point.y, tjs_new_point.z];
+        return projectCoordRay(c, r, met);
+        // const tjs_point_proj: three.Vector3 = new three.Vector3(c[0], c[1], c[2]);
+        // const tjs_origin: three.Vector3 =  new three.Vector3(r[0][0], r[0][1], r[0][2]);
+        // const p2: Txyz = vecAdd(r[0], r[1]);
+        // const tjs_point2: three.Vector3 =  new three.Vector3(p2[0], p2[1], p2[2]);
+        // const tjs_new_point: three.Vector3 = new three.Vector3();
+        // const tjs_line: three.Line3 = new three.Line3(tjs_origin, tjs_point2);
+        // // project
+        // tjs_line.closestPointToPoint( tjs_point_proj, false, tjs_new_point );
+        // return [tjs_new_point.x, tjs_new_point.y, tjs_new_point.z];
     } else if (r.length === 3) {
         const tjs_point_proj: three.Vector3 = new three.Vector3(c[0], c[1], c[2]);
         const tjs_new_point: three.Vector3 = new three.Vector3();
@@ -158,5 +159,29 @@ export function project(c: Txyz, r: TRay|TPlane): Txyz {
         return [tjs_new_point.x, tjs_new_point.y, tjs_new_point.z];
     } else {
         throw new Error('Error calculating projection. Projection must be onto either rays or planes.');
+    }
+}
+
+export function projectCoordRay(c: Txyz, r: TRay, met: number): Txyz {
+    const vec: Txyz = vecFromTo(c, r[0]);
+    const dot: number = vecDot(vec, r[1]);
+    switch (met) {
+        case 2:
+            return vecAdd(r[0], vecSetLen(r[1], dot));
+        case 1:
+            if (dot <= 0) {
+                return r[0].slice() as Txyz;
+            }
+            return vecAdd(r[0], vecSetLen(r[1], dot));
+        case 0:
+            const length: number = vecLen(r[1]);
+            if (dot <= 0) {
+                return r[0].slice() as Txyz;
+            } else if (dot >= length) {
+                return vecAdd(r[0], r[1]);
+            }
+            return vecAdd(r[0], vecSetLen(r[1], dot));
+        default:
+            return null;
     }
 }

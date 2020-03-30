@@ -1237,6 +1237,9 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
 
         // double-quotes (") or single-quotes (')
         } else if (code === 34 || code === 39) {
+            if (i === 0 && str.substring(0, 15) === '\'__model_data__' && str.charCodeAt(str.length - 1) === code) {
+                return [{ 'type': strType.STR, 'value': str}];
+            }
             const startCode = code;
             const startI = i;
             i += 1;

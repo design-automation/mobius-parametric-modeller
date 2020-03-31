@@ -1247,10 +1247,21 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
             if (!code) {
                 return 'Error: Missing ending quote.';
             }
-            while (code !== startCode) { // string must end with the same quote as well
+            while (true) { // string must end with the same quote as well
                 i += 1;
                 if (i === str.length) { break; }
                 code = str.charCodeAt(i);
+                if (code === startCode) {
+                    let checkI = i - 1;
+                    let count = 0;
+                    while (checkI >= 0 && str.charCodeAt(checkI) === 92) {
+                        count++;
+                        checkI--;
+                    }
+                    if (count % 2 === 0) {
+                        break;
+                    }
+                }
             }
             if (code === startCode) { i += 1; }
             const subStr = str.substring(startI, i);

@@ -653,6 +653,9 @@ export function Union(__model__: GIModel, entities: TId|TId[]): TId[] {
  * The polygons in B are first unioned before the operation is performed.
  * The boolean operation is then performed between each polyline or polygon in A, and the unioned B polygons.
  * ~
+ * If A is an empty list, then an empty list is returned.
+ * If B is an empty list, then the A list is returned.
+ * ~
  * @param __model__
  * @param a_entities A list of polyline or polygons, or entities from which polyline or polygons can be extracted.
  * @param b_entities A list of polygons, or entities from which polygons can be extracted.
@@ -663,7 +666,7 @@ export function Boolean(__model__: GIModel, a_entities: TId|TId[], b_entities: T
     a_entities = arrMakeFlat(a_entities) as TId[];
     if (isEmptyArr(a_entities)) { return []; }
     b_entities = arrMakeFlat(b_entities) as TId[];
-    if (isEmptyArr(b_entities)) { return []; }
+    if (isEmptyArr(b_entities)) { return a_entities; }
     // --- Error Check ---
     const fn_name = 'poly2d.Boolean';
     const a_ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'a_entities', a_entities,

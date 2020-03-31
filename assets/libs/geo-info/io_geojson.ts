@@ -1,5 +1,5 @@
 import { GIModel } from './GIModel';
-import { TNormal, TTexture, EAttribNames, Txyz, EEntType, EAttribDataTypeStrs, TAttribDataTypes, LONGLAT, IGeomPack, Txy } from './common';
+import { TNormal, TTexture, EAttribNames, Txyz, EEntType, EAttribDataTypeStrs, TAttribDataTypes, LONGLAT, IGeomPack, Txy, TEntTypeIdx } from './common';
 import { getArrDepth } from './id';
 import proj4 from 'proj4';
 import { vecAng2, vecDot } from '../geom/vectors';
@@ -15,14 +15,124 @@ enum EGeojsoFeatureType {
     MULTILINESTRING = 'MultiLineString',
     MULTIPOLYGON = 'MultiPolygon'
 }
-
+export function exportGeojson(model: GIModel, entities: TEntTypeIdx[], flatten: boolean): string {
+    // create the projection object
+    const proj_obj: proj4.Converter = _createProjection(model);
+    // calculate angle of rotation
+    let rot_matrix: Matrix4 = null;
+    if (model.attribs.query.hasModelAttrib('north')) {
+        const north: Txy = model.attribs.query.getModelAttribVal('north') as Txy;
+        if (Array.isArray(north)) {
+            const rot_ang: number = vecAng2([0, 1, 0], [north[0], north[1], 0], [0, 0, 1]);
+            rot_matrix = rotateMatrix([[0, 0, 0], [0, 0, 1]], -rot_ang);
+        }
+    }
+    const features: object[] = [];
+    for (const [ent_type, ent_i] of entities) {
+        switch (ent_type) {
+            case EEntType.PGON:
+                features.push(_createGeojsonPolygon(model, ent_i, proj_obj, rot_matrix, flatten));
+                break;
+            case EEntType.PLINE:
+                features.push(_createGeojsonLineString(model, ent_i, proj_obj, rot_matrix, flatten));
+                break;
+            default:
+                break;
+        }
+    }
+    const export_json = {
+        'type': 'FeatureCollection',
+        'features': features
+    };
+    return JSON.stringify(export_json, null, 2); // pretty
+}
+function _createGeojsonPolygon(model: GIModel, pgon_i: number, proj_obj: any, rot_matrix: Matrix4, flatten: boolean): object {
+    // {
+    //     "type": "Feature",
+    //     "geometry": {
+    //       "type": "Polygon",
+    //       "coordinates": [
+    //         [
+    //           [100.0, 0.0], [101.0, 0.0], [101.0, 1.0],
+    //           [100.0, 1.0], [100.0, 0.0]
+    //         ]
+    //       ]
+    //     },
+    //     "properties": {
+    //       "prop0": "value0",
+    //       "prop1": { "this": "that" }
+    //     }
+    // }
+    const all_coords: Txy[][] = [];
+    const wires_i: number[] = model.geom.nav.navAnyToWire(EEntType.PGON, pgon_i);
+    for (let i = 0; i < wires_i.length; i++) {
+        const coords: Txy[] = [];
+        const posis_i: number[] = model.geom.nav.navAnyToPosi(EEntType.WIRE, wires_i[i]);
+        for (const posi_i of posis_i) {
+            const xyz: Txyz = model.attribs.query.getPosiCoords(posi_i);
+            const lat_long: [number, number] = _xformFromXYZToLongLat(xyz, proj_obj, rot_matrix, flatten) as [number, number];
+            coords.push(lat_long);
+        }
+        all_coords.push(coords);
+    }
+    const all_props = {};
+    for (const name of model.attribs.query.getAttribNames(EEntType.PGON)) {
+        all_props[name] = model.attribs.query.getAttribVal(EEntType.PGON, name, pgon_i);
+    }
+    return {
+        'type': 'Feature',
+        'geometry': {
+            'type': 'Polygon',
+            'coordinates': all_coords
+        },
+        'properties': all_props
+    };
+}
+function _createGeojsonLineString(model: GIModel, pline_i: number, proj_obj: any, rot_matrix: Matrix4, flatten: boolean): object {
+    // {
+    //     "type": "Feature",
+    //     "geometry": {
+    //       "type": "LineString",
+    //       "coordinates": [
+    //         [102.0, 0.0], [103.0, 1.0], [104.0, 0.0], [105.0, 1.0]
+    //       ]
+    //     },
+    //     "properties": {
+    //       "prop0": "value0",
+    //       "prop1": 0.0
+    //     }
+    // },
+    const coords: Txy[] = [];
+    const wire_i: number = model.geom.nav.navPlineToWire(pline_i);
+    const posis_i: number[] = model.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
+    for (const posi_i of posis_i) {
+        const xyz: Txyz = model.attribs.query.getPosiCoords(posi_i);
+        const lat_long: [number, number] = _xformFromXYZToLongLat(xyz, proj_obj, rot_matrix, flatten) as [number, number];
+        coords.push(lat_long);
+    }
+    if (model.geom.query.isWireClosed(wire_i)) {
+        coords.push(coords[0]);
+    }
+    const all_props = {};
+    for (const name of model.attribs.query.getAttribNames(EEntType.PLINE)) {
+        all_props[name] = model.attribs.query.getAttribVal(EEntType.PLINE, name, pline_i);
+    }
+    return {
+        'type': 'Feature',
+        'geometry': {
+            'type': 'LineString',
+            'coordinates': coords
+        },
+        'properties': all_props
+    };
+}
  /**
  * Import geojson
  */
 export function importGeojson(model: GIModel, geojson_str: string, elevation: number): IGeomPack {
     // parse the json data str
     const geojson_obj: any = JSON.parse(geojson_str);
-    const proj_obj: proj4.Converter = _createProjection(model, geojson_obj);
+    const proj_obj: proj4.Converter = _createProjection(model);
     // calculate angle of rotation
     let rot_matrix: Matrix4 = null;
     if (model.attribs.query.hasModelAttrib('north')) {
@@ -118,7 +228,7 @@ export function importGeojson(model: GIModel, geojson_str: string, elevation: nu
  * @param model The model.
  * @param point The features to add.
  */
-function _createProjection(model: GIModel, geojson_obj: any): proj4.Converter {
+function _createProjection(model: GIModel): proj4.Converter {
         // create the function for transformation
         const proj_str_a = '+proj=tmerc +lat_0=';
         const proj_str_b = ' +lon_0=';
@@ -145,31 +255,33 @@ function _createProjection(model: GIModel, geojson_obj: any): proj4.Converter {
             }
         }
         // try to figure out what the projection is of the source file
-        let proj_from_str = 'WGS84';
-        if (geojson_obj.hasOwnProperty('crs')) {
-            if (geojson_obj.crs.hasOwnProperty('properties')) {
-                if (geojson_obj.crs.properties.hasOwnProperty('name')) {
-                    const name: string = geojson_obj.crs.properties.name;
-                    const epsg_index = name.indexOf('EPSG');
-                    if (epsg_index !== -1) {
-                        let epsg = name.slice(epsg_index);
-                        epsg = epsg.replace(/\s/g, '+');
-                        if (epsg === 'EPSG:4326') {
-                            // do nothing, 'WGS84' is fine
-                        } else if (['EPSG:4269', 'EPSG:3857', 'EPSG:3785', 'EPSG:900913', 'EPSG:102113'].indexOf(epsg) !== -1) {
-                            // these are the epsg codes that proj4 knows
-                            proj_from_str = epsg;
-                        } else if (epsg === 'EPSG:3414') {
-                            // singapore
-                            proj_from_str =
-                                '+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 ' +
-                                '+ellps=WGS84 +units=m +no_defs';
-                        }
-                    }
-                }
-            }
-        }
-        console.log('CRS of geojson data', proj_from_str);
+        // let proj_from_str = 'WGS84';
+        // if (geojson_obj.hasOwnProperty('crs')) {
+        //     if (geojson_obj.crs.hasOwnProperty('properties')) {
+        //         if (geojson_obj.crs.properties.hasOwnProperty('name')) {
+        //             const name: string = geojson_obj.crs.properties.name;
+        //             const epsg_index = name.indexOf('EPSG');
+        //             if (epsg_index !== -1) {
+        //                 let epsg = name.slice(epsg_index);
+        //                 epsg = epsg.replace(/\s/g, '+');
+        //                 if (epsg === 'EPSG:4326') {
+        //                     // do nothing, 'WGS84' is fine
+        //                 } else if (['EPSG:4269', 'EPSG:3857', 'EPSG:3785', 'EPSG:900913', 'EPSG:102113'].indexOf(epsg) !== -1) {
+        //                     // these are the epsg codes that proj4 knows
+        //                     proj_from_str = epsg;
+        //                 } else if (epsg === 'EPSG:3414') {
+        //                     // singapore
+        //                     proj_from_str =
+        //                         '+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 ' +
+        //                         '+ellps=WGS84 +units=m +no_defs';
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+        // console.log('CRS of geojson data', proj_from_str);
+
+        const proj_from_str = 'WGS84';
         const proj_to_str = proj_str_a + latitude + proj_str_b + longitude + proj_str_c;
         const proj_obj: proj4.Converter = proj4(proj_from_str, proj_to_str);
         return proj_obj;
@@ -189,7 +301,7 @@ function _createProjection(model: GIModel, geojson_obj: any): proj4.Converter {
 function _addPointToModel(model: GIModel, point: any,
         proj_obj: proj4.Converter, rot_matrix: Matrix4, elevation: number): number {
     // add feature
-    let xyz: Txyz = _xformLongLat(point.geometry.coordinates, proj_obj, elevation) as Txyz;
+    let xyz: Txyz = _xformFromLongLatToXYZ(point.geometry.coordinates, proj_obj, elevation) as Txyz;
     // rotate to north
     if (rot_matrix !== null) {
         xyz = multMatrix(xyz, rot_matrix);
@@ -221,7 +333,7 @@ function _addPointToModel(model: GIModel, point: any,
 function _addPlineToModel(model: GIModel, linestring: any,
         proj_obj: proj4.Converter, rot_matrix: Matrix4, elevation: number): number {
     // add feature
-    let xyzs: Txyz[] = _xformLongLat(linestring.geometry.coordinates, proj_obj, elevation) as Txyz[];
+    let xyzs: Txyz[] = _xformFromLongLatToXYZ(linestring.geometry.coordinates, proj_obj, elevation) as Txyz[];
     const first_xyz: Txyz = xyzs[0];
     const last_xyz: Txyz = xyzs[xyzs.length - 1];
     const close = xyzs.length > 2 && first_xyz[0] === last_xyz[0] && first_xyz[1] === last_xyz[1];
@@ -266,7 +378,7 @@ function _addPgonToModel(model: GIModel, polygon: any,
     // add feature
     const rings: number[][] = [];
     for (const ring of polygon.geometry.coordinates) {
-        const xyzs: Txyz[] = _xformLongLat(ring, proj_obj, elevation) as Txyz[];
+        const xyzs: Txyz[] = _xformFromLongLatToXYZ(ring, proj_obj, elevation) as Txyz[];
         // rotate to north
         if (rot_matrix !== null) {
             for (let i = 0; i < xyzs.length; i++) {
@@ -415,7 +527,8 @@ function _addAttribsToModel(model: GIModel, ent_type: EEntType, ent_i: number, f
  * @param long_lat_arr
  * @param elevation
  */
-function _xformLongLat(long_lat_arr: [number, number]|[number, number][], proj_obj: proj4.Converter, elevation: number): Txyz|Txyz[] {
+function _xformFromLongLatToXYZ(
+        long_lat_arr: [number, number]|[number, number][], proj_obj: proj4.Converter, elevation: number): Txyz|Txyz[] {
     if (getArrDepth(long_lat_arr) === 1) {
         const long_lat: [number, number] = long_lat_arr as [number, number];
         const xy: [number, number] = proj_obj.forward(long_lat);
@@ -424,9 +537,35 @@ function _xformLongLat(long_lat_arr: [number, number]|[number, number][], proj_o
         long_lat_arr = long_lat_arr as [number, number][];
         const xyzs_xformed: Txyz[] = [];
         for (const long_lat of long_lat_arr) {
-            const xyz: Txyz = _xformLongLat(long_lat, proj_obj, elevation) as Txyz;
+            const xyz: Txyz = _xformFromLongLatToXYZ(long_lat, proj_obj, elevation) as Txyz;
             xyzs_xformed.push(xyz);
         }
         return xyzs_xformed as Txyz[];
+    }
+}
+
+
+/**
+ * Converts cartesian coords to geojson long lat
+ * @param xyz
+ * @param flatten
+ */
+function _xformFromXYZToLongLat(
+    xyz: Txyz|Txyz[], proj_obj: proj4.Converter, rot_matrix: Matrix4, flatten: boolean): [number, number]|[number, number][] {
+    if (getArrDepth(xyz) === 1) {
+        xyz = xyz as Txyz;
+        // rotate to north
+        if (rot_matrix !== null) {
+            xyz = multMatrix(xyz, rot_matrix);
+        }
+        return proj_obj.inverse([xyz[0], xyz[1]]) as [number, number];
+    } else {
+        xyz = xyz as Txyz[];
+        const long_lat_arr: [number, number][] = [];
+        for (const a_xyz of xyz) {
+            const lat_long: [number, number] = _xformFromXYZToLongLat(a_xyz, proj_obj, rot_matrix, flatten) as [number, number];
+            long_lat_arr.push(lat_long);
+        }
+        return long_lat_arr as [number, number][];
     }
 }

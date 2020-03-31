@@ -9,7 +9,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { importObj, exportPosiBasedObj, exportVertBasedObj } from '@libs/geo-info/io_obj';
 import { importDae, exportDae } from '@libs/geo-info/io_dae';
-import { importGeojson } from '@libs/geo-info/io_geojson';
+import { importGeojson, exportGeojson } from '@libs/geo-info/io_geojson';
 import { download } from '@libs/filesys/download';
 import { TId, EEntType, Txyz, TPlane, TRay, IGeomPack, IModelData, IGeomPackTId, TEntTypeIdx } from '@libs/geo-info/common';
 import { __merge__ } from '../_model';
@@ -254,10 +254,12 @@ function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
         //     }
         //     return saveResource(dae_data, file_name);
         //     break;
-        // case _EIODataFormat.GEOJSON:
-        //     const geojson_data: string = exportObj(__model__);
-        //     return download(obj_data, filename);
-        //     break;
+        case _EIOExportDataFormat.GEOJSON:
+            const geojson_data: string = exportGeojson(__model__, ents_arr, true); // flatten
+            if (data_target === _EIODataTarget.DEFAULT) {
+                return download(geojson_data , file_name);
+            }
+            return saveResource(geojson_data, file_name);
         default:
             throw new Error('Data type not recognised');
     }

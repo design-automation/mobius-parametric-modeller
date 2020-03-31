@@ -8,6 +8,7 @@ import { DownloadUtils } from './download.utils';
 import { _varString } from '@assets/core/modules';
 // import {js as beautify} from 'js-beautify';
 import { mergeInputsFunc, printFunc, pythonList, ExecuteComponent } from '../execute/execute.component';
+import { InputType } from '@models/port';
 
 @Component({
   selector: 'javascript-save',
@@ -60,15 +61,23 @@ export class SaveJavascriptComponent {
         };
 
         func.args = [];
+        let argString = ``;
         for (const prod of fl.nodes[0].procedure) {
             if (!prod.enabled || prod.type !== ProcedureTypes.Constant) { continue; }
             let v: string = prod.args[prod.argCount - 2].value || 'undefined';
             if (v[0] === '"' || v[0] === '\'') { v = v.substring(1, v.length - 1); }
-            func.args.push(<IArgument>{
+            const arg = <IArgument>{
                 name: v,
                 value: prod.args[prod.argCount - 1].value,
                 type: prod.meta.inputMode,
-            });
+            };
+            func.args.push(arg);
+            if (prod.meta.inputMode === InputType.Slider) {
+                arg.min = prod.args[1].min;
+                arg.max = prod.args[1].max;
+                arg.step = prod.args[1].step;
+            }
+            argString += '// Parameter: ' + JSON.stringify(arg) + '\n';
         }
         func.argCount = func.args.length;
 
@@ -127,6 +136,7 @@ export class SaveJavascriptComponent {
             ` *   _ result.model -> gi model of the flowchart\n` +
             ` *   _ result.result -> returned output of the flowchart, if the flowchart does not return any value,` +
             ` result.result is the model of the flowchart\n */\n\n` +
+            argString.replace(/\\/g, '\\\\') +  '\n\n' +
             `function ${funcName}(__modules__` + func.args.map(arg => ', ' + arg.name).join('') + `) {\n\n` +
             '/** * **/' +
             _varString + `\n\n` +

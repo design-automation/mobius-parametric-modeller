@@ -152,6 +152,10 @@ const arithmetic = [
         'if m=1 the ray is infinite in one direction, ' +
         'and if m=0, the ray is not infinite.'],
     ['project(c, r)', 'Returns the xyz from projecting an xyz c onto an infinite ray r'],
+    ['project(c, r, m)', 'Returns the xyz from projecting an xyz c onto an infinite ray r, where ' +
+        'if m=2, the ray is infinite in both directions, ' +
+        'if m=1 the ray is infinite in one direction, ' +
+        'and if m=0, the ray is not infinite.'],
     ['project(c, p)', 'Returns the xyz from projecting an xyz c onto an infinite plane p']
 ];
 

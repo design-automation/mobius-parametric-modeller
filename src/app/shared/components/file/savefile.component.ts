@@ -16,6 +16,7 @@ declare global {
         };
     }
 }
+const requestedBytes = 1024 * 1024 * 200; // 200 MB local storage quota
 
 @Component({
     selector: 'file-save',
@@ -124,7 +125,6 @@ export class SaveFileComponent implements OnDestroy{
                 localStorage.setItem('mobius_backup_list', JSON.stringify(items));
             }
         }
-        const requestedBytes = 1024 * 1024 * 50;
         window['_code__'] = code;
         window['_file__'] = file;
 
@@ -135,7 +135,7 @@ export class SaveFileComponent implements OnDestroy{
                 function(e) { console.log('Error', e); });
             }, function(e) { console.log('Error', e); }
         );
-
+        SaveFileComponent.deleteUnaccountedFile();
         // localStorage.setItem(code, file);
     }
 
@@ -159,7 +159,6 @@ export class SaveFileComponent implements OnDestroy{
 
     static deleteFile(filecode) {
         window['_code__'] = filecode;
-        const requestedBytes = 1024 * 1024 * 50;
         navigator.webkitPersistentStorage.requestQuota (
             requestedBytes, function(grantedBytes) {
                 // @ts-ignore
@@ -184,9 +183,34 @@ export class SaveFileComponent implements OnDestroy{
         });
     }
 
+    static deleteUnaccountedFile() {
+        navigator.webkitPersistentStorage.requestQuota (
+            requestedBytes, function(grantedBytes) {
+                // @ts-ignore
+                window.webkitRequestFileSystem(PERSISTENT, grantedBytes, fs => {
+                    const dirReader = fs.root.createReader();
+                    const validList = JSON.parse(localStorage.getItem('mobius_backup_list'));
+                    dirReader.readEntries(function(results) {
+                        if (results.length) {
+                            for (const i of results) {
+                                if (validList.indexOf(i.name) === -1) {
+                                    i.remove(function() {
+                                        /* the file was removed successfully */
+                                    });
+                                }
+                            }
+                        }
+                    }, function(error) {
+                        console.log(error)
+                        /* handle error -- error is a FileError object */
+                    });
+                });
+            }, function(e) { console.log('Error', e); }
+        );
+    }
+
     static async loadFromFileSystem(filecode): Promise<any> {
         const p = new Promise((resolve) => {
-            const requestedBytes = 1024 * 1024 * 50;
             navigator.webkitPersistentStorage.requestQuota (
                 requestedBytes, function(grantedBytes) {
                     // @ts-ignore
@@ -199,7 +223,11 @@ export class SaveFileComponent implements OnDestroy{
                                 };
                                 reader.onloadend = () => {
                                     if ((typeof reader.result) === 'string') {
-                                        resolve((<string>reader.result).split('_|_|_')[0]);
+                                        // resolve((<string>reader.result).split('_|_|_')[0]);
+                                        const splitted = (<string>reader.result).split('_|_|_');
+                                        let index = 0;
+                                        if (splitted.length > 1) { index = splitted.length - 2; }
+                                        resolve(splitted[index]);
                                     } else {
                                         resolve(reader.result);
                                     }
@@ -244,6 +272,8 @@ export class SaveFileComponent implements OnDestroy{
             if (prod.hasOwnProperty('resolvedValue')) {
                 prod.resolvedValue = undefined;
             }
+            // delete prod['selected'];
+            // delete prod['hasError'];
             if (prod.children) {
                 SaveFileComponent.clearResolvedValue(prod.children);
             }
@@ -332,6 +362,7 @@ export class SaveFileComponent implements OnDestroy{
         savedfile.flowchart.meta.selected_nodes = [0];
         savedfile.flowchart.last_updated = new Date();
         for (const edge of savedfile.flowchart.edges) {
+            // delete edge['selected'];
             edge.selected = false;
         }
 
@@ -362,11 +393,14 @@ export class SaveFileComponent implements OnDestroy{
         const blob = new Blob([downloadResult.file], { type: 'application/json' });
 
         try {
-            SaveFileComponent.saveToLocalStorage(downloadResult.name, downloadResult.file);
+            let fileName = this.dataService.file.flowchart.name;
+            if (fileName.slice(-4) !== '.mob') {
+                fileName += '.mob';
+            }
+            SaveFileComponent.saveToLocalStorage(fileName, downloadResult.file);
         } catch (ex) {
             console.log('Unable to save file to local storage');
         }
-        console.log()
         DownloadUtils.downloadFile(downloadResult.name, blob);
         this.dataService.file.name = 'Untitled';
     }

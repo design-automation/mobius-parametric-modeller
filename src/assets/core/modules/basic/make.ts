@@ -229,6 +229,9 @@ export enum _EClose {
 function _polyline(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][], close: _EClose): TEntTypeIdx|TEntTypeIdx[] {
     const depth: number = getArrDepth(ents_arr);
     if (depth === 2) {
+        if (ents_arr.length < 2) {
+            throw new Error('Error in make.Polyline: Polylines must have at least two positions.');
+        }
         const bool_close: boolean = (close === _EClose.CLOSE);
         const posis_i: number[] = idIndicies(ents_arr as TEntTypeIdx[]);
         const pline_i: number = __model__.geom.add.addPline(posis_i, bool_close);
@@ -324,6 +327,9 @@ export function Polygon(__model__: GIModel, entities: TId|TId[]|TId[][]): TId|TI
 function _polygon(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx|TEntTypeIdx[] {
     const depth: number = getArrDepth(ents_arr);
     if (depth === 2) {
+        if (ents_arr.length < 3) {
+            throw new Error('Error in make.Polygon: Polygons must have at least three positions.');
+        }
         const posis_i: number[] = idIndicies(ents_arr as TEntTypeIdx[]);
         const pgon_i: number = __model__.geom.add.addPgon(posis_i);
         return [EEntType.PGON, pgon_i] as TEntTypeIdx;

@@ -130,6 +130,7 @@ const arithmetic = [
     ['exp(num)', 'Returns the value of E to the power of the number'],
     ['log(num)', 'Returns the natural logarithm (base E) of the number'],
     ['round(num)', 'Returns the value of the number rounded to its nearest integer'],
+    ['round(num, d)', 'Returns the value of the number rounded to the specified number of decimal places.'],
     ['ceil(num)', 'Returns the value of the number rounded up to its nearest integer'],
     ['floor(num)', 'Returns the value of the number rounded down to its nearest integer'],
     ['mod(num1, num2)', 'Returns the remainder after division of num1 by num2'],

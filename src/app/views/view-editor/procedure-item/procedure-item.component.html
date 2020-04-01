@@ -673,7 +673,7 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- collapse/expand local function button-->
-                <button class='btn' mat-icon-button title="collapse/expand function" (click)='toggleCollapse()'>
+                <button class='btn' mat-icon-button title="collapse/expand function" (click)='toggleCollapse($event)'>
                     <mat-icon class='icon' svgIcon='cDnArrow' *ngIf='data.meta.otherInfo["collapsed"]'></mat-icon>
                     <mat-icon class='icon' svgIcon='cUpArrow' *ngIf='!data.meta.otherInfo["collapsed"]'></mat-icon>
                 </button>

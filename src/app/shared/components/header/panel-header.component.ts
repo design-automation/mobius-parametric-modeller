@@ -44,6 +44,8 @@ export class PanelHeaderComponent implements OnDestroy {
         this.ctx.font = '12px sans-serif';
 
         this.settings = this.dataService.mobiusSettings;
+
+        if (this.settings['execute'] === undefined) { this.settings['execute'] = true; }
         if (this.settings['autosave'] === undefined) { this.settings['autosave'] = true; }
         if (this.settings['debug'] === undefined) { this.settings['debug'] = true; }
         for (const cat in this.func_categories) {

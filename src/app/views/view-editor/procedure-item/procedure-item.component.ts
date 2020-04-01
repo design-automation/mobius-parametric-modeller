@@ -285,8 +285,9 @@ export class ProcedureItemComponent implements OnDestroy {
         });
     }
 
-    toggleCollapse() {
-        event.stopPropagation();
+    toggleCollapse(event: MouseEvent) {
+        // event.stopPropagation();
+        this.onleave(event);
         if (!this.data.meta.otherInfo) { return; }
         this.data.meta.otherInfo['collapsed'] = !this.data.meta.otherInfo['collapsed']
     }

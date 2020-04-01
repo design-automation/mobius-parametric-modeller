@@ -409,8 +409,7 @@ export class SaveFileComponent implements OnDestroy{
         newFile.flowchart.description = splitDesc.join('\n') + flowchart_desc;
 
         const node = newFile.flowchart.nodes[1];
-
-        const modelVal = '\'__model_data__' + this.dataService.flowchart.nodes[this.dataService.flowchart.nodes.length - 1].model.replace(/\\/g, '\\\\') + '\'';
+        const modelVal = '\'__model_data__' + this.dataService.flowchart.nodes[this.dataService.flowchart.nodes.length - 1].model.replace(/\\/g, '\\\\').replace(/\'/g, '\\\'') + '\'';
         NodeUtils.add_procedure(node, ProcedureTypes.MainFunction, {
             'module': 'io',
             'name': 'Import',

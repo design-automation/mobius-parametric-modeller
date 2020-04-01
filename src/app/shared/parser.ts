@@ -1237,6 +1237,9 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
 
         // double-quotes (") or single-quotes (')
         } else if (code === 34 || code === 39) {
+            if (i === 0 && str.substring(0, 15) === '\'__model_data__' && str.charCodeAt(str.length - 1) === code) {
+                return [{ 'type': strType.STR, 'value': str}];
+            }
             const startCode = code;
             const startI = i;
             i += 1;
@@ -1244,10 +1247,21 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
             if (!code) {
                 return 'Error: Missing ending quote.';
             }
-            while (code !== startCode) { // string must end with the same quote as well
+            while (true) { // string must end with the same quote as well
                 i += 1;
                 if (i === str.length) { break; }
                 code = str.charCodeAt(i);
+                if (code === startCode) {
+                    let checkI = i - 1;
+                    let count = 0;
+                    while (checkI >= 0 && str.charCodeAt(checkI) === 92) {
+                        count++;
+                        checkI--;
+                    }
+                    if (count % 2 === 0) {
+                        break;
+                    }
+                }
             }
             if (code === startCode) { i += 1; }
             const subStr = str.substring(startI, i);

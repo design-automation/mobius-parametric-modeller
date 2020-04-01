@@ -134,6 +134,8 @@ export class LoadUrlComponent {
             checkNodeValidity(node);
         }
         setTimeout(() => {
+            const zoomFlowchart = document.getElementById('zoomToFit');
+            if (zoomFlowchart) { zoomFlowchart.click(); }
             let executeB = document.getElementById('executeButton');
             if (executeB && this.dataService.mobiusSettings.execute) { executeB.click(); }
             executeB = null;
@@ -192,6 +194,8 @@ export class LoadUrlComponent {
         SaveFileComponent.deleteFile('___TEMP___.mob');
 
         setTimeout(() => {
+            const zoomFlowchart = document.getElementById('zoomToFit');
+            if (zoomFlowchart) { zoomFlowchart.click(); }
             let executeB = document.getElementById('executeButton');
             if (executeB && this.dataService.mobiusSettings.execute) { executeB.click(); }
             executeB = null;

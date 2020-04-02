@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy } from '@angular/core';
 import { DownloadUtils } from './download.utils';
 import * as circularJSON from 'circular-json';
-import { FlowchartUtils } from '@models/flowchart';
+import { FlowchartUtils, IFlowchart } from '@models/flowchart';
 import { DataService } from '@services';
 import { InputType } from '@models/port';
 import { ProcedureTypes, IProcedure } from '@models/procedure';
@@ -17,6 +17,7 @@ declare global {
     }
 }
 const requestedBytes = 1024 * 1024 * 200; // 200 MB local storage quota
+let _occupied = null;
 
 @Component({
     selector: 'file-save',
@@ -46,6 +47,7 @@ const requestedBytes = 1024 * 1024 * 200; // 200 MB local storage quota
 // component for saving file to the browser local storage and hard disk.
 export class SaveFileComponent implements OnDestroy{
     _interval_: NodeJS.Timer;
+
     constructor(private dataService: DataService) {
         const settings = this.dataService.mobiusSettings;
         if (settings['autosave'] === undefined) {
@@ -61,36 +63,6 @@ export class SaveFileComponent implements OnDestroy{
 
 
     static saveFileToLocal(f: IMobius) {
-        // const models = [];
-        // for (const node of f.flowchart.nodes) {
-        //     const nodeModel = {
-        //         'model': node.model,
-        //         'input': node.input.value,
-        //         'output': node.output.value
-        //     };
-        //     node.model = undefined;
-        //     if (node.input.hasOwnProperty('value')) {
-        //         node.input.value = undefined;
-        //     }
-        //     if (node.output.hasOwnProperty('value')) {
-        //         node.output.value = undefined;
-        //     }
-        //     for (const prod of node.procedure) {
-        //         if (prod.hasOwnProperty('resolvedValue')) {
-        //             prod.resolvedValue = undefined;
-        //         }
-        //     }
-        //     models.push(nodeModel);
-        // }
-
-        // SaveFileComponent.saveToLocalStorage(f.flowchart.id, f.flowchart.name, circularJSON.stringify(f));
-
-        // for (const node of f.flowchart.nodes) {
-        //     const mod = models.shift();
-        //     node.model = mod.model;
-        //     node.input.value = mod.input;
-        //     node.output.value = mod.output;
-        // }
         const downloadResult = SaveFileComponent.fileDownloadString(f);
         let fileName = f.flowchart.name;
         if (fileName.slice(-4) !== '.mob') {
@@ -100,6 +72,19 @@ export class SaveFileComponent implements OnDestroy{
     }
 
     static saveToLocalStorage(name: string, file: string) {
+        if (_occupied === name) {
+            return;
+        } else if (_occupied !== null) {
+            while (_occupied !== null) {
+                continue;
+            }
+        }
+        _occupied = name;
+
+        setTimeout(() => {
+            _occupied = null;
+        }, 5000);
+
         const itemstring = localStorage.getItem('mobius_backup_list');
         const code = name;
         if (!itemstring) {
@@ -140,12 +125,12 @@ export class SaveFileComponent implements OnDestroy{
     }
 
     static saveToFS(fs) {
-        fs.root.getFile(window['_code__'], { create: true}, function (fileEntry) {
+        const code = window['_code__'];
+        fs.root.getFile(code, { create: true}, function (fileEntry) {
             fileEntry.createWriter(async function (fileWriter) {
-                // fileWriter.onwriteend = function (e) {
-                //     console.log('Write completed.');
-                // };
-
+                fileWriter.onwriteend = function (e) {
+                    _occupied = null;
+                };
                 // fileWriter.onerror = function (e) {
                 //     console.log('Write failed: ' + e.toString());
                 // };
@@ -223,11 +208,15 @@ export class SaveFileComponent implements OnDestroy{
                                 };
                                 reader.onloadend = () => {
                                     if ((typeof reader.result) === 'string') {
-                                        // resolve((<string>reader.result).split('_|_|_')[0]);
-                                        const splitted = (<string>reader.result).split('_|_|_');
-                                        let index = 0;
-                                        if (splitted.length > 1) { index = splitted.length - 2; }
-                                        resolve(splitted[index]);
+                                        resolve((<string>reader.result).split('_|_|_')[0]);
+                                        // const splitted = (<string>reader.result).split('_|_|_');
+                                        // let val = splitted[0];
+                                        // for (const i of splitted) {
+                                        //     if (val.length < i.length) {
+                                        //         val = i;
+                                        //     }
+                                        // }
+                                        // resolve(val);
                                     } else {
                                         resolve(reader.result);
                                     }
@@ -251,8 +240,8 @@ export class SaveFileComponent implements OnDestroy{
         nodeList.splice(nodeList.length - 1, 0, checkNode);
     }
 
-    static clearModelData(f: IMobius, modelMap = null) {
-        for (const node of f.flowchart.nodes) {
+    static clearModelData(f: IFlowchart, modelMap = null) {
+        for (const node of f.nodes) {
             if (modelMap !== null) {
                 modelMap[node.id] = node.model;
             }
@@ -264,6 +253,19 @@ export class SaveFileComponent implements OnDestroy{
                 node.output.value = undefined;
             }
             SaveFileComponent.clearResolvedValue(node.procedure);
+            if (node.localFunc) {
+                SaveFileComponent.clearResolvedValue(node.localFunc);
+            }
+        }
+        if (f.functions) {
+            for (const func of f.functions) {
+                SaveFileComponent.clearModelData(func.flowchart);
+            }
+        }
+        if (f.subFunctions) {
+            for (const func of f.subFunctions) {
+                SaveFileComponent.clearModelData(func.flowchart);
+            }
         }
     }
 
@@ -327,7 +329,7 @@ export class SaveFileComponent implements OnDestroy{
         // clear the nodes' input/output in the flowchart, save them in modelMap
         // (save time on JSON stringify + parse)
         const modelMap = {};
-        SaveFileComponent.clearModelData(f, modelMap);
+        SaveFileComponent.clearModelData(f.flowchart, modelMap);
 
         // make a copy of the flowchart
         const savedfile = circularJSON.parse(circularJSON.stringify(f));

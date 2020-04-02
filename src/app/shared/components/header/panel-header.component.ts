@@ -181,7 +181,7 @@ export class PanelHeaderComponent implements OnDestroy {
 
     updateSettings() {
         this.settings.execute = (<HTMLInputElement>document.getElementById('settings-execute')).checked;
-        // this.settings.debug = (<HTMLInputElement>document.getElementById('settings-debug')).checked;
+        this.settings.debug = (<HTMLInputElement>document.getElementById('settings-debug')).checked;
         this.settings.autosave = (<HTMLInputElement>document.getElementById('settings-autosave')).checked;
 
         for (const cat in this.func_categories) {
@@ -209,7 +209,7 @@ export class PanelHeaderComponent implements OnDestroy {
             if (result === 'error') {
                 return;
             }
-            SaveFileComponent.clearModelData(this.dataService.file, null);
+            SaveFileComponent.clearModelData(this.dataService.flowchart, null);
             try {
                 this.dataService.file = circularJSON.parse(result);
             } catch (ex) {

@@ -22,7 +22,7 @@
         <div class = "divider"></div>
 
         <button id='basic-funcs' class="accordion mainAccordion" 
-        (mousedown)='preventfocus()'
+        (mousedown)='preventfocus($event)'
         (click)='toggleAccordion("basic-funcs")' >Control Flow</button>
         <div class="panel">
             <ul class='toolset__functions--subset'>
@@ -80,7 +80,7 @@
         <!--Divider-->
         <div class = "divider"></div>
         <button id='Functions' class="accordion mainAccordion"  
-        (mousedown)='preventfocus()'
+        (mousedown)='preventfocus($event)'
         (click)='toggleAccordionHead("Functions")'>Main Funcs
         </button>
         <!--Search Bar-->
@@ -105,7 +105,7 @@
             <!-- functions from core.modules -->
             <ng-container *ngFor='let mod of Modules' >
                 <button id='{{mod.module}}' class="accordion" 
-                (mousedown)='preventfocus()'
+                (mousedown)='preventfocus($event)'
                 (click)='toggleAccordion(mod.module)' >{{ mod.module }}</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset'>
@@ -136,7 +136,7 @@
         <div class = "divider"></div>
         
         <button id='Inline' class="accordion mainAccordion" 
-        (mousedown)='preventfocus()'
+        (mousedown)='preventfocus($event)'
         (click)='toggleAccordionHead("Inline")'>Inline Funcs
         </button>
         <!--Search Bar-->
@@ -154,7 +154,7 @@
         </div>
         <div class="panel">
             <button id='globalParameters' class="accordion inline--cat" 
-            (mousedown)='preventfocus()'
+            (mousedown)='preventfocus($event)'
             (click)='toggleAccordion("globalParameters", true)'>parameters</button>
             <div class="panel">
                 <ul class='toolset__functions--subset inline_set'>
@@ -169,7 +169,7 @@
             </div>
             <ng-container *ngFor='let category of inlineFunc'>
                 <button id='inlineFunc_{{category[0]}}' class="accordion inline--cat" 
-                (mousedown)='preventfocus()'
+                (mousedown)='preventfocus($event)'
                 (click)='toggleAccordion("inlineFunc_"+category[0], true)'>{{category[0]}}</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset inline_set'>
@@ -188,7 +188,7 @@
     </div>
     <div [hidden]="!getNode().state.show_func && !getNode().state.show_code">
         <button id='User' class="accordion mainAccordion" 
-        (mousedown)='preventfocus()'
+        (mousedown)='preventfocus($event)'
         (click)='toggleAccordionHead("User")'>User Funcs
         </button>
         <!--Search Bar-->
@@ -212,7 +212,7 @@
         <div class="panel">
             <div [hidden]="!getNode().state.show_func">
                 <button id='CreateLocal' class="accordion inline--cat" 
-                (mousedown)='preventfocus()'
+                (mousedown)='preventfocus($event)'
                 (click)='toggleAccordion("CreateLocal", true)'>Create Local</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset user_set'>
@@ -227,7 +227,7 @@
             </div>
             <div [hidden]="!getNode().state.show_code">
                 <button id='localFunc' class="accordion inline--cat" 
-                (mousedown)='preventfocus()'
+                (mousedown)='preventfocus($event)'
                 (click)='toggleAccordion("localFunc", true)'>Local Funcs</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset user_set'>
@@ -241,7 +241,7 @@
                     </ul>
                 </div>
                 <button id='global_func_list' class="accordion" 
-                (mousedown)='preventfocus()'        
+                (mousedown)='preventfocus($event)'        
                 (click)='toggleAccordion("global_func_list")'>Global Funcs</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset'>
@@ -289,7 +289,7 @@
     <!-- functions for input nodes -->
     <div id='toolset_inp' class = 'toolset' *ngIf="getNode().type == 'start'">
         <button id='startFuncs' class="accordion inline--cat" 
-        (mousedown)='preventfocus()'
+        (mousedown)='preventfocus($event)'
         (click)='toggleAccordion("startFuncs")'>Parameters</button>
         <div class="panel">
         <!-- <div class='toolset__functions'> -->

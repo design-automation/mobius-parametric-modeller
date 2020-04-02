@@ -184,7 +184,7 @@
         <br>
         <div *ngFor='let backup of getBackupFiles()'>
             <button class='loadBackupButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backup.split('_-_')[0]}}</button>
-            <button class='deleteBackupButton' (click)="deleteBackup($event, backup)"><mat-icon>delete_outline</mat-icon></button>
+            <button class='deleteBackupButton' (click)="deleteBackup($event, backup)"><mat-icon class='icon'>delete_outline</mat-icon></button>
         </div>
         <button id='addBackupButton' onclick="document.getElementById('addBackup').click();">+</button>
         <input id='addBackup' type="file" (change)="addBackup()" style=" display: none;"/>

@@ -223,11 +223,15 @@ export class SaveFileComponent implements OnDestroy{
                                 };
                                 reader.onloadend = () => {
                                     if ((typeof reader.result) === 'string') {
-                                        // resolve((<string>reader.result).split('_|_|_')[0]);
-                                        const splitted = (<string>reader.result).split('_|_|_');
-                                        let index = 0;
-                                        if (splitted.length > 1) { index = splitted.length - 2; }
-                                        resolve(splitted[index]);
+                                        resolve((<string>reader.result).split('_|_|_')[0]);
+                                        // const splitted = (<string>reader.result).split('_|_|_');
+                                        // let val = splitted[0];
+                                        // for (const i of splitted) {
+                                        //     if (val.length < i.length) {
+                                        //         val = i;
+                                        //     }
+                                        // }
+                                        // resolve(val);
                                     } else {
                                         resolve(reader.result);
                                     }

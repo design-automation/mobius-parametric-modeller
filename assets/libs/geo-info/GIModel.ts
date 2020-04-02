@@ -13,6 +13,7 @@ export class GIModel {
     public attribs: GIAttribs;
     public comparator: GIModelComparator;
     public threejs: GIModelThreejs;
+    public debug = true;
     /**
      * Constructor
      */

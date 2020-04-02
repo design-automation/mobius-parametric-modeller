@@ -57,12 +57,14 @@ export class CodeUtils {
 
             case ProcedureTypes.If:
                 specialPrint = true;
-                if (isMainFlowchart && prod.print) {
+                // if (isMainFlowchart && prod.print) {
+                if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,` +
                     `'Evaluating If: (${args[0].value}) = ' + (${args[0].jsValue}), '__null__');`);
                 }
                 codeStr.push(`if (${args[0].jsValue}){`);
-                if (isMainFlowchart && prod.print) {
+                // if (isMainFlowchart && prod.print) {
+                if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,'Executing If', '__null__');`);
                 }
                 break;
@@ -70,7 +72,8 @@ export class CodeUtils {
             case ProcedureTypes.Else:
                 specialPrint = true;
                 codeStr.push(`else {`);
-                if (isMainFlowchart && prod.print) {
+                // if (isMainFlowchart && prod.print) {
+                if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,'Executing Else', '__null__');`);
                 }
                 break;
@@ -80,13 +83,18 @@ export class CodeUtils {
                 codeStr.push(`else {`);
                 if (isMainFlowchart) {
                     codeStr.push(`__params__.currentProcedure[0] = "${prod.ID}";`);
-                    if (prod.print) {
-                        codeStr.push(`printFunc(__params__.console,` +
-                        `'Evaluating Else-if: (${args[0].value}) = ' + (${args[0].jsValue}), '__null__');`);
-                    }
+                    // if (prod.print) {
+                    //     codeStr.push(`printFunc(__params__.console,` +
+                    //     `'Evaluating Else-if: (${args[0].value}) = ' + (${args[0].jsValue}), '__null__');`);
+                    // }
+                }
+                if (prod.print) {
+                    codeStr.push(`printFunc(__params__.console,` +
+                    `'Evaluating Else-if: (${args[0].value}) = ' + (${args[0].jsValue}), '__null__');`);
                 }
                 codeStr.push(`if(${args[0].jsValue}){`);
-                if (isMainFlowchart && prod.print) {
+                // if (isMainFlowchart && prod.print) {
+                if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,'Executing Else-if', '__null__');`);
                 }
                 break;
@@ -94,9 +102,10 @@ export class CodeUtils {
             case ProcedureTypes.Foreach:
                 specialPrint = true;
                 codeStr.push(`for (${prefix} ${args[0].jsValue} of ${args[1].jsValue}){`);
-                if (isMainFlowchart && prod.print) {
+                // if (isMainFlowchart && prod.print) {
+                if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,` +
-                        `'Executing For-each: ${args[0].value} = ' + (${args[0].jsValue}), '__null__');`);
+                    `'Executing For-each: ${args[0].value} = ' + (${args[0].jsValue}), '__null__');`);
                 }
                 existingVars.push(args[0].jsValue);
                 break;
@@ -104,9 +113,10 @@ export class CodeUtils {
             case ProcedureTypes.While:
                 specialPrint = true;
                 codeStr.push(`while (${args[0].jsValue}){`);
-                if (isMainFlowchart && prod.print) {
+                // if (isMainFlowchart && prod.print) {
+                if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,` +
-                        `'Executing While: (${args[0].value}) = ' + (${args[0].jsValue}), '__null__');`);
+                    `'Executing While: (${args[0].value}) = ' + (${args[0].jsValue}), '__null__');`);
                 }
                 break;
 
@@ -325,8 +335,9 @@ export class CodeUtils {
 
         }
 
-        if (isMainFlowchart && prod.print && !specialPrint && prod.args[0].name !== '__none__' && prod.args[0].jsValue) {
-            // const repGet = prod.args[0].jsValue;
+        // if (isMainFlowchart && prod.print && !specialPrint && prod.args[0].name !== '__none__' && prod.args[0].jsValue) {
+        if (prod.print && !specialPrint && prod.args[0].name !== '__none__' && prod.args[0].jsValue) {
+                // const repGet = prod.args[0].jsValue;
             const repGet = this.repGetAttrib(prod.args[0].jsValue);
             codeStr.push(`printFunc(__params__.console,'${prod.args[0].value}', ${repGet});`);
         }

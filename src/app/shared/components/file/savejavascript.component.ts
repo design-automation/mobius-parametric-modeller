@@ -3,12 +3,13 @@ import { IFlowchart } from '@models/flowchart';
 import { DataService } from '@services';
 import { ProcedureTypes, IFunction } from '@models/procedure';
 import { IdGenerator } from '@utils';
-import { IArgument, CodeUtils } from '@models/code';
+import { IArgument } from '@models/code';
 import { DownloadUtils } from './download.utils';
 import { _varString } from '@assets/core/modules';
 // import {js as beautify} from 'js-beautify';
 import { mergeInputsFunc, printFunc, pythonList, ExecuteComponent } from '../execute/execute.component';
 import { InputType } from '@models/port';
+import { CodeUtils } from '@shared/components/execute/code.util';
 
 @Component({
   selector: 'javascript-save',

@@ -105,7 +105,7 @@ export class LoadUrlComponent {
             return false;
         }
 
-        SaveFileComponent.clearModelData(this.dataService.file, null);
+        SaveFileComponent.clearModelData(this.dataService.flowchart, null);
         delete this.dataService.file.flowchart;
         this.dataService.file = loadeddata;
         if (updateLocalViewerSettings(loadeddata.settings)) {
@@ -165,8 +165,9 @@ export class LoadUrlComponent {
         // file.flowchart.name = urlSplit[urlSplit.length - 1 ].split('.mob')[0];
 
         checkMobFile(loadeddata);
+        loadeddata.flowchart.meta.selected_nodes = [loadeddata.flowchart.nodes.length - 1];
 
-        SaveFileComponent.clearModelData(this.dataService.file, null);
+        SaveFileComponent.clearModelData(this.dataService.flowchart, null);
         delete this.dataService.file.flowchart;
         this.dataService.file = loadeddata;
         if (updateLocalViewerSettings(loadeddata.settings)) {

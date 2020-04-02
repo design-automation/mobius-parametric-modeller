@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy } from '@angular/core';
 import { DownloadUtils } from './download.utils';
 import * as circularJSON from 'circular-json';
-import { FlowchartUtils } from '@models/flowchart';
+import { FlowchartUtils, IFlowchart } from '@models/flowchart';
 import { DataService } from '@services';
 import { InputType } from '@models/port';
 import { ProcedureTypes, IProcedure } from '@models/procedure';
@@ -251,8 +251,8 @@ export class SaveFileComponent implements OnDestroy{
         nodeList.splice(nodeList.length - 1, 0, checkNode);
     }
 
-    static clearModelData(f: IMobius, modelMap = null) {
-        for (const node of f.flowchart.nodes) {
+    static clearModelData(f: IFlowchart, modelMap = null) {
+        for (const node of f.nodes) {
             if (modelMap !== null) {
                 modelMap[node.id] = node.model;
             }
@@ -264,6 +264,19 @@ export class SaveFileComponent implements OnDestroy{
                 node.output.value = undefined;
             }
             SaveFileComponent.clearResolvedValue(node.procedure);
+            if (node.localFunc) {
+                SaveFileComponent.clearResolvedValue(node.localFunc);
+            }
+        }
+        if (f.functions) {
+            for (const func of f.functions) {
+                SaveFileComponent.clearModelData(func.flowchart);
+            }
+        }
+        if (f.subFunctions) {
+            for (const func of f.subFunctions) {
+                SaveFileComponent.clearModelData(func.flowchart);
+            }
         }
     }
 
@@ -327,7 +340,7 @@ export class SaveFileComponent implements OnDestroy{
         // clear the nodes' input/output in the flowchart, save them in modelMap
         // (save time on JSON stringify + parse)
         const modelMap = {};
-        SaveFileComponent.clearModelData(f, modelMap);
+        SaveFileComponent.clearModelData(f.flowchart, modelMap);
 
         // make a copy of the flowchart
         const savedfile = circularJSON.parse(circularJSON.stringify(f));

@@ -25,6 +25,9 @@ function pythonList(x, l){
 export const mergeInputsFunc = `
 function mergeInputs(models){
     let result = __modules__.${_parameterTypes.new}();
+    try {
+        result.debug = __debug__;
+    } catch (ex) {}
     for (let model of models){
         __modules__.${_parameterTypes.merge}(result, model);
     }
@@ -136,7 +139,10 @@ export class ExecuteComponent {
                 if (prod.meta.module === funcMeta[0] && prod.meta.name === funcMeta[1]) {
                     const arg = prod.args[2];
                     if (arg.name[0] === '_') { continue; }
-                    if (arg.jsValue.indexOf('__model_data__') !== -1) {
+                    if (arg.value.indexOf('__model_data__') !== -1) {
+                        arg.jsValue = arg.value;
+                        prod.resolvedValue = arg.value.split('__model_data__').join('');
+                    } else if (arg.jsValue && arg.jsValue.indexOf('__model_data__') !== -1) {
                         prod.resolvedValue = arg.jsValue.split('__model_data__').join('');
                     } else if (arg.value.indexOf('://') !== -1) {
                         const val = <string>(arg.value).replace(/ /g, '');
@@ -178,7 +184,11 @@ export class ExecuteComponent {
         if (this.dataService.consoleClear) {
             this.dataService.clearLog();
         }
-        SaveFileComponent.clearModelData(this.dataService.file, null);
+        SaveFileComponent.clearModelData(this.dataService.flowchart, null);
+
+        if (this.dataService.mobiusSettings.debug === undefined) {
+            this.dataService.mobiusSettings.debug = true;
+        }
 
         document.getElementById('spinner-on').click();
         this.dataService.log('<br><hr>');
@@ -482,6 +492,7 @@ export class ExecuteComponent {
                 }
                 if (exCheck) {
                     node.output.value = _parameterTypes.newFn();
+                    node.output.value.debug = this.dataService.mobiusSettings.debug;
                     node.output.value.setData(JSON.parse(node.model));
                 }
                 continue;
@@ -582,7 +593,8 @@ export class ExecuteComponent {
             fnString = _varString + globalVars + fnString;
 
             // add the merge input function and the print function
-            fnString = pythonList + '\n' + mergeInputsFunc + '\n' + printFunc + '\n' + fnString;
+            fnString = `\nconst __debug__ = ${this.dataService.mobiusSettings.debug};\n` +
+                        pythonList + '\n' + mergeInputsFunc + '\n' + printFunc + '\n' + fnString;
 
             // ==> generated code structure:
             //  1. pythonList + mergeInputFunction + printFunc
@@ -606,6 +618,8 @@ export class ExecuteComponent {
 
             params['model'] = _parameterTypes.newFn();
             _parameterTypes.mergeFn(params['model'], node.input.value);
+            params['model'].debug = this.dataService.mobiusSettings.debug;
+
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
 
             // #########################################################
@@ -720,19 +734,22 @@ export class ExecuteComponent {
             // Unexpected token
             const prodWithError: string = params['currentProcedure'][0];
             let localFunc: string;
-            const markError = function(prod: IProcedure, id: string, localFuncName = null) {
+            const markError = function(prod: IProcedure, id: string, localFuncProd = null) {
                 if (prod['ID'] && id && prod['ID'] === id) {
                     prod.hasError = true;
-                    localFunc = localFuncName;
+                    if (localFuncProd) {
+                        localFunc = localFuncProd.args[0].value;
+                        localFuncProd.hasError = true;
+                    }
                 }
                 if (prod.children) {
                     prod.children.map(function(p) {
-                        markError(p, id);
+                        markError(p, id, localFuncProd);
                     });
                 }
             };
             if (prodWithError !== '') {
-                node.procedure.concat(node.localFunc).map(function(prod: IProcedure) {
+                node.procedure.map(function(prod: IProcedure) {
                     if (prod['ID'] === prodWithError) {
                         prod.hasError = true;
                     }
@@ -749,7 +766,7 @@ export class ExecuteComponent {
                     }
                     if (prod.children) {
                         prod.children.map(function(p) {
-                            markError(p, prodWithError, prod.args[0].value);
+                            markError(p, prodWithError, prod);
                         });
                     }
                 });

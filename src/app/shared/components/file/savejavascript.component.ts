@@ -125,6 +125,8 @@ export class SaveJavascriptComponent {
             }
         }
 
+        if (this.dataService.mobiusSettings.debug === undefined) { this.dataService.mobiusSettings.debug = true; }
+
         fnString =
             `/**\n * to use this code: import ${funcName} from this js file as well as the GI module\n` +
             ` * run ${funcName} with the GI module as input along with other start node input\n` +
@@ -138,6 +140,7 @@ export class SaveJavascriptComponent {
             ` result.result is the model of the flowchart\n */\n\n` +
             argString.replace(/\\/g, '\\\\') +  '\n\n' +
             `function ${funcName}(__modules__` + func.args.map(arg => ', ' + arg.name).join('') + `) {\n\n` +
+            `__debug__ = ${this.dataService.mobiusSettings.debug};\n` +
             '/** * **/' +
             _varString + `\n\n` +
             fnString +
@@ -146,6 +149,7 @@ export class SaveJavascriptComponent {
             printFunc +
             `\n\nconst __params__ = {};\n` +
             `__params__["model"]= __modules__._model.__new__();\n` +
+            `__params__["model"].debug= __debug__;\n` +
             `__params__["modules"]= __modules__;\n` +
             `const result = exec_${funcName}(__params__` +
             func.args.map(arg => ', ' + arg.name).join('') +

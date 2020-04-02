@@ -17,6 +17,7 @@ declare global {
     }
 }
 const requestedBytes = 1024 * 1024 * 200; // 200 MB local storage quota
+let _occupied = null;
 
 @Component({
     selector: 'file-save',
@@ -46,6 +47,7 @@ const requestedBytes = 1024 * 1024 * 200; // 200 MB local storage quota
 // component for saving file to the browser local storage and hard disk.
 export class SaveFileComponent implements OnDestroy{
     _interval_: NodeJS.Timer;
+
     constructor(private dataService: DataService) {
         const settings = this.dataService.mobiusSettings;
         if (settings['autosave'] === undefined) {
@@ -61,36 +63,6 @@ export class SaveFileComponent implements OnDestroy{
 
 
     static saveFileToLocal(f: IMobius) {
-        // const models = [];
-        // for (const node of f.flowchart.nodes) {
-        //     const nodeModel = {
-        //         'model': node.model,
-        //         'input': node.input.value,
-        //         'output': node.output.value
-        //     };
-        //     node.model = undefined;
-        //     if (node.input.hasOwnProperty('value')) {
-        //         node.input.value = undefined;
-        //     }
-        //     if (node.output.hasOwnProperty('value')) {
-        //         node.output.value = undefined;
-        //     }
-        //     for (const prod of node.procedure) {
-        //         if (prod.hasOwnProperty('resolvedValue')) {
-        //             prod.resolvedValue = undefined;
-        //         }
-        //     }
-        //     models.push(nodeModel);
-        // }
-
-        // SaveFileComponent.saveToLocalStorage(f.flowchart.id, f.flowchart.name, circularJSON.stringify(f));
-
-        // for (const node of f.flowchart.nodes) {
-        //     const mod = models.shift();
-        //     node.model = mod.model;
-        //     node.input.value = mod.input;
-        //     node.output.value = mod.output;
-        // }
         const downloadResult = SaveFileComponent.fileDownloadString(f);
         let fileName = f.flowchart.name;
         if (fileName.slice(-4) !== '.mob') {
@@ -100,6 +72,19 @@ export class SaveFileComponent implements OnDestroy{
     }
 
     static saveToLocalStorage(name: string, file: string) {
+        if (_occupied === name) {
+            return;
+        } else if (_occupied !== null) {
+            while (_occupied !== null) {
+                continue;
+            }
+        }
+        _occupied = name;
+
+        setTimeout(() => {
+            _occupied = null;
+        }, 5000);
+
         const itemstring = localStorage.getItem('mobius_backup_list');
         const code = name;
         if (!itemstring) {
@@ -140,12 +125,12 @@ export class SaveFileComponent implements OnDestroy{
     }
 
     static saveToFS(fs) {
-        fs.root.getFile(window['_code__'], { create: true}, function (fileEntry) {
+        const code = window['_code__'];
+        fs.root.getFile(code, { create: true}, function (fileEntry) {
             fileEntry.createWriter(async function (fileWriter) {
-                // fileWriter.onwriteend = function (e) {
-                //     console.log('Write completed.');
-                // };
-
+                fileWriter.onwriteend = function (e) {
+                    _occupied = null;
+                };
                 // fileWriter.onerror = function (e) {
                 //     console.log('Write failed: ' + e.toString());
                 // };

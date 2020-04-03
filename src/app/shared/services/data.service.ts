@@ -75,7 +75,7 @@ export class DataService {
         if (settingsString) {
             DataService._mobiusSettings = JSON.parse(settingsString);
         } else {
-            DataService._mobiusSettings = {'execute': true};
+            DataService._mobiusSettings = {'execute': true, 'debug': true};
         }
     }
 

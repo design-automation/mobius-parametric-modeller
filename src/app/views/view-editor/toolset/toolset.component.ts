@@ -375,7 +375,9 @@ export class ToolsetComponent implements OnInit {
         // console.log(fnData);
         SaveFileComponent.saveToLocalStorage('___TEMP___.mob', fileString);
         // localStorage.setItem('temp_file', fileString);
-        window.open(`${window.location.origin}/editor?file=temp`, '_blank');
+        setTimeout(() => {
+            window.open(`${window.location.origin}/editor?file=temp`, '_blank');
+        }, 200);
     }
 
     open_update_dialog(event: MouseEvent, fnData) {
@@ -385,9 +387,9 @@ export class ToolsetComponent implements OnInit {
         this.dataService.dialog.showModal();
         this.dataService.setbackup_updateImported(fnData);
     }
-    
-    preventfocus() {
-        event.preventDefault()
+
+    preventfocus(event) {
+        event.preventDefault();
     }
 
     toggleAccordion(id: string, inline?: boolean) {

@@ -29,8 +29,10 @@ export class PanelHeaderComponent implements OnDestroy {
     settings;
     func_categories = Object.keys(Modules).filter(cat => cat[0] !== '_');
     private ctx = document.createElement('canvas').getContext('2d');
+    backupDates;
 
     constructor(private dataService: DataService, private keyboardService: KeyboardService, private router: Router) {
+        SaveFileComponent.updateBackupList();
         if (this.router.url === '/about') {
             this.executeCheck = false;
             this.nodeListCheck = false;
@@ -173,6 +175,8 @@ export class PanelHeaderComponent implements OnDestroy {
 
     getBackupFiles() {
         const items = localStorage.getItem('mobius_backup_list');
+        // console.log(items)
+        this.backupDates = JSON.parse(localStorage.getItem('mobius_backup_date_dict'));
         if (!items) {
             return [];
         }
@@ -181,7 +185,7 @@ export class PanelHeaderComponent implements OnDestroy {
 
     updateSettings() {
         this.settings.execute = (<HTMLInputElement>document.getElementById('settings-execute')).checked;
-        // this.settings.debug = (<HTMLInputElement>document.getElementById('settings-debug')).checked;
+        this.settings.debug = (<HTMLInputElement>document.getElementById('settings-debug')).checked;
         this.settings.autosave = (<HTMLInputElement>document.getElementById('settings-autosave')).checked;
 
         for (const cat in this.func_categories) {
@@ -204,12 +208,13 @@ export class PanelHeaderComponent implements OnDestroy {
 
     async loadBackup(event: MouseEvent, filecode: string) {
         event.stopPropagation();
+        if (!confirm('Loading a new file will delete the current flowchart! Would you like to continue?')) {return; }
         if (this.dataService.checkbackup_header()) {
             const result = await SaveFileComponent.loadFromFileSystem(filecode);
             if (result === 'error') {
                 return;
             }
-            SaveFileComponent.clearModelData(this.dataService.file, null);
+            SaveFileComponent.clearModelData(this.dataService.flowchart, null);
             try {
                 this.dataService.file = circularJSON.parse(result);
             } catch (ex) {
@@ -439,6 +444,9 @@ export class PanelHeaderComponent implements OnDestroy {
         if (i !== -1) {
             items.splice(i, 1);
             localStorage.setItem('mobius_backup_list', JSON.stringify(items));
+            const itemDates = JSON.parse(localStorage.getItem('mobius_backup_date_dict'));
+            itemDates[filecode] = (new Date()).toLocaleString();
+            localStorage.setItem('mobius_backup_date_dict', JSON.stringify(itemDates));
         }
     }
 

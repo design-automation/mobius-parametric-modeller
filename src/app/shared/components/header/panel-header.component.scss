@@ -278,11 +278,13 @@ button.mat-menu-item:hover{
         color: $color1;
         background-color: $color6;
         top: 30%;
-        max-width: 605px;
+        max-width: 805px;
         min-width: 405px;
         padding: 5px;
     
         .loadBackupButton{
+            height: 25px;
+            font-size: 12px;
             width: fit-content;
             min-width: 400px;
             margin-bottom: 2px;
@@ -296,7 +298,24 @@ button.mat-menu-item:hover{
                 color: $color3;
             }
         }
+        .backupDateButton{
+            height: 25px;
+            font-size: 12px;
+            width: fit-content;
+            min-width: 150px;
+            margin-bottom: 2px;
+            padding: 0px 5px 0px 5px;
+            background-color: $color5;
+            color: $color1;
+            display: inline-block;
+
+            &:disabled {
+                background-color: $color5-5;
+                color: $color3;
+            }
+        }
         .deleteBackupButton{
+            height: 25px;
             width: fit-content;
             margin-bottom: 2px;
             margin-left: 2px;
@@ -304,6 +323,12 @@ button.mat-menu-item:hover{
             background-color: $color5;
             color: $color1;
             display: inline-block;
+
+            .icon{
+                font-size: 18px;
+                padding-top: 5px;
+                height: 18px;
+            }
         }
         #addBackupButton{
             width: 34px;

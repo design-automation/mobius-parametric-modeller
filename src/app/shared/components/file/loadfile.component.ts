@@ -44,6 +44,8 @@ export class LoadFileComponent {
 
 
     sendloadfile() {
+        if (!confirm('Loading a new file will delete the current flowchart! Would you like to continue?')) {return; }
+
         const selectedFile = (<HTMLInputElement>document.getElementById('file-input')).files[0];
         const stream = new Observable<IMobius>(observer => {
             const reader = new FileReader();
@@ -75,7 +77,7 @@ export class LoadFileComponent {
             reader.readAsText(selectedFile);
         });
         stream.subscribe(loadeddata => {
-            SaveFileComponent.clearModelData(this.dataService.file, null);
+            SaveFileComponent.clearModelData(this.dataService.flowchart, null);
             delete this.dataService.file.flowchart;
             this.dataService.file = loadeddata;
             if (updateLocalViewerSettings(loadeddata.settings)) {

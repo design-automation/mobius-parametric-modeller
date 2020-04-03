@@ -105,7 +105,7 @@ export class LoadUrlComponent {
             return false;
         }
 
-        SaveFileComponent.clearModelData(this.dataService.file, null);
+        SaveFileComponent.clearModelData(this.dataService.flowchart, null);
         delete this.dataService.file.flowchart;
         this.dataService.file = loadeddata;
         if (updateLocalViewerSettings(loadeddata.settings)) {
@@ -134,6 +134,8 @@ export class LoadUrlComponent {
             checkNodeValidity(node);
         }
         setTimeout(() => {
+            const zoomFlowchart = document.getElementById('zoomToFit');
+            if (zoomFlowchart) { zoomFlowchart.click(); }
             let executeB = document.getElementById('executeButton');
             if (executeB && this.dataService.mobiusSettings.execute) { executeB.click(); }
             executeB = null;
@@ -163,8 +165,9 @@ export class LoadUrlComponent {
         // file.flowchart.name = urlSplit[urlSplit.length - 1 ].split('.mob')[0];
 
         checkMobFile(loadeddata);
+        loadeddata.flowchart.meta.selected_nodes = [loadeddata.flowchart.nodes.length - 1];
 
-        SaveFileComponent.clearModelData(this.dataService.file, null);
+        SaveFileComponent.clearModelData(this.dataService.flowchart, null);
         delete this.dataService.file.flowchart;
         this.dataService.file = loadeddata;
         if (updateLocalViewerSettings(loadeddata.settings)) {
@@ -192,6 +195,8 @@ export class LoadUrlComponent {
         SaveFileComponent.deleteFile('___TEMP___.mob');
 
         setTimeout(() => {
+            const zoomFlowchart = document.getElementById('zoomToFit');
+            if (zoomFlowchart) { zoomFlowchart.click(); }
             let executeB = document.getElementById('executeButton');
             if (executeB && this.dataService.mobiusSettings.execute) { executeB.click(); }
             executeB = null;

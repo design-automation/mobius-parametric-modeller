@@ -183,8 +183,11 @@
         <p>Select File from Local Storage: </p>
         <br>
         <div *ngFor='let backup of getBackupFiles()'>
-            <button class='loadBackupButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backup.split('_-_')[0]}}</button>
-            <button class='deleteBackupButton' (click)="deleteBackup($event, backup)"><mat-icon>delete_outline</mat-icon></button>
+            <ng-container *ngIf='backup!="___TEMP___.mob"'>
+                <button class='loadBackupButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backup}}</button>
+                <button class='backupDateButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backupDates[backup]}}</button>
+                <button class='deleteBackupButton' (click)="deleteBackup($event, backup)"><mat-icon class='icon'>delete_outline</mat-icon></button>
+            </ng-container>
         </div>
         <button id='addBackupButton' onclick="document.getElementById('addBackup').click();">+</button>
         <input id='addBackup' type="file" (change)="addBackup()" style=" display: none;"/>

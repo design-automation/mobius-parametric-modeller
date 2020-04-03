@@ -44,6 +44,8 @@ export class LoadFileComponent {
 
 
     sendloadfile() {
+        if (!confirm('Loading a new file will delete the current flowchart! Would you like to continue?')) {return; }
+
         const selectedFile = (<HTMLInputElement>document.getElementById('file-input')).files[0];
         const stream = new Observable<IMobius>(observer => {
             const reader = new FileReader();

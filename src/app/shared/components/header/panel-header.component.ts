@@ -208,8 +208,8 @@ export class PanelHeaderComponent implements OnDestroy {
 
     async loadBackup(event: MouseEvent, filecode: string) {
         event.stopPropagation();
-        if (!confirm('Loading a new file will delete the current flowchart! Would you like to continue?')) {return; }
         if (this.dataService.checkbackup_header()) {
+            if (!confirm('Loading a new file will delete the current flowchart! Would you like to continue?')) {return; }
             const result = await SaveFileComponent.loadFromFileSystem(filecode);
             if (result === 'error') {
                 return;

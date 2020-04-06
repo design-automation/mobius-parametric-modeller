@@ -274,6 +274,7 @@ function saveResource(file: string, name: string): boolean {
     const itemstring = localStorage.getItem('mobius_backup_list');
     if (!itemstring) {
         localStorage.setItem('mobius_backup_list', `["${name}"]`);
+        localStorage.setItem('mobius_backup_date_dict', `{ "${name}": "${(new Date()).toLocaleString()}"}`);
     } else {
         const items: string[] = JSON.parse(itemstring);
         let check = false;
@@ -281,19 +282,22 @@ function saveResource(file: string, name: string): boolean {
             const item = items[i];
             if (item === name) {
                 items.splice(i, 1);
-                items.push(item);
+                items.unshift(item);
                 check = true;
                 break;
             }
         }
         if (!check) {
-            items.push(name);
-            if (items.length > 5) {
-                const item = items.shift();
+            items.unshift(name);
+            if (items.length > 10) {
+                const item = items.pop();
                 localStorage.removeItem(item);
             }
-            localStorage.setItem('mobius_backup_list', JSON.stringify(items));
         }
+        localStorage.setItem('mobius_backup_list', JSON.stringify(items));
+        const itemDates = JSON.parse(localStorage.getItem('mobius_backup_date_dict'));
+        itemDates[itemstring] = (new Date()).toLocaleString();
+        localStorage.setItem('mobius_backup_date_dict', JSON.stringify(itemDates));
     }
     const requestedBytes = 1024 * 1024 * 50;
     window['_code_'] = name;

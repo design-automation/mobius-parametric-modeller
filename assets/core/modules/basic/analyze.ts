@@ -9,7 +9,7 @@
  */
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, Txy, XYPLANE } from '@libs/geo-info/common';
+import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, Txy, XYPLANE, EAttribDataTypeStrs } from '@libs/geo-info/common';
 import { isPline, isWire, isEdge, isPgon, isFace, getArrDepth, isVert, isPosi, isPoint, idsMakeFromIndicies } from '@libs/geo-info/id';
 import { distance } from '@libs/geom/distance';
 import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm, vecAng2 } from '@libs/geom/vectors';
@@ -24,6 +24,8 @@ import { arrMakeFlat } from '@assets/libs/util/arrs';
 import { degToRad } from '@assets/core/inline/_conversion';
 import { xfromSourceTargetMatrix, multMatrix } from '@libs/geom/matrix';
 import { XAXIS, YAXIS, ZAXIS } from '@assets/libs/geom/constants';
+import cytoscape from 'cytoscape';
+import { DEFAULT_SCROLL_TIME } from '@angular/cdk/scrolling';
 
 // ================================================================================================
 // utility function
@@ -201,9 +203,6 @@ function _createMeshBufTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.
  * @param directions The direction vectors
  * @param entities The obstructions, faces, polygons, or collections of faces or polygons.
  * @param method Enum; raytracing method
- * @returns Distance, or list of distances (if position2 is a list).
- * @example distance1 = calc.Distance (position1, position2, p_to_p_distance)
- * @example_info position1 = [0,0,0], position2 = [[0,0,10],[0,0,20]], Expected value of distance is [10,20].
  */
 export function Raytrace(__model__: GIModel, origins: Txyz|Txyz[], directions: Txyz|Txyz[],
         entities: TId|TId[]|TId[][], limits: number|[number, number], method: _ERaytraceMethod): number[]|number[][] {
@@ -342,9 +341,6 @@ function _raytrace(origins_tjs: THREE.Vector3[], matrices_tjs: THREE.Matrix4[], 
  * @param entities The obstructions, faces, polygons, or collections of faces or polygons.
  * @param limits The max distance for raytracing
  * @param method Enum; solar method
- * @returns Distance, or list of distances (if position2 is a list).
- * @example distance1 = calc.Distance (position1, position2, p_to_p_distance)
- * @example_info position1 = [0,0,0], position2 = [[0,0,10],[0,0,20]], Expected value of distance is [10,20].
  */
 export function Solar(__model__: GIModel, origins: TPlane[], detail: number,
     entities: TId|TId[]|TId[][], limits: number|[number, number], method: _ESolarMethod): number[] {
@@ -533,9 +529,6 @@ function _solarRaytrace(origins_tjs: [THREE.Vector3, THREE.Vector3][],
  * @param detail The level of detail for the analysis
  * @param radius The radius of the sun path
  * @param method Enum; solar method
- * @returns Distance, or list of distances (if position2 is a list).
- * @example distance1 = calc.Distance (position1, position2, p_to_p_distance)
- * @example_info position1 = [0,0,0], position2 = [[0,0,10],[0,0,20]], Expected value of distance is [10,20].
  */
 export function SunPath(__model__: GIModel, origin: Txyz|TPlane, detail: number, radius: number, method: _ESolarMethod): TId[] {
     // --- Error Check ---
@@ -591,4 +584,251 @@ export function SunPath(__model__: GIModel, origin: Txyz|TPlane, detail: number,
         posis_i.push(one_day_posis_i);
     }
     return idsMakeFromIndicies(EEntType.POSI, posis_i) as TId[];
+}
+// ================================================================================================
+export enum _EShortestPathMethod {
+    DIRECTED = 'directed',
+    UNDIRECTED = 'undirected'
+}
+export enum _EShortestPathResult {
+    COUNTS = 'counts',
+    PATHS = 'paths',
+    BOTH = 'both'
+}
+/**
+ * Calculates the shortest path from ever position in source, to every position in target.
+ * ~
+ * Returns a dictionary containing the shortes paths.
+ * ~
+ * If 'counts' is selected, the dictionary will contain four lists:
+ * 1) 'ps': a list of positions traversed by the paths,
+ * 2) 'ps_count': a list of numbers that count how often each position was traversed.
+ * 3) '_e': a list of edges traversed by the paths,
+ * 4) '_e_count': a list of numbers that count how often each edge was traversed.
+ * ~
+ * If 'paths' is selected, the dictionary will contain two lists of lists:
+ * 1) 'ps_paths': a list of lists of positions, one list for each path.
+ * 2) '_e_paths': a list of lists of edges, one list for each path.
+ * ~
+ * If 'both' is selected, the dictionary will contain all six lists just described.
+ * ~
+ * The network must consist of vertices that are connected or welded.
+ * For example, if the network consists of multiple polylines, then the vertcies of those polylines must be welded.
+ * ~
+ * If 'directed' is selected, then the edge direction is taken into account. Each edge will be one-way.
+ * If 'undirected' is selected, the edge direction is ignored. Each edge will be two-way.
+ * ~
+ * @param __model__
+ * @param source Path origins, positions, or entities from which positions can be extracted.
+ * @param target Path destinations, positions, or entities from which positions can be extracted.
+ * @param entities The network, edges, or entities from which edges can be extracted.
+ * @param method Enum, the method to use, directed or undeirected.
+ * @param result Enum, the data to return, positions, edges, or both.
+ */
+export function ShortestPath(__model__: GIModel, source: TId|TId[]|TId[][][], target: TId|TId[]|TId[][],
+        entities: TId|TId[]|TId[][], method: _EShortestPathMethod, result: _EShortestPathResult):
+        { _e?: TId[], ps?: TId[], _e_count?: number[], ps_count?: number[], _e_paths?: TId[][], ps_paths?: TId[][]} {
+
+    source = arrMakeFlat(source) as TId[];
+    target = arrMakeFlat(target) as TId[];
+    entities = arrMakeFlat(entities) as TId[];
+    // --- Error Check ---
+    const fn_name = 'analyze.ShortestPath';
+    const source_ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'origins', source,
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    const target_ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'destinations', target,
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    const ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    // --- Error Check ---
+    const directed: boolean = method === _EShortestPathMethod.DIRECTED ? true : false;
+    let return_edges = true;
+    let return_posis = true;
+    let return_paths = true;
+    switch (result) {
+        case _EShortestPathResult.COUNTS:
+            return_paths = false;
+            break;
+        case _EShortestPathResult.PATHS:
+            return_edges = false;
+            return_posis = false;
+            break;
+        default:
+            // return_edges = false;
+            // return_posis = false;
+            break;
+    }
+    const source_posis_i: number[] = _getUniquePosis(__model__, source_ents_arrs);
+    const target_posis_i: number[] = _getUniquePosis(__model__, target_ents_arrs);
+    const elements: any[] = _cytoscapeGetElements(__model__, ents_arrs, source_posis_i, target_posis_i, directed);
+    // create the cytoscape object
+    const cy = cytoscape({
+        elements: elements,
+        headless: true,
+    });
+    const map_edges_i: Map<number, number> = new Map();
+    const map_posis_i: Map<number, number> = new Map();
+    const posi_paths: number[][] = [];
+    const edge_paths: number[][] = [];
+    for (const source_posi_i of source_posis_i) {
+        const source_elem = cy.getElementById( source_posi_i.toString() );
+        const dijkstra = cy.elements().dijkstra({
+            root: source_elem,
+            weight: _cytoscapeWeightFn,
+            directed: directed
+        });
+        for (const target_posi_i of target_posis_i) {
+            const path = dijkstra.pathTo( cy.getElementById( target_posi_i.toString() ) );
+            const posi_path: number[] = [];
+            const edge_path: number[] = [];
+            for (const elem of path.toArray()) {
+                if (elem.isEdge()) {
+                    const edge_i: number = elem.data('idx');
+                    if (return_edges) {
+                        if (!map_edges_i.has(edge_i)) {
+                            map_edges_i.set(edge_i, 1);
+                        } else {
+                            map_edges_i.set(edge_i, map_edges_i.get(edge_i) + 1);
+                        }
+                        if (!directed) {
+                            const edge2_i: number = elem.data('idx2');
+                            if (edge2_i !== null) {
+                                if (!map_edges_i.has(edge2_i)) {
+                                    map_edges_i.set(edge2_i, 1);
+                                } else {
+                                    map_edges_i.set(edge2_i, map_edges_i.get(edge2_i) + 1);
+                                }
+                            }
+                        }
+                    }
+                    if (return_paths) {
+                        edge_path.push(edge_i);
+                    }
+                } else {
+                    const posi_i: number = elem.data('idx');
+                    if (return_posis) {
+                        if (!map_posis_i.has(posi_i)) {
+                            map_posis_i.set(posi_i, 1);
+                        } else {
+                            map_posis_i.set(posi_i, map_posis_i.get(posi_i) + 1);
+                        }
+                    }
+                    if (return_paths) {
+                        posi_path.push(posi_i);
+                    }
+                }
+            }
+            if (return_paths) {
+                edge_paths.push(edge_path);
+                posi_paths.push(posi_path);
+            }
+        }
+    }
+    const dict: { _e?: TId[], ps?: TId[], _e_count?: number[], ps_count?: number[], _e_paths?: TId[][], ps_paths?: TId[][]} = {};
+    if (return_edges) {
+        dict['_e'] = idsMakeFromIndicies(EEntType.EDGE, Array.from(map_edges_i.keys())) as TId[];
+        dict['_e_count'] = Array.from(map_edges_i.values());
+    }
+    if (return_posis) {
+        dict['ps'] =  idsMakeFromIndicies(EEntType.POSI, Array.from(map_posis_i.keys())) as TId[];
+        dict['ps_count'] =  Array.from(map_posis_i.values());
+    }
+    if (return_paths) {
+        dict['_e_paths'] =  idsMakeFromIndicies(EEntType.EDGE, edge_paths) as TId[][];
+        dict['ps_paths'] =  idsMakeFromIndicies(EEntType.POSI, posi_paths) as TId[][];
+    }
+    return dict;
+}
+
+function _getUniquePosis(__model__: GIModel, ents_arr: TEntTypeIdx[]): number[] {
+    const set_posis_i: Set<number> = new Set();
+    for (const [ent_type, ent_i] of ents_arr) {
+        const posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, ent_i);
+        for (const posi_i of posis_i) {
+            set_posis_i.add(posi_i);
+        }
+    }
+    return Array.from(set_posis_i);
+}
+function _cytoscapeWeightFn(edge: cytoscape.EdgeSingular) {
+    return edge.data('weight');
+}
+function _cytoscapeGetElements(__model__: GIModel, ents_arr: TEntTypeIdx[], 
+    source_posis_i: number[], target_posis_i: number[], directed: boolean): any[] {
+    let has_weight_attrib = false;
+    if (__model__.attribs.query.hasAttrib(EEntType.EDGE, 'weight')) {
+        has_weight_attrib = __model__.attribs.query.getAttribDataType(EEntType.EDGE, 'weight') === EAttribDataTypeStrs.NUMBER;
+    }
+    // edges, starts empty
+    const set_edges_i: Set<number> = new Set();
+    // posis, starts with cource and target
+    const set_posis_i: Set<number> = new Set(source_posis_i);
+    for (const target_posi_i of target_posis_i) { set_posis_i.add(target_posi_i); }
+    // network
+    for (const [ent_type, ent_i] of ents_arr) {
+        const edges_i: number[] = __model__.geom.nav.navAnyToEdge(ent_type, ent_i);
+        for (const edge_i of edges_i) {
+            set_edges_i.add(edge_i);
+        }
+        const posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, ent_i);
+        for (const posi_i of posis_i) {
+            set_posis_i.add(posi_i);
+        }
+    }
+    // create elements
+    const elements: any[] = [];
+    for (const posi_i of Array.from(set_posis_i)) {
+        elements.push( {  data: { id: posi_i.toString(), idx: posi_i} } );
+    }
+    if (directed) {
+        // directed
+        for (const edge_i of Array.from(set_edges_i)) {
+            const edge_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
+            let weight = 1.0;
+            if (has_weight_attrib) {
+                weight = __model__.attribs.query.getAttribVal(EEntType.EDGE, 'weight', edge_i) as number;
+            } else {
+                const c0: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[0]);
+                const c1: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[1]);
+                weight = distance(c0, c1);
+            }
+            elements.push( {  data: { id: 'e' + edge_i,
+                source: edge_posis_i[0].toString(), target: edge_posis_i[1].toString(), weight: weight, idx: edge_i} } );
+        }
+    } else {
+        // undirected
+        const map_edges_ab: Map<string, any> = new Map();
+        for (const edge_i of Array.from(set_edges_i)) {
+            let edge_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
+            edge_posis_i = edge_posis_i[0] < edge_posis_i[1] ? edge_posis_i : [edge_posis_i[1], edge_posis_i[0]];
+            const undir_edge_id: string = 'e_' + edge_posis_i[0].toString() + '_' + edge_posis_i[1].toString();
+            if (map_edges_ab.has(undir_edge_id)) {
+                const obj = map_edges_ab.get(undir_edge_id);
+                obj['data']['idx2'] = edge_i;
+                // TODO should we take the average of the two weights? Could be more than two...
+            } else {
+                let weight = 1.0;
+                if (has_weight_attrib) {
+                    weight = __model__.attribs.query.getAttribVal(EEntType.EDGE, 'weight', edge_i) as number;
+                } else {
+                    const c0: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[0]);
+                    const c1: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[1]);
+                    weight = distance(c0, c1);
+                }
+                const obj = {
+                    data: {
+                        id: undir_edge_id,
+                        source: edge_posis_i[0].toString(),
+                        target: edge_posis_i[1].toString(),
+                        weight: weight,
+                        idx: edge_i,
+                        idx2: null
+                    }
+                };
+                map_edges_ab.set(undir_edge_id, obj);
+                elements.push(obj);
+            }
+        }
+    }
+    return elements;
 }

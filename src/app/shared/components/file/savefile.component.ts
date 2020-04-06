@@ -381,7 +381,7 @@ export class SaveFileComponent implements OnDestroy{
         }
 
         // stringify the new copy (with formatting)
-        const fileString = circularJSON.stringify(savedfile, null, 4);
+        const fileString = circularJSON.stringify(savedfile);
         let fname = savedfile.name.replace(/\ /g, '_');
         if (savedfile.name.length < 4 || savedfile.name.substring(savedfile.name.length - 4) !== '.mob') {
             fname = `${fname}.mob`;
@@ -518,7 +518,7 @@ export class SaveFileComponent implements OnDestroy{
 
         const downloadResult = {
             'name': newFile.name.replace(/\ /g, '_') + '_data.mobdata',
-            'file': circularJSON.stringify(newFile, null, 4)
+            'file': circularJSON.stringify(newFile)
         };
 
         const blob = new Blob([downloadResult.file], { type: 'application/json' });

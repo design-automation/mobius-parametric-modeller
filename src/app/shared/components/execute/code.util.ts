@@ -379,7 +379,7 @@ export class CodeUtils {
         for (const p of prodList) {
             codeStr = codeStr.concat(CodeUtils.getProcedureCode(p, existingVars, isMainFlowchart,
                                                                 functionName, nodeId, usedFunctions));
-            if ( p.type === ProcedureTypes.Elseif ) {
+            if ( p.type === ProcedureTypes.Elseif && p.enabled) {
                 elifcount++;
             } else {
                 while (elifcount > 0) {

@@ -25,7 +25,8 @@ export function isInt(v: any): boolean {
     return Number.isInteger(v);
 }
 export function isFlt(v: any): boolean {
-    return !Number.isNaN(v) && v % 1 > 0;
+    // return !Number.isNaN(v) && v % 1 > 0;
+    return typeof v === 'number';
 }
 export function isBool(v: any): boolean {
     return typeof v === 'boolean';

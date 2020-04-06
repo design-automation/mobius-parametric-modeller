@@ -201,25 +201,26 @@ function _collectionAdd(__model__: GIModel, coll_i: number, ents_arr: TEntTypeId
  * ~
  * @param __model__
  * @param coll The collection to be updated.
- * @param entities Points, polylines, polygons, and collections to add.
+ * @param entities Points, polylines, polygons, and collections to add. Or null to empty the collection.
  * @returns void
  */
 export function Remove(__model__: GIModel, coll: TId, entities: TId|TId[]): void {
-    entities = arrMakeFlat(entities) as TId[];
-    if (!isEmptyArr(entities)) {
+    const fn_name = 'collection.Remove';
+    let ents_arr: TEntTypeIdx[] = null;
+    if (entities !== null) {
+        entities = arrMakeFlat(entities) as TId[];
         // --- Error Check ---
-        const fn_name = 'collection.Remove';
-        const coll_arr = checkIDs(fn_name, 'coll', coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
-        let ents_arr: TEntTypeIdx[] = null;
-        if (entities !== null) {
-            ents_arr = checkIDs(fn_name, 'entities', entities,
-                [IDcheckObj.isID, IDcheckObj.isIDList],
-                [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-        }
+        ents_arr = checkIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList],
+            [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         // --- Error Check ---
-        if (ents_arr === null) {
-            _collectionEmpty(__model__, coll_arr[1]);
-        }
+    }
+    // --- Error Check ---
+    const coll_arr = checkIDs(fn_name, 'coll', coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
+    // --- Error Check ---
+    if (ents_arr === null) {
+        _collectionEmpty(__model__, coll_arr[1]);
+    } else {
         _collectionRemove(__model__, coll_arr[1], ents_arr);
     }
 }
@@ -262,5 +263,24 @@ function _collectionEmpty(__model__: GIModel, coll_i: number): void {
     }
 }
 // ================================================================================================
+/**
+ * Deletes a collection without deleting the entities in the collection.
+ * ~
+ * @param __model__
+ * @param coll The collection or list of collections to be deleted.
+ * @returns void
+ */
+export function Delete(__model__: GIModel, coll: TId|TId[]): void {
+    coll = arrMakeFlat(coll) as TId[];
+    // --- Error Check ---
+    const fn_name = 'collection.Delete';
+    const colls_arrs = checkIDs(fn_name, 'coll', coll, [IDcheckObj.isIDList], [EEntType.COLL]) as TEntTypeIdx[];
+    // --- Error Check ---
+    const colls_i: number[] = [];
+    for (const [ent_type, ent_i] of colls_arrs) {
+        colls_i.push(ent_i);
+    }
+    __model__.geom.del.delColls(colls_i, false);
+}
 // ================================================================================================
 

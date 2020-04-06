@@ -156,6 +156,11 @@
     &.active, &:hover {
         background-color: $color3; 
     }
+    &:disabled{
+        color: $color3;
+        background-color: $color5;
+        pointer-events: none;
+    }
 }
 
 

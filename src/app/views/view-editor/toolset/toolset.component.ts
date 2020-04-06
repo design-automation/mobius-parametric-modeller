@@ -553,6 +553,7 @@ export class ToolsetComponent implements OnInit {
 
     assembleImportedTooltip(funcData, type = 'globalFunc'): string {
         let htmlDesc: string;
+        console.log(funcData)
         if (type === 'globalFunc') {
             const funcDoc = funcData.doc;
             htmlDesc = `<p class="funcDesc">${funcDoc.name}</p>`;

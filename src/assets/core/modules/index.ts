@@ -68,6 +68,12 @@ export {_math};
 import * as _mathjs from '../inline/_mathjs';
 export {_mathjs};
 
+import * as _types from '../inline/_types';
+export {_types};
+
+import * as _strs from '../inline/_strs';
+export {_strs};
+
 import * as _rand from '../inline/_rand';
 export {_rand};
 

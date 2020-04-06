@@ -1,6 +1,6 @@
 {
   "name": "mobius-parametric-modeller",
-  "version": "0.5.37",
+  "version": "0.5.38",
   "license": "MIT",
   "config": {
     "dev_url": "https://mobius.design-automation.net/",
@@ -45,6 +45,7 @@
     "@doodle3d/clipper-js": "^1.0.11",
     "@types/chroma-js": "^1.4.1",
     "@types/circular-json": "^0.4.0",
+    "@types/cytoscape": "^3.14.0",
     "@types/proj4": "^2.5.0",
     "@types/webgl2": "0.0.5",
     "angular-split": "^1.0.4",
@@ -52,6 +53,7 @@
     "chroma-js": "^1.4.1",
     "circular-json": "^0.4.0",
     "core-js": "^2.6.5",
+    "cytoscape": "^3.14.1",
     "d3-delaunay": "^5.2.1",
     "d3-polygon": "^1.0.6",
     "d3-voronoi": "^1.1.4",

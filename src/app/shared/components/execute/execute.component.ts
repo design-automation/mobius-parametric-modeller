@@ -554,7 +554,7 @@ export class ExecuteComponent {
                 return;
             }
             const usedFuncs: string[] = [];
-            const codeResult = CodeUtils.getNodeCode(node, true, undefined, usedFuncs);
+            const codeResult = CodeUtils.getNodeCode(node, true, undefined, undefined, usedFuncs);
             const usedFuncsSet = new Set(usedFuncs);
             // if process is terminated, return
             if (codeResult[1]) {
@@ -572,7 +572,7 @@ export class ExecuteComponent {
 
             // Create function string:
             // start with asembling the node's code
-            fnString =  '\n\n//  ------ MAIN CODE ------\n' +
+            fnString =  '\n\n//  ------------ MAIN CODE ------------\n' +
                         nodeCode[0] +
                         '\nfunction __main_node_code__(){\n' +
                         nodeCode[1] +
@@ -584,7 +584,7 @@ export class ExecuteComponent {
                 for (const otherFunc in funcStrings) {
                     if (!addedFunc.has(otherFunc) && otherFunc.substring(0, funcName.length) === funcName) {
                         addedFunc.add(otherFunc);
-                        fnString = funcStrings[otherFunc] + fnString;
+                        fnString =  `\n// ------ GLOBAL FUNCTION: ${otherFunc} ------\n\n` + funcStrings[otherFunc] + fnString;
                     }
                 }
             });
@@ -593,8 +593,11 @@ export class ExecuteComponent {
             fnString = _varString + globalVars + fnString;
 
             // add the merge input function and the print function
-            fnString = `\nconst __debug__ = ${this.dataService.mobiusSettings.debug};\n` +
-                        pythonList + '\n' + mergeInputsFunc + '\n' + printFunc + '\n' + fnString;
+            fnString = `\nconst __debug__ = ${this.dataService.mobiusSettings.debug};` +
+                        '\n\n// ------ MERGE INPUTS FUNCTION ------' + mergeInputsFunc +
+                        '\n\n// ------ PRINT FUNCTION ------' + printFunc +
+                        `\n\n// ------ FUNCTION FOR PYTHON STYLE LIST ------` + pythonList +
+                        '\n\n// ------ CONSTANTS ------' + fnString;
 
             // ==> generated code structure:
             //  1. pythonList + mergeInputFunction + printFunc

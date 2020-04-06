@@ -199,10 +199,10 @@
                     <ng-container *ngFor='let userFunc of searchedUserFuncs'>
                         <li
                         (mousedown)='selectPrevProd()'
-                        (click)='add_searched_user_func(userFunc.data)'
+                        (click)='add_searched_user_func(userFunc)'
                         (mouseenter)='popupTooltip($event, assembleImportedTooltip(userFunc.data, userFunc.type))'
                         (mouseleave)='turnoffTooltip()'>
-                            <span class='module-name'>{{userFunc.type}}.</span>{{userFunc.name}}
+                            <span class='module-name'>{{userFunc.type.replace("Func","")}}.</span>{{userFunc.name}}
                         </li>
 
                     </ng-container>
@@ -228,7 +228,8 @@
             <div [hidden]="!getNode().state.show_code">
                 <button id='localFunc' class="accordion inline--cat" 
                 (mousedown)='preventfocus($event)'
-                (click)='toggleAccordion("localFunc", true)'>Local Funcs</button>
+                (click)='toggleAccordion("localFunc", true)'
+                [disabled]='getNode().localFunc.length == 1'>Local Funcs</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset user_set'>
                         <li *ngFor='let func_prod of getNode().localFunc.slice(1)' 
@@ -240,17 +241,37 @@
                         </li>
                     </ul>
                 </div>
-                <button id='global_func_list' class="accordion" 
+                <button id='CreateGlobal' class="accordion" 
                 (mousedown)='preventfocus($event)'        
-                (click)='toggleAccordion("global_func_list")'>Global Funcs</button>
+                (click)='toggleAccordion("CreateGlobal")'>Create Global</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset'>
-                        <li class = 'user--add'>
-                            <button class = 'add-btn' onclick="document.getElementById('selectedFile').click();" title="Import Function from File">
-                                    Import
-                                    <!--<mat-icon class='add-icon'>open_in_browser</mat-icon>-->
+                        <li>
+                            <button class = 'add-btn' onclick="document.getElementById('selectImportFile').click();" title="Import Function from File">
+                                Import File
+                                <!--<mat-icon class='add-icon'>open_in_browser</mat-icon>-->
                             </button>
                         </li>
+                        <li>
+                            <button class = 'add-btn' (click)="open_update_dialog($event);" title="Import Function from Local Storage">
+                                Import LS
+                                <!--<mat-icon class='add-icon'>open_in_browser</mat-icon>-->
+                            </button>
+                        </li>
+                        <li class = 'user--manage'>
+                            <button class = 'add-btn' (click)="open_globalFunc_dialog($event);" title="Manage Global Functions">
+                                Manage
+                                <!--<mat-icon class='add-icon'>open_in_browser</mat-icon>-->
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <button id='global_func_list' class="accordion" 
+                (mousedown)='preventfocus($event)'        
+                (click)='toggleAccordion("global_func_list")'
+                [disabled]='getFlowchart().functions.length == 0'>Global Funcs</button>
+                <div class="panel">
+                    <ul class='toolset__functions--subset'>
                         <div class='tooltip user--def' *ngFor='let fn of getFlowchart().functions'>
                             <div class = 'user--def-lnContainer'
                             (mouseenter)='popupTooltip($event, assembleImportedTooltip(fn))'
@@ -259,7 +280,7 @@
                                 (mousedown)='selectPrevProd()'
                                 (click)='add_global_func(fn)'> {{fn.name}} 
                                 </li>
-                                <div class = 'btn--container'>
+                                <!-- <div class = 'btn--container'>
                                     <button class='importedFunc-btn' (click)='open_update_dialog($event, fn)'>
                                         <mat-icon class='importedFunc-btn-icon'>cached</mat-icon>
                                     </button>
@@ -272,12 +293,11 @@
                                     <button class='importedFunc-btn' (click)='delete_global_func(fn)'>
                                         <mat-icon class='importedFunc-btn-icon'>close</mat-icon>
                                     </button>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
-                        
                     </ul>
-                    <input type="file" id="selectedFile" (change)="import_global_func($event)" style="display: none;" multiple/>  
+                    <input type="file" id="selectImportFile" (change)="import_global_func($event)" style="display: none;" multiple/>  
                 </div>
             </div>
         </div>

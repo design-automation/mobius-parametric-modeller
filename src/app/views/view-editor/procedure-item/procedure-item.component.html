@@ -580,7 +580,7 @@
                         [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>
                     = 
                 </ng-container>
-                <div class='function-text'><span class='module-name'>globalFunc.</span>{{data.meta.name}}</div> 
+                <div class='function-text'><span class='module-name'>global.</span>{{data.meta.name}}</div> 
                 <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
                     <input class='input--arg' 
                         *ngIf='p.type !== 5'

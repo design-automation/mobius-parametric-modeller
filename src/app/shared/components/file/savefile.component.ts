@@ -56,18 +56,19 @@ export class SaveFileComponent implements OnDestroy{
         this._interval_ = setInterval(() => {
             const mobius_settings = this.dataService.mobiusSettings;
             if (!mobius_settings['autosave']) { return; }
-            SaveFileComponent.saveFileToLocal(this.dataService.file);
-            this.dataService.notifyMessage(`Auto-saving Flowchart as ${this.dataService.flowchart.name}`);
+
+            let fileName = this.dataService.flowchart.name.replace(/\s/g, '_');
+            if (fileName.length < 4 || fileName.slice(-4) !== '.mob') {
+                fileName += '.mob';
+            }
+            SaveFileComponent.saveFileToLocal(fileName, this.dataService.file);
+            this.dataService.notifyMessage(`Auto-saving Flowchart as ${fileName}`);
         }, 300000);
     }
 
 
-    static saveFileToLocal(f: IMobius) {
+    static saveFileToLocal( fileName: string, f: IMobius) {
         const downloadResult = SaveFileComponent.fileDownloadString(f);
-        let fileName = f.flowchart.name;
-        if (fileName.slice(-4) !== '.mob') {
-            fileName += '.mob';
-        }
         SaveFileComponent.saveToLocalStorage(fileName, downloadResult.file);
     }
 
@@ -89,6 +90,7 @@ export class SaveFileComponent implements OnDestroy{
         const code = name;
         if (!itemstring) {
             localStorage.setItem('mobius_backup_list', `["${code}"]`);
+            localStorage.setItem('mobius_backup_date_dict', `{ "${code}": "${(new Date()).toLocaleString()}"}`);
         } else {
             const items: string[] = JSON.parse(itemstring);
             let check = false;
@@ -96,19 +98,22 @@ export class SaveFileComponent implements OnDestroy{
                 const item = items[i];
                 if (item === code) {
                     items.splice(i, 1);
-                    items.push(item);
+                    items.unshift(item);
                     check = true;
                     break;
                 }
             }
             if (!check) {
-                items.push(code);
+                items.unshift(code);
                 if (items.length > 10) {
-                    const item = items.shift();
+                    const item = items.pop();
                     localStorage.removeItem(item);
                 }
-                localStorage.setItem('mobius_backup_list', JSON.stringify(items));
             }
+            localStorage.setItem('mobius_backup_list', JSON.stringify(items));
+            const itemDates = JSON.parse(localStorage.getItem('mobius_backup_date_dict'));
+            itemDates[code] = (new Date()).toLocaleString();
+            localStorage.setItem('mobius_backup_date_dict', JSON.stringify(itemDates));
         }
         window['_code__'] = code;
         window['_file__'] = file;
@@ -162,6 +167,9 @@ export class SaveFileComponent implements OnDestroy{
                 if (i !== -1) {
                     items.splice(i, 1);
                     localStorage.setItem('mobius_backup_list', JSON.stringify(items));
+                    const itemDates = JSON.parse(localStorage.getItem('mobius_backup_date_dict'));
+                    delete itemDates[filecode];
+                    localStorage.setItem('mobius_backup_date_dict', JSON.stringify(itemDates));
                 }
                 window['_code__'] = undefined;
             }, (e) => { console.log('Error', e); });
@@ -374,13 +382,55 @@ export class SaveFileComponent implements OnDestroy{
         }
 
         // stringify the new copy (with formatting)
-        const fileString = circularJSON.stringify(savedfile, null, 4);
+        const fileString = circularJSON.stringify(savedfile);
         let fname = savedfile.name.replace(/\ /g, '_');
         if (savedfile.name.length < 4 || savedfile.name.substring(savedfile.name.length - 4) !== '.mob') {
             fname = `${fname}.mob`;
         }
 
         return {'name': fname, 'file': fileString};
+    }
+
+    static updateBackupList() {
+        const backups = JSON.parse(localStorage.getItem('mobius_backup_list'));
+        const backupdates = {};
+        for (const backup of backups) {
+            // if (!backupdates[backup]) {
+                navigator.webkitPersistentStorage.requestQuota (
+                    requestedBytes, function(grantedBytes) {
+                        // @ts-ignore
+                        window.webkitRequestFileSystem(PERSISTENT, grantedBytes, (fs) => {
+                            fs.root.getFile(backup, {create: false}, function(fileEntry) {
+                                fileEntry.getMetadata( f => {
+                                    backupdates[backup] = f.modificationTime.toLocaleString();
+                                    localStorage.setItem('mobius_backup_date_dict', JSON.stringify(backupdates));
+                                    if (Object.keys(backupdates).length === backups.length) {
+                                        SaveFileComponent.reorderBackupList(backups, backupdates);
+                                    }
+                                });
+                            });
+                        });
+                    }, function(e) { console.log('Error', e); }
+                );
+            // }
+        }
+    }
+
+    static reorderBackupList(backups, backupdates) {
+        let reorderList = [];
+        for (const backup of backups) {
+            reorderList.push([backup, new Date(backupdates[backup])]);
+        }
+        reorderList = reorderList.sort((a, b) => {
+            if (a[1] > b[1]) {
+                return -1;
+            } else if (a[1] < b[1]) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+        localStorage.setItem('mobius_backup_list', JSON.stringify(reorderList.map(item => item[0])));
     }
 
     ngOnDestroy() {
@@ -469,7 +519,7 @@ export class SaveFileComponent implements OnDestroy{
 
         const downloadResult = {
             'name': newFile.name.replace(/\ /g, '_') + '_data.mobdata',
-            'file': circularJSON.stringify(newFile, null, 4)
+            'file': circularJSON.stringify(newFile)
         };
 
         const blob = new Blob([downloadResult.file], { type: 'application/json' });
@@ -477,5 +527,6 @@ export class SaveFileComponent implements OnDestroy{
         DownloadUtils.downloadFile(downloadResult.name, blob);
 
     }
+
 
 }

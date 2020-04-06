@@ -278,18 +278,34 @@ button.mat-menu-item:hover{
         color: $color1;
         background-color: $color6;
         top: 30%;
-        max-width: 605px;
+        max-width: 805px;
         min-width: 405px;
         padding: 5px;
     
         .loadBackupButton{
-            // height: 25px;
+            height: 25px;
+            font-size: 12px;
             width: fit-content;
             min-width: 400px;
             margin-bottom: 2px;
             padding: 0px 5px 0px 5px;
             background-color: $color5;
-            // font-size: 12px;
+            color: $color1;
+            display: inline-block;
+
+            &:disabled {
+                background-color: $color5-5;
+                color: $color3;
+            }
+        }
+        .backupDateButton{
+            height: 25px;
+            font-size: 12px;
+            width: fit-content;
+            min-width: 150px;
+            margin-bottom: 2px;
+            padding: 0px 5px 0px 5px;
+            background-color: $color5;
             color: $color1;
             display: inline-block;
 
@@ -299,7 +315,7 @@ button.mat-menu-item:hover{
             }
         }
         .deleteBackupButton{
-            // height: 25px;
+            height: 25px;
             width: fit-content;
             margin-bottom: 2px;
             margin-left: 2px;
@@ -308,14 +324,61 @@ button.mat-menu-item:hover{
             color: $color1;
             display: inline-block;
 
-            // .icon{
-            //     font-size: 18px;
-            //     padding-top: 5px;
-            //     height: 18px;
-            // }
+            .icon{
+                font-size: 18px;
+                padding-top: 5px;
+                height: 18px;
+            }
         }
         #addBackupButton{
             width: 34px;
+            margin-bottom: 2px;
+            padding: 0px 5px 0px 5px;
+            background-color: $color5;
+            color: $color1;
+            display: inline-block;
+        }
+    }
+    .globalFuncDialog{
+        font-family: 12px sans-serif;
+        color: $color1;
+        background-color: $color6;
+        top: 30%;
+        max-width: 805px;
+        min-width: 605px;
+        padding: 5px;
+
+        .globalFuncName{
+            height: 25px;
+            font-size: 12px;
+            width: fit-content;
+            min-width: 500px;
+            margin-bottom: 2px;
+            padding: 0px 5px 0px 5px;
+            background-color: $color5;
+            color: $color1;
+            display: inline-block;
+            pointer-events: none;
+        }
+        .manageGlobalButton{
+            height: 25px;
+            width: fit-content;
+            margin-bottom: 2px;
+            margin-left: 2px;
+            padding: 0px 5px 0px 5px;
+            background-color: $color5;
+            color: $color1;
+            display: inline-block;
+
+            .icon{
+                font-size: 18px;
+                padding-top: 5px;
+                height: 18px;
+            }
+        }
+        #addGlobalButton{
+            width: 70px;
+            font-size: 12px;
             margin-bottom: 2px;
             padding: 0px 5px 0px 5px;
             background-color: $color5;
@@ -356,6 +419,29 @@ button.mat-menu-item:hover{
 
         .subsetting {
             padding-left: 20px;
+        }
+    }
+    .saveLocalDialog{
+        font-family: 12px sans-serif;
+        color: $color1;
+        background-color: $color6;
+        top: 30%;
+        max-width: 605px;
+        min-width: 205px;
+        padding: 5px;
+    
+        .saveButtons{
+            width: 80px;
+            margin: 0px 20px 2px 20px;
+            padding: 0px 5px 0px 5px;
+            background-color: $color5;
+            color: $color1;
+            display: inline-block;
+        }
+        .fileNameInput{
+            width: 200px;
+            border: 1px solid $color1;
+            background-color: $color6;
         }
     }
     .creditsDialog{

@@ -246,8 +246,14 @@
                 <div class="panel">
                     <ul class='toolset__functions--subset'>
                         <li>
-                            <button class = 'add-btn' onclick="document.getElementById('selectedFile').click();" title="Import Function from File">
-                                Import
+                            <button class = 'add-btn' onclick="document.getElementById('selectImportFile').click();" title="Import Function from File">
+                                Import File
+                                <!--<mat-icon class='add-icon'>open_in_browser</mat-icon>-->
+                            </button>
+                        </li>
+                        <li>
+                            <button class = 'add-btn' (click)="open_update_dialog($event);" title="Import Function from Local Storage">
+                                Import LS
                                 <!--<mat-icon class='add-icon'>open_in_browser</mat-icon>-->
                             </button>
                         </li>
@@ -283,7 +289,7 @@
                         </div>
                         
                     </ul>
-                    <input type="file" id="selectedFile" (change)="import_global_func($event)" style="display: none;" multiple/>  
+                    <input type="file" id="selectImportFile" (change)="import_global_func($event)" style="display: none;" multiple/>  
                 </div>
             </div>
         </div>

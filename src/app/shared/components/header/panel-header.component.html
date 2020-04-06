@@ -71,6 +71,12 @@
                     New File
                 </button>
                 <br>
+                <button (click)="loadFile()"
+                title="Load Flowchart File from Computer">
+                    <mat-icon>launch</mat-icon>
+                    Load File 
+                </button>
+                <br>
                 <button onclick="document.getElementById('savefile').click();"
                 title="Save Flowchart File to Computer">
                     <mat-icon>save_alt</mat-icon>
@@ -81,12 +87,6 @@
                 title="Save Flowchart File to The local Storage">
                     <mat-icon>input</mat-icon>
                     Save to LS
-                </button>
-                <br>
-                <button (click)="loadFile()"
-                title="Load Flowchart File from Computer">
-                    <mat-icon>launch</mat-icon>
-                    Load File 
                 </button>
                 <br>
                 <button onclick="document.getElementById('savejavascript').click();"
@@ -220,6 +220,7 @@
                 <mat-icon class='icon'>delete_outline</mat-icon>
             </button>
         </div>
+        <button id='addGlobalButton' (click)="addGlobalFunc($event)">Import File</button>
     </div>
     <div class='saveLocalDialog' *ngIf='checkDialog("savels")'>
         <p>Save File to Local Storage as: </p>

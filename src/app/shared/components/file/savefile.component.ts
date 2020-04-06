@@ -56,18 +56,19 @@ export class SaveFileComponent implements OnDestroy{
         this._interval_ = setInterval(() => {
             const mobius_settings = this.dataService.mobiusSettings;
             if (!mobius_settings['autosave']) { return; }
-            SaveFileComponent.saveFileToLocal(this.dataService.file);
-            this.dataService.notifyMessage(`Auto-saving Flowchart as ${this.dataService.flowchart.name}`);
+
+            let fileName = this.dataService.flowchart.name.replace(/\s/g, '_');
+            if (fileName.length < 4 || fileName.slice(-4) !== '.mob') {
+                fileName += '.mob';
+            }
+            SaveFileComponent.saveFileToLocal(fileName, this.dataService.file);
+            this.dataService.notifyMessage(`Auto-saving Flowchart as ${fileName}`);
         }, 300000);
     }
 
 
-    static saveFileToLocal(f: IMobius) {
+    static saveFileToLocal( fileName: string, f: IMobius) {
         const downloadResult = SaveFileComponent.fileDownloadString(f);
-        let fileName = f.flowchart.name;
-        if (fileName.slice(-4) !== '.mob') {
-            fileName += '.mob';
-        }
         SaveFileComponent.saveToLocalStorage(fileName, downloadResult.file);
     }
 

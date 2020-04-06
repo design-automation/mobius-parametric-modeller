@@ -388,6 +388,13 @@ export class ToolsetComponent implements OnInit {
         this.dataService.setbackup_updateImported(fnData);
     }
 
+    open_globalFunc_dialog(event: MouseEvent) {
+        event.stopPropagation();
+        this.dataService.dialogType = 'globalfunc';
+        this.dataService.dialog = <HTMLDialogElement>document.getElementById('headerDialog');
+        this.dataService.dialog.showModal();
+    }
+
     preventfocus(event) {
         event.preventDefault();
     }

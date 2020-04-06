@@ -77,8 +77,9 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    .user--add{
-        margin-bottom: 8px;
+    .user--Manage{
+        margin-bottom: 4px;
+        border-bottom: 1px solid $color3;
     }
     :hover{
         background-color: $color4;

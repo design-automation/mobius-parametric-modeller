@@ -245,10 +245,16 @@
                 (click)='toggleAccordion("global_func_list")'>Global Funcs</button>
                 <div class="panel">
                     <ul class='toolset__functions--subset'>
-                        <li class = 'user--add'>
+                        <li>
                             <button class = 'add-btn' onclick="document.getElementById('selectedFile').click();" title="Import Function from File">
-                                    Import
-                                    <!--<mat-icon class='add-icon'>open_in_browser</mat-icon>-->
+                                Import
+                                <!--<mat-icon class='add-icon'>open_in_browser</mat-icon>-->
+                            </button>
+                        </li>
+                        <li class = 'user--manage'>
+                            <button class = 'add-btn' (click)="open_globalFunc_dialog($event);" title="Manage Global Functions">
+                                Manage
+                                <!--<mat-icon class='add-icon'>open_in_browser</mat-icon>-->
                             </button>
                         </li>
                         <div class='tooltip user--def' *ngFor='let fn of getFlowchart().functions'>
@@ -259,7 +265,7 @@
                                 (mousedown)='selectPrevProd()'
                                 (click)='add_global_func(fn)'> {{fn.name}} 
                                 </li>
-                                <div class = 'btn--container'>
+                                <!-- <div class = 'btn--container'>
                                     <button class='importedFunc-btn' (click)='open_update_dialog($event, fn)'>
                                         <mat-icon class='importedFunc-btn-icon'>cached</mat-icon>
                                     </button>
@@ -272,7 +278,7 @@
                                     <button class='importedFunc-btn' (click)='delete_global_func(fn)'>
                                         <mat-icon class='importedFunc-btn-icon'>close</mat-icon>
                                     </button>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         

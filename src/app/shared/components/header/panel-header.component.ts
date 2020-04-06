@@ -10,6 +10,7 @@ import { InputType } from '@models/port';
 import { IArgument } from '@models/code';
 import * as Modules from '@modules';
 import { checkNodeValidity } from '@shared/parser';
+import { DownloadUtils } from '../file/download.utils';
 
 @Component({
     selector: 'panel-header',
@@ -202,7 +203,10 @@ export class PanelHeaderComponent implements OnDestroy {
         return this.settings[settingName] === value;
     }
 
-    closeDialog() {
+    closeDialog(closeLS = false) {
+        if (closeLS) {
+            (<HTMLInputElement>document.getElementById('savels-name')).value = this.flowchart.name;
+        }
         this.dataService.dialog.close();
     }
 
@@ -330,104 +334,6 @@ export class PanelHeaderComponent implements OnDestroy {
                 func.hasReturn = false;
             }
             document.getElementById('tooltiptext').click();
-
-            // SaveFileComponent.loadFile(filecode, (fileString) => {
-            //     if (!fileString) {
-            //         return;
-            //     }
-            //     const file = circularJSON.parse(fileString);
-            //     // parse the flowchart
-            //     const fl = file.flowchart;
-
-            //     if (this.dataService.flowchart.subFunctions) {
-            //         const subFunctions = this.dataService.flowchart.subFunctions;
-            //         let i = 0;
-            //         while (i < subFunctions.length) {
-            //             const subFunc = subFunctions[i];
-            //             if (subFunc.name.substring(0, func.name.length) === func.name) {
-            //                 subFunctions.splice(i, 1);
-            //             } else {
-            //                 i++;
-            //             }
-            //         }
-            //     } else {
-            //         this.dataService.flowchart.subFunctions = [];
-            //     }
-
-            //     let funcName = fl.name.replace(/[^A-Za-z0-9_]/g, '_');
-            //     if (funcName.match(/^[\d_]/)) {
-            //         funcName = 'func' + funcName;
-            //     }
-
-            //     const documentation = {
-            //         name: funcName,
-            //         module: 'globalFunc',
-            //         description: fl.description,
-            //         summary: fl.description,
-            //         parameters: [],
-            //         returns: fl.returnDescription
-            //     };
-            //     // func = <IFunction>{
-            //     //     flowchart: <IFlowchart>{
-            //     //         id: fl.id ? fl.id : IdGenerator.getId(),
-            //     //         name: fl.name,
-            //     //         nodes: fl.nodes,
-            //     //         edges: fl.edges
-            //     //     },
-            //     //     name: func.name,
-            //     //     module: 'globalFunc',
-            //     //     doc: documentation,
-            //     //     importedFile: file
-            //     // };
-            //     func.flowchart = <IFlowchart>{
-            //         id: fl.id ? fl.id : IdGenerator.getId(),
-            //         name: fl.name,
-            //         nodes: fl.nodes,
-            //         edges: fl.edges
-            //     };
-            //     func.name = funcName;
-            //     func.doc = documentation;
-            //     func.importedFile = fileString;
-
-            //     func.args = [];
-            //     for (const prod of fl.nodes[0].procedure) {
-            //         if (!prod.enabled || prod.type !== ProcedureTypes.Constant) { continue; }
-            //         let v: string = prod.args[prod.argCount - 2].value || 'undefined';
-            //         if (v[0] === '"' || v[0] === '\'') { v = v.substring(1, v.length - 1); }
-            //         if (prod.meta.inputMode !== InputType.Constant) {
-            //             documentation.parameters.push({
-            //                 name: v,
-            //                 description: prod.meta.description
-            //             });
-            //         }
-            //         func.args.push(<IArgument>{
-            //             name: v,
-            //             value: prod.args[prod.argCount - 1].value,
-            //             type: prod.meta.inputMode,
-            //         });
-            //     }
-            //     func.argCount = func.args.length;
-
-            //     for (const i of fl.functions) {
-            //         i.name = func.name + '_' + i.name;
-            //         this.dataService.flowchart.subFunctions.push(i);
-            //     }
-            //     if (fl.subFunctions) {
-            //         for (const i of fl.subFunctions) {
-            //             i.name = func.name + '_' + i.name;
-            //             this.dataService.flowchart.subFunctions.push(i);
-            //         }
-            //     }
-
-            //     const end = fl.nodes[fl.nodes.length - 1];
-            //     const returnProd = end.procedure[end.procedure.length - 1];
-            //     if (returnProd.args[1].value) {
-            //         func.hasReturn = true;
-            //     } else {
-            //         func.hasReturn = false;
-            //     }
-            //     document.getElementById('tooltiptext').click();
-            // });
         }
     }
 
@@ -509,12 +415,28 @@ export class PanelHeaderComponent implements OnDestroy {
         helpMenu = null;
     }
 
+    saveBackup() {
+        try {
+            let fileName = (<HTMLInputElement>document.getElementById('savels-name')).value + '.mob';
+            fileName = fileName.replace(/\s/g, '_');
+            SaveFileComponent.saveFileToLocal(fileName, this.dataService.file);
+            this.closeDialog();
+            this.dataService.notifyMessage(`Saved Flowchart as ${fileName}...`);
+        } catch (ex) {
+            this.dataService.notifyMessage('ERROR: Unable to save Flowchart');
+        }
+    }
+
     @HostListener('window:keyup', ['$event'])
     onKeyUp(event: KeyboardEvent) {
         if (event.key === 's' && (event.ctrlKey || event.metaKey)) {
             try {
-                SaveFileComponent.saveFileToLocal(this.dataService.file);
-                this.dataService.notifyMessage(`Saved Flowchart as ${this.dataService.flowchart.name}...`);
+                let fileName = this.dataService.flowchart.name.replace(/\s/g, '_');
+                if (fileName.length < 4 || fileName.slice(-4) !== '.mob') {
+                    fileName += '.mob';
+                }
+                SaveFileComponent.saveFileToLocal(fileName, this.dataService.file);
+                this.dataService.notifyMessage(`Saved Flowchart as ${fileName}...`);
             } catch (ex) {
                 this.dataService.notifyMessage('ERROR: Unable to save Flowchart');
             }
@@ -610,4 +532,145 @@ export class PanelHeaderComponent implements OnDestroy {
         txtArea = null;
     }
 
+    async refresh_global_func(event: MouseEvent, func) {
+        event.stopPropagation();
+        const fileName = func.name + '.mob';
+        const localFiles = JSON.parse(localStorage.getItem('mobius_backup_list'));
+        let check = false;
+        for (const f in localFiles) {
+            if (localFiles[f] === fileName) {
+                check = true;
+            }
+        }
+        if (!check) {
+            this.dataService.notifyMessage(`Error: ${func.name}.mob does not exists in local storage,\n` +
+            `Unable to update Global Function ${func.name}`);
+            return;
+        }
+        const result = await SaveFileComponent.loadFromFileSystem(fileName);
+        if (!result) {
+            return;
+        }
+        const file = circularJSON.parse(result);
+        file.flowchart.meta.selected_nodes = [file.flowchart.nodes.length - 1];
+        // parse the flowchart
+        const fl = file.flowchart;
+
+        if (this.dataService.flowchart.subFunctions) {
+            const subFunctions = this.dataService.flowchart.subFunctions;
+            let i = 0;
+            while (i < subFunctions.length) {
+                const subFunc = subFunctions[i];
+                if (subFunc.name.substring(0, func.name.length) === func.name) {
+                    subFunctions.splice(i, 1);
+                } else {
+                    i++;
+                }
+            }
+        } else {
+            this.dataService.flowchart.subFunctions = [];
+        }
+
+        let funcName = fl.name.replace(/[^A-Za-z0-9_]/g, '_');
+        if (funcName.match(/^[\d_]/)) {
+            funcName = 'func' + funcName;
+        }
+
+        const documentation = {
+            name: funcName,
+            module: 'globalFunc',
+            description: fl.description,
+            summary: fl.description,
+            parameters: [],
+            returns: fl.returnDescription
+        };
+        func.flowchart = <IFlowchart>{
+            id: fl.id ? fl.id : IdGenerator.getId(),
+            name: fl.name,
+            nodes: fl.nodes,
+            edges: fl.edges
+        };
+        func.name = funcName;
+        func.doc = documentation;
+        func.importedFile = result;
+
+        func.args = [];
+        for (const prod of fl.nodes[0].procedure) {
+            if (!prod.enabled || prod.type !== ProcedureTypes.Constant) { continue; }
+            let v: string = prod.args[prod.argCount - 2].value || 'undefined';
+            if (v[0] === '"' || v[0] === '\'') { v = v.substring(1, v.length - 1); }
+            if (prod.meta.inputMode !== InputType.Constant) {
+                documentation.parameters.push({
+                    name: v,
+                    description: prod.meta.description
+                });
+            }
+            func.args.push(<IArgument>{
+                name: v,
+                value: prod.args[prod.argCount - 1].value,
+                type: prod.meta.inputMode,
+            });
+        }
+        func.argCount = func.args.length;
+
+        for (const i of fl.functions) {
+            i.name = func.name + '_' + i.name;
+            this.dataService.flowchart.subFunctions.push(i);
+        }
+        if (fl.subFunctions) {
+            for (const i of fl.subFunctions) {
+                i.name = func.name + '_' + i.name;
+                this.dataService.flowchart.subFunctions.push(i);
+            }
+        }
+
+        const end = fl.nodes[fl.nodes.length - 1];
+        const returnProd = end.procedure[end.procedure.length - 1];
+        if (returnProd.args[1].value) {
+            func.hasReturn = true;
+        } else {
+            func.hasReturn = false;
+        }
+        document.getElementById('tooltiptext').click();
+        this.dataService.notifyMessage(`Updated Global Function ${func.name}`);
+    }
+
+    download_global_func(event: MouseEvent, fnData) {
+        event.stopPropagation();
+        const fileString = fnData.importedFile;
+        const fname = `${fnData.name}.mob`;
+        const blob = new Blob([fileString], {type: 'application/json'});
+        DownloadUtils.downloadFile(fname, blob);
+        this.closeDialog();
+    }
+
+    edit_global_func(event: MouseEvent, fnData) {
+        event.stopPropagation();
+        const fileString = fnData.importedFile;
+        // console.log(fnData);
+        SaveFileComponent.saveToLocalStorage('___TEMP___.mob', fileString);
+        // localStorage.setItem('temp_file', fileString);
+        setTimeout(() => {
+            window.open(`${window.location.origin}/editor?file=temp`, '_blank');
+        }, 200);
+        this.closeDialog();
+    }
+
+    delete_global_func(event: MouseEvent, fnData) {
+        event.stopPropagation();
+        for (let i = 0; i < this.dataService.flowchart.functions.length; i++) {
+            if (this.dataService.flowchart.functions[i] === fnData) {
+                this.dataService.flowchart.functions.splice(i, 1);
+                break;
+            }
+        }
+        let j = 0;
+        while (j < this.dataService.flowchart.subFunctions.length) {
+            if (this.dataService.flowchart.subFunctions[j].name.substring(0, fnData.name.length) === fnData.name) {
+                this.dataService.flowchart.subFunctions.splice(j, 1);
+            } else {
+                j++;
+            }
+        }
+    }
 }

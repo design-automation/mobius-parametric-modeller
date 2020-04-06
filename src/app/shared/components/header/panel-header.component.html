@@ -77,6 +77,12 @@
                     Save File
                 </button>
                 <br>
+                <button (click)="openHeaderDialog($event, 'savels')"
+                title="Save Flowchart File to The local Storage">
+                    <mat-icon>input</mat-icon>
+                    Save to LS
+                </button>
+                <br>
                 <button (click)="loadFile()"
                 title="Load Flowchart File from Computer">
                     <mat-icon>launch</mat-icon>
@@ -191,6 +197,38 @@
         </div>
         <button id='addBackupButton' onclick="document.getElementById('addBackup').click();">+</button>
         <input id='addBackup' type="file" (change)="addBackup()" style=" display: none;"/>
+    </div>
+    <div class='globalFuncDialog' *ngIf='checkDialog("globalfunc")'>
+        <p>Manage Global Functions: </p>
+        <br>
+        <div *ngFor='let fn of flowchart.functions'>
+            <button class='globalFuncName' disabled>{{fn.name}}</button>
+            <button class='manageGlobalButton' (click)='refresh_global_func($event, fn)'
+            title='Refresh the function with mob file with the same name in the local storage'>
+                <mat-icon class='importedFunc-btn-icon'>cached</mat-icon>
+            </button>
+            <button class='manageGlobalButton' (click)='edit_global_func($event, fn)'
+            title='Edit the global function'>
+                <mat-icon class='importedFunc-btn-icon'>edit</mat-icon>
+            </button>
+            <button class='manageGlobalButton' (click)='download_global_func($event, fn)'
+            title='Download the global function'>
+                <mat-icon class='importedFunc-btn-icon'>get_app</mat-icon>
+            </button>
+            <button class='manageGlobalButton' (click)='delete_global_func($event, fn)'
+            title='Delete the global function'>
+                <mat-icon class='importedFunc-btn-icon'>delete_outline</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div class='saveLocalDialog' *ngIf='checkDialog("savels")'>
+        <p>Save File to Local Storage as: </p>
+        <br>
+        <input id='savels-name' class='fileNameInput' name='savels-name' value={{flowchart.name}}>.mob
+        <br>
+        <br>
+        <button class='saveButtons' (click)="saveBackup(true)">Apply</button>
+        <button class='saveButtons' (click)="closeDialog(true)">Cancel</button>
     </div>
     <div class='settingsDialog' *ngIf='checkDialog("settings")'>
         <p>Mobius Settings:</p>

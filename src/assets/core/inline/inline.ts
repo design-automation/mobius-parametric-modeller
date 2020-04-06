@@ -29,12 +29,54 @@ const constants = [
     ['XZ', 'A plane at the origin, aligned with the XZ plane']
  ];
 
+ const types = [
+    ['isNum(v)', 'Returns true if the value is a number, false otherwise.'],
+    ['isInt(v)', 'Returns true if the value is a integer, false otherwise.'],
+    ['isFlt(v)', 'Returns true if the value is a floating point number, false otherwise.'],
+    ['isBool(v)', 'Returns true if the value is a boolean, false otherwise.'],
+    ['isStr(v)', 'Returns true if the value is a string, false otherwise.'],
+    ['isList(v)', 'Returns true if the value is a list, false otherwise.'],
+    ['isDict(v)', 'Returns true if the value is a dictionary, false otherwise.'],
+    ['isVec2(v)', 'Returns true if the value is a list of two numbers, false otherwise.'],
+    ['isVec3(v)', 'Returns true if the value is a list of three numbers, false otherwise.'],
+    ['isCol(v)', 'Returns true if the value is a list of three numbers in the range [0, 1], false otherwise.'],
+    ['isRay(v)', 'Returns true if the value is a ray, false otherwise.'],
+    ['isPln(v)', 'Returns true if the value is a plane, false otherwise.'],
+    ['isNaN(v)', 'Returns true is the value is not a number (NaN), false otherwise.'],
+    ['isNull(v)', 'Returns true is the value is null, false otherwise.'],
+    ['isUndef(v)', 'Returns true is the value is undefined, false otherwise.']
+];
+
+const conversion = [
+    ['boolean(v)', 'Converts the value to a boolean'],
+    ['number(v)', 'Converts the value to a number'],
+    ['string(v)', 'Converts the value to a string'],
+    ['radToDeg(rad)', 'Converts radians to degrees'],
+    ['degToRad(deg)', 'Converts degrees to radians']
+];
+
+const strings = [
+    ['len(s)', 'Returns the number of characters in the string'],
+    ['strRepl(s, search, new)', 'Replace all instances of specified search string with a new string. The search string can be a regular expression.'],
+    ['strUpp(s)', 'Converts all the alphabetic characters in a string to uppercase.'],
+    ['strLow(s)', 'Converts all the alphabetic characters in a string to lowercase.'],
+    ['strTrim(s)', 'Removes the leading and trailing white space and line terminator characters from a string.'],
+    ['strTrimL(s)', 'Removes whitespace from the left end of a string.'],
+    ['strTrimR(s)', 'Removes whitespace from the right end of a string.'],
+    ['strPadL(s1, m)', 'Pads the start of the s1 string with white spaces so that the resulting string reaches a given length.'],
+    ['strPadL(s1, m, s2)', 'Pads the start of the s1 string with the s2 string so that the resulting string reaches a given length.'],
+    ['strPadR(s1, m)', 'Pads the end of the s1 string with white spaces so that the resulting string reaches a given length.'],
+    ['strPadR(s1, m, s2)', 'Pads the end of the s1 string with the s2 string so that the resulting string reaches a given length.'],
+    ['strSub(s, from)', 'Gets a substring beginning at the specified location.'],
+    ['strSub(s, from, length)', 'Gets a substring beginning at the specified location and having the specified length.'],
+    ['strStarts(s1, s2)', 'Returns true if the string s1 starts with s3, false otherwise.'],
+    ['strEnds(s1, s2)', 'Returns true if the string s1 ends with s3, false otherwise.']
+];
+
 const lists = [
-    ['isList(list)', 'Returns true if this is a list, false otherwise.'],
     ['range(start, end)', 'Generates a list of integers, from start to end, with a step size of 1'],
     ['range(start, end, step?)', 'Generates a list of integers, from start to end, with a specified step size'],
     ['len(list)', 'Returns the number of items in the list'],
-    // ['listLen(list)', 'Returns the number of items in the list'],
     ['listLast(list)', 'Returns the last item in a list'],
     ['listGet(list, index)', 'Returns the item in the list specified by index, either a positive or negative integer'],
     ['listFind(list, val)', 'Returns the index of the first occurence of the value in the list, or -1 if not found'],
@@ -103,14 +145,6 @@ const rays = [
     ['rayFromPln(p)', 'Create a ray from a plane "p", with the same origin and with a direction along the plane z axis.']
 ];
 
-const conversion = [
-    ['boolean(v)', 'Converts the value to a boolean'],
-    ['number(v)', 'Converts the value to a number'],
-    ['string(v)', 'Converts the value to a string'],
-    ['radToDeg(rad)', 'Converts radians to degrees'],
-    ['degToRad(deg)', 'Converts degrees to radians']
-];
-
 const random = [
     ['rand(min, max)', 'Returns a random number in the specified range'],
     ['rand(min, max, seed)', 'Returns a random number in the specified range, given a numeric seed'],
@@ -121,7 +155,9 @@ const random = [
 ];
 
 const arithmetic = [
-    ['approx(num, num, tol)', 'Returns if the difference between the two numbers is less than the tolerance, t'],
+    ['isApprox(v1, v2, tol)', 'Returns true if the absolute difference between the two numbers is less than the tolerance, t'],
+    ['isIn(v1, v2, v3)', 'Returns v1 < v2 < v3.'],
+    ['isWithin(v1, v2, v3)', 'Returns v1 <= v2 <= v3.'],
     ['abs(num)', 'Returns the absolute value of the number'],
     ['square(num)', 'Returns the square of the number'],
     ['cube(num)', 'Returns the cube of the number'],
@@ -138,7 +174,10 @@ const arithmetic = [
     ['sum(list)', 'Returns the sum of all values in a list'],
     ['prod(list)', 'Returns the product of all values in a list'],
     ['hypot(list)', 'Returns the hypotenuse of all values in a list'],
-    ['norm(list)', 'Returns the norm of a list'],
+    ['norm(list)', 'Returns the norm of a list']
+];
+
+const geometry = [
     ['distance(c1, c2)', 'Returns the Euclidean distance between two xyzs, c1 and c2'],
     ['distance(c, r)', 'Returns the Euclidean distance between an xyz c and an infinite ray r'],
     ['distance(c, p)', 'Returns the Euclidean distance between an xyz c and an infinite plane p'],
@@ -187,22 +226,14 @@ const trigonometry = [
     ['atan2(number1, number2)', 'Returns the inverse tangent function with two arguments, number1/number2']
 ];
 
-const str = [
-    ['replace(string,search_str,new_str)', 'Replace all instances of specified search with a new string'],
-    ['len(str)', 'Returns the number of characters in the string']
-];
-
-const attrib = [
-    ['setattr(entity, name, value)', 'Set an entity attribute value'],
-    ['getattr(entity, name)', 'Query for an entity attribute value']
-];
-
 export const inline_func = [
     ['constants', constants],
+    ['types', types],
+    ['conversion', conversion],
+    ['strings', strings],
     ['random', random],
     ['lists', lists],
     ['sets', sets],
-    ['conversion', conversion],
     ['vectors', vectors],
     ['rays', rays],
     ['planes', planes],
@@ -210,6 +241,7 @@ export const inline_func = [
     ['arithmetic', arithmetic],
     ['statistics', statistics],
     ['trigonometry', trigonometry],
+    ['geometry', geometry],
 ];
 
 // const inline_func_lst: string[][][] = inline_func.map(x => x[1]);

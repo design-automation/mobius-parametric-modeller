@@ -69,8 +69,8 @@ const strings = [
     ['strPadR(s1, m, s2)', 'Pads the end of the s1 string with the s2 string so that the resulting string reaches a given length.'],
     ['strSub(s, from)', 'Gets a substring beginning at the specified location.'],
     ['strSub(s, from, length)', 'Gets a substring beginning at the specified location and having the specified length.'],
-    ['strStarts(s1, s2)', 'Returns true if the string s1 starts with s3, false otherwise.'],
-    ['strEnds(s1, s2)', 'Returns true if the string s1 ends with s3, false otherwise.']
+    ['strStarts(s1, s2)', 'Returns true if the string s1 starts with s2, false otherwise.'],
+    ['strEnds(s1, s2)', 'Returns true if the string s1 ends with s2, false otherwise.']
 ];
 
 const lists = [

@@ -282,8 +282,13 @@ export class SaveFileComponent implements OnDestroy{
             if (prod.hasOwnProperty('resolvedValue')) {
                 prod.resolvedValue = undefined;
             }
-            // delete prod['selected'];
-            // delete prod['hasError'];
+            // ******** delete some unnecessary parameters ******** //
+            delete prod['selected'];
+            delete prod['hasError'];
+            for (const arg of prod.args) {
+                delete arg['invalidVar'];
+                delete arg['linked'];
+            }
             if (prod.children) {
                 SaveFileComponent.clearResolvedValue(prod.children);
             }

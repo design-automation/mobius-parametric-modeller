@@ -186,8 +186,12 @@ export class CodeUtils {
                 } else {
                     codeStr.push(`let __return_value__ = __modules__.${_parameterTypes.return}(${returnArgVals.join(', ')});`);
                     if (isMainFlowchart) {
-                        codeStr.push(`__params__.console.push('<p><b>Return: <i>' + ` +
-                                     `__return_value__.toString().replace(/,/g,', ') + '</i></b></p>');`);
+                        codeStr.push(`if (__return_value__ !== null) {` +
+                                     `__params__.console.push('<p><b>Return: <i>' + ` +
+                                     `__return_value__.toString().replace(/,/g,', ') + '</i></b></p>');` +
+                                     `} else {` +
+                                     `__params__.console.push('<p><b>Return: <i> null </i></b></p>');` +
+                                     `}`);
                     }
                     codeStr.push(`return __return_value__;`);
                 }
@@ -341,7 +345,9 @@ export class CodeUtils {
                     existingVars.push(args[0].jsValue);
                 }
                 break;
-
+            case ProcedureTypes.Error:
+                codeStr.push(`throw new Error('____' + ${prod.args[0].jsValue});`);
+                break;
         }
 
         // if (isMainFlowchart && prod.print && !specialPrint && prod.args[0].name !== '__none__' && prod.args[0].jsValue) {

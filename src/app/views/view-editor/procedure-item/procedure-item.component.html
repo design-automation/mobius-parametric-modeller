@@ -473,6 +473,45 @@
         </div>
     </div>
 
+    <!-- Error -->
+    <div class='container--line' 
+    [class.selected]="data.selected"
+    [class.error]="data.hasError"
+    [class.disabled]="!data.enabled"
+    [class.printing]='data.print'
+    [class.selectGeom]='data.selectGeom'
+    [ngSwitch]="data.type"
+    (click)='emitSelect($event, data)'
+    (mousedown)='disableShift($event)'
+    (mouseenter)='onenter($event)'
+    (mouseleave)='onleave($event)'
+    *ngSwitchCase="ProcedureTypes.Error">
+        <div class='container--item' >
+            <div class='line--item'>
+                <input class='input--error'
+                value='ERROR'
+                disabled>
+                <input class='input--error'
+                [(ngModel)]='data.args[0].value'
+                [class.error]='data.args[0].invalidVar'
+                [class.disabled]='disableInput'
+                (focus)='onInputFocus(0, true)'
+                (blur)='argMod($event, 0)'
+                placeholder='error message'
+                [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>
+                <!-- <p class='input--arg input--arg--p' [innerHTML]='argHighlight(data.args[1].value)'></p> -->
+            </div>
+        </div>
+        <div class = "btn-container">
+            <div class = "btns">
+                <!-- Disable button-->
+                <button id = 'disable-btn' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                    <mat-icon class='icon' svgIcon='disabled'></mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- MainFunction -->
     <div class='container--line' 
     [class.selected]="data.selected"

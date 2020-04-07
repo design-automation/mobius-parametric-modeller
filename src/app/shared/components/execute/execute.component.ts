@@ -289,7 +289,7 @@ export class ExecuteComponent {
     async checkProdValidity(node: INode, prodList: IProcedure[]) {
         let InvalidECheck = false;
         let EmptyECheck = false;
-        
+
         for (const prod of prodList) {
             // ignore the return, comment and disabled procedures
             if (prod.type === ProcedureTypes.Return || prod.type === ProcedureTypes.Comment || !prod.enabled) { continue; }
@@ -779,10 +779,11 @@ export class ExecuteComponent {
                     this.dataService.notifyMessage(`Error in main code of node "${node.name}"`);
                 }
             }
-
-            if (ex.toString().indexOf('Unexpected identifier') > -1) {
+            if (ex.toString().slice(0, 11) === 'Error: ____') {
+                ex.message = ex.toString().slice(11);
+            } else if (ex.toString().indexOf('Unexpected identifier') > -1) {
                 ex.message = 'Unexpected Identifier error. Did you declare everything?' +
-                'Check that your strings are enclosed in quotes (")';
+                             'Check that your strings are enclosed in quotes (")';
             } else if (ex.toString().indexOf('Unexpected token') > -1 || ex.toString().indexOf('unexpected token') > -1) {
                 ex.message = 'Unable to compile code. Check code order and arguments.';
             } else if (ex.toString().indexOf('\'readAsText\' on \'FileReader\'') > -1) {

@@ -638,7 +638,9 @@ export class DataThreejs extends DataThreejsLookAt {
             path + 'py' + format, path + 'ny' + format,
             path + 'pz' + format, path + 'nz' + format
         ];
-        const background = new THREE.CubeTextureLoader().load( urls );
+        const background = new THREE.CubeTextureLoader().load(urls, texture => {
+            this.renderer.render(this.scene, this.camera);
+        });
 
         background.format = THREE.RGBFormat;
         this.scene.background = background;

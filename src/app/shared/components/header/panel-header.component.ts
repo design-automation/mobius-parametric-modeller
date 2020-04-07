@@ -329,6 +329,9 @@ export class PanelHeaderComponent implements OnDestroy {
                 this.dataService.flowchart.subFunctions.push(subfunc);
             }
 
+            this.dataService.notifyMessage(`Successfully import global function ${funcName} from local storage`);
+            this.closeDialog();
+
             // const func = this.dataService.getbackup();
             // // const fileString: any = localStorage.getItem(filecode);
             // const result = await SaveFileComponent.loadFromFileSystem(filecode);

@@ -588,7 +588,12 @@ export class CodeUtils {
         } else {
             const inputs = [];
             for (const edge of inp.edges) {
-                if (edge.source.parentNode.enabled) {
+                if (!edge.source.parentNode.enabled) {
+                    continue;
+                }
+                if (edge.source.parentNode.type === 'start') {
+                    inputs.unshift(edge.source.value);
+                } else {
                     inputs.push(edge.source.value);
                 }
             }
@@ -685,7 +690,11 @@ export class CodeUtils {
                     if (!nodeEdge.source.parentNode.enabled) {
                         continue;
                     }
-                    activeNodes.push(nodeEdge.source.parentNode.id);
+                    if (nodeEdge.source.parentNode.type === 'start') {
+                        activeNodes.unshift(nodeEdge.source.parentNode.id);
+                    } else {
+                        activeNodes.push(nodeEdge.source.parentNode.id);
+                    }
                 }
                 fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) =>
                     `result_${func.name}_${nodeId}`).join(', ')}]);\n`;

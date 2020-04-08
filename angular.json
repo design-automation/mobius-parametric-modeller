@@ -104,10 +104,6 @@
               "**/assets/typedoc-json/**"
             ]
           }
-        },
-        "deploy": {
-          "builder": "angular-cli-ghpages:deploy",
-          "options": {}
         }
       }
     },

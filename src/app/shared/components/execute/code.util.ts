@@ -186,8 +186,12 @@ export class CodeUtils {
                 } else {
                     codeStr.push(`let __return_value__ = __modules__.${_parameterTypes.return}(${returnArgVals.join(', ')});`);
                     if (isMainFlowchart) {
-                        codeStr.push(`__params__.console.push('<p><b>Return: <i>' + ` +
-                                     `__return_value__.toString().replace(/,/g,', ') + '</i></b></p>');`);
+                        codeStr.push(`if (__return_value__ !== null) {` +
+                                     `__params__.console.push('<p><b>Return: <i>' + ` +
+                                     `__return_value__.toString().replace(/,/g,', ') + '</i></b></p>');` +
+                                     `} else {` +
+                                     `__params__.console.push('<p><b>Return: <i> null </i></b></p>');` +
+                                     `}`);
                     }
                     codeStr.push(`return __return_value__;`);
                 }
@@ -323,11 +327,14 @@ export class CodeUtils {
                         argsVals.push(prod.resolvedValue);
                     }
                 }
+
+                codeStr.push(`__params__.console.push('<div style="margin: 5px 0px 5px 10px; border: 1px solid #E6E6E6"><p><b> Global Function: ${prod.meta.name}</b></p>');`);
                 // argsVals = argsVals.join(', ');
                 // const fn = `${namePrefix}${prod.meta.name}(__params__, ${argsVals} )`;
                 const fn = `${namePrefix}${prod.meta.name}(__params__${argsVals.map(val => ', ' + val).join('')})`;
                 if (args[0].name === '__none__' || !args[0].jsValue) {
                     codeStr.push(`${fn};`);
+                    codeStr.push(`__params__.console.push('</div>')`);
                     break;
                 }
                 const repImpVar = this.repSetAttrib(args[0].jsValue);
@@ -340,8 +347,11 @@ export class CodeUtils {
                 if (prefix === 'let ') {
                     existingVars.push(args[0].jsValue);
                 }
+                codeStr.push(`__params__.console.push('</div>')`);
                 break;
-
+            case ProcedureTypes.Error:
+                codeStr.push(`throw new Error('____' + ${prod.args[0].jsValue});`);
+                break;
         }
 
         // if (isMainFlowchart && prod.print && !specialPrint && prod.args[0].name !== '__none__' && prod.args[0].jsValue) {

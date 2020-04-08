@@ -315,11 +315,30 @@
         margin: 2px;
         border: 0px;
         border-left: 2px solid $error-color;
-        border-right: 2px solid $error-color;
         padding-left: 3px;
         padding-right: 3px;
         pointer-events: none;
     }
+
+    .input--error{
+        font-size: $fsize2;
+        resize: horizontal;
+        width: 44px;
+        color: $error-color;
+        font-style: italic;
+        font-weight: 800;
+        background-color: transparent; 
+        margin: 2px;
+        border: 1px solid $color5;
+        padding-left: 3px;
+        padding-right: 3px;
+        &:disabled{
+            border: 0px;
+            border-left: 2px solid $error-color;
+            pointer-events: none;
+        }
+    }
+
 
     // .input--arg--p{
     //     position: absolute;

@@ -6,7 +6,8 @@
 
 /**
  *
- */import { GIModel } from '@libs/geo-info/GIModel';
+ */
+import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EEntType, TRay, TEntTypeIdx, EEntTypeStr, Txy} from '@libs/geo-info/common';
 import { checkArgTypes, TypeCheckObj, checkIDs, IDcheckObj} from '../_check_args';
 import { getArrDepth, isColl } from '@assets/libs/geo-info/id';
@@ -14,6 +15,7 @@ import { vecDiv, vecSum, vecAvg, vecFromTo, vecLen, vecCross, vecNorm, vecAdd, v
 import { isRay, isPlane, isVec3 } from '@assets/libs/geo-info/virtual';
 import { rayFromPln } from '@assets/core/inline/_ray';
 import { plnFromRay } from '@assets/core/inline/_plane';
+import * as THREE from 'three';
 const EPS = 1e-8;
 
 // ================================================================================================
@@ -46,8 +48,8 @@ export function getPlane(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], f
 // ================================================================================================
 export function getCentoridFromEnts(__model__: GIModel, ents: TId|TId[], fn_name: string): Txyz {
     // this must be an ID or an array of IDs, so lets get the centroid
-    const ent_id: TId|TId[] = origin as TId|TId[];
-    const ents_arr: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'origin', ent_id,
+    // TODO this error message is confusing
+    const ents_arr: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'ents', ents,
         [IDcheckObj.isID, IDcheckObj.isIDList],
         [EEntType.POSI, EEntType.VERT, EEntType.POINT, EEntType.EDGE, EEntType.WIRE,
             EEntType.PLINE, EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx;
@@ -93,6 +95,77 @@ function _centroidPosis(__model__: GIModel, posis_i: number[]): Txyz {
     const unique_posis_i = Array.from(new Set(posis_i));
     const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
     return vecDiv(vecSum(unique_xyzs), unique_xyzs.length);
+}
+// ================================================================================================
+export function getCenterOfMass(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): Txyz|Txyz[] {
+    if (getArrDepth(ents_arr) === 1) {
+        const [ent_type, ent_i]: [EEntType, number] = ents_arr as TEntTypeIdx;
+        const faces_i: number[] = __model__.geom.nav.navAnyToFace(ent_type, ent_i);
+        if (faces_i.length === 0) { return null; }
+        return _centerOfMass(__model__, faces_i);
+    } else {
+        const cents: Txyz[] = [];
+        ents_arr = ents_arr as TEntTypeIdx[];
+        for (const [ent_type, ent_i] of ents_arr) {
+            const faces_i: number[] = __model__.geom.nav.navAnyToFace(ent_type, ent_i);
+            if (faces_i.length === 0) { cents.push(null); }
+            cents.push(_centerOfMass(__model__, faces_i));
+        }
+        return cents;
+    }
+}
+function _centerOfMass(__model__: GIModel, faces_i: number[]): Txyz {
+    const face_midpoints: Txyz[] = [];
+    const face_areas: number[] = [];
+    let total_area = 0;
+    for (const face_i of faces_i) {
+        const [midpoint_xyz, area]: [Txyz, number] = _centerOfMassOfFace(__model__, face_i);
+        face_midpoints.push(midpoint_xyz);
+        face_areas.push(area);
+        total_area += area;
+    }
+    const cent: Txyz = [0, 0, 0];
+    for (let i = 0; i < face_midpoints.length; i++) {
+        const weight: number = face_areas[i] / total_area;
+        cent[0] = cent[0] + face_midpoints[i][0] * weight;
+        cent[1] = cent[1] + face_midpoints[i][1] * weight;
+        cent[2] = cent[2] + face_midpoints[i][2] * weight;
+    }
+    return cent;
+}
+function _centerOfMassOfFace(__model__: GIModel, face_i: number): [Txyz, number] {
+    const tri_midpoints: Txyz[] = [];
+    const tri_areas: number[] = [];
+    let total_area = 0;
+    const map_posi_to_v3: Map< number, THREE.Vector3> = new Map();
+    for (const tri_i of __model__.geom.nav.navFaceToTri(face_i)) {
+        const posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
+        const posis_v3: THREE.Vector3[] = [];
+        for (const posi_i of posis_i) {
+            let posi_v3: THREE.Vector3 = map_posi_to_v3.get(posi_i);
+            if (posi_v3 === undefined) {
+                const xyz: Txyz = __model__.attribs.query.getPosiCoords(posi_i);
+                posi_v3 = new THREE.Vector3(xyz[0], xyz[1], xyz[2]);
+            }
+            posis_v3.push(posi_v3);
+        }
+        const tri_tjs: THREE.Triangle = new THREE.Triangle(posis_v3[0], posis_v3[1], posis_v3[2]);
+        let midpoint: THREE.Vector3;
+        midpoint = tri_tjs.getMidpoint(midpoint);
+        const midpoint_xyz: Txyz = [midpoint.x, midpoint.y, midpoint.z];
+        const area: number = tri_tjs.getArea();
+        tri_midpoints.push(midpoint_xyz);
+        tri_areas.push(area);
+        total_area += area;
+    }
+    const cent: Txyz = [0, 0, 0];
+    for (let i = 0; i < tri_midpoints.length; i++) {
+        const weight: number = tri_areas[i] / total_area;
+        cent[0] = cent[0] + tri_midpoints[i][0] * weight;
+        cent[1] = cent[1] + tri_midpoints[i][1] * weight;
+        cent[2] = cent[2] + tri_midpoints[i][2] * weight;
+    }
+    return [cent, total_area];
 }
 // ================================================================================================
 // used by sweep

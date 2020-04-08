@@ -1,8 +1,9 @@
 
-import {  EEntType, IGeomArrays, EEntStrToGeomArray, TWire, Txyz, TColl, TEntTypeIdx, IGeomPack, TFace, EWireType, Txy } from './common';
+import {  EEntType, IGeomArrays, EEntStrToGeomArray, TWire, Txyz, TColl, TEntTypeIdx, IGeomPack, TFace, EWireType, Txy, TEdge, TPosi, TVert } from './common';
 import { isPosi, isVert, isPoint, isEdge, isWire, isPline, isFace, isPgon, isColl, isTri } from './id';
 import { GIGeom } from './GIGeom';
 import { vecFromTo, vecCross, vecDiv, vecNorm, vecLen, vecDot } from '../geom/vectors';
+import * as Mathjs from 'mathjs';
 /**
  * Class for geometry.
  */
@@ -295,6 +296,120 @@ export class GIGeomQuery {
         return posis_i;
     }
     // ============================================================================
+    // Verts
+    // ============================================================================
+    /**
+     * Get two edges that are adjacent to this vertex that are both not zero length.
+     * In some cases wires and polygons have edges that are zero length.
+     * This causes problems for calculating normals etc.
+     * The return value can be either one edge (in open polyline [null, edge_i], [edge_i, null])
+     * or two edges (in all other cases) [edge_i, edge_i].
+     * If the vert has no non-zero edges, then [null, null] is returned.
+     * @param vert_i
+     */
+    public getVertNonZeroEdges(vert_i: number): number[] {
+        // get the wire start and end verts
+        const edges_i: number[] = this._geom_arrays.up_verts_edges[vert_i];
+        const posi_coords: Txyz[] = [];
+        // get the first edge
+        let edge0 = null;
+        if (edges_i[0] !== null || edges_i[0] !== undefined) {
+            let prev_edge_i: number = edges_i[0];
+            while (edge0 === null) {
+                if (prev_edge_i === edges_i[1]) { break; }
+                const edge_verts_i: number[] = this._geom_arrays.dn_edges_verts[prev_edge_i];
+                // first
+                const posi0_i: number =  this._geom_arrays.dn_verts_posis[edge_verts_i[0]];
+                if ( posi_coords[posi0_i] === undefined) {
+                    posi_coords[posi0_i] = this._geom.model.attribs.query.getPosiCoords(posi0_i);
+                }
+                const xyz0: Txyz = posi_coords[posi0_i];
+                // second
+                const posi1_i: number =  this._geom_arrays.dn_verts_posis[edge_verts_i[1]];
+                if ( posi_coords[posi1_i] === undefined) {
+                    posi_coords[posi1_i] = this._geom.model.attribs.query.getPosiCoords(posi1_i);
+                }
+                const xyz1: Txyz = posi_coords[posi1_i];
+                // check
+                if (Math.abs(xyz0[0] - xyz1[0]) > 0 || Math.abs(xyz0[1] - xyz1[1]) > 0 || Math.abs(xyz0[2] - xyz1[2]) > 0) {
+                    edge0 = prev_edge_i;
+                } else {
+                    prev_edge_i = this._geom_arrays.up_verts_edges[edge_verts_i[0]][0];
+                    if (prev_edge_i === null || prev_edge_i === undefined) { break; }
+                }
+            }
+        }
+        // get the second edge
+        let edge1 = null;
+        if (edges_i[1] !== null || edges_i[1] !== undefined) {
+            let next_edge_i: number = edges_i[1];
+            while (edge1 === null) {
+                if (next_edge_i === edges_i[0]) { break; }
+                const edge_verts_i: number[] = this._geom_arrays.dn_edges_verts[next_edge_i];
+                // first
+                const posi0_i: number =  this._geom_arrays.dn_verts_posis[edge_verts_i[0]];
+                if ( posi_coords[posi0_i] === undefined) {
+                    posi_coords[posi0_i] = this._geom.model.attribs.query.getPosiCoords(posi0_i);
+                }
+                const xyz0: Txyz = posi_coords[posi0_i];
+                // second
+                const posi1_i: number =  this._geom_arrays.dn_verts_posis[edge_verts_i[1]];
+                if ( posi_coords[posi1_i] === undefined) {
+                    posi_coords[posi1_i] = this._geom.model.attribs.query.getPosiCoords(posi1_i);
+                }
+                const xyz1: Txyz = posi_coords[posi1_i];
+                // check
+                if (Math.abs(xyz0[0] - xyz1[0]) > 0 || Math.abs(xyz0[1] - xyz1[1]) > 0 || Math.abs(xyz0[2] - xyz1[2]) > 0) {
+                    edge1 = next_edge_i;
+                } else {
+                    next_edge_i = this._geom_arrays.up_verts_edges[edge_verts_i[1]][1];
+                    if (next_edge_i === null || next_edge_i === undefined) { break; }
+                }
+            }
+        }
+        // return the two edges, they can be null
+        return [edge0, edge1];
+    }
+    // ============================================================================
+    // Edges
+    // ============================================================================
+    /**
+     * Get the next edge in a sequence of edges
+     * @param edge_i
+     */
+    public getNextEdge(edge_i: number): number {
+        // get the wire start and end verts
+        const edge: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
+        const edges_i: number[] = this._geom_arrays.up_verts_edges[edge[1]];
+        if (edges_i.length === 1) { return null; }
+        return edges_i[1];
+    }
+    /**
+     * Get the previous edge in a sequence of edges
+     * @param edge_i
+     */
+    public getPrevEdge(edge_i: number): number {
+        // get the wire start and end verts
+        const edge: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
+        const edges_i: number[] = this._geom_arrays.up_verts_edges[edge[0]];
+        if (edges_i.length === 1) { return null; }
+        return edges_i[1];
+    }
+    /**
+     * Get a list of edges that are neighbours ()
+     * The list will include the input edge.
+     * @param edge_i
+     */
+    public getNeighborEdges(edge_i: number): number[] {
+        // get the wire start and end verts
+        const edge: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
+        const start_posi_i: number = this._geom_arrays.dn_verts_posis[edge[0]];
+        const end_posi_i: number = this._geom_arrays.dn_verts_posis[edge[1]];
+        const start_edges_i: number[] = this._geom.nav.navAnyToEdge(EEntType.POSI, start_posi_i);
+        const end_edges_i: number[] = this._geom.nav.navAnyToEdge(EEntType.POSI, end_posi_i);
+        return Mathjs.setIntersect(start_edges_i, end_edges_i);
+    }
+    // ============================================================================
     // Wires
     // ============================================================================
     /**
@@ -336,13 +451,32 @@ export class GIGeomQuery {
      */
     public getWireVerts(wire_i: number): number[] {
         const edges_i: number[] = this._geom_arrays.dn_wires_edges[wire_i];
-        const verts_i: number[] = edges_i.map(edge_i => this._geom_arrays.dn_edges_verts[edge_i][0]);
-        // if wire is open, then add final vertex
-        if (this._geom_arrays.dn_edges_verts[edges_i[0]][0] !== this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]) {
-            verts_i.push(this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]);
+        const verts_i: number[] = [];
+        // walk the edges chain
+        let next_edge_i: number = edges_i[0];
+        for (let i = 0; i < edges_i.length; i++) {
+            const edge_verts_i: number[] = this._geom_arrays.dn_edges_verts[next_edge_i];
+            verts_i.push(edge_verts_i[0]);
+            next_edge_i = this.getNextEdge(next_edge_i);
+            // are we at the end of the chain
+            if (next_edge_i === null) { // open wire
+                verts_i.push(edge_verts_i[1]);
+                break;
+            } else if (next_edge_i === edges_i[0]) { // closed wire
+                break;
+            }
         }
         return verts_i;
     }
+    // public getWireVerts(wire_i: number): number[] {
+    //     const edges_i: number[] = this._geom_arrays.dn_wires_edges[wire_i];
+    //     const verts_i: number[] = edges_i.map(edge_i => this._geom_arrays.dn_edges_verts[edge_i][0]);
+    //     // if wire is open, then add final vertex
+    //     if (this._geom_arrays.dn_edges_verts[edges_i[0]][0] !== this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]) {
+    //         verts_i.push(this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]);
+    //     }
+    //     return verts_i;
+    // }
     // ============================================================================
     // Collections
     // ============================================================================
@@ -504,8 +638,19 @@ export class GIGeomQuery {
      * @param wire_i
      */
     public getWireNormal(wire_i: number): Txyz {
-        const centroid: Txyz = this.getCentroid(EEntType.WIRE, wire_i);
         const edges_i: number[] = this._geom._geom_arrays.dn_wires_edges[wire_i];
+        // deal with special case, just a single edge
+        if (edges_i.length === 1) {
+            const posis_i: number[] = this._geom_arrays.dn_edges_verts[edges_i[0]].map(vert_i => this._geom_arrays.dn_verts_posis[vert_i]);
+            const xyz0: Txyz = this._geom.model.attribs.query.getPosiCoords(posis_i[0]);
+            const xyz1: Txyz = this._geom.model.attribs.query.getPosiCoords(posis_i[1]);
+            if (xyz0[2] === xyz1[2]) { return [0, 0, 1]; }
+            if (xyz0[1] === xyz1[1]) { return [0, 1, 0]; }
+            if (xyz0[0] === xyz1[0]) { return [1, 0, 0]; }
+            return vecNorm(vecCross(vecFromTo(xyz0, xyz1), [0, 0, 1]));
+        }
+        // proceed with multiple edges
+        const centroid: Txyz = this.getCentroid(EEntType.WIRE, wire_i);
         const normal: Txyz = [0, 0, 0];
         const tri_normals: Txyz[] = [];
         // let count = 0;
@@ -613,5 +758,29 @@ export class GIGeomQuery {
             }
         }
         return Array.from(perimeter_ents_i);
+    }
+    /**
+     * Get the object type of a topo entity.
+     * @param ent_type
+     * @param index
+     */
+    public getTopoObjType(ent_type: EEntType, index: number): EEntType {
+        switch (ent_type) {
+            case EEntType.FACE:
+                return EEntType.PGON;
+            case EEntType.WIRE:
+            case EEntType.EDGE:
+            case EEntType.VERT:
+                if (this._geom.nav.navAnyToFace(ent_type, index).length !== 0) {
+                    return EEntType.PGON;
+                } else if (this._geom.nav.navAnyToWire(ent_type, index).length !== 0) {
+                    return EEntType.PLINE;
+                } else if (this._geom.nav.navAnyToVert(ent_type, index).length !== 0) {
+                    return EEntType.POINT;
+                }
+                break;
+            default:
+                throw new Error('Invalid entity type: Must be a topo entity.');
+        }
     }
 }

@@ -219,6 +219,13 @@ export class GIGeomModify {
      * This lists the edges in reverse order, and flips each edge.
      * ~
      * The attributes will not be affected. So the order of edge attribtes will also become reversed.
+     * 
+     * TODO
+     * This does not reverse the order of the edges.
+     * The method, getWireVertices() in GeomQuery returns the correct vertices.
+     * However, you need to be careful with edge order.
+     * The next edge after edge 0 may not be edge 1.
+     * If reversed it will instead be the last edge.
      */
     public reverse(wire_i: number): void {
         const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];

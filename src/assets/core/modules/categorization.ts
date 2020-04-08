@@ -9,7 +9,8 @@ const basic = [
     'virtual',
     'render',
     'list',
-    'util'
+    'util',
+    'poly2d'
 ];
 
 const test1 = [

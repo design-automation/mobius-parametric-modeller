@@ -1,6 +1,6 @@
 import { Component, isDevMode } from '@angular/core';
 import { FlowchartUtils } from '@models/flowchart';
-import { CodeUtils } from '@models/code';
+import { CodeUtils } from './code.util';
 import { INode } from '@models/node';
 import { IProcedure, ProcedureTypes } from '@models/procedure';
 
@@ -25,6 +25,9 @@ function pythonList(x, l){
 export const mergeInputsFunc = `
 function mergeInputs(models){
     let result = __modules__.${_parameterTypes.new}();
+    try {
+        result.debug = __debug__;
+    } catch (ex) {}
     for (let model of models){
         __modules__.${_parameterTypes.merge}(result, model);
     }
@@ -137,7 +140,10 @@ export class ExecuteComponent {
                     const arg = prod.args[2];
                     if (arg.name[0] === '_') { continue; }
                     if (arg.value.indexOf('__model_data__') !== -1) {
+                        arg.jsValue = arg.value;
                         prod.resolvedValue = arg.value.split('__model_data__').join('');
+                    } else if (arg.jsValue && arg.jsValue.indexOf('__model_data__') !== -1) {
+                        prod.resolvedValue = arg.jsValue.split('__model_data__').join('');
                     } else if (arg.value.indexOf('://') !== -1) {
                         const val = <string>(arg.value).replace(/ /g, '');
                         const result = await CodeUtils.getURLContent(val);
@@ -178,7 +184,11 @@ export class ExecuteComponent {
         if (this.dataService.consoleClear) {
             this.dataService.clearLog();
         }
-        SaveFileComponent.clearModelData(this.dataService.file, null);
+        SaveFileComponent.clearModelData(this.dataService.flowchart, null);
+
+        if (this.dataService.mobiusSettings.debug === undefined) {
+            this.dataService.mobiusSettings.debug = true;
+        }
 
         document.getElementById('spinner-on').click();
         this.dataService.log('<br><hr>');
@@ -263,11 +273,13 @@ export class ExecuteComponent {
         try {
             if (testing) {
                 this.executeFlowchart();
+                this.dataService.finalizeLog();
                 return;
             } else {
                 // setTimeout for 20ms so that the loading screen has enough time to be loaded in
                 setTimeout(() => {
                     this.executeFlowchart();
+                    this.dataService.finalizeLog();
                     this.dataService.log('<br>');
                 }, 20);
             }
@@ -279,7 +291,7 @@ export class ExecuteComponent {
     async checkProdValidity(node: INode, prodList: IProcedure[]) {
         let InvalidECheck = false;
         let EmptyECheck = false;
-        
+
         for (const prod of prodList) {
             // ignore the return, comment and disabled procedures
             if (prod.type === ProcedureTypes.Return || prod.type === ProcedureTypes.Comment || !prod.enabled) { continue; }
@@ -482,6 +494,7 @@ export class ExecuteComponent {
                 }
                 if (exCheck) {
                     node.output.value = _parameterTypes.newFn();
+                    node.output.value.debug = this.dataService.mobiusSettings.debug;
                     node.output.value.setData(JSON.parse(node.model));
                 }
                 continue;
@@ -543,7 +556,7 @@ export class ExecuteComponent {
                 return;
             }
             const usedFuncs: string[] = [];
-            const codeResult = CodeUtils.getNodeCode(node, true, undefined, usedFuncs);
+            const codeResult = CodeUtils.getNodeCode(node, true, undefined, undefined, usedFuncs);
             const usedFuncsSet = new Set(usedFuncs);
             // if process is terminated, return
             if (codeResult[1]) {
@@ -561,7 +574,7 @@ export class ExecuteComponent {
 
             // Create function string:
             // start with asembling the node's code
-            fnString =  '\n\n//  ------ MAIN CODE ------\n' +
+            fnString =  '\n\n//  ------------ MAIN CODE ------------\n' +
                         nodeCode[0] +
                         '\nfunction __main_node_code__(){\n' +
                         nodeCode[1] +
@@ -573,7 +586,7 @@ export class ExecuteComponent {
                 for (const otherFunc in funcStrings) {
                     if (!addedFunc.has(otherFunc) && otherFunc.substring(0, funcName.length) === funcName) {
                         addedFunc.add(otherFunc);
-                        fnString = funcStrings[otherFunc] + fnString;
+                        fnString =  `\n// ------ GLOBAL FUNCTION: ${otherFunc} ------\n\n` + funcStrings[otherFunc] + fnString;
                     }
                 }
             });
@@ -582,7 +595,11 @@ export class ExecuteComponent {
             fnString = _varString + globalVars + fnString;
 
             // add the merge input function and the print function
-            fnString = pythonList + '\n' + mergeInputsFunc + '\n' + printFunc + '\n' + fnString;
+            fnString = `\nconst __debug__ = ${this.dataService.mobiusSettings.debug};` +
+                        '\n\n// ------ MERGE INPUTS FUNCTION ------' + mergeInputsFunc +
+                        '\n\n// ------ PRINT FUNCTION ------' + printFunc +
+                        `\n\n// ------ FUNCTION FOR PYTHON STYLE LIST ------` + pythonList +
+                        '\n\n// ------ CONSTANTS ------' + fnString;
 
             // ==> generated code structure:
             //  1. pythonList + mergeInputFunction + printFunc
@@ -606,6 +623,8 @@ export class ExecuteComponent {
 
             params['model'] = _parameterTypes.newFn();
             _parameterTypes.mergeFn(params['model'], node.input.value);
+            params['model'].debug = this.dataService.mobiusSettings.debug;
+
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
 
             // #########################################################
@@ -681,9 +700,6 @@ export class ExecuteComponent {
             } else {
                 duration_msg = '<p style="padding: 2px 0px 2px 10px;"><i>Executed in ' + duration / 1000 + ' seconds.</i></p>';
             }
-            // for (const logStr of params.console) {
-            //     this.dataService.log(logStr);
-            // }
             this.dataService.log(duration_msg);
             this.dataService.log('<br>');
             if (codeResult[1]) {
@@ -719,18 +735,23 @@ export class ExecuteComponent {
             // Unexpected Identifier
             // Unexpected token
             const prodWithError: string = params['currentProcedure'][0];
-            const markError = function(prod: IProcedure, id: string) {
+            let localFunc: string;
+            const markError = function(prod: IProcedure, id: string, localFuncProd = null) {
                 if (prod['ID'] && id && prod['ID'] === id) {
                     prod.hasError = true;
+                    if (localFuncProd) {
+                        localFunc = localFuncProd.args[0].value;
+                        localFuncProd.hasError = true;
+                    }
                 }
                 if (prod.children) {
                     prod.children.map(function(p) {
-                        markError(p, id);
+                        markError(p, id, localFuncProd);
                     });
                 }
             };
             if (prodWithError !== '') {
-                node.procedure.concat(node.localFunc).map(function(prod: IProcedure) {
+                node.procedure.map(function(prod: IProcedure) {
                     if (prod['ID'] === prodWithError) {
                         prod.hasError = true;
                     }
@@ -740,11 +761,28 @@ export class ExecuteComponent {
                         });
                     }
                 });
+                node.localFunc.map(function(prod: IProcedure) {
+                    if (prod['ID'] === prodWithError) {
+                        prod.hasError = true;
+                        localFunc = prod.args[0].value;
+                    }
+                    if (prod.children) {
+                        prod.children.map(function(p) {
+                            markError(p, prodWithError, prod);
+                        });
+                    }
+                });
+                if (localFunc) {
+                    this.dataService.notifyMessage(`Error in local function "${localFunc}" of node "${node.name}"`);
+                } else {
+                    this.dataService.notifyMessage(`Error in main code of node "${node.name}"`);
+                }
             }
-
-            if (ex.toString().indexOf('Unexpected identifier') > -1) {
+            if (ex.toString().slice(0, 11) === 'Error: ____') {
+                ex.message = ex.toString().slice(11);
+            } else if (ex.toString().indexOf('Unexpected identifier') > -1) {
                 ex.message = 'Unexpected Identifier error. Did you declare everything?' +
-                'Check that your strings are enclosed in quotes (")';
+                             'Check that your strings are enclosed in quotes (")';
             } else if (ex.toString().indexOf('Unexpected token') > -1 || ex.toString().indexOf('unexpected token') > -1) {
                 ex.message = 'Unable to compile code. Check code order and arguments.';
             } else if (ex.toString().indexOf('\'readAsText\' on \'FileReader\'') > -1) {

@@ -70,8 +70,8 @@ export class GIModelThreejs {
         // get the attribs at the vertex level
         const [posis_xyz, posis_map]: [number[], Map<number, number>]  =  this._model.attribs.threejs.get3jsSeqPosisCoords();
         const [vertex_xyz, vertex_map]: [number[], Map<number, number>]  =  this._model.attribs.threejs.get3jsSeqVertsCoords();
-        const normals_values: number[] = this._model.attribs.threejs.get3jsSeqVertsAttrib(EAttribNames.NORMAL);
-        let colors_values: number[] = this._model.attribs.threejs.get3jsSeqVertsAttrib(EAttribNames.COLOR);
+        const normals_values: number[] = this._model.attribs.threejs.get3jsSeqVertsNormals();
+        let colors_values: number[] = this._model.attribs.threejs.get3jsSeqVertsColors();
         // add normals and colours
         // if (!normals_values) {
         //     normals_values = this._generateNormals();

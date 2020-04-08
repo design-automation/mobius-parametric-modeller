@@ -1,13 +1,28 @@
 import { VERSION } from '@env/version';
 
 export interface CesiumSettings {
-    normals: { show: boolean, size: number };
-    axes: { show: boolean, size: number };
-    grid: { show: boolean, size: number };
-    positions: { show: boolean, size: number };
-    wireframe: { show: boolean };
-    version: string;
+    imagery: {
+        layer: string;
+        terrain: string;
+    };
+    cesium: {
+        ion: string;
+        assetid: string;
+        save: boolean
+    };
 }
+
+export const cesium_default_settings: CesiumSettings = {
+    'imagery': {
+        'layer': 'Open Street Map',
+        'terrain': 'Ellipsoid'
+    },
+    'cesium': {
+        'ion': '',
+        'assetid': '',
+        'save': true
+    }
+};
 
 export const Locale = [{
     name: 'Singapore',

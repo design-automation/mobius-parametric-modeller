@@ -175,9 +175,9 @@ export class ToolsetComponent implements OnInit {
     add_global_func(fnData) {
         fnData.args = fnData.args.map( (arg) => {
             if (arg.type === InputType.Constant) {
-                return {name: arg.name, value: arg.value, type: arg.type};
+                return {name: arg.name, value: arg.value, jsValue: arg.value, type: arg.type};
             }
-            return {name: arg.name, value: arg.value, type: arg.type};
+            return {name: arg.name, value: arg.value, jsValue: arg.value, type: arg.type};
         });
         this.eventAction.emit({
             'type': 'add_prod',
@@ -337,7 +337,7 @@ export class ToolsetComponent implements OnInit {
             }
         });
         const fncs: any = await p;
-        (<HTMLInputElement>document.getElementById('selectedFile')).value = '';
+        (<HTMLInputElement>document.getElementById('selectImportFile')).value = '';
         for (const fnc of fncs) {
             if (fnc === 'error') {
                 console.warn('Error reading file');
@@ -375,19 +375,28 @@ export class ToolsetComponent implements OnInit {
         // console.log(fnData);
         SaveFileComponent.saveToLocalStorage('___TEMP___.mob', fileString);
         // localStorage.setItem('temp_file', fileString);
-        window.open(`${window.location.origin}/editor?file=temp`, '_blank');
+        setTimeout(() => {
+            window.open(`${window.location.origin}/editor?file=temp`, '_blank');
+        }, 200);
     }
 
-    open_update_dialog(event: MouseEvent, fnData) {
+    open_update_dialog(event: MouseEvent) {
         event.stopPropagation();
         this.dataService.dialogType = 'backup';
         this.dataService.dialog = <HTMLDialogElement>document.getElementById('headerDialog');
         this.dataService.dialog.showModal();
-        this.dataService.setbackup_updateImported(fnData);
+        this.dataService.setbackup_updateImported(true);
     }
-    
-    preventfocus() {
-        event.preventDefault()
+
+    open_globalFunc_dialog(event: MouseEvent) {
+        event.stopPropagation();
+        this.dataService.dialogType = 'globalfunc';
+        this.dataService.dialog = <HTMLDialogElement>document.getElementById('headerDialog');
+        this.dataService.dialog.showModal();
+    }
+
+    preventfocus(event) {
+        event.preventDefault();
     }
 
     toggleAccordion(id: string, inline?: boolean) {

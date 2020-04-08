@@ -22,3 +22,8 @@ export function max(list: any): any {
     args.push(list);
     return Math.max.apply(Math, args);
 }
+export function round(num: number, decimal_places = 0): any {
+    if (decimal_places === 0) { return Math.round(num); }
+    const dec: number = Math.pow(10, decimal_places);
+    return Math.round(num * dec) / dec;
+}

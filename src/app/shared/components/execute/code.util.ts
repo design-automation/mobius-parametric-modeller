@@ -11,10 +11,10 @@ export class CodeUtils {
 
 
     static getProcedureCode(prod: IProcedure, existingVars: string[], isMainFlowchart: Boolean,
-                            functionName?: string, usedFunctions?: string[]): string[] {
+                            functionName?: string, nodeId?: string, usedFunctions?: string[]): string[] {
         if (_terminateCheck === '' || prod.enabled === false ||
             prod.type === ProcedureTypes.Blank ||
-            prod.type === ProcedureTypes.Comment) { return ['']; }
+            prod.type === ProcedureTypes.Comment) { return []; }
 
         // mark _terminateCheck to terminate all process after this
         if (prod.type === ProcedureTypes.Terminate && prod.enabled) {
@@ -57,12 +57,14 @@ export class CodeUtils {
 
             case ProcedureTypes.If:
                 specialPrint = true;
-                if (isMainFlowchart && prod.print) {
+                // if (isMainFlowchart && prod.print) {
+                if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,` +
                     `'Evaluating If: (${args[0].value}) = ' + (${args[0].jsValue}), '__null__');`);
                 }
                 codeStr.push(`if (${args[0].jsValue}){`);
-                if (isMainFlowchart && prod.print) {
+                // if (isMainFlowchart && prod.print) {
+                if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,'Executing If', '__null__');`);
                 }
                 break;
@@ -70,7 +72,8 @@ export class CodeUtils {
             case ProcedureTypes.Else:
                 specialPrint = true;
                 codeStr.push(`else {`);
-                if (isMainFlowchart && prod.print) {
+                // if (isMainFlowchart && prod.print) {
+                if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,'Executing Else', '__null__');`);
                 }
                 break;
@@ -80,13 +83,18 @@ export class CodeUtils {
                 codeStr.push(`else {`);
                 if (isMainFlowchart) {
                     codeStr.push(`__params__.currentProcedure[0] = "${prod.ID}";`);
-                    if (prod.print) {
-                        codeStr.push(`printFunc(__params__.console,` +
-                        `'Evaluating Else-if: (${args[0].value}) = ' + (${args[0].jsValue}), '__null__');`);
-                    }
+                    // if (prod.print) {
+                    //     codeStr.push(`printFunc(__params__.console,` +
+                    //     `'Evaluating Else-if: (${args[0].value}) = ' + (${args[0].jsValue}), '__null__');`);
+                    // }
+                }
+                if (prod.print) {
+                    codeStr.push(`printFunc(__params__.console,` +
+                    `'Evaluating Else-if: (${args[0].value}) = ' + (${args[0].jsValue}), '__null__');`);
                 }
                 codeStr.push(`if(${args[0].jsValue}){`);
-                if (isMainFlowchart && prod.print) {
+                // if (isMainFlowchart && prod.print) {
+                if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,'Executing Else-if', '__null__');`);
                 }
                 break;
@@ -94,9 +102,10 @@ export class CodeUtils {
             case ProcedureTypes.Foreach:
                 specialPrint = true;
                 codeStr.push(`for (${prefix} ${args[0].jsValue} of ${args[1].jsValue}){`);
-                if (isMainFlowchart && prod.print) {
+                // if (isMainFlowchart && prod.print) {
+                if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,` +
-                        `'Executing For-each: ${args[0].value} = ' + (${args[0].jsValue}), '__null__');`);
+                    `'Executing For-each: ${args[0].value} = ' + (${args[0].jsValue}), '__null__');`);
                 }
                 existingVars.push(args[0].jsValue);
                 break;
@@ -104,9 +113,10 @@ export class CodeUtils {
             case ProcedureTypes.While:
                 specialPrint = true;
                 codeStr.push(`while (${args[0].jsValue}){`);
-                if (isMainFlowchart && prod.print) {
+                // if (isMainFlowchart && prod.print) {
+                if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,` +
-                        `'Executing While: (${args[0].value}) = ' + (${args[0].jsValue}), '__null__');`);
+                    `'Executing While: (${args[0].value}) = ' + (${args[0].jsValue}), '__null__');`);
                 }
                 break;
 
@@ -120,7 +130,7 @@ export class CodeUtils {
 
             case ProcedureTypes.Constant:
                 if (!isMainFlowchart) {
-                    return [''];
+                    return [];
                 }
                 let constName = args[0].jsValue;
                 if (constName[0] === '"' || constName[0] === '\'') {
@@ -176,8 +186,12 @@ export class CodeUtils {
                 } else {
                     codeStr.push(`let __return_value__ = __modules__.${_parameterTypes.return}(${returnArgVals.join(', ')});`);
                     if (isMainFlowchart) {
-                        codeStr.push(`__params__.console.push('<p><b>Return: <i>' + ` +
-                                     `__return_value__.toString().replace(/,/g,', ') + '</i></b></p>');`);
+                        codeStr.push(`if (__return_value__ !== null) {` +
+                                     `__params__.console.push('<p><b>Return: <i>' + ` +
+                                     `__return_value__.toString().replace(/,/g,', ') + '</i></b></p>');` +
+                                     `} else {` +
+                                     `__params__.console.push('<p><b>Return: <i> null </i></b></p>');` +
+                                     `}`);
                     }
                     codeStr.push(`return __return_value__;`);
                 }
@@ -244,19 +258,28 @@ export class CodeUtils {
                 }
                 break;
             case ProcedureTypes.LocalFuncDef:
-                codeStr.push(`\nfunction ${prod.args[0].jsValue}(__params__, ${prod.args.slice(1).map(arg => arg.jsValue).join(', ')}) {`);
+                let funcDef_prefix = '';
+                if (! isMainFlowchart) {
+                    funcDef_prefix = `${functionName}_${nodeId}_`;
+                }
+                codeStr.push(`\nfunction ${funcDef_prefix}${prod.args[0].jsValue}` +
+                             `(__params__, ${prod.args.slice(1).map(arg => arg.jsValue).join(', ')}) {`);
                 break;
             case ProcedureTypes.LocalFuncReturn:
                 codeStr.push(`return ${prod.args[0].jsValue};`);
                 break;
             case ProcedureTypes.LocalFuncCall:
                 const lArgsVals: any = [];
+                let funcCall_prefix = '';
+                if (! isMainFlowchart) {
+                    funcCall_prefix = `${functionName}_${nodeId}_`;
+                }
                 // let urlCheck = false;
                 for (let i = 1; i < args.length; i++) {
                     lArgsVals.push(args[i].jsValue);
                 }
 
-                const lfn = `${prod.meta.name}_(__params__${lArgsVals.map(val => ', ' + val).join('')})`;
+                const lfn = `${funcCall_prefix}${prod.meta.name}_(__params__${lArgsVals.map(val => ', ' + val).join('')})`;
                 if (args[0].name === '__none__' || !args[0].jsValue) {
                     codeStr.push(`${lfn};`);
                     codeStr.push('if (__params__.terminated) { return __params__.model;}')
@@ -304,11 +327,14 @@ export class CodeUtils {
                         argsVals.push(prod.resolvedValue);
                     }
                 }
+
+                codeStr.push(`__params__.console.push('<div style="margin: 5px 0px 5px 10px; border: 1px solid #E6E6E6"><p><b> Global Function: ${prod.meta.name}</b></p>');`);
                 // argsVals = argsVals.join(', ');
                 // const fn = `${namePrefix}${prod.meta.name}(__params__, ${argsVals} )`;
                 const fn = `${namePrefix}${prod.meta.name}(__params__${argsVals.map(val => ', ' + val).join('')})`;
                 if (args[0].name === '__none__' || !args[0].jsValue) {
                     codeStr.push(`${fn};`);
+                    codeStr.push(`__params__.console.push('</div>')`);
                     break;
                 }
                 const repImpVar = this.repSetAttrib(args[0].jsValue);
@@ -321,12 +347,16 @@ export class CodeUtils {
                 if (prefix === 'let ') {
                     existingVars.push(args[0].jsValue);
                 }
+                codeStr.push(`__params__.console.push('</div>')`);
                 break;
-
+            case ProcedureTypes.Error:
+                codeStr.push(`throw new Error('____' + ${prod.args[0].jsValue});`);
+                break;
         }
 
-        if (isMainFlowchart && prod.print && !specialPrint && prod.args[0].name !== '__none__' && prod.args[0].jsValue) {
-            // const repGet = prod.args[0].jsValue;
+        // if (isMainFlowchart && prod.print && !specialPrint && prod.args[0].name !== '__none__' && prod.args[0].jsValue) {
+        if (prod.print && !specialPrint && prod.args[0].name !== '__none__' && prod.args[0].jsValue) {
+                // const repGet = prod.args[0].jsValue;
             const repGet = this.repGetAttrib(prod.args[0].jsValue);
             codeStr.push(`printFunc(__params__.console,'${prod.args[0].value}', ${repGet});`);
         }
@@ -342,7 +372,8 @@ export class CodeUtils {
         }
 
         if (prod.children) {
-            codeStr = codeStr.concat(CodeUtils.getProdListCode(prod.children, existingVars, isMainFlowchart, functionName, usedFunctions))
+            codeStr = codeStr.concat(CodeUtils.getProdListCode(prod.children, existingVars, isMainFlowchart,
+                                                               functionName, nodeId, usedFunctions));
             // for (const p of prod.children) {
             //     codeStr = codeStr.concat(CodeUtils.getProcedureCode(p, existingVars, isMainFlowchart, functionName, usedFunctions));
             // }
@@ -352,12 +383,13 @@ export class CodeUtils {
     }
 
     static getProdListCode(prodList: IProcedure[], existingVars: string[], isMainFlowchart: Boolean,
-                           functionName?: string, usedFunctions?: string[]): string[] {
+                           functionName?: string, nodeId?: string, usedFunctions?: string[]): string[] {
         let codeStr = [];
         let elifcount = 0;
         for (const p of prodList) {
-            codeStr = codeStr.concat(CodeUtils.getProcedureCode(p, existingVars, isMainFlowchart, functionName, usedFunctions));
-            if ( p.type === ProcedureTypes.Elseif ) {
+            codeStr = codeStr.concat(CodeUtils.getProcedureCode(p, existingVars, isMainFlowchart,
+                                                                functionName, nodeId, usedFunctions));
+            if ( p.type === ProcedureTypes.Elseif && p.enabled) {
                 elifcount++;
             } else {
                 while (elifcount > 0) {
@@ -431,6 +463,7 @@ export class CodeUtils {
     }
 
     static async getURLContent(url: string): Promise<any> {
+        url = url.replace('http://', 'https://');
         if (url.indexOf('dropbox') !== -1) {
             url = url.replace('www', 'dl').replace('dl=0', 'dl=1');
         }
@@ -441,16 +474,31 @@ export class CodeUtils {
             url = url.substring(0, url.length - 1);
         }
         const p = new Promise((resolve) => {
-            const request = new XMLHttpRequest();
-            request.open('GET', url);
-            // request.overrideMimeType('text/plain; charset=x-user-defined');
-            request.onload = () => {
-                resolve(request.responseText.replace(/(\\[bfnrtv\'\"\\])/g, '\\$1'));
-            };
-            request.onerror = () => {
-                resolve('HTTP Request Error: unable to retrieve file from url ' + url);
-            };
-            request.send();
+            fetch(url).then(res => {
+                if (!res.ok) {
+                    resolve('HTTP Request Error: request file timeout from url ' + url);
+                    return '';
+                }
+                return res.text();
+            }).then(body => {
+                resolve(body.replace(/(\\[bfnrtv\'\"\\])/g, '\\$1'));
+            });
+
+            // const request = new XMLHttpRequest();
+            // request.open('GET', url);
+            // request.onreadystatechange =  () => {
+            //     setTimeout(() => {
+            //         resolve('HTTP Request Error: request file timeout from url ' + url);
+            //     }, 5000);
+            // };
+            // // request.overrideMimeType('text/plain; charset=x-user-defined');
+            // request.onload = () => {
+            //     resolve(request.responseText.replace(/(\\[bfnrtv\'\"\\])/g, '\\$1'));
+            // };
+            // request.onerror = () => {
+            //     resolve('HTTP Request Error: unable to retrieve file from url ' + url);
+            // };
+            // request.send();
         });
         return await p;
     }
@@ -556,8 +604,8 @@ export class CodeUtils {
         return input;
     }
 
-    public static getNodeCode(node: INode, isMainFlowchart = false,
-                                    functionName?: string, usedFunctions?: string[]): [string[][], string] {
+    public static getNodeCode(node: INode, isMainFlowchart = false, functionName?: string,
+                              nodeId?: string, usedFunctions?: string[]): [string[][], string] {
         node.hasError = false;
         let codeStr = [];
 
@@ -578,7 +626,8 @@ export class CodeUtils {
             for (const arg of prod.args.slice(1)) {
                 varsDefined.push(arg.jsValue);
             }
-            codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName, usedFunctions));
+            codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName,
+                                                                nodeId, usedFunctions));
         }
 
         // input initializations
@@ -596,7 +645,8 @@ export class CodeUtils {
         codeStr.push(`__modules__.${_parameterTypes.preprocess}( __params__.model);`);
         varsDefined = [];
 
-        codeStr = codeStr.concat(CodeUtils.getProdListCode(node.procedure, varsDefined, isMainFlowchart, functionName, usedFunctions))
+        codeStr = codeStr.concat(CodeUtils.getProdListCode(node.procedure, varsDefined, isMainFlowchart, functionName,
+                                                           nodeId, usedFunctions));
         // for (const prod of node.procedure) {
         //     // if (node.type === 'start' && !isMainFlowchart) { break; }
         //     codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName, usedFunctions));
@@ -624,9 +674,10 @@ export class CodeUtils {
             if (node.type === 'start') {
                 fnCode += `let result_${nodeFuncName} = __params__.model;\n`;
             } else {
-                const codeRes = CodeUtils.getNodeCode(node, false, func.name)[0];
+                const codeRes = CodeUtils.getNodeCode(node, false, func.name, node.id)[0];
                 const nodecode = codeRes[0].join('\n').split('_-_-_+_-_-_');
-                fullCode += `\n${nodecode[0]}\nfunction ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){` +
+                fullCode += `${nodecode[0]}\nfunction ${nodeFuncName}` +
+                            `(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){` +
                             nodecode[1] + `\n}\n\n`;
 
                 const activeNodes = [];

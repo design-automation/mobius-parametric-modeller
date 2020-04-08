@@ -297,7 +297,7 @@ export function modifyVarArg(arg: IArgument, toLower = true) {
 
 export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProdList: IProcedure[]) {
     procedure.args[argIndex].usedVars = [];
-    if (!procedure.args[argIndex].value) { return; }
+    if (!procedure.args[argIndex].value || procedure.args[argIndex].value === '"___LONG_STRING_DATA___"') { return; }
     // PARSER CALL
     let varResult = parseArgument(procedure.args[argIndex].value);
     if (varResult.error) {
@@ -377,6 +377,7 @@ export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProd
 // VAR INPUT
 export function parseVariable(value: string): {'error'?: string, 'declaredVar'?: string, 
                                                'usedVars'?: string[], 'jsStr'?: string, 'valueStr'?: string} {
+
     const str = value.trim();
     const comps = splitComponents(str);
     if (typeof comps === 'string') {
@@ -497,7 +498,6 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
                 {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string, 'jsStr'?: string} {
     let newString = '';
     let jsString = '';
-
     // if variable ==> go to analyzeVar
     if (comps[i].type === strType.VAR) {
         const result = analyzeVar(comps, i, vars, false);
@@ -507,9 +507,18 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
         jsString += result.jsStr;
 
     // if number/string ==> basic
-    } else if (comps[i].type === strType.NUM || comps[i].type === strType.STR) {
+    } else if (comps[i].type === strType.NUM) {
         newString += comps[i].value;
         jsString += comps[i].value;
+
+    } else if (comps[i].type === strType.STR) {
+        if (comps[i].value.length > 1000) {
+            newString += '"___LONG_STRING_DATA___"';
+            jsString += comps[i].value;
+        } else {
+            newString += comps[i].value;
+            jsString += comps[i].value;
+        }
 
     // if "-" or "!" or "not" ==> add the operator then analyzeComp the next
     } else if (prefixUnaryOperators.has(comps[i].value)) {
@@ -1195,6 +1204,9 @@ function addVars(varList: string[], varName: string) {
 function splitComponents(str: string): {'type': strType, 'value': string}[] | string {
     const comps = [];
     let i = 0;
+
+    if (typeof str !== 'string') { str = JSON.stringify(str); }
+
     while (i < str.length) {
         let code = str.charCodeAt(i);
 
@@ -1228,6 +1240,9 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
 
         // double-quotes (") or single-quotes (')
         } else if (code === 34 || code === 39) {
+            if (i === 0 && str.substring(0, 15) === '\'__model_data__' && str.charCodeAt(str.length - 1) === code) {
+                return [{ 'type': strType.STR, 'value': str}];
+            }
             const startCode = code;
             const startI = i;
             i += 1;
@@ -1235,10 +1250,21 @@ function splitComponents(str: string): {'type': strType, 'value': string}[] | st
             if (!code) {
                 return 'Error: Missing ending quote.';
             }
-            while (code !== startCode) { // string must end with the same quote as well
+            while (true) { // string must end with the same quote as well
                 i += 1;
                 if (i === str.length) { break; }
                 code = str.charCodeAt(i);
+                if (code === startCode) {
+                    let checkI = i - 1;
+                    let count = 0;
+                    while (checkI >= 0 && str.charCodeAt(checkI) === 92) {
+                        count++;
+                        checkI--;
+                    }
+                    if (count % 2 === 0) {
+                        break;
+                    }
+                }
             }
             if (code === startCode) { i += 1; }
             const subStr = str.substring(startI, i);

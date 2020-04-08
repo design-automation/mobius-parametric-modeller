@@ -1,5 +1,5 @@
 /**
- * list functions that obtain and return information from an input list. Does not modify input list.
+ * Set functions for working with sets, using lists as a data structure. Does not modify input list.
  */
 
 import * as Mathjs from 'mathjs';

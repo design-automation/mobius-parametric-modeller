@@ -97,22 +97,11 @@ export class CesiumViewerComponent implements OnInit, DoCheck, OnChanges {
 
         // this.container.appendChild(this._data_cesium._renderer.domElement);
 
-        // ??? What is happening here?
-        // const self = this;
-        // this._data_cesium._controls.addEventListener('change', function () { self.render(self); });
-        // self._data_cesium._renderer.render(self._data_cesium._scene, self._data_cesium._camera);
-
         if (localStorage.getItem('mpm_selecting_entity_type') === null) {
             // localStorage.setItem('mpm_selecting_entity_type', JSON.stringify(this.SelectingEntityType));
         } else {
             // this.getSelectingEntityType();
         }
-    }
-    /**
-     * @param self
-     */
-    public render(self: CesiumViewerComponent) {
-        // self._data_cesium._renderer.render(self._data_cesium._scene, self._data_cesium._camera);
     }
 
     /**
@@ -129,12 +118,6 @@ export class CesiumViewerComponent implements OnInit, DoCheck, OnChanges {
         if (width !== this._width || height !== this._height) {
             this._width = width;
             this._height = height;
-            setTimeout(() => {
-                // this._data_cesium._camera.aspect = this._width / this._height;
-                // this._data_cesium._camera.updateProjectionMatrix();
-                // this._data_cesium._renderer.setSize(this._width, this._height);
-                // this.render(this);
-            }, 10);
         }
     }
 

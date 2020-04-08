@@ -21,7 +21,7 @@ import { CesiumViewerService } from './cesium/cesium-viewer.service';
 import { TabComponent } from './html/tab.component';
 import { TabsComponent } from './html/tabs.component';
 import { DropdownMenuComponent } from './html/dropdown-menu.component';
-import { ModalWindowComponent } from './html/modal-window.component';
+import { CesiumModalWindowComponent } from './html/modal-window.component';
 import { ModalService } from './html/modal-window.service';
 
 // import { AttributeComponent } from './attribute/attribute.component';
@@ -40,7 +40,7 @@ import { ModalService } from './html/modal-window.service';
         TabComponent,
         TabsComponent,
         DropdownMenuComponent,
-        ModalWindowComponent
+        CesiumModalWindowComponent
         // AttributeComponent,
         // ATabComponent,
         // ATabsComponent,

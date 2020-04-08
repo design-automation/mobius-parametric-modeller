@@ -75,16 +75,15 @@ export class DataThreejs extends DataThreejsLookAt {
             DataThreejs.disposeObjectProperty(this.scene.children[0], 'geometry');
             DataThreejs.disposeObjectProperty(this.scene.children[0], 'texture');
             this.scene.remove(this.scene.children[0]);
-            this.scene_objs = [];
         }
+        this.scene_objs = [];
+
         document.querySelectorAll('[id^=textLabel_]').forEach(value => {
             container.removeChild(value);
         });
         this.ObjLabelMap.clear();
         this.textLabels.clear();
 
-        // add the axes, ground, lights, etc
-        this._addEnv();
 
         // Add geometry
         const threejs_data: IThreeJS = model.threejs.get3jsData();
@@ -105,7 +104,7 @@ export class DataThreejs extends DataThreejsLookAt {
         const normals_buffer = new THREE.Float32BufferAttribute(threejs_data.normals, 3);
         const colors_buffer = new THREE.Float32BufferAttribute(threejs_data.colors, 3);
         const posis_xyz_buffer = new THREE.Float32BufferAttribute(threejs_data.posis_xyz, 3);
-        this._addTris(threejs_data.triangle_indices, verts_xyz_buffer, colors_buffer, material_groups, materials);
+        this._addTris(threejs_data.triangle_indices, verts_xyz_buffer, colors_buffer, normals_buffer, material_groups, materials);
         this._addLines(threejs_data.edge_indices, threejs_data.white_edge_indices, verts_xyz_buffer, colors_buffer, normals_buffer);
         this._addPoints(threejs_data.point_indices, verts_xyz_buffer, colors_buffer, [255, 255, 255], this.settings.positions.size + 1);
         this._addPosis(threejs_data.posis_indices, posis_xyz_buffer, this.settings.colors.position, this.settings.positions.size);
@@ -115,6 +114,9 @@ export class DataThreejs extends DataThreejsLookAt {
 
 
         this._all_objs_sphere = this._getAllObjsSphere();
+
+        // add the axes, ground, lights, etc
+        this._addEnv();
 
 
         setTimeout(() => {
@@ -218,12 +220,12 @@ export class DataThreejs extends DataThreejsLookAt {
         // const center = new THREE.Vector3(0, 0, 0); // allObjs.center;
         // this.axes_pos.x = center.x;
         // this.axes_pos.y = center.y;
-        let grid_pos = this.settings.grid.pos;
-        if (!grid_pos) {
-            grid_pos = new Vector3(0, 0, 0);
-        }
-        this.grid.position.set(grid_pos.x, grid_pos.y, -0.01);
-        this.axesHelper.position.set(grid_pos.x, grid_pos.y, 0);
+        // let grid_pos = this.settings.grid.pos;
+        // if (!grid_pos) {
+        //     grid_pos = new Vector3(0, 0, 0);
+        // }
+        // this.grid.position.set(grid_pos.x, grid_pos.y, -0.01);
+        // this.axesHelper.position.set(grid_pos.x, grid_pos.y, 0);
 
         // // settings
         // // if (num_posis !== 0) {
@@ -263,90 +265,6 @@ export class DataThreejs extends DataThreejsLookAt {
             this._addDirectionalLight();
         }
     }
-    // /**
-    //  * Add the model
-    //  */
-    // private _addModel(model: GIModel): number {
-
-    //     // get the data from the model
-    //     const [fb_tjs_bytes, tris_mat_arr]: [Uint8Array, THREE.Material[]] = model.threejs.getTjsData();
-
-    //     // create flatbuffer
-    //     const fb_tjs_buf = new flatbuffers.ByteBuffer(fb_tjs_bytes);
-    //     const fb_tjs_data = tjs.data.TjsData.getRootAsTjsData(fb_tjs_buf);
-
-    //     // console.log("fb_tjs_data.trisSelectIdxToIArray()", fb_tjs_data.trisSelectIdxToIArray());
-    //     // console.log("fb_tjs_data.edgesSelectIdxToIArray()", fb_tjs_data.edgesSelectIdxToIArray());
-    //     // console.log("fb_tjs_data.pointsSelectIdxToIArray()", fb_tjs_data.pointsSelectIdxToIArray());
-    //     // console.log("fb_tjs_data.posisIdxToIArray()", fb_tjs_data.posisIdxToIArray());
-    //     // console.log("fb_tjs_data.vertsIdxToIArray()", fb_tjs_data.vertsIdxToIArray());
-    //     // console.log("fb_tjs_data.coordsFlatArray()", fb_tjs_data.coordsFlatArray());
-    //     // console.log("fb_tjs_data.colorsFlatArray()", fb_tjs_data.colorsFlatArray());
-    //     // console.log("fb_tjs_data.trisVertsIdxFlatArray()", fb_tjs_data.trisVertsIdxFlatArray());
-    //     // console.log("fb_tjs_data.edgesVertsIdxFlatArray()", fb_tjs_data.edgesVertsIdxFlatArray());
-    //     // console.log("fb_tjs_data.pointsVertsIdxFlatArray()", fb_tjs_data.pointsVertsIdxFlatArray());
-    //     // console.log("fb_tjs_data.posisIdxToIArray()", fb_tjs_data.posisIdxToIArray());
-
-    //     // create the data from the flatbuffer
-    //     this.tris_select_idx_to_i = fb_tjs_data.trisSelectIdxToIArray();
-    //     this.edges_select_idx_to_i = fb_tjs_data.edgesSelectIdxToIArray();
-    //     this.points_select_idx_to_i = fb_tjs_data.pointsSelectIdxToIArray();
-    //     this.posis_idx_to_i = fb_tjs_data.posisIdxToIArray();
-    //     this.verts_idx_to_i = fb_tjs_data.vertsIdxToIArray();
-    //     const coords_buff_attrib = new THREE.BufferAttribute( fb_tjs_data.coordsFlatArray(), 3 );
-    //     const colors_buff_attrib = new THREE.BufferAttribute( fb_tjs_data.colorsFlatArray(), 3 );
-    //     const normals_buff_attrib = fb_tjs_data.normalsFlatArray() === null ?
-    //         null : new THREE.BufferAttribute( fb_tjs_data.normalsFlatArray(), 3 );
-    //     const tris_idx_buff_attrib  = new THREE.BufferAttribute(fb_tjs_data.trisVertsIdxFlatArray(), 1);
-    //     const edges_idx_buff_attrib  = new THREE.BufferAttribute(fb_tjs_data.edgesVertsIdxFlatArray(), 1);
-    //     const points_idx_buff_attrib  = new THREE.BufferAttribute(fb_tjs_data.pointsVertsIdxFlatArray(), 1);
-    //     const posis_idx_buff_attrib  = new THREE.BufferAttribute(fb_tjs_data.posisIdxToIArray(), 1);
-    //     const material_groups: Uint32Array  = fb_tjs_data.materialGroupsFlatArray();
-    //     const num_posis: number = fb_tjs_data.posisIdxToILength();
-    //     const num_points: number = fb_tjs_data.pointsVertsIdxFlatLength();
-    //     const num_edges: number = fb_tjs_data.edgesVertsIdxFlatLength() / 2;
-    //     const num_tris: number = fb_tjs_data.trisVertsIdxFlatLength() / 3;
-
-    //     // make the geometry buffers from the attribute buffers
-
-    //     // triangles
-    //     const tris_geom_buff: THREE.BufferGeometry = this._createTrisBuffGeom(
-    //         tris_idx_buff_attrib,
-    //         coords_buff_attrib, colors_buff_attrib, normals_buff_attrib,
-    //         material_groups);
-    //     // lines
-    //     const edges_geom_buff: THREE.BufferGeometry = this._createLinesBuffGeom(
-    //         edges_idx_buff_attrib,
-    //         coords_buff_attrib, colors_buff_attrib);
-    //     // points
-    //     const points_geom_buff: THREE.BufferGeometry = this._createPointsBuffGeom(
-    //         points_idx_buff_attrib,
-    //         coords_buff_attrib, colors_buff_attrib);
-    //     // positions
-    //     const posis_geom_buff: THREE.BufferGeometry = this._createPosisBuffGeom(
-    //         posis_idx_buff_attrib,
-    //         coords_buff_attrib);
-
-    //     // update threejs numbers
-    //     this.threejs_nums[0] = num_points;
-    //     this.threejs_nums[1] = num_edges;
-    //     this.threejs_nums[2] = num_tris;
-
-    //     // triangles
-    //     this._addTris(tris_geom_buff, tris_mat_arr);
-    //     // lines
-    //     this._addLines(edges_geom_buff);
-    //     // points
-    //     this._addPoints(points_geom_buff, [255, 255, 255], this.settings.positions.size + 1);
-    //     // positions
-    //     this._addPosis(posis_geom_buff, this.settings.colors.position, this.settings.positions.size);
-
-    //     // sphere
-    //     this._all_objs_sphere = this._getAllObjsSphere();
-
-    //     // return nuber of positions added
-    //     return num_posis;
-    // }
     /**
      *
      * @param scale
@@ -364,20 +282,33 @@ export class DataThreejs extends DataThreejsLookAt {
             altitude = this.directional_light_settings.altitude;
         }
         if (this.model && this.model.attribs && this.model.attribs.query
-            && this.model.attribs.query.hasModelAttrib('directional_light')) {
-                const model_light_settings: any = this.model.attribs.query.getModelAttribVal('directional_light');
-                if (model_light_settings.constructor === {}.constructor) {
-                    if (model_light_settings.hasOwnProperty('altitude')) {
-                        altitude = model_light_settings.altitude;
-                    }
-                    if (model_light_settings.hasOwnProperty('azimuth')) {
-                        azimuth = model_light_settings.azimuth;
-                    }
+        && this.model.attribs.query.hasModelAttrib('directional_light')) {
+            const model_light_settings: any = this.model.attribs.query.getModelAttribVal('directional_light');
+            if (model_light_settings.constructor === {}.constructor) {
+                if (model_light_settings.hasOwnProperty('altitude')) {
+                    altitude = model_light_settings.altitude;
+                }
+                if (model_light_settings.hasOwnProperty('azimuth')) {
+                    azimuth = model_light_settings.azimuth;
                 }
             }
-
-        let posX = Math.cos(altitude * Math.PI * 2 / 360) * Math.cos(azimuth * Math.PI * 2 / 360) * scale,
-            posY = Math.cos(altitude * Math.PI * 2 / 360) * Math.sin(azimuth * Math.PI * 2 / 360) * scale,
+        }
+        if (scale === 0) { scale = 10000; }
+        let azimuth_calc = 90 - azimuth;
+        if (this.model && this.model.attribs && this.model.attribs.query
+        && this.model.attribs.query.hasModelAttrib('north')) {
+            const north_attr: number[] = this.model.attribs.query.getModelAttribVal('north') as number[];
+            const north_vec = new THREE.Vector3(north_attr[0], north_attr[1], 0);
+            const y_vec = new THREE.Vector3(0, 1, 0);
+            const angle = north_vec.angleTo(y_vec) * 180 / Math.PI;
+            if (north_attr[0] > 0) {
+                azimuth_calc -= angle;
+            } else {
+                azimuth_calc += angle;
+            }
+        }
+        let posX = Math.cos(altitude * Math.PI * 2 / 360) * Math.cos(azimuth_calc * Math.PI * 2 / 360) * scale,
+            posY = Math.cos(altitude * Math.PI * 2 / 360) * Math.sin(azimuth_calc * Math.PI * 2 / 360) * scale,
             posZ = Math.sin(altitude * Math.PI * 2 / 360) * scale;
 
         if (this._all_objs_sphere) {
@@ -413,7 +344,8 @@ export class DataThreejs extends DataThreejsLookAt {
         this.axesHelper.visible = this.settings.axes.show;
         if (this.axesHelper.visible) {
             this.axesHelper.name = 'AxesHelper';
-            this.axesHelper.position.set(this.axes_pos.x, this.axes_pos.y, 0);
+            this.axesHelper.position.set(this.axes_pos.x, this.axes_pos.y, this.axes_pos.z);
+            this.axesHelper.position.set(0, 0, 0);
             this.scene.add(this.axesHelper);
         }
     }
@@ -446,7 +378,11 @@ export class DataThreejs extends DataThreejsLookAt {
             if (!pos) {
                 pos = new THREE.Vector3();
             }
-            this.grid.position.set(pos.x, pos.y, -0.01);
+            if (!pos.z) {
+                this.grid.position.set(pos.x, pos.y, -0.01);
+            } else {
+                this.grid.position.set(pos.x, pos.y, pos.z);
+            }
             this.scene.add(this.grid);
         }
     }
@@ -454,7 +390,6 @@ export class DataThreejs extends DataThreejsLookAt {
      *
      */
     public getGridPos() {
-        console.log(this._all_objs_sphere)
         if (this._all_objs_sphere) {
             const grd_pos = new THREE.Vector3(this._all_objs_sphere.center.x, this._all_objs_sphere.center.y, 0);
             this.grid.position.set(grd_pos.x, grd_pos.y, -0.01);
@@ -496,15 +431,15 @@ export class DataThreejs extends DataThreejsLookAt {
      * Add threejs triangles to the scene
      */
     private _addTris(tris_i: number[], posis_buffer: THREE.Float32BufferAttribute,
-                    // normals_buffer: THREE.Float32BufferAttribute,
-                     colors_buffer: THREE.Float32BufferAttribute, material_groups, materials): void {
+                     colors_buffer: THREE.Float32BufferAttribute,
+                     normals_buffer: THREE.Float32BufferAttribute,
+                     material_groups, materials): void {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(tris_i);
-        // geom.addAttribute('position', posis_buffer);
-        // // geom.addAttribute('normal', normals_buffer);
-        // geom.addAttribute('color', colors_buffer);
         geom.setAttribute('position', posis_buffer);
-        // geom.setAttribute('normal', normals_buffer);
+        if (normals_buffer.count > 0) {
+            geom.setAttribute('normal', normals_buffer);
+        }
         geom.setAttribute('color', colors_buffer);
         const colorf = new THREE.Color(parseInt(this.settings.colors.face_f.replace('#', '0x'), 16));
         const colorb = new THREE.Color(parseInt(this.settings.colors.face_b.replace('#', '0x'), 16));
@@ -558,7 +493,9 @@ export class DataThreejs extends DataThreejsLookAt {
         const mesh = new THREE.Mesh(geom, material_arr);
 
         mesh.geometry.computeBoundingSphere();
-        mesh.geometry.computeVertexNormals();
+        if (normals_buffer.count === 0) {
+            mesh.geometry.computeVertexNormals();
+        }
         mesh.castShadow = true;
         mesh.receiveShadow = true;
 
@@ -583,10 +520,7 @@ export class DataThreejs extends DataThreejsLookAt {
                     size: number = 1): void {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(lines_i);
-        // geom.addAttribute('position', posis_buffer);
-        // geom.addAttribute('normal', normals_buffer);
         geom.setAttribute('position', posis_buffer);
-        geom.setAttribute('normal', normals_buffer);
         geom.setAttribute('color', color_buffer);
         this._buffer_geoms.push(geom);
 
@@ -601,10 +535,7 @@ export class DataThreejs extends DataThreejsLookAt {
 
         const geom_white = new THREE.BufferGeometry();
         geom_white.setIndex(white_line_i);
-        // geom.addAttribute('position', posis_buffer);
-        // geom.addAttribute('normal', normals_buffer);
         geom_white.setAttribute('position', posis_buffer);
-        geom_white.setAttribute('normal', normals_buffer);
         geom_white.setAttribute('color', color_buffer);
         this._buffer_geoms.push(geom_white);
 
@@ -630,8 +561,6 @@ export class DataThreejs extends DataThreejsLookAt {
                         size: number = 1): void {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(points_i);
-        // geom.addAttribute('position', posis_buffer);
-        // geom.addAttribute('color', colors_buffer);
         geom.setAttribute('position', posis_buffer);
         geom.setAttribute('color', colors_buffer);
 
@@ -696,7 +625,8 @@ export class DataThreejs extends DataThreejsLookAt {
         return {
             element: div
         };
-    }/**
+    }
+    /**
      *
      * @param background_set
      */
@@ -708,7 +638,9 @@ export class DataThreejs extends DataThreejsLookAt {
             path + 'py' + format, path + 'ny' + format,
             path + 'pz' + format, path + 'nz' + format
         ];
-        const background = new THREE.CubeTextureLoader().load( urls );
+        const background = new THREE.CubeTextureLoader().load(urls, texture => {
+            this.renderer.render(this.scene, this.camera);
+        });
 
         background.format = THREE.RGBFormat;
         this.scene.background = background;
@@ -760,27 +692,33 @@ export class DataThreejs extends DataThreejsLookAt {
                 }
             }
         }
-        if (this.directional_light_settings.type === 'directional') {
-            this.directional_light = new THREE.DirectionalLight(this.directional_light_settings.color,
-                this.directional_light_settings.intensity);
-        } else {
-            this.directional_light = new THREE.PointLight(this.directional_light_settings.color,
-                this.directional_light_settings.intensity);
-        }
+
+        this.directional_light = new THREE.DirectionalLight(this.directional_light_settings.color,
+            this.directional_light_settings.intensity);
+
+        // if (this.directional_light_settings.type === 'directional') {
+        //     this.directional_light = new THREE.DirectionalLight(this.directional_light_settings.color,
+        //         this.directional_light_settings.intensity);
+        // } else {
+        //     this.directional_light = new THREE.PointLight(this.directional_light_settings.color,
+        //         this.directional_light_settings.intensity);
+        // }
         let distance = 0;
+
         if (this._all_objs_sphere) {
             distance = Math.round(this._all_objs_sphere.radius * 3);
+            // if (distance < 10000) { distance = 10000; }
         }
         this.directional_light_settings.distance = distance;
         // this.getDLPosition(distance);
-        // this.directional_light.shadow.radius = 2
         this.directional_light.castShadow = this.directional_light_settings.shadow;
         this.directional_light.visible = this.directional_light_settings.show;
         // this.directional_light_settings.shadowSize = 2;
         // const shadowMapSize = this.directional_light_settings.shadowSize;
-        // this.directional_light.shadow.bias = -0.00001;  // default
-        this.directional_light.shadow.mapSize.width = 2048;  // default
-        this.directional_light.shadow.mapSize.height = 2048; // default
+        // this.directional_light.shadow.radius = 1.2;  // default
+        this.directional_light.shadow.bias = -0.00001;  // default
+        this.directional_light.shadow.mapSize.width = this.directional_light_settings.shadowSize;  // default
+        this.directional_light.shadow.mapSize.height = this.directional_light_settings.shadowSize; // default
         // this.directional_light.shadow.camera.visible = true;
 
         this._setDLDistance(distance);
@@ -832,24 +770,40 @@ export class DataThreejs extends DataThreejsLookAt {
             this.directional_light.shadow.bias = -0.001;
 
             let helper;
-            if (this.directional_light_settings.type === 'directional') {
-                const cam = <THREE.OrthographicCamera> this.directional_light.shadow.camera;
-                cam.left = -scale;
-                cam.right = scale;
-                cam.top = scale;
-                cam.bottom = -scale;
-                if (this._all_objs_sphere) {
-                    const lightTarget = new THREE.Object3D();
-                    lightTarget.position.set(
-                        this._all_objs_sphere.center.x, this._all_objs_sphere.center.y, this._all_objs_sphere.center.z);
-                    lightTarget.name = 'lightTarget';
-                    this.scene.add(lightTarget);
-                    (<THREE.DirectionalLight>this.directional_light).target = lightTarget;
-                }
-                helper = new THREE.CameraHelper(this.directional_light.shadow.camera);
-            } else {
-                helper = new THREE.PointLightHelper( <THREE.PointLight>this.directional_light );
+
+            const cam = <THREE.OrthographicCamera> this.directional_light.shadow.camera;
+            cam.left = -scale;
+            cam.right = scale;
+            cam.top = scale;
+            cam.bottom = -scale;
+            if (this._all_objs_sphere) {
+                const lightTarget = new THREE.Object3D();
+                lightTarget.position.set(
+                    this._all_objs_sphere.center.x, this._all_objs_sphere.center.y, this._all_objs_sphere.center.z);
+                lightTarget.name = 'lightTarget';
+                this.scene.add(lightTarget);
+                (<THREE.DirectionalLight>this.directional_light).target = lightTarget;
             }
+            helper = new THREE.CameraHelper(this.directional_light.shadow.camera);
+
+            // if (this.directional_light_settings.type === 'directional') {
+            //     const cam = <THREE.OrthographicCamera> this.directional_light.shadow.camera;
+            //     cam.left = -scale;
+            //     cam.right = scale;
+            //     cam.top = scale;
+            //     cam.bottom = -scale;
+            //     if (this._all_objs_sphere) {
+            //         const lightTarget = new THREE.Object3D();
+            //         lightTarget.position.set(
+            //             this._all_objs_sphere.center.x, this._all_objs_sphere.center.y, this._all_objs_sphere.center.z);
+            //         lightTarget.name = 'lightTarget';
+            //         this.scene.add(lightTarget);
+            //         (<THREE.DirectionalLight>this.directional_light).target = lightTarget;
+            //     }
+            //     helper = new THREE.CameraHelper(this.directional_light.shadow.camera);
+            // } else {
+            //     helper = new THREE.PointLightHelper( <THREE.PointLight>this.directional_light );
+            // }
             helper.visible = this.directional_light_settings.helper;
             helper.name = 'DLHelper';
             this.scene.add(helper);

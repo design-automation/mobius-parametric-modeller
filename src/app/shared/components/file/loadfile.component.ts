@@ -13,7 +13,7 @@ import { SaveFileComponent } from './savefile.component';
 @Component({
   selector: 'file-load',
   template:  `<button id='loadfile' class='btn' onclick="document.getElementById('file-input').click();">Load</button>
-              <input id="file-input" type="file" (change)="sendloadfile()" style=" display: none;" accept=".mob"/>`,
+              <input id="file-input" type="file" (change)="sendloadfile()" style=" display: none;" accept=".mob,.mobdata"/>`,
   styles: [
             `
             button.btn{
@@ -44,6 +44,11 @@ export class LoadFileComponent {
 
 
     sendloadfile() {
+        if (!confirm('Loading a new file will delete the current flowchart! Would you like to continue?')) {
+            (<HTMLInputElement>document.getElementById('file-input')).value = '';
+            return;
+        }
+
         const selectedFile = (<HTMLInputElement>document.getElementById('file-input')).files[0];
         const stream = new Observable<IMobius>(observer => {
             const reader = new FileReader();
@@ -75,7 +80,7 @@ export class LoadFileComponent {
             reader.readAsText(selectedFile);
         });
         stream.subscribe(loadeddata => {
-            SaveFileComponent.clearModelData(this.dataService.file, null);
+            SaveFileComponent.clearModelData(this.dataService.flowchart, null);
             delete this.dataService.file.flowchart;
             this.dataService.file = loadeddata;
             if (updateLocalViewerSettings(loadeddata.settings)) {
@@ -91,9 +96,6 @@ export class LoadFileComponent {
                 //     }
                 // }
             }
-            for (const node of loadeddata.flowchart.nodes) {
-                checkNodeValidity(node);
-            }
             for (const func of this.dataService.flowchart.functions) {
                 for (const node of func.flowchart.nodes) {
                     checkNodeValidity(node);
@@ -105,6 +107,9 @@ export class LoadFileComponent {
                         checkNodeValidity(node);
                     }
                 }
+            }
+            for (const node of loadeddata.flowchart.nodes) {
+                checkNodeValidity(node);
             }
             setTimeout(() => {
                 if (this.dataService.mobiusSettings.execute) {

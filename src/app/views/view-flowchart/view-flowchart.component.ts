@@ -946,6 +946,20 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
             this.recursiveDisablePrint(node.localFunc);
             this.recursiveDisablePrint(node.procedure);
         }
+        for (const func of this.dataService.flowchart.functions) {
+            for (const node of func.flowchart.nodes) {
+                this.recursiveDisablePrint(node.localFunc);
+                this.recursiveDisablePrint(node.procedure);
+            }
+        }
+        if (this.dataService.flowchart.subFunctions) {
+            for (const func of this.dataService.flowchart.subFunctions) {
+                for (const node of func.flowchart.nodes) {
+                    this.recursiveDisablePrint(node.localFunc);
+                    this.recursiveDisablePrint(node.procedure);
+                }
+            }
+        }
         this.dataService.notifyMessage('Cleared All Print Statements in Flowchart');
     }
 

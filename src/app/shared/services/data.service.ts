@@ -75,7 +75,7 @@ export class DataService {
         if (settingsString) {
             DataService._mobiusSettings = JSON.parse(settingsString);
         } else {
-            DataService._mobiusSettings = {'execute': true};
+            DataService._mobiusSettings = {'execute': true, 'debug': true};
         }
     }
 
@@ -89,6 +89,17 @@ export class DataService {
 
     clearLog() {
         DataService._consoleLog = [];
+    }
+
+    finalizeLog() {
+        let i = 0;
+        while (i < DataService._consoleLog.length - 1) {
+            if (DataService._consoleLog[i].slice(0, 4) === '<div' && DataService._consoleLog[i + 1].slice(0, 5) === '</div') {
+                DataService._consoleLog.splice(i, 2);
+            } else {
+                i++;
+            }
+        }
     }
 
     spliceLog(remainingLogs: number) {

@@ -193,12 +193,15 @@
 
 								<dd id='grid_pos'>
                                     <div class="label">Grid Position</div>
-									<input type="number" disabled
-									[value]="formatNumber(settings.grid.pos_x)">
-									<input type="number" disabled
-									[value]="formatNumber(settings.grid.pos_y)">
-									<input type="number" disabled
-									[value]="formatNumber(settings.grid.pos_z)">
+									<input type="number"
+									[value]="formatNumber(settings.grid.pos_x)"
+                                    (change)="settingOnChange('grid.update_pos_x', $event.target.value)">
+									<input type="number"
+									[value]="formatNumber(settings.grid.pos_y)"
+                                    (change)="settingOnChange('grid.update_pos_y', $event.target.value)">
+									<input type="number"
+                                    [value]="formatNumber(settings.grid.pos_z)"
+                                    (change)="settingOnChange('grid.update_pos_z', $event.target.value)">
 									<button (click)="settingOnChange('grid.update_pos')" class="filebtn getbtn">Get</button>
                                 </dd>
 								<dd><hr></dd>
@@ -370,7 +373,7 @@
 								</dd>
                                 <dd><hr></dd>
 								<dd>
-									<div class="label" title='directional_light'>Light</div>
+									<div class="label" title='directional_light'>Directional Light</div>
 									<div class="onoffswitch">
 										<input type="checkbox"
 										name="onoffswitch"
@@ -399,7 +402,7 @@
 										</label>
 									</div>
 								</dd>
-								<dd>
+								<!-- <dd>
 									<div class="label">Light Type</div>
 									<div class="label">Directional Light</div>
 									<div class="onoffswitch radio">
@@ -431,7 +434,7 @@
 											<span class="onoffswitch-switch"></span>
 										</label>
 									</div>
-								</dd>
+								</dd> -->
 								<dd class='colors'>
 									<div class="label">Color</div>
 									<input
@@ -465,13 +468,13 @@
 										</label>
 									</div>
 								</dd>
-								<!-- <dd>
-									<div class="label">Shadow Size</div>
+								<dd>
+									<div class="label">Shadow Intensity</div>
 									<div class="slidecontainer light">
-										<input type="range" min="1" max="20" step="1" [value]="settings.directional_light.shadowSize" class="slider" (input)="settingOnChange('directional_light.shadowSize', $event.target.value)">
+										<input type="range" min="1024" max="5120" step="512" [value]="settings.directional_light.shadowSize" class="slider" (input)="settingOnChange('directional_light.shadowSize', $event.target.value)">
 										<input type="text" [value]="settings.directional_light.shadowSize" disabled>
 									</div>
-								</dd> -->
+								</dd>
 								<dd>
 									<div class="label" title='directional_light.azimuth'>Azimuth</div>
 									<div class="slidecontainer light">

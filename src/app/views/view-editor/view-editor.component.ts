@@ -202,6 +202,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         for (const prod of prodList) {
             if (prod.type === ProcedureTypes.LocalFuncCall && prod.meta.name === funcName) {
                 if (addArg) {
+                    if (!prod.meta.otherInfo) { prod.meta.otherInfo = {}; }
                     if (!prod.meta.otherInfo.deletedArgs || prod.meta.otherInfo.deletedArgs.length === 0) {
                         prod.args.push(<IArgument>{
                             'name': 'arg_' + prod.argCount,
@@ -340,7 +341,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                     node.state.procedure = [];
                 }
             } else {
-                for (let i = toBePasted.length - 1; i >= 0; i --) {
+                for (let i = 0; i < toBePasted.length; i++) {
                     if (toBePasted[i].type === ProcedureTypes.Blank ||
                         toBePasted[i].type === ProcedureTypes.Return) { continue; }
                     const check = NodeUtils.paste_procedure(node, toBePasted[i]);
@@ -351,11 +352,31 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                     redoActions.unshift({'type': 'add',
                         'parent': this.dataService.node.state.procedure[0].parent, 'prod': this.dataService.node.state.procedure[0]});
 
-                    // CHECK IF THE BELOW CAN BE CHANGED TO: node.state.procedure[0]
-                    node.state.procedure[node.state.procedure.length - 1].selected = false;
-                    pastingPlace.selected = true;
-                    node.state.procedure = [pastingPlace];
+                    // node.state.procedure[node.state.procedure.length - 1].selected = false;
+                    // pastingPlace.selected = true;
+                    // node.state.procedure = [pastingPlace];
                 }
+                node.state.procedure[node.state.procedure.length - 1].selected = false;
+                pastingPlace.selected = true;
+                node.state.procedure = [pastingPlace];
+
+
+                // for (let i = toBePasted.length - 1; i >= 0; i --) {
+                //     if (toBePasted[i].type === ProcedureTypes.Blank ||
+                //         toBePasted[i].type === ProcedureTypes.Return) { continue; }
+                //     const check = NodeUtils.paste_procedure(node, toBePasted[i]);
+                //     if (!check) {
+                //         this.dataService.notifyMessage('Error: Unable to paste procedure');
+                //         notified = true;
+                //     }
+                //     redoActions.unshift({'type': 'add',
+                //         'parent': this.dataService.node.state.procedure[0].parent, 'prod': this.dataService.node.state.procedure[0]});
+
+                //     // CHECK IF THE BELOW CAN BE CHANGED TO: node.state.procedure[0]
+                //     node.state.procedure[node.state.procedure.length - 1].selected = false;
+                //     pastingPlace.selected = true;
+                //     node.state.procedure = [pastingPlace];
+                // }
             }
             this.dataService.registerEdtAction(redoActions);
             checkNodeValidity(this.dataService.node);
@@ -542,8 +563,6 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 j++;
             }
         }
-        console.log(this.dataService.flowchart.functions);
-        console.log(this.dataService.flowchart.subFunctions);
     }
 
     updateHelpView(event) {

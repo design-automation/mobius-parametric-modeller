@@ -105,7 +105,7 @@ export class LoadUrlComponent {
             return false;
         }
 
-        SaveFileComponent.clearModelData(this.dataService.file, null);
+        SaveFileComponent.clearModelData(this.dataService.flowchart, null);
         delete this.dataService.file.flowchart;
         this.dataService.file = loadeddata;
         if (updateLocalViewerSettings(loadeddata.settings)) {
@@ -117,9 +117,6 @@ export class LoadUrlComponent {
             this.router.navigate(['/editor']);
         } else if (this.dataService.node.type !== 'end') {
             loadeddata.flowchart.meta.selected_nodes = [loadeddata.flowchart.nodes.length - 1];
-        }
-        for (const node of loadeddata.flowchart.nodes) {
-            checkNodeValidity(node);
         }
         for (const func of this.dataService.flowchart.functions) {
             for (const node of func.flowchart.nodes) {
@@ -133,7 +130,12 @@ export class LoadUrlComponent {
                 }
             }
         }
+        for (const node of loadeddata.flowchart.nodes) {
+            checkNodeValidity(node);
+        }
         setTimeout(() => {
+            const zoomFlowchart = document.getElementById('zoomToFit');
+            if (zoomFlowchart) { zoomFlowchart.click(); }
             let executeB = document.getElementById('executeButton');
             if (executeB && this.dataService.mobiusSettings.execute) { executeB.click(); }
             executeB = null;
@@ -163,8 +165,9 @@ export class LoadUrlComponent {
         // file.flowchart.name = urlSplit[urlSplit.length - 1 ].split('.mob')[0];
 
         checkMobFile(loadeddata);
+        loadeddata.flowchart.meta.selected_nodes = [loadeddata.flowchart.nodes.length - 1];
 
-        SaveFileComponent.clearModelData(this.dataService.file, null);
+        SaveFileComponent.clearModelData(this.dataService.flowchart, null);
         delete this.dataService.file.flowchart;
         this.dataService.file = loadeddata;
         if (updateLocalViewerSettings(loadeddata.settings)) {
@@ -172,9 +175,6 @@ export class LoadUrlComponent {
         }
         this.dataService.newFlowchart = true;
         this.router.navigate(['/editor']);
-        for (const node of loadeddata.flowchart.nodes) {
-            checkNodeValidity(node);
-        }
         for (const func of this.dataService.flowchart.functions) {
             for (const node of func.flowchart.nodes) {
                 checkNodeValidity(node);
@@ -187,11 +187,16 @@ export class LoadUrlComponent {
                 }
             }
         }
+        for (const node of loadeddata.flowchart.nodes) {
+            checkNodeValidity(node);
+        }
         this.dataService.clearModifiedNode();
         // localStorage.removeItem('temp_file');
         SaveFileComponent.deleteFile('___TEMP___.mob');
 
         setTimeout(() => {
+            const zoomFlowchart = document.getElementById('zoomToFit');
+            if (zoomFlowchart) { zoomFlowchart.click(); }
             let executeB = document.getElementById('executeButton');
             if (executeB && this.dataService.mobiusSettings.execute) { executeB.click(); }
             executeB = null;
@@ -223,9 +228,6 @@ export class LoadUrlComponent {
         //     }
         //     this.dataService.newFlowchart = true;
         //     this.router.navigate(['/editor']);
-        //     for (const node of loadeddata.flowchart.nodes) {
-        //         checkNodeValidity(node);
-        //     }
         //     for (const func of this.dataService.flowchart.functions) {
         //         for (const node of func.flowchart.nodes) {
         //             checkNodeValidity(node);
@@ -237,6 +239,9 @@ export class LoadUrlComponent {
         //                 checkNodeValidity(node);
         //             }
         //         }
+        //     }
+        //     for (const node of loadeddata.flowchart.nodes) {
+        //         checkNodeValidity(node);
         //     }
         //     this.dataService.clearModifiedNode();
         //     // localStorage.removeItem('temp_file');

@@ -25,7 +25,6 @@ import { degToRad } from '@assets/core/inline/_conversion';
 import { xfromSourceTargetMatrix, multMatrix } from '@libs/geom/matrix';
 import { XAXIS, YAXIS, ZAXIS } from '@assets/libs/geom/constants';
 import cytoscape from 'cytoscape';
-import { DEFAULT_SCROLL_TIME } from '@angular/cdk/scrolling';
 
 // ================================================================================================
 // utility function

@@ -1,6 +1,6 @@
 {
 	"id": 0,
-	"name": "mobius-parametric-modeller - v0.5.39",
+	"name": "mobius-parametric-modeller - v0.5.40",
 	"kind": 0,
 	"flags": {},
 	"children": [
@@ -14790,7 +14790,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 244,
+									"line": 243,
 									"character": 12
 								}
 							],
@@ -14807,7 +14807,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 247,
+									"line": 246,
 									"character": 13
 								}
 							],
@@ -14824,7 +14824,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 248,
+									"line": 247,
 									"character": 13
 								}
 							],
@@ -14841,7 +14841,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 242,
+									"line": 241,
 									"character": 13
 								}
 							],
@@ -14858,7 +14858,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 246,
+									"line": 245,
 									"character": 12
 								}
 							],
@@ -14875,7 +14875,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 245,
+									"line": 244,
 									"character": 12
 								}
 							],
@@ -14892,7 +14892,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 243,
+									"line": 242,
 									"character": 14
 								}
 							],
@@ -14917,7 +14917,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 241,
+							"line": 240,
 							"character": 28
 						}
 					]
@@ -14942,7 +14942,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 590,
+									"line": 589,
 									"character": 12
 								}
 							],
@@ -14959,7 +14959,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 591,
+									"line": 590,
 									"character": 14
 								}
 							],
@@ -14979,7 +14979,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 589,
+							"line": 588,
 							"character": 32
 						}
 					]
@@ -15004,7 +15004,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 596,
+									"line": 595,
 									"character": 8
 								}
 							],
@@ -15021,7 +15021,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 594,
+									"line": 593,
 									"character": 10
 								}
 							],
@@ -15038,7 +15038,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 595,
+									"line": 594,
 									"character": 9
 								}
 							],
@@ -15059,7 +15059,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 593,
+							"line": 592,
 							"character": 32
 						}
 					]
@@ -15084,7 +15084,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 396,
+									"line": 395,
 									"character": 19
 								}
 							],
@@ -15101,7 +15101,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 397,
+									"line": 396,
 									"character": 21
 								}
 							],
@@ -15121,7 +15121,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 395,
+							"line": 394,
 							"character": 25
 						}
 					]
@@ -15325,7 +15325,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 207,
+							"line": 206,
 							"character": 24
 						}
 					]
@@ -15533,7 +15533,7 @@
 											"sources": [
 												{
 													"fileName": "core/modules/basic/analyze.ts",
-													"line": 630,
+													"line": 629,
 													"character": 12
 												}
 											],
@@ -15557,7 +15557,7 @@
 											"sources": [
 												{
 													"fileName": "core/modules/basic/analyze.ts",
-													"line": 630,
+													"line": 629,
 													"character": 42
 												}
 											],
@@ -15580,7 +15580,7 @@
 											"sources": [
 												{
 													"fileName": "core/modules/basic/analyze.ts",
-													"line": 630,
+													"line": 629,
 													"character": 84
 												}
 											],
@@ -15607,7 +15607,7 @@
 											"sources": [
 												{
 													"fileName": "core/modules/basic/analyze.ts",
-													"line": 630,
+													"line": 629,
 													"character": 24
 												}
 											],
@@ -15631,7 +15631,7 @@
 											"sources": [
 												{
 													"fileName": "core/modules/basic/analyze.ts",
-													"line": 630,
+													"line": 629,
 													"character": 63
 												}
 											],
@@ -15654,7 +15654,7 @@
 											"sources": [
 												{
 													"fileName": "core/modules/basic/analyze.ts",
-													"line": 630,
+													"line": 629,
 													"character": 104
 												}
 											],
@@ -15688,7 +15688,7 @@
 									"sources": [
 										{
 											"fileName": "core/modules/basic/analyze.ts",
-											"line": 629,
+											"line": 628,
 											"character": 97
 										}
 									]
@@ -15699,7 +15699,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 628,
+							"line": 627,
 							"character": 28
 						}
 					]
@@ -15867,7 +15867,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 345,
+							"line": 344,
 							"character": 21
 						}
 					]
@@ -15983,7 +15983,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 533,
+							"line": 532,
 							"character": 23
 						}
 					]
@@ -16039,7 +16039,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 143,
+							"line": 142,
 							"character": 26
 						}
 					]
@@ -16095,7 +16095,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 92,
+							"line": 91,
 							"character": 23
 						}
 					]
@@ -16154,7 +16154,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 39,
+							"line": 38,
 							"character": 25
 						}
 					]
@@ -16252,7 +16252,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 756,
+							"line": 755,
 							"character": 30
 						}
 					]
@@ -16292,7 +16292,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 753,
+							"line": 752,
 							"character": 27
 						}
 					]
@@ -16351,7 +16351,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 743,
+							"line": 742,
 							"character": 24
 						}
 					]
@@ -16483,7 +16483,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 250,
+							"line": 249,
 							"character": 18
 						}
 					]
@@ -16552,7 +16552,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 233,
+							"line": 232,
 							"character": 31
 						}
 					]
@@ -16621,7 +16621,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 229,
+							"line": 228,
 							"character": 28
 						}
 					]
@@ -16690,7 +16690,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 433,
+							"line": 432,
 							"character": 24
 						}
 					]
@@ -16771,7 +16771,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 417,
+							"line": 416,
 							"character": 28
 						}
 					]
@@ -16863,7 +16863,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 399,
+							"line": 398,
 							"character": 25
 						}
 					]
@@ -16963,7 +16963,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 502,
+							"line": 501,
 							"character": 23
 						}
 					]
@@ -17006,7 +17006,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 489,
+							"line": 488,
 							"character": 26
 						}
 					]
@@ -17101,7 +17101,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 425,
+							"line": 424,
 							"character": 18
 						}
 					]

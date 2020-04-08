@@ -334,6 +334,7 @@ export class CodeUtils {
                 const fn = `${namePrefix}${prod.meta.name}(__params__${argsVals.map(val => ', ' + val).join('')})`;
                 if (args[0].name === '__none__' || !args[0].jsValue) {
                     codeStr.push(`${fn};`);
+                    codeStr.push(`__params__.console.push('</div>')`);
                     break;
                 }
                 const repImpVar = this.repSetAttrib(args[0].jsValue);

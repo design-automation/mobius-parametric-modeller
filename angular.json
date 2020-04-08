@@ -19,14 +19,20 @@
             "assets": [
               "src/assets",
               "src/mobius.ico",
-              { "glob": "**/*", "input": "./node_modules/cesium/Build/Cesium", "output": "/assets/cesium" } 
+              {
+                "glob": "**/*",
+                "input": "./node_modules/cesium/Build/Cesium",
+                "output": "/assets/cesium"
+              }
             ],
             "styles": [
               "src/styles.scss",
               "./node_modules/cesium/Build/Cesium/Widgets/widgets.css"
             ],
-            "scripts": ["./node_modules/cesium/Build/Cesium/Cesium.js",
-                        "./node_modules/hammerjs/hammer.min.js"]
+            "scripts": [
+              "./node_modules/cesium/Build/Cesium/Cesium.js",
+              "./node_modules/hammerjs/hammer.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -45,8 +51,8 @@
                   "with": "src/environments/environment.prod.ts"
                 },
                 {
-                    "replace": "src/app/appmodule/app-routing.module.ts",
-                    "with": "src/app/appmodule/app-routing.module.prod.ts"
+                  "replace": "src/app/appmodule/app-routing.module.ts",
+                  "with": "src/app/appmodule/app-routing.module.prod.ts"
                 }
               ]
             }
@@ -97,6 +103,10 @@
               "**/assets/typedoc-json/**"
             ]
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {}
         }
       }
     },

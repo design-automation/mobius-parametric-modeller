@@ -377,6 +377,8 @@ export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProd
 // VAR INPUT
 export function parseVariable(value: string): {'error'?: string, 'declaredVar'?: string, 
                                                'usedVars'?: string[], 'jsStr'?: string, 'valueStr'?: string} {
+    if (typeof value !== 'string') { value = JSON.stringify(value); }
+
     const str = value.trim();
     const comps = splitComponents(str);
     if (typeof comps === 'string') {
@@ -497,7 +499,6 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
                 {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string, 'jsStr'?: string} {
     let newString = '';
     let jsString = '';
-
     // if variable ==> go to analyzeVar
     if (comps[i].type === strType.VAR) {
         const result = analyzeVar(comps, i, vars, false);

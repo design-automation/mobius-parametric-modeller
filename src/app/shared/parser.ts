@@ -377,7 +377,6 @@ export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProd
 // VAR INPUT
 export function parseVariable(value: string): {'error'?: string, 'declaredVar'?: string, 
                                                'usedVars'?: string[], 'jsStr'?: string, 'valueStr'?: string} {
-    if (typeof value !== 'string') { value = JSON.stringify(value); }
 
     const str = value.trim();
     const comps = splitComponents(str);
@@ -1205,6 +1204,9 @@ function addVars(varList: string[], varName: string) {
 function splitComponents(str: string): {'type': strType, 'value': string}[] | string {
     const comps = [];
     let i = 0;
+
+    if (typeof str !== 'string') { str = JSON.stringify(str); }
+
     while (i < str.length) {
         let code = str.charCodeAt(i);
 

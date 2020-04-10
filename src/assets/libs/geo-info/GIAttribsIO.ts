@@ -124,7 +124,7 @@ export class GIAttribsIO {
         this._attribs_maps[EEntTypeStr[ EEntType.MOD ]] = new Map(new_attribs_data);
     }
     /**
-     * From another model
+     * merge attributes from another model into this model.
      * The existing attributes are not deleted
      * @param attribs_maps
      */
@@ -133,20 +133,24 @@ export class GIAttribsIO {
         const to_attribs: Map<string, GIAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
         // const num_ents: number = this._model.geom.query.numEnts(ent_type, true); // incude deleted ents
         from_attribs.forEach( from_attrib => {
-            const name: string = from_attrib.getName();
-            // get or create the existing attrib
-            if (!to_attribs.has(name)) {
-                to_attribs.set(name, new GIAttribMap( name, from_attrib.getDataType()) );
-            }
-            const to_attrib: GIAttribMap = to_attribs.get(name);
             // get the data and shift the ents_i indices
             const ents_i_values: [number[], TAttribDataTypes][] = from_attrib.getEntsVals();
-
+            let attrib_has_ents = false;
             for (const ents_i_value of ents_i_values) {
                 ents_i_value[0] = ents_i_value[0].map( ent_i => geom_map.get(ent_i) ); // shift
+                attrib_has_ents = ents_i_value[0].length > 0;
             }
-            // set the data
-            to_attrib.setEntsVals(ents_i_values);
+            if (attrib_has_ents) {
+                // get the name
+                const name: string = from_attrib.getName();
+                // get or create the attrib
+                if (!to_attribs.has(name)) {
+                    to_attribs.set(name, new GIAttribMap( name, from_attrib.getDataType()) );
+                }
+                const to_attrib: GIAttribMap = to_attribs.get(name);
+                // set the data
+                to_attrib.mergeEntsVals(ents_i_values);
+            }
         });
     }
     /**

@@ -91,6 +91,18 @@ export class DataService {
         DataService._consoleLog = [];
     }
 
+    finalizeLog() {
+        let i = 0;
+        while (i < DataService._consoleLog.length - 1) {
+            if (DataService._consoleLog[i].slice(0, 4) === '<div' && DataService._consoleLog[i + 1].slice(0, 5) === '</div') {
+                DataService._consoleLog.splice(i, 2);
+                i--;
+            } else {
+                i++;
+            }
+        }
+    }
+
     spliceLog(remainingLogs: number) {
         DataService._consoleLog.splice(0, DataService._consoleLog.length - remainingLogs);
     }

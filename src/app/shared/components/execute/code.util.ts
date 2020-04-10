@@ -327,11 +327,14 @@ export class CodeUtils {
                         argsVals.push(prod.resolvedValue);
                     }
                 }
+
+                codeStr.push(`__params__.console.push('<div style="margin: 5px 0px 5px 10px; border: 1px solid #E6E6E6"><p><b> Global Function: ${prod.meta.name}</b></p>');`);
                 // argsVals = argsVals.join(', ');
                 // const fn = `${namePrefix}${prod.meta.name}(__params__, ${argsVals} )`;
                 const fn = `${namePrefix}${prod.meta.name}(__params__${argsVals.map(val => ', ' + val).join('')})`;
                 if (args[0].name === '__none__' || !args[0].jsValue) {
                     codeStr.push(`${fn};`);
+                    codeStr.push(`__params__.console.push('</div>')`);
                     break;
                 }
                 const repImpVar = this.repSetAttrib(args[0].jsValue);
@@ -344,6 +347,7 @@ export class CodeUtils {
                 if (prefix === 'let ') {
                     existingVars.push(args[0].jsValue);
                 }
+                codeStr.push(`__params__.console.push('</div>')`);
                 break;
             case ProcedureTypes.Error:
                 codeStr.push(`throw new Error('____' + ${prod.args[0].jsValue});`);
@@ -584,7 +588,12 @@ export class CodeUtils {
         } else {
             const inputs = [];
             for (const edge of inp.edges) {
-                if (edge.source.parentNode.enabled) {
+                if (!edge.source.parentNode.enabled) {
+                    continue;
+                }
+                if (edge.source.parentNode.type === 'start') {
+                    inputs.unshift(edge.source.value);
+                } else {
                     inputs.push(edge.source.value);
                 }
             }
@@ -681,7 +690,11 @@ export class CodeUtils {
                     if (!nodeEdge.source.parentNode.enabled) {
                         continue;
                     }
-                    activeNodes.push(nodeEdge.source.parentNode.id);
+                    if (nodeEdge.source.parentNode.type === 'start') {
+                        activeNodes.unshift(nodeEdge.source.parentNode.id);
+                    } else {
+                        activeNodes.push(nodeEdge.source.parentNode.id);
+                    }
                 }
                 fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) =>
                     `result_${func.name}_${nodeId}`).join(', ')}]);\n`;

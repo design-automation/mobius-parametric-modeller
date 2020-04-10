@@ -273,11 +273,13 @@ export class ExecuteComponent {
         try {
             if (testing) {
                 this.executeFlowchart();
+                this.dataService.finalizeLog();
                 return;
             } else {
                 // setTimeout for 20ms so that the loading screen has enough time to be loaded in
                 setTimeout(() => {
                     this.executeFlowchart();
+                    this.dataService.finalizeLog();
                     this.dataService.log('<br>');
                 }, 20);
             }
@@ -698,9 +700,6 @@ export class ExecuteComponent {
             } else {
                 duration_msg = '<p style="padding: 2px 0px 2px 10px;"><i>Executed in ' + duration / 1000 + ' seconds.</i></p>';
             }
-            // for (const logStr of params.console) {
-            //     this.dataService.log(logStr);
-            // }
             this.dataService.log(duration_msg);
             this.dataService.log('<br>');
             if (codeResult[1]) {

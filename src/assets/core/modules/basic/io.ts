@@ -17,6 +17,7 @@ import { _model } from '..';
 import { idsMake, idsMakeFromIndicies } from '@libs/geo-info/id';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
 import { IDcheckObj, checkIDs, checkArgTypes, TypeCheckObj } from '../_check_args';
+import { ModelCheck } from './util';
 
 // ================================================================================================
 declare global {
@@ -225,7 +226,25 @@ function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
     file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): boolean {
     switch (data_format) {
         case _EIOExportDataFormat.GI:
-            let gi_data: string = JSON.stringify(__model__.getData());
+            let gi_data = '';
+            if (ents_arr === null) {
+                gi_data = JSON.stringify(__model__.getData());
+            } else {
+                // make a clone of the model (warning copy will change entity IDs)
+                const model_copy: GIModel = new GIModel();
+                model_copy.setData(__model__.getData(true));
+                // get the ents
+                const gp: IGeomPack = model_copy.geom.query.createGeomPack(ents_arr, true);
+                // delete the ents
+                model_copy.geom.del.delColls(gp.colls_i, true);
+                model_copy.geom.del.delPgons(gp.pgons_i, true);
+                model_copy.geom.del.delPlines(gp.plines_i, true);
+                model_copy.geom.del.delPoints(gp.points_i, true);
+                model_copy.geom.del.delPosis(gp.posis_i);
+                model_copy.geom.del.delUnusedPosis(gp.posis2_i);
+                model_copy.purge();
+                gi_data = JSON.stringify(model_copy.getData());
+            }
             // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
             gi_data = gi_data.replace(/\\/g, '\\\\'); // TODO temporary fix
             if (data_target === _EIODataTarget.DEFAULT) {

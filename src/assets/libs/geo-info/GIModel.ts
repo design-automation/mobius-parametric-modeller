@@ -56,12 +56,23 @@ export class GIModel {
         };
     }
     /**
-     * Returns a deep copy of this model
+     * Returns a copy of this model.
+     * Any deleted entities will be removed.
+     * Warning: entity IDs will change.
+     * If you need an clone, then use getData() and setData().
      */
     public copy(): GIModel {
-        const model_copy: GIModel = new GIModel()
+        const model_copy: GIModel = new GIModel();
         model_copy.merge(this);
         return model_copy;
+    }
+    /**
+     * Reomove deleted entities will be removed.
+     */
+    public purge(): void {
+        const model_copy: GIModel = new GIModel();
+        model_copy.merge(this);
+        this.setData(model_copy.getData());
     }
     /**
      * Check model for internal consistency

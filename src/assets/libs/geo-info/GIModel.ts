@@ -32,8 +32,8 @@ export class GIModel {
      * @param model_data The GI model.
      */
     public merge(model: GIModel): void {
-        this.attribs.io.merge(model.attribs._attribs_maps); // warning: must be before this.geom.io.merge()
-        this.geom.io.merge(model.geom._geom_arrays);
+        const maps: Map<number, number>[] = this.geom.io.merge(model.geom._geom_arrays);
+        this.attribs.io.merge(model.attribs._attribs_maps, maps);
     }
     /**
      * Sets the data in this model from JSON data.

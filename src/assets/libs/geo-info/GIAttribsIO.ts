@@ -22,17 +22,23 @@ export class GIAttribsIO {
      * The existing data in the model is not deleted.
      * @param model_data The JSON data for the model.
      */
-    public merge(attribs_maps: IAttribsMaps): void {
+    public merge(attribs_maps: IAttribsMaps, geom_maps: Map<number, number>[]): void {
+        // get the maps
+        const [
+            posis_map,
+            verts_map, edges_map, wires_map, faces_map,
+            points_map, plines_map, pgons_map, colls_map
+        ]: Map<number, number>[] = geom_maps;
         // add the attribute data
-        if (attribs_maps.ps !== undefined) { this._mergeAttribs(attribs_maps, EEntType.POSI); }
-        if (attribs_maps._v !== undefined) { this._mergeAttribs(attribs_maps, EEntType.VERT); }
-        if (attribs_maps._e !== undefined) { this._mergeAttribs(attribs_maps, EEntType.EDGE); }
-        if (attribs_maps._w !== undefined) { this._mergeAttribs(attribs_maps, EEntType.WIRE); }
-        if (attribs_maps._f !== undefined) { this._mergeAttribs(attribs_maps, EEntType.FACE); }
-        if (attribs_maps.pt !== undefined) { this._mergeAttribs(attribs_maps, EEntType.POINT); }
-        if (attribs_maps.pl !== undefined) { this._mergeAttribs(attribs_maps, EEntType.PLINE); }
-        if (attribs_maps.pg !== undefined) { this._mergeAttribs(attribs_maps, EEntType.PGON); }
-        if (attribs_maps.co !== undefined) { this._mergeAttribs(attribs_maps, EEntType.COLL); }
+        if (attribs_maps.ps !== undefined) { this._mergeAttribs(attribs_maps, EEntType.POSI, posis_map); }
+        if (attribs_maps._v !== undefined) { this._mergeAttribs(attribs_maps, EEntType.VERT, verts_map); }
+        if (attribs_maps._e !== undefined) { this._mergeAttribs(attribs_maps, EEntType.EDGE, edges_map); }
+        if (attribs_maps._w !== undefined) { this._mergeAttribs(attribs_maps, EEntType.WIRE, wires_map); }
+        if (attribs_maps._f !== undefined) { this._mergeAttribs(attribs_maps, EEntType.FACE, faces_map); }
+        if (attribs_maps.pt !== undefined) { this._mergeAttribs(attribs_maps, EEntType.POINT, points_map); }
+        if (attribs_maps.pl !== undefined) { this._mergeAttribs(attribs_maps, EEntType.PLINE, plines_map); }
+        if (attribs_maps.pg !== undefined) { this._mergeAttribs(attribs_maps, EEntType.PGON, pgons_map); }
+        if (attribs_maps.co !== undefined) { this._mergeAttribs(attribs_maps, EEntType.COLL, colls_map); }
         if (attribs_maps.mo !== undefined) { this._mergeModelAttribs(attribs_maps); }
     }
     /**
@@ -122,10 +128,10 @@ export class GIAttribsIO {
      * The existing attributes are not deleted
      * @param attribs_maps
      */
-    private _mergeAttribs(attribs_maps: IAttribsMaps, ent_type: EEntType) {
+    private _mergeAttribs(attribs_maps: IAttribsMaps, ent_type: EEntType, geom_map: Map<number, number>) {
         const from_attribs: Map<string, GIAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
         const to_attribs: Map<string, GIAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
-        const num_ents: number = this._model.geom.query.numEnts(ent_type, true); // incude deleted ents
+        // const num_ents: number = this._model.geom.query.numEnts(ent_type, true); // incude deleted ents
         from_attribs.forEach( from_attrib => {
             const name: string = from_attrib.getName();
             // get or create the existing attrib
@@ -137,7 +143,7 @@ export class GIAttribsIO {
             const ents_i_values: [number[], TAttribDataTypes][] = from_attrib.getEntsVals();
 
             for (const ents_i_value of ents_i_values) {
-                ents_i_value[0] = ents_i_value[0].map( ent_i => ent_i + num_ents ); // shift
+                ents_i_value[0] = ents_i_value[0].map( ent_i => geom_map.get(ent_i) ); // shift
             }
             // set the data
             to_attrib.setEntsVals(ents_i_values);

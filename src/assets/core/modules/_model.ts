@@ -1,8 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EAttribDataTypeStrs, TAttribDataTypes, EAttribNames, EEntType, TId, TEntTypeIdx, EEntTypeStr } from '@libs/geo-info/common';
 import { getArrDepth, idsBreak } from '@libs/geo-info/id';
-import { checkIDs, checkArgTypes, TypeCheckObj, IDcheckObj, checkAttribName, checkAttribValue } from './_check_args';
-import __ from 'underscore';
 
 //  ===============================================================================================
 //  Functions used by Mobius

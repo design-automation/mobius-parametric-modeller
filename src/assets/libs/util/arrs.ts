@@ -1,4 +1,4 @@
-import __ from 'underscore';
+import uscore from 'underscore';
 import { deepCopy } from './copy';
 import { isDim2 } from '../geo-info/id';
 

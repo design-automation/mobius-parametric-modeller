@@ -48,11 +48,17 @@ export class GIModel {
     /**
      * Returns the JSON data for this model.
      */
-    public getData(): IModelData {
+    public getData(make_copy = false): IModelData {
         return {
-            geometry: this.geom.io.getData(),
-            attributes: this.attribs.io.getData()
+            geometry: this.geom.io.getData(make_copy),
+            attributes: this.attribs.io.getData(make_copy)
         };
+    }
+    /**
+     * Returns a deep copy of this model
+     */
+    public copy(): GIModel {
+        return new GIModel(this.getData(true));
     }
     /**
      * Check model for internal consistency

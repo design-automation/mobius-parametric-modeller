@@ -1,6 +1,7 @@
 import { GIModel } from './GIModel';
 import { IAttribsData, IAttribData, TAttribDataTypes, EEntType, IAttribsMaps, EEntTypeStr, TModelAttribValuesArr } from './common';
 import { GIAttribMap } from './GIAttribMap';
+import { deepCopy } from '../util/copy';
 
 /**
  * Class for attributes.
@@ -75,8 +76,8 @@ export class GIAttribsIO {
     /**
      * Returns the JSON data for this model.
      */
-    public getData(): IAttribsData {
-        return {
+    public getData(make_copy = false): IAttribsData {
+        const data: IAttribsData = {
             positions: Array.from(this._attribs_maps.ps.values()).map(attrib => attrib.getData()),
             vertices: Array.from(this._attribs_maps._v.values()).map(attrib => attrib.getData()),
             edges: Array.from(this._attribs_maps._e.values()).map(attrib => attrib.getData()),
@@ -88,6 +89,10 @@ export class GIAttribsIO {
             collections: Array.from(this._attribs_maps.co.values()).map(attrib => attrib.getData()),
             model: Array.from(this._attribs_maps.mo)
         };
+        if (make_copy) {
+            return deepCopy(data) as IAttribsData;
+        }
+        return data;
     }
     // ============================================================================
     // Private methods

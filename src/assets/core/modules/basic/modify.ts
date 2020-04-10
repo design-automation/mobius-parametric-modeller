@@ -15,7 +15,6 @@ import { vecAdd, vecSum, vecDiv, vecFromTo, vecNorm, vecCross, vecSetLen, vecLen
 import { checkArgTypes, checkIDs, IDcheckObj, TypeCheckObj} from '../_check_args';
 import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
-import __ from 'underscore';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
 import { getOrigin, getRay, getPlane } from './_common';
 

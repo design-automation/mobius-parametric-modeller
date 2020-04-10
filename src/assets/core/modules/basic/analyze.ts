@@ -16,7 +16,7 @@ import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen, v
 import { triangulate } from '@libs/triangulate/triangulate';
 import { area } from '@libs/geom/triangle';
 import { checkIDs, checkArgTypes, IDcheckObj, TypeCheckObj} from '../_check_args';
-import __ from 'underscore';
+import uscore from 'underscore';
 import * as THREE from 'three';
 import { sum } from '@assets/core/inline/_mathjs';
 import { min, max } from '@assets/core/inline/_math';
@@ -359,13 +359,13 @@ export function Solar(__model__: GIModel, origins: TPlane[], detail: number,
             e.g. geolocation = {"latitude":12, "longitude":34}');
     } else {
         const geolocation = __model__.attribs.query.getModelAttribVal('geolocation');
-        if (__.isObject(geolocation) && __.has(geolocation, 'latitude')) {
+        if (uscore.isObject(geolocation) && uscore.has(geolocation, 'latitude')) {
             latitude = geolocation['latitude'];
         } else {
             throw new Error('analyze.Solar: geolocation model attribute is missing the "latitude" key, \
                 e.g. geolocation = {"latitude":12, "longitude":34}');
         }
-        if (__.has(geolocation, 'north')) {
+        if (uscore.has(geolocation, 'north')) {
             if (Array.isArray(geolocation['north']) && geolocation['north'].length === 2) {
                 north = geolocation['north'] as Txy;
             } else {
@@ -383,7 +383,7 @@ export function Solar(__model__: GIModel, origins: TPlane[], detail: number,
     const mesh_tjs: THREE.Mesh = _createMeshTjs(__model__, ents_arrs);
     limits = Array.isArray(limits) ? limits : [0, limits];
     // get the direction vectors
-    const directions_tjs: THREE.Vector3[] = __.flatten(_solarDirectionsTjs(latitude, north, detail, method));
+    const directions_tjs: THREE.Vector3[] = uscore.flatten(_solarDirectionsTjs(latitude, north, detail, method));
     // run the simulation
     const results: number[] = _solarRaytrace(origins_tjs, directions_tjs, mesh_tjs, limits) as number[];
     // cleanup
@@ -542,13 +542,13 @@ export function SunPath(__model__: GIModel, origin: Txyz|TPlane, detail: number,
             e.g. geolocation = {"latitude":12, "longitude":34}');
     } else {
         const geolocation = __model__.attribs.query.getModelAttribVal('geolocation');
-        if (__.isObject(geolocation) && __.has(geolocation, 'latitude')) {
+        if (uscore.isObject(geolocation) && uscore.has(geolocation, 'latitude')) {
             latitude = geolocation['latitude'];
         } else {
             throw new Error('analyze.Solar: geolocation model attribute is missing the "latitude" key, \
                 e.g. geolocation = {"latitude":12, "longitude":34}');
         }
-        if (__.has(geolocation, 'north')) {
+        if (uscore.has(geolocation, 'north')) {
             if (Array.isArray(geolocation['north']) && geolocation['north'].length === 2) {
                 north = geolocation['north'] as Txy;
             } else {

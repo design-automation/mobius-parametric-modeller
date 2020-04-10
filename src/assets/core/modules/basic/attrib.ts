@@ -8,7 +8,7 @@
 /**
  *
  */
-import __ from 'underscore';
+import uscore from 'underscore';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, TEntTypeIdx,
     EAttribPush, TAttribDataTypes, EEntTypeStr, EAttribDataTypeStrs, EEntTypeCollCP} from '@libs/geo-info/common';
@@ -132,7 +132,7 @@ export function Set(__model__: GIModel, entities: TId|TId[]|TId[][],
         attrib: string|[string, number|string], value: TAttribDataTypes|TAttribDataTypes[], method: _ESet): void {
     // if entities is null, then we are setting model attributes
     // @ts-ignore
-    if (entities !== null && getArrDepth(entities) === 2) { entities = __.flatten(entities); }
+    if (entities !== null && getArrDepth(entities) === 2) { entities = uscore.flatten(entities); }
     // --- Error Check ---
     const fn_name = 'attrib.Set';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
@@ -241,7 +241,7 @@ function _getEntsIndices(__model__: GIModel, ents_arr: TEntTypeIdx[]): number[] 
 export function Get(__model__: GIModel, entities: TId|TId[]|TId[][],
         attrib: string|[string, number|string]): TAttribDataTypes|TAttribDataTypes[] {
     // @ts-ignore
-    if (entities !== null && getArrDepth(entities) === 2) { entities = __.flatten(entities); }
+    if (entities !== null && getArrDepth(entities) === 2) { entities = uscore.flatten(entities); }
     // --- Error Check ---
     const fn_name = 'attrib.Get';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
@@ -425,7 +425,7 @@ export function Push(__model__: GIModel, entities: TId|TId[],
             entities = [entities] as TId[];
         } else if (depth === 2) {
             // @ts-ignore
-            entities = __.flatten(entities) as TId[];
+            entities = uscore.flatten(entities) as TId[];
         }
     }
     // --- Error Check ---

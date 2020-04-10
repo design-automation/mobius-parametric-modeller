@@ -16,7 +16,7 @@ import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen, v
 import { triangulate } from '@libs/triangulate/triangulate';
 import { area } from '@libs/geom/triangle';
 import { checkIDs, checkArgTypes, IDcheckObj, TypeCheckObj} from '../_check_args';
-import __ from 'underscore';
+import uscore from 'underscore';
 import { getCentroid, getCenterOfMass } from './_common';
 import { rayFromPln } from '@assets/core/inline/_ray';
 import { isEmptyArr2, arrMakeFlat, arrMaxDepth } from '@assets/libs/util/arrs';
@@ -282,7 +282,7 @@ function _length(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): numb
     } else {
         const lengths: number[]|number[][] =
             (ents_arrs as TEntTypeIdx[]).map( ents_arr => _length(__model__, ents_arr) ) as number[]|number[][];
-        return __.flatten(lengths);
+        return uscore.flatten(lengths);
     }
 }
 function _edgeLength(__model__: GIModel, edge_i: number): number {
@@ -372,7 +372,7 @@ function _area(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): number
     } else {
         const areas: number[]|number[][] =
             (ents_arrs as TEntTypeIdx[]).map( ents_arr => _area(__model__, ents_arr) ) as number[]|number[][];
-        return __.flatten(areas);
+        return uscore.flatten(areas);
     }
 }
 // ================================================================================================

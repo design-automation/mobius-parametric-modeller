@@ -1,6 +1,7 @@
 import { TTri, TVert, TEdge, TWire, TFace,
     TColl, IGeomData, TPoint, TPline, TPgon, Txyz, IGeomArrays, IGeomCopy, TAttribDataTypes, IGeomPack } from './common';
 import { GIGeom } from './GIGeom';
+import { deepCopy } from '../util/copy';
 
 /**
  * Class for geometry.
@@ -466,8 +467,8 @@ export class GIGeomIO {
     /**
      * Returns the JSON data for this model.
      */
-    public getData(): IGeomData {
-        return {
+    public getData(make_copy = false): IGeomData {
+        const data: IGeomData = {
             num_positions: this._geom_arrays.up_posis_verts.length,
             triangles: this._geom_arrays.dn_tris_verts,
             vertices: this._geom_arrays.dn_verts_posis,
@@ -480,6 +481,9 @@ export class GIGeomIO {
             collections: this._geom_arrays.dn_colls_objs,
             selected: this._geom.selected
         };
+        if (make_copy) {
+            return deepCopy(data) as IGeomData;
+        }
+        return data;
     }
-
 }

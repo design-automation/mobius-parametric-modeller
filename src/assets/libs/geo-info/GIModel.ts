@@ -32,8 +32,8 @@ export class GIModel {
      * @param model_data The GI model.
      */
     public merge(model: GIModel): void {
-        const maps: Map<number, number>[] = this.geom.io.merge(model.geom._geom_arrays);
-        this.attribs.io.merge(model.attribs._attribs_maps, maps);
+        const geom_maps: Map<number, number>[] = this.geom.io.merge(model.geom._geom_arrays);
+        this.attribs.io.merge(model.attribs._attribs_maps, geom_maps);
     }
     /**
      * Sets the data in this model from JSON data.
@@ -47,6 +47,7 @@ export class GIModel {
     }
     /**
      * Returns the JSON data for this model.
+     * This will include any deleted entities, which will be null.
      */
     public getData(make_copy = false): IModelData {
         return {
@@ -58,7 +59,9 @@ export class GIModel {
      * Returns a deep copy of this model
      */
     public copy(): GIModel {
-        return new GIModel(this.getData(true));
+        const model_copy: GIModel = new GIModel()
+        model_copy.merge(this);
+        return model_copy;
     }
     /**
      * Check model for internal consistency

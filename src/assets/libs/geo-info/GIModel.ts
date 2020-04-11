@@ -29,10 +29,21 @@ export class GIModel {
     /**
      * Copys the data from a second model into this model.
      * The existing data in this model is not deleted.
+     * For the imported data, deleted entities are also merged.
      * @param model_data The GI model.
      */
     public merge(model: GIModel): void {
         const geom_maps: Map<number, number>[] = this.geom.io.merge(model.geom._geom_arrays);
+        this.attribs.io.merge(model.attribs._attribs_maps, geom_maps);
+    }
+    /**
+     * Copys the data from a second model into this model.
+     * The existing data in this model is not deleted.
+     * For the imported data, deleted entities are filtered out (i.e. not merged).
+     * @param model_data The GI model.
+     */
+    public mergeAndPurge(model: GIModel): void {
+        const geom_maps: Map<number, number>[] = this.geom.io.mergeAndPurge(model.geom._geom_arrays);
         this.attribs.io.merge(model.attribs._attribs_maps, geom_maps);
     }
     /**
@@ -59,19 +70,29 @@ export class GIModel {
      * Returns a copy of this model.
      * Any deleted entities will be removed.
      * Warning: entity IDs will change.
-     * If you need an clone, then use getData() and setData().
+     * If you need an clone, then use clone().
      */
     public copy(): GIModel {
         const model_copy: GIModel = new GIModel();
-        model_copy.merge(this);
+        model_copy.mergeAndPurge(this);
         return model_copy;
+    }
+    /**
+     * Returns a clone of this model.
+     * Any deleted entities will remain.
+     * Entity IDs will not change.
+     */
+    public clone(): GIModel {
+        const model_clone: GIModel = new GIModel();
+        model_clone.setData(this.getData(true)); // get data makes deep copy
+        return model_clone;
     }
     /**
      * Reomove deleted entities will be removed.
      */
     public purge(): void {
         const model_copy: GIModel = new GIModel();
-        model_copy.merge(this);
+        model_copy.mergeAndPurge(this);
         this.setData(model_copy.getData());
     }
     /**

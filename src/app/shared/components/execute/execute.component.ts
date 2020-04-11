@@ -33,6 +33,9 @@ function mergeInputs(models){
     }
     return result;
 }
+function duplicateModel(model){
+    return model.copy();;
+}
 `;
 export const printFunc = `
 function printFunc(_console, name, value){

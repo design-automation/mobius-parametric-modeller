@@ -679,6 +679,9 @@ export class CodeUtils {
             if (node.type === 'start') {
                 fnCode += `let result_${nodeFuncName} = __params__.model;\n`;
             } else {
+                if (!node.enabled) {
+                    continue;
+                }
                 const codeRes = CodeUtils.getNodeCode(node, false, func.name, node.id)[0];
                 const nodecode = codeRes[0].join('\n').split('_-_-_+_-_-_');
                 fullCode += `${nodecode[0]}\nfunction ${nodeFuncName}` +
@@ -696,8 +699,13 @@ export class CodeUtils {
                         activeNodes.push(nodeEdge.source.parentNode.id);
                     }
                 }
-                fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) =>
-                    `result_${func.name}_${nodeId}`).join(', ')}]);\n`;
+                if (activeNodes.length === 1) {
+                    fnCode += `\nconsole.log('result_${func.name}_${activeNodes[0]}')\n;`
+                    fnCode += `\n__params__.model = duplicateModel(result_${func.name}_${activeNodes[0]});\n`;
+                } else {
+                    fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) =>
+                        `result_${func.name}_${nodeId}`).join(', ')}]);\n`;
+                }
                 fnCode += `let result_${nodeFuncName} = ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_'
                             ).join('')});\n`;
 

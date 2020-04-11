@@ -228,22 +228,21 @@ function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
         case _EIOExportDataFormat.GI:
             let gi_data = '';
             if (ents_arr === null) {
-                gi_data = JSON.stringify(__model__.getData());
+                gi_data = JSON.stringify(__model__.copy().getData());
             } else {
-                // make a clone of the model (warning copy will change entity IDs)
-                const model_copy: GIModel = new GIModel();
-                model_copy.setData(__model__.getData(true));
+                // make a clone of the model (warning: do not copy, copy will change entity IDs)
+                const model_clone: GIModel = __model__.clone();
                 // get the ents
-                const gp: IGeomPack = model_copy.geom.query.createGeomPack(ents_arr, true);
+                const gp: IGeomPack = model_clone.geom.query.createGeomPack(ents_arr, true);
                 // delete the ents
-                model_copy.geom.del.delColls(gp.colls_i, true);
-                model_copy.geom.del.delPgons(gp.pgons_i, true);
-                model_copy.geom.del.delPlines(gp.plines_i, true);
-                model_copy.geom.del.delPoints(gp.points_i, true);
-                model_copy.geom.del.delPosis(gp.posis_i);
-                model_copy.geom.del.delUnusedPosis(gp.posis2_i);
-                model_copy.purge();
-                gi_data = JSON.stringify(model_copy.getData());
+                model_clone.geom.del.delColls(gp.colls_i, true);
+                model_clone.geom.del.delPgons(gp.pgons_i, true);
+                model_clone.geom.del.delPlines(gp.plines_i, true);
+                model_clone.geom.del.delPoints(gp.points_i, true);
+                model_clone.geom.del.delPosis(gp.posis_i);
+                model_clone.geom.del.delUnusedPosis(gp.posis2_i);
+                model_clone.purge();
+                gi_data = JSON.stringify(model_clone.getData());
             }
             // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
             gi_data = gi_data.replace(/\\/g, '\\\\'); // TODO temporary fix

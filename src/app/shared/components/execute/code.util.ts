@@ -674,14 +674,17 @@ export class CodeUtils {
         let fullCode = `function ${func.name}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){\n`;
 
         let fnCode = `var merged;\n`;
+
+        const numRemainingOutputs = {};
         for (const node of func.flowchart.nodes) {
+            if (!node.enabled) {
+                continue;
+            }
+            numRemainingOutputs[node.id] = node.output.edges.length;
             const nodeFuncName = `${func.name}_${node.id}`;
             if (node.type === 'start') {
                 fnCode += `let result_${nodeFuncName} = __params__.model;\n`;
             } else {
-                if (!node.enabled) {
-                    continue;
-                }
                 const codeRes = CodeUtils.getNodeCode(node, false, func.name, node.id)[0];
                 const nodecode = codeRes[0].join('\n').split('_-_-_+_-_-_');
                 fullCode += `${nodecode[0]}\nfunction ${nodeFuncName}` +
@@ -689,29 +692,33 @@ export class CodeUtils {
                             nodecode[1] + `\n}\n\n`;
 
                 const activeNodes = [];
-                for (const nodeEdge of node.input.edges) {
-                    if (!nodeEdge.source.parentNode.enabled) {
-                        continue;
-                    }
-                    if (nodeEdge.source.parentNode.type === 'start') {
-                        activeNodes.unshift(nodeEdge.source.parentNode.id);
-                    } else {
-                        activeNodes.push(nodeEdge.source.parentNode.id);
-                    }
-                }
-                if (activeNodes.length === 1) {
-                    fnCode += `\nconsole.log('result_${func.name}_${activeNodes[0]}')\n;`
-                    fnCode += `\n__params__.model = duplicateModel(result_${func.name}_${activeNodes[0]});\n`;
+                if (node.input.edges.length === 1 && numRemainingOutputs[node.input.edges[0].source.parentNode.id] === 1) {
+                    fnCode += `\n__params__.model = result_${func.name}_${node.input.edges[0].source.parentNode.id};\n`;
                 } else {
-                    fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) =>
-                        `result_${func.name}_${nodeId}`).join(', ')}]);\n`;
+                    for (const nodeEdge of node.input.edges) {
+                        if (!nodeEdge.source.parentNode.enabled) {
+                            continue;
+                        }
+                        numRemainingOutputs[nodeEdge.source.parentNode.id] --;
+                        if (nodeEdge.source.parentNode.type === 'start') {
+                            activeNodes.unshift(nodeEdge.source.parentNode.id);
+                        } else {
+                            activeNodes.push(nodeEdge.source.parentNode.id);
+                        }
+                    }
+                    if (activeNodes.length === 1) {
+                        fnCode += `\n__params__.model = duplicateModel(result_${func.name}_${activeNodes[0]});\n`;
+                    } else {
+                        fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) =>
+                            `result_${func.name}_${nodeId}`).join(', ')}]);\n`;
+                    }
                 }
                 fnCode += `let result_${nodeFuncName} = ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_'
                             ).join('')});\n`;
 
             }
             if (node.type === 'end') {
-                // fnCode += `\n__mainParams__.model = mergeInputs([__mainParams__.model,__params__.model]);\n`;
+                fnCode += `\n__params__.model.purge();`;
                 fnCode += `\nreturn result_${nodeFuncName};\n`;
             }
         }

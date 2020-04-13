@@ -572,9 +572,9 @@ export class CodeUtils {
     }
 
     static mergeInputs(models): any {
-        const result = _parameterTypes['newFn']();
+        const result = _parameterTypes.newFn();
         for (const model of models) {
-            _parameterTypes['mergeFn'](result, model);
+            _parameterTypes.mergeFn(result, model);
         }
         return result;
     }
@@ -585,6 +585,8 @@ export class CodeUtils {
         let input: any;
         if (node.type === 'start' || inp.edges.length === 0) {
             input = _parameterTypes['newFn']();
+        } else if (inp.edges.length === 1 && inp.edges[0].source.parentNode.enabled) {
+            input = inp.edges[0].source.value.clone();
         } else {
             const inputs = [];
             for (const edge of inp.edges) {

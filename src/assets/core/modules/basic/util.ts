@@ -18,6 +18,20 @@ import { checkIDs, IDcheckObj } from '../_check_args';
 
 // ================================================================================================
 /**
+ * Removes all deleted entities from the model.
+ * The IDs of other entities may change as a result. 
+ * ~
+ * For example, if 'pg0' was deleted and 'pg1' still exists, then after purge
+ * 'pg1' will get renumbered, and will get the ID 'pg0'.
+ *
+ * @param __model__
+ * @returns void
+ */
+export function ModelPurge(__model__: GIModel): void {
+    __model__.purge();
+}
+// ================================================================================================
+/**
  * Returns an html string representation of the contents of this model
  *
  * @param __model__

@@ -720,7 +720,7 @@ export class CodeUtils {
 
             }
             if (node.type === 'end') {
-                fnCode += `\n__params__.model.purge();`;
+                // fnCode += `\n__params__.model.purge();`;
                 fnCode += `\nreturn result_${nodeFuncName};\n`;
             }
         }

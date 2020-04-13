@@ -583,10 +583,12 @@ export class CodeUtils {
 
     static getInputValue(inp: IPortInput, node: INode): Promise<string> {
         let input: any;
+        // const x = performance.now();
         if (node.type === 'start' || inp.edges.length === 0) {
             input = _parameterTypes['newFn']();
-        } else if (inp.edges.length === 1 && inp.edges[0].source.parentNode.enabled) {
-            input = inp.edges[0].source.value.clone();
+        // } else if (inp.edges.length === 1 && inp.edges[0].source.parentNode.enabled) {
+        //     input = inp.edges[0].source.value.clone();
+        //     console.log('clone time:', performance.now() - x);
         } else {
             const inputs = [];
             for (const edge of inp.edges) {
@@ -600,6 +602,7 @@ export class CodeUtils {
                 }
             }
             input = CodeUtils.mergeInputs(inputs);
+            // console.log('merge time:', performance.now() - x);
             /*
             if (input.constructor === gsConstructor) {
                 input = `new __MODULES__.gs.Model(${input.toJSON()})`

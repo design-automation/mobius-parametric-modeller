@@ -33,6 +33,9 @@ function mergeInputs(models){
     }
     return result;
 }
+function duplicateModel(model){
+    return model.clone();;
+}
 `;
 export const printFunc = `
 function printFunc(_console, name, value){
@@ -484,7 +487,7 @@ export class ExecuteComponent {
                 continue;
             }
 
-            // if the node is in the to be executed set
+            // if the node is not to be executed
             if (!executeSet.has(i)) {
                 let exCheck = false;
                 for (const edge of node.output.edges) {
@@ -499,6 +502,7 @@ export class ExecuteComponent {
                 }
                 continue;
             }
+            // execute valid node
             globalVars = this.executeNode(node, funcStrings, globalVars, constantList);
         }
 
@@ -621,8 +625,9 @@ export class ExecuteComponent {
                 }
             }
 
-            params['model'] = _parameterTypes.newFn();
-            _parameterTypes.mergeFn(params['model'], node.input.value);
+            params['model'] = node.input.value;
+            // console.log(node.input.value)
+            // _parameterTypes.mergeFn(params['model'], node.input.value);
             params['model'].debug = this.dataService.mobiusSettings.debug;
 
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)

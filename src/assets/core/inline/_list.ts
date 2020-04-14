@@ -1,7 +1,6 @@
 /**
  * list functions that obtain and return information from an input list. Does not modify input list.
  */
-import __ from 'underscore';
 import { arrMakeFlat } from '@libs/util/arrs';
 
 export function range(start: number, end?: number, step?: number): number[] {

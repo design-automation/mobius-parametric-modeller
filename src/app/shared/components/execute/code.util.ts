@@ -572,9 +572,9 @@ export class CodeUtils {
     }
 
     static mergeInputs(models): any {
-        const result = _parameterTypes['newFn']();
+        const result = _parameterTypes.newFn();
         for (const model of models) {
-            _parameterTypes['mergeFn'](result, model);
+            _parameterTypes.mergeFn(result, model);
         }
         return result;
     }
@@ -583,8 +583,12 @@ export class CodeUtils {
 
     static getInputValue(inp: IPortInput, node: INode): Promise<string> {
         let input: any;
+        // const x = performance.now();
         if (node.type === 'start' || inp.edges.length === 0) {
             input = _parameterTypes['newFn']();
+        // } else if (inp.edges.length === 1 && inp.edges[0].source.parentNode.enabled) {
+        //     input = inp.edges[0].source.value.clone();
+        //     console.log('clone time:', performance.now() - x);
         } else {
             const inputs = [];
             for (const edge of inp.edges) {
@@ -598,6 +602,7 @@ export class CodeUtils {
                 }
             }
             input = CodeUtils.mergeInputs(inputs);
+            // console.log('merge time:', performance.now() - x);
             /*
             if (input.constructor === gsConstructor) {
                 input = `new __MODULES__.gs.Model(${input.toJSON()})`
@@ -674,7 +679,13 @@ export class CodeUtils {
         let fullCode = `function ${func.name}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){\n`;
 
         let fnCode = `var merged;\n`;
+
+        const numRemainingOutputs = {};
         for (const node of func.flowchart.nodes) {
+            if (!node.enabled) {
+                continue;
+            }
+            numRemainingOutputs[node.id] = node.output.edges.length;
             const nodeFuncName = `${func.name}_${node.id}`;
             if (node.type === 'start') {
                 fnCode += `let result_${nodeFuncName} = __params__.model;\n`;
@@ -686,24 +697,33 @@ export class CodeUtils {
                             nodecode[1] + `\n}\n\n`;
 
                 const activeNodes = [];
-                for (const nodeEdge of node.input.edges) {
-                    if (!nodeEdge.source.parentNode.enabled) {
-                        continue;
+                if (node.input.edges.length === 1 && numRemainingOutputs[node.input.edges[0].source.parentNode.id] === 1) {
+                    fnCode += `\n__params__.model = result_${func.name}_${node.input.edges[0].source.parentNode.id};\n`;
+                } else {
+                    for (const nodeEdge of node.input.edges) {
+                        if (!nodeEdge.source.parentNode.enabled) {
+                            continue;
+                        }
+                        numRemainingOutputs[nodeEdge.source.parentNode.id] --;
+                        if (nodeEdge.source.parentNode.type === 'start') {
+                            activeNodes.unshift(nodeEdge.source.parentNode.id);
+                        } else {
+                            activeNodes.push(nodeEdge.source.parentNode.id);
+                        }
                     }
-                    if (nodeEdge.source.parentNode.type === 'start') {
-                        activeNodes.unshift(nodeEdge.source.parentNode.id);
+                    if (activeNodes.length === 1) {
+                        fnCode += `\n__params__.model = duplicateModel(result_${func.name}_${activeNodes[0]});\n`;
                     } else {
-                        activeNodes.push(nodeEdge.source.parentNode.id);
+                        fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) =>
+                            `result_${func.name}_${nodeId}`).join(', ')}]);\n`;
                     }
                 }
-                fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) =>
-                    `result_${func.name}_${nodeId}`).join(', ')}]);\n`;
                 fnCode += `let result_${nodeFuncName} = ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_'
                             ).join('')});\n`;
 
             }
             if (node.type === 'end') {
-                // fnCode += `\n__mainParams__.model = mergeInputs([__mainParams__.model,__params__.model]);\n`;
+                // fnCode += `\n__params__.model.purge();`;
                 fnCode += `\nreturn result_${nodeFuncName};\n`;
             }
         }

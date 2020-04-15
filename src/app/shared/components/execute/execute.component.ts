@@ -477,6 +477,7 @@ export class ExecuteComponent {
             }
         }
 
+        const nodeIndices = {}
         // execute each node
         for (let i = 0; i < this.dataService.flowchart.nodes.length; i++) {
             const node = this.dataService.flowchart.nodes[i];
@@ -486,6 +487,7 @@ export class ExecuteComponent {
                 node.output.value = undefined;
                 continue;
             }
+            nodeIndices[node.id] = i;
 
             // if the node is not to be executed
             if (!executeSet.has(i)) {
@@ -503,7 +505,7 @@ export class ExecuteComponent {
                 continue;
             }
             // execute valid node
-            globalVars = this.executeNode(node, funcStrings, globalVars, constantList);
+            globalVars = this.executeNode(node, funcStrings, globalVars, constantList, nodeIndices);
         }
 
         // delete each node.output.value to save memory
@@ -527,7 +529,7 @@ export class ExecuteComponent {
     }
 
 
-    executeNode(node: INode, funcStrings, globalVars, constantList): string {
+    executeNode(node: INode, funcStrings, globalVars, constantList, nodeIndices): string {
         const params = {
             'currentProcedure': [''],
             'console': this.dataService.getLog(),
@@ -560,7 +562,7 @@ export class ExecuteComponent {
                 return;
             }
             const usedFuncs: string[] = [];
-            const codeResult = CodeUtils.getNodeCode(node, true, undefined, undefined, usedFuncs);
+            const codeResult = CodeUtils.getNodeCode(node, true, nodeIndices, undefined, undefined, usedFuncs);
             const usedFuncsSet = new Set(usedFuncs);
             // if process is terminated, return
             if (codeResult[1]) {

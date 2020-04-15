@@ -477,7 +477,7 @@ export class ExecuteComponent {
             }
         }
 
-        const nodeIndices = {}
+        const nodeIndices = {};
         // execute each node
         for (let i = 0; i < this.dataService.flowchart.nodes.length; i++) {
             const node = this.dataService.flowchart.nodes[i];

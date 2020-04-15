@@ -707,13 +707,12 @@ export class CodeUtils {
                         //     activeNodes.push(nodeEdge.source.parentNode.id);
                         // }
                     }
-                    activeNodes = activeNodes.sort((a, b) => a[0] - b[0]);
-                    activeNodes = activeNodes.map(i => i[1]);
                     if (activeNodes.length === 1) {
-                        fnCode += `\n__params__.model = duplicateModel(result_${func.name}_${activeNodes[0]});\n`;
+                        fnCode += `\n__params__.model = duplicateModel(result_${func.name}_${activeNodes[0][1]});\n`;
                     } else {
+                        activeNodes = activeNodes.sort((a, b) => a[0] - b[0]);
                         fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) =>
-                            `result_${func.name}_${nodeId}`).join(', ')}]);\n`;
+                            `result_${func.name}_${nodeId[1]}`).join(', ')}]);\n`;
                     }
                 }
                 fnCode += `let result_${nodeFuncName} = ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_'

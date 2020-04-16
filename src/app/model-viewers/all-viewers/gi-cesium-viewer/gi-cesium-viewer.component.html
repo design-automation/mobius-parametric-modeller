@@ -25,10 +25,26 @@
                             <hr>
                         </dd>
                         <dd id='cesium_camera'>
-                            <div>Camera Position:</div> <br>
+                            <div>Camera Position:</div>
                             <div class='coord'> x: <input disabled [value]='settings.camera.pos.x'></div>
                             <div class='coord'> y: <input disabled [value]='settings.camera.pos.y'></div>
                             <div class='coord'> z: <input disabled [value]='settings.camera.pos.z'></div>
+                            <br>
+                            <div>Camera direction:</div>
+                            <div class='coord'> x: <input disabled [value]='settings.camera.direction.x'></div>
+                            <div class='coord'> y: <input disabled [value]='settings.camera.direction.y'></div>
+                            <div class='coord'> z: <input disabled [value]='settings.camera.direction.z'></div>
+                            <br>
+                            <div>Camera up:</div>
+                            <div class='coord'> x: <input disabled [value]='settings.camera.up.x'></div>
+                            <div class='coord'> y: <input disabled [value]='settings.camera.up.y'></div>
+                            <div class='coord'> z: <input disabled [value]='settings.camera.up.z'></div>
+                            <br>
+                            <div>Camera right:</div>
+                            <div class='coord'> x: <input disabled [value]='settings.camera.right.x'></div>
+                            <div class='coord'> y: <input disabled [value]='settings.camera.right.y'></div>
+                            <div class='coord'> z: <input disabled [value]='settings.camera.right.z'></div>
+                            <br>
                             <button (click)="settingOnChange('camera.pos')" class="filebtn getbtn">Get</button>
                         </dd>
             </dl>

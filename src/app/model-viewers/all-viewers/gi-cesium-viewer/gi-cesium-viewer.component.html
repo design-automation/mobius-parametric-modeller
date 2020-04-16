@@ -6,7 +6,7 @@
     <cesium-modal-window id="cesium_settings_modal" (closeModal) = 'onCloseModal()'>
         <h1>Cesium Viewer Settings</h1>
         <tabs id="settingsTab">
-            <tab tabTitle="Image Tiles">
+            <tab tabTitle="Scene">
                 <div class="mat-elevation-z1">
                     <dl>
                         <dd>
@@ -21,7 +21,17 @@
                                 <option *ngFor="let item of terrainList" value ={{item}}>{{item}}</option>
                             </select>
                         </dd>
-                    </dl>
+                        <dd>
+                            <hr>
+                        </dd>
+                        <dd id='cesium_camera'>
+                            <div>Camera Position:</div> <br>
+                            <div class='coord'> x: <input disabled [value]='settings.camera.pos.x'></div>
+                            <div class='coord'> y: <input disabled [value]='settings.camera.pos.y'></div>
+                            <div class='coord'> z: <input disabled [value]='settings.camera.pos.z'></div>
+                            <button (click)="settingOnChange('camera.pos')" class="filebtn getbtn">Get</button>
+                        </dd>
+            </dl>
                 </div>
             </tab>
             <tab tabTitle="Cesium Ion">

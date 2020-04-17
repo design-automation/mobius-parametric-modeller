@@ -802,7 +802,10 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
 
 function analyzeArray(comps: {'type': strType, 'value': string}[], i: number, vars: string[], acceptFunc = false):
                 {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string, 'jsStr'?: string} {
-    if (comps[i].type === strType.OTHER && !componentStartSymbols.has(comps[i].value) && comps[i].value !== ',') {
+    if (comps[i].type === strType.OTHER && !componentStartSymbols.has(comps[i].value)) {
+        if (comps[i].value === ',') {
+            return {'error': `Error: Unexpected Token "," at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
         return {'i': i, 'str': '', 'jsStr': ''};
     }
     const firstComp = analyzeComp(comps, i, vars, false, 'array');
@@ -821,9 +824,11 @@ function analyzeArray(comps: {'type': strType, 'value': string}[], i: number, va
         if (i + 1 >= comps.length) { return { 'error': `Error: "]" expected`}; }
         const result = analyzeComp(comps, i + 1, vars, false, 'array');
         if (result.error) { return result; }
-        if (result.str === '') { i = result.i; continue; }
+        // if (result.str === '') { i = result.i; continue; }
+        if (result.str === '') {
+            return {'error': `Error: Unexpected Token "," at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
         i = result.i + 1;
-        // if (result.str === '') { return { 'error': `Error: Value expected after ","`}; }
         if (result.str[0] !== ' ') {
             newString += ' ';
             jsString += ' ';

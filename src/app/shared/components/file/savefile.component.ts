@@ -248,7 +248,7 @@ export class SaveFileComponent implements OnDestroy{
         nodeList.splice(nodeList.length - 1, 0, checkNode);
     }
 
-    static clearModelData(f: IFlowchart, modelMap = null) {
+    static clearModelData(f: IFlowchart, modelMap = null, clearAll = true) {
         for (const node of f.nodes) {
             if (modelMap !== null) {
                 modelMap[node.id] = node.model;
@@ -261,37 +261,39 @@ export class SaveFileComponent implements OnDestroy{
                 node.output.value = undefined;
             }
             node.state.procedure = [];
-            SaveFileComponent.clearResolvedValue(node.procedure);
+            SaveFileComponent.clearResolvedValue(node.procedure, clearAll);
             if (node.localFunc) {
-                SaveFileComponent.clearResolvedValue(node.localFunc);
+                SaveFileComponent.clearResolvedValue(node.localFunc, clearAll);
             }
         }
         if (f.functions) {
             for (const func of f.functions) {
-                SaveFileComponent.clearModelData(func.flowchart);
+                SaveFileComponent.clearModelData(func.flowchart, null, clearAll);
             }
         }
         if (f.subFunctions) {
             for (const func of f.subFunctions) {
-                SaveFileComponent.clearModelData(func.flowchart);
+                SaveFileComponent.clearModelData(func.flowchart, null, clearAll);
             }
         }
     }
 
-    static clearResolvedValue(prodList: IProcedure[]) {
+    static clearResolvedValue(prodList: IProcedure[], clearAll) {
         prodList.forEach(prod => {
             if (prod.hasOwnProperty('resolvedValue')) {
                 prod.resolvedValue = undefined;
             }
-            // ******** delete some unnecessary parameters ******** //
-            delete prod['selected'];
-            delete prod['hasError'];
-            for (const arg of prod.args) {
-                delete arg['invalidVar'];
-                delete arg['linked'];
+            // ******** delete some unnecessary parameters for saving ******** //
+            if (clearAll) {
+                delete prod['selected'];
+                delete prod['hasError'];
+                for (const arg of prod.args) {
+                    delete arg['invalidVar'];
+                    delete arg['linked'];
+                }
             }
             if (prod.children) {
-                SaveFileComponent.clearResolvedValue(prod.children);
+                SaveFileComponent.clearResolvedValue(prod.children, clearAll);
             }
         });
     }

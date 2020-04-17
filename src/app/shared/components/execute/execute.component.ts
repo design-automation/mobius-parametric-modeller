@@ -187,7 +187,7 @@ export class ExecuteComponent {
         if (this.dataService.consoleClear) {
             this.dataService.clearLog();
         }
-        SaveFileComponent.clearModelData(this.dataService.flowchart, null);
+        SaveFileComponent.clearModelData(this.dataService.flowchart, null, false);
 
         if (this.dataService.mobiusSettings.debug === undefined) {
             this.dataService.mobiusSettings.debug = true;
@@ -294,16 +294,18 @@ export class ExecuteComponent {
     async checkProdValidity(node: INode, prodList: IProcedure[]) {
         let InvalidECheck = false;
         let EmptyECheck = false;
-
+        console.log('................')
         for (const prod of prodList) {
             // ignore the return, comment and disabled procedures
             if (prod.type === ProcedureTypes.Return || prod.type === ProcedureTypes.Comment || !prod.enabled) { continue; }
             // if there's any invalid argument, flag as having error
             for (const arg of prod.args) {
+                console.log(arg)
                 if (arg.invalidVar) {
                     node.hasError = true;
                     prod.hasError = true;
                     InvalidECheck = true;
+                    console.log('------------------------')
                 }
             }
             // if (prod.argCount > 0 && prod.args[0].invalidVar) {

@@ -566,9 +566,7 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
             jsString += `[]`;
             i += 1;
         } else {
-            console.log('???????????')
             const result = analyzeArray(comps, i + 1, vars);
-            console.log(result)
             if (result.error) { return result; }
             if (result.i + 1 >= comps.length || comps[result.i + 1].value !== ']') {
                 return {'error': 'Error: Closing Bracket "]" expected\n' +

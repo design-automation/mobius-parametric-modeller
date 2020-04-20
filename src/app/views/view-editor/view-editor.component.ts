@@ -259,7 +259,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         const temp = node.state.procedure.slice();
         const copiedProds = [];
         NodeUtils.rearrangeProcedures(copiedProds, temp, node.localFunc.concat(node.procedure));
-        SaveFileComponent.clearResolvedValue(copiedProds);
+        SaveFileComponent.clearResolvedValue(copiedProds, true);
         localStorage.setItem('mobius_copied_procedures', circularJSON.stringify(copiedProds));
         this.dataService.notifyMessage(`Copied ${copiedProds.length} Procedures`);
     }
@@ -281,7 +281,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         const temp = node.state.procedure.slice();
         const copiedProds = [];
         NodeUtils.rearrangeProcedures(copiedProds, temp, node.localFunc.concat(node.procedure));
-        SaveFileComponent.clearResolvedValue(copiedProds);
+        SaveFileComponent.clearResolvedValue(copiedProds, true);
 
         let parentArray: IProcedure[];
         const redoActions = [];

@@ -66,7 +66,7 @@ export class GIModelComparator {
         if (result.score === result.total) {
             result.comment = ['RESULT: The two models match.'];
         } else {
-            result.comment.push('RESULT: The two models no not match.');
+            result.comment.push('RESULT: The two models do not match.');
         }
 
         // calculate percentage score

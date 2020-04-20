@@ -320,14 +320,28 @@ body.modal-open {
         float: left;
     }
 
-    #camera, #camera_target, #grid_pos{
+    #cesium_camera, #cesium_camera_target{
+        position: relative;
+        .coord{
+            margin-left: 50px;
+        }
         input{
-            width: 65px;
+            width: 170px;
             border: 1px solid #bdbdbd;
             height: 16px;
+            margin-left: 30px;
             margin-right: 3px;
             text-align: right;
-            padding-right: 3px
+            padding-right: 3px;
+        }
+        .getbtn{
+            cursor: pointer;
+            background: $color7;
+            border: 1px solid $color4;
+            box-sizing: border-box;
+            margin-left: 155px;
+            height: 20px;
+            width: 50px;
         }
     }
 }

@@ -318,8 +318,8 @@ function saveResource(file: string, name: string): boolean {
         localStorage.setItem('mobius_backup_date_dict', JSON.stringify(itemDates));
     }
     const requestedBytes = 1024 * 1024 * 50;
-    window['_code_'] = name;
-    window['_file_'] = file;
+    window['_code__'] = name;
+    window['_file__'] = file;
     navigator.webkitPersistentStorage.requestQuota (
         requestedBytes, function(grantedBytes) {
             // @ts-ignore
@@ -332,12 +332,13 @@ function saveResource(file: string, name: string): boolean {
 }
 
 function saveToFS(fs) {
-    fs.root.getFile(window['_code_'], { create: true}, function (fileEntry) {
-        fileEntry.createWriter(function (fileWriter) {
-            const bb = new Blob([window['_file_']], {type: 'text/plain;charset=utf-8'});
-            fileWriter.write(bb);
-            window['_code_'] = undefined;
-            window['_file_'] = undefined;
+    const code = window['_code__'];
+    fs.root.getFile(code, { create: true}, function (fileEntry) {
+        fileEntry.createWriter(async function (fileWriter) {
+            const bb = new Blob([window['_file__'] + '_|_|_'], {type: 'text/plain;charset=utf-8'});
+            await fileWriter.write(bb);
+            window['_code__'] = undefined;
+            window['_file__'] = undefined;
         }, (e) => { console.log(e); });
     }, (e) => { console.log(e.code); });
 }

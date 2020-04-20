@@ -3,6 +3,7 @@ import { CesiumSettings } from '../gi-cesium-viewer.settings';
 import { EEntType, Txyz, TAttribDataTypes, LONGLAT } from '@libs/geo-info/common';
 // import { HereMapsImageryProvider } from './HereMapsImageryProvider.js';
 import Shape from '@doodle3d/clipper-js';
+import { DataService } from '@shared/services';
 
 /**
  * Cesium data
@@ -175,6 +176,7 @@ export class DataCesium {
      * @param container
      */
     public addGeometry(model: GIModel, container: any): void { // TODO delete container
+        this.updateSettings();
         this._viewer.scene.primitives.removeAll();
         // the origin of the model
         let longitude = LONGLAT[0];
@@ -480,8 +482,22 @@ export class DataCesium {
                 endTransform: Cesium.Matrix4.IDENTITY
             });
             this._camera = [sphere, this._viewer.camera];
-
-
+            if (this.settings.camera && this.settings.updated) {
+                const pos = this.settings.camera.pos;
+                if (pos && (pos.x || pos.y || pos.z)) {
+                    const dir = this.settings.camera.direction;
+                    const up = this.settings.camera.up;
+                    const right = this.settings.camera.right;
+                    this._viewer.camera.position = new Cesium.Cartesian3(pos.x, pos.y, pos.z);
+                    this._viewer.camera.direction = new Cesium.Cartesian3(dir.x, dir.y, dir.z);
+                    this._viewer.camera.up = new Cesium.Cartesian3(up.x, up.y, up.z);
+                    this._viewer.camera.right = new Cesium.Cartesian3(right.x, right.y, right.z);
+                }
+            }
+            if (lines_instances.length > 0 || tris_instances.length > 0 || transparent_instances.length > 0) {
+                this.settings.updated = false;
+                localStorage.setItem('cesium_settings', JSON.stringify(this.settings));
+            }
             const extent = Cesium.Rectangle.fromDegrees(
                 longitude - 0.01, latitude - 0.01,
                 longitude + 0.01, latitude + 0.01); // 100.3, 5.4, 100.4, 5.5);
@@ -519,8 +535,13 @@ export class DataCesium {
         }
     }
 
-    public updateSettings(settings) {
-        const newSetting = <CesiumSettings> JSON.parse(JSON.stringify(settings));
+    public updateSettings(settings: CesiumSettings = null) {
+        let newSetting: CesiumSettings;
+        if (settings !== null) {
+            newSetting = <CesiumSettings> JSON.parse(JSON.stringify(settings));
+        } else {
+            newSetting = <CesiumSettings> JSON.parse(localStorage.getItem('cesium_settings'));
+        }
         newSetting.cesium.ion = newSetting.cesium.ion.trim();
         let ionChange = false;
         if (newSetting.cesium) {
@@ -556,6 +577,25 @@ export class DataCesium {
                     }
                 }
             }
+        }
+        if (newSetting.camera) {
+            if (newSetting.camera.pos) {
+                this.settings.camera.pos.x = newSetting.camera.pos.x;
+                this.settings.camera.pos.y = newSetting.camera.pos.y;
+                this.settings.camera.pos.z = newSetting.camera.pos.z;
+                this.settings.camera.direction.x = newSetting.camera.direction.x;
+                this.settings.camera.direction.y = newSetting.camera.direction.y;
+                this.settings.camera.direction.z = newSetting.camera.direction.z;
+                this.settings.camera.up.x = newSetting.camera.up.x;
+                this.settings.camera.up.y = newSetting.camera.up.y;
+                this.settings.camera.up.z = newSetting.camera.up.z;
+                this.settings.camera.right.x = newSetting.camera.right.x;
+                this.settings.camera.right.y = newSetting.camera.right.y;
+                this.settings.camera.right.z = newSetting.camera.right.z;
+            }
+        }
+        if (newSetting.updated) {
+            this.settings.updated = newSetting.updated;
         }
         if (Cesium.Ion.defaultAccessToken && newSetting.cesium && newSetting.cesium.assetid) {
             this._addAssets(newSetting.cesium.assetid);

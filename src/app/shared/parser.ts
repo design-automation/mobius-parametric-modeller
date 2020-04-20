@@ -605,7 +605,7 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
         newString = result.str;
         jsString = result.jsStr;
         // return {'i': i, 'str': result.str, 'jsStr': result.jsStr};
-    }
+    } else { return {'i': i, 'str': newString, 'jsStr': jsString}; }
 
     if (i + 1 >= comps.length) { return {'i': i, 'str': newString, 'jsStr': jsString}; }
 
@@ -803,26 +803,37 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
 function analyzeArray(comps: {'type': strType, 'value': string}[], i: number, vars: string[], acceptFunc = false):
                 {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string, 'jsStr'?: string} {
     if (comps[i].type === strType.OTHER && !componentStartSymbols.has(comps[i].value)) {
+        if (comps[i].value === ',') {
+            return {'error': `Error: Unexpected Token "," at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
         return {'i': i, 'str': '', 'jsStr': ''};
     }
     const firstComp = analyzeComp(comps, i, vars, false, 'array');
     if (firstComp.error) { return firstComp; }
-    i = firstComp.i + 1;
+    if (firstComp.str === '') {
+        i = firstComp.i;
+    } else {
+        i = firstComp.i + 1;
+    }
     let newString = firstComp.str;
     let jsString = firstComp.jsStr;
-
     while (i < comps.length && comps[i].value === ',') {
+        // if (i + 1 < comps.length && comps[i + 1].value === ',') {return { 'error': `Error: Unexpected Token ","`}; }
         newString += comps[i].value;
         jsString += comps[i].value;
         if (i + 1 >= comps.length) { return { 'error': `Error: "]" expected`}; }
         const result = analyzeComp(comps, i + 1, vars, false, 'array');
         if (result.error) { return result; }
+        // if (result.str === '') { i = result.i; continue; }
+        if (result.str === '') {
+            return {'error': `Error: Unexpected Token "," at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+        }
         i = result.i + 1;
         if (result.str[0] !== ' ') {
             newString += ' ';
             jsString += ' ';
         }
-        if (acceptFunc && comps[result.i + 1].value === '=>') {
+        if (acceptFunc && comps[i].value === '=>') {
             const varIndex = vars.indexOf(result.str);
             if (varIndex !== -1) {
                 vars.splice(varIndex, 1);

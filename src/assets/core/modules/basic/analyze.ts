@@ -20,7 +20,7 @@ import uscore from 'underscore';
 import * as THREE from 'three';
 import { sum } from '@assets/core/inline/_mathjs';
 import { min, max } from '@assets/core/inline/_math';
-import { arrMakeFlat } from '@assets/libs/util/arrs';
+import { arrMakeFlat, arrIdxRem } from '@assets/libs/util/arrs';
 import { degToRad } from '@assets/core/inline/_conversion';
 import { xfromSourceTargetMatrix, multMatrix } from '@libs/geom/matrix';
 import { XAXIS, YAXIS, ZAXIS } from '@assets/libs/geom/constants';
@@ -595,7 +595,7 @@ export enum _EShortestPathResult {
     BOTH = 'both'
 }
 /**
- * Calculates the shortest path from ever position in source, to every position in target.
+ * Calculates the shortest path from every position in source, to every position in target.
  * ~
  * Returns a dictionary containing the shortes paths.
  * ~
@@ -611,7 +611,7 @@ export enum _EShortestPathResult {
  * ~
  * If 'both' is selected, the dictionary will contain all six lists just described.
  * ~
- * The network must consist of vertices that are connected or welded.
+ * The network must consist of vertices that are welded.
  * For example, if the network consists of multiple polylines, then the vertcies of those polylines must be welded.
  * ~
  * If 'directed' is selected, then the edge direction is taken into account. Each edge will be one-way.
@@ -621,7 +621,7 @@ export enum _EShortestPathResult {
  * @param source Path origins, positions, or entities from which positions can be extracted.
  * @param target Path destinations, positions, or entities from which positions can be extracted.
  * @param entities The network, edges, or entities from which edges can be extracted.
- * @param method Enum, the method to use, directed or undeirected.
+ * @param method Enum, the method to use, directed or undirected.
  * @param result Enum, the data to return, positions, edges, or both.
  */
 export function ShortestPath(__model__: GIModel, source: TId|TId[]|TId[][][], target: TId|TId[]|TId[][],
@@ -740,6 +740,7 @@ export function ShortestPath(__model__: GIModel, source: TId|TId[]|TId[][][], ta
 }
 
 function _getUniquePosis(__model__: GIModel, ents_arr: TEntTypeIdx[]): number[] {
+    if (ents_arr.length === 0) { return []; }
     const set_posis_i: Set<number> = new Set();
     for (const [ent_type, ent_i] of ents_arr) {
         const posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, ent_i);
@@ -831,3 +832,384 @@ function _cytoscapeGetElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
     }
     return elements;
 }
+
+// ================================================================================================
+export enum _ECentralityMethod {
+    DIRECTED = 'directed',
+    UNDIRECTED = 'undirected'
+}
+// export enum _ECentralityType {
+//     DEGREE = 'degree',
+//     CLOSENESS = 'closeness',
+//     HARMONIC = 'harmonic',
+//     BETWEENNESS = 'betweenness'
+// }
+// /**
+//  * Calculates centrality metrics for a netowrk.
+//  * ~
+//  * ~
+//  * @param __model__
+//  * @param source Positions, or entities from which positions can be extracted.
+//  * @param entities The network, edges, or entities from which edges can be extracted.
+//  * @param method Enum, the method to use, directed or undirected.
+//  * @param cen_type Enum, the data to return, positions, edges, or both.
+//  */
+// export function Centrality(__model__: GIModel, source: TId|TId[]|TId[][][],
+//         entities: TId|TId[]|TId[][], method: _ECentralityMethod, cen_type: _ECentralityType): any {
+
+//     if (source === null) {
+//         source = [];
+//     } else {
+//         source = arrMakeFlat(source) as TId[];
+//     }
+//     entities = arrMakeFlat(entities) as TId[];
+//     // --- Error Check ---
+//     const fn_name = 'analyze.Centrality';
+//     let source_ents_arrs: TEntTypeIdx[] = [];
+//     if (source.length > 0) {
+//         source_ents_arrs = checkIDs(fn_name, 'source', source,
+//             [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+//     }
+//     const ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+//         [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+//     // --- Error Check ---
+//     const directed: boolean = method === _ECentralityMethod.DIRECTED ? true : false;
+//     const source_posis_i: number[] = _getUniquePosis(__model__, source_ents_arrs);
+//     const [elements, graph_posis_i]: [cytoscape.ElementDefinition[], number[]] =
+//         _cytoscapeGetElements2(__model__, ents_arrs, source_posis_i, directed);
+//     // create the cytoscape object
+//     const cy = cytoscape({
+//         elements: elements,
+//         headless: true,
+//     });
+//     let cytoscape_centrality: any;
+//     const posis_i: number[] = source_ents_arrs.length === 0 ? graph_posis_i : source_posis_i;
+//     switch (cen_type) {
+//         // Degree Centrality
+//         case _ECentralityType.DEGREE:
+//             if (directed) {
+//                 const indegree: number[] = [];
+//                 const outdegree: number[] = [];
+//                 cytoscape_centrality = cy.elements().degreeCentralityNormalized({
+//                     weight: _cytoscapeWeightFn,
+//                     alpha: 1,
+//                     directed: directed
+//                 });
+//                 for (const posi_i of posis_i) {
+//                     const source_elem = cy.getElementById( posi_i.toString() );
+//                     indegree.push( cytoscape_centrality.indegree(source_elem) );
+//                     outdegree.push( cytoscape_centrality.outdegree(source_elem) );
+//                 }
+//                 return { 'indegree': indegree, 'outdegree': outdegree };
+//             } else {
+//                 const degree: number[] = [];
+//                 cytoscape_centrality = cy.elements().degreeCentralityNormalized({
+//                     weight: _cytoscapeWeightFn,
+//                     alpha: 1,
+//                     directed: directed
+//                 });
+//                 for (const posi_i of posis_i) {
+//                     const source_elem = cy.getElementById( posi_i.toString() );
+//                     degree.push( cytoscape_centrality.degree(source_elem) );
+//                 }
+//                 return { 'degree': degree };
+//             }
+//             break;
+//         // Closeness and Harmonic centrality
+//         case _ECentralityType.HARMONIC:
+//         case _ECentralityType.CLOSENESS:
+//             const harmonic: boolean = cen_type === _ECentralityType.HARMONIC;
+//             const closeness: number[] = [];
+//             cytoscape_centrality = cy.elements().closenessCentralityNormalized({
+//                 weight: _cytoscapeWeightFn,
+//                 harmonic: harmonic,
+//                 directed: directed
+//             });
+//             for (const posi_i of posis_i) {
+//                 const source_elem = cy.getElementById( posi_i.toString() );
+//                 closeness.push( cytoscape_centrality.closeness(source_elem) );
+//             }
+//             return { 'closeness': closeness  };
+//         // Betweenness centrality
+//         case _ECentralityType.BETWEENNESS:
+//             const betweenness: number[] = [];
+//             cytoscape_centrality = cy.elements().betweennessCentrality({
+//                 weight: _cytoscapeWeightFn,
+//                 directed: directed
+//             });
+//             for (const posi_i of posis_i) {
+//                 const source_elem = cy.getElementById( posi_i.toString() );
+//                 betweenness.push( cytoscape_centrality.betweennessNormalized(source_elem) );
+//             }
+//             return { 'betweenness': betweenness };
+//         default:
+//             throw new Error('Centrality type not recognised.');
+//             break;
+//     }
+//     return null;
+// }
+function _cytoscapeGetElements2(__model__: GIModel, ents_arr: TEntTypeIdx[],
+    posis_i: number[], directed: boolean): [cytoscape.ElementDefinition[], number[]] {
+    let has_weight_attrib = false;
+    if (__model__.attribs.query.hasAttrib(EEntType.EDGE, 'weight')) {
+        has_weight_attrib = __model__.attribs.query.getAttribDataType(EEntType.EDGE, 'weight') === EAttribDataTypeStrs.NUMBER;
+    }
+    // edges, starts empty
+    const set_edges_i: Set<number> = new Set();
+    // posis, starts with posis_i
+    const set_posis_i: Set<number> = new Set(posis_i);
+    // network
+    for (const [ent_type, ent_i] of ents_arr) {
+        const n_edges_i: number[] = __model__.geom.nav.navAnyToEdge(ent_type, ent_i);
+        for (const edge_i of n_edges_i) {
+            set_edges_i.add(edge_i);
+        }
+        const n_posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, ent_i);
+        for (const posi_i of n_posis_i) {
+            set_posis_i.add(posi_i);
+        }
+    }
+    // all unique posis
+    const uniq_posis_i: number[] =  Array.from(set_posis_i);
+    // create elements
+    const elements: cytoscape.ElementDefinition[] = [];
+    for (const posi_i of uniq_posis_i) {
+        elements.push( {  data: { id: posi_i.toString(), idx: posi_i} } );
+    }
+    if (directed) {
+        // directed
+        for (const edge_i of Array.from(set_edges_i)) {
+            const edge_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
+            let weight = 1.0;
+            if (has_weight_attrib) {
+                weight = __model__.attribs.query.getAttribVal(EEntType.EDGE, 'weight', edge_i) as number;
+            } else {
+                const c0: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[0]);
+                const c1: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[1]);
+                weight = distance(c0, c1);
+            }
+            elements.push( {  data: { id: 'e' + edge_i,
+                source: edge_posis_i[0].toString(), target: edge_posis_i[1].toString(), weight: weight, idx: edge_i} } );
+        }
+    } else {
+        // undirected
+        const map_edges_ab: Map<string, any> = new Map();
+        for (const edge_i of Array.from(set_edges_i)) {
+            let edge_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
+            edge_posis_i = edge_posis_i[0] < edge_posis_i[1] ? edge_posis_i : [edge_posis_i[1], edge_posis_i[0]];
+            const undir_edge_id: string = 'e_' + edge_posis_i[0].toString() + '_' + edge_posis_i[1].toString();
+            if (map_edges_ab.has(undir_edge_id)) {
+                const obj = map_edges_ab.get(undir_edge_id);
+                obj['data']['idx2'] = edge_i;
+                // TODO should we take the average of the two weights? Could be more than two...
+            } else {
+                let weight = 1.0;
+                if (has_weight_attrib) {
+                    weight = __model__.attribs.query.getAttribVal(EEntType.EDGE, 'weight', edge_i) as number;
+                } else {
+                    const c0: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[0]);
+                    const c1: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[1]);
+                    weight = distance(c0, c1);
+                }
+                const obj = {
+                    data: {
+                        id: undir_edge_id,
+                        source: edge_posis_i[0].toString(),
+                        target: edge_posis_i[1].toString(),
+                        weight: weight,
+                        idx: edge_i,
+                        idx2: null
+                    }
+                };
+                map_edges_ab.set(undir_edge_id, obj);
+                elements.push(obj);
+            }
+        }
+    }
+    return [elements, uniq_posis_i];
+}
+
+// ================================================================================================
+/**
+ * Calculates degree centrality for a netowrk. Values are normalized.
+ * ~
+ * @param __model__
+ * @param source Positions, or entities from which positions can be extracted. These positions should be in teh network.
+ * @param entities The network, edges, or entities from which edges can be extracted.
+ * @param alpha The alpha value for the centrality calculation, ranging on [0, 1]. With value 0,
+ * disregards edge weights and solely uses number of edges in the centrality calculation. With value 1,
+ * disregards number of edges and solely uses the edge weights in the centrality calculation.
+ * @param method Enum, the method to use, directed or undirected.
+ * @returns A dictionary, either { degree: [...] } if 'undirected' is selected,
+ * or { indegree: [...], outdegree: [...] } if 'directed' is is selected.
+ */
+export function CentralityDeg(__model__: GIModel, source: TId|TId[]|TId[][][],
+        entities: TId|TId[]|TId[][], alpha: number, method: _ECentralityMethod): any {
+
+    if (source === null) {
+        source = [];
+    } else {
+        source = arrMakeFlat(source) as TId[];
+    }
+    entities = arrMakeFlat(entities) as TId[];
+    // --- Error Check ---
+    const fn_name = 'analyze.CentralityDeg';
+    let source_ents_arrs: TEntTypeIdx[] = [];
+    if (source.length > 0) {
+        source_ents_arrs = checkIDs(fn_name, 'source', source,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    }
+    const ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    // --- Error Check ---
+    const directed: boolean = method === _ECentralityMethod.DIRECTED ? true : false;
+    const source_posis_i: number[] = _getUniquePosis(__model__, source_ents_arrs);
+    const [elements, graph_posis_i]: [cytoscape.ElementDefinition[], number[]] =
+        _cytoscapeGetElements2(__model__, ents_arrs, source_posis_i, directed);
+    // create the cytoscape object
+    const cy = cytoscape({
+        elements: elements,
+        headless: true,
+    });
+    let cytoscape_centrality: any;
+    const posis_i: number[] = source_ents_arrs.length === 0 ? graph_posis_i : source_posis_i;
+    if (directed) {
+        const indegree: number[] = [];
+        const outdegree: number[] = [];
+        cytoscape_centrality = cy.elements().degreeCentralityNormalized({
+            weight: _cytoscapeWeightFn,
+            alpha: alpha,
+            directed: directed
+        });
+        for (const posi_i of posis_i) {
+            const source_elem = cy.getElementById( posi_i.toString() );
+            indegree.push( cytoscape_centrality.indegree(source_elem) );
+            outdegree.push( cytoscape_centrality.outdegree(source_elem) );
+        }
+        return { 'indegree': indegree, 'outdegree': outdegree };
+    } else {
+        const degree: number[] = [];
+        cytoscape_centrality = cy.elements().degreeCentralityNormalized({
+            weight: _cytoscapeWeightFn,
+            alpha: alpha,
+            directed: directed
+        });
+        for (const posi_i of posis_i) {
+            const source_elem = cy.getElementById( posi_i.toString() );
+            degree.push( cytoscape_centrality.degree(source_elem) );
+        }
+        return { 'degree': degree };
+    }
+}
+// ================================================================================================
+export enum _EClosenessCentralityType {
+    ARITHMETIC = 'arithmetic',
+    HARMONIC = 'harmonic',
+}
+/**
+ * Calculates closness centrality for a netowrk. Values are normalized.
+ * ~
+ * ~
+ * @param __model__
+ * @param source Positions, or entities from which positions can be extracted. These positions should be in teh network.
+ * @param entities The network, edges, or entities from which edges can be extracted.
+ * @param method Enum, the method to use, directed or undirected.
+ * @param cen_type Enum, the data to return, positions, edges, or both.
+ * @returns A list of centrality values, between 0 and 1.
+ */
+export function CentralityClo(__model__: GIModel, source: TId|TId[]|TId[][][],
+        entities: TId|TId[]|TId[][], method: _ECentralityMethod, cen_type: _EClosenessCentralityType): number[] {
+
+    if (source === null) {
+        source = [];
+    } else {
+        source = arrMakeFlat(source) as TId[];
+    }
+    entities = arrMakeFlat(entities) as TId[];
+    // --- Error Check ---
+    const fn_name = 'analyze.CentralityClo';
+    let source_ents_arrs: TEntTypeIdx[] = [];
+    if (source.length > 0) {
+        source_ents_arrs = checkIDs(fn_name, 'source', source,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    }
+    const ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    // --- Error Check ---
+    const directed: boolean = method === _ECentralityMethod.DIRECTED ? true : false;
+    const source_posis_i: number[] = _getUniquePosis(__model__, source_ents_arrs);
+    const [elements, graph_posis_i]: [cytoscape.ElementDefinition[], number[]] =
+        _cytoscapeGetElements2(__model__, ents_arrs, source_posis_i, directed);
+    // create the cytoscape object
+    const cy = cytoscape({
+        elements: elements,
+        headless: true,
+    });
+    let cytoscape_centrality: any;
+    const posis_i: number[] = source_ents_arrs.length === 0 ? graph_posis_i : source_posis_i;
+    const harmonic: boolean = cen_type === _EClosenessCentralityType.HARMONIC;
+    const closeness: number[] = [];
+    cytoscape_centrality = cy.elements().closenessCentralityNormalized({
+        weight: _cytoscapeWeightFn,
+        harmonic: harmonic,
+        directed: directed
+    });
+    for (const posi_i of posis_i) {
+        const source_elem = cy.getElementById( posi_i.toString() );
+        closeness.push( cytoscape_centrality.closeness(source_elem) );
+    }
+    return closeness;
+}
+// ================================================================================================
+
+/**
+ * Calculates betweenness centrality for a netowrk. Values are normalized.
+ * ~
+ * ~
+ * @param __model__
+ * @param source Positions, or entities from which positions can be extracted. These positions should be in teh network.
+ * @param entities The network, edges, or entities from which edges can be extracted.
+ * @param method Enum, the method to use, directed or undirected.
+ * @returns A list of centrality values, between 0 and 1.
+ */
+export function CentralityBtw(__model__: GIModel, source: TId|TId[]|TId[][][],
+        entities: TId|TId[]|TId[][], method: _ECentralityMethod): number[] {
+
+    if (source === null) {
+        source = [];
+    } else {
+        source = arrMakeFlat(source) as TId[];
+    }
+    entities = arrMakeFlat(entities) as TId[];
+    // --- Error Check ---
+    const fn_name = 'analyze.CentralityBtw';
+    let source_ents_arrs: TEntTypeIdx[] = [];
+    if (source.length > 0) {
+        source_ents_arrs = checkIDs(fn_name, 'source', source,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    }
+    const ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    // --- Error Check ---
+    const directed: boolean = method === _ECentralityMethod.DIRECTED ? true : false;
+    const source_posis_i: number[] = _getUniquePosis(__model__, source_ents_arrs);
+    const [elements, graph_posis_i]: [cytoscape.ElementDefinition[], number[]] =
+        _cytoscapeGetElements2(__model__, ents_arrs, source_posis_i, directed);
+    // create the cytoscape object
+    const cy = cytoscape({
+        elements: elements,
+        headless: true,
+    });
+    const posis_i: number[] = source_ents_arrs.length === 0 ? graph_posis_i : source_posis_i;
+    const betweenness: number[] = [];
+    const cytoscape_centrality = cy.elements().betweennessCentrality({
+        weight: _cytoscapeWeightFn,
+        directed: directed
+    });
+    for (const posi_i of posis_i) {
+        const source_elem = cy.getElementById( posi_i.toString() );
+        betweenness.push( cytoscape_centrality.betweennessNormalized(source_elem) );
+    }
+    return betweenness;
+}
+

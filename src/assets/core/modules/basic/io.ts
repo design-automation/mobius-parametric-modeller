@@ -333,7 +333,8 @@ function saveResource(file: string, name: string): boolean {
 }
 
 function saveToFS(fs) {
-    fs.root.getFile(window['_code__'], { create: true}, function (fileEntry) {
+    const code = window['_code__'];
+    fs.root.getFile(code, { create: true}, function (fileEntry) {
         fileEntry.createWriter(async function (fileWriter) {
             const bb = new Blob([window['_file__'] + '_|_|_'], {type: 'text/plain;charset=utf-8'});
             await fileWriter.write(bb);

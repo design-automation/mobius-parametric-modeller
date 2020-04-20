@@ -301,10 +301,12 @@ export class SaveFileComponent implements OnDestroy{
     static fileDownloadString(f: IMobius): {'name': string, 'file': string} {
         const main_settings = JSON.parse(localStorage.getItem('mpm_settings'));
         const cesiumSettings = JSON.parse(localStorage.getItem('cesium_settings'));
-        if (cesiumSettings.cesium) {
-            delete cesiumSettings.cesium;
+        if (cesiumSettings) {
+            if (cesiumSettings.cesium) {
+                delete cesiumSettings.cesium;
+            }
+            main_settings.cesium = cesiumSettings;
         }
-        main_settings.cesium = cesiumSettings;
         f.settings = JSON.stringify(main_settings);
 
         // if any node disappears from the flowchart but is still present in any edge (due to bug), restore the node.
@@ -483,10 +485,12 @@ export class SaveFileComponent implements OnDestroy{
 
         const main_settings = JSON.parse(localStorage.getItem('mpm_settings'));
         const cesiumSettings = JSON.parse(localStorage.getItem('cesium_settings'));
-        if (cesiumSettings.cesium) {
-            delete cesiumSettings.cesium;
+        if (cesiumSettings) {
+            if (cesiumSettings.cesium) {
+                delete cesiumSettings.cesium;
+            }
+            main_settings.cesium = cesiumSettings;
         }
-        main_settings.cesium = cesiumSettings;
         newFile.settings = JSON.stringify(main_settings);
 
         const splitDesc = this.dataService.flowchart.description.split('\n');

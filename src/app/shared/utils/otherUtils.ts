@@ -26,7 +26,7 @@ export function updateCesiumViewerSettings(settings: any): boolean {
     if (typeof settings === 'string') {
         settings = JSON.parse(settings);
     }
-    if (!settings.cesium) {
+    if (!settings || !settings.cesium) {
         return false;
     }
     settings = settings.cesium;

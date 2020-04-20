@@ -49,7 +49,10 @@ export class GICesiumViewerComponent implements OnInit {
         if (localStorage.getItem('cesium_settings') !== null) {
             const parsedSettings = JSON.parse(localStorage.getItem('cesium_settings'));
             this.updateSettings(this.settings, parsedSettings);
+        } else {
+            localStorage.setItem('cesium_settings', JSON.stringify(this.settings));
         }
+
         if (this.dataService.getCesiumScene() === undefined) {
             this.dataService.setCesiumScene(this.settings);
         }

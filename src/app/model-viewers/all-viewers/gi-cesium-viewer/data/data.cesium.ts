@@ -542,6 +542,7 @@ export class DataCesium {
         } else {
             newSetting = <CesiumSettings> JSON.parse(localStorage.getItem('cesium_settings'));
         }
+        if (!newSetting) { return; }
         newSetting.cesium.ion = newSetting.cesium.ion.trim();
         let ionChange = false;
         if (newSetting.cesium) {

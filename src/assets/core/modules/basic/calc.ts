@@ -20,7 +20,7 @@ import uscore from 'underscore';
 import { getCentroid, getCenterOfMass } from './_common';
 import { rayFromPln } from '@assets/core/inline/_ray';
 import { isEmptyArr2, arrMakeFlat, arrMaxDepth } from '@assets/libs/util/arrs';
-import * as THREE from 'three';
+
 // ================================================================================================
 export enum _EDistanceMethod {
     PS_PS_DISTANCE = 'ps_to_ps_distance',

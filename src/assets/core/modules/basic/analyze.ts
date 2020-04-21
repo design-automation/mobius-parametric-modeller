@@ -50,7 +50,7 @@ import { TypedArrayUtils } from 'three/examples/jsm/utils/TypedArrayUtils.js';
  */
 export function Nearest(__model__: GIModel,
         source: TId|TId[], target: TId|TId[], max_dist: number, max_neighbors: number):
-        {'ps': TId[], 'neighbors': TId[][]|TId[]} {
+        {'ps': TId[], 'neighbors': TId[]|TId[][], 'distances': number[]|number[][]} {
     if (target === null) { target = source; } // TODO optimise
     source = arrMakeFlat(source) as TId[];
     target = arrMakeFlat(target) as TId[];
@@ -63,19 +63,20 @@ export function Nearest(__model__: GIModel,
     // --- Error Check ---
     const source_posis_i: number[] = _getUniquePosis(__model__, source_ents_arrs);
     const target_posis_i: number[] = _getUniquePosis(__model__, target_ents_arrs);
-    const result: [number[], number[][]]|[number[], number[]] =
+    const result: [number[], number[]|number[][], number[]|number[][]] =
         _nearest(__model__, source_posis_i, target_posis_i, max_dist, max_neighbors);
     // return dictionary with results
     return {
         'ps': idsMakeFromIndicies(EEntType.POSI, result[0]) as TId[],
-        'neighbors': idsMakeFromIndicies(EEntType.POSI, result[1]) as TId[][]|TId[]
+        'neighbors': idsMakeFromIndicies(EEntType.POSI, result[1]) as TId[][]|TId[],
+        'distances': result[2] as number[]|number[][]
     };
 }
 function _fuseDistSq(xyz1: number[], xyz2: number[]): number {
     return Math.pow(xyz1[0] - xyz2[0], 2) +  Math.pow(xyz1[1] - xyz2[1], 2) +  Math.pow(xyz1[2] - xyz2[2], 2);
 }
 function _nearest(__model__: GIModel, source_posis_i: number[], target_posis_i: number[],
-        dist: number, num_neighbors: number): [number[], number[][]]|[number[], number[]] {
+        dist: number, num_neighbors: number): [number[], number[]|number[][], number[]|number[][]] {
     // create a list of all posis
     const set_target_posis_i: Set<number> = new Set(target_posis_i);
     const set_posis_i: Set<number> = new Set(target_posis_i);
@@ -104,7 +105,7 @@ function _nearest(__model__: GIModel, source_posis_i: number[], target_posis_i: 
     const dist_sq: number = dist * dist;
     // deal with special case, num_neighbors === 1
     if (num_neighbors === 1) {
-        const result1: [number[], number[]] = [[], []];
+        const result1: [number[], number[], number[]] = [[], [], []];
         for (const posi_i of source_posis_i) {
             const nn = kdtree.nearest( map_posi_i_to_xyz.get(posi_i) as any, num_posis, dist_sq );
             let min_dist = Infinity;
@@ -119,12 +120,13 @@ function _nearest(__model__: GIModel, source_posis_i: number[], target_posis_i: 
             if (nn_posi_i !== undefined) {
                 result1[0].push(posi_i);
                 result1[1].push(nn_posi_i);
+                result1[2].push(Math.sqrt(min_dist));
             }
         }
         return result1;
     }
     // create a neighbors list
-    const result: [number[], number[][]] = [[], []];
+    const result: [number[], number[][], number[][]] = [[], [], []];
     for (const posi_i of source_posis_i) {
         // TODO at the moment is gets all posis since no distinction is made between source and traget
         // TODO kdtree could be optimised
@@ -138,13 +140,16 @@ function _nearest(__model__: GIModel, source_posis_i: number[], target_posis_i: 
         }
         posis_i_dists.sort( (a, b) => a[1] - b[1] );
         const nn_posis_i: number[] = [];
+        const nn_dists: number[] = [];
         for (const posi_i_dist  of posis_i_dists) {
             nn_posis_i.push(posi_i_dist[0]);
+            nn_dists.push(Math.sqrt(posi_i_dist[1]));
             if (nn_posis_i.length === num_neighbors) { break; }
         }
         if (nn_posis_i.length > 0) {
             result[0].push(posi_i);
             result[1].push(nn_posis_i);
+            result[2].push(nn_dists);
         }
     }
     return result;

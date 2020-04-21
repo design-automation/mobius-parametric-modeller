@@ -13,11 +13,8 @@ import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, Txy, XYPLANE, EAttribDa
 import { isPline, isWire, isEdge, isPgon, isFace, getArrDepth, isVert, isPosi, isPoint, idsMakeFromIndicies } from '@libs/geo-info/id';
 import { distance } from '@libs/geom/distance';
 import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm, vecAng2 } from '@libs/geom/vectors';
-import { triangulate } from '@libs/triangulate/triangulate';
-import { area } from '@libs/geom/triangle';
 import { checkIDs, checkArgTypes, IDcheckObj, TypeCheckObj} from '../_check_args';
 import uscore from 'underscore';
-import * as THREE from 'three';
 import { sum } from '@assets/core/inline/_mathjs';
 import { min, max } from '@assets/core/inline/_math';
 import { arrMakeFlat, arrIdxRem } from '@assets/libs/util/arrs';
@@ -25,7 +22,133 @@ import { degToRad } from '@assets/core/inline/_conversion';
 import { xfromSourceTargetMatrix, multMatrix } from '@libs/geom/matrix';
 import { XAXIS, YAXIS, ZAXIS } from '@assets/libs/geom/constants';
 import cytoscape from 'cytoscape';
+import * as THREE from 'three';
+import { TypedArrayUtils } from 'three/examples/jsm/utils/TypedArrayUtils.js';
 
+// ================================================================================================
+/**
+ * Finds the nearest positions within a certain maximum distance.
+ * ~
+ * Returns a dictionary containing the shortes paths.
+ * ~
+ * If 'num_neighbors' is 1, the dictionary will contain two lists:
+ * 1) 'ps': a list of positions, a subset of positions from the source.
+ * 2) 'neighbors': a list of neighbouring positions, a subset of positions from target.
+  * ~
+ * If 'num_neighbors' is greater than 1, the dictionary will contain two lists:
+ * 1) 'ps': a list of positions, a subset of positions from the source.
+ * 2) 'neighbors': a list of lists of neighbouring positions, a subset of positions from target.
+ * ~
+ * @param __model__
+ * @param source A list of positions, or entities from which positions can be extracted.
+ * @param target A list of positions, or entities from which positions can be extracted.
+ * If null, the positions in source will be used.
+ * @param max_dist The maximum distance for neighbors. If null, Infinity will be used.
+ * @param max_neighbors The maximum number of neighbors to return. 
+ * If null, the number of positions in target is used.
+ * @returns A dictionary containing the results.
+ */
+export function Nearest(__model__: GIModel,
+        source: TId|TId[], target: TId|TId[], max_dist: number, max_neighbors: number):
+        {'ps': TId[], 'neighbors': TId[][]|TId[]} {
+    if (target === null) { target = source; } // TODO optimise
+    source = arrMakeFlat(source) as TId[];
+    target = arrMakeFlat(target) as TId[];
+    // --- Error Check ---
+    const fn_name = 'analyze.ShortestPath';
+    const source_ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'origins', source,
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    const target_ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'destinations', target,
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    // --- Error Check ---
+    const source_posis_i: number[] = _getUniquePosis(__model__, source_ents_arrs);
+    const target_posis_i: number[] = _getUniquePosis(__model__, target_ents_arrs);
+    const result: [number[], number[][]]|[number[], number[]] =
+        _nearest(__model__, source_posis_i, target_posis_i, max_dist, max_neighbors);
+    // return dictionary with results
+    return {
+        'ps': idsMakeFromIndicies(EEntType.POSI, result[0]) as TId[],
+        'neighbors': idsMakeFromIndicies(EEntType.POSI, result[1]) as TId[][]|TId[]
+    };
+}
+function _fuseDistSq(xyz1: number[], xyz2: number[]): number {
+    return Math.pow(xyz1[0] - xyz2[0], 2) +  Math.pow(xyz1[1] - xyz2[1], 2) +  Math.pow(xyz1[2] - xyz2[2], 2);
+}
+function _nearest(__model__: GIModel, source_posis_i: number[], target_posis_i: number[],
+        dist: number, num_neighbors: number): [number[], number[][]]|[number[], number[]] {
+    // create a list of all posis
+    const set_target_posis_i: Set<number> = new Set(target_posis_i);
+    const set_posis_i: Set<number> = new Set(target_posis_i);
+    for (const posi_i of source_posis_i) { set_posis_i.add(posi_i); }
+    const posis_i: number[] = Array.from(set_posis_i);
+    // get dist and num_neighbours
+    if (dist === null) { dist = Infinity; }
+    if (num_neighbors === null) { num_neighbors = target_posis_i.length; }
+    // find neighbor
+    const map_posi_i_to_xyz: Map<number, Txyz> = new Map();
+    const typed_positions = new Float32Array( posis_i.length * 4 );
+    const typed_buff = new THREE.BufferGeometry();
+    typed_buff.setAttribute( 'position', new THREE.BufferAttribute( typed_positions, 4 ) );
+    for (let i = 0; i < posis_i.length; i++) {
+        const posi_i: number = posis_i[i];
+        const xyz: Txyz = __model__.attribs.query.getPosiCoords(posi_i);
+        map_posi_i_to_xyz.set(posi_i, xyz);
+        typed_positions[ i * 4 + 0 ] = xyz[0];
+        typed_positions[ i * 4 + 1 ] = xyz[1];
+        typed_positions[ i * 4 + 2 ] = xyz[2];
+        typed_positions[ i * 4 + 3 ] = posi_i;
+    }
+    const kdtree = new TypedArrayUtils.Kdtree( typed_positions, _fuseDistSq, 4 );
+    // calculate teh dist squared
+    const num_posis: number = posis_i.length;
+    const dist_sq: number = dist * dist;
+    // deal with special case, num_neighbors === 1
+    if (num_neighbors === 1) {
+        const result1: [number[], number[]] = [[], []];
+        for (const posi_i of source_posis_i) {
+            const nn = kdtree.nearest( map_posi_i_to_xyz.get(posi_i) as any, num_posis, dist_sq );
+            let min_dist = Infinity;
+            let nn_posi_i: number;
+            for (const a_nn of nn) {
+                const next_nn_posi_i: number = a_nn[0].obj[3];
+                if (set_target_posis_i.has(next_nn_posi_i) && a_nn[1] < min_dist) {
+                    min_dist = a_nn[1];
+                    nn_posi_i = next_nn_posi_i;
+                }
+            }
+            if (nn_posi_i !== undefined) {
+                result1[0].push(posi_i);
+                result1[1].push(nn_posi_i);
+            }
+        }
+        return result1;
+    }
+    // create a neighbors list
+    const result: [number[], number[][]] = [[], []];
+    for (const posi_i of source_posis_i) {
+        // TODO at the moment is gets all posis since no distinction is made between source and traget
+        // TODO kdtree could be optimised
+        const nn = kdtree.nearest( map_posi_i_to_xyz.get(posi_i) as any, num_posis, dist_sq );
+        const posis_i_dists: [number, number][] = [];
+        for (const a_nn of nn) {
+            const nn_posi_i: number = a_nn[0].obj[3];
+            if (set_target_posis_i.has(nn_posi_i)) {
+                posis_i_dists.push([nn_posi_i, a_nn[1]]);
+            }
+        }
+        posis_i_dists.sort( (a, b) => a[1] - b[1] );
+        const nn_posis_i: number[] = [];
+        for (const posi_i_dist  of posis_i_dists) {
+            nn_posis_i.push(posi_i_dist[0]);
+            if (nn_posis_i.length === num_neighbors) { break; }
+        }
+        if (nn_posis_i.length > 0) {
+            result[0].push(posi_i);
+            result[1].push(nn_posis_i);
+        }
+    }
+    return result;
+}
 // ================================================================================================
 // utility function
 // ----
@@ -623,6 +746,7 @@ export enum _EShortestPathResult {
  * @param entities The network, edges, or entities from which edges can be extracted.
  * @param method Enum, the method to use, directed or undirected.
  * @param result Enum, the data to return, positions, edges, or both.
+ * @returns A dictionary containing the results.
  */
 export function ShortestPath(__model__: GIModel, source: TId|TId[]|TId[][][], target: TId|TId[]|TId[][],
         entities: TId|TId[]|TId[][], method: _EShortestPathMethod, result: _EShortestPathResult):

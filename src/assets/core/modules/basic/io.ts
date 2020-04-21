@@ -337,8 +337,10 @@ function saveToFS(fs) {
         fileEntry.createWriter(async function (fileWriter) {
             const bb = new Blob([window['_file__'] + '_|_|_'], {type: 'text/plain;charset=utf-8'});
             await fileWriter.write(bb);
-            window['_code__'] = undefined;
-            window['_file__'] = undefined;
+            setTimeout(() => {
+                window['_code__'] = undefined;
+                window['_file__'] = undefined;
+            }, 0);
         }, (e) => { console.log(e); });
     }, (e) => { console.log(e.code); });
 }

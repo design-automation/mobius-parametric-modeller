@@ -70,7 +70,7 @@ export class DataCesium {
                 scene3DOnly: false,
                 baseLayerPicker: false,
                 sceneModePicker: false,
-                homeButton: true,
+                homeButton: false,
                 navigationHelpButton: false,
                 fullscreenButton: false,
                 animation: false,
@@ -146,13 +146,13 @@ export class DataCesium {
             // this._viewer.camera.up = this._camera[1].up;
             this._viewer.render();
         }
-        const homeBtn = <HTMLButtonElement> document.getElementsByClassName('cesium-home-button')[0];
+        // const homeBtn = <HTMLButtonElement> document.getElementsByClassName('cesium-home-button')[0];
         // tslint:disable-next-line
-        homeBtn.getElementsByTagName('path')[0].setAttribute('d', 'M15 3l2.3 2.3-2.89 2.87 1.42 1.42L18.7 6.7 21 9V3zM3 9l2.3-2.3 2.87 2.89 1.42-1.42L6.7 5.3 9 3H3zm6 12l-2.3-2.3 2.89-2.87-1.42-1.42L5.3 17.3 3 15v6zm12-6l-2.3 2.3-2.87-2.89-1.42 1.42 2.89 2.87L15 21h6z');
-        homeBtn.title = 'Zoom to Fit Model';
-        homeBtn.style.fontSize = '24px';
-        homeBtn.style.top = '26px';
-        homeBtn.style.right = '-1px';
+        // homeBtn.getElementsByTagName('path')[0].setAttribute('d', 'M15 3l2.3 2.3-2.89 2.87 1.42 1.42L18.7 6.7 21 9V3zM3 9l2.3-2.3 2.87 2.89 1.42-1.42L6.7 5.3 9 3H3zm6 12l-2.3-2.3 2.89-2.87-1.42-1.42L5.3 17.3 3 15v6zm12-6l-2.3 2.3-2.87-2.89-1.42 1.42 2.89 2.87L15 21h6z');
+        // homeBtn.title = 'Zoom to Fit Model';
+        // homeBtn.style.fontSize = '24px';
+        // homeBtn.style.top = '26px';
+        // homeBtn.style.right = '-1px';
         // settings button
         // const settingsBtn = homeBtn.nextElementSibling as HTMLElement;
         // settingsBtn.getElementsByTagName('img')[0].remove();
@@ -266,6 +266,7 @@ export class DataCesium {
         const posis_i: number[] = model.geom.query.getEnts(EEntType.POSI, false);
         const vert_n = model.attribs.query.getAttrib(EEntType.VERT, 'normal');
 
+        const allPosis = [];
         const posi_to_point_map: Map<number, any> = new Map();
         const vert_to_normal_map: Map<number, any> = new Map();
         for (const posi_i of posis_i) {
@@ -274,6 +275,7 @@ export class DataCesium {
                 const xform_pnt: any = Cesium.Cartesian3.fromArray(xyz);
                 Cesium.Matrix4.multiplyByPoint(east_north_up, xform_pnt, xform_pnt);
                 posi_to_point_map.set(posi_i, xform_pnt);
+                allPosis.push(xform_pnt);
             }
         }
         if (vert_n) {
@@ -477,6 +479,9 @@ export class DataCesium {
 
             // set up the camera
             const sphere = new Cesium.BoundingSphere(origin, 1e2);
+            if (allPosis.length > 0) {
+                Cesium.BoundingSphere.fromPoints(allPosis, sphere);
+            }
             this._viewer.camera.flyToBoundingSphere(sphere, {
                 duration: 0,
                 endTransform: Cesium.Matrix4.IDENTITY

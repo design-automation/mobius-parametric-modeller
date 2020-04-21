@@ -65,6 +65,14 @@ export class GICesiumViewerComponent implements OnInit {
     childEventClicked(event: Event) {
         this.clickedEvent = event;
     }
+
+    zoomfit() {
+        const camera = this.dataService.getCesiumScene()._camera;
+        const boundingSphere = camera[0];
+        const cameraObj = camera[1];
+        cameraObj.flyToBoundingSphere(boundingSphere, {'duration': 0});
+    }
+
     /**
      * settingOnChange
      * @param setting

@@ -34,7 +34,11 @@ function mergeInputs(models){
     return result;
 }
 function duplicateModel(model){
-    return model.clone();;
+    const result = model.clone();
+    try {
+        result.debug = __debug__;
+    } catch (ex) {}
+    return result;
 }
 `;
 export const printFunc = `

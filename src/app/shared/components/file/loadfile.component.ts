@@ -6,7 +6,7 @@ import { DataService } from '@services';
 import { _parameterTypes } from '@assets/core/_parameterTypes';
 import { ModuleList } from '@shared/decorators';
 import { checkNodeValidity } from '@shared/parser';
-import { IdGenerator, updateLocalViewerSettings } from '@utils';
+import { IdGenerator, updateLocalViewerSettings, updateCesiumViewerSettings } from '@utils';
 import { checkMobFile } from '@shared/updateOldMobFile';
 import { SaveFileComponent } from './savefile.component';
 
@@ -86,6 +86,7 @@ export class LoadFileComponent {
             if (updateLocalViewerSettings(loadeddata.settings)) {
                 this.dataService.viewerSettingsUpdated = true;
             }
+            updateCesiumViewerSettings(loadeddata.settings);
             this.dataService.newFlowchart = true;
             if (this.dataService.node.type !== 'end') {
                 loadeddata.flowchart.meta.selected_nodes = [loadeddata.flowchart.nodes.length - 1];

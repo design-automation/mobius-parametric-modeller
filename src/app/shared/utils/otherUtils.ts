@@ -2,19 +2,14 @@ export function updateLocalViewerSettings(settings: any): boolean {
     if (!settings) { return false; }
     let settings_string;
     if (typeof settings === 'string') {
-        settings_string = settings;
         settings = JSON.parse(settings);
-    } else {
-        settings_string = JSON.stringify(settings);
     }
+    if (settings.cesium) {
+        delete settings['cesium'];
+    }
+    settings_string = JSON.stringify(settings);
     if (settings_string === '{}') { return false; }
     const local_settings = JSON.parse(localStorage.getItem('mpm_settings'));
-
-    // if (!hasDiffProps(settings, local_settings)) {
-    //     localStorage.setItem('mpm_settings', settings_string);
-    //     return true;
-    // }
-    // return false;
 
     if (settings === null) {
         return false;
@@ -25,8 +20,28 @@ export function updateLocalViewerSettings(settings: any): boolean {
     return true;
 }
 
-function hasDiffProps(obj1, obj2) {
-    return !Object.keys(obj2).every(e => Object.keys(obj1).includes(e));
+export function updateCesiumViewerSettings(settings: any): boolean {
+    if (!settings) { return false; }
+    let settings_string;
+    if (typeof settings === 'string') {
+        settings = JSON.parse(settings);
+    }
+    if (!settings || !settings.cesium) {
+        return false;
+    }
+    settings = settings.cesium;
+    settings_string = JSON.stringify(settings);
+    if (settings_string === '{}') { return false; }
+    const local_settings = JSON.parse(localStorage.getItem('cesium_settings'));
+
+    if (settings === null) {
+        return false;
+    } else {
+        propCheck(settings, local_settings);
+        settings.updated = true;
+        localStorage.setItem('cesium_settings', JSON.stringify(settings));
+    }
+    return true;
 }
 
 function propCheck(obj1, obj2, checkChildren = true) {

@@ -60,7 +60,7 @@ export class CodeUtils {
                 // if (isMainFlowchart && prod.print) {
                 if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,` +
-                    `'Evaluating If: (${args[0].value}) = ' + (${args[0].jsValue}), '__null__');`);
+                    `'Evaluating If: (${args[0].value}) is ' + (${args[0].jsValue}), '__null__');`);
                 }
                 codeStr.push(`if (${args[0].jsValue}){`);
                 // if (isMainFlowchart && prod.print) {
@@ -90,7 +90,7 @@ export class CodeUtils {
                 }
                 if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,` +
-                    `'Evaluating Else-if: (${args[0].value}) = ' + (${args[0].jsValue}), '__null__');`);
+                    `'Evaluating Else-if: (${args[0].value}) is ' + (${args[0].jsValue}), '__null__');`);
                 }
                 codeStr.push(`if(${args[0].jsValue}){`);
                 // if (isMainFlowchart && prod.print) {
@@ -581,7 +581,7 @@ export class CodeUtils {
 
 
 
-    static getInputValue(inp: IPortInput, node: INode): Promise<string> {
+    static getInputValue(inp: IPortInput, node: INode, nodeIndices: {}): Promise<string> {
         let input: any;
         // const x = performance.now();
         if (node.type === 'start' || inp.edges.length === 0) {
@@ -590,32 +590,23 @@ export class CodeUtils {
         //     input = inp.edges[0].source.value.clone();
         //     console.log('clone time:', performance.now() - x);
         } else {
-            const inputs = [];
+            let inputs = [];
             for (const edge of inp.edges) {
                 if (!edge.source.parentNode.enabled) {
                     continue;
                 }
-                if (edge.source.parentNode.type === 'start') {
-                    inputs.unshift(edge.source.value);
-                } else {
-                    inputs.push(edge.source.value);
-                }
+                inputs.push([nodeIndices[edge.source.parentNode.id], edge.source.value]);
             }
-            input = CodeUtils.mergeInputs(inputs);
+            inputs = inputs.sort((a, b) => a[0] - b[0]);
+            const mergeModels = inputs.map(i => i[1])
+            input = CodeUtils.mergeInputs(mergeModels);
             // console.log('merge time:', performance.now() - x);
-            /*
-            if (input.constructor === gsConstructor) {
-                input = `new __MODULES__.gs.Model(${input.toJSON()})`
-            } else {
-                // do nothing
-            }
-            */
         }
         return input;
     }
 
-    public static getNodeCode(node: INode, isMainFlowchart = false, functionName?: string,
-                              nodeId?: string, usedFunctions?: string[]): [string[][], string] {
+    public static getNodeCode(node: INode, isMainFlowchart = false, nodeIndices: {},
+                              functionName?: string, nodeId?: string, usedFunctions?: string[]): [string[][], string] {
         node.hasError = false;
         let codeStr = [];
 
@@ -642,7 +633,7 @@ export class CodeUtils {
 
         // input initializations
         if (isMainFlowchart) {
-            const input = CodeUtils.getInputValue(node.input, node);
+            const input = CodeUtils.getInputValue(node.input, node, nodeIndices);
             node.input.value = input;
         }
 
@@ -681,41 +672,47 @@ export class CodeUtils {
         let fnCode = `var merged;\n`;
 
         const numRemainingOutputs = {};
+        const nodeIndices = {};
+        let nodeIndex = 0;
         for (const node of func.flowchart.nodes) {
             if (!node.enabled) {
                 continue;
             }
+            nodeIndices[node.id] = nodeIndex;
+            nodeIndex ++;
             numRemainingOutputs[node.id] = node.output.edges.length;
             const nodeFuncName = `${func.name}_${node.id}`;
             if (node.type === 'start') {
                 fnCode += `let result_${nodeFuncName} = __params__.model;\n`;
             } else {
-                const codeRes = CodeUtils.getNodeCode(node, false, func.name, node.id)[0];
+                const codeRes = CodeUtils.getNodeCode(node, false, nodeIndices, func.name, node.id)[0];
                 const nodecode = codeRes[0].join('\n').split('_-_-_+_-_-_');
                 fullCode += `${nodecode[0]}\nfunction ${nodeFuncName}` +
                             `(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){` +
                             nodecode[1] + `\n}\n\n`;
 
-                const activeNodes = [];
                 if (node.input.edges.length === 1 && numRemainingOutputs[node.input.edges[0].source.parentNode.id] === 1) {
                     fnCode += `\n__params__.model = result_${func.name}_${node.input.edges[0].source.parentNode.id};\n`;
                 } else {
+                    let activeNodes = [];
                     for (const nodeEdge of node.input.edges) {
                         if (!nodeEdge.source.parentNode.enabled) {
                             continue;
                         }
                         numRemainingOutputs[nodeEdge.source.parentNode.id] --;
-                        if (nodeEdge.source.parentNode.type === 'start') {
-                            activeNodes.unshift(nodeEdge.source.parentNode.id);
-                        } else {
-                            activeNodes.push(nodeEdge.source.parentNode.id);
-                        }
+                        activeNodes.push([nodeIndices[nodeEdge.source.parentNode.id], nodeEdge.source.parentNode.id]);
+                        // if (nodeEdge.source.parentNode.type === 'start') {
+                        //     activeNodes.unshift(nodeEdge.source.parentNode.id);
+                        // } else {
+                        //     activeNodes.push(nodeEdge.source.parentNode.id);
+                        // }
                     }
                     if (activeNodes.length === 1) {
-                        fnCode += `\n__params__.model = duplicateModel(result_${func.name}_${activeNodes[0]});\n`;
+                        fnCode += `\n__params__.model = duplicateModel(result_${func.name}_${activeNodes[0][1]});\n`;
                     } else {
+                        activeNodes = activeNodes.sort((a, b) => a[0] - b[0]);
                         fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) =>
-                            `result_${func.name}_${nodeId}`).join(', ')}]);\n`;
+                            `result_${func.name}_${nodeId[1]}`).join(', ')}]);\n`;
                     }
                 }
                 fnCode += `let result_${nodeFuncName} = ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_'

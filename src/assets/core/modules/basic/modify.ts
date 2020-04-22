@@ -10,13 +10,15 @@
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EEntType, TEntTypeIdx, TRay, IGeomPack} from '@libs/geo-info/common';
-import { getArrDepth, isColl, isPgon, isPline, isPoint, isPosi, isEmptyArr, idsMake } from '@libs/geo-info/id';
+import { getArrDepth, isEmptyArr } from '@libs/geo-info/id';
 import { vecAdd, vecSum, vecDiv, vecFromTo, vecNorm, vecCross, vecSetLen, vecLen, vecDot } from '@libs/geom/vectors';
 import { checkArgTypes, checkIDs, IDcheckObj, TypeCheckObj} from '../_check_args';
 import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
-import { getOrigin, getRay, getPlane } from './_common';
+import { getRay, getPlane } from './_common';
+import * as THREE from 'three';
+import { TypedArrayUtils } from 'three/examples/jsm/utils/TypedArrayUtils.js';
 
 // ================================================================================================
 /**
@@ -101,7 +103,7 @@ function _move(__model__: GIModel, ents_arr: TEntTypeIdx[], vectors: Txyz|Txyz[]
  * @param __model__
  * @param entities  An entity or list of entities to rotate.
  * @param ray A ray to rotate around. \
- * Given a plane, a ray will be created from teh plane z axis. \
+ * Given a plane, a ray will be created from the plane z axis. \
  * Given an `xyz` location, a ray will be generated with an origin at this location, and a direction `[0, 0, 1]`. \
  * Given any entities, the centroid will be extracted, \
  * and a ray will be generated with an origin at this centroid, and a direction `[0, 0, 1]`.
@@ -519,15 +521,17 @@ function _ring(__model__: GIModel, ents_arr: TEntTypeIdx[], method: _ERingMethod
     }
 }
 // ================================================================================================
+export enum _EWeldMethod {
+    MERGE_POSITIONS =  'merge_positions',
+    CLONE_POSITIONS  =  'clone_positions',
+}
 /**
- * Unweld vertices so that they do not share positions. The new positions that are generated are returned.
+ * Unweld vertices so that they do not share positions.
  * ~
  * @param __model__
  * @param entities Entities, a list of vertices, or entities from which vertices can be extracted.
  * @param method Enum; the method to use for welding.
- * @returns Entities, a list of new positions resulting from the unweld.
- * @example mod.Unweld(polyline1)
- * @example_info Unwelds the vertices of polyline1 from all other vertices that shares the same position.
+ * @returns void
  */
 export function Weld(__model__: GIModel, entities: TId|TId[], method: _EWeldMethod): void {
     entities = arrMakeFlat(entities) as TId[];
@@ -539,11 +543,7 @@ export function Weld(__model__: GIModel, entities: TId|TId[], method: _EWeldMeth
     // --- Error Check ---
     _weld(__model__, ents_arr, method);
 }
-export enum _EWeldMethod {
-    MERGE_POSITIONS =  'merge_positions',
-    CLONE_POSITIONS  =  'clone_positions',
-}
-export function _weld(__model__: GIModel, ents_arr: TEntTypeIdx[], method: _EWeldMethod): void {
+function _weld(__model__: GIModel, ents_arr: TEntTypeIdx[], method: _EWeldMethod): void {
     // get verts_i
     const all_verts_i: number[] = []; // count number of posis
     for (const ents of ents_arr) {
@@ -559,6 +559,98 @@ export function _weld(__model__: GIModel, ents_arr: TEntTypeIdx[], method: _EWel
             break;
         default:
             break;
+    }
+}
+// ================================================================================================
+/**
+ * Fuse positions that lie within a certain tolerance of one another.
+ * New positions will be created.
+ * If the  positions that are fuse have vertices attached, then the vertices will become welded.
+ * ~
+ * @param __model__
+ * @param entities Entities, a list of positions, or entities from which positions can be extracted.
+ * @param tolerance The distance tolerance for fusing positions.
+ *  @returns void
+ */
+export function Fuse(__model__: GIModel, entities: TId|TId[], tolerance: number): void {
+    entities = arrMakeFlat(entities) as TId[];
+    // --- Error Check ---
+    const fn_name = 'modify.Fuse';
+    const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities, 
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    // --- Error Check ---
+    _fuse(__model__, ents_arr, tolerance);
+}
+function _fuseDistSq(xyz1: number[], xyz2: number[]): number {
+    return Math.pow(xyz1[0] - xyz2[0], 2) +  Math.pow(xyz1[1] - xyz2[1], 2) +  Math.pow(xyz1[2] - xyz2[2], 2);
+}
+function _fuse(__model__: GIModel, ents_arr: TEntTypeIdx[], tolerance: number): void {
+    // get unique posis
+    const set_posis_i: Set<number> = new Set();
+    for (const ents of ents_arr) {
+        const ent_posis_i: number[] = __model__.geom.nav.navAnyToPosi(ents[0], ents[1]);
+        for (const posi_i of ent_posis_i) {
+            set_posis_i.add(posi_i);
+        }
+    }
+    const posis_i: number[] = Array.from(set_posis_i);
+    // find neighbour
+    const map_posi_i_to_xyz: Map<number, Txyz> = new Map();
+    const typed_positions = new Float32Array( posis_i.length * 4 );
+    const typed_buff = new THREE.BufferGeometry();
+    typed_buff.setAttribute( 'position', new THREE.BufferAttribute( typed_positions, 4 ) );
+    for (let i = 0; i < posis_i.length; i++) {
+        const posi_i: number = posis_i[i];
+        const xyz: Txyz = __model__.attribs.query.getPosiCoords(posi_i);
+        map_posi_i_to_xyz.set(posi_i, xyz);
+        typed_positions[ i * 4 + 0 ] = xyz[0];
+        typed_positions[ i * 4 + 1 ] = xyz[1];
+        typed_positions[ i * 4 + 2 ] = xyz[2];
+        typed_positions[ i * 4 + 3 ] = posi_i;
+    }
+    const kdtree = new TypedArrayUtils.Kdtree( typed_positions, _fuseDistSq, 4 );
+    // create a neighbours list
+    const nns: [number, number, number[]][] = []; // [posi_i, num_neighbours, neighbour_poisi_i]
+    for (let i = 0; i < posis_i.length; i++) {
+        const posi_i: number = posis_i[i];
+        const nn = kdtree.nearest( map_posi_i_to_xyz.get(posi_i) as any, posis_i.length, tolerance * tolerance );
+        const nn_posis_i: number[] = [];
+        for (const a_nn of nn) {
+            const obj: object = a_nn[0].obj;
+            const nn_posi_i: number = obj[3];
+            nn_posis_i.push(nn_posi_i);
+        }
+        nns.push([posis_i[i], nn_posis_i.length, nn_posis_i]);
+    }
+    // sort so that positions with most neighbours win
+    nns.sort( (a, b) => b[1] - a[1] );
+    // create new positions, replace posis for existing vertices
+    const nns_filt: [number, number, number[]][] = []; // [posi_i, num_neighbours, neighbour_poisi_i]
+    const exclude_posis_i: Set<number> = new Set(); // exclude any posis that have already been moved
+    for (const nn of nns) {
+        if (!exclude_posis_i.has(nn[0]) && nn[1] > 1) {
+            nns_filt.push(nn);
+            const new_xyz: Txyz = [0, 0, 0];
+            for (const n_posi_i of nn[2]) {
+                exclude_posis_i.add(n_posi_i);
+                const xyz: Txyz = map_posi_i_to_xyz.get(n_posi_i);
+                new_xyz[0] += xyz[0];
+                new_xyz[1] += xyz[1];
+                new_xyz[2] += xyz[2];
+            }
+            new_xyz[0] = new_xyz[0] / nn[1];
+            new_xyz[1] = new_xyz[1] / nn[1];
+            new_xyz[2] = new_xyz[2] / nn[1];
+            const new_posi_i: number = __model__.geom.add.addPosi();
+            __model__.attribs.add.setPosiCoords(new_posi_i, new_xyz);
+            for (const n_posi_i of nn[2]) {
+                const verts_i: number[] = __model__.geom.nav.navPosiToVert(n_posi_i);
+                for (const vert_i of verts_i) {
+                    __model__.geom.modify.replaceVertPosis(vert_i, new_posi_i);
+                }
+                // __model__.geom.add.addPline([new_posi_i, n_posi_i], false); // temp
+            }
+        }
     }
 }
 // ================================================================================================
@@ -596,8 +688,12 @@ function _remesh(__model__: GIModel, ents_arr: TEntTypeIdx[]): void {
         }
     }
 }
-// ================================================================================================
 
+// ================================================================================================
+export enum _EDeleteMethod {
+    DELETE_SELECTED  =  'delete_selected',
+    KEEP_SELECTED =  'keep_selected'
+}
 /**
  * Deletes geometric entities: positions, points, polylines, polygons, and collections.
  * ~
@@ -636,10 +732,6 @@ export function Delete(__model__: GIModel, entities: TId|TId[], method: _EDelete
                 throw new Error(fn_name + ' : Method not recognised.');
         }
     }
-}
-export enum _EDeleteMethod {
-    DELETE_SELECTED  =  'delete_selected',
-    KEEP_SELECTED =  'keep_selected'
 }
 function _delete(__model__: GIModel, ents_arr: TEntTypeIdx[], invert: boolean): void {
     // get the ents

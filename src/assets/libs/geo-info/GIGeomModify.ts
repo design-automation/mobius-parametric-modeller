@@ -88,6 +88,19 @@ export class GIGeomModify {
         }
     }
     /**
+     * Replace the position of a vertex with a new position.
+     * ~
+     */
+    public replaceVertPosis(vert_i: number, new_posi_i: number): void {
+        const old_posi_i: number = this._geom.nav.navVertToPosi(vert_i);
+        // set the down array
+        this._geom_arrays.dn_verts_posis[vert_i] = new_posi_i;
+        // update the up arrays for the old posi, i.e. remove this vert
+        arrRem(this._geom_arrays.up_posis_verts[old_posi_i], vert_i);
+        // update the up arrays for the new posi, i.e. add this vert
+        this._geom_arrays.up_posis_verts[new_posi_i].push(vert_i);
+    }
+    /**
      * Unweld the vertices on naked edges.
      * ~
      */

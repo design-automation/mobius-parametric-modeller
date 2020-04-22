@@ -248,7 +248,7 @@ export class SaveFileComponent implements OnDestroy{
         nodeList.splice(nodeList.length - 1, 0, checkNode);
     }
 
-    static clearModelData(f: IFlowchart, modelMap = null) {
+    static clearModelData(f: IFlowchart, modelMap = null, clearAll = true) {
         for (const node of f.nodes) {
             if (modelMap !== null) {
                 modelMap[node.id] = node.model;
@@ -261,43 +261,53 @@ export class SaveFileComponent implements OnDestroy{
                 node.output.value = undefined;
             }
             node.state.procedure = [];
-            SaveFileComponent.clearResolvedValue(node.procedure);
+            SaveFileComponent.clearResolvedValue(node.procedure, clearAll);
             if (node.localFunc) {
-                SaveFileComponent.clearResolvedValue(node.localFunc);
+                SaveFileComponent.clearResolvedValue(node.localFunc, clearAll);
             }
         }
         if (f.functions) {
             for (const func of f.functions) {
-                SaveFileComponent.clearModelData(func.flowchart);
+                SaveFileComponent.clearModelData(func.flowchart, null, clearAll);
             }
         }
         if (f.subFunctions) {
             for (const func of f.subFunctions) {
-                SaveFileComponent.clearModelData(func.flowchart);
+                SaveFileComponent.clearModelData(func.flowchart, null, clearAll);
             }
         }
     }
 
-    static clearResolvedValue(prodList: IProcedure[]) {
+    static clearResolvedValue(prodList: IProcedure[], clearAll) {
         prodList.forEach(prod => {
             if (prod.hasOwnProperty('resolvedValue')) {
                 prod.resolvedValue = undefined;
             }
-            // ******** delete some unnecessary parameters ******** //
-            delete prod['selected'];
-            delete prod['hasError'];
-            for (const arg of prod.args) {
-                delete arg['invalidVar'];
-                delete arg['linked'];
+            // ******** delete some unnecessary parameters for saving ******** //
+            if (clearAll) {
+                delete prod['selected'];
+                delete prod['hasError'];
+                for (const arg of prod.args) {
+                    delete arg['invalidVar'];
+                    delete arg['linked'];
+                }
             }
             if (prod.children) {
-                SaveFileComponent.clearResolvedValue(prod.children);
+                SaveFileComponent.clearResolvedValue(prod.children, clearAll);
             }
         });
     }
 
     static fileDownloadString(f: IMobius): {'name': string, 'file': string} {
-        f.settings = localStorage.getItem('mpm_settings');
+        const main_settings = JSON.parse(localStorage.getItem('mpm_settings'));
+        const cesiumSettings = JSON.parse(localStorage.getItem('cesium_settings'));
+        if (cesiumSettings) {
+            if (cesiumSettings.cesium) {
+                delete cesiumSettings.cesium;
+            }
+            main_settings.cesium = cesiumSettings;
+        }
+        f.settings = JSON.stringify(main_settings);
 
         // if any node disappears from the flowchart but is still present in any edge (due to bug), restore the node.
         for (const edge of f.flowchart.edges) {
@@ -399,6 +409,7 @@ export class SaveFileComponent implements OnDestroy{
 
     static updateBackupList() {
         const backups = JSON.parse(localStorage.getItem('mobius_backup_list'));
+        if (!backups) { return; }
         const backupdates = {};
         for (const backup of backups) {
             // if (!backupdates[backup]) {
@@ -472,7 +483,17 @@ export class SaveFileComponent implements OnDestroy{
             settings: {}
         };
         newFile.flowchart.name = this.dataService.flowchart.name;
-        newFile.settings = localStorage.getItem('mpm_settings');
+
+        const main_settings = JSON.parse(localStorage.getItem('mpm_settings'));
+        const cesiumSettings = JSON.parse(localStorage.getItem('cesium_settings'));
+        if (cesiumSettings) {
+            if (cesiumSettings.cesium) {
+                delete cesiumSettings.cesium;
+            }
+            main_settings.cesium = cesiumSettings;
+        }
+        newFile.settings = JSON.stringify(main_settings);
+
         const splitDesc = this.dataService.flowchart.description.split('\n');
         let i = 0;
         while (i < splitDesc.length) {

@@ -29,7 +29,7 @@ then the position will be moved by the average of the vectors.
 * **Parameters:**  
   * *entities:* An entity or list of entities to rotate.  
   * *ray:* A ray to rotate around. \
-Given a plane, a ray will be created from teh plane z axis. \
+Given a plane, a ray will be created from the plane z axis. \
 Given an `xyz` location, a ray will be generated with an origin at this location, and a direction `[0, 0, 1]`. \
 Given any entities, the centroid will be extracted, \
 and a ray will be generated with an origin at this centroid, and a direction `[0, 0, 1]`.  
@@ -153,15 +153,22 @@ in the ring. The first edge will become the last edge.
   
   
 ## Weld  
-* **Description:** Unweld vertices so that they do not share positions. The new positions that are generated are returned.
+* **Description:** Unweld vertices so that they do not share positions.
 ~  
 * **Parameters:**  
   * *entities:* Entities, a list of vertices, or entities from which vertices can be extracted.  
   * *method:* Enum; the method to use for welding.  
-* **Returns:** Entities, a list of new positions resulting from the unweld.  
-* **Examples:**  
-  * mod.Unweld(polyline1)  
-    Unwelds the vertices of polyline1 from all other vertices that shares the same position.
+* **Returns:** void  
+  
+## Fuse  
+* **Description:** Fuse positions that lie within a certain tolerance of one another.
+New positions will be created.
+If the  positions that are fuse have vertices attached, then the vertices will become welded.
+~  
+* **Parameters:**  
+  * *entities:* Entities, a list of positions, or entities from which positions can be extracted.  
+  * *tolerance:* The distance tolerance for fusing positions.
+ @returns void
   
   
 ## Remesh  

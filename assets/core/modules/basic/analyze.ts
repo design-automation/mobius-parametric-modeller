@@ -13,19 +13,147 @@ import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, Txy, XYPLANE, EAttribDa
 import { isPline, isWire, isEdge, isPgon, isFace, getArrDepth, isVert, isPosi, isPoint, idsMakeFromIndicies } from '@libs/geo-info/id';
 import { distance } from '@libs/geom/distance';
 import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm, vecAng2 } from '@libs/geom/vectors';
-import { triangulate } from '@libs/triangulate/triangulate';
-import { area } from '@libs/geom/triangle';
 import { checkIDs, checkArgTypes, IDcheckObj, TypeCheckObj} from '../_check_args';
 import uscore from 'underscore';
-import * as THREE from 'three';
 import { sum } from '@assets/core/inline/_mathjs';
 import { min, max } from '@assets/core/inline/_math';
-import { arrMakeFlat } from '@assets/libs/util/arrs';
+import { arrMakeFlat, arrIdxRem } from '@assets/libs/util/arrs';
 import { degToRad } from '@assets/core/inline/_conversion';
 import { xfromSourceTargetMatrix, multMatrix } from '@libs/geom/matrix';
 import { XAXIS, YAXIS, ZAXIS } from '@assets/libs/geom/constants';
 import cytoscape from 'cytoscape';
+import * as THREE from 'three';
+import { TypedArrayUtils } from 'three/examples/jsm/utils/TypedArrayUtils.js';
 
+// ================================================================================================
+/**
+ * Finds the nearest positions within a certain maximum distance.
+ * ~
+ * Returns a dictionary containing the shortes paths.
+ * ~
+ * If 'num_neighbors' is 1, the dictionary will contain two lists:
+ * 1) 'ps': a list of positions, a subset of positions from the source.
+ * 2) 'neighbors': a list of neighbouring positions, a subset of positions from target.
+  * ~
+ * If 'num_neighbors' is greater than 1, the dictionary will contain two lists:
+ * 1) 'ps': a list of positions, a subset of positions from the source.
+ * 2) 'neighbors': a list of lists of neighbouring positions, a subset of positions from target.
+ * ~
+ * @param __model__
+ * @param source A list of positions, or entities from which positions can be extracted.
+ * @param target A list of positions, or entities from which positions can be extracted.
+ * If null, the positions in source will be used.
+ * @param max_dist The maximum distance for neighbors. If null, Infinity will be used.
+ * @param max_neighbors The maximum number of neighbors to return. 
+ * If null, the number of positions in target is used.
+ * @returns A dictionary containing the results.
+ */
+export function Nearest(__model__: GIModel,
+        source: TId|TId[], target: TId|TId[], max_dist: number, max_neighbors: number):
+        {'ps': TId[], 'neighbors': TId[]|TId[][], 'distances': number[]|number[][]} {
+    if (target === null) { target = source; } // TODO optimise
+    source = arrMakeFlat(source) as TId[];
+    target = arrMakeFlat(target) as TId[];
+    // --- Error Check ---
+    const fn_name = 'analyze.ShortestPath';
+    const source_ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'origins', source,
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    const target_ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'destinations', target,
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    // --- Error Check ---
+    const source_posis_i: number[] = _getUniquePosis(__model__, source_ents_arrs);
+    const target_posis_i: number[] = _getUniquePosis(__model__, target_ents_arrs);
+    const result: [number[], number[]|number[][], number[]|number[][]] =
+        _nearest(__model__, source_posis_i, target_posis_i, max_dist, max_neighbors);
+    // return dictionary with results
+    return {
+        'ps': idsMakeFromIndicies(EEntType.POSI, result[0]) as TId[],
+        'neighbors': idsMakeFromIndicies(EEntType.POSI, result[1]) as TId[][]|TId[],
+        'distances': result[2] as number[]|number[][]
+    };
+}
+function _fuseDistSq(xyz1: number[], xyz2: number[]): number {
+    return Math.pow(xyz1[0] - xyz2[0], 2) +  Math.pow(xyz1[1] - xyz2[1], 2) +  Math.pow(xyz1[2] - xyz2[2], 2);
+}
+function _nearest(__model__: GIModel, source_posis_i: number[], target_posis_i: number[],
+        dist: number, num_neighbors: number): [number[], number[]|number[][], number[]|number[][]] {
+    // create a list of all posis
+    const set_target_posis_i: Set<number> = new Set(target_posis_i);
+    const set_posis_i: Set<number> = new Set(target_posis_i);
+    for (const posi_i of source_posis_i) { set_posis_i.add(posi_i); }
+    const posis_i: number[] = Array.from(set_posis_i);
+    // get dist and num_neighbours
+    if (dist === null) { dist = Infinity; }
+    if (num_neighbors === null) { num_neighbors = target_posis_i.length; }
+    // find neighbor
+    const map_posi_i_to_xyz: Map<number, Txyz> = new Map();
+    const typed_positions = new Float32Array( posis_i.length * 4 );
+    const typed_buff = new THREE.BufferGeometry();
+    typed_buff.setAttribute( 'position', new THREE.BufferAttribute( typed_positions, 4 ) );
+    for (let i = 0; i < posis_i.length; i++) {
+        const posi_i: number = posis_i[i];
+        const xyz: Txyz = __model__.attribs.query.getPosiCoords(posi_i);
+        map_posi_i_to_xyz.set(posi_i, xyz);
+        typed_positions[ i * 4 + 0 ] = xyz[0];
+        typed_positions[ i * 4 + 1 ] = xyz[1];
+        typed_positions[ i * 4 + 2 ] = xyz[2];
+        typed_positions[ i * 4 + 3 ] = posi_i;
+    }
+    const kdtree = new TypedArrayUtils.Kdtree( typed_positions, _fuseDistSq, 4 );
+    // calculate teh dist squared
+    const num_posis: number = posis_i.length;
+    const dist_sq: number = dist * dist;
+    // deal with special case, num_neighbors === 1
+    if (num_neighbors === 1) {
+        const result1: [number[], number[], number[]] = [[], [], []];
+        for (const posi_i of source_posis_i) {
+            const nn = kdtree.nearest( map_posi_i_to_xyz.get(posi_i) as any, num_posis, dist_sq );
+            let min_dist = Infinity;
+            let nn_posi_i: number;
+            for (const a_nn of nn) {
+                const next_nn_posi_i: number = a_nn[0].obj[3];
+                if (set_target_posis_i.has(next_nn_posi_i) && a_nn[1] < min_dist) {
+                    min_dist = a_nn[1];
+                    nn_posi_i = next_nn_posi_i;
+                }
+            }
+            if (nn_posi_i !== undefined) {
+                result1[0].push(posi_i);
+                result1[1].push(nn_posi_i);
+                result1[2].push(Math.sqrt(min_dist));
+            }
+        }
+        return result1;
+    }
+    // create a neighbors list
+    const result: [number[], number[][], number[][]] = [[], [], []];
+    for (const posi_i of source_posis_i) {
+        // TODO at the moment is gets all posis since no distinction is made between source and traget
+        // TODO kdtree could be optimised
+        const nn = kdtree.nearest( map_posi_i_to_xyz.get(posi_i) as any, num_posis, dist_sq );
+        const posis_i_dists: [number, number][] = [];
+        for (const a_nn of nn) {
+            const nn_posi_i: number = a_nn[0].obj[3];
+            if (set_target_posis_i.has(nn_posi_i)) {
+                posis_i_dists.push([nn_posi_i, a_nn[1]]);
+            }
+        }
+        posis_i_dists.sort( (a, b) => a[1] - b[1] );
+        const nn_posis_i: number[] = [];
+        const nn_dists: number[] = [];
+        for (const posi_i_dist  of posis_i_dists) {
+            nn_posis_i.push(posi_i_dist[0]);
+            nn_dists.push(Math.sqrt(posi_i_dist[1]));
+            if (nn_posis_i.length === num_neighbors) { break; }
+        }
+        if (nn_posis_i.length > 0) {
+            result[0].push(posi_i);
+            result[1].push(nn_posis_i);
+            result[2].push(nn_dists);
+        }
+    }
+    return result;
+}
 // ================================================================================================
 // utility function
 // ----
@@ -590,28 +718,33 @@ export enum _EShortestPathMethod {
     UNDIRECTED = 'undirected'
 }
 export enum _EShortestPathResult {
+    DISTS = 'distances',
     COUNTS = 'counts',
     PATHS = 'paths',
-    BOTH = 'both'
+    ALL = 'all'
 }
 /**
- * Calculates the shortest path from ever position in source, to every position in target.
+ * Calculates the shortest path from every position in source, to every position in target.
  * ~
- * Returns a dictionary containing the shortes paths.
+ * Returns a dictionary containing the shortest paths.
+ * ~
+ * If 'distances' is selected, the dictionary will contain two list:
+ * 1) 'source_ps': a list of start positions for eah path,
+ * 2) 'distances': a list of distances, one list for each path.
  * ~
  * If 'counts' is selected, the dictionary will contain four lists:
  * 1) 'ps': a list of positions traversed by the paths,
- * 2) 'ps_count': a list of numbers that count how often each position was traversed.
+ * 2) 'ps_count': a list of numbers that count how often each position was traversed,
  * 3) '_e': a list of edges traversed by the paths,
  * 4) '_e_count': a list of numbers that count how often each edge was traversed.
  * ~
  * If 'paths' is selected, the dictionary will contain two lists of lists:
- * 1) 'ps_paths': a list of lists of positions, one list for each path.
+ * 1) 'ps_paths': a list of lists of positions, one list for each path,
  * 2) '_e_paths': a list of lists of edges, one list for each path.
  * ~
- * If 'both' is selected, the dictionary will contain all six lists just described.
+ * If 'all' is selected, the dictionary will contain all lists just described.
  * ~
- * The network must consist of vertices that are connected or welded.
+ * The network must consist of vertices that are welded.
  * For example, if the network consists of multiple polylines, then the vertcies of those polylines must be welded.
  * ~
  * If 'directed' is selected, then the edge direction is taken into account. Each edge will be one-way.
@@ -621,12 +754,17 @@ export enum _EShortestPathResult {
  * @param source Path origins, positions, or entities from which positions can be extracted.
  * @param target Path destinations, positions, or entities from which positions can be extracted.
  * @param entities The network, edges, or entities from which edges can be extracted.
- * @param method Enum, the method to use, directed or undeirected.
+ * @param method Enum, the method to use, directed or undirected.
  * @param result Enum, the data to return, positions, edges, or both.
+ * @returns A dictionary containing the results.
  */
 export function ShortestPath(__model__: GIModel, source: TId|TId[]|TId[][][], target: TId|TId[]|TId[][],
         entities: TId|TId[]|TId[][], method: _EShortestPathMethod, result: _EShortestPathResult):
-        { _e?: TId[], ps?: TId[], _e_count?: number[], ps_count?: number[], _e_paths?: TId[][], ps_paths?: TId[][]} {
+        {
+            source_ps?: TId[], distances?: number[],
+            _e?: TId[], ps?: TId[], _e_count?: number[], ps_count?: number[],
+            _e_paths?: TId[][], ps_paths?: TId[][]
+        } {
 
     source = arrMakeFlat(source) as TId[];
     target = arrMakeFlat(target) as TId[];
@@ -641,56 +779,63 @@ export function ShortestPath(__model__: GIModel, source: TId|TId[]|TId[][][], ta
         [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
     // --- Error Check ---
     const directed: boolean = method === _EShortestPathMethod.DIRECTED ? true : false;
-    let return_edges = true;
-    let return_posis = true;
+    let return_dists = true;
+    let return_counts = true;
     let return_paths = true;
     switch (result) {
+        case _EShortestPathResult.DISTS:
+            return_paths = false;
+            return_counts = false;
+            break;
         case _EShortestPathResult.COUNTS:
+            return_dists = false;
             return_paths = false;
             break;
         case _EShortestPathResult.PATHS:
-            return_edges = false;
-            return_posis = false;
+            return_dists = false;
+            return_counts = false;
             break;
         default:
-            // return_edges = false;
-            // return_posis = false;
+            // all true
             break;
     }
     const source_posis_i: number[] = _getUniquePosis(__model__, source_ents_arrs);
     const target_posis_i: number[] = _getUniquePosis(__model__, target_ents_arrs);
-    const elements: any[] = _cytoscapeGetElements(__model__, ents_arrs, source_posis_i, target_posis_i, directed);
+    const cy_elems: any[] = _cytoscapeGetElements(__model__, ents_arrs, source_posis_i, target_posis_i, directed);
     // create the cytoscape object
     const cy = cytoscape({
-        elements: elements,
+        elements: cy_elems,
         headless: true,
     });
     const map_edges_i: Map<number, number> = new Map();
     const map_posis_i: Map<number, number> = new Map();
     const posi_paths: number[][] = [];
     const edge_paths: number[][] = [];
+    const path_dists: number[] = [];
     for (const source_posi_i of source_posis_i) {
-        const source_elem = cy.getElementById( source_posi_i.toString() );
+        const cy_source_elem = cy.getElementById( source_posi_i.toString() );
         const dijkstra = cy.elements().dijkstra({
-            root: source_elem,
+            root: cy_source_elem,
             weight: _cytoscapeWeightFn,
             directed: directed
         });
         for (const target_posi_i of target_posis_i) {
-            const path = dijkstra.pathTo( cy.getElementById( target_posi_i.toString() ) );
+            const cy_node = cy.getElementById( target_posi_i.toString() );
+            const dist: number = dijkstra.distanceTo(cy_node);
+            const cy_path = dijkstra.pathTo(cy_node);
             const posi_path: number[] = [];
             const edge_path: number[] = [];
-            for (const elem of path.toArray()) {
-                if (elem.isEdge()) {
-                    const edge_i: number = elem.data('idx');
-                    if (return_edges) {
+            for (const cy_path_elem of cy_path.toArray()) {
+                if (cy_path_elem.isEdge()) {
+                    const edge_i: number = cy_path_elem.data('idx');
+                    if (return_counts) {
                         if (!map_edges_i.has(edge_i)) {
                             map_edges_i.set(edge_i, 1);
                         } else {
                             map_edges_i.set(edge_i, map_edges_i.get(edge_i) + 1);
                         }
                         if (!directed) {
-                            const edge2_i: number = elem.data('idx2');
+                            const edge2_i: number = cy_path_elem.data('idx2');
                             if (edge2_i !== null) {
                                 if (!map_edges_i.has(edge2_i)) {
                                     map_edges_i.set(edge2_i, 1);
@@ -704,8 +849,8 @@ export function ShortestPath(__model__: GIModel, source: TId|TId[]|TId[][][], ta
                         edge_path.push(edge_i);
                     }
                 } else {
-                    const posi_i: number = elem.data('idx');
-                    if (return_posis) {
+                    const posi_i: number = cy_path_elem.data('idx');
+                    if (return_counts) {
                         if (!map_posis_i.has(posi_i)) {
                             map_posis_i.set(posi_i, 1);
                         } else {
@@ -720,26 +865,34 @@ export function ShortestPath(__model__: GIModel, source: TId|TId[]|TId[][][], ta
             if (return_paths) {
                 edge_paths.push(edge_path);
                 posi_paths.push(posi_path);
+                path_dists.push(dist);
             }
         }
     }
-    const dict: { _e?: TId[], ps?: TId[], _e_count?: number[], ps_count?: number[], _e_paths?: TId[][], ps_paths?: TId[][]} = {};
-    if (return_edges) {
-        dict['_e'] = idsMakeFromIndicies(EEntType.EDGE, Array.from(map_edges_i.keys())) as TId[];
-        dict['_e_count'] = Array.from(map_edges_i.values());
+    const dict: {
+        source_ps?: TId[], distances?: number[]
+        _e?: TId[], ps?: TId[], _e_count?: number[], ps_count?: number[],
+        _e_paths?: TId[][], ps_paths?: TId[][]
+    } = {};
+    if (return_dists) {
+        dict.source_ps = idsMakeFromIndicies(EEntType.POSI, source_posis_i) as TId[];
+        dict.distances = path_dists;
     }
-    if (return_posis) {
-        dict['ps'] =  idsMakeFromIndicies(EEntType.POSI, Array.from(map_posis_i.keys())) as TId[];
-        dict['ps_count'] =  Array.from(map_posis_i.values());
+    if (return_counts) {
+        dict._e = idsMakeFromIndicies(EEntType.EDGE, Array.from(map_edges_i.keys())) as TId[];
+        dict._e_count = Array.from(map_edges_i.values());
+        dict.ps =  idsMakeFromIndicies(EEntType.POSI, Array.from(map_posis_i.keys())) as TId[];
+        dict.ps_count =  Array.from(map_posis_i.values());
     }
     if (return_paths) {
-        dict['_e_paths'] =  idsMakeFromIndicies(EEntType.EDGE, edge_paths) as TId[][];
-        dict['ps_paths'] =  idsMakeFromIndicies(EEntType.POSI, posi_paths) as TId[][];
+        dict._e_paths =  idsMakeFromIndicies(EEntType.EDGE, edge_paths) as TId[][];
+        dict.ps_paths =  idsMakeFromIndicies(EEntType.POSI, posi_paths) as TId[][];
     }
     return dict;
 }
 
 function _getUniquePosis(__model__: GIModel, ents_arr: TEntTypeIdx[]): number[] {
+    if (ents_arr.length === 0) { return []; }
     const set_posis_i: Set<number> = new Set();
     for (const [ent_type, ent_i] of ents_arr) {
         const posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, ent_i);
@@ -831,3 +984,564 @@ function _cytoscapeGetElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
     }
     return elements;
 }
+
+/**
+ * Calculates the shortest path from every position in source, to the closest position in target.
+ * ~
+ * Returns a dictionary containing the shortes paths.
+ * ~
+ * If 'distances' is selected, the dictionary will contain one list:
+ * 1) 'distances': a list of distances, one list for each path.
+ * ~
+ * If 'counts' is selected, the dictionary will contain four lists:
+ * 1) 'ps': a list of positions traversed by the paths,
+ * 2) 'ps_count': a list of numbers that count how often each position was traversed.
+ * 3) '_e': a list of edges traversed by the paths,
+ * 4) '_e_count': a list of numbers that count how often each edge was traversed.
+ * ~
+ * If 'paths' is selected, the dictionary will contain two lists of lists:
+ * 1) 'ps_paths': a list of lists of positions, one list for each path.
+ * 2) '_e_paths': a list of lists of edges, one list for each path.
+ * ~
+* If 'all' is selected, the dictionary will contain all lists just described.
+ * ~
+ * The network must consist of vertices that are welded.
+ * For example, if the network consists of multiple polylines, then the vertcies of those polylines must be welded.
+ * ~
+ * If 'directed' is selected, then the edge direction is taken into account. Each edge will be one-way.
+ * If 'undirected' is selected, the edge direction is ignored. Each edge will be two-way.
+ * ~
+ * @param __model__
+ * @param source Path origins, positions, or entities from which positions can be extracted.
+ * @param target Path destinations, positions, or entities from which positions can be extracted.
+ * @param entities The network, edges, or entities from which edges can be extracted.
+ * @param method Enum, the method to use, directed or undirected.
+ * @param result Enum, the data to return, positions, edges, or both.
+ * @returns A dictionary containing the results.
+ */
+export function ClosestPath(__model__: GIModel, source: TId|TId[]|TId[][][], target: TId|TId[]|TId[][],
+        entities: TId|TId[]|TId[][], method: _EShortestPathMethod, result: _EShortestPathResult):
+        {
+            source_ps?: TId[], distances?: number[],
+            _e?: TId[], ps?: TId[], _e_count?: number[], ps_count?: number[],
+            _e_paths?: TId[][], ps_paths?: TId[][]
+        } {
+
+    source = arrMakeFlat(source) as TId[];
+    target = arrMakeFlat(target) as TId[];
+    entities = arrMakeFlat(entities) as TId[];
+    // --- Error Check ---
+    const fn_name = 'analyze.ShortestPath';
+    const source_ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'origins', source,
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    const target_ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'destinations', target,
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    const ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    // --- Error Check ---
+    const directed: boolean = method === _EShortestPathMethod.DIRECTED ? true : false;
+    let return_dists = true;
+    let return_counts = true;
+    let return_paths = true;
+    switch (result) {
+        case _EShortestPathResult.DISTS:
+            return_paths = false;
+            return_counts = false;
+            break;
+        case _EShortestPathResult.COUNTS:
+            return_dists = false;
+            return_paths = false;
+            break;
+        case _EShortestPathResult.PATHS:
+            return_dists = false;
+            return_counts = false;
+            break;
+        default:
+            // all true
+            break;
+    }
+    const source_posis_i: number[] = _getUniquePosis(__model__, source_ents_arrs);
+    const target_posis_i: number[] = _getUniquePosis(__model__, target_ents_arrs);
+    const cy_elems: any[] = _cytoscapeGetElements(__model__, ents_arrs, source_posis_i, target_posis_i, directed);
+    // create the cytoscape object
+    const cy = cytoscape({
+        elements: cy_elems,
+        headless: true,
+    });
+    const map_edges_i: Map<number, number> = new Map();
+    const map_posis_i: Map<number, number> = new Map();
+    const posi_paths: number[][] = [];
+    const edge_paths: number[][] = [];
+    const path_dists: number[] = [];
+    for (const source_posi_i of source_posis_i) {
+        const cy_source_elem = cy.getElementById( source_posi_i.toString() );
+        const dijkstra = cy.elements().dijkstra({
+            root: cy_source_elem,
+            weight: _cytoscapeWeightFn,
+            directed: directed
+        });
+        let closest_target_posi_i: number = null;
+        let closest_dist = Infinity;
+        for (const target_posi_i of target_posis_i) {
+            // find shortest path
+            const dist: number =
+                dijkstra.distanceTo( cy.getElementById( target_posi_i.toString() ) );
+            if (dist < closest_dist) {
+                closest_dist = dist;
+                closest_target_posi_i = target_posi_i;
+            }
+        }
+        if (closest_target_posi_i !== null) {
+            // get shortest path
+            const cy_path: cytoscape.CollectionReturnValue =
+                dijkstra.pathTo( cy.getElementById( closest_target_posi_i.toString() ) );
+            // get the data
+            const posi_path: number[] = [];
+            const edge_path: number[] = [];
+            for (const cy_path_elem of cy_path.toArray()) {
+                if (cy_path_elem.isEdge()) {
+                    const edge_i: number = cy_path_elem.data('idx');
+                    if (return_counts) {
+                        if (!map_edges_i.has(edge_i)) {
+                            map_edges_i.set(edge_i, 1);
+                        } else {
+                            map_edges_i.set(edge_i, map_edges_i.get(edge_i) + 1);
+                        }
+                        if (!directed) {
+                            const edge2_i: number = cy_path_elem.data('idx2');
+                            if (edge2_i !== null) {
+                                if (!map_edges_i.has(edge2_i)) {
+                                    map_edges_i.set(edge2_i, 1);
+                                } else {
+                                    map_edges_i.set(edge2_i, map_edges_i.get(edge2_i) + 1);
+                                }
+                            }
+                        }
+                    }
+                    if (return_paths) {
+                        edge_path.push(edge_i);
+                    }
+                } else {
+                    const posi_i: number = cy_path_elem.data('idx');
+                    if (return_counts) {
+                        if (!map_posis_i.has(posi_i)) {
+                            map_posis_i.set(posi_i, 1);
+                        } else {
+                            map_posis_i.set(posi_i, map_posis_i.get(posi_i) + 1);
+                        }
+                    }
+                    if (return_paths) {
+                        posi_path.push(posi_i);
+                    }
+                }
+            }
+            if (return_paths) {
+                edge_paths.push(edge_path);
+                posi_paths.push(posi_path);
+            }
+            if (return_dists) {
+                path_dists.push(closest_dist);
+            }
+        }
+    }
+    const dict: {
+        source_ps?: TId[], distances?: number[]
+        _e?: TId[], ps?: TId[], _e_count?: number[], ps_count?: number[],
+        _e_paths?: TId[][], ps_paths?: TId[][]
+    } = {};
+    if (return_dists) {
+        dict.source_ps = idsMakeFromIndicies(EEntType.POSI, source_posis_i) as TId[];
+        dict.distances = path_dists;
+    }
+    if (return_counts) {
+        dict._e = idsMakeFromIndicies(EEntType.EDGE, Array.from(map_edges_i.keys())) as TId[];
+        dict._e_count = Array.from(map_edges_i.values());
+        dict.ps =  idsMakeFromIndicies(EEntType.POSI, Array.from(map_posis_i.keys())) as TId[];
+        dict.ps_count =  Array.from(map_posis_i.values());
+    }
+    if (return_paths) {
+        dict._e_paths =  idsMakeFromIndicies(EEntType.EDGE, edge_paths) as TId[][];
+        dict.ps_paths =  idsMakeFromIndicies(EEntType.POSI, posi_paths) as TId[][];
+    }
+    return dict;
+}
+// ================================================================================================
+export enum _ECentralityMethod {
+    DIRECTED = 'directed',
+    UNDIRECTED = 'undirected'
+}
+// export enum _ECentralityType {
+//     DEGREE = 'degree',
+//     CLOSENESS = 'closeness',
+//     HARMONIC = 'harmonic',
+//     BETWEENNESS = 'betweenness'
+// }
+// /**
+//  * Calculates centrality metrics for a netowrk.
+//  * ~
+//  * ~
+//  * @param __model__
+//  * @param source Positions, or entities from which positions can be extracted.
+//  * @param entities The network, edges, or entities from which edges can be extracted.
+//  * @param method Enum, the method to use, directed or undirected.
+//  * @param cen_type Enum, the data to return, positions, edges, or both.
+//  */
+// export function Centrality(__model__: GIModel, source: TId|TId[]|TId[][][],
+//         entities: TId|TId[]|TId[][], method: _ECentralityMethod, cen_type: _ECentralityType): any {
+
+//     if (source === null) {
+//         source = [];
+//     } else {
+//         source = arrMakeFlat(source) as TId[];
+//     }
+//     entities = arrMakeFlat(entities) as TId[];
+//     // --- Error Check ---
+//     const fn_name = 'analyze.Centrality';
+//     let source_ents_arrs: TEntTypeIdx[] = [];
+//     if (source.length > 0) {
+//         source_ents_arrs = checkIDs(fn_name, 'source', source,
+//             [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+//     }
+//     const ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+//         [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+//     // --- Error Check ---
+//     const directed: boolean = method === _ECentralityMethod.DIRECTED ? true : false;
+//     const source_posis_i: number[] = _getUniquePosis(__model__, source_ents_arrs);
+//     const [elements, graph_posis_i]: [cytoscape.ElementDefinition[], number[]] =
+//         _cytoscapeGetElements2(__model__, ents_arrs, source_posis_i, directed);
+//     // create the cytoscape object
+//     const cy = cytoscape({
+//         elements: elements,
+//         headless: true,
+//     });
+//     let cytoscape_centrality: any;
+//     const posis_i: number[] = source_ents_arrs.length === 0 ? graph_posis_i : source_posis_i;
+//     switch (cen_type) {
+//         // Degree Centrality
+//         case _ECentralityType.DEGREE:
+//             if (directed) {
+//                 const indegree: number[] = [];
+//                 const outdegree: number[] = [];
+//                 cytoscape_centrality = cy.elements().degreeCentralityNormalized({
+//                     weight: _cytoscapeWeightFn,
+//                     alpha: 1,
+//                     directed: directed
+//                 });
+//                 for (const posi_i of posis_i) {
+//                     const source_elem = cy.getElementById( posi_i.toString() );
+//                     indegree.push( cytoscape_centrality.indegree(source_elem) );
+//                     outdegree.push( cytoscape_centrality.outdegree(source_elem) );
+//                 }
+//                 return { 'indegree': indegree, 'outdegree': outdegree };
+//             } else {
+//                 const degree: number[] = [];
+//                 cytoscape_centrality = cy.elements().degreeCentralityNormalized({
+//                     weight: _cytoscapeWeightFn,
+//                     alpha: 1,
+//                     directed: directed
+//                 });
+//                 for (const posi_i of posis_i) {
+//                     const source_elem = cy.getElementById( posi_i.toString() );
+//                     degree.push( cytoscape_centrality.degree(source_elem) );
+//                 }
+//                 return { 'degree': degree };
+//             }
+//             break;
+//         // Closeness and Harmonic centrality
+//         case _ECentralityType.HARMONIC:
+//         case _ECentralityType.CLOSENESS:
+//             const harmonic: boolean = cen_type === _ECentralityType.HARMONIC;
+//             const closeness: number[] = [];
+//             cytoscape_centrality = cy.elements().closenessCentralityNormalized({
+//                 weight: _cytoscapeWeightFn,
+//                 harmonic: harmonic,
+//                 directed: directed
+//             });
+//             for (const posi_i of posis_i) {
+//                 const source_elem = cy.getElementById( posi_i.toString() );
+//                 closeness.push( cytoscape_centrality.closeness(source_elem) );
+//             }
+//             return { 'closeness': closeness  };
+//         // Betweenness centrality
+//         case _ECentralityType.BETWEENNESS:
+//             const betweenness: number[] = [];
+//             cytoscape_centrality = cy.elements().betweennessCentrality({
+//                 weight: _cytoscapeWeightFn,
+//                 directed: directed
+//             });
+//             for (const posi_i of posis_i) {
+//                 const source_elem = cy.getElementById( posi_i.toString() );
+//                 betweenness.push( cytoscape_centrality.betweennessNormalized(source_elem) );
+//             }
+//             return { 'betweenness': betweenness };
+//         default:
+//             throw new Error('Centrality type not recognised.');
+//             break;
+//     }
+//     return null;
+// }
+function _cytoscapeGetElements2(__model__: GIModel, ents_arr: TEntTypeIdx[],
+    posis_i: number[], directed: boolean): [cytoscape.ElementDefinition[], number[]] {
+    let has_weight_attrib = false;
+    if (__model__.attribs.query.hasAttrib(EEntType.EDGE, 'weight')) {
+        has_weight_attrib = __model__.attribs.query.getAttribDataType(EEntType.EDGE, 'weight') === EAttribDataTypeStrs.NUMBER;
+    }
+    // edges, starts empty
+    const set_edges_i: Set<number> = new Set();
+    // posis, starts with posis_i
+    const set_posis_i: Set<number> = new Set(posis_i);
+    // network
+    for (const [ent_type, ent_i] of ents_arr) {
+        const n_edges_i: number[] = __model__.geom.nav.navAnyToEdge(ent_type, ent_i);
+        for (const edge_i of n_edges_i) {
+            set_edges_i.add(edge_i);
+        }
+        const n_posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, ent_i);
+        for (const posi_i of n_posis_i) {
+            set_posis_i.add(posi_i);
+        }
+    }
+    // all unique posis
+    const uniq_posis_i: number[] =  Array.from(set_posis_i);
+    // create elements
+    const elements: cytoscape.ElementDefinition[] = [];
+    for (const posi_i of uniq_posis_i) {
+        elements.push( {  data: { id: posi_i.toString(), idx: posi_i} } );
+    }
+    if (directed) {
+        // directed
+        for (const edge_i of Array.from(set_edges_i)) {
+            const edge_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
+            let weight = 1.0;
+            if (has_weight_attrib) {
+                weight = __model__.attribs.query.getAttribVal(EEntType.EDGE, 'weight', edge_i) as number;
+            } else {
+                const c0: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[0]);
+                const c1: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[1]);
+                weight = distance(c0, c1);
+            }
+            elements.push( {  data: { id: 'e' + edge_i,
+                source: edge_posis_i[0].toString(), target: edge_posis_i[1].toString(), weight: weight, idx: edge_i} } );
+        }
+    } else {
+        // undirected
+        const map_edges_ab: Map<string, any> = new Map();
+        for (const edge_i of Array.from(set_edges_i)) {
+            let edge_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
+            edge_posis_i = edge_posis_i[0] < edge_posis_i[1] ? edge_posis_i : [edge_posis_i[1], edge_posis_i[0]];
+            const undir_edge_id: string = 'e_' + edge_posis_i[0].toString() + '_' + edge_posis_i[1].toString();
+            if (map_edges_ab.has(undir_edge_id)) {
+                const obj = map_edges_ab.get(undir_edge_id);
+                obj['data']['idx2'] = edge_i;
+                // TODO should we take the average of the two weights? Could be more than two...
+            } else {
+                let weight = 1.0;
+                if (has_weight_attrib) {
+                    weight = __model__.attribs.query.getAttribVal(EEntType.EDGE, 'weight', edge_i) as number;
+                } else {
+                    const c0: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[0]);
+                    const c1: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[1]);
+                    weight = distance(c0, c1);
+                }
+                const obj = {
+                    data: {
+                        id: undir_edge_id,
+                        source: edge_posis_i[0].toString(),
+                        target: edge_posis_i[1].toString(),
+                        weight: weight,
+                        idx: edge_i,
+                        idx2: null
+                    }
+                };
+                map_edges_ab.set(undir_edge_id, obj);
+                elements.push(obj);
+            }
+        }
+    }
+    return [elements, uniq_posis_i];
+}
+
+// ================================================================================================
+/**
+ * Calculates degree centrality for a netowrk. Values are normalized.
+ * ~
+ * @param __model__
+ * @param source Positions, or entities from which positions can be extracted. These positions should be in teh network.
+ * @param entities The network, edges, or entities from which edges can be extracted.
+ * @param alpha The alpha value for the centrality calculation, ranging on [0, 1]. With value 0,
+ * disregards edge weights and solely uses number of edges in the centrality calculation. With value 1,
+ * disregards number of edges and solely uses the edge weights in the centrality calculation.
+ * @param method Enum, the method to use, directed or undirected.
+ * @returns A dictionary, either { degree: [...] } if 'undirected' is selected,
+ * or { indegree: [...], outdegree: [...] } if 'directed' is is selected.
+ */
+export function CentralityDeg(__model__: GIModel, source: TId|TId[]|TId[][][],
+        entities: TId|TId[]|TId[][], alpha: number, method: _ECentralityMethod): any {
+
+    if (source === null) {
+        source = [];
+    } else {
+        source = arrMakeFlat(source) as TId[];
+    }
+    entities = arrMakeFlat(entities) as TId[];
+    // --- Error Check ---
+    const fn_name = 'analyze.CentralityDeg';
+    let source_ents_arrs: TEntTypeIdx[] = [];
+    if (source.length > 0) {
+        source_ents_arrs = checkIDs(fn_name, 'source', source,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    }
+    const ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    // --- Error Check ---
+    const directed: boolean = method === _ECentralityMethod.DIRECTED ? true : false;
+    const source_posis_i: number[] = _getUniquePosis(__model__, source_ents_arrs);
+    const [elements, graph_posis_i]: [cytoscape.ElementDefinition[], number[]] =
+        _cytoscapeGetElements2(__model__, ents_arrs, source_posis_i, directed);
+    // create the cytoscape object
+    const cy = cytoscape({
+        elements: elements,
+        headless: true,
+    });
+    let cytoscape_centrality: any;
+    const posis_i: number[] = source_ents_arrs.length === 0 ? graph_posis_i : source_posis_i;
+    if (directed) {
+        const indegree: number[] = [];
+        const outdegree: number[] = [];
+        cytoscape_centrality = cy.elements().degreeCentralityNormalized({
+            weight: _cytoscapeWeightFn,
+            alpha: alpha,
+            directed: directed
+        });
+        for (const posi_i of posis_i) {
+            const source_elem = cy.getElementById( posi_i.toString() );
+            indegree.push( cytoscape_centrality.indegree(source_elem) );
+            outdegree.push( cytoscape_centrality.outdegree(source_elem) );
+        }
+        return { 'indegree': indegree, 'outdegree': outdegree };
+    } else {
+        const degree: number[] = [];
+        cytoscape_centrality = cy.elements().degreeCentralityNormalized({
+            weight: _cytoscapeWeightFn,
+            alpha: alpha,
+            directed: directed
+        });
+        for (const posi_i of posis_i) {
+            const source_elem = cy.getElementById( posi_i.toString() );
+            degree.push( cytoscape_centrality.degree(source_elem) );
+        }
+        return { 'degree': degree };
+    }
+}
+// ================================================================================================
+export enum _EClosenessCentralityType {
+    ARITHMETIC = 'arithmetic',
+    HARMONIC = 'harmonic',
+}
+/**
+ * Calculates closness centrality for a netowrk. Values are normalized.
+ * ~
+ * ~
+ * @param __model__
+ * @param source Positions, or entities from which positions can be extracted. These positions should be in teh network.
+ * @param entities The network, edges, or entities from which edges can be extracted.
+ * @param method Enum, the method to use, directed or undirected.
+ * @param cen_type Enum, the data to return, positions, edges, or both.
+ * @returns A list of centrality values, between 0 and 1.
+ */
+export function CentralityClo(__model__: GIModel, source: TId|TId[]|TId[][][],
+        entities: TId|TId[]|TId[][], method: _ECentralityMethod, cen_type: _EClosenessCentralityType): number[] {
+
+    if (source === null) {
+        source = [];
+    } else {
+        source = arrMakeFlat(source) as TId[];
+    }
+    entities = arrMakeFlat(entities) as TId[];
+    // --- Error Check ---
+    const fn_name = 'analyze.CentralityClo';
+    let source_ents_arrs: TEntTypeIdx[] = [];
+    if (source.length > 0) {
+        source_ents_arrs = checkIDs(fn_name, 'source', source,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    }
+    const ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    // --- Error Check ---
+    const directed: boolean = method === _ECentralityMethod.DIRECTED ? true : false;
+    const source_posis_i: number[] = _getUniquePosis(__model__, source_ents_arrs);
+    const [elements, graph_posis_i]: [cytoscape.ElementDefinition[], number[]] =
+        _cytoscapeGetElements2(__model__, ents_arrs, source_posis_i, directed);
+    // create the cytoscape object
+    const cy = cytoscape({
+        elements: elements,
+        headless: true,
+    });
+    let cytoscape_centrality: any;
+    const posis_i: number[] = source_ents_arrs.length === 0 ? graph_posis_i : source_posis_i;
+    const harmonic: boolean = cen_type === _EClosenessCentralityType.HARMONIC;
+    const closeness: number[] = [];
+    cytoscape_centrality = cy.elements().closenessCentralityNormalized({
+        weight: _cytoscapeWeightFn,
+        harmonic: harmonic,
+        directed: directed
+    });
+    for (const posi_i of posis_i) {
+        const source_elem = cy.getElementById( posi_i.toString() );
+        closeness.push( cytoscape_centrality.closeness(source_elem) );
+    }
+    return closeness;
+}
+// ================================================================================================
+
+/**
+ * Calculates betweenness centrality for a netowrk. Values are normalized.
+ * ~
+ * ~
+ * @param __model__
+ * @param source Positions, or entities from which positions can be extracted. These positions should be in teh network.
+ * @param entities The network, edges, or entities from which edges can be extracted.
+ * @param method Enum, the method to use, directed or undirected.
+ * @returns A list of centrality values, between 0 and 1.
+ */
+export function CentralityBtw(__model__: GIModel, source: TId|TId[]|TId[][][],
+        entities: TId|TId[]|TId[][], method: _ECentralityMethod): number[] {
+
+    if (source === null) {
+        source = [];
+    } else {
+        source = arrMakeFlat(source) as TId[];
+    }
+    entities = arrMakeFlat(entities) as TId[];
+    // --- Error Check ---
+    const fn_name = 'analyze.CentralityBtw';
+    let source_ents_arrs: TEntTypeIdx[] = [];
+    if (source.length > 0) {
+        source_ents_arrs = checkIDs(fn_name, 'source', source,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    }
+    const ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    // --- Error Check ---
+    const directed: boolean = method === _ECentralityMethod.DIRECTED ? true : false;
+    const source_posis_i: number[] = _getUniquePosis(__model__, source_ents_arrs);
+    const [elements, graph_posis_i]: [cytoscape.ElementDefinition[], number[]] =
+        _cytoscapeGetElements2(__model__, ents_arrs, source_posis_i, directed);
+    // create the cytoscape object
+    const cy = cytoscape({
+        elements: elements,
+        headless: true,
+    });
+    const posis_i: number[] = source_ents_arrs.length === 0 ? graph_posis_i : source_posis_i;
+    const betweenness: number[] = [];
+    const cytoscape_centrality = cy.elements().betweennessCentrality({
+        weight: _cytoscapeWeightFn,
+        directed: directed
+    });
+    for (const posi_i of posis_i) {
+        const source_elem = cy.getElementById( posi_i.toString() );
+        betweenness.push( cytoscape_centrality.betweennessNormalized(source_elem) );
+    }
+    return betweenness;
+}
+

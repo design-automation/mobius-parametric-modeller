@@ -409,6 +409,7 @@ export class SaveFileComponent implements OnDestroy{
 
     static updateBackupList() {
         const backups = JSON.parse(localStorage.getItem('mobius_backup_list'));
+        if (!backups) { return; }
         const backupdates = {};
         for (const backup of backups) {
             // if (!backupdates[backup]) {

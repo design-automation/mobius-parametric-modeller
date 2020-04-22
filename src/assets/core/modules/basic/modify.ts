@@ -652,6 +652,8 @@ function _fuse(__model__: GIModel, ents_arr: TEntTypeIdx[], tolerance: number): 
             }
         }
     }
+    // delete the posis if they are unused
+    __model__.geom.del.delUnusedPosis(Array.from(exclude_posis_i));
 }
 // ================================================================================================
 /**

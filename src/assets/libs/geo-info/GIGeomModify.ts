@@ -1,7 +1,6 @@
 import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz, TColl, TVert, Txy } from './common';
 import { GIGeom } from './GIGeom';
-import { arrRem, arrIdxAdd } from '../util/arrs';
-import { vecDot } from '../geom/vectors';
+import { arrRem } from '../util/arrs';
 
 /**
  * Class for geometry.
@@ -59,6 +58,51 @@ export class GIGeomModify {
         this._geom_arrays.up_edges_wires[new_edge_i] = wire_i;
         // return the new edge
         return new_edge_i;
+    }
+/**
+     * Insert a multiple vertices into an edge and updates the wire with the new edges
+     * ~
+     * Applies to both plines and pgons.
+     * ~
+     * Plines can be open or closed.
+     * ~
+     * TODO Mereg this with previous method
+     */
+    public insertVertsIntoWire(edge_i: number, posis_i: number[]): number[] {
+        const wire_i: number = this._geom.nav.navEdgeToWire(edge_i);
+        const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
+        const end_vert_i: number = this._geom_arrays.dn_edges_verts[edge_i][1];
+        const next_edge_i: number = this._geom_arrays.up_verts_edges[end_vert_i][1];
+        // check next edge amd save the next edge
+        if (next_edge_i !== undefined) {
+            this._geom_arrays.up_verts_edges[end_vert_i] = [next_edge_i]; // there is next edge
+        } else {
+            this._geom_arrays.up_verts_edges[end_vert_i] = []; // there is no next edge
+        }
+        // create the new vertices
+        const new_verts_i: number [] = [];
+        for (const posi_i of posis_i) {
+            const new_vert_i: number = this._geom.add._addVertex(posi_i);
+            new_verts_i.push(new_vert_i);
+        }
+        new_verts_i.push(end_vert_i);
+        // update the down/ip arrays for teh old edge
+        // the old edge becomes the first edge in this list, and it gets a new end vertex
+        this._geom_arrays.dn_edges_verts[edge_i][1] = new_verts_i[0];
+        this._geom_arrays.up_verts_edges[new_verts_i[0]] = [edge_i];
+        // create the new edges
+        const new_edges_i: number[] = [];
+        for (let i = 0; i < new_verts_i.length - 1; i++) {
+            const new_edge_i: number = this._geom.add._addEdge(new_verts_i[i], new_verts_i[i + 1]);
+            // update the up arrays for edges to wires
+            this._geom_arrays.up_edges_wires[new_edge_i] = wire_i;
+            // add to the list
+            new_edges_i.push(new_edge_i);
+        }
+        // update the down arrays for the wire
+        wire.splice(wire.indexOf(edge_i) + 1, 0, ...new_edges_i);
+        // return the new edge
+        return new_edges_i;
     }
     /**
      * Replace all positions in an entity with a new set of positions.

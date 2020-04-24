@@ -16,7 +16,7 @@ import { __merge__ } from '../_model';
 import { _model } from '..';
 import { idsMake, idsMakeFromIndicies } from '@libs/geo-info/id';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
-import { IDcheckObj, checkIDs, checkArgTypes, TypeCheckObj } from '../_check_args';
+import { IDcheckObj, checkIDs, checkArgTypes, TypeCheckObj, splitIDs } from '../_check_args';
 import { ModelCheck } from './util';
 
 // ================================================================================================
@@ -213,12 +213,20 @@ export function Export(__model__: GIModel, entities: TId|TId[]|TId[][],
     // --- Error Check ---
     const fn_name = 'io.Export';
     let ents_arr = null;
-    if (entities !== null) {
-        entities = arrMakeFlat(entities) as TId[];
-        ents_arr = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON, EEntType.COLL])  as TEntTypeIdx[];
+    if (__model__.debug) {
+        if (entities !== null) {
+            entities = arrMakeFlat(entities) as TId[];
+            ents_arr = checkIDs(fn_name, 'entities', entities,
+                [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON, EEntType.COLL])  as TEntTypeIdx[];
+        }
+        checkArgTypes(fn_name, 'file_name', file_name, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
+    } else {
+        if (entities !== null) {
+            entities = arrMakeFlat(entities) as TId[];
+            ents_arr = splitIDs(fn_name, 'entities', entities,
+                [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON, EEntType.COLL])  as TEntTypeIdx[];
+        }
     }
-    checkArgTypes(fn_name, 'file_name', file_name, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
     // --- Error Check ---
     _export(__model__, ents_arr, file_name, data_format, data_target);
 }

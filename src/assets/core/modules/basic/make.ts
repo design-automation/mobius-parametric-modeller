@@ -14,7 +14,7 @@ import { isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi,
 import { __merge__} from '../_model';
 import { _model } from '..';
 import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd, vecFromTo, vecLen, vecSetLen, vecCross } from '@libs/geom/vectors';
-import { checkArgTypes, checkIDs, IDcheckObj, TypeCheckObj } from '../_check_args';
+import { checkArgTypes, checkIDs, IDcheckObj, TypeCheckObj, splitIDs } from '../_check_args';
 import { distance } from '@libs/geom/distance';
 import { arrMakeFlat } from '@libs/util/arrs';
 import { getPlanesSeq } from './_common';
@@ -130,10 +130,9 @@ export enum _EExtrudeMethod {
 export function Position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TId|TId[]|TId[][] {
     if (isEmptyArr(coords)) { return []; }
     // --- Error Check ---
-    checkArgTypes('make.Position', 'coords', coords, [TypeCheckObj.isCoord, TypeCheckObj.isCoordList, TypeCheckObj.isCoordList_List]);
-    // if (__model__.debug) {
-    //     checkArgTypes('make.Position', 'coords', coords, [TypeCheckObj.isCoord, TypeCheckObj.isCoordList, TypeCheckObj.isCoordList_List]);
-    // }
+    if (__model__.debug) {
+        checkArgTypes('make.Position', 'coords', coords, [TypeCheckObj.isCoord, TypeCheckObj.isCoordList, TypeCheckObj.isCoordList_List]);
+    }
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = _position(__model__, coords);
     return idsMake(new_ents_arr);
@@ -167,10 +166,19 @@ function _position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TEntTypeId
 export function Point(__model__: GIModel, entities: TId|TId[]|TId[][]): TId|TId[]|TId[][] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
-    const ents_arr = checkIDs('make.Point', 'entities', entities,
+    let ents_arr;
+    if (__model__.debug) {
+        ents_arr = checkIDs('make.Point', 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
         [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
         EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON])  as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
+    } else {
+        ents_arr = splitIDs('make.Point', 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
+        [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
+        EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON])  as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
+
+    }
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] =  _point(__model__, ents_arr);
     return idsMake(new_ents_arr) as TId|TId[]|TId[][];
@@ -209,10 +217,18 @@ function _point(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntType
 export function Polyline(__model__: GIModel, entities: TId|TId[]|TId[][], close: _EClose): TId|TId[] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
-    const ents_arr = checkIDs('make.Polyline', 'entities', entities,
+    let ents_arr;
+    if (__model__.debug) {
+        ents_arr = checkIDs('make.Polyline', 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
         [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
         EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
+    } else {
+        ents_arr = splitIDs('make.Polyline', 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
+        [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
+        EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
+    }
     // --- Error Check ---
     const posis_arrs: TEntTypeIdx[][] = _getPlinePosisFromEnts(__model__, ents_arr);
     const new_ents_arr: TEntTypeIdx[] = _polyline(__model__, posis_arrs, close) as  TEntTypeIdx[];
@@ -313,9 +329,16 @@ function _getPlinePosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTy
 export function Polygon(__model__: GIModel, entities: TId|TId[]|TId[][]): TId|TId[] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
-    const ents_arr = checkIDs('make.Polygon', 'entities', entities,
+    let ents_arr;
+    if (__model__.debug) {
+        ents_arr = checkIDs('make.Polygon', 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
         [EEntType.POSI, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
+    } else {
+        ents_arr = splitIDs('make.Polygon', 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
+        [EEntType.POSI, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
+    }
     // --- Error Check ---
     const posis_arrs: TEntTypeIdx[][] = _getPgonPosisFromEnts(__model__, ents_arr);
     const new_ents_arr: TEntTypeIdx[] = _polygon(__model__, posis_arrs) as TEntTypeIdx[];
@@ -405,9 +428,16 @@ function _getPgonPosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTyp
 export function _Tin(__model__: GIModel, entities: TId[]|TId[][]): TId[] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
-    const ents_arr = checkIDs('make.Tin', 'entities', entities,
+    let ents_arr;
+    if (__model__.debug) {
+        ents_arr = checkIDs('make.Tin', 'entities', entities,
         [IDcheckObj.isIDList, IDcheckObj.isIDList_list],
         [EEntType.POSI, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
+    } else {
+        ents_arr = splitIDs('make.Tin', 'entities', entities,
+        [IDcheckObj.isIDList, IDcheckObj.isIDList_list],
+        [EEntType.POSI, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
+    }
     // --- Error Check ---
     const posis_arrs: TEntTypeIdx[][] = _getPgonPosisFromEnts(__model__, ents_arr);
     return null;
@@ -444,10 +474,17 @@ export function Copy(__model__: GIModel, entities: TId|TId[]|TId[][], vector: Tx
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'make.Copy';
-    const ents_arr = checkIDs(fn_name, 'entities', entities,
+    let ents_arr;
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, , IDcheckObj.isIDList_list],
         [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
-    checkArgTypes(fn_name, 'vector', vector, [TypeCheckObj.isNumber, TypeCheckObj.isVector, TypeCheckObj.isNull]);
+        checkArgTypes(fn_name, 'vector', vector, [TypeCheckObj.isNumber, TypeCheckObj.isVector, TypeCheckObj.isNull]);
+    } else {
+        ents_arr = splitIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList, , IDcheckObj.isIDList_list],
+        [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
+    }
     // --- Error Check ---
     const move_vec: Txyz = (Array.isArray(vector) ? vector : [0, 0, vector]) as Txyz;
     const bool_copy_attribs = true;
@@ -478,10 +515,19 @@ export function Hole(__model__: GIModel, pgon: TId, entities: TId|TId[]|TId[][])
     if (!Array.isArray(entities)) { entities = [entities]; }
     // --- Error Check ---
     const fn_name = 'make.Hole';
-    const ent_arr = checkIDs(fn_name, 'pgon', pgon, [IDcheckObj.isID], [EEntType.FACE, EEntType.PGON]) as TEntTypeIdx;
-    const holes_ents_arr = checkIDs(fn_name, 'entities', entities,
+    let ent_arr;
+    let holes_ents_arr;
+    if (__model__.debug) {
+        ent_arr = checkIDs(fn_name, 'pgon', pgon, [IDcheckObj.isID], [EEntType.FACE, EEntType.PGON]) as TEntTypeIdx;
+        holes_ents_arr = checkIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
+            [EEntType.POSI, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
+    } else {
+        ent_arr = splitIDs(fn_name, 'pgon', pgon, [IDcheckObj.isID], [EEntType.FACE, EEntType.PGON]) as TEntTypeIdx;
+        holes_ents_arr = splitIDs(fn_name, 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
         [EEntType.POSI, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
+    }
     // --- Error Check ---
     // get the posis for making holes
     _getHolePosisFromEnts(__model__, holes_ents_arr);
@@ -556,9 +602,16 @@ function _getHolePosisFromEnts(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntT
 export function Loft(__model__: GIModel, entities: TId[]|TId[][], divisions: number, method: _ELoftMethod): TId[] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
-    const ents_arr = checkIDs('make.Loft', 'entities', entities,
+    let ents_arr;
+    if (__model__.debug) {
+        ents_arr = checkIDs('make.Loft', 'entities', entities,
         [IDcheckObj.isIDList, IDcheckObj.isIDList_list],
         [EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
+    } else {
+        ents_arr = splitIDs('make.Loft', 'entities', entities,
+        [IDcheckObj.isIDList, IDcheckObj.isIDList_list],
+        [EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
+    }
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx[] = _loft(__model__, ents_arr, divisions, method);
     return idsMake(new_ents_arr) as TId[];
@@ -839,12 +892,20 @@ export function Extrude(__model__: GIModel, entities: TId|TId[],
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'make.Extrude';
-    const ents_arr =  checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
-        [EEntType.VERT, EEntType.EDGE, EEntType.WIRE, EEntType.FACE,
-         EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
-    checkArgTypes(fn_name, 'dist', dist, [TypeCheckObj.isNumber, TypeCheckObj.isVector]);
-    checkArgTypes(fn_name, 'divisions', divisions, [TypeCheckObj.isInt]);
+    let ents_arr;
+    if (__model__.debug) {
+        ents_arr =  checkIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList],
+            [EEntType.VERT, EEntType.EDGE, EEntType.WIRE, EEntType.FACE,
+            EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+        checkArgTypes(fn_name, 'dist', dist, [TypeCheckObj.isNumber, TypeCheckObj.isVector]);
+        checkArgTypes(fn_name, 'divisions', divisions, [TypeCheckObj.isInt]);
+    } else {
+        ents_arr =  splitIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList],
+            [EEntType.VERT, EEntType.EDGE, EEntType.WIRE, EEntType.FACE,
+            EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+    }
     // --- Error Check ---
     let new_ents_arr: TEntTypeIdx[] = null;
     // extrude
@@ -1108,13 +1169,22 @@ export function Sweep(__model__: GIModel, entities: TId|TId[], xsextion: TId, di
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'make.Sweep';
-    const backbone_ents: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
-    const xsection_ent: TEntTypeIdx = checkIDs(fn_name, 'xsextion', xsextion,
-        [IDcheckObj.isID], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx;
-    checkArgTypes(fn_name, 'divisions', divisions, [TypeCheckObj.isInt]);
-    if (divisions === 0) {
-        throw new Error(fn_name + ' : Divisor cannot be zero.');
+    let backbone_ents: TEntTypeIdx[];
+    let xsection_ent: TEntTypeIdx;
+    if (__model__.debug) {
+        backbone_ents = checkIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+        xsection_ent = checkIDs(fn_name, 'xsextion', xsextion,
+            [IDcheckObj.isID], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx;
+        checkArgTypes(fn_name, 'divisions', divisions, [TypeCheckObj.isInt]);
+        if (divisions === 0) {
+            throw new Error(fn_name + ' : Divisor cannot be zero.');
+        }
+    } else {
+        backbone_ents = splitIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+        xsection_ent = splitIDs(fn_name, 'xsextion', xsextion,
+            [IDcheckObj.isID], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx;
     }
     // --- Error Check ---
     // the xsection
@@ -1299,9 +1369,15 @@ export function Divide(__model__: GIModel, entities: TId|TId[], divisor: number,
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'make.Divide';
-    const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+    let ents_arr: TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
-    checkArgTypes(fn_name, 'divisor', divisor, [TypeCheckObj.isNumber]);
+        checkArgTypes(fn_name, 'divisor', divisor, [TypeCheckObj.isNumber]);
+    } else {
+        ents_arr = splitIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+    }
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx[] = _divide(__model__, ents_arr, divisor, method);
     // return the ids
@@ -1399,9 +1475,16 @@ export function Cut(__model__: GIModel, entities: TId|TId[], plane: TPlane, meth
     }
     // --- Error Check ---
     const fn_name = 'make.Cut';
-    const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
-    checkArgTypes(fn_name, 'plane', plane, [TypeCheckObj.isPlane]);
+    let ents_arr: TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        checkArgTypes(fn_name, 'plane', plane, [TypeCheckObj.isPlane]);
+    } else {
+        ents_arr = splitIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        checkArgTypes(fn_name, 'plane', plane, [TypeCheckObj.isPlane]);
+    }
     // --- Error Check ---
     // create the threejs entity and calc intersections
     const plane_normal: Txyz = vecCross(plane[1], plane[2]);

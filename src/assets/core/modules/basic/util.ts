@@ -13,7 +13,7 @@ import { EEntType, IModelData, TId, TEntTypeIdx } from '@libs/geo-info/common';
 import { __merge__ } from '../_model';
 import { _model } from '..';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
-import { checkIDs, IDcheckObj } from '../_check_args';
+import { checkIDs, IDcheckObj, splitIDs } from '../_check_args';
 
 export enum _ECOmpareMethod {
     THIS_IS_SUBSET = 'subset',
@@ -147,9 +147,16 @@ export function EntityInfo(__model__: GIModel, entities: TId|TId[]): string {
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
     const fn_name = 'collection.Info';
-    const ents_arr = checkIDs(fn_name, 'coll', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
-        [EEntType.COLL, EEntType.PGON, EEntType.PLINE, EEntType.POINT]) as TEntTypeIdx[];
+    let ents_arr: TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'coll', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList],
+            [EEntType.COLL, EEntType.PGON, EEntType.PLINE, EEntType.POINT]) as TEntTypeIdx[];
+    } else {
+        ents_arr = splitIDs(fn_name, 'coll', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList],
+            [EEntType.COLL, EEntType.PGON, EEntType.PLINE, EEntType.POINT]) as TEntTypeIdx[];
+    }
     // --- Error Check ---
     let result = '<h4>Entity Information:</h4>';
     for (const ent_arr of ents_arr) {

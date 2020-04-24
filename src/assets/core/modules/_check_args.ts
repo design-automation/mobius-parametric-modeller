@@ -56,6 +56,20 @@ export function checkAttribNameIdxKey(fn_name: string, attrib: string|[string, n
     // return the deconstructed attrib arg, attrib_idx_key may be null
     return [attrib_name, attrib_idx_key];
 }
+export function splitAttribNameIdxKey(fn_name: string, attrib: string|[string, number|string]): [string, number|string] {
+    let attrib_name: string = null;
+    let attrib_idx_key: number|string = null;
+    // deconstruct the attrib arg
+    if (Array.isArray(attrib)) {
+        attrib_name = attrib[0] as string;
+        attrib_idx_key = attrib[1] as number|string;
+    } else {
+        attrib_name = attrib as string;
+    }
+    // return the deconstructed attrib arg, attrib_idx_key may be null
+    return [attrib_name, attrib_idx_key];
+}
+
 export function checkAttribValue(fn_name: string, attrib_value: any): void {
     // check the actual value
     checkArgTypes(fn_name, 'attrib_value', attrib_value,
@@ -304,6 +318,29 @@ export class IDcheckObj {
         }
         return ret_arr as TEntTypeIdx[][];
     }
+    static splitID(fn_name: string, arg_name: string, arg: any, ent_type_strs: EEntType[]|null): TEntTypeIdx {
+        let ent_arr;
+        try {
+            ent_arr = idsBreak(arg) as TEntTypeIdx; // split
+        } catch (err) {
+            throw new Error(fn_name + ': ' + arg_name + ' is not a valid Entity ID'); // check valid id
+        }
+        return ent_arr;
+    }
+    static splitIDList(fn_name: string, arg_name: string, arg_list: any[], ent_type_strs: EEntType[]|null): TEntTypeIdx[] {
+        const ret_arr = [];
+        for (let i = 0; i < arg_list.length; i++) {
+            ret_arr.push(IDcheckObj.splitID(fn_name, arg_name + '[' + i + ']', arg_list[i], ent_type_strs));
+        }
+        return ret_arr as TEntTypeIdx[];
+    }
+    static splitIDList_list(fn_name: string, arg_name: string, arg_list: any, ent_type_strs: EEntType[]|null): TEntTypeIdx[][] {
+        const ret_arr = [];
+        for (let i = 0; i < arg_list.length; i++) {
+            ret_arr.push(IDcheckObj.splitIDList(fn_name, arg_name + '[' + i + ']', arg_list[i], ent_type_strs));
+        }
+        return ret_arr as TEntTypeIdx[][];
+    }
 }
 // =========================================================================================================================================
 // Specific Checks
@@ -350,6 +387,26 @@ export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns:
         throw new Error(ret_msg + err_arr.join(''));
     }
     return ret; // returns TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]; depends on which passes
+}
+export function splitIDs(fn_name: string, arg_name: string, arg: any, check_fns: Function[],
+                         IDchecks: EEntType[]|null): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
+    let ret: TEntTypeIdx|TEntTypeIdx[];
+    const repFunc = {
+        'isID': IDcheckObj.splitID,
+        'isIDList': IDcheckObj.splitIDList,
+        'isIDList_list': IDcheckObj.splitIDList_list
+    };
+    for (let i = 0; i < check_fns.length; i++) {
+        try {
+            const func = repFunc[check_fns[i].name];
+            if (!func) { continue; }
+            ret =  func(fn_name, arg_name, arg, IDchecks);
+        } catch (err) {
+            continue;
+        }
+        break;
+    }
+    return ret;
 }
 // =========================================================================================================================================
 // Most General Check

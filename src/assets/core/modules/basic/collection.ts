@@ -11,7 +11,7 @@ import { TId, EEntType, TEntTypeIdx, EFilterOperatorTypes } from '@libs/geo-info
 import { isPoint, isPline, isPgon, isColl, idsMake, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
 import { __merge__} from '../_model';
 import { _model } from '..';
-import { checkArgTypes, checkIDs, IDcheckObj, TypeCheckObj } from '../_check_args';
+import { checkArgTypes, checkIDs, IDcheckObj, TypeCheckObj, splitIDs } from '../_check_args';
 import { arrMakeFlat, getArrDepth2 } from '@libs/util/arrs';
  
 // ================================================================================================
@@ -33,10 +33,17 @@ import { arrMakeFlat, getArrDepth2 } from '@libs/util/arrs';
 export function Create(__model__: GIModel, entities: TId|TId[]|TId[][], name: string|string[]): TId|TId[] {
     // --- Error Check ---
     const fn_name = 'collection.Create';
-    const ents_arr = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
-        [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-    checkArgTypes(fn_name, 'name', name, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
+    let ents_arr: TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
+            [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+        checkArgTypes(fn_name, 'name', name, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
+    } else {
+        ents_arr = splitIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
+            [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+    }
     // --- Error Check ---
     const new_ent_arrs: TEntTypeIdx|TEntTypeIdx[] = _create(__model__, ents_arr);
     // set the name
@@ -108,8 +115,10 @@ function _create(__model__: GIModel, ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEn
  */
 export function Get(__model__: GIModel, names: string|string[]): TId|TId[] {
     // --- Error Check ---
-    const fn_name = 'collection.Get';
-    checkArgTypes(fn_name, 'names', names, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
+    if (__model__.debug) {
+        const fn_name = 'collection.Get';
+        checkArgTypes(fn_name, 'names', names, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
+    }
     // --- Error Check ---
     const colls_i: number[] = _get(__model__, names);
     if (colls_i.length === 0) {
@@ -161,10 +170,19 @@ export function Add(__model__: GIModel, coll: TId, entities: TId|TId[]): void {
     if (!isEmptyArr(entities)) {
         // --- Error Check ---
         const fn_name = 'collection.Add';
-        const coll_arr = checkIDs(fn_name, 'coll', coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
-        const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList],
-            [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+        let coll_arr;
+        let ents_arr: TEntTypeIdx[];
+        if (__model__.debug) {
+            coll_arr = checkIDs(fn_name, 'coll', coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
+            ents_arr = checkIDs(fn_name, 'entities', entities,
+                [IDcheckObj.isID, IDcheckObj.isIDList],
+                [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+        } else {
+            coll_arr = splitIDs(fn_name, 'coll', coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
+            ents_arr = splitIDs(fn_name, 'entities', entities,
+                [IDcheckObj.isID, IDcheckObj.isIDList],
+                [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+        }
         // --- Error Check ---
         _collectionAdd(__model__, coll_arr[1], ents_arr);
     }
@@ -205,18 +223,27 @@ function _collectionAdd(__model__: GIModel, coll_i: number, ents_arr: TEntTypeId
  * @returns void
  */
 export function Remove(__model__: GIModel, coll: TId, entities: TId|TId[]): void {
+    // --- Error Check ---
     const fn_name = 'collection.Remove';
     let ents_arr: TEntTypeIdx[] = null;
-    if (entities !== null) {
-        entities = arrMakeFlat(entities) as TId[];
-        // --- Error Check ---
-        ents_arr = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList],
-            [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-        // --- Error Check ---
+    let coll_arr;
+    if (__model__.debug) {
+        if (entities !== null) {
+            entities = arrMakeFlat(entities) as TId[];
+            ents_arr = checkIDs(fn_name, 'entities', entities,
+                [IDcheckObj.isID, IDcheckObj.isIDList],
+                [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+        }
+        coll_arr = checkIDs(fn_name, 'coll', coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
+    } else {
+        if (entities !== null) {
+            entities = arrMakeFlat(entities) as TId[];
+            ents_arr = splitIDs(fn_name, 'entities', entities,
+                [IDcheckObj.isID, IDcheckObj.isIDList],
+                [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+        }
+        coll_arr = splitIDs(fn_name, 'coll', coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
     }
-    // --- Error Check ---
-    const coll_arr = checkIDs(fn_name, 'coll', coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
     // --- Error Check ---
     if (ents_arr === null) {
         _collectionEmpty(__model__, coll_arr[1]);
@@ -274,7 +301,12 @@ export function Delete(__model__: GIModel, coll: TId|TId[]): void {
     coll = arrMakeFlat(coll) as TId[];
     // --- Error Check ---
     const fn_name = 'collection.Delete';
-    const colls_arrs = checkIDs(fn_name, 'coll', coll, [IDcheckObj.isIDList], [EEntType.COLL]) as TEntTypeIdx[];
+    let colls_arrs;
+    if (__model__.debug) {
+        colls_arrs = checkIDs(fn_name, 'coll', coll, [IDcheckObj.isIDList], [EEntType.COLL]) as TEntTypeIdx[];
+    } else {
+        colls_arrs = splitIDs(fn_name, 'coll', coll, [IDcheckObj.isIDList], [EEntType.COLL]) as TEntTypeIdx[];
+    }
     // --- Error Check ---
     const colls_i: number[] = [];
     for (const [ent_type, ent_i] of colls_arrs) {

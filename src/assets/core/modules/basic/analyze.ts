@@ -13,7 +13,7 @@ import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, Txy, XYPLANE, EAttribDa
 import { isPline, isWire, isEdge, isPgon, isFace, getArrDepth, isVert, isPosi, isPoint, idsMakeFromIndicies } from '@libs/geo-info/id';
 import { distance } from '@libs/geom/distance';
 import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm, vecAng2 } from '@libs/geom/vectors';
-import { checkIDs, checkArgTypes, IDcheckObj, TypeCheckObj} from '../_check_args';
+import { checkIDs, checkArgTypes, IDcheckObj, TypeCheckObj, splitIDs} from '../_check_args';
 import uscore from 'underscore';
 import { sum } from '@assets/core/inline/_mathjs';
 import { min, max } from '@assets/core/inline/_math';
@@ -56,10 +56,19 @@ export function Nearest(__model__: GIModel,
     target = arrMakeFlat(target) as TId[];
     // --- Error Check ---
     const fn_name = 'analyze.ShortestPath';
-    const source_ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'origins', source,
-        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
-    const target_ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'destinations', target,
-        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    let source_ents_arrs: TEntTypeIdx[];
+    let target_ents_arrs: TEntTypeIdx[];
+    if (__model__.debug) {
+        source_ents_arrs = checkIDs(fn_name, 'origins', source,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        target_ents_arrs = checkIDs(fn_name, 'destinations', target,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    } else {
+        source_ents_arrs = splitIDs(fn_name, 'origins', source,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        target_ents_arrs = splitIDs(fn_name, 'destinations', target,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    }
     // --- Error Check ---
     const source_posis_i: number[] = _getUniquePosis(__model__, source_ents_arrs);
     const target_posis_i: number[] = _getUniquePosis(__model__, target_ents_arrs);
@@ -336,9 +345,16 @@ export function Raytrace(__model__: GIModel, origins: Txyz|Txyz[], directions: T
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
     const fn_name = 'analyze.Raytrace';
-    const ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+    let ents_arrs: TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arrs = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList],
         [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+    } else {
+        ents_arrs = splitIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList],
+        [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+    }
     // TODO
     // TODO
     // --- Error Check ---
@@ -474,37 +490,47 @@ export function Solar(__model__: GIModel, origins: TPlane[], detail: number,
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
     const fn_name = 'analyze.Solar';
-    const ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
-        [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-    // TODO
-    // TODO
+    let ents_arrs: TEntTypeIdx[];
     let latitude: number = null;
     let north: Txy = [0, 1];
-    if (!__model__.attribs.query.hasModelAttrib('geolocation')) {
-        throw new Error('analyze.Solar: geolocation model attribute is missing, \
-            e.g. geolocation = {"latitude":12, "longitude":34}');
-    } else {
-        const geolocation = __model__.attribs.query.getModelAttribVal('geolocation');
-        if (uscore.isObject(geolocation) && uscore.has(geolocation, 'latitude')) {
-            latitude = geolocation['latitude'];
-        } else {
-            throw new Error('analyze.Solar: geolocation model attribute is missing the "latitude" key, \
+    if (__model__.debug) {
+        ents_arrs = checkIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList],
+            [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+        if (!__model__.attribs.query.hasModelAttrib('geolocation')) {
+            throw new Error('analyze.Solar: geolocation model attribute is missing, \
                 e.g. geolocation = {"latitude":12, "longitude":34}');
-        }
-        if (uscore.has(geolocation, 'north')) {
-            if (Array.isArray(geolocation['north']) && geolocation['north'].length === 2) {
-                north = geolocation['north'] as Txy;
+        } else {
+            const geolocation = __model__.attribs.query.getModelAttribVal('geolocation');
+            if (uscore.isObject(geolocation) && uscore.has(geolocation, 'latitude')) {
+                latitude = geolocation['latitude'];
             } else {
-                throw new Error('analyze.Solar: geolocation model attribute has a "north" value with the wrong type, \
-                it should be a vector with two values, \
-                e.g. geolocation = {"latitude":12, "longitude":34, "north":[1,2]}');
+                throw new Error('analyze.Solar: geolocation model attribute is missing the "latitude" key, \
+                    e.g. geolocation = {"latitude":12, "longitude":34}');
+            }
+            if (uscore.has(geolocation, 'north')) {
+                if (Array.isArray(geolocation['north']) && geolocation['north'].length === 2) {
+                    north = geolocation['north'] as Txy;
+                } else {
+                    throw new Error('analyze.Solar: geolocation model attribute has a "north" value with the wrong type, \
+                    it should be a vector with two values, \
+                    e.g. geolocation = {"latitude":12, "longitude":34, "north":[1,2]}');
+                }
             }
         }
+        if (detail > 6) {
+            throw new Error('analyze.Solar: The "detail" argument is too high, the maximum is 6.');
+        }
+    } else {
+        ents_arrs = splitIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList],
+            [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+        const geolocation = __model__.attribs.query.getModelAttribVal('geolocation');
+        latitude = geolocation['latitude'];
+        north = geolocation['north'] as Txy;
     }
-    if (detail > 6) {
-        throw new Error('analyze.Solar: The "detail" argument is too high, the maximum is 6.');
-    }
+    // TODO
+    // TODO
     // --- Error Check ---
     const origins_tjs: [THREE.Vector3, THREE.Vector3][] = _solarOriginsTjs(__model__, origins, 0.01);
     const mesh_tjs: THREE.Mesh = _createMeshTjs(__model__, ents_arrs);
@@ -664,26 +690,32 @@ export function SunPath(__model__: GIModel, origin: Txyz|TPlane, detail: number,
     // TODO
     let latitude: number = null;
     let north: Txy = [0, 1];
-    if (!__model__.attribs.query.hasModelAttrib('geolocation')) {
-        throw new Error('analyze.Solar: geolocation model attribute is missing, \
-            e.g. geolocation = {"latitude":12, "longitude":34}');
-    } else {
-        const geolocation = __model__.attribs.query.getModelAttribVal('geolocation');
-        if (uscore.isObject(geolocation) && uscore.has(geolocation, 'latitude')) {
-            latitude = geolocation['latitude'];
-        } else {
-            throw new Error('analyze.Solar: geolocation model attribute is missing the "latitude" key, \
+    if (__model__.debug) {
+        if (!__model__.attribs.query.hasModelAttrib('geolocation')) {
+            throw new Error('analyze.Solar: geolocation model attribute is missing, \
                 e.g. geolocation = {"latitude":12, "longitude":34}');
-        }
-        if (uscore.has(geolocation, 'north')) {
-            if (Array.isArray(geolocation['north']) && geolocation['north'].length === 2) {
-                north = geolocation['north'] as Txy;
+        } else {
+            const geolocation = __model__.attribs.query.getModelAttribVal('geolocation');
+            if (uscore.isObject(geolocation) && uscore.has(geolocation, 'latitude')) {
+                latitude = geolocation['latitude'];
             } else {
-                throw new Error('analyze.Solar: geolocation model attribute has a "north" value with the wrong type, \
-                it should be a vector with two values, \
-                e.g. geolocation = {"latitude":12, "longitude":34, "north":[1,2]}');
+                throw new Error('analyze.Solar: geolocation model attribute is missing the "latitude" key, \
+                    e.g. geolocation = {"latitude":12, "longitude":34}');
+            }
+            if (uscore.has(geolocation, 'north')) {
+                if (Array.isArray(geolocation['north']) && geolocation['north'].length === 2) {
+                    north = geolocation['north'] as Txy;
+                } else {
+                    throw new Error('analyze.Solar: geolocation model attribute has a "north" value with the wrong type, \
+                    it should be a vector with two values, \
+                    e.g. geolocation = {"latitude":12, "longitude":34, "north":[1,2]}');
+                }
             }
         }
+    } else {
+        const geolocation = __model__.attribs.query.getModelAttribVal('geolocation');
+        latitude = geolocation['latitude'];
+        north = geolocation['north'] as Txy;
     }
     // --- Error Check ---
     // create the matrix one time
@@ -771,12 +803,24 @@ export function ShortestPath(__model__: GIModel, source: TId|TId[]|TId[][][], ta
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
     const fn_name = 'analyze.ShortestPath';
-    const source_ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'origins', source,
-        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
-    const target_ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'destinations', target,
-        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
-    const ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    let source_ents_arrs: TEntTypeIdx[];
+    let target_ents_arrs: TEntTypeIdx[];
+    let ents_arrs: TEntTypeIdx[];
+    if (__model__.debug) {
+        source_ents_arrs = checkIDs(fn_name, 'origins', source,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        target_ents_arrs = checkIDs(fn_name, 'destinations', target,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        ents_arrs = checkIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    } else {
+        source_ents_arrs = splitIDs(fn_name, 'origins', source,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        target_ents_arrs = splitIDs(fn_name, 'destinations', target,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        ents_arrs = splitIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    }
     // --- Error Check ---
     const directed: boolean = method === _EShortestPathMethod.DIRECTED ? true : false;
     let return_dists = true;
@@ -1032,12 +1076,24 @@ export function ClosestPath(__model__: GIModel, source: TId|TId[]|TId[][][], tar
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
     const fn_name = 'analyze.ShortestPath';
-    const source_ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'origins', source,
-        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
-    const target_ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'destinations', target,
-        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
-    const ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    let source_ents_arrs: TEntTypeIdx[];
+    let target_ents_arrs: TEntTypeIdx[];
+    let ents_arrs: TEntTypeIdx[];
+    if (__model__.debug) {
+        source_ents_arrs = checkIDs(fn_name, 'origins', source,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        target_ents_arrs = checkIDs(fn_name, 'destinations', target,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        ents_arrs = checkIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    } else {
+        source_ents_arrs = splitIDs(fn_name, 'origins', source,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        target_ents_arrs = splitIDs(fn_name, 'destinations', target,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        ents_arrs = splitIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    }
     // --- Error Check ---
     const directed: boolean = method === _EShortestPathMethod.DIRECTED ? true : false;
     let return_dists = true;
@@ -1387,12 +1443,22 @@ export function CentralityDeg(__model__: GIModel, source: TId|TId[]|TId[][][],
     // --- Error Check ---
     const fn_name = 'analyze.CentralityDeg';
     let source_ents_arrs: TEntTypeIdx[] = [];
-    if (source.length > 0) {
-        source_ents_arrs = checkIDs(fn_name, 'source', source,
+    let ents_arrs: TEntTypeIdx[];
+    if (__model__.debug) {
+        if (source.length > 0) {
+            source_ents_arrs = checkIDs(fn_name, 'source', source,
+                [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        }
+        ents_arrs = checkIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    } else {
+        if (source.length > 0) {
+            source_ents_arrs = splitIDs(fn_name, 'source', source,
+                [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        }
+        ents_arrs = splitIDs(fn_name, 'entities', entities,
             [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
     }
-    const ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
     // --- Error Check ---
     const directed: boolean = method === _ECentralityMethod.DIRECTED ? true : false;
     const source_posis_i: number[] = _getUniquePosis(__model__, source_ents_arrs);
@@ -1461,12 +1527,22 @@ export function CentralityClo(__model__: GIModel, source: TId|TId[]|TId[][][],
     // --- Error Check ---
     const fn_name = 'analyze.CentralityClo';
     let source_ents_arrs: TEntTypeIdx[] = [];
-    if (source.length > 0) {
-        source_ents_arrs = checkIDs(fn_name, 'source', source,
+    let ents_arrs: TEntTypeIdx[];
+    if (__model__.debug) {
+        if (source.length > 0) {
+            source_ents_arrs = checkIDs(fn_name, 'source', source,
+                [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        }
+        ents_arrs = checkIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    } else {
+        if (source.length > 0) {
+            source_ents_arrs = splitIDs(fn_name, 'source', source,
+                [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        }
+        ents_arrs = splitIDs(fn_name, 'entities', entities,
             [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
     }
-    const ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
     // --- Error Check ---
     const directed: boolean = method === _ECentralityMethod.DIRECTED ? true : false;
     const source_posis_i: number[] = _getUniquePosis(__model__, source_ents_arrs);
@@ -1516,12 +1592,22 @@ export function CentralityBtw(__model__: GIModel, source: TId|TId[]|TId[][][],
     // --- Error Check ---
     const fn_name = 'analyze.CentralityBtw';
     let source_ents_arrs: TEntTypeIdx[] = [];
-    if (source.length > 0) {
-        source_ents_arrs = checkIDs(fn_name, 'source', source,
+    let ents_arrs: TEntTypeIdx[];
+    if (__model__.debug) {
+        if (source.length > 0) {
+            source_ents_arrs = checkIDs(fn_name, 'source', source,
+                [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        }
+        ents_arrs = checkIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    } else {
+        if (source.length > 0) {
+            source_ents_arrs = splitIDs(fn_name, 'source', source,
+                [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        }
+        ents_arrs = splitIDs(fn_name, 'entities', entities,
             [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
     }
-    const ents_arrs: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
     // --- Error Check ---
     const directed: boolean = method === _ECentralityMethod.DIRECTED ? true : false;
     const source_posis_i: number[] = _getUniquePosis(__model__, source_ents_arrs);

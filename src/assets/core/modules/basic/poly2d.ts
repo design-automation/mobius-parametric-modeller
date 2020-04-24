@@ -9,7 +9,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EEntType, TId, TEntTypeIdx, Txyz, Txy, TPlane, TBBox } from '@libs/geo-info/common';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
-import { checkIDs, IDcheckObj, TypeCheckObj, checkArgTypes } from '../_check_args';
+import { checkIDs, IDcheckObj, TypeCheckObj, checkArgTypes, splitIDs } from '../_check_args';
 import Shape from '@doodle3d/clipper-js';
 import { isEmptyArr, isPgon, idsMake } from '@assets/libs/geo-info/id';
 import * as d3del from 'd3-delaunay';
@@ -318,10 +318,19 @@ export function Voronoi(__model__: GIModel, pgons: TId|TId[], entities: TId|TId[
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'poly2d.Voronoi';
-    const pgons_ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'pgons', pgons,
-        [IDcheckObj.isIDList], null) as TEntTypeIdx[];
-    const posis_ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    let pgons_ents_arr: TEntTypeIdx[];
+    let posis_ents_arr: TEntTypeIdx[];
+    if (__model__.debug) {
+        pgons_ents_arr = checkIDs(fn_name, 'pgons', pgons,
+            [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        posis_ents_arr = checkIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    } else {
+        pgons_ents_arr = splitIDs(fn_name, 'pgons', pgons,
+            [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        posis_ents_arr = splitIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    }
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();
     // pgons
@@ -422,8 +431,14 @@ export function Delaunay(__model__: GIModel, entities: TId|TId[]): TId[] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'poly2d.Delaunay';
-    const posis_ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities1', entities,
+    let posis_ents_arr: TEntTypeIdx[];
+    if (__model__.debug) {
+        posis_ents_arr = checkIDs(fn_name, 'entities1', entities,
+            [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    } else {
+        posis_ents_arr = splitIDs(fn_name, 'entities1', entities,
         [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    }
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();
     // posis
@@ -473,8 +488,14 @@ export function ConvexHull(__model__: GIModel, entities: TId|TId[]): TId {
     if (isEmptyArr(entities)) { return null; }
     // --- Error Check ---
     const fn_name = 'poly2d.ConvexHull';
-    const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+    let ents_arr: TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    } else {
+        ents_arr = splitIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    }
     // --- Error Check ---
     // posis
     const posis_i: number[] = _getPosis(__model__, ents_arr);
@@ -524,8 +545,14 @@ export function BBoxPolygon(__model__: GIModel, entities: TId|TId[], method: _EB
     if (isEmptyArr(entities)) { return null; }
     // --- Error Check ---
     const fn_name = 'poly2d.BBoxPolygon';
-    const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+    let ents_arr: TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    } else {
+        ents_arr = splitIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    }
     // --- Error Check ---
     // posis
     const posis_i: number[] = _getPosis(__model__, ents_arr);
@@ -633,8 +660,14 @@ export function Union(__model__: GIModel, entities: TId|TId[]): TId[] {
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'poly2d.Union';
-    const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+    let ents_arr: TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    } else {
+        ents_arr = splitIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    }
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();
     const pgons_i: number[] = _getPgons(__model__, ents_arr);
@@ -669,10 +702,19 @@ export function Boolean(__model__: GIModel, a_entities: TId|TId[], b_entities: T
     if (isEmptyArr(b_entities)) { return a_entities; }
     // --- Error Check ---
     const fn_name = 'poly2d.Boolean';
-    const a_ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'a_entities', a_entities,
+    let a_ents_arr: TEntTypeIdx[];
+    let b_ents_arr: TEntTypeIdx[];
+    if (__model__.debug) {
+        a_ents_arr = checkIDs(fn_name, 'a_entities', a_entities,
         [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
-    const b_ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'b_entities', b_entities,
+        b_ents_arr = checkIDs(fn_name, 'b_entities', b_entities,
         [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    } else {
+        a_ents_arr = splitIDs(fn_name, 'a_entities', a_entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        b_ents_arr = splitIDs(fn_name, 'b_entities', b_entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    }
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();
     const [a_pgons_i, a_plines_i]: [number[], number[]] = _getPgonsPlines(__model__, a_ents_arr);
@@ -784,9 +826,15 @@ export function OffsetMitre(__model__: GIModel, entities: TId|TId[], dist: numbe
     }
     // --- Error Check ---
     const fn_name = 'poly2d.OffsetMitre';
-    const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
-    checkArgTypes(fn_name, 'miter_limit', limit, [TypeCheckObj.isNumber]);
+    let ents_arr: TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+        checkArgTypes(fn_name, 'miter_limit', limit, [TypeCheckObj.isNumber]);
+    } else {
+        ents_arr = splitIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+    }
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();
     const all_new_pgons: TEntTypeIdx[] = [];
@@ -835,8 +883,14 @@ export function OffsetChamfer(__model__: GIModel, entities: TId|TId[], dist: num
     }
     // --- Error Check ---
     const fn_name = 'poly2d.OffsetChamfer';
-    const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+    let ents_arr: TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+    } else {
+        ents_arr = splitIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+    }
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();
     const all_new_pgons: TEntTypeIdx[] = [];
@@ -885,9 +939,15 @@ export function OffsetRound(__model__: GIModel, entities: TId|TId[], dist: numbe
     }
     // --- Error Check ---
     const fn_name = 'poly2d.OffsetRound';
-    const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+    let ents_arr: TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+        checkArgTypes(fn_name, 'tolerance', tolerance, [TypeCheckObj.isNumber]);
+    } else {
+        ents_arr = splitIDs(fn_name, 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
-    checkArgTypes(fn_name, 'tolerance', tolerance, [TypeCheckObj.isNumber]);
+    }
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();
     const all_new_pgons: TEntTypeIdx[] = [];
@@ -948,9 +1008,15 @@ export function Clean(__model__: GIModel, entities: TId|TId[], tolerance: number
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'poly2d.Clean';
-    const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
-    checkArgTypes(fn_name, 'tolerance', tolerance, [TypeCheckObj.isNumber]);
+    let ents_arr: TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+        checkArgTypes(fn_name, 'tolerance', tolerance, [TypeCheckObj.isNumber]);
+    } else {
+        ents_arr = splitIDs(fn_name, 'entities', entities,
+            [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+    }
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();
     const all_new_pgons: TEntTypeIdx[] = [];

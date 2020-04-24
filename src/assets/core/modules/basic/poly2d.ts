@@ -1011,8 +1011,14 @@ export function Stitch(__model__: GIModel, entities: TId|TId[]): TId[] {
     }
     // --- Error Check ---
     const fn_name = 'poly2d.Stitch';
-    const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
+    let ents_arr: TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+    } else {
+        ents_arr = splitIDs(fn_name, 'entities', entities,
+        [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+    }
     // --- Error Check ---
     // copy the list of entities
     const new_ents_arr: TEntTypeIdx[] = _copyGeom(__model__, ents_arr, true) as TEntTypeIdx[];

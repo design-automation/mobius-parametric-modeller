@@ -9,7 +9,7 @@
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EAttribNames, TId, EEntType, Txyz, TEntTypeIdx, TPlane } from '@libs/geo-info/common';
-import { isPoint, isPline, isPgon, isDim0, isDim2, isColl, isPosi,
+import { isDim0, isDim2, isColl, isPosi,
     isEdge, isFace, idsMake, idIndicies, getArrDepth, isEmptyArr, isWire } from '@libs/geo-info/id';
 import { __merge__} from '../_model';
 import { _model } from '..';
@@ -17,90 +17,12 @@ import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd, vecFromTo, vecLen, v
 import { checkArgTypes, checkIDs, IDcheckObj, TypeCheckObj, splitIDs } from '../_check_args';
 import { distance } from '@libs/geom/distance';
 import { arrMakeFlat } from '@libs/util/arrs';
-import { getPlanesSeq } from './_common';
+import { getPlanesSeq, _copyGeom, _copyGeomPosis } from './_common';
 import { xfromSourceTargetMatrix, multMatrix } from '@assets/libs/geom/matrix';
 import { Matrix4 } from 'three';
 import { listZip } from '@assets/core/inline/_list';
 import * as THREE from 'three';
 
-// ================================================================================================
-// Utility functions
-function _copyGeom(__model__: GIModel,
-    ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][], copy_attributes: boolean): TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][] {
-    const depth: number = getArrDepth(ents_arr);
-    if (depth === 1) {
-        const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
-        if (isColl(ent_type)) {
-            const coll_i: number = __model__.geom.add.copyColls(index, copy_attributes) as number;
-            return [ent_type, coll_i];
-        } else if (isPgon(ent_type)) {
-            const obj_i: number = __model__.geom.add.copyPgons(index, copy_attributes) as number;
-            return [ent_type, obj_i];
-        } else if (isPline(ent_type)) {
-            const obj_i: number = __model__.geom.add.copyPlines(index, copy_attributes) as number;
-            return [ent_type, obj_i];
-        } else if (isPoint(ent_type)) {
-            const obj_i: number = __model__.geom.add.copyPoints(index, copy_attributes) as number;
-            return [ent_type, obj_i];
-        } else if (isPosi(ent_type)) {
-            const posi_i: number = __model__.geom.add.copyPosis(index, copy_attributes) as number;
-            return [ent_type, posi_i];
-        }
-    } else if (depth === 2) {
-        ents_arr = ents_arr as TEntTypeIdx[];
-        return ents_arr.map(ents_arr_item => _copyGeom(__model__, ents_arr_item, copy_attributes)) as TEntTypeIdx[];
-    } else { // depth > 2
-        ents_arr = ents_arr as TEntTypeIdx[][];
-        return ents_arr.map(ents_arr_item => _copyGeom(__model__, ents_arr_item, copy_attributes)) as TEntTypeIdx[][];
-    }
-}
-function _copyGeomPosis(__model__: GIModel, ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][],
-        copy_attributes: boolean, vector: Txyz): void {
-    const depth: number = getArrDepth(ents_arr);
-    if (depth === 1) {
-        ents_arr = [ents_arr] as TEntTypeIdx[];
-    } else if (depth > 2) {
-        // @ts-ignore
-        ents_arr = ents_arr.flat(depth - 2) as TEntTypeIdx[];
-    }
-    // create the new positions
-    const old_to_new_posis_i_map: Map<number, number> = new Map(); // count number of posis
-    for (const ent_arr of ents_arr) {
-        const [ent_type, index]: TEntTypeIdx = ent_arr as TEntTypeIdx;
-        // something may not be right here
-        // if you copy a pgon + posi, if you process the pgon first you wil make a copy of the posis
-        // but the posi may already be copied by the _copyGeom function, then we get two copies of that posi
-        // I think this whole copy-move function need to to be moved to the GI library, can also make it more efficient
-        if (isPosi(ent_type) && vector !== null) { // move the posi, no need to copy
-            const old_posi_i: number = index;
-            let new_posi_i: number;
-            if (old_to_new_posis_i_map.has(old_posi_i)) {
-                new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
-            } else {
-                const xyz: Txyz = __model__.attribs.query.getPosiCoords(old_posi_i);
-                __model__.attribs.add.setPosiCoords(old_posi_i, vecAdd(xyz, vector));
-                old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
-            }
-        } else { // obj or coll
-            const old_posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, index);
-            const ent_new_posis_i: number[] = [];
-            for (const old_posi_i of old_posis_i) {
-                let new_posi_i: number;
-                if (old_to_new_posis_i_map.has(old_posi_i)) {
-                    new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
-                } else {
-                    new_posi_i = __model__.geom.add.copyMovePosis(old_posi_i, vector, copy_attributes) as number;
-                    old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
-                }
-                ent_new_posis_i.push(new_posi_i);
-            }
-            __model__.geom.modify.replacePosis(ent_type, index, ent_new_posis_i);
-        }
-    }
-    // return all the new points
-    // const all_new_posis_i: number[] = Array.from(old_to_new_posis_i_map.values());
-    // return all_new_posis_i.map( posi_i => [EEntType.POSI, posi_i] ) as TEntTypeIdx[];
-}
 // Divide edge modelling operation
 export enum _EDivisorMethod {
     BY_NUMBER =  'by_number',

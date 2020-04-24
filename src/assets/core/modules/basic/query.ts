@@ -184,7 +184,7 @@ export function Filter(__model__: GIModel,
         checkAttribValue(fn_name, value);
     } else {
         if (entities !== null && entities !== undefined) {
-            ents_arr = checkIDs(fn_name, 'entities', entities,
+            ents_arr = splitIDs(fn_name, 'entities', entities,
                 [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx|TEntTypeIdx[];
         }
         [attrib_name, attrib_idx_key] = splitAttribNameIdxKey(fn_name, attrib);

@@ -14,7 +14,7 @@ import { Txyz, EAttribNames, EAttribDataTypeStrs } from '@libs/geo-info/common';
 import * as THREE from 'three';
 import { TId, EEntType, TEntTypeIdx } from '@libs/geo-info/common';
 import { isEmptyArr } from '@libs/geo-info/id';
-import { checkIDs, IDcheckObj, checkArgTypes, TypeCheckObj } from '../_check_args';
+import { checkIDs, IDcheckObj, checkArgTypes, TypeCheckObj, splitIDs } from '../_check_args';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
 
 // ================================================================================================
@@ -114,6 +114,9 @@ export function Set(__model__: GIModel, entities: TId|TId[], material: string): 
             ents_arr = checkIDs(fn_name, 'entities', entities,
                 [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx[];
             checkArgTypes(fn_name, 'material', material, [TypeCheckObj.isString]);
+        } else {
+            ents_arr = splitIDs(fn_name, 'entities', entities,
+                [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx[];
         }
         // --- Error Check ---
         _material(__model__, ents_arr, material);

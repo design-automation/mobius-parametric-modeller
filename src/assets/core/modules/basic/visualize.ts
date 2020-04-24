@@ -126,7 +126,7 @@ export function Gradient(__model__: GIModel, entities: TId|TId[], attrib: string
                 }
             }
         } else {
-            ents_arr = checkIDs(fn_name, 'entities', entities,
+            ents_arr = splitIDs(fn_name, 'entities', entities,
                 [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx[];
             attrib_name = Array.isArray(attrib) ? attrib[0] : attrib;
             attrib_idx_or_key = Array.isArray(attrib) ? attrib[1] : null;

@@ -30,10 +30,12 @@ import { arrFill, arrMakeFlat } from '@assets/libs/util/arrs';
  */
 export function Line(__model__: GIModel, origin: Txyz|TPlane, size: number, num_positions: number): TId[] {
     // --- Error Check ---
-    const fn_name = 'pattern.Line';
-    checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
-    checkArgTypes(fn_name, 'size', size, [TypeCheckObj.isNumber]);
-    checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+    if (__model__.debug) {
+        const fn_name = 'pattern.Line';
+        checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
+        checkArgTypes(fn_name, 'size', size, [TypeCheckObj.isNumber]);
+        checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+    }
     // --- Error Check ---
     // create the matrix one time
     let matrix: Matrix4;
@@ -76,9 +78,11 @@ export function Line(__model__: GIModel, origin: Txyz|TPlane, size: number, num_
  */
 export function Rectangle(__model__: GIModel, origin: Txyz|TPlane, size: number|[number, number]): TId[] {
     // --- Error Check ---
-    const fn_name = 'pattern.Rectangle';
-    checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
-    checkArgTypes(fn_name, 'size', size, [TypeCheckObj.isNumber, TypeCheckObj.isXYlist]);
+    if (__model__.debug) {
+        const fn_name = 'pattern.Rectangle';
+        checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
+        checkArgTypes(fn_name, 'size', size, [TypeCheckObj.isNumber, TypeCheckObj.isXYlist]);
+    }
     // --- Error Check ---
     // create the matrix one time
     let matrix: Matrix4;
@@ -129,10 +133,12 @@ export function Rectangle(__model__: GIModel, origin: Txyz|TPlane, size: number|
 export function Grid(__model__: GIModel, origin: Txyz|TPlane, size: number|[number, number],
         num_positions: number|[number, number], method: _EGridMethod): TId[]|TId[][] {
     // --- Error Check ---
-    const fn_name = 'pattern.Grid';
-    checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
-    checkArgTypes(fn_name, 'size', size, [TypeCheckObj.isNumber, TypeCheckObj.isXYlist]);
-    checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt, TypeCheckObj.isXYlistInt]);
+    if (__model__.debug) {
+        const fn_name = 'pattern.Grid';
+        checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
+        checkArgTypes(fn_name, 'size', size, [TypeCheckObj.isNumber, TypeCheckObj.isXYlist]);
+        checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt, TypeCheckObj.isXYlistInt]);
+    }
     // --- Error Check ---
     // create the matrix one time
     let matrix: Matrix4;
@@ -223,9 +229,11 @@ export function Box(__model__: GIModel, origin: Txyz | TPlane,
     num_positions: number | [number, number] | [number, number, number],
     method: _EBoxMethod): TId[] | TId[][] {
     // --- Error Check ---
-    const fn_name = 'pattern.Box';
-    checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
-    checkArgTypes(fn_name, 'size', size, [TypeCheckObj.isNumber, TypeCheckObj.isXYlist, TypeCheckObj.isXYZlist]);
+    if (__model__.debug) {
+        const fn_name = 'pattern.Box';
+        checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
+        checkArgTypes(fn_name, 'size', size, [TypeCheckObj.isNumber, TypeCheckObj.isXYlist, TypeCheckObj.isXYZlist]);
+    }
     // --- Error Check ---
     // create the matrix one time
     let matrix: Matrix4;
@@ -478,12 +486,14 @@ export enum _EBoxMethod {
 export function Polyhedron(__model__: GIModel, origin: Txyz | TPlane, radius: number, detail: number,
         method: _EPolyhedronMethod): TId[]|TId[][] {
     // --- Error Check ---
-    const fn_name = 'pattern.Polyhedron';
-    checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
-    checkArgTypes(fn_name, 'radius', radius, [TypeCheckObj.isNumber]);
-    checkArgTypes(fn_name, 'detail', detail, [TypeCheckObj.isInt]);
-    if (detail > 6) {
-        throw new Error('pattern.Polyhedron: The "detail" argument is too high, the maximum is 6.');
+    if (__model__.debug) {
+        const fn_name = 'pattern.Polyhedron';
+        checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
+        checkArgTypes(fn_name, 'radius', radius, [TypeCheckObj.isNumber]);
+        checkArgTypes(fn_name, 'detail', detail, [TypeCheckObj.isInt]);
+        if (detail > 6) {
+            throw new Error('pattern.Polyhedron: The "detail" argument is too high, the maximum is 6.');
+        }
     }
     // --- Error Check ---
     // create the matrix one time
@@ -580,11 +590,13 @@ export function _polyhedron(__model__: GIModel, matrix: Matrix4, radius: number,
  */
 export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num_positions: number, arc_angle: number): TId[] {
     // --- Error Check ---
-    const fn_name = 'pattern.Arc';
-    checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
-    checkArgTypes(fn_name, 'radius', radius, [TypeCheckObj.isNumber]);
-    checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
-    checkArgTypes(fn_name, 'arc_angle', arc_angle, [TypeCheckObj.isNumber, TypeCheckObj.isNull]);
+    if (__model__.debug) {
+        const fn_name = 'pattern.Arc';
+        checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
+        checkArgTypes(fn_name, 'radius', radius, [TypeCheckObj.isNumber]);
+        checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+        checkArgTypes(fn_name, 'arc_angle', arc_angle, [TypeCheckObj.isNumber, TypeCheckObj.isNull]);
+    }
     // --- Error Check ---
     // create the matrix one time
     let matrix: Matrix4;
@@ -637,8 +649,10 @@ export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num
 export function Bezier(__model__: GIModel, coords: Txyz[], num_positions: number): TId[] {
     // --- Error Check ---
     const fn_name = 'pattern.Bezier';
-    checkArgTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
-    checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+    if (__model__.debug) {
+        checkArgTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
+        checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+    }
     // --- Error Check ---
     // create the curve
     const coords_tjs: THREE.Vector3[] = coords.map(coord => new THREE.Vector3(coord[0], coord[1], coord[2]));
@@ -692,20 +706,22 @@ export function Bezier(__model__: GIModel, coords: Txyz[], num_positions: number
  */
 export function Nurbs(__model__: GIModel, coords: Txyz[], degree: number, close: _EClose, num_positions: number): TId[] {
     // --- Error Check ---
-    const fn_name = 'pattern.Nurbs';
-    checkArgTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
-    checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+    if (__model__.debug) {
+        const fn_name = 'pattern.Nurbs';
+        checkArgTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
+        checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+        if (coords.length < 3) {
+            throw new Error (fn_name + ': "coords" should be a list of at least three XYZ coords.');
+        }
+        if (degree < 2  || degree > 5) {
+            throw new Error (fn_name + ': "degree" should be between 2 and 5.');
+        }
+        if (degree > (coords.length - 1)) {
+            throw new Error (fn_name + ': a curve of degree ' + degree + ' requires at least ' + (degree + 1) + ' coords.' );
+        }
+    }
     // --- Error Check ---
     const closed: boolean = close === _EClose.CLOSE;
-    if (coords.length < 3) {
-        throw new Error (fn_name + ': "coords" should be a list of at least three XYZ coords.');
-    }
-    if (degree < 2  || degree > 5) {
-        throw new Error (fn_name + ': "degree" should be between 2 and 5.');
-    }
-    if (degree > (coords.length - 1)) {
-        throw new Error (fn_name + ': a curve of degree ' + degree + ' requires at least ' + (degree + 1) + ' coords.' );
-    }
     // create the curve using the VERBS library
     const offset = degree + 1;
     const coords2: Txyz[] = coords.slice();
@@ -769,20 +785,22 @@ export function Nurbs(__model__: GIModel, coords: Txyz[], degree: number, close:
  */
 export function _Interpolate(__model__: GIModel, coords: Txyz[], degree: number, close: _EClose, num_positions: number): TId[] {
     // --- Error Check ---
-    const fn_name = 'pattern._Interpolate';
-    checkArgTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
-    checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
-    // --- Error Check ---
+    if (__model__.debug) {
+        const fn_name = 'pattern._Interpolate';
+        checkArgTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
+        checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+        // --- Error Check ---
+        if (coords.length < 3) {
+            throw new Error (fn_name + ': "coords" should be a list of at least three XYZ coords.');
+        }
+        if (degree < 2  || degree > 5) {
+            throw new Error (fn_name + ': "degree" should be between 2 and 5.');
+        }
+        if (degree > (coords.length - 1)) {
+            throw new Error (fn_name + ': a curve of degree ' + degree + ' requires at least ' + (degree + 1) + ' coords.' );
+        }
+    }
     const closed: boolean = close === _EClose.CLOSE;
-    if (coords.length < 3) {
-        throw new Error (fn_name + ': "coords" should be a list of at least three XYZ coords.');
-    }
-    if (degree < 2  || degree > 5) {
-        throw new Error (fn_name + ': "degree" should be between 2 and 5.');
-    }
-    if (degree > (coords.length - 1)) {
-        throw new Error (fn_name + ': a curve of degree ' + degree + ' requires at least ' + (degree + 1) + ' coords.' );
-    }
     // create the curve using the VERBS library
     const offset = degree + 1;
     const coords2: Txyz[] = coords.slice();
@@ -876,18 +894,20 @@ export enum _EClose {
 export function Interpolate(__model__: GIModel, coords: Txyz[], type: _ECurveCatRomType, tension: number, close: _EClose,
     num_positions: number): TId[] {
     // --- Error Check ---
-    const fn_name = 'pattern.Interpolate';
-    checkArgTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
-    checkArgTypes(fn_name, 'tension', tension, [TypeCheckObj.isNumber01]);
-    checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+    if (__model__.debug) {
+        const fn_name = 'pattern.Interpolate';
+        checkArgTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
+        checkArgTypes(fn_name, 'tension', tension, [TypeCheckObj.isNumber01]);
+        checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+        if (coords.length < 3) {
+            throw new Error(fn_name + ': "coords" should be a list of at least three XYZ coords.');
+        }
+    }
     // --- Error Check ---
     const closed_tjs: boolean = close === _EClose.CLOSE;
     const num_positions_tjs: number = closed_tjs ? num_positions : num_positions - 1;
     if (tension === 0) { tension = 1e-16; } // There seems to be a bug in threejs, so this is a fix
     // Check we have enough coords
-    if (coords.length < 3) {
-        throw new Error(fn_name + ': "coords" should be a list of at least three XYZ coords.');
-    }
     // create the curve
     const coords_tjs: THREE.Vector3[] = coords.map(coord => new THREE.Vector3(coord[0], coord[1], coord[2]));
     const curve_tjs: THREE.CatmullRomCurve3 = new THREE.CatmullRomCurve3(coords_tjs, closed_tjs, type, tension);

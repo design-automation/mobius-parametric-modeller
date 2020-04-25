@@ -12,7 +12,7 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, ESort, TEntTypeIdx, EFilterOperatorTypes, TAttribDataTypes} from '@libs/geo-info/common';
 import { idsMake, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
-import { checkIDs, IDcheckObj, TypeCheckObj, checkArgTypes, checkAttribNameIdxKey, checkAttribValue } from '../_check_args';
+import { checkIDs, IDcheckObj, TypeCheckObj, checkArgTypes, checkAttribNameIdxKey, checkAttribValue, splitIDs, splitAttribNameIdxKey } from '../_check_args';
 import { isEmptyArr2, arrMakeFlat } from '@assets/libs/util/arrs';
 // ================================================================================================
 export enum _EEntType {
@@ -94,9 +94,16 @@ export function Get(__model__: GIModel, ent_type_enum: _EEntType, entities: TId|
     // --- Error Check ---
     const fn_name = 'query.Get';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = null;
-    if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx|TEntTypeIdx[];
+    if (__model__.debug) {
+        if (entities !== null && entities !== undefined) {
+            ents_arr = checkIDs(fn_name, 'entities', entities,
+                [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx|TEntTypeIdx[];
+        }
+    } else {
+        if (entities !== null && entities !== undefined) {
+            ents_arr = splitIDs(fn_name, 'entities', entities,
+                [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx|TEntTypeIdx[];
+        }
     }
     // --- Error Check ---
     // get the entity type // TODO deal with multiple ent types
@@ -167,12 +174,21 @@ export function Filter(__model__: GIModel,
     // --- Error Check ---
     const fn_name = 'query.Filter';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = null;
-    if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx|TEntTypeIdx[];
+    let attrib_name: string, attrib_idx_key: number|string;
+    if (__model__.debug) {
+        if (entities !== null && entities !== undefined) {
+            ents_arr = checkIDs(fn_name, 'entities', entities,
+                [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx|TEntTypeIdx[];
+        }
+        [attrib_name, attrib_idx_key] = checkAttribNameIdxKey(fn_name, attrib);
+        checkAttribValue(fn_name, value);
+    } else {
+        if (entities !== null && entities !== undefined) {
+            ents_arr = splitIDs(fn_name, 'entities', entities,
+                [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx|TEntTypeIdx[];
+        }
+        [attrib_name, attrib_idx_key] = splitAttribNameIdxKey(fn_name, attrib);
     }
-    const [attrib_name, attrib_idx_key]: [string, number|string] = checkAttribNameIdxKey(fn_name, attrib);
-    checkAttribValue(fn_name, value);
     // --- Error Check ---
     // make sure that the ents_arr is at least depth 2
     const depth: number = getArrDepth(ents_arr);
@@ -264,8 +280,14 @@ export function Invert(__model__: GIModel, ent_type_enum: _EEntType, entities: T
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
     let ents_arr: TEntTypeIdx[] = null;
-    if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs('query.Invert', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    if (__model__.debug) {
+        if (entities !== null && entities !== undefined) {
+            ents_arr = checkIDs('query.Invert', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        }
+    } else {
+        if (entities !== null && entities !== undefined) {
+            ents_arr = splitIDs('query.Invert', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        }
     }
     // --- Error Check ---
     const select_ent_types: EEntType = _getEntTypeFromStr(ent_type_enum);
@@ -307,8 +329,15 @@ export function Sort(__model__: GIModel, entities: TId[], attrib: string|[string
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
     const fn_name = 'query.Sort';
-    const ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
-    const [attrib_name, attrib_idx_key]: [string, number|string] = checkAttribNameIdxKey(fn_name, attrib);
+    let ents_arr: TEntTypeIdx[];
+    let attrib_name: string, attrib_idx_key: number|string;
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        [attrib_name, attrib_idx_key] = checkAttribNameIdxKey(fn_name, attrib);
+    } else {
+        ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        [attrib_name, attrib_idx_key] = splitAttribNameIdxKey(fn_name, attrib);
+    }
     // --- Error Check ---
     const sort_method: ESort = (method_enum === _ESortMethod.DESCENDING) ? ESort.DESCENDING : ESort.ASCENDING;
     const sorted_ents_arr: TEntTypeIdx[] = _sort(__model__, ents_arr, attrib_name, attrib_idx_key, sort_method);
@@ -353,8 +382,14 @@ export function Perimeter(__model__: GIModel, ent_type: _EEntType, entities: TId
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
     let ents_arr: TEntTypeIdx[] = null;
-    if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs('query.Perimeter', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    if (__model__.debug) {
+        if (entities !== null && entities !== undefined) {
+            ents_arr = checkIDs('query.Perimeter', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        }
+    } else {
+        if (entities !== null && entities !== undefined) {
+            ents_arr = splitIDs('query.Perimeter', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        }
     }
     // --- Error Check ---
     const select_ent_type: EEntType = _getEntTypeFromStr(ent_type);
@@ -392,8 +427,14 @@ export function Neighbor(__model__: GIModel, ent_type_enum: _EEntType, entities:
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
     let ents_arr: TEntTypeIdx[] = null;
-    if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs('query.neighbor', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    if (__model__.debug) {
+        if (entities !== null && entities !== undefined) {
+            ents_arr = checkIDs('query.neighbor', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        }
+    } else {
+        if (entities !== null && entities !== undefined) {
+            ents_arr = splitIDs('query.neighbor', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        }
     }
     // --- Error Check ---
     const select_ent_type: EEntType = _getEntTypeFromStr(ent_type_enum);
@@ -441,7 +482,12 @@ export function Type(__model__: GIModel, entities: TId|TId[], type_query_enum: _
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'query.Type';
-    const ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+    } else {
+        ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+    }
     // --- Error Check ---
     return _type(__model__, ents_arr, type_query_enum);
 }

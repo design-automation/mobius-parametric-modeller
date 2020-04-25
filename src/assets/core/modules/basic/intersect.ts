@@ -6,10 +6,10 @@
  *
  */
 
-import { TId, Txyz, EEntType, TPlane, TRay, TEntTypeIdx, TBBox } from '@libs/geo-info/common';
-import { checkArgTypes, checkIDs, TypeCheckObj, IDcheckObj, splitIDs } from '../_check_args';
+import { TId, Txyz, EEntType, TPlane, TRay, TEntTypeIdx } from '@libs/geo-info/common';
+import { checkArgTypes, checkIDs, TypeCheckObj, IDcheckObj } from '../_check_args';
 import { GIModel } from '@libs/geo-info/GIModel';
-import { getArrDepth } from '@libs/geo-info/id';
+import { getArrDepth, idsBreak } from '@libs/geo-info/id';
 import { vecCross} from '@libs/geom/vectors';
 import { _normal } from './calc';
 import * as THREE from 'three';
@@ -42,9 +42,10 @@ export function RayFace(__model__: GIModel, ray: TRay, entities: TId|TId[]): Txy
             [IDcheckObj.isID, IDcheckObj.isIDList],
             [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
     } else {
-        ents_arr = splitIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList],
-            [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+        // ents_arr = splitIDs(fn_name, 'entities', entities,
+        //     [IDcheckObj.isID, IDcheckObj.isIDList],
+        //     [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     }
     // --- Error Check ---
     // create the threejs entity and calc intersections
@@ -114,9 +115,10 @@ export function PlaneEdge(__model__: GIModel, plane: TRay|TPlane, entities: TId|
             [IDcheckObj.isID, IDcheckObj.isIDList],
             [EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
     } else {
-        ents_arr = splitIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList],
-            [EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+        // ents_arr = splitIDs(fn_name, 'entities', entities,
+        //     [IDcheckObj.isID, IDcheckObj.isIDList],
+        //     [EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     }
     // --- Error Check ---
     // create the threejs entity and calc intersections

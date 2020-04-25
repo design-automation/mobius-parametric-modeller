@@ -8,14 +8,13 @@
  */
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { Txyz, TColor, EAttribNames, EAttribDataTypeStrs, EAttribPush, TRay, TPlane, TBBox, Txy } from '@libs/geo-info/common';
-import { TId, EEntType, ESort, TEntTypeIdx } from '@libs/geo-info/common';
-import { isEmptyArr, getArrDepth, idsMake } from '@libs/geo-info/id';
-import { checkIDs, IDcheckObj, checkArgTypes, TypeCheckObj, splitIDs } from '../_check_args';
+import { Txyz, TColor, EAttribNames, EAttribDataTypeStrs, EAttribPush, TRay, TPlane, TBBox } from '@libs/geo-info/common';
+import { TId, EEntType, TEntTypeIdx } from '@libs/geo-info/common';
+import { isEmptyArr, getArrDepth, idsMake, idsBreak } from '@libs/geo-info/id';
+import { checkIDs, IDcheckObj, checkArgTypes, TypeCheckObj } from '../_check_args';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
 import { min, max } from '@assets/core/inline/_math';
-import { colFalse } from '@assets/core/inline/_colors';
-import { vecMult, vecAdd, vecEqual, vecSetLen, vecCross, vecNorm, vecSub, vecDot } from '@assets/libs/geom/vectors';
+import { vecMult, vecAdd, vecSetLen, vecCross, vecNorm, vecSub, vecDot } from '@assets/libs/geom/vectors';
 import * as ch from 'chroma-js';
 // ================================================================================================
 export enum _ESide {
@@ -44,14 +43,15 @@ export function Color(__model__: GIModel, entities: TId|TId[], color: TColor): v
     if (__model__.debug) {
         if (entities !== null) {
             ents_arr = checkIDs(fn_name, 'entities', entities,
-                [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx[];
+                [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDListOfLists], null) as TEntTypeIdx[];
         }
         checkArgTypes(fn_name, 'color', color, [TypeCheckObj.isColor]);
     } else {
-        if (entities !== null) {
-            ents_arr = splitIDs(fn_name, 'entities', entities,
-                [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx[];
-        }
+        // if (entities !== null) {
+        //     ents_arr = splitIDs(fn_name, 'entities', entities,
+        //         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDListOfLists], null) as TEntTypeIdx[];
+        // }
+        ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
     _color(__model__, ents_arr, color);
@@ -104,7 +104,7 @@ export function Gradient(__model__: GIModel, entities: TId|TId[], attrib: string
         let attrib_idx_or_key: number|string;
         if (__model__.debug) {
             ents_arr = checkIDs(fn_name, 'entities', entities,
-                [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx[];
+                [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDListOfLists], null) as TEntTypeIdx[];
             checkArgTypes(fn_name, 'attrib', attrib,
                 [TypeCheckObj.isString, TypeCheckObj.isStringStringList, TypeCheckObj.isStringNumberList]);
             checkArgTypes(fn_name, 'range', range, [TypeCheckObj.isNull, TypeCheckObj.isNumber, TypeCheckObj.isNumberList]);
@@ -126,8 +126,9 @@ export function Gradient(__model__: GIModel, entities: TId|TId[], attrib: string
                 }
             }
         } else {
-            ents_arr = splitIDs(fn_name, 'entities', entities,
-                [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx[];
+            // ents_arr = splitIDs(fn_name, 'entities', entities,
+            //     [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDListOfLists], null) as TEntTypeIdx[];
+            ents_arr = idsBreak(entities) as TEntTypeIdx[];
             attrib_name = Array.isArray(attrib) ? attrib[0] : attrib;
             attrib_idx_or_key = Array.isArray(attrib) ? attrib[1] : null;
         }
@@ -292,10 +293,11 @@ export function Edge(__model__: GIModel, entities: TId|TId[], method: _EEdgeMeth
                 [IDcheckObj.isIDList], null) as TEntTypeIdx[];
         }
     } else {
-        if (entities !== null) {
-            ents_arr = splitIDs(fn_name, 'entities', entities,
-                [IDcheckObj.isIDList], null) as TEntTypeIdx[];
-        }
+        // if (entities !== null) {
+        //     ents_arr = splitIDs(fn_name, 'entities', entities,
+        //         [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        // }
+        ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
     if (!__model__.attribs.query.hasAttrib(EEntType.EDGE, EAttribNames.VISIBILITY)) {
@@ -355,10 +357,11 @@ export function Mesh(__model__: GIModel, entities: TId|TId[], method: _EMeshMeth
                 [IDcheckObj.isIDList], null) as TEntTypeIdx[];
         }
     } else {
-        if (entities !== null) {
-            ents_arr = splitIDs(fn_name, 'entities', entities,
-                [IDcheckObj.isIDList], null) as TEntTypeIdx[];
-        }
+        // if (entities !== null) {
+        //     ents_arr = splitIDs(fn_name, 'entities', entities,
+        //         [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        // }
+        ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
     // Get the unique verts that belong to pgons

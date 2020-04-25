@@ -8,16 +8,14 @@
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { importObj, exportPosiBasedObj, exportVertBasedObj } from '@libs/geo-info/io_obj';
-import { importDae, exportDae } from '@libs/geo-info/io_dae';
 import { importGeojson, exportGeojson } from '@libs/geo-info/io_geojson';
 import { download } from '@libs/filesys/download';
 import { TId, EEntType, Txyz, TPlane, TRay, IGeomPack, IModelData, IGeomPackTId, TEntTypeIdx } from '@libs/geo-info/common';
 import { __merge__ } from '../_model';
 import { _model } from '..';
-import { idsMake, idsMakeFromIndicies } from '@libs/geo-info/id';
+import { idsMake, idsBreak } from '@libs/geo-info/id';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
-import { IDcheckObj, checkIDs, checkArgTypes, TypeCheckObj, splitIDs } from '../_check_args';
-import { ModelCheck } from './util';
+import { IDcheckObj, checkIDs, checkArgTypes, TypeCheckObj } from '../_check_args';
 
 // ================================================================================================
 declare global {
@@ -223,8 +221,9 @@ export function Export(__model__: GIModel, entities: TId|TId[]|TId[][],
     } else {
         if (entities !== null) {
             entities = arrMakeFlat(entities) as TId[];
-            ents_arr = splitIDs(fn_name, 'entities', entities,
-                [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON, EEntType.COLL])  as TEntTypeIdx[];
+            // ents_arr = splitIDs(fn_name, 'entities', entities,
+            //     [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON, EEntType.COLL])  as TEntTypeIdx[];
+            ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
     }
     // --- Error Check ---

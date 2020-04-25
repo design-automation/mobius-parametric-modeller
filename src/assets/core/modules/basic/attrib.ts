@@ -11,10 +11,10 @@
 import uscore from 'underscore';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, TEntTypeIdx,
-    EAttribPush, TAttribDataTypes, EEntTypeStr, EAttribDataTypeStrs, EEntTypeCollCP} from '@libs/geo-info/common';
-import { getArrDepth } from '@libs/geo-info/id';
+    EAttribPush, TAttribDataTypes, EEntTypeStr, EAttribDataTypeStrs } from '@libs/geo-info/common';
+import { getArrDepth, idsBreak } from '@libs/geo-info/id';
 import { checkIDs, IDcheckObj, checkAttribValue, checkAttribName,
-    checkAttribIdxKey, checkAttribNameIdxKey, splitAttribNameIdxKey, splitIDs } from '../_check_args';
+    checkAttribIdxKey, checkAttribNameIdxKey, splitAttribNameIdxKey } from '../_check_args';
 // ================================================================================================
 function _getEntTypeFromStr(ent_type_str: _EEntType|_EEntTypeAndMod): EEntType {
     switch (ent_type_str) {
@@ -146,7 +146,9 @@ export function Set(__model__: GIModel, entities: TId|TId[]|TId[][],
         checkAttribName(fn_name , attrib_name);
     } else {
         if (entities !== null && entities !== undefined) {
-            ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+            // ents_arr = splitIDs(fn_name, 'entities', entities,
+            // [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+            ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
         }
         [attrib_name, attrib_idx_key] = splitAttribNameIdxKey(fn_name, attrib);
     }
@@ -268,7 +270,9 @@ export function Get(__model__: GIModel, entities: TId|TId[]|TId[][],
         checkAttribName(fn_name, attrib_name);
     } else {
         if (entities !== null && entities !== undefined) {
-            ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+            // ents_arr = splitIDs(fn_name, 'entities', entities,
+            // [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+            ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
         }
         [attrib_name, attrib_idx_key] = splitAttribNameIdxKey(fn_name, attrib);
     }
@@ -527,7 +531,9 @@ export function Push(__model__: GIModel, entities: TId|TId[],
         }
     } else {
         if (entities !== null && entities !== undefined) {
-            ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            // ents_arr = splitIDs(fn_name, 'entities', entities,
+            // [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
         [source_attrib_name, source_attrib_idx_key] = splitAttribNameIdxKey(fn_name, source_attrib);
         [target_attrib_name, target_attrib_idx_key] = splitAttribNameIdxKey(fn_name, target_attrib);

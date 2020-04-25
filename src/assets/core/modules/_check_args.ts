@@ -314,7 +314,7 @@ export class IDcheckObj {
         }
         return ret_arr as TEntTypeIdx[];
     }
-    static isIDList_list(fn_name: string, arg_name: string, arg_list: any, ent_type_strs: EEntType[]|null): TEntTypeIdx[][] {
+    static isIDListOfLists(fn_name: string, arg_name: string, arg_list: any, ent_type_strs: EEntType[]|null): TEntTypeIdx[][] {
         isListArg(fn_name, arg_name, arg_list, 'list of valid Entity IDs');
         const ret_arr = [];
         if (ent_type_strs === null) {

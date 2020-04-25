@@ -11,8 +11,8 @@
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, ESort, TEntTypeIdx, EFilterOperatorTypes, TAttribDataTypes} from '@libs/geo-info/common';
-import { idsMake, getArrDepth, isEmptyArr } from '@libs/geo-info/id';
-import { checkIDs, IDcheckObj, TypeCheckObj, checkArgTypes, checkAttribNameIdxKey, checkAttribValue, splitIDs, splitAttribNameIdxKey } from '../_check_args';
+import { idsMake, getArrDepth, isEmptyArr, idsBreak } from '@libs/geo-info/id';
+import { checkIDs, IDcheckObj, checkAttribNameIdxKey, checkAttribValue, splitAttribNameIdxKey } from '../_check_args';
 import { isEmptyArr2, arrMakeFlat } from '@assets/libs/util/arrs';
 // ================================================================================================
 export enum _EEntType {
@@ -97,12 +97,13 @@ export function Get(__model__: GIModel, ent_type_enum: _EEntType, entities: TId|
     if (__model__.debug) {
         if (entities !== null && entities !== undefined) {
             ents_arr = checkIDs(fn_name, 'entities', entities,
-                [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx|TEntTypeIdx[];
+                [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDListOfLists], null) as TEntTypeIdx|TEntTypeIdx[];
         }
     } else {
         if (entities !== null && entities !== undefined) {
-            ents_arr = splitIDs(fn_name, 'entities', entities,
-                [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx|TEntTypeIdx[];
+            // ents_arr = splitIDs(fn_name, 'entities', entities,
+            //     [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDListOfLists], null) as TEntTypeIdx|TEntTypeIdx[];
+            ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
     }
     // --- Error Check ---
@@ -178,14 +179,15 @@ export function Filter(__model__: GIModel,
     if (__model__.debug) {
         if (entities !== null && entities !== undefined) {
             ents_arr = checkIDs(fn_name, 'entities', entities,
-                [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx|TEntTypeIdx[];
+                [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDListOfLists], null) as TEntTypeIdx|TEntTypeIdx[];
         }
         [attrib_name, attrib_idx_key] = checkAttribNameIdxKey(fn_name, attrib);
         checkAttribValue(fn_name, value);
     } else {
         if (entities !== null && entities !== undefined) {
-            ents_arr = splitIDs(fn_name, 'entities', entities,
-                [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx|TEntTypeIdx[];
+            // ents_arr = splitIDs(fn_name, 'entities', entities,
+            //     [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDListOfLists], null) as TEntTypeIdx|TEntTypeIdx[];
+            ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
         [attrib_name, attrib_idx_key] = splitAttribNameIdxKey(fn_name, attrib);
     }
@@ -286,7 +288,8 @@ export function Invert(__model__: GIModel, ent_type_enum: _EEntType, entities: T
         }
     } else {
         if (entities !== null && entities !== undefined) {
-            ents_arr = splitIDs('query.Invert', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            // ents_arr = splitIDs('query.Invert', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
     }
     // --- Error Check ---
@@ -335,7 +338,8 @@ export function Sort(__model__: GIModel, entities: TId[], attrib: string|[string
         ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
         [attrib_name, attrib_idx_key] = checkAttribNameIdxKey(fn_name, attrib);
     } else {
-        ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        // ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx[];
         [attrib_name, attrib_idx_key] = splitAttribNameIdxKey(fn_name, attrib);
     }
     // --- Error Check ---
@@ -388,7 +392,8 @@ export function Perimeter(__model__: GIModel, ent_type: _EEntType, entities: TId
         }
     } else {
         if (entities !== null && entities !== undefined) {
-            ents_arr = splitIDs('query.Perimeter', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            // ents_arr = splitIDs('query.Perimeter', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
     }
     // --- Error Check ---
@@ -429,11 +434,12 @@ export function Neighbor(__model__: GIModel, ent_type_enum: _EEntType, entities:
     let ents_arr: TEntTypeIdx[] = null;
     if (__model__.debug) {
         if (entities !== null && entities !== undefined) {
-            ents_arr = checkIDs('query.neighbor', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            ents_arr = checkIDs('query.Neighbor', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
         }
     } else {
         if (entities !== null && entities !== undefined) {
-            ents_arr = splitIDs('query.neighbor', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            // ents_arr = splitIDs('query.neighbor', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
     }
     // --- Error Check ---
@@ -486,7 +492,8 @@ export function Type(__model__: GIModel, entities: TId|TId[], type_query_enum: _
     if (__model__.debug) {
         ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
     } else {
-        ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+        // ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     }
     // --- Error Check ---
     return _type(__model__, ents_arr, type_query_enum);

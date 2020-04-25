@@ -13,7 +13,8 @@ import { EEntType, IModelData, TId, TEntTypeIdx } from '@libs/geo-info/common';
 import { __merge__ } from '../_model';
 import { _model } from '..';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
-import { checkIDs, IDcheckObj, splitIDs } from '../_check_args';
+import { checkIDs, IDcheckObj } from '../_check_args';
+import { idsBreak } from '@assets/libs/geo-info/id';
 
 export enum _ECOmpareMethod {
     THIS_IS_SUBSET = 'subset',
@@ -153,9 +154,10 @@ export function EntityInfo(__model__: GIModel, entities: TId|TId[]): string {
             [IDcheckObj.isID, IDcheckObj.isIDList],
             [EEntType.COLL, EEntType.PGON, EEntType.PLINE, EEntType.POINT]) as TEntTypeIdx[];
     } else {
-        ents_arr = splitIDs(fn_name, 'coll', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList],
-            [EEntType.COLL, EEntType.PGON, EEntType.PLINE, EEntType.POINT]) as TEntTypeIdx[];
+        // ents_arr = splitIDs(fn_name, 'coll', entities,
+        //     [IDcheckObj.isID, IDcheckObj.isIDList],
+        //     [EEntType.COLL, EEntType.PGON, EEntType.PLINE, EEntType.POINT]) as TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
     let result = '<h4>Entity Information:</h4>';

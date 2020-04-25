@@ -9,9 +9,9 @@
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EEntType, TId, TEntTypeIdx, Txyz, Txy, TPlane } from '@libs/geo-info/common';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
-import { checkIDs, IDcheckObj, TypeCheckObj, checkArgTypes, splitIDs } from '../_check_args';
+import { checkIDs, IDcheckObj, TypeCheckObj, checkArgTypes } from '../_check_args';
 import Shape from '@doodle3d/clipper-js';
-import { isEmptyArr, isPgon, idsMake, idsMakeFromIndicies } from '@assets/libs/geo-info/id';
+import { isEmptyArr, idsMake, idsBreak } from '@assets/libs/geo-info/id';
 import * as d3del from 'd3-delaunay';
 import * as d3poly from 'd3-polygon';
 import * as d3vor from 'd3-voronoi';
@@ -327,10 +327,12 @@ export function Voronoi(__model__: GIModel, pgons: TId|TId[], entities: TId|TId[
         posis_ents_arr = checkIDs(fn_name, 'entities', entities,
             [IDcheckObj.isIDList], null) as TEntTypeIdx[];
     } else {
-        pgons_ents_arr = splitIDs(fn_name, 'pgons', pgons,
-            [IDcheckObj.isIDList], null) as TEntTypeIdx[];
-        posis_ents_arr = splitIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        // pgons_ents_arr = splitIDs(fn_name, 'pgons', pgons,
+        //     [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        // posis_ents_arr = splitIDs(fn_name, 'entities', entities,
+        //     [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        pgons_ents_arr = idsBreak(pgons) as TEntTypeIdx[];
+        posis_ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();
@@ -437,8 +439,9 @@ export function Delaunay(__model__: GIModel, entities: TId|TId[]): TId[] {
         posis_ents_arr = checkIDs(fn_name, 'entities1', entities,
             [IDcheckObj.isIDList], null) as TEntTypeIdx[];
     } else {
-        posis_ents_arr = splitIDs(fn_name, 'entities1', entities,
-        [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        // posis_ents_arr = splitIDs(fn_name, 'entities1', entities,
+        // [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        posis_ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();
@@ -494,8 +497,9 @@ export function ConvexHull(__model__: GIModel, entities: TId|TId[]): TId {
         ents_arr = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isIDList], null) as TEntTypeIdx[];
     } else {
-        ents_arr = splitIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        // ents_arr = splitIDs(fn_name, 'entities', entities,
+        // [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
     // posis
@@ -551,8 +555,9 @@ export function BBoxPolygon(__model__: GIModel, entities: TId|TId[], method: _EB
         ents_arr = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isIDList], null) as TEntTypeIdx[];
     } else {
-        ents_arr = splitIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        // ents_arr = splitIDs(fn_name, 'entities', entities,
+        // [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
     // posis
@@ -666,8 +671,9 @@ export function Union(__model__: GIModel, entities: TId|TId[]): TId[] {
         ents_arr = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
     } else {
-        ents_arr = splitIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        // ents_arr = splitIDs(fn_name, 'entities', entities,
+        // [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();
@@ -711,10 +717,12 @@ export function Boolean(__model__: GIModel, a_entities: TId|TId[], b_entities: T
         b_ents_arr = checkIDs(fn_name, 'b_entities', b_entities,
         [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
     } else {
-        a_ents_arr = splitIDs(fn_name, 'a_entities', a_entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
-        b_ents_arr = splitIDs(fn_name, 'b_entities', b_entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        // a_ents_arr = splitIDs(fn_name, 'a_entities', a_entities,
+        // [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        // b_ents_arr = splitIDs(fn_name, 'b_entities', b_entities,
+        // [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        a_ents_arr = idsBreak(a_entities) as TEntTypeIdx[];
+        b_ents_arr = idsBreak(b_entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();
@@ -833,8 +841,9 @@ export function OffsetMitre(__model__: GIModel, entities: TId|TId[], dist: numbe
             [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
         checkArgTypes(fn_name, 'miter_limit', limit, [TypeCheckObj.isNumber]);
     } else {
-        ents_arr = splitIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+        // ents_arr = splitIDs(fn_name, 'entities', entities,
+        //     [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();
@@ -889,8 +898,9 @@ export function OffsetChamfer(__model__: GIModel, entities: TId|TId[], dist: num
         ents_arr = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
     } else {
-        ents_arr = splitIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+        // ents_arr = splitIDs(fn_name, 'entities', entities,
+        // [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();
@@ -946,8 +956,9 @@ export function OffsetRound(__model__: GIModel, entities: TId|TId[], dist: numbe
             [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
         checkArgTypes(fn_name, 'tolerance', tolerance, [TypeCheckObj.isNumber]);
     } else {
-        ents_arr = splitIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+        // ents_arr = splitIDs(fn_name, 'entities', entities,
+        // [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();
@@ -1016,8 +1027,9 @@ export function Stitch(__model__: GIModel, entities: TId|TId[]): TId[] {
         ents_arr = checkIDs(fn_name, 'entities', entities,
         [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
     } else {
-        ents_arr = splitIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+        // ents_arr = splitIDs(fn_name, 'entities', entities,
+        // [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
     // copy the list of entities
@@ -1217,8 +1229,9 @@ export function Clean(__model__: GIModel, entities: TId|TId[], tolerance: number
             [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
         checkArgTypes(fn_name, 'tolerance', tolerance, [TypeCheckObj.isNumber]);
     } else {
-        ents_arr = splitIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+        // ents_arr = splitIDs(fn_name, 'entities', entities,
+        //     [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();

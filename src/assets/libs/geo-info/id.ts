@@ -42,24 +42,28 @@ export function idsMake(ent_type_idxs: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]
         return ent_type_idxs_arrs.map( ent_type_idxs_arr => idsMake(ent_type_idxs_arr) ) as TId[][];
     }
 }
-export function idsBreak(ids: TId|TId[]|TId[][]): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
-    const depth: number = getArrDepth(ids);
-    if (depth === 0) {
-        const id: TId = ids as TId;
+export function idsBreak(id: TId|TId[]|TId[][]|TId[][][]): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]|TEntTypeIdx[][][] {
+    // const depth: number = getArrDepth(ids);
+    if (id === null) { return null; }
+    if (!Array.isArray(id)) {
+        id = id as TId;
         if (typeof id !== 'string') { throw new Error('Value is not an entity ID.'); }
-        if (id.length < 3) { throw new Error('String is not an entity ID.'); }
+        // if (id.length < 3) { throw new Error('String is not an entity ID.'); }
         const ent_type_str: string = id.slice(0, 2);
         const ent_type: EEntType = EEntTypeStr[ent_type_str];
         if (ent_type === undefined) { throw new Error('String is not an entity ID.'); }
         const index: number = Number(id.slice(2));
         return [ent_type, index];
-    } else if (depth === 1) {
-        const ids_arr: TId[] = ids as TId[];
-        return ids_arr.map( id => idsBreak(id) ) as TEntTypeIdx[];
-    } else { // depth === 2
-        const ids_arr: TId[][] = ids as TId[][];
-        return ids_arr.map( id => idsBreak(id) ) as TEntTypeIdx[][];
+    } else {
+        return (id as TId[]).map( a_id => idsBreak(a_id) ) as TEntTypeIdx[];
     }
+    // } else if (depth === 1) {
+    //     const ids_arr: TId[] = ids as TId[];
+    //     return ids_arr.map( id => idsBreak(id) ) as TEntTypeIdx[];
+    // } else { // depth === 2
+    //     const ids_arr: TId[][] = ids as TId[][];
+    //     return ids_arr.map( id => idsBreak(id) ) as TEntTypeIdx[][];
+    // }
 }
 export function idIndicies(ents_arr: TEntTypeIdx[]): number[] {
     return ents_arr.map( ents => ents[1] );

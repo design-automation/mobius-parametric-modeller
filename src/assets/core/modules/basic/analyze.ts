@@ -10,9 +10,9 @@
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, Txy, XYPLANE, EAttribDataTypeStrs } from '@libs/geo-info/common';
-import { isPline, isWire, isEdge, isPgon, isFace, getArrDepth, isVert, isPosi, isPoint, idsMakeFromIndicies, idsMake } from '@libs/geo-info/id';
+import { getArrDepth, idsMakeFromIndicies, idsMake, idsBreak } from '@libs/geo-info/id';
 import { distance } from '@libs/geom/distance';
-import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm, vecAng2, vecSetLen } from '@libs/geom/vectors';
+import { vecAdd, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm, vecAng2, vecSetLen } from '@libs/geom/vectors';
 import { checkIDs, checkArgTypes, IDcheckObj, TypeCheckObj, splitIDs} from '../_check_args';
 import uscore from 'underscore';
 import { min, max } from '@assets/core/inline/_math';
@@ -55,7 +55,7 @@ export function Nearest(__model__: GIModel,
     source = arrMakeFlat(source) as TId[];
     target = arrMakeFlat(target) as TId[];
     // --- Error Check ---
-    const fn_name = 'analyze.ShortestPath';
+    const fn_name = 'analyze.Nearest';
     let source_ents_arrs: TEntTypeIdx[];
     let target_ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
@@ -358,30 +358,35 @@ export enum _ERaytraceMethod {
  * @param __model__
  * @param rays A ray, a list of rays, or a list of lists of rays.
  * @param entities The obstructions, faces, polygons, or collections of faces or polygons.
- * @param limits The ray limites, either max, or [min, max].
+ * @param dist The ray limites, either max, or [min, max].
  * @param method Enum; values to return.
  */
 export function Raytrace(__model__: GIModel, rays: TRay|TRay[]|TRay[][],
-        entities: TId|TId[]|TId[][], limits: number|[number, number], method: _ERaytraceMethod): TRaytraceResult|TRaytraceResult[] {
+        entities: TId|TId[]|TId[][], dist: number|[number, number], method: _ERaytraceMethod): TRaytraceResult|TRaytraceResult[] {
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
     const fn_name = 'analyze.Raytrace';
     let ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
+        checkArgTypes(fn_name, 'rays', rays, [TypeCheckObj.isRay, TypeCheckObj.isRayList, TypeCheckObj.isRayListOfList]);
         ents_arrs = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
-        [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+            [IDcheckObj.isID, IDcheckObj.isIDList],
+            [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+        checkArgTypes(fn_name, 'dist', dist, [TypeCheckObj.isNumber, TypeCheckObj.isNumberList]);
+        if (Array.isArray(dist)) {
+            if (dist.length !== 2) { throw new Error('If "dist" is a list, it must have a length of two: [min_dist, max_dist].'); }
+            if (dist[0] >= dist[1]) { throw new Error('If "dist" is a list, the "min_dist" must be less than the "max_dist": [min_dist, max_dist].'); }
+        }
     } else {
-        ents_arrs = splitIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
-        [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+        // ents_arrs = splitIDs(fn_name, 'entities', entities,
+        // [IDcheckObj.isID, IDcheckObj.isIDList],
+        // [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+        ents_arrs = idsBreak(entities) as TEntTypeIdx[];
     }
-    // TODO
-    // TODO
     // --- Error Check ---
     const mesh: [THREE.Mesh, number[]] = _createMeshTjs(__model__, ents_arrs);
-    limits = Array.isArray(limits) ? limits : [0, limits];
-    const result = _raytraceAll(__model__, rays, mesh, limits, method);
+    dist = Array.isArray(dist) ? dist : [0, dist];
+    const result = _raytraceAll(__model__, rays, mesh, dist, method);
     // cleanup
     mesh[0].geometry.dispose();
     (mesh[0].material as THREE.Material).dispose();

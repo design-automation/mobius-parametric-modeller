@@ -1,4 +1,4 @@
-import { EEntType, EAttribNames, TEntTypeIdx, EEntTypeStr } from '@libs/geo-info/common';
+import { EEntType, EAttribNames, TEntTypeIdx, EEntTypeStr, TRay } from '@libs/geo-info/common';
 import { idsBreak } from '@libs/geo-info/id';
 
 // =========================================================================================================================================
@@ -243,17 +243,24 @@ export class TypeCheckObj {
         }
         return;
     }
-    static isRay(fn_name: string, arg_name: string, arg_list: [number, number, number][]): void { // TRay = [Txyz, Txyz]
-        isListArg(fn_name, arg_name, arg_list, 'origin and vector');
+    static isRay(fn_name: string, arg_name: string, arg_list: TRay): void { // TRay = [Txyz, Txyz]
+        isListArg(fn_name, arg_name, arg_list, '[origin, direction]');
         isListLenArg(fn_name, arg_name, arg_list, 2);
         TypeCheckObj.isCoord(fn_name, arg_name  + '[0]', arg_list[0]);
         TypeCheckObj.isVector(fn_name, arg_name + '[1]', arg_list[1]);
         return;
     }
-    static isRayList(fn_name: string, arg_name: string, arg_list: [number, number, number][][]): void {
+    static isRayList(fn_name: string, arg_name: string, arg_list: TRay[]): void {
         isListArg(fn_name, arg_name, arg_list, 'Rays');
         for (let i = 0; i < arg_list.length; i++) {
             TypeCheckObj.isRay(fn_name, arg_name + '[' + i + ']', arg_list[i]);
+        }
+        return;
+    }
+    static isRayListOfList(fn_name: string, arg_name: string, arg_list: TRay[][]): void {
+        isListArg(fn_name, arg_name, arg_list, 'lists of Rays');
+        for (let i = 0; i < arg_list.length; i++) {
+            TypeCheckObj.isRayList(fn_name, arg_name + '[' + i + ']', arg_list[i]);
         }
         return;
     }

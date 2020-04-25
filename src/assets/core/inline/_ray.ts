@@ -5,7 +5,7 @@ import { multMatrix, xformMatrix } from '@assets/libs/geom/matrix';
 
 /**
  * Ray functions that modify rays. These functions do not modify input ray.
- * 
+ *
  * The function is overloaded.
  */
 export function rayMake(origin: Txyz|Txyz[], dir: Txyz|Txyz[], len?: number): TRay|TRay[] {

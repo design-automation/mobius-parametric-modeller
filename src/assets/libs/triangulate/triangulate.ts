@@ -154,7 +154,8 @@ function _getThreePoints(points: three.Vector3[]): three.Vector3[] {
     //         }
     //     }
     //     if (third_point_idx === null) { return null; }
-    //     const extreme_points: three.Vector3[] = [pair_idxs[0], pair_idxs[1], third_point_idx].sort((a, b) => a - b ).map( i => points[i] );
+    //     const extreme_points: three.Vector3[] =
+    // [pair_idxs[0], pair_idxs[1], third_point_idx].sort((a, b) => a - b ).map( i => points[i] );
     //     return extreme_points;
     // }
     // could not find points

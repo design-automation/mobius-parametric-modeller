@@ -84,8 +84,8 @@ function _getThreePoints(points: three.Vector3[]): three.Vector3[] {
     }
     // calc sizes
     const x_size: number = Math.abs(points[extremes[3]].x - points[extremes[0]].x);
-    const y_size: number = Math.abs(points[extremes[4]].x - points[extremes[1]].x);
-    const z_size: number = Math.abs(points[extremes[5]].x - points[extremes[2]].x);
+    const y_size: number = Math.abs(points[extremes[4]].y - points[extremes[1]].y);
+    const z_size: number = Math.abs(points[extremes[5]].z - points[extremes[2]].z);
     // add the extreme points
     const set_selected: Set<number> = new Set();
     if (x_size > 0) { set_selected.add(extremes[0]); set_selected.add(extremes[3]); }

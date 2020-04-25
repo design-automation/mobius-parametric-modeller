@@ -10,20 +10,20 @@
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, Txy, XYPLANE, EAttribDataTypeStrs } from '@libs/geo-info/common';
-import { isPline, isWire, isEdge, isPgon, isFace, getArrDepth, isVert, isPosi, isPoint, idsMakeFromIndicies } from '@libs/geo-info/id';
+import { isPline, isWire, isEdge, isPgon, isFace, getArrDepth, isVert, isPosi, isPoint, idsMakeFromIndicies, idsMake } from '@libs/geo-info/id';
 import { distance } from '@libs/geom/distance';
-import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm, vecAng2 } from '@libs/geom/vectors';
+import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm, vecAng2, vecSetLen } from '@libs/geom/vectors';
 import { checkIDs, checkArgTypes, IDcheckObj, TypeCheckObj} from '../_check_args';
 import uscore from 'underscore';
-import { sum } from '@assets/core/inline/_mathjs';
 import { min, max } from '@assets/core/inline/_math';
-import { arrMakeFlat, arrIdxRem } from '@assets/libs/util/arrs';
+import { arrMakeFlat, arrIdxRem, getArrDepth2 } from '@assets/libs/util/arrs';
 import { degToRad } from '@assets/core/inline/_conversion';
 import { xfromSourceTargetMatrix, multMatrix } from '@libs/geom/matrix';
 import { XAXIS, YAXIS, ZAXIS } from '@assets/libs/geom/constants';
 import cytoscape from 'cytoscape';
 import * as THREE from 'three';
 import { TypedArrayUtils } from 'three/examples/jsm/utils/TypedArrayUtils.js';
+import * as Mathjs from 'mathjs';
 
 // ================================================================================================
 /**
@@ -44,7 +44,7 @@ import { TypedArrayUtils } from 'three/examples/jsm/utils/TypedArrayUtils.js';
  * @param target A list of positions, or entities from which positions can be extracted.
  * If null, the positions in source will be used.
  * @param max_dist The maximum distance for neighbors. If null, Infinity will be used.
- * @param max_neighbors The maximum number of neighbors to return. 
+ * @param max_neighbors The maximum number of neighbors to return.
  * If null, the number of positions in target is used.
  * @returns A dictionary containing the results.
  */
@@ -100,7 +100,7 @@ function _nearest(__model__: GIModel, source_posis_i: number[], target_posis_i: 
         typed_positions[ i * 4 + 3 ] = posi_i;
     }
     const kdtree = new TypedArrayUtils.Kdtree( typed_positions, _fuseDistSq, 4 );
-    // calculate teh dist squared
+    // calculate the dist squared
     const num_posis: number = posis_i.length;
     const dist_sq: number = dist * dist;
     // deal with special case, num_neighbors === 1
@@ -216,7 +216,7 @@ function _createMeshesTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.M
     }
     return meshes_tjs;
 }
-function _createMeshTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.Mesh {
+function _createMeshTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): [THREE.Mesh, number[]] {
     // Note that for meshes, faces must be pointed towards the origin of the ray in order to be detected;
     // intersections of the ray passing through the back of a face will not be detected.
     // To raycast against both faces of an object, you'll want to set the material's side property to THREE.DoubleSide.
@@ -237,23 +237,24 @@ function _createMeshTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.Mes
         posis_tjs[posi_i] = posi_tjs;
     }
     // get an array of all the faces
-    const faces_i: number[] = [];
+    const pgons_i: number[] = [];
     for (const [ent_type, ent_i] of ents_arrs) {
         switch (ent_type) {
-            case EEntType.FACE:
-                faces_i.push(ent_i);
+            case EEntType.PGON:
+                pgons_i.push(ent_i);
                 break;
             default:
-                const coll_faces_i: number[] = __model__.geom.nav.navAnyToFace(ent_type, ent_i);
-                coll_faces_i.forEach( coll_face_i => faces_i.push(coll_face_i) );
+                const coll_pgons_i: number[] = __model__.geom.nav.navAnyToPgon(ent_type, ent_i);
+                coll_pgons_i.forEach( coll_pgon_i => pgons_i.push(coll_pgon_i) );
                 break;
         }
     }
     // create tjs meshes
     const geom_tjs = new THREE.Geometry();
-    for (const face_i of faces_i) {
+    const idx_to_pgon_i: number[] = [];
+    for (const pgon_i of pgons_i) {
         // create the tjs geometry
-        const tris_i: number[] = __model__.geom.nav.navFaceToTri(face_i);
+        const tris_i: number[] = __model__.geom.nav.navAnyToTri(EEntType.PGON, pgon_i);
         for (const tri_i of tris_i) {
             const tri_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
             // add the three vertices to the geometry
@@ -261,11 +262,12 @@ function _createMeshTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.Mes
             const b: number = geom_tjs.vertices.push(posis_tjs[tri_posis_i[1]]) - 1;
             const c: number = geom_tjs.vertices.push(posis_tjs[tri_posis_i[2]]) - 1;
             // add the tjs tri to the geometry
-            geom_tjs.faces.push( new THREE.Face3( a, b, c ) );
+            const idx_tjs: number = geom_tjs.faces.push( new THREE.Face3( a, b, c ) ) - 1;
+            idx_to_pgon_i[idx_tjs] = pgon_i;
         }
-        // create the mesh, assigning the material
     }
-    return new THREE.Mesh(geom_tjs, mat_tjs);
+    // create the mesh, assigning the material
+    return [new THREE.Mesh(geom_tjs, mat_tjs), idx_to_pgon_i];
 }
 function _createMeshBufTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.Mesh {
     // Note that for meshes, faces must be pointed towards the origin of the ray in order to be detected;
@@ -322,17 +324,36 @@ function _createMeshBufTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.
     return new THREE.Mesh(geom_tjs, mat_tjs);
 }
 // ================================================================================================
+interface TRaytraceResult {
+    hit_count?: number;
+    miss_count?: number;
+    min_dist?: number;
+    avg_dist?: number;
+    max_dist?: number;
+    distances?: number[];
+    faces?: TId[];
+    intersections?: Txyz[];
+}
+export enum _ERaytraceMethod {
+    STATS = 'stats',
+    DISTANCES = 'distances',
+    ENTITIES = 'entities',
+    INTERSECTIONS = 'intersections',
+    ALL = 'all'
+}
 /**
- * xxx
+ * Shoot a set of rays into a set of obstructions.
+ * ~
+ * Returns a list of data, depending on the selected method.
  * ~
  * @param __model__
- * @param origins The origins of teh rays
- * @param directions The direction vectors
+ * @param rays A ray, a list of rays, or a list of lists of rays.
  * @param entities The obstructions, faces, polygons, or collections of faces or polygons.
- * @param method Enum; raytracing method
+ * @param limits The ray limites, either max, or [min, max].
+ * @param method Enum; values to return.
  */
-export function Raytrace(__model__: GIModel, origins: Txyz|Txyz[], directions: Txyz|Txyz[],
-        entities: TId|TId[]|TId[][], limits: number|[number, number], method: _ERaytraceMethod): number[]|number[][] {
+export function Raytrace(__model__: GIModel, rays: TRay|TRay[]|TRay[][],
+        entities: TId|TId[]|TId[][], limits: number|[number, number], method: _ERaytraceMethod): TRaytraceResult|TRaytraceResult[] {
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
     const fn_name = 'analyze.Raytrace';
@@ -342,114 +363,101 @@ export function Raytrace(__model__: GIModel, origins: Txyz|Txyz[], directions: T
     // TODO
     // TODO
     // --- Error Check ---
-    const origins_tjs: THREE.Vector3[] = _raytraceOriginsTjs(__model__, origins);
-    const directions_tjs: THREE.Vector3[] = _raytraceDirectionsTjs(__model__, directions);
-    const mesh_tjs: THREE.Mesh = _createMeshTjs(__model__, ents_arrs);
+    const mesh: [THREE.Mesh, number[]] = _createMeshTjs(__model__, ents_arrs);
     limits = Array.isArray(limits) ? limits : [0, limits];
-    const result = _raytrace(origins_tjs, null, directions_tjs, mesh_tjs, limits, method);
+    const result = _raytraceAll(__model__, rays, mesh, limits, method);
     // cleanup
-    mesh_tjs.geometry.dispose();
-    (mesh_tjs.material as THREE.Material).dispose();
-    // return teh results
+    mesh[0].geometry.dispose();
+    (mesh[0].material as THREE.Material).dispose();
+    // return the results
     return result;
 }
-function _raytraceOriginsTjs(__model__: GIModel, origins: Txyz|Txyz[]): THREE.Vector3[] {
-    origins = Array.isArray(origins[0]) ? origins as Txyz[] : [origins] as Txyz[];
-    return origins.map(origin => new THREE.Vector3(...origin));
-}
-function _raytraceDirectionsTjs(__model__: GIModel, directions: Txyz|Txyz[]): THREE.Vector3[] {
-    directions = Array.isArray(directions[0]) ? directions as Txyz[] : [directions] as Txyz[];
-    for (let i = 0; i < directions.length; i++) {
-        directions[i] = vecNorm(directions[i]);
+function _raytraceAll(__model__: GIModel, rays: TRay|TRay[]|TRay[][],
+        mesh: [THREE.Mesh, number[]], limits: [number, number],
+        method: _ERaytraceMethod): TRaytraceResult|TRaytraceResult[] {
+    const depth: number = getArrDepth2(rays);
+    if (depth === 2) {
+        return _raytraceAll(__model__, [rays] as TRay[], mesh, limits, method);
+    } else if (depth === 3) { //  just one ray, or a list of rays
+        const [origins_tjs, dirs_tjs]: [THREE.Vector3[], THREE.Vector3[]] =
+            _raytraceOriginsDirsTjs(__model__, rays as TRay[]);
+        return _raytrace(origins_tjs, dirs_tjs, mesh, limits, method) as TRaytraceResult;
+    } else if (depth === 4) {
+        return (rays as TRay[][]).map(a_rays => _raytraceAll(
+            __model__, a_rays, mesh, limits, method)) as TRaytraceResult[];
     }
-    return directions.map(direction => new THREE.Vector3(...direction));
 }
-
-export enum _ERaytraceMethod {
-    HIT_COUNT = 'hit_count',
-    MISS_COUNT = 'miss_count',
-    AVG_DIST = 'avg_distance',
-    MIN_DIST = 'min_distance',
-    MAX_DIST = 'max_distance',
-    DIST_LIST = 'dist_list',
-    ENTS_LIST = 'ents_list'
+function _raytraceOriginsDirsTjs(__model__: GIModel, rays: TRay[]): [THREE.Vector3[], THREE.Vector3[]] {
+    const origins_tjs: THREE.Vector3[] = [];
+    const dirs_tjs: THREE.Vector3[] = [];
+    for (const ray of rays) {
+        origins_tjs.push(new THREE.Vector3(ray[0][0], ray[0][1], ray[0][2]));
+        const dir = vecNorm(ray[1]);
+        dirs_tjs.push(new THREE.Vector3(dir[0], dir[1], dir[2]));
+    }
+    return [origins_tjs, dirs_tjs];
 }
-function _raytrace(origins_tjs: THREE.Vector3[], matrices_tjs: THREE.Matrix4[], directions_tjs: THREE.Vector3[], mesh_tjs: THREE.Mesh,
-        limits: [number, number], method: _ERaytraceMethod): number[]|number[][] {
-    const result = [];
+function _raytrace(origins_tjs: THREE.Vector3[], dirs_tjs: THREE.Vector3[], mesh: [THREE.Mesh, number[]],
+        limits: [number, number], method: _ERaytraceMethod): TRaytraceResult {
+    const result: TRaytraceResult = {};
+    let hit_count = 0;
+    let miss_count = 0;
+    const result_dists: number[] = [];
+    const result_ents: TId[] = [];
+    const result_isects: Txyz[] = [];
     for (let i = 0; i < origins_tjs.length; i++) {
+        // get the origin and direction
         const origin_tjs = origins_tjs[i];
-        let result_count = 0;
-        const result_dists: number[] = [];
-        const result_ents: THREE.Object3D[] = [];
-        for (const direction_tjs of directions_tjs) {
-            let xformed_direction_tjs: THREE.Vector3 = direction_tjs;
-            if (matrices_tjs) {
-                xformed_direction_tjs = direction_tjs.clone();
-                xformed_direction_tjs.applyMatrix4(matrices_tjs[i]);
+        const direction_tjs = dirs_tjs[i];
+        // shoot
+        const ray_tjs: THREE.Raycaster = new THREE.Raycaster(origin_tjs, direction_tjs, limits[0], limits[1]);
+        const isects: THREE.Intersection[] = ray_tjs.intersectObject(mesh[0], false);
+        result_dists.push(limits[1]);
+        // get the result
+        if (isects.length === 0) {
+            miss_count += 1;
+            if (method === _ERaytraceMethod.ALL || method === _ERaytraceMethod.ENTITIES) {
+                result_ents.push( null );
             }
-            const ray_tjs: THREE.Raycaster = new THREE.Raycaster(origin_tjs, xformed_direction_tjs, limits[0], limits[1]);
-            const isects: THREE.Intersection[] = ray_tjs.intersectObject(mesh_tjs, false);
-            // distance – distance between the origin of the ray and the intersection
-            // point – point of intersection, in world coordinates
-            // face – intersected face
-            // faceIndex – index of the intersected face
-            // object – the intersected object
-            // uv - U,V coordinates at point of intersection
-            // uv2 - Second set of U,V coordinates at point of intersection
-            switch (method) {
-                case _ERaytraceMethod.HIT_COUNT:
-                    if (isects.length > 0) {
-                        result_count += 1;
-                    }
-                    break;
-                case _ERaytraceMethod.MISS_COUNT:
-                    if (isects.length === 0) {
-                        result_count += 1;
-                    }
-                    break;
-                case _ERaytraceMethod.AVG_DIST:
-                case _ERaytraceMethod.MIN_DIST:
-                case _ERaytraceMethod.MAX_DIST:
-                case _ERaytraceMethod.DIST_LIST:
-                    if (isects.length > 0) {
-                        result_dists.push(isects[0]['distance']);
-                    }
-                    break;
-                case _ERaytraceMethod.ENTS_LIST:
-                    if (isects.length > 0) {
-                        result_ents.push(isects[0]['object']);
-                    }
-                    break;
+            if (method === _ERaytraceMethod.ALL || method === _ERaytraceMethod.INTERSECTIONS) {
+                const origin: Txyz = origin_tjs.toArray() as Txyz;
+                const dir: Txyz = direction_tjs.toArray() as Txyz;
+                result_isects.push(vecAdd(origin, vecSetLen(dir, limits[1])));
+            }
+        } else {
+            result_dists.push(isects[0]['distance']);
+            hit_count += 1;
+            if (method === _ERaytraceMethod.ALL || method === _ERaytraceMethod.ENTITIES) {
+                const face_i = mesh[1][isects[0].faceIndex];
+                result_ents.push( idsMake([EEntType.PGON, face_i]) as TId );
+            }
+            if (method === _ERaytraceMethod.ALL || method === _ERaytraceMethod.INTERSECTIONS) {
+                const isect_tjs: THREE.Vector3 = isects[0].point;
+                result_isects.push([isect_tjs.x, isect_tjs.y, isect_tjs.z]);
             }
         }
-        switch (method) {
-            case _ERaytraceMethod.HIT_COUNT:
-            case _ERaytraceMethod.MISS_COUNT:
-                result.push(result_count);
-                break;
-            case _ERaytraceMethod.AVG_DIST:
-                result.push(sum(result_dists) / result_dists.length);
-                break;
-            case _ERaytraceMethod.MIN_DIST:
-                result.push(min(result_dists));
-                break;
-            case _ERaytraceMethod.MAX_DIST:
-                result.push(max(result_dists));
-                break;
-            case _ERaytraceMethod.DIST_LIST:
-                    result.push(result_dists);
-                break;
-            case _ERaytraceMethod.ENTS_LIST:
-                throw new Error('Not implemented');
-                break;
-        }
+    }
+    if ((method === _ERaytraceMethod.ALL || method === _ERaytraceMethod.STATS) && result_dists.length > 0) {
+        result.hit_count = hit_count;
+        result.miss_count = miss_count;
+        result.min_dist = min(result_dists);
+        result.avg_dist = Mathjs.sum(result_dists) / result_dists.length;
+        result.max_dist = max(result_dists);
+    }
+    if (method === _ERaytraceMethod.ALL || method === _ERaytraceMethod.DISTANCES) {
+        result.distances = result_dists;
+    }
+    if (method === _ERaytraceMethod.ALL || method === _ERaytraceMethod.ENTITIES) {
+        result.faces = result_ents;
+    }
+    if (method === _ERaytraceMethod.ALL || method === _ERaytraceMethod.INTERSECTIONS) {
+        result.intersections = result_isects;
     }
     return result;
 }
 // ================================================================================================
 /**
- * xxx
+ * Calculate solar factor
  * ~
  * The detail parameter spacifies the number of target points that get generated along the sun paths.
  * The higher the level of detail, the more accurate but also the slower the analysis will be.
@@ -507,7 +515,7 @@ export function Solar(__model__: GIModel, origins: TPlane[], detail: number,
     }
     // --- Error Check ---
     const origins_tjs: [THREE.Vector3, THREE.Vector3][] = _solarOriginsTjs(__model__, origins, 0.01);
-    const mesh_tjs: THREE.Mesh = _createMeshTjs(__model__, ents_arrs);
+    const [mesh_tjs, idx_to_face_i]: [THREE.Mesh, number[]] = _createMeshTjs(__model__, ents_arrs);
     limits = Array.isArray(limits) ? limits : [0, limits];
     // get the direction vectors
     const directions_tjs: THREE.Vector3[] = uscore.flatten(_solarDirectionsTjs(latitude, north, detail, method));
@@ -905,8 +913,8 @@ function _getUniquePosis(__model__: GIModel, ents_arr: TEntTypeIdx[]): number[] 
 function _cytoscapeWeightFn(edge: cytoscape.EdgeSingular) {
     return edge.data('weight');
 }
-function _cytoscapeGetElements(__model__: GIModel, ents_arr: TEntTypeIdx[], 
-    source_posis_i: number[], target_posis_i: number[], directed: boolean): any[] {
+function _cytoscapeGetElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
+        source_posis_i: number[], target_posis_i: number[], directed: boolean): any[] {
     let has_weight_attrib = false;
     if (__model__.attribs.query.hasAttrib(EEntType.EDGE, 'weight')) {
         has_weight_attrib = __model__.attribs.query.getAttribDataType(EEntType.EDGE, 'weight') === EAttribDataTypeStrs.NUMBER;
@@ -1366,7 +1374,7 @@ function _cytoscapeGetElements2(__model__: GIModel, ents_arr: TEntTypeIdx[],
  * Calculates degree centrality for a netowrk. Values are normalized.
  * ~
  * @param __model__
- * @param source Positions, or entities from which positions can be extracted. These positions should be in teh network.
+ * @param source Positions, or entities from which positions can be extracted. These positions should be in the network.
  * @param entities The network, edges, or entities from which edges can be extracted.
  * @param alpha The alpha value for the centrality calculation, ranging on [0, 1]. With value 0,
  * disregards edge weights and solely uses number of edges in the centrality calculation. With value 1,
@@ -1443,7 +1451,7 @@ export enum _EClosenessCentralityType {
  * ~
  * ~
  * @param __model__
- * @param source Positions, or entities from which positions can be extracted. These positions should be in teh network.
+ * @param source Positions, or entities from which positions can be extracted. These positions should be in the network.
  * @param entities The network, edges, or entities from which edges can be extracted.
  * @param method Enum, the method to use, directed or undirected.
  * @param cen_type Enum, the data to return, positions, edges, or both.
@@ -1499,7 +1507,7 @@ export function CentralityClo(__model__: GIModel, source: TId|TId[]|TId[][][],
  * ~
  * ~
  * @param __model__
- * @param source Positions, or entities from which positions can be extracted. These positions should be in teh network.
+ * @param source Positions, or entities from which positions can be extracted. These positions should be in the network.
  * @param entities The network, edges, or entities from which edges can be extracted.
  * @param method Enum, the method to use, directed or undirected.
  * @returns A list of centrality values, between 0 and 1.

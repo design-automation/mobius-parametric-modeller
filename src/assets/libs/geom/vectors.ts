@@ -18,7 +18,7 @@ export function vecSub(v1: Txyz, v2: Txyz, norm: boolean = false): Txyz {
         v1[2] - v2[2],
     ];
     if (norm) {
-        this.vectorNorm(v3);
+        return vecNorm(v3);
     }
     return v3;
 }
@@ -31,7 +31,7 @@ export function vecsSub(vecs: Txyz[], norm: boolean = false): Txyz {
         vec_sub[2] = vec_sub[2] - vec[2];
     }
     if (norm) {
-        this.vectorNorm(vec_sub);
+        return vecNorm(vec_sub);
     }
     return vec_sub;
 }
@@ -43,7 +43,7 @@ export function vecAdd(v1: Txyz, v2: Txyz, norm: boolean = false): Txyz {
         v1[2] + v2[2],
     ];
     if (norm) {
-        this.vectorNorm(v3);
+        return vecNorm(v3);
     }
     return v3;
 }
@@ -56,7 +56,7 @@ export function vecsAdd(vecs: Txyz[], norm: boolean = false): Txyz {
         vec_add[2] = vec_add[2] + vec[2];
     }
     if (norm) {
-        this.vectorNorm(vec_add);
+        return vecNorm(vec_add);
     }
     return vec_add;
 }
@@ -69,7 +69,7 @@ export function vecSum(vecs: Txyz[], norm: boolean = false): Txyz {
         vec_sum[2] += vec[2];
     }
     if (norm) {
-        this.vectorNorm(vec_sum);
+        return vecNorm(vec_sum);
     }
     return vec_sum;
 }

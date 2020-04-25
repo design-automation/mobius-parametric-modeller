@@ -116,7 +116,9 @@ const lists = [
     ['vecAng2(v1, v2, n)', 'Calculate the angle (0 to 2PI) between two vectors, relative to the plane normal'],
     ['vecDot(v1, v2)', 'Calculates the dot product of two vectors'],
     ['vecCross(v1, v2)', 'Calculates the cross product of two vectors'],
-    ['vecEqual(v1, v2, tol)', 'Returns true if the difference between two vectors is smaller than a specified tolerance']
+    ['vecEqual(v1, v2, tol)', 'Returns true if the difference between two vectors is smaller than a specified tolerance'],
+    ['vecLtoG(v, p)', 'Transforms a vector from a local coordinate system define by plane "p" to the global coordinate system.'],
+    ['vecGtoL(v, p)', 'Transforms a vector from the global coordinate system to a local coordinate system define by plane "p".']
 ];
 
 const colors = [
@@ -142,7 +144,9 @@ const rays = [
     ['rayMove(r, v)', 'Move the ray "r" relative to the global X, Y, and Z axes, by vector "v".'],
     ['rayRot(r1, r2, a)', 'Rotate the ray "r1" around the ray "r2", by angle "a" (in radians).'],
     ['rayLMove(r, d)', 'Move the ray "r" relative to the ray direction vector, by distance "d".'],
-    ['rayFromPln(p)', 'Create a ray from a plane "p", with the same origin and with a direction along the plane z axis.']
+    ['rayFromPln(p)', 'Create a ray from a plane "p", with the same origin and with a direction along the plane z axis.'],
+    ['rayLtoG(v, p)', 'Transforms a ray from a local coordinate system define by plane "p" to the global coordinate system.'],
+    ['rayGtoL(v, p)', 'Transforms a ray from the global coordinate system to a local coordinate system define by plane "p".']
 ];
 
 const random = [

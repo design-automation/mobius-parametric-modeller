@@ -454,7 +454,7 @@ export function Hole(__model__: GIModel, pgon: TId, entities: TId|TId[]|TId[][])
         // holes_ents_arr = splitIDs(fn_name, 'entities', entities,
         // [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDListOfLists],
         // [EEntType.POSI, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
-        ent_arr = idsBreak(entities) as TEntTypeIdx;
+        ent_arr = idsBreak(pgon) as TEntTypeIdx;
         holes_ents_arr = idsBreak(entities) as TEntTypeIdx[]|TEntTypeIdx[][];
     }
     // --- Error Check ---

@@ -7,8 +7,8 @@
 /**
  *
  */
+import { checkArgs, ArgCh } from '../_check_args';
 
-import { checkArgTypes, TypeCheckObj } from '../_check_args';
 import { Txyz, TPlane, XYPLANE, TId, EEntType } from '@libs/geo-info/common';
 import { getArrDepth, idsMakeFromIndicies } from '@libs/geo-info/id';
 import { vecAdd, vecFromTo, vecDiv, vecMult } from '@libs/geom/vectors';
@@ -32,9 +32,9 @@ export function Line(__model__: GIModel, origin: Txyz|TPlane, size: number, num_
     // --- Error Check ---
     if (__model__.debug) {
         const fn_name = 'pattern.Line';
-        checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
-        checkArgTypes(fn_name, 'size', size, [TypeCheckObj.isNumber]);
-        checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+        checkArgs(fn_name, 'origin', origin, [ArgCh.isXYZ, ArgCh.isPln]);
+        checkArgs(fn_name, 'size', size, [ArgCh.isNum]);
+        checkArgs(fn_name, 'num_positions', num_positions, [ArgCh.isInt]);
     }
     // --- Error Check ---
     // create the matrix one time
@@ -80,8 +80,8 @@ export function Rectangle(__model__: GIModel, origin: Txyz|TPlane, size: number|
     // --- Error Check ---
     if (__model__.debug) {
         const fn_name = 'pattern.Rectangle';
-        checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
-        checkArgTypes(fn_name, 'size', size, [TypeCheckObj.isNumber, TypeCheckObj.isXYlist]);
+        checkArgs(fn_name, 'origin', origin, [ArgCh.isXYZ, ArgCh.isPln]);
+        checkArgs(fn_name, 'size', size, [ArgCh.isNum, ArgCh.isXY]);
     }
     // --- Error Check ---
     // create the matrix one time
@@ -114,6 +114,12 @@ export function Rectangle(__model__: GIModel, origin: Txyz|TPlane, size: number|
     return idsMakeFromIndicies(EEntType.POSI, posis_i) as TId[];
 }
 // ================================================================================================
+export enum _EGridMethod {
+    FLAT = 'flat',
+    COLUMNS = 'columns',
+    ROWS = 'rows',
+    QUADS = 'quads'
+}
 /**
 * Creates positions in a grid pattern. Returns a list (or list of lists) of new positions.
 * @param __model__
@@ -135,9 +141,9 @@ export function Grid(__model__: GIModel, origin: Txyz|TPlane, size: number|[numb
     // --- Error Check ---
     if (__model__.debug) {
         const fn_name = 'pattern.Grid';
-        checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
-        checkArgTypes(fn_name, 'size', size, [TypeCheckObj.isNumber, TypeCheckObj.isXYlist]);
-        checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt, TypeCheckObj.isXYlistInt]);
+        checkArgs(fn_name, 'origin', origin, [ArgCh.isXYZ, ArgCh.isPln]);
+        checkArgs(fn_name, 'size', size, [ArgCh.isNum, ArgCh.isXY]);
+        checkArgs(fn_name, 'num_positions', num_positions, [ArgCh.isInt, ArgCh.isXYInt]);
     }
     // --- Error Check ---
     // create the matrix one time
@@ -206,13 +212,15 @@ export function Grid(__model__: GIModel, origin: Txyz|TPlane, size: number|[numb
     }
     return idsMakeFromIndicies(EEntType.POSI, posis_i2) as TId[][];
 }
-export enum _EGridMethod {
+// ================================================================================================
+export enum _EBoxMethod {
     FLAT = 'flat',
-    COLUMNS = 'columns',
     ROWS = 'rows',
+    COLUMNS = 'columns',
+    LAYERS = 'layers',
+    // SIDES = 'sides',
     QUADS = 'quads'
 }
-// ================================================================================================
 /**
  * Creates positions in a box pattern. Returns a list of new positions.
  * @param __model__
@@ -231,8 +239,8 @@ export function Box(__model__: GIModel, origin: Txyz | TPlane,
     // --- Error Check ---
     if (__model__.debug) {
         const fn_name = 'pattern.Box';
-        checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
-        checkArgTypes(fn_name, 'size', size, [TypeCheckObj.isNumber, TypeCheckObj.isXYlist, TypeCheckObj.isXYZlist]);
+        checkArgs(fn_name, 'origin', origin, [ArgCh.isXYZ, ArgCh.isPln]);
+        checkArgs(fn_name, 'size', size, [ArgCh.isNum, ArgCh.isXY, ArgCh.isXYZ]);
     }
     // --- Error Check ---
     // create the matrix one time
@@ -464,14 +472,6 @@ export function Box(__model__: GIModel, origin: Txyz | TPlane,
     }
     return [];
 }
-export enum _EBoxMethod {
-    FLAT = 'flat',
-    ROWS = 'rows',
-    COLUMNS = 'columns',
-    LAYERS = 'layers',
-    // SIDES = 'sides',
-    QUADS = 'quads'
-}
 // ================================================================================================
 /**
  * Creates positions in a polyhedron pattern. Returns a list of new positions.
@@ -488,9 +488,9 @@ export function Polyhedron(__model__: GIModel, origin: Txyz | TPlane, radius: nu
     // --- Error Check ---
     if (__model__.debug) {
         const fn_name = 'pattern.Polyhedron';
-        checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
-        checkArgTypes(fn_name, 'radius', radius, [TypeCheckObj.isNumber]);
-        checkArgTypes(fn_name, 'detail', detail, [TypeCheckObj.isInt]);
+        checkArgs(fn_name, 'origin', origin, [ArgCh.isXYZ, ArgCh.isPln]);
+        checkArgs(fn_name, 'radius', radius, [ArgCh.isNum]);
+        checkArgs(fn_name, 'detail', detail, [ArgCh.isInt]);
         if (detail > 6) {
             throw new Error('pattern.Polyhedron: The "detail" argument is too high, the maximum is 6.');
         }
@@ -592,10 +592,10 @@ export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num
     // --- Error Check ---
     if (__model__.debug) {
         const fn_name = 'pattern.Arc';
-        checkArgTypes(fn_name, 'origin', origin, [TypeCheckObj.isCoord, TypeCheckObj.isPlane]);
-        checkArgTypes(fn_name, 'radius', radius, [TypeCheckObj.isNumber]);
-        checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
-        checkArgTypes(fn_name, 'arc_angle', arc_angle, [TypeCheckObj.isNumber, TypeCheckObj.isNull]);
+        checkArgs(fn_name, 'origin', origin, [ArgCh.isXYZ, ArgCh.isPln]);
+        checkArgs(fn_name, 'radius', radius, [ArgCh.isNum]);
+        checkArgs(fn_name, 'num_positions', num_positions, [ArgCh.isInt]);
+        checkArgs(fn_name, 'arc_angle', arc_angle, [ArgCh.isNum, ArgCh.isNull]);
     }
     // --- Error Check ---
     // create the matrix one time
@@ -650,8 +650,8 @@ export function Bezier(__model__: GIModel, coords: Txyz[], num_positions: number
     // --- Error Check ---
     const fn_name = 'pattern.Bezier';
     if (__model__.debug) {
-        checkArgTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
-        checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+        checkArgs(fn_name, 'coords', coords, [ArgCh.isXYZL]);
+        checkArgs(fn_name, 'num_positions', num_positions, [ArgCh.isInt]);
     }
     // --- Error Check ---
     // create the curve
@@ -678,6 +678,10 @@ export function Bezier(__model__: GIModel, coords: Txyz[], num_positions: number
     return idsMakeFromIndicies(EEntType.POSI, posis_i) as TId[];
 }
 // ================================================================================================
+export enum _EClose {
+    OPEN = 'open',
+    CLOSE = 'close'
+}
 /**
  * Creates positions in an NURBS curve pattern, by using the XYZ positions as control points.
  * Returns a list of new positions.
@@ -708,8 +712,8 @@ export function Nurbs(__model__: GIModel, coords: Txyz[], degree: number, close:
     // --- Error Check ---
     if (__model__.debug) {
         const fn_name = 'pattern.Nurbs';
-        checkArgTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
-        checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+        checkArgs(fn_name, 'coords', coords, [ArgCh.isXYZL]);
+        checkArgs(fn_name, 'num_positions', num_positions, [ArgCh.isInt]);
         if (coords.length < 3) {
             throw new Error (fn_name + ': "coords" should be a list of at least three XYZ coords.');
         }
@@ -787,8 +791,8 @@ export function _Interpolate(__model__: GIModel, coords: Txyz[], degree: number,
     // --- Error Check ---
     if (__model__.debug) {
         const fn_name = 'pattern._Interpolate';
-        checkArgTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
-        checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+        checkArgs(fn_name, 'coords', coords, [ArgCh.isXYZL]);
+        checkArgs(fn_name, 'num_positions', num_positions, [ArgCh.isInt]);
         // --- Error Check ---
         if (coords.length < 3) {
             throw new Error (fn_name + ': "coords" should be a list of at least three XYZ coords.');
@@ -857,10 +861,6 @@ function nurbsToPosis(__model__: GIModel, curve_verb: any, degree: number, close
     // return the list of posis
     return posis_i_sorted;
 }
-export enum _EClose {
-    OPEN = 'open',
-    CLOSE = 'close'
-}
 // ================================================================================================
 /**
  * Creates positions in an spline pattern. Returns a list of new positions.
@@ -896,9 +896,9 @@ export function Interpolate(__model__: GIModel, coords: Txyz[], type: _ECurveCat
     // --- Error Check ---
     if (__model__.debug) {
         const fn_name = 'pattern.Interpolate';
-        checkArgTypes(fn_name, 'coords', coords, [TypeCheckObj.isCoordList]);
-        checkArgTypes(fn_name, 'tension', tension, [TypeCheckObj.isNumber01]);
-        checkArgTypes(fn_name, 'num_positions', num_positions, [TypeCheckObj.isInt]);
+        checkArgs(fn_name, 'coords', coords, [ArgCh.isXYZL]);
+        checkArgs(fn_name, 'tension', tension, [ArgCh.isNum01]);
+        checkArgs(fn_name, 'num_positions', num_positions, [ArgCh.isInt]);
         if (coords.length < 3) {
             throw new Error(fn_name + ': "coords" should be a list of at least three XYZ coords.');
         }

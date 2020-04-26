@@ -7,11 +7,13 @@
  *
  */
 
+import { checkIDs, IdCh } from '../_check_ids';
+import { checkArgs, ArgCh } from '../_check_args';
+
 import { GIModel } from '@libs/geo-info/GIModel';
 import { Txyz, TColor, EAttribNames, EAttribDataTypeStrs, EAttribPush, TRay, TPlane, TBBox } from '@libs/geo-info/common';
 import { TId, EEntType, TEntTypeIdx } from '@libs/geo-info/common';
 import { isEmptyArr, getArrDepth, idsMake, idsBreak } from '@libs/geo-info/id';
-import { checkIDs, IDcheckObj, checkArgTypes, TypeCheckObj } from '../_check_args';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
 import { min, max } from '@assets/core/inline/_math';
 import { vecMult, vecAdd, vecSetLen, vecCross, vecNorm, vecSub, vecDot } from '@assets/libs/geom/vectors';
@@ -43,9 +45,9 @@ export function Color(__model__: GIModel, entities: TId|TId[], color: TColor): v
     if (__model__.debug) {
         if (entities !== null) {
             ents_arr = checkIDs(fn_name, 'entities', entities,
-                [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDListOfLists], null) as TEntTypeIdx[];
+                [IdCh.isId, IdCh.isIdL, IdCh.isIdLL], null) as TEntTypeIdx[];
         }
-        checkArgTypes(fn_name, 'color', color, [TypeCheckObj.isColor]);
+        checkArgs(fn_name, 'color', color, [ArgCh.isColor]);
     } else {
         // if (entities !== null) {
         //     ents_arr = splitIDs(fn_name, 'entities', entities,
@@ -104,10 +106,10 @@ export function Gradient(__model__: GIModel, entities: TId|TId[], attrib: string
         let attrib_idx_or_key: number|string;
         if (__model__.debug) {
             ents_arr = checkIDs(fn_name, 'entities', entities,
-                [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDListOfLists], null) as TEntTypeIdx[];
-            checkArgTypes(fn_name, 'attrib', attrib,
-                [TypeCheckObj.isString, TypeCheckObj.isStringStringList, TypeCheckObj.isStringNumberList]);
-            checkArgTypes(fn_name, 'range', range, [TypeCheckObj.isNull, TypeCheckObj.isNumber, TypeCheckObj.isNumberList]);
+                [IdCh.isId, IdCh.isIdL, IdCh.isIdLL], null) as TEntTypeIdx[];
+            checkArgs(fn_name, 'attrib', attrib,
+                [ArgCh.isStr, ArgCh.isStrStr, ArgCh.isStrNum]);
+            checkArgs(fn_name, 'range', range, [ArgCh.isNull, ArgCh.isNum, ArgCh.isNumL]);
             attrib_name = Array.isArray(attrib) ? attrib[0] : attrib;
             attrib_idx_or_key = Array.isArray(attrib) ? attrib[1] : null;
             if (!__model__.attribs.query.hasAttrib(ents_arr[0][0], attrib_name)) {
@@ -290,7 +292,7 @@ export function Edge(__model__: GIModel, entities: TId|TId[], method: _EEdgeMeth
     if (__model__.debug) {
         if (entities !== null) {
             ents_arr = checkIDs(fn_name, 'entities', entities,
-                [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+                [IdCh.isIdL], null) as TEntTypeIdx[];
         }
     } else {
         // if (entities !== null) {
@@ -354,7 +356,7 @@ export function Mesh(__model__: GIModel, entities: TId|TId[], method: _EMeshMeth
     if (__model__.debug) {
         if (entities !== null) {
             ents_arr = checkIDs(fn_name, 'entities', entities,
-                [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+                [IdCh.isIdL], null) as TEntTypeIdx[];
         }
     } else {
         // if (entities !== null) {
@@ -498,8 +500,8 @@ export function Ray(__model__: GIModel, rays: TRay|TRay[], scale: number): TId[]
     // --- Error Check ---
     const fn_name = 'visualize.Ray';
     if (__model__.debug) {
-        checkArgTypes(fn_name, 'ray', rays, [TypeCheckObj.isRay, TypeCheckObj.isRayList]);
-        checkArgTypes(fn_name, 'scale', scale, [TypeCheckObj.isNumber]);
+        checkArgs(fn_name, 'ray', rays, [ArgCh.isRay, ArgCh.isRayL]);
+        checkArgs(fn_name, 'scale', scale, [ArgCh.isNum]);
     }
     // --- Error Check ---
    return idsMake(_visRay(__model__, rays, scale)) as TId[];
@@ -566,9 +568,9 @@ export function Plane(__model__: GIModel, planes: TPlane|TPlane[], scale: number
     // --- Error Check ---
     const fn_name = 'visualize.Plane';
     if (__model__.debug) {
-        checkArgTypes(fn_name, 'planes', planes,
-            [TypeCheckObj.isPlane, TypeCheckObj.isPlaneList]);
-        checkArgTypes(fn_name, 'scale', scale, [TypeCheckObj.isNumber]);
+        checkArgs(fn_name, 'planes', planes,
+            [ArgCh.isPln, ArgCh.isPlnL]);
+        checkArgs(fn_name, 'scale', scale, [ArgCh.isNum]);
     }
     // --- Error Check ---
     return idsMake(_visPlane(__model__, planes, scale)) as TId[];
@@ -645,7 +647,7 @@ export function BBox(__model__: GIModel, bboxes: TBBox|TBBox): TId[] {
     // --- Error Check ---
     const fn_name = 'visualize.BBox';
     if (__model__.debug) {
-        checkArgTypes(fn_name, 'bbox', bboxes, [TypeCheckObj.isBBox]); // TODO bboxs can be a list // add isBBoxList to enable check
+        checkArgs(fn_name, 'bbox', bboxes, [ArgCh.isBBox]); // TODO bboxs can be a list // add isBBoxList to enable check
     }
     // --- Error Check ---
     return  idsMake(_visBBox(__model__, bboxes)) as TId[];

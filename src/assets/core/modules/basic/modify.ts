@@ -7,12 +7,13 @@
 /**
  *
  */
+import { checkIDs, IdCh } from '../_check_ids';
+import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EEntType, TEntTypeIdx, TRay, IGeomPack} from '@libs/geo-info/common';
 import { getArrDepth, isEmptyArr, idsBreak } from '@libs/geo-info/id';
 import { vecAdd, vecSum, vecDiv, vecFromTo, vecNorm, vecCross, vecSetLen, vecLen, vecDot } from '@libs/geom/vectors';
-import { checkArgTypes, checkIDs, IDcheckObj, TypeCheckObj } from '../_check_args';
 import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
@@ -49,10 +50,8 @@ export function Move(__model__: GIModel, entities: TId|TId[], vectors: Txyz|Txyz
         const fn_name = 'modify.Move';
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
-            ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
-                [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
-                EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-            checkArgTypes(fn_name, 'vectors', vectors, [TypeCheckObj.isVector, TypeCheckObj.isVectorList]);
+            ents_arr = checkIDs(fn_name, 'entities', entities, [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+            checkArgs(fn_name, 'vectors', vectors, [ArgCh.isXYZ, ArgCh.isXYZL]);
         } else {
             // ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
             // [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
@@ -127,10 +126,10 @@ export function Rotate(__model__: GIModel, entities: TId|TId[], ray: Txyz|TRay|T
         const fn_name = 'modify.Rotate';
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
-            ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
+            ents_arr = checkIDs(fn_name, 'entities', entities, [IdCh.isId, IdCh.isIdL],
                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
                 EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-            checkArgTypes(fn_name, 'angle', angle, [TypeCheckObj.isNumber]);
+            checkArgs(fn_name, 'angle', angle, [ArgCh.isNum]);
         } else {
             // ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
             //     [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
@@ -182,10 +181,10 @@ export function Scale(__model__: GIModel, entities: TId|TId[], plane: Txyz|TRay|
         const fn_name = 'modify.Scale';
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
-            ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
+            ents_arr = checkIDs(fn_name, 'entities', entities, [IdCh.isId, IdCh.isIdL],
                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
                 EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-            checkArgTypes(fn_name, 'scale', scale, [TypeCheckObj.isNumber, TypeCheckObj.isXYZlist]);
+            checkArgs(fn_name, 'scale', scale, [ArgCh.isNum, ArgCh.isXYZ]);
         } else {
             // ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
             //     [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
@@ -238,7 +237,7 @@ export function Mirror(__model__: GIModel, entities: TId|TId[], plane: Txyz|TRay
         const fn_name = 'modify.Mirror';
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
-            ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
+            ents_arr = checkIDs(fn_name, 'entities', entities, [IdCh.isId, IdCh.isIdL],
                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
                 EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         } else {
@@ -295,7 +294,7 @@ export function XForm(__model__: GIModel, entities: TId|TId[],
         const fn_name = 'modify.XForm';
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
-            ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
+            ents_arr = checkIDs(fn_name, 'entities', entities, [IdCh.isId, IdCh.isIdL],
                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
                 EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         } else {
@@ -343,9 +342,9 @@ export function Offset(__model__: GIModel, entities: TId|TId[], dist: number): v
         const fn_name = 'modify.Offset';
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
-            ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
+            ents_arr = checkIDs(fn_name, 'entities', entities, [IdCh.isId, IdCh.isIdL],
                 [EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-            checkArgTypes(fn_name, 'dist', dist, [TypeCheckObj.isNumber]);
+            checkArgs(fn_name, 'dist', dist, [ArgCh.isNum]);
         } else {
             // ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
             //     [EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
@@ -482,7 +481,7 @@ export function Reverse(__model__: GIModel, entities: TId|TId[]): void {
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
             ents_arr = checkIDs('modify.Reverse', 'entities', entities,
-                [IDcheckObj.isID, IDcheckObj.isIDList],
+                [IdCh.isId, IdCh.isIdL],
                 [EEntType.WIRE, EEntType.PLINE, EEntType.FACE, EEntType.PGON])  as TEntTypeIdx[];
         } else {
             // ents_arr = splitIDs('modify.Reverse', 'entities', entities,
@@ -526,7 +525,7 @@ export function Shift(__model__: GIModel, entities: TId|TId[], offset: number): 
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
             ents_arr = checkIDs('modify.Reverse', 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList],
+            [IdCh.isId, IdCh.isIdL],
             [EEntType.WIRE, EEntType.PLINE, EEntType.FACE, EEntType.PGON])  as TEntTypeIdx[];
         } else {
             // ents_arr = splitIDs('modify.Reverse', 'entities', entities,
@@ -562,7 +561,7 @@ export function Ring(__model__: GIModel, entities: TId|TId[], method: _ERingMeth
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
             ents_arr = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE]) as TEntTypeIdx[];
+            [IdCh.isId, IdCh.isIdL], [EEntType.PLINE]) as TEntTypeIdx[];
         } else {
             // ents_arr = splitIDs(fn_name, 'entities', entities,
             // [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE]) as TEntTypeIdx[];
@@ -609,7 +608,7 @@ export function Weld(__model__: GIModel, entities: TId|TId[], method: _EWeldMeth
     const fn_name = 'modify.Weld';
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
-        ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
+        ents_arr = checkIDs(fn_name, 'entities', entities, [IdCh.isId, IdCh.isIdL],
             [EEntType.VERT, EEntType.EDGE, EEntType.WIRE, EEntType.FACE,
             EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
     } else {
@@ -657,7 +656,7 @@ export function Fuse(__model__: GIModel, entities: TId|TId[], tolerance: number)
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,
         // [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
@@ -762,7 +761,7 @@ export function Remesh(__model__: GIModel, entities: TId[]): void {
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
             ents_arr = checkIDs('modify.Remesh', 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+            [IdCh.isId, IdCh.isIdL], [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         } else {
             // ents_arr = splitIDs('modify.Remesh', 'entities', entities,
             // [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
@@ -814,7 +813,7 @@ export function Delete(__model__: GIModel, entities: TId|TId[], method: _EDelete
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
             ents_arr = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList],
+            [IdCh.isId, IdCh.isIdL],
             [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         } else {
             // ents_arr = splitIDs(fn_name, 'entities', entities,

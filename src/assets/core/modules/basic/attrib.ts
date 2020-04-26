@@ -8,14 +8,61 @@
 /**
  *
  */
+import { checkIDs, IdCh } from '../_check_ids';
+import { checkAttribValue, checkAttribName,
+    checkAttribIdxKey, checkAttribNameIdxKey, splitAttribNameIdxKey } from '../_check_attribs';
+
 import uscore from 'underscore';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, TEntTypeIdx,
     EAttribPush, TAttribDataTypes, EEntTypeStr, EAttribDataTypeStrs } from '@libs/geo-info/common';
 import { getArrDepth, idsBreak } from '@libs/geo-info/id';
-import { checkIDs, IDcheckObj, checkAttribValue, checkAttribName,
-    checkAttribIdxKey, checkAttribNameIdxKey, splitAttribNameIdxKey } from '../_check_args';
 // ================================================================================================
+
+export enum _EEntType {
+    POSI =   'ps',
+    VERT =   '_v',
+    EDGE =   '_e',
+    WIRE =   '_w',
+    FACE =   '_f',
+    POINT =  'pt',
+    PLINE =  'pl',
+    PGON =   'pg',
+    COLL =   'co'
+}
+export enum _EEntTypeAndMod {
+    POSI =   'ps',
+    VERT =   '_v',
+    EDGE =   '_e',
+    WIRE =   '_w',
+    FACE =   '_f',
+    POINT =  'pt',
+    PLINE =  'pl',
+    PGON =   'pg',
+    COLL =   'co',
+    MOD =    'mo'
+}
+export enum _EAttribPushTarget {
+    POSI =   'ps',
+    VERT =   '_v',
+    EDGE =   '_e',
+    WIRE =   '_w',
+    FACE =   '_f',
+    POINT =  'pt',
+    PLINE =  'pl',
+    PGON =   'pg',
+    COLL =   'co',
+    COLLP =  'cop',
+    COLLC =  'coc',
+    MOD =    'mo'
+}
+export enum _EDataType {
+    NUMBER =   'number',
+    STRING =   'string',
+    BOOLEAN = 'boolean',
+    LIST =   'list',
+    DICT = 'dict'
+}
 function _getEntTypeFromStr(ent_type_str: _EEntType|_EEntTypeAndMod): EEntType {
     switch (ent_type_str) {
         case _EEntTypeAndMod.POSI:
@@ -63,58 +110,14 @@ function _getAttribPushTarget(ent_type_str: _EAttribPushTarget): EEntType|string
         case _EAttribPushTarget.COLL:
             return EEntType.COLL;
         case _EAttribPushTarget.COLLC:
-            return "coll_children";
+            return 'coll_children';
         case _EAttribPushTarget.COLLP:
-            return "coll_parent";
+            return 'coll_parent';
         case _EAttribPushTarget.MOD:
             return EEntType.MOD;
         default:
             break;
     }
-}
-export enum _EEntType {
-    POSI =   'ps',
-    VERT =   '_v',
-    EDGE =   '_e',
-    WIRE =   '_w',
-    FACE =   '_f',
-    POINT =  'pt',
-    PLINE =  'pl',
-    PGON =   'pg',
-    COLL =   'co'
-}
-export enum _EEntTypeAndMod {
-    POSI =   'ps',
-    VERT =   '_v',
-    EDGE =   '_e',
-    WIRE =   '_w',
-    FACE =   '_f',
-    POINT =  'pt',
-    PLINE =  'pl',
-    PGON =   'pg',
-    COLL =   'co',
-    MOD =    'mo'
-}
-export enum _EAttribPushTarget {
-    POSI =   'ps',
-    VERT =   '_v',
-    EDGE =   '_e',
-    WIRE =   '_w',
-    FACE =   '_f',
-    POINT =  'pt',
-    PLINE =  'pl',
-    PGON =   'pg',
-    COLL =   'co',
-    COLLP =  'cop',
-    COLLC =  'coc',
-    MOD =    'mo'
-}
-export enum _EDataType {
-    NUMBER =   'number',
-    STRING =   'string',
-    BOOLEAN = 'boolean',
-    LIST =   'list',
-    DICT = 'dict'
 }
 // ================================================================================================
 /**
@@ -140,7 +143,7 @@ export function Set(__model__: GIModel, entities: TId|TId[]|TId[][],
     let attrib_idx_key: number|string;
     if (__model__.debug) {
         if (entities !== null && entities !== undefined) {
-            ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+            ents_arr = checkIDs(fn_name, 'entities', entities, [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx|TEntTypeIdx[];
         }
         [attrib_name, attrib_idx_key] = checkAttribNameIdxKey(fn_name, attrib);
         checkAttribName(fn_name , attrib_name);
@@ -264,7 +267,7 @@ export function Get(__model__: GIModel, entities: TId|TId[]|TId[][],
     const fn_name = 'attrib.Get';
     if (__model__.debug) {
         if (entities !== null && entities !== undefined) {
-            ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+            ents_arr = checkIDs(fn_name, 'entities', entities, [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx|TEntTypeIdx[];
         }
         [attrib_name, attrib_idx_key] = checkAttribNameIdxKey(fn_name, attrib);
         checkAttribName(fn_name, attrib_name);
@@ -508,7 +511,7 @@ export function Push(__model__: GIModel, entities: TId|TId[],
 
     if (__model__.debug) {
         if (entities !== null && entities !== undefined) {
-            ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            ents_arr = checkIDs(fn_name, 'entities', entities, [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
         }
         [source_attrib_name, source_attrib_idx_key] = checkAttribNameIdxKey(fn_name, source_attrib);
         [target_attrib_name, target_attrib_idx_key] = checkAttribNameIdxKey(fn_name, target_attrib);

@@ -7,9 +7,10 @@
 /**
  *
  */
+import { checkIDs, IdCh } from '../_check_ids';
+
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EEntType, TRay, TEntTypeIdx, EEntTypeStr, Txy} from '@libs/geo-info/common';
-import { checkIDs, IDcheckObj} from '../_check_args';
 import { getArrDepth, isColl, isPosi, isPgon, isPline, isPoint } from '@assets/libs/geo-info/id';
 import { vecDiv, vecSum, vecAvg, vecFromTo, vecLen, vecCross, vecNorm, vecAdd, vecSetLen, vecDot } from '@assets/libs/geom/vectors';
 import { isRay, isPlane, isVec3 } from '@assets/libs/geo-info/virtual';
@@ -50,7 +51,7 @@ export function getCentoridFromEnts(__model__: GIModel, ents: TId|TId[], fn_name
     // this must be an ID or an array of IDs, so lets get the centroid
     // TODO this error message is confusing
     const ents_arr: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'ents', ents,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
+        [IdCh.isId, IdCh.isIdL],
         [EEntType.POSI, EEntType.VERT, EEntType.POINT, EEntType.EDGE, EEntType.WIRE,
             EEntType.PLINE, EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx;
     const centroid: Txyz|Txyz[] = getCentroid(__model__, ents_arr);
@@ -269,9 +270,9 @@ export function getPlanesSeq(xyzs: Txyz[], normal: Txyz, close: boolean): TPlane
 // Utility functions used in make.Copy() and in poly2d.Stitch()
 /**
  * Copy posis, points, plines, pgons
- * @param __model__ 
- * @param ents_arr 
- * @param copy_attributes 
+ * @param __model__
+ * @param ents_arr
+ * @param copy_attributes
  */
 export function _copyGeom(__model__: GIModel,
     ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][], copy_attributes: boolean): TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][] {

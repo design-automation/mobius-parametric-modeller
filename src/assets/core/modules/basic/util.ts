@@ -6,14 +6,14 @@
  *
  */
 
-import { GIModel } from '@libs/geo-info/GIModel';
+import { checkIDs, IdCh } from '../_check_ids';
 
+import { GIModel } from '@libs/geo-info/GIModel';
 import { download } from '@libs/filesys/download';
 import { EEntType, IModelData, TId, TEntTypeIdx } from '@libs/geo-info/common';
 import { __merge__ } from '../_model';
 import { _model } from '..';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
-import { checkIDs, IDcheckObj } from '../_check_args';
 import { idsBreak } from '@assets/libs/geo-info/id';
 
 export enum _ECOmpareMethod {
@@ -24,7 +24,7 @@ export enum _ECOmpareMethod {
 // ================================================================================================
 /**
  * Removes all deleted entities from the model.
- * The IDs of other entities may change as a result. 
+ * The IDs of other entities may change as a result.
  * ~
  * For example, if 'pg0' was deleted and 'pg1' still exists, then after purge
  * 'pg1' will get renumbered, and will get the ID 'pg0'.
@@ -47,7 +47,7 @@ export function ModelInfo(__model__: GIModel): string {
     info += '<ul>';
     // model attribs
     const model_attribs: string[] = __model__.attribs.query.getAttribNames(EEntType.MOD);
-    if (model_attribs.length !== 0) { info += '<li>Model attribs: ' + model_attribs.join(', ') + '</li>';; }
+    if (model_attribs.length !== 0) { info += '<li>Model attribs: ' + model_attribs.join(', ') + '</li>'; }
     // collections
     const num_colls: number = __model__.geom.query.numEnts(EEntType.COLL, false);
     const num_del_colls: number = __model__.geom.query.numEnts(EEntType.COLL, true) - num_colls;
@@ -151,7 +151,7 @@ export function EntityInfo(__model__: GIModel, entities: TId|TId[]): string {
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(fn_name, 'coll', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList],
+            [IdCh.isId, IdCh.isIdL],
             [EEntType.COLL, EEntType.PGON, EEntType.PLINE, EEntType.POINT]) as TEntTypeIdx[];
     } else {
         // ents_arr = splitIDs(fn_name, 'coll', entities,
@@ -317,6 +317,16 @@ function _collInfo(__model__: GIModel, coll_i: number): string {
     return info;
 }
 // ================================================================================================
+
+export enum _EIOExportParams {
+    YES = 'Add Params',
+    NO = 'No Params'
+}
+export enum _EIOExportContents {
+    BOTH = 'Both',
+    CONSOLE = 'Console Only',
+    MODEL = 'Model Only'
+}
 /**
  * Export data from the model as a file.
  * This will result in a popup in your browser, asking you to save the filel.
@@ -366,15 +376,6 @@ export function ExportIO(__model__: GIModel, __console__: string[], __constList_
     }
 
     return download(JSON.stringify(edxAnswer) , file_name);
-}
-export enum _EIOExportParams {
-    YES = 'Add Params',
-    NO = 'No Params'
-}
-export enum _EIOExportContents {
-    BOTH = 'Both',
-    CONSOLE = 'Console Only',
-    MODEL = 'Model Only'
 }
 function convertString(value) {
     let val;

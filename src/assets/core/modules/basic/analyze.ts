@@ -7,13 +7,14 @@
 /**
  *
  */
+import { checkIDs, IdCh } from '../_check_ids';
+import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, Txy, XYPLANE, EAttribDataTypeStrs } from '@libs/geo-info/common';
 import { getArrDepth, idsMakeFromIndicies, idsMake, idsBreak } from '@libs/geo-info/id';
 import { distance } from '@libs/geom/distance';
 import { vecAdd, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm, vecAng2, vecSetLen } from '@libs/geom/vectors';
-import { checkIDs, checkArgTypes, IDcheckObj, TypeCheckObj } from '../_check_args';
 import uscore from 'underscore';
 import { min, max } from '@assets/core/inline/_math';
 import { arrMakeFlat, arrIdxRem, getArrDepth2 } from '@assets/libs/util/arrs';
@@ -60,9 +61,9 @@ export function Nearest(__model__: GIModel,
     let target_ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
         source_ents_arrs = checkIDs(fn_name, 'origins', source,
-            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
         target_ents_arrs = checkIDs(fn_name, 'destinations', target,
-            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
     } else {
         // source_ents_arrs = splitIDs(fn_name, 'origins', source,
         //     [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
@@ -370,11 +371,11 @@ export function Raytrace(__model__: GIModel, rays: TRay|TRay[]|TRay[][],
     const fn_name = 'analyze.Raytrace';
     let ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
-        checkArgTypes(fn_name, 'rays', rays, [TypeCheckObj.isRay, TypeCheckObj.isRayList, TypeCheckObj.isRayListOfList]);
+        checkArgs(fn_name, 'rays', rays, [ArgCh.isRay, ArgCh.isRayL, ArgCh.isRayLL]);
         ents_arrs = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList],
+            [IdCh.isId, IdCh.isIdL],
             [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-        checkArgTypes(fn_name, 'dist', dist, [TypeCheckObj.isNumber, TypeCheckObj.isNumberList]);
+        checkArgs(fn_name, 'dist', dist, [ArgCh.isNum, ArgCh.isNumL]);
         if (Array.isArray(dist)) {
             if (dist.length !== 2) { throw new Error('If "dist" is a list, it must have a length of two: [min_dist, max_dist].'); }
             if (dist[0] >= dist[1]) { throw new Error('If "dist" is a list, the "min_dist" must be less than the "max_dist": [min_dist, max_dist].'); }
@@ -510,7 +511,7 @@ export function Solar(__model__: GIModel, origins: TPlane[], detail: number,
     let north: Txy = [0, 1];
     if (__model__.debug) {
         ents_arrs = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList],
+            [IdCh.isId, IdCh.isIdL],
             [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         if (!__model__.attribs.query.hasModelAttrib('geolocation')) {
             throw new Error('analyze.Solar: geolocation model attribute is missing, \
@@ -824,11 +825,11 @@ export function ShortestPath(__model__: GIModel, source: TId|TId[]|TId[][][], ta
     let ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
         source_ents_arrs = checkIDs(fn_name, 'origins', source,
-            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
         target_ents_arrs = checkIDs(fn_name, 'destinations', target,
-            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
         ents_arrs = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
     } else {
         // source_ents_arrs = splitIDs(fn_name, 'origins', source,
         //     [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
@@ -1100,11 +1101,11 @@ export function ClosestPath(__model__: GIModel, source: TId|TId[]|TId[][][], tar
     let ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
         source_ents_arrs = checkIDs(fn_name, 'origins', source,
-            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
         target_ents_arrs = checkIDs(fn_name, 'destinations', target,
-            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
         ents_arrs = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
     } else {
         // source_ents_arrs = splitIDs(fn_name, 'origins', source,
         //     [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
@@ -1469,10 +1470,10 @@ export function CentralityDeg(__model__: GIModel, source: TId|TId[]|TId[][][],
     if (__model__.debug) {
         if (source.length > 0) {
             source_ents_arrs = checkIDs(fn_name, 'source', source,
-                [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+                [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
         }
         ents_arrs = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
     } else {
         // if (source.length > 0) {
         //     source_ents_arrs = splitIDs(fn_name, 'source', source,
@@ -1555,10 +1556,10 @@ export function CentralityClo(__model__: GIModel, source: TId|TId[]|TId[][][],
     if (__model__.debug) {
         if (source.length > 0) {
             source_ents_arrs = checkIDs(fn_name, 'source', source,
-                [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+                [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
         }
         ents_arrs = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
     } else {
         // if (source.length > 0) {
         //     source_ents_arrs = splitIDs(fn_name, 'source', source,
@@ -1622,10 +1623,10 @@ export function CentralityBtw(__model__: GIModel, source: TId|TId[]|TId[][][],
     if (__model__.debug) {
         if (source.length > 0) {
             source_ents_arrs = checkIDs(fn_name, 'source', source,
-                [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+                [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
         }
         ents_arrs = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
     } else {
         // if (source.length > 0) {
         //     source_ents_arrs = splitIDs(fn_name, 'source', source,

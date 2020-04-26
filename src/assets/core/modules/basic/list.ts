@@ -9,13 +9,25 @@
 /**
  *
  */
+import { checkArgs, ArgCh } from '../_check_args';
 
-import { checkArgTypes, TypeCheckObj } from '../_check_args';
 import { idsBreak } from '@libs/geo-info/id';
 import { TEntTypeIdx } from '@libs/geo-info/common';
 
 
 // ================================================================================================
+export enum _EAddMethod {
+    TO_START = 'to_start',
+    TO_END = 'to_end',
+    EXTEND_START = 'extend_start',
+    EXTEND_END = 'extend_end',
+    SORTED_ALPHA = 'alpha_descending',
+    SORTED_REV_ALPHA = 'alpha_ascending',
+    SORTED_NUM = 'numeric_descending',
+    SORTED_REV_NUM = 'numeric_ascending',
+    SORTED_ID = 'ID_descending',
+    SORTED_REV_ID = 'ID_ascending'
+}
 /**
  * Adds an item to a list.
  *
@@ -35,8 +47,8 @@ import { TEntTypeIdx } from '@libs/geo-info/common';
 export function Add(list: any[], item: any|any[], method: _EAddMethod): void {
     // --- Error Check ---
     const fn_name = 'list.Add';
-    checkArgTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
-    checkArgTypes(fn_name, 'value', item, [TypeCheckObj.isAny]);
+    checkArgs(fn_name, 'list', list, [ArgCh.isList]);
+    checkArgs(fn_name, 'value', item, [ArgCh.isAny]);
     // --- Error Check ---
     let str_value: string;
     switch (method) {
@@ -112,23 +124,18 @@ export function Add(list: any[], item: any|any[], method: _EAddMethod): void {
             break;
     }
 }
-export enum _EAddMethod {
-    TO_START = 'to_start',
-    TO_END = 'to_end',
-    EXTEND_START = 'extend_start',
-    EXTEND_END = 'extend_end',
-    SORTED_ALPHA = 'alpha_descending',
-    SORTED_REV_ALPHA = 'alpha_ascending',
-    SORTED_NUM = 'numeric_descending',
-    SORTED_REV_NUM = 'numeric_ascending',
-    SORTED_ID = 'ID_descending',
-    SORTED_REV_ID = 'ID_ascending'
-}
 // ================================================================================================
+export enum _ERemoveMethod {
+    REMOVE_INDEX = 'index',
+    REMOVE_FIRST_VALUE = 'first_value',
+    REMOVE_LAST_VALUE = 'last_value',
+    REMOVE_ALL_VALUES = 'all_values'
+}
 /**
  * Removes items in a list.
  * ~
- * If @param method is set to 'index', then @param item should be the index of the item to be replaced. Negative indexes are allowed.
+ * If @param method is set to 'index', then @param item should be the index of the item to be replaced.
+ * Negative indexes are allowed.
  * If @param method is not set to 'index', then @param item should be the value.
  *
  * @param list The list in which to remove items
@@ -139,8 +146,8 @@ export enum _EAddMethod {
 export function Remove(list: any[], item: any, method: _ERemoveMethod): void {
     // --- Error Check ---
     const fn_name = 'list.Remove';
-    checkArgTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
-    checkArgTypes(fn_name, 'item', item, [TypeCheckObj.isAny]);
+    checkArgs(fn_name, 'list', list, [ArgCh.isList]);
+    checkArgs(fn_name, 'item', item, [ArgCh.isAny]);
     // --- Error Check ---
     let index: number;
     switch (method) {
@@ -171,14 +178,13 @@ export function Remove(list: any[], item: any, method: _ERemoveMethod): void {
             throw new Error('list.Remove: Remove method not recognised.');
     }
 }
-export enum _ERemoveMethod {
-    REMOVE_INDEX = 'index',
-    REMOVE_FIRST_VALUE = 'first_value',
-    REMOVE_LAST_VALUE = 'last_value',
-    REMOVE_ALL_VALUES = 'all_values'
-}
 // ================================================================================================
-
+export enum _EReplaceMethod {
+    REPLACE_INDEX = 'index',
+    REPLACE_FIRST_VALUE = 'first_value',
+    REPLACE_LAST_VALUE = 'last_value',
+    REPLACE_ALL_VALUES = 'all_values'
+}
 /**
  * Replaces items in a list.
  * ~
@@ -194,9 +200,9 @@ export enum _ERemoveMethod {
 export function Replace(list: any[], old_item: any, new_item: any, method: _EReplaceMethod): void {
     // --- Error Check ---
     const fn_name = 'list.Replace';
-    checkArgTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
-    checkArgTypes(fn_name, 'item', old_item, [TypeCheckObj.isAny]);
-    checkArgTypes(fn_name, 'new_value', new_item, [TypeCheckObj.isAny]);
+    checkArgs(fn_name, 'list', list, [ArgCh.isList]);
+    checkArgs(fn_name, 'item', old_item, [ArgCh.isAny]);
+    checkArgs(fn_name, 'new_value', new_item, [ArgCh.isAny]);
     // --- Error Check ---
     let index: number;
     switch (method) {
@@ -226,12 +232,6 @@ export function Replace(list: any[], old_item: any, new_item: any, method: _ERep
             throw new Error('list.Replace: Replace method not recognised.');
     }
 }
-export enum _EReplaceMethod {
-    REPLACE_INDEX = 'index',
-    REPLACE_FIRST_VALUE = 'first_value',
-    REPLACE_LAST_VALUE = 'last_value',
-    REPLACE_ALL_VALUES = 'all_values'
-}
 // ================================================================================================
 /**
  * Sorts an list, based on the values of the items in the list.
@@ -251,7 +251,7 @@ export enum _EReplaceMethod {
  */
 export function Sort(list: any[], method: _ESortMethod): void {
     // --- Error Check ---
-    checkArgTypes('list.Sort', 'list', list, [TypeCheckObj.isList]);
+    checkArgs('list.Sort', 'list', list, [ArgCh.isList]);
     // --- Error Check ---
     _sort(list, method);
 }
@@ -331,10 +331,10 @@ function _sort(list: any[], method: _ESortMethod): void {
 export function Splice(list: any[], index: number, num_to_remove: number, items_to_insert: any[]): void {
     // --- Error Check ---
     const fn_name = 'list.Splice';
-    checkArgTypes(fn_name, 'list', list, [TypeCheckObj.isList]);
-    checkArgTypes(fn_name, 'index', index, [TypeCheckObj.isInt]);
-    checkArgTypes(fn_name, 'num_to_remove', num_to_remove, [TypeCheckObj.isInt]);
-    checkArgTypes(fn_name, 'values_to_add', items_to_insert, [TypeCheckObj.isList]);
+    checkArgs(fn_name, 'list', list, [ArgCh.isList]);
+    checkArgs(fn_name, 'index', index, [ArgCh.isInt]);
+    checkArgs(fn_name, 'num_to_remove', num_to_remove, [ArgCh.isInt]);
+    checkArgs(fn_name, 'values_to_add', items_to_insert, [ArgCh.isList]);
     // --- Error Check ---
 
     // avoid the spread operator

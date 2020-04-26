@@ -5,15 +5,16 @@
 /**
  *
  */
+import { checkIDs, IdCh } from '../_check_ids';
+import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, TEntTypeIdx, EFilterOperatorTypes } from '@libs/geo-info/common';
 import { isPoint, isPline, isPgon, isColl, idsMake, getArrDepth, isEmptyArr, idsBreak } from '@libs/geo-info/id';
 import { __merge__} from '../_model';
 import { _model } from '..';
-import { checkArgTypes, checkIDs, IDcheckObj, TypeCheckObj } from '../_check_args';
 import { arrMakeFlat } from '@libs/util/arrs';
- 
+
 // ================================================================================================
 /**
  * Adds one or more new collections to the model.
@@ -36,9 +37,9 @@ export function Create(__model__: GIModel, entities: TId|TId[]|TId[][], name: st
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDListOfLists],
+            [IdCh.isId, IdCh.isIdL, IdCh.isIdLL],
             [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-        checkArgTypes(fn_name, 'name', name, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
+        checkArgs(fn_name, 'name', name, [ArgCh.isStr, ArgCh.isStrL]);
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,
         //     [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list],
@@ -118,7 +119,7 @@ export function Get(__model__: GIModel, names: string|string[]): TId|TId[] {
     // --- Error Check ---
     if (__model__.debug) {
         const fn_name = 'collection.Get';
-        checkArgTypes(fn_name, 'names', names, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
+        checkArgs(fn_name, 'names', names, [ArgCh.isStr, ArgCh.isStrL]);
     }
     // --- Error Check ---
     const colls_i: number[] = _get(__model__, names);
@@ -174,9 +175,9 @@ export function Add(__model__: GIModel, coll: TId, entities: TId|TId[]): void {
         let coll_arr;
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
-            coll_arr = checkIDs(fn_name, 'coll', coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
+            coll_arr = checkIDs(fn_name, 'coll', coll, [IdCh.isId], [EEntType.COLL]) as TEntTypeIdx;
             ents_arr = checkIDs(fn_name, 'entities', entities,
-                [IDcheckObj.isID, IDcheckObj.isIDList],
+                [IdCh.isId, IdCh.isIdL],
                 [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         } else {
             // coll_arr = splitIDs(fn_name, 'coll', coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
@@ -234,10 +235,10 @@ export function Remove(__model__: GIModel, coll: TId, entities: TId|TId[]): void
         if (entities !== null) {
             entities = arrMakeFlat(entities) as TId[];
             ents_arr = checkIDs(fn_name, 'entities', entities,
-                [IDcheckObj.isID, IDcheckObj.isIDList],
+                [IdCh.isId, IdCh.isIdL],
                 [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         }
-        coll_arr = checkIDs(fn_name, 'coll', coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
+        coll_arr = checkIDs(fn_name, 'coll', coll, [IdCh.isId], [EEntType.COLL]) as TEntTypeIdx;
     } else {
         if (entities !== null) {
             entities = arrMakeFlat(entities) as TId[];
@@ -308,7 +309,7 @@ export function Delete(__model__: GIModel, coll: TId|TId[]): void {
     const fn_name = 'collection.Delete';
     let colls_arrs;
     if (__model__.debug) {
-        colls_arrs = checkIDs(fn_name, 'coll', coll, [IDcheckObj.isIDList], [EEntType.COLL]) as TEntTypeIdx[];
+        colls_arrs = checkIDs(fn_name, 'coll', coll, [IdCh.isIdL], [EEntType.COLL]) as TEntTypeIdx[];
     } else {
         // colls_arrs = splitIDs(fn_name, 'coll', coll, [IDcheckObj.isIDList], [EEntType.COLL]) as TEntTypeIdx[];
         colls_arrs = idsBreak(coll) as TEntTypeIdx[];

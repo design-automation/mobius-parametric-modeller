@@ -441,6 +441,7 @@ function _vector(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): Txyz
             const posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, index);
             const start: Txyz = __model__.attribs.query.getPosiCoords(posis_i[0]);
             const end: Txyz = __model__.attribs.query.getPosiCoords(posis_i[1]);
+            // console.log(">>>>", start, end);
             return vecSub(end, start);
         } else {
             const edges_i: number[] = __model__.geom.nav.navAnyToEdge(ent_type, index);

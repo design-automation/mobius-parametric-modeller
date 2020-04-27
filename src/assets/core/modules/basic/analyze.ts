@@ -14,7 +14,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, Txy, XYPLANE, EAttribDataTypeStrs } from '@libs/geo-info/common';
 import { getArrDepth, idsMakeFromIndicies, idsMake, idsBreak } from '@libs/geo-info/id';
 import { distance } from '@libs/geom/distance';
-import { vecAdd, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm, vecAng2, vecSetLen } from '@libs/geom/vectors';
+import { vecAdd, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm, vecAng2, vecSetLen, vecRot } from '@libs/geom/vectors';
 import uscore from 'underscore';
 import { min, max } from '@assets/core/inline/_math';
 import { arrMakeFlat, arrIdxRem, getArrDepth2 } from '@assets/libs/util/arrs';
@@ -339,11 +339,13 @@ function _createMeshBufTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]): THREE.
 interface TRaytraceResult {
     hit_count?: number;
     miss_count?: number;
+    total_dist?: number;
     min_dist?: number;
     avg_dist?: number;
     max_dist?: number;
+    area_ratio?: number;
     distances?: number[];
-    faces?: TId[];
+    hit_pgons?: TId[];
     intersections?: Txyz[];
 }
 export enum _ERaytraceMethod {
@@ -432,20 +434,20 @@ function _raytrace(origins_tjs: THREE.Vector3[], dirs_tjs: THREE.Vector3[], mesh
     for (let i = 0; i < origins_tjs.length; i++) {
         // get the origin and direction
         const origin_tjs = origins_tjs[i];
-        const direction_tjs = dirs_tjs[i];
+        const dir_tjs = dirs_tjs[i];
         // shoot
-        const ray_tjs: THREE.Raycaster = new THREE.Raycaster(origin_tjs, direction_tjs, limits[0], limits[1]);
+        const ray_tjs: THREE.Raycaster = new THREE.Raycaster(origin_tjs, dir_tjs, limits[0], limits[1]);
         const isects: THREE.Intersection[] = ray_tjs.intersectObject(mesh[0], false);
-        result_dists.push(limits[1]);
         // get the result
         if (isects.length === 0) {
+            result_dists.push(limits[1]);
             miss_count += 1;
             if (method === _ERaytraceMethod.ALL || method === _ERaytraceMethod.ENTITIES) {
                 result_ents.push( null );
             }
             if (method === _ERaytraceMethod.ALL || method === _ERaytraceMethod.INTERSECTIONS) {
                 const origin: Txyz = origin_tjs.toArray() as Txyz;
-                const dir: Txyz = direction_tjs.toArray() as Txyz;
+                const dir: Txyz = dir_tjs.toArray() as Txyz;
                 result_isects.push(vecAdd(origin, vecSetLen(dir, limits[1])));
             }
         } else {
@@ -464,21 +466,242 @@ function _raytrace(origins_tjs: THREE.Vector3[], dirs_tjs: THREE.Vector3[], mesh
     if ((method === _ERaytraceMethod.ALL || method === _ERaytraceMethod.STATS) && result_dists.length > 0) {
         result.hit_count = hit_count;
         result.miss_count = miss_count;
+        result.total_dist = Mathjs.sum(result_dists);
         result.min_dist = min(result_dists);
-        result.avg_dist = Mathjs.sum(result_dists) / result_dists.length;
+        result.avg_dist = result.total_dist / result_dists.length;
         result.max_dist = max(result_dists);
+        result.area_ratio = result.total_dist / (result_dists.length * limits[1]);
     }
     if (method === _ERaytraceMethod.ALL || method === _ERaytraceMethod.DISTANCES) {
         result.distances = result_dists;
     }
     if (method === _ERaytraceMethod.ALL || method === _ERaytraceMethod.ENTITIES) {
-        result.faces = result_ents;
+        result.hit_pgons = result_ents;
     }
     if (method === _ERaytraceMethod.ALL || method === _ERaytraceMethod.INTERSECTIONS) {
         result.intersections = result_isects;
     }
     return result;
 }
+// ================================================================================================
+interface TIsovistResult {
+    ps: TId[];
+    avg_dist?: number[];
+    min_dist?: number[];
+    max_dist?: number[];
+    area?: number[];
+    perimeter?: number[];
+    circularity?: number[];
+    compactness?: number[];
+    cluster?: number[];
+}
+/**
+ * Calculates an approximation of the isovist for a set of positions.
+ * ~
+ * Returns a dictionary containing different isovist metrics.
+ * ~
+ * - 'avg_dist': The average distance from origin to the perimeter.
+ * - 'min_dist': The minimum distance from the origin to the perimeter.
+ * - 'max_dist': The minimum distance from the origin to the perimeter.
+ * - 'area': The area of the isovist.
+ * - 'perimeter': The perimeter of the isovist.
+ * - 'circularity': The ratio of the square of the perimeter to area (Davis and Benedikt, 1979).
+ * - 'compactness': The ratio of average distance to the maximum distance (Michael Batty, 2001).
+ * - 'cluster': The ratio of the radius of an idealized circle with the actual area of the
+ * isovist to the radius of an idealized circle with the actual perimeter of the circle (Michael Batty, 2001).
+ * ~
+ * Isovists are calculated by raycasting in a radial pattern.
+ * The 'detail' parameter defines how many rays to generate.
+ * More rays will result in greater accuracy, but with will be slower to calculate.
+ * ~
+ * @param __model__
+ * @param origins A list of positions, or entities from which positions can be extracted.
+ * @param entities The obstructions,polygons, or collections of faces or polygons.
+ * @param dist The maximum radius of the isovist.
+ * @param detail The number of rays to generate when calculating isovists.
+ */
+export function Isovist(__model__: GIModel, origins: TId|TId[]|TId[][],
+        entities: TId|TId[]|TId[][], dist: number, detail: number): TIsovistResult {
+    origins = arrMakeFlat(origins) as TId[];
+    entities = arrMakeFlat(entities) as TId[];
+    // --- Error Check ---
+    const fn_name = 'analyze.Isovist';
+    let origin_ents_arrs: TEntTypeIdx[];
+    let ents_arrs: TEntTypeIdx[];
+    if (__model__.debug) {
+        origin_ents_arrs = checkIDs(fn_name, 'origins', origins,
+            [IdCh.isIdL], null) as TEntTypeIdx[];
+        ents_arrs = checkIDs(fn_name, 'entities', entities,
+            [IdCh.isIdL],
+            [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+        checkArgs(fn_name, 'dist', dist, [ArgCh.isNum, ArgCh.isNumL]);
+        if (Array.isArray(dist)) {
+            if (dist.length !== 2) { throw new Error('If "dist" is a list, it must have a length of two: [min_dist, max_dist].'); }
+            if (dist[0] >= dist[1]) { throw new Error('If "dist" is a list, the "min_dist" must be less than the "max_dist": [min_dist, max_dist].'); }
+        }
+    } else {
+        origin_ents_arrs = idsBreak(origins) as TEntTypeIdx[];
+        ents_arrs = idsBreak(entities) as TEntTypeIdx[];
+    }
+    // --- Error Check ---
+    // create tjs origins
+    const origin_posis_i: number[] = _getUniquePosis(__model__, origin_ents_arrs);
+    const origin_xyzs: Txyz[] = [];
+    const origins_tjs: THREE.Vector3[] = [];
+    for (const origin_posi_i of origin_posis_i) {
+        const origin_xyz = vecAdd(__model__.attribs.query.getPosiCoords(origin_posi_i), [0, 0, 0.1]); // small lift
+        origin_xyzs.push(origin_xyz);
+        const origin_tjs: THREE.Vector3 = new THREE.Vector3(origin_xyz[0], origin_xyz[1], origin_xyz[2]);
+        origins_tjs.push(origin_tjs);
+    }
+    // create tjs directions
+    const dirs_xyzs: Txyz[] = [];
+    const dirs_tjs: THREE.Vector3[] = [];
+    const vec: Txyz = [1, 0, 0];
+    for (let i = 0; i < detail; i++) {
+        const dir_xyz = vecRot(vec, [0, 0, 1], i * (Math.PI * 2) / detail);
+        dirs_xyzs.push(vecSetLen(dir_xyz, dist));
+        const dir_tjs: THREE.Vector3 = new THREE.Vector3(dir_xyz[0], dir_xyz[1], dir_xyz[2]);
+        dirs_tjs.push(dir_tjs);
+    }
+    // calc max perim and area
+    const ang = (2 * Math.PI) / detail;
+    const opp = dist * Math.sin(ang);
+    const max_perim = detail * 2 * opp;
+    const max_area = detail * dist * Math.cos(ang) * opp;
+    // create mesh
+    const mesh: [THREE.Mesh, number[]] = _createMeshTjs(__model__, ents_arrs);
+    // create data structure
+    const result: TIsovistResult = { ps: idsMakeFromIndicies(EEntType.POSI, origin_posis_i) as TId[] };
+    result.avg_dist = [];
+    result.min_dist = [];
+    result.max_dist = [];
+    result.area = [];
+    result.perimeter = [];
+    result.circularity = [];
+    result.compactness = [];
+    result.cluster = [];
+    // shoot rays
+    for (let i = 0; i < origins_tjs.length; i++) {
+        const origin_tjs: THREE.Vector3 = origins_tjs[i];
+        const result_dists: number[] = [];
+        const result_isects: Txyz[] = [];
+        for (let j = 0; j < dirs_tjs.length; j++) {
+            const dir_tjs: THREE.Vector3 = dirs_tjs[j];
+            const ray_tjs: THREE.Raycaster = new THREE.Raycaster(origin_tjs, dir_tjs, 0, dist);
+            const isects: THREE.Intersection[] = ray_tjs.intersectObject(mesh[0], false);
+            // get the result
+            if (isects.length === 0) {
+                result_dists.push(dist);
+                result_isects.push(vecAdd(origin_xyzs[i], dirs_xyzs[j]));
+            } else {
+                result_dists.push(isects[0]['distance']);
+                const isect_tjs: THREE.Vector3 = isects[0].point;
+                result_isects.push([isect_tjs.x, isect_tjs.y, isect_tjs.z]);
+            }
+        }
+        // calc the perimeter and area
+        let perim = 0;
+        let area = 0;
+        for (let j = 0; j < detail; j++) {
+            const j2 = j === detail - 1 ? 0 : j + 1;
+            // calc perim
+            const c = distance(result_isects[j], result_isects[j2]);
+            perim += c;
+            // calc area using Heron's formula
+            const a = result_dists[j];
+            const b = result_dists[j2];
+            const s = (a + b + c) / 2;
+            const tri_area = Math.sqrt(s * (s - a) * (s - b) * (s - c));
+            area += tri_area;
+        }
+        const total_dist = Mathjs.sum(result_dists);
+        const avg_dist = total_dist / result_dists.length;
+        const min_dist = min(result_dists);
+        const max_dist = max(result_dists);
+        // save the data
+        result.avg_dist.push( avg_dist );
+        result.min_dist.push( min_dist );
+        result.max_dist.push( max_dist );
+        result.area.push( area / max_area );
+        result.perimeter.push( perim / max_perim );
+        result.circularity.push( (perim * perim) / area );
+        result.compactness.push( avg_dist / max_dist );
+        result.cluster.push( Math.sqrt(area / Math.PI) / (perim / (2 * Math.PI)) );
+    }
+    // cleanup
+    mesh[0].geometry.dispose();
+    (mesh[0].material as THREE.Material).dispose();
+    // return the results
+    return result;
+    // // get the points on the isovist plane
+    // const isects_xyz: Txyz[] = [];
+    // const pln_height = 1.6; // TODO
+    // const pln: TPlane = [[0, 0, pln_height], [1, 0, 0], [0, 1, 0]];
+    // for (const [ent_type, ent_i] of ents_arrs) {
+    //     const ent_edges_i: number[] = __model__.geom.nav.navAnyToEdge(ent_type, ent_i);
+    //     for (const ent_edge_i of ent_edges_i) {
+    //         const edge_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.EDGE, ent_edge_i);
+    //         const start: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[0]);
+    //         const end: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[1]);
+    //         const edge_ray: TRay = [start, vecFromTo(start, end)];
+    //         const isect: Txyz = intersect(edge_ray, pln);
+    //         if (isect !== null) { isects_xyz.push(isect); }
+    //     }
+    // }
+    // // get the rays
+    // const kd_result = _nearest2(__model__, origin_xyzs, isects_xyz, dist);
+    // const rays_ang: [TRay, number][] = [];
+    // for (let i = 0; i < origin_xyzs.length; i++) {
+    //     const origin_xyz: Txyz = origin_xyzs[i];
+    //     const nns: Txyz[] = kd_result[i].map(j => isects_xyz[j]);
+    //     for (const nn_xyz of nns) {
+    //         const dir: Txyz = vecFromTo(origin_xyz, nn_xyz);
+    //         vecAng2()
+    //     }
+
+    // }
+}
+// function _nearest2(__model__: GIModel, source_xyzs: Txyz[], target_xyzs: Txyz[],
+//         dist: number): number[][] {
+//     // create a list of all xyz
+//     const all_xyzs: Txyz[] = [];
+//     for (const source_xyz of source_xyzs) { all_xyzs.push(source_xyz); }
+//     for (const target_xyz of target_xyzs) { all_xyzs.push(target_xyz); }
+//     // get dist and num_neighbours
+//     if (dist === null) { dist = Infinity; }
+//     const num_neighbors: number = target_xyzs.length;
+//     // find neighbor
+//     const typed_positions = new Float32Array( all_xyzs.length * 4 );
+//     const typed_buff = new THREE.BufferGeometry();
+//     typed_buff.setAttribute( 'position', new THREE.BufferAttribute( typed_positions, 4 ) );
+//     for (let i = 0; i < all_xyzs.length; i++) {
+//         const xyz: Txyz = all_xyzs[i];
+//         typed_positions[ i * 4 + 0 ] = xyz[0];
+//         typed_positions[ i * 4 + 1 ] = xyz[1];
+//         typed_positions[ i * 4 + 2 ] = xyz[2];
+//         typed_positions[ i * 4 + 3 ] = i;
+//     }
+//     // calculate the kdtree
+//     const kdtree = new TypedArrayUtils.Kdtree( typed_positions, _fuseDistSq, 4 );
+//     // calculate the dist squared
+//     const dist_sq: number = dist * dist;
+//     // create a neighbors list
+//     const result: number[][] = [];
+//     for (let i = 0; i < source_xyzs.length; i++) {
+//         // TODO at the moment is gets all posis since no distinction is made between source and traget
+//         // TODO kdtree could be optimised
+//         result[i] = [];
+//         const nn = kdtree.nearest( source_xyzs[i] as any, all_xyzs.length, dist_sq );
+//         for (const a_nn of nn) {
+//             const j: number = a_nn[0].obj[3];
+//             if (j >= source_xyzs.length) {
+//                 result[i].push(i - source_xyzs.length); // this is the index to target_xyzs
+//             }
+//         }
+//     }
+//     return result;
+// }
 // ================================================================================================
 /**
  * Calculate solar factor

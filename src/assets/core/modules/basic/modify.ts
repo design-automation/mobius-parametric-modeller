@@ -642,7 +642,10 @@ function _weld(__model__: GIModel, ents_arr: TEntTypeIdx[], method: _EWeldMethod
 /**
  * Fuse positions that lie within a certain tolerance of one another.
  * New positions will be created.
- * If the  positions that are fuse have vertices attached, then the vertices will become welded.
+ * If the positions that are fuse have vertices attached, then the vertices will become welded.
+ * ~
+ * In some cases, if edges are shorter than the tolerance, this can result in edges being deleted.
+ * The deletion of edges may also result in polylines or polygpns being deleted.
  * ~
  * @param __model__
  * @param entities Entities, a list of positions, or entities from which positions can be extracted.

@@ -134,8 +134,28 @@ export class GIGeomModify {
     /**
      * Replace the position of a vertex with a new position.
      * ~
+     * If the result is an edge with two same posis, then teh vertex will be deleted.
+     * ~
+     * Called by modify.Fuse()
      */
     public replaceVertPosis(vert_i: number, new_posi_i: number): void {
+        // special case
+        // check if this is an edge, and if the edge will get two same posis
+        // in that case, we will delete the  vertex rather than replace it
+        const edges_i: number[] = this._geom.nav.navVertToEdge(vert_i);
+        if (edges_i) {
+            for (const edge_i of edges_i) {
+                const edge_posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
+                if (edge_posis_i[0] === new_posi_i || edge_posis_i[1]  === new_posi_i) {
+                    console.log(">>> del vertex ", vert_i);
+                    const wire_i: number[] = this._geom.nav.navAnyToWire(EEntType.VERT, vert_i);
+                    this._geom.del_vert.delVert(vert_i);
+                    
+                    return;
+                }
+            }
+        }
+        // normal case
         const old_posi_i: number = this._geom.nav.navVertToPosi(vert_i);
         // set the down array
         this._geom_arrays.dn_verts_posis[vert_i] = new_posi_i;

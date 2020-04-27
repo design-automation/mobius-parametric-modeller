@@ -449,6 +449,7 @@ export function ModelCheck(__model__: GIModel): string {
         console.log(__model__);
         return String(check);
     }
+    console.log(__model__);
     return 'No internal inconsistencies have been found.';
 }
 // ================================================================================================

@@ -138,9 +138,11 @@ function _getFrom(__model__: GIModel, ent_type: EEntType, ents_arr: TEntTypeIdx[
         // get the list of entities that are found
         const found_ents_i_set: Set<number> = new Set();
         for (const ent_arr of ents_arr) {
-            const ents_i: number[] = __model__.geom.nav.navAnyToAny(ent_arr[0], ent_type, ent_arr[1]);
-            for (const ent_i of ents_i) {
-                found_ents_i_set.add(ent_i);
+            if (__model__.geom.query.entExists(ent_arr[0], ent_arr[1])) {
+                const ents_i: number[] = __model__.geom.nav.navAnyToAny(ent_arr[0], ent_type, ent_arr[1]);
+                for (const ent_i of ents_i) {
+                    found_ents_i_set.add(ent_i);
+                }
             }
         }
         // return the found ents

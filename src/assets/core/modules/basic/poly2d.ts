@@ -1059,7 +1059,7 @@ export function Stitch(__model__: GIModel, entities: TId|TId[]): TId[] {
             _knifeGetEdgeData(__model__, ent_edge_i, map_edge_i_to_posi_i, map_edge_i_to_bbox, map_posi_i_to_xyz);
         }
     }
-    // get the edges and teh data for each edge
+    // get the edges and the data for each edge
     const map_edge_i_to_isects: Map<number, [number, number][]> = new Map();
     const map_edge_i_to_edge_i: Map<number, Set<number>> = new Map();
     for (const a_edge_i of edges_i) {
@@ -1133,16 +1133,16 @@ export function Stitch(__model__: GIModel, entities: TId|TId[]): TId[] {
             }
         }
     }
-    const all_new_edges_i: number[] = [];
+    // const all_new_edges_i: number[] = [];
     for (const edge_i of map_edge_i_to_isects.keys()) {
         // isect [t, posi_i]
         const isects: [number, number][] = map_edge_i_to_isects.get(edge_i);
         isects.sort( (a, b) => a[0] - b[0] );
         const posis_i: number[] = isects.map(isect => isect[1]);
         const new_edges_i: number[] = __model__.geom.modify.insertVertsIntoWire(edge_i, posis_i);
-        for (const new_edge_i of new_edges_i) {
-            all_new_edges_i.push(new_edge_i);
-        }
+        // for (const new_edge_i of new_edges_i) {
+        //     all_new_edges_i.push(new_edge_i);
+        // }
     }
     return idsMake(new_ents_arr) as TId[];
 }

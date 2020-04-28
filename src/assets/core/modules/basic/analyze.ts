@@ -1444,6 +1444,14 @@ export function ClosestPath(__model__: GIModel, source: TId|TId[]|TId[][][], tar
             if (return_dists) {
                 path_dists.push(closest_dist);
             }
+        } else {
+            if (return_paths) {
+                edge_paths.push([]);
+                posi_paths.push([]);
+            }
+            if (return_dists) {
+                path_dists.push(1e8); // TODO, cannot pas Infinity due to JSON issues
+            }
         }
     }
     const dict: {

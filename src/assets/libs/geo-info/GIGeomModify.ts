@@ -60,15 +60,29 @@ export class GIGeomModify {
         return new_edge_i;
     }
 /**
-     * Insert a multiple vertices into an edge and updates the wire with the new edges
+     * Insert multiple vertices into an edge and updates the wire with the new edges
      * ~
      * Applies to both plines and pgons.
      * ~
      * Plines can be open or closed.
      * ~
-     * TODO Mereg this with previous method
      */
     public insertVertsIntoWire(edge_i: number, posis_i: number[]): number[] {
+        // check that there are no duplicates in the list
+        if (posis_i.length > 1) {
+            posis_i = Array.from(new Set(posis_i));
+        }
+        // check tha the posis being inserted are not already the start or end of this edge
+        const edge_posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.EDGE,  edge_i);
+        if (edge_posis_i[0] === posis_i[0]) {
+            posis_i = posis_i.slice(1);
+        }
+        if (edge_posis_i[1] === posis_i[posis_i.length - 1]) {
+            posis_i = posis_i.slice(0, posis_i.length - 1);
+        }
+        // if no more posis, then return empty list
+        if (posis_i.length === 0) { return []; }
+        // proceed to insert posis
         const wire_i: number = this._geom.nav.navEdgeToWire(edge_i);
         const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
         const end_vert_i: number = this._geom_arrays.dn_edges_verts[edge_i][1];
@@ -140,21 +154,43 @@ export class GIGeomModify {
      */
     public replaceVertPosis(vert_i: number, new_posi_i: number): void {
         // special case
-        // check if this is an edge, and if the edge will get two same posis
-        // in that case, we will delete the  vertex rather than replace it
+        // check if this is a vert for an edge
         const edges_i: number[] = this._geom.nav.navVertToEdge(vert_i);
-        if (edges_i) {
-            for (const edge_i of edges_i) {
-                const edge_posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
+        const num_edges: number = edges_i.length;
+        switch (num_edges) {
+            case 1:
+                // we must be at an edge at the start or end of an open wire
+                const edge_posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.EDGE, edges_i[0]);
                 if (edge_posis_i[0] === new_posi_i || edge_posis_i[1]  === new_posi_i) {
-                    console.log(">>> del vertex ", vert_i);
-                    const wire_i: number[] = this._geom.nav.navAnyToWire(EEntType.VERT, vert_i);
                     this._geom.del_vert.delVert(vert_i);
-                    
                     return;
                 }
-            }
+                break;
+            case 2:
+                // we must be in the middle of a wire
+                const prev_edge_i: number = edges_i[0];
+                const next_edge_i: number = edges_i[1];
+                const [a_posi_i, b1_posi_i]: [number, number] = this._geom.nav.navAnyToPosi(EEntType.EDGE, prev_edge_i) as [number, number];
+                const [b2_posi_i, c_posi_i]: [number, number] = this._geom.nav.navAnyToPosi(EEntType.EDGE, next_edge_i) as [number, number];
+                if (a_posi_i === new_posi_i && c_posi_i  === new_posi_i) {
+                    // special case where both adjacent edges both new_posi)i
+                    const [b2_vert_i, c_vert_i]: [number, number] =
+                        this._geom.nav.navEdgeToVert(next_edge_i) as [number, number];
+                    if (vert_i !== b2_vert_i) {
+                        throw new Error('Bad navigation in geometry data structure.');
+                    }
+                    this._geom.del_vert.delVert(c_vert_i);
+                    this._geom.del_vert.delVert(vert_i);
+                    return;
+                } else if (a_posi_i === new_posi_i || c_posi_i === new_posi_i) {
+                    this._geom.del_vert.delVert(vert_i);
+                    return;
+                }
+                break;
+            // default:
+            //     break;
         }
+
         // normal case
         const old_posi_i: number = this._geom.nav.navVertToPosi(vert_i);
         // set the down array

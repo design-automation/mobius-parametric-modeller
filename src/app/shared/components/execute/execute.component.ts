@@ -154,7 +154,6 @@ export class ExecuteComponent {
                     } else if (arg.value.indexOf('://') !== -1) {
                         const val = <string>(arg.value).replace(/ /g, '');
                         const result = await CodeUtils.getURLContent(val);
-                        console.log(result);
                         if (result === undefined) {
                             prod.resolvedValue = arg.value;
                         } else if (result.indexOf('HTTP Request Error') !== -1) {

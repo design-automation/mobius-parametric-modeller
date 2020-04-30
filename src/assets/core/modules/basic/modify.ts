@@ -733,7 +733,7 @@ function _fuse(__model__: GIModel, ents_arr: TEntTypeIdx[], tolerance: number): 
             for (const n_posi_i of nn[2]) {
                 const verts_i: number[] = __model__.geom.nav.navPosiToVert(n_posi_i);
                 for (const vert_i of verts_i) {
-                    __model__.geom.modify.replaceVertPosis(vert_i, new_posi_i);
+                    __model__.geom.modify.replaceVertPosi(vert_i, new_posi_i);
                 }
                 // __model__.geom.add.addPline([new_posi_i, n_posi_i], false); // temp
             }

@@ -148,11 +148,12 @@ export class GIGeomModify {
     /**
      * Replace the position of a vertex with a new position.
      * ~
-     * If the result is an edge with two same posis, then teh vertex will be deleted.
+     * If the result is an edge with two same posis, then the vertex will be deleted if del_if_invalid = true.
+     * If del_if_invalid = false, no action will be taken.
      * ~
-     * Called by modify.Fuse()
+     * Called by modify.Fuse() and poly2d.Stitch().
      */
-    public replaceVertPosis(vert_i: number, new_posi_i: number): void {
+    public replaceVertPosi(vert_i: number, new_posi_i: number, del_if_invalid: boolean = true): void {
         // special case
         // check if this is a vert for an edge
         const edges_i: number[] = this._geom.nav.navVertToEdge(vert_i);
@@ -162,7 +163,10 @@ export class GIGeomModify {
                 // we must be at an edge at the start or end of an open wire
                 const edge_posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.EDGE, edges_i[0]);
                 if (edge_posis_i[0] === new_posi_i || edge_posis_i[1]  === new_posi_i) {
-                    this._geom.del_vert.delVert(vert_i);
+                    // special case where start or end has new_posi_i
+                    if (del_if_invalid) {
+                        this._geom.del_vert.delVert(vert_i);
+                    }
                     return;
                 }
                 break;
@@ -173,17 +177,22 @@ export class GIGeomModify {
                 const [a_posi_i, b1_posi_i]: [number, number] = this._geom.nav.navAnyToPosi(EEntType.EDGE, prev_edge_i) as [number, number];
                 const [b2_posi_i, c_posi_i]: [number, number] = this._geom.nav.navAnyToPosi(EEntType.EDGE, next_edge_i) as [number, number];
                 if (a_posi_i === new_posi_i && c_posi_i  === new_posi_i) {
-                    // special case where both adjacent edges both new_posi)i
+                    // special case where both adjacent edges has new_posi_i
                     const [b2_vert_i, c_vert_i]: [number, number] =
                         this._geom.nav.navEdgeToVert(next_edge_i) as [number, number];
                     if (vert_i !== b2_vert_i) {
                         throw new Error('Bad navigation in geometry data structure.');
                     }
-                    this._geom.del_vert.delVert(c_vert_i);
-                    this._geom.del_vert.delVert(vert_i);
+                    if (del_if_invalid) {
+                        this._geom.del_vert.delVert(c_vert_i);
+                        this._geom.del_vert.delVert(vert_i);
+                    }
                     return;
                 } else if (a_posi_i === new_posi_i || c_posi_i === new_posi_i) {
-                    this._geom.del_vert.delVert(vert_i);
+                    // special case where one adjacent edges has new_posi_i
+                    if (del_if_invalid) {
+                        this._geom.del_vert.delVert(vert_i);
+                    }
                     return;
                 }
                 break;

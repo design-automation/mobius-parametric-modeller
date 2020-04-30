@@ -185,6 +185,12 @@ const geometry = [
     ['distance(c1, c2)', 'Returns the Euclidean distance between two xyzs, c1 and c2'],
     ['distance(c, r)', 'Returns the Euclidean distance between an xyz c and an infinite ray r'],
     ['distance(c, p)', 'Returns the Euclidean distance between an xyz c and an infinite plane p'],
+    ['distanceM(c1, c2)', 'Returns the Manhattan distance between two xyzs, c1 and c2'],
+    ['distanceM(c, r)', 'Returns the Manhattan distance between an xyz c and an infinite ray r'],
+    ['distanceM(c, p)', 'Returns the Manhattan distance between an xyz c and an infinite plane p'],
+    ['distanceMS(c1, c2)', 'Returns the Manhattan squared distance between two xyzs, c1 and c2'],
+    ['distanceMS(c, r)', 'Returns the Manhattan squared distance between an xyz c and an infinite ray r'],
+    ['distanceMS(c, p)', 'Returns the Manhattan squared distance between an xyz c and an infinite plane p'],
     ['intersect(r1, r2)', 'Returns the intersection xyz between two infinite rays'],
     ['intersect(r1, r2, m)', 'Returns the intersection xyz between two rays, where ' +
         'if m=2, rays are infinite in both directions, ' +

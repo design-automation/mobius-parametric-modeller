@@ -21,6 +21,7 @@ import { vecFromTo, vecNorm, vecMult, vecAdd } from '@assets/libs/geom/vectors';
 import { xfromSourceTargetMatrix, multMatrix } from '@assets/libs/geom/matrix';
 import { Matrix4 } from 'three';
 import { _copyGeom, _copyGeomPosis } from './_common';
+import { distanceManhattan } from '@assets/libs/geom/distance';
 
 const SCALE = 1e9;
 type TPosisMap = Map<number, Map<number, number>>;
@@ -1134,16 +1135,43 @@ export function Stitch(__model__: GIModel, entities: TId|TId[]): TId[] {
         }
     }
     // const all_new_edges_i: number[] = [];
+    const all_new_edges_i: number[] = [];
     for (const edge_i of map_edge_i_to_isects.keys()) {
         // isect [t, posi_i]
         const isects: [number, number][] = map_edge_i_to_isects.get(edge_i);
         isects.sort( (a, b) => a[0] - b[0] );
         const posis_i: number[] = isects.map(isect => isect[1]);
         const new_edges_i: number[] = __model__.geom.modify.insertVertsIntoWire(edge_i, posis_i);
-        // for (const new_edge_i of new_edges_i) {
-        //     all_new_edges_i.push(new_edge_i);
-        // }
+        for (const new_edge_i of new_edges_i) {
+            all_new_edges_i.push(new_edge_i);
+        }
     }
+    // check if any new edges are zero length
+    const del_posis_i: number[] = [];
+    for (const edge_i of all_new_edges_i) {
+        const posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
+        const xyzs: Txyz[] = posis_i.map(posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+        const dist: number = distanceManhattan(xyzs[0], xyzs[1]);
+        if (dist === 0) {
+            // we are going to del this posi
+            const del_posi_i: number = posis_i[0];
+            // get the vert of this edge
+            const verts_i: number[] = __model__.geom.nav.navEdgeToVert(edge_i);
+            const del_vert_i: number = verts_i[0];
+            // we need to make sure we dont disconnect any edges in the process
+            // so we get all the verts connected to this edge
+            // for each other edge, we will replace the posi for the vert that would have been deleted
+            // the posi will be posis_i[1]
+            const replc_verts_i: number[] = __model__.geom.nav.navPosiToVert(del_posi_i);
+            for (const replc_vert_i of replc_verts_i) {
+                if (replc_vert_i === del_vert_i) { continue; }
+                __model__.geom.modify.replaceVertPosi(replc_vert_i, posis_i[1], false); // false = do nothing if edge becomes invalid
+            }
+            del_posis_i.push(posis_i[0]);
+        }
+    }
+    __model__.geom.del.delPosis(del_posis_i);
+    // return
     return idsMake(new_ents_arr) as TId[];
 }
 function _knifeGetEdgeData(__model__: GIModel, edge_i: number,

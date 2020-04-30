@@ -476,7 +476,7 @@ export class CodeUtils {
         const p = new Promise((resolve) => {
             fetch(url).then(res => {
                 if (!res.ok) {
-                    resolve('HTTP Request Error: request file timeout from url ' + url);
+                    resolve('HTTP Request Error: Unable to retrieve file from ' + url);
                     return '';
                 }
                 return res.text();

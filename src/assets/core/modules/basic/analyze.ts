@@ -18,13 +18,14 @@ import uscore from 'underscore';
 import { min, max } from '@assets/core/inline/_math';
 import { arrMakeFlat, arrIdxRem, getArrDepth2, arrMake2Deep } from '@assets/libs/util/arrs';
 import { degToRad } from '@assets/core/inline/_conversion';
-import { xfromSourceTargetMatrix, multMatrix } from '@libs/geom/matrix';
+import { multMatrix } from '@libs/geom/matrix';
 import { XAXIS, YAXIS, ZAXIS } from '@assets/libs/geom/constants';
 import cytoscape from 'cytoscape';
 import * as THREE from 'three';
 import { TypedArrayUtils } from 'three/examples/jsm/utils/TypedArrayUtils.js';
 import * as Mathjs from 'mathjs';
 import { createSingleMeshTjs } from '@assets/libs/geom/mesh';
+import { isRay, isXYZ, isPlane } from '@assets/libs/geo-info/virtual';
 
 // ================================================================================================
 interface TRaytraceResult {
@@ -246,7 +247,7 @@ interface TIsovistResult {
  * @param radius The maximum radius of the isovist.
  * @param num_rays The number of rays to generate when calculating isovists.
  */
-export function Isovist(__model__: GIModel, origins: Txyz|Txyz[],
+export function Isovist(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[],
         entities: TId|TId[]|TId[][], radius: number, num_rays: number): TIsovistResult {
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
@@ -254,7 +255,7 @@ export function Isovist(__model__: GIModel, origins: Txyz|Txyz[],
     // let origin_ents_arrs: TEntTypeIdx[];
     let ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
-        checkArgs(fn_name, 'origins', origins, [ArgCh.isXYZ, ArgCh.isXYZL]);
+        checkArgs(fn_name, 'origins', origins, [ArgCh.isXYZL, ArgCh.isRayL, ArgCh.isPlnL]);
         ents_arrs = checkIDs(fn_name, 'entities', entities,
             [IdCh.isIdL],
             [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
@@ -270,12 +271,7 @@ export function Isovist(__model__: GIModel, origins: Txyz|Txyz[],
     // --- Error Check ---
     // create tjs origins
     const origin_xyzs: Txyz[] = arrMake2Deep(origins);
-    const origins_tjs: THREE.Vector3[] = [];
-    for (const origin_xyz of origin_xyzs) {
-        // TODO Should we lift coords by 0.1 ???
-        const origin_tjs: THREE.Vector3 = new THREE.Vector3(origin_xyz[0], origin_xyz[1], origin_xyz[2] + 0.1);
-        origins_tjs.push(origin_tjs);
-    }
+    const origins_tjs: THREE.Vector3[] = _isovistOriginsTjs(__model__, origins, 0.1); // TODO Should we lift coords by 0.1 ???
     // create tjs directions
     const dirs_xyzs: Txyz[] = [];
     const dirs_tjs: THREE.Vector3[] = [];
@@ -357,6 +353,27 @@ export function Isovist(__model__: GIModel, origins: Txyz|Txyz[],
     // return the results
     return result;
 }
+function _isovistOriginsTjs(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], offset: number): THREE.Vector3[] {
+    const vectors_tjs: THREE.Vector3[] = [];
+    const is_xyz: boolean = isXYZ(origins[0]);
+    const is_ray: boolean = isRay(origins[0]);
+    const is_pln: boolean = isPlane(origins[0]);
+    for (const origin of origins) {
+        let origin_xyz: Txyz = null;
+        if (is_xyz) {
+            origin_xyz = origin as Txyz;
+        } else if (is_ray) {
+            origin_xyz = origin[0] as Txyz;
+        } else if (is_pln) {
+            origin_xyz = origin[0] as Txyz;
+        } else {
+            throw new Error('analyze.Solar: origins arg has invalid values');
+        }
+        const origin_tjs: THREE.Vector3 = new THREE.Vector3(origin_xyz[0], origin_xyz[1], origin_xyz[2] + offset);
+        vectors_tjs.push(origin_tjs);
+    }
+    return vectors_tjs;
+}
 // ================================================================================================
 export enum _ESolarMethod {
     DIRECT_EXPOSURE = 'direct_exposure',
@@ -432,7 +449,7 @@ export enum _ESolarMethod {
  * @param limits The max distance for raytracing.
  * @param method Enum; solar method.
  */
-export function Solar(__model__: GIModel, origins: TRay[]|TPlane[], detail: number,
+export function Solar(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], detail: number,
         entities: TId|TId[]|TId[][], limits: number|[number, number], method: _ESolarMethod): any {
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
@@ -441,7 +458,7 @@ export function Solar(__model__: GIModel, origins: TRay[]|TPlane[], detail: numb
     let latitude: number = null;
     let north: Txy = [0, 1];
     if (__model__.debug) {
-        checkArgs(fn_name, 'origins', origins, [ArgCh.isRayL, ArgCh.isPlnL]);
+        checkArgs(fn_name, 'origins', origins, [ArgCh.isXYZL, ArgCh.isRayL, ArgCh.isPlnL]);
         checkArgs(fn_name, 'detail', detail, [ArgCh.isInt]);
         if (detail < 0 || detail > 6) {
             throw new Error (fn_name + ': "detail" must be an integer between 0 and 6.');
@@ -505,20 +522,29 @@ export function Solar(__model__: GIModel, origins: TRay[]|TPlane[], detail: numb
             throw new Error('Solar method not recognised.');
     }
 }
-function _solarOriginsTjs(__model__: GIModel, origins: TRay[]|TPlane[], offset: number): [THREE.Vector3, THREE.Vector3][] {
+function _solarOriginsTjs(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], offset: number): [THREE.Vector3, THREE.Vector3][] {
     const vectors_tjs: [THREE.Vector3, THREE.Vector3][] = [];
+    const is_xyz: boolean = isXYZ(origins[0]);
+    const is_ray: boolean = isRay(origins[0]);
+    const is_pln: boolean = isPlane(origins[0]);
     for (const origin of origins) {
+        let origin_xyz: Txyz = null;
         let normal_xyz: Txyz = null;
-        if (origin.length === 2) {
-            normal_xyz = vecNorm(origin[1]);
-        } else if (origin.length === 3) {
-            normal_xyz = vecCross(origin[1], origin[2]);
+        if (is_xyz) {
+            origin_xyz = origin as Txyz;
+            normal_xyz = [0, 0, 1];
+        } else if (is_ray) {
+            origin_xyz = origin[0] as Txyz;
+            normal_xyz = vecNorm(origin[1] as Txyz);
+        } else if (is_pln) {
+            origin_xyz = origin[0] as Txyz;
+            normal_xyz = vecCross(origin[1] as Txyz, origin[2] as Txyz);
         } else {
             throw new Error('analyze.Solar: origins arg has invalid values');
         }
         const normal_tjs: THREE.Vector3 = new THREE.Vector3(...normal_xyz);
-        const origin_xyz: Txyz = vecAdd(origin[0], vecMult(normal_xyz, offset));
-        const origin_tjs: THREE.Vector3 = new THREE.Vector3(...origin_xyz);
+        const origin_offset_xyz: Txyz = vecAdd(origin_xyz, vecMult(normal_xyz, offset));
+        const origin_tjs: THREE.Vector3 = new THREE.Vector3(...origin_offset_xyz);
         vectors_tjs.push([origin_tjs, normal_tjs]);
     }
     return vectors_tjs;

@@ -13,7 +13,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EEntType, TRay, TEntTypeIdx, EEntTypeStr, Txy} from '@libs/geo-info/common';
 import { getArrDepth, isColl, isPosi, isPgon, isPline, isPoint } from '@assets/libs/geo-info/id';
 import { vecDiv, vecSum, vecAvg, vecFromTo, vecLen, vecCross, vecNorm, vecAdd, vecSetLen, vecDot } from '@assets/libs/geom/vectors';
-import { isRay, isPlane, isVec3 } from '@assets/libs/geo-info/virtual';
+import { isRay, isPlane, isXYZ } from '@assets/libs/geo-info/virtual';
 import { rayFromPln } from '@assets/core/inline/_ray';
 import { plnFromRay } from '@assets/core/inline/_plane';
 import * as THREE from 'three';
@@ -21,7 +21,7 @@ const EPS = 1e-8;
 
 // ================================================================================================
 export function getOrigin(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], fn_name: string): Txyz {
-    if (isVec3(data)) { return data as Txyz; }
+    if (isXYZ(data)) { return data as Txyz; }
     if (isRay(data)) { return data[0] as Txyz; }
     if (isPlane(data)) { return data[0] as Txyz; }
     const ents: TId|TId[] = data as TId|TId[];
@@ -30,7 +30,7 @@ export function getOrigin(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], 
 }
 // ================================================================================================
 export function getRay(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], fn_name: string): TRay {
-    if (isVec3(data)) { return [data, [0, 0, 1]] as TRay; }
+    if (isXYZ(data)) { return [data, [0, 0, 1]] as TRay; }
     if (isRay(data)) { return data as TRay; }
     if (isPlane(data)) { return rayFromPln(data as TPlane) as TRay; }
     const ents: TId|TId[] = data as TId|TId[];
@@ -39,7 +39,7 @@ export function getRay(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], fn_
 }
 // ================================================================================================
 export function getPlane(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], fn_name: string): TPlane {
-    if (isVec3(data)) { return [data, [1, 0, 0], [0, 1, 0]] as TPlane; }
+    if (isXYZ(data)) { return [data, [1, 0, 0], [0, 1, 0]] as TPlane; }
     if (isRay(data)) { return plnFromRay(data as TRay) as TPlane; }
     if (isPlane(data)) { return data as TPlane; }
     const ents: TId|TId[] = data as TId|TId[];

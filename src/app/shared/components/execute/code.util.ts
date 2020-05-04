@@ -387,15 +387,23 @@ export class CodeUtils {
         let codeStr = [];
         let elifcount = 0;
         for (const p of prodList) {
-            codeStr = codeStr.concat(CodeUtils.getProcedureCode(p, existingVars, isMainFlowchart,
-                                                                functionName, nodeId, usedFunctions));
+            const procedureCode = CodeUtils.getProcedureCode(p, existingVars, isMainFlowchart,
+                functionName, nodeId, usedFunctions);
             if ( p.type === ProcedureTypes.Elseif && p.enabled) {
+                codeStr = codeStr.concat(procedureCode);
                 elifcount++;
+            } else if (p.type === ProcedureTypes.Else && p.enabled) {
+                codeStr = codeStr.concat(procedureCode);
+                while (elifcount > 0) {
+                    codeStr.push('}');
+                    elifcount--;
+                }
             } else {
                 while (elifcount > 0) {
                     codeStr.push('}');
                     elifcount--;
                 }
+                codeStr = codeStr.concat(procedureCode);
             }
         }
         while (elifcount > 0) {

@@ -548,9 +548,9 @@ export class DataCesium {
             newSetting = <CesiumSettings> JSON.parse(localStorage.getItem('cesium_settings'));
         }
         if (!newSetting) { return; }
-        newSetting.cesium.ion = newSetting.cesium.ion.trim();
         let ionChange = false;
         if (newSetting.cesium) {
+            if (newSetting.cesium.ion) { newSetting.cesium.ion = newSetting.cesium.ion.trim(); }
             if (newSetting.cesium.ion !== Cesium.Ion.defaultAccessToken && newSetting.cesium.ion !== '') {
                 Cesium.Ion.defaultAccessToken = newSetting.cesium.ion;
                 ionChange = true;

@@ -77,19 +77,19 @@ export function xfromSourceTargetMatrix(source_plane: TPlane, target_plane: TPla
 // ================================================================================================
 // Helper functions
 // ================================================================================================
-function xformMatrix(plane: TPlane, neg: boolean): three.Matrix4 {
+export function xformMatrix(plane: TPlane, neg: boolean): three.Matrix4 {
     const o: three.Vector3 = new three.Vector3(...plane[0]);
     const x: three.Vector3 = new three.Vector3(...plane[1]);
     const y: three.Vector3 = new three.Vector3(...plane[2]);
     const z: three.Vector3 = new three.Vector3(...vecCross(plane[1], plane[2]));
-    const m1: three.Matrix4 = new three.Matrix4();
     if (neg) {
         o.negate();
     }
     // origin translate matrix
+    const m1: three.Matrix4 = new three.Matrix4();
     m1.setPosition(o);
-    const m2: three.Matrix4 = new three.Matrix4();
     // xfrom matrix
+    const m2: three.Matrix4 = new three.Matrix4();
     m2.makeBasis(x, y, z);
     // combine two matrices
     const m3: three.Matrix4 = new three.Matrix4();

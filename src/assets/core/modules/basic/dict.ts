@@ -10,7 +10,7 @@
  *
  */
 
-import { checkArgTypes, TypeCheckObj } from '../_check_args';
+import { checkArgs, ArgCh } from '../_check_args';
 
 // ================================================================================================
 /**
@@ -24,8 +24,8 @@ import { checkArgTypes, TypeCheckObj } from '../_check_args';
 export function Add(dict: object, keys: string|string[], values: any|any[]): void {
     // --- Error Check ---
     const fn_name = 'dict.Add';
-    checkArgTypes(fn_name, 'keys', keys, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
-    checkArgTypes(fn_name, 'values', keys, [TypeCheckObj.isAny, TypeCheckObj.isList]);
+    checkArgs(fn_name, 'keys', keys, [ArgCh.isStr, ArgCh.isStrL]);
+    checkArgs(fn_name, 'values', keys, [ArgCh.isAny, ArgCh.isList]);
     keys = Array.isArray(keys) ? keys : [keys];
     values = Array.isArray(values) ? values : [values];
     if (keys.length !== values.length) {
@@ -49,7 +49,7 @@ export function Add(dict: object, keys: string|string[], values: any|any[]): voi
 export function Remove(dict: object, keys: string|string[]): void {
     // --- Error Check ---
     const fn_name = 'dict.Remove';
-    checkArgTypes(fn_name, 'key', keys, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
+    checkArgs(fn_name, 'key', keys, [ArgCh.isStr, ArgCh.isStrL]);
     // --- Error Check ---
     if (!Array.isArray(keys)) { keys = [keys] as string[]; }
     keys = keys as string[];
@@ -75,8 +75,8 @@ export function Remove(dict: object, keys: string|string[]): void {
 export function Replace(dict: object, old_keys: string|string[], new_keys: string|string[]): void {
     // --- Error Check ---
     const fn_name = 'dict.Replace';
-    checkArgTypes(fn_name, 'old_keys', old_keys, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
-    checkArgTypes(fn_name, 'new_keys', new_keys, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
+    checkArgs(fn_name, 'old_keys', old_keys, [ArgCh.isStr, ArgCh.isStrL]);
+    checkArgs(fn_name, 'new_keys', new_keys, [ArgCh.isStr, ArgCh.isStrL]);
     old_keys = Array.isArray(old_keys) ? old_keys : [old_keys];
     new_keys = Array.isArray(new_keys) ? new_keys : [new_keys];
     if (old_keys.length !== new_keys.length) {

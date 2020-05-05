@@ -8,13 +8,14 @@
 /**
  *
  */
+import { checkIDs, IdCh } from '../_check_ids';
+import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { Txyz, EAttribNames, EAttribDataTypeStrs } from '@libs/geo-info/common';
 import * as THREE from 'three';
 import { TId, EEntType, TEntTypeIdx } from '@libs/geo-info/common';
-import { isEmptyArr } from '@libs/geo-info/id';
-import { checkIDs, IDcheckObj, checkArgTypes, TypeCheckObj } from '../_check_args';
+import { isEmptyArr, idsBreak } from '@libs/geo-info/id';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
 
 // ================================================================================================
@@ -101,7 +102,7 @@ enum _EMaterialType {
  * The properties of this material must be defined at the model level, using one of the material functions.
  * ~
  * @param entities The entities for which to set the material.
- * @param color The name of the material.
+ * @param material The name of the material.
  * @returns void
  */
 export function Set(__model__: GIModel, entities: TId|TId[], material: string): void {
@@ -109,10 +110,16 @@ export function Set(__model__: GIModel, entities: TId|TId[], material: string): 
     if (!isEmptyArr(entities)) {
         // --- Error Check ---
         const fn_name = 'matrial.Set';
-        const ents_arr: TEntTypeIdx[] =
-            checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx[];
-        checkArgTypes(fn_name, 'material', material, [TypeCheckObj.isString]);
+        let ents_arr: TEntTypeIdx[];
+        if (__model__.debug) {
+            ents_arr = checkIDs(fn_name, 'entities', entities,
+                [IdCh.isId, IdCh.isIdL, IdCh.isIdLL], null) as TEntTypeIdx[];
+            checkArgs(fn_name, 'material', material, [ArgCh.isStr]);
+        } else {
+            // ents_arr = splitIDs(fn_name, 'entities', entities,
+            //     [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDListOfLists], null) as TEntTypeIdx[];
+            ents_arr = idsBreak(entities) as TEntTypeIdx[];
+        }
         // --- Error Check ---
         _material(__model__, ents_arr, material);
     }
@@ -143,8 +150,10 @@ function _material(__model__: GIModel, ents_arr: TEntTypeIdx[], material: string
 export function Glass(__model__: GIModel, name: string, opacity: number): void {
     // --- Error Check ---
     const fn_name = 'material.Glass';
-    checkArgTypes(fn_name, 'name', name, [TypeCheckObj.isString]);
-    checkArgTypes(fn_name, 'opacity', opacity, [TypeCheckObj.isNumber01]);
+    if (__model__.debug) {
+        checkArgs(fn_name, 'name', name, [ArgCh.isStr]);
+        checkArgs(fn_name, 'opacity', opacity, [ArgCh.isNum01]);
+    }
     // --- Error Check ---
     opacity = _clamp01(opacity);
     const transparent: boolean = opacity < 1;
@@ -193,10 +202,12 @@ export function Basic(__model__: GIModel, name: string,
             select_vert_colors: _Ecolors
         ): void {
     // --- Error Check ---
-    const fn_name = 'material.Basic';
-    checkArgTypes(fn_name, 'name', name, [TypeCheckObj.isString]);
-    checkArgTypes(fn_name, 'color', color, [TypeCheckObj.isColor]);
-    checkArgTypes(fn_name, 'opacity', opacity, [TypeCheckObj.isNumber01]);
+    if (__model__.debug) {
+        const fn_name = 'material.Basic';
+        checkArgs(fn_name, 'name', name, [ArgCh.isStr]);
+        checkArgs(fn_name, 'color', color, [ArgCh.isColor]);
+        checkArgs(fn_name, 'opacity', opacity, [ArgCh.isNum01]);
+    }
     // --- Error Check ---
     const side: number = _convertSelectESideToNum(select_side);
     const vert_colors: number = _convertSelectEcolorsToNum(select_vert_colors);
@@ -230,9 +241,11 @@ export function Basic(__model__: GIModel, name: string,
  */
 export function Lambert(__model__: GIModel, name: string, emissive: Txyz): void {
     // --- Error Check ---
-    const fn_name = 'material.Lambert';
-    checkArgTypes(fn_name, 'name', name, [TypeCheckObj.isString]);
-    checkArgTypes(fn_name, 'emissive', emissive, [TypeCheckObj.isXYZlist]);
+    if (__model__.debug) {
+        const fn_name = 'material.Lambert';
+        checkArgs(fn_name, 'name', name, [ArgCh.isStr]);
+        checkArgs(fn_name, 'emissive', emissive, [ArgCh.isXYZ]);
+    }
     // --- Error Check ---
     _clampArr01(emissive);
     const settings_obj = {
@@ -263,11 +276,13 @@ export function Phong(__model__: GIModel, name: string,
             shininess: number
         ): void {
     // --- Error Check ---
-    const fn_name = 'material.Phong';
-    checkArgTypes(fn_name, 'name', name, [TypeCheckObj.isString]);
-    checkArgTypes(fn_name, 'emissive', emissive, [TypeCheckObj.isXYZlist]);
-    checkArgTypes(fn_name, 'emissive', specular, [TypeCheckObj.isXYZlist]);
-    checkArgTypes(fn_name, 'shininess', shininess, [TypeCheckObj.isNumber]);
+    if (__model__.debug) {
+        const fn_name = 'material.Phong';
+        checkArgs(fn_name, 'name', name, [ArgCh.isStr]);
+        checkArgs(fn_name, 'emissive', emissive, [ArgCh.isXYZ]);
+        checkArgs(fn_name, 'emissive', specular, [ArgCh.isXYZ]);
+        checkArgs(fn_name, 'shininess', shininess, [ArgCh.isNum]);
+    }
     // --- Error Check ---
     _clampArr01(emissive);
     _clampArr01(specular);
@@ -304,11 +319,13 @@ export function Standard(__model__: GIModel, name: string,
             metalness: number
         ): void {
     // --- Error Check ---
-    const fn_name = 'material.Standard';
-    checkArgTypes(fn_name, 'name', name, [TypeCheckObj.isString]);
-    checkArgTypes(fn_name, 'emissive', emissive, [TypeCheckObj.isXYZlist]);
-    checkArgTypes(fn_name, 'roughness', roughness, [TypeCheckObj.isNumber]);
-    checkArgTypes(fn_name, 'metalness', metalness, [TypeCheckObj.isNumber]);
+    if (__model__.debug) {
+        const fn_name = 'material.Standard';
+        checkArgs(fn_name, 'name', name, [ArgCh.isStr]);
+        checkArgs(fn_name, 'emissive', emissive, [ArgCh.isXYZ]);
+        checkArgs(fn_name, 'roughness', roughness, [ArgCh.isNum]);
+        checkArgs(fn_name, 'metalness', metalness, [ArgCh.isNum]);
+    }
     // --- Error Check ---
     _clampArr01(emissive);
     roughness = _clamp01(roughness);
@@ -346,12 +363,14 @@ export function Physical(__model__: GIModel, name: string,
             reflectivity: number
         ): void {
     // --- Error Check ---
-    const fn_name = 'material.Physical';
-    checkArgTypes(fn_name, 'name', name, [TypeCheckObj.isString]);
-    checkArgTypes(fn_name, 'emissive', emissive, [TypeCheckObj.isXYZlist]);
-    checkArgTypes(fn_name, 'roughness', roughness, [TypeCheckObj.isNumber]);
-    checkArgTypes(fn_name, 'metalness', metalness, [TypeCheckObj.isNumber]);
-    checkArgTypes(fn_name, 'reflectivity', reflectivity, [TypeCheckObj.isNumber]);
+    if (__model__.debug) {
+        const fn_name = 'material.Physical';
+        checkArgs(fn_name, 'name', name, [ArgCh.isStr]);
+        checkArgs(fn_name, 'emissive', emissive, [ArgCh.isXYZ]);
+        checkArgs(fn_name, 'roughness', roughness, [ArgCh.isNum]);
+        checkArgs(fn_name, 'metalness', metalness, [ArgCh.isNum]);
+        checkArgs(fn_name, 'reflectivity', reflectivity, [ArgCh.isNum]);
+    }
     // --- Error Check ---
     _clampArr01(emissive);
     roughness = _clamp01(roughness);

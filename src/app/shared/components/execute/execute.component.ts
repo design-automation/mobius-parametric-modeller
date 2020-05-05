@@ -156,6 +156,8 @@ export class ExecuteComponent {
                         const result = await CodeUtils.getURLContent(val);
                         if (result === undefined) {
                             prod.resolvedValue = arg.value;
+                        } else if (result.indexOf('HTTP Request Error') !== -1) {
+                            throw new Error(result);
                         } else {
                             prod.resolvedValue = '`' + result + '`';
                         }

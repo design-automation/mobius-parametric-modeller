@@ -186,7 +186,7 @@ select{
         .slider-input{
             height: $fsize1;
             line-height:$fsize1;
-            position: relative;
+            // position: relative;
             top: 7px;
         }
         mat-slider{
@@ -238,4 +238,65 @@ select{
 
 .chkbox{
     display: none;
+}
+
+
+.slider {
+    -webkit-appearance: none;
+    min-width: 10px;
+    padding: 0px;
+    box-sizing: content-box;
+    width: 100%;
+    overflow: hidden;
+    // width: calc(100% - 110px);
+    background-color: $color6 !important;
+    height: 12px;
+    border: 2px solid $color5 !important;
+    margin-top: 2px;
+    // right: 50px;
+    // position: absolute;
+    // outline: none;
+    // opacity: 0.7;
+    // -webkit-transition: .2s;
+    // transition: opacity .2s;
+}
+// .slider:hover {
+//     border: 2px solid $color5;
+//     background-color: $color6;
+// }
+// .slider:focus {
+//     border: 2px solid $color5;
+//     background-color: $color5-5;
+// }
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    overflow: hidden;
+
+	border-radius: 0 !important;
+	background-color: $color3;
+	// border: 1px solid $color1 !important;
+	width: 5px !important;
+    right: -5px !important;
+    bottom: -7px !important;
+    
+    transform: scale(1) !important;
+
+    height: $fsize1 !important;
+    box-shadow: -1000px 0 0 1000px $color5;
+
+    // width: 25px;
+    // height: 25px;
+    // background: #4CAF50;
+    // cursor: pointer;
+}
+.slider::-moz-range-thumb {
+	border-radius: 0 !important;
+	background-color: $color5 !important;
+	border: 1px solid $color1 !important;
+	width: 5px !important;
+    right: -5px !important;
+    bottom: -7px !important;
+    transform: scale(1) !important;
+    height: $fsize1 !important;
 }

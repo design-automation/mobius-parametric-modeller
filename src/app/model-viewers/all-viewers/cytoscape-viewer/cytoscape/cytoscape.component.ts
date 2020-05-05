@@ -27,15 +27,6 @@ const CYTOSCAPE_STYLE = [
         }
     },
     <cytoscape.Stylesheet> {
-        selector: ':selected',
-        css: {
-            'background-color': 'black',
-            'line-color': 'black',
-            'target-arrow-color': 'black',
-            'source-arrow-color': 'black'
-        }
-    },
-    <cytoscape.Stylesheet> {
         selector: '.ps',
         css: {
         }
@@ -44,13 +35,28 @@ const CYTOSCAPE_STYLE = [
         selector: '._e',
         css: {
             'shape': 'round-triangle',
-            'background-color': 'rgb(0, 0, 109)'
+            'background-color': 'rgb(100, 0, 100)'
+        }
+    },
+    <cytoscape.Stylesheet> {
+        selector: '.pg',
+        css: {
+            'shape': 'round-diamond',
+            'background-color': 'rgb(0, 100, 100)'
+        }
+    },
+    <cytoscape.Stylesheet> {
+        selector: ':selected',
+        css: {
+            'background-color': 'rgb(0, 0, 100)',
+            'line-color': 'black',
+            'target-arrow-color': 'black',
+            'source-arrow-color': 'black'
         }
     },
     <cytoscape.Stylesheet> {
         selector: 'edges',
         css: {
-            'haystack-radius': 0.2
         }
     }
 ];
@@ -111,32 +117,52 @@ export class CytoscapeComponent implements OnDestroy, OnChanges {
             });
         });
 
-        const edge_i: number[] = this.model.geom.query.getEnts(EEntType.EDGE, false);
-        for (const _e of edge_i) {
-            const ps = this.model.geom.nav.navAnyToPosi(EEntType.EDGE, _e);
+        const _e_i: number[] = this.model.geom.query.getEnts(EEntType.EDGE, false);
+        for (const _e of _e_i) {
+            const ps_i = this.model.geom.nav.navAnyToPosi(EEntType.EDGE, _e);
             cy_eles.push({
                 group: 'nodes',
                 data: { id: `_e${_e}` },
                 position: { x: 0, y: 0 },
                 classes: ['_e']
             });
-            cy_eles.push({
-                group: 'edges',
-                data: { id: `_e${_e}_ps${ps[0]}`, source: `_e${_e}`, target: `ps${ps[0]}` }
-            });
-            cy_eles.push({
-                group: 'edges',
-                data: { id: `_e${_e}_ps${ps[1]}`, source: `_e${_e}`, target: `ps${ps[1]}` }
-            });
+            for (const ps of ps_i) {
+                cy_eles.push({
+                    group: 'edges',
+                    data: { id: `_e${_e}_ps${ps}`, source: `_e${_e}`, target: `ps${ps}` }
+                });
+            }
         }
+
+        const pg_i: number[] = this.model.geom.query.getEnts(EEntType.PGON, false);
+        for (const pg of pg_i) {
+            const _e_l = this.model.geom.nav.navAnyToEdge(EEntType.PGON, pg);
+            cy_eles.push({
+                group: 'nodes',
+                data: { id: `pg${pg}` },
+                position: { x: 0, y: 0 },
+                classes: ['pg']
+            });
+            for (const _e of _e_l) {
+                cy_eles.push({
+                    group: 'edges',
+                    data: { id: `pg${pg}__e${_e}`, source: `pg${pg}`, target: `_e${_e}` }
+                });
+            }
+        }
+
         const allObjs = this.cytoscape.add(cy_eles);
 
         const layout = this.cytoscape.layout({
-            name: 'cose',
-            componentSpacing: 500
+            name: 'concentric'
         });
         const x = layout.run();
         this.cytoscape.fit();
         this.cytoscapeService.cytoscapeCol = allObjs;
     }
+
+    zoomfit() {
+        this.cytoscape.fit();
+    }
+
 }

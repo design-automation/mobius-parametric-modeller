@@ -113,8 +113,30 @@ export abstract class NodeUtils {
             prod.selected = false;
         }
         node.state.procedure = [];
+        NodeUtils.check_procedure_selected([], node.localFunc);
+        NodeUtils.check_procedure_selected([], node.procedure);
     }
 
+    static check_procedure_selected(selectedList: IProcedure[], prodList: IProcedure[]) {
+        for (const prod of prodList) {
+            if (prod.children) {
+                NodeUtils.check_procedure_selected(selectedList, prod.children);
+            }
+            if (!prod.selected) {
+                continue;
+            }
+            let check = false;
+            for (const selProd of selectedList) {
+                if (selProd.ID === prod.ID) {
+                    check = true;
+                    break;
+                }
+            }
+            if (!check) {
+                prod.selected = false;
+            }
+        }
+    }
 
     static rearrangeProcedures(prodList: IProcedure[], tempList: IProcedure[], prods: IProcedure[]) {
         for (const pr of prods) {

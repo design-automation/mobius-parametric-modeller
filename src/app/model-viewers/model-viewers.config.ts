@@ -20,7 +20,7 @@ export const VIEWER_ARR = [
     // Step-1: Add Component here
     GIViewerComponent,
     GICesiumViewerComponent,
-    CytoscapeViewerComponent
+    // CytoscapeViewerComponent
     // MobiuscesiumComponent
 ];
 
@@ -29,7 +29,7 @@ export const VIEWER_MOD = [
     // Step-2: Add Module here
     GIViewerModule,
     GICesiumViewerModule,
-    CytoscapeViewerModule,
+    // CytoscapeViewerModule,
     // MobiusCesium
 ];
 
@@ -39,7 +39,7 @@ export const Viewers: IView[] = [
     // The order of these views here will influence the order of the view appearing in the viewer header.
     { name: '3D Viewer', icon: undefined, component: GIViewerComponent },
     { name: 'Geo Viewer', icon: undefined, component: GICesiumViewerComponent },
-    { name: 'Cytoscape Viewer', icon: undefined, component: CytoscapeViewerComponent },
+    // { name: 'Cytoscape Viewer', icon: undefined, component: CytoscapeViewerComponent },
     // { name: 'Mobius Cesium', icon: undefined, component: MobiuscesiumComponent },
     { name: 'Console', icon: undefined, component: ConsoleViewerComponent },
     { name: 'Help', icon: undefined, component: HelpViewerComponent }

@@ -5,18 +5,18 @@
 /**
  *
  */
+import { checkIDs, IdCh } from '../_check_ids';
+import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { importObj, exportPosiBasedObj, exportVertBasedObj } from '@libs/geo-info/io_obj';
-import { importDae, exportDae } from '@libs/geo-info/io_dae';
 import { importGeojson, exportGeojson } from '@libs/geo-info/io_geojson';
 import { download } from '@libs/filesys/download';
 import { TId, EEntType, Txyz, TPlane, TRay, IGeomPack, IModelData, IGeomPackTId, TEntTypeIdx } from '@libs/geo-info/common';
 import { __merge__ } from '../_model';
 import { _model } from '..';
-import { idsMake, idsMakeFromIndicies } from '@libs/geo-info/id';
+import { idsMake, idsBreak } from '@libs/geo-info/id';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
-import { IDcheckObj, checkIDs, checkArgTypes, TypeCheckObj } from '../_check_args';
 
 // ================================================================================================
 declare global {
@@ -212,12 +212,21 @@ export function Export(__model__: GIModel, entities: TId|TId[]|TId[][],
     // --- Error Check ---
     const fn_name = 'io.Export';
     let ents_arr = null;
-    if (entities !== null) {
-        entities = arrMakeFlat(entities) as TId[];
-        ents_arr = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON, EEntType.COLL])  as TEntTypeIdx[];
+    if (__model__.debug) {
+        if (entities !== null) {
+            entities = arrMakeFlat(entities) as TId[];
+            ents_arr = checkIDs(fn_name, 'entities', entities,
+                [IdCh.isIdL], [EEntType.PLINE, EEntType.PGON, EEntType.COLL])  as TEntTypeIdx[];
+        }
+        checkArgs(fn_name, 'file_name', file_name, [ArgCh.isStr, ArgCh.isStrL]);
+    } else {
+        if (entities !== null) {
+            entities = arrMakeFlat(entities) as TId[];
+            // ents_arr = splitIDs(fn_name, 'entities', entities,
+            //     [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON, EEntType.COLL])  as TEntTypeIdx[];
+            ents_arr = idsBreak(entities) as TEntTypeIdx[];
+        }
     }
-    checkArgTypes(fn_name, 'file_name', file_name, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
     // --- Error Check ---
     _export(__model__, ents_arr, file_name, data_format, data_target);
 }
@@ -225,7 +234,24 @@ function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
     file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): boolean {
     switch (data_format) {
         case _EIOExportDataFormat.GI:
-            let gi_data: string = JSON.stringify(__model__.getData());
+            let gi_data = '';
+            if (ents_arr === null) {
+                gi_data = JSON.stringify(__model__.copy().getData());
+            } else {
+                // make a clone of the model (warning: do not copy, copy will change entity IDs)
+                const model_clone: GIModel = __model__.clone();
+                // get the ents
+                const gp: IGeomPack = model_clone.geom.query.createGeomPack(ents_arr, true);
+                // delete the ents
+                model_clone.geom.del.delColls(gp.colls_i, true);
+                model_clone.geom.del.delPgons(gp.pgons_i, true);
+                model_clone.geom.del.delPlines(gp.plines_i, true);
+                model_clone.geom.del.delPoints(gp.points_i, true);
+                model_clone.geom.del.delPosis(gp.posis_i);
+                model_clone.geom.del.delUnusedPosis(gp.posis2_i);
+                model_clone.purge();
+                gi_data = JSON.stringify(model_clone.getData());
+            }
             // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
             gi_data = gi_data.replace(/\\/g, '\\\\'); // TODO temporary fix
             if (data_target === _EIODataTarget.DEFAULT) {
@@ -300,8 +326,20 @@ function saveResource(file: string, name: string): boolean {
         localStorage.setItem('mobius_backup_date_dict', JSON.stringify(itemDates));
     }
     const requestedBytes = 1024 * 1024 * 50;
-    window['_code_'] = name;
-    window['_file_'] = file;
+    // window['_code__'] = name;
+    // window['_file__'] = file;
+
+    function saveToFS(fs) {
+        const code = name;
+        // console.log(code)
+        fs.root.getFile(code, { create: true}, function (fileEntry) {
+            fileEntry.createWriter(async function (fileWriter) {
+                const bb = new Blob([file + '_|_|_'], {type: 'text/plain;charset=utf-8'});
+                await fileWriter.write(bb);
+            }, (e) => { console.log(e); });
+        }, (e) => { console.log(e.code); });
+    }
+
     navigator.webkitPersistentStorage.requestQuota (
         requestedBytes, function(grantedBytes) {
             // @ts-ignore
@@ -313,13 +351,3 @@ function saveResource(file: string, name: string): boolean {
     // localStorage.setItem(code, file);
 }
 
-function saveToFS(fs) {
-    fs.root.getFile(window['_code_'], { create: true}, function (fileEntry) {
-        fileEntry.createWriter(function (fileWriter) {
-            const bb = new Blob([window['_file_']], {type: 'text/plain;charset=utf-8'});
-            fileWriter.write(bb);
-            window['_code_'] = undefined;
-            window['_file_'] = undefined;
-        }, (e) => { console.log(e); });
-    }, (e) => { console.log(e.code); });
-}

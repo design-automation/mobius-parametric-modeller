@@ -1,7 +1,6 @@
 import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz, TColl, TVert, Txy } from './common';
 import { GIGeom } from './GIGeom';
-import { arrRem, arrIdxAdd } from '../util/arrs';
-import { vecDot } from '../geom/vectors';
+import { arrRem } from '../util/arrs';
 
 /**
  * Class for geometry.
@@ -60,6 +59,65 @@ export class GIGeomModify {
         // return the new edge
         return new_edge_i;
     }
+/**
+     * Insert multiple vertices into an edge and updates the wire with the new edges
+     * ~
+     * Applies to both plines and pgons.
+     * ~
+     * Plines can be open or closed.
+     * ~
+     */
+    public insertVertsIntoWire(edge_i: number, posis_i: number[]): number[] {
+        // check that there are no duplicates in the list
+        if (posis_i.length > 1) {
+            posis_i = Array.from(new Set(posis_i));
+        }
+        // check tha the posis being inserted are not already the start or end of this edge
+        const edge_posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.EDGE,  edge_i);
+        if (edge_posis_i[0] === posis_i[0]) {
+            posis_i = posis_i.slice(1);
+        }
+        if (edge_posis_i[1] === posis_i[posis_i.length - 1]) {
+            posis_i = posis_i.slice(0, posis_i.length - 1);
+        }
+        // if no more posis, then return empty list
+        if (posis_i.length === 0) { return []; }
+        // proceed to insert posis
+        const wire_i: number = this._geom.nav.navEdgeToWire(edge_i);
+        const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
+        const end_vert_i: number = this._geom_arrays.dn_edges_verts[edge_i][1];
+        const next_edge_i: number = this._geom_arrays.up_verts_edges[end_vert_i][1];
+        // check next edge amd save the next edge
+        if (next_edge_i !== undefined) {
+            this._geom_arrays.up_verts_edges[end_vert_i] = [next_edge_i]; // there is next edge
+        } else {
+            this._geom_arrays.up_verts_edges[end_vert_i] = []; // there is no next edge
+        }
+        // create the new vertices
+        const new_verts_i: number [] = [];
+        for (const posi_i of posis_i) {
+            const new_vert_i: number = this._geom.add._addVertex(posi_i);
+            new_verts_i.push(new_vert_i);
+        }
+        new_verts_i.push(end_vert_i);
+        // update the down/ip arrays for teh old edge
+        // the old edge becomes the first edge in this list, and it gets a new end vertex
+        this._geom_arrays.dn_edges_verts[edge_i][1] = new_verts_i[0];
+        this._geom_arrays.up_verts_edges[new_verts_i[0]] = [edge_i];
+        // create the new edges
+        const new_edges_i: number[] = [];
+        for (let i = 0; i < new_verts_i.length - 1; i++) {
+            const new_edge_i: number = this._geom.add._addEdge(new_verts_i[i], new_verts_i[i + 1]);
+            // update the up arrays for edges to wires
+            this._geom_arrays.up_edges_wires[new_edge_i] = wire_i;
+            // add to the list
+            new_edges_i.push(new_edge_i);
+        }
+        // update the down arrays for the wire
+        wire.splice(wire.indexOf(edge_i) + 1, 0, ...new_edges_i);
+        // return the new edge
+        return new_edges_i;
+    }
     /**
      * Replace all positions in an entity with a new set of positions.
      * ~
@@ -86,6 +144,70 @@ export class GIGeomModify {
             // update the up arrays for the new posi, i.e. add this vert
             this._geom_arrays.up_posis_verts[new_posi_i].push(vert_i);
         }
+    }
+    /**
+     * Replace the position of a vertex with a new position.
+     * ~
+     * If the result is an edge with two same posis, then the vertex will be deleted if del_if_invalid = true.
+     * If del_if_invalid = false, no action will be taken.
+     * ~
+     * Called by modify.Fuse() and poly2d.Stitch().
+     */
+    public replaceVertPosi(vert_i: number, new_posi_i: number, del_if_invalid: boolean = true): void {
+        // special case
+        // check if this is a vert for an edge
+        const edges_i: number[] = this._geom.nav.navVertToEdge(vert_i);
+        const num_edges: number = edges_i.length;
+        switch (num_edges) {
+            case 1:
+                // we must be at an edge at the start or end of an open wire
+                const edge_posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.EDGE, edges_i[0]);
+                if (edge_posis_i[0] === new_posi_i || edge_posis_i[1]  === new_posi_i) {
+                    // special case where start or end has new_posi_i
+                    if (del_if_invalid) {
+                        this._geom.del_vert.delVert(vert_i);
+                    }
+                    return;
+                }
+                break;
+            case 2:
+                // we must be in the middle of a wire
+                const prev_edge_i: number = edges_i[0];
+                const next_edge_i: number = edges_i[1];
+                const [a_posi_i, b1_posi_i]: [number, number] = this._geom.nav.navAnyToPosi(EEntType.EDGE, prev_edge_i) as [number, number];
+                const [b2_posi_i, c_posi_i]: [number, number] = this._geom.nav.navAnyToPosi(EEntType.EDGE, next_edge_i) as [number, number];
+                if (a_posi_i === new_posi_i && c_posi_i  === new_posi_i) {
+                    // special case where both adjacent edges has new_posi_i
+                    const [b2_vert_i, c_vert_i]: [number, number] =
+                        this._geom.nav.navEdgeToVert(next_edge_i) as [number, number];
+                    if (vert_i !== b2_vert_i) {
+                        throw new Error('Bad navigation in geometry data structure.');
+                    }
+                    if (del_if_invalid) {
+                        this._geom.del_vert.delVert(c_vert_i);
+                        this._geom.del_vert.delVert(vert_i);
+                    }
+                    return;
+                } else if (a_posi_i === new_posi_i || c_posi_i === new_posi_i) {
+                    // special case where one adjacent edges has new_posi_i
+                    if (del_if_invalid) {
+                        this._geom.del_vert.delVert(vert_i);
+                    }
+                    return;
+                }
+                break;
+            // default:
+            //     break;
+        }
+
+        // normal case
+        const old_posi_i: number = this._geom.nav.navVertToPosi(vert_i);
+        // set the down array
+        this._geom_arrays.dn_verts_posis[vert_i] = new_posi_i;
+        // update the up arrays for the old posi, i.e. remove this vert
+        arrRem(this._geom_arrays.up_posis_verts[old_posi_i], vert_i);
+        // update the up arrays for the new posi, i.e. add this vert
+        this._geom_arrays.up_posis_verts[new_posi_i].push(vert_i);
     }
     /**
      * Unweld the vertices on naked edges.

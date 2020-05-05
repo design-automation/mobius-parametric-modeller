@@ -8,14 +8,61 @@
 /**
  *
  */
-import __ from 'underscore';
+import { checkIDs, IdCh } from '../_check_ids';
+import { checkAttribValue, checkAttribName,
+    checkAttribIdxKey, checkAttribNameIdxKey, splitAttribNameIdxKey } from '../_check_attribs';
+
+import uscore from 'underscore';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, TEntTypeIdx,
-    EAttribPush, TAttribDataTypes, EEntTypeStr, EAttribDataTypeStrs, EEntTypeCollCP} from '@libs/geo-info/common';
-import { getArrDepth } from '@libs/geo-info/id';
-import { checkIDs, IDcheckObj, checkAttribValue, checkAttribName,
-    checkAttribIdxKey, checkAttribNameIdxKey } from '../_check_args';
+    EAttribPush, TAttribDataTypes, EEntTypeStr, EAttribDataTypeStrs } from '@libs/geo-info/common';
+import { getArrDepth, idsBreak } from '@libs/geo-info/id';
 // ================================================================================================
+
+export enum _EEntType {
+    POSI =   'ps',
+    VERT =   '_v',
+    EDGE =   '_e',
+    WIRE =   '_w',
+    FACE =   '_f',
+    POINT =  'pt',
+    PLINE =  'pl',
+    PGON =   'pg',
+    COLL =   'co'
+}
+export enum _EEntTypeAndMod {
+    POSI =   'ps',
+    VERT =   '_v',
+    EDGE =   '_e',
+    WIRE =   '_w',
+    FACE =   '_f',
+    POINT =  'pt',
+    PLINE =  'pl',
+    PGON =   'pg',
+    COLL =   'co',
+    MOD =    'mo'
+}
+export enum _EAttribPushTarget {
+    POSI =   'ps',
+    VERT =   '_v',
+    EDGE =   '_e',
+    WIRE =   '_w',
+    FACE =   '_f',
+    POINT =  'pt',
+    PLINE =  'pl',
+    PGON =   'pg',
+    COLL =   'co',
+    COLLP =  'cop',
+    COLLC =  'coc',
+    MOD =    'mo'
+}
+export enum _EDataType {
+    NUMBER =   'number',
+    STRING =   'string',
+    BOOLEAN = 'boolean',
+    LIST =   'list',
+    DICT = 'dict'
+}
 function _getEntTypeFromStr(ent_type_str: _EEntType|_EEntTypeAndMod): EEntType {
     switch (ent_type_str) {
         case _EEntTypeAndMod.POSI:
@@ -63,58 +110,14 @@ function _getAttribPushTarget(ent_type_str: _EAttribPushTarget): EEntType|string
         case _EAttribPushTarget.COLL:
             return EEntType.COLL;
         case _EAttribPushTarget.COLLC:
-            return "coll_children";
+            return 'coll_children';
         case _EAttribPushTarget.COLLP:
-            return "coll_parent";
+            return 'coll_parent';
         case _EAttribPushTarget.MOD:
             return EEntType.MOD;
         default:
             break;
     }
-}
-export enum _EEntType {
-    POSI =   'ps',
-    VERT =   '_v',
-    EDGE =   '_e',
-    WIRE =   '_w',
-    FACE =   '_f',
-    POINT =  'pt',
-    PLINE =  'pl',
-    PGON =   'pg',
-    COLL =   'co'
-}
-export enum _EEntTypeAndMod {
-    POSI =   'ps',
-    VERT =   '_v',
-    EDGE =   '_e',
-    WIRE =   '_w',
-    FACE =   '_f',
-    POINT =  'pt',
-    PLINE =  'pl',
-    PGON =   'pg',
-    COLL =   'co',
-    MOD =    'mo'
-}
-export enum _EAttribPushTarget {
-    POSI =   'ps',
-    VERT =   '_v',
-    EDGE =   '_e',
-    WIRE =   '_w',
-    FACE =   '_f',
-    POINT =  'pt',
-    PLINE =  'pl',
-    PGON =   'pg',
-    COLL =   'co',
-    COLLP =  'cop',
-    COLLC =  'coc',
-    MOD =    'mo'
-}
-export enum _EDataType {
-    NUMBER =   'number',
-    STRING =   'string',
-    BOOLEAN = 'boolean',
-    LIST =   'list',
-    DICT = 'dict'
 }
 // ================================================================================================
 /**
@@ -132,15 +135,26 @@ export function Set(__model__: GIModel, entities: TId|TId[]|TId[][],
         attrib: string|[string, number|string], value: TAttribDataTypes|TAttribDataTypes[], method: _ESet): void {
     // if entities is null, then we are setting model attributes
     // @ts-ignore
-    if (entities !== null && getArrDepth(entities) === 2) { entities = __.flatten(entities); }
+    if (entities !== null && getArrDepth(entities) === 2) { entities = uscore.flatten(entities); }
     // --- Error Check ---
     const fn_name = 'attrib.Set';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
-    if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+    let attrib_name: string;
+    let attrib_idx_key: number|string;
+    if (__model__.debug) {
+        if (entities !== null && entities !== undefined) {
+            ents_arr = checkIDs(fn_name, 'entities', entities, [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx|TEntTypeIdx[];
+        }
+        [attrib_name, attrib_idx_key] = checkAttribNameIdxKey(fn_name, attrib);
+        checkAttribName(fn_name , attrib_name);
+    } else {
+        if (entities !== null && entities !== undefined) {
+            // ents_arr = splitIDs(fn_name, 'entities', entities,
+            // [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+            ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
+        }
+        [attrib_name, attrib_idx_key] = splitAttribNameIdxKey(fn_name, attrib);
     }
-    const [attrib_name, attrib_idx_key]: [string, number|string] = checkAttribNameIdxKey(fn_name, attrib);
-    checkAttribName(fn_name , attrib_name);
     // --- Error Check ---
     _setAttrib(__model__, ents_arr, attrib_name, value, attrib_idx_key, method);
 }
@@ -187,9 +201,11 @@ function _setEachEntDifferentAttribValue(__model__: GIModel, ents_arr: TEntTypeI
     const ents_i: number[] = _getEntsIndices(__model__, ents_arr);
     for (let i = 0; i < ents_arr.length; i++) {
         // --- Error Check ---
-        const fn_name = 'entities@' + attrib_name;
-        checkAttribValue(fn_name, attrib_values[i]);
-        if (idx_or_key !== null) { checkAttribIdxKey(fn_name, idx_or_key); }
+        if (__model__.debug) {
+            const fn_name = 'entities@' + attrib_name;
+            checkAttribValue(fn_name, attrib_values[i]);
+            if (idx_or_key !== null) { checkAttribIdxKey(fn_name, idx_or_key); }
+        }
         // --- Error Check ---
         if (typeof idx_or_key === 'number') {
             __model__.attribs.add.setAttribListIdxVal(ent_type, ents_i[i], attrib_name, idx_or_key, attrib_values[i]);
@@ -203,8 +219,10 @@ function _setEachEntDifferentAttribValue(__model__: GIModel, ents_arr: TEntTypeI
 function _setEachEntSameAttribValue(__model__: GIModel, ents_arr: TEntTypeIdx[],
         attrib_name: string, attrib_value: TAttribDataTypes, idx_or_key?: number|string): void {
     // --- Error Check ---
-    const fn_name = 'entities@' + attrib_name;
-    checkAttribValue(fn_name , attrib_value);
+    if (__model__.debug) {
+        const fn_name = 'entities@' + attrib_name;
+        checkAttribValue(fn_name , attrib_value);
+    }
     // --- Error Check ---
     const ent_type: number = ents_arr[0][0];
     const ents_i: number[] = _getEntsIndices(__model__, ents_arr);
@@ -241,15 +259,26 @@ function _getEntsIndices(__model__: GIModel, ents_arr: TEntTypeIdx[]): number[] 
 export function Get(__model__: GIModel, entities: TId|TId[]|TId[][],
         attrib: string|[string, number|string]): TAttribDataTypes|TAttribDataTypes[] {
     // @ts-ignore
-    if (entities !== null && getArrDepth(entities) === 2) { entities = __.flatten(entities); }
+    if (entities !== null && getArrDepth(entities) === 2) { entities = uscore.flatten(entities); }
     // --- Error Check ---
-    const fn_name = 'attrib.Get';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
-    if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+    let attrib_name: string;
+    let attrib_idx_key: number|string;
+    const fn_name = 'attrib.Get';
+    if (__model__.debug) {
+        if (entities !== null && entities !== undefined) {
+            ents_arr = checkIDs(fn_name, 'entities', entities, [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx|TEntTypeIdx[];
+        }
+        [attrib_name, attrib_idx_key] = checkAttribNameIdxKey(fn_name, attrib);
+        checkAttribName(fn_name, attrib_name);
+    } else {
+        if (entities !== null && entities !== undefined) {
+            // ents_arr = splitIDs(fn_name, 'entities', entities,
+            // [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+            ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
+        }
+        [attrib_name, attrib_idx_key] = splitAttribNameIdxKey(fn_name, attrib);
     }
-    const [attrib_name, attrib_idx_key]: [string, number|string] = checkAttribNameIdxKey(fn_name, attrib);
-    checkAttribName(fn_name, attrib_name);
     // --- Error Check ---
     return _get(__model__, ents_arr, attrib_name, attrib_idx_key);
 }
@@ -300,21 +329,32 @@ function _get(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
  */
 export function Add(__model__: GIModel, ent_type_sel: _EEntTypeAndMod, data_type_sel: _EDataType, attribs: string|string[]): void {
     // --- Error Check ---
+
     const fn_name = 'attrib.Add';
     const arg_name = 'ent_type_sel';
-    if (ent_type_sel === 'ps' && attribs === 'xyz') {
-        throw new Error(fn_name + ': ' + arg_name + ' The xyz attribute already exists.');
-     }
-    // convert the ent_type_str to an ent_type
-    const ent_type: EEntType = _getEntTypeFromStr(ent_type_sel);
-    if (ent_type === undefined) {
-        throw new Error(fn_name + ': ' + arg_name + ' is not one of the following valid types - ' +
-        'ps, _v, _e, _w, _f, pt, pl, pg, co, mo.');
+    let ent_type: EEntType;
+
+    if (__model__.debug) {
+        if (ent_type_sel === 'ps' && attribs === 'xyz') {
+            throw new Error(fn_name + ': ' + arg_name + ' The xyz attribute already exists.');
+         }
+        // convert the ent_type_str to an ent_type
+        ent_type = _getEntTypeFromStr(ent_type_sel);
+        if (ent_type === undefined) {
+            throw new Error(fn_name + ': ' + arg_name + ' is not one of the following valid types - ' +
+            'ps, _v, _e, _w, _f, pt, pl, pg, co, mo.');
+        }
+        // create an array of attrib names
+        if (!Array.isArray(attribs)) { attribs = [attribs]; }
+        attribs = attribs as string[];
+        for (const attrib of attribs) { checkAttribName(fn_name , attrib); }
+    } else {
+        // convert the ent_type_str to an ent_type
+        ent_type = _getEntTypeFromStr(ent_type_sel);
+        // create an array of attrib names
+        attribs = attribs as string[];
     }
-    // create an array of attrib names
-    if (!Array.isArray(attribs)) { attribs = [attribs]; }
-    attribs = attribs as string[];
-    for (const attrib of attribs) { checkAttribName(fn_name , attrib); }
+
     // --- Error Check ---
     // set the data type
     let data_type: EAttribDataTypeStrs = null;
@@ -357,20 +397,30 @@ export function Delete(__model__: GIModel, ent_type_sel: _EEntTypeAndMod, attrib
     // --- Error Check ---
     const fn_name = 'attrib.Delete';
     const arg_name = 'ent_type_sel';
-    if (ent_type_sel === 'ps' && attribs === 'xyz') {
-        throw new Error(fn_name + ': ' + arg_name + ' Deleting xyz attribute is not allowed.');
-     }
-    // convert the ent_type_str to an ent_type
-    const ent_type: EEntType = _getEntTypeFromStr(ent_type_sel);
-    if (ent_type === undefined) {
-        throw new Error(fn_name + ': ' + arg_name + ' is not one of the following valid types - ' +
-        'ps, _v, _e, _w, _f, pt, pl, pg, co, mo.');
+    let ent_type: EEntType;
+    if (__model__.debug) {
+        if (ent_type_sel === 'ps' && attribs === 'xyz') {
+            throw new Error(fn_name + ': ' + arg_name + ' Deleting xyz attribute is not allowed.');
+        }
+        // convert the ent_type_str to an ent_type
+        ent_type = _getEntTypeFromStr(ent_type_sel);
+        if (ent_type === undefined) {
+            throw new Error(fn_name + ': ' + arg_name + ' is not one of the following valid types - ' +
+            'ps, _v, _e, _w, _f, pt, pl, pg, co, mo.');
+        }
+        // create an array of attrib names
+        if (attribs === null) { attribs = __model__.attribs.query.getAttribNamesUser(ent_type); }
+        if (!Array.isArray(attribs)) { attribs = [attribs]; }
+        attribs = attribs as string[];
+        for (const attrib of attribs) { checkAttribName(fn_name , attrib); }
+    } else {
+        // convert the ent_type_str to an ent_type
+        ent_type = _getEntTypeFromStr(ent_type_sel);
+        // create an array of attrib names
+        if (attribs === null) { attribs = __model__.attribs.query.getAttribNamesUser(ent_type); }
+        if (!Array.isArray(attribs)) { attribs = [attribs]; }
+        attribs = attribs as string[];
     }
-    // create an array of attrib names
-    if (attribs === null) { attribs = __model__.attribs.query.getAttribNamesUser(ent_type); }
-    if (!Array.isArray(attribs)) { attribs = [attribs]; }
-    attribs = attribs as string[];
-    for (const attrib of attribs) { checkAttribName(fn_name , attrib); }
     // --- Error Check ---
     // delete the attributes
     for (const attrib of attribs) {
@@ -393,14 +443,16 @@ export function Rename(__model__: GIModel, ent_type_sel: _EEntTypeAndMod, old_at
     // --- Error Check ---
     const fn_name = 'attrib.Rename';
     const arg_name = 'ent_type_sel';
-    checkAttribName(fn_name , old_attrib);
-    checkAttribName(fn_name , new_attrib);
-    // --- Error Check ---
-    // convert the ent_type_str to an ent_type
-    const ent_type: EEntType = _getEntTypeFromStr(ent_type_sel);
-    if (ent_type === undefined) {
-        throw new Error(fn_name + ': ' + arg_name + ' is not one of the following valid types - ' +
-        'ps, _v, _e, _w, _f, pt, pl, pg, co, mo.');
+    const ent_type: EEntType = _getEntTypeFromStr(ent_type_sel);;
+    if (__model__.debug) {
+        checkAttribName(fn_name , old_attrib);
+        checkAttribName(fn_name , new_attrib);
+        // --- Error Check ---
+        // convert the ent_type_str to an ent_type
+        if (ent_type === undefined) {
+            throw new Error(fn_name + ': ' + arg_name + ' is not one of the following valid types - ' +
+            'ps, _v, _e, _w, _f, pt, pl, pg, co, mo.');
+        }
     }
     // create the attribute
     __model__.attribs.modify.renameAttrib(ent_type, old_attrib, new_attrib);
@@ -425,15 +477,20 @@ export function Push(__model__: GIModel, entities: TId|TId[],
             entities = [entities] as TId[];
         } else if (depth === 2) {
             // @ts-ignore
-            entities = __.flatten(entities) as TId[];
+            entities = uscore.flatten(entities) as TId[];
         }
     }
     // --- Error Check ---
     const fn_name = 'attrib.Push';
+
     let ents_arr: TEntTypeIdx[] = null;
-    if (entities !== null && entities !== undefined) {
-        ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
-    }
+    let source_attrib_name: string;
+    let source_attrib_idx_key: number|string;
+    let target_attrib_name: string;
+    let target_attrib_idx_key: number|string;
+    let source_ent_type: EEntType;
+    const indices: number[] = [];
+    let target: EEntType|string;
     let source_attrib: [string, number|string] = null;
     let target_attrib: [string, number|string] = null;
     if (Array.isArray(attrib)) {
@@ -451,26 +508,90 @@ export function Push(__model__: GIModel, entities: TId|TId[],
         source_attrib = [attrib, null];
         target_attrib = [attrib, null];
     }
-    const [source_attrib_name, source_attrib_idx_key]: [string, number|string] = checkAttribNameIdxKey(fn_name, source_attrib);
-    const [target_attrib_name, target_attrib_idx_key]: [string, number|string] = checkAttribNameIdxKey(fn_name, target_attrib);
-    // --- Error Check ---
-    // get the source ent_type and indices
-    const source_ent_type: EEntType = ents_arr[0][0];
-    const indices: number[] = [];
-    for (const ent_arr of ents_arr) {
-        if (ent_arr[0] !== source_ent_type) {
-            throw new Error('The entities must all be of the same type.');
+
+    if (__model__.debug) {
+        if (entities !== null && entities !== undefined) {
+            ents_arr = checkIDs(fn_name, 'entities', entities, [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
         }
-        indices.push(ent_arr[1]);
+        [source_attrib_name, source_attrib_idx_key] = checkAttribNameIdxKey(fn_name, source_attrib);
+        [target_attrib_name, target_attrib_idx_key] = checkAttribNameIdxKey(fn_name, target_attrib);
+        // --- Error Check ---
+        // get the source ent_type and indices
+        source_ent_type = ents_arr[0][0];
+        for (const ent_arr of ents_arr) {
+            if (ent_arr[0] !== source_ent_type) {
+                throw new Error('The entities must all be of the same type.');
+            }
+            indices.push(ent_arr[1]);
+        }
+        // check the names
+        checkAttribName(fn_name, source_attrib_name);
+        checkAttribName(fn_name, target_attrib_name);
+        // get the target ent_type
+        target = _getAttribPushTarget(ent_type_sel);
+        if (source_ent_type === target) {
+            throw new Error('The new attribute is at the same level as the existing attribute.');
+        }
+    } else {
+        if (entities !== null && entities !== undefined) {
+            // ents_arr = splitIDs(fn_name, 'entities', entities,
+            // [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+            ents_arr = idsBreak(entities) as TEntTypeIdx[];
+        }
+        [source_attrib_name, source_attrib_idx_key] = splitAttribNameIdxKey(fn_name, source_attrib);
+        [target_attrib_name, target_attrib_idx_key] = splitAttribNameIdxKey(fn_name, target_attrib);
+
+        // get the source ent_type and indices
+        source_ent_type = ents_arr[0][0];
+        for (const ent_arr of ents_arr) {
+            indices.push(ent_arr[1]);
+        }
+        // get the target ent_type
+        target = _getAttribPushTarget(ent_type_sel);
     }
-    // check the names
-    checkAttribName(fn_name, source_attrib_name);
-    checkAttribName(fn_name, target_attrib_name);
-    // get the target ent_type
-    const target: EEntType|string = _getAttribPushTarget(ent_type_sel);
-    if (source_ent_type === target) {
-        throw new Error('The new attribute is at the same level as the existing attribute.');
-    }
+
+    // let ents_arr: TEntTypeIdx[] = null;
+    // if (entities !== null && entities !== undefined) {
+    //     ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    // }
+    // let source_attrib: [string, number|string] = null;
+    // let target_attrib: [string, number|string] = null;
+    // if (Array.isArray(attrib)) {
+    //     // set source attrib
+    //     source_attrib = [
+    //         attrib[0] as string,
+    //         (attrib.length > 1 ? attrib[1] : null) as number|string
+    //     ];
+    //     // set target attrib
+    //     target_attrib = [
+    //         (attrib.length > 2 ? attrib[2] : attrib[0]) as string,
+    //         (attrib.length > 3 ? attrib[3] : null) as number|string
+    //     ];
+    // } else {
+    //     source_attrib = [attrib, null];
+    //     target_attrib = [attrib, null];
+    // }
+    // const [source_attrib_name, source_attrib_idx_key]: [string, number|string] = checkAttribNameIdxKey(fn_name, source_attrib);
+    // const [target_attrib_name, target_attrib_idx_key]: [string, number|string] = checkAttribNameIdxKey(fn_name, target_attrib);
+    // // --- Error Check ---
+    // // get the source ent_type and indices
+    // const source_ent_type: EEntType = ents_arr[0][0];
+    // const indices: number[] = [];
+    // for (const ent_arr of ents_arr) {
+    //     if (ent_arr[0] !== source_ent_type) {
+    //         throw new Error('The entities must all be of the same type.');
+    //     }
+    //     indices.push(ent_arr[1]);
+    // }
+    // // check the names
+    // checkAttribName(fn_name, source_attrib_name);
+    // checkAttribName(fn_name, target_attrib_name);
+    // // get the target ent_type
+    // const target: EEntType|string = _getAttribPushTarget(ent_type_sel);
+    // if (source_ent_type === target) {
+    //     throw new Error('The new attribute is at the same level as the existing attribute.');
+    // }
+
     // get the method
     const method: EAttribPush = _convertPushMethod(method_sel);
     // do the push

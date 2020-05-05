@@ -544,6 +544,7 @@ export class PanelHeaderComponent implements OnDestroy {
         if (url.indexOf('dropbox') !== -1) {
             url = url.replace('www', 'dl').replace('?dl=0', '');
         }
+        url = url.replace(/^[\"\']|[\"\']$/g, '');
         request.open('GET', url);
 
         request.onload = () => {
@@ -582,10 +583,15 @@ export class PanelHeaderComponent implements OnDestroy {
         if (url.indexOf('dropbox') !== -1) {
             url = url.replace('www', 'dl').replace('?dl=0', '');
         }
+        url = url.replace(/^[\"\']|[\"\']$/g, '');
         url = '_' + btoa(url);
 
         let txtArea = document.getElementById('generatedLink');
-        txtArea.innerHTML = `${window.location.origin}/${this.urlSet[1]}` +
+        let baseLink = window.location.origin;
+        if (baseLink.indexOf('design-automation.github.io') !== -1) {
+            baseLink += '/mobius-parametric-modeller-dev'
+        }
+        txtArea.innerHTML = `${baseLink}/${this.urlSet[1]}` +
             `?file=${url}${this.urlSet[2]}${this.urlSet[3]}${this.urlSet[4]}${this.urlSet[5]}`;
         txtArea = null;
     }

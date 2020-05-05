@@ -49,7 +49,10 @@ export class GICesiumViewerComponent implements OnInit {
         if (localStorage.getItem('cesium_settings') !== null) {
             const parsedSettings = JSON.parse(localStorage.getItem('cesium_settings'));
             this.updateSettings(this.settings, parsedSettings);
+        } else {
+            localStorage.setItem('cesium_settings', JSON.stringify(this.settings));
         }
+
         if (this.dataService.getCesiumScene() === undefined) {
             this.dataService.setCesiumScene(this.settings);
         }
@@ -62,6 +65,14 @@ export class GICesiumViewerComponent implements OnInit {
     childEventClicked(event: Event) {
         this.clickedEvent = event;
     }
+
+    zoomfit() {
+        const camera = this.dataService.getCesiumScene()._camera;
+        const boundingSphere = camera[0];
+        const cameraObj = camera[1];
+        cameraObj.flyToBoundingSphere(boundingSphere, {'duration': 0});
+    }
+
     /**
      * settingOnChange
      * @param setting
@@ -69,6 +80,26 @@ export class GICesiumViewerComponent implements OnInit {
      */
     public settingOnChange(setting: string, value?: number) {
         const scene = this.dataService.getCesiumScene();
+        switch (setting) {
+            case 'camera.pos':
+                const camera_pos = this.dataService.getCesiumScene()._camera[1].position;
+                this.settings.camera.pos.x = camera_pos.x;
+                this.settings.camera.pos.y = camera_pos.y;
+                this.settings.camera.pos.z = camera_pos.z;
+                const camera_direction = this.dataService.getCesiumScene()._camera[1].direction;
+                this.settings.camera.direction.x = camera_direction.x;
+                this.settings.camera.direction.y = camera_direction.y;
+                this.settings.camera.direction.z = camera_direction.z;
+                const camera_up = this.dataService.getCesiumScene()._camera[1].up;
+                this.settings.camera.up.x = camera_up.x;
+                this.settings.camera.up.y = camera_up.y;
+                this.settings.camera.up.z = camera_up.z;
+                const camera_right = this.dataService.getCesiumScene()._camera[1].right;
+                this.settings.camera.right.x = camera_right.x;
+                this.settings.camera.right.y = camera_right.y;
+                this.settings.camera.right.z = camera_right.z;
+                break;
+        }
     }
     /**
      *

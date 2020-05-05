@@ -7,12 +7,13 @@
 /**
  *
  */
+import { checkIDs, IdCh } from '../_check_ids';
+
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EEntType, TRay, TEntTypeIdx, EEntTypeStr, Txy} from '@libs/geo-info/common';
-import { checkArgTypes, TypeCheckObj, checkIDs, IDcheckObj} from '../_check_args';
-import { getArrDepth, isColl } from '@assets/libs/geo-info/id';
+import { getArrDepth, isColl, isPosi, isPgon, isPline, isPoint } from '@assets/libs/geo-info/id';
 import { vecDiv, vecSum, vecAvg, vecFromTo, vecLen, vecCross, vecNorm, vecAdd, vecSetLen, vecDot } from '@assets/libs/geom/vectors';
-import { isRay, isPlane, isVec3 } from '@assets/libs/geo-info/virtual';
+import { isRay, isPlane, isXYZ } from '@assets/libs/geo-info/virtual';
 import { rayFromPln } from '@assets/core/inline/_ray';
 import { plnFromRay } from '@assets/core/inline/_plane';
 import * as THREE from 'three';
@@ -20,7 +21,7 @@ const EPS = 1e-8;
 
 // ================================================================================================
 export function getOrigin(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], fn_name: string): Txyz {
-    if (isVec3(data)) { return data as Txyz; }
+    if (isXYZ(data)) { return data as Txyz; }
     if (isRay(data)) { return data[0] as Txyz; }
     if (isPlane(data)) { return data[0] as Txyz; }
     const ents: TId|TId[] = data as TId|TId[];
@@ -29,7 +30,7 @@ export function getOrigin(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], 
 }
 // ================================================================================================
 export function getRay(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], fn_name: string): TRay {
-    if (isVec3(data)) { return [data, [0, 0, 1]] as TRay; }
+    if (isXYZ(data)) { return [data, [0, 0, 1]] as TRay; }
     if (isRay(data)) { return data as TRay; }
     if (isPlane(data)) { return rayFromPln(data as TPlane) as TRay; }
     const ents: TId|TId[] = data as TId|TId[];
@@ -38,7 +39,7 @@ export function getRay(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], fn_
 }
 // ================================================================================================
 export function getPlane(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], fn_name: string): TPlane {
-    if (isVec3(data)) { return [data, [1, 0, 0], [0, 1, 0]] as TPlane; }
+    if (isXYZ(data)) { return [data, [1, 0, 0], [0, 1, 0]] as TPlane; }
     if (isRay(data)) { return plnFromRay(data as TRay) as TPlane; }
     if (isPlane(data)) { return data as TPlane; }
     const ents: TId|TId[] = data as TId|TId[];
@@ -50,7 +51,7 @@ export function getCentoridFromEnts(__model__: GIModel, ents: TId|TId[], fn_name
     // this must be an ID or an array of IDs, so lets get the centroid
     // TODO this error message is confusing
     const ents_arr: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'ents', ents,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
+        [IdCh.isId, IdCh.isIdL],
         [EEntType.POSI, EEntType.VERT, EEntType.POINT, EEntType.EDGE, EEntType.WIRE,
             EEntType.PLINE, EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx;
     const centroid: Txyz|Txyz[] = getCentroid(__model__, ents_arr);
@@ -264,3 +265,88 @@ export function getPlanesSeq(xyzs: Txyz[], normal: Txyz, close: boolean): TPlane
 }
 // ================================================================================================
 
+
+// ================================================================================================
+// Utility functions used in make.Copy() and in poly2d.Stitch()
+/**
+ * Copy posis, points, plines, pgons
+ * @param __model__
+ * @param ents_arr
+ * @param copy_attributes
+ */
+export function _copyGeom(__model__: GIModel,
+    ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][], copy_attributes: boolean): TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][] {
+    const depth: number = getArrDepth(ents_arr);
+    if (depth === 1) {
+        const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
+        if (isColl(ent_type)) {
+            const coll_i: number = __model__.geom.add.copyColls(index, copy_attributes) as number;
+            return [ent_type, coll_i];
+        } else if (isPgon(ent_type)) {
+            const obj_i: number = __model__.geom.add.copyPgons(index, copy_attributes) as number;
+            return [ent_type, obj_i];
+        } else if (isPline(ent_type)) {
+            const obj_i: number = __model__.geom.add.copyPlines(index, copy_attributes) as number;
+            return [ent_type, obj_i];
+        } else if (isPoint(ent_type)) {
+            const obj_i: number = __model__.geom.add.copyPoints(index, copy_attributes) as number;
+            return [ent_type, obj_i];
+        } else if (isPosi(ent_type)) {
+            const posi_i: number = __model__.geom.add.copyPosis(index, copy_attributes) as number;
+            return [ent_type, posi_i];
+        }
+    } else if (depth === 2) {
+        ents_arr = ents_arr as TEntTypeIdx[];
+        return ents_arr.map(ents_arr_item => _copyGeom(__model__, ents_arr_item, copy_attributes)) as TEntTypeIdx[];
+    } else { // depth > 2
+        ents_arr = ents_arr as TEntTypeIdx[][];
+        return ents_arr.map(ents_arr_item => _copyGeom(__model__, ents_arr_item, copy_attributes)) as TEntTypeIdx[][];
+    }
+}
+export function _copyGeomPosis(__model__: GIModel, ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][],
+        copy_attributes: boolean, vector: Txyz): void {
+    const depth: number = getArrDepth(ents_arr);
+    if (depth === 1) {
+        ents_arr = [ents_arr] as TEntTypeIdx[];
+    } else if (depth > 2) {
+        // @ts-ignore
+        ents_arr = ents_arr.flat(depth - 2) as TEntTypeIdx[];
+    }
+    // create the new positions
+    const old_to_new_posis_i_map: Map<number, number> = new Map(); // count number of posis
+    for (const ent_arr of ents_arr) {
+        const [ent_type, index]: TEntTypeIdx = ent_arr as TEntTypeIdx;
+        // something may not be right here
+        // if you copy a pgon + posi, if you process the pgon first you wil make a copy of the posis
+        // but the posi may already be copied by the _copyGeom function, then we get two copies of that posi
+        // I think this whole copy-move function need to to be moved to the GI library, can also make it more efficient
+        if (isPosi(ent_type) && vector !== null) { // positions
+            const old_posi_i: number = index;
+            let new_posi_i: number;
+            if (old_to_new_posis_i_map.has(old_posi_i)) {
+                new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
+            } else {
+                const xyz: Txyz = __model__.attribs.query.getPosiCoords(old_posi_i);
+                __model__.attribs.add.setPosiCoords(old_posi_i, vecAdd(xyz, vector));
+                old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
+            }
+        } else { // obj or coll
+            const old_posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, index);
+            const ent_new_posis_i: number[] = [];
+            for (const old_posi_i of old_posis_i) {
+                let new_posi_i: number;
+                if (old_to_new_posis_i_map.has(old_posi_i)) {
+                    new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
+                } else {
+                    new_posi_i = __model__.geom.add.copyMovePosis(old_posi_i, vector, copy_attributes) as number;
+                    old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
+                }
+                ent_new_posis_i.push(new_posi_i);
+            }
+            __model__.geom.modify.replacePosis(ent_type, index, ent_new_posis_i);
+        }
+    }
+    // return all the new points
+    // const all_new_posis_i: number[] = Array.from(old_to_new_posis_i_map.values());
+    // return all_new_posis_i.map( posi_i => [EEntType.POSI, posi_i] ) as TEntTypeIdx[];
+}

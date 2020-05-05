@@ -3,7 +3,7 @@ import { TRay, TPlane, TBBox } from './common';
 // ============================================================================
 
 
-export function isVec3(data: any): boolean {
+export function isXYZ(data: any): boolean {
     if (!Array.isArray(data)) { return false; }
     data = data as any[];
     if (data.length !== 3) { return false; }
@@ -17,7 +17,7 @@ export function isRay(data: any): boolean {
     data = data as any[];
     if (data.length !== 2) { return false; }
     for (const item of data) {
-        if (!isVec3(item)) { return false; }
+        if (!isXYZ(item)) { return false; }
     }
     return true;
 }
@@ -26,7 +26,7 @@ export function isPlane(data: any): boolean {
     data = data as any[];
     if (data.length !== 3) { return false; }
     for (const item of data) {
-        if (!isVec3(item)) { return false; }
+        if (!isXYZ(item)) { return false; }
     }
     return true;
 }
@@ -35,7 +35,7 @@ export function isBBox(data: any): boolean {
     data = data as any[];
     if (data.length !== 4) { return false; }
     for (const item of data) {
-        if (!isVec3(item)) { return false; }
+        if (!isXYZ(item)) { return false; }
     }
     return true;
 }

@@ -21,6 +21,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { GoogleAnalyticsService } from '@shared/services/google.analytics';
 import { DataCesiumService } from '../model-viewers/all-viewers/gi-cesium-viewer/data/data.cesium.service';
 import { DataOutputService } from '@shared/services/dataOutput.service';
+import { CytoscapeService } from '../model-viewers/all-viewers/cytoscape-viewer/service/cytoscape.service';
 // import { WebWorkerService } from 'ngx-web-worker';
 
 
@@ -55,7 +56,7 @@ import { DataOutputService } from '@shared/services/dataOutput.service';
         ViewAboutComponent,
     ],
     providers: [ DataService, DataOutputService, KeyboardService,
-                 GiViewerDataService, DataCesiumService,
+                 GiViewerDataService, DataCesiumService, CytoscapeService,
                  GoogleAnalyticsService],
     bootstrap: [ AppComponent ]
 })

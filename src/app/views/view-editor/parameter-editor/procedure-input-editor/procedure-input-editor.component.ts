@@ -127,6 +127,15 @@ export class ProcedureInputEditorComponent implements OnDestroy {
         return this.ctx.measureText(val).width + 7;
     }
 
+    sliderInputSize() {
+        const maxInput =  this.prod.args[this.prod.argCount - 1].max;
+        const stepInput = this.prod.args[this.prod.argCount - 1].step;
+        if (maxInput === undefined || maxInput === '') { return this.ctx.measureText('100').width + 8; }
+        if (stepInput === undefined) { return this.ctx.measureText(maxInput).width + 7; }
+        const sum = Number(maxInput) + Number(stepInput);
+        return this.ctx.measureText(sum.toString()).width + 7;
+    }
+
 
     updateMin(args, event) {
         if (event.type === 'keyup' && event.which !== 13) { return; }

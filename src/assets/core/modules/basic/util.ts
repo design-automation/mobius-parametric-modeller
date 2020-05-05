@@ -6,16 +6,35 @@
  *
  */
 
-import { GIModel } from '@libs/geo-info/GIModel';
+import { checkIDs, IdCh } from '../_check_ids';
 
+import { GIModel } from '@libs/geo-info/GIModel';
 import { download } from '@libs/filesys/download';
 import { EEntType, IModelData, TId, TEntTypeIdx } from '@libs/geo-info/common';
 import { __merge__ } from '../_model';
 import { _model } from '..';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
-import { checkIDs, IDcheckObj } from '../_check_args';
+import { idsBreak } from '@assets/libs/geo-info/id';
 
-
+export enum _ECOmpareMethod {
+    THIS_IS_SUBSET = 'subset',
+    THIS_IS_SUPERSET = 'superset',
+    THIS_IS_EQUAL = 'equal'
+}
+// ================================================================================================
+/**
+ * Removes all deleted entities from the model.
+ * The IDs of other entities may change as a result.
+ * ~
+ * For example, if 'pg0' was deleted and 'pg1' still exists, then after purge
+ * 'pg1' will get renumbered, and will get the ID 'pg0'.
+ *
+ * @param __model__
+ * @returns void
+ */
+export function ModelPurge(__model__: GIModel): void {
+    __model__.purge();
+}
 // ================================================================================================
 /**
  * Returns an html string representation of the contents of this model
@@ -24,40 +43,88 @@ import { checkIDs, IDcheckObj } from '../_check_args';
  * @returns Text that summarises what is in the model, click print to see this text.
  */
 export function ModelInfo(__model__: GIModel): string {
-    return JSON.stringify(
-        {
-            'geometry': {
-                'num_positions': __model__.geom.query.numEnts(EEntType.POSI, false),
-                'num_vertices': __model__.geom.query.numEnts(EEntType.VERT, false),
-                'num_edges': __model__.geom.query.numEnts(EEntType.EDGE, false),
-                'num_wires': __model__.geom.query.numEnts(EEntType.WIRE, false),
-                'num_faces': __model__.geom.query.numEnts(EEntType.FACE, false),
-                'num_points': __model__.geom.query.numEnts(EEntType.POINT, false),
-                'num_polylines': __model__.geom.query.numEnts(EEntType.PLINE, false),
-                'num_polygons': __model__.geom.query.numEnts(EEntType.PGON, false),
-                'num_collections': __model__.geom.query.numEnts(EEntType.COLL, false)
-            },
-            'attributes': {
-                'position_attribs': __model__.attribs.query.getAttribNames(EEntType.POSI),
-                'vertex_attribs': __model__.attribs.query.getAttribNames(EEntType.VERT),
-                'edge_attribs': __model__.attribs.query.getAttribNames(EEntType.EDGE),
-                'wire_attribs': __model__.attribs.query.getAttribNames(EEntType.WIRE),
-                'face_attribs': __model__.attribs.query.getAttribNames(EEntType.FACE),
-                'point_attribs': __model__.attribs.query.getAttribNames(EEntType.POINT),
-                'polyline_attribs': __model__.attribs.query.getAttribNames(EEntType.PLINE),
-                'polygon_attribs': __model__.attribs.query.getAttribNames(EEntType.PGON),
-                'collection_attribs': __model__.attribs.query.getAttribNames(EEntType.COLL),
-                'model_attribs': __model__.attribs.query.getAttribNames(EEntType.MOD)
-            }
-        },
-    );
+    let info = '<h4>Model Information:</h4>';
+    info += '<ul>';
+    // model attribs
+    const model_attribs: string[] = __model__.attribs.query.getAttribNames(EEntType.MOD);
+    if (model_attribs.length !== 0) { info += '<li>Model attribs: ' + model_attribs.join(', ') + '</li>'; }
+    // collections
+    const num_colls: number = __model__.geom.query.numEnts(EEntType.COLL, false);
+    const num_del_colls: number = __model__.geom.query.numEnts(EEntType.COLL, true) - num_colls;
+    const coll_attribs: string[] = __model__.attribs.query.getAttribNames(EEntType.COLL);
+    info += '<li>';
+    info += '<b>Collections</b>: ' + num_colls + ' (Deleted: ' + num_del_colls + ') ';
+    if (coll_attribs.length !== 0) { info += 'Attribs: ' + coll_attribs.join(', '); }
+    info += '</li>';
+    // pgons
+    const num_pgons: number = __model__.geom.query.numEnts(EEntType.PGON, false);
+    const num_del_pgons: number = __model__.geom.query.numEnts(EEntType.PGON, true) - num_pgons;
+    const pgon_attribs: string[] = __model__.attribs.query.getAttribNames(EEntType.PGON);
+    info += '<li>';
+    info += '<b>Polygons</b>: ' + num_pgons + ' (Deleted: ' + num_del_pgons + ') ';
+    if (pgon_attribs.length !== 0) { info += 'Attribs: ' + pgon_attribs.join(', '); }
+    info += '</li>';
+    // plines
+    const num_plines: number = __model__.geom.query.numEnts(EEntType.PLINE, false);
+    const num_del_plines: number = __model__.geom.query.numEnts(EEntType.PLINE, true) - num_plines;
+    const pline_attribs: string[] = __model__.attribs.query.getAttribNames(EEntType.PLINE);
+    info += '<li>';
+    info += '<b>Polylines</b>: ' + num_plines + ' (Deleted: ' + num_del_plines + ') ';
+    if (pline_attribs.length !== 0) { info += 'Attribs: ' + pline_attribs.join(', '); }
+    info += '</li>';
+    // points
+    const num_points: number = __model__.geom.query.numEnts(EEntType.POINT, false);
+    const num_del_points: number = __model__.geom.query.numEnts(EEntType.POINT, true) - num_points;
+    const point_attribs: string[] = __model__.attribs.query.getAttribNames(EEntType.POINT);
+    info += '<li>';
+    info += '<b>Points</b>: ' + num_points + ' (Deleted: ' + num_del_points + ') ';
+    if (point_attribs.length !== 0) { info += 'Attribs: ' + point_attribs.join(', '); }
+    info += '</li>';
+    // faces
+    const num_faces: number = __model__.geom.query.numEnts(EEntType.FACE, false);
+    const num_del_faces: number = __model__.geom.query.numEnts(EEntType.FACE, true) - num_faces;
+    const face_attribs: string[] = __model__.attribs.query.getAttribNames(EEntType.FACE);
+    info += '<li>';
+    info += '<b>Faces</b>: ' + num_faces + ' (Deleted: ' + num_del_faces + ') ';
+    if (face_attribs.length !== 0) { info += 'Attribs: ' + face_attribs.join(', '); }
+    info += '</li>';
+    // wires
+    const num_wires: number = __model__.geom.query.numEnts(EEntType.WIRE, false);
+    const num_del_wires: number = __model__.geom.query.numEnts(EEntType.WIRE, true) - num_wires;
+    const wire_attribs: string[] = __model__.attribs.query.getAttribNames(EEntType.WIRE);
+    info += '<li>';
+    info += '<b>Wires</b>: ' + num_wires + ' (Deleted: ' + num_del_wires + ') ';
+    if (wire_attribs.length !== 0) { info += 'Attribs: ' + wire_attribs.join(', '); }
+    info += '</li>';
+    // edges
+    const num_edges: number = __model__.geom.query.numEnts(EEntType.EDGE, false);
+    const num_del_edges: number = __model__.geom.query.numEnts(EEntType.EDGE, true) - num_edges;
+    const edge_attribs: string[] = __model__.attribs.query.getAttribNames(EEntType.EDGE);
+    info += '<li>';
+    info += '<b>Edges</b>: ' + num_edges + ' (Deleted: ' + num_del_edges + ') ';
+    if (edge_attribs.length !== 0) { info += 'Attribs: ' + edge_attribs.join(', '); }
+    info += '</li>';
+    // verts
+    const num_verts: number = __model__.geom.query.numEnts(EEntType.VERT, false);
+    const num_del_verts: number = __model__.geom.query.numEnts(EEntType.VERT, true) - num_verts;
+    const vert_attribs: string[] = __model__.attribs.query.getAttribNames(EEntType.VERT);
+    info += '<li>';
+    info += '<b>Vertices</b>: ' + num_verts + ' (Deleted: ' + num_del_verts + ') ';
+    if (vert_attribs.length !== 0) { info += 'Attribs: ' + vert_attribs.join(', '); }
+    info += '</li>';
+    // posis
+    const num_posis: number = __model__.geom.query.numEnts(EEntType.POSI, false);
+    const num_del_posis: number = __model__.geom.query.numEnts(EEntType.POSI, true) - num_posis;
+    const posi_attribs: string[] = __model__.attribs.query.getAttribNames(EEntType.POSI);
+    info += '<li>';
+    info += '<b>Positions</b>: ' + num_posis + ' (Deleted: ' + num_del_posis + ') ';
+    if (posi_attribs.length !== 0) { info += 'Attribs: ' + posi_attribs.join(', '); }
+    info += '</li>';
+    // end
+    info += '</ul>';
+    // return the string
+    return info;
 }
-export enum _ECOmpareMethod {
-    THIS_IS_SUBSET = 'subset',
-    THIS_IS_SUPERSET = 'superset',
-    THIS_IS_EQUAL = 'equal'
-}
-
 // ================================================================================================
 /**
  * Returns am html string representation of the parameters in this model
@@ -81,9 +148,17 @@ export function EntityInfo(__model__: GIModel, entities: TId|TId[]): string {
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
     const fn_name = 'collection.Info';
-    const ents_arr = checkIDs(fn_name, 'coll', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
-        [EEntType.COLL, EEntType.PGON, EEntType.PLINE, EEntType.POINT]) as TEntTypeIdx[];
+    let ents_arr: TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'coll', entities,
+            [IdCh.isId, IdCh.isIdL],
+            [EEntType.COLL, EEntType.PGON, EEntType.PLINE, EEntType.POINT]) as TEntTypeIdx[];
+    } else {
+        // ents_arr = splitIDs(fn_name, 'coll', entities,
+        //     [IDcheckObj.isID, IDcheckObj.isIDList],
+        //     [EEntType.COLL, EEntType.PGON, EEntType.PLINE, EEntType.POINT]) as TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx[];
+    }
     // --- Error Check ---
     let result = '<h4>Entity Information:</h4>';
     for (const ent_arr of ents_arr) {
@@ -242,6 +317,16 @@ function _collInfo(__model__: GIModel, coll_i: number): string {
     return info;
 }
 // ================================================================================================
+
+export enum _EIOExportParams {
+    YES = 'Add Params',
+    NO = 'No Params'
+}
+export enum _EIOExportContents {
+    BOTH = 'Both',
+    CONSOLE = 'Console Only',
+    MODEL = 'Model Only'
+}
 /**
  * Export data from the model as a file.
  * This will result in a popup in your browser, asking you to save the filel.
@@ -291,15 +376,6 @@ export function ExportIO(__model__: GIModel, __console__: string[], __constList_
     }
 
     return download(JSON.stringify(edxAnswer) , file_name);
-}
-export enum _EIOExportParams {
-    YES = 'Add Params',
-    NO = 'No Params'
-}
-export enum _EIOExportContents {
-    BOTH = 'Both',
-    CONSOLE = 'Console Only',
-    MODEL = 'Model Only'
 }
 function convertString(value) {
     let val;
@@ -373,6 +449,7 @@ export function ModelCheck(__model__: GIModel): string {
         console.log(__model__);
         return String(check);
     }
+    console.log(__model__);
     return 'No internal inconsistencies have been found.';
 }
 // ================================================================================================

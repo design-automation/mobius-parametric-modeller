@@ -33,6 +33,13 @@ function mergeInputs(models){
     }
     return result;
 }
+function duplicateModel(model){
+    const result = model.clone();
+    try {
+        result.debug = __debug__;
+    } catch (ex) {}
+    return result;
+}
 `;
 export const printFunc = `
 function printFunc(_console, name, value){
@@ -149,6 +156,8 @@ export class ExecuteComponent {
                         const result = await CodeUtils.getURLContent(val);
                         if (result === undefined) {
                             prod.resolvedValue = arg.value;
+                        } else if (result.indexOf('HTTP Request Error') !== -1) {
+                            throw new Error(result);
                         } else {
                             prod.resolvedValue = '`' + result + '`';
                         }
@@ -184,7 +193,7 @@ export class ExecuteComponent {
         if (this.dataService.consoleClear) {
             this.dataService.clearLog();
         }
-        SaveFileComponent.clearModelData(this.dataService.flowchart, null);
+        SaveFileComponent.clearModelData(this.dataService.flowchart, null, false);
 
         if (this.dataService.mobiusSettings.debug === undefined) {
             this.dataService.mobiusSettings.debug = true;
@@ -291,7 +300,6 @@ export class ExecuteComponent {
     async checkProdValidity(node: INode, prodList: IProcedure[]) {
         let InvalidECheck = false;
         let EmptyECheck = false;
-
         for (const prod of prodList) {
             // ignore the return, comment and disabled procedures
             if (prod.type === ProcedureTypes.Return || prod.type === ProcedureTypes.Comment || !prod.enabled) { continue; }
@@ -474,6 +482,7 @@ export class ExecuteComponent {
             }
         }
 
+        const nodeIndices = {};
         // execute each node
         for (let i = 0; i < this.dataService.flowchart.nodes.length; i++) {
             const node = this.dataService.flowchart.nodes[i];
@@ -483,8 +492,9 @@ export class ExecuteComponent {
                 node.output.value = undefined;
                 continue;
             }
+            nodeIndices[node.id] = i;
 
-            // if the node is in the to be executed set
+            // if the node is not to be executed
             if (!executeSet.has(i)) {
                 let exCheck = false;
                 for (const edge of node.output.edges) {
@@ -499,7 +509,8 @@ export class ExecuteComponent {
                 }
                 continue;
             }
-            globalVars = this.executeNode(node, funcStrings, globalVars, constantList);
+            // execute valid node
+            globalVars = this.executeNode(node, funcStrings, globalVars, constantList, nodeIndices);
         }
 
         // delete each node.output.value to save memory
@@ -523,7 +534,7 @@ export class ExecuteComponent {
     }
 
 
-    executeNode(node: INode, funcStrings, globalVars, constantList): string {
+    executeNode(node: INode, funcStrings, globalVars, constantList, nodeIndices): string {
         const params = {
             'currentProcedure': [''],
             'console': this.dataService.getLog(),
@@ -556,7 +567,7 @@ export class ExecuteComponent {
                 return;
             }
             const usedFuncs: string[] = [];
-            const codeResult = CodeUtils.getNodeCode(node, true, undefined, undefined, usedFuncs);
+            const codeResult = CodeUtils.getNodeCode(node, true, nodeIndices, undefined, undefined, usedFuncs);
             const usedFuncsSet = new Set(usedFuncs);
             // if process is terminated, return
             if (codeResult[1]) {
@@ -621,8 +632,9 @@ export class ExecuteComponent {
                 }
             }
 
-            params['model'] = _parameterTypes.newFn();
-            _parameterTypes.mergeFn(params['model'], node.input.value);
+            params['model'] = node.input.value;
+            // console.log(node.input.value)
+            // _parameterTypes.mergeFn(params['model'], node.input.value);
             params['model'].debug = this.dataService.mobiusSettings.debug;
 
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)

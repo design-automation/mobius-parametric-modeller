@@ -1,7 +1,3 @@
-import __ from 'underscore';
-import { deepCopy } from './copy';
-import { isDim2 } from '../geo-info/id';
-
 /**
  * Remove an item from an array
  * @param arr
@@ -41,7 +37,7 @@ export function arrIdxRem(arr: any[], idx: number, item: any, del_empty: boolean
     }
 }
 /**
- * Make flat array from anything.
+ * Make flat array (depth = 1) from anything.
  * ~
  * If it is not an array, then make it an array
  * ~
@@ -70,6 +66,37 @@ export function arrMakeFlat(data: any): any[] {
     flat(data);
     return flattend;
 }
+/**
+ * Make an array of depth 2 from anything.
+ * ~
+ * If it is not an array, then make it an array
+ * ~
+ * If it is an array, then make it flat
+ * ~
+ * @param data
+ */
+export function arrMake2Deep(data: any): any[] {
+    if (!Array.isArray(data)) {
+        return [[data]];
+    }
+    // return new_array;
+    const flattend = [];
+    function flat(data2: any) {
+        data2.forEach(function(el: any) {
+            if (!Array.isArray(el)) {
+                flattend.push([el]);
+            } else if (!Array.isArray(el[0])) {
+                flattend.push(el);
+            } else {
+                flat(el);
+            }
+        });
+    }
+    flat(data);
+    return flattend;
+}
+
+
 /**
  * Maximum depth of an array
  * @param data

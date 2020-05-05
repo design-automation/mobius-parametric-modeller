@@ -66,7 +66,7 @@ export class GIModelComparator {
         if (result.score === result.total) {
             result.comment = ['RESULT: The two models match.'];
         } else {
-            result.comment.push('RESULT: The two models no not match.');
+            result.comment.push('RESULT: The two models do not match.');
         }
 
         // calculate percentage score
@@ -319,8 +319,8 @@ export class GIModelComparator {
                     for (const key of keys) {
                         if (key !== 'ps:xyz') {
                             if (
-                                !other_fprints_arr[com_idx].has(key) ||
-                                this_fprints_arr[com_idx].get(key) !== other_fprints_arr[com_idx].get(key)
+                                !other_fprints_arr[found_other_idx].has(key) ||
+                                this_fprints_arr[com_idx].get(key) !== other_fprints_arr[found_other_idx].get(key)
                             ) {
                                 ent_num_attribs_mismatch += 1;
                                 if (!num_attribs_not_found.has(key)) {

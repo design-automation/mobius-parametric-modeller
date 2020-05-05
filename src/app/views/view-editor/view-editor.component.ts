@@ -259,7 +259,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         const temp = node.state.procedure.slice();
         const copiedProds = [];
         NodeUtils.rearrangeProcedures(copiedProds, temp, node.localFunc.concat(node.procedure));
-        SaveFileComponent.clearResolvedValue(copiedProds);
+        SaveFileComponent.clearResolvedValue(copiedProds, true);
         localStorage.setItem('mobius_copied_procedures', circularJSON.stringify(copiedProds));
         this.dataService.notifyMessage(`Copied ${copiedProds.length} Procedures`);
     }
@@ -281,7 +281,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         const temp = node.state.procedure.slice();
         const copiedProds = [];
         NodeUtils.rearrangeProcedures(copiedProds, temp, node.localFunc.concat(node.procedure));
-        SaveFileComponent.clearResolvedValue(copiedProds);
+        SaveFileComponent.clearResolvedValue(copiedProds, true);
 
         let parentArray: IProcedure[];
         const redoActions = [];
@@ -538,6 +538,30 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
     // import a flowchart as function
     import_global_func(event) {
+        for (let i = 0; i < this.dataService.flowchart.functions.length; i ++) {
+            if (this.dataService.flowchart.functions[i].name === event.main.name) {
+                if (confirm(`A function named ${event.main.name} already exists. Would you like to override it?`)) {
+                    this.dataService.flowchart.functions[i] = event.main;
+                    if (!this.dataService.flowchart.subFunctions) {
+                        this.dataService.flowchart.subFunctions = [];
+                    }
+                    let j = 0;
+                    while (j < this.dataService.flowchart.subFunctions.length) {
+                        const func = this.dataService.flowchart.subFunctions[j];
+                        if (func.name.startsWith(event.main.name)) {
+                            this.dataService.flowchart.subFunctions.splice(j, 1);
+                        } else {
+                            j++;
+                        }
+                    }
+                    for (const func of event.sub) {
+                        this.dataService.flowchart.subFunctions.push(func);
+                    }
+                    this.dataService.notifyMessage(`Import and Override Global Function ${event.main.name}`);
+                }
+                return;
+            }
+        }
         this.dataService.flowchart.functions.push(event.main);
         if (!this.dataService.flowchart.subFunctions) {
             this.dataService.flowchart.subFunctions = [];
@@ -545,6 +569,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         for (const func of event.sub) {
             this.dataService.flowchart.subFunctions.push(func);
         }
+        this.dataService.notifyMessage(`Imported Global Function ${event.main.name}`);
     }
 
     // delete an imported function

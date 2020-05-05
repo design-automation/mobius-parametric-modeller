@@ -29,11 +29,22 @@ export class GIModel {
     /**
      * Copys the data from a second model into this model.
      * The existing data in this model is not deleted.
+     * For the imported data, deleted entities are also merged.
      * @param model_data The GI model.
      */
     public merge(model: GIModel): void {
-        this.attribs.io.merge(model.attribs._attribs_maps); // warning: must be before this.geom.io.merge()
-        this.geom.io.merge(model.geom._geom_arrays);
+        const geom_maps: Map<number, number>[] = this.geom.io.merge(model.geom._geom_arrays);
+        this.attribs.io.merge(model.attribs._attribs_maps, geom_maps);
+    }
+    /**
+     * Copys the data from a second model into this model.
+     * The existing data in this model is not deleted.
+     * For the imported data, deleted entities are filtered out (i.e. not merged).
+     * @param model_data The GI model.
+     */
+    public mergeAndPurge(model: GIModel): void {
+        const geom_maps: Map<number, number>[] = this.geom.io.mergeAndPurge(model.geom._geom_arrays);
+        this.attribs.io.merge(model.attribs._attribs_maps, geom_maps);
     }
     /**
      * Sets the data in this model from JSON data.
@@ -47,12 +58,42 @@ export class GIModel {
     }
     /**
      * Returns the JSON data for this model.
+     * This will include any deleted entities, which will be null.
      */
-    public getData(): IModelData {
+    public getData(make_copy = false): IModelData {
         return {
-            geometry: this.geom.io.getData(),
-            attributes: this.attribs.io.getData()
+            geometry: this.geom.io.getData(make_copy),
+            attributes: this.attribs.io.getData(make_copy)
         };
+    }
+    /**
+     * Returns a copy of this model.
+     * Any deleted entities will be removed.
+     * Warning: entity IDs will change.
+     * If you need an clone, then use clone().
+     */
+    public copy(): GIModel {
+        const model_copy: GIModel = new GIModel();
+        model_copy.mergeAndPurge(this);
+        return model_copy;
+    }
+    /**
+     * Returns a clone of this model.
+     * Any deleted entities will remain.
+     * Entity IDs will not change.
+     */
+    public clone(): GIModel {
+        const model_clone: GIModel = new GIModel();
+        model_clone.setData(this.getData(true)); // get data makes deep copy
+        return model_clone;
+    }
+    /**
+     * Reomove deleted entities will be removed.
+     */
+    public purge(): void {
+        const model_copy: GIModel = new GIModel();
+        model_copy.mergeAndPurge(this);
+        this.setData(model_copy.getData());
     }
     /**
      * Check model for internal consistency

@@ -3,10 +3,12 @@
     <cesium-viewer [model]='data' (eventClicked)="childEventClicked($event)"></cesium-viewer>
     <!-- Settings Button & Settings Panel -->
     <button class='btn' id="cesium_settings_button" mat-icon-button (click)="openModal('cesium_settings_modal')" title="Settings"><mat-icon svgIcon="settings"></mat-icon></button>
+    <button class='btn' id="cesium_zoom_fit" mat-icon-button (click)="zoomfit()" title='Zoom to Fit Model'><mat-icon svgIcon="cZoom"></mat-icon></button>
+
     <cesium-modal-window id="cesium_settings_modal" (closeModal) = 'onCloseModal()'>
         <h1>Cesium Viewer Settings</h1>
         <tabs id="settingsTab">
-            <tab tabTitle="Image Tiles">
+            <tab tabTitle="Scene">
                 <div class="mat-elevation-z1">
                     <dl>
                         <dd>
@@ -21,7 +23,33 @@
                                 <option *ngFor="let item of terrainList" value ={{item}}>{{item}}</option>
                             </select>
                         </dd>
-                    </dl>
+                        <dd>
+                            <hr>
+                        </dd>
+                        <dd id='cesium_camera'>
+                            <div>Camera Position:</div>
+                            <div class='coord'> x: <input disabled [value]='settings.camera.pos.x'></div>
+                            <div class='coord'> y: <input disabled [value]='settings.camera.pos.y'></div>
+                            <div class='coord'> z: <input disabled [value]='settings.camera.pos.z'></div>
+                            <br>
+                            <div>Camera direction:</div>
+                            <div class='coord'> x: <input disabled [value]='settings.camera.direction.x'></div>
+                            <div class='coord'> y: <input disabled [value]='settings.camera.direction.y'></div>
+                            <div class='coord'> z: <input disabled [value]='settings.camera.direction.z'></div>
+                            <br>
+                            <div>Camera up:</div>
+                            <div class='coord'> x: <input disabled [value]='settings.camera.up.x'></div>
+                            <div class='coord'> y: <input disabled [value]='settings.camera.up.y'></div>
+                            <div class='coord'> z: <input disabled [value]='settings.camera.up.z'></div>
+                            <br>
+                            <div>Camera right:</div>
+                            <div class='coord'> x: <input disabled [value]='settings.camera.right.x'></div>
+                            <div class='coord'> y: <input disabled [value]='settings.camera.right.y'></div>
+                            <div class='coord'> z: <input disabled [value]='settings.camera.right.z'></div>
+                            <br>
+                            <button (click)="settingOnChange('camera.pos')" class="filebtn getbtn">Get</button>
+                        </dd>
+            </dl>
                 </div>
             </tab>
             <tab tabTitle="Cesium Ion">

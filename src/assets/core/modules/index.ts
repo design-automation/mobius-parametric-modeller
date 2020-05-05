@@ -86,8 +86,8 @@ export {_ray};
 import * as _plane from '../inline/_plane';
 export {_plane};
 
-import * as _calc from '../inline/_calc';
-export {_calc};
+import * as _geometry from '../inline/_geometry';
+export {_geometry};
 
 import * as _list from '../inline/_list';
 export {_list};

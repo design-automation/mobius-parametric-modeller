@@ -60,7 +60,7 @@ export class CodeUtils {
                 // if (isMainFlowchart && prod.print) {
                 if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,` +
-                    `'Evaluating If: (${args[0].value}) = ' + (${args[0].jsValue}), '__null__');`);
+                    `'Evaluating If: (${args[0].value}) is ' + (${args[0].jsValue}), '__null__');`);
                 }
                 codeStr.push(`if (${args[0].jsValue}){`);
                 // if (isMainFlowchart && prod.print) {
@@ -90,7 +90,7 @@ export class CodeUtils {
                 }
                 if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,` +
-                    `'Evaluating Else-if: (${args[0].value}) = ' + (${args[0].jsValue}), '__null__');`);
+                    `'Evaluating Else-if: (${args[0].value}) is ' + (${args[0].jsValue}), '__null__');`);
                 }
                 codeStr.push(`if(${args[0].jsValue}){`);
                 // if (isMainFlowchart && prod.print) {
@@ -387,15 +387,23 @@ export class CodeUtils {
         let codeStr = [];
         let elifcount = 0;
         for (const p of prodList) {
-            codeStr = codeStr.concat(CodeUtils.getProcedureCode(p, existingVars, isMainFlowchart,
-                                                                functionName, nodeId, usedFunctions));
+            const procedureCode = CodeUtils.getProcedureCode(p, existingVars, isMainFlowchart,
+                functionName, nodeId, usedFunctions);
             if ( p.type === ProcedureTypes.Elseif && p.enabled) {
+                codeStr = codeStr.concat(procedureCode);
                 elifcount++;
+            } else if (p.type === ProcedureTypes.Else && p.enabled) {
+                codeStr = codeStr.concat(procedureCode);
+                while (elifcount > 0) {
+                    codeStr.push('}');
+                    elifcount--;
+                }
             } else {
                 while (elifcount > 0) {
                     codeStr.push('}');
                     elifcount--;
                 }
+                codeStr = codeStr.concat(procedureCode);
             }
         }
         while (elifcount > 0) {
@@ -476,7 +484,7 @@ export class CodeUtils {
         const p = new Promise((resolve) => {
             fetch(url).then(res => {
                 if (!res.ok) {
-                    resolve('HTTP Request Error: request file timeout from url ' + url);
+                    resolve('HTTP Request Error: Unable to retrieve file from ' + url);
                     return '';
                 }
                 return res.text();
@@ -572,40 +580,41 @@ export class CodeUtils {
     }
 
     static mergeInputs(models): any {
-        const result = _parameterTypes['newFn']();
+        const result = _parameterTypes.newFn();
         for (const model of models) {
-            _parameterTypes['mergeFn'](result, model);
+            _parameterTypes.mergeFn(result, model);
         }
         return result;
     }
 
 
 
-    static getInputValue(inp: IPortInput, node: INode): Promise<string> {
+    static getInputValue(inp: IPortInput, node: INode, nodeIndices: {}): Promise<string> {
         let input: any;
+        // const x = performance.now();
         if (node.type === 'start' || inp.edges.length === 0) {
             input = _parameterTypes['newFn']();
+        // } else if (inp.edges.length === 1 && inp.edges[0].source.parentNode.enabled) {
+        //     input = inp.edges[0].source.value.clone();
+        //     console.log('clone time:', performance.now() - x);
         } else {
-            const inputs = [];
+            let inputs = [];
             for (const edge of inp.edges) {
-                if (edge.source.parentNode.enabled) {
-                    inputs.push(edge.source.value);
+                if (!edge.source.parentNode.enabled) {
+                    continue;
                 }
+                inputs.push([nodeIndices[edge.source.parentNode.id], edge.source.value]);
             }
-            input = CodeUtils.mergeInputs(inputs);
-            /*
-            if (input.constructor === gsConstructor) {
-                input = `new __MODULES__.gs.Model(${input.toJSON()})`
-            } else {
-                // do nothing
-            }
-            */
+            inputs = inputs.sort((a, b) => a[0] - b[0]);
+            const mergeModels = inputs.map(i => i[1])
+            input = CodeUtils.mergeInputs(mergeModels);
+            // console.log('merge time:', performance.now() - x);
         }
         return input;
     }
 
-    public static getNodeCode(node: INode, isMainFlowchart = false, functionName?: string,
-                              nodeId?: string, usedFunctions?: string[]): [string[][], string] {
+    public static getNodeCode(node: INode, isMainFlowchart = false, nodeIndices: {},
+                              functionName?: string, nodeId?: string, usedFunctions?: string[]): [string[][], string] {
         node.hasError = false;
         let codeStr = [];
 
@@ -632,7 +641,7 @@ export class CodeUtils {
 
         // input initializations
         if (isMainFlowchart) {
-            const input = CodeUtils.getInputValue(node.input, node);
+            const input = CodeUtils.getInputValue(node.input, node, nodeIndices);
             node.input.value = input;
         }
 
@@ -669,32 +678,57 @@ export class CodeUtils {
         let fullCode = `function ${func.name}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){\n`;
 
         let fnCode = `var merged;\n`;
+
+        const numRemainingOutputs = {};
+        const nodeIndices = {};
+        let nodeIndex = 0;
         for (const node of func.flowchart.nodes) {
+            if (!node.enabled) {
+                continue;
+            }
+            nodeIndices[node.id] = nodeIndex;
+            nodeIndex ++;
+            numRemainingOutputs[node.id] = node.output.edges.length;
             const nodeFuncName = `${func.name}_${node.id}`;
             if (node.type === 'start') {
                 fnCode += `let result_${nodeFuncName} = __params__.model;\n`;
             } else {
-                const codeRes = CodeUtils.getNodeCode(node, false, func.name, node.id)[0];
+                const codeRes = CodeUtils.getNodeCode(node, false, nodeIndices, func.name, node.id)[0];
                 const nodecode = codeRes[0].join('\n').split('_-_-_+_-_-_');
                 fullCode += `${nodecode[0]}\nfunction ${nodeFuncName}` +
                             `(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){` +
                             nodecode[1] + `\n}\n\n`;
 
-                const activeNodes = [];
-                for (const nodeEdge of node.input.edges) {
-                    if (!nodeEdge.source.parentNode.enabled) {
-                        continue;
+                if (node.input.edges.length === 1 && numRemainingOutputs[node.input.edges[0].source.parentNode.id] === 1) {
+                    fnCode += `\n__params__.model = result_${func.name}_${node.input.edges[0].source.parentNode.id};\n`;
+                } else {
+                    let activeNodes = [];
+                    for (const nodeEdge of node.input.edges) {
+                        if (!nodeEdge.source.parentNode.enabled) {
+                            continue;
+                        }
+                        numRemainingOutputs[nodeEdge.source.parentNode.id] --;
+                        activeNodes.push([nodeIndices[nodeEdge.source.parentNode.id], nodeEdge.source.parentNode.id]);
+                        // if (nodeEdge.source.parentNode.type === 'start') {
+                        //     activeNodes.unshift(nodeEdge.source.parentNode.id);
+                        // } else {
+                        //     activeNodes.push(nodeEdge.source.parentNode.id);
+                        // }
                     }
-                    activeNodes.push(nodeEdge.source.parentNode.id);
+                    if (activeNodes.length === 1) {
+                        fnCode += `\n__params__.model = duplicateModel(result_${func.name}_${activeNodes[0][1]});\n`;
+                    } else {
+                        activeNodes = activeNodes.sort((a, b) => a[0] - b[0]);
+                        fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) =>
+                            `result_${func.name}_${nodeId[1]}`).join(', ')}]);\n`;
+                    }
                 }
-                fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) =>
-                    `result_${func.name}_${nodeId}`).join(', ')}]);\n`;
                 fnCode += `let result_${nodeFuncName} = ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_'
                             ).join('')});\n`;
 
             }
             if (node.type === 'end') {
-                // fnCode += `\n__mainParams__.model = mergeInputs([__mainParams__.model,__params__.model]);\n`;
+                // fnCode += `\n__params__.model.purge();`;
                 fnCode += `\nreturn result_${nodeFuncName};\n`;
             }
         }

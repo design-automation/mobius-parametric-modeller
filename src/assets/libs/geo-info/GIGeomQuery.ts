@@ -1,5 +1,6 @@
 
-import {  EEntType, IGeomArrays, EEntStrToGeomArray, TWire, Txyz, TColl, TEntTypeIdx, IGeomPack, TFace, EWireType, Txy, TEdge, TPosi, TVert } from './common';
+import {  EEntType, IGeomArrays, EEntStrToGeomArray, TWire, Txyz, TColl, TEntTypeIdx,
+    IGeomPack, TFace, EWireType, Txy, TEdge, TPosi, TVert } from './common';
 import { isPosi, isVert, isPoint, isEdge, isWire, isPline, isFace, isPgon, isColl, isTri } from './id';
 import { GIGeom } from './GIGeom';
 import { vecFromTo, vecCross, vecDiv, vecNorm, vecLen, vecDot } from '../geom/vectors';

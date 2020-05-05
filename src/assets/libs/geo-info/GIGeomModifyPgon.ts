@@ -61,7 +61,7 @@ export class GIGeomModifyPgon {
             // get the face
             const face_i: number = this._geom.nav.navPgonToFace(pgons_i);
             // create the triangles
-            const tris_i: number[] = this._geom.add._addTris(outer_i, holes_i);
+            const new_tris_i: number[] = this._geom.add._addTris(outer_i, holes_i);
             // delete the old trianges
             const old_face_tris_i: number[] = this._geom_arrays.dn_faces_wirestris[face_i][1];
             for (const old_face_tri_i of old_face_tris_i) {
@@ -75,8 +75,12 @@ export class GIGeomModifyPgon {
                 // tris to faces
                 delete this._geom_arrays.up_tris_faces[old_face_tri_i];
             }
+            // update up array for tri to face
+            for (const new_tri_i of new_tris_i) {
+                this._geom_arrays.up_tris_faces[new_tri_i] = face_i;
+            }
             // update down array for face to tri
-            this._geom_arrays.dn_faces_wirestris[face_i][1] = tris_i;
+            this._geom_arrays.dn_faces_wirestris[face_i][1] = new_tris_i;
         } else { // An array of pgons
             pgons_i.forEach(pgon_i => this.triPgons(pgon_i));
         }

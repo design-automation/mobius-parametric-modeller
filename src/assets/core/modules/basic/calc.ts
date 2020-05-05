@@ -7,20 +7,21 @@
 /**
  *
  */
+import { checkIDs, IdCh } from '../_check_ids';
+import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, TBBox, Txy } from '@libs/geo-info/common';
-import { isPline, isWire, isEdge, isPgon, isFace, getArrDepth, isVert, isPosi, isPoint, isEmptyArr } from '@libs/geo-info/id';
+import { isPline, isWire, isEdge, isPgon, isFace, getArrDepth, isVert, isPosi, isPoint, idsBreak } from '@libs/geo-info/id';
 import { distance } from '@libs/geom/distance';
 import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm, vecSetLen } from '@libs/geom/vectors';
 import { triangulate } from '@libs/triangulate/triangulate';
 import { area } from '@libs/geom/triangle';
-import { checkIDs, checkArgTypes, IDcheckObj, TypeCheckObj} from '../_check_args';
-import __ from 'underscore';
+import uscore from 'underscore';
 import { getCentroid, getCenterOfMass } from './_common';
 import { rayFromPln } from '@assets/core/inline/_ray';
 import { isEmptyArr2, arrMakeFlat, arrMaxDepth } from '@assets/libs/util/arrs';
-import * as THREE from 'three';
+
 // ================================================================================================
 export enum _EDistanceMethod {
     PS_PS_DISTANCE = 'ps_to_ps_distance',
@@ -45,10 +46,21 @@ export function Distance(__model__: GIModel, entities1: TId|TId[], entities2: TI
     entities2 = arrMakeFlat(entities2);
     // --- Error Check ---
     const fn_name = 'calc.Distance';
-    const ents_arr1 = checkIDs(fn_name, 'entities1', entities1, [IDcheckObj.isID, IDcheckObj.isIDList],
-        null)  as TEntTypeIdx|TEntTypeIdx[];
-    const ents_arr2 = checkIDs(fn_name, 'entities2', entities2, [IDcheckObj.isIDList],
-        null) as TEntTypeIdx[];
+    let ents_arr1: TEntTypeIdx|TEntTypeIdx[];
+    let ents_arr2: TEntTypeIdx|TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr1 = checkIDs(fn_name, 'entities1', entities1, [IdCh.isId, IdCh.isIdL],
+            null)  as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr2 = checkIDs(fn_name, 'entities2', entities2, [IdCh.isIdL],
+            null) as TEntTypeIdx[];
+    } else {
+        // ents_arr1 = splitIDs(fn_name, 'entities1', entities1, [IDcheckObj.isID, IDcheckObj.isIDList],
+        //     null)  as TEntTypeIdx|TEntTypeIdx[];
+        // ents_arr2 = splitIDs(fn_name, 'entities2', entities2, [IDcheckObj.isIDList],
+        //     null) as TEntTypeIdx[];
+        ents_arr1 = idsBreak(entities1)  as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr2 = idsBreak(entities2) as TEntTypeIdx[];
+    }
     // --- Error Check ---
     // get the from posis
     let from_posis_i: number|number[];
@@ -260,8 +272,15 @@ export function Length(__model__: GIModel, entities: TId|TId[]): number|number[]
     if (isEmptyArr2(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Length';
-    const ents_arr =  checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities, [IdCh.isId, IdCh.isIdL],
         [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON, EEntType.FACE, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+    } else {
+        // ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
+        // [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON, EEntType.FACE, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
+    }
     // --- Error Check ---
     return _length(__model__, ents_arr);
 }
@@ -282,7 +301,7 @@ function _length(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): numb
     } else {
         const lengths: number[]|number[][] =
             (ents_arrs as TEntTypeIdx[]).map( ents_arr => _length(__model__, ents_arr) ) as number[]|number[][];
-        return __.flatten(lengths);
+        return uscore.flatten(lengths);
     }
 }
 function _edgeLength(__model__: GIModel, edge_i: number): number {
@@ -323,9 +342,17 @@ export function Area(__model__: GIModel, entities: TId|TId[]): number|number[] {
     if (isEmptyArr2(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Area';
-    const ents_arr = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities,
+        [IdCh.isId, IdCh.isIdL],
         [EEntType.PGON, EEntType.FACE, EEntType.PLINE, EEntType.WIRE, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+    } else {
+        // ents_arr = splitIDs(fn_name, 'entities', entities,
+        // [IDcheckObj.isID, IDcheckObj.isIDList],
+        // [EEntType.PGON, EEntType.FACE, EEntType.PLINE, EEntType.WIRE, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
+    }
     // --- Error Check ---
     return _area(__model__, ents_arr);
 }
@@ -372,7 +399,7 @@ function _area(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): number
     } else {
         const areas: number[]|number[][] =
             (ents_arrs as TEntTypeIdx[]).map( ents_arr => _area(__model__, ents_arr) ) as number[]|number[][];
-        return __.flatten(areas);
+        return uscore.flatten(areas);
     }
 }
 // ================================================================================================
@@ -393,9 +420,17 @@ export function Vector(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
     if (isEmptyArr2(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Vector';
-    const ents_arrs: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
+    let ents_arrs: TEntTypeIdx|TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arrs = checkIDs(fn_name, 'entities', entities,
+        [IdCh.isId, IdCh.isIdL],
         [EEntType.PGON, EEntType.FACE, EEntType.PLINE, EEntType.WIRE, EEntType.EDGE]) as TEntTypeIdx|TEntTypeIdx[];
+    } else {
+        // ents_arrs = splitIDs(fn_name, 'entities', entities,
+        // [IDcheckObj.isID, IDcheckObj.isIDList],
+        // [EEntType.PGON, EEntType.FACE, EEntType.PLINE, EEntType.WIRE, EEntType.EDGE]) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arrs = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
+    }
     // --- Error Check ---
     return _vector(__model__, ents_arrs);
 }
@@ -406,6 +441,7 @@ function _vector(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): Txyz
             const posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, index);
             const start: Txyz = __model__.attribs.query.getPosiCoords(posis_i[0]);
             const end: Txyz = __model__.attribs.query.getPosiCoords(posis_i[1]);
+            // console.log(">>>>", start, end);
             return vecSub(end, start);
         } else {
             const edges_i: number[] = __model__.geom.nav.navAnyToEdge(ent_type, index);
@@ -455,8 +491,15 @@ export function Centroid(__model__: GIModel, entities: TId|TId[], method: _ECent
     if (isEmptyArr2(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Centroid';
-    const ents_arrs: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+    let ents_arrs: TEntTypeIdx|TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arrs = checkIDs(fn_name, 'entities', entities,
+        [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx|TEntTypeIdx[];
+    } else {
+        // ents_arrs = splitIDs(fn_name, 'entities', entities,
+        // [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arrs = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
+    }
     // --- Error Check ---
     switch (method) {
         case _ECentroidMethod.PS_AVERAGE:
@@ -501,9 +544,16 @@ export function Normal(__model__: GIModel, entities: TId|TId[], scale: number): 
     if (isEmptyArr2(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Normal';
-    const ents_arr: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], null) as  TEntTypeIdx|TEntTypeIdx[];
-    checkArgTypes(fn_name, 'scale', scale, [TypeCheckObj.isNumber]);
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities,
+        [IdCh.isId, IdCh.isIdL], null) as  TEntTypeIdx|TEntTypeIdx[];
+        checkArgs(fn_name, 'scale', scale, [ArgCh.isNum]);
+    } else {
+        // ents_arr = splitIDs(fn_name, 'entities', entities,
+        // [IDcheckObj.isID, IDcheckObj.isIDList], null) as  TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
+    }
     // --- Error Check ---
     return _normal(__model__, ents_arr, scale);
 }
@@ -589,10 +639,18 @@ export function Eval(__model__: GIModel, entities: TId|TId[], t_param: number): 
     if (isEmptyArr2(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Eval';
-    const ents_arrs: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
-        [EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
-    checkArgTypes(fn_name, 'param', t_param, [TypeCheckObj.isNumber01]);
+    let ents_arrs: TEntTypeIdx|TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arrs = checkIDs(fn_name, 'entities', entities,
+            [IdCh.isId, IdCh.isIdL],
+            [EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+        checkArgs(fn_name, 'param', t_param, [ArgCh.isNum01]);
+    } else {
+        // ents_arrs = splitIDs(fn_name, 'entities', entities,
+        //     [IDcheckObj.isID, IDcheckObj.isIDList],
+        //     [EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arrs = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
+    }
     // --- Error Check ---
     return _eval(__model__, ents_arrs, t_param);
 }
@@ -680,8 +738,15 @@ export function Ray(__model__: GIModel, entities: TId|TId[]): TRay|TRay[] {
     if (isEmptyArr2(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Ray';
-    const ents_arr = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.PLINE, EEntType.FACE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities,
+        [IdCh.isId, IdCh.isIdL], [EEntType.EDGE, EEntType.PLINE, EEntType.FACE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
+    } else {
+        // ents_arr = splitIDs(fn_name, 'entities', entities,
+        // [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.PLINE, EEntType.FACE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
+    }
     // --- Error Check ---
     return _getRay(__model__, ents_arr);
 }
@@ -731,10 +796,18 @@ export function Plane(__model__: GIModel, entities: TId|TId[]): TPlane|TPlane[] 
     if (isEmptyArr2(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Plane';
-    const ents_arr =  checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null); // takes in any
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities,
+            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx|TEntTypeIdx[]; // takes in any
+    } else {
+        // ents_arr = splitIDs(fn_name, 'entities', entities,
+        //     [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[]; // takes in any
+        ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
+    }
     // TODO [EEntType.PGON, EEntType.FACE, EEntType.PLINE, EEntType.WIRE]);
     // --- Error Check ---
-    return _getPlane(__model__, ents_arr as TEntTypeIdx|TEntTypeIdx[]);
+    return _getPlane(__model__, ents_arr);
 }
 function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPlane|TPlane[] {
     if (getArrDepth(ents_arr) === 1) {
@@ -772,7 +845,13 @@ export function BBox(__model__: GIModel, entities: TId|TId[]): TBBox {
     if (!Array.isArray(entities)) { entities = [entities]; }
     // --- Error Check ---
     const fn_name = 'calc.BBox';
-    const ents_arr: TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[]; // all
+    let ents_arr: TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities, [IdCh.isIdL], null) as TEntTypeIdx[]; // all
+    } else {
+        // ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[]; // all
+        ents_arr = idsBreak(entities) as TEntTypeIdx[];
+    }
     // --- Error Check ---
     return _getBoundingBox(__model__, ents_arr);
 }

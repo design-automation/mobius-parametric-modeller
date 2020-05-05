@@ -3,6 +3,7 @@ import { CesiumSettings } from '../gi-cesium-viewer.settings';
 import { EEntType, Txyz, TAttribDataTypes, LONGLAT } from '@libs/geo-info/common';
 // import { HereMapsImageryProvider } from './HereMapsImageryProvider.js';
 import Shape from '@doodle3d/clipper-js';
+import { DataService } from '@shared/services';
 
 /**
  * Cesium data
@@ -69,7 +70,7 @@ export class DataCesium {
                 scene3DOnly: false,
                 baseLayerPicker: false,
                 sceneModePicker: false,
-                homeButton: true,
+                homeButton: false,
                 navigationHelpButton: false,
                 fullscreenButton: false,
                 animation: false,
@@ -145,13 +146,13 @@ export class DataCesium {
             // this._viewer.camera.up = this._camera[1].up;
             this._viewer.render();
         }
-        const homeBtn = <HTMLButtonElement> document.getElementsByClassName('cesium-home-button')[0];
+        // const homeBtn = <HTMLButtonElement> document.getElementsByClassName('cesium-home-button')[0];
         // tslint:disable-next-line
-        homeBtn.getElementsByTagName('path')[0].setAttribute('d', 'M15 3l2.3 2.3-2.89 2.87 1.42 1.42L18.7 6.7 21 9V3zM3 9l2.3-2.3 2.87 2.89 1.42-1.42L6.7 5.3 9 3H3zm6 12l-2.3-2.3 2.89-2.87-1.42-1.42L5.3 17.3 3 15v6zm12-6l-2.3 2.3-2.87-2.89-1.42 1.42 2.89 2.87L15 21h6z');
-        homeBtn.title = 'Zoom to Fit Model';
-        homeBtn.style.fontSize = '24px';
-        homeBtn.style.top = '26px';
-        homeBtn.style.right = '-1px';
+        // homeBtn.getElementsByTagName('path')[0].setAttribute('d', 'M15 3l2.3 2.3-2.89 2.87 1.42 1.42L18.7 6.7 21 9V3zM3 9l2.3-2.3 2.87 2.89 1.42-1.42L6.7 5.3 9 3H3zm6 12l-2.3-2.3 2.89-2.87-1.42-1.42L5.3 17.3 3 15v6zm12-6l-2.3 2.3-2.87-2.89-1.42 1.42 2.89 2.87L15 21h6z');
+        // homeBtn.title = 'Zoom to Fit Model';
+        // homeBtn.style.fontSize = '24px';
+        // homeBtn.style.top = '26px';
+        // homeBtn.style.right = '-1px';
         // settings button
         // const settingsBtn = homeBtn.nextElementSibling as HTMLElement;
         // settingsBtn.getElementsByTagName('img')[0].remove();
@@ -175,6 +176,7 @@ export class DataCesium {
      * @param container
      */
     public addGeometry(model: GIModel, container: any): void { // TODO delete container
+        this.updateSettings();
         this._viewer.scene.primitives.removeAll();
         // the origin of the model
         let longitude = LONGLAT[0];
@@ -264,6 +266,7 @@ export class DataCesium {
         const posis_i: number[] = model.geom.query.getEnts(EEntType.POSI, false);
         const vert_n = model.attribs.query.getAttrib(EEntType.VERT, 'normal');
 
+        const allPosis = [];
         const posi_to_point_map: Map<number, any> = new Map();
         const vert_to_normal_map: Map<number, any> = new Map();
         for (const posi_i of posis_i) {
@@ -272,6 +275,7 @@ export class DataCesium {
                 const xform_pnt: any = Cesium.Cartesian3.fromArray(xyz);
                 Cesium.Matrix4.multiplyByPoint(east_north_up, xform_pnt, xform_pnt);
                 posi_to_point_map.set(posi_i, xform_pnt);
+                allPosis.push(xform_pnt);
             }
         }
         if (vert_n) {
@@ -475,13 +479,30 @@ export class DataCesium {
 
             // set up the camera
             const sphere = new Cesium.BoundingSphere(origin, 1e2);
+            if (allPosis.length > 0) {
+                Cesium.BoundingSphere.fromPoints(allPosis, sphere);
+            }
             this._viewer.camera.flyToBoundingSphere(sphere, {
                 duration: 0,
                 endTransform: Cesium.Matrix4.IDENTITY
             });
             this._camera = [sphere, this._viewer.camera];
-
-
+            if (this.settings.camera && this.settings.updated) {
+                const pos = this.settings.camera.pos;
+                if (pos && (pos.x || pos.y || pos.z)) {
+                    const dir = this.settings.camera.direction;
+                    const up = this.settings.camera.up;
+                    const right = this.settings.camera.right;
+                    this._viewer.camera.position = new Cesium.Cartesian3(pos.x, pos.y, pos.z);
+                    this._viewer.camera.direction = new Cesium.Cartesian3(dir.x, dir.y, dir.z);
+                    this._viewer.camera.up = new Cesium.Cartesian3(up.x, up.y, up.z);
+                    this._viewer.camera.right = new Cesium.Cartesian3(right.x, right.y, right.z);
+                }
+            }
+            if (lines_instances.length > 0 || tris_instances.length > 0 || transparent_instances.length > 0) {
+                this.settings.updated = false;
+                localStorage.setItem('cesium_settings', JSON.stringify(this.settings));
+            }
             const extent = Cesium.Rectangle.fromDegrees(
                 longitude - 0.01, latitude - 0.01,
                 longitude + 0.01, latitude + 0.01); // 100.3, 5.4, 100.4, 5.5);
@@ -519,11 +540,17 @@ export class DataCesium {
         }
     }
 
-    public updateSettings(settings) {
-        const newSetting = <CesiumSettings> JSON.parse(JSON.stringify(settings));
-        newSetting.cesium.ion = newSetting.cesium.ion.trim();
+    public updateSettings(settings: CesiumSettings = null) {
+        let newSetting: CesiumSettings;
+        if (settings !== null) {
+            newSetting = <CesiumSettings> JSON.parse(JSON.stringify(settings));
+        } else {
+            newSetting = <CesiumSettings> JSON.parse(localStorage.getItem('cesium_settings'));
+        }
+        if (!newSetting) { return; }
         let ionChange = false;
         if (newSetting.cesium) {
+            if (newSetting.cesium.ion) { newSetting.cesium.ion = newSetting.cesium.ion.trim(); }
             if (newSetting.cesium.ion !== Cesium.Ion.defaultAccessToken && newSetting.cesium.ion !== '') {
                 Cesium.Ion.defaultAccessToken = newSetting.cesium.ion;
                 ionChange = true;
@@ -556,6 +583,25 @@ export class DataCesium {
                     }
                 }
             }
+        }
+        if (newSetting.camera) {
+            if (newSetting.camera.pos) {
+                this.settings.camera.pos.x = newSetting.camera.pos.x;
+                this.settings.camera.pos.y = newSetting.camera.pos.y;
+                this.settings.camera.pos.z = newSetting.camera.pos.z;
+                this.settings.camera.direction.x = newSetting.camera.direction.x;
+                this.settings.camera.direction.y = newSetting.camera.direction.y;
+                this.settings.camera.direction.z = newSetting.camera.direction.z;
+                this.settings.camera.up.x = newSetting.camera.up.x;
+                this.settings.camera.up.y = newSetting.camera.up.y;
+                this.settings.camera.up.z = newSetting.camera.up.z;
+                this.settings.camera.right.x = newSetting.camera.right.x;
+                this.settings.camera.right.y = newSetting.camera.right.y;
+                this.settings.camera.right.z = newSetting.camera.right.z;
+            }
+        }
+        if (newSetting.updated) {
+            this.settings.updated = newSetting.updated;
         }
         if (Cesium.Ion.defaultAccessToken && newSetting.cesium && newSetting.cesium.assetid) {
             this._addAssets(newSetting.cesium.assetid);

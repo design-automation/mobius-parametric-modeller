@@ -6,15 +6,35 @@ type Txyz = [number, number, number];
 type TRay = [Txyz, Txyz];
 type TPlane = [Txyz, Txyz, Txyz];
 
-export function distance(c1: Txyz, c2: Txyz|TRay|TPlane): number {
+
+function _distEuclidean(c1: Txyz, c2: Txyz): number {
+    const v: Txyz = [
+        c1[0] - c2[0],
+        c1[1] - c2[1],
+        c1[2] - c2[2]
+    ];
+    return Math.hypot(v[0], v[1], v[2]);
+}
+function _distManhattan(c1: Txyz, c2: Txyz): number {
+    const v: Txyz = [
+        Math.abs(c1[0] - c2[0]),
+        Math.abs(c1[1] - c2[1]),
+        Math.abs(c1[2] - c2[2])
+    ];
+    return v[0] + v[1] + v[2];
+}
+function _distManhattanSq(c1: Txyz, c2: Txyz): number {
+    const v: Txyz = [
+        Math.abs(c1[0] - c2[0]),
+        Math.abs(c1[1] - c2[1]),
+        Math.abs(c1[2] - c2[2])
+    ];
+    return (v[0] * v[0]) + (v[1] * v[1]) + (v[2] * v[2]);
+}
+function _dist(c1: Txyz, c2: Txyz|TRay|TPlane, func: Function): number {
     if (!Array.isArray(c2[0])) {
         c2 = c2 as Txyz;
-        const v: Txyz = [
-            c1[0] - c2[0],
-            c1[1] - c2[1],
-            c1[2] - c2[2],
-        ];
-        return Math.hypot(v[0], v[1], v[2]);
+        return func(c1, c2);
     } else if (c2.length === 2) {
         c2 = c2 as TRay;
         const tjs_point_proj: three.Vector3 = new three.Vector3(c1[0], c1[1], c1[2]);
@@ -41,5 +61,14 @@ export function distance(c1: Txyz, c2: Txyz|TRay|TPlane): number {
     } else {
         throw new Error('Error calculating distance. Distance must to either an xyz, a ray, or a plane.');
     }
+}
 
+export function distance(c1: Txyz, c2: Txyz|TRay|TPlane): number {
+    return _dist(c1, c2, _distEuclidean);
+}
+export function distanceManhattan(c1: Txyz, c2: Txyz|TRay|TPlane): number {
+    return _dist(c1, c2, _distManhattan);
+}
+export function distanceManhattanSq(c1: Txyz, c2: Txyz|TRay|TPlane): number {
+    return _dist(c1, c2, _distManhattanSq);
 }

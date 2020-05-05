@@ -153,9 +153,9 @@ export class GIAttribMap {
      * @param ent_i
      * @param val
      */
-    public setEntsVals(ents_i_values: [number[], TAttribDataTypes][]): void {
+    public setEntsVals(ents_i_values: [number[], TAttribDataTypes][], check_type = true): void {
         for (let i = 0; i < ents_i_values.length; i++) {
-            this.setEntVal(ents_i_values[i][0], ents_i_values[i][1]);
+            this.setEntVal(ents_i_values[i][0], ents_i_values[i][1], check_type);
         }
     }
     /**
@@ -168,7 +168,7 @@ export class GIAttribMap {
      * @param ent_i
      * @param val
      */
-    public setEntVal(ents_i: number|number[], val: TAttribDataTypes): void {
+    public setEntVal(ents_i: number|number[], val: TAttribDataTypes, check_type = true): void {
         // if indefined, do nothing
         if (val === undefined) { return; }
         // if null, delete
@@ -177,16 +177,18 @@ export class GIAttribMap {
             return;
         }
         // check the type
-        if (this._data_type === EAttribDataTypeStrs.NUMBER && typeof val !== 'number') {
-            throw new Error('Error setting attribute value. Attribute is of type "number" but the value is not a number.');
-        } else if (this._data_type === EAttribDataTypeStrs.STRING && typeof val !== 'string') {
-            throw new Error('Error setting attribute value. Attribute is of type "string" but the value is not a string.');
-        } else if (this._data_type === EAttribDataTypeStrs.BOOLEAN && typeof val !== 'boolean') {
-            throw new Error('Error setting attribute value. Attribute is of type "boolean" but the value is not a boolean.');
-        } else if (this._data_type === EAttribDataTypeStrs.LIST && !Array.isArray(val)) {
-            throw new Error('Error setting attribute value. Attribute is of type "list" but the value is not a list.');
-        } else if (this._data_type === EAttribDataTypeStrs.DICT && typeof val !== 'object') {
-            throw new Error('Error setting attribute value. Attribute is of type "list" but the value is not a list.');
+        if (check_type) {
+            if (this._data_type === EAttribDataTypeStrs.NUMBER && typeof val !== 'number') {
+                throw new Error('Error setting attribute value. Attribute is of type "number" but the value is not a number.');
+            } else if (this._data_type === EAttribDataTypeStrs.STRING && typeof val !== 'string') {
+                throw new Error('Error setting attribute value. Attribute is of type "string" but the value is not a string.');
+            } else if (this._data_type === EAttribDataTypeStrs.BOOLEAN && typeof val !== 'boolean') {
+                throw new Error('Error setting attribute value. Attribute is of type "boolean" but the value is not a boolean.');
+            } else if (this._data_type === EAttribDataTypeStrs.LIST && !Array.isArray(val)) {
+                throw new Error('Error setting attribute value. Attribute is of type "list" but the value is not a list.');
+            } else if (this._data_type === EAttribDataTypeStrs.DICT && typeof val !== 'object') {
+                throw new Error('Error setting attribute value. Attribute is of type "list" but the value is not a list.');
+            }
         }
         const val_k: string | number = this._valToValkey(val);
         // check if this val already exists, if not create it
@@ -215,7 +217,7 @@ export class GIAttribMap {
             this._cleanUp(old_val_i);
             }
         });
-        // for the new val_i, set it to point to all the ents that have this value
+        // for the val_i, set it to point to all the ents that have this value
         const exist_ents_i: number[] = this._map_val_i_to_ents_i.get(new_val_i);
         const exist_new_ents_i: number[] = Array.from(new Set(exist_ents_i.concat(ents_i)));
         this._map_val_i_to_ents_i.set(new_val_i, exist_new_ents_i);
@@ -229,6 +231,54 @@ export class GIAttribMap {
             const arr_len: number = Object.keys((val as object)).length;
             if (arr_len > this._data_length) {
                 this._data_length = arr_len;
+            }
+        }
+    }
+    /**
+     * Merges the value for multiple entity-value pairs at the same time.
+     * This method is for merging two model, and focuses on fast merging.
+     * It assume that the ents are new ents with no existing attribute values.
+     * ~
+     * For setting entity attributes, use the setEntsVals() method.
+     * ~
+     * [ [[2,4,6,8], 'hello'], [[9,10], 'world']]
+     * ~
+     * Can also set lists and dicts
+     * [ [[2,4,6,8], [1,2,3]], [[9,10], [4,5,6,7]]]
+     * [ [[2,4,6,8], {a:1, b:2}], [[9,10], {d:1, e:2, f:3}]]
+     * ~
+     * @param ent_i
+     * @param val
+     */
+    public mergeEntsVals(ents_i_values: [number[], TAttribDataTypes][]): void {
+        for (const [ents_i, val] of ents_i_values) {
+            // get key
+            const val_k: string | number = this._valToValkey(val);
+            // check if this val already exists, if not create it
+            if (!this._map_val_k_to_val_i.has(val_k)) {
+                this._map_val_k_to_val_i.set(val_k, this._num_vals);
+                this._map_val_i_to_val.set(this._num_vals, val);
+                this._map_val_i_to_ents_i.set(this._num_vals, []);
+                this._num_vals += 1;
+            }
+            // get the new val_i
+            const val_i: number = this._map_val_k_to_val_i.get(val_k);
+            // for each ent_i, set the new val_i
+            ents_i.forEach( ent_i => {
+                this._map_ent_i_to_val_i.set(ent_i, val_i);
+                this._map_val_i_to_ents_i.get(val_i).push(ent_i);
+            });
+            // update the _data_length for lists and objects
+            if (this._data_type === EAttribDataTypeStrs.LIST) {
+                const arr_len: number = (val as any[]).length;
+                if (arr_len > this._data_length) {
+                    this._data_length = arr_len;
+                }
+            } else if (this._data_type === EAttribDataTypeStrs.DICT) {
+                const arr_len: number = Object.keys((val as object)).length;
+                if (arr_len > this._data_length) {
+                    this._data_length = arr_len;
+                }
             }
         }
     }

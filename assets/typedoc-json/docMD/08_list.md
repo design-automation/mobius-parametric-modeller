@@ -21,7 +21,8 @@
 ## Remove  
 * **Description:** Removes items in a list.
 ~
-If @param method is set to 'index', then @param item should be the index of the item to be replaced. Negative indexes are allowed.
+If @param method is set to 'index', then @param item should be the index of the item to be replaced.
+Negative indexes are allowed.
 If @param method is not set to 'index', then @param item should be the value.  
 * **Parameters:**  
   * *list:* The list in which to remove items  

@@ -116,7 +116,9 @@ const lists = [
     ['vecAng2(v1, v2, n)', 'Calculate the angle (0 to 2PI) between two vectors, relative to the plane normal'],
     ['vecDot(v1, v2)', 'Calculates the dot product of two vectors'],
     ['vecCross(v1, v2)', 'Calculates the cross product of two vectors'],
-    ['vecEqual(v1, v2, tol)', 'Returns true if the difference between two vectors is smaller than a specified tolerance']
+    ['vecEqual(v1, v2, tol)', 'Returns true if the difference between two vectors is smaller than a specified tolerance'],
+    ['vecLtoG(v, p)', 'Transforms a vector from a local coordinate system define by plane "p" to the global coordinate system.'],
+    ['vecGtoL(v, p)', 'Transforms a vector from the global coordinate system to a local coordinate system define by plane "p".']
 ];
 
 const colors = [
@@ -142,7 +144,9 @@ const rays = [
     ['rayMove(r, v)', 'Move the ray "r" relative to the global X, Y, and Z axes, by vector "v".'],
     ['rayRot(r1, r2, a)', 'Rotate the ray "r1" around the ray "r2", by angle "a" (in radians).'],
     ['rayLMove(r, d)', 'Move the ray "r" relative to the ray direction vector, by distance "d".'],
-    ['rayFromPln(p)', 'Create a ray from a plane "p", with the same origin and with a direction along the plane z axis.']
+    ['rayFromPln(p)', 'Create a ray from a plane "p", with the same origin and with a direction along the plane z axis.'],
+    ['rayLtoG(v, p)', 'Transforms a ray from a local coordinate system define by plane "p" to the global coordinate system.'],
+    ['rayGtoL(v, p)', 'Transforms a ray from the global coordinate system to a local coordinate system define by plane "p".']
 ];
 
 const random = [
@@ -181,6 +185,12 @@ const geometry = [
     ['distance(c1, c2)', 'Returns the Euclidean distance between two xyzs, c1 and c2'],
     ['distance(c, r)', 'Returns the Euclidean distance between an xyz c and an infinite ray r'],
     ['distance(c, p)', 'Returns the Euclidean distance between an xyz c and an infinite plane p'],
+    ['distanceM(c1, c2)', 'Returns the Manhattan distance between two xyzs, c1 and c2'],
+    ['distanceM(c, r)', 'Returns the Manhattan distance between an xyz c and an infinite ray r'],
+    ['distanceM(c, p)', 'Returns the Manhattan distance between an xyz c and an infinite plane p'],
+    ['distanceMS(c1, c2)', 'Returns the Manhattan squared distance between two xyzs, c1 and c2'],
+    ['distanceMS(c, r)', 'Returns the Manhattan squared distance between an xyz c and an infinite ray r'],
+    ['distanceMS(c, p)', 'Returns the Manhattan squared distance between an xyz c and an infinite plane p'],
     ['intersect(r1, r2)', 'Returns the intersection xyz between two infinite rays'],
     ['intersect(r1, r2, m)', 'Returns the intersection xyz between two rays, where ' +
         'if m=2, rays are infinite in both directions, ' +

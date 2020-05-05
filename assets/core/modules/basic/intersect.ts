@@ -5,11 +5,12 @@
 /**
  *
  */
+import { checkIDs, IdCh } from '../_check_ids';
+import { checkArgs, ArgCh } from '../_check_args';
 
-import { TId, Txyz, EEntType, TPlane, TRay, TEntTypeIdx, TBBox } from '@libs/geo-info/common';
-import { checkArgTypes, checkIDs, TypeCheckObj, IDcheckObj } from '../_check_args';
+import { TId, Txyz, EEntType, TPlane, TRay, TEntTypeIdx } from '@libs/geo-info/common';
 import { GIModel } from '@libs/geo-info/GIModel';
-import { getArrDepth } from '@libs/geo-info/id';
+import { getArrDepth, idsBreak } from '@libs/geo-info/id';
 import { vecCross} from '@libs/geom/vectors';
 import { _normal } from './calc';
 import * as THREE from 'three';
@@ -35,10 +36,18 @@ import * as THREE from 'three';
 export function RayFace(__model__: GIModel, ray: TRay, entities: TId|TId[]): Txyz[] {
     // --- Error Check ---
     const fn_name = 'intersect.RayFace';
-    checkArgTypes(fn_name, 'ray', ray, [TypeCheckObj.isRay]);
-    const ents_arr: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
-        [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[];
+    if (__model__.debug) {
+        checkArgs(fn_name, 'ray', ray, [ArgCh.isRay]);
+        ents_arr = checkIDs(fn_name, 'entities', entities,
+            [IdCh.isId, IdCh.isIdL],
+            [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+    } else {
+        // ents_arr = splitIDs(fn_name, 'entities', entities,
+        //     [IDcheckObj.isID, IDcheckObj.isIDList],
+        //     [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
+    }
     // --- Error Check ---
     // create the threejs entity and calc intersections
     const ray_tjs: THREE.Ray = new THREE.Ray(new THREE.Vector3(...ray[0]), new THREE.Vector3(...ray[1]));
@@ -100,10 +109,18 @@ function _intersectRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], 
 export function PlaneEdge(__model__: GIModel, plane: TRay|TPlane, entities: TId|TId[]): Txyz[] {
     // --- Error Check ---
     const fn_name = 'intersect.PlaneEdge';
-    checkArgTypes(fn_name, 'plane', plane, [TypeCheckObj.isPlane]);
-    const ents_arr: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'entities', entities,
-        [IDcheckObj.isID, IDcheckObj.isIDList],
-        [EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[];
+    if (__model__.debug) {
+        checkArgs(fn_name, 'plane', plane, [ArgCh.isPln]);
+        ents_arr = checkIDs(fn_name, 'entities', entities,
+            [IdCh.isId, IdCh.isIdL],
+            [EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+    } else {
+        // ents_arr = splitIDs(fn_name, 'entities', entities,
+        //     [IDcheckObj.isID, IDcheckObj.isIDList],
+        //     [EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
+    }
     // --- Error Check ---
     // create the threejs entity and calc intersections
     const plane_normal: Txyz = vecCross(plane[1], plane[2]);

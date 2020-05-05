@@ -7,15 +7,16 @@
  *
  */
 
+import { checkIDs, IdCh } from '../_check_ids';
+import { checkArgs, ArgCh } from '../_check_args';
+
 import { GIModel } from '@libs/geo-info/GIModel';
-import { Txyz, TColor, EAttribNames, EAttribDataTypeStrs, EAttribPush, TRay, TPlane, TBBox, Txy } from '@libs/geo-info/common';
-import { TId, EEntType, ESort, TEntTypeIdx } from '@libs/geo-info/common';
-import { isEmptyArr, getArrDepth, idsMake } from '@libs/geo-info/id';
-import { checkIDs, IDcheckObj, checkArgTypes, TypeCheckObj } from '../_check_args';
+import { Txyz, TColor, EAttribNames, EAttribDataTypeStrs, EAttribPush, TRay, TPlane, TBBox } from '@libs/geo-info/common';
+import { TId, EEntType, TEntTypeIdx } from '@libs/geo-info/common';
+import { isEmptyArr, getArrDepth, idsMake, idsBreak } from '@libs/geo-info/id';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
 import { min, max } from '@assets/core/inline/_math';
-import { colFalse } from '@assets/core/inline/_colors';
-import { vecMult, vecAdd, vecEqual, vecSetLen, vecCross, vecNorm, vecSub, vecDot } from '@assets/libs/geom/vectors';
+import { vecMult, vecAdd, vecSetLen, vecCross, vecNorm, vecSub, vecDot } from '@assets/libs/geom/vectors';
 import * as ch from 'chroma-js';
 // ================================================================================================
 export enum _ESide {
@@ -41,11 +42,19 @@ export function Color(__model__: GIModel, entities: TId|TId[], color: TColor): v
     // --- Error Check ---
     const fn_name = 'visualize.Color';
     let ents_arr: TEntTypeIdx[] = null;
-    if (entities !== null) {
-        ents_arr = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx[];
+    if (__model__.debug) {
+        if (entities !== null) {
+            ents_arr = checkIDs(fn_name, 'entities', entities,
+                [IdCh.isId, IdCh.isIdL, IdCh.isIdLL], null) as TEntTypeIdx[];
+        }
+        checkArgs(fn_name, 'color', color, [ArgCh.isColor]);
+    } else {
+        // if (entities !== null) {
+        //     ents_arr = splitIDs(fn_name, 'entities', entities,
+        //         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDListOfLists], null) as TEntTypeIdx[];
+        // }
+        ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
-    checkArgTypes(fn_name, 'color', color, [TypeCheckObj.isColor]);
     // --- Error Check ---
     _color(__model__, ents_arr, color);
 }
@@ -92,27 +101,38 @@ export function Gradient(__model__: GIModel, entities: TId|TId[], attrib: string
     if (!isEmptyArr(entities)) {
         // --- Error Check ---
         const fn_name = 'visualize.Gradient';
-        const ents_arr: TEntTypeIdx[] =
-            checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDList_list], null) as TEntTypeIdx[];
-        checkArgTypes(fn_name, 'attrib', attrib,
-            [TypeCheckObj.isString, TypeCheckObj.isStringStringList, TypeCheckObj.isStringNumberList]);
-        checkArgTypes(fn_name, 'range', range, [TypeCheckObj.isNull, TypeCheckObj.isNumber, TypeCheckObj.isNumberList]);
-        const attrib_name: string = Array.isArray(attrib) ? attrib[0] : attrib;
-        const attrib_idx_or_key: number|string = Array.isArray(attrib) ? attrib[1] : null;
-        if (!__model__.attribs.query.hasAttrib(ents_arr[0][0], attrib_name)) {
-            throw new Error(fn_name + ': The attribute with name "' + attrib + '" does not exist on these entities.');
-        } else {
-            let data_type = null;
-            if (attrib_idx_or_key === null) {
-                data_type = __model__.attribs.query.getAttribDataType(ents_arr[0][0], attrib_name);
+        let ents_arr: TEntTypeIdx[] = null;
+        let attrib_name: string;
+        let attrib_idx_or_key: number|string;
+        if (__model__.debug) {
+            ents_arr = checkIDs(fn_name, 'entities', entities,
+                [IdCh.isId, IdCh.isIdL, IdCh.isIdLL], null) as TEntTypeIdx[];
+            checkArgs(fn_name, 'attrib', attrib,
+                [ArgCh.isStr, ArgCh.isStrStr, ArgCh.isStrNum]);
+            checkArgs(fn_name, 'range', range, [ArgCh.isNull, ArgCh.isNum, ArgCh.isNumL]);
+            attrib_name = Array.isArray(attrib) ? attrib[0] : attrib;
+            attrib_idx_or_key = Array.isArray(attrib) ? attrib[1] : null;
+            if (!__model__.attribs.query.hasAttrib(ents_arr[0][0], attrib_name)) {
+                throw new Error(fn_name + ': The attribute with name "' + attrib + '" does not exist on these entities.');
             } else {
-                const first_val = __model__.attribs.query.getAttribValAny(ents_arr[0][0], attrib_name, ents_arr[0][1], attrib_idx_or_key);
+                let data_type = null;
+                if (attrib_idx_or_key === null) {
+                    data_type = __model__.attribs.query.getAttribDataType(ents_arr[0][0], attrib_name);
+                } else {
+                    const first_val = __model__.attribs.query.getAttribValAny(ents_arr[0][0], attrib_name,
+                                                                              ents_arr[0][1], attrib_idx_or_key);
+                }
+                if (data_type !== EAttribDataTypeStrs.NUMBER) {
+                    throw new Error(fn_name + ': The attribute with name "' + attrib_name + '" is not a number data type.' +
+                    'For generating a gradient, the attribute must be a number.');
+                }
             }
-            if (data_type !== EAttribDataTypeStrs.NUMBER) {
-                throw new Error(fn_name + ': The attribute with name "' + attrib_name + '" is not a number data type.' +
-                'For generating a gradient, the attribute must be a number.');
-            }
+        } else {
+            // ents_arr = splitIDs(fn_name, 'entities', entities,
+            //     [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDListOfLists], null) as TEntTypeIdx[];
+            ents_arr = idsBreak(entities) as TEntTypeIdx[];
+            attrib_name = Array.isArray(attrib) ? attrib[0] : attrib;
+            attrib_idx_or_key = Array.isArray(attrib) ? attrib[1] : null;
         }
         // --- Error Check ---
         if (range === null) {
@@ -133,42 +153,42 @@ export enum _EColorRampMethod {
     GREEN_RED = 'green_red',
     BLUE_GREEN = 'blue_green',
     GREY_SCALE = 'grey_scale',
-    ORRD="OrRd",
-    PUBU="PuBu",
-    BUPU="BuPu",
-    ORANGES="Oranges",
-    BUGN="BuGn",
-    YLORBR="YlOrBr",
-    YLGN="YlGn",
-    REDS="Reds",
-    RDPU="RdPu",
-    GREENS="Greens",
-    YLGNBU="YlGnBu",
-    PURPLES="Purples",
-    GNBU="GnBu",
-    GREYS="Greys",
-    YLORRD="YlOrRd",
-    PURD="PuRd",
-    BLUES="Blues",
-    PUBUGN="PuBuGn",
-    VIRIDIS="Viridis",
-    SPECTRAL="Spectral",
-    RDYLGN="RdYlGn",
-    RDBU="RdBu",
-    PIYG="PiYG",
-    PRGN="PRGn",
-    RDYLBU="RdYlBu",
-    BRBG="BrBG",
-    RDGY="RdGy",
-    PUOR="PuOr",
-    SET2="Set2",
-    ACCENT="Accent",
-    SET1="Set1",
-    SET3="Set3",
-    DARK2="Dark2",
-    PAIRED="Paired",
-    PASTEL2="Pastel2",
-    PASTEL1="Pastel1",
+    ORRD= 'OrRd',
+    PUBU= 'PuBu',
+    BUPU= 'BuPu',
+    ORANGES= 'Oranges',
+    BUGN= 'BuGn',
+    YLORBR= 'YlOrBr',
+    YLGN= 'YlGn',
+    REDS= 'Reds',
+    RDPU= 'RdPu',
+    GREENS= 'Greens',
+    YLGNBU= 'YlGnBu',
+    PURPLES= 'Purples',
+    GNBU= 'GnBu',
+    GREYS= 'Greys',
+    YLORRD= 'YlOrRd',
+    PURD= 'PuRd',
+    BLUES= 'Blues',
+    PUBUGN= 'PuBuGn',
+    VIRIDIS= 'Viridis',
+    SPECTRAL= 'Spectral',
+    RDYLGN= 'RdYlGn',
+    RDBU= 'RdBu',
+    PIYG= 'PiYG',
+    PRGN= 'PRGn',
+    RDYLBU= 'RdYlBu',
+    BRBG= 'BrBG',
+    RDGY= 'RdGy',
+    PUOR= 'PuOr',
+    SET2= 'Set2',
+    ACCENT= 'Accent',
+    SET1= 'Set1',
+    SET3= 'Set3',
+    DARK2= 'Dark2',
+    PAIRED= 'Paired',
+    PASTEL2= 'Pastel2',
+    PASTEL1= 'Pastel1',
 }
 function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: string, idx_or_key: number|string, range: [number, number],
         method: _EColorRampMethod): void {
@@ -217,7 +237,7 @@ function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: str
         'green_red': ['green', 'red'],
         'blue_green': ['blue', 'green'],
         'grey_scale': ['white', 'black']
-    }
+    };
     let scale: any = null;
     if (method in scales) {
         scale = scales[method];
@@ -269,9 +289,17 @@ export function Edge(__model__: GIModel, entities: TId|TId[], method: _EEdgeMeth
     // --- Error Check ---
     const fn_name = 'visualize.Edge';
     let ents_arr: TEntTypeIdx[] = null;
-    if (entities !== null) {
-        ents_arr = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    if (__model__.debug) {
+        if (entities !== null) {
+            ents_arr = checkIDs(fn_name, 'entities', entities,
+                [IdCh.isIdL], null) as TEntTypeIdx[];
+        }
+    } else {
+        // if (entities !== null) {
+        //     ents_arr = splitIDs(fn_name, 'entities', entities,
+        //         [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        // }
+        ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
     if (!__model__.attribs.query.hasAttrib(EEntType.EDGE, EAttribNames.VISIBILITY)) {
@@ -325,9 +353,17 @@ export function Mesh(__model__: GIModel, entities: TId|TId[], method: _EMeshMeth
     // --- Error Check ---
     const fn_name = 'visualize.Mesh';
     let ents_arr: TEntTypeIdx[] = null;
-    if (entities !== null) {
-        ents_arr = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+    if (__model__.debug) {
+        if (entities !== null) {
+            ents_arr = checkIDs(fn_name, 'entities', entities,
+                [IdCh.isIdL], null) as TEntTypeIdx[];
+        }
+    } else {
+        // if (entities !== null) {
+        //     ents_arr = splitIDs(fn_name, 'entities', entities,
+        //         [IDcheckObj.isIDList], null) as TEntTypeIdx[];
+        // }
+        ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
     // Get the unique verts that belong to pgons
@@ -463,8 +499,10 @@ function _meshSmooth(__model__: GIModel, verts_i: number[]): void {
 export function Ray(__model__: GIModel, rays: TRay|TRay[], scale: number): TId[] {
     // --- Error Check ---
     const fn_name = 'visualize.Ray';
-    checkArgTypes(fn_name, 'ray', rays, [TypeCheckObj.isRay, TypeCheckObj.isRayList]);
-    checkArgTypes(fn_name, 'scale', scale, [TypeCheckObj.isNumber]);
+    if (__model__.debug) {
+        checkArgs(fn_name, 'ray', rays, [ArgCh.isRay, ArgCh.isRayL]);
+        checkArgs(fn_name, 'scale', scale, [ArgCh.isNum]);
+    }
     // --- Error Check ---
    return idsMake(_visRay(__model__, rays, scale)) as TId[];
 }
@@ -529,9 +567,11 @@ function _visRay(__model__: GIModel, rays: TRay|TRay[], scale: number): TEntType
 export function Plane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): TId[] {
     // --- Error Check ---
     const fn_name = 'visualize.Plane';
-    checkArgTypes(fn_name, 'planes', planes,
-        [TypeCheckObj.isPlane, TypeCheckObj.isPlaneList]);
-    checkArgTypes(fn_name, 'scale', scale, [TypeCheckObj.isNumber]);
+    if (__model__.debug) {
+        checkArgs(fn_name, 'planes', planes,
+            [ArgCh.isPln, ArgCh.isPlnL]);
+        checkArgs(fn_name, 'scale', scale, [ArgCh.isNum]);
+    }
     // --- Error Check ---
     return idsMake(_visPlane(__model__, planes, scale)) as TId[];
 }
@@ -606,7 +646,9 @@ function _visPlane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): 
 export function BBox(__model__: GIModel, bboxes: TBBox|TBBox): TId[] {
     // --- Error Check ---
     const fn_name = 'visualize.BBox';
-    checkArgTypes(fn_name, 'bbox', bboxes, [TypeCheckObj.isBBox]); // TODO bboxs can be a list // add isBBoxList to enable check
+    if (__model__.debug) {
+        checkArgs(fn_name, 'bbox', bboxes, [ArgCh.isBBox]); // TODO bboxs can be a list // add isBBoxList to enable check
+    }
     // --- Error Check ---
     return  idsMake(_visBBox(__model__, bboxes)) as TId[];
 }

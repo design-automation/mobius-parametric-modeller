@@ -5,19 +5,18 @@
 /**
  *
  */
+import { checkIDs, IdCh } from '../_check_ids';
+import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { importObj, exportPosiBasedObj, exportVertBasedObj } from '@libs/geo-info/io_obj';
-import { importDae, exportDae } from '@libs/geo-info/io_dae';
 import { importGeojson, exportGeojson } from '@libs/geo-info/io_geojson';
 import { download } from '@libs/filesys/download';
 import { TId, EEntType, Txyz, TPlane, TRay, IGeomPack, IModelData, IGeomPackTId, TEntTypeIdx } from '@libs/geo-info/common';
 import { __merge__ } from '../_model';
 import { _model } from '..';
-import { idsMake, idsMakeFromIndicies } from '@libs/geo-info/id';
+import { idsMake, idsBreak } from '@libs/geo-info/id';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
-import { IDcheckObj, checkIDs, checkArgTypes, TypeCheckObj } from '../_check_args';
-import { ModelCheck } from './util';
 
 // ================================================================================================
 declare global {
@@ -213,12 +212,21 @@ export function Export(__model__: GIModel, entities: TId|TId[]|TId[][],
     // --- Error Check ---
     const fn_name = 'io.Export';
     let ents_arr = null;
-    if (entities !== null) {
-        entities = arrMakeFlat(entities) as TId[];
-        ents_arr = checkIDs(fn_name, 'entities', entities,
-            [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON, EEntType.COLL])  as TEntTypeIdx[];
+    if (__model__.debug) {
+        if (entities !== null) {
+            entities = arrMakeFlat(entities) as TId[];
+            ents_arr = checkIDs(fn_name, 'entities', entities,
+                [IdCh.isIdL], [EEntType.PLINE, EEntType.PGON, EEntType.COLL])  as TEntTypeIdx[];
+        }
+        checkArgs(fn_name, 'file_name', file_name, [ArgCh.isStr, ArgCh.isStrL]);
+    } else {
+        if (entities !== null) {
+            entities = arrMakeFlat(entities) as TId[];
+            // ents_arr = splitIDs(fn_name, 'entities', entities,
+            //     [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON, EEntType.COLL])  as TEntTypeIdx[];
+            ents_arr = idsBreak(entities) as TEntTypeIdx[];
+        }
     }
-    checkArgTypes(fn_name, 'file_name', file_name, [TypeCheckObj.isString, TypeCheckObj.isStringList]);
     // --- Error Check ---
     _export(__model__, ents_arr, file_name, data_format, data_target);
 }
@@ -323,7 +331,7 @@ function saveResource(file: string, name: string): boolean {
 
     function saveToFS(fs) {
         const code = name;
-        console.log(code)
+        // console.log(code)
         fs.root.getFile(code, { create: true}, function (fileEntry) {
             fileEntry.createWriter(async function (fileWriter) {
                 const bb = new Blob([file + '_|_|_'], {type: 'text/plain;charset=utf-8'});

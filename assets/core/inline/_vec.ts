@@ -1,6 +1,7 @@
 import * as vec from '@libs/geom/vectors';
-import { Txyz } from '@assets/libs/geo-info/common';
+import { Txyz, TPlane } from '@assets/libs/geo-info/common';
 import { getArrDepth2 } from '@assets/libs/util/arrs';
+import { xformMatrix, multMatrix } from '@assets/libs/geom/matrix';
 
 // export const vecAdd = vec.vecAdd;
 // export const vecSub = vec.vecSub;
@@ -506,6 +507,48 @@ export function vecRev(v: Txyz|Txyz[]): Txyz|Txyz[] {
     // normal case, vec is Txyz
     return vec.vecRev(v as Txyz) as Txyz;
 }
-
+// ================================================================================================
+export function vecLtoG(v: Txyz|Txyz[], p: TPlane|TPlane[]): Txyz|Txyz[] {
+    return vecXForm(v, p, true);
+}
+export function vecGtoL(v: Txyz|Txyz[], p: TPlane|TPlane[]): Txyz|Txyz[] {
+    return vecXForm(v, p, false);
+}
+function vecXForm(v: Txyz|Txyz[], p: TPlane|TPlane[], to_global: boolean): Txyz|Txyz[] {
+    // overloaded case
+    const depth1: number = getArrDepth2(v);
+    const depth2: number = getArrDepth2(p);
+    if (depth1 === 1 && depth2 === 2) {
+        // v is Txyz and p is TPlane
+        return multMatrix(v as Txyz, xformMatrix(p as TPlane, to_global));
+    } else if (depth1 === 2 && depth2 === 2) {
+         // v is Txyz[] and p is TPlane
+        const matrix = xformMatrix(p as TPlane, to_global);
+        return (v as Txyz[]).map( a_v => multMatrix(a_v, matrix));
+    } else if (depth1 === 1 && depth2 === 3) {
+        // v is Txyz and p is TPlane[]
+        const result: Txyz[] = [];
+        for (const a_p of p) {
+            const matrix = xformMatrix(a_p as TPlane, to_global);
+            result.push(multMatrix(v as Txyz, matrix));
+        }
+        return result;
+    } else if (depth1 === 2 && depth2 === 3) {
+        // v is Txyz[] p is TPlane[], they must be equal length
+        if (v.length === p.length) {
+            const result: Txyz[] = [];
+            for (let i = 0; i < v.length; i++) {
+                const matrix = xformMatrix(p[i] as TPlane, to_global);
+                result.push(multMatrix(v[i] as Txyz, matrix));
+            }
+            return result;
+        } else {
+            throw new Error(
+                'Error transforming vectors: The list of vectors and list of planes must be of equal length.');
+        }
+    }
+    throw new Error(
+        'Error transforming vectors: Cannot process the input lists.');
+}
 
 

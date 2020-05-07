@@ -959,8 +959,8 @@ export enum _EShortestPathResult {
 export function ShortestPath(__model__: GIModel, source: TId|TId[]|TId[][][], target: TId|TId[]|TId[][],
         entities: TId|TId[]|TId[][], method: _EShortestPathMethod, result: _EShortestPathResult): TShortestPathResult {
 
-    source = arrMakeFlat(source) as TId[];
-    target = arrMakeFlat(target) as TId[];
+    source = source === null ? [] : arrMakeFlat(source) as TId[];
+    target = target === null ? [] : arrMakeFlat(target) as TId[];
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
     const fn_name = 'analyze.ShortestPath';
@@ -1007,8 +1007,8 @@ export function ShortestPath(__model__: GIModel, source: TId|TId[]|TId[][][], ta
             // all true
             break;
     }
-    const source_posis_i: number[] = _getUniquePosis(__model__, source_ents_arrs);
-    const target_posis_i: number[] = _getUniquePosis(__model__, target_ents_arrs);
+    const source_posis_i: number[] = _getUniquePosis(__model__, source.length === 0 ? ents_arrs : source_ents_arrs);
+    const target_posis_i: number[] = _getUniquePosis(__model__, target.length === 0 ? ents_arrs : target_ents_arrs);
     const cy_elems: any[] = _cytoscapeGetElements(__model__, ents_arrs, source_posis_i, target_posis_i, directed);
     // create the cytoscape object
     const cy = cytoscape({
@@ -1259,8 +1259,8 @@ interface TClosestPathResult {
 export function ClosestPath(__model__: GIModel, source: TId|TId[]|TId[][][], target: TId|TId[]|TId[][],
         entities: TId|TId[]|TId[][], method: _EShortestPathMethod, result: _EShortestPathResult): TClosestPathResult {
 
-    source = arrMakeFlat(source) as TId[];
-    target = arrMakeFlat(target) as TId[];
+    source = source === null ? [] : arrMakeFlat(source) as TId[];
+    target = target === null ? [] : arrMakeFlat(target) as TId[];
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
     const fn_name = 'analyze.ClosestPath';
@@ -1307,8 +1307,8 @@ export function ClosestPath(__model__: GIModel, source: TId|TId[]|TId[][][], tar
             // all true
             break;
     }
-    const source_posis_i: number[] = _getUniquePosis(__model__, source_ents_arrs);
-    const target_posis_i: number[] = _getUniquePosis(__model__, target_ents_arrs);
+    const source_posis_i: number[] = _getUniquePosis(__model__, source.length === 0 ? ents_arrs : source_ents_arrs);
+    const target_posis_i: number[] = _getUniquePosis(__model__, target.length === 0 ? ents_arrs : target_ents_arrs);
     const cy_elems: any[] = _cytoscapeGetElements(__model__, ents_arrs, source_posis_i, target_posis_i, directed);
     // create the cytoscape object
     const cy = cytoscape({

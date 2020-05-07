@@ -1,6 +1,6 @@
 {
 	"id": 0,
-	"name": "mobius-parametric-modeller - v0.5.48",
+	"name": "mobius-parametric-modeller - v0.5.49",
 	"kind": 0,
 	"flags": {},
 	"children": [
@@ -13,7 +13,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/_parameterTypes.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/_parameterTypes.ts",
 			"children": [
 				{
 					"id": 5027,
@@ -546,7 +546,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/inline/_arithmetic.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_arithmetic.ts",
 			"children": [
 				{
 					"id": 4996,
@@ -670,7 +670,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/inline/_colors.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_colors.ts",
 			"children": [
 				{
 					"id": 4960,
@@ -928,7 +928,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/inline/_constants.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_constants.ts",
 			"children": [
 				{
 					"id": 4973,
@@ -1412,7 +1412,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/inline/_conversion.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_conversion.ts",
 			"children": [
 				{
 					"id": 2207,
@@ -1576,7 +1576,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/inline/_geometry.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_geometry.ts",
 			"children": [
 				{
 					"id": 4940,
@@ -1729,7 +1729,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/inline/_list.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_list.ts",
 			"children": [
 				{
 					"id": 3308,
@@ -2911,7 +2911,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/inline/_math.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_math.ts",
 			"children": [
 				{
 					"id": 2196,
@@ -3083,7 +3083,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/inline/_mathjs.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_mathjs.ts",
 			"children": [
 				{
 					"id": 4681,
@@ -3615,7 +3615,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/inline/_plane.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_plane.ts",
 			"children": [
 				{
 					"id": 2728,
@@ -4512,7 +4512,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/inline/_rand.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_rand.ts",
 			"children": [
 				{
 					"id": 4821,
@@ -4855,7 +4855,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/inline/_ray.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_ray.ts",
 			"children": [
 				{
 					"id": 2690,
@@ -5754,7 +5754,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/inline/_set.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_set.ts",
 			"children": [
 				{
 					"id": 4955,
@@ -6024,7 +6024,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/inline/_strs.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_strs.ts",
 			"children": [
 				{
 					"id": 4798,
@@ -6655,7 +6655,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/inline/_types.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_types.ts",
 			"children": [
 				{
 					"id": 4712,
@@ -7478,7 +7478,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/inline/_util.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_util.ts",
 			"children": [
 				{
 					"id": 4980,
@@ -7704,7 +7704,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/inline/_vec.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/inline/_vec.ts",
 			"children": [
 				{
 					"id": 4829,
@@ -9530,7 +9530,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/_check_args.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/_check_args.ts",
 			"children": [
 				{
 					"id": 570,
@@ -11616,7 +11616,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/_check_attribs.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/_check_attribs.ts",
 			"children": [
 				{
 					"id": 2533,
@@ -12014,7 +12014,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/_check_ids.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/_check_ids.ts",
 			"children": [
 				{
 					"id": 455,
@@ -12520,7 +12520,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/_check_types.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/_check_types.ts",
 			"children": [
 				{
 					"id": 499,
@@ -13678,7 +13678,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/_model.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/_model.ts",
 			"children": [
 				{
 					"id": 2992,
@@ -14177,7 +14177,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/_output.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/_output.ts",
 			"children": [
 				{
 					"id": 5002,
@@ -14275,7 +14275,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/basic/_common.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/basic/_common.ts",
 			"comment": {
 				"shortText": "Shared utility functions\n~\n~"
 			},
@@ -15346,13 +15346,13 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/basic/analyze.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/basic/analyze.ts",
 			"comment": {
 				"shortText": "The `analysis` module has functions for performing various types of analysis with entities in the model.\nThese functions all return dictionaries containing the results of the analysis."
 			},
 			"children": [
 				{
-					"id": 2306,
+					"id": 2324,
 					"name": "_ECentralityMethod",
 					"kind": 4,
 					"kindString": "Enumeration",
@@ -15361,7 +15361,7 @@
 					},
 					"children": [
 						{
-							"id": 2308,
+							"id": 2326,
 							"name": "DIRECTED",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -15371,14 +15371,14 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 1416,
+									"line": 1422,
 									"character": 12
 								}
 							],
 							"defaultValue": "\"directed\""
 						},
 						{
-							"id": 2307,
+							"id": 2325,
 							"name": "UNDIRECTED",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -15388,7 +15388,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 1415,
+									"line": 1421,
 									"character": 14
 								}
 							],
@@ -15400,21 +15400,21 @@
 							"title": "Enumeration members",
 							"kind": 16,
 							"children": [
-								2308,
-								2307
+								2326,
+								2325
 							]
 						}
 					],
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 1414,
+							"line": 1420,
 							"character": 30
 						}
 					]
 				},
 				{
-					"id": 2309,
+					"id": 2327,
 					"name": "_ECentralityType",
 					"kind": 4,
 					"kindString": "Enumeration",
@@ -15423,7 +15423,7 @@
 					},
 					"children": [
 						{
-							"id": 2310,
+							"id": 2328,
 							"name": "BETWEENNESS",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -15433,14 +15433,14 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 1626,
+									"line": 1632,
 									"character": 15
 								}
 							],
 							"defaultValue": "\"betweenness\""
 						},
 						{
-							"id": 2311,
+							"id": 2329,
 							"name": "CLOSENESS",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -15450,14 +15450,14 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 1627,
+									"line": 1633,
 									"character": 13
 								}
 							],
 							"defaultValue": "\"closeness\""
 						},
 						{
-							"id": 2312,
+							"id": 2330,
 							"name": "HARMONIC",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -15467,7 +15467,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 1628,
+									"line": 1634,
 									"character": 12
 								}
 							],
@@ -15479,16 +15479,16 @@
 							"title": "Enumeration members",
 							"kind": 16,
 							"children": [
-								2310,
-								2311,
-								2312
+								2328,
+								2329,
+								2330
 							]
 						}
 					],
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 1625,
+							"line": 1631,
 							"character": 28
 						}
 					]
@@ -15610,7 +15610,7 @@
 					]
 				},
 				{
-					"id": 2298,
+					"id": 2307,
 					"name": "_EShortestPathMethod",
 					"kind": 4,
 					"kindString": "Enumeration",
@@ -15619,7 +15619,7 @@
 					},
 					"children": [
 						{
-							"id": 2299,
+							"id": 2308,
 							"name": "DIRECTED",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -15629,14 +15629,14 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 898,
+									"line": 908,
 									"character": 12
 								}
 							],
 							"defaultValue": "\"directed\""
 						},
 						{
-							"id": 2300,
+							"id": 2309,
 							"name": "UNDIRECTED",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -15646,7 +15646,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 899,
+									"line": 909,
 									"character": 14
 								}
 							],
@@ -15658,21 +15658,21 @@
 							"title": "Enumeration members",
 							"kind": 16,
 							"children": [
-								2299,
-								2300
+								2308,
+								2309
 							]
 						}
 					],
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 897,
+							"line": 907,
 							"character": 32
 						}
 					]
 				},
 				{
-					"id": 2301,
+					"id": 2310,
 					"name": "_EShortestPathResult",
 					"kind": 4,
 					"kindString": "Enumeration",
@@ -15681,7 +15681,7 @@
 					},
 					"children": [
 						{
-							"id": 2305,
+							"id": 2314,
 							"name": "ALL",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -15691,14 +15691,14 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 905,
+									"line": 915,
 									"character": 7
 								}
 							],
 							"defaultValue": "\"all\""
 						},
 						{
-							"id": 2303,
+							"id": 2312,
 							"name": "COUNTS",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -15708,14 +15708,14 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 903,
+									"line": 913,
 									"character": 10
 								}
 							],
 							"defaultValue": "\"counts\""
 						},
 						{
-							"id": 2302,
+							"id": 2311,
 							"name": "DISTS",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -15725,14 +15725,14 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 902,
+									"line": 912,
 									"character": 9
 								}
 							],
 							"defaultValue": "\"distances\""
 						},
 						{
-							"id": 2304,
+							"id": 2313,
 							"name": "PATHS",
 							"kind": 16,
 							"kindString": "Enumeration member",
@@ -15742,7 +15742,7 @@
 							"sources": [
 								{
 									"fileName": "core/modules/basic/analyze.ts",
-									"line": 904,
+									"line": 914,
 									"character": 9
 								}
 							],
@@ -15754,17 +15754,17 @@
 							"title": "Enumeration members",
 							"kind": 16,
 							"children": [
-								2305,
-								2303,
-								2302,
-								2304
+								2314,
+								2312,
+								2311,
+								2313
 							]
 						}
 					],
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 901,
+							"line": 911,
 							"character": 32
 						}
 					]
@@ -15846,6 +15846,233 @@
 							"fileName": "core/modules/basic/analyze.ts",
 							"line": 378,
 							"character": 25
+						}
+					]
+				},
+				{
+					"id": 2315,
+					"name": "TClosestPathResult",
+					"kind": 256,
+					"kindString": "Interface",
+					"flags": {},
+					"children": [
+						{
+							"id": 2317,
+							"name": "distances",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isOptional": true
+							},
+							"sources": [
+								{
+									"fileName": "core/modules/basic/analyze.ts",
+									"line": 1203,
+									"character": 13
+								}
+							],
+							"type": {
+								"type": "array",
+								"elementType": {
+									"type": "intrinsic",
+									"name": "number"
+								}
+							}
+						},
+						{
+							"id": 2322,
+							"name": "edge_paths",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isOptional": true
+							},
+							"sources": [
+								{
+									"fileName": "core/modules/basic/analyze.ts",
+									"line": 1208,
+									"character": 14
+								}
+							],
+							"type": {
+								"type": "array",
+								"elementType": {
+									"type": "array",
+									"elementType": {
+										"type": "reference",
+										"name": "TId",
+										"id": 368
+									}
+								}
+							}
+						},
+						{
+							"id": 2318,
+							"name": "edges",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isOptional": true
+							},
+							"sources": [
+								{
+									"fileName": "core/modules/basic/analyze.ts",
+									"line": 1204,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "array",
+								"elementType": {
+									"type": "reference",
+									"name": "TId",
+									"id": 368
+								}
+							}
+						},
+						{
+							"id": 2320,
+							"name": "edges_count",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isOptional": true
+							},
+							"sources": [
+								{
+									"fileName": "core/modules/basic/analyze.ts",
+									"line": 1206,
+									"character": 15
+								}
+							],
+							"type": {
+								"type": "array",
+								"elementType": {
+									"type": "intrinsic",
+									"name": "number"
+								}
+							}
+						},
+						{
+							"id": 2323,
+							"name": "posi_paths",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isOptional": true
+							},
+							"sources": [
+								{
+									"fileName": "core/modules/basic/analyze.ts",
+									"line": 1209,
+									"character": 14
+								}
+							],
+							"type": {
+								"type": "array",
+								"elementType": {
+									"type": "array",
+									"elementType": {
+										"type": "reference",
+										"name": "TId",
+										"id": 368
+									}
+								}
+							}
+						},
+						{
+							"id": 2319,
+							"name": "posis",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isOptional": true
+							},
+							"sources": [
+								{
+									"fileName": "core/modules/basic/analyze.ts",
+									"line": 1205,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "array",
+								"elementType": {
+									"type": "reference",
+									"name": "TId",
+									"id": 368
+								}
+							}
+						},
+						{
+							"id": 2321,
+							"name": "posis_count",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isOptional": true
+							},
+							"sources": [
+								{
+									"fileName": "core/modules/basic/analyze.ts",
+									"line": 1207,
+									"character": 15
+								}
+							],
+							"type": {
+								"type": "array",
+								"elementType": {
+									"type": "intrinsic",
+									"name": "number"
+								}
+							}
+						},
+						{
+							"id": 2316,
+							"name": "source_posis",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isOptional": true
+							},
+							"sources": [
+								{
+									"fileName": "core/modules/basic/analyze.ts",
+									"line": 1202,
+									"character": 16
+								}
+							],
+							"type": {
+								"type": "array",
+								"elementType": {
+									"type": "reference",
+									"name": "TId",
+									"id": 368
+								}
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								2317,
+								2322,
+								2318,
+								2320,
+								2323,
+								2319,
+								2321,
+								2316
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/modules/basic/analyze.ts",
+							"line": 1201,
+							"character": 28
 						}
 					]
 				},
@@ -16311,6 +16538,248 @@
 					]
 				},
 				{
+					"id": 2298,
+					"name": "TShortestPathResult",
+					"kind": 256,
+					"kindString": "Interface",
+					"flags": {},
+					"children": [
+						{
+							"id": 2300,
+							"name": "distances",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isOptional": true
+							},
+							"sources": [
+								{
+									"fileName": "core/modules/basic/analyze.ts",
+									"line": 899,
+									"character": 13
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "array",
+										"elementType": {
+											"type": "intrinsic",
+											"name": "number"
+										}
+									},
+									{
+										"type": "array",
+										"elementType": {
+											"type": "array",
+											"elementType": {
+												"type": "intrinsic",
+												"name": "number"
+											}
+										}
+									}
+								]
+							}
+						},
+						{
+							"id": 2305,
+							"name": "edge_paths",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isOptional": true
+							},
+							"sources": [
+								{
+									"fileName": "core/modules/basic/analyze.ts",
+									"line": 904,
+									"character": 14
+								}
+							],
+							"type": {
+								"type": "array",
+								"elementType": {
+									"type": "array",
+									"elementType": {
+										"type": "reference",
+										"name": "TId",
+										"id": 368
+									}
+								}
+							}
+						},
+						{
+							"id": 2301,
+							"name": "edges",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isOptional": true
+							},
+							"sources": [
+								{
+									"fileName": "core/modules/basic/analyze.ts",
+									"line": 900,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "array",
+								"elementType": {
+									"type": "reference",
+									"name": "TId",
+									"id": 368
+								}
+							}
+						},
+						{
+							"id": 2303,
+							"name": "edges_count",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isOptional": true
+							},
+							"sources": [
+								{
+									"fileName": "core/modules/basic/analyze.ts",
+									"line": 902,
+									"character": 15
+								}
+							],
+							"type": {
+								"type": "array",
+								"elementType": {
+									"type": "intrinsic",
+									"name": "number"
+								}
+							}
+						},
+						{
+							"id": 2306,
+							"name": "posi_paths",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isOptional": true
+							},
+							"sources": [
+								{
+									"fileName": "core/modules/basic/analyze.ts",
+									"line": 905,
+									"character": 14
+								}
+							],
+							"type": {
+								"type": "array",
+								"elementType": {
+									"type": "array",
+									"elementType": {
+										"type": "reference",
+										"name": "TId",
+										"id": 368
+									}
+								}
+							}
+						},
+						{
+							"id": 2302,
+							"name": "posis",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isOptional": true
+							},
+							"sources": [
+								{
+									"fileName": "core/modules/basic/analyze.ts",
+									"line": 901,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "array",
+								"elementType": {
+									"type": "reference",
+									"name": "TId",
+									"id": 368
+								}
+							}
+						},
+						{
+							"id": 2304,
+							"name": "posis_count",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isOptional": true
+							},
+							"sources": [
+								{
+									"fileName": "core/modules/basic/analyze.ts",
+									"line": 903,
+									"character": 15
+								}
+							],
+							"type": {
+								"type": "array",
+								"elementType": {
+									"type": "intrinsic",
+									"name": "number"
+								}
+							}
+						},
+						{
+							"id": 2299,
+							"name": "source_posis",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {
+								"isOptional": true
+							},
+							"sources": [
+								{
+									"fileName": "core/modules/basic/analyze.ts",
+									"line": 898,
+									"character": 16
+								}
+							],
+							"type": {
+								"type": "array",
+								"elementType": {
+									"type": "reference",
+									"name": "TId",
+									"id": 368
+								}
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								2300,
+								2305,
+								2301,
+								2303,
+								2306,
+								2302,
+								2304,
+								2299
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "core/modules/basic/analyze.ts",
+							"line": 897,
+							"character": 29
+						}
+					]
+				},
+				{
 					"id": 2497,
 					"name": "Centrality",
 					"kind": 64,
@@ -16436,7 +16905,7 @@
 									"type": {
 										"type": "reference",
 										"name": "_ECentralityMethod",
-										"id": 2306
+										"id": 2324
 									}
 								},
 								{
@@ -16451,7 +16920,7 @@
 									"type": {
 										"type": "reference",
 										"name": "_ECentralityType",
-										"id": 2309
+										"id": 2327
 									}
 								}
 							],
@@ -16464,13 +16933,13 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 1674,
+							"line": 1680,
 							"character": 26
 						}
 					]
 				},
 				{
-					"id": 2454,
+					"id": 2463,
 					"name": "ClosestPath",
 					"kind": 64,
 					"kindString": "Function",
@@ -16479,18 +16948,18 @@
 					},
 					"signatures": [
 						{
-							"id": 2455,
+							"id": 2464,
 							"name": "ClosestPath",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"comment": {
-								"shortText": "Calculates the shortest path from every position in source, to the closest position in target.\n~\nThis differs from the 'analyze.ShortestPath()' function. If you specify multiple target positions,\nfor each cource position,\nthe 'analyze.ShortestPath()' function will calculate multiple shortest paths,\ni.e. the shortest path to all targets.\nThis function will caculate just one shortest path,\ni.e. the shortest path to the closest target.\n~\nPaths are calculated through a network of connected edges.\nFor edges to be connected, vertices must be welded.\nFor example, if the network consists of multiple polylines, then the vertcies of those polylines must be welded.\n~\nIf 'directed' is selected, then the edge direction is taken into account. Each edge will be one-way.\nIf 'undirected' is selected, the edge direction is ignored. Each edge will be two-way.\n~\nEach edge can be assigned a weight.\nThe shortest path is the path where the sum of the weights of the edges along the path is the minimum.\n~\nBy default, all edges are assigned a weight of 1.\nDefault weights can be overridden by creating a numeric attribute on edges call 'weight'.\n~\nReturns a dictionary containing the shortes paths.\n~\nIf 'distances' is selected, the dictionary will contain one list:\n1) 'distances': a list of distances, one list for each path.\n~\nIf 'counts' is selected, the dictionary will contain four lists:\n1) 'posis': a list of positions traversed by the paths,\n2) 'posis_count': a list of numbers that count how often each position was traversed.\n3) 'edges': a list of edges traversed by the paths,\n4) 'edges_count': a list of numbers that count how often each edge was traversed.\n~\nIf 'paths' is selected, the dictionary will contain two lists of lists:\n1) 'posi_paths': a list of lists of positions, one list for each path.\n2) 'edge_paths': a list of lists of edges, one list for each path.\n~\nIf 'all' is selected, the dictionary will contain all lists just described.\n~",
+								"shortText": "Calculates the shortest path from every position in source, to the closest position in target.\n~\nThis differs from the 'analyze.ShortestPath()' function. If you specify multiple target positions,\nfor each cource position,\nthe 'analyze.ShortestPath()' function will calculate multiple shortest paths,\ni.e. the shortest path to all targets.\nThis function will caculate just one shortest path,\ni.e. the shortest path to the closest target.\n~\nPaths are calculated through a network of connected edges.\nFor edges to be connected, vertices must be welded.\nFor example, if the network consists of multiple polylines, then the vertcies of those polylines must be welded.\n~\nIf 'directed' is selected, then the edge direction is taken into account. Each edge will be one-way.\nIf 'undirected' is selected, the edge direction is ignored. Each edge will be two-way.\n~\nEach edge can be assigned a weight.\nThe shortest path is the path where the sum of the weights of the edges along the path is the minimum.\n~\nBy default, all edges are assigned a weight of 1.\nDefault weights can be overridden by creating a numeric attribute on edges call 'weight'.\n~\nReturns a dictionary containing the shortes paths.\n~\nIf 'distances' is selected, the dictionary will contain one list:\n1) 'distances': a list of distances.\n~\nIf 'counts' is selected, the dictionary will contain four lists:\n1) 'posis': a list of positions traversed by the paths,\n2) 'posis_count': a list of numbers that count how often each position was traversed.\n3) 'edges': a list of edges traversed by the paths,\n4) 'edges_count': a list of numbers that count how often each edge was traversed.\n~\nIf 'paths' is selected, the dictionary will contain two lists of lists:\n1) 'posi_paths': a list of lists of positions, one list for each path.\n2) 'edge_paths': a list of lists of edges, one list for each path.\n~\nIf 'all' is selected, the dictionary will contain all lists just described.\n~",
 								"returns": "A dictionary containing the results.\n"
 							},
 							"parameters": [
 								{
-									"id": 2456,
+									"id": 2465,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -16503,7 +16972,7 @@
 									}
 								},
 								{
-									"id": 2457,
+									"id": 2466,
 									"name": "source",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -16545,7 +17014,7 @@
 									}
 								},
 								{
-									"id": 2458,
+									"id": 2467,
 									"name": "target",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -16584,7 +17053,7 @@
 									}
 								},
 								{
-									"id": 2459,
+									"id": 2468,
 									"name": "entities",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -16623,7 +17092,7 @@
 									}
 								},
 								{
-									"id": 2460,
+									"id": 2469,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -16634,11 +17103,11 @@
 									"type": {
 										"type": "reference",
 										"name": "_EShortestPathMethod",
-										"id": 2298
+										"id": 2307
 									}
 								},
 								{
-									"id": 2461,
+									"id": 2470,
 									"name": "result",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -16649,246 +17118,21 @@
 									"type": {
 										"type": "reference",
 										"name": "_EShortestPathResult",
-										"id": 2301
+										"id": 2310
 									}
 								}
 							],
 							"type": {
-								"type": "reflection",
-								"declaration": {
-									"id": 2462,
-									"name": "__type",
-									"kind": 65536,
-									"kindString": "Type literal",
-									"flags": {},
-									"children": [
-										{
-											"id": 2465,
-											"name": "_e",
-											"kind": 32,
-											"kindString": "Variable",
-											"flags": {
-												"isOptional": true
-											},
-											"sources": [
-												{
-													"fileName": "core/modules/basic/analyze.ts",
-													"line": 1248,
-													"character": 14
-												}
-											],
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "reference",
-													"name": "TId",
-													"id": 368
-												}
-											}
-										},
-										{
-											"id": 2467,
-											"name": "_e_count",
-											"kind": 32,
-											"kindString": "Variable",
-											"flags": {
-												"isOptional": true
-											},
-											"sources": [
-												{
-													"fileName": "core/modules/basic/analyze.ts",
-													"line": 1248,
-													"character": 44
-												}
-											],
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "intrinsic",
-													"name": "number"
-												}
-											}
-										},
-										{
-											"id": 2469,
-											"name": "_e_paths",
-											"kind": 32,
-											"kindString": "Variable",
-											"flags": {
-												"isOptional": true
-											},
-											"sources": [
-												{
-													"fileName": "core/modules/basic/analyze.ts",
-													"line": 1249,
-													"character": 20
-												}
-											],
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "array",
-													"elementType": {
-														"type": "reference",
-														"name": "TId",
-														"id": 368
-													}
-												}
-											}
-										},
-										{
-											"id": 2464,
-											"name": "distances",
-											"kind": 32,
-											"kindString": "Variable",
-											"flags": {
-												"isOptional": true
-											},
-											"sources": [
-												{
-													"fileName": "core/modules/basic/analyze.ts",
-													"line": 1247,
-													"character": 40
-												}
-											],
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "intrinsic",
-													"name": "number"
-												}
-											}
-										},
-										{
-											"id": 2466,
-											"name": "ps",
-											"kind": 32,
-											"kindString": "Variable",
-											"flags": {
-												"isOptional": true
-											},
-											"sources": [
-												{
-													"fileName": "core/modules/basic/analyze.ts",
-													"line": 1248,
-													"character": 26
-												}
-											],
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "reference",
-													"name": "TId",
-													"id": 368
-												}
-											}
-										},
-										{
-											"id": 2468,
-											"name": "ps_count",
-											"kind": 32,
-											"kindString": "Variable",
-											"flags": {
-												"isOptional": true
-											},
-											"sources": [
-												{
-													"fileName": "core/modules/basic/analyze.ts",
-													"line": 1248,
-													"character": 65
-												}
-											],
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "intrinsic",
-													"name": "number"
-												}
-											}
-										},
-										{
-											"id": 2470,
-											"name": "ps_paths",
-											"kind": 32,
-											"kindString": "Variable",
-											"flags": {
-												"isOptional": true
-											},
-											"sources": [
-												{
-													"fileName": "core/modules/basic/analyze.ts",
-													"line": 1249,
-													"character": 40
-												}
-											],
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "array",
-													"elementType": {
-														"type": "reference",
-														"name": "TId",
-														"id": 368
-													}
-												}
-											}
-										},
-										{
-											"id": 2463,
-											"name": "source_ps",
-											"kind": 32,
-											"kindString": "Variable",
-											"flags": {
-												"isOptional": true
-											},
-											"sources": [
-												{
-													"fileName": "core/modules/basic/analyze.ts",
-													"line": 1247,
-													"character": 21
-												}
-											],
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "reference",
-													"name": "TId",
-													"id": 368
-												}
-											}
-										}
-									],
-									"groups": [
-										{
-											"title": "Variables",
-											"kind": 32,
-											"children": [
-												2465,
-												2467,
-												2469,
-												2464,
-												2466,
-												2468,
-												2470,
-												2463
-											]
-										}
-									],
-									"sources": [
-										{
-											"fileName": "core/modules/basic/analyze.ts",
-											"line": 1245,
-											"character": 97
-										}
-									]
-								}
+								"type": "reference",
+								"name": "TClosestPathResult",
+								"id": 2315
 							}
 						}
 					],
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 1244,
+							"line": 1259,
 							"character": 27
 						}
 					]
@@ -17033,7 +17277,7 @@
 									"type": {
 										"type": "reference",
 										"name": "_ECentralityMethod",
-										"id": 2306
+										"id": 2324
 									}
 								}
 							],
@@ -17046,13 +17290,13 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 1539,
+							"line": 1545,
 							"character": 22
 						}
 					]
 				},
 				{
-					"id": 2338,
+					"id": 2356,
 					"name": "Isovist",
 					"kind": 64,
 					"kindString": "Function",
@@ -17061,7 +17305,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2339,
+							"id": 2357,
 							"name": "Isovist",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -17071,7 +17315,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2340,
+									"id": 2358,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17084,7 +17328,7 @@
 									}
 								},
 								{
-									"id": 2341,
+									"id": 2359,
 									"name": "origins",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17123,7 +17367,7 @@
 									}
 								},
 								{
-									"id": 2342,
+									"id": 2360,
 									"name": "entities",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17162,7 +17406,7 @@
 									}
 								},
 								{
-									"id": 2343,
+									"id": 2361,
 									"name": "radius",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17176,7 +17420,7 @@
 									}
 								},
 								{
-									"id": 2344,
+									"id": 2362,
 									"name": "num_rays",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17206,7 +17450,7 @@
 					]
 				},
 				{
-					"id": 2398,
+					"id": 2416,
 					"name": "Nearest",
 					"kind": 64,
 					"kindString": "Function",
@@ -17215,7 +17459,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2399,
+							"id": 2417,
 							"name": "Nearest",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -17226,7 +17470,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2400,
+									"id": 2418,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17239,7 +17483,7 @@
 									}
 								},
 								{
-									"id": 2401,
+									"id": 2419,
 									"name": "source",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17267,7 +17511,7 @@
 									}
 								},
 								{
-									"id": 2402,
+									"id": 2420,
 									"name": "target",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17295,7 +17539,7 @@
 									}
 								},
 								{
-									"id": 2403,
+									"id": 2421,
 									"name": "radius",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17309,7 +17553,7 @@
 									}
 								},
 								{
-									"id": 2404,
+									"id": 2422,
 									"name": "max_neighbors",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17326,14 +17570,14 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 2405,
+									"id": 2423,
 									"name": "__type",
 									"kind": 65536,
 									"kindString": "Type literal",
 									"flags": {},
 									"children": [
 										{
-											"id": 2408,
+											"id": 2426,
 											"name": "distances",
 											"kind": 32,
 											"kindString": "Variable",
@@ -17369,7 +17613,7 @@
 											}
 										},
 										{
-											"id": 2407,
+											"id": 2425,
 											"name": "neighbors",
 											"kind": 32,
 											"kindString": "Variable",
@@ -17407,7 +17651,7 @@
 											}
 										},
 										{
-											"id": 2406,
+											"id": 2424,
 											"name": "posis",
 											"kind": 32,
 											"kindString": "Variable",
@@ -17434,9 +17678,9 @@
 											"title": "Variables",
 											"kind": 32,
 											"children": [
-												2408,
-												2407,
-												2406
+												2426,
+												2425,
+												2424
 											]
 										}
 									],
@@ -17460,7 +17704,7 @@
 					]
 				},
 				{
-					"id": 2313,
+					"id": 2331,
 					"name": "Raytrace",
 					"kind": 64,
 					"kindString": "Function",
@@ -17469,7 +17713,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2314,
+							"id": 2332,
 							"name": "Raytrace",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -17479,7 +17723,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2315,
+									"id": 2333,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17492,7 +17736,7 @@
 									}
 								},
 								{
-									"id": 2316,
+									"id": 2334,
 									"name": "rays",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17531,7 +17775,7 @@
 									}
 								},
 								{
-									"id": 2317,
+									"id": 2335,
 									"name": "entities",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17570,7 +17814,7 @@
 									}
 								},
 								{
-									"id": 2318,
+									"id": 2336,
 									"name": "dist",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17602,7 +17846,7 @@
 									}
 								},
 								{
-									"id": 2319,
+									"id": 2337,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17646,7 +17890,7 @@
 					]
 				},
 				{
-					"id": 2420,
+					"id": 2438,
 					"name": "ShortestPath",
 					"kind": 64,
 					"kindString": "Function",
@@ -17655,7 +17899,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2421,
+							"id": 2439,
 							"name": "ShortestPath",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -17666,7 +17910,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2422,
+									"id": 2440,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17679,7 +17923,7 @@
 									}
 								},
 								{
-									"id": 2423,
+									"id": 2441,
 									"name": "source",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17721,7 +17965,7 @@
 									}
 								},
 								{
-									"id": 2424,
+									"id": 2442,
 									"name": "target",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17760,7 +18004,7 @@
 									}
 								},
 								{
-									"id": 2425,
+									"id": 2443,
 									"name": "entities",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17799,7 +18043,7 @@
 									}
 								},
 								{
-									"id": 2426,
+									"id": 2444,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17810,11 +18054,11 @@
 									"type": {
 										"type": "reference",
 										"name": "_EShortestPathMethod",
-										"id": 2298
+										"id": 2307
 									}
 								},
 								{
-									"id": 2427,
+									"id": 2445,
 									"name": "result",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -17825,252 +18069,27 @@
 									"type": {
 										"type": "reference",
 										"name": "_EShortestPathResult",
-										"id": 2301
+										"id": 2310
 									}
 								}
 							],
 							"type": {
-								"type": "reflection",
-								"declaration": {
-									"id": 2428,
-									"name": "__type",
-									"kind": 65536,
-									"kindString": "Type literal",
-									"flags": {},
-									"children": [
-										{
-											"id": 2430,
-											"name": "distances",
-											"kind": 32,
-											"kindString": "Variable",
-											"flags": {
-												"isOptional": true
-											},
-											"sources": [
-												{
-													"fileName": "core/modules/basic/analyze.ts",
-													"line": 952,
-													"character": 43
-												}
-											],
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "intrinsic",
-													"name": "number"
-												}
-											}
-										},
-										{
-											"id": 2435,
-											"name": "edge_paths",
-											"kind": 32,
-											"kindString": "Variable",
-											"flags": {
-												"isOptional": true
-											},
-											"sources": [
-												{
-													"fileName": "core/modules/basic/analyze.ts",
-													"line": 954,
-													"character": 22
-												}
-											],
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "array",
-													"elementType": {
-														"type": "reference",
-														"name": "TId",
-														"id": 368
-													}
-												}
-											}
-										},
-										{
-											"id": 2431,
-											"name": "edges",
-											"kind": 32,
-											"kindString": "Variable",
-											"flags": {
-												"isOptional": true
-											},
-											"sources": [
-												{
-													"fileName": "core/modules/basic/analyze.ts",
-													"line": 953,
-													"character": 17
-												}
-											],
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "reference",
-													"name": "TId",
-													"id": 368
-												}
-											}
-										},
-										{
-											"id": 2433,
-											"name": "edges_count",
-											"kind": 32,
-											"kindString": "Variable",
-											"flags": {
-												"isOptional": true
-											},
-											"sources": [
-												{
-													"fileName": "core/modules/basic/analyze.ts",
-													"line": 953,
-													"character": 53
-												}
-											],
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "intrinsic",
-													"name": "number"
-												}
-											}
-										},
-										{
-											"id": 2436,
-											"name": "posi_paths",
-											"kind": 32,
-											"kindString": "Variable",
-											"flags": {
-												"isOptional": true
-											},
-											"sources": [
-												{
-													"fileName": "core/modules/basic/analyze.ts",
-													"line": 954,
-													"character": 44
-												}
-											],
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "array",
-													"elementType": {
-														"type": "reference",
-														"name": "TId",
-														"id": 368
-													}
-												}
-											}
-										},
-										{
-											"id": 2432,
-											"name": "posis",
-											"kind": 32,
-											"kindString": "Variable",
-											"flags": {
-												"isOptional": true
-											},
-											"sources": [
-												{
-													"fileName": "core/modules/basic/analyze.ts",
-													"line": 953,
-													"character": 32
-												}
-											],
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "reference",
-													"name": "TId",
-													"id": 368
-												}
-											}
-										},
-										{
-											"id": 2434,
-											"name": "posis_count",
-											"kind": 32,
-											"kindString": "Variable",
-											"flags": {
-												"isOptional": true
-											},
-											"sources": [
-												{
-													"fileName": "core/modules/basic/analyze.ts",
-													"line": 953,
-													"character": 77
-												}
-											],
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "intrinsic",
-													"name": "number"
-												}
-											}
-										},
-										{
-											"id": 2429,
-											"name": "source_posis",
-											"kind": 32,
-											"kindString": "Variable",
-											"flags": {
-												"isOptional": true
-											},
-											"sources": [
-												{
-													"fileName": "core/modules/basic/analyze.ts",
-													"line": 952,
-													"character": 24
-												}
-											],
-											"type": {
-												"type": "array",
-												"elementType": {
-													"type": "reference",
-													"name": "TId",
-													"id": 368
-												}
-											}
-										}
-									],
-									"groups": [
-										{
-											"title": "Variables",
-											"kind": 32,
-											"children": [
-												2430,
-												2435,
-												2431,
-												2433,
-												2436,
-												2432,
-												2434,
-												2429
-											]
-										}
-									],
-									"sources": [
-										{
-											"fileName": "core/modules/basic/analyze.ts",
-											"line": 950,
-											"character": 97
-										}
-									]
-								}
+								"type": "reference",
+								"name": "TShortestPathResult",
+								"id": 2298
 							}
 						}
 					],
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 949,
+							"line": 959,
 							"character": 28
 						}
 					]
 				},
 				{
-					"id": 2350,
+					"id": 2368,
 					"name": "Solar",
 					"kind": 64,
 					"kindString": "Function",
@@ -18079,7 +18098,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2351,
+							"id": 2369,
 							"name": "Solar",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -18099,7 +18118,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2352,
+									"id": 2370,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18112,7 +18131,7 @@
 									}
 								},
 								{
-									"id": 2353,
+									"id": 2371,
 									"name": "origins",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18151,7 +18170,7 @@
 									}
 								},
 								{
-									"id": 2354,
+									"id": 2372,
 									"name": "detail",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18165,7 +18184,7 @@
 									}
 								},
 								{
-									"id": 2355,
+									"id": 2373,
 									"name": "entities",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18204,7 +18223,7 @@
 									}
 								},
 								{
-									"id": 2356,
+									"id": 2374,
 									"name": "limits",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18236,7 +18255,7 @@
 									}
 								},
 								{
-									"id": 2357,
+									"id": 2375,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18266,7 +18285,7 @@
 					]
 				},
 				{
-					"id": 2391,
+					"id": 2409,
 					"name": "SunPath",
 					"kind": 64,
 					"kindString": "Function",
@@ -18275,7 +18294,7 @@
 					},
 					"signatures": [
 						{
-							"id": 2392,
+							"id": 2410,
 							"name": "SunPath",
 							"kind": 4096,
 							"kindString": "Call signature",
@@ -18295,7 +18314,7 @@
 							},
 							"parameters": [
 								{
-									"id": 2393,
+									"id": 2411,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18308,7 +18327,7 @@
 									}
 								},
 								{
-									"id": 2394,
+									"id": 2412,
 									"name": "origin",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18335,7 +18354,7 @@
 									}
 								},
 								{
-									"id": 2395,
+									"id": 2413,
 									"name": "detail",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18349,7 +18368,7 @@
 									}
 								},
 								{
-									"id": 2396,
+									"id": 2414,
 									"name": "radius",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18363,7 +18382,7 @@
 									}
 								},
 								{
-									"id": 2397,
+									"id": 2415,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -18465,7 +18484,7 @@
 											"sources": [
 												{
 													"fileName": "core/modules/basic/analyze.ts",
-													"line": 1799,
+													"line": 1805,
 													"character": 20
 												}
 											],
@@ -18487,7 +18506,7 @@
 											"sources": [
 												{
 													"fileName": "core/modules/basic/analyze.ts",
-													"line": 1798,
+													"line": 1804,
 													"character": 15
 												}
 											],
@@ -18537,7 +18556,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 1783,
+							"line": 1789,
 							"character": 31
 						}
 					]
@@ -18611,7 +18630,7 @@
 											"sources": [
 												{
 													"fileName": "core/modules/basic/analyze.ts",
-													"line": 1758,
+													"line": 1764,
 													"character": 20
 												}
 											],
@@ -18633,7 +18652,7 @@
 											"sources": [
 												{
 													"fileName": "core/modules/basic/analyze.ts",
-													"line": 1757,
+													"line": 1763,
 													"character": 15
 												}
 											],
@@ -18683,7 +18702,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 1730,
+							"line": 1736,
 							"character": 29
 						}
 					]
@@ -18748,7 +18767,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 1589,
+							"line": 1595,
 							"character": 34
 						}
 					]
@@ -18822,7 +18841,7 @@
 											"sources": [
 												{
 													"fileName": "core/modules/basic/analyze.ts",
-													"line": 1621,
+													"line": 1627,
 													"character": 16
 												}
 											],
@@ -18844,7 +18863,7 @@
 											"sources": [
 												{
 													"fileName": "core/modules/basic/analyze.ts",
-													"line": 1620,
+													"line": 1626,
 													"character": 15
 												}
 											],
@@ -18894,7 +18913,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 1608,
+							"line": 1614,
 							"character": 36
 						}
 					]
@@ -18968,7 +18987,7 @@
 											"sources": [
 												{
 													"fileName": "core/modules/basic/analyze.ts",
-													"line": 1780,
+													"line": 1786,
 													"character": 20
 												}
 											],
@@ -18990,7 +19009,7 @@
 											"sources": [
 												{
 													"fileName": "core/modules/basic/analyze.ts",
-													"line": 1779,
+													"line": 1785,
 													"character": 15
 												}
 											],
@@ -19040,7 +19059,7 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 1762,
+							"line": 1768,
 							"character": 28
 						}
 					]
@@ -19136,27 +19155,27 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 1418,
+							"line": 1424,
 							"character": 31
 						}
 					]
 				},
 				{
-					"id": 2447,
+					"id": 2456,
 					"name": "_cytoscapeGetElements",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2448,
+							"id": 2457,
 							"name": "_cytoscapeGetElements",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2449,
+									"id": 2458,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19168,7 +19187,7 @@
 									}
 								},
 								{
-									"id": 2450,
+									"id": 2459,
 									"name": "ents_arr",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19183,7 +19202,7 @@
 									}
 								},
 								{
-									"id": 2451,
+									"id": 2460,
 									"name": "source_posis_i",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19197,7 +19216,7 @@
 									}
 								},
 								{
-									"id": 2452,
+									"id": 2461,
 									"name": "target_posis_i",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19211,7 +19230,7 @@
 									}
 								},
 								{
-									"id": 2453,
+									"id": 2462,
 									"name": "directed",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19234,27 +19253,27 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 1116,
+							"line": 1121,
 							"character": 30
 						}
 					]
 				},
 				{
-					"id": 2441,
+					"id": 2450,
 					"name": "_cytoscapeWeightFn",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2442,
+							"id": 2451,
 							"name": "_cytoscapeWeightFn",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2443,
+									"id": 2452,
 									"name": "edge",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19274,27 +19293,27 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 1108,
+							"line": 1113,
 							"character": 27
 						}
 					]
 				},
 				{
-					"id": 2444,
+					"id": 2453,
 					"name": "_cytoscapeWeightFn2",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2445,
+							"id": 2454,
 							"name": "_cytoscapeWeightFn2",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2446,
+									"id": 2455,
 									"name": "edge",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19314,27 +19333,27 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 1111,
+							"line": 1116,
 							"character": 28
 						}
 					]
 				},
 				{
-					"id": 2409,
+					"id": 2427,
 					"name": "_fuseDistSq",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2410,
+							"id": 2428,
 							"name": "_fuseDistSq",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2411,
+									"id": 2429,
 									"name": "xyz1",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19348,7 +19367,7 @@
 									}
 								},
 								{
-									"id": 2412,
+									"id": 2430,
 									"name": "xyz2",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19377,21 +19396,21 @@
 					]
 				},
 				{
-					"id": 2437,
+					"id": 2446,
 					"name": "_getUniquePosis",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2438,
+							"id": 2447,
 							"name": "_getUniquePosis",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2439,
+									"id": 2448,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19403,7 +19422,7 @@
 									}
 								},
 								{
-									"id": 2440,
+									"id": 2449,
 									"name": "ents_arr",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19430,27 +19449,27 @@
 					"sources": [
 						{
 							"fileName": "core/modules/basic/analyze.ts",
-							"line": 1097,
+							"line": 1102,
 							"character": 24
 						}
 					]
 				},
 				{
-					"id": 2345,
+					"id": 2363,
 					"name": "_isovistOriginsTjs",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2346,
+							"id": 2364,
 							"name": "_isovistOriginsTjs",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2347,
+									"id": 2365,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19462,7 +19481,7 @@
 									}
 								},
 								{
-									"id": 2348,
+									"id": 2366,
 									"name": "origins",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19498,7 +19517,7 @@
 									}
 								},
 								{
-									"id": 2349,
+									"id": 2367,
 									"name": "offset",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19527,21 +19546,21 @@
 					]
 				},
 				{
-					"id": 2413,
+					"id": 2431,
 					"name": "_nearest",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2414,
+							"id": 2432,
 							"name": "_nearest",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2415,
+									"id": 2433,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19553,7 +19572,7 @@
 									}
 								},
 								{
-									"id": 2416,
+									"id": 2434,
 									"name": "source_posis_i",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19567,7 +19586,7 @@
 									}
 								},
 								{
-									"id": 2417,
+									"id": 2435,
 									"name": "target_posis_i",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19581,7 +19600,7 @@
 									}
 								},
 								{
-									"id": 2418,
+									"id": 2436,
 									"name": "dist",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19592,7 +19611,7 @@
 									}
 								},
 								{
-									"id": 2419,
+									"id": 2437,
 									"name": "num_neighbors",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19670,21 +19689,21 @@
 					]
 				},
 				{
-					"id": 2331,
+					"id": 2349,
 					"name": "_raytrace",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2332,
+							"id": 2350,
 							"name": "_raytrace",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2333,
+									"id": 2351,
 									"name": "origins_tjs",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19698,7 +19717,7 @@
 									}
 								},
 								{
-									"id": 2334,
+									"id": 2352,
 									"name": "dirs_tjs",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19712,7 +19731,7 @@
 									}
 								},
 								{
-									"id": 2335,
+									"id": 2353,
 									"name": "mesh",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19735,7 +19754,7 @@
 									}
 								},
 								{
-									"id": 2336,
+									"id": 2354,
 									"name": "limits",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19755,7 +19774,7 @@
 									}
 								},
 								{
-									"id": 2337,
+									"id": 2355,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19783,21 +19802,21 @@
 					]
 				},
 				{
-					"id": 2320,
+					"id": 2338,
 					"name": "_raytraceAll",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2321,
+							"id": 2339,
 							"name": "_raytraceAll",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2322,
+									"id": 2340,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19809,7 +19828,7 @@
 									}
 								},
 								{
-									"id": 2323,
+									"id": 2341,
 									"name": "rays",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19845,7 +19864,7 @@
 									}
 								},
 								{
-									"id": 2324,
+									"id": 2342,
 									"name": "mesh",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19868,7 +19887,7 @@
 									}
 								},
 								{
-									"id": 2325,
+									"id": 2343,
 									"name": "limits",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19888,7 +19907,7 @@
 									}
 								},
 								{
-									"id": 2326,
+									"id": 2344,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19929,21 +19948,21 @@
 					]
 				},
 				{
-					"id": 2327,
+					"id": 2345,
 					"name": "_raytraceOriginsDirsTjs",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2328,
+							"id": 2346,
 							"name": "_raytraceOriginsDirsTjs",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2329,
+									"id": 2347,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -19955,7 +19974,7 @@
 									}
 								},
 								{
-									"id": 2330,
+									"id": 2348,
 									"name": "rays",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20000,21 +20019,21 @@
 					]
 				},
 				{
-					"id": 2377,
+					"id": 2395,
 					"name": "_solarDirectTjs",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2378,
+							"id": 2396,
 							"name": "_solarDirectTjs",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2379,
+									"id": 2397,
 									"name": "latitude",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20025,7 +20044,7 @@
 									}
 								},
 								{
-									"id": 2380,
+									"id": 2398,
 									"name": "north",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20037,7 +20056,7 @@
 									}
 								},
 								{
-									"id": 2381,
+									"id": 2399,
 									"name": "detail",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20069,21 +20088,21 @@
 					]
 				},
 				{
-					"id": 2363,
+					"id": 2381,
 					"name": "_solarDirectionsTjs",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2364,
+							"id": 2382,
 							"name": "_solarDirectionsTjs",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2365,
+									"id": 2383,
 									"name": "latitude",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20094,7 +20113,7 @@
 									}
 								},
 								{
-									"id": 2366,
+									"id": 2384,
 									"name": "north",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20106,7 +20125,7 @@
 									}
 								},
 								{
-									"id": 2367,
+									"id": 2385,
 									"name": "detail",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20117,7 +20136,7 @@
 									}
 								},
 								{
-									"id": 2368,
+									"id": 2386,
 									"name": "method",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20150,21 +20169,21 @@
 					]
 				},
 				{
-					"id": 2358,
+					"id": 2376,
 					"name": "_solarOriginsTjs",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2359,
+							"id": 2377,
 							"name": "_solarOriginsTjs",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2360,
+									"id": 2378,
 									"name": "__model__",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20176,7 +20195,7 @@
 									}
 								},
 								{
-									"id": 2361,
+									"id": 2379,
 									"name": "origins",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20212,7 +20231,7 @@
 									}
 								},
 								{
-									"id": 2362,
+									"id": 2380,
 									"name": "offset",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20250,21 +20269,21 @@
 					]
 				},
 				{
-					"id": 2385,
+					"id": 2403,
 					"name": "_solarRaytrace",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2386,
+							"id": 2404,
 							"name": "_solarRaytrace",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2387,
+									"id": 2405,
 									"name": "origins_tjs",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20287,7 +20306,7 @@
 									}
 								},
 								{
-									"id": 2388,
+									"id": 2406,
 									"name": "directions_tjs",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20301,7 +20320,7 @@
 									}
 								},
 								{
-									"id": 2389,
+									"id": 2407,
 									"name": "mesh_tjs",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20312,7 +20331,7 @@
 									}
 								},
 								{
-									"id": 2390,
+									"id": 2408,
 									"name": "limits",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20350,21 +20369,21 @@
 					]
 				},
 				{
-					"id": 2382,
+					"id": 2400,
 					"name": "_solarRaytraceMax",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2383,
+							"id": 2401,
 							"name": "_solarRaytraceMax",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2384,
+									"id": 2402,
 									"name": "directions_tjs",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20393,21 +20412,21 @@
 					]
 				},
 				{
-					"id": 2369,
+					"id": 2387,
 					"name": "_solarRot",
 					"kind": 64,
 					"kindString": "Function",
 					"flags": {},
 					"signatures": [
 						{
-							"id": 2370,
+							"id": 2388,
 							"name": "_solarRot",
 							"kind": 4096,
 							"kindString": "Call signature",
 							"flags": {},
 							"parameters": [
 								{
-									"id": 2371,
+									"id": 2389,
 									"name": "day_ang",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20418,7 +20437,7 @@
 									}
 								},
 								{
-									"id": 2372,
+									"id": 2390,
 									"name": "day",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20429,7 +20448,7 @@
 									}
 								},
 								{
-									"id": 2373,
+									"id": 2391,
 									"name": "hour_ang",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20440,7 +20459,7 @@
 									}
 								},
 								{
-									"id": 2374,
+									"id": 2392,
 									"name": "hour",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20451,7 +20470,7 @@
 									}
 								},
 								{
-									"id": 2375,
+									"id": 2393,
 									"name": "latitude",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20462,7 +20481,7 @@
 									}
 								},
 								{
-									"id": 2376,
+									"id": 2394,
 									"name": "north",
 									"kind": 32768,
 									"kindString": "Parameter",
@@ -20493,11 +20512,11 @@
 					"title": "Enumerations",
 					"kind": 4,
 					"children": [
-						2306,
-						2309,
+						2324,
+						2327,
 						2279,
-						2298,
-						2301,
+						2307,
+						2310,
 						2294
 					]
 				},
@@ -20505,8 +20524,10 @@
 					"title": "Interfaces",
 					"kind": 256,
 					"children": [
+						2315,
 						2285,
-						2268
+						2268,
+						2298
 					]
 				},
 				{
@@ -20514,36 +20535,36 @@
 					"kind": 64,
 					"children": [
 						2497,
-						2454,
+						2463,
 						2477,
-						2338,
-						2398,
-						2313,
-						2420,
-						2350,
-						2391,
+						2356,
+						2416,
+						2331,
+						2438,
+						2368,
+						2409,
 						2520,
 						2504,
 						2484,
 						2489,
 						2512,
 						2471,
-						2447,
-						2441,
-						2444,
-						2409,
-						2437,
-						2345,
-						2413,
-						2331,
-						2320,
-						2327,
-						2377,
+						2456,
+						2450,
+						2453,
+						2427,
+						2446,
 						2363,
-						2358,
-						2385,
-						2382,
-						2369
+						2431,
+						2349,
+						2338,
+						2345,
+						2395,
+						2381,
+						2376,
+						2403,
+						2400,
+						2387
 					]
 				}
 			],
@@ -20563,7 +20584,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/basic/attrib.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/basic/attrib.ts",
 			"comment": {
 				"shortText": "The `attrib` module has functions for working with attributes in teh model.\nNote that attributes can also be set and retrieved using the \"@\" symbol.\n~\n~"
 			},
@@ -23132,7 +23153,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/basic/calc.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/basic/calc.ts",
 			"comment": {
 				"shortText": "The `calc` module has functions for performing various types of calculations with entities in the model.\nThese functions neither make nor modify anything in the model.\nThese functions all return either numbers or lists of numbers."
 			},
@@ -26001,7 +26022,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/basic/collection.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/basic/collection.ts",
 			"comment": {
 				"shortText": "The `collections` module has functions for creating and modifying collections."
 			},
@@ -26876,7 +26897,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/basic/dict.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/basic/dict.ts",
 			"comment": {
 				"shortText": "The `dict` module has functions for working with dictionaries.\nThese functions have no direct link with the model, the are generic functions for manipulating dictionaries.\nThese functions neither make nor modify anything in the model.\nIn addition to these functions, there are also inline functions available for working with dictionaries."
 			},
@@ -27186,7 +27207,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/basic/intersect.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/basic/intersect.ts",
 			"comment": {
 				"shortText": "The `intersect` module has functions for calculating intersections between different types of entities."
 			},
@@ -27602,7 +27623,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/basic/io.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/basic/io.ts",
 			"comment": {
 				"shortText": "The `io` module has functions for importing and exporting."
 			},
@@ -28951,7 +28972,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/basic/isect.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/basic/isect.ts",
 			"comment": {
 				"shortText": "The `isect` module has functions for performing intersections between entities in the model.\nThese functions may make new entities, and may modify existing entities, depending on the function that is selected.\nIf new entities are created, then the function will return the IDs of those entities."
 			},
@@ -29368,7 +29389,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/basic/list.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/basic/list.ts",
 			"comment": {
 				"shortText": "The `list` module has functions for working with lists of items.\nThese functions have no direct link with the model, the are generic functions for manipulating lists.\nThe functions are often used when manipulating lists of IDs of entities in the model.\nThese functions neither make nor modify anything in the model.\nIn addition to these functions, there are also various inline functions available for working with lists."
 			},
@@ -30624,7 +30645,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/basic/make.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/basic/make.ts",
 			"comment": {
 				"shortText": "The `make` module has functions for making new entities in the model.\nAll these functions return the IDs of the entities that are created."
 			},
@@ -35936,7 +35957,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/basic/material.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/basic/material.ts",
 			"comment": {
 				"shortText": "The `material` module has functions for defining materials.\nThe material definitions are saved as attributes at the model level.\nMore advanced materials can be created.\nFor more informtion, see the threejs docs: https://threejs.org/"
 			},
@@ -37299,7 +37320,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/basic/modify.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/basic/modify.ts",
 			"comment": {
 				"shortText": "The `modify` module has functions for modifying existing entities in the model.\nThese functions do not make any new entities, but they may change attribute values.\nAll these functions all return void."
 			},
@@ -40068,7 +40089,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/basic/pattern.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/basic/pattern.ts",
 			"comment": {
 				"shortText": "The `pattern` module has functions for creating patters of positions in the model.\nAll these functions all return lists of position IDs.\nThe list may be nested, depending on which function is selected."
 			},
@@ -42221,7 +42242,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/basic/poly2d.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/basic/poly2d.ts",
 			"comment": {
 				"shortText": "The `poly2D` module has a set of functions for working with 2D polygons, on the XY plane."
 			},
@@ -46395,7 +46416,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/basic/query.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/basic/query.ts",
 			"comment": {
 				"shortText": "The `query` module has functions for querying entities in the the model.\nMost of these functions all return a list of IDs of entities in the model.\n~\n~"
 			},
@@ -49940,7 +49961,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/basic/util.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/basic/util.ts",
 			"comment": {
 				"shortText": "The `util` module has some utility functions used for debugging."
 			},
@@ -51095,7 +51116,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/basic/visualize.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/basic/visualize.ts",
 			"comment": {
 				"shortText": "The `visualize` module has functions for defining various settings for the 3D viewer.\nColor is saved as vertex attributes."
 			},
@@ -53503,7 +53524,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/categorization.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/categorization.ts",
 			"children": [
 				{
 					"id": 5097,
@@ -53630,7 +53651,7 @@
 			"flags": {
 				"isExported": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/core/modules/index.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/core/modules/index.ts",
 			"sources": [
 				{
 					"fileName": "core/modules/index.ts",
@@ -53648,7 +53669,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/filesys/download.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/filesys/download.ts",
 			"children": [
 				{
 					"id": 4277,
@@ -53738,7 +53759,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIAttribMap.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIAttribMap.ts",
 			"children": [
 				{
 					"id": 41,
@@ -56340,7 +56361,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIAttribModify.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIAttribModify.ts",
 			"children": [
 				{
 					"id": 1942,
@@ -56674,7 +56695,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIAttribs.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIAttribs.ts",
 			"children": [
 				{
 					"id": 1959,
@@ -57513,7 +57534,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIAttribsAdd.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIAttribsAdd.ts",
 			"children": [
 				{
 					"id": 1695,
@@ -58861,7 +58882,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIAttribsIO.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIAttribsIO.ts",
 			"children": [
 				{
 					"id": 1909,
@@ -59475,7 +59496,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIAttribsQuery.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIAttribsQuery.ts",
 			"children": [
 				{
 					"id": 1813,
@@ -61166,7 +61187,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIAttribsThreejs.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIAttribsThreejs.ts",
 			"children": [
 				{
 					"id": 1781,
@@ -61835,7 +61856,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeom.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeom.ts",
 			"children": [
 				{
 					"id": 1652,
@@ -62924,7 +62945,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomAdd.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomAdd.ts",
 			"children": [
 				{
 					"id": 1034,
@@ -64356,7 +64377,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomCheck.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomCheck.ts",
 			"children": [
 				{
 					"id": 1341,
@@ -64895,7 +64916,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomDel.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomDel.ts",
 			"children": [
 				{
 					"id": 1306,
@@ -65582,7 +65603,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomDelEdge.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomDelEdge.ts",
 			"children": [
 				{
 					"id": 1639,
@@ -65847,7 +65868,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomDelVert.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomDelVert.ts",
 			"children": [
 				{
 					"id": 1604,
@@ -66466,7 +66487,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomIO.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomIO.ts",
 			"children": [
 				{
 					"id": 1286,
@@ -66882,7 +66903,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomModify.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomModify.ts",
 			"children": [
 				{
 					"id": 1110,
@@ -67607,7 +67628,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomModifyColl.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomModifyColl.ts",
 			"children": [
 				{
 					"id": 1425,
@@ -68047,7 +68068,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomModifyPgon.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomModifyPgon.ts",
 			"children": [
 				{
 					"id": 1403,
@@ -68471,7 +68492,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomModifyPline.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomModifyPline.ts",
 			"children": [
 				{
 					"id": 1389,
@@ -68753,7 +68774,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomNav.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomNav.ts",
 			"children": [
 				{
 					"id": 1449,
@@ -71267,7 +71288,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomQuery.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomQuery.ts",
 			"children": [
 				{
 					"id": 1152,
@@ -73065,7 +73086,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomThreejs.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIGeomThreejs.ts",
 			"children": [
 				{
 					"id": 1257,
@@ -73789,7 +73810,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIModel.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIModel.ts",
 			"children": [
 				{
 					"id": 2116,
@@ -74601,7 +74622,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIModelComparator.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIModelComparator.ts",
 			"children": [
 				{
 					"id": 1992,
@@ -76565,7 +76586,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIModelThreejs.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GIModelThreejs.ts",
 			"children": [
 				{
 					"id": 2106,
@@ -76786,7 +76807,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/GiGeomCompare.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/GiGeomCompare.ts",
 			"children": [
 				{
 					"id": 1369,
@@ -77182,7 +77203,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/ThreejsJSON.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/ThreejsJSON.ts",
 			"children": [
 				{
 					"id": 2087,
@@ -77718,7 +77739,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/common.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/common.ts",
 			"children": [
 				{
 					"id": 320,
@@ -82734,7 +82755,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/id.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/id.ts",
 			"children": [
 				{
 					"id": 390,
@@ -83895,7 +83916,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/io_geojson.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/io_geojson.ts",
 			"children": [
 				{
 					"id": 4183,
@@ -85365,7 +85386,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/io_obj.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/io_obj.ts",
 			"children": [
 				{
 					"id": 4146,
@@ -86049,7 +86070,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geo-info/virtual.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geo-info/virtual.ts",
 			"children": [
 				{
 					"id": 2264,
@@ -86253,7 +86274,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geom/constants.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geom/constants.ts",
 			"children": [
 				{
 					"id": 2238,
@@ -86353,7 +86374,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geom/distance.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geom/distance.ts",
 			"children": [
 				{
 					"id": 2162,
@@ -86985,7 +87006,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geom/intersect.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geom/intersect.ts",
 			"children": [
 				{
 					"id": 4907,
@@ -87547,7 +87568,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geom/matrix.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geom/matrix.ts",
 			"children": [
 				{
 					"id": 2212,
@@ -88012,7 +88033,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geom/mesh.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geom/mesh.ts",
 			"children": [
 				{
 					"id": 2242,
@@ -88235,7 +88256,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geom/triangle.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geom/triangle.ts",
 			"children": [
 				{
 					"id": 899,
@@ -88483,7 +88504,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/geom/vectors.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/geom/vectors.ts",
 			"children": [
 				{
 					"id": 928,
@@ -90079,7 +90100,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/triangulate/earcut.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/triangulate/earcut.ts",
 			"children": [
 				{
 					"id": 887,
@@ -92093,7 +92114,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/triangulate/threex.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/triangulate/threex.ts",
 			"children": [
 				{
 					"id": 718,
@@ -92530,7 +92551,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/triangulate/triangulate.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/triangulate/triangulate.ts",
 			"children": [
 				{
 					"id": 913,
@@ -92828,7 +92849,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/util/arrs.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/util/arrs.ts",
 			"children": [
 				{
 					"id": 26,
@@ -93395,7 +93416,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/util/copy.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/util/copy.ts",
 			"children": [
 				{
 					"id": 37,
@@ -93467,7 +93488,7 @@
 				"isExported": true,
 				"isExternal": true
 			},
-			"originalName": "C:/Users/akibdpt/Documents/Angular/mobius-parametric-modeller/src/assets/libs/util/maps.ts",
+			"originalName": "C:/Users/phuon/Documents/angular/mobius-parametric-modeller/src/assets/libs/util/maps.ts",
 			"children": [
 				{
 					"id": 1777,

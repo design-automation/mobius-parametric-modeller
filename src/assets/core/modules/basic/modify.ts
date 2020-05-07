@@ -19,7 +19,7 @@ import { Matrix4 } from 'three';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
 import { getRay, getPlane } from './_common';
 import * as THREE from 'three';
-import { TypedArrayUtils } from 'three/examples/jsm/utils/TypedArrayUtils.js';
+import { TypedArrayUtils } from '@libs/TypedArrayUtils.js';
 
 // ================================================================================================
 /**

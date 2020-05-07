@@ -829,6 +829,7 @@ function analyzeArray(comps: {'type': strType, 'value': string}[], i: number, va
             return {'error': `Error: Unexpected Token "," at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
         }
         i = result.i + 1;
+        if (i >= comps.length) { break; }
         if (result.str[0] !== ' ') {
             newString += ' ';
             jsString += ' ';

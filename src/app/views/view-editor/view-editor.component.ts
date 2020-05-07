@@ -236,6 +236,8 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             NodeUtils.deselect_procedure(this.dataService.node);
             return;
         }
+        NodeUtils.check_procedure_selected(this.dataService.node.state.procedure, this.dataService.node.localFunc);
+        NodeUtils.check_procedure_selected(this.dataService.node.state.procedure, this.dataService.node.procedure);
         if (!event.ctrl && document.activeElement.tagName === 'INPUT') {
             return;
         }

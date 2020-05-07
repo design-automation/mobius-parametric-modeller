@@ -905,8 +905,8 @@ interface TShortestPathResult {
     posi_paths?: TId[][];
 }
 export enum _EShortestPathMethod {
-    DIRECTED = 'directed',
-    UNDIRECTED = 'undirected'
+    UNDIRECTED = 'undirected',
+    DIRECTED = 'directed'
 }
 export enum _EShortestPathResult {
     DISTS = 'distances',

@@ -894,6 +894,16 @@ function _nearest(__model__: GIModel, source_posis_i: number[], target_posis_i: 
     return result;
 }
 // ================================================================================================
+interface TShortestPathResult {
+    source_posis?: TId[];
+    distances?: number[]|number[][];
+    edges?: TId[];
+    posis?: TId[];
+    edges_count?: number[];
+    posis_count?: number[];
+    edge_paths?: TId[][];
+    posi_paths?: TId[][];
+}
 export enum _EShortestPathMethod {
     DIRECTED = 'directed',
     UNDIRECTED = 'undirected'
@@ -947,12 +957,7 @@ export enum _EShortestPathResult {
  * @returns A dictionary containing the results.
  */
 export function ShortestPath(__model__: GIModel, source: TId|TId[]|TId[][][], target: TId|TId[]|TId[][],
-        entities: TId|TId[]|TId[][], method: _EShortestPathMethod, result: _EShortestPathResult):
-        {
-            source_posis?: TId[], distances?: number[],
-            edges?: TId[], posis?: TId[], edges_count?: number[], posis_count?: number[],
-            edge_paths?: TId[][], posi_paths?: TId[][]
-        } {
+        entities: TId|TId[]|TId[][], method: _EShortestPathMethod, result: _EShortestPathResult): TShortestPathResult {
 
     source = arrMakeFlat(source) as TId[];
     target = arrMakeFlat(target) as TId[];
@@ -1014,8 +1019,9 @@ export function ShortestPath(__model__: GIModel, source: TId|TId[]|TId[][][], ta
     const map_posis_i: Map<number, number> = new Map();
     const posi_paths: number[][] = [];
     const edge_paths: number[][] = [];
-    const path_dists: number[] = [];
+    const all_path_dists: number[][] = [];
     for (const source_posi_i of source_posis_i) {
+        const path_dists: number[] = [];
         const cy_source_elem = cy.getElementById( source_posi_i.toString() );
         const dijkstra = cy.elements().dijkstra({
             root: cy_source_elem,
@@ -1068,18 +1074,17 @@ export function ShortestPath(__model__: GIModel, source: TId|TId[]|TId[][][], ta
             if (return_paths) {
                 edge_paths.push(edge_path);
                 posi_paths.push(posi_path);
+            }
+            if (return_dists) {
                 path_dists.push(dist);
             }
         }
+        all_path_dists.push(path_dists);
     }
-    const dict: {
-        source_posis?: TId[], distances?: number[]
-        edges?: TId[], posis?: TId[], edges_count?: number[], posis_count?: number[],
-        edge_paths?: TId[][], posi_paths?: TId[][]
-    } = {};
+    const dict: TShortestPathResult = {};
     if (return_dists) {
         dict.source_posis = idsMakeFromIndicies(EEntType.POSI, source_posis_i) as TId[];
-        dict.distances = path_dists;
+        dict.distances = source_posis_i.length === 1 ? all_path_dists[0] : all_path_dists;
     }
     if (return_counts) {
         dict.edges = idsMakeFromIndicies(EEntType.EDGE, Array.from(map_edges_i.keys())) as TId[];
@@ -1192,7 +1197,17 @@ function _cytoscapeGetElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
     }
     return elements;
 }
-
+// ================================================================================================
+interface TClosestPathResult {
+    source_posis?: TId[];
+    distances?: number[];
+    edges?: TId[];
+    posis?: TId[];
+    edges_count?: number[];
+    posis_count?: number[];
+    edge_paths?: TId[][];
+    posi_paths?: TId[][];
+}
 /**
  * Calculates the shortest path from every position in source, to the closest position in target.
  * ~
@@ -1219,7 +1234,7 @@ function _cytoscapeGetElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
  * Returns a dictionary containing the shortes paths.
  * ~
  * If 'distances' is selected, the dictionary will contain one list:
- * 1) 'distances': a list of distances, one list for each path.
+ * 1) 'distances': a list of distances.
  * ~
  * If 'counts' is selected, the dictionary will contain four lists:
  * 1) 'posis': a list of positions traversed by the paths,
@@ -1242,18 +1257,13 @@ function _cytoscapeGetElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
  * @returns A dictionary containing the results.
  */
 export function ClosestPath(__model__: GIModel, source: TId|TId[]|TId[][][], target: TId|TId[]|TId[][],
-        entities: TId|TId[]|TId[][], method: _EShortestPathMethod, result: _EShortestPathResult):
-        {
-            source_ps?: TId[], distances?: number[],
-            _e?: TId[], ps?: TId[], _e_count?: number[], ps_count?: number[],
-            _e_paths?: TId[][], ps_paths?: TId[][]
-        } {
+        entities: TId|TId[]|TId[][], method: _EShortestPathMethod, result: _EShortestPathResult): TClosestPathResult {
 
     source = arrMakeFlat(source) as TId[];
     target = arrMakeFlat(target) as TId[];
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
-    const fn_name = 'analyze.ShortestPath';
+    const fn_name = 'analyze.ClosestPath';
     let source_ents_arrs: TEntTypeIdx[];
     let target_ents_arrs: TEntTypeIdx[];
     let ents_arrs: TEntTypeIdx[];
@@ -1389,11 +1399,7 @@ export function ClosestPath(__model__: GIModel, source: TId|TId[]|TId[][][], tar
             }
         }
     }
-    const dict: {
-        source_posis?: TId[], distances?: number[]
-        edges?: TId[], posis?: TId[], edges_count?: number[], posis_count?: number[],
-        edge_paths?: TId[][], posi_paths?: TId[][]
-    } = {};
+    const dict: TClosestPathResult = {};
     if (return_dists) {
         dict.source_posis = idsMakeFromIndicies(EEntType.POSI, source_posis_i) as TId[];
         dict.distances = path_dists;

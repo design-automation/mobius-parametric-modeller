@@ -22,7 +22,7 @@ import { multMatrix } from '@libs/geom/matrix';
 import { XAXIS, YAXIS, ZAXIS } from '@assets/libs/geom/constants';
 import cytoscape from 'cytoscape';
 import * as THREE from 'three';
-import { TypedArrayUtils } from 'three/examples/jsm/utils/TypedArrayUtils.js';
+import { TypedArrayUtils } from '@libs/TypedArrayUtils.js';
 import * as Mathjs from 'mathjs';
 import { createSingleMeshTjs } from '@assets/libs/geom/mesh';
 import { isRay, isXYZ, isPlane } from '@assets/libs/geo-info/virtual';

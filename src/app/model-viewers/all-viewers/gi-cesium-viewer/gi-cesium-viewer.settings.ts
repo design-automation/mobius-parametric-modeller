@@ -11,6 +11,9 @@ export interface CesiumSettings {
         up: {x: number, y: number, z: number};
         right: {x: number, y: number, z: number};
     };
+    time: {
+        date: string;
+    };
     cesium: {
         ion: string;
         assetid: string;
@@ -29,6 +32,9 @@ export const cesium_default_settings: CesiumSettings = {
         'direction': {'x': 0, 'y': 0, 'z': 0},
         'up': {'x': 0, 'y': 0, 'z': 0},
         'right': {'x': 0, 'y': 0, 'z': 0}
+    },
+    'time': {
+        'date': (new Date()).toISOString().split('T')[0]
     },
     'cesium': {
         'ion': '',

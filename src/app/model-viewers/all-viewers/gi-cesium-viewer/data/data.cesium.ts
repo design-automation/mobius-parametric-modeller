@@ -600,6 +600,15 @@ export class DataCesium {
                 this.settings.camera.right.z = newSetting.camera.right.z;
             }
         }
+        if (newSetting.time) {
+            if (newSetting.time.date) {
+                this.settings.time.date = newSetting.time.date;
+                Cesium.JulianDate.fromIso8601(this.settings.time.date, this._viewer.clock.currentTime);
+                Cesium.JulianDate.addDays(this._viewer.clock.currentTime, -1, this._viewer.clock.startTime);
+                Cesium.JulianDate.addDays(this._viewer.clock.currentTime, 1, this._viewer.clock.stopTime);
+                this._viewer.timeline.zoomTo(this._viewer.clock.startTime, this._viewer.clock.stopTime);
+            }
+        }
         if (newSetting.updated) {
             this.settings.updated = newSetting.updated;
         }

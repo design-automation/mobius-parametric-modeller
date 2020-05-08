@@ -10,13 +10,13 @@ import { checkIDs, IdCh } from '../_check_ids';
 import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, Txy, XYPLANE, EAttribDataTypeStrs } from '@libs/geo-info/common';
+import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, Txy, EAttribDataTypeStrs } from '@libs/geo-info/common';
 import { getArrDepth, idsMakeFromIndicies, idsMake, idsBreak } from '@libs/geo-info/id';
 import { distance } from '@libs/geom/distance';
-import { vecAdd, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm, vecAng2, vecSetLen, vecRot } from '@libs/geom/vectors';
+import { vecAdd, vecCross, vecMult, vecNorm, vecAng2, vecSetLen, vecRot } from '@libs/geom/vectors';
 import uscore from 'underscore';
 import { min, max } from '@assets/core/inline/_math';
-import { arrMakeFlat, arrIdxRem, getArrDepth2, arrMake2Deep } from '@assets/libs/util/arrs';
+import { arrMakeFlat, getArrDepth2 } from '@assets/libs/util/arrs';
 import { degToRad } from '@assets/core/inline/_conversion';
 import { multMatrix } from '@libs/geom/matrix';
 import { XAXIS, YAXIS, ZAXIS } from '@assets/libs/geom/constants';
@@ -214,6 +214,8 @@ interface TIsovistResult {
     max_dist?: number[];
     area?: number[];
     perimeter?: number[];
+    area_ratio?: number[];
+    perimeter_ratio?: number[];
     circularity?: number[];
     compactness?: number[];
     cluster?: number[];
@@ -235,6 +237,8 @@ interface TIsovistResult {
  * 3) 'max_dist': The minimum distance from the origin to the perimeter.
  * 4) 'area': The area of the isovist.
  * 5) 'perimeter': The perimeter of the isovist.
+ * 4) 'area_ratio': The ratio of the area of the isovist to the maximum area.
+ * 5) 'perimeter_ratio': The ratio of the perimeter of the isovist to the maximum perimeter.
  * 6) 'circularity': The ratio of the square of the perimeter to area (Davis and Benedikt, 1979).
  * 7) 'compactness': The ratio of average distance to the maximum distance (Michael Batty, 2001).
  * 8) 'cluster': The ratio of the radius of an idealized circle with the actual area of the
@@ -242,12 +246,12 @@ interface TIsovistResult {
  * ~
  * ~
  * @param __model__
- * @param origins A list of XYZ coordinates.
- * @param entities The obstructions,polygons, or collections of faces or polygons.
+ * @param origins A list of Rays or a list of Planes, to be used as the origins for calculating the isovists.
+ * @param entities The obstructions: faces, polygons, or collections.
  * @param radius The maximum radius of the isovist.
  * @param num_rays The number of rays to generate when calculating isovists.
  */
-export function Isovist(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[],
+export function Isovist(__model__: GIModel, origins: TRay[]|TPlane[],
         entities: TId|TId[]|TId[][], radius: number, num_rays: number): TIsovistResult {
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
@@ -255,7 +259,7 @@ export function Isovist(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[],
     // let origin_ents_arrs: TEntTypeIdx[];
     let ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
-        checkArgs(fn_name, 'origins', origins, [ArgCh.isXYZL, ArgCh.isRayL, ArgCh.isPlnL]);
+        checkArgs(fn_name, 'origins', origins, [ArgCh.isRayL, ArgCh.isPlnL]);
         ents_arrs = checkIDs(fn_name, 'entities', entities,
             [IdCh.isIdL],
             [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
@@ -269,8 +273,7 @@ export function Isovist(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[],
         ents_arrs = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
-    // create tjs origins
-    const origin_xyzs: Txyz[] = arrMake2Deep(origins);
+    // create tjs origins for xyz, ray, or plane
     const origins_tjs: THREE.Vector3[] = _isovistOriginsTjs(__model__, origins, 0.1); // TODO Should we lift coords by 0.1 ???
     // create tjs directions
     const dirs_xyzs: Txyz[] = [];
@@ -284,9 +287,9 @@ export function Isovist(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[],
     }
     // calc max perim and area
     const ang = (2 * Math.PI) / num_rays;
-    const opp = radius * Math.sin(ang);
+    const opp = radius * Math.sin(ang / 2);
     const max_perim = num_rays * 2 * opp;
-    const max_area = num_rays * radius * Math.cos(ang) * opp;
+    const max_area = num_rays * radius * Math.cos(ang / 2) * opp;
     // create mesh
     const mesh: [THREE.Mesh, number[]] = createSingleMeshTjs(__model__, ents_arrs);
     // create data structure
@@ -297,6 +300,8 @@ export function Isovist(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[],
     result.area = [];
     result.perimeter = [];
     result.circularity = [];
+    result.area_ratio = [];
+    result.perimeter_ratio = [];
     result.compactness = [];
     result.cluster = [];
     // shoot rays
@@ -311,7 +316,9 @@ export function Isovist(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[],
             // get the result
             if (isects.length === 0) {
                 result_dists.push(radius);
-                result_isects.push(vecAdd(origin_xyzs[i], dirs_xyzs[j]));
+                result_isects.push(vecAdd(
+                    [origin_tjs.x, origin_tjs.y, origin_tjs.z], dirs_xyzs[j]
+                ));
             } else {
                 result_dists.push(isects[0]['distance']);
                 const isect_tjs: THREE.Vector3 = isects[0].point;
@@ -326,12 +333,8 @@ export function Isovist(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[],
             // calc perim
             const c = distance(result_isects[j], result_isects[j2]);
             perim += c;
-            // calc area using Heron's formula
-            const a = result_dists[j];
-            const b = result_dists[j2];
-            const s = (a + b + c) / 2;
-            const tri_area = Math.sqrt(s * (s - a) * (s - b) * (s - c));
-            area += tri_area;
+            // calc area
+            area += _isovistTriArea(result_dists[j], result_dists[j2], c);
         }
         const total_dist = Mathjs.sum(result_dists);
         const avg_dist = total_dist / result_dists.length;
@@ -341,8 +344,10 @@ export function Isovist(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[],
         result.avg_dist.push( avg_dist );
         result.min_dist.push( min_dist );
         result.max_dist.push( max_dist );
-        result.area.push( area / max_area );
-        result.perimeter.push( perim / max_perim );
+        result.area.push( area );
+        result.perimeter.push( perim );
+        result.area_ratio.push( area / max_area );
+        result.perimeter_ratio.push( perim / max_perim );
         result.circularity.push( (perim * perim) / area );
         result.compactness.push( avg_dist / max_dist );
         result.cluster.push( Math.sqrt(area / Math.PI) / (perim / (2 * Math.PI)) );
@@ -374,7 +379,11 @@ function _isovistOriginsTjs(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[],
     }
     return vectors_tjs;
 }
-
+function _isovistTriArea(a: number, b: number, c: number): number {
+    // calc area using Heron's formula
+    const s = (a + b + c) / 2;
+    return Math.sqrt(s * (s - a) * (s - b) * (s - c));
+}
 // ================================================================================================
 export enum _ESkyMethod {
     WEIGHTED = 'weighted',

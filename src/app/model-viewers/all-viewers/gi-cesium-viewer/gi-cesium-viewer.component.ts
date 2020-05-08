@@ -99,6 +99,13 @@ export class GICesiumViewerComponent implements OnInit {
                 this.settings.camera.right.y = camera_right.y;
                 this.settings.camera.right.z = camera_right.z;
                 break;
+            case 'time.date':
+                this.settings.time.date = Cesium.JulianDate.toIso8601(
+                    this.dataService.getCesiumScene()._viewer.clock.currentTime).split('T')[0];
+                break;
+            case 'time.current':
+                this.settings.time.date = (new Date()).toISOString().split('T')[0];
+                break;
         }
     }
     /**

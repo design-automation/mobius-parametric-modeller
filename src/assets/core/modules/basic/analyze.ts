@@ -374,14 +374,133 @@ function _isovistOriginsTjs(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[],
     }
     return vectors_tjs;
 }
+
 // ================================================================================================
-export enum _ESolarMethod {
-    DIRECT_EXPOSURE = 'direct_exposure',
-    INDIRECT_EXPOSURE = 'indirect_exposure',
+export enum _ESkyMethod {
+    WEIGHTED = 'weighted',
+    UNWEIGHTED = 'unweighted',
     ALL = 'all'
 }
+
 /**
- * Calculate an approximation of the solar exposure factor, for a set sensors positioned at the origins.
+ * Calculate an approximation of the sky exposure factor, for a set sensors positioned at specified locations.
+ * The sky exposure factor for each sensor is a value between 0 and 1, where 0 means that it has no exposure
+ * and 1 means that it has maximum exposure.
+ * ~
+ * Each sensor has a location and direction, specified using either rays or planes.
+ * The direction of the sensor specifies what is infront and what is behind the sensor.
+ * For each sensor, only exposure infront of the sensor is calculated.
+ * ~
+ * The exposure is calculated by shooting rays in reverse.
+ * from the sensor origin to a set of points on the sky dome.
+ * If the rays hits an obstruction, then the sky dome is obstructed..
+ * If the ray hits no obstructions, then the sky dome is not obstructed.
+ * ~
+ * The exposure factor at each sensor point is calculated as follows:
+ * 1) Shoot rays to all sky dome points.
+ * 2) If the ray hits an obstruction, assign a weight of 0 to that ray.
+ * 3) If a ray does not hit any obstructions, assign a weight between 0 and 1, depending on the incidence angle.
+ * 4) Calculate the total solar expouse by adding up the weights for all rays.
+ * 5) Divide by the maximum possible exposure for an unobstructed sensor with a direction pointing straight up.
+ * ~
+ * If 'weighted' is selected, then
+ * the exposure calculation takes into account the angle of incidence of the ray to the sensor direction.
+ * Rays parallel to the sensor direction are assigned a weight of 1.
+ * Rays at an oblique angle are assigned a weight equal to the cosine of the angle
+ * betweeen the sensor direction and the ray.
+ * ~
+ * If 'unweighted' is selected, then all rays are assigned a weight of 1, irresepctive of angle.
+ * ~
+ * The detail parameter spacifies the number of points that get generated on the sky dome.
+ * The higher the level of detail, the more accurate but also the slower the analysis will be.
+ * ~
+ * The number of points are as follows:
+ * - detail = 0 -> 45 points
+ * - detail = 1 -> 66 points
+ * - detail = 2 -> 91 points
+ * - detail = 3 -> 136 points
+ * - detail = 4 -> 225 points
+ * - detail = 5 -> 490 points
+ * - detail = 6  -> 1067 points
+ * ~
+ * Returns a dictionary containing exposure results.
+ * ~
+ * 1) 'exposure': A list of numbers, the exposure factors.
+ * ~
+ * ~
+ * @param __model__
+ * @param origins A list of Rays or a list of Planes, to be used as the origins for calculating the solar exposure.
+ * @param detail An integer between 1 and 6, specifies the level of detail for the analysis.
+ * @param entities The obstructions, faces, polygons, or collections of faces or polygons.
+ * @param limits The max distance for raytracing.
+ * @param method Enum; sky method.
+ */
+export function Sky(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], detail: number,
+        entities: TId|TId[]|TId[][], limits: number|[number, number], method: _ESkyMethod): any {
+    entities = arrMakeFlat(entities) as TId[];
+    // --- Error Check ---
+    const fn_name = 'analyze.Sky';
+    let ents_arrs: TEntTypeIdx[];
+    let latitude: number = null;
+    let north: Txy = [0, 1];
+    if (__model__.debug) {
+        checkArgs(fn_name, 'origins', origins, [ArgCh.isXYZL, ArgCh.isRayL, ArgCh.isPlnL]);
+        checkArgs(fn_name, 'detail', detail, [ArgCh.isInt]);
+        if (detail < 0 || detail > 6) {
+            throw new Error (fn_name + ': "detail" must be an integer between 0 and 6.');
+        }
+        ents_arrs = checkIDs(fn_name, 'entities', entities,
+            [IdCh.isId, IdCh.isIdL],
+            [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+    } else {
+        ents_arrs = idsBreak(entities) as TEntTypeIdx[];
+        const geolocation = __model__.attribs.query.getModelAttribVal('geolocation');
+        latitude = geolocation['latitude'];
+        if (__model__.attribs.query.hasModelAttrib('north')) {
+            north = __model__.attribs.query.getModelAttribVal('north') as Txy;
+        }
+    }
+    // TODO
+    // TODO
+    // --- Error Check ---
+
+
+    const sensor_oris_dirs_tjs: [THREE.Vector3, THREE.Vector3][] = _rayOrisDirsTjs(__model__, origins, 0.01);
+    const [mesh_tjs, idx_to_face_i]: [THREE.Mesh, number[]] = createSingleMeshTjs(__model__, ents_arrs);
+    limits = Array.isArray(limits) ? limits : [0, limits];
+    // get the direction vectors
+    const ray_dirs_tjs: THREE.Vector3[] = _skyRayDirsTjs(detail);
+    // run the simulation
+    const weighted: boolean = method === _ESkyMethod.WEIGHTED;
+    const results: number[] = _calcExposure(sensor_oris_dirs_tjs, ray_dirs_tjs, mesh_tjs, limits, weighted);
+    // cleanup
+    mesh_tjs.geometry.dispose();
+    (mesh_tjs.material as THREE.Material).dispose();
+    // return the result
+    return { 'exposure': results };
+
+}
+function _skyRayDirsTjs(detail: number): THREE.Vector3[] {
+    const hedron_tjs: THREE.IcosahedronGeometry = new THREE.IcosahedronGeometry(1, detail + 2);
+    // calc vectors
+    const vecs: THREE.Vector3[] = [];
+    for (const vec of hedron_tjs.vertices) {
+        // vec.applyAxisAngle(YAXIS, Math.PI / 2);
+        if (vec.z > -1e-6) {
+            vecs.push(vec);
+        }
+    }
+    return vecs;
+}
+// ================================================================================================
+export enum _ESolarMethod {
+    DIRECT_WEIGHTED = 'direct_weighted',
+    DIRECT_UNWEIGHTED = 'direct_unweighted',
+    INDIRECT_WEIGHTED = 'indirect_weighted',
+    INDIRECT_UNWEIGHTED = 'indirect_unweighted'
+}
+/**
+ * Calculate an approximation of the solar exposure factor, for a set sensors positioned at specfied locations.
  * The solar exposure factor for each sensor is a value between 0 and 1, where 0 means that it has no exposure
  * and 1 means that it has maximum exposure.
  * ~
@@ -392,16 +511,16 @@ export enum _ESolarMethod {
  * @north==[1,2]
  * If no north direction is specified, then [0,1] is the default (i.e. north is in the direction of the y-axis);
  * ~
- * Each origin can be though of as a sensore, with a location and direction.
- * The origins can be specified using either rays or planes.
+ * Each sensor has a location and direction, specified using either rays or planes.
  * The direction of the sensor specifies what is infront and what is behind the sensor.
- * For each sensor, only solar exposure infront of the sensor is calculated.
+ * For each sensor, only exposure infront of the sensor is calculated.
  * ~
- * The solar exposure is calculated by shooting rays from the sensor origin to a set of points on the sky dome.
- * If the rays hits an obstruction, then the sun ray does not hit the sensor.
- * If the ray hits no obstructions, then it is assumed that the sun ray hits the sensor.
+ * The exposure is calculated by shooting rays in reverse.
+ * from the sensor origin to a set of points on the sky dome.
+ * If the rays hits an obstruction, then the sky dome is obstructed..
+ * If the ray hits no obstructions, then the sky dome is not obstructed.
  * ~
- * The solar exposure factor at each sensor point is calculated as follows:
+ * The exposure factor at each sensor point is calculated as follows:
  * 1) Shoot rays to all sky dome points.
  * 2) If the ray hits an obstruction, assign a wight of 0 to that ray.
  * 3) If a ray does not hit any obstructions, assign a weight between 0 and 1, depending on the incidence angle.
@@ -428,19 +547,27 @@ export enum _ESolarMethod {
  * - detail = 1 -> 66 points
  * - detail = 2 -> 91 points
  * - detail = 3 -> 136 points
- * - detail = 4 -> 225 points
- * - detail = 5 -> 490 points
- * - detail = 6  -> 1067 points
+ * ~
+ * At latitude 0, the number of points for 'indirect' are as follows:
+ * - detail = 0 -> ?? points
+ * - detail = 1 -> ?? points
+ * - detail = 2 -> ?? points
+ * - detail = 3 -> ?? points
+ * ~
+ * The number of points for 'sky' are as follows:
+ * - detail = 0 -> ?? points
+ * - detail = 1 -> ?? points
+ * - detail = 2 -> ?? points
+ * - detail = 3 -> ?? points
  * ~
  * Returns a dictionary containing solar exposure results.
  * ~
- * If 'direct' is selected, the dictionary will contain:
+ * If one  of the 'direct' methods is selected, the dictionary will contain:
  * 1) 'direct': A list of numbers, the direct exposure factors.
  * ~
- * If 'indirect' is selected, the dictionary will contain:
+ * If one  of the 'indirect' methods is selected, the dictionary will contain:
  * 1) 'indirect': A list of numbers, the indirect exposure factors.
  * ~
- * If 'all' is selected, the dictionary will contain all of the above.
  * ~
  * @param __model__
  * @param origins A list of Rays or a list of Planes, to be used as the origins for calculating the solar exposure.
@@ -449,11 +576,11 @@ export enum _ESolarMethod {
  * @param limits The max distance for raytracing.
  * @param method Enum; solar method.
  */
-export function Solar(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], detail: number,
+export function Sun(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], detail: number,
         entities: TId|TId[]|TId[][], limits: number|[number, number], method: _ESolarMethod): any {
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
-    const fn_name = 'analyze.Solar';
+    const fn_name = 'analyze.Sun';
     let ents_arrs: TEntTypeIdx[];
     let latitude: number = null;
     let north: Txy = [0, 1];
@@ -500,29 +627,40 @@ export function Solar(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], detai
 
     // TODO North direction
 
-    const origins_tjs: [THREE.Vector3, THREE.Vector3][] = _solarOriginsTjs(__model__, origins, 0.01);
+    const sensor_oris_dirs_tjs: [THREE.Vector3, THREE.Vector3][] = _rayOrisDirsTjs(__model__, origins, 0.01);
     const [mesh_tjs, idx_to_face_i]: [THREE.Mesh, number[]] = createSingleMeshTjs(__model__, ents_arrs);
     limits = Array.isArray(limits) ? limits : [0, limits];
-    // get the direction vectors
-    const directions_tjs: THREE.Vector3[] = uscore.flatten(_solarDirectionsTjs(latitude, north, detail, method));
-    // run the simulation
-    const results: number[] = _solarRaytrace(origins_tjs, directions_tjs, mesh_tjs, limits) as number[];
-    // cleanup
-    mesh_tjs.geometry.dispose();
-    (mesh_tjs.material as THREE.Material).dispose();
+
+
     // return the result
+    const results = {};
     switch (method) {
-        case _ESolarMethod.DIRECT_EXPOSURE:
-            return { 'direct': results };
-        case _ESolarMethod.INDIRECT_EXPOSURE:
-            return { 'indirect': results };
-        case _ESolarMethod.ALL:
-            throw new Error('Not implemented.');
+        case _ESolarMethod.DIRECT_WEIGHTED:
+        case _ESolarMethod.DIRECT_UNWEIGHTED:
+            // get the direction vectors
+            const ray_dirs_tjs1: THREE.Vector3[] = uscore.flatten(_solarDirsTjs(latitude, north, detail, method));
+            // run the simulation
+            const weighted1: boolean = method === _ESolarMethod.DIRECT_WEIGHTED;
+            results['direct'] = _calcExposure(sensor_oris_dirs_tjs, ray_dirs_tjs1, mesh_tjs, limits, weighted1) as number[];
+            break;
+        case _ESolarMethod.INDIRECT_WEIGHTED:
+        case _ESolarMethod.INDIRECT_UNWEIGHTED:
+            // get the direction vectors
+            const ray_dirs_tjs2: THREE.Vector3[] = uscore.flatten(_solarDirsTjs(latitude, north, detail, method));
+            // run the simulation
+            const weighted2: boolean = method === _ESolarMethod.INDIRECT_WEIGHTED;
+            results['indirect'] = _calcExposure(sensor_oris_dirs_tjs, ray_dirs_tjs2, mesh_tjs, limits, weighted2) as number[];
+            break;
         default:
             throw new Error('Solar method not recognised.');
     }
+    // cleanup
+    mesh_tjs.geometry.dispose();
+    (mesh_tjs.material as THREE.Material).dispose();
+    // return dict
+    return results;
 }
-function _solarOriginsTjs(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], offset: number): [THREE.Vector3, THREE.Vector3][] {
+function _rayOrisDirsTjs(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], offset: number): [THREE.Vector3, THREE.Vector3][] {
     const vectors_tjs: [THREE.Vector3, THREE.Vector3][] = [];
     const is_xyz: boolean = isXYZ(origins[0]);
     const is_ray: boolean = isRay(origins[0]);
@@ -549,14 +687,18 @@ function _solarOriginsTjs(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], o
     }
     return vectors_tjs;
 }
-function _solarDirectionsTjs(latitude: number, north: Txy, detail: number, method: _ESolarMethod): THREE.Vector3[][] {
+function _solarDirsTjs(latitude: number, north: Txy, detail: number, method: _ESolarMethod): THREE.Vector3[]|THREE.Vector3[][] {
     switch (method) {
-        case _ESolarMethod.DIRECT_EXPOSURE:
-            return _solarDirectTjs(latitude, north, detail);
-        case _ESolarMethod.INDIRECT_EXPOSURE:
-            throw new Error('Not implemented');
-        case _ESolarMethod.ALL:
-            throw new Error('Not implemented');
+        case _ESolarMethod.DIRECT_WEIGHTED:
+        case _ESolarMethod.DIRECT_UNWEIGHTED:
+            return _solarRaysDirectTjs(latitude, north, detail);
+        case _ESolarMethod.INDIRECT_WEIGHTED:
+        case _ESolarMethod.INDIRECT_UNWEIGHTED:
+            return _solarRaysIndirectTjs(latitude, north, detail);
+        // case _ESolarMethod.ALL:
+        //     throw new Error('Not implemented');
+        default:
+            throw new Error('Solar method not recognised.');
     }
 }
 function _solarRot(day_ang: number, day: number, hour_ang: number, hour: number, latitude: number, north: number): THREE.Vector3 {
@@ -567,12 +709,14 @@ function _solarRot(day_ang: number, day: number, hour_ang: number, hour: number,
     vec.applyAxisAngle(ZAXIS, -north);
     return vec;
 }
-function _solarDirectTjs(latitude: number, north: Txy, detail: number): THREE.Vector3[][] {
+function _solarRaysDirectTjs(latitude: number, north: Txy, detail: number): THREE.Vector3[][] {
     const directions: THREE.Vector3[][] = [];
     // set the level of detail
-    const day_step = [182 / 4, 182 / 5, 182 / 6, 182 / 7, 182 / 8, 182 / 9, 182 / 10][detail];
+    // const day_step = [182 / 4, 182 / 5, 182 / 6, 182 / 7, 182 / 8, 182 / 9, 182 / 10][detail];
+    const day_step = [182 / 3, 182 / 6, 182 / 9, 182 / 12][detail];
     const num_day_steps: number = Math.round(182 / day_step) + 1;
-    const hour_step = [0.25 * 6, 0.25 * 5, 0.25 * 4, 0.25 * 3, 0.25 * 2, 0.25 * 1, 0.25 * 0.5][detail];
+    // const hour_step = [0.25 * 6, 0.25 * 5, 0.25 * 4, 0.25 * 3, 0.25 * 2, 0.25 * 1, 0.25 * 0.5][detail];
+    const hour_step = [0.25 * 6, 0.25 * 4, 0.25 * 1, 0.25 * 0.5][detail];
     // get the angles in radians
     const day_ang_rad: number = degToRad(47) as number / 182;
     const hour_ang_rad: number = (2 * Math.PI) / 24;
@@ -589,7 +733,7 @@ function _solarDirectTjs(latitude: number, north: Txy, detail: number): THREE.Ve
         let sunset = 0;
         for (let hour = 0; hour < 24; hour = hour + 0.1) {
             const sunrise_vec: THREE.Vector3 = _solarRot(day_ang_rad, day, hour_ang_rad, hour, latitude_rad, north_rad);
-            if (sunrise_vec.z > 0) {
+            if (sunrise_vec.z > -1e-6) {
                 sunrise = hour;
                 sunset = 24 - hour;
                 one_day_path.push(sunrise_vec);
@@ -599,7 +743,7 @@ function _solarDirectTjs(latitude: number, north: Txy, detail: number): THREE.Ve
         // morning sun path, count down from midday
         for (let hour = 12; hour > sunrise; hour = hour - hour_step) {
             const am_vec: THREE.Vector3 = _solarRot(day_ang_rad, day, hour_ang_rad, hour, latitude_rad, north_rad);
-            if (am_vec.z > 0) {
+            if (am_vec.z > -1e-6) {
                 one_day_path.splice(1, 0, am_vec);
             } else {
                 break;
@@ -608,7 +752,7 @@ function _solarDirectTjs(latitude: number, north: Txy, detail: number): THREE.Ve
         // afternoon sunpath, count up from midday
         for (let hour = 12 + hour_step; hour < sunset; hour = hour + hour_step) {
             const pm_vec: THREE.Vector3 = _solarRot(day_ang_rad, day, hour_ang_rad, hour, latitude_rad, north_rad);
-            if (pm_vec.z > 0) {
+            if (pm_vec.z > -1e-6) {
                 one_day_path.push(pm_vec);
             } else {
                 break;
@@ -622,8 +766,29 @@ function _solarDirectTjs(latitude: number, north: Txy, detail: number): THREE.Ve
     }
     return directions;
 }
+function _solarRaysIndirectTjs(latitude: number, north: Txy, detail: number): THREE.Vector3[] {
+    const hedron_tjs: THREE.IcosahedronGeometry = new THREE.IcosahedronGeometry(1, detail + 2);
+    const solar_offset = Math.cos(degToRad(66.5) as number);
+    // get the atitude angle in radians
+    const latitude_rad: number = degToRad(latitude) as number;
+    // get the angle from y-axis to north vector in radians
+    const north_rad = vecAng2([north[0], north[1], 0], [0, 1, 0], [0, 0, 1]);
+    // calc vectors
+    const indirect_vecs: THREE.Vector3[] = [];
+    for (const vec of hedron_tjs.vertices) {
+        if (Math.abs(vec.y) > solar_offset) {
+            vec.applyAxisAngle(XAXIS, latitude_rad);
+            vec.applyAxisAngle(ZAXIS, -north_rad);
+            if (vec.z > -1e-6) {
+                indirect_vecs.push(vec);
+            }
+        }
+    }
+    return indirect_vecs;
+}
 // calc the max solar exposure for a point with no obstructions facing straight up
-function _solarRaytraceMax(directions_tjs: THREE.Vector3[]): number {
+function _calcMaxExposure(directions_tjs: THREE.Vector3[], weighted: boolean): number {
+    if (!weighted) { return directions_tjs.length; }
     let result = 0;
     const normal_tjs: THREE.Vector3 = new THREE.Vector3(0, 0, 1);
     for (const direction_tjs of directions_tjs) {
@@ -636,11 +801,12 @@ function _solarRaytraceMax(directions_tjs: THREE.Vector3[]): number {
     }
     return result;
 }
-function _solarRaytrace(origins_tjs: [THREE.Vector3, THREE.Vector3][],
-        directions_tjs: THREE.Vector3[], mesh_tjs: THREE.Mesh, limits: [number, number]): number[] {
+function _calcExposure(origins_normals_tjs: [THREE.Vector3, THREE.Vector3][],
+        directions_tjs: THREE.Vector3[], mesh_tjs: THREE.Mesh,
+        limits: [number, number], weighted: boolean): number[] {
     const results = [];
-    const result_max: number = _solarRaytraceMax(directions_tjs);
-    for (const [origin_tjs, normal_tjs] of origins_tjs) {
+    const result_max: number = _calcMaxExposure(directions_tjs, weighted);
+    for (const [origin_tjs, normal_tjs] of origins_normals_tjs) {
         let result = 0;
         for (const direction_tjs of directions_tjs) {
             const dot_normal_direction: number = normal_tjs.dot(direction_tjs);
@@ -648,16 +814,26 @@ function _solarRaytrace(origins_tjs: [THREE.Vector3, THREE.Vector3][],
                 const ray_tjs: THREE.Raycaster = new THREE.Raycaster(origin_tjs, direction_tjs, limits[0], limits[1]);
                 const isects: THREE.Intersection[] = ray_tjs.intersectObject(mesh_tjs, false);
                 if (isects.length === 0) {
-                    // this applies the cosine weighting rule
-                    result = result + dot_normal_direction;
+                    if (weighted) {
+                        // this applies the cosine weighting rule
+                        result = result + dot_normal_direction;
+                    } else {
+                        // this applies no cosine weighting
+                        result = result + 1;
+                    }
                 }
             }
         }
-        results.push(100 * result / result_max);
+        results.push(result / result_max);
     }
     return results;
 }
 // ================================================================================================
+export enum _ESunPathMethod {
+    DIRECT = 'direct',
+    INDIRECT = 'indirect',
+    SKY = 'sky'
+}
 /**
  * Generates a sun path, oriented according to the geolocation and north direction.
  * The sun path is generated as an aid to visualize the orientation of the sun relative to the model.
@@ -674,11 +850,12 @@ function _solarRaytrace(origins_tjs: [THREE.Vector3, THREE.Vector3][],
  * @param origins The origins of the rays
  * @param detail The level of detail for the analysis
  * @param radius The radius of the sun path
- * @param method Enum; solar method
+ * @param method Enum, the type of sky to generate.
  */
-export function SunPath(__model__: GIModel, origin: Txyz|TRay|TPlane, detail: number, radius: number, method: _ESolarMethod): TId[] {
+export function SkyDome(__model__: GIModel, origin: Txyz|TRay|TPlane, detail: number,
+        radius: number, method: _ESunPathMethod): TId[]|TId[][] {
     // --- Error Check ---
-    const fn_name = 'analyze.SunPath';
+    const fn_name = 'analyze.SkyDome';
     let latitude: number = null;
     let north: Txy = [0, 1];
     if (__model__.debug) {
@@ -688,24 +865,26 @@ export function SunPath(__model__: GIModel, origin: Txyz|TRay|TPlane, detail: nu
             throw new Error (fn_name + ': "detail" must be an integer between 0 and 6.');
         }
         checkArgs(fn_name, 'radius', radius, [ArgCh.isNum]);
-        if (!__model__.attribs.query.hasModelAttrib('geolocation')) {
-            throw new Error('analyze.Solar: model attribute "geolocation" is missing, \
-                e.g. @geolocation = {"latitude":12, "longitude":34}');
-        } else {
-            const geolocation = __model__.attribs.query.getModelAttribVal('geolocation');
-            if (uscore.isObject(geolocation) && uscore.has(geolocation, 'latitude')) {
-                latitude = geolocation['latitude'];
-            } else {
-                throw new Error('analyze.Solar: model attribute "geolocation" is missing the "latitude" key, \
+        if (method !== _ESunPathMethod.SKY) {
+            if (!__model__.attribs.query.hasModelAttrib('geolocation')) {
+                throw new Error('analyze.Solar: model attribute "geolocation" is missing, \
                     e.g. @geolocation = {"latitude":12, "longitude":34}');
+            } else {
+                const geolocation = __model__.attribs.query.getModelAttribVal('geolocation');
+                if (uscore.isObject(geolocation) && uscore.has(geolocation, 'latitude')) {
+                    latitude = geolocation['latitude'];
+                } else {
+                    throw new Error('analyze.Solar: model attribute "geolocation" is missing the "latitude" key, \
+                        e.g. @geolocation = {"latitude":12, "longitude":34}');
+                }
             }
-        }
-        if (__model__.attribs.query.hasModelAttrib('north')) {
-            north = __model__.attribs.query.getModelAttribVal('north') as Txy;
-            if (!Array.isArray(north) || north.length !== 2) {
-                throw new Error('analyze.Solar: model has a "north" attribute with the wrong type, \
-                it should be a vector with two values, \
-                e.g. @north =  [1,2]');
+            if (__model__.attribs.query.hasModelAttrib('north')) {
+                north = __model__.attribs.query.getModelAttribVal('north') as Txy;
+                if (!Array.isArray(north) || north.length !== 2) {
+                    throw new Error('analyze.Solar: model has a "north" attribute with the wrong type, \
+                    it should be a vector with two values, \
+                    e.g. @north =  [1,2]');
+                }
             }
         }
     } else {
@@ -730,20 +909,38 @@ export function SunPath(__model__: GIModel, origin: Txyz|TRay|TPlane, detail: nu
         // origin is Txyz
         matrix.makeTranslation(...origin as Txyz);
     }
-    // get the direction vectors
-    const directions_tjs: THREE.Vector3[][] = _solarDirectionsTjs(latitude, north, detail, method);
-    // generate the sun path
-    const posis_i: number[][] = [];
-    for (const one_day_tjs of directions_tjs) {
-        const one_day_posis_i: number[] = [];
-        for (const direction_tjs of one_day_tjs) {
-            let xyz: Txyz = vecMult([direction_tjs.x, direction_tjs.y, direction_tjs.z], radius);
-            xyz = multMatrix(xyz, matrix);
-            const posi_i: number = __model__.geom.add.addPosi();
-            __model__.attribs.add.setPosiCoords(posi_i, xyz);
-            one_day_posis_i.push(posi_i);
-        }
-        posis_i.push(one_day_posis_i);
+    // generate the positions on the sky dome
+    switch (method) {
+        case _ESunPathMethod.DIRECT:
+            const rays_dirs_tjs1: THREE.Vector3[][] = _solarRaysDirectTjs(latitude, north, detail);
+            return _sunPathGenPosisNested(__model__, rays_dirs_tjs1, radius, matrix);
+        case _ESunPathMethod.INDIRECT:
+            const rays_dirs_tjs2: THREE.Vector3[] = _solarRaysIndirectTjs(latitude, north, detail);
+            return _sunPathGenPosis(__model__, rays_dirs_tjs2, radius, matrix);
+        case _ESunPathMethod.SKY:
+            const rays_dirs_tjs3: THREE.Vector3[] = _skyRayDirsTjs(detail);
+            return _sunPathGenPosis(__model__, rays_dirs_tjs3, radius, matrix);
+        default:
+            throw new Error('Sunpath method not recognised.');
+    }
+}
+function _sunPathGenPosisNested(__model__: GIModel, rays_dirs_tjs: THREE.Vector3[][],
+        radius: number, matrix: THREE.Matrix4): TId[][] {
+    const posis: TId[][] = [];
+    for (const one_day_tjs of rays_dirs_tjs) {
+        posis.push(_sunPathGenPosis(__model__, one_day_tjs, radius, matrix));
+    }
+    return posis;
+}
+function _sunPathGenPosis(__model__: GIModel, rays_dirs_tjs: THREE.Vector3[],
+        radius: number, matrix: THREE.Matrix4): TId[] {
+    const posis_i: number[] = [];
+    for (const direction_tjs of rays_dirs_tjs) {
+        let xyz: Txyz = vecMult([direction_tjs.x, direction_tjs.y, direction_tjs.z], radius);
+        xyz = multMatrix(xyz, matrix);
+        const posi_i: number = __model__.geom.add.addPosi();
+        __model__.attribs.add.setPosiCoords(posi_i, xyz);
+        posis_i.push(posi_i);
     }
     return idsMakeFromIndicies(EEntType.POSI, posis_i) as TId[];
 }

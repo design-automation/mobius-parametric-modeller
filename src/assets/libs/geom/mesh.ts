@@ -83,7 +83,7 @@ export function createSingleMeshTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]
         const posi_tjs = new THREE.Vector3(...xyz);
         posis_tjs[posi_i] = posi_tjs;
     }
-    // get an array of all the faces
+    // get an array of all the pgons
     const pgons_i: number[] = [];
     for (const [ent_type, ent_i] of ents_arrs) {
         switch (ent_type) {
@@ -91,8 +91,8 @@ export function createSingleMeshTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]
                 pgons_i.push(ent_i);
                 break;
             default:
-                const coll_pgons_i: number[] = __model__.geom.nav.navAnyToPgon(ent_type, ent_i);
-                coll_pgons_i.forEach( coll_pgon_i => pgons_i.push(coll_pgon_i) );
+                const ent_pgons_i: number[] = __model__.geom.nav.navAnyToPgon(ent_type, ent_i);
+                ent_pgons_i.forEach( ent_pgon_i => pgons_i.push(ent_pgon_i) );
                 break;
         }
     }

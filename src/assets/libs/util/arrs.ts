@@ -75,26 +75,26 @@ export function arrMakeFlat(data: any): any[] {
  * ~
  * @param data
  */
-export function arrMake2Deep(data: any): any[] {
-    if (!Array.isArray(data)) {
-        return [[data]];
-    }
-    // return new_array;
-    const flattend = [];
-    function flat(data2: any) {
-        data2.forEach(function(el: any) {
-            if (!Array.isArray(el)) {
-                flattend.push([el]);
-            } else if (!Array.isArray(el[0])) {
-                flattend.push(el);
-            } else {
-                flat(el);
-            }
-        });
-    }
-    flat(data);
-    return flattend;
-}
+// export function arrMake2Deep(data: any): any[] {
+//     if (!Array.isArray(data)) {
+//         return [[data]];
+//     }
+//     // return new_array;
+//     const flattend = [];
+//     function flat(data2: any) {
+//         data2.forEach(function(el: any) {
+//             if (!Array.isArray(el)) {
+//                 flattend.push([el]);
+//             } else if (!Array.isArray(el[0])) {
+//                 flattend.push(el);
+//             } else {
+//                 flat(el);
+//             }
+//         });
+//     }
+//     flat(data);
+//     return flattend;
+// }
 
 
 /**

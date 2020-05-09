@@ -274,6 +274,24 @@ export class GIViewerComponent implements OnInit {
             case 'wireframe.show':
                 this.wireframeToggle();
                 break;
+            case 'camera.pos_x':
+                if (isNaN(value)) {
+                    return;
+                }
+                this.temp_camera_pos.x = Math.round(value);
+                break;
+            case 'camera.pos_y':
+                if (isNaN(value)) {
+                    return;
+                }
+                this.temp_camera_pos.y = Math.round(value);
+                break;
+            case 'camera.pos_z':
+                if (isNaN(value)) {
+                    return;
+                }
+                this.temp_camera_pos.z = Math.round(value);
+                break;
             case 'camera.get_camera_pos':
                 this.temp_camera_pos = this.dataService.getThreejsScene().camera.position;
                 this.settings.camera.pos = this.temp_camera_pos;

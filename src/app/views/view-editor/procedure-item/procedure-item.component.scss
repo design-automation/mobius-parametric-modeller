@@ -9,13 +9,14 @@
 .container--line{
     background-color: transparent;
     font-size: $fsize2;
-    margin: 0px 5px 2px 0px;
-    padding: 0px 0px 1px 10px;
+    margin: 0px 0px 1px 0px;
+    padding: 0px 0px 1px 9px;
     // padding-bottom: 1px;
     // padding-left: 2px;
     //border-bottom: 1px solid red;
     border-bottom: 1px solid $color5;
     border-left: 1px solid $color5;
+    box-shadow: inset 1px -1px 0px 0px white;
     color: $color1;
     //min-height: 22px;
     opacity: 1;

@@ -9,8 +9,8 @@
 .container--line{
     background-color: transparent;
     font-size: $fsize2;
-    margin: 0px 5px 2px 8px;
-    padding: 0px 0px 1px 3px;
+    margin: 0px 5px 2px 2px;
+    padding: 0px 0px 1px 10px;
     // padding-bottom: 1px;
     // padding-left: 2px;
     //border-bottom: 1px solid red;
@@ -48,11 +48,6 @@
                 }
             }
         }
-        &.selected{
-            // padding-bottom: 0px;
-            // border-bottom: 2px solid $selected-color;
-            background-color: $selected-color1;
-        }
         &.onhover{
             .btns{
                 #disable-btn{
@@ -67,31 +62,18 @@
     // }
 
     &.selected{
-        // border-bottom: 2px solid $selected-color;
-        // border-left: 2px solid $selected-color;
-        // padding-bottom: 0px;
-        // padding-left: 2px;
         background-color: $selected-color1;
     }
     &.printing:not(.disabled){
         border-bottom: 2px solid $print-color;
         border-left: 2px solid $print-color;
         padding-bottom: 0px;
-        padding-left: 2px;
+        padding-left: 8px;
         // #print-btn{
         //     color: $print-color;
         //     background-color: $color6;
         // }
         &.onhover {
-            // background-color: $print-color-lt;
-            #print-btn{
-                background-color: transparent;
-            }
-        }
-        &.selected{
-            background-color: $selected-color1;
-            // padding-bottom: 0px;
-            // border-bottom: 2px solid $selected-color;
             // background-color: $print-color-lt;
             #print-btn{
                 background-color: transparent;
@@ -106,12 +88,6 @@
                 background-color: inherit;
             }
         }
-        &.selected{
-            // padding-bottom: 0px;
-            // border-bottom: 2px solid $selected-color;
-            // background-color: $print-color-lt;
-            background-color: $selected-color1;
-        }
         &.onhover{
             .btns{
                 #print-btn{
@@ -125,7 +101,7 @@
         border-bottom: 2px solid $selectGeom-color;
         border-left: 2px solid $selectGeom-color;
         padding-bottom: 0px;
-        padding-left: 2px;
+        padding-left: 8px;
         #selectGeom-btn{
             color: $selectGeom-color;
             background-color: $color6;
@@ -136,24 +112,15 @@
                 background-color: transparent;
             }
         }
-        &.selected{
-            background-color: $selected-color1;
-            // padding-bottom: 0px;
-            // border-bottom: 2px solid $selected-color;
-            // background-color: $selectGeom-color-lt;
-            #selectGeom-btn{
-                background-color: transparent;
-            }
-        }
         &.printing {
             border-left: 2px solid $print-color;
-            padding-left: 2px;
+            padding-left: 8px;
         }
         &.error{
             border-bottom: 2px solid $error-color;
             border-left: 2px solid $error-color;
             padding-bottom: 0px;
-            padding-left: 0px;
+            padding-left: 8px;
         }
     }
 
@@ -170,12 +137,6 @@
                     color: $selected-color;
                 }
             }
-        }
-        &.selected{
-            background-color: $selected-color1;
-            // padding-bottom: 0px;
-            // border-bottom: 2px solid $selected-color;
-            // background-color: $selectGeom-color-lt;
         }
         &.onhover{
             .btns{
@@ -194,7 +155,7 @@
         border-bottom: 2px solid $error-color;
         border-left: 2px solid $error-color;
         padding-bottom: 0px;
-        padding-left: 0px;
+        padding-left: 8px;
 
     }
     &.error:not(.disabled){
@@ -205,12 +166,6 @@
         .btn{
             background-color: inherit;
         }
-        &.selected{
-            background-color: $selected-color1;
-            // padding-bottom: 0px;
-            // border-bottom: 2px solid $selected-color;
-            // background-color: $error-color-lt;
-        }
         // &.onhover {
         //     background-color: $error-color-lt;
         // }
@@ -220,9 +175,6 @@
         background-color: $color5;
         &.selected{
             background-color: $selected-color1;
-            // padding-bottom: 0px;
-            // border-bottom: 2px solid $selected-color;
-            // background-color: $error-color-lt;
         }
         .btn{
             background-color: inherit;

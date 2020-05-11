@@ -81,13 +81,13 @@ function printFunc(_console, name, value){
         for (const __item__ in value) {
             const __value__ = value[__item__];
             if (!__value__) {
-                __value_strings__.push('\\"' + __item__ + '\\"' + ': ' + __value__);
+                __value_strings__.push('\\<b>"' + __item__ + '\\"</b>' + ': ' + __value__);
                 continue;
             }
             if (__value__.constructor === [].constructor || __value__.constructor === {}.constructor) {
                 __list_check__ = true;
             }
-            __value_strings__.push('\\"' + __item__ + '\\"' + ': ' + JSON.stringify(__value__).replace(/,/g, ', '));
+            __value_strings__.push('\\<b>"' + __item__ + '\\"</b>' + ': ' + JSON.stringify(__value__).replace(/,/g, ', '));
         }
         if (__list_check__) {
             padding_style = 'padding: 2px 0px 0px 10px;';

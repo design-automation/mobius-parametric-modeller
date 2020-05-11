@@ -118,14 +118,14 @@
                     order: 1
                 }
             }
-        } 
+        }
     }
 
     &.selectGeom:not(.disabled){
         border-bottom: 2px solid $selectGeom-color;
-        // border-left: 2px solid $selectGeom-color;
+        border-left: 2px solid $selectGeom-color;
         padding-bottom: 0px;
-        // padding-left: 1px;
+        padding-left: 2px;
         #selectGeom-btn{
             color: $selectGeom-color;
             background-color: $color6;
@@ -144,6 +144,16 @@
             #selectGeom-btn{
                 background-color: transparent;
             }
+        }
+        &.printing {
+            border-left: 2px solid $print-color;
+            padding-left: 2px;
+        }
+        &.error{
+            border-bottom: 2px solid $error-color;
+            border-left: 2px solid $error-color;
+            padding-bottom: 0px;
+            padding-left: 0px;
         }
     }
 

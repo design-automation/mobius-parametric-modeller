@@ -570,7 +570,9 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
 
     // select an edge
     selectEdge(event, edge_index) {
-
+        if (document.activeElement.tagName === 'TEXTAREA') {
+            (<HTMLElement>document.activeElement).blur();
+        }
         // if ctrl is pressed, add the edge into the list of selected edges
         if (event === 'ctrl') {
             this.selectedEdge.push(edge_index);

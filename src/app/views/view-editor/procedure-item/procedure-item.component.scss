@@ -9,13 +9,14 @@
 .container--line{
     background-color: transparent;
     font-size: $fsize2;
-    margin: 0px 5px 2px 8px;
-    padding: 0px 0px 1px 3px;
+    margin: 0px 0px 1px 0px;
+    padding: 0px 0px 1px 9px;
     // padding-bottom: 1px;
     // padding-left: 2px;
     //border-bottom: 1px solid red;
     border-bottom: 1px solid $color5;
     border-left: 1px solid $color5;
+    box-shadow: inset 1px -1px 0px 0px white;
     color: $color1;
     //min-height: 22px;
     opacity: 1;
@@ -28,7 +29,7 @@
     flex-shrink: 0;
 
     overflow-x: hidden;
-    width: calc(100% - 15px);
+    width: calc(100% - 10px);
     // min-width: fit-content; // for global side scroll
 
     &.strong{
@@ -48,10 +49,6 @@
                 }
             }
         }
-        &.selected{
-            padding-bottom: 0px;
-            border-bottom: 2px solid $selected-color;
-        }
         &.onhover{
             .btns{
                 #disable-btn{
@@ -59,11 +56,6 @@
                 }
             }
         }
-        // &:hover .btns{
-        //     #disable-btn{
-        //         order: 0;
-        //     }
-        // }
     }
 
     // &.disabled .input--var, &.disabled .input--arg{
@@ -71,44 +63,22 @@
     // }
 
     &.selected{
-        border-bottom: 2px solid $selected-color;
-        border-left: 2px solid $selected-color;
-        padding-bottom: 0px;
-        padding-left: 2px;
-
-        // &:hover > .btn-container {
-        //     .btns{
-        //         border-bottom: 2px solid $selected-color;
-        //         border-left: 2px solid $selected-color;
-        //     }
-        // }
+        background-color: $selected-color1;
+        &.lastSelected{
+            background-color: $selected-color2;
+        }
     }
-
     &.printing:not(.disabled){
         border-bottom: 2px solid $print-color;
         border-left: 2px solid $print-color;
         padding-bottom: 0px;
-        padding-left: 2px;
+        padding-left: 8px;
         // #print-btn{
         //     color: $print-color;
         //     background-color: $color6;
         // }
         &.onhover {
-            background-color: $print-color-lt;
-            #print-btn{
-                background-color: transparent;
-            }
-        }
-        // &:hover {
-        //     background-color: $print-color-lt;
-        //     #print-btn{
-        //         background-color: transparent;
-        //     }
-        // }
-        &.selected{
-            padding-bottom: 0px;
-            border-bottom: 2px solid $selected-color;
-            background-color: $print-color-lt;
+            // background-color: $print-color-lt;
             #print-btn{
                 background-color: transparent;
             }
@@ -121,18 +91,6 @@
             .btn{
                 background-color: inherit;
             }
-            // #print-btn{
-            //     display: flex;
-            //     justify-content: center;   
-            //     &:hover{
-            //         color: $selected-color;
-            //     }
-            // }
-        }
-        &.selected{
-            padding-bottom: 0px;
-            border-bottom: 2px solid $selected-color;
-            background-color: $print-color-lt;
         }
         &.onhover{
             .btns{
@@ -140,42 +98,33 @@
                     order: 1
                 }
             }
-        } 
-        // &:hover .btns{
-        //     #print-btn{
-        //         order: 1
-        //     }
-        // }
+        }
     }
 
     &.selectGeom:not(.disabled){
         border-bottom: 2px solid $selectGeom-color;
-        // border-left: 2px solid $selectGeom-color;
+        border-left: 2px solid $selectGeom-color;
         padding-bottom: 0px;
-        // padding-left: 1px;
+        padding-left: 8px;
         #selectGeom-btn{
             color: $selectGeom-color;
             background-color: $color6;
         }
         &.onhover {
-            background-color: $selectGeom-color-lt;
+            // background-color: $selectGeom-color-lt;
             #selectGeom-btn{
                 background-color: transparent;
             }
         }
-        // &:hover {
-        //     background-color: $selectGeom-color-lt;
-        //     #selectGeom-btn{
-        //         background-color: transparent;
-        //     }
-        // }
-        &.selected{
+        &.printing {
+            border-left: 2px solid $print-color;
+            padding-left: 8px;
+        }
+        &.error{
+            border-bottom: 2px solid $error-color;
+            border-left: 2px solid $error-color;
             padding-bottom: 0px;
-            border-bottom: 2px solid $selected-color;
-            background-color: $selectGeom-color-lt;
-            #selectGeom-btn{
-                background-color: transparent;
-            }
+            padding-left: 8px;
         }
     }
 
@@ -193,11 +142,6 @@
                 }
             }
         }
-        &.selected{
-            padding-bottom: 0px;
-            border-bottom: 2px solid $selected-color;
-            background-color: $selectGeom-color-lt;
-        }
         &.onhover{
             .btns{
                 #selectGeom-btn{
@@ -211,28 +155,39 @@
         //     }
         // }
     }
-
-    &.error:not(.disabled){
+    &.error{
         border-bottom: 2px solid $error-color;
         border-left: 2px solid $error-color;
         padding-bottom: 0px;
-        padding-left: 0px;
+        padding-left: 8px;
+
+    }
+    &.error:not(.disabled){
+        // border-bottom: 2px solid $error-color;
+        // border-left: 2px solid $error-color;
+        // padding-bottom: 0px;
+        // padding-left: 0px;
         .btn{
             background-color: inherit;
         }
-        &.selected{
-            padding-bottom: 0px;
-            border-bottom: 2px solid $selected-color;
-            background-color: $error-color-lt;
-        }
-        &.onhover {
-            background-color: $error-color-lt;
-        }
-        // &:hover {
+        // &.onhover {
         //     background-color: $error-color-lt;
         // }
     }
-    
+
+    &.onhover{
+        background-color: $color5;
+        &.selected{
+            background-color: $selected-color1;
+            &.lastSelected{
+                background-color: $selected-color2;
+            }
+        }
+        .btn{
+            background-color: inherit;
+        }
+    }
+
     .input--var{
         font-size: $fsize2;
         min-width: 10px;
@@ -349,12 +304,6 @@
     //     }
     // }
 
-    &.onhover{
-        background-color: $color5;
-        .btn{
-            background-color: inherit;
-        }
-    }
     // &:hover{
     //     background-color: $color5;
     //     .btn{

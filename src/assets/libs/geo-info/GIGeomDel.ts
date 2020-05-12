@@ -262,6 +262,13 @@ export class GIGeomDel {
             // down arrays
             this._geom_arrays.dn_colls_objs[coll_i] = null;
         }
+        // check parents
+        const set_colls_i: Set<number> = new Set(colls_i);
+        for (const coll of this._geom_arrays.dn_colls_objs) {
+            if (coll !== null && set_colls_i.has(coll[0])) {
+                coll[0] = -1;
+            }
+        }
     }
     /**
      * Delete edges.

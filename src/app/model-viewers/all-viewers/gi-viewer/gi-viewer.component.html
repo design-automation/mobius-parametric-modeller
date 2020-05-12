@@ -142,11 +142,14 @@
 								<dd><hr></dd>
 								<dd id='camera'>
 									<div class="label">Camera Position</div>
-									<input type="number" disabled
+									<input type="number"
+									(change)="settingOnChange('camera.pos_x', $event.target.value)" 
 									[value]="formatNumber(settings.camera.pos.x)">
-									<input type="number" disabled
+									<input type="number"
+									(change)="settingOnChange('camera.pos_y', $event.target.value)" 
 									[value]="formatNumber(settings.camera.pos.y)">
-									<input type="number" disabled
+									<input type="number"
+									(change)="settingOnChange('camera.pos_z', $event.target.value)" 
 									[value]="formatNumber(settings.camera.pos.z)">
 									<button (click)="settingOnChange('camera.get_camera_pos')" class="filebtn getbtn">Get</button>
 								</dd>

@@ -340,6 +340,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                     redoActions.unshift({'type': 'add',
                         'parent': this.dataService.node.state.procedure[0].parent, 'prod': this.dataService.node.state.procedure[0]});
                     node.state.procedure[0].selected = false;
+                    node.state.procedure[0].lastSelected = false;
                     node.state.procedure = [];
                 }
             } else {
@@ -353,32 +354,12 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                     }
                     redoActions.unshift({'type': 'add',
                         'parent': this.dataService.node.state.procedure[0].parent, 'prod': this.dataService.node.state.procedure[0]});
-
-                    // node.state.procedure[node.state.procedure.length - 1].selected = false;
-                    // pastingPlace.selected = true;
-                    // node.state.procedure = [pastingPlace];
                 }
                 node.state.procedure[node.state.procedure.length - 1].selected = false;
+                node.state.procedure[node.state.procedure.length - 1].lastSelected = false;
                 pastingPlace.selected = true;
+                pastingPlace.lastSelected = true;
                 node.state.procedure = [pastingPlace];
-
-
-                // for (let i = toBePasted.length - 1; i >= 0; i --) {
-                //     if (toBePasted[i].type === ProcedureTypes.Blank ||
-                //         toBePasted[i].type === ProcedureTypes.Return) { continue; }
-                //     const check = NodeUtils.paste_procedure(node, toBePasted[i]);
-                //     if (!check) {
-                //         this.dataService.notifyMessage('Error: Unable to paste procedure');
-                //         notified = true;
-                //     }
-                //     redoActions.unshift({'type': 'add',
-                //         'parent': this.dataService.node.state.procedure[0].parent, 'prod': this.dataService.node.state.procedure[0]});
-
-                //     // CHECK IF THE BELOW CAN BE CHANGED TO: node.state.procedure[0]
-                //     node.state.procedure[node.state.procedure.length - 1].selected = false;
-                //     pastingPlace.selected = true;
-                //     node.state.procedure = [pastingPlace];
-                // }
             }
             this.dataService.registerEdtAction(redoActions);
             checkNodeValidity(this.dataService.node);

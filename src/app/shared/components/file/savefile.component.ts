@@ -286,6 +286,7 @@ export class SaveFileComponent implements OnDestroy{
             // ******** delete some unnecessary parameters for saving ******** //
             if (clearAll) {
                 delete prod['selected'];
+                delete prod['lastSelected'];
                 delete prod['hasError'];
                 for (const arg of prod.args) {
                     delete arg['invalidVar'];

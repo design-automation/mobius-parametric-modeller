@@ -154,7 +154,7 @@ export class CytoscapeComponent implements OnDestroy, OnChanges {
         return function (event: cytoscape.EventObject) {
             const selectedID = event.target.id();
             const selectedClass = event.target.classes()[0];
-            if (selectedClass === 'ps') { return; }
+            if (selectedClass === 'ps' || (box && selectedClass[0] === '_')) { return; }
             const selectedPos = event.target.position();
             const allObj = {
                 'ps': model.geom.query.getEnts(EEntType.POSI, false),
@@ -184,6 +184,14 @@ export class CytoscapeComponent implements OnDestroy, OnChanges {
                     obj_i = [model.geom.nav.navPgonToFace(sourceID)];
                     objClass = '_f';
                     num_obj = allObj._f.length;
+                } else if (sourceClass === 'pl') {
+                    obj_i = [model.geom.nav.navPlineToWire(sourceID)];
+                    objClass = '_f';
+                    num_obj = allObj._f.length;
+                } else if (sourceClass === 'pt') {
+                    obj_i = [model.geom.nav.navPointToVert(sourceID)];
+                    objClass = '_f';
+                    num_obj = allObj._f.length;
                 } else if (sourceClass === '_f') {
                     obj_i = model.geom.nav.navFaceToWire(sourceID);
                     objClass = '_w';
@@ -205,7 +213,11 @@ export class CytoscapeComponent implements OnDestroy, OnChanges {
                 }
                 for (const objID of obj_i) {
                     let clss = objClass;
-                    if (clss === '') { clss = objID.slice(0, 2); }
+                    let oID = objID;
+                    if (clss === '') {
+                        clss = objID.slice(0, 2);
+                        oID = parseInt(objID.slice(2), 10);
+                    }
                     for (let i = 0; i < cytoscapeService.cytoscapeEdges.length; i++) {
                         const objSet = cytoscapeService.cytoscapeEdges[i];
                         if (objSet[0] === `${objClass}${objID}`) {
@@ -214,15 +226,13 @@ export class CytoscapeComponent implements OnDestroy, OnChanges {
                             break;
                         }
                     }
-                    removeObject(objID, clss);
+                    removeObject(oID, clss);
                 }
             }
             if (selectedClass !== 'root') {
                 for (let i = 0; i < cytoscapeService.cytoscapeEdges.length; i++) {
                     const objSet = cytoscapeService.cytoscapeEdges[i];
-                    console.log(objSet[0], selectedID)
                     if (objSet[0] === selectedID) {
-                        console.log(objSet[1])
                         cy.remove(objSet[1]);
                         cytoscapeService.cytoscapeEdges.splice(i, 1);
                         removeObject(parseInt(selectedID.slice(2), 10), selectedClass);
@@ -264,6 +274,14 @@ export class CytoscapeComponent implements OnDestroy, OnChanges {
                     num_obj = allObj.pg.length + allObj.pl.length + allObj.pt.length + allObj.co.length;
                 } else if (sourceClass === 'pg') {
                     obj_i = [model.geom.nav.navPgonToFace(sourceID)];
+                    objClass = '_f';
+                    num_obj = allObj._f.length;
+                } else if (sourceClass === 'pl') {
+                    obj_i = [model.geom.nav.navPlineToWire(sourceID)];
+                    objClass = '_f';
+                    num_obj = allObj._f.length;
+                } else if (sourceClass === 'pt') {
+                    obj_i = [model.geom.nav.navPointToVert(sourceID)];
                     objClass = '_f';
                     num_obj = allObj._f.length;
                 } else if (sourceClass === '_f') {
@@ -358,7 +376,7 @@ export class CytoscapeComponent implements OnDestroy, OnChanges {
             }
             this.cytoscape.fit();
             this.cytoscape.on('tap', 'node', CytoscapeComponent.onclick(this.model, this.cytoscape, this.cytoscapeService, false));
-            // this.cytoscape.on('box', 'node', CytoscapeComponent.onclick(this.model, this.cytoscape, this.cytoscapeService, true));
+            this.cytoscape.on('box', 'node', CytoscapeComponent.onclick(this.model, this.cytoscape, this.cytoscapeService, true));
         } else if (changes['model'] && this.model) {
             this.updateCytoscape();
         }
@@ -415,7 +433,7 @@ export class CytoscapeComponent implements OnDestroy, OnChanges {
         this.cytoscapeService.cytoscapeEdges = [['root', allObjs]];
         this.cytoscapeService.resetNodes();
         this.cytoscape.on('tap', 'node', CytoscapeComponent.onclick(this.model, this.cytoscape, this.cytoscapeService, false));
-        // this.cytoscape.on('box', 'node', CytoscapeComponent.onclick(this.model, this.cytoscape, this.cytoscapeService, true));
+        this.cytoscape.on('box', 'node', CytoscapeComponent.onclick(this.model, this.cytoscape, this.cytoscapeService, true));
     }
 
     zoomfit() {

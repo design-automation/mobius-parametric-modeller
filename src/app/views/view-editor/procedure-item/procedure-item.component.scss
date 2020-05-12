@@ -64,6 +64,9 @@
 
     &.selected{
         background-color: $selected-color1;
+        &.lastSelected{
+            background-color: $selected-color2;
+        }
     }
     &.printing:not(.disabled){
         border-bottom: 2px solid $print-color;
@@ -176,6 +179,9 @@
         background-color: $color5;
         &.selected{
             background-color: $selected-color1;
+            &.lastSelected{
+                background-color: $selected-color2;
+            }
         }
         .btn{
             background-color: inherit;

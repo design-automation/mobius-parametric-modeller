@@ -157,6 +157,9 @@ export abstract class NodeUtils {
         if (!procedure) {
             return;
         }
+        for (const selprod of node.state.procedure) {
+            selprod.lastSelected = false;
+        }
         if (ctrl) {
             let selIndex = 0;
             let selected = false;
@@ -165,6 +168,9 @@ export abstract class NodeUtils {
                     selected = true;
                     node.state.procedure.splice(selIndex, 1);
                     procedure.selected = false;
+                    if (node.state.procedure.length > 0) {
+                        node.state.procedure[node.state.procedure.length - 1].lastSelected = true;
+                    }
                     return false;
                 }
                 selIndex += 1;
@@ -177,12 +183,16 @@ export abstract class NodeUtils {
             if (node.state.procedure.length === 0) {
                 node.state.procedure.push(procedure);
                 procedure.selected = true;
+                procedure.lastSelected = true;
                 return;
             } else if (procedure.selected) {
                 procedure.selected = false;
                 const i = node.state.procedure.indexOf(procedure);
                 if (i !== -1) {
                     node.state.procedure.splice(i, 1);
+                    if (node.state.procedure.length > 0) {
+                        node.state.procedure[node.state.procedure.length - 1].lastSelected = true;
+                    }
                     return;
                 }
             }
@@ -288,10 +298,11 @@ export abstract class NodeUtils {
             if (sel && node.state.procedure.length === 1 && node.state.procedure[node.state.procedure.length - 1] === procedure) {
                 node.state.procedure = [];
             } else {
-                node.state.procedure = [procedure];
                 procedure.selected = true;
+                node.state.procedure = [procedure];
             }
         }
+        procedure.lastSelected = true;
     }
 
     static insert_procedure(node: INode, prod: IProcedure) {

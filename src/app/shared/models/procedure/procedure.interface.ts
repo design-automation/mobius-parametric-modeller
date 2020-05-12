@@ -24,7 +24,10 @@ export interface IProcedure {
 
     print: boolean;
     enabled: boolean;
+
     selected: boolean;
+    lastSelected?: boolean;
+
     selectGeom: boolean;
     hasError: boolean;
 

@@ -500,6 +500,26 @@ export class PanelHeaderComponent implements OnDestroy {
         helpMenu = null;
     }
 
+    @HostListener('window:copy', ['$event'])
+    onWindowCopy(event: KeyboardEvent) {
+        if (this.router.url === '/editor') {
+            document.getElementById('copyProdButton').click();
+        }
+    }
+
+    @HostListener('window:cut', ['$event'])
+    onWindowCut(event: KeyboardEvent) {
+        if (this.router.url === '/editor') {
+            document.getElementById('cutProdButton').click();
+        }
+    }
+    @HostListener('window:paste', ['$event'])
+    onWindowPaste(event: KeyboardEvent) {
+        if (this.router.url === '/editor') {
+            document.getElementById('pasteProdButton').click();
+        }
+    }
+
     saveBackup() {
         try {
             let fileName = (<HTMLInputElement>document.getElementById('savels-name')).value + '.mob';

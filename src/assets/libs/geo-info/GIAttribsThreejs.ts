@@ -122,6 +122,26 @@ export class GIAttribsThreejs {
         return verts_colors.flat(1);
     }
 
+    /**
+     * Get a flat array of colors values for all the points.
+     * Verts that have been deleted will not be included
+     */
+    public get3jsSeqPointsLabel(): any[] {
+        if (!this._attribs_maps.pt.has(EAttribNames.LABEL)) { return null; }
+        const points_attrib: GIAttribMap = this._attribs_maps.pt.get(EAttribNames.LABEL);
+        // get all the colors
+        const points_labels: TAttribDataTypes[] = [];
+        const points_i: number[] = this._model.geom.query.getEnts(EEntType.VERT, false);
+        for (const point_i of points_i) {
+            if (point_i !== null) {
+                const value = points_attrib.getEntVal(point_i) as TAttribDataTypes;
+                points_labels.push(value);
+            }
+        }
+        // @ts-ignore
+        return points_labels.flat(1);
+    }
+
 
     /**
      *

@@ -72,7 +72,6 @@ export class GIModelThreejs {
         const [vertex_xyz, vertex_map]: [number[], Map<number, number>]  =  this._model.attribs.threejs.get3jsSeqVertsCoords();
         const normals_values: number[] = this._model.attribs.threejs.get3jsSeqVertsNormals();
         let colors_values: number[] = this._model.attribs.threejs.get3jsSeqVertsColors();
-        const point_labels: any[] = this._model.attribs.threejs.get3jsSeqPointsLabel();
         // add normals and colours
         // if (!normals_values) {
         //     normals_values = this._generateNormals();
@@ -120,7 +119,6 @@ export class GIModelThreejs {
             colors: colors_values,
             point_indices: points_verts_i,
             point_select_map: point_select_map,
-            point_label: point_labels,
             edge_indices: edges_verts_i,
             edge_select_map: edge_select_map,
             white_edge_indices: white_edges_verts_i,

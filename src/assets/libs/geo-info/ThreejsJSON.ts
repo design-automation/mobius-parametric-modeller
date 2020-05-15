@@ -8,7 +8,6 @@ export interface IThreeJS {
     colors: number[];
     point_indices: number[];
     point_select_map: Map<number, number>;
-    point_label: any[];
     edge_indices: number[];
     edge_select_map: Map<number, number>;
     white_edge_indices: number[];

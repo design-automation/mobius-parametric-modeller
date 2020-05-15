@@ -9,6 +9,7 @@ import { ISettings } from './data.threejsSettings';
 
 import { DataThreejsLookAt } from './data.threejsLookAt';
 import { BufferGeometryUtils } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import { isArray } from 'util';
 
 enum MaterialType {
     MeshBasicMaterial = 'MeshBasicMaterial',
@@ -92,7 +93,6 @@ export class DataThreejs extends DataThreejsLookAt {
         this.edge_select_map = threejs_data.edge_select_map;
         this.white_edge_select_map = threejs_data.white_edge_select_map;
         this.point_select_map = threejs_data.point_select_map;
-        this.point_label = threejs_data.point_label;
         this.posis_map = threejs_data.posis_map;
         this.vertex_map = threejs_data.vertex_map;
 
@@ -108,7 +108,7 @@ export class DataThreejs extends DataThreejsLookAt {
         this._addLines(threejs_data.edge_indices, threejs_data.white_edge_indices, verts_xyz_buffer, colors_buffer, normals_buffer);
         this._addPoints(threejs_data.point_indices, verts_xyz_buffer, colors_buffer, [255, 255, 255], this.settings.positions.size + 1);
         this._addPosis(threejs_data.posis_indices, posis_xyz_buffer, this.settings.colors.position, this.settings.positions.size);
-        this._addPointLabels(threejs_data.point_indices, threejs_data.point_label, verts_xyz_buffer);
+        this._addPointLabels(model);
 
         const position_size = this.settings.positions.size;
         this.raycaster.params.Points.threshold = position_size > 1 ? position_size / 3 : position_size / 4;
@@ -514,7 +514,11 @@ export class DataThreejs extends DataThreejsLookAt {
     /**
      * Add threejs points to the scene
      */
-    private _addPointLabels(points_i: number[], point_labels: any[], posis_buffer: THREE.Float32BufferAttribute): void {
+    private _addPointLabels(model: GIModel): void {
+        const labels = model.attribs.query.getModelAttribVal('label');
+        if (!labels || !isArray(labels) || labels.length === 0) {
+            return;
+        }
         const loader = new THREE.FontLoader();
         loader.load( 'assets/fonts/helvetiker_regular.typeface.json', font => {
             const matLite = new THREE.MeshBasicMaterial( {
@@ -524,38 +528,75 @@ export class DataThreejs extends DataThreejsLookAt {
                 side: THREE.DoubleSide
             } );
             const shapes = [];
-            for (let i = 0; i < points_i.length; i++) {
-                if (point_labels[points_i[i]]) {
-                    const shape = font.generateShapes( point_labels[points_i[i]].text, point_labels[points_i[i]].size , 1);
-                    const geom = new THREE.ShapeBufferGeometry(shape);
 
-                    let offsetX = 0, offsetY = 0, offsetZ = 0;
-                    if (!point_labels[points_i[i]].orientation || point_labels[points_i[i]].orientation === 'XY') {
-                        geom.computeBoundingBox();
-                        offsetX = - 0.5 * (geom.boundingBox.max.x - geom.boundingBox.min.x);
-                        offsetY = - geom.boundingBox.min.y;
-                        offsetZ = - geom.boundingBox.min.z;
-                    } else if (point_labels[points_i[i]].orientation === 'XZ') {
-                        geom.rotateX(Math.PI / 2);
-                        geom.computeBoundingBox();
-                        offsetX = - 0.5 * (geom.boundingBox.max.x - geom.boundingBox.min.x);
-                        offsetY = - geom.boundingBox.min.y;
-                        offsetZ = - geom.boundingBox.min.z;
-                    } else if (point_labels[points_i[i]].orientation === 'YZ') {
-                        geom.rotateZ(Math.PI / 2);
-                        geom.rotateY(Math.PI / 2);
-                        geom.rotateZ(Math.PI);
-                        geom.computeBoundingBox();
-                        offsetX = - geom.boundingBox.min.x;
-                        offsetY = 0.5 * (geom.boundingBox.max.y - geom.boundingBox.min.y);
-                        offsetZ = - geom.boundingBox.min.z;
+            const fromVec = new THREE.Vector3(0, 0, 1);
+            const checkVecFrom = new THREE.Vector3(1, 0, 0);
+
+            for (const label of labels) {
+                const labelText = label.text;
+                const labelOrient = label.position || label.location;
+                if (!labelText || !labelOrient || !isArray(labelOrient)) { continue; }
+                const labelSize = label.size || 20;
+
+                const shape = font.generateShapes( labelText, labelSize , 1);
+                const geom = new THREE.ShapeBufferGeometry(shape);
+
+                let labelPos = labelOrient[0];
+
+                if (!isArray(labelPos)) {
+                    labelPos = labelOrient;
+                } else {
+                    let toVec = new THREE.Vector3(...labelOrient[1]);
+                    const pVec2 = new THREE.Vector3(...labelOrient[2]);
+                    toVec = toVec.cross(pVec2).normalize();
+
+                    if (labelOrient[1][0] !== 0 || labelOrient[1][1] !== 0) {
+                        const checkVecTo = new THREE.Vector3(labelOrient[1][0], labelOrient[1][1], 0).normalize();
+                        const rotateQuat = new THREE.Quaternion();
+                        rotateQuat.setFromUnitVectors(checkVecFrom, checkVecTo);
+                        const rotateMat = new THREE.Matrix4(); // create one and reuse it
+                        rotateMat.makeRotationFromQuaternion(rotateQuat);
+                        geom.applyMatrix(rotateMat);
                     }
 
-                    geom.translate( posis_buffer.getX(points_i[i]) + offsetX,
-                                    posis_buffer.getY(points_i[i]) + offsetY,
-                                    posis_buffer.getZ(points_i[i]) + offsetZ);
-                    shapes.push(geom);
+                    const quaternion = new THREE.Quaternion();
+                    quaternion.setFromUnitVectors(fromVec, toVec);
+                    const matrix = new THREE.Matrix4(); // create one and reuse it
+                    matrix.makeRotationFromQuaternion(quaternion);
+                    geom.applyMatrix(matrix);
+
+                    // if (toVec.x !== 0) {
+                    //     console.log(toVec)
+                    //     console.log(toVec.x, Math.abs(toVec.x));
+                    //     geom.rotateX(Math.abs(toVec.x) * Math.PI / 2);
+                    // }
                 }
+
+                // if (!label.orientation || label.orientation === 'XY') {
+                //     geom.computeBoundingBox();
+                //     offsetX = - 0.5 * (geom.boundingBox.max.x - geom.boundingBox.min.x);
+                //     offsetY = - geom.boundingBox.min.y;
+                //     offsetZ = - geom.boundingBox.min.z;
+                // } else if (label.orientation === 'XZ') {
+                //     geom.rotateX(Math.PI / 2);
+                //     geom.computeBoundingBox();
+                //     offsetX = - 0.5 * (geom.boundingBox.max.x - geom.boundingBox.min.x);
+                //     offsetY = - geom.boundingBox.min.y;
+                //     offsetZ = - geom.boundingBox.min.z;
+                // } else if (label.orientation === 'YZ') {
+                //     geom.rotateZ(Math.PI / 2);
+                //     geom.rotateY(Math.PI / 2);
+                //     geom.rotateZ(Math.PI);
+                //     geom.computeBoundingBox();
+                //     offsetX = - geom.boundingBox.min.x;
+                //     offsetY = 0.5 * (geom.boundingBox.max.y - geom.boundingBox.min.y);
+                //     offsetZ = - geom.boundingBox.min.z;
+                // }
+                // geom.translate( labelPos[0] + offsetX,
+                //                 labelPos[1] + offsetY,
+                //                 labelPos[2] + offsetZ);
+                geom.translate( labelPos[0], labelPos[1], labelPos[2]);
+                shapes.push(geom);
             }
             if (shapes.length === 0) { return; }
             const mergedGeom = BufferGeometryUtils.mergeBufferGeometries(shapes);

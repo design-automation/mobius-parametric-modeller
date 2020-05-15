@@ -515,7 +515,7 @@ export class DataThreejs extends DataThreejsLookAt {
      * Add threejs points to the scene
      */
     private _addPointLabels(model: GIModel): void {
-        const labels = model.attribs.query.getModelAttribVal('label');
+        const labels = model.attribs.query.getModelAttribVal('labels');
         if (!labels || !isArray(labels) || labels.length === 0) {
             return;
         }
@@ -564,37 +564,7 @@ export class DataThreejs extends DataThreejsLookAt {
                     const matrix = new THREE.Matrix4(); // create one and reuse it
                     matrix.makeRotationFromQuaternion(quaternion);
                     geom.applyMatrix(matrix);
-
-                    // if (toVec.x !== 0) {
-                    //     console.log(toVec)
-                    //     console.log(toVec.x, Math.abs(toVec.x));
-                    //     geom.rotateX(Math.abs(toVec.x) * Math.PI / 2);
-                    // }
                 }
-
-                // if (!label.orientation || label.orientation === 'XY') {
-                //     geom.computeBoundingBox();
-                //     offsetX = - 0.5 * (geom.boundingBox.max.x - geom.boundingBox.min.x);
-                //     offsetY = - geom.boundingBox.min.y;
-                //     offsetZ = - geom.boundingBox.min.z;
-                // } else if (label.orientation === 'XZ') {
-                //     geom.rotateX(Math.PI / 2);
-                //     geom.computeBoundingBox();
-                //     offsetX = - 0.5 * (geom.boundingBox.max.x - geom.boundingBox.min.x);
-                //     offsetY = - geom.boundingBox.min.y;
-                //     offsetZ = - geom.boundingBox.min.z;
-                // } else if (label.orientation === 'YZ') {
-                //     geom.rotateZ(Math.PI / 2);
-                //     geom.rotateY(Math.PI / 2);
-                //     geom.rotateZ(Math.PI);
-                //     geom.computeBoundingBox();
-                //     offsetX = - geom.boundingBox.min.x;
-                //     offsetY = 0.5 * (geom.boundingBox.max.y - geom.boundingBox.min.y);
-                //     offsetZ = - geom.boundingBox.min.z;
-                // }
-                // geom.translate( labelPos[0] + offsetX,
-                //                 labelPos[1] + offsetY,
-                //                 labelPos[2] + offsetZ);
                 geom.translate( labelPos[0], labelPos[1], labelPos[2]);
                 shapes.push(geom);
             }

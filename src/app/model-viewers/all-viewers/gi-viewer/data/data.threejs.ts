@@ -521,12 +521,11 @@ export class DataThreejs extends DataThreejsLookAt {
         }
         const loader = new THREE.FontLoader();
         loader.load( 'assets/fonts/helvetiker_regular.typeface.json', font => {
-            // const matLite = new THREE.MeshBasicMaterial( {
-            //     color: 0x000000,
-            //     transparent: true,
-            //     opacity: 1,
-            //     side: THREE.DoubleSide
-            // } );
+            const matLite = new THREE.MeshBasicMaterial( {
+                transparent: false,
+                side: THREE.DoubleSide,
+                vertexColors: THREE.VertexColors
+            } );
             const shapes = [];
 
             const fromVec = new THREE.Vector3(0, 0, 1);
@@ -571,31 +570,19 @@ export class DataThreejs extends DataThreejsLookAt {
                 if (label.color  && label.color.length === 3) {
                     color = new THREE.Color(`rgb(${label.color[0]}, ${label.color[1]}, ${label.color[2]})`);
                 }
-                // const colors_buffer = new THREE.Float32BufferAttribute(geom.attributes.position.count * 3, 3);
-                // if (label.color && label.color.length === 3) {
-
-                //     for (let i = 0; i < colors_buffer.count; i++) {
-                //         colors_buffer.setXYZ(i, label.color[0], label.color[1], label.color[2]);
-                //     }
-                // }
-                // geom.setAttribute('color', colors_buffer);
-
-                const matLite = new THREE.MeshBasicMaterial( {
-                    color: color,
-                    transparent: true,
-                    opacity: 1,
-                    side: THREE.DoubleSide
-                } );
-
-                const text = new THREE.Mesh(geom , matLite);
-                this.scene.add(text);
-
+                const colors_buffer = new THREE.Float32BufferAttribute(geom.attributes.position.count * 3, 3);
+                if (label.color && label.color.length === 3) {
+                    for (let i = 0; i < colors_buffer.count; i++) {
+                        colors_buffer.setXYZ(i, label.color[0], label.color[1], label.color[2]);
+                    }
+                }
+                geom.setAttribute('color', colors_buffer);
                 shapes.push(geom);
             }
             if (shapes.length === 0) { return; }
-            // const mergedGeom = BufferGeometryUtils.mergeBufferGeometries(shapes);
-            // const text = new THREE.Mesh(mergedGeom , matLite);
-            // this.scene.add(text);
+            const mergedGeom = BufferGeometryUtils.mergeBufferGeometries(shapes);
+            const text = new THREE.Mesh(mergedGeom , matLite);
+            this.scene.add(text);
             this.renderer.render(this.scene, this.camera);
         });
     }

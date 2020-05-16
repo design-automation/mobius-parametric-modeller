@@ -445,6 +445,7 @@
             <div class='line--item'>
                 <input class='input--comment' 
                 [(ngModel)]='data.args[0].value'
+                (focus)='onInputFocus(-1)'
                 [class.disabled]='disableInput'
                 placeholder='Comment'
                 [style.width.px]='inputSize(data.args[0].value||"Comment")'

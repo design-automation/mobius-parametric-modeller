@@ -16,6 +16,30 @@
 .toolset--body{
     max-height: calc(100vh - 41px);
     overflow:hidden;
+    // &:hover{
+    //     overflow-y: auto;
+    // }
+    // &::-webkit-scrollbar {
+    //     width: 8px;
+    // }
+    
+    // &::-webkit-scrollbar-track {
+    //     background: $color5;
+    // }
+    
+    // &::-webkit-scrollbar-thumb {
+    //     background: $color4; 
+    //     border-left: 2px solid $color5;
+    // }
+    
+    // &::-webkit-scrollbar-thumb:hover {
+    //     background: $color2; 
+    // }
+}
+
+.toolset--commands{
+    max-height: calc(100vh - 90px);
+    overflow:hidden;
     &:hover{
         overflow-y: auto;
     }

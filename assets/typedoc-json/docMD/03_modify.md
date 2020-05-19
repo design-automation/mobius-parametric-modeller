@@ -202,11 +202,11 @@ When deleting objects (point, polyline, and polygons), topology is also deleted.
 When deleting collections, the objects and other collections in the collection are also deleted.
 ~  
 * **Parameters:**  
-  * *entities:* Position, point, polyline, polygon, collection.  
+  * *entities:* Positions, points, polylines, polygons, collections.  
   * *method:* Enum, delete or keep unused positions.  
 * **Returns:** void  
 * **Examples:**  
-  * modify.Delete(polygon1)  
+  * modify.Delete(polygon1, 'delete_selected')  
     Deletes polygon1 from the model.
   
   

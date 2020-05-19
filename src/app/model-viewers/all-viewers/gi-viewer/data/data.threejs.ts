@@ -8,6 +8,8 @@ import { Vector } from '@assets/core/modules/basic/calc';
 import { ISettings } from './data.threejsSettings';
 
 import { DataThreejsLookAt } from './data.threejsLookAt';
+import { BufferGeometryUtils } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import { isArray } from 'util';
 
 enum MaterialType {
     MeshBasicMaterial = 'MeshBasicMaterial',
@@ -87,8 +89,6 @@ export class DataThreejs extends DataThreejsLookAt {
 
         // Add geometry
         const threejs_data: IThreeJS = model.threejs.get3jsData();
-
-
         this.tri_select_map = threejs_data.triangle_select_map;
         this.edge_select_map = threejs_data.edge_select_map;
         this.white_edge_select_map = threejs_data.white_edge_select_map;
@@ -108,6 +108,7 @@ export class DataThreejs extends DataThreejsLookAt {
         this._addLines(threejs_data.edge_indices, threejs_data.white_edge_indices, verts_xyz_buffer, colors_buffer, normals_buffer);
         this._addPoints(threejs_data.point_indices, verts_xyz_buffer, colors_buffer, [255, 255, 255], this.settings.positions.size + 1);
         this._addPosis(threejs_data.posis_indices, posis_xyz_buffer, this.settings.colors.position, this.settings.positions.size);
+        this._addPointLabels(model);
 
         const position_size = this.settings.positions.size;
         this.raycaster.params.Points.threshold = position_size > 1 ? position_size / 3 : position_size / 4;
@@ -509,6 +510,83 @@ export class DataThreejs extends DataThreejsLookAt {
         this.scene.add(point);
         this.threejs_nums[0] = points_i.length;
     }
+    // ============================================================================
+    /**
+     * Add threejs points to the scene
+     */
+    private _addPointLabels(model: GIModel): void {
+        const labels = model.attribs.query.getModelAttribVal('labels');
+        if (!labels || !isArray(labels) || labels.length === 0) {
+            return;
+        }
+        const loader = new THREE.FontLoader();
+        loader.load( 'assets/fonts/helvetiker_regular.typeface.json', font => {
+            const matLite = new THREE.MeshBasicMaterial( {
+                transparent: false,
+                side: THREE.DoubleSide,
+                vertexColors: THREE.VertexColors
+            } );
+            const shapes = [];
+
+            const fromVec = new THREE.Vector3(0, 0, 1);
+            const checkVecFrom = new THREE.Vector3(1, 0, 0);
+
+            for (const label of labels) {
+                const labelText = label.text;
+                const labelOrient = label.position || label.location;
+                if (!labelText || !labelOrient || !isArray(labelOrient)) { continue; }
+                const labelSize = label.size || 20;
+
+                const shape = font.generateShapes( labelText, labelSize , 1);
+                const geom = new THREE.ShapeBufferGeometry(shape);
+
+                let labelPos = labelOrient[0];
+
+                if (!isArray(labelPos)) {
+                    labelPos = labelOrient;
+                } else {
+                    let toVec = new THREE.Vector3(...labelOrient[1]);
+                    const pVec2 = new THREE.Vector3(...labelOrient[2]);
+                    toVec = toVec.cross(pVec2).normalize();
+
+                    if (labelOrient[1][0] !== 0 || labelOrient[1][1] !== 0) {
+                        const checkVecTo = new THREE.Vector3(labelOrient[1][0], labelOrient[1][1], 0).normalize();
+                        const rotateQuat = new THREE.Quaternion();
+                        rotateQuat.setFromUnitVectors(checkVecFrom, checkVecTo);
+                        const rotateMat = new THREE.Matrix4(); // create one and reuse it
+                        rotateMat.makeRotationFromQuaternion(rotateQuat);
+                        geom.applyMatrix(rotateMat);
+                    }
+
+                    const quaternion = new THREE.Quaternion();
+                    quaternion.setFromUnitVectors(fromVec, toVec);
+                    const matrix = new THREE.Matrix4(); // create one and reuse it
+                    matrix.makeRotationFromQuaternion(quaternion);
+                    geom.applyMatrix(matrix);
+                }
+                geom.translate( labelPos[0], labelPos[1], labelPos[2]);
+
+                let color = new THREE.Color(0);
+                if (label.color  && label.color.length === 3) {
+                    color = new THREE.Color(`rgb(${label.color[0]}, ${label.color[1]}, ${label.color[2]})`);
+                }
+                const colors_buffer = new THREE.Float32BufferAttribute(geom.attributes.position.count * 3, 3);
+                if (label.color && label.color.length === 3) {
+                    for (let i = 0; i < colors_buffer.count; i++) {
+                        colors_buffer.setXYZ(i, label.color[0], label.color[1], label.color[2]);
+                    }
+                }
+                geom.setAttribute('color', colors_buffer);
+                shapes.push(geom);
+            }
+            if (shapes.length === 0) { return; }
+            const mergedGeom = BufferGeometryUtils.mergeBufferGeometries(shapes);
+            const text = new THREE.Mesh(mergedGeom , matLite);
+            this.scene.add(text);
+            this.renderer.render(this.scene, this.camera);
+        });
+    }
+
 
     // ============================================================================
     /**

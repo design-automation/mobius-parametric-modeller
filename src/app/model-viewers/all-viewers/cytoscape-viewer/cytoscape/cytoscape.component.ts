@@ -99,14 +99,15 @@ const CYTOSCAPE_STYLE = [
         selector: ':selected',
         css: {
             'background-color': 'rgb(0, 0, 100)',
-            'line-color': 'black',
-            'target-arrow-color': 'black',
-            'source-arrow-color': 'black'
+            'line-color': 'black'
         }
     },
     <cytoscape.Stylesheet> {
         selector: 'edges',
         css: {
+            'curve-style': 'straight',
+            'target-arrow-shape': 'vee',
+            'arrow-scale': 3
         }
     }
 ];

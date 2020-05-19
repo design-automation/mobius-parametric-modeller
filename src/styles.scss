@@ -303,6 +303,9 @@ input, textarea, select, a {
     }
 }
 
+.hidden-button {
+    display: none;
+}
 // angular overwrite
 // .mat-tab-label{
 //     font-family: sans-serif !important;

@@ -4,10 +4,7 @@
             <panel-header [flowchart]='getFlowchart()'></panel-header>
             <!-- viewchild content -->
             <div class='content__panel' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'>
-
-                <div class='container--editor'
-                (copy)='copyProd()' (cut)='cutProd()' (paste)='pasteProd()'>
-                
+                <div class='container--editor'>
                     <div class='container__content'>
                         <!-- toolset on the left side -->
                         <div class="container--toolset">
@@ -108,4 +105,6 @@
 </div>
 <spinner></spinner>
 <chrome></chrome>
-
+<button class='hidden-button' id='copyProdButton' (click) = 'copyProd()'></button>
+<button class='hidden-button' id='cutProdButton' (click) = 'cutProd()'></button>
+<button class='hidden-button' id='pasteProdButton' (click) = 'pasteProd()'></button>

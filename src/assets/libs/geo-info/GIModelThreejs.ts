@@ -126,7 +126,7 @@ export class GIModelThreejs {
             triangle_indices: tris_verts_i,
             triangle_select_map: triangle_select_map,
             materials: materials,
-            material_groups: material_groups
+            material_groups: material_groups,
         };
         // console.log(data);
         return data;

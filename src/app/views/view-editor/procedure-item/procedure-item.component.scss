@@ -163,10 +163,10 @@
 
     }
     &.error:not(.disabled){
-        // border-bottom: 2px solid $error-color;
-        // border-left: 2px solid $error-color;
-        // padding-bottom: 0px;
-        // padding-left: 0px;
+        border-bottom: 2px solid $error-color;
+        border-left: 2px solid $error-color;
+        padding-bottom: 0px;
+        padding-left: 8px;
         .btn{
             background-color: inherit;
         }

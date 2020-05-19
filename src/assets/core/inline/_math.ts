@@ -22,8 +22,27 @@ export function max(list: any): any {
     args.push(list);
     return Math.max.apply(Math, args);
 }
-export function round(num: number, decimal_places = 0): any {
+export function round(num: number|number[], decimal_places = 0): number|number[] {
+    if (Array.isArray(num)) {
+        return num.map( a_num => round(a_num, decimal_places) ) as number[];
+    }
+    num = num as number;
     if (decimal_places === 0) { return Math.round(num); }
-    const dec: number = Math.pow(10, decimal_places);
-    return Math.round(num * dec) / dec;
+    if (decimal_places > 0) {
+        const dec: number = Math.pow(10, decimal_places);
+        return Math.round(num * dec) / dec;
+    } else {
+        const dec: number = Math.pow(10, Math.abs(decimal_places));
+        return Math.round(num / dec) * dec;
+    }
+}
+export function sigFig(num: number|number[], sig_figs: number): number|number[] {
+    if (Array.isArray(num)) {
+        return num.map( a_num => sigFig(a_num, sig_figs) ) as number[];
+    }
+    if (num === 0) { return 0; }
+    num = num as number;
+    const round_val: number = sig_figs - 1 - Math.floor(Math.log10(Math.abs(num)));
+    return round(num, round_val) as number;
+    // return parseFloat(num.toPrecision(sig_figs));
 }

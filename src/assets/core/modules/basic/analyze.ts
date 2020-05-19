@@ -420,17 +420,14 @@ export enum _ESkyMethod {
  * ~
  * If 'unweighted' is selected, then all rays are assigned a weight of 1, irresepctive of angle.
  * ~
- * The detail parameter spacifies the number of points that get generated on the sky dome.
+ * The detail parameter spacifies the number of rays that get generated.
  * The higher the level of detail, the more accurate but also the slower the analysis will be.
  * ~
- * The number of points are as follows:
- * - detail = 0 -> 45 points
- * - detail = 1 -> 66 points
- * - detail = 2 -> 91 points
- * - detail = 3 -> 136 points
- * - detail = 4 -> 225 points
- * - detail = 5 -> 490 points
- * - detail = 6  -> 1067 points
+ * The number of rays are as follows:
+ * 0 = 89 rays,
+ * 1 = 337 rays,
+ * 2 = 1313 rays,
+ * 3 = 5185 rays.
  * ~
  * Returns a dictionary containing exposure results.
  * ~
@@ -438,8 +435,8 @@ export enum _ESkyMethod {
  * ~
  * ~
  * @param __model__
- * @param origins A list of Rays or a list of Planes, to be used as the origins for calculating the solar exposure.
- * @param detail An integer between 1 and 6, specifies the level of detail for the analysis.
+ * @param origins A list of coordinates, a list of Rays or a list of Planes, to be used as the origins for calculating exposure.
+ * @param detail An integer between 1 and 3 inclusive, specifying the level of detail for the analysis.
  * @param entities The obstructions, faces, polygons, or collections of faces or polygons.
  * @param limits The max distance for raytracing.
  * @param method Enum; sky method.
@@ -455,8 +452,8 @@ export function Sky(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], detail:
     if (__model__.debug) {
         checkArgs(fn_name, 'origins', origins, [ArgCh.isXYZL, ArgCh.isRayL, ArgCh.isPlnL]);
         checkArgs(fn_name, 'detail', detail, [ArgCh.isInt]);
-        if (detail < 0 || detail > 6) {
-            throw new Error (fn_name + ': "detail" must be an integer between 0 and 6.');
+        if (detail < 0 || detail > 3) {
+            throw new Error (fn_name + ': "detail" must be an integer between 0 and 3 inclusive.');
         }
         ents_arrs = checkIDs(fn_name, 'entities', entities,
             [IdCh.isId, IdCh.isIdL],
@@ -499,6 +496,7 @@ function _skyRayDirsTjs(detail: number): THREE.Vector3[] {
             vecs.push(vec);
         }
     }
+    //console.log("num rays = ", vecs.length);
     return vecs;
 }
 // ================================================================================================
@@ -547,27 +545,27 @@ export enum _ESolarMethod {
  * The direct sky dome points cover a strip of sky where the sun travels.
  * The inderect sky dome points cover the segments of sky either side of the direct sun strip.
  * ~
- * The detail parameter spacifies the number of points that get generated on the sky dome.
+ * The detail parameter spacifies the number of rays that get generated.
  * The higher the level of detail, the more accurate but also the slower the analysis will be.
- * The number of points differs depending on the latitde.
+ * The number of rays differs depending on the latitde.
  * ~
- * At latitude 0, the number of points for 'direct' are as follows:
- * - detail = 0 -> 45 points
- * - detail = 1 -> 66 points
- * - detail = 2 -> 91 points
- * - detail = 3 -> 136 points
+ * At latitude 0, the number of rays for 'direct' are as follows:
+ * 0 = 44 rays,
+ * 1 = 105 rays,
+ * 2 = 510 rays,
+ * 3 = 1287 rays.
  * ~
- * At latitude 0, the number of points for 'indirect' are as follows:
- * - detail = 0 -> ?? points
- * - detail = 1 -> ?? points
- * - detail = 2 -> ?? points
- * - detail = 3 -> ?? points
+ * At latitude 0, the number of rays for 'indirect' are as follows:
+ * 0 = 58 rays,
+ * 1 = 204 rays,
+ * 2 = 798 rays,
+ * 3 = 3122 rays.
  * ~
- * The number of points for 'sky' are as follows:
- * - detail = 0 -> ?? points
- * - detail = 1 -> ?? points
- * - detail = 2 -> ?? points
- * - detail = 3 -> ?? points
+ * The number of rays for 'sky' are as follows:
+ * 0 = 89 rays,
+ * 1 = 337 rays,
+ * 2 = 1313 rays,
+ * 3 = 5185 rays.
  * ~
  * Returns a dictionary containing solar exposure results.
  * ~
@@ -579,8 +577,8 @@ export enum _ESolarMethod {
  * ~
  * ~
  * @param __model__
- * @param origins A list of Rays or a list of Planes, to be used as the origins for calculating the solar exposure.
- * @param detail An integer between 1 and 6, specifies the level of detail for the analysis.
+ * @param origins A list of coordinates, a list of Rays or a list of Planes, to be used as the origins for calculating exposure.
+ * @param detail An integer between 1 and 3 inclusive, specifying the level of detail for the analysis.
  * @param entities The obstructions, faces, polygons, or collections of faces or polygons.
  * @param limits The max distance for raytracing.
  * @param method Enum; solar method.
@@ -596,8 +594,8 @@ export function Sun(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], detail:
     if (__model__.debug) {
         checkArgs(fn_name, 'origins', origins, [ArgCh.isXYZL, ArgCh.isRayL, ArgCh.isPlnL]);
         checkArgs(fn_name, 'detail', detail, [ArgCh.isInt]);
-        if (detail < 0 || detail > 6) {
-            throw new Error (fn_name + ': "detail" must be an integer between 0 and 6.');
+        if (detail < 0 || detail > 3) {
+            throw new Error (fn_name + ': "detail" must be an integer between 0 and 3 inclusive.');
         }
         ents_arrs = checkIDs(fn_name, 'entities', entities,
             [IdCh.isId, IdCh.isIdL],
@@ -773,6 +771,7 @@ function _solarRaysDirectTjs(latitude: number, north: Txy, detail: number): THRE
         // add it to the list
         directions.push(one_day_path);
     }
+    // console.log("num rays = ", arrMakeFlat(directions).length);
     return directions;
 }
 function _solarRaysIndirectTjs(latitude: number, north: Txy, detail: number): THREE.Vector3[] {
@@ -793,6 +792,7 @@ function _solarRaysIndirectTjs(latitude: number, north: Txy, detail: number): TH
             }
         }
     }
+    // console.log("num rays = ", indirect_vecs.length);
     return indirect_vecs;
 }
 // calc the max solar exposure for a point with no obstructions facing straight up

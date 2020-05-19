@@ -14,25 +14,30 @@
     color: $color1;
     vertical-align: bottom;
     // border-left: 1px solid red;
-    border-bottom: 1px solid $color1;
-    border-left: 1px solid $color1;
+    border-bottom: 1px solid $color5;
+    border-left: 1px solid $color5;
     overflow: hidden;
     // width: calc(100% - 20px);
     width: 100%;
-    
+
+    box-shadow: inset 1px -1px 0px 0px white;
+
     &.inputDisabled{
         opacity: 0.4;
     }
     &:hover .btns{
         display: inline-flex;
+        background-color: transparent;
     }
 
     &.error {
         border: 2px solid $error-color;
     }
-    &.selected {
-        border-left: 2px solid $selected-color;
-        border-bottom: 2px solid $selected-color;
+    &.selected{
+        background-color: $selected-color1;
+        &.lastSelected{
+            background-color: $selected-color2;
+        }
     }
 }
 

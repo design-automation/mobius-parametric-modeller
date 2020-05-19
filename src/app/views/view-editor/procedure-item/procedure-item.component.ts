@@ -405,6 +405,7 @@ export class ProcedureItemComponent implements OnDestroy {
         for (const prod of this.dataService.node.state.procedure) {
             prod.selected = false;
         }
+        if (index === -1) { return; }
 
         let topProd = this.data;
         while (topProd.parent) { topProd = topProd.parent; }

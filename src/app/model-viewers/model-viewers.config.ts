@@ -21,7 +21,6 @@ export const VIEWER_ARR = [
     GIViewerComponent,
     GICesiumViewerComponent,
     // CytoscapeViewerComponent
-    // MobiuscesiumComponent
 ];
 
 // Viewer modules array
@@ -30,7 +29,6 @@ export const VIEWER_MOD = [
     GIViewerModule,
     GICesiumViewerModule,
     // CytoscapeViewerModule,
-    // MobiusCesium
 ];
 
 // Viewers
@@ -40,7 +38,6 @@ export const Viewers: IView[] = [
     { name: '3D Viewer', icon: undefined, component: GIViewerComponent },
     { name: 'Geo Viewer', icon: undefined, component: GICesiumViewerComponent },
     // { name: 'Cytoscape Viewer', icon: undefined, component: CytoscapeViewerComponent },
-    // { name: 'Mobius Cesium', icon: undefined, component: MobiuscesiumComponent },
     { name: 'Console', icon: undefined, component: ConsoleViewerComponent },
     { name: 'Help', icon: undefined, component: HelpViewerComponent }
 ];

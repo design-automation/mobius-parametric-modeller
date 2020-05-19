@@ -122,7 +122,6 @@ export class GIAttribsThreejs {
         return verts_colors.flat(1);
     }
 
-
     /**
      *
      */

@@ -1,7 +1,8 @@
 <div class='container--parameter' 
 *ngIf='prod.meta?.module =="Input"'
 [class.error]='prod.hasError' 
-[class.selected]='prod.selected' 
+[class.selected]='prod.selected'
+[class.lastSelected]="prod.lastSelected"
 [class.inputDisabled]='!prod.enabled' 
 (mousedown)='disableShift($event)'
 (click)='selectInput($event)'>

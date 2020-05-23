@@ -16,7 +16,7 @@ import { getArrDepth, isEmptyArr, idsBreak } from '@libs/geo-info/id';
 import { vecAdd, vecSum, vecDiv, vecFromTo, vecNorm, vecCross, vecSetLen, vecLen, vecDot } from '@libs/geom/vectors';
 import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
-import { arrMakeFlat } from '@assets/libs/util/arrs';
+import { arrMakeFlat, isEmptyArr2 } from '@assets/libs/util/arrs';
 import { getRay, getPlane } from './_common';
 import * as THREE from 'three';
 import { TypedArrayUtils } from '@libs/TypedArrayUtils.js';
@@ -802,40 +802,52 @@ export enum _EDeleteMethod {
  * When deleting collections, the objects and other collections in the collection are also deleted.
  * ~
  * @param __model__
- * @param entities Position, point, polyline, polygon, collection.
+ * @param entities Positions, points, polylines, polygons, collections.
  * @param method Enum, delete or keep unused positions.
  * @returns void
- * @example modify.Delete(polygon1)
+ * @example modify.Delete(polygon1, 'delete_selected')
  * @example_info Deletes polygon1 from the model.
  */
 export function Delete(__model__: GIModel, entities: TId|TId[], method: _EDeleteMethod): void {
-    entities = arrMakeFlat(entities) as TId[];
-    if (!isEmptyArr(entities)) {
-        // --- Error Check ---
-        const fn_name = 'modify.Delete';
-        let ents_arr: TEntTypeIdx[];
-        if (__model__.debug) {
-            ents_arr = checkIDs(fn_name, 'entities', entities,
-            [IdCh.isId, IdCh.isIdL],
-            [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-        } else {
-            // ents_arr = splitIDs(fn_name, 'entities', entities,
-            // [IDcheckObj.isID, IDcheckObj.isIDList],
-            // [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-            ents_arr = idsBreak(entities) as TEntTypeIdx[];
-        }
-        // --- Error Check ---
-        switch (method) {
-            case _EDeleteMethod.DELETE_SELECTED:
-                _delete(__model__, ents_arr, false); //  do not invert
-                break;
-            case _EDeleteMethod.KEEP_SELECTED:
-                _delete(__model__, ents_arr, true); // invert
-                break;
-            default:
-                throw new Error(fn_name + ' : Method not recognised.');
-        }
+    if (entities === null) {
+        if (method === _EDeleteMethod.KEEP_SELECTED) { return; }
+        if (method === _EDeleteMethod.DELETE_SELECTED) { _deleteAll(__model__);  return; }
     }
+    entities = arrMakeFlat(entities) as TId[];
+    // --- Error Check ---
+    const fn_name = 'modify.Delete';
+    let ents_arr: TEntTypeIdx[];
+    if (__model__.debug) {
+        ents_arr = checkIDs(fn_name, 'entities', entities,
+        [IdCh.isId, IdCh.isIdL],
+        [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+    } else {
+        // ents_arr = splitIDs(fn_name, 'entities', entities,
+        // [IDcheckObj.isID, IDcheckObj.isIDList],
+        // [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+        ents_arr = idsBreak(entities) as TEntTypeIdx[];
+    }
+    // --- Error Check ---
+    switch (method) {
+        case _EDeleteMethod.DELETE_SELECTED:
+            if (isEmptyArr2(entities)) { return; }
+            _delete(__model__, ents_arr, false); //  do not invert
+            return;
+        case _EDeleteMethod.KEEP_SELECTED:
+            if (isEmptyArr2(entities)) { _deleteAll(__model__); return; }
+            _delete(__model__, ents_arr, true); // invert
+            return;
+        default:
+            throw new Error(fn_name + ' : Method not recognised.');
+    }
+}
+function _deleteAll(__model__: GIModel): void {
+    // delete the ents
+    __model__.geom.del.delColls(__model__.geom.query.getEnts(EEntType.COLL, false), false);
+    __model__.geom.del.delPgons(__model__.geom.query.getEnts(EEntType.PGON, false), false);
+    __model__.geom.del.delPlines(__model__.geom.query.getEnts(EEntType.PLINE, false), false);
+    __model__.geom.del.delPoints(__model__.geom.query.getEnts(EEntType.POINT, false), false);
+    __model__.geom.del.delPosis(__model__.geom.query.getEnts(EEntType.POSI, false));
 }
 function _delete(__model__: GIModel, ents_arr: TEntTypeIdx[], invert: boolean): void {
     // get the ents

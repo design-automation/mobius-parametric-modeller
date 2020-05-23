@@ -260,6 +260,10 @@ export class SaveFileComponent implements OnDestroy{
             if (node.output.hasOwnProperty('value')) {
                 node.output.value = undefined;
             }
+            for (const prod of node.state.procedure) {
+                prod.selected = false;
+                prod.lastSelected = false;
+            }
             node.state.procedure = [];
             SaveFileComponent.clearResolvedValue(node.procedure, clearAll);
             if (node.localFunc) {

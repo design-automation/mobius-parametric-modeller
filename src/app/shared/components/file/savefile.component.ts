@@ -248,7 +248,7 @@ export class SaveFileComponent implements OnDestroy{
         nodeList.splice(nodeList.length - 1, 0, checkNode);
     }
 
-    static clearModelData(f: IFlowchart, modelMap = null, clearAll = true) {
+    static clearModelData(f: IFlowchart, modelMap = null, clearAll = true, clearState = true) {
         for (const node of f.nodes) {
             if (modelMap !== null) {
                 modelMap[node.id] = node.model;
@@ -260,11 +260,13 @@ export class SaveFileComponent implements OnDestroy{
             if (node.output.hasOwnProperty('value')) {
                 node.output.value = undefined;
             }
-            for (const prod of node.state.procedure) {
-                prod.selected = false;
-                prod.lastSelected = false;
+            if (clearState) {
+                for (const prod of node.state.procedure) {
+                    prod.selected = false;
+                    prod.lastSelected = false;
+                }
+                node.state.procedure = [];
             }
-            node.state.procedure = [];
             SaveFileComponent.clearResolvedValue(node.procedure, clearAll);
             if (node.localFunc) {
                 SaveFileComponent.clearResolvedValue(node.localFunc, clearAll);

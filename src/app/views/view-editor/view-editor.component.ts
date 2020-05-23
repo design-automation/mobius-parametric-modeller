@@ -29,7 +29,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
     disableInput = false;
 
-    private copyCheck = true;
+    // private copyCheck = true;
     private ctx = document.createElement('canvas').getContext('2d');
 
     constructor(private dataService: DataService,
@@ -256,7 +256,8 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 i += 1;
             }
         }
-        if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
+        // if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
+        if (document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
 
         const temp = node.state.procedure.slice();
         const copiedProds = [];
@@ -278,7 +279,8 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 i += 1;
             }
         }
-        if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
+        // if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
+        if (document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
 
         const temp = node.state.procedure.slice();
         const copiedProds = [];
@@ -315,10 +317,13 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     // paste copied procedures
     pasteProd() {
         const node = this.dataService.node;
-        if (this.copyCheck
-        && document.activeElement.nodeName !== 'INPUT'
+        if (document.activeElement.nodeName !== 'INPUT'
         && document.activeElement.nodeName !== 'TEXTAREA'
         && this.router.url.slice(0, 7) === '/editor') {
+        // if (this.copyCheck
+        // && document.activeElement.nodeName !== 'INPUT'
+        // && document.activeElement.nodeName !== 'TEXTAREA'
+        // && this.router.url.slice(0, 7) === '/editor') {
             const copiedProds = localStorage.getItem('mobius_copied_procedures');
             if (!copiedProds) {
                 this.dataService.notifyMessage('Error: No saved procedure to be pasted!');
@@ -426,7 +431,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     @HostListener('window:keyup', ['$event'])
     onKeyUp(event: KeyboardEvent) {
         if (!(event.ctrlKey && event.metaKey && event.shiftKey)) { this.disableInput = false; }
-        if (!this.copyCheck) { return; }
+        // if (!this.copyCheck) { return; }
         if (event.key === 'Delete') {
             this.deleteSelectedProds();
         } else if (event.key.toLowerCase() === 'z' && (event.ctrlKey === true || event.metaKey === true)) {
@@ -509,12 +514,12 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
     // activate copying/cutting/pasting when the mouse hovers over the procedure list
     activateCopyPaste(): void {
-        this.copyCheck = true;
+        // this.copyCheck = true;
     }
 
     // deactivate copying/cutting/pasting when the mouse exit the procedure list
     deactivateCopyPaste(): void {
-        this.copyCheck = false;
+        // this.copyCheck = false;
     }
 
 

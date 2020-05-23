@@ -193,7 +193,7 @@ export class ExecuteComponent {
         if (this.dataService.consoleClear) {
             this.dataService.clearLog();
         }
-        SaveFileComponent.clearModelData(this.dataService.flowchart, null, false);
+        SaveFileComponent.clearModelData(this.dataService.flowchart, null, false, false);
 
         if (this.dataService.mobiusSettings.debug === undefined) {
             this.dataService.mobiusSettings.debug = true;

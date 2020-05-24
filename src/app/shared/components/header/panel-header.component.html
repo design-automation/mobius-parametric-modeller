@@ -192,6 +192,7 @@
             <ng-container *ngIf='backup!="___TEMP___.mob"'>
                 <button class='loadBackupButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backup}}</button>
                 <button class='backupDateButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backupDates[backup]}}</button>
+                <button class='deleteBackupButton' (click)="downloadBackup($event, backup)"><mat-icon class='icon'>cloud_download_outline</mat-icon></button>
                 <button class='deleteBackupButton' (click)="deleteBackup($event, backup)"><mat-icon class='icon'>delete_outline</mat-icon></button>
             </ng-container>
         </div>

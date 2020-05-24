@@ -157,6 +157,12 @@ export class SaveFileComponent implements OnDestroy{
         );
     }
 
+    static async downloadLocalStorageFile(filecode) {
+        const file = await SaveFileComponent.loadFromFileSystem(filecode);
+        const blob = new Blob([file], { type: 'application/json' });
+        DownloadUtils.downloadFile(filecode, blob);
+    }
+
     static removeFromFS(fs) {
         const filecode = window['_code__'];
         fs.root.getFile(filecode, {create: false}, function(fileEntry) {

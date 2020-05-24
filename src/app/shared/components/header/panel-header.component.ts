@@ -441,6 +441,11 @@ export class PanelHeaderComponent implements OnDestroy {
         }
     }
 
+    downloadBackup(event: MouseEvent, filecode: string) {
+        event.stopPropagation();
+        SaveFileComponent.downloadLocalStorageFile(filecode);
+    }
+
     async addBackup() {
         const selectedFile = (<HTMLInputElement>document.getElementById('addBackup')).files[0];
         const p = new Promise((resolve) => {

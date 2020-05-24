@@ -184,7 +184,7 @@ export class CodeUtils {
                 if (!check) {
                     codeStr.push(`return null;`);
                 } else {
-                    codeStr.push(`let __return_value__ = __modules__.${_parameterTypes.return}(${returnArgVals.join(', ')});`);
+                    codeStr.push(`__return_value__ = __modules__.${_parameterTypes.return}(${returnArgVals.join(', ')});`);
                     if (isMainFlowchart) {
                         codeStr.push(`if (__return_value__ !== null) {` +
                                      `__params__.console.push('<p><b>Return: <i>' + ` +
@@ -647,6 +647,8 @@ export class CodeUtils {
 
         if (node.type === 'start') {
             codeStr.push('__params__.constants = {};\n');
+        } else if (node.type === 'end') {
+            codeStr.push('let __return_value__;\n');
         }
 
 

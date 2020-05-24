@@ -665,6 +665,11 @@ export class ExecuteComponent {
                     }
                 }
             }
+            for (const i in window) {
+                if (i[i.length - 1] === '_' && i[i.length - 2] !== '_' && i[0] !== '_') {
+                    delete window[i];
+                }
+            }
 
             if (node.type === 'end') {
                 node.output.value = result;

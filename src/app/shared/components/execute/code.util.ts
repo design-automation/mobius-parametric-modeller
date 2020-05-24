@@ -184,7 +184,7 @@ export class CodeUtils {
                 if (!check) {
                     codeStr.push(`return null;`);
                 } else {
-                    codeStr.push(`__return_value__ = __modules__.${_parameterTypes.return}(${returnArgVals.join(', ')});`);
+                    codeStr.push(`let __return_value__ = __modules__.${_parameterTypes.return}(${returnArgVals.join(', ')});`);
                     if (isMainFlowchart) {
                         codeStr.push(`if (__return_value__ !== null) {` +
                                      `__params__.console.push('<p><b>Return: <i>' + ` +
@@ -647,8 +647,6 @@ export class CodeUtils {
 
         if (node.type === 'start') {
             codeStr.push('__params__.constants = {};\n');
-        } else if (node.type === 'end') {
-            codeStr.push('let __return_value__;\n');
         }
 
 
@@ -664,7 +662,8 @@ export class CodeUtils {
         //     codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName, usedFunctions));
         // }
         if (node.type === 'end' && node.procedure.length > 0) {
-            codeStr.splice(codeStr.length - 2, 0, 'break; }');
+            codeStr.push('break; }');
+            // codeStr.splice(codeStr.length - 2, 0, 'break; }');
             // return [[codeStr, varsDefined], _terminateCheck];
         } else {
             codeStr.push(`__modules__.${_parameterTypes.postprocess}( __params__.model);`);

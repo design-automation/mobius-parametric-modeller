@@ -662,7 +662,7 @@ export abstract class NodeUtils {
         } else {
             let checkNode = node.state.procedure[node.state.procedure.length - 1];
             // if (tp === 'BREAK' || tp === 'CONTINUE') {
-            if (tp === 'CONTINUE') {
+            if (tp === 'CONTINUE' || (tp === 'BREAK' && node.type === 'end')) {
                 if (!checkNode) {return true; }
                 while (checkNode.parent) {
                     if (checkNode.parent.type.toString() === ProcedureTypes.Foreach.toString() ||

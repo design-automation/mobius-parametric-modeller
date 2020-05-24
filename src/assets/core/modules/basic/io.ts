@@ -315,10 +315,10 @@ function saveResource(file: string, name: string): boolean {
         }
         if (!check) {
             items.unshift(name);
-            if (items.length > 10) {
-                const item = items.pop();
-                localStorage.removeItem(item);
-            }
+            // if (items.length > 10) {
+            //     const item = items.pop();
+            //     localStorage.removeItem(item);
+            // }
         }
         localStorage.setItem('mobius_backup_list', JSON.stringify(items));
         const itemDates = JSON.parse(localStorage.getItem('mobius_backup_date_dict'));

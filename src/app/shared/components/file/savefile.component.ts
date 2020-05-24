@@ -105,10 +105,10 @@ export class SaveFileComponent implements OnDestroy{
             }
             if (!check) {
                 items.unshift(code);
-                if (items.length > 10) {
-                    const item = items.pop();
-                    localStorage.removeItem(item);
-                }
+                // if (itemss.length > 10) {
+                //     const item = items.pop();
+                //     localStorage.removeItem(item);
+                // }
             }
             localStorage.setItem('mobius_backup_list', JSON.stringify(items));
             const itemDates = JSON.parse(localStorage.getItem('mobius_backup_date_dict'));

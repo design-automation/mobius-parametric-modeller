@@ -8,6 +8,7 @@ import { ProcedureTypes, IProcedure } from '@models/procedure';
 import { IdGenerator } from '@utils';
 import { IMobius } from '@models/mobius';
 import { INode, NodeUtils } from '@models/node';
+import JSZip from 'jszip';
 
 declare global {
     interface Navigator {
@@ -115,72 +116,75 @@ export class SaveFileComponent implements OnDestroy{
             itemDates[code] = (new Date()).toLocaleString();
             localStorage.setItem('mobius_backup_date_dict', JSON.stringify(itemDates));
         }
-        window['_code__'] = code;
-        window['_file__'] = file;
 
         navigator.webkitPersistentStorage.requestQuota (
             requestedBytes, function(grantedBytes) {
                 // @ts-ignore
-                window.webkitRequestFileSystem(PERSISTENT, grantedBytes, SaveFileComponent.saveToFS,
+                window.webkitRequestFileSystem(PERSISTENT, grantedBytes, saveToFS,
                 function(e) { console.log('Error', e); });
             }, function(e) { console.log('Error', e); }
         );
+
+        function saveToFS(fs) {
+            fs.root.getFile(code, { create: true}, function (fileEntry) {
+                fileEntry.createWriter(async function (fileWriter) {
+                    fileWriter.onwriteend = function (e) {
+                        _occupied = null;
+                    };
+                    // fileWriter.onerror = function (e) {
+                    //     console.log('Write failed: ' + e.toString());
+                    // };
+                    const bb = new Blob([file + '_|_|_'], {type: 'text/plain;charset=utf-8'});
+                    await fileWriter.write(bb);
+                }, (e) => { console.log(e); });
+            }, (e) => { console.log(e.code); });
+        }
+
         SaveFileComponent.deleteUnaccountedFile();
         // localStorage.setItem(code, file);
     }
 
-    static saveToFS(fs) {
-        const code = window['_code__'];
-        fs.root.getFile(code, { create: true}, function (fileEntry) {
-            fileEntry.createWriter(async function (fileWriter) {
-                fileWriter.onwriteend = function (e) {
-                    _occupied = null;
-                };
-                // fileWriter.onerror = function (e) {
-                //     console.log('Write failed: ' + e.toString());
-                // };
-                const bb = new Blob([window['_file__'] + '_|_|_'], {type: 'text/plain;charset=utf-8'});
-                await fileWriter.write(bb);
-                window['_code__'] = undefined;
-                window['_file__'] = undefined;
-            }, (e) => { console.log(e); });
-        }, (e) => { console.log(e.code); });
-    }
 
     static deleteFile(filecode) {
-        window['_code__'] = filecode;
+        // window['_code__'] = filecode;
         navigator.webkitPersistentStorage.requestQuota (
             requestedBytes, function(grantedBytes) {
                 // @ts-ignore
-                window.webkitRequestFileSystem(PERSISTENT, grantedBytes, SaveFileComponent.removeFromFS);
+                window.webkitRequestFileSystem(PERSISTENT, grantedBytes, removeFromFS);
             }, function(e) { console.log('Error', e); }
         );
+        function removeFromFS(fs) {
+            console.log(filecode);
+            fs.root.getFile(filecode, {create: false}, function(fileEntry) {
+                fileEntry.remove(function() {
+                    // console.log('File removed.');
+                    const items: string[] = JSON.parse(localStorage.getItem('mobius_backup_list'));
+                    const i = items.indexOf(filecode);
+                    if (i !== -1) {
+                        items.splice(i, 1);
+                        localStorage.setItem('mobius_backup_list', JSON.stringify(items));
+                        const itemDates = JSON.parse(localStorage.getItem('mobius_backup_date_dict'));
+                        delete itemDates[filecode];
+                        localStorage.setItem('mobius_backup_date_dict', JSON.stringify(itemDates));
+                    }
+                    window['_code__'] = undefined;
+                }, (e) => { console.log('Error', e); });
+            });
+        }
     }
 
-    static async downloadLocalStorageFile(filecode) {
-        const file = await SaveFileComponent.loadFromFileSystem(filecode);
-        const blob = new Blob([file], { type: 'application/json' });
-        DownloadUtils.downloadFile(filecode, blob);
-    }
-
-    static removeFromFS(fs) {
-        const filecode = window['_code__'];
-        fs.root.getFile(filecode, {create: false}, function(fileEntry) {
-            fileEntry.remove(function() {
-                // console.log('File removed.');
-                const items: string[] = JSON.parse(localStorage.getItem('mobius_backup_list'));
-                const i = items.indexOf(filecode);
-                if (i !== -1) {
-                    items.splice(i, 1);
-                    localStorage.setItem('mobius_backup_list', JSON.stringify(items));
-                    const itemDates = JSON.parse(localStorage.getItem('mobius_backup_date_dict'));
-                    delete itemDates[filecode];
-                    localStorage.setItem('mobius_backup_date_dict', JSON.stringify(itemDates));
-                }
-                window['_code__'] = undefined;
-            }, (e) => { console.log('Error', e); });
+    static async downloadLocalStorageFile(filecodes) {
+        const zip = new JSZip();
+        for (const filecode of filecodes) {
+            const file = await SaveFileComponent.loadFromFileSystem(filecode);
+            zip.file(filecode, file);
+        }
+        zip.generateAsync({type: 'blob'}).then(function(content) {
+            DownloadUtils.downloadFile('local_storage_files.zip', content);
         });
+        // const blob = new Blob([file], { type: 'application/json' });
     }
+
 
     static deleteUnaccountedFile() {
         navigator.webkitPersistentStorage.requestQuota (

@@ -22,6 +22,7 @@ export class PanelHeaderComponent implements OnDestroy {
     @Input() flowchart: IFlowchart;
     executeCheck: boolean;
     nodeListCheck: boolean;
+    selectedBackups: string[] = [];
 
     urlSet = ['', 'publish', '', '', '', ''];
     urlValid: boolean;
@@ -424,26 +425,38 @@ export class PanelHeaderComponent implements OnDestroy {
 
     deleteBackup(event: MouseEvent, filecode: string) {
         event.stopPropagation();
-        // const file = localStorage.getItem(filecode);
-        // if (!file) {
-        //     return;
-        // }
-        // localStorage.removeItem(filecode);
-        SaveFileComponent.deleteFile(filecode);
-        const items: string[] = this.getBackupFiles();
-        const i = items.indexOf(filecode);
-        if (i !== -1) {
-            items.splice(i, 1);
-            localStorage.setItem('mobius_backup_list', JSON.stringify(items));
-            const itemDates = JSON.parse(localStorage.getItem('mobius_backup_date_dict'));
-            itemDates[filecode] = (new Date()).toLocaleString();
-            localStorage.setItem('mobius_backup_date_dict', JSON.stringify(itemDates));
+        for (filecode of this.selectedBackups) {
+            SaveFileComponent.deleteFile(filecode);
+            const items: string[] = this.getBackupFiles();
+            const i = items.indexOf(filecode);
+            if (i !== -1) {
+                items.splice(i, 1);
+                localStorage.setItem('mobius_backup_list', JSON.stringify(items));
+                const itemDates = JSON.parse(localStorage.getItem('mobius_backup_date_dict'));
+                itemDates[filecode] = (new Date()).toLocaleString();
+                localStorage.setItem('mobius_backup_date_dict', JSON.stringify(itemDates));
+            }
         }
+        this.selectedBackups = [];
+
+        // event.stopPropagation();
+        // SaveFileComponent.deleteFile(filecode);
+        // const items: string[] = this.getBackupFiles();
+        // const i = items.indexOf(filecode);
+        // if (i !== -1) {
+        //     items.splice(i, 1);
+        //     localStorage.setItem('mobius_backup_list', JSON.stringify(items));
+        //     const itemDates = JSON.parse(localStorage.getItem('mobius_backup_date_dict'));
+        //     itemDates[filecode] = (new Date()).toLocaleString();
+        //     localStorage.setItem('mobius_backup_date_dict', JSON.stringify(itemDates));
+        // }
     }
 
     downloadBackup(event: MouseEvent, filecode: string) {
         event.stopPropagation();
-        SaveFileComponent.downloadLocalStorageFile(filecode);
+        SaveFileComponent.downloadLocalStorageFile(this.selectedBackups);
+        // event.stopPropagation();
+        // SaveFileComponent.downloadLocalStorageFile(filecode);
     }
 
     async addBackup() {
@@ -456,6 +469,25 @@ export class PanelHeaderComponent implements OnDestroy {
             reader.readAsText(selectedFile);
         });
         SaveFileComponent.saveToLocalStorage(selectedFile.name, <string> await p);
+    }
+
+    selectBackup(backup) {
+        for(let i = 0; i < this.selectedBackups.length; i++) {
+            if (this.selectedBackups[i] === backup) {
+                this.selectedBackups.splice(i, 1);
+                return;
+            }
+        }
+        this.selectedBackups.push(backup);
+    }
+
+    selectedBackup(backup) {
+        for( const b of this.selectedBackups) {
+            if (b === backup) {
+                return true;
+            }
+        }
+        return false;
     }
 
     checkMobBackup(backup): boolean {

@@ -49,11 +49,11 @@ export enum _ERaytraceMethod {
 }
 /**
  * Shoot a set of rays into a set of obstructions, consisting of polygon faces.
- * One can imagibe particles being shot from the ray origin in the ray direction, hitting the obsructions.
+ * One can imagine particles being shot from the ray origin in the ray direction, hitting the obstructions.
  * ~
  * Each ray will either hit an obstruction, or will hit no obstructions.
  * The length of the ray vector is ignored, only the ray origin and direction is taken into account.
- * Each particle shot out from a ray will tavel a certain distance.
+ * Each particle shot out from a ray will travel a certain distance.
  * The minimum and maximum distance that the particle will travel is defined by the 'dist' argument.
  * ~
  * If a ray particle hits an obstruction, then the 'distance' for that ray is the distance from the ray origin
@@ -83,6 +83,10 @@ export enum _ERaytraceMethod {
  * or 'null' if no polygon was hit.
  * ~
  * If 'all' is selected, the dictionary will contain all of the above.
+ * ~
+ * If the input is a list of rays, the output will be a single dictionary.
+ * If the list is empty (i.e. contains no rays), then 'null' is returned.
+ * If the input is a list of lists of rays, then the output will be a list of dictionaries.
  * ~
  * @param __model__
  * @param rays A ray, a list of rays, or a list of lists of rays.
@@ -126,13 +130,15 @@ function _raytraceAll(__model__: GIModel, rays: TRay|TRay[]|TRay[][],
         mesh: [THREE.Mesh, number[]], limits: [number, number],
         method: _ERaytraceMethod): TRaytraceResult|TRaytraceResult[] {
     const depth: number = getArrDepth2(rays);
-    if (depth === 2) {
+    if (depth < 2) {// an empty list
+        return null;
+    } else if (depth === 2) {// just one ray
         return _raytraceAll(__model__, [rays] as TRay[], mesh, limits, method);
-    } else if (depth === 3) { //  just one ray, or a list of rays
+    } else if (depth === 3) { // a list of rays
         const [origins_tjs, dirs_tjs]: [THREE.Vector3[], THREE.Vector3[]] =
             _raytraceOriginsDirsTjs(__model__, rays as TRay[]);
         return _raytrace(origins_tjs, dirs_tjs, mesh, limits, method) as TRaytraceResult;
-    } else if (depth === 4) {
+    } else if (depth === 4) { // a nested list of rays
         return (rays as TRay[][]).map(a_rays => _raytraceAll(
             __model__, a_rays, mesh, limits, method)) as TRaytraceResult[];
     }

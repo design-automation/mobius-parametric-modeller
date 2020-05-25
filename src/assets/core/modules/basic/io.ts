@@ -113,7 +113,6 @@ export function Import(__model__: GIModel, model_data: string|{}, data_format: _
                 coll_results[data_name] = idsMake([EEntType.COLL, coll_i]) as TId;
             }
         }
-        console.log(coll_results)
         return coll_results;
     }
     switch (data_format) {

@@ -162,12 +162,17 @@ export class ExecuteComponent {
                             prod.resolvedValue = '`' + result + '`';
                         }
                         break;
-                    } else if (arg.value[0] !== '"' && arg.value[0] !== '\'' ) {
+                    } else if ((arg.value[0] !== '"' && arg.value[0] !== '\'')) {
                         prod.resolvedValue = null;
                         break;
                     } else {
+                        let val = arg.value.slice(1, -1).trim();
+                        if (val.length > 1 && val[0] === '{') {
+                            prod.resolvedValue = null;
+                            break;
+                        }
+                        val = val.replace(/\"|\'/g, '');
                         const backup_list: string[] = JSON.parse(localStorage.getItem('mobius_backup_list'));
-                        const val = arg.value.replace(/\"|\'/g, '');
                         if (val.indexOf('*') !== -1) {
                             const splittedVal = val.split('*');
                             const start = splittedVal[0] === '' ? null : splittedVal[0];
@@ -188,6 +193,7 @@ export class ExecuteComponent {
                             }
                             result += '}';
                             prod.resolvedValue = result;
+                            break;
                         } else {
                             if (backup_list.indexOf(val) !== -1) {
                                 const result = await SaveFileComponent.loadFromFileSystem(val);
@@ -197,6 +203,7 @@ export class ExecuteComponent {
                                     // prod.resolvedValue = arg.value;
                                 } else {
                                     prod.resolvedValue = '`' + result + '`';
+                                    break;
                                 }
                             } else {
                                 prod.hasError = true;

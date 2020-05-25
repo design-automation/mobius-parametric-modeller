@@ -90,6 +90,9 @@ export function Write(__model__: GIModel, data: string, file_name: string, data_
  * @example_info Imports the data from my_data.obj, from local storage.
  */
 export function Import(__model__: GIModel, model_data: string|{}, data_format: _EIODataFormat): TId|{} {
+    if (!model_data) {
+        throw new Error('Invalid imported model data');
+    }
     let coll_i: number = null;
     if (model_data.constructor === {}.constructor) {
         let import_func: Function;

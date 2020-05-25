@@ -290,10 +290,12 @@ button.mat-menu-item:hover{
             width: fit-content;
             min-width: 400px;
             margin-bottom: 2px;
-            padding: 0px 5px 0px 5px;
+            padding: 0px 5px 0px 12px;
             background-color: $color5;
-            color: $color1;
+            // color: $color1;
+            color: black;
             display: inline-block;
+            text-align: left;
 
             &:disabled {
                 background-color: $color5-5;
@@ -308,7 +310,8 @@ button.mat-menu-item:hover{
             margin-bottom: 2px;
             padding: 0px 5px 0px 5px;
             background-color: $color5;
-            color: $color1;
+            // color: $color1;
+            color: black;
             display: inline-block;
 
             &:disabled {

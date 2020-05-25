@@ -255,6 +255,7 @@ export class ExecuteComponent {
             // the data is then saved as resolvedValue in its respective argument in the procedure (in JSON format)
             try {
                 await  ExecuteComponent.resolveImportedUrl(node.procedure, true);
+                await  ExecuteComponent.resolveImportedUrl(node.localFunc, true);
             } catch (ex) {
                 node.hasError = true;
                 this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);

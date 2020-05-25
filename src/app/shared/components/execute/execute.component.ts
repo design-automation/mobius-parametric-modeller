@@ -163,20 +163,42 @@ export class ExecuteComponent {
                         }
                         break;
                     } else {
-                        const backup_list = JSON.parse(localStorage.getItem('mobius_backup_list'));
+                        const backup_list: string[] = JSON.parse(localStorage.getItem('mobius_backup_list'));
                         const val = arg.value.replace(/\"|\'/g, '');
-                        if (backup_list.indexOf(val) !== -1) {
-                            const result = await SaveFileComponent.loadFromFileSystem(val);
-                            if (!result || result === 'error') {
+                        if (val.indexOf('*') !== -1) {
+                            const splittedVal = val.split('*');
+                            const start = splittedVal[0] === '' ? null : splittedVal[0];
+                            const end = splittedVal[1] === '' ? null : splittedVal[1];
+                            let result = '{';
+                            for (const backup_name of backup_list) {
+                                let valid_check = true;
+                                if (start && !backup_name.startsWith(start)) {
+                                    valid_check = false;
+                                }
+                                if (end && !backup_name.endsWith(end)) {
+                                    valid_check = false;
+                                }
+                                if (valid_check) {
+                                    const backup_file = await SaveFileComponent.loadFromFileSystem(backup_name);
+                                    result += `"${backup_name}": \`${backup_file.replace(/\\/g, '\\\\')}\`,`;
+                                }
+                            }
+                            result += '}';
+                            prod.resolvedValue = result;
+                        } else {
+                            if (backup_list.indexOf(val) !== -1) {
+                                const result = await SaveFileComponent.loadFromFileSystem(val);
+                                if (!result || result === 'error') {
+                                    prod.hasError = true;
+                                    throw(new Error(`File named ${val} does not exist in the local storage`));
+                                    // prod.resolvedValue = arg.value;
+                                } else {
+                                    prod.resolvedValue = '`' + result + '`';
+                                }
+                            } else {
                                 prod.hasError = true;
                                 throw(new Error(`File named ${val} does not exist in the local storage`));
-                                // prod.resolvedValue = arg.value;
-                            } else {
-                                prod.resolvedValue = '`' + result + '`';
                             }
-                        } else {
-                            prod.hasError = true;
-                            throw(new Error(`File named ${val} does not exist in the local storage`));
                         }
                     }
                     break;

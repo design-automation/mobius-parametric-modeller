@@ -89,17 +89,42 @@ export function Write(__model__: GIModel, data: string, file_name: string, data_
  * @example io.Import ("my_data.obj", obj)
  * @example_info Imports the data from my_data.obj, from local storage.
  */
-export function Import(__model__: GIModel, model_data: string, data_format: _EIODataFormat): TId {
+export function Import(__model__: GIModel, model_data: string|{}, data_format: _EIODataFormat): TId|{} {
     let coll_i: number = null;
+    if (model_data.constructor === {}.constructor) {
+        let import_func: Function;
+        switch (data_format) {
+            case _EIODataFormat.GI:
+                import_func  = _importGI;
+                break;
+            case _EIODataFormat.OBJ:
+                import_func  = _importObj;
+                break;
+            case _EIODataFormat.GEOJSON:
+                import_func  = _importGeojson;
+                break;
+            default:
+                throw new Error('Import type not recognised');
+        }
+        const coll_results = {};
+        for (const data_name in <Object> model_data) {
+            if (model_data[data_name]) {
+                coll_i  = import_func(__model__, <string> model_data[data_name]);
+                coll_results[data_name] = idsMake([EEntType.COLL, coll_i]) as TId;
+            }
+        }
+        console.log(coll_results)
+        return coll_results;
+    }
     switch (data_format) {
         case _EIODataFormat.GI:
-            coll_i  = _importGI(__model__, model_data);
+            coll_i  = _importGI(__model__, <string> model_data);
             break;
         case _EIODataFormat.OBJ:
-            coll_i  = _importObj(__model__, model_data);
+            coll_i  = _importObj(__model__, <string> model_data);
             break;
         case _EIODataFormat.GEOJSON:
-            coll_i  = _importGeojson(__model__, model_data);
+            coll_i  = _importGeojson(__model__, <string> model_data);
             break;
         default:
             throw new Error('Import type not recognised');

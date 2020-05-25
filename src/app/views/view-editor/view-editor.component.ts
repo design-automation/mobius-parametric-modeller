@@ -431,13 +431,11 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     @HostListener('window:keyup', ['$event'])
     onKeyUp(event: KeyboardEvent) {
         if (!(event.ctrlKey && event.metaKey && event.shiftKey)) { this.disableInput = false; }
+        if (document.activeElement.nodeName === 'INPUT') {return; }
         // if (!this.copyCheck) { return; }
         if (event.key === 'Delete') {
             this.deleteSelectedProds();
         } else if (event.key.toLowerCase() === 'z' && (event.ctrlKey === true || event.metaKey === true)) {
-            if (document.activeElement.nodeName === 'INPUT') {
-                return;
-            }
             let actions: any;
             // if ((<HTMLElement>event.target).nodeName === 'INPUT') {return; }
             if (event.shiftKey) {

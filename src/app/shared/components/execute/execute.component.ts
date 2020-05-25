@@ -162,6 +162,9 @@ export class ExecuteComponent {
                             prod.resolvedValue = '`' + result + '`';
                         }
                         break;
+                    } else if (arg.value[0] !== '"' && arg.value[0] !== '\'' ) {
+                        prod.resolvedValue = null;
+                        break;
                     } else {
                         const backup_list: string[] = JSON.parse(localStorage.getItem('mobius_backup_list'));
                         const val = arg.value.replace(/\"|\'/g, '');

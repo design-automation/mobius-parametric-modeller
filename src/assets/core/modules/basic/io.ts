@@ -48,7 +48,7 @@ export enum _EIODataTarget {
  * @param data The data to be read (from URL or from Local Storage).
  * @returns the data.
  */
-export function Read(__model__: GIModel, data: string): string {
+export function Read(__model__: GIModel, data: string|{}): string|{} {
     return data;
 }
 // ================================================================================================

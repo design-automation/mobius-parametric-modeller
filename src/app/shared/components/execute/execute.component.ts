@@ -14,6 +14,7 @@ import { DataOutputService } from '@shared/services/dataOutput.service';
 import { SaveFileComponent } from '@shared/components/file';
 import { _parameterTypes, _varString } from '@assets/core/_parameterTypes';
 import { isArray } from 'util';
+import JSZip from 'jszip';
 
 export const pythonList = `
 function pythonList(x, l){
@@ -164,8 +165,10 @@ export class ExecuteComponent {
                         const result = await CodeUtils.getURLContent(val);
                         if (result === undefined) {
                             prod.resolvedValue = arg.value;
-                        } else if (result.indexOf('HTTP Request Error') !== -1) {
+                        } else if (result.indexOf && result.indexOf('HTTP Request Error') !== -1) {
                             throw new Error(result);
+                        } else if (val.indexOf('.zip') !== -1) {
+                            prod.resolvedValue = await ExecuteComponent.openZipFile(result);
                         } else {
                             prod.resolvedValue = '`' + result + '`';
                         }
@@ -223,6 +226,20 @@ export class ExecuteComponent {
                 }
             }
         }
+    }
+
+    static async openZipFile(zipFile) {
+        let result = '{';
+        await JSZip.loadAsync(zipFile).then(async function (zip) {
+            for (const filename of Object.keys(zip.files)) {
+                const splittedNames = filename.split('/').slice(1).join('/');
+                await zip.files[filename].async('text').then(function (fileData) {
+                    result += `"${splittedNames}": \`${fileData.replace(/\\/g, '\\\\')}\`,`;
+                });
+            }
+        });
+        result += '}';
+        return result;
     }
 
     async execute(testing?: boolean) {

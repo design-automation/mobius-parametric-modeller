@@ -487,9 +487,13 @@ export class CodeUtils {
                     resolve('HTTP Request Error: Unable to retrieve file from ' + url);
                     return '';
                 }
-                return res.text();
-            }).then(body => {
-                resolve(body.replace(/(\\[bfnrtv\'\"\\])/g, '\\$1'));
+                if (url.indexOf('.zip') !== -1) {
+                    res.blob().then(body => resolve(body));
+                } else {
+                    res.text().then(body => resolve(body.replace(/(\\[bfnrtv\'\"\\])/g, '\\$1')));
+                }
+            // }).then(body => {
+            //     resolve(body.replace(/(\\[bfnrtv\'\"\\])/g, '\\$1'));
             });
 
             // const request = new XMLHttpRequest();

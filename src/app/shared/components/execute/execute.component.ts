@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { DataOutputService } from '@shared/services/dataOutput.service';
 import { SaveFileComponent } from '@shared/components/file';
 import { _parameterTypes, _varString } from '@assets/core/_parameterTypes';
+import { isArray } from 'util';
 
 export const pythonList = `
 function pythonList(x, l){
@@ -125,8 +126,15 @@ export class ExecuteComponent {
         this.isDev = isDevMode();
     }
 
-    static async resolveImportedUrl(prodList: IProcedure[], isMainFlowchart?: boolean) {
-        for (const prod of prodList) {
+    static async resolveImportedUrl(prodList: IProcedure[]|INode, isMainFlowchart?: boolean) {
+        if (!isArray(prodList)) {
+            await ExecuteComponent.resolveImportedUrl(prodList.procedure, isMainFlowchart);
+            if (prodList.localFunc) {
+                await ExecuteComponent.resolveImportedUrl(prodList.localFunc, isMainFlowchart);
+            }
+            return;
+        }
+        for (const prod of <IProcedure[]> prodList) {
             if (prod.children) {await  ExecuteComponent.resolveImportedUrl(prod.children); }
             if (!prod.enabled) {
                 continue;
@@ -254,8 +262,7 @@ export class ExecuteComponent {
             // resolve all urls (or local storage files) in the node, calling the url and retrieving the data
             // the data is then saved as resolvedValue in its respective argument in the procedure (in JSON format)
             try {
-                await  ExecuteComponent.resolveImportedUrl(node.procedure, true);
-                await  ExecuteComponent.resolveImportedUrl(node.localFunc, true);
+                await  ExecuteComponent.resolveImportedUrl(node, true);
             } catch (ex) {
                 node.hasError = true;
                 this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
@@ -300,13 +307,13 @@ export class ExecuteComponent {
         // resolve urls for each imported functions and subFunctions
         for (const func of this.dataService.flowchart.functions) {
             for (const node of func.flowchart.nodes) {
-                await  ExecuteComponent.resolveImportedUrl(node.procedure, false);
+                await  ExecuteComponent.resolveImportedUrl(node, false);
             }
         }
         if (this.dataService.flowchart.subFunctions) {
             for (const func of this.dataService.flowchart.subFunctions) {
                 for (const node of func.flowchart.nodes) {
-                    await  ExecuteComponent.resolveImportedUrl(node.procedure, false);
+                    await  ExecuteComponent.resolveImportedUrl(node, false);
                 }
             }
         }

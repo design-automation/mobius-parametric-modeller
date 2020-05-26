@@ -3,7 +3,8 @@
         <as-split-area [size]="100 - getSplit()">
             <panel-header [flowchart]='getFlowchart()'></panel-header>
             <!-- viewchild content -->
-            <div class='content__panel' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'>
+            <div class='content__panel'>
+            <!-- <div class='content__panel' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'> -->
                 <div class='container--editor'>
                     <div class='container__content'>
                         <!-- toolset on the left side -->

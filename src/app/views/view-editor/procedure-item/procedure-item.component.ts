@@ -404,6 +404,7 @@ export class ProcedureItemComponent implements OnDestroy {
     onInputFocus(index: number, isVar?: boolean) {
         for (const prod of this.dataService.node.state.procedure) {
             prod.selected = false;
+            prod.lastSelected = false;
         }
         if (index === -1) { return; }
 

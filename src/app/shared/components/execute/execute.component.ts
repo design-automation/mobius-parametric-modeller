@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
 import { DataOutputService } from '@shared/services/dataOutput.service';
 import { SaveFileComponent } from '@shared/components/file';
 import { _parameterTypes, _varString } from '@assets/core/_parameterTypes';
+import { isArray } from 'util';
+import JSZip from 'jszip';
 
 export const pythonList = `
 function pythonList(x, l){
@@ -125,8 +127,15 @@ export class ExecuteComponent {
         this.isDev = isDevMode();
     }
 
-    static async resolveImportedUrl(prodList: IProcedure[], isMainFlowchart?: boolean) {
-        for (const prod of prodList) {
+    static async resolveImportedUrl(prodList: IProcedure[]|INode, isMainFlowchart?: boolean) {
+        if (!isArray(prodList)) {
+            await ExecuteComponent.resolveImportedUrl(prodList.procedure, isMainFlowchart);
+            if (prodList.localFunc) {
+                await ExecuteComponent.resolveImportedUrl(prodList.localFunc, isMainFlowchart);
+            }
+            return;
+        }
+        for (const prod of <IProcedure[]> prodList) {
             if (prod.children) {await  ExecuteComponent.resolveImportedUrl(prod.children); }
             if (!prod.enabled) {
                 continue;
@@ -156,33 +165,81 @@ export class ExecuteComponent {
                         const result = await CodeUtils.getURLContent(val);
                         if (result === undefined) {
                             prod.resolvedValue = arg.value;
-                        } else if (result.indexOf('HTTP Request Error') !== -1) {
+                        } else if (result.indexOf && result.indexOf('HTTP Request Error') !== -1) {
                             throw new Error(result);
+                        } else if (val.indexOf('.zip') !== -1) {
+                            prod.resolvedValue = await ExecuteComponent.openZipFile(result);
                         } else {
                             prod.resolvedValue = '`' + result + '`';
                         }
                         break;
+                    } else if ((arg.value[0] !== '"' && arg.value[0] !== '\'')) {
+                        prod.resolvedValue = null;
+                        break;
                     } else {
-                        const backup_list = JSON.parse(localStorage.getItem('mobius_backup_list'));
-                        const val = arg.value.replace(/\"|\'/g, '');
-                        if (backup_list.indexOf(val) !== -1) {
-                            const result = await SaveFileComponent.loadFromFileSystem(val);
-                            if (!result || result === 'error') {
+                        let val = arg.value.slice(1, -1).trim();
+                        if (val.length > 1 && val[0] === '{') {
+                            prod.resolvedValue = null;
+                            break;
+                        }
+                        val = val.replace(/\"|\'/g, '');
+                        const backup_list: string[] = JSON.parse(localStorage.getItem('mobius_backup_list'));
+                        if (val.indexOf('*') !== -1) {
+                            const splittedVal = val.split('*');
+                            const start = splittedVal[0] === '' ? null : splittedVal[0];
+                            const end = splittedVal[1] === '' ? null : splittedVal[1];
+                            let result = '{';
+                            for (const backup_name of backup_list) {
+                                let valid_check = true;
+                                if (start && !backup_name.startsWith(start)) {
+                                    valid_check = false;
+                                }
+                                if (end && !backup_name.endsWith(end)) {
+                                    valid_check = false;
+                                }
+                                if (valid_check) {
+                                    const backup_file = await SaveFileComponent.loadFromFileSystem(backup_name);
+                                    result += `"${backup_name}": \`${backup_file.replace(/\\/g, '\\\\')}\`,`;
+                                }
+                            }
+                            result += '}';
+                            prod.resolvedValue = result;
+                            break;
+                        } else {
+                            if (backup_list.indexOf(val) !== -1) {
+                                const result = await SaveFileComponent.loadFromFileSystem(val);
+                                if (!result || result === 'error') {
+                                    prod.hasError = true;
+                                    throw(new Error(`File named ${val} does not exist in the local storage`));
+                                    // prod.resolvedValue = arg.value;
+                                } else {
+                                    prod.resolvedValue = '`' + result + '`';
+                                    break;
+                                }
+                            } else {
                                 prod.hasError = true;
                                 throw(new Error(`File named ${val} does not exist in the local storage`));
-                                // prod.resolvedValue = arg.value;
-                            } else {
-                                prod.resolvedValue = '`' + result + '`';
                             }
-                        } else {
-                            prod.hasError = true;
-                            throw(new Error(`File named ${val} does not exist in the local storage`));
                         }
                     }
                     break;
                 }
             }
         }
+    }
+
+    static async openZipFile(zipFile) {
+        let result = '{';
+        await JSZip.loadAsync(zipFile).then(async function (zip) {
+            for (const filename of Object.keys(zip.files)) {
+                // const splittedNames = filename.split('/').slice(1).join('/');
+                await zip.files[filename].async('text').then(function (fileData) {
+                    result += `"${filename}": \`${fileData.replace(/\\/g, '\\\\')}\`,`;
+                });
+            }
+        });
+        result += '}';
+        return result;
     }
 
     async execute(testing?: boolean) {
@@ -193,7 +250,7 @@ export class ExecuteComponent {
         if (this.dataService.consoleClear) {
             this.dataService.clearLog();
         }
-        SaveFileComponent.clearModelData(this.dataService.flowchart, null, false);
+        SaveFileComponent.clearModelData(this.dataService.flowchart, null, false, false);
 
         if (this.dataService.mobiusSettings.debug === undefined) {
             this.dataService.mobiusSettings.debug = true;
@@ -222,7 +279,7 @@ export class ExecuteComponent {
             // resolve all urls (or local storage files) in the node, calling the url and retrieving the data
             // the data is then saved as resolvedValue in its respective argument in the procedure (in JSON format)
             try {
-                await  ExecuteComponent.resolveImportedUrl(node.procedure, true);
+                await  ExecuteComponent.resolveImportedUrl(node, true);
             } catch (ex) {
                 node.hasError = true;
                 this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
@@ -267,13 +324,13 @@ export class ExecuteComponent {
         // resolve urls for each imported functions and subFunctions
         for (const func of this.dataService.flowchart.functions) {
             for (const node of func.flowchart.nodes) {
-                await  ExecuteComponent.resolveImportedUrl(node.procedure, false);
+                await  ExecuteComponent.resolveImportedUrl(node, false);
             }
         }
         if (this.dataService.flowchart.subFunctions) {
             for (const func of this.dataService.flowchart.subFunctions) {
                 for (const node of func.flowchart.nodes) {
-                    await  ExecuteComponent.resolveImportedUrl(node.procedure, false);
+                    await  ExecuteComponent.resolveImportedUrl(node, false);
                 }
             }
         }
@@ -663,6 +720,11 @@ export class ExecuteComponent {
                     if (prevWindowVar[v]) {
                         window[v] = prevWindowVar[v];
                     }
+                }
+            }
+            for (const i in window) {
+                if (i[i.length - 1] === '_' && i[i.length - 2] !== '_' && i[0] !== '_') {
+                    delete window[i];
                 }
             }
 

@@ -374,13 +374,14 @@ export class SaveFileComponent implements OnDestroy{
 
         // make a copy of the flowchart
         const savedfile = circularJSON.parse(circularJSON.stringify(f));
-        SaveFileComponent.clearModelData(savedfile.flowchart, modelMap);
 
         // set the nodes' input/output in the original flowchart again
         for (const node of f.flowchart.nodes) {
             node.model = modelMap[node.id];
             modelMap[node.id] = null;
         }
+
+        SaveFileComponent.clearModelData(savedfile.flowchart, {});
 
         // reset each node's id in the new copy of the flowchart --> the same node will
         // have different id everytime it's saved

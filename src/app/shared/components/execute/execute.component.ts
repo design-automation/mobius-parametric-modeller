@@ -232,9 +232,9 @@ export class ExecuteComponent {
         let result = '{';
         await JSZip.loadAsync(zipFile).then(async function (zip) {
             for (const filename of Object.keys(zip.files)) {
-                const splittedNames = filename.split('/').slice(1).join('/');
+                // const splittedNames = filename.split('/').slice(1).join('/');
                 await zip.files[filename].async('text').then(function (fileData) {
-                    result += `"${splittedNames}": \`${fileData.replace(/\\/g, '\\\\')}\`,`;
+                    result += `"${filename}": \`${fileData.replace(/\\/g, '\\\\')}\`,`;
                 });
             }
         });

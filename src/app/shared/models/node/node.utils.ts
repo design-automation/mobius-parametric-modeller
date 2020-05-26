@@ -111,6 +111,7 @@ export abstract class NodeUtils {
     static deselect_procedure(node: INode) {
         for (const prod of node.state.procedure) {
             prod.selected = false;
+            prod.lastSelected = false;
         }
         node.state.procedure = [];
         NodeUtils.check_procedure_selected([], node.localFunc);
@@ -134,6 +135,7 @@ export abstract class NodeUtils {
             }
             if (!check) {
                 prod.selected = false;
+                prod.lastSelected = false;
             }
         }
     }

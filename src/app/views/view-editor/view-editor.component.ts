@@ -129,6 +129,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         if ((<HTMLElement>event.target).nodeName === 'INPUT') {
             for (const prod of this.dataService.node.state.procedure) {
                 prod.selected = false;
+                prod.lastSelected = false;
             }
             this.dataService.node.state.procedure = [];
         }
@@ -251,6 +252,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         while (i < node.state.procedure.length) {
             if (node.state.procedure[i].type === ProcedureTypes.Blank || node.state.procedure[i].type === ProcedureTypes.Return) {
                 node.state.procedure[i].selected = false;
+                node.state.procedure[i].lastSelected = false;
                 node.state.procedure.splice(i, 1);
             } else {
                 i += 1;
@@ -270,10 +272,35 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     // cut selected procedures
     cutProd() {
         const node = this.dataService.node;
+        let tobeSelected;
+        for (const selected of node.state.procedure) {
+            if (!selected.lastSelected) {
+                continue;
+            }
+            let prodList;
+            if (selected.parent) {
+                prodList = selected.parent.children;
+            } else if (selected.type === ProcedureTypes.LocalFuncDef) {
+                prodList = node.localFunc;
+            } else {
+                prodList = node.procedure;
+            }
+            let reached_last_selected = false;
+            for (const prod of prodList) {
+                if (prod.lastSelected) {
+                    reached_last_selected = true;
+                }
+                if (reached_last_selected && !prod.selected) {
+                    tobeSelected = prod;
+                    break;
+                }
+            }
+        }
         let i = 0;
         while (i < node.state.procedure.length) {
             if (node.state.procedure[i].type === ProcedureTypes.Blank || node.state.procedure[i].type === ProcedureTypes.Return) {
                 node.state.procedure[i].selected = false;
+                node.state.procedure[i].lastSelected = false;
                 node.state.procedure.splice(i, 1);
             } else {
                 i += 1;
@@ -309,7 +336,8 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         this.dataService.registerEdtAction(redoActions);
         checkNodeValidity(this.dataService.node);
 
-        NodeUtils.deselect_procedure(node);
+        // NodeUtils.deselect_procedure(node);
+        NodeUtils.select_procedure(node, tobeSelected, false, false);
 
         this.dataService.notifyMessage(`Cut ${copiedProds.length} Procedures`);
     }
@@ -404,6 +432,30 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
     deleteSelectedProds() {
         const node = this.dataService.node;
+        let tobeSelected;
+        for (const selected of node.state.procedure) {
+            if (!selected.lastSelected) {
+                continue;
+            }
+            let prodList;
+            if (selected.parent) {
+                prodList = selected.parent.children;
+            } else if (selected.type === ProcedureTypes.LocalFuncDef) {
+                prodList = node.localFunc;
+            } else {
+                prodList = node.procedure;
+            }
+            let reached_last_selected = false;
+            for (const prod of prodList) {
+                if (prod.lastSelected) {
+                    reached_last_selected = true;
+                }
+                if (reached_last_selected && !prod.selected) {
+                    tobeSelected = prod;
+                    break;
+                }
+            }
+        }
         const redoActions = [];
         for (const prod of node.state.procedure) {
             let prodList: IProcedure[];
@@ -415,6 +467,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 prodList = node.procedure;
             }
             prod.selected = false;
+            prod.lastSelected = false;
             for (let i = 1; i < prodList.length; i++) {
                 if (prodList[i].ID === prod.ID) {
                     redoActions.unshift({'type': 'del', 'parent': prodList[i].parent, 'index': i, 'prod': prodList[i]});
@@ -425,7 +478,8 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         }
         this.dataService.registerEdtAction(redoActions);
         checkNodeValidity(this.dataService.node);
-        this.dataService.node.state.procedure = [];
+        NodeUtils.select_procedure(node, tobeSelected, false, false);
+        // this.dataService.node.state.procedure = [];
     }
 
     @HostListener('window:keyup', ['$event'])

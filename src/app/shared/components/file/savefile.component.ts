@@ -388,10 +388,11 @@ export class SaveFileComponent implements OnDestroy{
         // (to track if one single .mob file is passed around among the students)
         for (const node of savedfile.flowchart.nodes) {
             node.id = IdGenerator.getNodeID();
-            for (const prod of node.state.procedure) {
-                prod.selected = false;
-            }
-            node.state.procedure = [];
+            // for (const prod of node.state.procedure) {
+            //     prod.selected = false;
+            //     prod.lastSelected = false;
+            // }
+            // node.state.procedure = [];
         }
 
         // **** need to modify this when changing the input's constant function:

@@ -370,10 +370,11 @@ export class SaveFileComponent implements OnDestroy{
         // clear the nodes' input/output in the flowchart, save them in modelMap
         // (save time on JSON stringify + parse)
         const modelMap = {};
-        SaveFileComponent.clearModelData(f.flowchart, modelMap);
+        SaveFileComponent.clearModelData(f.flowchart, modelMap, false, false);
 
         // make a copy of the flowchart
         const savedfile = circularJSON.parse(circularJSON.stringify(f));
+        SaveFileComponent.clearModelData(savedfile.flowchart, modelMap);
 
         // set the nodes' input/output in the original flowchart again
         for (const node of f.flowchart.nodes) {

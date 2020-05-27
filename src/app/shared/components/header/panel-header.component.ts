@@ -175,16 +175,6 @@ export class PanelHeaderComponent implements OnDestroy {
         return this.dataService.dialogType === type;
     }
 
-    getBackupFiles() {
-        const items = localStorage.getItem('mobius_backup_list');
-        // console.log(items)
-        this.backupDates = JSON.parse(localStorage.getItem('mobius_backup_date_dict'));
-        if (!items) {
-            return [];
-        }
-        return JSON.parse(items);
-    }
-
     updateSettings() {
         this.settings.execute = (<HTMLInputElement>document.getElementById('settings-execute')).checked;
         this.settings.debug = (<HTMLInputElement>document.getElementById('settings-debug')).checked;
@@ -423,6 +413,17 @@ export class PanelHeaderComponent implements OnDestroy {
         }
     }
 
+    getBackupFiles() {
+        const items = localStorage.getItem('mobius_backup_list');
+        // console.log(items)
+        this.backupDates = JSON.parse(localStorage.getItem('mobius_backup_date_dict'));
+        if (!items) {
+            return [];
+        }
+        return JSON.parse(items);
+    }
+
+
     deleteBackup(event: MouseEvent, filecode: string) {
         event.stopPropagation();
         for (filecode of this.selectedBackups) {
@@ -471,18 +472,53 @@ export class PanelHeaderComponent implements OnDestroy {
         SaveFileComponent.saveToLocalStorage(selectedFile.name, <string> await p);
     }
 
-    selectBackup(backup) {
-        for(let i = 0; i < this.selectedBackups.length; i++) {
-            if (this.selectedBackups[i] === backup) {
-                this.selectedBackups.splice(i, 1);
-                return;
+    selectBackup(backup: string, event: MouseEvent) {
+        event.stopPropagation();
+        if (event.shiftKey && this.selectedBackups.length > 0) {
+            const backup_items = JSON.parse(localStorage.getItem('mobius_backup_list'));
+            let indexFrom: number, indexTo: number;
+
+            for (let i = 0; i < backup_items.length; i++) {
+                if (backup_items[i] === this.selectedBackups[this.selectedBackups.length - 1]) {
+                    indexFrom = i;
+                }
+                if (backup_items[i] === backup) {
+                    indexTo = i;
+                }
             }
+            let step = 1;
+            if (indexFrom > indexTo) {
+                step = -1;
+            }
+            indexTo += step;
+
+            if (this.selectedBackups.indexOf(backup) === -1) {
+                for (let i = indexFrom; i !== indexTo; i += step) {
+                    if (this.selectedBackups.indexOf(backup_items[i]) === -1) {
+                        this.selectedBackups.push(backup_items[i]);
+                    }
+                }
+            } else {
+                for (let i = indexFrom; i !== indexTo; i += step) {
+                    const backup_index = this.selectedBackups.indexOf(backup_items[i]);
+                    if (backup_index !== -1) {
+                        this.selectedBackups.splice(backup_index, 1);
+                    }
+                }
+            }
+        } else {
+            for (let i = 0; i < this.selectedBackups.length; i++) {
+                if (this.selectedBackups[i] === backup) {
+                    this.selectedBackups.splice(i, 1);
+                    return;
+                }
+            }
+            this.selectedBackups.push(backup);
         }
-        this.selectedBackups.push(backup);
     }
 
     selectedBackup(backup) {
-        for( const b of this.selectedBackups) {
+        for (const b of this.selectedBackups) {
             if (b === backup) {
                 return true;
             }

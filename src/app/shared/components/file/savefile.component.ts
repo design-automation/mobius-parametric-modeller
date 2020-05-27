@@ -154,7 +154,6 @@ export class SaveFileComponent implements OnDestroy{
             }, function(e) { console.log('Error', e); }
         );
         function removeFromFS(fs) {
-            console.log(filecode);
             fs.root.getFile(filecode, {create: false}, function(fileEntry) {
                 fileEntry.remove(function() {
                     // console.log('File removed.');

@@ -179,7 +179,8 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     add_prod(data: {type: ProcedureTypes, data: IFunction}): void {
         if (this.dataService.focusedInputProd && this.dataService.node.state.procedure.length === 0) {
             this.dataService.focusedInputProd.selected = true;
-            this.dataService.node.state.procedure.push(this.dataService.focusedInputProd)
+            this.dataService.focusedInputProd.lastSelected = true;
+            this.dataService.node.state.procedure.push(this.dataService.focusedInputProd);
             this.dataService.focusedInputProd = null;
         }
         NodeUtils.add_procedure(this.dataService.node, data.type, data.data);

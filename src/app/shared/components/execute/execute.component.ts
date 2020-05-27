@@ -127,16 +127,16 @@ export class ExecuteComponent {
         this.isDev = isDevMode();
     }
 
-    static async resolveImportedUrl(prodList: IProcedure[]|INode, isMainFlowchart?: boolean) {
+    static async resolveImportedUrl(prodList: IProcedure[]|INode, isMainFlowchart?: boolean, isStartNode = false) {
         if (!isArray(prodList)) {
-            await ExecuteComponent.resolveImportedUrl(prodList.procedure, isMainFlowchart);
+            await ExecuteComponent.resolveImportedUrl(prodList.procedure, isMainFlowchart, isStartNode);
             if (prodList.localFunc) {
-                await ExecuteComponent.resolveImportedUrl(prodList.localFunc, isMainFlowchart);
+                await ExecuteComponent.resolveImportedUrl(prodList.localFunc, isMainFlowchart, isStartNode);
             }
             return;
         }
         for (const prod of <IProcedure[]> prodList) {
-            if (prod.children) {await  ExecuteComponent.resolveImportedUrl(prod.children); }
+            if (prod.children) {await  ExecuteComponent.resolveImportedUrl(prod.children, isMainFlowchart, isStartNode); }
             if (!prod.enabled) {
                 continue;
             }
@@ -149,7 +149,7 @@ export class ExecuteComponent {
                 }
                 continue;
             }
-            if (prod.type !== ProcedureTypes.MainFunction) {continue; }
+            if (prod.type !== ProcedureTypes.MainFunction || (isStartNode && !isMainFlowchart)) {continue; }
             for (const func of _parameterTypes.urlFunctions) {
                 const funcMeta = func.split('.');
                 if (prod.meta.module === funcMeta[0] && prod.meta.name === funcMeta[1]) {
@@ -279,7 +279,7 @@ export class ExecuteComponent {
             // resolve all urls (or local storage files) in the node, calling the url and retrieving the data
             // the data is then saved as resolvedValue in its respective argument in the procedure (in JSON format)
             try {
-                await  ExecuteComponent.resolveImportedUrl(node, true);
+                await  ExecuteComponent.resolveImportedUrl(node, true, node.type === 'start');
             } catch (ex) {
                 node.hasError = true;
                 this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
@@ -324,13 +324,33 @@ export class ExecuteComponent {
         // resolve urls for each imported functions and subFunctions
         for (const func of this.dataService.flowchart.functions) {
             for (const node of func.flowchart.nodes) {
-                await  ExecuteComponent.resolveImportedUrl(node, false);
+                try {
+                    await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
+                } catch (ex) {
+                    document.getElementById('spinner-off').click();
+                    document.getElementById('Console').click();
+                    this.dataService.log(`<h4 style="padding: 2px 0px 2px 0px; color:red;">` +
+                                         `Error in global function ${func.name}: ${ex.message}</h4>`);
+                    const _category = this.isDev ? 'dev' : 'execute';
+                    this.googleAnalyticsService.trackEvent(_category, `error: ${ex.name}`, 'click', performance.now() - this.startTime);
+                    throw ex;
+                }
             }
         }
         if (this.dataService.flowchart.subFunctions) {
             for (const func of this.dataService.flowchart.subFunctions) {
                 for (const node of func.flowchart.nodes) {
-                    await  ExecuteComponent.resolveImportedUrl(node, false);
+                    try {
+                        await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
+                    } catch (ex) {
+                        document.getElementById('spinner-off').click();
+                        document.getElementById('Console').click();
+                        this.dataService.log(`<h4 style="padding: 2px 0px 2px 0px; color:red;">` +
+                                             `Error in global function ${func.name.split('_')[0]}: ${ex.message}</h4>`);
+                        const _category = this.isDev ? 'dev' : 'execute';
+                        this.googleAnalyticsService.trackEvent(_category, `error: ${ex.name}`, 'click', performance.now() - this.startTime);
+                        throw ex;
+                    }
                 }
             }
         }

@@ -534,6 +534,10 @@ export class PanelHeaderComponent implements OnDestroy {
         return true;
     }
 
+    prevDef(event) {
+        event.preventDefault();
+    }
+
     @HostListener('window:click', ['$event'])
     onWindowClick(event: MouseEvent) {
         if ((<HTMLElement>event.target).id === 'addBackup' || (<HTMLElement>event.target).id === 'addBackupButton') {

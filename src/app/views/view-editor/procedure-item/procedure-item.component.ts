@@ -406,6 +406,7 @@ export class ProcedureItemComponent implements OnDestroy {
             prod.selected = false;
             prod.lastSelected = false;
         }
+        this.dataService.node.state.procedure = [];
         if (index === -1) { return; }
 
         let topProd = this.data;
@@ -413,7 +414,6 @@ export class ProcedureItemComponent implements OnDestroy {
         let topProdList = this.dataService.node.procedure;
         if (topProd.type === ProcedureTypes.LocalFuncDef) { topProdList = [topProd]; }
 
-        this.dataService.node.state.procedure = [];
         if (this.data.args[index].invalidVar && typeof this.data.args[index].invalidVar === 'string') {
             this.emitNotifyError(this.data.args[index].invalidVar);
         } else if (isVar) {

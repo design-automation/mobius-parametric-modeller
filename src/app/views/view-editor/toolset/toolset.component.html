@@ -238,7 +238,7 @@
                 <div [hidden]="!getNode().state.show_func">
                     <button id='CreateLocal' class="accordion inline--cat" 
                     (mousedown)='preventfocus($event)'
-                    (click)='toggleAccordion("CreateLocal", true)'>Create Local</button>
+                    (click)='toggleAccordion("CreateLocal")'>Create Local</button>
                     <div class="panel">
                         <ul class='toolset__functions--subset user_set'>
                             <li 
@@ -253,7 +253,7 @@
                 <div [hidden]="!getNode().state.show_code">
                     <button id='localFunc' class="accordion inline--cat" 
                     (mousedown)='preventfocus($event)'
-                    (click)='toggleAccordion("localFunc", true)'
+                    (click)='toggleAccordion("localFunc")'
                     [disabled]='getNode().localFunc.length == 1'>Local Funcs</button>
                     <div class="panel">
                         <ul class='toolset__functions--subset user_set'>

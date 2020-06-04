@@ -200,7 +200,7 @@
         </div>
         <button id='addBackupButton' onclick="document.getElementById('addBackup').click();">+</button>
         <input id='addBackup' type="file" (change)="addBackup()" style=" display: none;"/>
-        <button class='deleteBackupButton' (click)="downloadBackup($event)"><mat-icon class='icon'>cloud_download_outline</mat-icon></button>
+        <button class='downloadBackupButton' (click)="downloadBackup($event)"><mat-icon class='icon'>cloud_download_outline</mat-icon></button>
         <button class='deleteBackupButton' (click)="deleteBackup($event)"><mat-icon class='icon'>delete_outline</mat-icon></button>
     </div>
     <div class='globalFuncDialog' *ngIf='checkDialog("globalfunc")'>

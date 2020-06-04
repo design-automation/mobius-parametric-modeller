@@ -190,7 +190,10 @@
         <br>
         <div *ngFor='let backup of getBackupFiles()'>
             <ng-container *ngIf='backup!="___TEMP___.mob"'>
-                <input class="selectedBackup" type="checkbox" (click)="selectBackup(backup, $event)" [checked]='selectedBackup(backup)'>
+                <div class='div--chbox'>
+                    <input class="selectedBackup" type="checkbox" name={{backup}} [checked]='selectedBackup(backup)'>
+                    <label for={{backup}} (click)="selectBackup(backup, $event)" (mousedown)="prevDef($event)"></label>
+                </div>
                 <button class='loadBackupButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backup}}</button>
                 <button class='backupDateButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backupDates[backup]}}</button>
             </ng-container>

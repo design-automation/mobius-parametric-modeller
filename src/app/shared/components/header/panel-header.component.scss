@@ -290,6 +290,7 @@ button.mat-menu-item:hover{
             width: fit-content;
             min-width: 400px;
             margin-bottom: 2px;
+            margin-left: 20px;
             padding: 0px 5px 0px 12px;
             background-color: $color5;
             // color: $color1;
@@ -299,7 +300,7 @@ button.mat-menu-item:hover{
 
             &:disabled {
                 background-color: $color5-5;
-                color: $color3;
+                // color: $color3;
             }
         }
         .backupDateButton{
@@ -316,7 +317,7 @@ button.mat-menu-item:hover{
 
             &:disabled {
                 background-color: $color5-5;
-                color: $color3;
+                // color: $color3;
             }
         }
         .deleteBackupButton{
@@ -342,6 +343,12 @@ button.mat-menu-item:hover{
             background-color: $color5;
             color: $color1;
             display: inline-block;
+        }
+        .div--chbox{
+            position: absolute;
+            label {
+                top: 3px;
+            }
         }
     }
     .globalFuncDialog{

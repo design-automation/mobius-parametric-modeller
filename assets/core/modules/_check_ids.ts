@@ -69,6 +69,9 @@ export function checkIDs(fn_name: string, arg_name: string, arg: any, check_fns:
     let pass = false;
     const err_arr = [];
     let ret: TEntTypeIdx|TEntTypeIdx[];
+    if (arg === undefined) {
+        throw new Error(fn_name + ': ' + arg_name + ' is undefined' + '<br>');
+    }
     for (let i = 0; i < check_fns.length; i++) {
         try {
            ret =  check_fns[i](fn_name, arg_name, arg, IDchecks);

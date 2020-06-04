@@ -5,6 +5,9 @@ import { ArgCh, checkArgs } from './_check_args';
 // =========================================================================================================================================
 export function checkAttribName(fn_name: string, attrib_name: string): void {
     ArgCh.isStr(fn_name, 'attrib_name', attrib_name); // check arg is string
+    if (attrib_name === undefined) {
+        throw new Error (fn_name + ': ' + 'attrib_name is undefined');
+    }
     if (attrib_name.length === 0) {
         throw new Error (fn_name + ': ' + 'attrib_name not specified');
     }

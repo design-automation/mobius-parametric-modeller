@@ -186,7 +186,7 @@ export class CodeUtils {
                 } else {
                     codeStr.push(`let __return_value__ = __modules__.${_parameterTypes.return}(${returnArgVals.join(', ')});`);
                     if (isMainFlowchart) {
-                        codeStr.push(`if (__return_value__ !== null) {` +
+                        codeStr.push(`if (__return_value__ !== undefined && __return_value__ !== null) {` +
                                      `__params__.console.push('<p><b>Return: <i>' + ` +
                                      `__return_value__.toString().replace(/,/g,', ') + '</i></b></p>');` +
                                      `} else {` +

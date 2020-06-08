@@ -142,6 +142,7 @@ export class SaveJavascriptComponent {
             argString.replace(/\\/g, '\\\\') +  '\n\n' +
             `function ${funcName}(__modules__` + func.args.map(arg => ', ' + arg.name).join('') + `) {\n\n` +
             `__debug__ = ${this.dataService.mobiusSettings.debug};\n` +
+            `__model__ = null;\n` +
             '/** * **/' +
             _varString + `\n\n` +
             fnString +
@@ -149,9 +150,13 @@ export class SaveJavascriptComponent {
             mergeInputsFunc +
             printFunc +
             `\n\nconst __params__ = {};\n` +
-            `__params__["model"]= __modules__._model.__new__();\n` +
-            `__params__["model"].debug= __debug__;\n` +
-            `__params__["modules"]= __modules__;\n` +
+            `__params__["model"] = __modules__._model.__new__();\n` +
+            `if (__model__) {\n` +
+            `__params__["model"].setData(JSON.parse(__model__))\n` +
+            `}\n` +
+            `__params__["model"].debug = __debug__;\n` +
+            `__params__["console"] = [];\n` +
+            `__params__["modules"] = __modules__;\n` +
             `const result = exec_${funcName}(__params__` +
             func.args.map(arg => ', ' + arg.name).join('') +
             `);\n` +

@@ -77,27 +77,27 @@ export class GIMeta {
         this._posi_count = index;
     }
     public setNextVert(index: number): void {
-        this._posi_count = index;
+        this._vert_count = index;
     }
     public setNextEdge(index: number): void {
-        this._posi_count = index;
+        this._edge_count = index;
     }
     public setNextWire(index: number): void {
-        this._posi_count = index;
+        this._wire_count = index;
     }
     public setNextFace(index: number): void {
-        this._posi_count = index;
+        this._face_count = index;
     }
     public setNextPoint(index: number): void {
-        this._posi_count = index;
+        this._point_count = index;
     }
     public setNextPline(index: number): void {
-        this._posi_count = index;
+        this._pline_count = index;
     }
     public setNextPgon(index: number): void {
-        this._posi_count = index;
+        this._pgon_count = index;
     }
     public setNextColl(index: number): void {
-        this._posi_count = index;
+        this._coll_count = index;
     }
 }

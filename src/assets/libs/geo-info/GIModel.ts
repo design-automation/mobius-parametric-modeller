@@ -16,7 +16,6 @@ export class GIModel {
     public comparator: GIModelComparator;
     public threejs: GIModelThreejs;
     public debug = true;
-    private meta;
     /**
      * Constructor
      */
@@ -72,7 +71,7 @@ export class GIModel {
             attributes: this.attribs.io.getData(make_copy)
         };
     }
-    public setMeta(meta: GIMeta){
+    public setMeta(meta: GIMeta) {
         this.meta = meta;
     }
     public getMeta(): GIMeta {

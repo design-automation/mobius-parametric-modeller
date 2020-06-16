@@ -3,6 +3,7 @@ import { GIAttribs } from './GIAttribs';
 import { IModelData, IGeomPack, EEntType, Txyz, TEntAttribValuesArr, TAttribDataTypes, TEntity, TEntTypeIdx } from './common';
 import { GIModelComparator } from './GIModelComparator';
 import { GIModelThreejs } from './GIModelThreejs';
+import { GIMeta } from './GIMeta';
 
 /**
  * Geo-info model class.
@@ -14,6 +15,7 @@ export class GIModel {
     public comparator: GIModelComparator;
     public threejs: GIModelThreejs;
     public debug = true;
+    private meta;
     /**
      * Constructor
      */
@@ -35,6 +37,7 @@ export class GIModel {
     public merge(model: GIModel): void {
         const geom_maps: Map<number, number>[] = this.geom.io.merge(model.geom._geom_arrays);
         this.attribs.io.merge(model.attribs._attribs_maps, geom_maps);
+        this.setMeta(model.getMeta());
     }
     /**
      * Copys the data from a second model into this model.
@@ -66,6 +69,12 @@ export class GIModel {
             attributes: this.attribs.io.getData(make_copy)
         };
     }
+    public setMeta(meta: GIMeta){
+        this.meta = meta;
+    }
+    public getMeta(): GIMeta {
+        return this.meta;
+    }
     /**
      * Returns a copy of this model.
      * Any deleted entities will be removed.
@@ -85,6 +94,7 @@ export class GIModel {
     public clone(): GIModel {
         const model_clone: GIModel = new GIModel();
         model_clone.setData(this.getData(true)); // get data makes deep copy
+        model_clone.setMeta(this.getMeta());
         return model_clone;
     }
     /**

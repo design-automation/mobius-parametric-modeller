@@ -1,4 +1,5 @@
 import {__new__, __merge__} from './modules/_model';
+import { GIMeta } from '@assets/libs/geo-info/GIMeta';
 
 export const _parameterTypes = {
     constList: '__constList__',
@@ -9,6 +10,8 @@ export const _parameterTypes = {
 
     new: '_model.__new__',
     newFn: __new__,
+
+    newMeta: GIMeta,
 
     merge: '_model.__merge__',
     mergeFn: __merge__,

@@ -138,7 +138,8 @@ function _importGI(__model__: GIModel, model_data: string): number {
     const num_ents_before: number[] = __model__.geom.query.numEntsAll(true);
     // import
     const gi_json: IModelData = JSON.parse(model_data) as IModelData;
-    const gi_model: GIModel = new GIModel(gi_json);
+    const gi_model: GIModel = new GIModel();
+    gi_model.setData(gi_json);
     __model__.merge(gi_model);
     // get number of ents after merge
     const num_ents_after: number[] = __model__.geom.query.numEntsAll(true);

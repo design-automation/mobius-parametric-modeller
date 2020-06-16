@@ -415,7 +415,8 @@ function convertString(value) {
  */
 export function ModelCompare(__model__: GIModel, gi_model: string, method: _ECOmpareMethod): string {
     const gi_obj: IModelData = JSON.parse(gi_model) as IModelData;
-    const other_model = new GIModel(gi_obj);
+    const other_model = new GIModel();
+    other_model.setData(gi_obj);
     let result: {score: number, total: number, comment: string} = null;
     // compare function has three boolean args
     // normalize: boolean

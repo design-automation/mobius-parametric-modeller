@@ -84,6 +84,9 @@ export function Rectangle(__model__: GIModel, origin: Txyz|TPlane, size: number|
         checkArgs(fn_name, 'size', size, [ArgCh.isNum, ArgCh.isXY]);
     }
     // --- Error Check ---
+
+    console.log("META = ", __model__.meta);
+
     // create the matrix one time
     let matrix: Matrix4;
     const origin_is_plane = getArrDepth(origin) === 2;

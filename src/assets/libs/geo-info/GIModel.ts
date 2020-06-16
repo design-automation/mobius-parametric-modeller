@@ -10,6 +10,7 @@ import { GIMeta } from './GIMeta';
  */
 export class GIModel {
     [x: string]: any; // TODO: What is this???
+    public meta: GIMeta;
     public geom: GIGeom;
     public attribs: GIAttribs;
     public comparator: GIModelComparator;
@@ -19,14 +20,16 @@ export class GIModel {
     /**
      * Constructor
      */
-    constructor(model_data?: IModelData) {
+    // constructor(model_data?: IModelData) {
+    constructor() {
+        this.meta = new GIMeta();
         this.geom = new GIGeom(this);
         this.attribs = new GIAttribs(this);
         this.comparator = new GIModelComparator(this);
         this.threejs = new GIModelThreejs(this);
-        if (model_data) {
-            this.setData(model_data);
-        }
+        // if (model_data) {
+        //     this.setData(model_data);
+        // }
     }
     /**
      * Copys the data from a second model into this model.
@@ -83,6 +86,7 @@ export class GIModel {
      */
     public copy(): GIModel {
         const model_copy: GIModel = new GIModel();
+        model_copy.meta = this.meta;
         model_copy.mergeAndPurge(this);
         return model_copy;
     }
@@ -93,6 +97,7 @@ export class GIModel {
      */
     public clone(): GIModel {
         const model_clone: GIModel = new GIModel();
+        model_clone.meta = this.meta;
         model_clone.setData(this.getData(true)); // get data makes deep copy
         model_clone.setMeta(this.getMeta());
         return model_clone;
@@ -102,6 +107,7 @@ export class GIModel {
      */
     public purge(): void {
         const model_copy: GIModel = new GIModel();
+        model_copy.meta = this.meta;
         model_copy.mergeAndPurge(this);
         this.setData(model_copy.getData());
     }

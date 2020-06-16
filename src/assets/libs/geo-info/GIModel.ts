@@ -19,14 +19,16 @@ export class GIModel {
     /**
      * Constructor
      */
-    constructor(model_data?: IModelData) {
+    // constructor(model_data?: IModelData) {
+    constructor() {
+        this.meta = new GIMeta();
         this.geom = new GIGeom(this);
         this.attribs = new GIAttribs(this);
         this.comparator = new GIModelComparator(this);
         this.threejs = new GIModelThreejs(this);
-        if (model_data) {
-            this.setData(model_data);
-        }
+        // if (model_data) {
+        //     this.setData(model_data);
+        // }
     }
     /**
      * Copys the data from a second model into this model.

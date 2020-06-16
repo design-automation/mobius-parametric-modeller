@@ -4,6 +4,7 @@
 export class GIMeta {
     private _posi_count: number;
     private _vert_count: number;
+    private _tri_count: number;
     private _edge_count: number;
     private _wire_count: number;
     private _face_count: number;
@@ -17,6 +18,7 @@ export class GIMeta {
     constructor() {
         this._posi_count = 0;
         this._vert_count = 0;
+        this._tri_count = 0;
         this._edge_count = 0;
         this._wire_count = 0;
         this._face_count = 0;
@@ -35,6 +37,11 @@ export class GIMeta {
     public nextVert(): number {
         const index: number = this._vert_count;
         this._vert_count += 1;
+        return index;
+    }
+    public nextTri(): number {
+        const index: number = this._tri_count;
+        this._tri_count += 1;
         return index;
     }
     public nextEdge(): number {
@@ -78,6 +85,9 @@ export class GIMeta {
     }
     public setNextVert(index: number): void {
         this._vert_count = index;
+    }
+    public setNextTri(index: number): void {
+        this._tri_count = index;
     }
     public setNextEdge(index: number): void {
         this._edge_count = index;

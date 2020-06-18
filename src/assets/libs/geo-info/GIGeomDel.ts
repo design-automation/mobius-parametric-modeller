@@ -31,6 +31,7 @@ export class GIGeomDel {
         // loop
         const deleted_posis_i: number[] = [];
         for (const posi_i of posis_i) {
+            if (this._geom_arrays.up_posis_verts[posi_i] === undefined) { continue; } // already deleted
             // update up arrays
             const verts_i: number[] = this._geom_arrays.up_posis_verts[posi_i];
             if ( !verts_i || verts_i.length === 0) { // only delete posis with no verts
@@ -85,12 +86,11 @@ export class GIGeomDel {
             const posi_i: number = this._geom_arrays.dn_verts_posis[vert_i];
             // delete the point and check collections
             delete this._geom_arrays.dn_points_verts[point_i];
-            for (const coll of this._geom_arrays.dn_colls_objs) {
-                if (coll !== undefined) {
-                    const coll_points_i: number[] = coll[1];
-                    arrRem(coll_points_i, point_i);
-                }
-            }
+            delete this._geom_arrays.dn_points_verts[point_i];
+            this._geom_arrays.dn_colls_objs.forEach( coll => {
+                const coll_points_i: number[] = coll[3];
+                arrRem(coll_points_i, point_i);
+            });
             // delete the vert by setting the up and down arrays to undefined
             delete this._geom_arrays.dn_verts_posis[vert_i];
             delete this._geom_arrays.up_verts_points[vert_i];
@@ -124,12 +124,11 @@ export class GIGeomDel {
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PLINE, pline_i);
             // delete the pline and check collections
             delete this._geom_arrays.dn_plines_wires[pline_i];
-            for (const coll of this._geom_arrays.dn_colls_objs) {
-                if (coll !== undefined) {
-                    const coll_plines_i: number[] = coll[2];
-                    arrRem(coll_plines_i, pline_i);
-                }
-            }
+            delete this._geom_arrays.up_plines_colls[pline_i];
+            this._geom_arrays.dn_colls_objs.forEach( coll => {
+                const coll_plines_i: number[] = coll[3];
+                arrRem(coll_plines_i, pline_i);
+            });
             // delete the wire
             delete this._geom_arrays.dn_wires_edges[wire_i];
             delete this._geom_arrays.up_wires_plines[wire_i];
@@ -181,12 +180,11 @@ export class GIGeomDel {
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PGON, pgon_i);
             // delete the pgon and check the collections
             delete this._geom_arrays.dn_pgons_faces[pgon_i];
-            for (const coll of this._geom_arrays.dn_colls_objs) {
-                if (coll !== undefined) {
-                    const coll_pgons_i: number[] = coll[3];
-                    arrRem(coll_pgons_i, pgon_i);
-                }
-            }
+            delete this._geom_arrays.up_pgons_colls[pgon_i];
+            this._geom_arrays.dn_colls_objs.forEach( coll => {
+                const coll_pgons_i: number[] = coll[3];
+                arrRem(coll_pgons_i, pgon_i);
+            });
             // delete the face
             delete this._geom_arrays.dn_faces_wirestris[face_i];
             delete this._geom_arrays.up_faces_pgons[face_i];
@@ -248,16 +246,19 @@ export class GIGeomDel {
             points_i.forEach(point_i =>  {
                 const other_colls_i: number[] = this._geom_arrays.up_points_colls[point_i];
                 arrRem(other_colls_i, coll_i);
+                if (other_colls_i.length === 0) { delete this._geom_arrays.up_points_colls[point_i]; }
             });
             const plines_i: number[] = coll[2];
             plines_i.forEach(pline_i =>  {
                 const other_colls_i: number[] = this._geom_arrays.up_plines_colls[pline_i];
                 arrRem(other_colls_i, coll_i);
+                if (other_colls_i.length === 0) { delete this._geom_arrays.up_plines_colls[pline_i]; }
             });
             const pgons_i: number[] = coll[3];
             pgons_i.forEach(pgon_i =>  {
                 const other_colls_i: number[] = this._geom_arrays.up_pgons_colls[pgon_i];
                 arrRem(other_colls_i, coll_i);
+                if (other_colls_i.length === 0) { delete this._geom_arrays.up_pgons_colls[pgon_i]; }
             });
             // down arrays
             delete this._geom_arrays.dn_colls_objs[coll_i];

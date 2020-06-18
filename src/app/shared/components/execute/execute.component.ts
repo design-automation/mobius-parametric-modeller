@@ -43,6 +43,29 @@ function duplicateModel(model){
     return result;
 }
 `;
+// export const mergeInputsFunc = `
+// function mergeInputs(models){
+//     const start = performance.now()
+//     let result = __modules__.${_parameterTypes.new}();
+//     try {
+//         result.debug = __debug__;
+//     } catch (ex) {}
+//     for (let model of models){
+//         __modules__.${_parameterTypes.merge}(result, model);
+//     }
+//     console.log('merge time:', (performance.now() - start ) / 1000, 'sec')
+//     return result;
+// }
+// function duplicateModel(model){
+//     const start = performance.now()
+//     const result = model.clone();
+//     try {
+//         result.debug = __debug__;
+//     } catch (ex) {}
+//     console.log('clone time:', (performance.now() - start ) / 1000, 'sec')
+//     return result;
+// }
+// `;
 export const printFunc = `
 function printFunc(_console, name, value){
     let val;

@@ -19,8 +19,8 @@ export class GIModelThreejs {
      */
     private _generateColors(): number[] {
         const colors = [];
-        const numEnts = this._model.geom.query.numEnts(EEntType.VERT, false);
-        for (let index = 0; index < numEnts; index++) {
+        const num_ents = this._model.geom.query.numEnts(EEntType.VERT);
+        for (let index = 0; index < num_ents; index++) {
             colors.push(1, 1, 1);
         }
         // const geom_array = this._model.geom._geom_arrays;

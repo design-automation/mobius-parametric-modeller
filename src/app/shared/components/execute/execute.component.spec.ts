@@ -85,39 +85,39 @@ describe('Execute Component test', () => {
                 oModel.setData(model);
                 if (test.requirements.hasOwnProperty('geometry')) {
                     if (test.requirements.geometry.hasOwnProperty('num_positions')) {
-                        expect(oModel.geom.query.numEnts(EEntType.POSI, false)).
+                        expect(oModel.geom.query.numEnts(EEntType.POSI)).
                         toBe(test.requirements.geometry['num_positions'], 'No. positions do not match');
                     }
                     if (test.requirements.geometry.hasOwnProperty('num_vertices')) {
-                        expect(oModel.geom.query.numEnts(EEntType.VERT, false)).
+                        expect(oModel.geom.query.numEnts(EEntType.VERT)).
                         toBe(test.requirements.geometry['num_vertices'], 'No. vertices do not match');
                     }
                     if (test.requirements.geometry.hasOwnProperty('num_edges')) {
-                        expect(oModel.geom.query.numEnts(EEntType.EDGE, false)).
+                        expect(oModel.geom.query.numEnts(EEntType.EDGE)).
                         toBe(test.requirements.geometry['num_edges'], 'No. edges do not match');
                     }
                     if (test.requirements.geometry.hasOwnProperty('num_wires')) {
-                        expect(oModel.geom.query.numEnts(EEntType.WIRE, false)).
+                        expect(oModel.geom.query.numEnts(EEntType.WIRE)).
                         toBe(test.requirements.geometry['num_wires'], 'No. wires do not match');
                     }
                     if (test.requirements.geometry.hasOwnProperty('num_faces')) {
-                        expect(oModel.geom.query.numEnts(EEntType.FACE, false)).
+                        expect(oModel.geom.query.numEnts(EEntType.FACE)).
                         toBe(test.requirements.geometry['num_faces'], 'No. faces do not match');
                     }
                     if (test.requirements.geometry.hasOwnProperty('num_points')) {
-                        expect(oModel.geom.query.numEnts(EEntType.POINT, false)).
+                        expect(oModel.geom.query.numEnts(EEntType.POINT)).
                         toBe(test.requirements.geometry['num_points'], 'No. points do not match');
                     }
                     if (test.requirements.geometry.hasOwnProperty('num_polylines')) {
-                        expect(oModel.geom.query.numEnts(EEntType.PLINE, false)).
+                        expect(oModel.geom.query.numEnts(EEntType.PLINE)).
                         toBe(test.requirements.geometry['num_polylines'], 'No. polylines do not match');
                     }
                     if (test.requirements.geometry.hasOwnProperty('num_polygons')) {
-                        expect(oModel.geom.query.numEnts(EEntType.PGON, false)).
+                        expect(oModel.geom.query.numEnts(EEntType.PGON)).
                         toBe(test.requirements.geometry['num_polygons'], 'No. polygons do not match');
                     }
                     if (test.requirements.geometry.hasOwnProperty('num_collections')) {
-                        expect(oModel.geom.query.numEnts(EEntType.COLL, false)).
+                        expect(oModel.geom.query.numEnts(EEntType.COLL)).
                         toBe(test.requirements.geometry['num_collections'], 'No. collections do not match');
                     }
                 }

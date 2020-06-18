@@ -1,5 +1,5 @@
 import { TTri, TVert, TEdge, TWire, TFace,
-    TColl, IGeomData, TPoint, TPline, TPgon, Txyz, IGeomArrays, IGeomCopy, TAttribDataTypes, IGeomPack, TPosi, TPlane } from './common';
+    TColl, IGeomData, TPoint, TPline, TPgon, Txyz, IGeomArrays, IGeomCopy, TAttribDataTypes, IGeomPack, TPosi, TPlane, EEntType } from './common';
 import { GIGeom } from './GIGeom';
 import { deepCopy } from '../util/copy';
 
@@ -17,13 +17,70 @@ export class GIGeomIO {
         this._geom_arrays = geom_arrays;
     }
 
+
     /**
      * Adds data to this model from another model.
      * The existing data in the model is not deleted.
-     * Both models may have deleted items, resulting in null values.
+     * Both models may have deleted items, resulting in undefined values.
      * @param geom_arrays The geom_arrays of the other model.
      */
-    public merge(geom_arrays: IGeomArrays): Map<number, number>[] {
+    public merge(geom_arrays: IGeomArrays): void {
+        // ======================================================================
+        // update down arrays
+        // points
+        _mergeEntArrays(this._geom_arrays.dn_points_verts, geom_arrays.dn_points_verts, EEntType.POINT);
+        // plines
+        _mergeEntArrays(this._geom_arrays.dn_plines_wires, geom_arrays.dn_plines_wires, EEntType.PLINE);
+        // pgons
+        _mergeEntArrays(this._geom_arrays.dn_pgons_faces, geom_arrays.dn_pgons_faces, EEntType.PGON);
+        // colls
+        _mergeEntArrays(this._geom_arrays.dn_colls_objs, geom_arrays.dn_colls_objs, EEntType.COLL);
+        // vertices
+        _mergeEntArrays(this._geom_arrays.dn_verts_posis, geom_arrays.dn_verts_posis, EEntType.VERT);
+        // triangles
+        _mergeEntArrays(this._geom_arrays.dn_tris_verts, geom_arrays.dn_tris_verts, EEntType.TRI);
+        // edges
+        _mergeEntArrays(this._geom_arrays.dn_edges_verts, geom_arrays.dn_edges_verts, EEntType.EDGE);
+        // wires
+        _mergeEntArrays(this._geom_arrays.dn_wires_edges, geom_arrays.dn_wires_edges, EEntType.WIRE);
+        // faces
+        _mergeEntArrays(this._geom_arrays.dn_faces_wirestris, geom_arrays.dn_faces_wirestris, EEntType.FACE);
+
+        // ======================================================================
+        // update up arrays
+        // update posis to verts (they can be undefined or [])
+        // this array is used to capture deleted posis
+        _mergePosisArrays(this._geom_arrays.up_posis_verts, geom_arrays.up_posis_verts);
+        // update verts to tris
+        _mergeEntArrays(this._geom_arrays.up_verts_tris, geom_arrays.up_verts_tris, EEntType.VERT);
+        // update tris to faces
+        _mergeEntArrays(this._geom_arrays.up_tris_faces, geom_arrays.up_tris_faces, EEntType.TRI);
+        // update verts to edges
+        _mergeEntArrays(this._geom_arrays.up_verts_edges, geom_arrays.up_verts_edges, EEntType.VERT);
+        // update edges to wires
+        _mergeEntArrays(this._geom_arrays.up_edges_wires, geom_arrays.up_edges_wires, EEntType.EDGE);
+        // update wires to faces
+        _mergeEntArrays(this._geom_arrays.up_wires_faces, geom_arrays.up_wires_faces, EEntType.WIRE);
+        // update verts to points
+        _mergeEntArrays(this._geom_arrays.up_verts_points, geom_arrays.up_verts_points, EEntType.VERT);
+        // update wires to plines
+        _mergeEntArrays(this._geom_arrays.up_wires_plines, geom_arrays.up_wires_plines, EEntType.WIRE);
+        // update faces to pgons
+        _mergeEntArrays(this._geom_arrays.up_faces_pgons, geom_arrays.up_faces_pgons, EEntType.FACE);
+        // update points to colls
+        _mergeEntArrays(this._geom_arrays.up_points_colls, geom_arrays.up_points_colls, EEntType.POINT);
+        // update plines to colls
+        _mergeEntArrays(this._geom_arrays.up_plines_colls, geom_arrays.up_plines_colls, EEntType.PLINE);
+        // update pgons to colls
+        _mergeEntArrays(this._geom_arrays.up_pgons_colls, geom_arrays.up_pgons_colls, EEntType.PGON);
+    }
+    /**
+     * Adds data to this model from another model.
+     * The existing data in the model is not deleted.
+     * Both models may have deleted items, resulting in undefined values.
+     * @param geom_arrays The geom_arrays of the other model.
+     */
+    public merge2(geom_arrays: IGeomArrays): Map<number, number>[] {
         // get lengths of existing entities before we start adding stuff
         // const num_posis: number = this._geom_arrays.num_posis;
         const num_posis: number = this._geom_arrays.up_posis_verts.length;
@@ -38,8 +95,8 @@ export class GIGeomIO {
         const num_colls: number = this._geom_arrays.dn_colls_objs.length;
 
         // for the down arrays, it is important the values are never undefined
+        // if anything is deleted, then the value should be undefined
         // undefined cannot be exported as json
-        // if anything is deleted, then the value should be null
 
         // ======================================================================
         // update down arrays
@@ -369,7 +426,9 @@ export class GIGeomIO {
         const posis_map: Map<number, number> = new Map();
         let posis_count = 0;
         for (let posi_i = 0; posi_i < geom_arrays.up_posis_verts.length; posi_i++) { // posis uses up array
-            if (geom_arrays.up_posis_verts[posi_i] !== null) {
+            if (geom_arrays.up_posis_verts[posi_i] === undefined || geom_arrays.up_posis_verts[posi_i] === null) {
+                continue;
+            } else {
                 posis_map.set(posi_i, posis_count + num_posis);
                 posis_count += 1;
             }
@@ -379,7 +438,9 @@ export class GIGeomIO {
         const verts_map: Map<number, number> = new Map();
         let vert_count = 0;
         for (let vert_i = 0; vert_i < geom_arrays.dn_verts_posis.length; vert_i++) {
-            if (geom_arrays.dn_verts_posis[vert_i] !== null) {
+            if (geom_arrays.dn_verts_posis[vert_i] === undefined || geom_arrays.dn_verts_posis[vert_i] === null) {
+                continue;
+            } else {
                 verts_map.set(vert_i, vert_count + num_verts);
                 vert_count += 1;
             }
@@ -389,7 +450,9 @@ export class GIGeomIO {
         const tris_map: Map<number, number> = new Map();
         let tris_count = 0;
         for (let tri_i = 0; tri_i < geom_arrays.dn_tris_verts.length; tri_i++) {
-            if (geom_arrays.dn_tris_verts[tri_i] !== null) {
+            if (geom_arrays.dn_tris_verts[tri_i] === undefined || geom_arrays.dn_tris_verts[tri_i] === null) {
+                continue;
+            } else {
                 tris_map.set(tri_i, tris_count + num_tris);
                 tris_count += 1;
             }
@@ -399,7 +462,9 @@ export class GIGeomIO {
         const edges_map: Map<number, number> = new Map();
         let edges_count = 0;
         for (let edge_i = 0; edge_i < geom_arrays.dn_edges_verts.length; edge_i++) {
-            if (geom_arrays.dn_edges_verts[edge_i] !== null) {
+            if (geom_arrays.dn_edges_verts[edge_i] === undefined || geom_arrays.dn_edges_verts[edge_i] === null) {
+                continue;
+            } else {
                 edges_map.set(edge_i, edges_count + num_edges);
                 edges_count += 1;
             }
@@ -409,7 +474,9 @@ export class GIGeomIO {
         const wires_map: Map<number, number> = new Map();
         let wires_count = 0;
         for (let wire_i = 0; wire_i < geom_arrays.dn_wires_edges.length; wire_i++) {
-            if (geom_arrays.dn_wires_edges[wire_i] !== null) {
+            if (geom_arrays.dn_wires_edges[wire_i] === undefined || geom_arrays.dn_wires_edges[wire_i] === null) {
+                continue;
+            } else {
                 wires_map.set(wire_i, wires_count + num_wires);
                 wires_count += 1;
             }
@@ -419,7 +486,9 @@ export class GIGeomIO {
         const faces_map: Map<number, number> = new Map();
         let faces_count = 0;
         for (let face_i = 0; face_i < geom_arrays.dn_faces_wirestris.length; face_i++) {
-            if (geom_arrays.dn_faces_wirestris[face_i] !== null) {
+            if (geom_arrays.dn_faces_wirestris[face_i] === undefined || geom_arrays.dn_faces_wirestris[face_i] === null) {
+                continue;
+            } else {
                 faces_map.set(face_i, faces_count + num_faces);
                 faces_count += 1;
             }
@@ -429,7 +498,9 @@ export class GIGeomIO {
         const points_map: Map<number, number> = new Map();
         let points_count = 0;
         for (let point_i = 0; point_i < geom_arrays.dn_points_verts.length; point_i++) {
-            if (geom_arrays.dn_points_verts[point_i] !== null) {
+            if (geom_arrays.dn_points_verts[point_i] === undefined || geom_arrays.dn_points_verts[point_i] === null) {
+                continue;
+            } else {
                 points_map.set(point_i, points_count + num_points);
                 points_count += 1;
             }
@@ -439,7 +510,9 @@ export class GIGeomIO {
         const plines_map: Map<number, number> = new Map();
         let plines_count = 0;
         for (let pline_i = 0; pline_i < geom_arrays.dn_plines_wires.length; pline_i++) {
-            if (geom_arrays.dn_plines_wires[pline_i] !== null) {
+            if (geom_arrays.dn_plines_wires[pline_i] === undefined || geom_arrays.dn_plines_wires[pline_i] === null) {
+                continue;
+            } else {
                 plines_map.set(pline_i, plines_count + num_plines);
                 plines_count += 1;
             }
@@ -449,7 +522,9 @@ export class GIGeomIO {
         const pgons_map: Map<number, number> = new Map();
         let pgons_count = 0;
         for (let pgon_i = 0; pgon_i < geom_arrays.dn_pgons_faces.length; pgon_i++) {
-            if (geom_arrays.dn_pgons_faces[pgon_i] !== null) {
+            if (geom_arrays.dn_pgons_faces[pgon_i] === undefined || geom_arrays.dn_pgons_faces[pgon_i] === null) {
+                continue;
+            } else {
                 pgons_map.set(pgon_i, pgons_count + num_pgons);
                 pgons_count += 1;
             }
@@ -459,7 +534,9 @@ export class GIGeomIO {
         const colls_map: Map<number, number> = new Map();
         let colls_count = 0;
         for (let coll_i = 0; coll_i < geom_arrays.dn_colls_objs.length; coll_i++) {
-            if (geom_arrays.dn_colls_objs[coll_i] !== null) {
+            if (geom_arrays.dn_colls_objs[coll_i] === undefined || geom_arrays.dn_colls_objs[coll_i] === null) {
+                continue;
+            } else {
                 colls_map.set(coll_i, colls_count + num_colls);
                 colls_count += 1;
             }
@@ -477,35 +554,45 @@ export class GIGeomIO {
 
         // add vertices to model
         for (const posi_i of geom_arrays.dn_verts_posis) {
-            if (posi_i !== null) {
+            if (posi_i === undefined || posi_i === null) {
+                continue;
+            } else {
                 const new_vert: TVert = posis_map.get(posi_i) as TVert;
                 this._geom_arrays.dn_verts_posis.push( new_vert );
             }
         }
         // add triangles to model
         for (const verts_i of geom_arrays.dn_tris_verts) {
-            if (verts_i !== null) {
+            if (verts_i === undefined || verts_i === null) {
+                continue;
+            } else {
                 const new_triangle: TTri = verts_i.map(vert_i => verts_map.get(vert_i)) as TTri;
                 this._geom_arrays.dn_tris_verts.push( new_triangle );
             }
         }
         // add edges to model
         for (const verts_i of geom_arrays.dn_edges_verts) {
-            if (verts_i !== null) {
+            if (verts_i === undefined || verts_i === null) {
+                continue;
+            } else {
                 const new_edge: TEdge = verts_i.map(vert_i => verts_map.get(vert_i)) as TEdge;
                 this._geom_arrays.dn_edges_verts.push( new_edge );
             }
         }
         // add wires to model
         for (const edges_i of geom_arrays.dn_wires_edges) {
-            if (edges_i !== null) {
+            if (edges_i === undefined || edges_i === null) {
+                continue;
+            } else {
                 const new_wire: TWire = edges_i.map(edge_i => edges_map.get(edge_i)) as TWire;
                 this._geom_arrays.dn_wires_edges.push( new_wire );
             }
         }
         // add faces to model
         for (const wires_tris_i of geom_arrays.dn_faces_wirestris) {
-            if (wires_tris_i !== null) {
+            if (wires_tris_i === undefined || wires_tris_i === null) {
+                continue;
+            } else {
                 const new_face: TFace = [
                     wires_tris_i[0].map( wire_i => wires_map.get(wire_i)),
                     wires_tris_i[1].map( tri_i => tris_map.get(tri_i))
@@ -515,28 +602,36 @@ export class GIGeomIO {
         }
         // add points to model
         for (const vert_i of geom_arrays.dn_points_verts) {
-            if (vert_i !== null) {
+            if (vert_i === undefined || vert_i === null) {
+                continue;
+            } else {
                 const new_point: TPoint = verts_map.get(vert_i) as TPoint;
                 this._geom_arrays.dn_points_verts.push( new_point );
             }
         }
         // add plines to model
         for (const wire_i of geom_arrays.dn_plines_wires) {
-            if (wire_i !== null) {
+            if (wire_i === undefined || wire_i === null) {
+                continue;
+            } else {
                 const new_pline: TPline = wires_map.get(wire_i) as TPline;
                 this._geom_arrays.dn_plines_wires.push( new_pline );
             }
         }
         // add pgons to model
         for (const face_i of geom_arrays.dn_pgons_faces) {
-            if (face_i !== null) {
+            if (face_i === undefined || face_i === null) {
+                continue;
+            } else {
                 const new_pgon: TPgon = faces_map.get(face_i) as TPgon;
                 this._geom_arrays.dn_pgons_faces.push( new_pgon );
             }
         }
         // add collections to model
         for (const coll of geom_arrays.dn_colls_objs) {
-            if (coll !== null) {
+            if (coll === undefined || coll === null) {
+                continue;
+            } else {
                 const parent: number = (coll[0] === -1) ? -1 : colls_map.get(coll[0]);
                 const coll_points_i: number[] = coll[1].map( point_i => points_map.get(point_i));
                 const coll_plines_i: number[] = coll[2].map( pline_i => plines_map.get(pline_i));
@@ -689,185 +784,337 @@ export class GIGeomIO {
      */
     public setData(geom_data: IGeomData): IGeomPack {
         // update the down arrays
-        // these are assumed never to undefined
-
         // add vertices to model
-        this._geom_arrays.dn_verts_posis =  geom_data.vertices;
+        this._geom_arrays.dn_verts_posis = [];
+        for (let i = 0; i < geom_data.verts.length; i++) {
+            this._geom_arrays.dn_verts_posis[geom_data.verts_i[i]] = geom_data.verts[i];
+        }
         // add triangles to model
-        this._geom_arrays.dn_tris_verts =  geom_data.triangles;
+        this._geom_arrays.dn_tris_verts = [];
+        for (let i = 0; i < geom_data.tris.length; i++) {
+            this._geom_arrays.dn_tris_verts[geom_data.tris_i[i]] = geom_data.tris[i];
+        }
         // add edges to model
-        this._geom_arrays.dn_edges_verts = geom_data.edges;
+        this._geom_arrays.dn_edges_verts = [];
+        for (let i = 0; i < geom_data.edges.length; i++) {
+            this._geom_arrays.dn_edges_verts[geom_data.edges_i[i]] = geom_data.edges[i];
+        }
         // add wires to model
-        this._geom_arrays.dn_wires_edges = geom_data.wires;
+        this._geom_arrays.dn_wires_edges = [];
+        for (let i = 0; i < geom_data.wires.length; i++) {
+            this._geom_arrays.dn_wires_edges[geom_data.wires_i[i]] = geom_data.wires[i];
+        }
         // add faces to model
-        this._geom_arrays.dn_faces_wirestris = geom_data.faces;
+        this._geom_arrays.dn_faces_wirestris = [];
+        for (let i = 0; i < geom_data.faces.length; i++) {
+            this._geom_arrays.dn_faces_wirestris[geom_data.faces_i[i]] = geom_data.faces[i];
+        }
         // add points to model
-        this._geom_arrays.dn_points_verts = geom_data.points;
+        this._geom_arrays.dn_points_verts = [];
+        for (let i = 0; i < geom_data.points.length; i++) {
+            this._geom_arrays.dn_points_verts[geom_data.points_i[i]] = geom_data.points[i];
+        }
         // add lines to model
-        this._geom_arrays.dn_plines_wires = geom_data.polylines;
+        this._geom_arrays.dn_plines_wires = [];
+        for (let i = 0; i < geom_data.plines.length; i++) {
+            this._geom_arrays.dn_plines_wires[geom_data.plines_i[i]] = geom_data.plines[i];
+        }
         // add pgons to model
-        this._geom_arrays.dn_pgons_faces = geom_data.polygons;
+        this._geom_arrays.dn_pgons_faces = [];
+        for (let i = 0; i < geom_data.pgons.length; i++) {
+            this._geom_arrays.dn_pgons_faces[geom_data.pgons_i[i]] = geom_data.pgons[i];
+        }
         // add collections to model
-        this._geom_arrays.dn_colls_objs = geom_data.collections;
+        this._geom_arrays.dn_colls_objs = [];
+        for (let i = 0; i < geom_data.colls.length; i++) {
+            this._geom_arrays.dn_colls_objs[geom_data.colls_i[i]] = geom_data.colls[i];
+        }
         // set selected
         this._geom.selected = geom_data.selected;
-
+        // ========================================================================================
         // update the up arrays
-        // many of the values will be undefined
-        // they could be null, since we might have saved some data with deleted ents
-
-        // fill up_posis_verts with either null or empty arrays
-        // the up_posis_verts array is special, it can have no undefine values
-        // its length is used to determine how many posis there are in the model
+        // posis->verts, create empty []
         this._geom_arrays.up_posis_verts = [];
-        let posi_i = 0; const posi_i_max = geom_data.num_positions;
-        for (; posi_i < posi_i_max; posi_i++) {
-            if (this._geom.model.attribs.query.getPosiCoords(posi_i) === undefined) {
-                this._geom_arrays.up_posis_verts[posi_i] = null;
-            } else {
-                this._geom_arrays.up_posis_verts[posi_i] = [];
-            }
+        for (let i = 0; i < geom_data.posis_i.length; i++) {
+            this._geom_arrays.up_posis_verts[geom_data.posis_i[i]] = [];
         }
         // posis->verts
-        this._geom_arrays.dn_verts_posis.forEach( (_posi_i, vert_i) => { // val, index
-            if (_posi_i !== null) {
-                this._geom_arrays.up_posis_verts[_posi_i].push(vert_i);
-            }
+        this._geom_arrays.dn_verts_posis.forEach( (posi_i, vert_i) => { // val, index
+            this._geom_arrays.up_posis_verts[posi_i].push(vert_i);
         });
         // verts->tris, one to many
         this._geom_arrays.up_verts_tris = [];
         this._geom_arrays.dn_tris_verts.forEach( (vert_i_arr, tri_i) => { // val, index
-            if (vert_i_arr !== null) {
-                vert_i_arr.forEach( vert_i => {
-                    if (this._geom_arrays.up_verts_tris[vert_i] === undefined) {
-                        this._geom_arrays.up_verts_tris[vert_i] = [];
-                    }
-                    this._geom_arrays.up_verts_tris[vert_i].push(tri_i);
-                });
-            }
+            vert_i_arr.forEach( vert_i => {
+                if (this._geom_arrays.up_verts_tris[vert_i] === undefined) {
+                    this._geom_arrays.up_verts_tris[vert_i] = [];
+                }
+                this._geom_arrays.up_verts_tris[vert_i].push(tri_i);
+            });
         });
         // verts->edges, one to two
         // order is important
         this._geom_arrays.up_verts_edges = [];
         this._geom_arrays.dn_edges_verts.forEach( (vert_i_arr, edge_i) => { // val, index
-            if (vert_i_arr !== null) {
-                vert_i_arr.forEach( (vert_i, index) => {
-                    if (this._geom_arrays.up_verts_edges[vert_i] === undefined) {
-                        this._geom_arrays.up_verts_edges[vert_i] = [];
-                    }
-                    if (index === 0) {
-                        this._geom_arrays.up_verts_edges[vert_i].push(edge_i);
-                    } else if (index === 1) {
-                        this._geom_arrays.up_verts_edges[vert_i].splice(0, 0, edge_i);
-                    }
-                    if (index > 1) {
-                        throw new Error('Import data error: Found an edge with more than two vertices.');
-                    }
-                });
-            }
+            vert_i_arr.forEach( (vert_i, index) => {
+                if (this._geom_arrays.up_verts_edges[vert_i] === undefined) {
+                    this._geom_arrays.up_verts_edges[vert_i] = [];
+                }
+                if (index === 0) {
+                    this._geom_arrays.up_verts_edges[vert_i].push(edge_i);
+                } else if (index === 1) {
+                    this._geom_arrays.up_verts_edges[vert_i].splice(0, 0, edge_i);
+                }
+                if (index > 1) {
+                    throw new Error('Import data error: Found an edge with more than two vertices.');
+                }
+            });
         });
         // edges->wires
         this._geom_arrays.up_edges_wires = [];
         this._geom_arrays.dn_wires_edges.forEach( (edge_i_arr, wire_i) => { // val, index
-            if (edge_i_arr !== null) {
-                edge_i_arr.forEach( edge_i => {
-                    this._geom_arrays.up_edges_wires[edge_i] = wire_i;
-                });
-            }
+            edge_i_arr.forEach( edge_i => {
+                this._geom_arrays.up_edges_wires[edge_i] = wire_i;
+            });
         });
         // wires->faces, tris->faces, faces->wirestris
         this._geom_arrays.up_wires_faces = [];
         this._geom_arrays.up_tris_faces = [];
         this._geom_arrays.dn_faces_wirestris.forEach( (face, face_i) => { // val, index
-            if (face !== null) {
-                const [wire_i_arr, tri_i_arr] = face;
-                wire_i_arr.forEach( wire_i => {
-                    this._geom_arrays.up_wires_faces[wire_i] = face_i;
-                });
-                tri_i_arr.forEach( tri_i => {
-                    this._geom_arrays.up_tris_faces[tri_i] = face_i;
-                });
-            }
+            const [wire_i_arr, tri_i_arr] = face;
+            wire_i_arr.forEach( wire_i => {
+                this._geom_arrays.up_wires_faces[wire_i] = face_i;
+            });
+            tri_i_arr.forEach( tri_i => {
+                this._geom_arrays.up_tris_faces[tri_i] = face_i;
+            });
         });
         // points, lines, polygons
         this._geom_arrays.up_verts_points = [];
         this._geom_arrays.dn_points_verts.forEach( (vert_i, point_i) => { // val, index
-            if (vert_i !== null) {
-                this._geom_arrays.up_verts_points[vert_i] = point_i;
-            }
+            this._geom_arrays.up_verts_points[vert_i] = point_i;
         });
         this._geom_arrays.up_wires_plines = [];
         this._geom_arrays.dn_plines_wires.forEach( (wire_i, line_i) => { // val, index
-            if (wire_i !== null) {
-                this._geom_arrays.up_wires_plines[wire_i] = line_i;
-            }
+            this._geom_arrays.up_wires_plines[wire_i] = line_i;
         });
         this._geom_arrays.up_faces_pgons = [];
         this._geom_arrays.dn_pgons_faces.forEach( (face_i, pgon_i) => { // val, index
-            if (face_i !== null) {
-                this._geom_arrays.up_faces_pgons[face_i] = pgon_i;
-            }
+            this._geom_arrays.up_faces_pgons[face_i] = pgon_i;
         });
         // collections of points, polylines, polygons
         this._geom_arrays.up_points_colls = [];
         this._geom_arrays.up_plines_colls = [];
         this._geom_arrays.up_pgons_colls = [];
         this._geom_arrays.dn_colls_objs.forEach( (coll, coll_i) => { // val, index
-            if (coll !== null) {
-                const [parent, point_i_arr, pline_i_arr, pgon_i_arr] = coll;
-                point_i_arr.forEach( point_i => {
-                    if (this._geom_arrays.up_points_colls[point_i] === undefined) {
-                        this._geom_arrays.up_points_colls[point_i] = [coll_i];
-                    } else {
-                        this._geom_arrays.up_points_colls[point_i].push(coll_i);
-                    }
-                });
-                pline_i_arr.forEach( pline_i => {
-                    if (this._geom_arrays.up_plines_colls[pline_i] === undefined) {
-                        this._geom_arrays.up_plines_colls[pline_i] = [coll_i];
-                    } else {
-                        this._geom_arrays.up_plines_colls[pline_i].push(coll_i);
-                    }
-                });
-                pgon_i_arr.forEach( pgon_i => {
-                    if (this._geom_arrays.up_pgons_colls[pgon_i] === undefined) {
-                        this._geom_arrays.up_pgons_colls[pgon_i] = [coll_i];
-                    } else {
-                        this._geom_arrays.up_pgons_colls[pgon_i].push(coll_i);
-                    }
-                });
-            }
+            const [parent, point_i_arr, pline_i_arr, pgon_i_arr] = coll;
+            point_i_arr.forEach( point_i => {
+                if (this._geom_arrays.up_points_colls[point_i] === undefined) {
+                    this._geom_arrays.up_points_colls[point_i] = [coll_i];
+                } else {
+                    this._geom_arrays.up_points_colls[point_i].push(coll_i);
+                }
+            });
+            pline_i_arr.forEach( pline_i => {
+                if (this._geom_arrays.up_plines_colls[pline_i] === undefined) {
+                    this._geom_arrays.up_plines_colls[pline_i] = [coll_i];
+                } else {
+                    this._geom_arrays.up_plines_colls[pline_i].push(coll_i);
+                }
+            });
+            pgon_i_arr.forEach( pgon_i => {
+                if (this._geom_arrays.up_pgons_colls[pgon_i] === undefined) {
+                    this._geom_arrays.up_pgons_colls[pgon_i] = [coll_i];
+                } else {
+                    this._geom_arrays.up_pgons_colls[pgon_i].push(coll_i);
+                }
+            });
         });
-
         // return data
         return {
-            posis_i:  Array.from(Array(geom_data.num_positions).keys()), // .map(v => v + num_old_posis),
-            points_i: Array.from(Array(geom_data.points.length).keys()), // .map(v => v + num_old_points),
-            plines_i: Array.from(Array(geom_data.polylines.length).keys()), // .map(v => v + num_old_plines),
-            pgons_i:  Array.from(Array(geom_data.polygons.length).keys()), // .map(v => v + num_old_pgons),
-            colls_i:  Array.from(Array(geom_data.collections.length).keys()) // .map(v => v + num_old_colls)
+            posis_i: geom_data.posis_i,
+            points_i: geom_data.points_i,
+            plines_i: geom_data.plines_i,
+            pgons_i: geom_data.pgons_i,
+            colls_i: geom_data.colls_i
         };
     }
     /**
      * Returns the JSON data for this model.
      */
-    public getData(make_copy = false): IGeomData {
+    public getData(): IGeomData {
         const data: IGeomData = {
-            num_positions: this._geom_arrays.up_posis_verts.length,
-            triangles: this._geom_arrays.dn_tris_verts,
-            vertices: this._geom_arrays.dn_verts_posis,
-            edges: this._geom_arrays.dn_edges_verts,
-            wires: this._geom_arrays.dn_wires_edges,
-            faces: this._geom_arrays.dn_faces_wirestris,
-            points: this._geom_arrays.dn_points_verts,
-            polylines: this._geom_arrays.dn_plines_wires,
-            polygons: this._geom_arrays.dn_pgons_faces,
-            collections: this._geom_arrays.dn_colls_objs,
+            posis_i: [],
+            verts: [], verts_i: [],
+            tris: [], tris_i: [],
+            edges: [], edges_i: [],
+            wires: [], wires_i: [],
+            faces: [], faces_i: [],
+            points: [], points_i: [],
+            plines: [], plines_i: [],
+            pgons: [], pgons_i: [],
+            colls: [], colls_i: [],
             selected: this._geom.selected
         };
-        if (make_copy) {
-            return deepCopy(data) as IGeomData;
-        }
+        this._geom_arrays.up_posis_verts.forEach( (ent, i) => {
+            data.posis_i.push(i);
+        });
+        this._geom_arrays.dn_verts_posis.forEach( (ent, i) => {
+            data.verts.push(ent);
+            data.verts_i.push(i);
+        });
+        this._geom_arrays.dn_tris_verts.forEach( (ent, i) => {
+            data.tris.push(ent);
+            data.tris_i.push(i);
+        });
+        this._geom_arrays.dn_edges_verts.forEach( (ent, i) => {
+            data.edges.push(ent);
+            data.edges_i.push(i);
+        });
+        this._geom_arrays.dn_wires_edges.forEach( (ent, i) => {
+            data.wires.push(ent);
+            data.wires_i.push(i);
+        });
+        this._geom_arrays.dn_faces_wirestris.forEach( (ent, i) => {
+            data.faces.push(ent);
+            data.faces_i.push(i);
+        });
+        this._geom_arrays.dn_points_verts.forEach( (ent, i) => {
+            data.points.push(ent);
+            data.points_i.push(i);
+        });
+        this._geom_arrays.dn_plines_wires.forEach( (ent, i) => {
+            data.plines.push(ent);
+            data.plines_i.push(i);
+        });
+        this._geom_arrays.dn_pgons_faces.forEach( (ent, i) => {
+            data.pgons.push(ent);
+            data.pgons_i.push(i);
+        });
+        this._geom_arrays.dn_colls_objs.forEach( (ent, i) => {
+            data.colls.push(ent);
+            data.colls_i.push(i);
+        });
         return data;
+    }
+}
+
+// utility function
+function _mergeEntArrays(arr1: any[], arr2: any[], type: EEntType): void {
+    // for (let i = 0; i < arr2.length; i++) {
+    //     if (arr2[i] !== undefined && arr2[i] !== null) {
+    //         if (arr1[i] !== undefined && arr1[i] !== null) {
+    //             throw new Error('Conflict merging ' + _getEntTypeStr(type) + '.'); 
+    //             // + JSON.stringify(arr1) + JSON.stringify(arr2));
+    //         }
+    //         arr1[i] = _deepCopy(arr2[i]);
+    //     }
+    // }
+    // for (const i in arr2) {
+    //     if (arr2[i] !== undefined && arr2[i] !== null) {
+    //         if (arr1[i] !== undefined && arr1[i] !== null) {
+    //             throw new Error('Conflict merging ' + _getEntTypeStr(type) + '.'); 
+    //             // + JSON.stringify(arr1) + JSON.stringify(arr2));
+    //         }
+    //         arr1[i] = _deepCopy(arr2[i]);
+    //     }
+    // }
+    // for (const i in arr2) { // forin loop
+    //     if (arr2[i] !== undefined) {
+    //         if (arr1[i] !== undefined) {
+    //             throw new Error('Conflict merging ' + _getEntTypeStr(type) + '.'); 
+    //             // + JSON.stringify(arr1) + JSON.stringify(arr2));
+    //         }
+    //         arr1[i] = _deepCopy(arr2[i]);
+    //     }
+    // }
+    arr2.forEach( (ent, ent_i) => {
+        if (arr1[ent_i] !== undefined) {
+            throw new Error('Conflict merging ' + _getEntTypeStr(type) + '.');
+        }
+        arr1[ent_i] = _deepCopy(ent);
+    });
+}
+function _mergePosisArrays(arr1: any[], arr2: any[]): void {
+    // for (let i = 0; i < arr2.length; i++) {
+    //     if (arr2[i] !== undefined && arr2[i] !== null) {
+    //         if (arr1[i] !== undefined && arr1[i] !== null) {
+    //             const verts_i_set: Set<number> = new Set(arr1[i]);
+    //             for (const vert_i of arr2[i]) {
+    //                 verts_i_set.add(vert_i);
+    //             }
+    //             arr1[i] = Array.from(verts_i_set);
+    //         }
+    //         arr1[i] = _deepCopy(arr2[i]);
+    //     }
+    // }
+    // for (const i in arr2) {
+    //     if (arr2[i] !== undefined && arr2[i] !== null) {
+    //         if (arr1[i] !== undefined && arr1[i] !== null) {
+    //             const verts_i_set: Set<number> = new Set(arr1[i]);
+    //             for (const vert_i of arr2[i]) {
+    //                 verts_i_set.add(vert_i);
+    //             }
+    //             arr1[i] = Array.from(verts_i_set);
+    //         }
+    //         arr1[i] = _deepCopy(arr2[i]);
+    //     }
+    // }
+    // for (const i in arr2) { // forin loop
+    //     if (arr2[i] !== undefined) {
+    //         if (arr1[i] !== undefined) {
+    //             const verts_i_set: Set<number> = new Set(arr1[i]);
+    //             for (const vert_i of arr2[i]) {
+    //                 verts_i_set.add(vert_i);
+    //             }
+    //             arr1[i] = Array.from(verts_i_set);
+    //         }
+    //         arr1[i] = _deepCopy(arr2[i]);
+    //     }
+    // }
+    arr2.forEach( (verts_i, posi_i) => {
+        if (arr1[posi_i] !== undefined) {
+            const verts_i_set: Set<number> = new Set(arr1[posi_i]);
+            for (const vert_i of verts_i) {
+                verts_i_set.add(vert_i);
+            }
+            arr1[posi_i] = Array.from(verts_i_set);
+        } else {
+            arr1[posi_i] = _deepCopy(verts_i);
+        }
+    });
+}
+function _deepCopy(data: any) {
+    if (Array.isArray(data)) {
+        const copy = [];
+        for (let i = 0, len = data.length; i < len; i++) {
+            copy[i] = _deepCopy(data[i]);
+        }
+        return copy;
+    }
+    return data;
+}
+function _getEntTypeStr(ent_type_str: EEntType): string {
+    switch (ent_type_str) {
+        case EEntType.POSI:
+            return 'positions';
+        case EEntType.VERT:
+            return 'vertices';
+        case EEntType.TRI:
+            return 'triangles';
+        case EEntType.EDGE:
+            return 'edges';
+        case EEntType.WIRE:
+            return 'wires';
+        case EEntType.FACE:
+            return 'faces';
+        case EEntType.POINT:
+            return 'points';
+        case EEntType.PLINE:
+            return 'polylines';
+        case EEntType.PGON:
+            return 'polygons';
+        case EEntType.COLL:
+            return 'collections';
     }
 }

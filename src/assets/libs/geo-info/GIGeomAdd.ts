@@ -35,7 +35,8 @@ export class GIGeomAdd {
         // create vert
         const vert_i = this._addVertex(posi_i);
         // create point
-        const point_i: number = this._geom_arrays.dn_points_verts.push(vert_i) - 1;
+        const point_i: number = this._geom.model.meta.nextPoint();
+        this._geom_arrays.dn_points_verts[point_i] = vert_i;
         this._geom_arrays.up_verts_points[vert_i] = point_i;
         return point_i;
     }
@@ -55,7 +56,8 @@ export class GIGeomAdd {
         }
         const wire_i: number = this._addWire(edges_i_arr, close);
         // create pline
-        const pline_i: number = this._geom_arrays.dn_plines_wires.push(wire_i) - 1;
+        const pline_i: number = this._geom.model.meta.nextPline();
+        this._geom_arrays.dn_plines_wires[pline_i] = wire_i;
         this._geom_arrays.up_wires_plines[wire_i] = pline_i;
         return pline_i;
     }
@@ -93,7 +95,8 @@ export class GIGeomAdd {
             face_i = this._addFace(wire_i);
         }
         // create polygon
-        const pgon_i: number = this._geom_arrays.dn_pgons_faces.push(face_i) - 1;
+        const pgon_i: number = this._geom.model.meta.nextPgon();
+        this._geom_arrays.dn_pgons_faces[pgon_i] = face_i;
         this._geom_arrays.up_faces_pgons[face_i] = pgon_i;
         return pgon_i;
     }
@@ -107,7 +110,8 @@ export class GIGeomAdd {
     public addColl(parent_i: number, points_i: number[], plines_i: number[], pgons_i: number[]): number {
         parent_i = parent_i === null ? -1 : parent_i;
         // create collection
-        const coll_i: number = this._geom_arrays.dn_colls_objs.push([parent_i, points_i, plines_i, pgons_i]) - 1;
+        const coll_i: number = this._geom.model.meta.nextColl();
+        this._geom_arrays.dn_colls_objs[coll_i] = [parent_i, points_i, plines_i, pgons_i];
         for (const point_i of points_i) {
             if (this._geom_arrays.up_points_colls[point_i] === undefined) {
                 this._geom_arrays.up_points_colls[point_i] = [coll_i];

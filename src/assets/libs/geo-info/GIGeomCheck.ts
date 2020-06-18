@@ -39,8 +39,8 @@ export class GIGeomCheck {
         for (let posi_i = 0; posi_i < this._geom_arrays.up_posis_verts.length; posi_i++) {
             // up
             const verts_i: number[] = this._geom_arrays.up_posis_verts[posi_i];
-            if (verts_i === undefined) { errors.push('Posi ' + posi_i + ': Posi->Vert undefined.'); }
-            if (verts_i === null) { continue; } // deleted
+            if (verts_i === undefined) { continue; }
+            if (verts_i === null) { errors.push('Posi ' + posi_i + ': null.'); continue; }
             // down
             for (const vert_i of verts_i) {
                 const vert: TVert = this._geom_arrays.dn_verts_posis[vert_i];
@@ -55,8 +55,8 @@ export class GIGeomCheck {
         for (let vert_i = 0; vert_i < this._geom_arrays.dn_verts_posis.length; vert_i++) {
             // check the vert itself
             const vert: TVert = this._geom_arrays.dn_verts_posis[vert_i];
-            if (vert === undefined) { errors.push('Vert ' + vert_i + ': Vert->Posi undefined.'); }
-            if (vert === null) { continue; } // deleted
+            if (vert === undefined) { continue; }
+            if (vert === null) { errors.push('Vert ' + vert_i + ': null.'); continue; } // deleted
             // check the position
             const posi_i: number = vert;
             // check that the position points up to this vertex
@@ -72,6 +72,10 @@ export class GIGeomCheck {
             }
             if (point_i !== undefined) {
                 // up for points
+                if (point_i === undefined) {
+                    errors.push('Vert ' + vert_i + ': Vert->Point undefined.');
+                    continue;
+                }
                 if (point_i === null) {
                     errors.push('Vert ' + vert_i + ': Vert->Point null.');
                     continue;
@@ -90,6 +94,10 @@ export class GIGeomCheck {
                 }
             } else if (edges_i !== undefined) {
                 // up for edges
+                if (edges_i === undefined) {
+                    errors.push('Vert ' + vert_i + ': Vert->Edge undefined.');
+                    continue;
+                }
                 if (edges_i === null) {
                     errors.push('Vert ' + vert_i + ': Vert->Edge null.');
                     continue;
@@ -126,8 +134,8 @@ export class GIGeomCheck {
         for (let edge_i = 0; edge_i < this._geom_arrays.dn_edges_verts.length; edge_i++) {
             // check the edge itself
             const edge: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
-            if (edge === undefined) { errors.push('Edge ' + edge_i + ': Edge->Vert undefined.'); }
-            if (edge === null) { continue; } // deleted
+            if (edge === undefined) { continue; }
+            if (edge === null) { errors.push('Edge ' + edge_i + ': null.'); continue; }
             if (edge.length > 2) { errors.push('Edge ' + edge_i + ': Edge has more than two vertices.'); }
             // down from edge to vertices
             const verts_i: number[] = this._geom_arrays.dn_edges_verts[edge_i];
@@ -169,8 +177,8 @@ export class GIGeomCheck {
         for (let wire_i = 0; wire_i < this._geom_arrays.dn_wires_edges.length; wire_i++) {
             // check the wire itself
             const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
-            if (wire === undefined) { errors.push('Wire ' + wire_i + ': Wire->Edge undefined.'); }
-            if (wire === null) { continue; } // deleted
+            if (wire === undefined) { continue; }
+            if (wire === null) { errors.push('Wire ' + wire_i + ': null.'); continue; } // deleted
             // down from wire to edges
             const edges_i: number[] = wire;
             for (const edge_i of edges_i) {
@@ -236,8 +244,8 @@ export class GIGeomCheck {
         for (let face_i = 0; face_i < this._geom_arrays.dn_faces_wirestris.length; face_i++) {
             // check this face itself
             const face: TFace = this._geom_arrays.dn_faces_wirestris[face_i];
-            if (face === undefined) { errors.push('Face ' + face_i + ': Face->WireTri undefined.'); }
-            if (face === null) { continue; } // deleted
+            if (face === undefined) { continue; }
+            if (face === null) { errors.push('Face ' + face_i + ': null.'); continue; } // deleted
             // down from face to wires
             const wires_i: number[] = face[0];
             for (const wire_i of wires_i) {
@@ -297,8 +305,8 @@ export class GIGeomCheck {
         for (let point_i = 0; point_i < this._geom_arrays.dn_points_verts.length; point_i++) {
             // check the point itself
             const point: TPoint = this._geom_arrays.dn_points_verts[point_i];
-            if (point === undefined) { errors.push('Point ' + point_i + ': Point->Vert undefined.'); }
-            if (point === null) { continue; } // deleted
+            if (point === undefined) { continue; }
+            if (point === null) { errors.push('Point ' + point_i + ': null.'); continue; } // deleted
             // down from point to vertex
             const vert_i: number = point;
             // check that the vertex points up to this point
@@ -332,8 +340,8 @@ export class GIGeomCheck {
         for (let pline_i = 0; pline_i < this._geom_arrays.dn_plines_wires.length; pline_i++) {
             // check the pline itself
             const pline: TPline = this._geom_arrays.dn_plines_wires[pline_i];
-            if (pline === undefined) { errors.push('Pline ' + pline_i + ': Pline->Wire undefined.'); }
-            if (pline === null) { continue; } // deleted
+            if (pline === undefined) { continue; }
+            if (pline === null) { errors.push('Pline ' + pline_i + ': null.'); continue; } // deleted
             // down from pline to wire
             const wire_i: number = pline;
             // check that the wire points up to this pline
@@ -367,8 +375,8 @@ export class GIGeomCheck {
         for (let pgon_i = 0; pgon_i < this._geom_arrays.dn_pgons_faces.length; pgon_i++) {
             // check the pgon itself
             const pgon: TPgon = this._geom_arrays.dn_pgons_faces[pgon_i];
-            if (pgon === undefined) { errors.push('Pgon ' + pgon_i + ': Pgon->Face undefined.'); }
-            if (pgon === null) { continue; } // deleted
+            if (pgon === undefined) { continue; }
+            if (pgon === null) { errors.push('Pgon ' + pgon_i + ': null.'); continue; } // deleted
             // down from pgon to face
             const face_i: number = pgon;
             // check that the face points up to this pgon
@@ -402,8 +410,8 @@ export class GIGeomCheck {
         for (let wire_i = 0; wire_i < this._geom_arrays.dn_wires_edges.length; wire_i++) {
             // down
             const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
-            if (wire === undefined) { continue; } // error, will be picked up by _checkWires()
-            if (wire === null) { continue; } // deleted
+            if (wire === undefined) { continue; }
+            if (wire === null) { errors.push('Wire ' + wire_i + ': null.'); continue; }
             // check if this is closed or open
             const first_edge: TEdge = this._geom_arrays.dn_edges_verts[wire[0]];
             const first_vert_i: number = first_edge[0];

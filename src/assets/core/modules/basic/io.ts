@@ -135,35 +135,35 @@ export function Import(__model__: GIModel, model_data: string|{}, data_format: _
 }
 function _importGI(__model__: GIModel, model_data: string): number {
     // get number of ents before merge
-    const num_ents_before: number[] = __model__.geom.query.numEntsAll(true);
+    const num_ents_before: number[] = __model__.geom.query.numEntsAll();
     // import
     const gi_json: IModelData = JSON.parse(model_data) as IModelData;
     const gi_model: GIModel = new GIModel();
     gi_model.setData(gi_json);
     __model__.merge(gi_model);
     // get number of ents after merge
-    const num_ents_after: number[] = __model__.geom.query.numEntsAll(true);
+    const num_ents_after: number[] = __model__.geom.query.numEntsAll();
     // return the result
     return _createGIColl(__model__, num_ents_before, num_ents_after);
 }
 function _importObj(__model__: GIModel, model_data: string): number {
     // get number of ents before merge
-    const num_ents_before: number[] = __model__.geom.query.numEntsAll(true);
+    const num_ents_before: number[] = __model__.geom.query.numEntsAll();
     // import
     const obj_model: GIModel = importObj(model_data);
     __model__.merge(obj_model);
     // get number of ents after merge
-    const num_ents_after: number[] = __model__.geom.query.numEntsAll(true);
+    const num_ents_after: number[] = __model__.geom.query.numEntsAll();
     // return the result
     return _createColl(__model__, num_ents_before, num_ents_after);
 }
 function _importGeojson(__model__: GIModel, model_data: string): number {
     // get number of ents before merge
-    const num_ents_before: number[] = __model__.geom.query.numEntsAll(true);
+    const num_ents_before: number[] = __model__.geom.query.numEntsAll();
     // import
     importGeojson(__model__, model_data, 0);
     // get number of ents after merge
-    const num_ents_after: number[] = __model__.geom.query.numEntsAll(true);
+    const num_ents_after: number[] = __model__.geom.query.numEntsAll();
     // return the result
     return _createColl(__model__, num_ents_before, num_ents_after);
 }
@@ -265,7 +265,7 @@ function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
         case _EIOExportDataFormat.GI:
             let gi_data = '';
             if (ents_arr === null) {
-                gi_data = JSON.stringify(__model__.copy().getData());
+                gi_data = JSON.stringify(__model__.getData());
             } else {
                 // make a clone of the model (warning: do not copy, copy will change entity IDs)
                 const model_clone: GIModel = __model__.clone();

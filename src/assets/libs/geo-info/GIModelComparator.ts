@@ -113,7 +113,7 @@ export class GIModelComparator {
         const precision = 1e4;
         const min: Txyz = [Infinity, Infinity, Infinity];
         const max: Txyz = [-Infinity, -Infinity, -Infinity];
-        for (const posi_i of this._model.geom.query.getEnts(EEntType.POSI, false)) {
+        for (const posi_i of this._model.geom.query.getEnts(EEntType.POSI)) {
             const xyz: Txyz = this._model.attribs.query.getPosiCoords(posi_i);
             if (xyz[0] < min[0]) { min[0] = xyz[0]; }
             if (xyz[1] < min[1]) { min[1] = xyz[1]; }
@@ -135,7 +135,7 @@ export class GIModelComparator {
      * Normalises the direction of open wires
      */
     private normOpenWires(trans_padding: [Txyz, number[]]): void {
-        for (const wire_i of this._model.geom.query.getEnts(EEntType.WIRE, false)) {
+        for (const wire_i of this._model.geom.query.getEnts(EEntType.WIRE)) {
             if (!this._model.geom.query.isWireClosed(wire_i)) {
                 // an open wire can only start at the first or last vertex, but the order can be reversed
                 const verts_i: number[] = this._model.geom.nav.navAnyToVert(EEntType.WIRE, wire_i);
@@ -151,7 +151,7 @@ export class GIModelComparator {
      * Normalises the edge order of closed wires
      */
     private normClosedWires(trans_padding: [Txyz, number[]]): void {
-        for (const wire_i of this._model.geom.query.getEnts(EEntType.WIRE, false)) {
+        for (const wire_i of this._model.geom.query.getEnts(EEntType.WIRE)) {
             if (this._model.geom.query.isWireClosed(wire_i)) {
                 // a closed wire can start at any edge
                 const edges_i: number[] = this._model.geom.nav.navAnyToEdge(EEntType.WIRE, wire_i);
@@ -181,7 +181,7 @@ export class GIModelComparator {
      * Normalises the order of holes in faces
      */
     private normHoles(trans_padding: [Txyz, number[]]): void {
-        for (const face_i of this._model.geom.query.getEnts(EEntType.FACE, false)) {
+        for (const face_i of this._model.geom.query.getEnts(EEntType.FACE)) {
             const holes_i: number[] = this._model.geom.query.getFaceHoles(face_i);
             if (holes_i.length > 0) {
                 const fprints: Array<[string, number]> = [];
@@ -411,7 +411,7 @@ export class GIModelComparator {
         // set attrib names to check when comparing objects and collections
         const attrib_names: string[] = [];
         if (this._model.attribs.query.hasAttrib(EEntType.PGON, 'material')) {
-            const pgons_i: number[] = this._model.geom.query.getEnts(EEntType.PGON, false);
+            const pgons_i: number[] = this._model.geom.query.getEnts(EEntType.PGON);
             const mat_names: Set<string> = new Set(this._model.attribs.query.getAttribVal(EEntType.PGON, 'material', pgons_i) as string[]);
             for (const mat_name of Array.from(mat_names)) {
                 if (mat_name !== undefined) {
@@ -472,7 +472,7 @@ export class GIModelComparator {
             // note that this map will be undefined for each ent for which no match was found
             // at the same time, flip the map
             const com_idx_to_other_map: Map<number, number> = new Map();
-            const other_ents_i: number[] = other_model.geom.query.getEnts(obj_ent_type, false);
+            const other_ents_i: number[] = other_model.geom.query.getEnts(obj_ent_type);
             const other_mia_ents_i: number[] = [];
             for (const ent_i of other_ents_i) {
                 const com_idx: number = other_to_com_idx_maps.get(obj_ent_type).get(ent_i);
@@ -484,7 +484,7 @@ export class GIModelComparator {
             }
             // get all the ents in this model for which no match has been found in the other model
             // note that this map is never empty, it always contains a mapping for each ent, even when no match was found
-            const this_ents_i: number[] = this._model.geom.query.getEnts(obj_ent_type, false);
+            const this_ents_i: number[] = this._model.geom.query.getEnts(obj_ent_type);
             const this_mia_ents_i: number[] = [];
             for (const ent_i of this_ents_i) {
                 const com_idx: number = this_to_com_idx_maps.get(obj_ent_type).get(ent_i);
@@ -630,7 +630,7 @@ export class GIModelComparator {
      */
     private getEntsFprint(ent_type: EEntType, attrib_names: Map<EEntType, string[]>): [Array<Map<string, string>>, number[]] {
         const fprints: Array<Map<string, string>>  = [];
-        const ents_i: number[] = this._model.geom.query.getEnts(ent_type, false);
+        const ents_i: number[] = this._model.geom.query.getEnts(ent_type);
         for (const ent_i of ents_i) {
             fprints.push(this.getEntFprint(ent_type, ent_i, attrib_names));
         }
@@ -685,7 +685,7 @@ export class GIModelComparator {
     private getCollFprints(idx_maps: Map<EEntType, Map<number, number>>, attrib_names: string[]): string[] {
         const fprints: string[]  = [];
         // create the fprints for each collection
-        const colls_i: number[] = this._model.geom.query.getEnts(EEntType.COLL, false);
+        const colls_i: number[] = this._model.geom.query.getEnts(EEntType.COLL);
         for (const coll_i of colls_i) {
             fprints.push(this.getCollFprint(coll_i, idx_maps, attrib_names));
         }

@@ -347,8 +347,8 @@ function _getPgonsPlines(model: GIModel, entities: TEntTypeIdx[]): [number[], nu
     let pgons_i: number[] = [];
     let plines_i: number[] = [];
     if (entities === null) {
-        pgons_i = model.geom.query.getEnts(EEntType.PGON, false);
-        plines_i = model.geom.query.getEnts(EEntType.PLINE, false);
+        pgons_i = model.geom.query.getEnts(EEntType.PGON);
+        plines_i = model.geom.query.getEnts(EEntType.PLINE);
     } else {
         for (const [ent_type, ent_i] of entities) {
             if (ent_type === EEntType.PGON) {

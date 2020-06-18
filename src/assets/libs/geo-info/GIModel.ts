@@ -37,9 +37,11 @@ export class GIModel {
      * @param model_data The GI model.
      */
     public merge(model: GIModel): void {
-        const geom_maps: Map<number, number>[] = this.geom.io.merge(model.geom._geom_arrays);
-        this.attribs.io.merge(model.attribs._attribs_maps, geom_maps);
-        this.setMeta(model.getMeta());
+        // const geom_maps: Map<number, number>[] = this.geom.io.merge(model.geom._geom_arrays);
+        // this.attribs.io.merge(model.attribs._attribs_maps, geom_maps);
+        this.geom.io.merge(model.geom._geom_arrays);
+        this.attribs.io.merge(model.attribs._attribs_maps);
+        this.meta = model.meta;
     }
     /**
      * Copys the data from a second model into this model.
@@ -49,7 +51,7 @@ export class GIModel {
      */
     public mergeAndPurge(model: GIModel): void {
         const geom_maps: Map<number, number>[] = this.geom.io.mergeAndPurge(model.geom._geom_arrays);
-        this.attribs.io.merge(model.attribs._attribs_maps, geom_maps);
+        this.attribs.io.mergeAndPurge(model.attribs._attribs_maps, geom_maps);
     }
     /**
      * Sets the data in this model from JSON data.
@@ -63,12 +65,12 @@ export class GIModel {
     }
     /**
      * Returns the JSON data for this model.
-     * This will include any deleted entities, which will be null.
+     * This will include any deleted entities, which will be undefined.
      */
-    public getData(make_copy = false): IModelData {
+    public getData(): IModelData {
         return {
-            geometry: this.geom.io.getData(make_copy),
-            attributes: this.attribs.io.getData(make_copy)
+            geometry: this.geom.io.getData(),
+            attributes: this.attribs.io.getData()
         };
     }
     public setMeta(meta: GIMeta) {
@@ -97,8 +99,8 @@ export class GIModel {
     public clone(): GIModel {
         const model_clone: GIModel = new GIModel();
         model_clone.meta = this.meta;
-        model_clone.setData(this.getData(true)); // get data makes deep copy
-        model_clone.setMeta(this.getMeta());
+        // model_clone.setData(this.getData(true)); // get data makes deep copy
+        model_clone.merge(this);
         return model_clone;
     }
     /**

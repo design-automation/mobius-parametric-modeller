@@ -126,7 +126,7 @@ export function Get(__model__: GIModel, ent_type_enum: _EEntType, entities: TId|
     return idsMake(found_ents_arr) as TId[]|TId[][];
 }
 function _getAll(__model__: GIModel, ent_type: EEntType): TEntTypeIdx[] {
-    const ents_i: number[] = __model__.geom.query.getEnts(ent_type, false);
+    const ents_i: number[] = __model__.geom.query.getEnts(ent_type);
     return ents_i.map(ent_i => [ent_type, ent_i]) as TEntTypeIdx[];
 }
 function _getFrom(__model__: GIModel, ent_type: EEntType, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx[]|TEntTypeIdx[][] {
@@ -310,7 +310,7 @@ function _invert(__model__: GIModel, select_ent_type: EEntType, ents_arr: TEntTy
         .filter(ent_arr => ent_arr[0] === select_ent_type).map(ent_arr => ent_arr[1]);
     // get the list of entities
     const found_entities_i: number[] = [];
-    const ents_i: number[] = __model__.geom.query.getEnts(select_ent_type, false);
+    const ents_i: number[] = __model__.geom.query.getEnts(select_ent_type);
     for (const ent_i of ents_i) {
         if (excl_ents_i.indexOf(ent_i) === -1) { found_entities_i.push(ent_i); }
     }

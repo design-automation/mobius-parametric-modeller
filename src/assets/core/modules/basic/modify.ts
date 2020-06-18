@@ -843,15 +843,16 @@ export function Delete(__model__: GIModel, entities: TId|TId[], method: _EDelete
 }
 function _deleteAll(__model__: GIModel): void {
     // delete the ents
-    __model__.geom.del.delColls(__model__.geom.query.getEnts(EEntType.COLL, false), false);
-    __model__.geom.del.delPgons(__model__.geom.query.getEnts(EEntType.PGON, false), false);
-    __model__.geom.del.delPlines(__model__.geom.query.getEnts(EEntType.PLINE, false), false);
-    __model__.geom.del.delPoints(__model__.geom.query.getEnts(EEntType.POINT, false), false);
-    __model__.geom.del.delPosis(__model__.geom.query.getEnts(EEntType.POSI, false));
+    __model__.geom.del.delColls(__model__.geom.query.getEnts(EEntType.COLL), false);
+    __model__.geom.del.delPgons(__model__.geom.query.getEnts(EEntType.PGON), false);
+    __model__.geom.del.delPlines(__model__.geom.query.getEnts(EEntType.PLINE), false);
+    __model__.geom.del.delPoints(__model__.geom.query.getEnts(EEntType.POINT), false);
+    __model__.geom.del.delPosis(__model__.geom.query.getEnts(EEntType.POSI));
 }
 function _delete(__model__: GIModel, ents_arr: TEntTypeIdx[], invert: boolean): void {
     // get the ents
     const gp: IGeomPack = __model__.geom.query.createGeomPack(ents_arr, invert);
+    // console.log("geom pack = ", gp);
     // delete the ents
     __model__.geom.del.delColls(gp.colls_i, true);
     __model__.geom.del.delPgons(gp.pgons_i, true);

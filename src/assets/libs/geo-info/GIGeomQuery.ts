@@ -1,7 +1,7 @@
 
 import {  EEntType, IGeomArrays, EEntStrToGeomArray, TWire, Txyz, TColl, TEntTypeIdx,
-    IGeomPack, TFace, EWireType, Txy, TEdge, TPosi, TVert } from './common';
-import { isPosi, isVert, isPoint, isEdge, isWire, isPline, isFace, isPgon, isColl, isTri } from './id';
+    IGeomPack, TFace, EWireType, TEdge } from './common';
+import { isPosi, isPoint, isPline, isPgon, isColl } from './id';
 import { GIGeom } from './GIGeom';
 import { vecFromTo, vecCross, vecDiv, vecNorm, vecLen, vecDot } from '../geom/vectors';
 import * as Mathjs from 'mathjs';
@@ -23,120 +23,112 @@ export class GIGeomQuery {
     // ============================================================================
 
     /**
-     * Returns a list of indices for all.
+     * Returns a sparse list of indices for ents.
      * ~
      * If include_deleted=true, it will include ents that are null.
      * @param ent_type
      */
-    public getEnts(ent_type: EEntType, include_deleted: boolean): number[] {
+    // public getEntsSparse(ent_type: EEntType): number[] {
+    //     // get posis indices array from up array: up_posis_verts
+    //     if (isPosi(ent_type)) {
+    //         const posis: number[][] = this._geom_arrays.up_posis_verts;
+    //         const posis_i: number[] = [];
+    //             for (let i = 0; i < posis.length; i++ ) {
+    //                 const posi = posis[i];
+    //                 if (posi !== null && posi !== undefined) {
+    //                     posis_i[i] = i;
+    //                 }
+    //             }
+
+    //         return posis_i;
+    //     }
+    //     // get ents indices array from down arrays
+    //     const geom_array_key: string = EEntStrToGeomArray[ent_type];
+    //     const geom_array: any[] = this._geom_arrays[geom_array_key];
+    //     const ents_i: number[] = [];
+    //     for (let i = 0; i < geom_array.length; i++ ) {
+    //         const ent = geom_array[i];
+    //         if (ent !== null && ent !== undefined) {
+    //             ents_i[i] = i;
+    //         }
+    //     }
+
+    //     return ents_i;
+    // }
+    /**
+     * Returns a list of indices for ents.
+     * @param ent_type
+     */
+    public getEnts(ent_type: EEntType): number[] {
         // get posis indices array from up array: up_posis_verts
         if (isPosi(ent_type)) {
-            const posis: number[][] = this._geom_arrays.up_posis_verts;
+            // const posis: number[][] = this._geom_arrays.up_posis_verts;
             const posis_i: number[] = [];
-            if (include_deleted) {
-                let i = 0; const i_max = posis.length;
-                for (; i < i_max; i++ ) {
-                    const posi = posis[i];
-                    if (posi !== null) {
-                        posis_i.push(i);
-                    } else {
-                        posis_i.push(null); // TODO
-                    }
-                }
-            } else {
-                let i = 0; const i_max = posis.length;
-                for (; i < i_max; i++ ) {
-                    const posi = posis[i];
-                    if (posi !== null) {
-                        posis_i.push(i);
-                    }
-                }
-            }
+            // for (let i = 0; i < posis.length; i++ ) {
+            //     const posi = posis[i];
+            //     if (posi !== undefined) {
+            //         posis_i.push(i);
+            //     }
+            // }
+            this._geom_arrays.up_posis_verts.forEach( (_, i) => posis_i.push(i) );
             return posis_i;
         }
         // get ents indices array from down arrays
         const geom_array_key: string = EEntStrToGeomArray[ent_type];
         const geom_array: any[] = this._geom_arrays[geom_array_key];
         const ents_i: number[] = [];
-        if (include_deleted) {
-            let i = 0; const i_max = geom_array.length;
-            for (; i < i_max; i++ ) {
-                const ent = geom_array[i];
-                if (ent !== null) {
-                    ents_i.push(i);
-                } else {
-                    ents_i.push(null); // TODO
-                }
-            }
-        } else {
-            let i = 0; const i_max = geom_array.length;
-            for (; i < i_max; i++ ) {
-                const ent = geom_array[i];
-                if (ent !== null) {
-                    ents_i.push(i);
-                }
-            }
-        }
+        // for (let i = 0; i < geom_array.length; i++ ) {
+        //     const ent = geom_array[i];
+        //     if (ent !== undefined) {
+        //         ents_i.push(i);
+        //     }
+        // }
+        geom_array.forEach( (_, i) => ents_i.push(i) );
         return ents_i;
     }
     /**
      * Returns the number of entities
      */
-    public numEnts(ent_type: EEntType, include_deleted: boolean): number {
-        if (include_deleted) {
-            return this.getNumEntsInclDel(ent_type);
+    public numEnts(ent_type: EEntType): number {
+        if (isPosi(ent_type)) {
+            // get posis count from up array: up_posis_verts
+            return this._geom_arrays.up_posis_verts.filter( ent_i => ent_i !== undefined).length;
+        } else {
+            // get ents count from down arrays
+            const geom_array_key: string = EEntStrToGeomArray[ent_type];
+            return this._geom_arrays[geom_array_key].filter( ent_i => ent_i !== undefined).length;
         }
-        return this.getNumEntsExcDel(ent_type);
     }
     /**
      * Returns the number of entities for [posis, point, polylines, polygons, collections].
      */
-    public numEntsAll(include_deleted: boolean): number[] {
-        if (include_deleted) {
-            return [
-                this.getNumEntsInclDel(EEntType.POSI),
-                this.getNumEntsInclDel(EEntType.POINT),
-                this.getNumEntsInclDel(EEntType.PLINE),
-                this.getNumEntsInclDel(EEntType.PGON),
-                this.getNumEntsInclDel(EEntType.COLL)
-            ];
-        }
+    public numEntsAll(): number[] {
         return [
-            this.getNumEntsExcDel(EEntType.POSI),
-            this.getNumEntsExcDel(EEntType.POINT),
-            this.getNumEntsExcDel(EEntType.PLINE),
-            this.getNumEntsExcDel(EEntType.PGON),
-            this.getNumEntsExcDel(EEntType.COLL)
+            this.numEnts(EEntType.POSI),
+            this.numEnts(EEntType.POINT),
+            this.numEnts(EEntType.PLINE),
+            this.numEnts(EEntType.PGON),
+            this.numEnts(EEntType.COLL)
         ];
     }
-    private getNumEntsInclDel(ent_type: EEntType): number {
-        // get posis count from up array: up_posis_verts
-        if (isPosi(ent_type)) {
-            return this._geom_arrays.up_posis_verts.length;
-        }
-        // get ents count from down arrays
-        const geom_array_key: string = EEntStrToGeomArray[ent_type];
-        const geom_array: any[] = this._geom_arrays[geom_array_key];
-        return geom_array.length;
-    }
-    private getNumEntsExcDel(ent_type: EEntType): number {
-        let count = 0;
-        let geom_array: any[] = null;
-        if (isPosi(ent_type)) {
-            // get posis count from up array: up_posis_verts
-            geom_array = this._geom_arrays.up_posis_verts;
-        } else {
-            // get ents count from down arrays
-            const geom_array_key: string = EEntStrToGeomArray[ent_type];
-            geom_array = this._geom_arrays[geom_array_key];
-        }
-        for (let i = 0; i < geom_array.length; i++) {
-            if (geom_array[i] !== null) {
-                count += 1;
-            }
-        }
-        return count;
-    }
+    // private getNumEntsInclDel(ent_type: EEntType): number {
+    //     let count = 0;
+    //     let geom_array: any[] = null;
+    //     if (isPosi(ent_type)) {
+    //         // get posis count from up array: up_posis_verts
+    //         geom_array = this._geom_arrays.up_posis_verts;
+    //     } else {
+    //         // get ents count from down arrays
+    //         const geom_array_key: string = EEntStrToGeomArray[ent_type];
+    //         geom_array = this._geom_arrays[geom_array_key];
+    //     }
+    //     for (let i = 0; i < geom_array.length; i++) {
+    //         if (geom_array[i] !== undefined) {
+    //             count += 1;
+    //         }
+    //     }
+    //     return count;
+    // }
     /**
      * Check if an entity exists
      * @param ent_type
@@ -144,16 +136,10 @@ export class GIGeomQuery {
      */
     public entExists(ent_type: EEntType, index: number): boolean {
         if (ent_type === EEntType.POSI) {
-            return (
-                this._geom_arrays.up_posis_verts[index] !== undefined &&
-                this._geom_arrays.up_posis_verts[index] !== null
-            );
+            return this._geom_arrays.up_posis_verts[index] !== undefined;
         }
         const geom_arrays_key: string = EEntStrToGeomArray[ent_type];
-        return (
-            this._geom_arrays[geom_arrays_key][index] !== undefined &&
-            this._geom_arrays[geom_arrays_key][index] !== null
-        );
+        return this._geom_arrays[geom_arrays_key][index] !== undefined;
     }
     /**
      * Returns a geompack of unique indexes, given an array of TEntTypeIdx.
@@ -236,24 +222,24 @@ export class GIGeomQuery {
         // invert
         const inv_colls_i: number[] = [];
         for (let i = 0; i < this._geom_arrays.dn_colls_objs.length; i++) {
-            if (this._geom_arrays.dn_colls_objs[i] !== null && !set_colls_i.has(i)) { inv_colls_i.push(i); }
+            if (this._geom_arrays.dn_colls_objs[i] !== undefined && !set_colls_i.has(i)) { inv_colls_i.push(i); }
         }
         const inv_pgons_i: number[] = [];
         for (let i = 0; i < this._geom_arrays.dn_pgons_faces.length; i++) {
-            if (this._geom_arrays.dn_pgons_faces[i] !== null && !set_pgons_i.has(i)) { inv_pgons_i.push(i); }
+            if (this._geom_arrays.dn_pgons_faces[i] !== undefined && !set_pgons_i.has(i)) { inv_pgons_i.push(i); }
         }
         const inv_plines_i: number[] = [];
         for (let i = 0; i < this._geom_arrays.dn_plines_wires.length; i++) {
-            if (this._geom_arrays.dn_plines_wires[i] !== null && !set_plines_i.has(i)) { inv_plines_i.push(i); }
+            if (this._geom_arrays.dn_plines_wires[i] !== undefined && !set_plines_i.has(i)) { inv_plines_i.push(i); }
         }
         const inv_points_i: number[] = [];
         for (let i = 0; i < this._geom_arrays.dn_points_verts.length; i++) {
-            if (this._geom_arrays.dn_points_verts[i] !== null && !set_points_i.has(i)) { inv_points_i.push(i); }
+            if (this._geom_arrays.dn_points_verts[i] !== undefined && !set_points_i.has(i)) { inv_points_i.push(i); }
         }
         const inv_posis2_i: number[] = [];
         for (let i = 0; i < this._geom_arrays.up_posis_verts.length; i++) {
             if (
-                this._geom_arrays.up_posis_verts[i] !== null &&
+                this._geom_arrays.up_posis_verts[i] !== undefined &&
                 !set_posis2_i.has(i) && !set_posis_i.has(i) ) {
                     inv_posis2_i.push(i);
                 }
@@ -273,27 +259,27 @@ export class GIGeomQuery {
     /**
      * Returns a list of indices for all posis that have no verts
      */
-    public getUnusedPosis(include_deleted: boolean): number[] {
+    public getUnusedPosis(): number[] {
         // get posis indices array from up array: up_posis_verts
         const posis: number[][] = this._geom_arrays.up_posis_verts;
         const posis_i: number[] = [];
-        if (include_deleted) {
+        // if (include_deleted) {
+        //     for (let i = 0; i < posis.length; i++ ) {
+        //         const posi = posis[i];
+        //         if (posi !== null) {
+        //             if (posi.length === 0) { posis_i.push(i); }
+        //         } else {
+        //             posis_i.push(null);
+        //         }
+        //     }
+        // } else {
             for (let i = 0; i < posis.length; i++ ) {
                 const posi = posis[i];
-                if (posi !== null) {
-                    if (posi.length === 0) { posis_i.push(i); }
-                } else {
-                    posis_i.push(null);
-                }
-            }
-        } else {
-            for (let i = 0; i < posis.length; i++ ) {
-                const posi = posis[i];
-                if (posi !== null) {
+                if (posi !== undefined) {
                     if (posi.length === 0) { posis_i.push(i); }
                 }
             }
-        }
+        // }
         return posis_i;
     }
     // ============================================================================
@@ -496,7 +482,7 @@ export class GIGeomQuery {
         const children: number[] = [];
         for (let i = 0; i < this._geom_arrays.dn_colls_objs.length; i++) {
             const coll: TColl = this._geom_arrays.dn_colls_objs[i];
-            if (coll !== null && coll[0] === coll_i) {
+            if (coll !== undefined && coll[0] === coll_i) {
                 children.push(i);
             }
         }
@@ -523,7 +509,7 @@ export class GIGeomQuery {
         const descendent_colls_i: number[] = [];
         for (let i = 0; i < this._geom_arrays.dn_colls_objs.length; i++) {
             const coll: TColl = this._geom_arrays.dn_colls_objs[i];
-            if (coll !== null && coll[0] !== -1 && i !== coll_i) {
+            if (coll !== undefined && coll[0] !== -1 && i !== coll_i) {
                 if (this.isCollDescendent(i, coll_i)) {
                     descendent_colls_i.push(i);
                 }

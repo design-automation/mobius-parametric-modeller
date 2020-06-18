@@ -158,15 +158,15 @@ export class CytoscapeComponent implements OnDestroy, OnChanges {
             if (selectedClass === 'ps' || (box && selectedClass[0] === '_')) { return; }
             const selectedPos = event.target.position();
             const allObj = {
-                'ps': model.geom.query.getEnts(EEntType.POSI, false),
-                '_v': model.geom.query.getEnts(EEntType.VERT, false),
-                '_e': model.geom.query.getEnts(EEntType.EDGE, false),
-                '_w': model.geom.query.getEnts(EEntType.WIRE, false),
-                '_f': model.geom.query.getEnts(EEntType.FACE, false),
-                'pt': model.geom.query.getEnts(EEntType.POINT, false),
-                'pl': model.geom.query.getEnts(EEntType.PLINE, false),
-                'pg': model.geom.query.getEnts(EEntType.PGON, false),
-                'co': model.geom.query.getEnts(EEntType.COLL, false)
+                'ps': model.geom.query.getEnts(EEntType.POSI),
+                '_v': model.geom.query.getEnts(EEntType.VERT),
+                '_e': model.geom.query.getEnts(EEntType.EDGE),
+                '_w': model.geom.query.getEnts(EEntType.WIRE),
+                '_f': model.geom.query.getEnts(EEntType.FACE),
+                'pt': model.geom.query.getEnts(EEntType.POINT),
+                'pl': model.geom.query.getEnts(EEntType.PLINE),
+                'pg': model.geom.query.getEnts(EEntType.PGON),
+                'co': model.geom.query.getEnts(EEntType.COLL)
             };
 
             function removeObject(sourceID, sourceClass) {
@@ -394,11 +394,11 @@ export class CytoscapeComponent implements OnDestroy, OnChanges {
             style: CYTOSCAPE_STYLE,
         });
 
-        let obj_i: string[] = this.model.geom.query.getEnts(EEntType.COLL, false).map(x => 'co' + x);
+        let obj_i: string[] = this.model.geom.query.getEnts(EEntType.COLL).map(x => 'co' + x);
         if (obj_i.length === 0) {
-            obj_i = obj_i.concat(this.model.geom.query.getEnts(EEntType.PGON, false).map(x => 'pg' + x));
-            obj_i = obj_i.concat(this.model.geom.query.getEnts(EEntType.PLINE, false).map(x => 'pl' + x));
-            obj_i = obj_i.concat(this.model.geom.query.getEnts(EEntType.POINT, false).map(x => 'pt' + x));
+            obj_i = obj_i.concat(this.model.geom.query.getEnts(EEntType.PGON).map(x => 'pg' + x));
+            obj_i = obj_i.concat(this.model.geom.query.getEnts(EEntType.PLINE).map(x => 'pl' + x));
+            obj_i = obj_i.concat(this.model.geom.query.getEnts(EEntType.POINT).map(x => 'pt' + x));
         }
 
         const cy_eles = [];

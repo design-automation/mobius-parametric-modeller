@@ -263,7 +263,7 @@ export class DataCesium {
         xform_matrix[13] = 0;
         xform_matrix[14] = 0;
         // create all positions
-        const posis_i: number[] = model.geom.query.getEnts(EEntType.POSI, false);
+        const posis_i: number[] = model.geom.query.getEnts(EEntType.POSI);
         const vert_n = model.attribs.query.getAttrib(EEntType.VERT, 'normal');
 
         const allPosis = [];
@@ -279,7 +279,7 @@ export class DataCesium {
             }
         }
         if (vert_n) {
-            for (const vert_i of model.geom.query.getEnts(EEntType.VERT, false)) {
+            for (const vert_i of model.geom.query.getEnts(EEntType.VERT)) {
                 // const pos = model.geom.nav.navVertToPosi(vert_i);
                 const normal_attr = vert_n.getEntVal(vert_i) as Txyz;
                 if (normal_attr && normal_attr.constructor === [].constructor && normal_attr.length === 3) {
@@ -292,7 +292,7 @@ export class DataCesium {
         // add geom
         if (model) {
             // get each polygon
-            const pgons_i: number[] = model.geom.query.getEnts(EEntType.PGON, false);
+            const pgons_i: number[] = model.geom.query.getEnts(EEntType.PGON);
             // get each triangle
             const lines_instances: any[] = [];
             const tris_instances: any[] = [];
@@ -402,7 +402,7 @@ export class DataCesium {
                     }
                 }
             }
-            const plines_i: number[] = model.geom.query.getEnts(EEntType.PLINE, false);
+            const plines_i: number[] = model.geom.query.getEnts(EEntType.PLINE);
             // get each pline
             for (const pline_i of plines_i) {
                 let pline_colour = Cesium.Color.BLACK;

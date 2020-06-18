@@ -273,7 +273,7 @@ export class GIAttribsAdd {
         } else if (source_ent_type === EEntType.MOD) {
             const value: TAttribDataTypes = this._model.attribs.query.getModelAttribValAny(source_attrib_name, source_attrib_idx_key);
             this.addAttrib(target_ent_type, target_attrib_name, target_data_type);
-            const target_ents_i: number[] = this._model.geom.query.getEnts(target_ent_type, false);
+            const target_ents_i: number[] = this._model.geom.query.getEnts(target_ent_type);
             for (const target_ent_i of target_ents_i) {
                 if (typeof target_attrib_idx_key === 'number') {
                     this.setAttribListIdxVal(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);

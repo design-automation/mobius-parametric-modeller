@@ -71,7 +71,7 @@ export class GIGeomModifyPgon {
                     arrRem(vert_tris_i, old_face_tri_i);
                 }
                 // tris to verts
-                this._geom_arrays.dn_tris_verts[old_face_tri_i] = null;
+                delete this._geom_arrays.dn_tris_verts[old_face_tri_i];
                 // tris to faces
                 delete this._geom_arrays.up_tris_faces[old_face_tri_i];
             }
@@ -123,7 +123,7 @@ export class GIGeomModifyPgon {
                 arrRem(tris_i, old_face_tri_i);
             }
             // tris to verts
-            this._geom_arrays.dn_tris_verts[old_face_tri_i] = null;
+            delete this._geom_arrays.dn_tris_verts[old_face_tri_i];
             // tris to faces
             delete this._geom_arrays.up_tris_faces[old_face_tri_i];
         }
@@ -159,8 +159,9 @@ export class GIGeomModifyPgon {
             for (const vert_i of verts_i) {
                 delete this._geom_arrays.up_verts_tris[vert_i]; // up
             }
-            // delete the tri
-            this._geom_arrays.dn_tris_verts[tri_i] = null;
+            // tris to verts
+            delete this._geom_arrays.dn_tris_verts[tri_i]; // down
+            // tris to faces
             delete this._geom_arrays.up_tris_faces[tri_i]; // up
         }
         // update down arrays

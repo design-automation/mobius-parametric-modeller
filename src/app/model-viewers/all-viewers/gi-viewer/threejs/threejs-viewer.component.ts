@@ -339,7 +339,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 element.innerHTML = String(index);
             }
         } else {
-            const ent_arr = this.model.geom.query.getEnts(this.SelectingEntityType.id, false);
+            const ent_arr = this.model.geom.query.getEnts(this.SelectingEntityType.id);
             for (let i = 0; i < allLabels.length; i++) {
                 const element = allLabels[i];
                 const val = Number(element.getAttribute('data-index'));
@@ -469,15 +469,15 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     getGISummary(model: GIModel) {
         let colls = 0, pgons = 0, plines = 0, points = 0, faces = 0, wires = 0, edges = 0, vertices = 0, positions = 0;
         if (this) {
-            colls = model.geom.query.numEnts(EEntType.COLL, false);
-            pgons = model.geom.query.numEnts(EEntType.PGON, false);
-            plines = model.geom.query.numEnts(EEntType.PLINE, false);
-            points = model.geom.query.numEnts(EEntType.POINT, false);
-            faces = model.geom.query.numEnts(EEntType.FACE, false);
-            wires = model.geom.query.numEnts(EEntType.WIRE, false);
-            edges = model.geom.query.numEnts(EEntType.EDGE, false);
-            vertices = model.geom.query.numEnts(EEntType.VERT, false);
-            positions = model.geom.query.numEnts(EEntType.POSI, false);
+            colls = model.geom.query.numEnts(EEntType.COLL);
+            pgons = model.geom.query.numEnts(EEntType.PGON);
+            plines = model.geom.query.numEnts(EEntType.PLINE);
+            points = model.geom.query.numEnts(EEntType.POINT);
+            faces = model.geom.query.numEnts(EEntType.FACE);
+            wires = model.geom.query.numEnts(EEntType.WIRE);
+            edges = model.geom.query.numEnts(EEntType.EDGE);
+            vertices = model.geom.query.numEnts(EEntType.VERT);
+            positions = model.geom.query.numEnts(EEntType.POSI);
         }
         const gi_summary = [{title: 'Collections', val: colls},
         {title: 'Polygons', val: pgons},

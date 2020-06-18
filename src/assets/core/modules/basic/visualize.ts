@@ -65,7 +65,7 @@ function _color(__model__: GIModel, ents_arr: TEntTypeIdx[], color: TColor): voi
     // make a list of all the verts
     let all_verts_i: number[] = [];
     if (ents_arr === null) {
-        all_verts_i = __model__.geom.query.getEnts(EEntType.VERT, false);
+        all_verts_i = __model__.geom.query.getEnts(EEntType.VERT);
     } else {
         for (const ent_arr of ents_arr) {
             const [ent_type, ent_i]: [number, number] = ent_arr as TEntTypeIdx;
@@ -325,7 +325,7 @@ export function Edge(__model__: GIModel, entities: TId|TId[], method: _EEdgeMeth
         }
         edges_i = Array.from(set_edges_i);
     } else {
-        edges_i = __model__.geom.query.getEnts(EEntType.EDGE, false);
+        edges_i = __model__.geom.query.getEnts(EEntType.EDGE);
     }
     // Set edge visibility
     const setting: string = method === _EEdgeMethod.VISIBLE ? null : 'hidden';
@@ -403,7 +403,7 @@ export function Mesh(__model__: GIModel, entities: TId|TId[], method: _EMeshMeth
         }
         verts_i = Array.from(set_verts_i);
     } else {
-        verts_i = __model__.geom.query.getEnts(EEntType.VERT, false);
+        verts_i = __model__.geom.query.getEnts(EEntType.VERT);
     }
     // calc vertex normals and set edge visibility
     switch (method) {

@@ -138,7 +138,7 @@ function getNodesWithInstGeoms(id: string, inst_geoms: string): string {
 function processColls(model: GIModel): void {
     const colls_map: Map<number, number[]> = new Map();
     // go through the collections
-    const colls_i: number[] = model.geom.query.getEnts(EEntType.COLL, false);
+    const colls_i: number[] = model.geom.query.getEnts(EEntType.COLL);
     for (const coll_i of colls_i) {
         const parent: number = model.geom.query.getCollParent(coll_i);
         // const pgons_i: number[] = model.geom.nav.navCollToPgon(coll_i);
@@ -149,11 +149,11 @@ function processColls(model: GIModel): void {
         colls_map.get(parent).push(coll_i);
     }
     for (const coll_i of colls_map.get(null)) {
-
+        // TODO
     }
 }
 function processPgonInColl(model: GIModel, pgon_i: number) {
-
+    // TODO
 }
 /**
  * Process polygons
@@ -293,7 +293,7 @@ export function exportDae(model: GIModel): string {
     const materials_pgons_rev_map: Map<string, string> = new Map();
     const materials_plines_rev_map: Map<string, string> = new Map();
     // process the polygons that are not in a collection
-    const pgons_i: number[] = model.geom.query.getEnts(EEntType.PGON, false);
+    const pgons_i: number[] = model.geom.query.getEnts(EEntType.PGON);
     for (const pgon_i of pgons_i) {
         const material_id: string  = processMaterialPgon(model, pgon_i, has_color_attrib,
             materials_map, material_effectss_map, materials_pgons_rev_map);
@@ -315,7 +315,7 @@ export function exportDae(model: GIModel): string {
         }
     }
     // process the polylines that are not in a collection
-    const plines_i: number[] = model.geom.query.getEnts(EEntType.PLINE, false);
+    const plines_i: number[] = model.geom.query.getEnts(EEntType.PLINE);
     for (const pline_i of plines_i) {
         const material_id: string  = processMaterialPline(model, pline_i, has_color_attrib,
             materials_map, material_effectss_map, materials_plines_rev_map);

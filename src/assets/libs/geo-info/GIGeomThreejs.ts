@@ -37,7 +37,10 @@ export class GIGeomThreejs {
      * 3) the material groups array, which is an array of [ start, count, mat_index ]
      */
     public get3jsTris(vertex_map: Map<number, number>): [number[], Map<number, number>, object[], [number, number, number][]] {
+
+        // TODO this should not be parsed each time
         const settings = JSON.parse(localStorage.getItem('mpm_settings'));
+
         // arrays to store threejs data
         const tri_data_arrs: [number[], TTri, number][] = []; // tri_mat_indices, new_tri_verts_i, tri_i
         const mat_f: object = {
@@ -59,41 +62,40 @@ export class GIGeomThreejs {
         // get the material attribute from polygons
         const material_attrib: GIAttribMap = this._geom.model.attribs._attribs_maps.pg.get('material');
         // loop through all tris
-        let tri_i = 0; const tri_i_max = this._geom_arrays.dn_tris_verts.length;
-        for (; tri_i < tri_i_max; tri_i++) {
+        for (let tri_i = 0; tri_i < this._geom_arrays.dn_tris_verts.length; tri_i++) {
             const tri_verts_i: number[] = this._geom_arrays.dn_tris_verts[tri_i];
-            if (tri_verts_i !== null) {
-                // get the verts, face and the polygon for this tri
-                const new_tri_verts_i: TTri = tri_verts_i.map(v => vertex_map.get(v)) as TTri;
-                // get the materials for this tri from the polygon
-                const tri_face_i: number = this._geom_arrays.up_tris_faces[tri_i];
-                const tri_pgon_i: number = this._geom_arrays.up_faces_pgons[tri_face_i];
-                const tri_mat_indices: number[] = [];
-                if (material_attrib !== undefined) {
-                    const mat_attrib_val: string|string[] = material_attrib.getEntVal(tri_pgon_i) as string|string[];
-                    const pgon_mat_names: string[] = (Array.isArray(mat_attrib_val)) ? mat_attrib_val : [mat_attrib_val];
-                    for (const pgon_mat_name of pgon_mat_names) {
-                        let pgon_mat_index: number = material_names.indexOf(pgon_mat_name);
-                        if (pgon_mat_index === -1) {
-                            const mat_settings_obj: object = this._geom.model.attribs._attribs_maps.mo.get(pgon_mat_name);
-                            if (mat_settings_obj !== undefined) {
-                                pgon_mat_index = materials.length;
-                                material_names.push(pgon_mat_name);
-                                materials.push(this._getMaterial(mat_settings_obj));
-                            }
-                        }
-                        if (pgon_mat_index !== -1) {
-                            tri_mat_indices.push(pgon_mat_index);
+            // check the triamgle is not undefined
+            if (tri_verts_i === undefined || tri_verts_i === null) { continue; } // TODO remove null
+            // get the verts, face and the polygon for this tri
+            const new_tri_verts_i: TTri = tri_verts_i.map(v => vertex_map.get(v)) as TTri;
+            // get the materials for this tri from the polygon
+            const tri_face_i: number = this._geom_arrays.up_tris_faces[tri_i];
+            const tri_pgon_i: number = this._geom_arrays.up_faces_pgons[tri_face_i];
+            const tri_mat_indices: number[] = [];
+            if (material_attrib !== undefined) {
+                const mat_attrib_val: string|string[] = material_attrib.getEntVal(tri_pgon_i) as string|string[];
+                const pgon_mat_names: string[] = (Array.isArray(mat_attrib_val)) ? mat_attrib_val : [mat_attrib_val];
+                for (const pgon_mat_name of pgon_mat_names) {
+                    let pgon_mat_index: number = material_names.indexOf(pgon_mat_name);
+                    if (pgon_mat_index === -1) {
+                        const mat_settings_obj: object = this._geom.model.attribs._attribs_maps.mo.get(pgon_mat_name);
+                        if (mat_settings_obj !== undefined) {
+                            pgon_mat_index = materials.length;
+                            material_names.push(pgon_mat_name);
+                            materials.push(this._getMaterial(mat_settings_obj));
                         }
                     }
+                    if (pgon_mat_index !== -1) {
+                        tri_mat_indices.push(pgon_mat_index);
+                    }
                 }
-                if (tri_mat_indices.length === 0) {
-                    tri_mat_indices.push(0); // default material front
-                    tri_mat_indices.push(1); // default material back
-                }
-                // add the data to the data_array
-                tri_data_arrs.push( [ tri_mat_indices, new_tri_verts_i, tri_i ] );
             }
+            if (tri_mat_indices.length === 0) {
+                tri_mat_indices.push(0); // default material front
+                tri_mat_indices.push(1); // default material back
+            }
+            // add the data to the data_array
+            tri_data_arrs.push( [ tri_mat_indices, new_tri_verts_i, tri_i ] );
         }
         // sort that data_array, so that we get triangls sorted according to their materials
         // for each entry in the data_array, the first item is the material indices, so that they are sorted correctly
@@ -159,6 +161,7 @@ export class GIGeomThreejs {
         // return [tris_verts_i.flat(1), tri_select_map];
         // return this._geom_arrays.dn_tris_verts.flat(1);
         // return [].concat(...this._geom_arrays.dn_tris_verts);
+
     }
     /**
      * Returns a flat list of the sequence of verices for all the edges.
@@ -170,8 +173,6 @@ export class GIGeomThreejs {
         const edge_select_map: Map<number, number> = new Map();
         const white_edges_verts_i_filt: TEdge[] = [];
         const white_edge_select_map: Map<number, number> = new Map();
-        let gi_i = 0;
-        const l = this._geom_arrays.dn_edges_verts.length;
         const visibility_attrib = this._geom.model.attribs._attribs_maps._e.get('visibility');
         let hidden_attrib;
         if (visibility_attrib) {
@@ -182,22 +183,21 @@ export class GIGeomThreejs {
         if (edge_attrib) {
             edge_material_attrib = edge_attrib.getEntsFromVal('white');
         }
-        for (; gi_i < l; gi_i++) {
+        for (let gi_i = 0; gi_i < this._geom_arrays.dn_edges_verts.length; gi_i++) {
             if (hidden_attrib && hidden_attrib.indexOf(gi_i) !== -1) { continue; }
             const edge_verts_i: TEdge = this._geom_arrays.dn_edges_verts[gi_i];
             let color_check;
             if (edge_material_attrib) {
                 color_check = edge_material_attrib.indexOf(gi_i) !== -1;
             }
-            if (edge_verts_i !== null) {
-                const new_edge_verts_i: TEdge = edge_verts_i.map(e => vertex_map.get(e)) as TEdge;
-                if (color_check) {
-                    const tjs_i = white_edges_verts_i_filt.push(new_edge_verts_i) - 1;
-                    white_edge_select_map.set(tjs_i, gi_i);
-                } else {
-                    const tjs_i = edges_verts_i_filt.push(new_edge_verts_i) - 1;
-                    edge_select_map.set(tjs_i, gi_i);
-                }
+            if (edge_verts_i === undefined || edge_verts_i === null) { continue; } // TODO remove null
+            const new_edge_verts_i: TEdge = edge_verts_i.map(e => vertex_map.get(e)) as TEdge;
+            if (color_check) {
+                const tjs_i = white_edges_verts_i_filt.push(new_edge_verts_i) - 1;
+                white_edge_select_map.set(tjs_i, gi_i);
+            } else {
+                const tjs_i = edges_verts_i_filt.push(new_edge_verts_i) - 1;
+                edge_select_map.set(tjs_i, gi_i);
             }
         }
         // @ts-ignore
@@ -220,15 +220,14 @@ export class GIGeomThreejs {
         const l = this._geom_arrays.dn_plines_wires.length;
         for (; pw_i < l; pw_i++) {
             const plines_wires_i: TPline = this._geom_arrays.dn_plines_wires[pw_i];
-            if (plines_wires_i !== null) {
-                const wires_edge_i: TWire = this._geom_arrays.dn_wires_edges[plines_wires_i];
-                for (const we_i of wires_edge_i) {
-                    const edge_verts_i: TEdge = this._geom_arrays.dn_edges_verts[we_i];
-                    const new_edge_verts_i: TEdge = edge_verts_i.map(e => vertex_map.get(e)) as TEdge;
-                    const tjs_i = edges_verts_i_filt.push(new_edge_verts_i) - 1;
-                    edge_select_map.set(tjs_i, gi_i);
-                    gi_i++;
-                }
+            if (plines_wires_i === undefined || plines_wires_i === null) { continue; } // TODO remove null
+            const wires_edge_i: TWire = this._geom_arrays.dn_wires_edges[plines_wires_i];
+            for (const we_i of wires_edge_i) {
+                const edge_verts_i: TEdge = this._geom_arrays.dn_edges_verts[we_i];
+                const new_edge_verts_i: TEdge = edge_verts_i.map(e => vertex_map.get(e)) as TEdge;
+                const tjs_i = edges_verts_i_filt.push(new_edge_verts_i) - 1;
+                edge_select_map.set(tjs_i, gi_i);
+                gi_i++;
             }
         }
         // const l = this._geom_arrays.dn_edges_verts.length;
@@ -258,11 +257,10 @@ export class GIGeomThreejs {
         const l = this._geom_arrays.dn_points_verts.length;
         for (; gi_i < l; gi_i++) {
             const point_verts_i: TPoint = this._geom_arrays.dn_points_verts[gi_i];
-            if (point_verts_i !== null) {
-                const new_point_verts_i: TPoint = vertex_map.get(point_verts_i) as TPoint;
-                const tjs_i = points_verts_i_filt.push(new_point_verts_i) - 1;
-                point_select_map.set(tjs_i, gi_i);
-            }
+            if (point_verts_i === undefined || point_verts_i === null) { continue; } // TODO remove null
+            const new_point_verts_i: TPoint = vertex_map.get(point_verts_i) as TPoint;
+            const tjs_i = points_verts_i_filt.push(new_point_verts_i) - 1;
+            point_select_map.set(tjs_i, gi_i);
         }
         return [points_verts_i_filt, point_select_map];
         // return this._geom_arrays.dn_points_verts;

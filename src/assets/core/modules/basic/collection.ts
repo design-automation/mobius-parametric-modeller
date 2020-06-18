@@ -135,7 +135,7 @@ function _get(__model__: GIModel, names: string|string[]): number[] {
         // wildcards
         if (names.indexOf('*') !== -1 || names.indexOf('?') !== -1) {
             const reg_exp = new RegExp(names.replace('?', '\\w').replace('*', '\\w*'));
-            const all_colls_i: number[] = __model__.geom.query.getEnts(EEntType.COLL, false);
+            const all_colls_i: number[] = __model__.geom.query.getEnts(EEntType.COLL);
             const all_names: string[] = __model__.attribs.query.getAttribVal(EEntType.COLL, 'name', all_colls_i) as string[];
             const unique_names: string[] = Array.from(new Set(all_names));
             const match_names: string[] = [];
@@ -144,7 +144,7 @@ function _get(__model__: GIModel, names: string|string[]): number[] {
             }
             return _get(__model__, match_names);
         }
-        const colls_i: number[] = __model__.geom.query.getEnts(EEntType.COLL, false);
+        const colls_i: number[] = __model__.geom.query.getEnts(EEntType.COLL);
         const query_result: number[] = __model__.attribs.query.filterByAttribs(
             EEntType.COLL, colls_i, 'name', null, EFilterOperatorTypes.IS_EQUAL, names);
         return query_result;

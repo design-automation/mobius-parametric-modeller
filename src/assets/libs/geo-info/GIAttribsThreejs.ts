@@ -33,13 +33,21 @@ export class GIAttribsThreejs {
         //
         const coords: number[][] = [];
         const posi_map: Map<number, number> = new Map();
-        const posis_i: number[] = this._model.geom.query.getEnts(EEntType.POSI, true);
-        posis_i.forEach( (posi_i, gi_index) => {
-            if (posi_i !== null) {
-                const tjs_index: number = coords.push( coords_attrib.getEntVal(posi_i) as number[] ) - 1;
-                posi_map.set(gi_index, tjs_index);
-            }
-        });
+        const posis_i: number[] = this._model.geom.query.getEnts(EEntType.POSI);
+
+        for (const posi_i of posis_i) {
+            const tjs_index: number = coords.push( coords_attrib.getEntVal(posi_i) as number[] ) - 1;
+            posi_map.set(posi_i, tjs_index);
+        }
+
+        // posis_i.forEach( (posi_i, gi_index) => {
+        //     if (posi_i !== null) {
+        //         const tjs_index: number = coords.push( coords_attrib.getEntVal(posi_i) as number[] ) - 1;
+        //         posi_map.set(gi_index, tjs_index);
+        //     }
+        // });
+
+
         // @ts-ignore
         return [coords.flat(1), posi_map];
     }
@@ -53,14 +61,22 @@ export class GIAttribsThreejs {
         //
         const coords: number[][] = [];
         const vertex_map: Map<number, number> = new Map();
-        const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT, true);
-        verts_i.forEach( (vert_i, gi_index) => {
-            if (vert_i !== null) {
-                const posi_i: number = this._model.geom.nav.navVertToPosi(vert_i);
-                const tjs_index: number = coords.push( coords_attrib.getEntVal(posi_i) as number[] ) - 1;
-                vertex_map.set(gi_index, tjs_index);
-            }
-        });
+        const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT);
+
+        for (const vert_i of verts_i) {
+            const posi_i: number = this._model.geom.nav.navVertToPosi(vert_i);
+            const tjs_index: number = coords.push( coords_attrib.getEntVal(posi_i) as number[] ) - 1;
+            vertex_map.set(vert_i, tjs_index);
+        }
+
+        // verts_i.forEach( (vert_i, gi_index) => {
+        //     if (vert_i !== null) {
+        //         const posi_i: number = this._model.geom.nav.navVertToPosi(vert_i);
+        //         const tjs_index: number = coords.push( coords_attrib.getEntVal(posi_i) as number[] ) - 1;
+        //         vertex_map.set(gi_index, tjs_index);
+        //     }
+        // });
+
         // @ts-ignore
         return [coords.flat(1), vertex_map];
     }
@@ -73,7 +89,7 @@ export class GIAttribsThreejs {
         // create a sparse arrays of normals of all verts of polygons
         const verts_attrib: GIAttribMap = this._attribs_maps._v.get(EAttribNames.NORMAL);
         const normals: Txyz[] = [];
-        for (const pgon_i of this._model.geom.query.getEnts(EEntType.PGON, false)) {
+        for (const pgon_i of this._model.geom.query.getEnts(EEntType.PGON)) {
             let pgon_normal: Txyz = null;
             for (const vert_i of this._model.geom.nav.navAnyToVert(EEntType.PGON, pgon_i)) {
                 let normal: Txyz = verts_attrib.getEntVal(vert_i) as Txyz;
@@ -89,9 +105,9 @@ export class GIAttribsThreejs {
         }
         // get all the normals
         const verts_normals: TAttribDataTypes[] = [];
-        const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT, false);
+        const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT);
         for (const vert_i of verts_i) {
-            if (vert_i !== null) {
+            if (vert_i !== undefined) {
                 let normal: Txyz = normals[vert_i];
                 normal = normal === undefined ? [0, 0, 0] : normal;
                 verts_normals.push(normal);
@@ -110,9 +126,9 @@ export class GIAttribsThreejs {
         const verts_attrib: GIAttribMap = this._attribs_maps._v.get(EAttribNames.COLOR);
         // get all the colors
         const verts_colors: TAttribDataTypes[] = [];
-        const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT, false);
+        const verts_i: number[] = this._model.geom.query.getEnts(EEntType.VERT);
         for (const vert_i of verts_i) {
-            if (vert_i !== null) {
+            if (vert_i !== undefined) {
                 const value = verts_attrib.getEntVal(vert_i) as TAttribDataTypes;
                 const _value = value === undefined ? [1, 1, 1] : value;
                 verts_colors.push(_value);
@@ -153,7 +169,7 @@ export class GIAttribsThreejs {
         const data_obj_map: Map< number, {_id: string} > = new Map();
 
         // create the ID for each table row
-        const ents_i: number[] = this._model.geom.query.getEnts(ent_type, false);
+        const ents_i: number[] = this._model.geom.query.getEnts(ent_type);
 
         // sessionStorage.setItem('attrib_table_ents', JSON.stringify(ents_i));
         let i = 0;
@@ -290,7 +306,7 @@ export class GIAttribsThreejs {
                     // @ts-ignore
                     delete val[attrib];
                 } catch (ex) {}
-            })
+            });
         }
         return Array.from(data_obj_map.values());
     }
@@ -301,9 +317,9 @@ export class GIAttribsThreejs {
      * @param id
      */
     public getIdIndex(ent_type: EEntType, id: number) {
-        const ents_i = this._model.geom.query.getEnts(ent_type, false);
+        const ents_i = this._model.geom.query.getEnts(ent_type);
         const index = ents_i.findIndex(ent_i => ent_i === id);
-        console.log("calling getIdIndex in GIATtribsThreejs", id, index);
+        console.log('calling getIdIndex in GIATtribsThreejs', id, index);
         return index;
     }
 }

@@ -1,7 +1,6 @@
-import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz, TColl, TVert, EWireType } from './common';
+import { EEntType, IGeomArrays } from './common';
 import { GIGeom } from './GIGeom';
-import { arrRem, arrIdxAdd } from '../util/arrs';
-import { vecDot } from '../geom/vectors';
+import { arrRem } from '../util/arrs';
 
 /**
  * Class for deleting geometry.
@@ -45,10 +44,10 @@ export class GIGeomDelVert {
      */
     public delVert(vert_i: number): void {
         // check, has it already been deleted
-        if (this._geom_arrays.dn_verts_posis[vert_i] === null) { return; }
+        if (this._geom_arrays.dn_verts_posis[vert_i] === undefined) { return; }
         // check, is this a point, then delete the point and vertex
         const point_i: number = this._geom_arrays.up_verts_points[vert_i];
-        if (point_i !== undefined && point_i !== null) {
+        if (point_i !== undefined) {
             this._geom.del.delPoints(point_i, false);
             return;
         }
@@ -68,7 +67,7 @@ export class GIGeomDelVert {
             // special case, open pline with 2 verts
             this.__delVert__OpenPline1Edge(wire_i);
 
-        } else if (face_i !== undefined && face_i !== null && num_verts === 3) {
+        } else if (face_i !== undefined && num_verts === 3) {
 
             // special case, pgon with three verts
             const wires_i: number[] = this._geom_arrays.dn_faces_wirestris[face_i][0];
@@ -141,7 +140,7 @@ export class GIGeomDelVert {
         // vert_i is at the star of an open wire, we have one edge
         const start_edge_i: number = wire_edges_i[0];
         // delete the first edge
-        this._geom_arrays.dn_edges_verts[start_edge_i] = null;
+        delete this._geom_arrays.dn_edges_verts[start_edge_i];
         delete this._geom_arrays.up_edges_wires[start_edge_i];
         this._geom.model.attribs.add.delEntFromAttribs(EEntType.EDGE, start_edge_i);
         // update the second vert
@@ -150,7 +149,7 @@ export class GIGeomDelVert {
         // update the wire
         arrRem(wire_edges_i, start_edge_i);
         // delete the vert
-        this._geom_arrays.dn_verts_posis[vert_i] = null;
+        delete this._geom_arrays.dn_verts_posis[vert_i];
         delete this._geom_arrays.up_verts_edges[vert_i];
         this._geom.model.attribs.add.delEntFromAttribs(EEntType.VERT, vert_i);
         // update the posis
@@ -165,7 +164,7 @@ export class GIGeomDelVert {
         // vert_i is at the end of an open wire, we have one edge
         const end_edge_i: number = wire_edges_i[wire_edges_i.length - 1];
         // delete the last edge
-        this._geom_arrays.dn_edges_verts[end_edge_i] = null;
+        delete this._geom_arrays.dn_edges_verts[end_edge_i];
         delete this._geom_arrays.up_edges_wires[end_edge_i];
         this._geom.model.attribs.add.delEntFromAttribs(EEntType.EDGE, end_edge_i);
         // update the one before last vert
@@ -174,7 +173,7 @@ export class GIGeomDelVert {
         // update the wire
         arrRem(wire_edges_i, end_edge_i);
         // delete the vert
-        this._geom_arrays.dn_verts_posis[vert_i] = null;
+        delete this._geom_arrays.dn_verts_posis[vert_i];
         delete this._geom_arrays.up_verts_edges[vert_i];
         this._geom.model.attribs.add.delEntFromAttribs(EEntType.VERT, vert_i);
         // update the posis
@@ -212,13 +211,13 @@ export class GIGeomDelVert {
         prev_edge_verts_i[1] = next_vert_i;
         this._geom_arrays.up_verts_edges[next_vert_i][0] = prev_edge_i;
         // delete the next edge
-        this._geom_arrays.dn_edges_verts[next_edge_i] = null;
+        delete this._geom_arrays.dn_edges_verts[next_edge_i];
         delete this._geom_arrays.up_edges_wires[next_edge_i];
         this._geom.model.attribs.add.delEntFromAttribs(EEntType.EDGE, next_edge_i);
         // update the wire
         arrRem(wire_edges_i, next_edge_i);
         // delete the vert
-        this._geom_arrays.dn_verts_posis[vert_i] = null;
+        delete this._geom_arrays.dn_verts_posis[vert_i];
         delete this._geom_arrays.up_verts_edges[vert_i];
         this._geom.model.attribs.add.delEntFromAttribs(EEntType.VERT, vert_i);
         // update the posis

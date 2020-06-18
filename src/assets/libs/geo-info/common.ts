@@ -309,16 +309,25 @@ export type TModelAttribValuesArr = Array<[string, TAttribDataTypes]>;
 export const RE_SPACES: RegExp = /\s+/g;
 
 export interface IGeomData {
-    num_positions: number;
-    triangles: TTri[];
-    vertices: TVert[];
+    posis_i: number[];
+    verts: TVert[];
+    verts_i: number[];
+    tris: TTri[];
+    tris_i: number[];
     edges: TEdge[];
+    edges_i: number[];
     wires: TWire[];
+    wires_i: number[];
     faces: TFace[];
+    faces_i: number[];
     points: TPoint[];
-    polylines: TPline[];
-    polygons: TPgon[];
-    collections: TColl[];
+    points_i: number[];
+    plines: TPline[];
+    plines_i: number[];
+    pgons: TPgon[];
+    pgons_i: number[];
+    colls: TColl[];
+    colls_i: number[];
     selected: TEntTypeIdx[];
 }
 export interface IAttribData {
@@ -327,15 +336,15 @@ export interface IAttribData {
     data: TEntAttribValuesArr;
 }
 export interface IAttribsData {
-    positions: IAttribData[];
-    vertices: IAttribData[];
+    posis: IAttribData[];
+    verts: IAttribData[];
     edges: IAttribData[];
     wires: IAttribData[];
     faces: IAttribData[];
     points: IAttribData[];
-    polylines: IAttribData[];
-    polygons: IAttribData[];
-    collections: IAttribData[];
+    plines: IAttribData[];
+    pgons: IAttribData[];
+    colls: IAttribData[];
     model: TModelAttribValuesArr;
 }
 export interface IModelData {

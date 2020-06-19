@@ -329,24 +329,24 @@ export class CodeUtils {
                 }
 
                 codeStr.push(`__params__.console.push('<div style="margin: 5px 0px 5px 10px; border: 1px solid #E6E6E6"><p><b> Global Function: ${prod.meta.name}</b></p>');`);
-                // argsVals = argsVals.join(', ');
-                // const fn = `${namePrefix}${prod.meta.name}(__params__, ${argsVals} )`;
                 const fn = `${namePrefix}${prod.meta.name}(__params__${argsVals.map(val => ', ' + val).join('')})`;
+                codeStr.push(`__params__.prevModel = __params__.model.clone();`);
                 if (args[0].name === '__none__' || !args[0].jsValue) {
                     codeStr.push(`${fn};`);
-                    codeStr.push(`__params__.console.push('</div>')`);
-                    break;
-                }
-                const repImpVar = this.repSetAttrib(args[0].jsValue);
-                if (!repImpVar) {
-                    codeStr.push(`${prefix}${args[0].jsValue} = ${fn};`);
                 } else {
-                    codeStr.push(`${repImpVar[0]} ${fn} ${repImpVar[1]}`);
+                    const repImpVar = this.repSetAttrib(args[0].jsValue);
+                    if (!repImpVar) {
+                        codeStr.push(`${prefix}${args[0].jsValue} = ${fn};`);
+                    } else {
+                        codeStr.push(`${repImpVar[0]} ${fn} ${repImpVar[1]}`);
+                    }
+                    if (prefix === 'let ') {
+                        existingVars.push(args[0].jsValue);
+                    }
                 }
-
-                if (prefix === 'let ') {
-                    existingVars.push(args[0].jsValue);
-                }
+                codeStr.push(`__params__.prevModel.merge(__params__.model);`);
+                codeStr.push(`__params__.model = __params__.prevModel;`);
+                codeStr.push(`__params__.prevModel = null;`);
                 codeStr.push(`__params__.console.push('</div>')`);
                 break;
             case ProcedureTypes.Error:

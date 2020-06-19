@@ -25,15 +25,15 @@ export class GIAttribsIO {
     public merge(attribs_maps: IAttribsMaps): void {
 
         // add the attribute data
-        if (attribs_maps.ps !== undefined) { this._mergeAttribs(attribs_maps, EEntType.POSI); } // , posis_map); }
-        if (attribs_maps._v !== undefined) { this._mergeAttribs(attribs_maps, EEntType.VERT); } // , verts_map); }
-        if (attribs_maps._e !== undefined) { this._mergeAttribs(attribs_maps, EEntType.EDGE); } // , edges_map); }
-        if (attribs_maps._w !== undefined) { this._mergeAttribs(attribs_maps, EEntType.WIRE); } // , wires_map); }
-        if (attribs_maps._f !== undefined) { this._mergeAttribs(attribs_maps, EEntType.FACE); } // , faces_map); }
-        if (attribs_maps.pt !== undefined) { this._mergeAttribs(attribs_maps, EEntType.POINT); } // , points_map); }
-        if (attribs_maps.pl !== undefined) { this._mergeAttribs(attribs_maps, EEntType.PLINE); } // , plines_map); }
-        if (attribs_maps.pg !== undefined) { this._mergeAttribs(attribs_maps, EEntType.PGON); } // , pgons_map); }
-        if (attribs_maps.co !== undefined) { this._mergeAttribs(attribs_maps, EEntType.COLL); } // , colls_map); }
+        if (attribs_maps.ps !== undefined) { this._mergeAttribs(attribs_maps, EEntType.POSI); }
+        if (attribs_maps._v !== undefined) { this._mergeAttribs(attribs_maps, EEntType.VERT); }
+        if (attribs_maps._e !== undefined) { this._mergeAttribs(attribs_maps, EEntType.EDGE); }
+        if (attribs_maps._w !== undefined) { this._mergeAttribs(attribs_maps, EEntType.WIRE); }
+        if (attribs_maps._f !== undefined) { this._mergeAttribs(attribs_maps, EEntType.FACE); }
+        if (attribs_maps.pt !== undefined) { this._mergeAttribs(attribs_maps, EEntType.POINT); }
+        if (attribs_maps.pl !== undefined) { this._mergeAttribs(attribs_maps, EEntType.PLINE); }
+        if (attribs_maps.pg !== undefined) { this._mergeAttribs(attribs_maps, EEntType.PGON); }
+        if (attribs_maps.co !== undefined) { this._mergeAttribs(attribs_maps, EEntType.COLL); }
         if (attribs_maps.mo !== undefined) { this._mergeModelAttribs(attribs_maps); }
     }
     /**
@@ -149,7 +149,7 @@ export class GIAttribsIO {
         const to_attribs: Map<string, GIAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
         // const num_ents: number = this._model.geom.query.numEnts(ent_type, true); // incude deleted ents
         from_attribs.forEach( from_attrib => {
-            // get the data and shift the ents_i indices
+            // get the data
             const ents_i_values: [number[], TAttribDataTypes][] = from_attrib.getEntsVals();
             let attrib_has_ents = false;
             for (const ents_i_value of ents_i_values) {

@@ -62,10 +62,7 @@ export class GIGeomThreejs {
         // get the material attribute from polygons
         const material_attrib: GIAttribMap = this._geom.model.attribs._attribs_maps.pg.get('material');
         // loop through all tris
-        for (let tri_i = 0; tri_i < this._geom_arrays.dn_tris_verts.length; tri_i++) {
-            const tri_verts_i: number[] = this._geom_arrays.dn_tris_verts[tri_i];
-            // check the triamgle is not undefined
-            if (tri_verts_i === undefined || tri_verts_i === null) { continue; } // TODO remove null
+        this._geom_arrays.dn_tris_verts.forEach( (tri_verts_i, tri_i) => {
             // get the verts, face and the polygon for this tri
             const new_tri_verts_i: TTri = tri_verts_i.map(v => vertex_map.get(v)) as TTri;
             // get the materials for this tri from the polygon
@@ -96,7 +93,7 @@ export class GIGeomThreejs {
             }
             // add the data to the data_array
             tri_data_arrs.push( [ tri_mat_indices, new_tri_verts_i, tri_i ] );
-        }
+        });
         // sort that data_array, so that we get triangls sorted according to their materials
         // for each entry in the data_array, the first item is the material indices, so that they are sorted correctly
         tri_data_arrs.sort();
@@ -183,23 +180,23 @@ export class GIGeomThreejs {
         if (edge_attrib) {
             edge_material_attrib = edge_attrib.getEntsFromVal('white');
         }
-        for (let gi_i = 0; gi_i < this._geom_arrays.dn_edges_verts.length; gi_i++) {
-            if (hidden_attrib && hidden_attrib.indexOf(gi_i) !== -1) { continue; }
-            const edge_verts_i: TEdge = this._geom_arrays.dn_edges_verts[gi_i];
-            let color_check;
-            if (edge_material_attrib) {
-                color_check = edge_material_attrib.indexOf(gi_i) !== -1;
+        this._geom_arrays.dn_edges_verts.forEach( (edge_verts_i, edge_i) => {
+            const hidden = hidden_attrib && hidden_attrib.indexOf(edge_i) !== -1;
+            if (!hidden) {
+                let color_check;
+                if (edge_material_attrib) {
+                    color_check = edge_material_attrib.indexOf(edge_i) !== -1;
+                }
+                const new_edge_verts_i: TEdge = edge_verts_i.map(e => vertex_map.get(e)) as TEdge;
+                if (color_check) {
+                    const tjs_i = white_edges_verts_i_filt.push(new_edge_verts_i) - 1;
+                    white_edge_select_map.set(tjs_i, edge_i);
+                } else {
+                    const tjs_i = edges_verts_i_filt.push(new_edge_verts_i) - 1;
+                    edge_select_map.set(tjs_i, edge_i);
+                }
             }
-            if (edge_verts_i === undefined || edge_verts_i === null) { continue; } // TODO remove null
-            const new_edge_verts_i: TEdge = edge_verts_i.map(e => vertex_map.get(e)) as TEdge;
-            if (color_check) {
-                const tjs_i = white_edges_verts_i_filt.push(new_edge_verts_i) - 1;
-                white_edge_select_map.set(tjs_i, gi_i);
-            } else {
-                const tjs_i = edges_verts_i_filt.push(new_edge_verts_i) - 1;
-                edge_select_map.set(tjs_i, gi_i);
-            }
-        }
+        });
         // @ts-ignore
         return [edges_verts_i_filt.flat(1), edge_select_map, white_edges_verts_i_filt.flat(1), white_edge_select_map];
 
@@ -215,36 +212,17 @@ export class GIGeomThreejs {
     public get3jsPlines(vertex_map: Map<number, number>): [number[], Map<number, number>] {
         const edges_verts_i_filt: TEdge[] = [];
         const edge_select_map: Map<number, number> = new Map();
-        let pw_i = 0;
-        let gi_i = 0;
-        const l = this._geom_arrays.dn_plines_wires.length;
-        for (; pw_i < l; pw_i++) {
-            const plines_wires_i: TPline = this._geom_arrays.dn_plines_wires[pw_i];
-            if (plines_wires_i === undefined || plines_wires_i === null) { continue; } // TODO remove null
-            const wires_edge_i: TWire = this._geom_arrays.dn_wires_edges[plines_wires_i];
-            for (const we_i of wires_edge_i) {
-                const edge_verts_i: TEdge = this._geom_arrays.dn_edges_verts[we_i];
+        this._geom_arrays.dn_plines_wires.forEach( (wire_i, pline_i) => {
+            const edges_i: TWire = this._geom_arrays.dn_wires_edges[wire_i];
+            for (const edge_i of edges_i) {
+                const edge_verts_i: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
                 const new_edge_verts_i: TEdge = edge_verts_i.map(e => vertex_map.get(e)) as TEdge;
                 const tjs_i = edges_verts_i_filt.push(new_edge_verts_i) - 1;
-                edge_select_map.set(tjs_i, gi_i);
-                gi_i++;
+                edge_select_map.set(tjs_i, pline_i);
             }
-        }
-        // const l = this._geom_arrays.dn_edges_verts.length;
-        // for (; gi_i < l; gi_i++) {
-        //     const edge_verts_i: TEdge = this._geom_arrays.dn_edges_verts[gi_i];
-        //     if (edge_verts_i !== null) {
-        //         const new_edge_verts_i: TEdge = edge_verts_i.map(e => vertex_map.get(e)) as TEdge;
-        //         const tjs_i = edges_verts_i_filt.push(new_edge_verts_i) - 1;
-        //         edge_select_map.set(tjs_i, gi_i);
-        //     }
-        // }
+        });
         // @ts-ignore
         return [edges_verts_i_filt.flat(1), edge_select_map];
-
-        // @ts-ignore
-        // return this._geom_arrays.dn_edges_verts.flat(1);
-        // return [].concat(...this._geom_arrays.dn_edges_verts);
     }
     /**
      * Returns a flat list of the sequence of verices for all the points.
@@ -253,17 +231,12 @@ export class GIGeomThreejs {
     public get3jsPoints(vertex_map: Map<number, number>): [number[], Map<number, number>] {
         const points_verts_i_filt: TPoint[] = [];
         const point_select_map: Map<number, number> = new Map();
-        let gi_i = 0;
-        const l = this._geom_arrays.dn_points_verts.length;
-        for (; gi_i < l; gi_i++) {
-            const point_verts_i: TPoint = this._geom_arrays.dn_points_verts[gi_i];
-            if (point_verts_i === undefined || point_verts_i === null) { continue; } // TODO remove null
-            const new_point_verts_i: TPoint = vertex_map.get(point_verts_i) as TPoint;
+        this._geom_arrays.dn_points_verts.forEach( (vert_i, point_i) => {
+            const new_point_verts_i: TPoint = vertex_map.get(vert_i) as TPoint;
             const tjs_i = points_verts_i_filt.push(new_point_verts_i) - 1;
-            point_select_map.set(tjs_i, gi_i);
-        }
+            point_select_map.set(tjs_i, point_i);
+        });
         return [points_verts_i_filt, point_select_map];
-        // return this._geom_arrays.dn_points_verts;
     }
 
     /**

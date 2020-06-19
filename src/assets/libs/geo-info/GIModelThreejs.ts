@@ -84,26 +84,6 @@ export class GIModelThreejs {
         // get the indices of the vertices for edges, points and triangles
         const [tris_verts_i, triangle_select_map, materials, material_groups]:
             [number[], Map<number, number>, object[], [number, number, number][]] = this._model.geom.threejs.get3jsTris(vertex_map);
-        // let c = 0;
-        // let str = '';
-        // let last = 0;
-        // for (const t of tris_verts_i) {
-        //     if (c % 3 === 0) {
-        //         if (c > 0) {
-        //             str += vertex_xyz[last * 3] + ',' + vertex_xyz[last * 3 + 1] + ',' + vertex_xyz[last * 3 + 2]
-        //             + ' _SelPolyline _PlanarSrf _Delete';
-        //         }
-        //         str += '\n_polyline ';
-        //         c = 1;
-        //         last = t;
-        //     } else {
-        //         c += 1;
-        //     }
-        //     str += vertex_xyz[t * 3] + ',' + vertex_xyz[t * 3 + 1] + ',' + vertex_xyz[t * 3 + 2] + ' ';
-        // }
-        // str += vertex_xyz[last * 3] + ',' + vertex_xyz[last * 3 + 1] + ',' + vertex_xyz[last * 3 + 2] + ' _SelPolyline _PlanarSrf _Delete'
-        // console.log(str);
-
         // const [edges_verts_i, edge_select_map]: [number[], Map<number, number>] = this._model.geom.threejs.get3jsPlines(vertex_map);
         const [edges_verts_i, edge_select_map, white_edges_verts_i, white_edge_select_map]:
             [number[], Map<number, number>, number[], Map<number, number>] = this._model.geom.threejs.get3jsEdges(vertex_map);

@@ -108,6 +108,18 @@ export class GIAttribMap {
         return this._map_ent_i_to_val_i.has(ent_i);
     }
     /**
+     * Returns the number of entities that have a value (i.e. is not undefined).
+     */
+    public numEnts(): number {
+        return this._map_ent_i_to_val_i.size;
+    }
+    /**
+     * Returns the number of values.
+     */
+    public numVals(): number {
+        return this._map_val_k_to_val_i.size;
+    }
+    /**
      * Delete the entities from this attribute map.
      */
     public delEnt(ents_i: number|number[]): void {
@@ -281,6 +293,59 @@ export class GIAttribMap {
                 }
             }
         }
+    }
+    /**
+     * Merges another attrib map into this attrib map
+     * @param attrib_map The attrib map to merge into this map
+     */
+    public merge(attrib_map: GIAttribMap): void {
+        attrib_map._map_val_k_to_val_i.forEach( (other_val_i, other_val_k) => {
+            // get the other ents
+            const other_ents_i: number[] = attrib_map._map_val_i_to_ents_i.get(other_val_i);
+
+            if (other_ents_i.length === 0) {
+                console.log("    other_ents_i", other_ents_i);
+                console.log("    other_val_i", other_val_i);
+                console.log("    other_val_k", other_val_k);
+                console.log("    attrib_map", attrib_map);
+            }
+
+            // update this map
+            if (this._map_val_k_to_val_i.has(other_val_k)) {
+                // get the existing value index from the value key
+                const exist_val_i: number = this._map_val_k_to_val_i.get(other_val_k);
+                // get all ents
+                const exist_ents_i: number[] = this._map_val_i_to_ents_i.get(exist_val_i);
+                const exist_other_ents_i: number[] = Array.from(new Set(exist_ents_i.concat(other_ents_i)));
+                // update the ent maps
+                this._map_val_i_to_ents_i.set(exist_val_i, exist_other_ents_i);
+                other_ents_i.forEach( ent_i => this._map_ent_i_to_val_i.set(ent_i, exist_val_i));
+            } else {
+                // add a other value key to this map and get the new value index
+                const new_val_i: number = this._num_vals;
+                this._map_val_k_to_val_i.set(other_val_k, new_val_i);
+                this._num_vals += 1;
+                // update the val_i to val map
+                const other_val = attrib_map._map_val_i_to_val.get(other_val_i);
+                this._map_val_i_to_val.set(new_val_i, other_val); // TODO copy data
+                // update the ent maps
+                this._map_val_i_to_ents_i.set(new_val_i, Array.from(other_ents_i));
+                other_ents_i.forEach( ent_i => this._map_ent_i_to_val_i.set(ent_i, new_val_i));
+
+                // update the _data_length for lists and objects
+                if (this._data_type === EAttribDataTypeStrs.LIST) {
+                    const arr_len: number = (other_val as any[]).length;
+                    if (arr_len > this._data_length) {
+                        this._data_length = arr_len;
+                    }
+                } else if (this._data_type === EAttribDataTypeStrs.DICT) {
+                    const arr_len: number = Object.keys((other_val as object)).length;
+                    if (arr_len > this._data_length) {
+                        this._data_length = arr_len;
+                    }
+                }
+            }
+        });
     }
     /**
      * Sets the indexed value for a given entity or entities.

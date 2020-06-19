@@ -49,15 +49,15 @@ export class GIAttribsIO {
             points_map, plines_map, pgons_map, colls_map
         ]: Map<number, number>[] = geom_maps;
         // add the attribute data
-        if (attribs_maps.ps !== undefined) { this._mergeAttribs(attribs_maps, EEntType.POSI, posis_map); }
-        if (attribs_maps._v !== undefined) { this._mergeAttribs(attribs_maps, EEntType.VERT, verts_map); }
-        if (attribs_maps._e !== undefined) { this._mergeAttribs(attribs_maps, EEntType.EDGE, edges_map); }
-        if (attribs_maps._w !== undefined) { this._mergeAttribs(attribs_maps, EEntType.WIRE, wires_map); }
-        if (attribs_maps._f !== undefined) { this._mergeAttribs(attribs_maps, EEntType.FACE, faces_map); }
-        if (attribs_maps.pt !== undefined) { this._mergeAttribs(attribs_maps, EEntType.POINT, points_map); }
-        if (attribs_maps.pl !== undefined) { this._mergeAttribs(attribs_maps, EEntType.PLINE, plines_map); }
-        if (attribs_maps.pg !== undefined) { this._mergeAttribs(attribs_maps, EEntType.PGON, pgons_map); }
-        if (attribs_maps.co !== undefined) { this._mergeAttribs(attribs_maps, EEntType.COLL, colls_map); }
+        if (attribs_maps.ps !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.POSI, posis_map); }
+        if (attribs_maps._v !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.VERT, verts_map); }
+        if (attribs_maps._e !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.EDGE, edges_map); }
+        if (attribs_maps._w !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.WIRE, wires_map); }
+        if (attribs_maps._f !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.FACE, faces_map); }
+        if (attribs_maps.pt !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.POINT, points_map); }
+        if (attribs_maps.pl !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.PLINE, plines_map); }
+        if (attribs_maps.pg !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.PGON, pgons_map); }
+        if (attribs_maps.co !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.COLL, colls_map); }
         if (attribs_maps.mo !== undefined) { this._mergeModelAttribs(attribs_maps); }
     }
     /**
@@ -144,7 +144,35 @@ export class GIAttribsIO {
      * The existing attributes are not deleted
      * @param attribs_maps
      */
-    private _mergeAttribs(attribs_maps: IAttribsMaps, ent_type: EEntType, geom_map: Map<number, number> = null) {
+    private _mergeAttribs(attribs_maps: IAttribsMaps, ent_type: EEntType) {
+        const other_attribs: Map<string, GIAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
+        const this_attribs: Map<string, GIAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
+        // const num_ents: number = this._model.geom.query.numEnts(ent_type, true); // incude deleted ents
+        other_attribs.forEach( other_attrib => {
+            if (other_attrib.numEnts() > 0) {
+                // get the name
+                const name: string = other_attrib.getName();
+                // get or create the attrib
+                if (!this_attribs.has(name)) {
+                    const this_attrib: GIAttribMap = new GIAttribMap( name, other_attrib.getDataType());
+                    this_attribs.set(name, this_attrib );
+                    this_attrib.merge(other_attrib);
+                } else {
+                    const this_attrib: GIAttribMap = this_attribs.get(name);
+                    if (this_attrib.getDataType() !== other_attrib.getDataType()) {
+                        throw new Error('Merge Error: Cannot merge attributes with different data types.')
+                    }
+                    this_attrib.merge(other_attrib);
+                }
+            }
+        });
+    }
+    /**
+     * merge attributes from another model into this model.
+     * The existing attributes are not deleted
+     * @param attribs_maps
+     */
+    private _mergeAndPurgeAttribs(attribs_maps: IAttribsMaps, ent_type: EEntType, geom_map: Map<number, number>) {
         const from_attribs: Map<string, GIAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
         const to_attribs: Map<string, GIAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
         // const num_ents: number = this._model.geom.query.numEnts(ent_type, true); // incude deleted ents
@@ -154,9 +182,7 @@ export class GIAttribsIO {
             let attrib_has_ents = false;
             for (const ents_i_value of ents_i_values) {
                 // for merge and purge, IDs need to be shifted
-                if (geom_map !== null) {
-                    ents_i_value[0] = ents_i_value[0].map( ent_i => geom_map.get(ent_i) ); // shift
-                }
+                ents_i_value[0] = ents_i_value[0].map( ent_i => geom_map.get(ent_i) ); // shift
                 attrib_has_ents = ents_i_value[0].length > 0;
             }
             if (attrib_has_ents) {

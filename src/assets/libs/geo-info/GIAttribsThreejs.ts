@@ -310,16 +310,16 @@ export class GIAttribsThreejs {
         }
         return Array.from(data_obj_map.values());
     }
-    /**
-     * TODO
-     * This is confusing... will this not always return the same, i.e. id = index
-     * @param ent_type
-     * @param id
-     */
-    public getIdIndex(ent_type: EEntType, id: number) {
-        const ents_i = this._model.geom.query.getEnts(ent_type);
-        const index = ents_i.findIndex(ent_i => ent_i === id);
-        console.log('calling getIdIndex in GIATtribsThreejs', id, index);
-        return index;
-    }
+    // /**
+    //  * TODO
+    //  * This is confusing... will this not always return the same, i.e. id = index
+    //  * @param ent_type
+    //  * @param id
+    //  */
+    // public getIdIndex(ent_type: EEntType, id: number) {
+    //     const ents_i = this._model.geom.query.getEnts(ent_type);
+    //     const index = ents_i.findIndex(ent_i => ent_i === id);
+    //     console.log('calling getIdIndex in GIATtribsThreejs', id, index);
+    //     return index;
+    // }
 }

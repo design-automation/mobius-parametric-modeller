@@ -560,7 +560,7 @@ export class ExecuteComponent {
         }
 
         const nodeIndices = {};
-        const meta = new _parameterTypes.newMeta();
+        this.dataService.modelMeta = new _parameterTypes.newMeta();
         // execute each node
         for (let i = 0; i < this.dataService.flowchart.nodes.length; i++) {
             const node = this.dataService.flowchart.nodes[i];
@@ -587,7 +587,7 @@ export class ExecuteComponent {
                 continue;
             }
             // execute valid node
-            globalVars = this.executeNode(node, funcStrings, globalVars, constantList, nodeIndices, meta);
+            globalVars = this.executeNode(node, funcStrings, globalVars, constantList, nodeIndices);
         }
 
         // delete each node.output.value to save memory
@@ -611,7 +611,7 @@ export class ExecuteComponent {
     }
 
 
-    executeNode(node: INode, funcStrings, globalVars, constantList, nodeIndices, meta): string {
+    executeNode(node: INode, funcStrings, globalVars, constantList, nodeIndices): string {
         const params = {
             'currentProcedure': [''],
             'console': this.dataService.getLog(),
@@ -713,7 +713,7 @@ export class ExecuteComponent {
             // console.log(node.input.value)
             // _parameterTypes.mergeFn(params['model'], node.input.value);
             params['model'].debug = this.dataService.mobiusSettings.debug;
-            params['model'].setMeta(meta);
+            params['model'].setMeta(this.dataService.modelMeta);
 
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
 

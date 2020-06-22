@@ -41,7 +41,7 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
     }
 
     viewerData() {
-        return this.dataOutputService.getViewerData(this.getNode(), true);
+        return this.dataOutputService.getViewerData(this.getNode(), this.dataService.modelMeta, true);
     }
 
     adjustTextArea() {

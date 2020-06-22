@@ -6,6 +6,7 @@ import { IProcedure } from '@models/procedure';
 import { IEdge } from '@models/edge';
 import { Subject } from 'rxjs';
 import { VERSION } from '@env/version';
+import { GIMeta } from '@assets/libs/geo-info/GIMeta';
 
 @Injectable()
 export class DataService {
@@ -24,6 +25,8 @@ export class DataService {
 
     private static _modelOutputView = {};
     private static _testModel = false;
+
+    private static _modelMeta = null;
 
     private static _helpView = [false, false, undefined];
     private static _helpViewData = [undefined, ''];
@@ -128,6 +131,9 @@ export class DataService {
 
     get newFlowchart() {return DataService._newFlowchart; }
     set newFlowchart(check: boolean) {DataService._newFlowchart = check; }
+
+    get modelMeta() {return DataService._modelMeta; }
+    set modelMeta(meta: GIMeta) {DataService._modelMeta = meta; }
 
     getModelOutputView(nodeID: string) {
         if (DataService._modelOutputView.hasOwnProperty(nodeID)) {

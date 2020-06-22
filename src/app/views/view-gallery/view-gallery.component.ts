@@ -46,7 +46,7 @@ export class ViewGalleryComponent {
    }
 
    viewerData() {
-    return this.dataOutputService.getViewerData(this.getNode(), true);
+    return this.dataOutputService.getViewerData(this.getNode(), this.dataService.modelMeta, true);
 }
 
     getFilesFromURL(): Observable<any> {

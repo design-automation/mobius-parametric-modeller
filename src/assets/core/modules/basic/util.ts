@@ -445,8 +445,10 @@ export function ModelCompare(__model__: GIModel, gi_model: string, method: _ECOm
  * @returns Text that summarises what is in the model, click print to see this text.
  */
 export function ModelCheck(__model__: GIModel): string {
-    console.log(__model__);
-    console.log(JSON.stringify(__model__.meta));
+    console.log("==== ==== ==== ====");
+    console.log("MODEL", __model__);
+    console.log("META", __model__.meta);
+    console.log("==== ==== ==== ====");
     const check: string[] = __model__.check();
     if (check.length > 0) {
         return String(check);

@@ -154,13 +154,13 @@ export class GIAttribsIO {
                 const name: string = other_attrib.getName();
                 // get or create the attrib
                 if (!this_attribs.has(name)) {
-                    const this_attrib: GIAttribMap = new GIAttribMap( name, other_attrib.getDataType());
+                    const this_attrib: GIAttribMap = new GIAttribMap(this._model, name, other_attrib.getDataType());
                     this_attribs.set(name, this_attrib );
                     this_attrib.merge(other_attrib);
                 } else {
                     const this_attrib: GIAttribMap = this_attribs.get(name);
                     if (this_attrib.getDataType() !== other_attrib.getDataType()) {
-                        throw new Error('Merge Error: Cannot merge attributes with different data types.')
+                        throw new Error('Merge Error: Cannot merge attributes with different data types.');
                     }
                     this_attrib.merge(other_attrib);
                 }
@@ -190,7 +190,7 @@ export class GIAttribsIO {
                 const name: string = from_attrib.getName();
                 // get or create the attrib
                 if (!to_attribs.has(name)) {
-                    to_attribs.set(name, new GIAttribMap( name, from_attrib.getDataType()) );
+                    to_attribs.set(name, new GIAttribMap(this._model, name, from_attrib.getDataType()) );
                 }
                 const to_attrib: GIAttribMap = to_attribs.get(name);
                 // set the data
@@ -206,12 +206,9 @@ export class GIAttribsIO {
     private _setAttribs(new_attribs_data: IAttribData[], ent_type: EEntType) {
         const to_attribs: Map<string, GIAttribMap> = new Map();
         new_attribs_data.forEach( new_attrib_data => {
-            const name: string = new_attrib_data.name;
-            // create a new attrib
-            const to_attrib: GIAttribMap = new GIAttribMap( name, new_attrib_data.data_type );
-            to_attribs.set(name, to_attrib);
-            // set the data
-            to_attrib.setEntsVals(new_attrib_data.data);
+            const to_attrib: GIAttribMap = new GIAttribMap(this._model, new_attrib_data.name, new_attrib_data.data_type );
+            to_attrib.setData(new_attrib_data);
+            to_attribs.set(new_attrib_data.name, to_attrib);
         });
         this._attribs_maps[EEntTypeStr[ ent_type ]] = to_attribs;
     }

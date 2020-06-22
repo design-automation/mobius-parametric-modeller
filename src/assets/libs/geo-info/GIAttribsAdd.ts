@@ -38,7 +38,7 @@ export class GIAttribsAdd {
             }
         } else {
             if (!attribs.has(name)) {
-                const attrib: GIAttribMap = new GIAttribMap(name, data_type);
+                const attrib: GIAttribMap = new GIAttribMap(this._model, name, data_type);
                 attribs.set(name, attrib);
             } else {
                 if (attribs.get(name).getDataType() !== data_type) {

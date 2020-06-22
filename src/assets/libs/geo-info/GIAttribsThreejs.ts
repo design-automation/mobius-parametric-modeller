@@ -40,6 +40,8 @@ export class GIAttribsThreejs {
             posi_map.set(posi_i, tjs_index);
         }
 
+        // console.log("LIST OF THREEJS COORDS", coords)
+
         // posis_i.forEach( (posi_i, gi_index) => {
         //     if (posi_i !== null) {
         //         const tjs_index: number = coords.push( coords_attrib.getEntVal(posi_i) as number[] ) - 1;
@@ -185,7 +187,7 @@ export class GIAttribsThreejs {
         // loop through all the attributes
         attribs.forEach( (attrib, attrib_name) => {
             const data_size: number = attrib.getDataLength();
-            if (!attrib.hasNonNullVal()) { return; }
+            if (attrib.numVals() === 0) { return; }
             for (const ent_i of ents_i) {
                 if (attrib_name.substr(0, 1) === '_' && attrib_name !== '_parent') {
                     const attrib_value = attrib.getEntVal(ent_i);
@@ -258,7 +260,7 @@ export class GIAttribsThreejs {
         const nullAttribs = new Set();
         attribs.forEach( (attrib, attrib_name) => {
             const data_size: number = attrib.getDataLength();
-            if (!attrib.hasNonNullVal()) { return; }
+            if (attrib.numVals() === 0) { return; }
             nullAttribs.add(attrib_name);
             for (const ent_i of Array.from(selected_ents.values())) {
                 if (attrib_name.substr(0, 1) === '_') {

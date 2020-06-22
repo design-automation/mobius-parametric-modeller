@@ -59,6 +59,7 @@ export class GIModel {
      * @param model_data The JSON data.
      */
     public setData (model_data: IModelData): IGeomPack {
+        // console.log("SET DATA");
         this.attribs.io.setData(model_data.attributes); // warning: must be before this.geom.io.setData()
         const new_ents_i: IGeomPack = this.geom.io.setData(model_data.geometry);
         return new_ents_i;
@@ -68,6 +69,7 @@ export class GIModel {
      * This will include any deleted entities, which will be undefined.
      */
     public getData(): IModelData {
+        // console.log("GET DATA");
         return {
             geometry: this.geom.io.getData(),
             attributes: this.attribs.io.getData()

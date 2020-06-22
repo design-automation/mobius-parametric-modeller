@@ -1,6 +1,7 @@
-import { EFilterOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, RE_SPACES } from './common';
+import { EFilterOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribData } from './common';
 import { arrRem } from '../util/arrs';
 import { deepCopy } from '../util/copy';
+import { GIModel } from './GIModel';
 
 /**
  * Geo-info attribute class for one attribute.
@@ -12,6 +13,7 @@ import { deepCopy } from '../util/copy';
  *
  */
 export class GIAttribMap {
+    private _model: GIModel;
     private _name: string;
     private _data_type: EAttribDataTypeStrs;
     private _data_length: number;
@@ -19,17 +21,18 @@ export class GIAttribMap {
     // the index will keep growing, even when data gets deleted
     // it counts of the number of unique values (including any deleted values)
     // this should never be decremented, even when values get deleted
-    private _num_vals: number;
+    // private _num_vals: number;
     // the four data maps that store everything
-    private _map_val_k_to_val_i: Map<string|number, number>; // unique, no duplicates
-    private _map_val_i_to_val: Map<number, TAttribDataTypes>; // unique, no duplicates
+    // private _map_val_k_to_val_i: Map<string|number, number>; // unique, no duplicates
+    // private _map_val_i_to_val: Map<number, TAttribDataTypes>; // unique, no duplicates
     private _map_val_i_to_ents_i: Map<number, number[]>;
     private _map_ent_i_to_val_i: Map<number, number>;
     /**
      * Creates an attribute.
      * @param attrib_data
      */
-    constructor(name: string, data_type: EAttribDataTypeStrs) {
+    constructor(model: GIModel, name: string, data_type: EAttribDataTypeStrs) {
+        this._model = model;
         this._name = name;
         this._data_type = data_type;
         if (data_type === EAttribDataTypeStrs.LIST || data_type === EAttribDataTypeStrs.DICT) {
@@ -38,9 +41,6 @@ export class GIAttribMap {
             this._data_length = 1;
         }
         // the maps
-        this._num_vals = 0;
-        this._map_val_k_to_val_i = new Map();
-        this._map_val_i_to_val = new Map();
         this._map_val_i_to_ents_i = new Map();
         this._map_ent_i_to_val_i = new Map();
     }
@@ -48,16 +48,28 @@ export class GIAttribMap {
      * Returns the JSON data for this attribute.
      */
     public getData(): IAttribData {
-        const _data: Array<[number[], TAttribDataTypes]> = [];
-        this._map_val_i_to_ents_i.forEach((ents_i: number[], val_i: number) => {
-            const val: TAttribDataTypes = this._map_val_i_to_val.get(val_i);
-            _data.push([ents_i, val]);
-        });
         return {
             name: this._name,
             data_type: this._data_type,
-            data: _data
+            data_length: this._data_length,
+            data: Array.from(this._map_val_i_to_ents_i)
         };
+    }
+    /**
+     * Sets the JSON data for this attribute.
+     * Any existing data is deleted.
+     */
+    public setData(attrib_data: IAttribData): void {
+        this._name = attrib_data.name;
+        this._data_type = attrib_data.data_type;
+        this._data_length = attrib_data.data_length;
+        this._map_val_i_to_ents_i = new Map(attrib_data.data);
+        this._map_ent_i_to_val_i = new Map();
+        this._map_val_i_to_ents_i.forEach( (ents_i, val_i) => {
+            ents_i.forEach( ent_i => {
+                this._map_ent_i_to_val_i.set(ent_i, val_i);
+            });
+        });
     }
     /**
      * Gets the name of this attribute.
@@ -89,18 +101,18 @@ export class GIAttribMap {
     public getDataLength(): number {
         return this._data_length;
     }
-    /**
-     * Returns true if the data has non null/undefined value.
-     */
-    public hasNonNullVal(): boolean {
-        return this._num_vals > 0;
-    }
-    /**
-     * Returns true if this value exists in the attributes.
-     */
-    public hasVal(val: TAttribDataTypes): boolean {
-        return this._map_val_k_to_val_i.has(this._valToValkey(val));
-    }
+    // /**
+    //  * Returns true if the data has non null/undefined value.
+    //  */
+    // public hasNonNullVal(): boolean {
+    //     return this._num_vals > 0;
+    // }
+    // /**
+    //  * Returns true if this value exists in the attributes.
+    //  */
+    // public hasVal(val: TAttribDataTypes): boolean {
+    //     return this._map_val_k_to_val_i.has(this._valToValkey(val));
+    // }
     /**
      * Returns true if there is an entity that has a value (i.e. the value is not undefined).
      */
@@ -117,7 +129,7 @@ export class GIAttribMap {
      * Returns the number of values.
      */
     public numVals(): number {
-        return this._map_val_k_to_val_i.size;
+        return this._map_val_i_to_ents_i.size;
     }
     /**
      * Delete the entities from this attribute map.
@@ -133,7 +145,7 @@ export class GIAttribMap {
                 // del the entity from _map_val_i_to_ents_i
                 const other_ents_i: number[] = this._map_val_i_to_ents_i.get(val_i);
                 other_ents_i.splice(other_ents_i.indexOf(ent_i), 1);
-                // now clean up just in case that was the last entity with this value
+                // clean up just in case that was the last entity with this value
                 this._cleanUp(val_i);
             }
         });
@@ -149,7 +161,8 @@ export class GIAttribMap {
     public getEntsVals(): [number[], TAttribDataTypes][] {
         const ents_i_values: [number[], TAttribDataTypes][] = [];
         this._map_val_i_to_ents_i.forEach( (ents_i, val_i) => {
-            const value: TAttribDataTypes = this._map_val_i_to_val.get(val_i);
+            // const value: TAttribDataTypes = this._map_val_i_to_val.get(val_i);
+            const value: TAttribDataTypes = this._model.meta.getAttribValFromIdx(val_i, this._data_type);
             ents_i_values.push([ents_i, value]);
         });
         return ents_i_values;
@@ -204,14 +217,22 @@ export class GIAttribMap {
         }
         const val_k: string | number = this._valToValkey(val);
         // check if this val already exists, if not create it
-        if (!this._map_val_k_to_val_i.has(val_k)) {
-            this._map_val_k_to_val_i.set(val_k, this._num_vals);
-            this._map_val_i_to_val.set(this._num_vals, val);
-            this._map_val_i_to_ents_i.set(this._num_vals, []);
-            this._num_vals += 1;
+        // if (!this._map_val_k_to_val_i.has(val_k)) {
+        //     this._map_val_k_to_val_i.set(val_k, this._num_vals);
+        //     this._map_val_i_to_val.set(this._num_vals, val);
+        let val_i: number;
+        if (this._model.meta.hasAttribKey(val_k, this._data_type)) {
+            val_i = this._model.meta.getAttribIdxFromKey(val_k, this._data_type);
+            if (!this._map_val_i_to_ents_i.has(val_i)) {
+                this._map_val_i_to_ents_i.set(val_i, []);
+            }
+        } else {
+            val_i = this._model.meta.addAttribByKeyVal(val_k, val, this._data_type);
+            this._map_val_i_to_ents_i.set(val_i, []);
         }
         // get the new val_i
-        const new_val_i: number = this._map_val_k_to_val_i.get(val_k);
+        // const new_val_i: number = this._map_val_k_to_val_i.get(val_k);
+        // an array of ents
         ents_i = (Array.isArray(ents_i)) ? ents_i : [ents_i];
         // loop through all the unique ents, and set _map_ent_i_to_val_i
         let unique_ents_i: number[] = ents_i;
@@ -222,17 +243,21 @@ export class GIAttribMap {
             // keep the old value for later
             const old_val_i: number = this._map_ent_i_to_val_i.get(ent_i);
             // for each ent_i, set the new val_i
-            this._map_ent_i_to_val_i.set(ent_i, new_val_i);
+            this._map_ent_i_to_val_i.set(ent_i, val_i);
             // clean up the old val_i
-            if (old_val_i !== undefined && old_val_i !== new_val_i) {
+            if (old_val_i !== undefined && old_val_i !== val_i) {
                 arrRem(this._map_val_i_to_ents_i.get(old_val_i), ent_i);
-            this._cleanUp(old_val_i);
+                // clean up just in case that was the last entity with this value
+                this._cleanUp(old_val_i);
             }
         });
         // for the val_i, set it to point to all the ents that have this value
-        const exist_ents_i: number[] = this._map_val_i_to_ents_i.get(new_val_i);
-        const exist_new_ents_i: number[] = Array.from(new Set(exist_ents_i.concat(ents_i)));
-        this._map_val_i_to_ents_i.set(new_val_i, exist_new_ents_i);
+        const exist_ents_i: number[] = this._map_val_i_to_ents_i.get(val_i);
+        const exist_new_ents_i: number[] = exist_ents_i === undefined ?
+            ents_i :
+            Array.from(new Set(exist_ents_i.concat(ents_i)));
+        this._map_val_i_to_ents_i.set(val_i, exist_new_ents_i);
+
         // update the _data_length for lists and objects
         if (this._data_type === EAttribDataTypeStrs.LIST) {
             const arr_len: number = (val as any[]).length;
@@ -246,106 +271,78 @@ export class GIAttribMap {
             }
         }
     }
-    /**
-     * Merges the value for multiple entity-value pairs at the same time.
-     * This method is for merging two model, and focuses on fast merging.
-     * It assume that the ents are new ents with no existing attribute values.
-     * ~
-     * For setting entity attributes, use the setEntsVals() method.
-     * ~
-     * [ [[2,4,6,8], 'hello'], [[9,10], 'world']]
-     * ~
-     * Can also set lists and dicts
-     * [ [[2,4,6,8], [1,2,3]], [[9,10], [4,5,6,7]]]
-     * [ [[2,4,6,8], {a:1, b:2}], [[9,10], {d:1, e:2, f:3}]]
-     * ~
-     * @param ent_i
-     * @param val
-     */
+    // /**
+    //  * Merges the value for multiple entity-value pairs at the same time.
+    //  * This method is for merging two model, and focuses on fast merging.
+    //  * It assume that the ents are new ents with no existing attribute values.
+    //  * ~
+    //  * For setting entity attributes, use the setEntsVals() method.
+    //  * ~
+    //  * [ [[2,4,6,8], 'hello'], [[9,10], 'world']]
+    //  * ~
+    //  * Can also set lists and dicts
+    //  * [ [[2,4,6,8], [1,2,3]], [[9,10], [4,5,6,7]]]
+    //  * [ [[2,4,6,8], {a:1, b:2}], [[9,10], {d:1, e:2, f:3}]]
+    //  * ~
+    //  * @param ent_i
+    //  * @param val
+    //  */
     public mergeEntsVals(ents_i_values: [number[], TAttribDataTypes][]): void {
-        for (const [ents_i, val] of ents_i_values) {
-            // get key
-            const val_k: string | number = this._valToValkey(val);
-            // check if this val already exists, if not create it
-            if (!this._map_val_k_to_val_i.has(val_k)) {
-                this._map_val_k_to_val_i.set(val_k, this._num_vals);
-                this._map_val_i_to_val.set(this._num_vals, val);
-                this._map_val_i_to_ents_i.set(this._num_vals, []);
-                this._num_vals += 1;
-            }
-            // get the new val_i
-            const val_i: number = this._map_val_k_to_val_i.get(val_k);
-            // for each ent_i, set the new val_i
-            ents_i.forEach( ent_i => {
-                this._map_ent_i_to_val_i.set(ent_i, val_i);
-                this._map_val_i_to_ents_i.get(val_i).push(ent_i);
-            });
-            // update the _data_length for lists and objects
-            if (this._data_type === EAttribDataTypeStrs.LIST) {
-                const arr_len: number = (val as any[]).length;
-                if (arr_len > this._data_length) {
-                    this._data_length = arr_len;
-                }
-            } else if (this._data_type === EAttribDataTypeStrs.DICT) {
-                const arr_len: number = Object.keys((val as object)).length;
-                if (arr_len > this._data_length) {
-                    this._data_length = arr_len;
-                }
-            }
-        }
+        throw new Error('Not implemented');
+        // for (const [ents_i, val] of ents_i_values) {
+        //     // get key
+        //     const val_k: string | number = this._valToValkey(val);
+        //     // check if this val already exists, if not create it
+        //     // if (!this._map_val_k_to_val_i.has(val_k)) {
+        //     //     this._map_val_k_to_val_i.set(val_k, this._num_vals);
+        //     //     this._map_val_i_to_val.set(this._num_vals, val);
+        // if (!this._model.meta.hasAttribKey(val_k, this._data_type)) {
+        //         const val_i: number = this._model.meta.addAttribByKeyVal(val_k, val, this._data_type);
+        //         this._map_val_i_to_ents_i.set(val_i, []);
+        //         this._num_vals += 1;
+        //     }
+        //     // get the new val_i
+        //     const val_i: number = this._map_val_k_to_val_i.get(val_k);
+        //     // for each ent_i, set the new val_i
+        //     ents_i.forEach( ent_i => {
+        //         this._map_ent_i_to_val_i.set(ent_i, val_i);
+        //         this._map_val_i_to_ents_i.get(val_i).push(ent_i);
+        //     });
+        //     // update the _data_length for lists and objects
+        //     if (this._data_type === EAttribDataTypeStrs.LIST) {
+        //         const arr_len: number = (val as any[]).length;
+        //         if (arr_len > this._data_length) {
+        //             this._data_length = arr_len;
+        //         }
+        //     } else if (this._data_type === EAttribDataTypeStrs.DICT) {
+        //         const arr_len: number = Object.keys((val as object)).length;
+        //         if (arr_len > this._data_length) {
+        //             this._data_length = arr_len;
+        //         }
+        //     }
+        // }
     }
     /**
      * Merges another attrib map into this attrib map
      * @param attrib_map The attrib map to merge into this map
      */
     public merge(attrib_map: GIAttribMap): void {
-        attrib_map._map_val_k_to_val_i.forEach( (other_val_i, other_val_k) => {
-            // get the other ents
-            const other_ents_i: number[] = attrib_map._map_val_i_to_ents_i.get(other_val_i);
-
-            if (other_ents_i.length === 0) {
-                console.log("    other_ents_i", other_ents_i);
-                console.log("    other_val_i", other_val_i);
-                console.log("    other_val_k", other_val_k);
-                console.log("    attrib_map", attrib_map);
-            }
-
-            // update this map
-            if (this._map_val_k_to_val_i.has(other_val_k)) {
-                // get the existing value index from the value key
-                const exist_val_i: number = this._map_val_k_to_val_i.get(other_val_k);
-                // get all ents
-                const exist_ents_i: number[] = this._map_val_i_to_ents_i.get(exist_val_i);
-                const exist_other_ents_i: number[] = Array.from(new Set(exist_ents_i.concat(other_ents_i)));
-                // update the ent maps
-                this._map_val_i_to_ents_i.set(exist_val_i, exist_other_ents_i);
-                other_ents_i.forEach( ent_i => this._map_ent_i_to_val_i.set(ent_i, exist_val_i));
-            } else {
-                // add a other value key to this map and get the new value index
-                const new_val_i: number = this._num_vals;
-                this._map_val_k_to_val_i.set(other_val_k, new_val_i);
-                this._num_vals += 1;
-                // update the val_i to val map
-                const other_val = attrib_map._map_val_i_to_val.get(other_val_i);
-                this._map_val_i_to_val.set(new_val_i, other_val); // TODO copy data
-                // update the ent maps
-                this._map_val_i_to_ents_i.set(new_val_i, Array.from(other_ents_i));
-                other_ents_i.forEach( ent_i => this._map_ent_i_to_val_i.set(ent_i, new_val_i));
-
-                // update the _data_length for lists and objects
-                if (this._data_type === EAttribDataTypeStrs.LIST) {
-                    const arr_len: number = (other_val as any[]).length;
-                    if (arr_len > this._data_length) {
-                        this._data_length = arr_len;
-                    }
-                } else if (this._data_type === EAttribDataTypeStrs.DICT) {
-                    const arr_len: number = Object.keys((other_val as object)).length;
-                    if (arr_len > this._data_length) {
-                        this._data_length = arr_len;
-                    }
-                }
-            }
+        attrib_map._map_val_i_to_ents_i.forEach( (other_ents_i, val_i) => {
+            // get the ents
+            const exist_ents_i: number[] = this._map_val_i_to_ents_i.get(val_i);
+            const exist_other_ents_i: number[] = exist_ents_i === undefined ?
+                other_ents_i :
+                Array.from(new Set(exist_ents_i.concat(other_ents_i)));
+            // update the ent maps
+            this._map_val_i_to_ents_i.set(val_i, exist_other_ents_i);
+            other_ents_i.forEach( ent_i => this._map_ent_i_to_val_i.set(ent_i, val_i));
         });
+        // update the data length
+        if (this._data_type === EAttribDataTypeStrs.LIST || this._data_type === EAttribDataTypeStrs.DICT) {
+            if (attrib_map._data_length > this._data_length) {
+                this._data_length = attrib_map._data_length;
+            }
+        }
     }
     /**
      * Sets the indexed value for a given entity or entities.
@@ -424,7 +421,8 @@ export class GIAttribMap {
             const ent_i: number = ents_i as number;
             const val_i: number = this._map_ent_i_to_val_i.get(ent_i);
             if (val_i === undefined) { return undefined; }
-            return this._map_val_i_to_val.get(val_i) as TAttribDataTypes;
+            // return this._map_val_i_to_val.get(val_i) as TAttribDataTypes;
+            return this._model.meta.getAttribValFromIdx(val_i, this._data_type);
         } else {
             return ents_i.map(ent_i => this.getEntVal(ent_i)) as TAttribDataTypes;
         }
@@ -472,7 +470,8 @@ export class GIAttribMap {
      * @param val
      */
     public getEntsFromVal(val: TAttribDataTypes): number[] {
-        const val_i: number = this._map_val_k_to_val_i.get(this._valToValkey(val));
+        // const val_i: number = this._map_val_k_to_val_i.get(this._valToValkey(val));
+        const val_i: number =  this._model.meta.getAttribIdxFromKey(this._valToValkey(val), this._data_type);
         if (val_i === undefined) { return []; }
         return this._map_val_i_to_ents_i.get(val_i);
     }
@@ -647,11 +646,6 @@ export class GIAttribMap {
             const ents_i: number[] = this._map_val_i_to_ents_i.get(val_i);
             if (ents_i.length === 0) {
                 this._map_val_i_to_ents_i.delete(val_i);
-                // _map_val_i_to_val: Map<number, TAttribDataTypes>
-                const val: TAttribDataTypes = this._map_val_i_to_val.get(val_i);
-                this._map_val_i_to_val.delete(val_i);
-                // _map_val_k_to_val_i: Map<string|number, number>
-                this._map_val_k_to_val_i.delete(this._valToValkey(val));
             }
         }
     }

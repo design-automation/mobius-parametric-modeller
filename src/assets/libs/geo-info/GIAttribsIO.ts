@@ -153,17 +153,18 @@ export class GIAttribsIO {
                 // get the name
                 const name: string = other_attrib.getName();
                 // get or create the attrib
+                let this_attrib: GIAttribMap;
                 if (!this_attribs.has(name)) {
-                    const this_attrib: GIAttribMap = new GIAttribMap(this._model, name, other_attrib.getDataType());
+                    this_attrib = new GIAttribMap(this._model, name, other_attrib.getDataType());
                     this_attribs.set(name, this_attrib );
-                    this_attrib.merge(other_attrib);
                 } else {
-                    const this_attrib: GIAttribMap = this_attribs.get(name);
+                    this_attrib = this_attribs.get(name);
                     if (this_attrib.getDataType() !== other_attrib.getDataType()) {
                         throw new Error('Merge Error: Cannot merge attributes with different data types.');
                     }
-                    this_attrib.merge(other_attrib);
                 }
+                // merge
+                this_attrib.merge(other_attrib);
             }
         });
     }

@@ -446,8 +446,9 @@ export function ModelCompare(__model__: GIModel, gi_model: string, method: _ECOm
  */
 export function ModelCheck(__model__: GIModel): string {
     console.log("==== ==== ==== ====");
-    console.log("MODEL", __model__);
-    console.log("META", __model__.meta);
+    console.log("MODEL GEOM\n", __model__.geom.toStr());
+    console.log("MODEL ATTRIBS\n", __model__.attribs.toStr());
+    console.log("META\n", __model__.meta.toStr());
     console.log("==== ==== ==== ====");
     const check: string[] = __model__.check();
     if (check.length > 0) {

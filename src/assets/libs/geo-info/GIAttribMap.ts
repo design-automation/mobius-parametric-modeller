@@ -194,6 +194,8 @@ export class GIAttribMap {
      * @param val
      */
     public setEntVal(ents_i: number|number[], val: TAttribDataTypes, check_type = true): void {
+        //console.log("xxxx", val)
+
         // if indefined, do nothing
         if (val === undefined) { return; }
         // if null, delete
@@ -331,7 +333,7 @@ export class GIAttribMap {
             // get the ents
             const exist_ents_i: number[] = this._map_val_i_to_ents_i.get(val_i);
             const exist_other_ents_i: number[] = exist_ents_i === undefined ?
-                other_ents_i :
+                Array.from(other_ents_i) :
                 Array.from(new Set(exist_ents_i.concat(other_ents_i)));
             // update the ent maps
             this._map_val_i_to_ents_i.set(val_i, exist_other_ents_i);

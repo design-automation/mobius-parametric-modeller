@@ -82,4 +82,12 @@ export class GIGeom {
         this.threejs = new GIGeomThreejs(this, this._geom_arrays);
         this.selected = [];
     }
+    /**
+     * Generate a string for debugging
+     */
+    public toStr(): string {
+        let result = '';
+        result += JSON.stringify(this.io.getData());
+        return result;
+    }
 }

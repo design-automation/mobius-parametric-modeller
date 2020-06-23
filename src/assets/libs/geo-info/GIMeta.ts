@@ -149,19 +149,19 @@ export class GIMeta {
         return this._attrib_values[data_type][1].has(key);
     }
     // create string for debugging
-    public createStr(): string {
+    public toStr(): string {
         return '' +
+            'number: ' +
             JSON.stringify(this._attrib_values['number'][0]) +
             JSON.stringify(Array.from(this._attrib_values['number'][1])) +
-
+            '\nstring: ' +
             JSON.stringify(this._attrib_values['string'][0]) +
             JSON.stringify(Array.from(this._attrib_values['string'][1])) +
-
+            '\nlist: ' +
             JSON.stringify(this._attrib_values['list'][0]) +
             JSON.stringify(Array.from(this._attrib_values['list'][1])) +
-
+            '\ndict: ' +
             JSON.stringify(this._attrib_values['dict'][0]) +
             JSON.stringify(Array.from(this._attrib_values['dict'][1]));
-
     }
 }

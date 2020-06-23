@@ -23,7 +23,7 @@ export class GIModelThreejs {
         for (let index = 0; index < num_ents; index++) {
             colors.push(1, 1, 1);
         }
-        // const geom_array = this._model.geom._geom_arrays;
+        // const geom_array = this._model.geom._geom_maps;
         // for (const e of geom_array.dn_edges_verts) {
         //     for (const v of e) {
         //         const vert_attrb0 = colors[v * 3];
@@ -37,8 +37,8 @@ export class GIModelThreejs {
         //     }
         // }
         // for (const w of geom_array.dn_plines_wires) {
-        //     for (const e of geom_array.dn_wires_edges[w]) {
-        //         for (const v of geom_array.dn_edges_verts[e]) {
+        //     for (const e of geom_array.dn_wires_edges.get(w]) {
+        //         for (const v of geom_array.dn_edges_verts.get(e]) {
         //             const vert_attrb0 = colors[v * 3];
         //             const vert_attrb1 = colors[v * 3 + 1];
         //             const vert_attrb2 = colors[v * 3 + 2];

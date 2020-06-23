@@ -9,13 +9,13 @@ import { triangulate } from '../triangulate/triangulate';
  */
 export class GIGeomModifyPgon {
     private _geom: GIGeom;
-    private _geom_arrays: IGeomArrays;
+    private _geom_maps: IGeomArrays;
     /**
      * Constructor
      */
     constructor(geom: GIGeom, geom_arrays: IGeomArrays) {
         this._geom = geom;
-        this._geom_arrays = geom_arrays;
+        this._geom_maps = geom_arrays;
     }
     /**
      * Creates one or more holes in a polygon.
@@ -63,24 +63,24 @@ export class GIGeomModifyPgon {
             // create the triangles
             const new_tris_i: number[] = this._geom.add._addTris(outer_i, holes_i);
             // delete the old trianges
-            const old_face_tris_i: number[] = this._geom_arrays.dn_faces_wirestris[face_i][1];
+            const old_face_tris_i: number[] = this._geom_maps.dn_faces_wirestris.get(face_i)[1];
             for (const old_face_tri_i of old_face_tris_i) {
                 // verts to tris
-                for (const vertex_i of this._geom_arrays.dn_tris_verts[old_face_tri_i]) {
-                    const vert_tris_i: number[] = this._geom_arrays.up_verts_tris[vertex_i];
+                for (const vert_i of this._geom_maps.dn_tris_verts.get(old_face_tri_i)) {
+                    const vert_tris_i: number[] = this._geom_maps.up_verts_tris.get(vert_i);
                     arrRem(vert_tris_i, old_face_tri_i);
                 }
                 // tris to verts
-                delete this._geom_arrays.dn_tris_verts[old_face_tri_i];
+                this._geom_maps.dn_tris_verts.delete(old_face_tri_i);
                 // tris to faces
-                delete this._geom_arrays.up_tris_faces[old_face_tri_i];
+                this._geom_maps.up_tris_faces.delete(old_face_tri_i);
             }
             // update up array for tri to face
             for (const new_tri_i of new_tris_i) {
-                this._geom_arrays.up_tris_faces[new_tri_i] = face_i;
+                this._geom_maps.up_tris_faces.set(new_tri_i, face_i);
             }
             // update down array for face to tri
-            this._geom_arrays.dn_faces_wirestris[face_i][1] = new_tris_i;
+            this._geom_maps.dn_faces_wirestris.get(face_i)[1] = new_tris_i;
         } else { // An array of pgons
             pgons_i.forEach(pgon_i => this.triPgons(pgon_i));
         }
@@ -96,7 +96,7 @@ export class GIGeomModifyPgon {
      */
     private _cutFaceHoles(face_i: number, hole_wires_i: number[]): number {
         // get the wires and triangles arrays
-        const [face_wires_i, old_face_tris_i]: [number[], number[]] = this._geom_arrays.dn_faces_wirestris[face_i];
+        const [face_wires_i, old_face_tris_i]: [number[], number[]] = this._geom_maps.dn_faces_wirestris.get(face_i);
         // get the outer wire
         const outer_wire_i: number = face_wires_i[0];
         // get the hole wires
@@ -111,21 +111,21 @@ export class GIGeomModifyPgon {
         const new_wires_i: number[] = face_wires_i.concat(hole_wires_i);
         const new_face: TFace = [new_wires_i, new_tris_i];
         // update down arrays
-        this._geom_arrays.dn_faces_wirestris[face_i] = new_face;
+        this._geom_maps.dn_faces_wirestris.set(face_i, new_face);
         // update up arrays
-        hole_wires_i.forEach(hole_wire_i => this._geom_arrays.up_wires_faces[hole_wire_i] = face_i);
-        new_tris_i.forEach( tri_i => this._geom_arrays.up_tris_faces[tri_i] = face_i );
+        hole_wires_i.forEach(hole_wire_i => this._geom_maps.up_wires_faces.set(hole_wire_i, face_i));
+        new_tris_i.forEach( tri_i => this._geom_maps.up_tris_faces.set(tri_i, face_i ));
         // delete the old trianges
         for (const old_face_tri_i of old_face_tris_i) {
             // remove these deleted tris from the verts
-            for (const vertex_i of this._geom_arrays.dn_tris_verts[old_face_tri_i]) {
-                const tris_i: number[] = this._geom_arrays.up_verts_tris[vertex_i];
+            for (const vert_i of this._geom_maps.dn_tris_verts.get(old_face_tri_i)) {
+                const tris_i: number[] = this._geom_maps.up_verts_tris.get(vert_i);
                 arrRem(tris_i, old_face_tri_i);
             }
             // tris to verts
-            delete this._geom_arrays.dn_tris_verts[old_face_tri_i];
+            this._geom_maps.dn_tris_verts.delete(old_face_tri_i);
             // tris to faces
-            delete this._geom_arrays.up_tris_faces[old_face_tri_i];
+            this._geom_maps.up_tris_faces.delete(old_face_tri_i);
         }
         // TODO deal with the old triangles, stored in face_tris_i
         // TODO These are still there and are still pointing up at this face
@@ -141,34 +141,34 @@ export class GIGeomModifyPgon {
      */
     private _updateFaceTris(face_i: number) {
         // get the wires
-        const border_wire_i: number = this._geom_arrays.dn_faces_wirestris[face_i][0][0];
+        const border_wire_i: number = this._geom_maps.dn_faces_wirestris.get(face_i)[0][0];
         // get the border and holes
         const holes_wires_i: number[] = [];
-        const num_holes: number = this._geom_arrays.dn_faces_wirestris[face_i][0].length - 1;
+        const num_holes: number = this._geom_maps.dn_faces_wirestris.get(face_i)[0].length - 1;
         if (num_holes > 1) {
             for (let i = 1; i < num_holes + 1; i++) {
-                const hole_wire_i: number = this._geom_arrays.dn_faces_wirestris[face_i][0][i];
+                const hole_wire_i: number = this._geom_maps.dn_faces_wirestris.get(face_i)[0][i];
                 holes_wires_i.push(hole_wire_i);
             }
         }
         const tris_i: number[] = this._geom.add._addTris(border_wire_i, holes_wires_i);
         // delete the old tris
-        for (const tri_i of this._geom_arrays.dn_faces_wirestris[face_i][1]) {
+        for (const tri_i of this._geom_maps.dn_faces_wirestris.get(face_i)[1]) {
             // update the verts
-            const verts_i: number[] = this._geom_arrays.dn_tris_verts[tri_i];
+            const verts_i: number[] = this._geom_maps.dn_tris_verts.get(tri_i);
             for (const vert_i of verts_i) {
-                delete this._geom_arrays.up_verts_tris[vert_i]; // up
+                this._geom_maps.up_verts_tris.delete(vert_i); // up
             }
             // tris to verts
-            delete this._geom_arrays.dn_tris_verts[tri_i]; // down
+            this._geom_maps.dn_tris_verts.delete(tri_i); // down
             // tris to faces
-            delete this._geom_arrays.up_tris_faces[tri_i]; // up
+            this._geom_maps.up_tris_faces.delete(tri_i); // up
         }
         // update down arrays
-        this._geom_arrays.dn_faces_wirestris[face_i][1] = tris_i;
+        this._geom_maps.dn_faces_wirestris.get(face_i)[1] = tris_i;
         // update up arrays
         for (const tri_i of tris_i) {
-            this._geom_arrays.up_tris_faces[tri_i] = face_i;
+            this._geom_maps.up_tris_faces.set(tri_i, face_i);
         }
     }
 }

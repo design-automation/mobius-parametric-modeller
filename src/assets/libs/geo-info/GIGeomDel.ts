@@ -8,13 +8,13 @@ import { vecDot } from '../geom/vectors';
  */
 export class GIGeomDel {
     private _geom: GIGeom;
-    private _geom_arrays: IGeomArrays;
+    private _geom_maps: IGeomArrays;
     /**
      * Constructor
      */
     constructor(geom: GIGeom, geom_arrays: IGeomArrays) {
         this._geom = geom;
-        this._geom_arrays = geom_arrays;
+        this._geom_maps = geom_arrays;
     }
     // ============================================================================
     // Delete geometry
@@ -31,11 +31,11 @@ export class GIGeomDel {
         // loop
         const deleted_posis_i: number[] = [];
         for (const posi_i of posis_i) {
-            if (this._geom_arrays.up_posis_verts[posi_i] === undefined) { continue; } // already deleted
+            if (!this._geom_maps.up_posis_verts.has(posi_i)) { continue; } // already deleted
             // update up arrays
-            const verts_i: number[] = this._geom_arrays.up_posis_verts[posi_i];
-            if ( !verts_i || verts_i.length === 0) { // only delete posis with no verts
-                delete this._geom_arrays.up_posis_verts[posi_i];
+            const verts_i: number[] = this._geom_maps.up_posis_verts.get(posi_i);
+            if ( verts_i.length === 0) { // only delete posis with no verts
+                this._geom_maps.up_posis_verts.delete(posi_i);
                 deleted_posis_i.push(posi_i);
             }
             // no need to update down arrays
@@ -55,12 +55,12 @@ export class GIGeomDel {
         // loop
         const deleted_posis_i: number[] = [];
         for (const posi_i of posis_i) {
-            if (this._geom_arrays.up_posis_verts[posi_i] === undefined) { continue; } // already deleted
+            if (!this._geom_maps.up_posis_verts.has(posi_i)) { continue; } // already deleted
             // delete all verts for this posi
-            const copy_verts_i: number[] = this._geom_arrays.up_posis_verts[posi_i].slice(); // make a copy
+            const copy_verts_i: number[] = this._geom_maps.up_posis_verts.get(posi_i).slice(); // make a copy
             copy_verts_i.forEach(vert_i => this._geom.del_vert.delVert(vert_i));
             // delete the posi
-            delete this._geom_arrays.up_posis_verts[posi_i];
+            this._geom_maps.up_posis_verts.delete(posi_i);
             deleted_posis_i.push(posi_i);
             // no need to update down arrays
         }
@@ -81,21 +81,21 @@ export class GIGeomDel {
         // loop
         for (const point_i of points_i) {
             // first get all the arrays so we dont break navigation
-            const vert_i: number = this._geom_arrays.dn_points_verts[point_i];
+            const vert_i: number = this._geom_maps.dn_points_verts.get(point_i);
             if (vert_i === undefined) { continue; } // already deleted
-            const posi_i: number = this._geom_arrays.dn_verts_posis[vert_i];
+            const posi_i: number = this._geom_maps.dn_verts_posis.get(vert_i);
             // delete the point and check collections
-            delete this._geom_arrays.dn_points_verts[point_i];
-            delete this._geom_arrays.dn_points_verts[point_i];
-            this._geom_arrays.dn_colls_objs.forEach( coll => {
+            this._geom_maps.dn_points_verts.delete(point_i);
+            this._geom_maps.dn_points_verts.delete(point_i);
+            this._geom_maps.dn_colls_objs.forEach( coll => {
                 const coll_points_i: number[] = coll[3];
                 arrRem(coll_points_i, point_i);
             });
             // delete the vert by setting the up and down arrays to undefined
-            delete this._geom_arrays.dn_verts_posis[vert_i];
-            delete this._geom_arrays.up_verts_points[vert_i];
+            this._geom_maps.dn_verts_posis.delete(vert_i);
+            this._geom_maps.up_verts_points.delete(vert_i);
             // remove the vert from up_posis_verts
-            const posi_verts_i: number[] = this._geom_arrays.up_posis_verts[posi_i];
+            const posi_verts_i: number[] = this._geom_maps.up_posis_verts.get(posi_i);
             arrRem(posi_verts_i, vert_i);
             // delete unused posis
             if (del_unused_posis) {
@@ -117,34 +117,34 @@ export class GIGeomDel {
         // loop
         for (const pline_i of plines_i) {
             // first get all the arrays so we dont break navigation
-            const wire_i: number = this._geom_arrays.dn_plines_wires[pline_i];
+            const wire_i: number = this._geom_maps.dn_plines_wires.get(pline_i);
             if (wire_i === undefined) { continue; } // already deleted
             const edges_i: number[] = this._geom.nav.navAnyToEdge(EEntType.PLINE, pline_i);
             const verts_i: number[] = this._geom.nav.navAnyToVert(EEntType.PLINE, pline_i);
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PLINE, pline_i);
             // delete the pline and check collections
-            delete this._geom_arrays.dn_plines_wires[pline_i];
-            delete this._geom_arrays.up_plines_colls[pline_i];
-            this._geom_arrays.dn_colls_objs.forEach( coll => {
+            this._geom_maps.dn_plines_wires.delete(pline_i);
+            this._geom_maps.up_plines_colls.delete(pline_i);
+            this._geom_maps.dn_colls_objs.forEach( coll => {
                 const coll_plines_i: number[] = coll[3];
                 arrRem(coll_plines_i, pline_i);
             });
             // delete the wire
-            delete this._geom_arrays.dn_wires_edges[wire_i];
-            delete this._geom_arrays.up_wires_plines[wire_i];
+            this._geom_maps.dn_wires_edges.delete(wire_i);
+            this._geom_maps.up_wires_plines.delete(wire_i);
             // delete the edges
             edges_i.forEach( edge_i => {
-                delete this._geom_arrays.dn_edges_verts[edge_i];
-                delete this._geom_arrays.up_edges_wires[edge_i];
+                this._geom_maps.dn_edges_verts.delete(edge_i);
+                this._geom_maps.up_edges_wires.delete(edge_i);
             });
             // delete the verts
             verts_i.forEach( vert_i => {
-                delete this._geom_arrays.dn_verts_posis[vert_i];
-                delete this._geom_arrays.up_verts_edges[vert_i];
+                this._geom_maps.dn_verts_posis.delete(vert_i);
+                this._geom_maps.up_verts_edges.delete(vert_i);
             });
             // remove the verts from up_posis_verts
             for (const posi_i of posis_i) {
-                const posi_verts_i: number[] = this._geom_arrays.up_posis_verts[posi_i];
+                const posi_verts_i: number[] = this._geom_maps.up_posis_verts.get(posi_i);
                 // loop through deleted verts
                 for (const vert_i of verts_i) {
                     arrRem(posi_verts_i, vert_i);
@@ -171,7 +171,7 @@ export class GIGeomDel {
         // loop
         for (const pgon_i of pgons_i) {
             // first get all the arrays so we dont break navigation
-            const face_i: number = this._geom_arrays.dn_pgons_faces[pgon_i];
+            const face_i: number = this._geom_maps.dn_pgons_faces.get(pgon_i);
             if (face_i === undefined) { continue; } // already deleted
             const wires_i: number[] = this._geom.nav.navAnyToWire(EEntType.PGON, pgon_i);
             const edges_i: number[] = this._geom.nav.navAnyToEdge(EEntType.PGON, pgon_i);
@@ -179,39 +179,39 @@ export class GIGeomDel {
             const tris_i: number[] = this._geom.nav.navAnyToTri(EEntType.PGON, pgon_i);
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PGON, pgon_i);
             // delete the pgon and check the collections
-            delete this._geom_arrays.dn_pgons_faces[pgon_i];
-            delete this._geom_arrays.up_pgons_colls[pgon_i];
-            this._geom_arrays.dn_colls_objs.forEach( coll => {
+            this._geom_maps.dn_pgons_faces.delete(pgon_i);
+            this._geom_maps.up_pgons_colls.delete(pgon_i);
+            this._geom_maps.dn_colls_objs.forEach( coll => {
                 const coll_pgons_i: number[] = coll[3];
                 arrRem(coll_pgons_i, pgon_i);
             });
             // delete the face
-            delete this._geom_arrays.dn_faces_wirestris[face_i];
-            delete this._geom_arrays.up_faces_pgons[face_i];
+            this._geom_maps.dn_faces_wirestris.delete(face_i);
+            this._geom_maps.up_faces_pgons.delete(face_i);
             // delete the wires
             wires_i.forEach( wire_i => {
-                delete this._geom_arrays.dn_wires_edges[wire_i];
-                delete this._geom_arrays.up_wires_faces[wire_i];
+                this._geom_maps.dn_wires_edges.delete(wire_i);
+                this._geom_maps.up_wires_faces.delete(wire_i);
             });
             // delete the edges
             edges_i.forEach( edge_i => {
-                delete this._geom_arrays.dn_edges_verts[edge_i];
-                delete this._geom_arrays.up_edges_wires[edge_i];
+                this._geom_maps.dn_edges_verts.delete(edge_i);
+                this._geom_maps.up_edges_wires.delete(edge_i);
             });
             // delete the verts
             verts_i.forEach( vert_i => {
-                delete this._geom_arrays.dn_verts_posis[vert_i];
-                delete this._geom_arrays.up_verts_edges[vert_i];
-                delete this._geom_arrays.up_verts_tris[vert_i];
+                this._geom_maps.dn_verts_posis.delete(vert_i);
+                this._geom_maps.up_verts_edges.delete(vert_i);
+                this._geom_maps.up_verts_tris.delete(vert_i);
             });
             // delete the tris
             tris_i.forEach( tri_i => {
-                delete this._geom_arrays.dn_tris_verts[tri_i];
-                delete this._geom_arrays.up_tris_faces[tri_i];
+                this._geom_maps.dn_tris_verts.delete(tri_i);
+                this._geom_maps.up_tris_faces.delete(tri_i);
             });
             // clean up, posis up arrays point to verts that may have been deleted
             for (const posi_i of posis_i) {
-                const posi_verts_i: number[] = this._geom_arrays.up_posis_verts[posi_i];
+                const posi_verts_i: number[] = this._geom_maps.up_posis_verts.get(posi_i);
                 // loop through deleted verts
                 for (const vert_i of verts_i) {
                     arrRem(posi_verts_i, vert_i);
@@ -239,37 +239,43 @@ export class GIGeomDel {
         if (!colls_i.length) { return; }
         // loop
         for (const coll_i of colls_i) {
-            const coll: TColl = this._geom_arrays.dn_colls_objs[coll_i];
+            const coll: TColl = this._geom_maps.dn_colls_objs.get(coll_i);
             if (coll === undefined) { continue; } // already deleted
             // up arrays, delete points, plines, pgons
             const points_i: number[] = coll[1];
             points_i.forEach(point_i =>  {
-                const other_colls_i: number[] = this._geom_arrays.up_points_colls[point_i];
+                const other_colls_i: number[] = this._geom_maps.up_points_colls.get(point_i);
                 arrRem(other_colls_i, coll_i);
-                if (other_colls_i.length === 0) { delete this._geom_arrays.up_points_colls[point_i]; }
+                if (other_colls_i.length === 0) {
+                    this._geom_maps.up_points_colls.delete(point_i);
+                }
             });
             const plines_i: number[] = coll[2];
             plines_i.forEach(pline_i =>  {
-                const other_colls_i: number[] = this._geom_arrays.up_plines_colls[pline_i];
+                const other_colls_i: number[] = this._geom_maps.up_plines_colls.get(pline_i);
                 arrRem(other_colls_i, coll_i);
-                if (other_colls_i.length === 0) { delete this._geom_arrays.up_plines_colls[pline_i]; }
+                if (other_colls_i.length === 0) {
+                    this._geom_maps.up_plines_colls.delete(pline_i);
+                }
             });
             const pgons_i: number[] = coll[3];
             pgons_i.forEach(pgon_i =>  {
-                const other_colls_i: number[] = this._geom_arrays.up_pgons_colls[pgon_i];
+                const other_colls_i: number[] = this._geom_maps.up_pgons_colls.get(pgon_i);
                 arrRem(other_colls_i, coll_i);
-                if (other_colls_i.length === 0) { delete this._geom_arrays.up_pgons_colls[pgon_i]; }
+                if (other_colls_i.length === 0) {
+                    this._geom_maps.up_pgons_colls.delete(pgon_i);
+                }
             });
             // down arrays
-            delete this._geom_arrays.dn_colls_objs[coll_i];
+            this._geom_maps.dn_colls_objs.delete(coll_i);
         }
         // check parents
         const set_colls_i: Set<number> = new Set(colls_i);
-        for (const coll of this._geom_arrays.dn_colls_objs) {
-            if (coll !== undefined && set_colls_i.has(coll[0])) {
+        this._geom_maps.dn_colls_objs.forEach( (coll, coll_i) => {
+            if (set_colls_i.has(coll[0])) {
                 coll[0] = -1;
             }
-        }
+        });
     }
     /**
      * Delete edges.

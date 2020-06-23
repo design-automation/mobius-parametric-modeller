@@ -8,13 +8,13 @@ import * as THREE from 'three';
  */
 export class GIGeomThreejs {
     private _geom: GIGeom;
-    private _geom_arrays: IGeomArrays;
+    private _geom_maps: IGeomArrays;
     /**
      * Constructor
      */
     constructor(geom: GIGeom, geom_arrays: IGeomArrays) {
         this._geom = geom;
-        this._geom_arrays = geom_arrays;
+        this._geom_maps = geom_arrays;
     }
     // ============================================================================
     // ThreeJS
@@ -22,13 +22,13 @@ export class GIGeomThreejs {
     // For a method to get the array of positions, see the attrib class
     // getSeqCoords()
     // ============================================================================
-    /**
-     * Returns a flat list of all vertices.
-     * The indices in the list point to the sequential coordinates.
-     */
-    public get3jsVerts(): number[] {
-        return this._geom_arrays.dn_verts_posis;
-    }
+    // /**
+    //  * Returns a flat list of all vertices.
+    //  * The indices in the list point to the sequential coordinates.
+    //  */
+    // public get3jsVerts(): number[] {
+    //     return this._geom_maps.dn_verts_posis;
+    // }
     /**
      * Returns that data required for threejs triangles.
      * 0) the vertices, as a flat array
@@ -62,12 +62,12 @@ export class GIGeomThreejs {
         // get the material attribute from polygons
         const material_attrib: GIAttribMap = this._geom.model.attribs._attribs_maps.pg.get('material');
         // loop through all tris
-        this._geom_arrays.dn_tris_verts.forEach( (tri_verts_i, tri_i) => {
+        this._geom_maps.dn_tris_verts.forEach( (tri_verts_i, tri_i) => {
             // get the verts, face and the polygon for this tri
             const new_tri_verts_i: TTri = tri_verts_i.map(v => vertex_map.get(v)) as TTri;
             // get the materials for this tri from the polygon
-            const tri_face_i: number = this._geom_arrays.up_tris_faces[tri_i];
-            const tri_pgon_i: number = this._geom_arrays.up_faces_pgons[tri_face_i];
+            const tri_face_i: number = this._geom_maps.up_tris_faces.get(tri_i);
+            const tri_pgon_i: number = this._geom_maps.up_faces_pgons.get(tri_face_i);
             const tri_mat_indices: number[] = [];
             if (material_attrib !== undefined) {
                 const mat_attrib_val: string|string[] = material_attrib.getEntVal(tri_pgon_i) as string|string[];
@@ -145,9 +145,9 @@ export class GIGeomThreejs {
         ];
 
         // let gi_i = 0;
-        // const l = this._geom_arrays.dn_tris_verts.length;
+        // const l = this._geom_maps.dn_tris_verts.length;
         // for (; gi_i < l; gi_i++) {
-        //     const tri_verts_i: TTri = this._geom_arrays.dn_tris_verts[gi_i];
+        //     const tri_verts_i: TTri = this._geom_maps.dn_tris_verts.get(gi_i];
         //     if (tri_verts_i !== null) {
         //         const new_tri_verts_i: TTri = tri_verts_i.map(v => vertex_map.get(v)) as TTri;
         //         const tjs_i = tris_verts_i_filt.push(new_tri_verts_i) - 1;
@@ -156,8 +156,8 @@ export class GIGeomThreejs {
         // }
         // @ts-ignore
         // return [tris_verts_i.flat(1), tri_select_map];
-        // return this._geom_arrays.dn_tris_verts.flat(1);
-        // return [].concat(...this._geom_arrays.dn_tris_verts);
+        // return this._geom_maps.dn_tris_verts.flat(1);
+        // return [].concat(...this._geom_maps.dn_tris_verts);
 
     }
     /**
@@ -180,7 +180,7 @@ export class GIGeomThreejs {
         if (edge_attrib) {
             edge_material_attrib = edge_attrib.getEntsFromVal('white');
         }
-        this._geom_arrays.dn_edges_verts.forEach( (edge_verts_i, edge_i) => {
+        this._geom_maps.dn_edges_verts.forEach( (edge_verts_i, edge_i) => {
             const hidden = hidden_attrib && hidden_attrib.indexOf(edge_i) !== -1;
             if (!hidden) {
                 let color_check;
@@ -201,8 +201,8 @@ export class GIGeomThreejs {
         return [edges_verts_i_filt.flat(1), edge_select_map, white_edges_verts_i_filt.flat(1), white_edge_select_map];
 
         // @ts-ignore
-        // return this._geom_arrays.dn_edges_verts.flat(1);
-        // return [].concat(...this._geom_arrays.dn_edges_verts);
+        // return this._geom_maps.dn_edges_verts.flat(1);
+        // return [].concat(...this._geom_maps.dn_edges_verts);
     }
     /**
      * Returns a flat list of the sequence of verices for all the edges.
@@ -212,10 +212,10 @@ export class GIGeomThreejs {
     public get3jsPlines(vertex_map: Map<number, number>): [number[], Map<number, number>] {
         const edges_verts_i_filt: TEdge[] = [];
         const edge_select_map: Map<number, number> = new Map();
-        this._geom_arrays.dn_plines_wires.forEach( (wire_i, pline_i) => {
-            const edges_i: TWire = this._geom_arrays.dn_wires_edges[wire_i];
+        this._geom_maps.dn_plines_wires.forEach( (wire_i, pline_i) => {
+            const edges_i: TWire = this._geom_maps.dn_wires_edges.get(wire_i);
             for (const edge_i of edges_i) {
-                const edge_verts_i: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
+                const edge_verts_i: TEdge = this._geom_maps.dn_edges_verts.get(edge_i);
                 const new_edge_verts_i: TEdge = edge_verts_i.map(e => vertex_map.get(e)) as TEdge;
                 const tjs_i = edges_verts_i_filt.push(new_edge_verts_i) - 1;
                 edge_select_map.set(tjs_i, pline_i);
@@ -231,7 +231,7 @@ export class GIGeomThreejs {
     public get3jsPoints(vertex_map: Map<number, number>): [number[], Map<number, number>] {
         const points_verts_i_filt: TPoint[] = [];
         const point_select_map: Map<number, number> = new Map();
-        this._geom_arrays.dn_points_verts.forEach( (vert_i, point_i) => {
+        this._geom_maps.dn_points_verts.forEach( (vert_i, point_i) => {
             const new_point_verts_i: TPoint = vertex_map.get(vert_i) as TPoint;
             const tjs_i = points_verts_i_filt.push(new_point_verts_i) - 1;
             point_select_map.set(tjs_i, point_i);

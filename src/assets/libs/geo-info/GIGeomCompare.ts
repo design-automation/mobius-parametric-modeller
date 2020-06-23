@@ -7,13 +7,13 @@ import { GIGeom } from './GIGeom';
  */
 export class GIGeomCompare {
     private _geom: GIGeom;
-    private _geom_arrays: IGeomArrays;
+    private _geom_maps: IGeomArrays;
     /**
      * Constructor
      */
     constructor(geom: GIGeom, geom_arrays: IGeomArrays) {
         this._geom = geom;
-        this._geom_arrays = geom_arrays;
+        this._geom_maps = geom_arrays;
     }
 
     /**
@@ -76,7 +76,7 @@ export class GIGeomCompare {
      * For making holes in faces, it is safer to use the cutFaceHoles method.
      */
     public setPgonHoles(face_i: number, holes_i: number[]): void {
-        const face: TFace = this._geom_arrays.dn_faces_wirestris[face_i];
+        const face: TFace = this._geom_maps.dn_faces_wirestris.get(face_i);
         const boundary_i: number = face[0][0];
         face[0] = [boundary_i];
         for (let i = 0; i < holes_i.length; i++) {

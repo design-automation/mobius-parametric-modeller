@@ -8,13 +8,13 @@ import { vecDot } from '../geom/vectors';
  */
 export class GIGeomModifyPline {
     private _geom: GIGeom;
-    private _geom_arrays: IGeomArrays;
+    private _geom_maps: IGeomArrays;
     /**
      * Constructor
      */
     constructor(geom: GIGeom, geom_arrays: IGeomArrays) {
         this._geom = geom;
-        this._geom_arrays = geom_arrays;
+        this._geom_maps = geom_arrays;
     }
     /**
      * Close a polyline.
@@ -25,7 +25,7 @@ export class GIGeomModifyPline {
     public closePline(pline_i: number): number {
         const wire_i: number = this._geom.nav.navPlineToWire(pline_i);
         // get the wire start and end verts
-        const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
+        const wire: TWire = this._geom_maps.dn_wires_edges.get(wire_i);
         const num_edges: number = wire.length;
         const start_edge_i: number = wire[0];
         const end_edge_i: number = wire[num_edges - 1];
@@ -35,9 +35,9 @@ export class GIGeomModifyPline {
         // add the edge to the model
         const new_edge_i: number = this._geom.add._addEdge(end_vert_i, start_vert_i);
         // update the down arrays
-        this._geom_arrays.dn_wires_edges[wire_i].push(new_edge_i);
+        this._geom_maps.dn_wires_edges.get(wire_i).push(new_edge_i);
         // update the up arrays
-        this._geom_arrays.up_edges_wires[new_edge_i] = wire_i;
+        this._geom_maps.up_edges_wires.set(new_edge_i, wire_i);
         // return the new edge
         return new_edge_i;
     }
@@ -54,7 +54,7 @@ export class GIGeomModifyPline {
         const pline_i: number = this._geom.nav.navWireToPline(wire_i);
         if (pline_i === undefined) { return; }
         // get the wire start and end verts
-        const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
+        const wire: TWire = this._geom_maps.dn_wires_edges.get(wire_i);
         // check wire has more than two edges
         const num_edges: number = wire.length;
         if (num_edges < 3) { return; }

@@ -37,9 +37,9 @@ export class GIModel {
      * @param model_data The GI model.
      */
     public merge(model: GIModel): void {
-        // const geom_maps: Map<number, number>[] = this.geom.io.merge(model.geom._geom_arrays);
+        // const geom_maps: Map<number, number>[] = this.geom.io.merge(model.geom._geom_maps);
         // this.attribs.io.merge(model.attribs._attribs_maps, geom_maps);
-        this.geom.io.merge(model.geom._geom_arrays);
+        this.geom.io.merge(model.geom._geom_maps);
         this.attribs.io.merge(model.attribs._attribs_maps);
         this.meta = model.meta;
     }
@@ -50,7 +50,7 @@ export class GIModel {
      * @param model_data The GI model.
      */
     public mergeAndPurge(model: GIModel): void {
-        const geom_maps: Map<number, number>[] = this.geom.io.mergeAndPurge(model.geom._geom_arrays);
+        const geom_maps: Map<number, number>[] = this.geom.io.mergeAndPurge(model.geom._geom_maps);
         this.attribs.io.mergeAndPurge(model.attribs._attribs_maps, geom_maps);
     }
     /**

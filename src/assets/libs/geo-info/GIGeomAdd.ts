@@ -8,13 +8,13 @@ import { vecAdd } from '../geom/vectors';
  */
 export class GIGeomAdd {
     private _geom: GIGeom;
-    private _geom_arrays: IGeomArrays;
+    private _geom_maps: IGeomArrays;
     /**
      * Constructor
      */
     constructor(geom: GIGeom, geom_arrays: IGeomArrays) {
         this._geom = geom;
-        this._geom_arrays = geom_arrays;
+        this._geom_maps = geom_arrays;
     }
     // ============================================================================
     // Add geometry
@@ -36,8 +36,8 @@ export class GIGeomAdd {
         const vert_i = this._addVertex(posi_i);
         // create point
         const point_i: number = this._geom.model.meta.nextPoint();
-        this._geom_arrays.dn_points_verts[point_i] = vert_i;
-        this._geom_arrays.up_verts_points[vert_i] = point_i;
+        this._geom_maps.dn_points_verts.set(point_i, vert_i);
+        this._geom_maps.up_verts_points.set(vert_i, point_i);
         return point_i;
     }
     /**
@@ -57,8 +57,8 @@ export class GIGeomAdd {
         const wire_i: number = this._addWire(edges_i_arr, close);
         // create pline
         const pline_i: number = this._geom.model.meta.nextPline();
-        this._geom_arrays.dn_plines_wires[pline_i] = wire_i;
-        this._geom_arrays.up_wires_plines[wire_i] = pline_i;
+        this._geom_maps.dn_plines_wires.set(pline_i, wire_i);
+        this._geom_maps.up_wires_plines.set(wire_i, pline_i);
         return pline_i;
     }
     /**
@@ -96,8 +96,8 @@ export class GIGeomAdd {
         }
         // create polygon
         const pgon_i: number = this._geom.model.meta.nextPgon();
-        this._geom_arrays.dn_pgons_faces[pgon_i] = face_i;
-        this._geom_arrays.up_faces_pgons[face_i] = pgon_i;
+        this._geom_maps.dn_pgons_faces.set(pgon_i, face_i);
+        this._geom_maps.up_faces_pgons.set(face_i, pgon_i);
         return pgon_i;
     }
     /**
@@ -111,26 +111,26 @@ export class GIGeomAdd {
         parent_i = parent_i === null ? -1 : parent_i;
         // create collection
         const coll_i: number = this._geom.model.meta.nextColl();
-        this._geom_arrays.dn_colls_objs[coll_i] = [parent_i, points_i, plines_i, pgons_i];
+        this._geom_maps.dn_colls_objs.set(coll_i, [parent_i, points_i, plines_i, pgons_i]);
         for (const point_i of points_i) {
-            if (this._geom_arrays.up_points_colls[point_i] === undefined) {
-                this._geom_arrays.up_points_colls[point_i] = [coll_i];
+            if (!this._geom_maps.up_points_colls.has(point_i)) {
+                this._geom_maps.up_points_colls.set(point_i, [coll_i]);
             } else {
-                this._geom_arrays.up_points_colls[point_i].push(coll_i);
+                this._geom_maps.up_points_colls.get(point_i).push(coll_i);
             }
         }
         for (const pline_i of plines_i) {
-            if (this._geom_arrays.up_plines_colls[pline_i] === undefined) {
-                this._geom_arrays.up_plines_colls[pline_i] = [coll_i];
+            if (!this._geom_maps.up_plines_colls.has(pline_i)) {
+                this._geom_maps.up_plines_colls.set(pline_i, [coll_i]);
             } else {
-                this._geom_arrays.up_plines_colls[pline_i].push(coll_i);
+                this._geom_maps.up_plines_colls.get(pline_i).push(coll_i);
             }
         }
         for (const pgon_i of pgons_i) {
-            if (this._geom_arrays.up_pgons_colls[pgon_i] === undefined) {
-                this._geom_arrays.up_pgons_colls[pgon_i] = [coll_i];
+            if (!this._geom_maps.up_pgons_colls.has(pgon_i)) {
+                this._geom_maps.up_pgons_colls.set(pgon_i, [coll_i]);
             } else {
-                this._geom_arrays.up_pgons_colls[pgon_i].push(coll_i);
+                this._geom_maps.up_pgons_colls.get(pgon_i).push(coll_i);
             }
         }
         return coll_i;
@@ -306,7 +306,7 @@ export class GIGeomAdd {
         // because posis are the bottom of the hierarchy
         // update up arrays
         const posi_i: number = this._geom.model.meta.nextPosi();
-        this._geom_arrays.up_posis_verts[posi_i] = [];
+        this._geom_maps.up_posis_verts.set(posi_i, []);
         // return the numeric index of the posi
         return posi_i;
     }
@@ -317,12 +317,12 @@ export class GIGeomAdd {
     public _addVertex(posi_i: number): number {
         // update down arrays
         const vert_i: number = this._geom.model.meta.nextVert();
-        this._geom_arrays.dn_verts_posis[vert_i] = posi_i;
+        this._geom_maps.dn_verts_posis.set(vert_i, posi_i);
         // update up arrays
-            // if (this._geom_arrays.up_posis_verts[posi_i] === undefined) {
-            //     this._geom_arrays.up_posis_verts[posi_i] = [];
+            // if (this._geom_maps.up_posis_verts.get(posi_i] === undefined) {
+            //     this._geom_maps.up_posis_verts.get(posi_i] = [];
             // }
-        this._geom_arrays.up_posis_verts[posi_i].push(vert_i);
+        this._geom_maps.up_posis_verts.get(posi_i).push(vert_i);
         // return the numeric index of the vertex
         return vert_i;
     }
@@ -337,19 +337,19 @@ export class GIGeomAdd {
     public _addEdge(vert_i1: number, vert_i2: number): number {
         // update down arrays
         const edge_i: number = this._geom.model.meta.nextEdge();
-        this._geom_arrays.dn_edges_verts[edge_i] = [vert_i1, vert_i2];
+        this._geom_maps.dn_edges_verts.set(edge_i, [vert_i1, vert_i2]);
         // assume there are three edges, prev, edge_i, next
         // for vert_i1, [prev, edge_i] or [edge_i]
         // update up arrays for the start vertex
-        if (this._geom_arrays.up_verts_edges[vert_i1] === undefined) {
-            this._geom_arrays.up_verts_edges[vert_i1] = [];
+        if (!this._geom_maps.up_verts_edges.has(vert_i1)) {
+            this._geom_maps.up_verts_edges.set(vert_i1, []);
         }
-        switch (this._geom_arrays.up_verts_edges[vert_i1].length) {
+        switch (this._geom_maps.up_verts_edges.get(vert_i1).length) {
             case 0:
-                this._geom_arrays.up_verts_edges[vert_i1] = [edge_i]; // [edge_i]
+                this._geom_maps.up_verts_edges.set(vert_i1, [edge_i]); // [edge_i]
                 break;
             case 1:
-                this._geom_arrays.up_verts_edges[vert_i1][1] = edge_i; // [prev, edge_i]
+                this._geom_maps.up_verts_edges.get(vert_i1)[1] = edge_i; // [prev, edge_i]
                 break;
             case 2:
                 throw new Error('Vertex must have just zero or one edges.');
@@ -358,16 +358,16 @@ export class GIGeomAdd {
         }
         // for vert_i2, [edge_i, next] or [edge_i]
         // update up arrays for the end vertex
-        if (this._geom_arrays.up_verts_edges[vert_i2] === undefined) {
-            this._geom_arrays.up_verts_edges[vert_i2] = [];
+        if (!this._geom_maps.up_verts_edges.has(vert_i2)) {
+            this._geom_maps.up_verts_edges.set(vert_i2, []);
         }
-        switch (this._geom_arrays.up_verts_edges[vert_i2].length) {
+        switch (this._geom_maps.up_verts_edges.get(vert_i2).length) {
             case 0:
-                this._geom_arrays.up_verts_edges[vert_i2] = [edge_i]; // [edge_i]
+                this._geom_maps.up_verts_edges.set(vert_i2, [edge_i]); // [edge_i]
                 break;
             case 1:
-                const next_edge_i: number = this._geom_arrays.up_verts_edges[vert_i2][0];
-                this._geom_arrays.up_verts_edges[vert_i2] = [edge_i, next_edge_i]; // [edge_i, next]
+                const next_edge_i: number = this._geom_maps.up_verts_edges.get(vert_i2)[0];
+                this._geom_maps.up_verts_edges.set(vert_i2, [edge_i, next_edge_i]); // [edge_i, next]
                 break;
             case 2:
                 throw new Error('Vertex must have just zero or one edges.');
@@ -385,9 +385,9 @@ export class GIGeomAdd {
     public _addWire(edges_i: number[], close: boolean = false): number {
         // update down arrays
         const wire_i: number = this._geom.model.meta.nextWire();
-        this._geom_arrays.dn_wires_edges[wire_i] = edges_i;
+        this._geom_maps.dn_wires_edges.set(wire_i, edges_i);
         // update up arrays
-        edges_i.forEach( edge_i => this._geom_arrays.up_edges_wires[edge_i] = wire_i );
+        edges_i.forEach( edge_i => this._geom_maps.up_edges_wires.set(edge_i, wire_i) );
         // return the numeric index of the wire
         return wire_i;
     }
@@ -404,10 +404,10 @@ export class GIGeomAdd {
         const face: TFace = [[wire_i], tris_i];
         // update down arrays
         const face_i: number = this._geom.model.meta.nextFace();
-        this._geom_arrays.dn_faces_wirestris[face_i] = face;
+        this._geom_maps.dn_faces_wirestris.set(face_i, face);
         // update up arrays
-        this._geom_arrays.up_wires_faces[wire_i] = face_i;
-        tris_i.forEach( tri_i => this._geom_arrays.up_tris_faces[tri_i] = face_i );
+        this._geom_maps.up_wires_faces.set(wire_i, face_i);
+        tris_i.forEach( tri_i => this._geom_maps.up_tris_faces.set(tri_i, face_i) );
         // return the numeric index of the face
         return face_i;
     }
@@ -425,10 +425,10 @@ export class GIGeomAdd {
         const face: TFace = [face_wires_i, tris_i];
         // update down arrays
         const face_i: number = this._geom.model.meta.nextFace();
-        this._geom_arrays.dn_faces_wirestris[face_i] = face;
+        this._geom_maps.dn_faces_wirestris.set(face_i, face);
         // update up arrays
-        face_wires_i.forEach(face_wire_i => this._geom_arrays.up_wires_faces[face_wire_i] = face_i);
-        tris_i.forEach( tri_i => this._geom_arrays.up_tris_faces[tri_i] = face_i );
+        face_wires_i.forEach(face_wire_i => this._geom_maps.up_wires_faces.set(face_wire_i, face_i) );
+        tris_i.forEach( tri_i => this._geom_maps.up_tris_faces.set(tri_i, face_i) );
         // return the numeric index of the face
         return face_i;
     }
@@ -445,7 +445,7 @@ export class GIGeomAdd {
         // get the coords of the outer perimeter edge
         const wire_verts_i: number[] = this._geom.nav.navAnyToVert(EEntType.WIRE, wire_i);
         wire_verts_i.forEach(wire_vert_i => all_verts_i.push(wire_vert_i));
-        const wire_posis_i: number[] = wire_verts_i.map( vert_i => this._geom_arrays.dn_verts_posis[vert_i] );
+        const wire_posis_i: number[] = wire_verts_i.map( vert_i => this._geom_maps.dn_verts_posis.get(vert_i) );
         const wire_coords: Txyz[] = wire_posis_i.map( posi_i => this._geom.model.attribs.query.getPosiCoords(posi_i) );
         // get the coords of the holes
         const all_hole_coords: Txyz[][] = [];
@@ -453,7 +453,7 @@ export class GIGeomAdd {
             for (const hole_wire_i of hole_wires_i) {
                 const hole_wire_verts_i: number[] = this._geom.nav.navAnyToVert(EEntType.WIRE, hole_wire_i);
                 hole_wire_verts_i.forEach(wire_vert_i => all_verts_i.push(wire_vert_i));
-                const hole_wire_posis_i: number[] = hole_wire_verts_i.map( vert_i => this._geom_arrays.dn_verts_posis[vert_i] );
+                const hole_wire_posis_i: number[] = hole_wire_verts_i.map( vert_i => this._geom_maps.dn_verts_posis.get(vert_i) );
                 const hole_wire_coords: Txyz[] = hole_wire_posis_i.map( posi_i => this._geom.model.attribs.query.getPosiCoords(posi_i) );
                 all_hole_coords.push(hole_wire_coords);
             }
@@ -465,18 +465,18 @@ export class GIGeomAdd {
         const tris_i: number[] = [];
         for (const tri_verts_i of tris_verts_i) {
             const tri_i: number = this._geom.model.meta.nextTri();
-            this._geom_arrays.dn_tris_verts[tri_i] = tri_verts_i;
+            this._geom_maps.dn_tris_verts.set(tri_i, tri_verts_i);
             tris_i.push(tri_i);
-        };
+        }
         // update up arrays, verts->tris
         for (let i = 0; i < tris_verts_i.length; i++) {
             const tri_verts_i: TTri = tris_verts_i[i];
             const tri_i: number = tris_i[i];
             for (const tri_vert_i of tri_verts_i) {
-                if (this._geom_arrays.up_verts_tris[tri_vert_i] === undefined) {
-                    this._geom_arrays.up_verts_tris[tri_vert_i] = [];
+                if (!this._geom_maps.up_verts_tris.has(tri_vert_i) ) {
+                    this._geom_maps.up_verts_tris.set(tri_vert_i, []);
                 }
-                this._geom_arrays.up_verts_tris[tri_vert_i].push(tri_i);
+                this._geom_maps.up_verts_tris.get(tri_vert_i).push(tri_i);
             }
         }
         // return an array of numeric indices of the triangles

@@ -243,27 +243,27 @@ export enum EAttribPush {
  */
 export interface IGeomArrays {
     // num_posis: number;
-    dn_verts_posis: TVert[];
-    dn_tris_verts: TTri[];
-    dn_edges_verts: TEdge[];
-    dn_wires_edges: TWire[];
-    dn_faces_wirestris: TFace[];
-    dn_points_verts: TPoint[];
-    dn_plines_wires: TPline[];
-    dn_pgons_faces: TPgon[];
-    dn_colls_objs: TColl[];
-    up_posis_verts: number[][]; // one to many
-    up_tris_faces: number[];
-    up_verts_edges: number[][]; // one to two
-    up_verts_tris: number[][]; // one to many
-    up_verts_points: number[];
-    up_edges_wires: number[];
-    up_wires_faces: number[];
-    up_wires_plines: number[];
-    up_faces_pgons: number[];
-    up_points_colls: number[][]; // one to many
-    up_plines_colls: number[][]; // one to many
-    up_pgons_colls: number[][]; // one to many
+    dn_verts_posis: Map<number, TVert>;
+    dn_tris_verts: Map<number, TTri>;
+    dn_edges_verts: Map<number, TEdge>;
+    dn_wires_edges: Map<number, TWire>;
+    dn_faces_wirestris: Map<number, TFace>;
+    dn_points_verts: Map<number, TPoint>;
+    dn_plines_wires: Map<number, TPline>;
+    dn_pgons_faces: Map<number, TPgon>;
+    dn_colls_objs: Map<number, TColl>;
+    up_posis_verts: Map<number, number[]>; // one to many
+    up_tris_faces: Map<number, number>;
+    up_verts_edges: Map<number, number[]>; // one to two
+    up_verts_tris: Map<number, number[]>; // one to many
+    up_verts_points: Map<number, number>;
+    up_edges_wires: Map<number, number>;
+    up_wires_faces: Map<number, number>;
+    up_wires_plines: Map<number, number>;
+    up_faces_pgons: Map<number, number>;
+    up_points_colls: Map<number, number[]>; // one to many
+    up_plines_colls: Map<number, number[]>; // one to many
+    up_pgons_colls: Map<number, number[]>; // one to many
 }
 
 // copy geometry

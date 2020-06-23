@@ -7,13 +7,13 @@ import { arrRem } from '../util/arrs';
  */
 export class GIGeomModify {
     private _geom: GIGeom;
-    private _geom_arrays: IGeomArrays;
+    private _geom_maps: IGeomArrays;
     /**
      * Constructor
      */
     constructor(geom: GIGeom, geom_arrays: IGeomArrays) {
         this._geom = geom;
-        this._geom_arrays = geom_arrays;
+        this._geom_maps = geom_arrays;
     }
     // ============================================================================
     // Modify geometry
@@ -28,10 +28,10 @@ export class GIGeomModify {
      */
     public insertVertIntoWire(edge_i: number, posi_i: number): number {
         const wire_i: number = this._geom.nav.navEdgeToWire(edge_i);
-        const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
-        const old_edge_verts_i: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
-        const old_and_prev_edge_i: number[] = this._geom_arrays.up_verts_edges[old_edge_verts_i[0]];
-        const old_and_next_edge_i: number[] = this._geom_arrays.up_verts_edges[old_edge_verts_i[1]];
+        const wire: TWire = this._geom_maps.dn_wires_edges.get(wire_i);
+        const old_edge_verts_i: TEdge = this._geom_maps.dn_edges_verts.get(edge_i);
+        const old_and_prev_edge_i: number[] = this._geom_maps.up_verts_edges.get(old_edge_verts_i[0]);
+        const old_and_next_edge_i: number[] = this._geom_maps.up_verts_edges.get(old_edge_verts_i[1]);
         // check prev edge
         if (old_and_prev_edge_i.length === 2) {
             if (old_and_prev_edge_i[0] === edge_i) {
@@ -43,19 +43,19 @@ export class GIGeomModify {
             if (old_and_next_edge_i[1] === edge_i) {
                 throw new Error('Edges are in wrong order');
             }
-            this._geom_arrays.up_verts_edges[old_edge_verts_i[1]] = [old_and_next_edge_i[1]];
+            this._geom_maps.up_verts_edges.set(old_edge_verts_i[1], [old_and_next_edge_i[1]]);
         } else {
-            this._geom_arrays.up_verts_edges[old_edge_verts_i[1]] = [];
+            this._geom_maps.up_verts_edges.set(old_edge_verts_i[1], []);
         }
         // create one new vertex and one new edge
         const new_vert_i: number = this._geom.add._addVertex(posi_i);
-        this._geom_arrays.up_verts_edges[new_vert_i] = [edge_i];
+        this._geom_maps.up_verts_edges.set(new_vert_i, [edge_i]);
         const new_edge_i: number = this._geom.add._addEdge(new_vert_i, old_edge_verts_i[1]);
         // update the down arrays
         old_edge_verts_i[1] = new_vert_i;
         wire.splice(wire.indexOf(edge_i), 1, edge_i, new_edge_i);
         // update the up arrays for edges to wires
-        this._geom_arrays.up_edges_wires[new_edge_i] = wire_i;
+        this._geom_maps.up_edges_wires.set(new_edge_i, wire_i);
         // return the new edge
         return new_edge_i;
     }
@@ -84,14 +84,14 @@ export class GIGeomModify {
         if (posis_i.length === 0) { return []; }
         // proceed to insert posis
         const wire_i: number = this._geom.nav.navEdgeToWire(edge_i);
-        const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
-        const end_vert_i: number = this._geom_arrays.dn_edges_verts[edge_i][1];
-        const next_edge_i: number = this._geom_arrays.up_verts_edges[end_vert_i][1];
+        const wire: TWire = this._geom_maps.dn_wires_edges.get(wire_i);
+        const end_vert_i: number = this._geom_maps.dn_edges_verts.get(edge_i)[1];
+        const next_edge_i: number = this._geom_maps.up_verts_edges.get(end_vert_i)[1];
         // check next edge amd save the next edge
         if (next_edge_i !== undefined) {
-            this._geom_arrays.up_verts_edges[end_vert_i] = [next_edge_i]; // there is next edge
+            this._geom_maps.up_verts_edges.set(end_vert_i, [next_edge_i]); // there is next edge
         } else {
-            this._geom_arrays.up_verts_edges[end_vert_i] = []; // there is no next edge
+            this._geom_maps.up_verts_edges.set(end_vert_i, []); // there is no next edge
         }
         // create the new vertices
         const new_verts_i: number [] = [];
@@ -102,14 +102,14 @@ export class GIGeomModify {
         new_verts_i.push(end_vert_i);
         // update the down/ip arrays for teh old edge
         // the old edge becomes the first edge in this list, and it gets a new end vertex
-        this._geom_arrays.dn_edges_verts[edge_i][1] = new_verts_i[0];
-        this._geom_arrays.up_verts_edges[new_verts_i[0]] = [edge_i];
+        this._geom_maps.dn_edges_verts.get(edge_i)[1] = new_verts_i[0];
+        this._geom_maps.up_verts_edges.set(new_verts_i[0], [edge_i]);
         // create the new edges
         const new_edges_i: number[] = [];
         for (let i = 0; i < new_verts_i.length - 1; i++) {
             const new_edge_i: number = this._geom.add._addEdge(new_verts_i[i], new_verts_i[i + 1]);
             // update the up arrays for edges to wires
-            this._geom_arrays.up_edges_wires[new_edge_i] = wire_i;
+            this._geom_maps.up_edges_wires.set(new_edge_i, wire_i);
             // add to the list
             new_edges_i.push(new_edge_i);
         }
@@ -138,11 +138,11 @@ export class GIGeomModify {
             const i: number = old_posis_i_map[old_posi_i];
             const new_posi_i: number = new_posis_i[i];
             // set the down array
-            this._geom_arrays.dn_verts_posis[vert_i] = new_posi_i;
+            this._geom_maps.dn_verts_posis.set(vert_i, new_posi_i);
             // update the up arrays for the old posi, i.e. remove this vert
-            arrRem(this._geom_arrays.up_posis_verts[old_posi_i], vert_i);
+            arrRem(this._geom_maps.up_posis_verts.get(old_posi_i), vert_i);
             // update the up arrays for the new posi, i.e. add this vert
-            this._geom_arrays.up_posis_verts[new_posi_i].push(vert_i);
+            this._geom_maps.up_posis_verts.get(new_posi_i).push(vert_i);
         }
     }
     /**
@@ -203,11 +203,11 @@ export class GIGeomModify {
         // normal case
         const old_posi_i: number = this._geom.nav.navVertToPosi(vert_i);
         // set the down array
-        this._geom_arrays.dn_verts_posis[vert_i] = new_posi_i;
+        this._geom_maps.dn_verts_posis.set(vert_i, new_posi_i);
         // update the up arrays for the old posi, i.e. remove this vert
-        arrRem(this._geom_arrays.up_posis_verts[old_posi_i], vert_i);
+        arrRem(this._geom_maps.up_posis_verts.get(old_posi_i), vert_i);
         // update the up arrays for the new posi, i.e. add this vert
-        this._geom_arrays.up_posis_verts[new_posi_i].push(vert_i);
+        this._geom_maps.up_posis_verts.get(new_posi_i).push(vert_i);
     }
     /**
      * Unweld the vertices on naked edges.
@@ -242,11 +242,11 @@ export class GIGeomModify {
             if (old_to_new_posis_i_map.has(old_posi_i)) {
                 const new_posi_i: number = old_to_new_posis_i_map.get(old_posi_i);
                 // update the down arrays
-                this._geom_arrays.dn_verts_posis[vert_i] = new_posi_i;
+                this._geom_maps.dn_verts_posis.set(vert_i, new_posi_i);
                 // update the up arrays for the old posi, i.e. remove this vert
-                arrRem(this._geom_arrays.up_posis_verts[old_posi_i], vert_i);
+                arrRem(this._geom_maps.up_posis_verts.get(old_posi_i), vert_i);
                 // update the up arrays for the new posi, i.e. add this vert
-                this._geom_arrays.up_posis_verts[new_posi_i].push(vert_i);
+                this._geom_maps.up_posis_verts.get(new_posi_i).push(vert_i);
             }
         }
         // return all the new positions
@@ -268,11 +268,11 @@ export class GIGeomModify {
             if (all_verts_count > 1) {
                 const new_posi_i: number = this._geom.add.copyPosis(exist_posi_i, true) as number;
                 // update the down arrays
-                this._geom_arrays.dn_verts_posis[vert_i] = new_posi_i;
+                this._geom_maps.dn_verts_posis.set(vert_i, new_posi_i);
                 // update the up arrays for the old posi, i.e. remove this vert
-                arrRem(this._geom_arrays.up_posis_verts[exist_posi_i], vert_i);
+                arrRem(this._geom_maps.up_posis_verts.get(exist_posi_i), vert_i);
                 // update the up arrays for the new posi, i.e. add this vert
-                this._geom_arrays.up_posis_verts[new_posi_i].push(vert_i);
+                this._geom_maps.up_posis_verts.get(new_posi_i).push(vert_i);
                 // add the new posi_i to the list, to be returned later
                 new_posis_i.push(new_posi_i);
             }
@@ -325,11 +325,11 @@ export class GIGeomModify {
         // replace the verts posi
         for (const vert_i of verts_i) {
             // update the down arrays
-            this._geom_arrays.dn_verts_posis[vert_i] = new_posi_i;
+            this._geom_maps.dn_verts_posis.set(vert_i, new_posi_i);
             // update the up arrays for the old posi, i.e. remove this vert
-            arrRem(this._geom_arrays.up_posis_verts[vert_i_to_posi_i[vert_i]], vert_i);
+            arrRem(this._geom_maps.up_posis_verts.get(vert_i_to_posi_i[vert_i]), vert_i);
             // update the up arrays for the new posi, i.e. add this vert
-            this._geom_arrays.up_posis_verts[new_posi_i].push(vert_i);
+            this._geom_maps.up_posis_verts.get(new_posi_i).push(vert_i);
         }
         // del the posis that are no longer used, i.e. have zero verts
         this._geom.del.delPosis(posis_to_del_i);
@@ -341,7 +341,7 @@ export class GIGeomModify {
      * This lists the edges in reverse order, and flips each edge.
      * ~
      * The attributes will not be affected. So the order of edge attribtes will also become reversed.
-     * 
+     *
      * TODO
      * This does not reverse the order of the edges.
      * The method, getWireVertices() in GeomQuery returns the correct vertices.
@@ -350,23 +350,23 @@ export class GIGeomModify {
      * If reversed it will instead be the last edge.
      */
     public reverse(wire_i: number): void {
-        const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
+        const wire: TWire = this._geom_maps.dn_wires_edges.get(wire_i);
         wire.reverse();
         // reverse the edges
         for (const edge_i of wire) {
-            const edge: TEdge = this._geom_arrays.dn_edges_verts[edge_i];
+            const edge: TEdge = this._geom_maps.dn_edges_verts.get(edge_i);
             edge.reverse();
             // the verts pointing up to edges also need to be reversed
-            const edges_i: number[] = this._geom_arrays.up_verts_edges[edge[0]];
+            const edges_i: number[] = this._geom_maps.up_verts_edges.get(edge[0]);
             edges_i.reverse();
         }
         // if this is the first wire in a face, reverse the triangles
-        const face_i: number = this._geom_arrays.up_wires_faces[wire_i];
+        const face_i: number = this._geom_maps.up_wires_faces.get(wire_i);
         if (face_i !== undefined) {
-            const face: TFace = this._geom_arrays.dn_faces_wirestris[face_i];
+            const face: TFace = this._geom_maps.dn_faces_wirestris.get(face_i);
             if (face[0][0] === wire_i) {
                 for (const tri_i of face[1]) {
-                    const tri: TTri = this._geom_arrays.dn_tris_verts[tri_i];
+                    const tri: TTri = this._geom_maps.dn_tris_verts.get(tri_i);
                     tri.reverse();
                 }
             }
@@ -381,7 +381,7 @@ export class GIGeomModify {
      * e2, e3, e1, withh attribute values 6, 7, 5
      */
     public shift(wire_i: number, offset: number): void {
-        const wire: TWire = this._geom_arrays.dn_wires_edges[wire_i];
+        const wire: TWire = this._geom_maps.dn_wires_edges.get(wire_i);
         wire.unshift.apply( wire, wire.splice( offset, wire.length ) );
     }
 

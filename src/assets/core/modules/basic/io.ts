@@ -135,35 +135,35 @@ export function Import(__model__: GIModel, model_data: string|{}, data_format: _
 }
 function _importGI(__model__: GIModel, model_data: string): number {
     // get number of ents before merge
-    const num_ents_before: number[] = __model__.geom.query.numEntsAll();
+    const num_ents_before: number[] = __model__.modeldata.geom.query.numEntsAll();
     // import
     const gi_json: IModelData = JSON.parse(model_data) as IModelData;
     const gi_model: GIModel = new GIModel();
     gi_model.setModelData(gi_json);
     __model__.merge(gi_model);
     // get number of ents after merge
-    const num_ents_after: number[] = __model__.geom.query.numEntsAll();
+    const num_ents_after: number[] = __model__.modeldata.geom.query.numEntsAll();
     // return the result
     return _createGIColl(__model__, num_ents_before, num_ents_after);
 }
 function _importObj(__model__: GIModel, model_data: string): number {
     // get number of ents before merge
-    const num_ents_before: number[] = __model__.geom.query.numEntsAll();
+    const num_ents_before: number[] = __model__.modeldata.geom.query.numEntsAll();
     // import
     const obj_model: GIModel = importObj(model_data);
     __model__.merge(obj_model);
     // get number of ents after merge
-    const num_ents_after: number[] = __model__.geom.query.numEntsAll();
+    const num_ents_after: number[] = __model__.modeldata.geom.query.numEntsAll();
     // return the result
     return _createColl(__model__, num_ents_before, num_ents_after);
 }
 function _importGeojson(__model__: GIModel, model_data: string): number {
     // get number of ents before merge
-    const num_ents_before: number[] = __model__.geom.query.numEntsAll();
+    const num_ents_before: number[] = __model__.modeldata.geom.query.numEntsAll();
     // import
     importGeojson(__model__, model_data, 0);
     // get number of ents after merge
-    const num_ents_after: number[] = __model__.geom.query.numEntsAll();
+    const num_ents_after: number[] = __model__.modeldata.geom.query.numEntsAll();
     // return the result
     return _createColl(__model__, num_ents_before, num_ents_after);
 }
@@ -172,25 +172,25 @@ function _createGIColl(__model__: GIModel, before: number[], after: number[]): n
     const plines_i: number[] = [];
     const pgons_i: number[] = [];
     for (let point_i = before[1]; point_i < after[1]; point_i++) {
-        if (__model__.geom.query.entExists(EEntType.POINT, point_i)) {
+        if (__model__.modeldata.geom.query.entExists(EEntType.POINT, point_i)) {
             points_i.push( point_i );
         }
     }
     for (let pline_i = before[2]; pline_i < after[2]; pline_i++) {
-        if (__model__.geom.query.entExists(EEntType.PLINE, pline_i)) {
+        if (__model__.modeldata.geom.query.entExists(EEntType.PLINE, pline_i)) {
             plines_i.push( pline_i );
         }
     }
     for (let pgon_i = before[3]; pgon_i < after[3]; pgon_i++) {
-        if (__model__.geom.query.entExists(EEntType.PGON, pgon_i)) {
+        if (__model__.modeldata.geom.query.entExists(EEntType.PGON, pgon_i)) {
             pgons_i.push( pgon_i );
         }
     }
     if (points_i.length + plines_i.length + pgons_i.length === 0) { return null; }
-    const container_coll_i: number = __model__.geom.add.addColl(null, points_i, plines_i, pgons_i);
+    const container_coll_i: number = __model__.modeldata.geom.add.addColl(null, points_i, plines_i, pgons_i);
     for (let coll_i = before[4]; coll_i < after[4]; coll_i++) {
-        if (__model__.geom.query.entExists(EEntType.COLL, coll_i)) {
-            __model__.geom.modify_coll.setCollParent(coll_i, container_coll_i);
+        if (__model__.modeldata.geom.query.entExists(EEntType.COLL, coll_i)) {
+            __model__.modeldata.geom.modify_coll.setCollParent(coll_i, container_coll_i);
         }
     }
     return container_coll_i;
@@ -209,9 +209,9 @@ function _createColl(__model__: GIModel, before: number[], after: number[]): num
         pgons_i.push( pgon_i );
     }
     if (points_i.length + plines_i.length + pgons_i.length === 0) { return null; }
-    const container_coll_i: number = __model__.geom.add.addColl(null, points_i, plines_i, pgons_i);
+    const container_coll_i: number = __model__.modeldata.geom.add.addColl(null, points_i, plines_i, pgons_i);
     for (let coll_i = before[4]; coll_i < after[4]; coll_i++) {
-        __model__.geom.modify_coll.setCollParent(coll_i, container_coll_i);
+        __model__.modeldata.geom.modify_coll.setCollParent(coll_i, container_coll_i);
     }
     return container_coll_i;
 }

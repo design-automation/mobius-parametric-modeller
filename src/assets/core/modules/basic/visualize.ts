@@ -59,20 +59,20 @@ export function Color(__model__: GIModel, entities: TId|TId[], color: TColor): v
     _color(__model__, ents_arr, color);
 }
 function _color(__model__: GIModel, ents_arr: TEntTypeIdx[], color: TColor): void {
-    if (!__model__.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOR)) {
-        __model__.attribs.add.addAttrib(EEntType.VERT, EAttribNames.COLOR, EAttribDataTypeStrs.LIST);
+    if (!__model__.modeldata.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOR)) {
+        __model__.modeldata.attribs.add.addAttrib(EEntType.VERT, EAttribNames.COLOR, EAttribDataTypeStrs.LIST);
     }
     // make a list of all the verts
     let all_verts_i: number[] = [];
     if (ents_arr === null) {
-        all_verts_i = __model__.geom.query.getEnts(EEntType.VERT);
+        all_verts_i = __model__.modeldata.geom.query.getEnts(EEntType.VERT);
     } else {
         for (const ent_arr of ents_arr) {
             const [ent_type, ent_i]: [number, number] = ent_arr as TEntTypeIdx;
             if (ent_type === EEntType.VERT) {
                 all_verts_i.push(ent_i);
             } else {
-                const verts_i: number[] = __model__.geom.nav.navAnyToVert(ent_type, ent_i);
+                const verts_i: number[] = __model__.modeldata.geom.nav.navAnyToVert(ent_type, ent_i);
                 for (const vert_i of verts_i) {
                     all_verts_i.push(vert_i);
                 }
@@ -80,7 +80,7 @@ function _color(__model__: GIModel, ents_arr: TEntTypeIdx[], color: TColor): voi
         }
     }
     // set all verts to have same color
-    __model__.attribs.add.setAttribVal(EEntType.VERT, all_verts_i, EAttribNames.COLOR, color);
+    __model__.modeldata.attribs.add.setAttribVal(EEntType.VERT, all_verts_i, EAttribNames.COLOR, color);
 }
 // ================================================================================================
 /**
@@ -112,14 +112,14 @@ export function Gradient(__model__: GIModel, entities: TId|TId[], attrib: string
             checkArgs(fn_name, 'range', range, [ArgCh.isNull, ArgCh.isNum, ArgCh.isNumL]);
             attrib_name = Array.isArray(attrib) ? attrib[0] : attrib;
             attrib_idx_or_key = Array.isArray(attrib) ? attrib[1] : null;
-            if (!__model__.attribs.query.hasAttrib(ents_arr[0][0], attrib_name)) {
+            if (!__model__.modeldata.attribs.query.hasAttrib(ents_arr[0][0], attrib_name)) {
                 throw new Error(fn_name + ': The attribute with name "' + attrib + '" does not exist on these entities.');
             } else {
                 let data_type = null;
                 if (attrib_idx_or_key === null) {
-                    data_type = __model__.attribs.query.getAttribDataType(ents_arr[0][0], attrib_name);
+                    data_type = __model__.modeldata.attribs.query.getAttribDataType(ents_arr[0][0], attrib_name);
                 } else {
-                    const first_val = __model__.attribs.query.getAttribValAny(ents_arr[0][0], attrib_name,
+                    const first_val = __model__.modeldata.attribs.query.getAttribValAny(ents_arr[0][0], attrib_name,
                                                                               ents_arr[0][1], attrib_idx_or_key);
                 }
                 if (data_type !== EAttribDataTypeStrs.NUMBER) {
@@ -192,15 +192,15 @@ export enum _EColorRampMethod {
 }
 function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: string, idx_or_key: number|string, range: [number, number],
         method: _EColorRampMethod): void {
-    if (!__model__.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOR)) {
-        __model__.attribs.add.addAttrib(EEntType.VERT, EAttribNames.COLOR, EAttribDataTypeStrs.LIST);
+    if (!__model__.modeldata.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOR)) {
+        __model__.modeldata.attribs.add.addAttrib(EEntType.VERT, EAttribNames.COLOR, EAttribDataTypeStrs.LIST);
     }
     // get the ents
     const first_ent_type: number = ents_arr[0][0];
     const ents_i: number[] = ents_arr.map( ent_arr => ent_arr[1] );
     // push the attrib down from the ent to its verts
     if (first_ent_type !== EEntType.VERT) {
-        __model__.attribs.add.pushAttribVals(first_ent_type, attrib_name, idx_or_key, ents_i,
+        __model__.modeldata.attribs.add.pushAttribVals(first_ent_type, attrib_name, idx_or_key, ents_i,
             EEntType.VERT, attrib_name, null, EAttribPush.AVERAGE);
     }
     // make a list of all the verts
@@ -210,14 +210,14 @@ function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: str
         if (ent_type === EEntType.VERT) {
             all_verts_i.push(ent_i);
         } else {
-            const verts_i: number[] = __model__.geom.nav.navAnyToVert(ent_type, ent_i);
+            const verts_i: number[] = __model__.modeldata.geom.nav.navAnyToVert(ent_type, ent_i);
             for (const vert_i of verts_i) {
                 all_verts_i.push(vert_i);
             }
         }
     }
     // get the attribute values
-    const vert_values: number[] = __model__.attribs.query.getAttribVal(EEntType.VERT, attrib_name, all_verts_i) as number[];
+    const vert_values: number[] = __model__.modeldata.attribs.query.getAttribVal(EEntType.VERT, attrib_name, all_verts_i) as number[];
     // if range[0] is null, get min value
     if (range[0] === null) {
         range[0] = min(vert_values);
@@ -263,7 +263,7 @@ function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: str
     values_map.forEach((col_and_verts_i) => {
         const col: TColor = col_and_verts_i[0];
         const verts_i: number[] = col_and_verts_i[1];
-        __model__.attribs.add.setAttribVal(EEntType.VERT, verts_i, EAttribNames.COLOR, col);
+        __model__.modeldata.attribs.add.setAttribVal(EEntType.VERT, verts_i, EAttribNames.COLOR, col);
     });
 }
 // ================================================================================================
@@ -302,11 +302,11 @@ export function Edge(__model__: GIModel, entities: TId|TId[], method: _EEdgeMeth
         ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
-    if (!__model__.attribs.query.hasAttrib(EEntType.EDGE, EAttribNames.VISIBILITY)) {
+    if (!__model__.modeldata.attribs.query.hasAttrib(EEntType.EDGE, EAttribNames.VISIBILITY)) {
         if (method === _EEdgeMethod.VISIBLE) {
             return;
         } else {
-            __model__.attribs.add.addAttrib(EEntType.EDGE, EAttribNames.VISIBILITY, EAttribDataTypeStrs.STRING);
+            __model__.modeldata.attribs.add.addAttrib(EEntType.EDGE, EAttribNames.VISIBILITY, EAttribDataTypeStrs.STRING);
         }
     }
     // Get the unique edges
@@ -317,7 +317,7 @@ export function Edge(__model__: GIModel, entities: TId|TId[], method: _EEdgeMeth
             if (ent_type === EEntType.EDGE) {
                 set_edges_i.add(ent_i);
             } else {
-                const ent_edges_i: number[] = __model__.geom.nav.navAnyToEdge(ent_type, ent_i);
+                const ent_edges_i: number[] = __model__.modeldata.geom.nav.navAnyToEdge(ent_type, ent_i);
                 for (const ent_edge_i of ent_edges_i) {
                     set_edges_i.add(ent_edge_i);
                 }
@@ -325,11 +325,11 @@ export function Edge(__model__: GIModel, entities: TId|TId[], method: _EEdgeMeth
         }
         edges_i = Array.from(set_edges_i);
     } else {
-        edges_i = __model__.geom.query.getEnts(EEntType.EDGE);
+        edges_i = __model__.modeldata.geom.query.getEnts(EEntType.EDGE);
     }
     // Set edge visibility
     const setting: string = method === _EEdgeMethod.VISIBLE ? null : 'hidden';
-    __model__.attribs.add.setAttribVal(EEntType.EDGE, edges_i, EAttribNames.VISIBILITY, setting);
+    __model__.modeldata.attribs.add.setAttribVal(EEntType.EDGE, edges_i, EAttribNames.VISIBILITY, setting);
 }
 // ================================================================================================
 export enum _EMeshMethod {
@@ -372,7 +372,7 @@ export function Mesh(__model__: GIModel, entities: TId|TId[], method: _EMeshMeth
         const set_verts_i: Set<number> = new Set();
         for (const [ent_type, ent_i] of ents_arr) {
             if (ent_type === EEntType.VERT) {
-                if (__model__.geom.query.getTopoObjType(EEntType.VERT, ent_i) === EEntType.PGON) {
+                if (__model__.modeldata.geom.query.getTopoObjType(EEntType.VERT, ent_i) === EEntType.PGON) {
                     set_verts_i.add(ent_i);
                 }
             } else if (ent_type === EEntType.POINT) {
@@ -380,22 +380,22 @@ export function Mesh(__model__: GIModel, entities: TId|TId[], method: _EMeshMeth
             } else if (ent_type === EEntType.PLINE) {
                 // skip
             } else if (ent_type === EEntType.PGON) {
-                const ent_verts_i: number[] = __model__.geom.nav.navAnyToVert(EEntType.PGON, ent_i);
+                const ent_verts_i: number[] = __model__.modeldata.geom.nav.navAnyToVert(EEntType.PGON, ent_i);
                 for (const ent_vert_i of ent_verts_i) {
                     set_verts_i.add(ent_vert_i);
                 }
             } else if (ent_type === EEntType.COLL) {
-                const coll_pgons_i: number[] = __model__.geom.nav.navCollToPgon(ent_i);
+                const coll_pgons_i: number[] = __model__.modeldata.geom.nav.navCollToPgon(ent_i);
                 for (const coll_pgon_i of coll_pgons_i) {
-                    const ent_verts_i: number[] = __model__.geom.nav.navAnyToVert(EEntType.PGON, coll_pgon_i);
+                    const ent_verts_i: number[] = __model__.modeldata.geom.nav.navAnyToVert(EEntType.PGON, coll_pgon_i);
                     for (const ent_vert_i of ent_verts_i) {
                         set_verts_i.add(ent_vert_i);
                     }
                 }
             }  else {
-                const ent_verts_i: number[] = __model__.geom.nav.navAnyToVert(ent_type, ent_i);
+                const ent_verts_i: number[] = __model__.modeldata.geom.nav.navAnyToVert(ent_type, ent_i);
                 for (const ent_vert_i of ent_verts_i) {
-                    if (__model__.geom.query.getTopoObjType(EEntType.VERT, ent_vert_i) === EEntType.PGON) {
+                    if (__model__.modeldata.geom.query.getTopoObjType(EEntType.VERT, ent_vert_i) === EEntType.PGON) {
                         set_verts_i.add(ent_vert_i);
                     }
                 }
@@ -403,7 +403,7 @@ export function Mesh(__model__: GIModel, entities: TId|TId[], method: _EMeshMeth
         }
         verts_i = Array.from(set_verts_i);
     } else {
-        verts_i = __model__.geom.query.getEnts(EEntType.VERT);
+        verts_i = __model__.modeldata.geom.query.getEnts(EEntType.VERT);
     }
     // calc vertex normals and set edge visibility
     switch (method) {
@@ -418,14 +418,14 @@ export function Mesh(__model__: GIModel, entities: TId|TId[], method: _EMeshMeth
     }
 }
 function _meshFaceted(__model__: GIModel, verts_i: number[]): void {
-    if (!__model__.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.NORMAL)) {
-        __model__.attribs.add.addAttrib(EEntType.VERT, EAttribNames.NORMAL, EAttribDataTypeStrs.LIST);
+    if (!__model__.modeldata.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.NORMAL)) {
+        __model__.modeldata.attribs.add.addAttrib(EEntType.VERT, EAttribNames.NORMAL, EAttribDataTypeStrs.LIST);
     }
     // get the polygons
     const map_vert_pgons: Map<number, number> = new Map();
     const set_pgons_i: Set<number> = new Set();
     for (const vert_i of verts_i) {
-        const pgons_i: number[] = __model__.geom.nav.navAnyToPgon(EEntType.VERT, vert_i); // TODO optimize
+        const pgons_i: number[] = __model__.modeldata.geom.nav.navAnyToPgon(EEntType.VERT, vert_i); // TODO optimize
         if (pgons_i.length === 1) { // one polygon
             map_vert_pgons.set(vert_i, pgons_i[0]);
             set_pgons_i.add(pgons_i[0]);
@@ -434,28 +434,28 @@ function _meshFaceted(__model__: GIModel, verts_i: number[]): void {
     // calc the normals one time
     const normals: Txyz[] = [];
     for (const pgon_i of Array.from(set_pgons_i)) {
-        const normal: Txyz = __model__.geom.query.getFaceNormal(__model__.geom.nav.navPgonToFace(pgon_i));
+        const normal: Txyz = __model__.modeldata.geom.query.getFaceNormal(__model__.modeldata.geom.nav.navPgonToFace(pgon_i));
         normals[pgon_i] = normal;
     }
     // set the normal
     map_vert_pgons.forEach( (pgon_i, vert_i) => {
         const normal: Txyz = normals[pgon_i];
-        __model__.attribs.add.setAttribVal(EEntType.VERT, vert_i, EAttribNames.NORMAL, normal);
+        __model__.modeldata.attribs.add.setAttribVal(EEntType.VERT, vert_i, EAttribNames.NORMAL, normal);
     });
 }
 function _meshSmooth(__model__: GIModel, verts_i: number[]): void {
-    if (!__model__.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.NORMAL)) {
-        __model__.attribs.add.addAttrib(EEntType.VERT, EAttribNames.NORMAL, EAttribDataTypeStrs.LIST);
+    if (!__model__.modeldata.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.NORMAL)) {
+        __model__.modeldata.attribs.add.addAttrib(EEntType.VERT, EAttribNames.NORMAL, EAttribDataTypeStrs.LIST);
     }
     // get the polygons
     const map_posi_pgons: Map<number, number[]> = new Map();
     const set_pgons_i: Set<number> = new Set();
     const vert_to_posi: number[] = [];
     for (const vert_i of verts_i) {
-        const posi_i: number = __model__.geom.nav.navVertToPosi(vert_i);
+        const posi_i: number = __model__.modeldata.geom.nav.navVertToPosi(vert_i);
         vert_to_posi[vert_i] = posi_i;
         if (!map_posi_pgons.has(posi_i)) {
-            const posi_pgons_i: number[] = __model__.geom.nav.navAnyToPgon(EEntType.VERT, vert_i);
+            const posi_pgons_i: number[] = __model__.modeldata.geom.nav.navAnyToPgon(EEntType.VERT, vert_i);
             map_posi_pgons.set(posi_i, posi_pgons_i);
             for (const posi_pgon_i of posi_pgons_i) {
                 set_pgons_i.add(posi_pgon_i);
@@ -465,7 +465,7 @@ function _meshSmooth(__model__: GIModel, verts_i: number[]): void {
     // calc all normals one time
     const normals: Txyz[] = [];
     for (const pgon_i of Array.from(set_pgons_i)) {
-        const normal: Txyz = __model__.geom.query.getFaceNormal(__model__.geom.nav.navPgonToFace(pgon_i));
+        const normal: Txyz = __model__.modeldata.geom.query.getFaceNormal(__model__.modeldata.geom.nav.navPgonToFace(pgon_i));
         normals[pgon_i] = normal;
     }
     // set normals on all verts
@@ -483,7 +483,7 @@ function _meshSmooth(__model__: GIModel, verts_i: number[]): void {
         const div: number = posi_pgons_i.length;
         normal = [normal[0] / div, normal[1] / div, normal[2] / div];
         normal = vecNorm(normal);
-        __model__.attribs.add.setAttribVal(EEntType.VERT, vert_i, EAttribNames.NORMAL, normal);
+        __model__.modeldata.attribs.add.setAttribVal(EEntType.VERT, vert_i, EAttribNames.NORMAL, normal);
     }
 }
 // ================================================================================================
@@ -513,12 +513,12 @@ function _visRay(__model__: GIModel, rays: TRay|TRay[], scale: number): TEntType
         const vec: Txyz = ray[1]; // vecMult(ray[1], scale);
         const end: Txyz = vecAdd(origin, vec);
         // create orign point
-        const origin_posi_i: number = __model__.geom.add.addPosi();
-        __model__.attribs.add.setPosiCoords(origin_posi_i, origin);
+        const origin_posi_i: number = __model__.modeldata.geom.add.addPosi();
+        __model__.modeldata.attribs.add.setPosiCoords(origin_posi_i, origin);
         // create pline
-        const end_posi_i: number = __model__.geom.add.addPosi();
-        __model__.attribs.add.setPosiCoords(end_posi_i, end);
-        const pline_i = __model__.geom.add.addPline([origin_posi_i, end_posi_i]);
+        const end_posi_i: number = __model__.modeldata.geom.add.addPosi();
+        __model__.modeldata.attribs.add.setPosiCoords(end_posi_i, end);
+        const pline_i = __model__.modeldata.geom.add.addPline([origin_posi_i, end_posi_i]);
         // create the arrow heads
         const vec_unit: Txyz = vecNorm(ray[1]);
         const head_scale = scale;
@@ -530,13 +530,13 @@ function _visRay(__model__: GIModel, rays: TRay|TRay[], scale: number): TEntType
         }
         const vec_rev: Txyz = vecSetLen(vecMult(vec, -1), head_scale);
         const arrow_a: Txyz = vecAdd(vecAdd(end, vec_rev), vec_norm);
-        const arrow_a_posi_i: number = __model__.geom.add.addPosi();
-        __model__.attribs.add.setPosiCoords(arrow_a_posi_i, arrow_a);
-        const arrow_a_pline_i: number = __model__.geom.add.addPline([end_posi_i, arrow_a_posi_i]);
+        const arrow_a_posi_i: number = __model__.modeldata.geom.add.addPosi();
+        __model__.modeldata.attribs.add.setPosiCoords(arrow_a_posi_i, arrow_a);
+        const arrow_a_pline_i: number = __model__.modeldata.geom.add.addPline([end_posi_i, arrow_a_posi_i]);
         const arrow_b: Txyz = vecSub(vecAdd(end, vec_rev), vec_norm);
-        const arrow_b_posi_i: number = __model__.geom.add.addPosi();
-        __model__.attribs.add.setPosiCoords(arrow_b_posi_i, arrow_b);
-        const arrow_b_pline_i = __model__.geom.add.addPline([end_posi_i, arrow_b_posi_i]);
+        const arrow_b_posi_i: number = __model__.modeldata.geom.add.addPosi();
+        __model__.modeldata.attribs.add.setPosiCoords(arrow_b_posi_i, arrow_b);
+        const arrow_b_pline_i = __model__.modeldata.geom.add.addPline([end_posi_i, arrow_b_posi_i]);
         // return the geometry IDs
         return [
             [EEntType.PLINE, pline_i],
@@ -593,28 +593,28 @@ function _visPlane(__model__: GIModel, planes: TPlane|TPlane[], scale: number): 
         x_end = vecAdd(x_end, vecMult(x_vec, 0.1));
         y_end = vecSub(y_end, vecMult(y_vec, 0.1));
         // create the point
-        const origin_posi_i: number = __model__.geom.add.addPosi();
-        __model__.attribs.add.setPosiCoords(origin_posi_i, origin);
+        const origin_posi_i: number = __model__.modeldata.geom.add.addPosi();
+        __model__.modeldata.attribs.add.setPosiCoords(origin_posi_i, origin);
         // create the x axis
-        const x_end_posi_i: number = __model__.geom.add.addPosi();
-        __model__.attribs.add.setPosiCoords(x_end_posi_i, x_end);
-        const x_pline_i = __model__.geom.add.addPline([origin_posi_i, x_end_posi_i]);
+        const x_end_posi_i: number = __model__.modeldata.geom.add.addPosi();
+        __model__.modeldata.attribs.add.setPosiCoords(x_end_posi_i, x_end);
+        const x_pline_i = __model__.modeldata.geom.add.addPline([origin_posi_i, x_end_posi_i]);
         // create the y axis
-        const y_end_posi_i: number = __model__.geom.add.addPosi();
-        __model__.attribs.add.setPosiCoords(y_end_posi_i, y_end);
-        const y_pline_i = __model__.geom.add.addPline([origin_posi_i, y_end_posi_i]);
+        const y_end_posi_i: number = __model__.modeldata.geom.add.addPosi();
+        __model__.modeldata.attribs.add.setPosiCoords(y_end_posi_i, y_end);
+        const y_pline_i = __model__.modeldata.geom.add.addPline([origin_posi_i, y_end_posi_i]);
         // create the z axis
-        const z_end_posi_i: number = __model__.geom.add.addPosi();
-        __model__.attribs.add.setPosiCoords(z_end_posi_i, z_end);
-        const z_pline_i = __model__.geom.add.addPline([origin_posi_i, z_end_posi_i]);
+        const z_end_posi_i: number = __model__.modeldata.geom.add.addPosi();
+        __model__.modeldata.attribs.add.setPosiCoords(z_end_posi_i, z_end);
+        const z_pline_i = __model__.modeldata.geom.add.addPline([origin_posi_i, z_end_posi_i]);
         // create pline for plane
         const corner_posis_i: number[] = [];
         for (const corner of plane_corners) {
-            const posi_i: number = __model__.geom.add.addPosi();
-            __model__.attribs.add.setPosiCoords(posi_i, corner);
+            const posi_i: number = __model__.modeldata.geom.add.addPosi();
+            __model__.modeldata.attribs.add.setPosiCoords(posi_i, corner);
             corner_posis_i.push(posi_i);
         }
-        const plane_i = __model__.geom.add.addPline(corner_posis_i, true);
+        const plane_i = __model__.modeldata.geom.add.addPline(corner_posis_i, true);
         // return the geometry IDs
         return [
             [EEntType.PLINE, x_pline_i],
@@ -658,38 +658,38 @@ function _visBBox(__model__: GIModel, bboxs: TBBox|TBBox[]): TEntTypeIdx[] {
         const _min: Txyz = bbox[1];
         const _max: Txyz = bbox[2];
         // bottom
-        const ps0: number = __model__.geom.add.addPosi();
-        __model__.attribs.add.setPosiCoords(ps0, _min);
-        const ps1: number = __model__.geom.add.addPosi();
-        __model__.attribs.add.setPosiCoords(ps1, [_max[0], _min[1], _min[2]]);
-        const ps2: number = __model__.geom.add.addPosi();
-        __model__.attribs.add.setPosiCoords(ps2, [_max[0], _max[1], _min[2]]);
-        const ps3: number = __model__.geom.add.addPosi();
-        __model__.attribs.add.setPosiCoords(ps3, [_min[0], _max[1], _min[2]]);
+        const ps0: number = __model__.modeldata.geom.add.addPosi();
+        __model__.modeldata.attribs.add.setPosiCoords(ps0, _min);
+        const ps1: number = __model__.modeldata.geom.add.addPosi();
+        __model__.modeldata.attribs.add.setPosiCoords(ps1, [_max[0], _min[1], _min[2]]);
+        const ps2: number = __model__.modeldata.geom.add.addPosi();
+        __model__.modeldata.attribs.add.setPosiCoords(ps2, [_max[0], _max[1], _min[2]]);
+        const ps3: number = __model__.modeldata.geom.add.addPosi();
+        __model__.modeldata.attribs.add.setPosiCoords(ps3, [_min[0], _max[1], _min[2]]);
         // top
-        const ps4: number = __model__.geom.add.addPosi();
-        __model__.attribs.add.setPosiCoords(ps4, [_min[0], _min[1], _max[2]]);
-        const ps5: number = __model__.geom.add.addPosi();
-        __model__.attribs.add.setPosiCoords(ps5, [_max[0], _min[1], _max[2]]);
-        const ps6: number = __model__.geom.add.addPosi();
-        __model__.attribs.add.setPosiCoords(ps6, _max);
-        const ps7: number = __model__.geom.add.addPosi();
-        __model__.attribs.add.setPosiCoords(ps7, [_min[0], _max[1], _max[2]]);
+        const ps4: number = __model__.modeldata.geom.add.addPosi();
+        __model__.modeldata.attribs.add.setPosiCoords(ps4, [_min[0], _min[1], _max[2]]);
+        const ps5: number = __model__.modeldata.geom.add.addPosi();
+        __model__.modeldata.attribs.add.setPosiCoords(ps5, [_max[0], _min[1], _max[2]]);
+        const ps6: number = __model__.modeldata.geom.add.addPosi();
+        __model__.modeldata.attribs.add.setPosiCoords(ps6, _max);
+        const ps7: number = __model__.modeldata.geom.add.addPosi();
+        __model__.modeldata.attribs.add.setPosiCoords(ps7, [_min[0], _max[1], _max[2]]);
         // plines bottom
-        const pl0 = __model__.geom.add.addPline([ps0, ps1]);
-        const pl1 = __model__.geom.add.addPline([ps1, ps2]);
-        const pl2 = __model__.geom.add.addPline([ps2, ps3]);
-        const pl3 = __model__.geom.add.addPline([ps3, ps0]);
+        const pl0 = __model__.modeldata.geom.add.addPline([ps0, ps1]);
+        const pl1 = __model__.modeldata.geom.add.addPline([ps1, ps2]);
+        const pl2 = __model__.modeldata.geom.add.addPline([ps2, ps3]);
+        const pl3 = __model__.modeldata.geom.add.addPline([ps3, ps0]);
         // plines top
-        const pl4 = __model__.geom.add.addPline([ps4, ps5]);
-        const pl5 = __model__.geom.add.addPline([ps5, ps6]);
-        const pl6 = __model__.geom.add.addPline([ps6, ps7]);
-        const pl7 = __model__.geom.add.addPline([ps7, ps4]);
+        const pl4 = __model__.modeldata.geom.add.addPline([ps4, ps5]);
+        const pl5 = __model__.modeldata.geom.add.addPline([ps5, ps6]);
+        const pl6 = __model__.modeldata.geom.add.addPline([ps6, ps7]);
+        const pl7 = __model__.modeldata.geom.add.addPline([ps7, ps4]);
         // plines vertical
-        const pl8 = __model__.geom.add.addPline([ps0, ps4]);
-        const pl9 = __model__.geom.add.addPline([ps1, ps5]);
-        const pl10 = __model__.geom.add.addPline([ps2, ps6]);
-        const pl11 = __model__.geom.add.addPline([ps3, ps7]);
+        const pl8 = __model__.modeldata.geom.add.addPline([ps0, ps4]);
+        const pl9 = __model__.modeldata.geom.add.addPline([ps1, ps5]);
+        const pl10 = __model__.modeldata.geom.add.addPline([ps2, ps6]);
+        const pl11 = __model__.modeldata.geom.add.addPline([ps3, ps7]);
         // return
         return [pl0, pl1, pl2, pl3, pl4, pl5, pl6, pl7, pl8, pl9, pl10, pl11].map(pl => [EEntType.PLINE, pl]) as TEntTypeIdx[];
     } else {

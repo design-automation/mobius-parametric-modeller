@@ -64,7 +64,7 @@ export function getCentoridFromEnts(__model__: GIModel, ents: TId|TId[], fn_name
 export function getCentroid(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): Txyz|Txyz[] {
     if (getArrDepth(ents_arr) === 1) {
         const [ent_type, index]: [EEntType, number] = ents_arr as TEntTypeIdx;
-        const posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, index);
+        const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(ent_type, index);
         return _centroidPosis(__model__, posis_i);
     } else {
         // divide the input into posis and non posis
@@ -94,21 +94,21 @@ export function getCentroid(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeId
 }
 function _centroidPosis(__model__: GIModel, posis_i: number[]): Txyz {
     const unique_posis_i = Array.from(new Set(posis_i));
-    const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+    const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.modeldata.attribs.query.getPosiCoords(posi_i));
     return vecDiv(vecSum(unique_xyzs), unique_xyzs.length);
 }
 // ================================================================================================
 export function getCenterOfMass(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): Txyz|Txyz[] {
     if (getArrDepth(ents_arr) === 1) {
         const [ent_type, ent_i]: [EEntType, number] = ents_arr as TEntTypeIdx;
-        const faces_i: number[] = __model__.geom.nav.navAnyToFace(ent_type, ent_i);
+        const faces_i: number[] = __model__.modeldata.geom.nav.navAnyToFace(ent_type, ent_i);
         if (faces_i.length === 0) { return null; }
         return _centerOfMass(__model__, faces_i);
     } else {
         const cents: Txyz[] = [];
         ents_arr = ents_arr as TEntTypeIdx[];
         for (const [ent_type, ent_i] of ents_arr) {
-            const faces_i: number[] = __model__.geom.nav.navAnyToFace(ent_type, ent_i);
+            const faces_i: number[] = __model__.modeldata.geom.nav.navAnyToFace(ent_type, ent_i);
             if (faces_i.length === 0) { cents.push(null); }
             cents.push(_centerOfMass(__model__, faces_i));
         }
@@ -139,13 +139,13 @@ function _centerOfMassOfFace(__model__: GIModel, face_i: number): [Txyz, number]
     const tri_areas: number[] = [];
     let total_area = 0;
     const map_posi_to_v3: Map< number, THREE.Vector3> = new Map();
-    for (const tri_i of __model__.geom.nav.navFaceToTri(face_i)) {
-        const posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
+    for (const tri_i of __model__.modeldata.geom.nav.navFaceToTri(face_i)) {
+        const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
         const posis_v3: THREE.Vector3[] = [];
         for (const posi_i of posis_i) {
             let posi_v3: THREE.Vector3 = map_posi_to_v3.get(posi_i);
             if (posi_v3 === undefined) {
-                const xyz: Txyz = __model__.attribs.query.getPosiCoords(posi_i);
+                const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posi_i);
                 posi_v3 = new THREE.Vector3(xyz[0], xyz[1], xyz[2]);
             }
             posis_v3.push(posi_v3);
@@ -280,19 +280,19 @@ export function _copyGeom(__model__: GIModel,
     if (depth === 1) {
         const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
         if (isColl(ent_type)) {
-            const coll_i: number = __model__.geom.add.copyColls(index, copy_attributes) as number;
+            const coll_i: number = __model__.modeldata.geom.add.copyColls(index, copy_attributes) as number;
             return [ent_type, coll_i];
         } else if (isPgon(ent_type)) {
-            const obj_i: number = __model__.geom.add.copyPgons(index, copy_attributes) as number;
+            const obj_i: number = __model__.modeldata.geom.add.copyPgons(index, copy_attributes) as number;
             return [ent_type, obj_i];
         } else if (isPline(ent_type)) {
-            const obj_i: number = __model__.geom.add.copyPlines(index, copy_attributes) as number;
+            const obj_i: number = __model__.modeldata.geom.add.copyPlines(index, copy_attributes) as number;
             return [ent_type, obj_i];
         } else if (isPoint(ent_type)) {
-            const obj_i: number = __model__.geom.add.copyPoints(index, copy_attributes) as number;
+            const obj_i: number = __model__.modeldata.geom.add.copyPoints(index, copy_attributes) as number;
             return [ent_type, obj_i];
         } else if (isPosi(ent_type)) {
-            const posi_i: number = __model__.geom.add.copyPosis(index, copy_attributes) as number;
+            const posi_i: number = __model__.modeldata.geom.add.copyPosis(index, copy_attributes) as number;
             return [ent_type, posi_i];
         }
     } else if (depth === 2) {
@@ -326,24 +326,24 @@ export function _copyGeomPosis(__model__: GIModel, ents_arr: TEntTypeIdx | TEntT
             if (old_to_new_posis_i_map.has(old_posi_i)) {
                 new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
             } else {
-                const xyz: Txyz = __model__.attribs.query.getPosiCoords(old_posi_i);
-                __model__.attribs.add.setPosiCoords(old_posi_i, vecAdd(xyz, vector));
+                const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(old_posi_i);
+                __model__.modeldata.attribs.add.setPosiCoords(old_posi_i, vecAdd(xyz, vector));
                 old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
             }
         } else { // obj or coll
-            const old_posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, index);
+            const old_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(ent_type, index);
             const ent_new_posis_i: number[] = [];
             for (const old_posi_i of old_posis_i) {
                 let new_posi_i: number;
                 if (old_to_new_posis_i_map.has(old_posi_i)) {
                     new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
                 } else {
-                    new_posi_i = __model__.geom.add.copyMovePosis(old_posi_i, vector, copy_attributes) as number;
+                    new_posi_i = __model__.modeldata.geom.add.copyMovePosis(old_posi_i, vector, copy_attributes) as number;
                     old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
                 }
                 ent_new_posis_i.push(new_posi_i);
             }
-            __model__.geom.modify.replacePosis(ent_type, index, ent_new_posis_i);
+            __model__.modeldata.geom.modify.replacePosis(ent_type, index, ent_new_posis_i);
         }
     }
     // return all the new points

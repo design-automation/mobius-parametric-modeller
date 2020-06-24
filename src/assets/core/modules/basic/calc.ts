@@ -72,7 +72,7 @@ export function Distance(__model__: GIModel, entities1: TId|TId[], entities2: TI
             if (ent_type === EEntType.POSI) {
                 from_posis_i.push(ent_i);
             } else {
-                const ent_posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, ent_i);
+                const ent_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(ent_type, ent_i);
                 for (const ent_posi_i of ent_posis_i) {
                     from_posis_i.push(ent_posi_i);
                 }
@@ -100,14 +100,14 @@ export function Distance(__model__: GIModel, entities1: TId|TId[], entities2: TI
         if (ent_type === to_ent_type) {
             set_to_ents_i.add(ent_i);
         } else {
-            const sub_ents_i: number[] = __model__.geom.nav.navAnyToAny(ent_type, to_ent_type, ent_i);
+            const sub_ents_i: number[] = __model__.modeldata.geom.nav.navAnyToAny(ent_type, to_ent_type, ent_i);
             for (const sub_ent_i of sub_ents_i) {
                 set_to_ents_i.add(sub_ent_i);
             }
         }
         // posis
         if (to_ent_type !== EEntType.POSI) {
-            const sub_posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, ent_i);
+            const sub_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(ent_type, ent_i);
             for (const sub_posi_i of sub_posis_i) {
                 set_to_posis_i.add(sub_posi_i);
             }
@@ -119,7 +119,7 @@ export function Distance(__model__: GIModel, entities1: TId|TId[], entities2: TI
     const map_posi_i_xyz: Map<number, Txyz> = new Map();
     if (to_ent_type === EEntType.POSI) { set_to_posis_i = set_to_ents_i; }
     for (const posi_i of set_to_posis_i) {
-        const xyz: Txyz = __model__.attribs.query.getPosiCoords(posi_i);
+        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posi_i);
         map_posi_i_xyz.set(posi_i, xyz);
     }
     // calc the distance
@@ -174,7 +174,7 @@ function _distanceManyPosisToEdges(__model__: GIModel, from_posi_i: number|numbe
 }
 function _distancePstoPs(__model__: GIModel, from_posi_i: number, to_posis_i: number[],
         map_posi_i_xyz: Map<number, Txyz>): number {
-    const from_xyz: Txyz = __model__.attribs.query.getPosiCoords(from_posi_i);
+    const from_xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(from_posi_i);
     let min_dist = Infinity;
     // loop, measure dist
     for (const to_posi_i of to_posis_i) {
@@ -187,16 +187,16 @@ function _distancePstoPs(__model__: GIModel, from_posi_i: number, to_posis_i: nu
     return min_dist;
 }
 // function _distancePstoW(__model__: GIModel, from_posi_i: number, to_wires_i: number[]): number {
-//     const from_xyz: Txyz = __model__.attribs.query.getPosiCoords(from_posi_i);
+//     const from_xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(from_posi_i);
 //     let min_dist = Infinity;
 //     const map_posi_xyz: Map<number, Txyz> = new Map();
 //     for (const wire_i of to_wires_i) {
 //         // get the posis
-//         const to_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
+//         const to_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
 //         // if closed, add first posi to end
-//         if (__model__.geom.query.isWireClosed(wire_i)) { to_posis_i.push(to_posis_i[0]); }
+//         if (__model__.modeldata.geom.query.isWireClosed(wire_i)) { to_posis_i.push(to_posis_i[0]); }
 //         // add the first xyz to the list, this will be prev
-//         let prev_xyz: Txyz = __model__.attribs.query.getPosiCoords(to_posis_i[0]);
+//         let prev_xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(to_posis_i[0]);
 //         map_posi_xyz.set(to_posis_i[0], prev_xyz);
 //         // loop, measure dist
 //         for (let i = 1; i < to_posis_i.length; i++) {
@@ -204,7 +204,7 @@ function _distancePstoPs(__model__: GIModel, from_posi_i: number, to_posis_i: nu
 //             const curr_posi_i: number = to_posis_i[i];
 //             let curr_xyz: Txyz = map_posi_xyz.get(curr_posi_i);
 //             if (curr_xyz === undefined) {
-//                 curr_xyz = __model__.attribs.query.getPosiCoords(curr_posi_i);
+//                 curr_xyz = __model__.modeldata.attribs.query.getPosiCoords(curr_posi_i);
 //                 map_posi_xyz.set(curr_posi_i, curr_xyz);
 //             }
 //             // calc dist
@@ -218,11 +218,11 @@ function _distancePstoPs(__model__: GIModel, from_posi_i: number, to_posis_i: nu
 // }
 function _distancePstoE(__model__: GIModel, from_posi_i: number, to_edges_i: number[],
         map_posi_i_xyz: Map<number, Txyz>): number {
-    const from_xyz: Txyz = __model__.attribs.query.getPosiCoords(from_posi_i);
+    const from_xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(from_posi_i);
     let min_dist = Infinity;
     for (const edge_i of to_edges_i) {
         // get the posis
-        const edge_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
+        const edge_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
         const xyz_start: Txyz = map_posi_i_xyz.get(edge_posis_i[0]);
         const xyz_end: Txyz = map_posi_i_xyz.get(edge_posis_i[1]);
         // calc dist
@@ -292,10 +292,10 @@ function _length(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): numb
         } else if (ent_type === EEntType.WIRE) {
             return _wireLength(__model__, index);
         } else if (ent_type === EEntType.PLINE) {
-            const wire_i: number = __model__.geom.nav.navPlineToWire(index);
+            const wire_i: number = __model__.modeldata.geom.nav.navPlineToWire(index);
             return _wireLength(__model__, wire_i);
         } else {
-            const wires_i: number[] = __model__.geom.nav.navAnyToWire(ent_type, index);
+            const wires_i: number[] = __model__.modeldata.geom.nav.navAnyToWire(ent_type, index);
             return wires_i.map( wire_i => _wireLength(__model__, wire_i) ) as number[];
         }
     } else {
@@ -305,22 +305,22 @@ function _length(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): numb
     }
 }
 function _edgeLength(__model__: GIModel, edge_i: number): number {
-    const posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
-    const xyz_0: Txyz = __model__.attribs.query.getPosiCoords(posis_i[0]);
-    const xyz_1: Txyz = __model__.attribs.query.getPosiCoords(posis_i[1]);
+    const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
+    const xyz_0: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posis_i[0]);
+    const xyz_1: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posis_i[1]);
     return distance(xyz_0, xyz_1);
 }
 function _wireLength(__model__: GIModel, wire_i: number): number {
-    const posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
+    const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
     let dist = 0;
     for (let i = 0; i < posis_i.length - 1; i++) {
-        const xyz_0: Txyz = __model__.attribs.query.getPosiCoords(posis_i[i]);
-        const xyz_1: Txyz = __model__.attribs.query.getPosiCoords(posis_i[i + 1]);
+        const xyz_0: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posis_i[i]);
+        const xyz_1: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posis_i[i + 1]);
         dist += distance(xyz_0, xyz_1);
     }
-    if (__model__.geom.query.isWireClosed(wire_i)) {
-        const xyz_0: Txyz = __model__.attribs.query.getPosiCoords(posis_i[posis_i.length - 1]);
-        const xyz_1: Txyz = __model__.attribs.query.getPosiCoords(posis_i[0]);
+    if (__model__.modeldata.geom.query.isWireClosed(wire_i)) {
+        const xyz_0: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posis_i[posis_i.length - 1]);
+        const xyz_1: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posis_i[0]);
         dist += distance(xyz_0, xyz_1);
     }
     return dist;
@@ -363,13 +363,13 @@ function _area(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): number
             // faces, these are already triangulated
             let face_i: number = index;
             if (isPgon(ent_type)) {
-                face_i = __model__.geom.nav.navPgonToFace(index);
+                face_i = __model__.modeldata.geom.nav.navPgonToFace(index);
             }
-            const tris_i: number[] = __model__.geom.nav.navFaceToTri(face_i);
+            const tris_i: number[] = __model__.modeldata.geom.nav.navFaceToTri(face_i);
             let total_area = 0;
             for (const tri_i of tris_i) {
-                const corners_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
-                const corners_xyzs: Txyz[] = corners_i.map(corner_i => __model__.attribs.query.getPosiCoords(corner_i));
+                const corners_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
+                const corners_xyzs: Txyz[] = corners_i.map(corner_i => __model__.modeldata.attribs.query.getPosiCoords(corner_i));
                 const tri_area: number = area( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2]);
                 total_area += tri_area;
             }
@@ -378,13 +378,13 @@ function _area(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): number
             // wires, these need to be triangulated
             let wire_i: number = index;
             if (isPline(ent_type)) {
-                wire_i = __model__.geom.nav.navPlineToWire(index);
+                wire_i = __model__.modeldata.geom.nav.navPlineToWire(index);
             }
-            if (!__model__.geom.query.isWireClosed(wire_i)) {
+            if (!__model__.modeldata.geom.query.isWireClosed(wire_i)) {
                 throw new Error('To calculate area, wire must be closed');
             }
-            const posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.WIRE, index);
-            const xyzs:  Txyz[] = posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i) );
+            const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.WIRE, index);
+            const xyzs:  Txyz[] = posis_i.map( posi_i => __model__.modeldata.attribs.query.getPosiCoords(posi_i) );
             const tris: number[][] = triangulate(xyzs);
             let total_area = 0;
             for (const tri of tris) {
@@ -438,13 +438,13 @@ function _vector(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): Txyz
     if (getArrDepth(ents_arrs) === 1) {
         const [ent_type, index]: [EEntType, number] = ents_arrs as TEntTypeIdx;
         if (ent_type === EEntType.EDGE) {
-            const posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, index);
-            const start: Txyz = __model__.attribs.query.getPosiCoords(posis_i[0]);
-            const end: Txyz = __model__.attribs.query.getPosiCoords(posis_i[1]);
+            const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(ent_type, index);
+            const start: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posis_i[0]);
+            const end: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posis_i[1]);
             // console.log(">>>>", start, end);
             return vecSub(end, start);
         } else {
-            const edges_i: number[] = __model__.geom.nav.navAnyToEdge(ent_type, index);
+            const edges_i: number[] = __model__.modeldata.geom.nav.navAnyToEdge(ent_type, index);
             const edges_arrs: TEntTypeIdx[] = edges_i.map(edge_i => [EEntType.EDGE, edge_i] as [EEntType, number]);
             return edges_arrs.map( edges_arr => _vector(__model__, edges_arr) ) as Txyz[];
         }
@@ -562,19 +562,19 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
         const ent_type: EEntType = (ents_arr as TEntTypeIdx)[0];
         const index: number = (ents_arr as TEntTypeIdx)[1];
         if (isPgon(ent_type)) {
-            const norm_vec: Txyz = __model__.geom.query.getFaceNormal(__model__.geom.nav.navPgonToFace(index));
+            const norm_vec: Txyz = __model__.modeldata.geom.query.getFaceNormal(__model__.modeldata.geom.nav.navPgonToFace(index));
             return vecMult(norm_vec, scale);
         } else if (isFace(ent_type)) {
-            const norm_vec: Txyz = __model__.geom.query.getFaceNormal(index);
+            const norm_vec: Txyz = __model__.modeldata.geom.query.getFaceNormal(index);
             return vecMult(norm_vec, scale);
         } else if (isPline(ent_type)) {
-            const norm_vec: Txyz = __model__.geom.query.getWireNormal(__model__.geom.nav.navPlineToWire(index));
+            const norm_vec: Txyz = __model__.modeldata.geom.query.getWireNormal(__model__.modeldata.geom.nav.navPlineToWire(index));
             return vecMult(norm_vec, scale);
         } else if (isWire(ent_type)) {
-            const norm_vec: Txyz = __model__.geom.query.getWireNormal(index);
+            const norm_vec: Txyz = __model__.modeldata.geom.query.getWireNormal(index);
             return vecMult(norm_vec, scale);
         } else if (isEdge(ent_type)) {
-            const verts_i: number[] = __model__.geom.nav.navEdgeToVert(index);
+            const verts_i: number[] = __model__.modeldata.geom.nav.navEdgeToVert(index);
             const norm_vecs: Txyz[] = verts_i.map( vert_i => _vertNormal(__model__, vert_i) );
             const norm_vec: Txyz = vecDiv( vecSum(norm_vecs), norm_vecs.length);
             return vecMult(norm_vec, scale);
@@ -582,7 +582,7 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
             const norm_vec: Txyz = _vertNormal(__model__, index);
             return vecMult(norm_vec, scale);
         } else if (isPosi(ent_type)) {
-            const verts_i: number[] = __model__.geom.nav.navPosiToVert(index);
+            const verts_i: number[] = __model__.modeldata.geom.nav.navPosiToVert(index);
             if (verts_i.length > 0) {
                 const norm_vecs: Txyz[] = verts_i.map( vert_i => _vertNormal(__model__, vert_i) );
                 const norm_vec: Txyz = vecDiv( vecSum(norm_vecs), norm_vecs.length);
@@ -598,18 +598,18 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
 }
 function _vertNormal(__model__: GIModel, index: number) {
     let norm_vec: Txyz;
-    const edges_i: number[] = __model__.geom.nav.navVertToEdge(index);
+    const edges_i: number[] = __model__.modeldata.geom.nav.navVertToEdge(index);
     if (edges_i.length === 1) {
-        const posis0_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.EDGE, edges_i[0]);
-        const posis1_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.EDGE, edges_i[1]);
-        const p_mid: Txyz = __model__.attribs.query.getPosiCoords(posis0_i[1]); // same as posis1_i[0]
-        const p_a: Txyz = __model__.attribs.query.getPosiCoords(posis0_i[0]);
-        const p_b: Txyz = __model__.attribs.query.getPosiCoords(posis1_i[1]);
+        const posis0_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edges_i[0]);
+        const posis1_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edges_i[1]);
+        const p_mid: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posis0_i[1]); // same as posis1_i[0]
+        const p_a: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posis0_i[0]);
+        const p_b: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posis1_i[1]);
         norm_vec = vecCross( vecFromTo(p_mid, p_a), vecFromTo(p_mid, p_b), true);
         if (vecLen(norm_vec) > 0) { return norm_vec; }
     }
-    const wire_i: number = __model__.geom.nav.navEdgeToWire(edges_i[0]);
-    norm_vec = __model__.geom.query.getWireNormal(wire_i);
+    const wire_i: number = __model__.modeldata.geom.nav.navEdgeToWire(edges_i[0]);
+    norm_vec = __model__.modeldata.geom.query.getWireNormal(wire_i);
     return norm_vec;
 }
 // ================================================================================================
@@ -658,16 +658,16 @@ function _eval(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], t_param:
     if (getArrDepth(ents_arr) === 1) {
         const [ent_type, index]: [EEntType, number] = ents_arr as TEntTypeIdx;
         if (ent_type === EEntType.EDGE || ent_type === EEntType.WIRE || ent_type === EEntType.PLINE) {
-            const edges_i: number[] = __model__.geom.nav.navAnyToEdge(ent_type, index);
+            const edges_i: number[] = __model__.modeldata.geom.nav.navAnyToEdge(ent_type, index);
             const num_edges: number = edges_i.length;
             // get all the edge lengths
             let total_dist = 0;
             const dists: number[] = [];
             const xyz_pairs: Txyz[][] = [];
             for (const edge_i of edges_i) {
-                const posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
-                const xyz_0: Txyz = __model__.attribs.query.getPosiCoords(posis_i[0]);
-                const xyz_1: Txyz = __model__.attribs.query.getPosiCoords(posis_i[1]);
+                const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
+                const xyz_0: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posis_i[0]);
+                const xyz_1: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posis_i[1]);
                 const dist: number = distance(xyz_0, xyz_1);
                 total_dist += dist;
                 dists.push(total_dist);
@@ -691,7 +691,7 @@ function _eval(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], t_param:
             // t param must be 1 (or greater)
             return xyz_pairs[num_edges - 1][1];
         } else {
-            const wires_i: number[] = __model__.geom.nav.navAnyToWire(ent_type, index);
+            const wires_i: number[] = __model__.modeldata.geom.nav.navAnyToWire(ent_type, index);
             const wires_arrs: TEntTypeIdx[] = wires_i.map(wire_i => [EEntType.WIRE, wire_i] as [EEntType, number]);
             return wires_arrs.map( wires_arr => _eval(__model__, wires_arr, t_param) ) as Txyz[];
         }
@@ -751,8 +751,8 @@ export function Ray(__model__: GIModel, entities: TId|TId[]): TRay|TRay[] {
     return _getRay(__model__, ents_arr);
 }
 function _getRayFromEdge(__model__: GIModel, ent_arr: TEntTypeIdx): TRay {
-    const posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_arr[0], ent_arr[1]);
-    const xyzs: Txyz[] = posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+    const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(ent_arr[0], ent_arr[1]);
+    const xyzs: Txyz[] = posis_i.map( posi_i => __model__.modeldata.attribs.query.getPosiCoords(posi_i));
     return [xyzs[0], vecSub(xyzs[1], xyzs[0])];
 }
 function _getRayFromFace(__model__: GIModel, ent_arr: TEntTypeIdx): TRay {
@@ -760,7 +760,7 @@ function _getRayFromFace(__model__: GIModel, ent_arr: TEntTypeIdx): TRay {
     return rayFromPln(plane) as TRay;
 }
 function _getRayFromPline(__model__: GIModel, ent_arr: TEntTypeIdx): TRay[] {
-    const edges_i: number[] = __model__.geom.nav.navAnyToEdge(ent_arr[0], ent_arr[1]);
+    const edges_i: number[] = __model__.modeldata.geom.nav.navAnyToEdge(ent_arr[0], ent_arr[1]);
     return edges_i.map( edge_i => _getRayFromEdge(__model__, [EEntType.EDGE, edge_i]) ) as TRay[];
 }
 function _getRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TRay|TRay[] {
@@ -773,7 +773,7 @@ function _getRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TRay|
         } else if (ent_arr[0] === EEntType.FACE) {
             return _getRayFromFace(__model__, ent_arr);
         } else { // must be a polygon
-            const face_i: number = __model__.geom.nav.navPgonToFace(ent_arr[1]);
+            const face_i: number = __model__.modeldata.geom.nav.navPgonToFace(ent_arr[1]);
             return _getRayFromFace(__model__, [EEntType.FACE, face_i]);
         }
     } else {
@@ -812,10 +812,10 @@ export function Plane(__model__: GIModel, entities: TId|TId[]): TPlane|TPlane[] 
 function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPlane|TPlane[] {
     if (getArrDepth(ents_arr) === 1) {
         const ent_arr = ents_arr as TEntTypeIdx;
-        const posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_arr[0], ent_arr[1]);
+        const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(ent_arr[0], ent_arr[1]);
         const unique_posis_i = Array.from(new Set(posis_i));
         if (unique_posis_i.length < 3) { throw new Error('Too few points to calculate plane.'); }
-        const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+        const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.modeldata.attribs.query.getPosiCoords(posi_i));
         const origin: Txyz = vecDiv(vecSum(unique_xyzs), unique_xyzs.length);
         // const normal: Txyz = newellNorm(unique_xyzs);
         const normal: Txyz = _normal(__model__, ent_arr, 1) as Txyz;
@@ -858,13 +858,13 @@ export function BBox(__model__: GIModel, entities: TId|TId[]): TBBox {
 function _getBoundingBox(__model__: GIModel, ents_arr: TEntTypeIdx[]): TBBox {
     const posis_set_i: Set<number> = new Set();
     for (const ent_arr of ents_arr) {
-        const ent_posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_arr[0], ent_arr[1]);
+        const ent_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(ent_arr[0], ent_arr[1]);
         for (const ent_posi_i of ent_posis_i) {
             posis_set_i.add(ent_posi_i);
         }
     }
     const unique_posis_i = Array.from(posis_set_i);
-    const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+    const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.modeldata.attribs.query.getPosiCoords(posi_i));
     const corner_min: Txyz = [Infinity, Infinity, Infinity];
     const corner_max: Txyz = [-Infinity, -Infinity, -Infinity];
     for (const unique_xyz of unique_xyzs) {
@@ -928,7 +928,7 @@ function _getBoundingBox(__model__: GIModel, ents_arr: TEntTypeIdx[]): TBBox {
 // }
 // function _distanceRaytoP(__model__: GIModel, ray_tjs: THREE.Ray, posis_i: number|number[]): number|number[] {
 //     if (!Array.isArray(posis_i)) {
-//         const xyz: Txyz = __model__.attribs.query.getPosiCoords(posis_i);
+//         const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posis_i);
 //         return ray_tjs.distanceToPoint( new THREE.Vector3(...xyz) ) as number;
 //     } else {
 //         return posis_i.map( posi_i => _distanceRaytoP(__model__, ray_tjs, posi_i) ) as number[];
@@ -936,7 +936,7 @@ function _getBoundingBox(__model__: GIModel, ents_arr: TEntTypeIdx[]): TBBox {
 // }
 // function _distancePlanetoP(__model__: GIModel, plane_tjs: THREE.Plane, posis_i: number|number[]): number|number[] {
 //     if (!Array.isArray(posis_i)) {
-//         const xyz: Txyz = __model__.attribs.query.getPosiCoords(posis_i);
+//         const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posis_i);
 //         return plane_tjs.distanceToPoint( new THREE.Vector3(...xyz) ) as number;
 //     } else {
 //         return posis_i.map( posi_i => _distancePlanetoP(__model__, plane_tjs, posi_i) ) as number[];

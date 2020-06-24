@@ -187,11 +187,11 @@ function _setAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
 }
 function _setModelAttrib(__model__: GIModel, attrib_name: string, attrib_value: TAttribDataTypes, idx_or_key?: number|string): void {
     if (typeof idx_or_key === 'number') {
-        __model__.attribs.add.setModelAttribListIdxVal(attrib_name, idx_or_key, attrib_value as number);
+        __model__.modeldata.attribs.add.setModelAttribListIdxVal(attrib_name, idx_or_key, attrib_value as number);
     } if (typeof idx_or_key === 'string') {
-        __model__.attribs.add.setModelAttribDictKeyVal(attrib_name, idx_or_key, attrib_value as string);
+        __model__.modeldata.attribs.add.setModelAttribDictKeyVal(attrib_name, idx_or_key, attrib_value as string);
     } else {
-        __model__.attribs.add.setModelAttribVal(attrib_name, attrib_value);
+        __model__.modeldata.attribs.add.setModelAttribVal(attrib_name, attrib_value);
     }
 }
 function _setEachEntDifferentAttribValue(__model__: GIModel, ents_arr: TEntTypeIdx[],
@@ -211,11 +211,11 @@ function _setEachEntDifferentAttribValue(__model__: GIModel, ents_arr: TEntTypeI
         }
         // --- Error Check ---
         if (typeof idx_or_key === 'number') {
-            __model__.attribs.add.setAttribListIdxVal(ent_type, ents_i[i], attrib_name, idx_or_key, attrib_values[i]);
+            __model__.modeldata.attribs.add.setAttribListIdxVal(ent_type, ents_i[i], attrib_name, idx_or_key, attrib_values[i]);
         } if (typeof idx_or_key === 'string') {
-            __model__.attribs.add.setAttribDictKeyVal(ent_type, ents_i[i], attrib_name, idx_or_key, attrib_values[i]);
+            __model__.modeldata.attribs.add.setAttribDictKeyVal(ent_type, ents_i[i], attrib_name, idx_or_key, attrib_values[i]);
         } else {
-            __model__.attribs.add.setAttribVal(ent_type, ents_i[i], attrib_name, attrib_values[i]);
+            __model__.modeldata.attribs.add.setAttribVal(ent_type, ents_i[i], attrib_name, attrib_values[i]);
         }
     }
 }
@@ -230,11 +230,11 @@ function _setEachEntSameAttribValue(__model__: GIModel, ents_arr: TEntTypeIdx[],
     const ent_type: number = ents_arr[0][0];
     const ents_i: number[] = _getEntsIndices(__model__, ents_arr);
     if (typeof idx_or_key === 'number') {
-        __model__.attribs.add.setAttribListIdxVal(ent_type, ents_i, attrib_name, idx_or_key, attrib_value);
+        __model__.modeldata.attribs.add.setAttribListIdxVal(ent_type, ents_i, attrib_name, idx_or_key, attrib_value);
     } else if (typeof idx_or_key === 'string') {
-        __model__.attribs.add.setAttribDictKeyVal(ent_type, ents_i, attrib_name, idx_or_key, attrib_value);
+        __model__.modeldata.attribs.add.setAttribDictKeyVal(ent_type, ents_i, attrib_name, idx_or_key, attrib_value);
     } else {
-        __model__.attribs.add.setAttribVal(ent_type, ents_i, attrib_name, attrib_value);
+        __model__.modeldata.attribs.add.setAttribVal(ent_type, ents_i, attrib_name, attrib_value);
     }
 }
 function _getEntsIndices(__model__: GIModel, ents_arr: TEntTypeIdx[]): number[] {
@@ -291,11 +291,11 @@ function _get(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
     if (ents_arr === null) {
         // get the attrib values from the model
         if (typeof attrib_idx_key === 'number') {
-            return __model__.attribs.query.getModelAttribListIdxVal(attrib_name, attrib_idx_key);
+            return __model__.modeldata.attribs.query.getModelAttribListIdxVal(attrib_name, attrib_idx_key);
         } else if (typeof attrib_idx_key === 'string') {
-            return __model__.attribs.query.getModelAttribDictKeyVal(attrib_name, attrib_idx_key);
+            return __model__.modeldata.attribs.query.getModelAttribDictKeyVal(attrib_name, attrib_idx_key);
         } else {
-            return __model__.attribs.query.getModelAttribVal(attrib_name);
+            return __model__.modeldata.attribs.query.getModelAttribVal(attrib_name);
         }
     } else if (ents_arr.length === 0) {
         return [];
@@ -308,11 +308,11 @@ function _get(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
         }
         // get the attrib values from the ents
         if (typeof attrib_idx_key === 'number') {
-            return __model__.attribs.query.getAttribListIdxVal(ent_type, attrib_name, ent_i, attrib_idx_key as number);
+            return __model__.modeldata.attribs.query.getAttribListIdxVal(ent_type, attrib_name, ent_i, attrib_idx_key as number);
         } else if (typeof attrib_idx_key === 'string') {
-            return __model__.attribs.query.getAttribDictKeyVal(ent_type, attrib_name, ent_i, attrib_idx_key as string);
+            return __model__.modeldata.attribs.query.getAttribDictKeyVal(ent_type, attrib_name, ent_i, attrib_idx_key as string);
         } else {
-            return __model__.attribs.query.getAttribVal(ent_type, attrib_name, ent_i);
+            return __model__.modeldata.attribs.query.getAttribVal(ent_type, attrib_name, ent_i);
         }
     } else {
         return (ents_arr as TEntTypeIdx[]).map( ent_arr =>
@@ -383,7 +383,7 @@ export function Add(__model__: GIModel, ent_type_sel: _EEntTypeAndMod, data_type
     }
     // create the attribute
     for (const attrib of attribs) {
-        __model__.attribs.add.addAttrib(ent_type, attrib, data_type);
+        __model__.modeldata.attribs.add.addAttrib(ent_type, attrib, data_type);
     }
 }
 // ================================================================================================
@@ -412,7 +412,7 @@ export function Delete(__model__: GIModel, ent_type_sel: _EEntTypeAndMod, attrib
             'ps, _v, _e, _w, _f, pt, pl, pg, co, mo.');
         }
         // create an array of attrib names
-        if (attribs === null) { attribs = __model__.attribs.query.getAttribNamesUser(ent_type); }
+        if (attribs === null) { attribs = __model__.modeldata.attribs.query.getAttribNamesUser(ent_type); }
         if (!Array.isArray(attribs)) { attribs = [attribs]; }
         attribs = attribs as string[];
         for (const attrib of attribs) { checkAttribName(fn_name , attrib); }
@@ -420,14 +420,14 @@ export function Delete(__model__: GIModel, ent_type_sel: _EEntTypeAndMod, attrib
         // convert the ent_type_str to an ent_type
         ent_type = _getEntTypeFromStr(ent_type_sel);
         // create an array of attrib names
-        if (attribs === null) { attribs = __model__.attribs.query.getAttribNamesUser(ent_type); }
+        if (attribs === null) { attribs = __model__.modeldata.attribs.query.getAttribNamesUser(ent_type); }
         if (!Array.isArray(attribs)) { attribs = [attribs]; }
         attribs = attribs as string[];
     }
     // --- Error Check ---
     // delete the attributes
     for (const attrib of attribs) {
-        __model__.attribs.modify.delAttrib(ent_type, attrib);
+        __model__.modeldata.attribs.modify.delAttrib(ent_type, attrib);
     }
 }
 // ================================================================================================
@@ -458,7 +458,7 @@ export function Rename(__model__: GIModel, ent_type_sel: _EEntTypeAndMod, old_at
         }
     }
     // create the attribute
-    __model__.attribs.modify.renameAttrib(ent_type, old_attrib, new_attrib);
+    __model__.modeldata.attribs.modify.renameAttrib(ent_type, old_attrib, new_attrib);
 }
 // ================================================================================================
 /**
@@ -598,7 +598,7 @@ export function Push(__model__: GIModel, entities: TId|TId[],
     // get the method
     const method: EAttribPush = _convertPushMethod(method_sel);
     // do the push
-    __model__.attribs.add.pushAttribVals(source_ent_type, source_attrib_name, source_attrib_idx_key, indices,
+    __model__.modeldata.attribs.add.pushAttribVals(source_ent_type, source_attrib_name, source_attrib_idx_key, indices,
                                          target,          target_attrib_name, target_attrib_idx_key, method);
 }
 export enum _EPushMethodSel {

@@ -138,11 +138,11 @@ function getNodesWithInstGeoms(id: string, inst_geoms: string): string {
 function processColls(model: GIModel): void {
     const colls_map: Map<number, number[]> = new Map();
     // go through the collections
-    const colls_i: number[] = model.geom.query.getEnts(EEntType.COLL);
+    const colls_i: number[] = model.modeldata.geom.query.getEnts(EEntType.COLL);
     for (const coll_i of colls_i) {
-        const parent: number = model.geom.query.getCollParent(coll_i);
-        // const pgons_i: number[] = model.geom.nav.navCollToPgon(coll_i);
-        // const plines_i: number[] = model.geom.nav.navCollToPline(coll_i);
+        const parent: number = model.modeldata.geom.query.getCollParent(coll_i);
+        // const pgons_i: number[] = model.modeldata.geom.nav.navCollToPgon(coll_i);
+        // const plines_i: number[] = model.modeldata.geom.nav.navCollToPline(coll_i);
         if ( !colls_map.has(parent) ) {
             colls_map.set(parent, []);
         }
@@ -161,12 +161,12 @@ function processPgonInColl(model: GIModel, pgon_i: number) {
 function processMaterialPgon(model: GIModel, pgon_i: number, has_color_attrib: boolean,
         materials_map: Map<string, string>, material_effects_map: Map<string, string>,
         materials_rev_map: Map<string, string>): string {
-    const pgon_verts_i: number[] = model.geom.nav.navAnyToVert(EEntType.PGON, pgon_i);
+    const pgon_verts_i: number[] = model.modeldata.geom.nav.navAnyToVert(EEntType.PGON, pgon_i);
     let material_id = 'default_pgon_material';
     if (has_color_attrib) {
         let color: TColor = [0, 0, 0];
         for (const pgon_vert_i of pgon_verts_i) {
-            let vert_color: TColor = model.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, pgon_vert_i) as TColor;
+            let vert_color: TColor = model.modeldata.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, pgon_vert_i) as TColor;
             if (vert_color === null || vert_color === undefined) { vert_color = [1, 1, 1]; }
             color = [color[0] + vert_color[0], color[1] + vert_color[1], color[2] + vert_color[2]];
         }
@@ -189,21 +189,21 @@ function processGeomMeshPgon(model: GIModel, pgon_i: number, material_id: string
         geom_meshes_map: Map<string, string>): void {
     const id = 'pg' + pgon_i;
     let xyz_str = '';
-    const pgon_verts_i: number[] = model.geom.nav.navAnyToVert(EEntType.PGON, pgon_i);
+    const pgon_verts_i: number[] = model.modeldata.geom.nav.navAnyToVert(EEntType.PGON, pgon_i);
     const vert_map: Map<number, number> = new Map();
     for (let i = 0; i < pgon_verts_i.length; i++) {
         const vert_i: number = pgon_verts_i[i];
-        const posi_i: number = model.geom.nav.navVertToPosi(vert_i);
-        const xyz: Txyz = model.attribs.query.getPosiCoords(posi_i);
+        const posi_i: number = model.modeldata.geom.nav.navVertToPosi(vert_i);
+        const xyz: Txyz = model.modeldata.attribs.query.getPosiCoords(posi_i);
         xyz_str += ' ' + xyz.join(' ');
         vert_map.set(posi_i, i);
     }
     let indices = '';
-    const pgon_tris_i: number[] = model.geom.nav.navAnyToTri(EEntType.PGON, pgon_i);
+    const pgon_tris_i: number[] = model.modeldata.geom.nav.navAnyToTri(EEntType.PGON, pgon_i);
     let num_tris = 0;
     for (const tri_i of pgon_tris_i) {
-        const tri_posis_i: number[] = model.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
-        const corners_xyzs: Txyz[] = tri_posis_i.map(tri_posi_i => model.attribs.query.getPosiCoords(tri_posi_i));
+        const tri_posis_i: number[] = model.modeldata.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
+        const corners_xyzs: Txyz[] = tri_posis_i.map(tri_posi_i => model.modeldata.attribs.query.getPosiCoords(tri_posi_i));
         const tri_area: number = area( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2]);
         if (tri_area > 0) {
             for (const tri_posi_i of tri_posis_i) {
@@ -220,12 +220,12 @@ function processGeomMeshPgon(model: GIModel, pgon_i: number, material_id: string
 function processMaterialPline(model: GIModel, pline_i: number, has_color_attrib: boolean,
         materials_map: Map<string, string>, material_effects_map: Map<string, string>,
         materials_rev_map: Map<string, string>): string {
-    const pline_verts_i: number[] = model.geom.nav.navAnyToVert(EEntType.PLINE, pline_i);
+    const pline_verts_i: number[] = model.modeldata.geom.nav.navAnyToVert(EEntType.PLINE, pline_i);
     let material_id = 'default_pline_material';
     if (has_color_attrib) {
         let color: TColor = [0, 0, 0];
         for (const pline_vert_i of pline_verts_i) {
-            let vert_color: TColor = model.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, pline_vert_i) as TColor;
+            let vert_color: TColor = model.modeldata.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, pline_vert_i) as TColor;
             if (vert_color === null || vert_color === undefined) { vert_color = [1, 1, 1]; }
             color = [color[0] + vert_color[0], color[1] + vert_color[1], color[2] + vert_color[2]];
         }
@@ -248,21 +248,21 @@ function processGeomMeshPline(model: GIModel, pline_i: number, material_id: stri
         geom_meshes_map: Map<string, string>): void {
     const id = 'pl' + pline_i;
     let xyz_str = '';
-    const pline_verts_i: number[] = model.geom.nav.navAnyToVert(EEntType.PLINE, pline_i);
+    const pline_verts_i: number[] = model.modeldata.geom.nav.navAnyToVert(EEntType.PLINE, pline_i);
     const vert_map: Map<number, number> = new Map();
     for (let i = 0; i < pline_verts_i.length; i++) {
         const vert_i: number = pline_verts_i[i];
-        const posi_i: number = model.geom.nav.navVertToPosi(vert_i);
-        const xyz: Txyz = model.attribs.query.getPosiCoords(posi_i);
+        const posi_i: number = model.modeldata.geom.nav.navVertToPosi(vert_i);
+        const xyz: Txyz = model.modeldata.attribs.query.getPosiCoords(posi_i);
         xyz_str += ' ' + xyz.join(' ');
         vert_map.set(posi_i, i);
     }
     let indices = '';
-    const pline_edges_i: number[] = model.geom.nav.navAnyToEdge(EEntType.PLINE, pline_i);
+    const pline_edges_i: number[] = model.modeldata.geom.nav.navAnyToEdge(EEntType.PLINE, pline_i);
     let num_edges = 0;
     for (const edge_i of pline_edges_i) {
-        const edge_posis_i: number[] = model.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
-        const ends_xyzs: Txyz[] = edge_posis_i.map(tri_posi_i => model.attribs.query.getPosiCoords(tri_posi_i));
+        const edge_posis_i: number[] = model.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
+        const ends_xyzs: Txyz[] = edge_posis_i.map(tri_posi_i => model.modeldata.attribs.query.getPosiCoords(tri_posi_i));
         const edge_length: number = distance( ends_xyzs[0], ends_xyzs[1] );
         if (edge_length > 0) {
             for (const edge_posi_i of edge_posis_i) {
@@ -279,9 +279,9 @@ function processGeomMeshPline(model: GIModel, pline_i: number, material_id: stri
  */
 export function exportDae(model: GIModel): string {
     // do we have color, texture, normal?
-    const has_color_attrib: boolean = model.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOR);
-    const has_normal_attrib: boolean = model.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.NORMAL);
-    const has_texture_attrib: boolean = model.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.TEXTURE);
+    const has_color_attrib: boolean = model.modeldata.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOR);
+    const has_normal_attrib: boolean = model.modeldata.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.NORMAL);
+    const has_texture_attrib: boolean = model.modeldata.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.TEXTURE);
     // create maps to store all the data
     const scene_inst_geoms_map: Map<string, string> = new Map();
     const nodes_inst_geoms_map: Map<string, string[]> = new Map();
@@ -293,14 +293,14 @@ export function exportDae(model: GIModel): string {
     const materials_pgons_rev_map: Map<string, string> = new Map();
     const materials_plines_rev_map: Map<string, string> = new Map();
     // process the polygons that are not in a collection
-    const pgons_i: number[] = model.geom.query.getEnts(EEntType.PGON);
+    const pgons_i: number[] = model.modeldata.geom.query.getEnts(EEntType.PGON);
     for (const pgon_i of pgons_i) {
         const material_id: string  = processMaterialPgon(model, pgon_i, has_color_attrib,
             materials_map, material_effectss_map, materials_pgons_rev_map);
         const id = 'pg' + pgon_i;
         processGeomMeshPgon(model, pgon_i, material_id, geom_meshes_map);
         const inst_geom = getInstGeom(id, material_id);
-        const colls_i: number[] = model.geom.nav.navPgonToColl(pgon_i);
+        const colls_i: number[] = model.modeldata.geom.nav.navPgonToColl(pgon_i);
         if (colls_i === undefined) {
             scene_inst_geoms_map.set(id, inst_geom);
         } else {
@@ -315,14 +315,14 @@ export function exportDae(model: GIModel): string {
         }
     }
     // process the polylines that are not in a collection
-    const plines_i: number[] = model.geom.query.getEnts(EEntType.PLINE);
+    const plines_i: number[] = model.modeldata.geom.query.getEnts(EEntType.PLINE);
     for (const pline_i of plines_i) {
         const material_id: string  = processMaterialPline(model, pline_i, has_color_attrib,
             materials_map, material_effectss_map, materials_plines_rev_map);
         const id = 'pl' + pline_i;
         processGeomMeshPline(model, pline_i, material_id, geom_meshes_map);
         const inst_geom = getInstGeom(id, material_id);
-        const colls_i: number[] = model.geom.nav.navPlineToColl(pline_i);
+        const colls_i: number[] = model.modeldata.geom.nav.navPlineToColl(pline_i);
         if (colls_i === undefined) {
             scene_inst_geoms_map.set(id, inst_geom);
         } else {

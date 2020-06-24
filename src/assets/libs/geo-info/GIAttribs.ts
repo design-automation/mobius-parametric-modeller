@@ -5,6 +5,7 @@ import { GIModel } from './GIModel';
 import { EEntType, EAttribNames,  IAttribsData, EAttribDataTypeStrs, IAttribsMaps } from './common';
 import { GIAttribsIO } from './GIAttribsIO';
 import { GIAttribsModify } from './GIAttribModify';
+import { GIModelData } from './GIModelData';
 
 function hashCode(s: string) {
     let h: number;
@@ -42,7 +43,7 @@ const ent_type_strs: Map<EEntType, string> = new Map([
  * Class for attributes.
  */
 export class GIAttribs {
-    private _model: GIModel;
+    private _modeldata: GIModelData;
     // maps, the key is the name, the value is the attrib map clas
     public _attribs_maps: IAttribsMaps = { // TODO this should not be public
         ps: new Map(),
@@ -64,15 +65,15 @@ export class GIAttribs {
     public threejs: GIAttribsThreejs;
    /**
      * Creates an object to store the attribute data.
-     * @param model The JSON data
+     * @param modeldata The JSON data
      */
-    constructor(model: GIModel) {
-        this._model = model;
-        this.io = new GIAttribsIO(model, this._attribs_maps);
-        this.add = new GIAttribsAdd(model, this._attribs_maps);
-        this.modify = new GIAttribsModify(model, this._attribs_maps);
-        this.query = new GIAttribsQuery(model, this._attribs_maps);
-        this.threejs = new GIAttribsThreejs(model, this._attribs_maps);
+    constructor(modeldata: GIModelData) {
+        this._modeldata = modeldata;
+        this.io = new GIAttribsIO(modeldata, this._attribs_maps);
+        this.add = new GIAttribsAdd(modeldata, this._attribs_maps);
+        this.modify = new GIAttribsModify(modeldata, this._attribs_maps);
+        this.query = new GIAttribsQuery(modeldata, this._attribs_maps);
+        this.threejs = new GIAttribsThreejs(modeldata, this._attribs_maps);
         this.add.addAttrib(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.LIST);
     }
     /**
@@ -97,8 +98,8 @@ export class GIAttribs {
         for (const ent_type of eny_type_array) {
             // get the attrib names
             const ent_type_str: string = ent_type_strs.get(ent_type);
-            const this_attrib_names: string[] = this._model.attribs.query.getAttribNames(ent_type);
-            const other_attrib_names: string[] = other_model.attribs.query.getAttribNames(ent_type);
+            const this_attrib_names: string[] = this._modeldata.attribs.query.getAttribNames(ent_type);
+            const other_attrib_names: string[] = other_model.modeldata.attribs.query.getAttribNames(ent_type);
             attrib_names.set(ent_type, this_attrib_names);
             // check that each attribute in this model exists in the other model
             for (const this_attrib_name of this_attrib_names) {
@@ -115,8 +116,8 @@ export class GIAttribs {
                     attrib_comments.push('The "' + this_attrib_name + '" ' + ent_type_str + ' attribute is missing.');
                 } else {
                     // get the data types
-                    const data_type_1: EAttribDataTypeStrs = this._model.attribs.query.getAttribDataType(ent_type, this_attrib_name);
-                    const data_type_2: EAttribDataTypeStrs = other_model.attribs.query.getAttribDataType(ent_type, this_attrib_name);
+                    const data_type_1: EAttribDataTypeStrs = this._modeldata.attribs.query.getAttribDataType(ent_type, this_attrib_name);
+                    const data_type_2: EAttribDataTypeStrs = other_model.modeldata.attribs.query.getAttribDataType(ent_type, this_attrib_name);
                     // compare data types
                     if (data_type_1 !== data_type_2) {
                         matches = false;
@@ -162,9 +163,9 @@ export class GIAttribs {
         for (const ent_type of eny_type_array) {
             const ent_type_str: string = ent_type_strs.get(ent_type);
             result += ent_type_str + ': ';
-            const attrib_names: string[] = this._model.attribs.query.getAttribNames(ent_type);
+            const attrib_names: string[] = this._modeldata.attribs.query.getAttribNames(ent_type);
             for (const attrib_name of attrib_names) {
-                result += JSON.stringify(this._model.attribs.query.getAttrib(ent_type, attrib_name).getData());
+                result += JSON.stringify(this._modeldata.attribs.query.getAttrib(ent_type, attrib_name).getData());
                 result += '\n';
             }
         }

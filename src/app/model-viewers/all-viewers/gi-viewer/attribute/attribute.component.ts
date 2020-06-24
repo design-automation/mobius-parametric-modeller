@@ -27,7 +27,7 @@ enum SORT_STATE {
 export class AttributeComponent implements OnChanges {
     @ViewChild(ATabsComponent, { static: true }) child: ATabsComponent;
 
-    @Input() data: GIModel;
+    @Input() model: GIModel;
     @Input() refresh: Event;
     @Input() reset: Event;
     @Output() attrTableSelect = new EventEmitter<Object>();
@@ -125,7 +125,7 @@ export class AttributeComponent implements OnChanges {
     // }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['data'] && this.data) {
+        if (changes['data'] && this.model) {
             this.refreshTable();
         }
         if (changes['reset']) {
@@ -140,12 +140,12 @@ export class AttributeComponent implements OnChanges {
     }
 
     generateTable(tabIndex: number) {
-        if (this.data) {
-            const ThreeJSData = this.data.attribs.threejs;
+        if (this.model) {
+            const ThreeJSData = this.model.modeldata.attribs.threejs;
             if (Number(tabIndex) === 9) {
                 this.displayData = ThreeJSData.getModelAttribsForTable();
             } else {
-                const ready = this.data.attribs.threejs instanceof GIAttribsThreejs;
+                const ready = this.model.modeldata.attribs.threejs instanceof GIAttribsThreejs;
                 this.selected_ents = this.dataService.selected_ents.get(EEntTypeStr[this.tab_map[tabIndex]]);
 
                 if (!ready) { return; }
@@ -262,7 +262,7 @@ export class AttributeComponent implements OnChanges {
             }
             // sessionStorage.setItem('mpm_changetab', 'true');
             if (changeTab) {
-                if (this.data) {
+                if (this.model) {
                     if (currentTab === 0 || currentTab === 8 || currentTab === 9) {
                         this.child.selectTab(this.tab_rev_map[currentTab]);
                     } else if (currentTab === 1 || currentTab === 2 || currentTab === 3 || currentTab === 4) {
@@ -351,7 +351,7 @@ export class AttributeComponent implements OnChanges {
         }
         const id = Number(ent_id.substr(2));
         // Multiple row selection
-        const ThreeJSData = this.data.attribs.threejs;
+        const ThreeJSData = this.model.modeldata.attribs.threejs;
         const attrib_table = ThreeJSData.getAttribsForTable(this.tab_map[currentTab]);
         this.current_selected = id;
         const s = this.multi_selection;

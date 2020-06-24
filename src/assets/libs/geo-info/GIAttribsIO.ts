@@ -1,20 +1,21 @@
 import { GIModel } from './GIModel';
-import { IAttribsData, IAttribData, TAttribDataTypes, EEntType, IAttribsMaps, EEntTypeStr, TModelAttribValuesArr } from './common';
+import { IAttribsData, IAttribData, TAttribDataTypes, EEntType, IAttribsMaps, EEntTypeStr, TModelAttribValuesArr, IGeomPack } from './common';
 import { GIAttribMap } from './GIAttribMap';
 import { deepCopy } from '../util/copy';
+import { GIModelData } from './GIModelData';
 
 /**
  * Class for attributes.
  */
 export class GIAttribsIO {
-    private _model: GIModel;
+    private _modeldata: GIModelData;
     private _attribs_maps: IAttribsMaps;
    /**
      * Creates an object to store the attribute data.
-     * @param model The JSON data
+     * @param modeldata The JSON data
      */
-    constructor(model: GIModel, attribs_maps: IAttribsMaps) {
-        this._model = model;
+    constructor(modeldata: GIModelData, attribs_maps: IAttribsMaps) {
+        this._modeldata = modeldata;
         this._attribs_maps = attribs_maps;
     }
     /**
@@ -35,6 +36,31 @@ export class GIAttribsIO {
         if (attribs_maps.pg !== undefined) { this._mergeAttribs(attribs_maps, EEntType.PGON); }
         if (attribs_maps.co !== undefined) { this._mergeAttribs(attribs_maps, EEntType.COLL); }
         if (attribs_maps.mo !== undefined) { this._mergeModelAttribs(attribs_maps); }
+    }
+    /**
+     * Adds data to this model from another model.
+     *
+     * @param model_data Attribute data from the other model.
+     */
+    public dump(attribs_maps: IAttribsMaps): void {
+        if (attribs_maps.ps !== undefined) { this._dumpAttribs(attribs_maps, EEntType.POSI); }
+        if (attribs_maps._v !== undefined) { this._dumpAttribs(attribs_maps, EEntType.VERT); }
+        if (attribs_maps._e !== undefined) { this._dumpAttribs(attribs_maps, EEntType.EDGE); }
+        if (attribs_maps._w !== undefined) { this._dumpAttribs(attribs_maps, EEntType.WIRE); }
+        if (attribs_maps._f !== undefined) { this._dumpAttribs(attribs_maps, EEntType.FACE); }
+        if (attribs_maps.pt !== undefined) { this._dumpAttribs(attribs_maps, EEntType.POINT); }
+        if (attribs_maps.pl !== undefined) { this._dumpAttribs(attribs_maps, EEntType.PLINE); }
+        if (attribs_maps.pg !== undefined) { this._dumpAttribs(attribs_maps, EEntType.PGON); }
+        if (attribs_maps.co !== undefined) { this._dumpAttribs(attribs_maps, EEntType.COLL); }
+        if (attribs_maps.mo !== undefined) { this._mergeModelAttribs(attribs_maps); }
+    }
+    /**
+     * Adds data to this model from another model.
+     *
+     * @param model_data Attribute data from the other model.
+     */
+    public dumpSelect(attribs_maps: IAttribsMaps, gp: IGeomPack): void {
+        throw new Error('Not implemented');
     }
     /**
      * Adds data to this model from another model.
@@ -147,7 +173,7 @@ export class GIAttribsIO {
     private _mergeAttribs(attribs_maps: IAttribsMaps, ent_type: EEntType) {
         const other_attribs: Map<string, GIAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
         const this_attribs: Map<string, GIAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
-        // const num_ents: number = this._model.geom.query.numEnts(ent_type, true); // incude deleted ents
+        // const num_ents: number = this._model.modeldata.geom.query.numEnts(ent_type, true); // incude deleted ents
         other_attribs.forEach( other_attrib => {
             if (other_attrib.numEnts() > 0) {
                 // get the name
@@ -155,7 +181,7 @@ export class GIAttribsIO {
                 // get or create the attrib
                 let this_attrib: GIAttribMap;
                 if (!this_attribs.has(name)) {
-                    this_attrib = new GIAttribMap(this._model, name, other_attrib.getDataType());
+                    this_attrib = new GIAttribMap(this._modeldata, name, other_attrib.getDataType());
                     this_attribs.set(name, this_attrib );
                 } else {
                     this_attrib = this_attribs.get(name);
@@ -170,13 +196,30 @@ export class GIAttribsIO {
     }
     /**
      * merge attributes from another model into this model.
+     * Assumes that the existing model is empty
+     * @param attribs_maps
+     */
+    private _dumpAttribs(attribs_maps: IAttribsMaps, ent_type: EEntType) {
+        const other_attribs: Map<string, GIAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
+        const this_attribs: Map<string, GIAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
+        other_attribs.forEach( other_attrib => {
+            if (other_attrib.numEnts() > 0) {
+                const name: string = other_attrib.getName();
+                const this_attrib = new GIAttribMap(this._modeldata, name, other_attrib.getDataType());
+                this_attribs.set(name, this_attrib );
+                this_attrib.merge(other_attrib);
+            }
+        });
+    }
+    /**
+     * merge attributes from another model into this model.
      * The existing attributes are not deleted
      * @param attribs_maps
      */
     private _mergeAndPurgeAttribs(attribs_maps: IAttribsMaps, ent_type: EEntType, geom_map: Map<number, number>) {
         const from_attribs: Map<string, GIAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
         const to_attribs: Map<string, GIAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
-        // const num_ents: number = this._model.geom.query.numEnts(ent_type, true); // incude deleted ents
+        // const num_ents: number = this._model.modeldata.geom.query.numEnts(ent_type, true); // incude deleted ents
         from_attribs.forEach( from_attrib => {
             // get the data
             const ents_i_values: [number[], TAttribDataTypes][] = from_attrib.getEntsVals();
@@ -191,7 +234,7 @@ export class GIAttribsIO {
                 const name: string = from_attrib.getName();
                 // get or create the attrib
                 if (!to_attribs.has(name)) {
-                    to_attribs.set(name, new GIAttribMap(this._model, name, from_attrib.getDataType()) );
+                    to_attribs.set(name, new GIAttribMap(this._modeldata, name, from_attrib.getDataType()) );
                 }
                 const to_attrib: GIAttribMap = to_attribs.get(name);
                 // set the data
@@ -207,7 +250,7 @@ export class GIAttribsIO {
     private _setAttribs(new_attribs_data: IAttribData[], ent_type: EEntType) {
         const to_attribs: Map<string, GIAttribMap> = new Map();
         new_attribs_data.forEach( new_attrib_data => {
-            const to_attrib: GIAttribMap = new GIAttribMap(this._model, new_attrib_data.name, new_attrib_data.data_type );
+            const to_attrib: GIAttribMap = new GIAttribMap(this._modeldata, new_attrib_data.name, new_attrib_data.data_type );
             to_attrib.setData(new_attrib_data);
             to_attribs.set(new_attrib_data.name, to_attrib);
         });

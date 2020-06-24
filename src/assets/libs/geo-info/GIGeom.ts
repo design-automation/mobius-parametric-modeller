@@ -14,12 +14,13 @@ import { GIGeomModifyColl } from './GIGeomModifyColl';
 import { GIGeomNav } from './GIGeomNav';
 import { GIGeomDelVert } from './GIGeomDelVert';
 import { GIGeomDelEdge } from './GIGeomDelEdge';
+import { GIModelData } from './GIModelData';
 
 /**
  * Class for geometry.
  */
 export class GIGeom {
-    public model: GIModel;
+    public modeldata: GIModelData;
     public selected: TEntTypeIdx[]; // entities that should become selected
     //  all arrays
     public _geom_maps: IGeomArrays = {  // TODO this should not be public
@@ -64,8 +65,8 @@ export class GIGeom {
     /**
      * Constructor
      */
-    constructor(model: GIModel) {
-        this.model = model;
+    constructor(model: GIModelData) {
+        this.modeldata = model;
         this.io = new GIGeomIO(this, this._geom_maps);
         this.add = new GIGeomAdd(this, this._geom_maps);
         this.del = new GIGeomDel(this, this._geom_maps);

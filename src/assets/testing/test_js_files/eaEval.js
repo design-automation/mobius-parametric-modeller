@@ -792,7 +792,7 @@ function printFunc(_console, name, value){
 const __params__ = {};
 __params__["model"] = __modules__._model.__new__();
 if (__model__) {
-__params__["model"].setData(JSON.parse(__model__))
+__params__["model"].setModelData(JSON.parse(__model__))
 }
 __params__["model"].debug = __debug__;
 __params__["console"] = [];

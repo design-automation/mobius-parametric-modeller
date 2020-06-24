@@ -4,19 +4,20 @@ import { TAttribDataTypes, EEntType,
 import { GIAttribMap } from './GIAttribMap';
 import { vecAdd } from '@libs/geom/vectors';
 import * as mathjs from 'mathjs';
+import { GIModelData } from './GIModelData';
 
 /**
  * Class for attributes.
  */
 export class GIAttribsAdd {
-    private _model: GIModel;
+    private _modeldata: GIModelData;
     private _attribs_maps: IAttribsMaps;
    /**
      * Creates an object to store the attribute data.
-     * @param model The JSON data
+     * @param modeldata The JSON data
      */
-    constructor(model: GIModel, attribs_maps: IAttribsMaps) {
-        this._model = model;
+    constructor(modeldata: GIModelData, attribs_maps: IAttribsMaps) {
+        this._modeldata = modeldata;
         this._attribs_maps = attribs_maps;
     }
     /**
@@ -38,7 +39,7 @@ export class GIAttribsAdd {
             }
         } else {
             if (!attribs.has(name)) {
-                const attrib: GIAttribMap = new GIAttribMap(this._model, name, data_type);
+                const attrib: GIAttribMap = new GIAttribMap(this._modeldata, name, data_type);
                 attribs.set(name, attrib);
             } else {
                 if (attribs.get(name).getDataType() !== data_type) {
@@ -201,7 +202,7 @@ export class GIAttribsAdd {
         // if source and target are same, then return
         if (source_ent_type === target) { return; }
         // check that the attribute exists
-        if (! this._model.attribs.query.hasAttrib(source_ent_type, source_attrib_name)) {
+        if (! this._modeldata.attribs.query.hasAttrib(source_ent_type, source_attrib_name)) {
             throw new Error('Error pushing attributes: The attribute does not exist.');
         }
         let target_ent_type: EEntType = null;
@@ -217,8 +218,8 @@ export class GIAttribsAdd {
             target_ent_type = target as EEntType;
         }
         // get the data type and data size of the existing attribute
-        const source_data_type: EAttribDataTypeStrs = this._model.attribs.query.getAttribDataType(source_ent_type, source_attrib_name);
-        const source_data_size: number = this._model.attribs.query.getAttribDataLength(source_ent_type, source_attrib_name);
+        const source_data_type: EAttribDataTypeStrs = this._modeldata.attribs.query.getAttribDataType(source_ent_type, source_attrib_name);
+        const source_data_size: number = this._modeldata.attribs.query.getAttribDataLength(source_ent_type, source_attrib_name);
         // get the target data type and size
         let target_data_type: EAttribDataTypeStrs = source_data_type;
         let target_data_size: number = source_data_size;
@@ -233,7 +234,7 @@ export class GIAttribsAdd {
             }
         } else if (source_attrib_idx_key !== null) {
             // get the first data item as a template to check data type and data size
-            const first_val: TAttribDataTypes = this._model.attribs.query.getAttribValAny(
+            const first_val: TAttribDataTypes = this._modeldata.attribs.query.getAttribValAny(
                 source_ent_type, source_attrib_name, source_indices[0],
                 source_attrib_idx_key) as TAttribDataTypes;
             target_data_type = this._checkDataType(first_val);
@@ -257,7 +258,7 @@ export class GIAttribsAdd {
             const attrib_values: TAttribDataTypes[] = [];
             for (const index of source_indices) {
                 const value: TAttribDataTypes =
-                    this._model.attribs.query.getAttribValAny(source_ent_type, source_attrib_name, index,
+                    this._modeldata.attribs.query.getAttribValAny(source_ent_type, source_attrib_name, index,
                         source_attrib_idx_key) as TAttribDataTypes;
                 attrib_values.push(value);
             }
@@ -271,9 +272,9 @@ export class GIAttribsAdd {
             }
             return;
         } else if (source_ent_type === EEntType.MOD) {
-            const value: TAttribDataTypes = this._model.attribs.query.getModelAttribValAny(source_attrib_name, source_attrib_idx_key);
+            const value: TAttribDataTypes = this._modeldata.attribs.query.getModelAttribValAny(source_attrib_name, source_attrib_idx_key);
             this.addAttrib(target_ent_type, target_attrib_name, target_data_type);
-            const target_ents_i: number[] = this._model.geom.query.getEnts(target_ent_type);
+            const target_ents_i: number[] = this._modeldata.geom.query.getEnts(target_ent_type);
             for (const target_ent_i of target_ents_i) {
                 if (typeof target_attrib_idx_key === 'number') {
                     this.setAttribListIdxVal(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
@@ -289,17 +290,17 @@ export class GIAttribsAdd {
         const attrib_values_map: Map<number, TAttribDataTypes[]> = new Map();
         for (const index of source_indices) {
             const attrib_value: TAttribDataTypes =
-                this._model.attribs.query.getAttribValAny(source_ent_type, source_attrib_name, index,
+                this._modeldata.attribs.query.getAttribValAny(source_ent_type, source_attrib_name, index,
                     source_attrib_idx_key) as TAttribDataTypes;
             let target_ents_i: number[] = null;
             if (target_coll === 'coll_parent') {
-                const parent = this._model.geom.nav.navCollToCollParent(index);
+                const parent = this._modeldata.geom.nav.navCollToCollParent(index);
                 target_ents_i = (parent === -1) ? [] : [parent];
             } else if (target_coll === 'coll_children') {
-                target_ents_i = this._model.geom.nav.navCollToCollChildren(index);
+                target_ents_i = this._modeldata.geom.nav.navCollToCollChildren(index);
             } else {
                 target_ent_type =  target_ent_type as EEntType;
-                target_ents_i = this._model.geom.nav.navAnyToAny(source_ent_type, target_ent_type, index);
+                target_ents_i = this._modeldata.geom.nav.navAnyToAny(source_ent_type, target_ent_type, index);
             }
             for (const target_ent_i of target_ents_i) {
                 if (! attrib_values_map.has(target_ent_i)) {

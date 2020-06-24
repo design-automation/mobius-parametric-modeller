@@ -12,7 +12,7 @@ import { getArrDepth, idsBreak } from '@libs/geo-info/id';
  */
 export function __new__(): GIModel {
     const model: GIModel = new GIModel();
-    model.attribs.add.addAttrib(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.LIST);
+    model.modeldata.attribs.add.addAttrib(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.LIST);
     return model;
 }
 //  ===============================================================================================
@@ -53,7 +53,7 @@ export function __merge__(model1: GIModel, model2: GIModel): void {
  * @param __model__
  */
 export function __stringify__(__model__: GIModel): string {
-    return JSON.stringify(__model__.getData());
+    return JSON.stringify(__model__.getModelData());
 }
 //  ===============================================================================================
 /**

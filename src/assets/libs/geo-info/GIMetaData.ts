@@ -10,7 +10,7 @@ interface IAttribValues {
 /**
  * Geo-info model metadata class.
  */
-export class GIMeta {
+export class GIMetaData {
     private _posi_count: number;
     private _vert_count: number;
     private _tri_count: number;

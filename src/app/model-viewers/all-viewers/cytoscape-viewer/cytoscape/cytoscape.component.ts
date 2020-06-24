@@ -158,15 +158,15 @@ export class CytoscapeComponent implements OnDestroy, OnChanges {
             if (selectedClass === 'ps' || (box && selectedClass[0] === '_')) { return; }
             const selectedPos = event.target.position();
             const allObj = {
-                'ps': model.geom.query.getEnts(EEntType.POSI),
-                '_v': model.geom.query.getEnts(EEntType.VERT),
-                '_e': model.geom.query.getEnts(EEntType.EDGE),
-                '_w': model.geom.query.getEnts(EEntType.WIRE),
-                '_f': model.geom.query.getEnts(EEntType.FACE),
-                'pt': model.geom.query.getEnts(EEntType.POINT),
-                'pl': model.geom.query.getEnts(EEntType.PLINE),
-                'pg': model.geom.query.getEnts(EEntType.PGON),
-                'co': model.geom.query.getEnts(EEntType.COLL)
+                'ps': model.modeldata.geom.query.getEnts(EEntType.POSI),
+                '_v': model.modeldata.geom.query.getEnts(EEntType.VERT),
+                '_e': model.modeldata.geom.query.getEnts(EEntType.EDGE),
+                '_w': model.modeldata.geom.query.getEnts(EEntType.WIRE),
+                '_f': model.modeldata.geom.query.getEnts(EEntType.FACE),
+                'pt': model.modeldata.geom.query.getEnts(EEntType.POINT),
+                'pl': model.modeldata.geom.query.getEnts(EEntType.PLINE),
+                'pg': model.modeldata.geom.query.getEnts(EEntType.PGON),
+                'co': model.modeldata.geom.query.getEnts(EEntType.COLL)
             };
 
             function removeObject(sourceID, sourceClass) {
@@ -175,38 +175,38 @@ export class CytoscapeComponent implements OnDestroy, OnChanges {
                 let num_obj;
                 if (sourceClass === 'co') {
                     obj_i = [];
-                    obj_i = obj_i.concat(model.geom.nav.navCollToCollChildren(sourceID).map(x => 'co' + x));
-                    obj_i = obj_i.concat(model.geom.nav.navCollToPgon(sourceID).map(x => 'pg' + x));
-                    obj_i = obj_i.concat(model.geom.nav.navCollToPline(sourceID).map(x => 'pl' + x));
-                    obj_i = obj_i.concat(model.geom.nav.navCollToPoint(sourceID).map(x => 'pt' + x));
+                    obj_i = obj_i.concat(model.modeldata.geom.nav.navCollToCollChildren(sourceID).map(x => 'co' + x));
+                    obj_i = obj_i.concat(model.modeldata.geom.nav.navCollToPgon(sourceID).map(x => 'pg' + x));
+                    obj_i = obj_i.concat(model.modeldata.geom.nav.navCollToPline(sourceID).map(x => 'pl' + x));
+                    obj_i = obj_i.concat(model.modeldata.geom.nav.navCollToPoint(sourceID).map(x => 'pt' + x));
                     objClass = '';
                     num_obj = allObj.pg.length + allObj.pl.length + allObj.pt.length + allObj.co.length;
                 } else if (sourceClass === 'pg') {
-                    obj_i = [model.geom.nav.navPgonToFace(sourceID)];
+                    obj_i = [model.modeldata.geom.nav.navPgonToFace(sourceID)];
                     objClass = '_f';
                     num_obj = allObj._f.length;
                 } else if (sourceClass === 'pl') {
-                    obj_i = [model.geom.nav.navPlineToWire(sourceID)];
+                    obj_i = [model.modeldata.geom.nav.navPlineToWire(sourceID)];
                     objClass = '_f';
                     num_obj = allObj._f.length;
                 } else if (sourceClass === 'pt') {
-                    obj_i = [model.geom.nav.navPointToVert(sourceID)];
+                    obj_i = [model.modeldata.geom.nav.navPointToVert(sourceID)];
                     objClass = '_f';
                     num_obj = allObj._f.length;
                 } else if (sourceClass === '_f') {
-                    obj_i = model.geom.nav.navFaceToWire(sourceID);
+                    obj_i = model.modeldata.geom.nav.navFaceToWire(sourceID);
                     objClass = '_w';
                     num_obj = allObj._w.length;
                 } else if (sourceClass === '_w') {
-                    obj_i = model.geom.nav.navWireToEdge(sourceID);
+                    obj_i = model.modeldata.geom.nav.navWireToEdge(sourceID);
                     objClass = '_e';
                     num_obj = allObj._e.length;
                 } else if (sourceClass === '_e') {
-                    obj_i = model.geom.nav.navEdgeToVert(sourceID);
+                    obj_i = model.modeldata.geom.nav.navEdgeToVert(sourceID);
                     objClass = '_v';
                     num_obj = allObj._v.length;
                 } else if (sourceClass === '_v') {
-                    obj_i = [model.geom.nav.navVertToPosi(sourceID)];
+                    obj_i = [model.modeldata.geom.nav.navVertToPosi(sourceID)];
                     objClass = 'ps';
                     num_obj = allObj.ps.length;
                 } else {
@@ -267,38 +267,38 @@ export class CytoscapeComponent implements OnDestroy, OnChanges {
                 let num_obj;
                 if (sourceClass === 'co') {
                     obj_i = [];
-                    obj_i = obj_i.concat(model.geom.nav.navCollToCollChildren(sourceID).map(x => 'co' + x));
-                    obj_i = obj_i.concat(model.geom.nav.navCollToPgon(sourceID).map(x => 'pg' + x));
-                    obj_i = obj_i.concat(model.geom.nav.navCollToPline(sourceID).map(x => 'pl' + x));
-                    obj_i = obj_i.concat(model.geom.nav.navCollToPoint(sourceID).map(x => 'pt' + x));
+                    obj_i = obj_i.concat(model.modeldata.geom.nav.navCollToCollChildren(sourceID).map(x => 'co' + x));
+                    obj_i = obj_i.concat(model.modeldata.geom.nav.navCollToPgon(sourceID).map(x => 'pg' + x));
+                    obj_i = obj_i.concat(model.modeldata.geom.nav.navCollToPline(sourceID).map(x => 'pl' + x));
+                    obj_i = obj_i.concat(model.modeldata.geom.nav.navCollToPoint(sourceID).map(x => 'pt' + x));
                     objClass = '';
                     num_obj = allObj.pg.length + allObj.pl.length + allObj.pt.length + allObj.co.length;
                 } else if (sourceClass === 'pg') {
-                    obj_i = [model.geom.nav.navPgonToFace(sourceID)];
+                    obj_i = [model.modeldata.geom.nav.navPgonToFace(sourceID)];
                     objClass = '_f';
                     num_obj = allObj._f.length;
                 } else if (sourceClass === 'pl') {
-                    obj_i = [model.geom.nav.navPlineToWire(sourceID)];
+                    obj_i = [model.modeldata.geom.nav.navPlineToWire(sourceID)];
                     objClass = '_f';
                     num_obj = allObj._f.length;
                 } else if (sourceClass === 'pt') {
-                    obj_i = [model.geom.nav.navPointToVert(sourceID)];
+                    obj_i = [model.modeldata.geom.nav.navPointToVert(sourceID)];
                     objClass = '_f';
                     num_obj = allObj._f.length;
                 } else if (sourceClass === '_f') {
-                    obj_i = model.geom.nav.navFaceToWire(sourceID);
+                    obj_i = model.modeldata.geom.nav.navFaceToWire(sourceID);
                     objClass = '_w';
                     num_obj = allObj._w.length;
                 } else if (sourceClass === '_w') {
-                    obj_i = model.geom.nav.navWireToEdge(sourceID);
+                    obj_i = model.modeldata.geom.nav.navWireToEdge(sourceID);
                     objClass = '_e';
                     num_obj = allObj._e.length;
                 } else if (sourceClass === '_e') {
-                    obj_i = model.geom.nav.navEdgeToVert(sourceID);
+                    obj_i = model.modeldata.geom.nav.navEdgeToVert(sourceID);
                     objClass = '_v';
                     num_obj = allObj._v.length;
                 } else if (sourceClass === '_v') {
-                    obj_i = [model.geom.nav.navVertToPosi(sourceID)];
+                    obj_i = [model.modeldata.geom.nav.navVertToPosi(sourceID)];
                     objClass = 'ps';
                     num_obj = allObj.ps.length;
                 } else {
@@ -394,11 +394,11 @@ export class CytoscapeComponent implements OnDestroy, OnChanges {
             style: CYTOSCAPE_STYLE,
         });
 
-        let obj_i: string[] = this.model.geom.query.getEnts(EEntType.COLL).map(x => 'co' + x);
+        let obj_i: string[] = this.model.modeldata.geom.query.getEnts(EEntType.COLL).map(x => 'co' + x);
         if (obj_i.length === 0) {
-            obj_i = obj_i.concat(this.model.geom.query.getEnts(EEntType.PGON).map(x => 'pg' + x));
-            obj_i = obj_i.concat(this.model.geom.query.getEnts(EEntType.PLINE).map(x => 'pl' + x));
-            obj_i = obj_i.concat(this.model.geom.query.getEnts(EEntType.POINT).map(x => 'pt' + x));
+            obj_i = obj_i.concat(this.model.modeldata.geom.query.getEnts(EEntType.PGON).map(x => 'pg' + x));
+            obj_i = obj_i.concat(this.model.modeldata.geom.query.getEnts(EEntType.PLINE).map(x => 'pl' + x));
+            obj_i = obj_i.concat(this.model.modeldata.geom.query.getEnts(EEntType.POINT).map(x => 'pt' + x));
         }
 
         const cy_eles = [];

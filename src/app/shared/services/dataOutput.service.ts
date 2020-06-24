@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { INode } from '@models/node';
 import { _parameterTypes } from '@assets/core/_parameterTypes';
 import { WebWorkerService } from 'ngx-web-worker';
-import { GIMeta } from '@assets/libs/geo-info/GIMeta';
+import { GIMetaData } from '@assets/libs/geo-info/GIMetaData';
 
 @Injectable()
 export class DataOutputService {
     private emptyModel = _parameterTypes.newFn();
     private iModel = {'nodeID': '', 'getOutput': null, 'model': null};
 
-    getViewerData(node: INode, meta: GIMeta, getViewOutput: boolean) {
+    getViewerData(node: INode, meta: GIMetaData, getViewOutput: boolean) {
         const webWorker = new WebWorkerService();
         if (!node || !node.enabled || !node.model) { return this.emptyModel; }
         if (this.iModel.nodeID === node.id && this.iModel.getOutput === getViewOutput) {
@@ -18,13 +18,13 @@ export class DataOutputService {
         // const startTime = performance.now();
         // console.log('retrieve Data...');
         const model = _parameterTypes.newFn();
-        model.setMeta(meta);
+        model.setMetaData(meta);
         if (getViewOutput) {
             const result = webWorker.run(input => {
                 return JSON.parse(input);
             }, node.model);
             result.then(r => {
-                model.setData(r);
+                model.setModelData(r);
                 this.iModel.model = model;
             });
             this.iModel.getOutput = true;
@@ -36,7 +36,7 @@ export class DataOutputService {
                 return JSON.parse(input);
             }, node.input.edges[0].source.parentNode.model);
             result.then(r => {
-                model.setData(r);
+                model.setModelData(r);
                 this.iModel.model = model;
             });
             this.iModel.getOutput = false;
@@ -49,8 +49,8 @@ export class DataOutputService {
                     continue;
                 }
                 const newModel = _parameterTypes.newFn();
-                newModel.setData(JSON.parse(edge.source.parentNode.model));
-                newModel.setMeta(meta);
+                newModel.setModelData(JSON.parse(edge.source.parentNode.model));
+                newModel.setMetaData(meta);
                 model.merge(newModel);
             }
             this.iModel.getOutput = false;

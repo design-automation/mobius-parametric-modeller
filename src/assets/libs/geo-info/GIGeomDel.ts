@@ -1,4 +1,4 @@
-import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz, TColl, TVert, EWireType } from './common';
+import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz, TColl, TVert, EWireType, IGeomPack } from './common';
 import { GIGeom } from './GIGeom';
 import { arrRem, arrIdxAdd } from '../util/arrs';
 import { vecDot } from '../geom/vectors';
@@ -19,6 +19,19 @@ export class GIGeomDel {
     // ============================================================================
     // Delete geometry
     // ============================================================================
+    /**
+     * Delete ents
+     * @param gp
+     */
+    public del(gp: IGeomPack): void {
+        // delete the ents
+        this.delColls(gp.colls_i, true);
+        this.delPgons(gp.pgons_i, true);
+        this.delPlines(gp.plines_i, true);
+        this.delPoints(gp.points_i, true);
+        this.delPosis(gp.posis_i);
+        this.delUnusedPosis(gp.posis2_i);
+    }
     /**
      * Del all unused posis in the model.
      * Posi attributes will also be deleted.
@@ -41,7 +54,7 @@ export class GIGeomDel {
             // no need to update down arrays
         }
         // delete all the posi attributes, for all posis that were deleted
-        this._geom.model.attribs.add.delEntFromAttribs(EEntType.POSI, deleted_posis_i);
+        this._geom.modeldata.attribs.add.delEntFromAttribs(EEntType.POSI, deleted_posis_i);
     }
     /**
      * Del posis.
@@ -65,7 +78,7 @@ export class GIGeomDel {
             // no need to update down arrays
         }
         // delete all the posi attributes, for all posis that were deleted
-        this._geom.model.attribs.add.delEntFromAttribs(EEntType.POSI, deleted_posis_i);
+        this._geom.modeldata.attribs.add.delEntFromAttribs(EEntType.POSI, deleted_posis_i);
     }
     /**
      * Del points.
@@ -77,7 +90,7 @@ export class GIGeomDel {
         points_i = (Array.isArray(points_i)) ? points_i : [points_i];
         if (!points_i.length) { return; }
         // del attribs
-        this._geom.model.attribs.add.delEntFromAttribs(EEntType.POINT, points_i);
+        this._geom.modeldata.attribs.add.delEntFromAttribs(EEntType.POINT, points_i);
         // loop
         for (const point_i of points_i) {
             // first get all the arrays so we dont break navigation
@@ -110,7 +123,7 @@ export class GIGeomDel {
      */
     public delPlines(plines_i: number|number[], del_unused_posis: boolean): void {
         // del attribs
-        this._geom.model.attribs.add.delEntFromAttribs(EEntType.PLINE, plines_i);
+        this._geom.modeldata.attribs.add.delEntFromAttribs(EEntType.PLINE, plines_i);
         // create array
         plines_i = (Array.isArray(plines_i)) ? plines_i : [plines_i];
         if (!plines_i.length) { return; }
@@ -164,7 +177,7 @@ export class GIGeomDel {
      */
     public delPgons(pgons_i: number|number[], del_unused_posis: boolean): void {
         // del attribs
-        this._geom.model.attribs.add.delEntFromAttribs(EEntType.PGON, pgons_i);
+        this._geom.modeldata.attribs.add.delEntFromAttribs(EEntType.PGON, pgons_i);
         // create array
         pgons_i = (Array.isArray(pgons_i)) ? pgons_i : [pgons_i];
         if (!pgons_i.length) { return; }
@@ -233,7 +246,7 @@ export class GIGeomDel {
      */
     public delColls(colls_i: number|number[], del_unused_posis: boolean): void {
         // del attribs
-        this._geom.model.attribs.add.delEntFromAttribs(EEntType.COLL, colls_i);
+        this._geom.modeldata.attribs.add.delEntFromAttribs(EEntType.COLL, colls_i);
         // create array
         colls_i = (Array.isArray(colls_i)) ? colls_i : [colls_i];
         if (!colls_i.length) { return; }
@@ -285,7 +298,7 @@ export class GIGeomDel {
      */
     public delEdges(edges_i: number|number[], del_unused_posis: boolean, heal: boolean): void {
         // del attribs
-        this._geom.model.attribs.add.delEntFromAttribs(EEntType.EDGE, edges_i);
+        this._geom.modeldata.attribs.add.delEntFromAttribs(EEntType.EDGE, edges_i);
         // create array
         edges_i = (Array.isArray(edges_i)) ? edges_i : [edges_i];
         if (!edges_i.length) { return; }

@@ -152,7 +152,7 @@ export class SaveJavascriptComponent {
             `\n\nconst __params__ = {};\n` +
             `__params__["model"] = __modules__._model.__new__();\n` +
             `if (__model__) {\n` +
-            `__params__["model"].setData(JSON.parse(__model__))\n` +
+            `__params__["model"].setModelData(JSON.parse(__model__))\n` +
             `}\n` +
             `__params__["model"].debug = __debug__;\n` +
             `__params__["console"] = [];\n` +

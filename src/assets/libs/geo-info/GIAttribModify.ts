@@ -1,21 +1,19 @@
-import { GIModel } from './GIModel';
-import { IAttribsData, IModelData, IAttribData, TAttribDataTypes, EEntType,
-    EAttribDataTypeStrs, IGeomData, IAttribsMaps, EAttribNames, Txyz, EEntTypeStr, EAttribPush } from './common';
+import { EEntType, IAttribsMaps, EEntTypeStr } from './common';
 import { GIAttribMap } from './GIAttribMap';
-import { vecAdd, vecDiv, vecSum } from '@libs/geom/vectors';
+import { GIModelData } from './GIModelData';
 
 /**
  * Class for attributes.
  */
 export class GIAttribsModify {
-    private _model: GIModel;
+    private _modeldata: GIModelData;
     private _attribs_maps: IAttribsMaps;
    /**
      * Creates an object to store the attribute data.
-     * @param model The JSON data
+     * @param modeldata The JSON data
      */
-    constructor(model: GIModel, attribs_maps: IAttribsMaps) {
-        this._model = model;
+    constructor(modeldata: GIModelData, attribs_maps: IAttribsMaps) {
+        this._modeldata = modeldata;
         this._attribs_maps = attribs_maps;
     }
     /**

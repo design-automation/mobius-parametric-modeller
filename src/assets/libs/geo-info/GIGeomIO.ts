@@ -21,58 +21,94 @@ export class GIGeomIO {
     /**
      * Adds data to this model from another model.
      * The existing data in the model is not deleted.
-     * Both models may have deleted items, resulting in undefined values.
+     * Conflict detection will be performed.
      * @param geom_arrays The geom_arrays of the other model.
      */
     public merge(geom_arrays: IGeomArrays): void {
         // ======================================================================
-        // update down arrays
-        // points
-        _mergeEntArrays(this._geom_maps.dn_points_verts, geom_arrays.dn_points_verts, EEntType.POINT);
-        // plines
-        _mergeEntArrays(this._geom_maps.dn_plines_wires, geom_arrays.dn_plines_wires, EEntType.PLINE);
-        // pgons
-        _mergeEntArrays(this._geom_maps.dn_pgons_faces, geom_arrays.dn_pgons_faces, EEntType.PGON);
-        // colls
-        _mergeEntArrays(this._geom_maps.dn_colls_objs, geom_arrays.dn_colls_objs, EEntType.COLL);
-        // vertices
-        _mergeEntArrays(this._geom_maps.dn_verts_posis, geom_arrays.dn_verts_posis, EEntType.VERT);
-        // triangles
-        _mergeEntArrays(this._geom_maps.dn_tris_verts, geom_arrays.dn_tris_verts, EEntType.TRI);
-        // edges
-        _mergeEntArrays(this._geom_maps.dn_edges_verts, geom_arrays.dn_edges_verts, EEntType.EDGE);
-        // wires
-        _mergeEntArrays(this._geom_maps.dn_wires_edges, geom_arrays.dn_wires_edges, EEntType.WIRE);
-        // faces
-        _mergeEntArrays(this._geom_maps.dn_faces_wirestris, geom_arrays.dn_faces_wirestris, EEntType.FACE);
-
+        _mergeEnts(this._geom_maps.dn_points_verts, geom_arrays.dn_points_verts, EEntType.POINT);
+        _mergeEnts(this._geom_maps.dn_plines_wires, geom_arrays.dn_plines_wires, EEntType.PLINE);
+        _mergeEnts(this._geom_maps.dn_pgons_faces, geom_arrays.dn_pgons_faces, EEntType.PGON);
+        _mergeEnts(this._geom_maps.dn_colls_objs, geom_arrays.dn_colls_objs, EEntType.COLL);
+        _mergeEnts(this._geom_maps.dn_verts_posis, geom_arrays.dn_verts_posis, EEntType.VERT);
+        _mergeEnts(this._geom_maps.dn_tris_verts, geom_arrays.dn_tris_verts, EEntType.TRI);
+        _mergeEnts(this._geom_maps.dn_edges_verts, geom_arrays.dn_edges_verts, EEntType.EDGE);
+        _mergeEnts(this._geom_maps.dn_wires_edges, geom_arrays.dn_wires_edges, EEntType.WIRE);
+        _mergeEnts(this._geom_maps.dn_faces_wirestris, geom_arrays.dn_faces_wirestris, EEntType.FACE);
         // ======================================================================
-        // update up arrays
-        // update posis to verts (they can be undefined or [])
-        // this array is used to capture deleted posis
-        _mergePosisArrays(this._geom_maps.up_posis_verts, geom_arrays.up_posis_verts);
-        // update verts to tris
-        _mergeEntArrays(this._geom_maps.up_verts_tris, geom_arrays.up_verts_tris, EEntType.VERT);
-        // update tris to faces
-        _mergeEntArrays(this._geom_maps.up_tris_faces, geom_arrays.up_tris_faces, EEntType.TRI);
-        // update verts to edges
-        _mergeEntArrays(this._geom_maps.up_verts_edges, geom_arrays.up_verts_edges, EEntType.VERT);
-        // update edges to wires
-        _mergeEntArrays(this._geom_maps.up_edges_wires, geom_arrays.up_edges_wires, EEntType.EDGE);
-        // update wires to faces
-        _mergeEntArrays(this._geom_maps.up_wires_faces, geom_arrays.up_wires_faces, EEntType.WIRE);
-        // update verts to points
-        _mergeEntArrays(this._geom_maps.up_verts_points, geom_arrays.up_verts_points, EEntType.VERT);
-        // update wires to plines
-        _mergeEntArrays(this._geom_maps.up_wires_plines, geom_arrays.up_wires_plines, EEntType.WIRE);
-        // update faces to pgons
-        _mergeEntArrays(this._geom_maps.up_faces_pgons, geom_arrays.up_faces_pgons, EEntType.FACE);
-        // update points to colls
-        _mergeEntArrays(this._geom_maps.up_points_colls, geom_arrays.up_points_colls, EEntType.POINT);
-        // update plines to colls
-        _mergeEntArrays(this._geom_maps.up_plines_colls, geom_arrays.up_plines_colls, EEntType.PLINE);
-        // update pgons to colls
-        _mergeEntArrays(this._geom_maps.up_pgons_colls, geom_arrays.up_pgons_colls, EEntType.PGON);
+        _mergePosis(this._geom_maps.up_posis_verts, geom_arrays.up_posis_verts);
+        _mergeEnts(this._geom_maps.up_verts_tris, geom_arrays.up_verts_tris, EEntType.VERT);
+        _mergeEnts(this._geom_maps.up_tris_faces, geom_arrays.up_tris_faces, EEntType.TRI);
+        _mergeEnts(this._geom_maps.up_verts_edges, geom_arrays.up_verts_edges, EEntType.VERT);
+        _mergeEnts(this._geom_maps.up_edges_wires, geom_arrays.up_edges_wires, EEntType.EDGE);
+        _mergeEnts(this._geom_maps.up_wires_faces, geom_arrays.up_wires_faces, EEntType.WIRE);
+        _mergeEnts(this._geom_maps.up_verts_points, geom_arrays.up_verts_points, EEntType.VERT);
+        _mergeEnts(this._geom_maps.up_wires_plines, geom_arrays.up_wires_plines, EEntType.WIRE);
+        _mergeEnts(this._geom_maps.up_faces_pgons, geom_arrays.up_faces_pgons, EEntType.FACE);
+        _mergeEnts(this._geom_maps.up_points_colls, geom_arrays.up_points_colls, EEntType.POINT);
+        _mergeEnts(this._geom_maps.up_plines_colls, geom_arrays.up_plines_colls, EEntType.PLINE);
+        _mergeEnts(this._geom_maps.up_pgons_colls, geom_arrays.up_pgons_colls, EEntType.PGON);
+    }
+    /**
+     * Adds data to this model from another model.
+     * No conflict detection is performed.
+     * Typically, this model is assumed to be empty.
+     * @param geom_arrays The geom_arrays of the other model.
+     */
+    public dump(geom_arrays: IGeomArrays): void {
+        _dumpEnts(this._geom_maps.dn_points_verts, geom_arrays.dn_points_verts);
+        _dumpEnts(this._geom_maps.dn_plines_wires, geom_arrays.dn_plines_wires);
+        _dumpEnts(this._geom_maps.dn_pgons_faces, geom_arrays.dn_pgons_faces);
+        _dumpEnts(this._geom_maps.dn_colls_objs, geom_arrays.dn_colls_objs);
+        _dumpEnts(this._geom_maps.dn_verts_posis, geom_arrays.dn_verts_posis);
+        _dumpEnts(this._geom_maps.dn_tris_verts, geom_arrays.dn_tris_verts);
+        _dumpEnts(this._geom_maps.dn_edges_verts, geom_arrays.dn_edges_verts);
+        _dumpEnts(this._geom_maps.dn_wires_edges, geom_arrays.dn_wires_edges);
+        _dumpEnts(this._geom_maps.dn_faces_wirestris, geom_arrays.dn_faces_wirestris);
+        // ======================================================================
+        _dumpEnts(this._geom_maps.up_posis_verts, geom_arrays.up_posis_verts);
+        _dumpEnts(this._geom_maps.up_verts_tris, geom_arrays.up_verts_tris);
+        _dumpEnts(this._geom_maps.up_tris_faces, geom_arrays.up_tris_faces);
+        _dumpEnts(this._geom_maps.up_verts_edges, geom_arrays.up_verts_edges);
+        _dumpEnts(this._geom_maps.up_edges_wires, geom_arrays.up_edges_wires);
+        _dumpEnts(this._geom_maps.up_wires_faces, geom_arrays.up_wires_faces);
+        _dumpEnts(this._geom_maps.up_verts_points, geom_arrays.up_verts_points);
+        _dumpEnts(this._geom_maps.up_wires_plines, geom_arrays.up_wires_plines);
+        _dumpEnts(this._geom_maps.up_faces_pgons, geom_arrays.up_faces_pgons);
+        _dumpEnts(this._geom_maps.up_points_colls, geom_arrays.up_points_colls);
+        _dumpEnts(this._geom_maps.up_plines_colls, geom_arrays.up_plines_colls);
+        _dumpEnts(this._geom_maps.up_pgons_colls, geom_arrays.up_pgons_colls);
+    }
+    /**
+     * Adds data to this model from another model.
+     * No conflict detection is performed.
+     * Typically, this model is assumed to be empty.
+     * @param geom_arrays The geom_arrays of the other model.
+     */
+    public dumpSelect(geom_arrays: IGeomArrays, gp: IGeomPack): void {
+        // TODO get topo entities
+        _dumpEntsSelect(this._geom_maps.dn_points_verts, geom_arrays.dn_points_verts, gp.points_i);
+        _dumpEntsSelect(this._geom_maps.dn_plines_wires, geom_arrays.dn_plines_wires, gp.plines_i);
+        _dumpEntsSelect(this._geom_maps.dn_pgons_faces, geom_arrays.dn_pgons_faces, gp.pgons_i);
+        _dumpEntsSelect(this._geom_maps.dn_colls_objs, geom_arrays.dn_colls_objs, gp.colls_i);
+        _dumpEntsSelect(this._geom_maps.dn_verts_posis, geom_arrays.dn_verts_posis, []);
+        _dumpEntsSelect(this._geom_maps.dn_tris_verts, geom_arrays.dn_tris_verts, []);
+        _dumpEntsSelect(this._geom_maps.dn_edges_verts, geom_arrays.dn_edges_verts, []);
+        _dumpEntsSelect(this._geom_maps.dn_wires_edges, geom_arrays.dn_wires_edges, []);
+        _dumpEntsSelect(this._geom_maps.dn_faces_wirestris, geom_arrays.dn_faces_wirestris, []);
+        // ======================================================================
+        _dumpEntsSelect(this._geom_maps.up_posis_verts, geom_arrays.up_posis_verts, []);
+        _dumpEntsSelect(this._geom_maps.up_verts_tris, geom_arrays.up_verts_tris, []);
+        _dumpEntsSelect(this._geom_maps.up_tris_faces, geom_arrays.up_tris_faces, []);
+        _dumpEntsSelect(this._geom_maps.up_verts_edges, geom_arrays.up_verts_edges, []);
+        _dumpEntsSelect(this._geom_maps.up_edges_wires, geom_arrays.up_edges_wires, []);
+        _dumpEntsSelect(this._geom_maps.up_wires_faces, geom_arrays.up_wires_faces, []);
+        _dumpEntsSelect(this._geom_maps.up_verts_points, geom_arrays.up_verts_points, []);
+        _dumpEntsSelect(this._geom_maps.up_wires_plines, geom_arrays.up_wires_plines, []);
+        _dumpEntsSelect(this._geom_maps.up_faces_pgons, geom_arrays.up_faces_pgons, []);
+        _dumpEntsSelect(this._geom_maps.up_points_colls, geom_arrays.up_points_colls, []);
+        _dumpEntsSelect(this._geom_maps.up_plines_colls, geom_arrays.up_plines_colls, []);
+        _dumpEntsSelect(this._geom_maps.up_pgons_colls, geom_arrays.up_pgons_colls, []);
     }
     // /**
     //  * Adds data to this model from another model.
@@ -1002,7 +1038,17 @@ export class GIGeomIO {
 }
 
 // utility function
-function _mergeEntArrays(map1: Map<number, any>, map2: Map<number, any>, type: EEntType): void {
+function _dumpEntsSelect(map1: Map<number, any>, map2: Map<number, any>, selected: number[]): void {
+    selected.forEach( ent_i => {
+        map1.set(ent_i, _deepCopy(map2.get(ent_i)));
+    });
+}
+function _dumpEnts(map1: Map<number, any>, map2: Map<number, any>): void {
+    map2.forEach( (ent, ent_i) => {
+        map1.set(ent_i, _deepCopy(ent));
+    });
+}
+function _mergeEnts(map1: Map<number, any>, map2: Map<number, any>, type: EEntType): void {
     map2.forEach( (ent, ent_i) => {
         if (map1.has(ent_i)) {
             throw new Error('Conflict merging ' + _getEntTypeStr(type) + '.');
@@ -1010,7 +1056,7 @@ function _mergeEntArrays(map1: Map<number, any>, map2: Map<number, any>, type: E
         map1.set(ent_i, _deepCopy(ent));
     });
 }
-function _mergePosisArrays(map1: Map<number, any>, map2: Map<number, any>): void {
+function _mergePosis(map1: Map<number, any>, map2: Map<number, any>): void {
     map2.forEach( (verts_i, posi_i) => {
         if (map1.has(posi_i)) {
             const verts_i_set: Set<number> = new Set(map1.get(posi_i));

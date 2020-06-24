@@ -54,11 +54,11 @@ export function importObj(obj_str: string): GIModel {
         }
     }
     for (const coord of coords) {
-        const posi_i: number = model.geom.add.addPosi();
-        model.attribs.add.setAttribVal(EEntType.POSI, posi_i, EAttribNames.COORDS, coord);
+        const posi_i: number = model.modeldata.geom.add.addPosi();
+        model.modeldata.attribs.add.setAttribVal(EEntType.POSI, posi_i, EAttribNames.COORDS, coord);
     }
     for (const face of faces) {
-        const face_i: number = model.geom.add.addPgon(face[0]);
+        const face_i: number = model.modeldata.geom.add.addPgon(face[0]);
         // TODO: texture uv
         // TODO: normals
     }
@@ -75,9 +75,9 @@ export function exportVertBasedObj(model: GIModel, entities: TEntTypeIdx[]): str
     let f_str = '';
     let l_str = '';
     // do we have color, texture, normal?
-    const has_color_attrib: boolean = model.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOR);
-    const has_normal_attrib: boolean = model.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.NORMAL);
-    const has_texture_attrib: boolean = model.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.TEXTURE);
+    const has_color_attrib: boolean = model.modeldata.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOR);
+    const has_normal_attrib: boolean = model.modeldata.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.NORMAL);
+    const has_texture_attrib: boolean = model.modeldata.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.TEXTURE);
     // get the polgons, polylines, verts, posis
     const [pgons_i, plines_i]: [number[], number[]] = _getPgonsPlines(model, entities);
     const [verts_i, posis_i]: [number[], number[]] = _getVertsPosis(model, pgons_i, plines_i);
@@ -86,9 +86,9 @@ export function exportVertBasedObj(model: GIModel, entities: TEntTypeIdx[]): str
     let num_v = 0;
     for (let i = 0; i < verts_i.length; i++) {
         const vert_i: number =  verts_i[i];
-        const coord: Txyz = model.attribs.query.getVertCoords(vert_i);
+        const coord: Txyz = model.modeldata.attribs.query.getVertCoords(vert_i);
         if (has_color_attrib) {
-            let color: TColor = model.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, vert_i) as TColor;
+            let color: TColor = model.modeldata.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, vert_i) as TColor;
             if (color === undefined) { color = [1, 1, 1]; }
             v_str += 'v ' + coord.map( v => v.toString() ).join(' ')  + ' ' + color.map( c => c.toString() ).join(' ') + '\n';
         } else {
@@ -111,7 +111,7 @@ export function exportVertBasedObj(model: GIModel, entities: TEntTypeIdx[]): str
             f_str += 'g ' + names.join( ' ' ) + '\n';
         }
         for (const pgon_i of group_pgons_i) {
-            const pgon_verts_i_outer: number[] = model.geom.nav.navAnyToVert(EEntType.PGON, pgon_i);
+            const pgon_verts_i_outer: number[] = model.modeldata.geom.nav.navAnyToVert(EEntType.PGON, pgon_i);
             // const verts_i_outer = verts_i[0];
             // TODO what about holes
             f_str += 'f ';
@@ -148,7 +148,7 @@ export function exportVertBasedObj(model: GIModel, entities: TEntTypeIdx[]): str
             f_str += 'g ' + names.join( ' ' ) + '\n';
         }
         for (const pline_i of group_plines_i) {
-            const pline_verts_i: number[] = model.geom.nav.navAnyToVert(EEntType.PLINE, pline_i);
+            const pline_verts_i: number[] = model.modeldata.geom.nav.navAnyToVert(EEntType.PLINE, pline_i);
             l_str += 'l ' + pline_verts_i.map( vert_i => (vert_i_to_obj_v[vert_i] + 1).toString() ).join(' ') + '\n';
         }
     }
@@ -166,9 +166,9 @@ export function exportPosiBasedObj(model: GIModel, entities: TEntTypeIdx[]): str
     let f_str = '';
     let l_str = '';
     // do we have color, texture, normal?
-    const has_color_attrib: boolean = model.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOR);
-    const has_normal_attrib: boolean = model.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.NORMAL);
-    const has_texture_attrib: boolean = model.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.TEXTURE);
+    const has_color_attrib: boolean = model.modeldata.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.COLOR);
+    const has_normal_attrib: boolean = model.modeldata.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.NORMAL);
+    const has_texture_attrib: boolean = model.modeldata.attribs.query.hasAttrib(EEntType.VERT, EAttribNames.TEXTURE);
     // get the polgons, polylines, verts, posis
     const [pgons_i, plines_i]: [number[], number[]] = _getPgonsPlines(model, entities);
     const [verts_i, posis_i]: [number[], number[]] = _getVertsPosis(model, pgons_i, plines_i);
@@ -177,13 +177,13 @@ export function exportPosiBasedObj(model: GIModel, entities: TEntTypeIdx[]): str
     const posi_i_to_obj_v: number[] = [];
     for (let i = 0; i < posis_i.length; i++) {
         const posi_i: number =  posis_i[i];
-        const coord: Txyz = model.attribs.query.getPosiCoords(posi_i);
+        const coord: Txyz = model.modeldata.attribs.query.getPosiCoords(posi_i);
         if (has_color_attrib) {
             // get the average color from the verts
-            const posi_verts_i: number[] = model.geom.nav.navPosiToVert(posi_i);
+            const posi_verts_i: number[] = model.modeldata.geom.nav.navPosiToVert(posi_i);
             let color: TColor = [0, 0, 0];
             for (const posi_vert_i of posi_verts_i) {
-                let vert_color: TColor = model.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, posi_vert_i) as TColor;
+                let vert_color: TColor = model.modeldata.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, posi_vert_i) as TColor;
                 if (vert_color === undefined) { vert_color = [1, 1, 1]; }
                 color = [color[0] + vert_color[0], color[1] + vert_color[1], color[2] + vert_color[2]];
             }
@@ -210,13 +210,13 @@ export function exportPosiBasedObj(model: GIModel, entities: TEntTypeIdx[]): str
             f_str += 'g ' + names.join( ' ' ) + '\n';
         }
         for (const pgon_i of group_pgons_i) {
-            const pgon_verts_i_outer: number[] = model.geom.nav.navAnyToVert(EEntType.PGON, pgon_i);
+            const pgon_verts_i_outer: number[] = model.modeldata.geom.nav.navAnyToVert(EEntType.PGON, pgon_i);
             // const verts_i_outer = verts_i[0];
             // TODO what about holes
             f_str += 'f ';
             for (const vert_i of pgon_verts_i_outer) {
                 // v
-                f_str += (1 + posi_i_to_obj_v[model.geom.nav.navVertToPosi(vert_i)]);
+                f_str += (1 + posi_i_to_obj_v[model.modeldata.geom.nav.navVertToPosi(vert_i)]);
                 if (has_texture_attrib || has_normal_attrib) {
                     // vt
                     if (has_texture_attrib && vert_i_obj_vt[vert_i] !== undefined) {
@@ -247,9 +247,9 @@ export function exportPosiBasedObj(model: GIModel, entities: TEntTypeIdx[]): str
             f_str += 'g ' + names.join( ' ' ) + '\n';
         }
         for (const pline_i of group_plines_i) {
-            const pline_verts_i: number[] = model.geom.nav.navAnyToVert(EEntType.PLINE, pline_i);
+            const pline_verts_i: number[] = model.modeldata.geom.nav.navAnyToVert(EEntType.PLINE, pline_i);
             l_str += 'l ' + pline_verts_i.map( vert_i =>
-                (posi_i_to_obj_v[model.geom.nav.navVertToPosi(vert_i)] + 1).toString() ).join(' ') + '\n';
+                (posi_i_to_obj_v[model.modeldata.geom.nav.navVertToPosi(vert_i)] + 1).toString() ).join(' ') + '\n';
         }
     }
     // result
@@ -267,7 +267,7 @@ function _getTexturesStr(model: GIModel, verts_i: number[], has_texture_attrib: 
     if (has_texture_attrib) {
         for (let i = 0; i < verts_i.length; i++) {
             const vert_i  = verts_i[i];
-            const texture: TTexture = model.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.TEXTURE, vert_i) as TTexture;
+            const texture: TTexture = model.modeldata.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.TEXTURE, vert_i) as TTexture;
             if (texture !== undefined) {
                 vt_str += 'vt ' + texture.map( v => v.toString() ).join(' ') + '\n';
                 vert_i_obj_vt[vert_i] = i;
@@ -288,7 +288,7 @@ function _getNormalsStr(model: GIModel, verts_i: number[], has_normal_attrib: bo
     if (has_normal_attrib) {
         for (let i = 0; i < verts_i.length; i++) {
             const vert_i  = verts_i[i];
-            const  normal: TNormal = model.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.NORMAL, vert_i) as TNormal;
+            const  normal: TNormal = model.modeldata.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.NORMAL, vert_i) as TNormal;
             if (normal !== undefined) {
                 vn_str += 'vn ' + normal.map( v => v.toString() ).join(' ') + '\n';
                 vert_i_obj_vn[vert_i] = i;
@@ -305,20 +305,20 @@ function _getNormalsStr(model: GIModel, verts_i: number[], has_normal_attrib: bo
 function _getGroups(model: GIModel, ent_type: EEntType, ents_i: number[]): [string[], Map<string, [string[], number[]]>] {
     const map_colls_to_ents: Map<string, [string[], number[]]> = new Map();
     // check if the name attribut exists
-    if (!model.attribs.query.hasAttrib(EEntType.COLL, 'name')) {
+    if (!model.modeldata.attribs.query.hasAttrib(EEntType.COLL, 'name')) {
         return [[NOGROUPS], map_colls_to_ents.set(NOGROUPS, [[], ents_i])];
     }
     // get the collections of each entity
     for (const ent_i of ents_i) {
-        const colls_i: number[] = model.geom.nav.navAnyToColl(ent_type, ent_i);
+        const colls_i: number[] = model.modeldata.geom.nav.navAnyToColl(ent_type, ent_i);
         const set_all_colls_i: Set<number> = new Set();
         for (const coll_i of colls_i) {
             set_all_colls_i.add(coll_i);
-            for (const anc_coll_i of model.geom.query.getCollAncestors(coll_i)) {
+            for (const anc_coll_i of model.modeldata.geom.query.getCollAncestors(coll_i)) {
                 set_all_colls_i.add(anc_coll_i);
             }
         }
-        const names: string[] = model.attribs.query.getAttribVal(EEntType.COLL, 'name', Array.from(set_all_colls_i)) as string[];
+        const names: string[] = model.modeldata.attribs.query.getAttribVal(EEntType.COLL, 'name', Array.from(set_all_colls_i)) as string[];
         let key = NOGROUPS;
         if (names.length > 0) {
             names.sort();
@@ -347,8 +347,8 @@ function _getPgonsPlines(model: GIModel, entities: TEntTypeIdx[]): [number[], nu
     let pgons_i: number[] = [];
     let plines_i: number[] = [];
     if (entities === null) {
-        pgons_i = model.geom.query.getEnts(EEntType.PGON);
-        plines_i = model.geom.query.getEnts(EEntType.PLINE);
+        pgons_i = model.modeldata.geom.query.getEnts(EEntType.PGON);
+        plines_i = model.modeldata.geom.query.getEnts(EEntType.PLINE);
     } else {
         for (const [ent_type, ent_i] of entities) {
             if (ent_type === EEntType.PGON) {
@@ -356,10 +356,10 @@ function _getPgonsPlines(model: GIModel, entities: TEntTypeIdx[]): [number[], nu
             } else if (ent_type === EEntType.PLINE) {
                 plines_i.push(ent_i);
             } else if (ent_type === EEntType.COLL) {
-                for (const pgon_i of model.geom.nav.navAnyToPgon(EEntType.COLL, ent_i)) {
+                for (const pgon_i of model.modeldata.geom.nav.navAnyToPgon(EEntType.COLL, ent_i)) {
                     pgons_i.push(pgon_i);
                 }
-                for (const pline_i of model.geom.nav.navAnyToPline(EEntType.COLL, ent_i)) {
+                for (const pline_i of model.modeldata.geom.nav.navAnyToPline(EEntType.COLL, ent_i)) {
                     plines_i.push(pline_i);
                 }
             }
@@ -375,18 +375,18 @@ function _getVertsPosis(model: GIModel, pgons_i: number[], plines_i: number[]): 
     const posis_i: Set<number> = new Set();
     const verts_i: Set<number> = new Set();
     for (const pgon_i of pgons_i) {
-        for (const vert_i of model.geom.nav.navAnyToVert(EEntType.PGON, pgon_i)) {
+        for (const vert_i of model.modeldata.geom.nav.navAnyToVert(EEntType.PGON, pgon_i)) {
             verts_i.add(vert_i);
         }
-        for (const posi_i of model.geom.nav.navAnyToPosi(EEntType.PGON, pgon_i)) {
+        for (const posi_i of model.modeldata.geom.nav.navAnyToPosi(EEntType.PGON, pgon_i)) {
             posis_i.add(posi_i);
         }
     }
     for (const pline_i of plines_i) {
-        for (const vert_i of model.geom.nav.navAnyToVert(EEntType.PLINE, pline_i)) {
+        for (const vert_i of model.modeldata.geom.nav.navAnyToVert(EEntType.PLINE, pline_i)) {
             verts_i.add(vert_i);
         }
-        for (const posi_i of model.geom.nav.navAnyToPosi(EEntType.PLINE, pline_i)) {
+        for (const posi_i of model.modeldata.geom.nav.navAnyToPosi(EEntType.PLINE, pline_i)) {
             posis_i.add(posi_i);
         }
     }

@@ -22,7 +22,7 @@ export class GIGeomDelEdge {
      */
     public delEdges(edges_i: number|number[], del_unused_posis: boolean, heal: boolean): void {
         // del attribs
-        this._geom.model.attribs.add.delEntFromAttribs(EEntType.EDGE, edges_i);
+        this._geom.modeldata.attribs.add.delEntFromAttribs(EEntType.EDGE, edges_i);
         // create array
         edges_i = (Array.isArray(edges_i)) ? edges_i : [edges_i];
         if (!edges_i.length) { return; }

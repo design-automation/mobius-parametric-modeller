@@ -2,6 +2,7 @@ import { EFilterOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribDat
 import { arrRem } from '../util/arrs';
 import { deepCopy } from '../util/copy';
 import { GIModel } from './GIModel';
+import { GIModelData } from './GIModelData';
 
 /**
  * Geo-info attribute class for one attribute.
@@ -13,7 +14,7 @@ import { GIModel } from './GIModel';
  *
  */
 export class GIAttribMap {
-    private _model: GIModel;
+    private _modeldata: GIModelData;
     private _name: string;
     private _data_type: EAttribDataTypeStrs;
     private _data_length: number;
@@ -31,8 +32,8 @@ export class GIAttribMap {
      * Creates an attribute.
      * @param attrib_data
      */
-    constructor(model: GIModel, name: string, data_type: EAttribDataTypeStrs) {
-        this._model = model;
+    constructor(modeldata: GIModelData, name: string, data_type: EAttribDataTypeStrs) {
+        this._modeldata = modeldata;
         this._name = name;
         this._data_type = data_type;
         if (data_type === EAttribDataTypeStrs.LIST || data_type === EAttribDataTypeStrs.DICT) {
@@ -162,7 +163,7 @@ export class GIAttribMap {
         const ents_i_values: [number[], TAttribDataTypes][] = [];
         this._map_val_i_to_ents_i.forEach( (ents_i, val_i) => {
             // const value: TAttribDataTypes = this._map_val_i_to_val.get(val_i);
-            const value: TAttribDataTypes = this._model.meta.getAttribValFromIdx(val_i, this._data_type);
+            const value: TAttribDataTypes = this._modeldata.model.metadata.getAttribValFromIdx(val_i, this._data_type);
             ents_i_values.push([ents_i, value]);
         });
         return ents_i_values;
@@ -194,7 +195,7 @@ export class GIAttribMap {
      * @param val
      */
     public setEntVal(ents_i: number|number[], val: TAttribDataTypes, check_type = true): void {
-        //console.log("xxxx", val)
+        // console.log("xxxx", val)
 
         // if indefined, do nothing
         if (val === undefined) { return; }
@@ -223,13 +224,13 @@ export class GIAttribMap {
         //     this._map_val_k_to_val_i.set(val_k, this._num_vals);
         //     this._map_val_i_to_val.set(this._num_vals, val);
         let val_i: number;
-        if (this._model.meta.hasAttribKey(val_k, this._data_type)) {
-            val_i = this._model.meta.getAttribIdxFromKey(val_k, this._data_type);
+        if (this._modeldata.model.metadata.hasAttribKey(val_k, this._data_type)) {
+            val_i = this._modeldata.model.metadata.getAttribIdxFromKey(val_k, this._data_type);
             if (!this._map_val_i_to_ents_i.has(val_i)) {
                 this._map_val_i_to_ents_i.set(val_i, []);
             }
         } else {
-            val_i = this._model.meta.addAttribByKeyVal(val_k, val, this._data_type);
+            val_i = this._modeldata.model.metadata.addAttribByKeyVal(val_k, val, this._data_type);
             this._map_val_i_to_ents_i.set(val_i, []);
         }
         // get the new val_i
@@ -347,6 +348,15 @@ export class GIAttribMap {
         }
     }
     /**
+     * Dumps another attrib map into this attrib map
+     * Assumes tha this map is empty
+     * @param attrib_map The attrib map to merge into this map
+     */
+    public dump(attrib_map: GIAttribMap): void {
+        this._map_val_i_to_ents_i = deepCopy(attrib_map._map_val_i_to_ents_i);
+        this._map_ent_i_to_val_i = deepCopy(attrib_map._map_ent_i_to_val_i);
+    }
+    /**
      * Sets the indexed value for a given entity or entities.
      * This assumes that this attribute is a list.
      * @param ent_i
@@ -424,7 +434,7 @@ export class GIAttribMap {
             const val_i: number = this._map_ent_i_to_val_i.get(ent_i);
             if (val_i === undefined) { return undefined; }
             // return this._map_val_i_to_val.get(val_i) as TAttribDataTypes;
-            return this._model.meta.getAttribValFromIdx(val_i, this._data_type);
+            return this._modeldata.model.metadata.getAttribValFromIdx(val_i, this._data_type);
         } else {
             return ents_i.map(ent_i => this.getEntVal(ent_i)) as TAttribDataTypes;
         }
@@ -473,7 +483,7 @@ export class GIAttribMap {
      */
     public getEntsFromVal(val: TAttribDataTypes): number[] {
         // const val_i: number = this._map_val_k_to_val_i.get(this._valToValkey(val));
-        const val_i: number =  this._model.meta.getAttribIdxFromKey(this._valToValkey(val), this._data_type);
+        const val_i: number =  this._modeldata.model.metadata.getAttribIdxFromKey(this._valToValkey(val), this._data_type);
         if (val_i === undefined) { return []; }
         return this._map_val_i_to_ents_i.get(val_i);
     }

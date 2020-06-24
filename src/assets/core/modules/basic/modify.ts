@@ -828,14 +828,15 @@ export function Delete(__model__: GIModel, entities: TId|TId[], method: _EDelete
         ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
+    const gp: IGeomPack = __model__.geom.query.createGeomPack(ents_arr, false);
     switch (method) {
         case _EDeleteMethod.DELETE_SELECTED:
             if (isEmptyArr2(entities)) { return; }
-            _delete(__model__, ents_arr, false); //  do not invert
+            __model__.delete(gp, false); //  do not invert
             return;
         case _EDeleteMethod.KEEP_SELECTED:
             if (isEmptyArr2(entities)) { _deleteAll(__model__); return; }
-            _delete(__model__, ents_arr, true); // invert
+            __model__.delete(gp, true); // invert
             return;
         default:
             throw new Error(fn_name + ' : Method not recognised.');
@@ -849,18 +850,18 @@ function _deleteAll(__model__: GIModel): void {
     __model__.geom.del.delPoints(__model__.geom.query.getEnts(EEntType.POINT), false);
     __model__.geom.del.delPosis(__model__.geom.query.getEnts(EEntType.POSI));
 }
-function _delete(__model__: GIModel, ents_arr: TEntTypeIdx[], invert: boolean): void {
-    // get the ents
-    const gp: IGeomPack = __model__.geom.query.createGeomPack(ents_arr, invert);
-    // console.log("geom pack = ", gp);
-    // delete the ents
-    __model__.geom.del.delColls(gp.colls_i, true);
-    __model__.geom.del.delPgons(gp.pgons_i, true);
-    __model__.geom.del.delPlines(gp.plines_i, true);
-    __model__.geom.del.delPoints(gp.points_i, true);
-    __model__.geom.del.delPosis(gp.posis_i);
-    __model__.geom.del.delUnusedPosis(gp.posis2_i);
-}
+// function _delete(__model__: GIModel, ents_arr: TEntTypeIdx[], invert: boolean): void {
+//     // get the ents
+//     const gp: IGeomPack = __model__.geom.query.createGeomPack(ents_arr, invert);
+//     // console.log("geom pack = ", gp);
+//     // delete the ents
+//     __model__.geom.del.delColls(gp.colls_i, true);
+//     __model__.geom.del.delPgons(gp.pgons_i, true);
+//     __model__.geom.del.delPlines(gp.plines_i, true);
+//     __model__.geom.del.delPoints(gp.points_i, true);
+//     __model__.geom.del.delPosis(gp.posis_i);
+//     __model__.geom.del.delUnusedPosis(gp.posis2_i);
+// }
 
 
 

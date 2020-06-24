@@ -25,7 +25,7 @@ import { Vector3, GridHelper } from 'three';
 export class GIViewerComponent implements OnInit {
     dataservice: DataService;
     // model data passed to the viewer
-    @Input() data: GIModel;
+    @Input() model: GIModel;
 
     settings: Settings = DefaultSettings;
 
@@ -174,13 +174,13 @@ export class GIViewerComponent implements OnInit {
             };
             this.dataService.getThreejsScene().settings = this.settings;
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
-            this.threejs.updateModel(this.data);
+            this.threejs.updateModel(this.model);
         } else {
             // tslint:disable-next-line: forin
             for (const setting in this.dataService.getThreejsScene().settings) {
                 this.settings[setting] = this.dataService.getThreejsScene().settings[setting];
             }
-            this.threejs.updateModel(this.data);
+            this.threejs.updateModel(this.model);
         }
         setTimeout(() => {
             this.threejs.activateRender();
@@ -192,7 +192,7 @@ export class GIViewerComponent implements OnInit {
         for (const setting in this.dataService.getThreejsScene().settings) {
             this.settings[setting] = this.dataService.getThreejsScene().settings[setting];
         }
-        this.threejs.updateModel(this.data);
+        this.threejs.updateModel(this.model);
     }
 
     settingOnChange(setting: string, value?: number) {

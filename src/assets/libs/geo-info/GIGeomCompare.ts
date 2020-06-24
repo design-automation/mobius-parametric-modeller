@@ -43,7 +43,7 @@ export class GIGeomCompare {
             // total marks is not updated, we deduct marks
             // get the number of entitoes in each model
             const this_num_ents: number = this._geom.query.numEnts(ent_type);
-            const other_num_ents: number = other_model.geom.query.numEnts(ent_type);
+            const other_num_ents: number = other_model.modeldata.geom.query.numEnts(ent_type);
             if (this_num_ents > other_num_ents) {
                 geom_comments.push([
                     'Mismatch: Model has too few entities of type:',

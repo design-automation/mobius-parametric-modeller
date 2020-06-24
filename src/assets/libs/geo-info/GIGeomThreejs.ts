@@ -60,7 +60,7 @@ export class GIGeomThreejs {
         const materials: object[] = [this._getMaterial( mat_f ), this._getMaterial( mat_b )];
         const material_names:  string[] = ['default_front', 'default_back'];
         // get the material attribute from polygons
-        const material_attrib: GIAttribMap = this._geom.model.attribs._attribs_maps.pg.get('material');
+        const material_attrib: GIAttribMap = this._geom.modeldata.attribs._attribs_maps.pg.get('material');
         // loop through all tris
         this._geom_maps.dn_tris_verts.forEach( (tri_verts_i, tri_i) => {
             // get the verts, face and the polygon for this tri
@@ -75,7 +75,7 @@ export class GIGeomThreejs {
                 for (const pgon_mat_name of pgon_mat_names) {
                     let pgon_mat_index: number = material_names.indexOf(pgon_mat_name);
                     if (pgon_mat_index === -1) {
-                        const mat_settings_obj: object = this._geom.model.attribs._attribs_maps.mo.get(pgon_mat_name);
+                        const mat_settings_obj: object = this._geom.modeldata.attribs._attribs_maps.mo.get(pgon_mat_name);
                         if (mat_settings_obj !== undefined) {
                             pgon_mat_index = materials.length;
                             material_names.push(pgon_mat_name);
@@ -170,12 +170,12 @@ export class GIGeomThreejs {
         const edge_select_map: Map<number, number> = new Map();
         const white_edges_verts_i_filt: TEdge[] = [];
         const white_edge_select_map: Map<number, number> = new Map();
-        const visibility_attrib = this._geom.model.attribs._attribs_maps._e.get('visibility');
+        const visibility_attrib = this._geom.modeldata.attribs._attribs_maps._e.get('visibility');
         let hidden_attrib;
         if (visibility_attrib) {
             hidden_attrib = visibility_attrib.getEntsFromVal('hidden');
         }
-        const edge_attrib = this._geom.model.attribs._attribs_maps._e.get('material');
+        const edge_attrib = this._geom.modeldata.attribs._attribs_maps._e.get('material');
         let edge_material_attrib;
         if (edge_attrib) {
             edge_material_attrib = edge_attrib.getEntsFromVal('white');

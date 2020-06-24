@@ -88,7 +88,7 @@ export class DataThreejs extends DataThreejsLookAt {
 
 
         // Add geometry
-        const threejs_data: IThreeJS = model.threejs.get3jsData();
+        const threejs_data: IThreeJS = model.get3jsData();
         this.tri_select_map = threejs_data.triangle_select_map;
         this.edge_select_map = threejs_data.edge_select_map;
         this.white_edge_select_map = threejs_data.white_edge_select_map;
@@ -125,8 +125,8 @@ export class DataThreejs extends DataThreejsLookAt {
             if (old) {
                 container.removeChild(old);
             }
-            if (!this.model.attribs.query.hasAttrib(EEntType.MOD, 'hud')) { return; }
-            const hud = this.model.attribs.query.getModelAttribVal('hud') as string;
+            if (!this.model.modeldata.attribs.query.hasAttrib(EEntType.MOD, 'hud')) { return; }
+            const hud = this.model.modeldata.attribs.query.getModelAttribVal('hud') as string;
             const element = this._createHud(hud).element;
             container.appendChild(element);
             old = null;
@@ -213,9 +213,9 @@ export class DataThreejs extends DataThreejsLookAt {
         if (!altitude && altitude !== 0) {
             altitude = this.directional_light_settings.altitude;
         }
-        if (this.model && this.model.attribs && this.model.attribs.query
-        && this.model.attribs.query.hasModelAttrib('directional_light')) {
-            const model_light_settings: any = this.model.attribs.query.getModelAttribVal('directional_light');
+        if (this.model && this.model.attribs && this.model.modeldata.attribs.query
+        && this.model.modeldata.attribs.query.hasModelAttrib('directional_light')) {
+            const model_light_settings: any = this.model.modeldata.attribs.query.getModelAttribVal('directional_light');
             if (model_light_settings.constructor === {}.constructor) {
                 if (model_light_settings.hasOwnProperty('altitude')) {
                     altitude = model_light_settings.altitude;
@@ -227,9 +227,9 @@ export class DataThreejs extends DataThreejsLookAt {
         }
         if (scale === 0) { scale = 10000; }
         let azimuth_calc = 90 - azimuth;
-        if (this.model && this.model.attribs && this.model.attribs.query
-        && this.model.attribs.query.hasModelAttrib('north')) {
-            const north_attr: number[] = this.model.attribs.query.getModelAttribVal('north') as number[];
+        if (this.model && this.model.attribs && this.model.modeldata.attribs.query
+        && this.model.modeldata.attribs.query.hasModelAttrib('north')) {
+            const north_attr: number[] = this.model.modeldata.attribs.query.getModelAttribVal('north') as number[];
             const north_vec = new THREE.Vector3(north_attr[0], north_attr[1], 0);
             const y_vec = new THREE.Vector3(0, 1, 0);
             const angle = north_vec.angleTo(y_vec) * 180 / Math.PI;
@@ -515,7 +515,7 @@ export class DataThreejs extends DataThreejsLookAt {
      * Add threejs points to the scene
      */
     private _addPointLabels(model: GIModel): void {
-        const labels = model.attribs.query.getModelAttribVal('labels');
+        const labels = model.modeldata.attribs.query.getModelAttribVal('labels');
         if (!labels || !isArray(labels) || labels.length === 0) {
             return;
         }
@@ -690,9 +690,9 @@ export class DataThreejs extends DataThreejsLookAt {
         this.directional_light_settings = JSON.parse(JSON.stringify(this.settings.directional_light));
         if (this.model
         && this.model.attribs
-        && this.model.attribs.query
-        && this.model.attribs.query.hasModelAttrib('directional_light')) {
-            const model_light_settings: any = this.model.attribs.query.getModelAttribVal('directional_light');
+        && this.model.modeldata.attribs.query
+        && this.model.modeldata.attribs.query.hasModelAttrib('directional_light')) {
+            const model_light_settings: any = this.model.modeldata.attribs.query.getModelAttribVal('directional_light');
             if (model_light_settings.constructor === {}.constructor) {
                 for (const i in model_light_settings) {
                     if (model_light_settings[i]) {

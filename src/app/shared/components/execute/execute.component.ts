@@ -713,7 +713,7 @@ export class ExecuteComponent {
             // console.log(node.input.value)
             // _parameterTypes.mergeFn(params['model'], node.input.value);
             params['model'].debug = this.dataService.mobiusSettings.debug;
-            params['model'].setMeta(this.dataService.modelMeta);
+            params['model'].setMetaData(this.dataService.modelMeta);
 
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
 
@@ -780,11 +780,11 @@ export class ExecuteComponent {
                     }
                 }
                 globalVars += '\n';
-                // node.model = params['model'].getData();
+                // node.model = params['model'].getModelData();
             } else {
-                // node.model = diff(node.input.value.getData(), params['model'].getData());
+                // node.model = diff(node.input.value.getData(), params['model'].getModelData());
             }
-            node.model = JSON.stringify(params['model'].getData());
+            node.model = JSON.stringify(params['model'].getModelData());
             node.input.value = null;
 
             const endTime = performance.now();

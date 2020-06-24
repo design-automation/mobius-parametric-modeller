@@ -139,7 +139,7 @@ function _importGI(__model__: GIModel, model_data: string): number {
     // import
     const gi_json: IModelData = JSON.parse(model_data) as IModelData;
     const gi_model: GIModel = new GIModel();
-    gi_model.setData(gi_json);
+    gi_model.setModelData(gi_json);
     __model__.merge(gi_model);
     // get number of ents after merge
     const num_ents_after: number[] = __model__.geom.query.numEntsAll();
@@ -265,7 +265,7 @@ function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
         case _EIOExportDataFormat.GI:
             let gi_data = '';
             if (ents_arr === null) {
-                gi_data = JSON.stringify(__model__.getData());
+                gi_data = JSON.stringify(__model__.getModelData());
             } else {
                 // make a clone of the model (warning: do not copy, copy will change entity IDs)
                 const model_clone: GIModel = __model__.clone();
@@ -279,7 +279,7 @@ function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
                 model_clone.geom.del.delPosis(gp.posis_i);
                 model_clone.geom.del.delUnusedPosis(gp.posis2_i);
                 model_clone.purge();
-                gi_data = JSON.stringify(model_clone.getData());
+                gi_data = JSON.stringify(model_clone.getModelData());
             }
             // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
             gi_data = gi_data.replace(/\\/g, '\\\\'); // TODO temporary fix

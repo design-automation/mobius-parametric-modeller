@@ -6,7 +6,7 @@ import { IProcedure } from '@models/procedure';
 import { IEdge } from '@models/edge';
 import { Subject } from 'rxjs';
 import { VERSION } from '@env/version';
-import { GIMeta } from '@assets/libs/geo-info/GIMeta';
+import { GIMetaData } from '@assets/libs/geo-info/GIMetaData';
 
 @Injectable()
 export class DataService {
@@ -133,7 +133,7 @@ export class DataService {
     set newFlowchart(check: boolean) {DataService._newFlowchart = check; }
 
     get modelMeta() {return DataService._modelMeta; }
-    set modelMeta(meta: GIMeta) {DataService._modelMeta = meta; }
+    set modelMeta(meta: GIMetaData) {DataService._modelMeta = meta; }
 
     getModelOutputView(nodeID: string) {
         if (DataService._modelOutputView.hasOwnProperty(nodeID)) {

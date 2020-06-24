@@ -1,34 +1,51 @@
-import { GIGeom } from './GIGeom';
-import { GIAttribs } from './GIAttribs';
 import { IModelData, IGeomPack, EEntType, Txyz, TEntAttribValuesArr, TAttribDataTypes, TEntity, TEntTypeIdx } from './common';
-import { GIModelComparator } from './GIModelComparator';
-import { GIModelThreejs } from './GIModelThreejs';
-import { GIMeta } from './GIMeta';
+import { GIMetaData } from './GIMetaData';
+import { GIModelData } from './GIModelData';
+import { IThreeJS } from './ThreejsJSON';
 
 /**
  * Geo-info model class.
  */
 export class GIModel {
     [x: string]: any; // TODO: What is this???
-    public meta: GIMeta;
-    public geom: GIGeom;
-    public attribs: GIAttribs;
-    public comparator: GIModelComparator;
-    public threejs: GIModelThreejs;
+    public metadata: GIMetaData;
+    public modeldata: GIModelData;
     public debug = true;
     /**
      * Constructor
      */
     // constructor(model_data?: IModelData) {
     constructor() {
-        this.meta = new GIMeta();
-        this.geom = new GIGeom(this);
-        this.attribs = new GIAttribs(this);
-        this.comparator = new GIModelComparator(this);
-        this.threejs = new GIModelThreejs(this);
-        // if (model_data) {
-        //     this.setData(model_data);
-        // }
+        this.metadata = new GIMetaData();
+        this.modeldata = new GIModelData(this);
+    }
+    /**
+     * Sets the data in this model from JSON data.
+     * Any existing data in the model is deleted.
+     * @param model_data The JSON data.
+     */
+    public setModelData (model_data: IModelData): IGeomPack {
+        return this.modeldata.setData(model_data);
+    }
+    /**
+     * Returns the JSON data for this model.
+     * This will include any deleted entities, which will be undefined.
+     */
+    public getModelData(): IModelData {
+        return this.modeldata.getData();
+    }
+    /**
+     * Set the meta data object
+     * @param meta
+     */
+    public setMetaData(meta: GIMetaData) {
+        this.metadata = meta;
+    }
+    /**
+     * Get the meta data object.
+     */
+    public getMetaData(): GIMetaData {
+        return this.metadata;
     }
     /**
      * Copys the data from a second model into this model.
@@ -37,61 +54,7 @@ export class GIModel {
      * @param model_data The GI model.
      */
     public merge(model: GIModel): void {
-        // const geom_maps: Map<number, number>[] = this.geom.io.merge(model.geom._geom_maps);
-        // this.attribs.io.merge(model.attribs._attribs_maps, geom_maps);
-        this.geom.io.merge(model.geom._geom_maps);
-        this.attribs.io.merge(model.attribs._attribs_maps);
-        this.meta = model.meta;
-    }
-    /**
-     * Copys the data from a second model into this model.
-     * The existing data in this model is not deleted.
-     * For the imported data, deleted entities are filtered out (i.e. not merged).
-     * @param model_data The GI model.
-     */
-    public mergeAndPurge(model: GIModel): void {
-        const geom_maps: Map<number, number>[] = this.geom.io.mergeAndPurge(model.geom._geom_maps);
-        this.attribs.io.mergeAndPurge(model.attribs._attribs_maps, geom_maps);
-    }
-    /**
-     * Sets the data in this model from JSON data.
-     * Any existing data in the model is deleted.
-     * @param model_data The JSON data.
-     */
-    public setData (model_data: IModelData): IGeomPack {
-        // console.log("SET DATA");
-        this.attribs.io.setData(model_data.attributes); // warning: must be before this.geom.io.setData()
-        const new_ents_i: IGeomPack = this.geom.io.setData(model_data.geometry);
-        return new_ents_i;
-    }
-    /**
-     * Returns the JSON data for this model.
-     * This will include any deleted entities, which will be undefined.
-     */
-    public getData(): IModelData {
-        // console.log("GET DATA");
-        return {
-            geometry: this.geom.io.getData(),
-            attributes: this.attribs.io.getData()
-        };
-    }
-    public setMeta(meta: GIMeta) {
-        this.meta = meta;
-    }
-    public getMeta(): GIMeta {
-        return this.meta;
-    }
-    /**
-     * Returns a copy of this model.
-     * Any deleted entities will be removed.
-     * Warning: entity IDs will change.
-     * If you need an clone, then use clone().
-     */
-    public copy(): GIModel {
-        const model_copy: GIModel = new GIModel();
-        model_copy.meta = this.meta;
-        model_copy.mergeAndPurge(this);
-        return model_copy;
+        this.modeldata.merge(model.modeldata);
     }
     /**
      * Returns a clone of this model.
@@ -99,28 +62,40 @@ export class GIModel {
      * Entity IDs will not change.
      */
     public clone(): GIModel {
-        const model_clone: GIModel = new GIModel();
-        model_clone.meta = this.meta;
-        // model_clone.setData(this.getData(true)); // get data makes deep copy
-        model_clone.merge(this);
-        return model_clone;
+        const clone: GIModel = new GIModel();
+        clone.metadata = this.metadata;
+        clone.modeldata = this.modeldata.clone();
+        return clone;
     }
     /**
      * Reomove deleted entities will be removed.
      */
     public purge(): void {
         const model_copy: GIModel = new GIModel();
-        model_copy.meta = this.meta;
-        model_copy.mergeAndPurge(this);
-        this.setData(model_copy.getData());
+        model_copy.metadata = this.metadata;
+        model_copy.modeldata = this.modeldata.purge();
+    }
+    /**
+     * Delete ents in teh model.
+     */
+    public delete(gp: IGeomPack, invert: boolean): void {
+        if (gp === null) {
+            const modeldata2 = new GIModelData(this);
+        } else if (invert) {
+            const modeldata2 = new GIModelData(this);
+            modeldata2.mergeSelected(this.modeldata, gp);
+            this.modeldata = modeldata2;
+        } else {
+            this.modeldata.geom.del.del(gp);
+        }
     }
     /**
      * Check model for internal consistency
      */
     public check(): string[] {
-        return this.geom.check.check();
+        return this.modeldata.check();
     }
-        /**
+    /**
      * Compares this model and another model.
      * ~
      * This is the answer model.
@@ -132,6 +107,12 @@ export class GIModel {
      */
     public compare(model: GIModel, normalize: boolean, check_geom_equality: boolean, check_attrib_equality: boolean):
             {percent: number, score: number, total: number, comment: string} {
-        return this.comparator.compare(model, normalize, check_geom_equality, check_attrib_equality);
+        return this.modeldata.compare(model, normalize, check_geom_equality, check_attrib_equality);
+    }
+    /**
+     * Get the threejs data for this model.
+     */
+    public get3jsData(): IThreeJS {
+        return this.modeldata.threejs.get3jsData();
     }
 }

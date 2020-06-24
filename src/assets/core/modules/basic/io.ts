@@ -270,14 +270,14 @@ function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
                 // make a clone of the model (warning: do not copy, copy will change entity IDs)
                 const model_clone: GIModel = __model__.clone();
                 // get the ents
-                const gp: IGeomPack = model_clone.geom.query.createGeomPack(ents_arr, true);
+                const gp: IGeomPack = model_clone.modeldata.geom.query.createGeomPack(ents_arr, true);
                 // delete the ents
-                model_clone.geom.del.delColls(gp.colls_i, true);
-                model_clone.geom.del.delPgons(gp.pgons_i, true);
-                model_clone.geom.del.delPlines(gp.plines_i, true);
-                model_clone.geom.del.delPoints(gp.points_i, true);
-                model_clone.geom.del.delPosis(gp.posis_i);
-                model_clone.geom.del.delUnusedPosis(gp.posis2_i);
+                model_clone.modeldata.geom.del.delColls(gp.colls_i, true);
+                model_clone.modeldata.geom.del.delPgons(gp.pgons_i, true);
+                model_clone.modeldata.geom.del.delPlines(gp.plines_i, true);
+                model_clone.modeldata.geom.del.delPoints(gp.points_i, true);
+                model_clone.modeldata.geom.del.delPosis(gp.posis_i);
+                model_clone.modeldata.geom.del.delUnusedPosis(gp.posis2_i);
                 model_clone.purge();
                 gi_data = JSON.stringify(model_clone.getModelData());
             }

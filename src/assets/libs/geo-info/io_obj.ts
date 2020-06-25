@@ -183,7 +183,8 @@ export function exportPosiBasedObj(model: GIModel, entities: TEntTypeIdx[]): str
             const posi_verts_i: number[] = model.modeldata.geom.nav.navPosiToVert(posi_i);
             let color: TColor = [0, 0, 0];
             for (const posi_vert_i of posi_verts_i) {
-                let vert_color: TColor = model.modeldata.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, posi_vert_i) as TColor;
+                let vert_color: TColor =
+                    model.modeldata.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, posi_vert_i) as TColor;
                 if (vert_color === undefined) { vert_color = [1, 1, 1]; }
                 color = [color[0] + vert_color[0], color[1] + vert_color[1], color[2] + vert_color[2]];
             }

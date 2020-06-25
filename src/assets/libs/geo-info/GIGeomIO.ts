@@ -1,7 +1,6 @@
-import { TTri, TVert, TEdge, TWire, TFace,
-    TColl, IGeomData, TPoint, TPline, TPgon, Txyz, IGeomArrays, IGeomCopy, TAttribDataTypes, IGeomPack, TPosi, TPlane, EEntType } from './common';
+import {  IGeomData, IGeomArrays, IGeomPack, EEntType, IGeomSets } from './common';
 import { GIGeom } from './GIGeom';
-import { deepCopy } from '../util/copy';
+import * as lodash from 'lodash';
 
 /**
  * Class for geometry.
@@ -85,30 +84,29 @@ export class GIGeomIO {
      * Typically, this model is assumed to be empty.
      * @param geom_arrays The geom_arrays of the other model.
      */
-    public dumpSelect(geom_arrays: IGeomArrays, gp: IGeomPack): void {
-        // TODO get topo entities
-        _dumpEntsSelect(this._geom_maps.dn_points_verts, geom_arrays.dn_points_verts, gp.points_i);
-        _dumpEntsSelect(this._geom_maps.dn_plines_wires, geom_arrays.dn_plines_wires, gp.plines_i);
-        _dumpEntsSelect(this._geom_maps.dn_pgons_faces, geom_arrays.dn_pgons_faces, gp.pgons_i);
-        _dumpEntsSelect(this._geom_maps.dn_colls_objs, geom_arrays.dn_colls_objs, gp.colls_i);
-        _dumpEntsSelect(this._geom_maps.dn_verts_posis, geom_arrays.dn_verts_posis, []);
-        _dumpEntsSelect(this._geom_maps.dn_tris_verts, geom_arrays.dn_tris_verts, []);
-        _dumpEntsSelect(this._geom_maps.dn_edges_verts, geom_arrays.dn_edges_verts, []);
-        _dumpEntsSelect(this._geom_maps.dn_wires_edges, geom_arrays.dn_wires_edges, []);
-        _dumpEntsSelect(this._geom_maps.dn_faces_wirestris, geom_arrays.dn_faces_wirestris, []);
+    public dumpSelect(geom_arrays: IGeomArrays, ent_sets: IGeomSets): void {
+        _dumpEntsSelect(this._geom_maps.dn_points_verts, geom_arrays.dn_points_verts, ent_sets.points_i);
+        _dumpEntsSelect(this._geom_maps.dn_plines_wires, geom_arrays.dn_plines_wires, ent_sets.plines_i);
+        _dumpEntsSelect(this._geom_maps.dn_pgons_faces, geom_arrays.dn_pgons_faces, ent_sets.pgons_i);
+        _dumpEntsSelect(this._geom_maps.dn_colls_objs, geom_arrays.dn_colls_objs, ent_sets.colls_i);
+        _dumpEntsSelect(this._geom_maps.dn_verts_posis, geom_arrays.dn_verts_posis, ent_sets.verts_i);
+        _dumpEntsSelect(this._geom_maps.dn_tris_verts, geom_arrays.dn_tris_verts, ent_sets.tris_i);
+        _dumpEntsSelect(this._geom_maps.dn_edges_verts, geom_arrays.dn_edges_verts, ent_sets.edges_i);
+        _dumpEntsSelect(this._geom_maps.dn_wires_edges, geom_arrays.dn_wires_edges, ent_sets.wires_i);
+        _dumpEntsSelect(this._geom_maps.dn_faces_wirestris, geom_arrays.dn_faces_wirestris, ent_sets.faces_i);
         // ======================================================================
-        _dumpEntsSelect(this._geom_maps.up_posis_verts, geom_arrays.up_posis_verts, []);
-        _dumpEntsSelect(this._geom_maps.up_verts_tris, geom_arrays.up_verts_tris, []);
-        _dumpEntsSelect(this._geom_maps.up_tris_faces, geom_arrays.up_tris_faces, []);
-        _dumpEntsSelect(this._geom_maps.up_verts_edges, geom_arrays.up_verts_edges, []);
-        _dumpEntsSelect(this._geom_maps.up_edges_wires, geom_arrays.up_edges_wires, []);
-        _dumpEntsSelect(this._geom_maps.up_wires_faces, geom_arrays.up_wires_faces, []);
-        _dumpEntsSelect(this._geom_maps.up_verts_points, geom_arrays.up_verts_points, []);
-        _dumpEntsSelect(this._geom_maps.up_wires_plines, geom_arrays.up_wires_plines, []);
-        _dumpEntsSelect(this._geom_maps.up_faces_pgons, geom_arrays.up_faces_pgons, []);
-        _dumpEntsSelect(this._geom_maps.up_points_colls, geom_arrays.up_points_colls, []);
-        _dumpEntsSelect(this._geom_maps.up_plines_colls, geom_arrays.up_plines_colls, []);
-        _dumpEntsSelect(this._geom_maps.up_pgons_colls, geom_arrays.up_pgons_colls, []);
+        _dumpEntsSelect(this._geom_maps.up_posis_verts,  geom_arrays.up_posis_verts,  ent_sets.posis_i);
+        _dumpEntsSelect(this._geom_maps.up_verts_tris,   geom_arrays.up_verts_tris,   ent_sets.verts_i);
+        _dumpEntsSelect(this._geom_maps.up_tris_faces,   geom_arrays.up_tris_faces,   ent_sets.tris_i);
+        _dumpEntsSelect(this._geom_maps.up_verts_edges,  geom_arrays.up_verts_edges,  ent_sets.verts_i);
+        _dumpEntsSelect(this._geom_maps.up_edges_wires,  geom_arrays.up_edges_wires,  ent_sets.edges_i);
+        _dumpEntsSelect(this._geom_maps.up_wires_faces,  geom_arrays.up_wires_faces,  ent_sets.wires_i);
+        _dumpEntsSelect(this._geom_maps.up_verts_points, geom_arrays.up_verts_points, ent_sets.verts_i);
+        _dumpEntsSelect(this._geom_maps.up_wires_plines, geom_arrays.up_wires_plines, ent_sets.wires_i);
+        _dumpEntsSelect(this._geom_maps.up_faces_pgons,  geom_arrays.up_faces_pgons,  ent_sets.faces_i);
+        _dumpEntsSelect(this._geom_maps.up_points_colls, geom_arrays.up_points_colls, ent_sets.points_i);
+        _dumpEntsSelect(this._geom_maps.up_plines_colls, geom_arrays.up_plines_colls, ent_sets.plines_i);
+        _dumpEntsSelect(this._geom_maps.up_pgons_colls,  geom_arrays.up_pgons_colls,  ent_sets.pgons_i);
     }
     // /**
     //  * Adds data to this model from another model.
@@ -1038,14 +1036,15 @@ export class GIGeomIO {
 }
 
 // utility function
-function _dumpEntsSelect(map1: Map<number, any>, map2: Map<number, any>, selected: number[]): void {
+function _dumpEntsSelect(map1: Map<number, any>, map2: Map<number, any>, selected: Set<number>): void {
     selected.forEach( ent_i => {
-        map1.set(ent_i, _deepCopy(map2.get(ent_i)));
+        const ent2 = map2.get(ent_i);
+        if (ent2 !== undefined) { map1.set(ent_i, lodash.cloneDeep(ent2)); }
     });
 }
 function _dumpEnts(map1: Map<number, any>, map2: Map<number, any>): void {
     map2.forEach( (ent, ent_i) => {
-        map1.set(ent_i, _deepCopy(ent));
+        map1.set(ent_i, lodash.cloneDeep(ent));
     });
 }
 function _mergeEnts(map1: Map<number, any>, map2: Map<number, any>, type: EEntType): void {
@@ -1053,7 +1052,7 @@ function _mergeEnts(map1: Map<number, any>, map2: Map<number, any>, type: EEntTy
         if (map1.has(ent_i)) {
             throw new Error('Conflict merging ' + _getEntTypeStr(type) + '.');
         }
-        map1.set(ent_i, _deepCopy(ent));
+        map1.set(ent_i, lodash.cloneDeep(ent));
     });
 }
 function _mergePosis(map1: Map<number, any>, map2: Map<number, any>): void {
@@ -1065,20 +1064,20 @@ function _mergePosis(map1: Map<number, any>, map2: Map<number, any>): void {
             }
             map1.set(posi_i, Array.from(verts_i_set));
         } else {
-            map1.set(posi_i, _deepCopy(verts_i));
+            map1.set(posi_i, lodash.cloneDeep(verts_i));
         }
     });
 }
-function _deepCopy(data: any) {
-    if (Array.isArray(data)) {
-        const copy = [];
-        for (let i = 0, len = data.length; i < len; i++) {
-            copy[i] = _deepCopy(data[i]);
-        }
-        return copy;
-    }
-    return data;
-}
+// function _deepCopy(data: any) {
+//     if (Array.isArray(data)) {
+//         const copy = [];
+//         for (let i = 0, len = data.length; i < len; i++) {
+//             copy[i] = _deepCopy(data[i]);
+//         }
+//         return copy;
+//     }
+//     return data;
+// }
 function _getEntTypeStr(ent_type_str: EEntType): string {
     switch (ent_type_str) {
         case EEntType.POSI:

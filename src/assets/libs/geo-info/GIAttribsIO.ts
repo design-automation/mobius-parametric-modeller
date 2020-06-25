@@ -1,8 +1,9 @@
-import { GIModel } from './GIModel';
-import { IAttribsData, IAttribData, TAttribDataTypes, EEntType, IAttribsMaps, EEntTypeStr, TModelAttribValuesArr, IGeomPack } from './common';
+import { IAttribsData, IAttribData, TAttribDataTypes, EEntType,
+    IAttribsMaps, EEntTypeStr, TModelAttribValuesArr, IGeomPack, IGeomSets } from './common';
 import { GIAttribMap } from './GIAttribMap';
-import { deepCopy } from '../util/copy';
 import { GIModelData } from './GIModelData';
+import * as lodash from 'lodash';
+
 
 /**
  * Class for attributes.
@@ -24,8 +25,6 @@ export class GIAttribsIO {
      * @param model_data Attribute data from the other model.
      */
     public merge(attribs_maps: IAttribsMaps): void {
-
-        // add the attribute data
         if (attribs_maps.ps !== undefined) { this._mergeAttribs(attribs_maps, EEntType.POSI); }
         if (attribs_maps._v !== undefined) { this._mergeAttribs(attribs_maps, EEntType.VERT); }
         if (attribs_maps._e !== undefined) { this._mergeAttribs(attribs_maps, EEntType.EDGE); }
@@ -39,7 +38,7 @@ export class GIAttribsIO {
     }
     /**
      * Adds data to this model from another model.
-     *
+     * Assumes this model is empty.
      * @param model_data Attribute data from the other model.
      */
     public dump(attribs_maps: IAttribsMaps): void {
@@ -52,15 +51,42 @@ export class GIAttribsIO {
         if (attribs_maps.pl !== undefined) { this._dumpAttribs(attribs_maps, EEntType.PLINE); }
         if (attribs_maps.pg !== undefined) { this._dumpAttribs(attribs_maps, EEntType.PGON); }
         if (attribs_maps.co !== undefined) { this._dumpAttribs(attribs_maps, EEntType.COLL); }
-        if (attribs_maps.mo !== undefined) { this._mergeModelAttribs(attribs_maps); }
+        if (attribs_maps.mo !== undefined) { this._dumpModelAttribs(attribs_maps); }
     }
     /**
-     * Adds data to this model from another model.
-     *
+     * Adds selected data to this model from another model.
+     * Assumes this model is empty.
      * @param model_data Attribute data from the other model.
      */
-    public dumpSelect(attribs_maps: IAttribsMaps, gp: IGeomPack): void {
-        throw new Error('Not implemented');
+    public dumpSelect(attribs_maps: IAttribsMaps, ent_sets: IGeomSets): void {
+        if (attribs_maps.ps !== undefined) {
+            this._dumpAttribsSelect(attribs_maps, EEntType.POSI, ent_sets.posis_i);
+        }
+        if (attribs_maps._v !== undefined) {
+            this._dumpAttribsSelect(attribs_maps, EEntType.VERT, ent_sets.verts_i);
+        }
+        if (attribs_maps._e !== undefined) {
+            this._dumpAttribsSelect(attribs_maps, EEntType.EDGE, ent_sets.edges_i);
+        }
+        if (attribs_maps._w !== undefined) {
+            this._dumpAttribsSelect(attribs_maps, EEntType.WIRE, ent_sets.wires_i);
+        }
+        if (attribs_maps._f !== undefined) {
+            this._dumpAttribsSelect(attribs_maps, EEntType.FACE, ent_sets.faces_i);
+        }
+        if (attribs_maps.pt !== undefined) {
+            this._dumpAttribsSelect(attribs_maps, EEntType.POINT, ent_sets.points_i);
+        }
+        if (attribs_maps.pl !== undefined) {
+            this._dumpAttribsSelect(attribs_maps, EEntType.PLINE, ent_sets.plines_i);
+        }
+        if (attribs_maps.pg !== undefined) {
+            this._dumpAttribsSelect(attribs_maps, EEntType.PGON, ent_sets.pgons_i);
+        }
+        if (attribs_maps.co !== undefined) {
+            this._dumpAttribsSelect(attribs_maps, EEntType.COLL, ent_sets.colls_i);
+        }
+        if (attribs_maps.mo !== undefined) { this._dumpModelAttribs(attribs_maps); }
     }
     /**
      * Adds data to this model from another model.
@@ -148,14 +174,26 @@ export class GIAttribsIO {
     /**
      * From another model
      * The existing attributes are not deleted
+     * Deep copy of attrib values
      * @param attribs_maps
      */
-    private _mergeModelAttribs(attribs_maps: IAttribsMaps) {
-        const from_attrib: Map<string, TAttribDataTypes> = attribs_maps[EEntTypeStr[ EEntType.MOD ]];
-        const to_attrib: Map<string, TAttribDataTypes> = this._attribs_maps[EEntTypeStr[ EEntType.MOD ]];
-        from_attrib.forEach( (value, name) => {
-            to_attrib.set(name, value);
+    private _mergeModelAttribs(attribs_maps: IAttribsMaps): void {
+        const other_attribs: Map<string, TAttribDataTypes> = attribs_maps[EEntTypeStr[ EEntType.MOD ]];
+        const this_attribs: Map<string, TAttribDataTypes> = this._attribs_maps[EEntTypeStr[ EEntType.MOD ]];
+        // TODO this is a hack to fix an error
+        if (!(other_attribs instanceof Map)) { return; }
+        other_attribs.forEach( (val, key) => {
+            this_attribs.set(key, lodash.cloneDeep(val));
         });
+    }
+    /**
+     * From another model
+     * The existing attributes are not deleted
+     * Deep copy of attrib values
+     * @param attribs_maps
+     */
+    private _dumpModelAttribs(attribs_maps: IAttribsMaps) {
+        this._attribs_maps[EEntTypeStr[ EEntType.MOD ]] = lodash.cloneDeep(attribs_maps[EEntTypeStr[ EEntType.MOD ]]);
     }
     /**
      * From JSON data
@@ -207,7 +245,24 @@ export class GIAttribsIO {
                 const name: string = other_attrib.getName();
                 const this_attrib = new GIAttribMap(this._modeldata, name, other_attrib.getDataType());
                 this_attribs.set(name, this_attrib );
-                this_attrib.merge(other_attrib);
+                this_attrib.dump(other_attrib);
+            }
+        });
+    }
+    /**
+     * Dumps selected attributes from another model into this model.
+     * Assumes that the existing model is empty
+     * @param attribs_maps
+     */
+    private _dumpAttribsSelect(attribs_maps: IAttribsMaps, ent_type: EEntType, selected: Set<number>) {
+        const other_attribs: Map<string, GIAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
+        const this_attribs: Map<string, GIAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
+        other_attribs.forEach( other_attrib => {
+            if (other_attrib.numEnts() > 0) {
+                const name: string = other_attrib.getName();
+                const this_attrib = new GIAttribMap(this._modeldata, name, other_attrib.getDataType());
+                this_attribs.set(name, this_attrib );
+                this_attrib.dumpSelect(other_attrib, selected);
             }
         });
     }

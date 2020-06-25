@@ -1,4 +1,4 @@
-import { EEntType, EAttribNames, TEntTypeIdx, EEntTypeStr, TRay } from '@libs/geo-info/common';
+import { EEntType, TEntTypeIdx } from '@libs/geo-info/common';
 import { idsBreak } from '@libs/geo-info/id';
 
 export class IdCh {

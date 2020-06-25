@@ -1,8 +1,7 @@
 import { EFilterOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribData } from './common';
 import { arrRem } from '../util/arrs';
-import { deepCopy } from '../util/copy';
-import { GIModel } from './GIModel';
 import { GIModelData } from './GIModelData';
+import * as lodash from 'lodash';
 
 /**
  * Geo-info attribute class for one attribute.
@@ -18,12 +17,7 @@ export class GIAttribMap {
     private _name: string;
     private _data_type: EAttribDataTypeStrs;
     private _data_length: number;
-    // the _num_vals is used as an arbitrary index for the unique values
-    // the index will keep growing, even when data gets deleted
-    // it counts of the number of unique values (including any deleted values)
-    // this should never be decremented, even when values get deleted
-    // private _num_vals: number;
-    // the four data maps that store everything
+    // the two data maps that store attrib pointers
     // private _map_val_k_to_val_i: Map<string|number, number>; // unique, no duplicates
     // private _map_val_i_to_val: Map<number, TAttribDataTypes>; // unique, no duplicates
     private _map_val_i_to_ents_i: Map<number, number[]>;
@@ -353,8 +347,39 @@ export class GIAttribMap {
      * @param attrib_map The attrib map to merge into this map
      */
     public dump(attrib_map: GIAttribMap): void {
-        this._map_val_i_to_ents_i = deepCopy(attrib_map._map_val_i_to_ents_i);
-        this._map_ent_i_to_val_i = deepCopy(attrib_map._map_ent_i_to_val_i);
+        this._map_val_i_to_ents_i = lodash.cloneDeep(attrib_map._map_val_i_to_ents_i);
+        this._map_ent_i_to_val_i = lodash.cloneDeep(attrib_map._map_ent_i_to_val_i);
+    }
+        /**
+     * Dumps another attrib map into this attrib map
+     * Assumes tha this map is empty
+     * @param attrib_map The attrib map to merge into this map
+     */
+    public dumpSelect(attrib_map: GIAttribMap, selected: Set<number>): void {
+        selected.forEach(selected_ent_i => {
+            if (attrib_map._map_ent_i_to_val_i.has(selected_ent_i)) {
+                const val_i: number = attrib_map._map_ent_i_to_val_i.get(selected_ent_i);
+                const ents_i: number[] = attrib_map._map_val_i_to_ents_i.get(val_i);
+                const ents2_i: number[] = ents_i.filter( ent_i => selected.has(ent_i) );
+                this._map_val_i_to_ents_i.set(val_i, ents2_i);
+                ents2_i.forEach( ent_i => this._map_ent_i_to_val_i.set(ent_i, val_i));
+                // update the data length
+                if (this._data_type === EAttribDataTypeStrs.LIST || this._data_type === EAttribDataTypeStrs.DICT) {
+                    const val = this._modeldata.model.metadata.getAttribValFromIdx(val_i, this._data_type);
+                    if (this._data_type === EAttribDataTypeStrs.LIST) {
+                        const arr_len: number = (val as any[]).length;
+                        if (arr_len > this._data_length) {
+                            this._data_length = arr_len;
+                        }
+                    } else if (this._data_type === EAttribDataTypeStrs.DICT) {
+                        const arr_len: number = Object.keys((val as object)).length;
+                        if (arr_len > this._data_length) {
+                            this._data_length = arr_len;
+                        }
+                    }
+                }
+            }
+        });
     }
     /**
      * Sets the indexed value for a given entity or entities.
@@ -379,7 +404,7 @@ export class GIAttribMap {
             const exist_list: any[] = this.getEntVal(ent_i) as any[];
             let new_list: any[] = [];
             if (exist_list !== undefined) {
-                new_list = deepCopy(exist_list); // IMPORTANT clone the array
+                new_list = lodash.cloneDeep(exist_list); // IMPORTANT clone the array
             }
             if (idx < 0) {
                 idx += new_list.length;
@@ -413,7 +438,7 @@ export class GIAttribMap {
             const exist_dict: object = this.getEntVal(ent_i) as object;
             let new_dict: object = {};
             if (exist_dict !== undefined) {
-                new_dict = deepCopy(exist_dict); // IMPORTANT clone the dict
+                new_dict = lodash.cloneDeep(exist_dict); // IMPORTANT clone the dict
             }
             new_dict[key] = val;
             this.setEntVal(ent_i, new_dict);

@@ -1,6 +1,6 @@
 
 import {  EEntType, IGeomArrays, EEntStrToGeomArray, TWire, Txyz, TColl, TEntTypeIdx,
-    IGeomPack, TFace, EWireType, TEdge } from './common';
+    IGeomPack, TFace, EWireType, TEdge, IGeomSets as IEntSets } from './common';
 import { isPosi, isPoint, isPline, isPgon, isColl } from './id';
 import { GIGeom } from './GIGeom';
 import { vecFromTo, vecCross, vecDiv, vecNorm, vecLen, vecDot } from '../geom/vectors';
@@ -152,9 +152,9 @@ export class GIGeomQuery {
      * ~
      * Used for deleting all entities.
      */
-    public createGeomPack(ents: TEntTypeIdx[], invert: boolean = false): IGeomPack {
+    public createEntSets(ents: TEntTypeIdx[]): IEntSets {
         const set_posis_i: Set<number> = new Set();
-        const set_posis2_i: Set<number> = new Set();
+        const set_ent_posis_i: Set<number> = new Set();
         const set_points_i: Set<number> = new Set();
         const set_plines_i: Set<number> = new Set();
         const set_pgons_i: Set<number> = new Set();
@@ -193,61 +193,59 @@ export class GIGeomQuery {
         set_points_i.forEach( point_i => {
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.POINT, point_i);
             for (const posi_i of posis_i) {
-                set_posis2_i.add(posi_i);
+                set_ent_posis_i.add(posi_i);
             }
         });
         set_plines_i.forEach( pline_i => {
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PLINE, pline_i);
             for (const posi_i of posis_i) {
-                set_posis2_i.add(posi_i);
+                set_ent_posis_i.add(posi_i);
             }
         });
         set_pgons_i.forEach( pgon_i => {
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PGON, pgon_i);
             for (const posi_i of posis_i) {
-                set_posis2_i.add(posi_i);
+                set_ent_posis_i.add(posi_i);
             }
         });
         // if no invert, then return the result
-        if (!invert) {
-            return {
-                posis_i: Array.from(set_posis_i),
-                posis2_i: Array.from(set_posis2_i),
-                points_i: Array.from(set_points_i),
-                plines_i: Array.from(set_plines_i),
-                pgons_i: Array.from(set_pgons_i),
-                colls_i: Array.from(set_colls_i)
-            };
-        }
-        // invert
-        const inv_colls_i: number[] = [];
-        this._geom_maps.dn_colls_objs.forEach( (_, coll_i) => {
-            if (!set_colls_i.has(coll_i)) { inv_colls_i.push(coll_i); }
-        });
-        const inv_pgons_i: number[] = [];
-        this._geom_maps.dn_pgons_faces.forEach( (_, pgon_i) => {
-            if (!set_pgons_i.has(pgon_i)) { inv_pgons_i.push(pgon_i); }
-        });
-        const inv_plines_i: number[] = [];
-        this._geom_maps.dn_plines_wires.forEach( (pline, pline_i) => {
-            if (!set_plines_i.has(pline_i)) { inv_plines_i.push(pline_i); }
-        });
-        const inv_points_i: number[] = [];
-        this._geom_maps.dn_points_verts.forEach( (point, point_i) => {
-            if (!set_points_i.has(point_i)) { inv_points_i.push(point_i); }
-        });
-        const inv_posis2_i: number[] = [];
-        this._geom_maps.up_posis_verts.forEach( (posi, posi_i) => {
-            if (!set_posis2_i.has(posi_i) && !set_posis_i.has(posi_i) ) { inv_posis2_i.push(posi_i); }
-        });
         return {
-            posis_i: [],
-            posis2_i: inv_posis2_i,
-            points_i: inv_points_i,
-            plines_i: inv_plines_i,
-            pgons_i: inv_pgons_i,
-            colls_i: inv_colls_i
+            posis_i: set_posis_i,
+            points_i: set_points_i,
+            plines_i: set_plines_i,
+            pgons_i: set_pgons_i,
+            colls_i: set_colls_i,
+            obj_posis_i: set_ent_posis_i
         };
+    //     // invert
+    //     const inv_colls_i: Set<number> = new Set();
+    //     this._geom_maps.dn_colls_objs.forEach( (_, coll_i) => {
+    //         if (!set_colls_i.has(coll_i)) { inv_colls_i.add(coll_i); }
+    //     });
+    //     const inv_pgons_i: Set<number> = new Set();
+    //     this._geom_maps.dn_pgons_faces.forEach( (_, pgon_i) => {
+    //         if (!set_pgons_i.has(pgon_i)) { inv_pgons_i.add(pgon_i); }
+    //     });
+    //     const inv_plines_i: Set<number> = new Set();
+    //     this._geom_maps.dn_plines_wires.forEach( (pline, pline_i) => {
+    //         if (!set_plines_i.has(pline_i)) { inv_plines_i.add(pline_i); }
+    //     });
+    //     const inv_points_i: Set<number> = new Set();
+    //     this._geom_maps.dn_points_verts.forEach( (point, point_i) => {
+    //         if (!set_points_i.has(point_i)) { inv_points_i.add(point_i); }
+    //     });
+    //     const inv_posis2_i: Set<number> = new Set();
+    //     this._geom_maps.up_posis_verts.forEach( (posi, posi_i) => {
+    //         if (!set_ent_posis_i.has(posi_i) && !set_posis_i.has(posi_i) ) { inv_posis2_i.add(posi_i); }
+    //     });
+    //     return {
+    //         posis_i: new Set(),
+    //         obj_posis_i: inv_posis2_i,
+    //         points_i: inv_points_i,
+    //         plines_i: inv_plines_i,
+    //         pgons_i: inv_pgons_i,
+    //         colls_i: inv_colls_i
+    //     };
     }
     // ============================================================================
     // Posis
@@ -750,5 +748,18 @@ export class GIGeomQuery {
             default:
                 throw new Error('Invalid entity type: Must be a topo entity.');
         }
+    }
+    /**
+     * Get the topo entities of an object
+     * @param ent_type
+     * @param index
+     */
+    public getObjTopo(ent_type: EEntType, index: number): [number[], number[], number[], number[]] {
+        return [
+            this._geom.nav.navAnyToVert(ent_type, index),
+            this._geom.nav.navAnyToEdge(ent_type, index),
+            this._geom.nav.navAnyToWire(ent_type, index),
+            this._geom.nav.navAnyToFace(ent_type, index),
+        ];
     }
 }

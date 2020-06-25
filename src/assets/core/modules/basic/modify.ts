@@ -11,7 +11,7 @@ import { checkIDs, IdCh } from '../_check_ids';
 import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TPlane, Txyz, EEntType, TEntTypeIdx, TRay, IGeomPack} from '@libs/geo-info/common';
+import { TId, TPlane, Txyz, EEntType, TEntTypeIdx, TRay, IGeomPack, IGeomSets} from '@libs/geo-info/common';
 import { getArrDepth, isEmptyArr, idsBreak } from '@libs/geo-info/id';
 import { vecAdd, vecSum, vecDiv, vecFromTo, vecNorm, vecCross, vecSetLen, vecLen, vecDot } from '@libs/geom/vectors';
 import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
@@ -811,7 +811,7 @@ export enum _EDeleteMethod {
 export function Delete(__model__: GIModel, entities: TId|TId[], method: _EDeleteMethod): void {
     if (entities === null) {
         if (method === _EDeleteMethod.KEEP_SELECTED) { return; }
-        if (method === _EDeleteMethod.DELETE_SELECTED) { _deleteAll(__model__);  return; }
+        if (method === _EDeleteMethod.DELETE_SELECTED) { __model__.delete(null, false);  return; }
     }
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
@@ -828,28 +828,28 @@ export function Delete(__model__: GIModel, entities: TId|TId[], method: _EDelete
         ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
-    const gp: IGeomPack = __model__.modeldata.geom.query.createGeomPack(ents_arr, false);
+    const ent_sets: IGeomSets = __model__.modeldata.geom.query.createEntSets(ents_arr);
     switch (method) {
         case _EDeleteMethod.DELETE_SELECTED:
             if (isEmptyArr2(entities)) { return; }
-            __model__.delete(gp, false); //  do not invert
+            __model__.delete(ent_sets, false); //  do not invert
             return;
         case _EDeleteMethod.KEEP_SELECTED:
-            if (isEmptyArr2(entities)) { _deleteAll(__model__); return; }
-            __model__.delete(gp, true); // invert
+            if (isEmptyArr2(entities)) { __model__.delete(null, false); return; }
+            __model__.delete(ent_sets, true); // invert
             return;
         default:
             throw new Error(fn_name + ' : Method not recognised.');
     }
 }
-function _deleteAll(__model__: GIModel): void {
-    // delete the ents
-    __model__.modeldata.geom.del.delColls(__model__.modeldata.geom.query.getEnts(EEntType.COLL), false);
-    __model__.modeldata.geom.del.delPgons(__model__.modeldata.geom.query.getEnts(EEntType.PGON), false);
-    __model__.modeldata.geom.del.delPlines(__model__.modeldata.geom.query.getEnts(EEntType.PLINE), false);
-    __model__.modeldata.geom.del.delPoints(__model__.modeldata.geom.query.getEnts(EEntType.POINT), false);
-    __model__.modeldata.geom.del.delPosis(__model__.modeldata.geom.query.getEnts(EEntType.POSI));
-}
+// function _deleteAll(__model__: GIModel): void {
+//     // delete the ents
+//     __model__.modeldata.geom.del.delColls(__model__.modeldata.geom.query.getEnts(EEntType.COLL), false);
+//     __model__.modeldata.geom.del.delPgons(__model__.modeldata.geom.query.getEnts(EEntType.PGON), false);
+//     __model__.modeldata.geom.del.delPlines(__model__.modeldata.geom.query.getEnts(EEntType.PLINE), false);
+//     __model__.modeldata.geom.del.delPoints(__model__.modeldata.geom.query.getEnts(EEntType.POINT), false);
+//     __model__.modeldata.geom.del.delPosis(__model__.modeldata.geom.query.getEnts(EEntType.POSI));
+// }
 // function _delete(__model__: GIModel, ents_arr: TEntTypeIdx[], invert: boolean): void {
 //     // get the ents
 //     const gp: IGeomPack = __model__.modeldata.geom.query.createGeomPack(ents_arr, invert);

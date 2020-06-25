@@ -116,8 +116,10 @@ export class GIAttribs {
                     attrib_comments.push('The "' + this_attrib_name + '" ' + ent_type_str + ' attribute is missing.');
                 } else {
                     // get the data types
-                    const data_type_1: EAttribDataTypeStrs = this._modeldata.attribs.query.getAttribDataType(ent_type, this_attrib_name);
-                    const data_type_2: EAttribDataTypeStrs = other_model.modeldata.attribs.query.getAttribDataType(ent_type, this_attrib_name);
+                    const data_type_1: EAttribDataTypeStrs =
+                        this._modeldata.attribs.query.getAttribDataType(ent_type, this_attrib_name);
+                    const data_type_2: EAttribDataTypeStrs =
+                        other_model.modeldata.attribs.query.getAttribDataType(ent_type, this_attrib_name);
                     // compare data types
                     if (data_type_1 !== data_type_2) {
                         matches = false;

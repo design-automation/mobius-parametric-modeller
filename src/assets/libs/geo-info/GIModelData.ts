@@ -1,9 +1,8 @@
 import { GIGeom } from './GIGeom';
 import { GIAttribs } from './GIAttribs';
-import { IModelData, IGeomPack } from './common';
+import { IModelData, IGeomPack, IGeomSets } from './common';
 import { GIModelComparator } from './GIModelComparator';
 import { GIModelThreejs } from './GIModelThreejs';
-import { GIMetaData } from './GIMetaData';
 import { GIModel } from './GIModel';
 
 /**
@@ -71,12 +70,47 @@ export class GIModelData {
      * For the imported data, deleted entities are also merged.
      * @param model_data The GI model.
      */
-    public mergeSelected(modeldata: GIModelData, gp: IGeomPack): void {
-        // const geom_maps: Map<number, number>[] = this.geom.io.merge(model.modeldata.geom._geom_maps);
-        // this.attribs.io.merge(model.modeldata.attribs._attribs_maps, geom_maps);
-        this.geom.io.dumpSelect(modeldata.geom._geom_maps, gp);
-        this.attribs.io.dumpSelect(modeldata.attribs._attribs_maps, gp);
-        this.model.metadata = modeldata.model.metadata;
+    public dumpSelect(modeldata: GIModelData, ent_sets: IGeomSets): void {
+        // add topo geom sets
+        ent_sets.verts_i = new Set();
+        ent_sets.tris_i = new Set();
+        ent_sets.edges_i = new Set();
+        ent_sets.wires_i = new Set();
+        ent_sets.faces_i = new Set();
+        // add the ent posis to the main posis list to keep
+        ent_sets.obj_posis_i.forEach( posi_i => ent_sets.posis_i.add(posi_i) );
+        // points
+        ent_sets.points_i.forEach( point_i => {
+            ent_sets.verts_i.add(modeldata.geom.nav.navPointToVert(point_i));
+        });
+        // plines
+        ent_sets.plines_i.forEach( pline_i => {
+            const wire_i: number = modeldata.geom.nav.navPlineToWire(pline_i);
+            ent_sets.wires_i.add(wire_i);
+            const edges_i: number[] = modeldata.geom.nav.navWireToEdge(wire_i);
+            edges_i.forEach(edge_i => ent_sets.edges_i.add(edge_i));
+            const verts_i: number[] = modeldata.geom.query.getWireVerts(wire_i);
+            verts_i.forEach(vert_i => ent_sets.verts_i.add(vert_i));
+        });
+        // pgons
+        ent_sets.pgons_i.forEach( pgon_i => {
+            const face_i: number = modeldata.geom.nav.navPgonToFace(pgon_i);
+            ent_sets.faces_i.add(face_i);
+            const tris_i: number[] = modeldata.geom.nav.navFaceToTri(face_i);
+            tris_i.forEach(tri_i => ent_sets.tris_i.add(tri_i));
+            const wires_i: number[] = modeldata.geom.nav.navFaceToWire(face_i);
+            wires_i.forEach(wire_i => ent_sets.wires_i.add(wire_i));
+            wires_i.forEach( wire_i => {
+                const edges_i: number[] = modeldata.geom.nav.navWireToEdge(wire_i);
+                edges_i.forEach(edge_i => ent_sets.edges_i.add(edge_i));
+                const verts_i: number[] = modeldata.geom.query.getWireVerts(wire_i);
+            verts_i.forEach(vert_i => ent_sets.verts_i.add(vert_i));
+            });
+        });
+        // dump the selected data into this model
+        // this model is assumed to be emprt
+        this.geom.io.dumpSelect(modeldata.geom._geom_maps, ent_sets);
+        this.attribs.io.dumpSelect(modeldata.attribs._attribs_maps, ent_sets);
     }
     /**
      * Returns a clone of this model.

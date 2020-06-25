@@ -1,4 +1,4 @@
-import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz, TColl, TVert, EWireType, IGeomPack } from './common';
+import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz, TColl, TVert, EWireType, IGeomPack, IGeomSets } from './common';
 import { GIGeom } from './GIGeom';
 import { arrRem, arrIdxAdd } from '../util/arrs';
 import { vecDot } from '../geom/vectors';
@@ -21,16 +21,16 @@ export class GIGeomDel {
     // ============================================================================
     /**
      * Delete ents
-     * @param gp
+     * @param ent_sets
      */
-    public del(gp: IGeomPack): void {
+    public del(ent_sets: IGeomSets): void {
         // delete the ents
-        this.delColls(gp.colls_i, true);
-        this.delPgons(gp.pgons_i, true);
-        this.delPlines(gp.plines_i, true);
-        this.delPoints(gp.points_i, true);
-        this.delPosis(gp.posis_i);
-        this.delUnusedPosis(gp.posis2_i);
+        this.delColls(Array.from(ent_sets.colls_i), true);
+        this.delPgons(Array.from(ent_sets.pgons_i), true);
+        this.delPlines(Array.from(ent_sets.plines_i), true);
+        this.delPoints(Array.from(ent_sets.points_i), true);
+        this.delPosis(Array.from(ent_sets.posis_i));
+        this.delUnusedPosis(Array.from(ent_sets.obj_posis_i));
     }
     /**
      * Del all unused posis in the model.

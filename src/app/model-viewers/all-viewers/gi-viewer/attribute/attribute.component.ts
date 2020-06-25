@@ -10,7 +10,6 @@ import { DataService } from '../data/data.service';
 import { EEntType, EEntTypeStr } from '@libs/geo-info/common';
 import { GIAttribsThreejs } from '@libs/geo-info/GIAttribsThreejs';
 import { ATabsComponent } from './tabs.component';
-import { sortByKey } from '@libs/util/maps';
 
 enum SORT_STATE {
     DEFAULT,

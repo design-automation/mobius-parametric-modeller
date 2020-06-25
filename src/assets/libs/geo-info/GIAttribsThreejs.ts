@@ -26,7 +26,7 @@ export class GIAttribsThreejs {
     /**
      * Get a flat array of all the coordinates of all the vertices.
      * Verts that have been deleted will not be included
-     * @param verts An array of vertex indices pointing to the positio.
+     * @param verts An array of vertex indices pointing to the position.
      */
     public get3jsSeqPosisCoords(): [number[], Map<number, number>] {
         const coords_attrib: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);

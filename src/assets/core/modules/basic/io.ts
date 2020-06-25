@@ -12,7 +12,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { importObj, exportPosiBasedObj, exportVertBasedObj } from '@libs/geo-info/io_obj';
 import { importGeojson, exportGeojson } from '@libs/geo-info/io_geojson';
 import { download } from '@libs/filesys/download';
-import { TId, EEntType, Txyz, TPlane, TRay, IGeomPack, IModelData, IGeomPackTId, TEntTypeIdx } from '@libs/geo-info/common';
+import { TId, EEntType, Txyz, TPlane, TRay, IGeomPack, IModelData, IGeomPackTId, TEntTypeIdx, IGeomSets } from '@libs/geo-info/common';
 import { __merge__ } from '../_model';
 import { _model } from '..';
 import { idsMake, idsBreak } from '@libs/geo-info/id';
@@ -264,23 +264,16 @@ function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
     switch (data_format) {
         case _EIOExportDataFormat.GI:
             let gi_data = '';
-            if (ents_arr === null) {
-                gi_data = JSON.stringify(__model__.getModelData());
-            } else {
-                // make a clone of the model (warning: do not copy, copy will change entity IDs)
-                const model_clone: GIModel = __model__.clone();
+            // clone the model
+            const model_clone: GIModel = __model__.clone();
+            if (ents_arr !== null) {
                 // get the ents
-                const gp: IGeomPack = model_clone.modeldata.geom.query.createGeomPack(ents_arr, true);
+                const ent_sets: IGeomSets = model_clone.geom.query.createGeomSets(ents_arr, true);
                 // delete the ents
-                model_clone.modeldata.geom.del.delColls(gp.colls_i, true);
-                model_clone.modeldata.geom.del.delPgons(gp.pgons_i, true);
-                model_clone.modeldata.geom.del.delPlines(gp.plines_i, true);
-                model_clone.modeldata.geom.del.delPoints(gp.points_i, true);
-                model_clone.modeldata.geom.del.delPosis(gp.posis_i);
-                model_clone.modeldata.geom.del.delUnusedPosis(gp.posis2_i);
-                model_clone.purge();
-                gi_data = JSON.stringify(model_clone.getModelData());
+                model_clone.delete(ent_sets, false);
             }
+            model_clone.purge();
+            gi_data = JSON.stringify(model_clone.getModelData());
             // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
             gi_data = gi_data.replace(/\\/g, '\\\\'); // TODO temporary fix
             if (data_target === _EIODataTarget.DEFAULT) {

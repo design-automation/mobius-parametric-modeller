@@ -7,13 +7,11 @@ import {
 import { DataThreejs } from '../data/data.threejs';
 // import { IModel } from 'gs-json';
 import { DataService } from '../data/data.service';
-import { EEntType, EEntStrToGeomArray, EEntTypeStr, Txyz } from '@libs/geo-info/common';
+import { EEntType, EEntTypeStr, Txyz } from '@libs/geo-info/common';
 import { DropdownMenuComponent } from '../html/dropdown-menu.component';
 import { ModalService } from '../html/modal-window.service';
 import { ThreeJSViewerService } from './threejs-viewer.service';
 import { sortByKey } from '@libs/util/maps';
-import { KeyboardService } from '@shared/services';
-import { Subscription } from 'rxjs';
 
 let renderCheck = true;
 

@@ -121,7 +121,7 @@ export class GIModelData {
         const clone: GIModelData = new GIModelData(this.model);
         clone.geom.io.dump(this.geom._geom_maps);
         clone.attribs.io.dump(this.attribs._attribs_maps);
-        this.model.metadata = this.model.metadata;
+        // this.model.metadata = this.model.metadata;
         // clone.dump(this);
         return clone;
     }

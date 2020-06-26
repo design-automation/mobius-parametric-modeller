@@ -2,6 +2,7 @@ import { EFilterOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribDat
 import { arrRem } from '../util/arrs';
 import { GIModelData } from './GIModelData';
 import * as lodash from 'lodash';
+import { cloneDeepMapArr } from './common_func';
 
 /**
  * Geo-info attribute class for one attribute.
@@ -347,8 +348,8 @@ export class GIAttribMap {
      * @param attrib_map The attrib map to merge into this map
      */
     public dump(attrib_map: GIAttribMap): void {
-        this._map_val_i_to_ents_i = lodash.cloneDeep(attrib_map._map_val_i_to_ents_i);
-        this._map_ent_i_to_val_i = lodash.cloneDeep(attrib_map._map_ent_i_to_val_i);
+        this._map_val_i_to_ents_i = cloneDeepMapArr(attrib_map._map_val_i_to_ents_i);
+        this._map_ent_i_to_val_i = new Map(attrib_map._map_ent_i_to_val_i);
     }
         /**
      * Dumps another attrib map into this attrib map

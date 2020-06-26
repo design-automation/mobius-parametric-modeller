@@ -65,6 +65,7 @@ export class GIModel {
         const clone: GIModel = new GIModel();
         clone.metadata = this.metadata;
         clone.modeldata = this.modeldata.clone();
+        // clone.modeldata.merge(this.modeldata);
         return clone;
     }
     /**

@@ -70,7 +70,7 @@ export class GIGeomDelVert {
         } else if (face_i !== undefined && num_verts === 3) {
 
             // special case, pgon with three verts
-            const wires_i: number[] = this._geom_maps.dn_faces_wirestris.get(face_i)[0];
+            const wires_i: number[] = this._geom_maps.dn_faces_wires.get(face_i);
             const index_face_wire: number = wires_i.indexOf(wire_i);
             if (index_face_wire === 0) {
 

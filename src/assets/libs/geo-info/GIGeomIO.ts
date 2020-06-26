@@ -34,7 +34,8 @@ export class GIGeomIO {
         _mergeEnts(this._geom_maps.dn_tris_verts, geom_maps.dn_tris_verts, EEntType.TRI);
         _mergeEnts(this._geom_maps.dn_edges_verts, geom_maps.dn_edges_verts, EEntType.EDGE);
         _mergeEnts(this._geom_maps.dn_wires_edges, geom_maps.dn_wires_edges, EEntType.WIRE);
-        _mergeEnts(this._geom_maps.dn_faces_wirestris, geom_maps.dn_faces_wirestris, EEntType.FACE);
+        _mergeEnts(this._geom_maps.dn_faces_wires, geom_maps.dn_faces_wires, EEntType.FACE);
+        _mergeEnts(this._geom_maps.dn_faces_tris, geom_maps.dn_faces_tris, EEntType.FACE);
         // ======================================================================
         _mergePosis(this._geom_maps.up_posis_verts, geom_maps.up_posis_verts);
         _mergeEnts(this._geom_maps.up_verts_tris, geom_maps.up_verts_tris, EEntType.VERT);
@@ -64,7 +65,8 @@ export class GIGeomIO {
         this._geom_maps.dn_tris_verts = cloneDeepMapArr(geom_maps.dn_tris_verts) as Map<number, TTri>;
         this._geom_maps.dn_edges_verts = cloneDeepMapArr(geom_maps.dn_edges_verts) as Map<number, TEdge>;
         this._geom_maps.dn_wires_edges = cloneDeepMapArr(geom_maps.dn_wires_edges) as Map<number, TWire>;
-        this._geom_maps.dn_faces_wirestris = lodash.cloneDeep(geom_maps.dn_faces_wirestris);
+        this._geom_maps.dn_faces_wires = cloneDeepMapArr(geom_maps.dn_faces_wires);
+        this._geom_maps.dn_faces_tris = cloneDeepMapArr(geom_maps.dn_faces_tris);
         // ======================================================================
         this._geom_maps.up_posis_verts = cloneDeepMapArr(geom_maps.up_posis_verts);
         this._geom_maps.up_verts_tris = cloneDeepMapArr(geom_maps.up_verts_tris);
@@ -78,28 +80,6 @@ export class GIGeomIO {
         this._geom_maps.up_points_colls = cloneDeepMapArr(geom_maps.up_points_colls);
         this._geom_maps.up_plines_colls = cloneDeepMapArr(geom_maps.up_plines_colls);
         this._geom_maps.up_pgons_colls = cloneDeepMapArr(geom_maps.up_pgons_colls);
-        // _dumpEnts(this._geom_maps.dn_points_verts, geom_maps.dn_points_verts);
-        // _dumpEnts(this._geom_maps.dn_plines_wires, geom_maps.dn_plines_wires);
-        // _dumpEnts(this._geom_maps.dn_pgons_faces, geom_maps.dn_pgons_faces);
-        // _dumpEnts(this._geom_maps.dn_colls_objs, geom_maps.dn_colls_objs);
-        // _dumpEnts(this._geom_maps.dn_verts_posis, geom_maps.dn_verts_posis);
-        // _dumpEnts(this._geom_maps.dn_tris_verts, geom_maps.dn_tris_verts);
-        // _dumpEnts(this._geom_maps.dn_edges_verts, geom_maps.dn_edges_verts);
-        // _dumpEnts(this._geom_maps.dn_wires_edges, geom_maps.dn_wires_edges);
-        // _dumpEnts(this._geom_maps.dn_faces_wirestris, geom_maps.dn_faces_wirestris);
-        // // ======================================================================
-        // _dumpEnts(this._geom_maps.up_posis_verts, geom_maps.up_posis_verts);
-        // _dumpEnts(this._geom_maps.up_verts_tris, geom_maps.up_verts_tris);
-        // _dumpEnts(this._geom_maps.up_tris_faces, geom_maps.up_tris_faces);
-        // _dumpEnts(this._geom_maps.up_verts_edges, geom_maps.up_verts_edges);
-        // _dumpEnts(this._geom_maps.up_edges_wires, geom_maps.up_edges_wires);
-        // _dumpEnts(this._geom_maps.up_wires_faces, geom_maps.up_wires_faces);
-        // _dumpEnts(this._geom_maps.up_verts_points, geom_maps.up_verts_points);
-        // _dumpEnts(this._geom_maps.up_wires_plines, geom_maps.up_wires_plines);
-        // _dumpEnts(this._geom_maps.up_faces_pgons, geom_maps.up_faces_pgons);
-        // _dumpEnts(this._geom_maps.up_points_colls, geom_maps.up_points_colls);
-        // _dumpEnts(this._geom_maps.up_plines_colls, geom_maps.up_plines_colls);
-        // _dumpEnts(this._geom_maps.up_pgons_colls, geom_maps.up_pgons_colls);
     }
     /**
      * Adds data to this model from another model.
@@ -116,7 +96,8 @@ export class GIGeomIO {
         _dumpEntsSelect(this._geom_maps.dn_tris_verts, geom_maps.dn_tris_verts, ent_sets.tris_i);
         _dumpEntsSelect(this._geom_maps.dn_edges_verts, geom_maps.dn_edges_verts, ent_sets.edges_i);
         _dumpEntsSelect(this._geom_maps.dn_wires_edges, geom_maps.dn_wires_edges, ent_sets.wires_i);
-        _dumpEntsSelect(this._geom_maps.dn_faces_wirestris, geom_maps.dn_faces_wirestris, ent_sets.faces_i);
+        _dumpEntsSelect(this._geom_maps.dn_faces_wires, geom_maps.dn_faces_wires, ent_sets.faces_i);
+        _dumpEntsSelect(this._geom_maps.dn_faces_tris, geom_maps.dn_faces_tris, ent_sets.faces_i);
         // ======================================================================
         _dumpEntsSelect(this._geom_maps.up_posis_verts,  geom_maps.up_posis_verts,  ent_sets.posis_i);
         _dumpEntsSelect(this._geom_maps.up_verts_tris,   geom_maps.up_verts_tris,   ent_sets.verts_i);
@@ -465,7 +446,7 @@ export class GIGeomIO {
         const num_tris: number = this._geom_maps.dn_tris_verts.size;
         const num_edges: number = this._geom_maps.dn_edges_verts.size;
         const num_wires: number = this._geom_maps.dn_wires_edges.size;
-        const num_faces: number = this._geom_maps.dn_faces_wirestris.size;
+        const num_faces: number = this._geom_maps.dn_faces_wires.size;
         const num_points: number = this._geom_maps.dn_points_verts.size;
         const num_plines: number = this._geom_maps.dn_plines_wires.size;
         const num_pgons: number = this._geom_maps.dn_pgons_faces.size;
@@ -864,9 +845,11 @@ export class GIGeomIO {
             this._geom_maps.dn_wires_edges.set(geom_data.wires_i[i], geom_data.wires[i]);
         }
         // add faces to model
-        this._geom_maps.dn_faces_wirestris = new Map();
+        this._geom_maps.dn_faces_wires = new Map();
+        this._geom_maps.dn_faces_tris = new Map();
         for (let i = 0; i < geom_data.faces.length; i++) {
-            this._geom_maps.dn_faces_wirestris.set(geom_data.faces_i[i], geom_data.faces[i]);
+            this._geom_maps.dn_faces_wires.set(geom_data.faces_i[i], geom_data.faces[i]);
+            this._geom_maps.dn_faces_tris.set(geom_data.faces_i[i], geom_data.facetris[i]);
         }
         // add points to model
         this._geom_maps.dn_points_verts = new Map();
@@ -936,14 +919,16 @@ export class GIGeomIO {
                 this._geom_maps.up_edges_wires.set(edge_i, wire_i);
             });
         });
-        // wires->faces, tris->faces, faces->wirestris
+        // wires->faces
         this._geom_maps.up_wires_faces = new Map();
-        this._geom_maps.up_tris_faces = new Map();
-        this._geom_maps.dn_faces_wirestris.forEach( (face, face_i) => { // val, index
-            const [wire_i_arr, tri_i_arr] = face;
+        this._geom_maps.dn_faces_wires.forEach( (wire_i_arr, face_i) => { // val, index
             wire_i_arr.forEach( wire_i => {
                 this._geom_maps.up_wires_faces.set(wire_i, face_i);
             });
+        });
+        // tris->faces
+        this._geom_maps.up_tris_faces = new Map();
+        this._geom_maps.dn_faces_tris.forEach( (tri_i_arr, face_i) => { // val, index
             tri_i_arr.forEach( tri_i => {
                 this._geom_maps.up_tris_faces.set(tri_i, face_i);
             });
@@ -1008,7 +993,7 @@ export class GIGeomIO {
             tris: [], tris_i: [],
             edges: [], edges_i: [],
             wires: [], wires_i: [],
-            faces: [], faces_i: [],
+            faces: [], facetris: [], faces_i: [],
             points: [], points_i: [],
             plines: [], plines_i: [],
             pgons: [], pgons_i: [],
@@ -1034,9 +1019,12 @@ export class GIGeomIO {
             data.wires.push(ent);
             data.wires_i.push(i);
         });
-        this._geom_maps.dn_faces_wirestris.forEach( (ent, i) => {
+        this._geom_maps.dn_faces_wires.forEach( (ent, i) => {
             data.faces.push(ent);
             data.faces_i.push(i);
+        });
+        this._geom_maps.dn_faces_tris.forEach( (ent, _) => {
+            data.facetris.push(ent);
         });
         this._geom_maps.dn_points_verts.forEach( (ent, i) => {
             data.points.push(ent);

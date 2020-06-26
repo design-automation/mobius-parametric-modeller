@@ -401,10 +401,11 @@ export class GIGeomAdd {
         // create the triangles
         const tris_i: number[] = this._addTris(wire_i);
         // create the face
-        const face: TFace = [[wire_i], tris_i];
+        const face: TFace = [wire_i];
         // update down arrays
         const face_i: number = this._geom.modeldata.model.metadata.nextFace();
-        this._geom_maps.dn_faces_wirestris.set(face_i, face);
+        this._geom_maps.dn_faces_wires.set(face_i, face);
+        this._geom_maps.dn_faces_tris.set(face_i, tris_i);
         // update up arrays
         this._geom_maps.up_wires_faces.set(wire_i, face_i);
         tris_i.forEach( tri_i => this._geom_maps.up_tris_faces.set(tri_i, face_i) );
@@ -421,13 +422,13 @@ export class GIGeomAdd {
         // create the triangles
         const tris_i: number[] = this._addTris(wire_i, holes_wires_i);
         // create the face
-        const face_wires_i: number[] = [wire_i].concat(holes_wires_i);
-        const face: TFace = [face_wires_i, tris_i];
+        const face: TFace = [wire_i].concat(holes_wires_i);
         // update down arrays
         const face_i: number = this._geom.modeldata.model.metadata.nextFace();
-        this._geom_maps.dn_faces_wirestris.set(face_i, face);
+        this._geom_maps.dn_faces_wires.set(face_i, face);
+        this._geom_maps.dn_faces_tris.set(face_i, tris_i);
         // update up arrays
-        face_wires_i.forEach(face_wire_i => this._geom_maps.up_wires_faces.set(face_wire_i, face_i) );
+        face.forEach(face_wire_i => this._geom_maps.up_wires_faces.set(face_wire_i, face_i) );
         tris_i.forEach( tri_i => this._geom_maps.up_tris_faces.set(tri_i, face_i) );
         // return the numeric index of the face
         return face_i;

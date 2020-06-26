@@ -719,7 +719,7 @@ export class ExecuteComponent {
 
             // #########################################################
             // *********************************************************
-            console.log(fnString);
+            // console.log(fnString);
 
             const fn = new Function('__modules__', '__params__', fnString);
             // execute the function

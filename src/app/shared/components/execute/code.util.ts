@@ -346,7 +346,7 @@ export class CodeUtils {
                 }
                 // codeStr.push(`__params__.prevModel.merge(__params__.model);`);
                 // codeStr.push(`__params__.model = __params__.prevModel;`);
-                codeStr.push(`__params__.prevModel = null;`);
+                // codeStr.push(`__params__.prevModel = null;`);
                 codeStr.push(`__params__.console.push('</div>')`);
                 break;
             case ProcedureTypes.Error:

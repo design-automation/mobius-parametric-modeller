@@ -60,7 +60,7 @@ export class GIModelData {
     public merge(modeldata: GIModelData): void {
         // const geom_maps: Map<number, number>[] = this.geom.io.merge(model.modeldata.geom._geom_maps);
         // this.attribs.io.merge(model.modeldata.attribs._attribs_maps, geom_maps);
-        this.geom.io.merge(modeldata.geom._geom_maps);
+        this.geom.io.merge(modeldata.geom);
         this.attribs.io.merge(modeldata.attribs._attribs_maps);
         this.model.metadata = modeldata.model.metadata;
     }

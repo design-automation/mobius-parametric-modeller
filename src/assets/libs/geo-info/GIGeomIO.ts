@@ -1,7 +1,7 @@
-import {  IGeomData, IGeomArrays, IGeomPack, EEntType, IGeomSets, TTri, TEdge, TWire } from './common';
+import {  IGeomData, IGeomArrays, IGeomPack, EEntType, IGeomSets, TTri, TEdge, TWire, IModelData, EEntStrToGeomMaps } from './common';
 import { GIGeom } from './GIGeom';
 import * as lodash from 'lodash';
-import { cloneDeepMapArr } from './common_func';
+import { cloneDeepMapArr, getEntTypeStr as getEntTypeName } from './common_func';
 
 /**
  * Class for geometry.
@@ -21,34 +21,37 @@ export class GIGeomIO {
     /**
      * Adds data to this model from another model.
      * The existing data in the model is not deleted.
-     * Conflict detection will be performed.
+     * Conflict detection will be performed based on time stamps.
      * @param geom_maps The geom_arrays of the other model.
      */
-    public merge(geom_maps: IGeomArrays): void {
+    public merge(other_geom: GIGeom): void {
+        const geom_maps = other_geom._geom_maps;
         // ======================================================================
-        _mergeEnts(this._geom_maps.dn_points_verts, geom_maps.dn_points_verts, EEntType.POINT);
-        _mergeEnts(this._geom_maps.dn_plines_wires, geom_maps.dn_plines_wires, EEntType.PLINE);
-        _mergeEnts(this._geom_maps.dn_pgons_faces, geom_maps.dn_pgons_faces, EEntType.PGON);
-        _mergeEnts(this._geom_maps.dn_colls_objs, geom_maps.dn_colls_objs, EEntType.COLL);
-        _mergeEnts(this._geom_maps.dn_verts_posis, geom_maps.dn_verts_posis, EEntType.VERT);
-        _mergeEnts(this._geom_maps.dn_tris_verts, geom_maps.dn_tris_verts, EEntType.TRI);
-        _mergeEnts(this._geom_maps.dn_edges_verts, geom_maps.dn_edges_verts, EEntType.EDGE);
-        _mergeEnts(this._geom_maps.dn_wires_edges, geom_maps.dn_wires_edges, EEntType.WIRE);
-        _mergeEnts(this._geom_maps.dn_faces_wires, geom_maps.dn_faces_wires, EEntType.FACE);
-        _mergeEnts(this._geom_maps.dn_faces_tris, geom_maps.dn_faces_tris, EEntType.FACE);
+        this._mergeObjCollEnts(other_geom, EEntType.POINT); // check for conflicts
+        this._mergeObjCollEnts(other_geom, EEntType.PLINE); // check for conflicts
+        this._mergeObjCollEnts(other_geom, EEntType.PGON); // check for conflicts
+        this._mergeObjCollEnts(other_geom, EEntType.COLL); // check for conflicts
         // ======================================================================
-        _mergePosis(this._geom_maps.up_posis_verts, geom_maps.up_posis_verts);
-        _mergeEnts(this._geom_maps.up_verts_tris, geom_maps.up_verts_tris, EEntType.VERT);
-        _mergeEnts(this._geom_maps.up_tris_faces, geom_maps.up_tris_faces, EEntType.TRI);
-        _mergeEnts(this._geom_maps.up_verts_edges, geom_maps.up_verts_edges, EEntType.VERT);
-        _mergeEnts(this._geom_maps.up_edges_wires, geom_maps.up_edges_wires, EEntType.EDGE);
-        _mergeEnts(this._geom_maps.up_wires_faces, geom_maps.up_wires_faces, EEntType.WIRE);
-        _mergeEnts(this._geom_maps.up_verts_points, geom_maps.up_verts_points, EEntType.VERT);
-        _mergeEnts(this._geom_maps.up_wires_plines, geom_maps.up_wires_plines, EEntType.WIRE);
-        _mergeEnts(this._geom_maps.up_faces_pgons, geom_maps.up_faces_pgons, EEntType.FACE);
-        _mergeEnts(this._geom_maps.up_points_colls, geom_maps.up_points_colls, EEntType.POINT);
-        _mergeEnts(this._geom_maps.up_plines_colls, geom_maps.up_plines_colls, EEntType.PLINE);
-        _mergeEnts(this._geom_maps.up_pgons_colls, geom_maps.up_pgons_colls, EEntType.PGON);
+        this._mergeEnts(this._geom_maps.dn_verts_posis, geom_maps.dn_verts_posis, EEntType.VERT);
+        this._mergeEnts(this._geom_maps.dn_tris_verts, geom_maps.dn_tris_verts, EEntType.TRI);
+        this._mergeEnts(this._geom_maps.dn_edges_verts, geom_maps.dn_edges_verts, EEntType.EDGE);
+        this._mergeEnts(this._geom_maps.dn_wires_edges, geom_maps.dn_wires_edges, EEntType.WIRE);
+        this._mergeEnts(this._geom_maps.dn_faces_wires, geom_maps.dn_faces_wires, EEntType.FACE);
+        this._mergeEnts(this._geom_maps.dn_faces_tris, geom_maps.dn_faces_tris, EEntType.FACE);
+        // ======================================================================
+        this._mergePosis(other_geom); // check for conflicts
+        this._mergeEnts(this._geom_maps.up_verts_tris, geom_maps.up_verts_tris, EEntType.VERT);
+        this._mergeEnts(this._geom_maps.up_tris_faces, geom_maps.up_tris_faces, EEntType.TRI);
+        this._mergeEnts(this._geom_maps.up_verts_edges, geom_maps.up_verts_edges, EEntType.VERT);
+        this._mergeEnts(this._geom_maps.up_edges_wires, geom_maps.up_edges_wires, EEntType.EDGE);
+        this._mergeEnts(this._geom_maps.up_wires_faces, geom_maps.up_wires_faces, EEntType.WIRE);
+        this._mergeEnts(this._geom_maps.up_verts_points, geom_maps.up_verts_points, EEntType.VERT);
+        this._mergeEnts(this._geom_maps.up_wires_plines, geom_maps.up_wires_plines, EEntType.WIRE);
+        this._mergeEnts(this._geom_maps.up_faces_pgons, geom_maps.up_faces_pgons, EEntType.FACE);
+        this._mergeEnts(this._geom_maps.up_points_colls, geom_maps.up_points_colls, EEntType.POINT);
+        this._mergeEnts(this._geom_maps.up_plines_colls, geom_maps.up_plines_colls, EEntType.PLINE);
+        this._mergeEnts(this._geom_maps.up_pgons_colls, geom_maps.up_pgons_colls, EEntType.PGON);
+        // ======================================================================
     }
     /**
      * Adds data to this model from another model.
@@ -80,6 +83,12 @@ export class GIGeomIO {
         this._geom_maps.up_points_colls = cloneDeepMapArr(geom_maps.up_points_colls);
         this._geom_maps.up_plines_colls = cloneDeepMapArr(geom_maps.up_plines_colls);
         this._geom_maps.up_pgons_colls = cloneDeepMapArr(geom_maps.up_pgons_colls);
+        // ======================================================================
+        this._geom_maps.posis_ts = new Map(geom_maps.posis_ts);
+        this._geom_maps.points_ts = new Map(geom_maps.points_ts);
+        this._geom_maps.plines_ts = new Map(geom_maps.plines_ts);
+        this._geom_maps.pgons_ts = new Map(geom_maps.pgons_ts);
+        this._geom_maps.colls_ts = new Map(geom_maps.colls_ts);
     }
     /**
      * Adds data to this model from another model.
@@ -88,29 +97,31 @@ export class GIGeomIO {
      * @param geom_maps The geom_arrays of the other model.
      */
     public dumpSelect(geom_maps: IGeomArrays, ent_sets: IGeomSets): void {
-        _dumpEntsSelect(this._geom_maps.dn_points_verts, geom_maps.dn_points_verts, ent_sets.points_i);
-        _dumpEntsSelect(this._geom_maps.dn_plines_wires, geom_maps.dn_plines_wires, ent_sets.plines_i);
-        _dumpEntsSelect(this._geom_maps.dn_pgons_faces, geom_maps.dn_pgons_faces, ent_sets.pgons_i);
-        _dumpEntsSelect(this._geom_maps.dn_colls_objs, geom_maps.dn_colls_objs, ent_sets.colls_i);
-        _dumpEntsSelect(this._geom_maps.dn_verts_posis, geom_maps.dn_verts_posis, ent_sets.verts_i);
-        _dumpEntsSelect(this._geom_maps.dn_tris_verts, geom_maps.dn_tris_verts, ent_sets.tris_i);
-        _dumpEntsSelect(this._geom_maps.dn_edges_verts, geom_maps.dn_edges_verts, ent_sets.edges_i);
-        _dumpEntsSelect(this._geom_maps.dn_wires_edges, geom_maps.dn_wires_edges, ent_sets.wires_i);
-        _dumpEntsSelect(this._geom_maps.dn_faces_wires, geom_maps.dn_faces_wires, ent_sets.faces_i);
-        _dumpEntsSelect(this._geom_maps.dn_faces_tris, geom_maps.dn_faces_tris, ent_sets.faces_i);
+        this._dumpEntsSelect(this._geom_maps.dn_points_verts, geom_maps.dn_points_verts, ent_sets.points_i);
+        this._dumpEntsSelect(this._geom_maps.dn_plines_wires, geom_maps.dn_plines_wires, ent_sets.plines_i);
+        this._dumpEntsSelect(this._geom_maps.dn_pgons_faces, geom_maps.dn_pgons_faces, ent_sets.pgons_i);
+        this._dumpEntsSelect(this._geom_maps.dn_colls_objs, geom_maps.dn_colls_objs, ent_sets.colls_i);
+        this._dumpEntsSelect(this._geom_maps.dn_verts_posis, geom_maps.dn_verts_posis, ent_sets.verts_i);
+        this._dumpEntsSelect(this._geom_maps.dn_tris_verts, geom_maps.dn_tris_verts, ent_sets.tris_i);
+        this._dumpEntsSelect(this._geom_maps.dn_edges_verts, geom_maps.dn_edges_verts, ent_sets.edges_i);
+        this._dumpEntsSelect(this._geom_maps.dn_wires_edges, geom_maps.dn_wires_edges, ent_sets.wires_i);
+        this._dumpEntsSelect(this._geom_maps.dn_faces_wires, geom_maps.dn_faces_wires, ent_sets.faces_i);
+        this._dumpEntsSelect(this._geom_maps.dn_faces_tris, geom_maps.dn_faces_tris, ent_sets.faces_i);
         // ======================================================================
-        _dumpEntsSelect(this._geom_maps.up_posis_verts,  geom_maps.up_posis_verts,  ent_sets.posis_i);
-        _dumpEntsSelect(this._geom_maps.up_verts_tris,   geom_maps.up_verts_tris,   ent_sets.verts_i);
-        _dumpEntsSelect(this._geom_maps.up_tris_faces,   geom_maps.up_tris_faces,   ent_sets.tris_i);
-        _dumpEntsSelect(this._geom_maps.up_verts_edges,  geom_maps.up_verts_edges,  ent_sets.verts_i);
-        _dumpEntsSelect(this._geom_maps.up_edges_wires,  geom_maps.up_edges_wires,  ent_sets.edges_i);
-        _dumpEntsSelect(this._geom_maps.up_wires_faces,  geom_maps.up_wires_faces,  ent_sets.wires_i);
-        _dumpEntsSelect(this._geom_maps.up_verts_points, geom_maps.up_verts_points, ent_sets.verts_i);
-        _dumpEntsSelect(this._geom_maps.up_wires_plines, geom_maps.up_wires_plines, ent_sets.wires_i);
-        _dumpEntsSelect(this._geom_maps.up_faces_pgons,  geom_maps.up_faces_pgons,  ent_sets.faces_i);
-        _dumpEntsSelect(this._geom_maps.up_points_colls, geom_maps.up_points_colls, ent_sets.points_i);
-        _dumpEntsSelect(this._geom_maps.up_plines_colls, geom_maps.up_plines_colls, ent_sets.plines_i);
-        _dumpEntsSelect(this._geom_maps.up_pgons_colls,  geom_maps.up_pgons_colls,  ent_sets.pgons_i);
+        this._dumpEntsSelect(this._geom_maps.up_posis_verts,  geom_maps.up_posis_verts,  ent_sets.posis_i);
+        this._dumpEntsSelect(this._geom_maps.up_verts_tris,   geom_maps.up_verts_tris,   ent_sets.verts_i);
+        this._dumpEntsSelect(this._geom_maps.up_tris_faces,   geom_maps.up_tris_faces,   ent_sets.tris_i);
+        this._dumpEntsSelect(this._geom_maps.up_verts_edges,  geom_maps.up_verts_edges,  ent_sets.verts_i);
+        this._dumpEntsSelect(this._geom_maps.up_edges_wires,  geom_maps.up_edges_wires,  ent_sets.edges_i);
+        this._dumpEntsSelect(this._geom_maps.up_wires_faces,  geom_maps.up_wires_faces,  ent_sets.wires_i);
+        this._dumpEntsSelect(this._geom_maps.up_verts_points, geom_maps.up_verts_points, ent_sets.verts_i);
+        this._dumpEntsSelect(this._geom_maps.up_wires_plines, geom_maps.up_wires_plines, ent_sets.wires_i);
+        this._dumpEntsSelect(this._geom_maps.up_faces_pgons,  geom_maps.up_faces_pgons,  ent_sets.faces_i);
+        this._dumpEntsSelect(this._geom_maps.up_points_colls, geom_maps.up_points_colls, ent_sets.points_i);
+        this._dumpEntsSelect(this._geom_maps.up_plines_colls, geom_maps.up_plines_colls, ent_sets.plines_i);
+        this._dumpEntsSelect(this._geom_maps.up_pgons_colls,  geom_maps.up_pgons_colls,  ent_sets.pgons_i);
+        // ======================================================================
+        // time stamp updated in dumpEntsSelect() method
     }
     // /**
     //  * Adds data to this model from another model.
@@ -829,6 +840,10 @@ export class GIGeomIO {
         for (let i = 0; i < geom_data.verts.length; i++) {
             this._geom_maps.dn_verts_posis.set(geom_data.verts_i[i], geom_data.verts[i]);
         }
+        this._geom_maps.posis_ts = new Map();
+        for (let i = 0; i < geom_data.verts.length; i++) {
+            this._geom_maps.posis_ts.set(geom_data.verts_i[i], geom_data.posis_ts[i]);
+        }
         // add triangles to model
         this._geom_maps.dn_tris_verts = new Map();
         for (let i = 0; i < geom_data.tris.length; i++) {
@@ -988,7 +1003,7 @@ export class GIGeomIO {
      */
     public getData(): IGeomData {
         const data: IGeomData = {
-            posis_i: [],
+            posis_i: [], posis_ts: [],
             verts: [], verts_i: [],
             tris: [], tris_i: [],
             edges: [], edges_i: [],
@@ -1000,8 +1015,11 @@ export class GIGeomIO {
             colls: [], colls_i: [],
             selected: this._geom.selected
         };
-        this._geom_maps.up_posis_verts.forEach( (ent, i) => {
+        this._geom_maps.up_posis_verts.forEach( (_, i) => {
             data.posis_i.push(i);
+        });
+        this._geom_maps.posis_ts.forEach( (ts, i) => {
+            data.posis_ts.push(ts);
         });
         this._geom_maps.dn_verts_posis.forEach( (ent, i) => {
             data.verts.push(ent);
@@ -1044,72 +1062,56 @@ export class GIGeomIO {
         });
         return data;
     }
-}
-
-// utility function
-function _dumpEntsSelect(map1: Map<number, any>, map2: Map<number, any>, selected: Set<number>): void {
-    selected.forEach( ent_i => {
-        const ent2 = map2.get(ent_i);
-        if (ent2 !== undefined) { map1.set(ent_i, lodash.cloneDeep(ent2)); }
-    });
-}
-// function _dumpEnts(map1: Map<number, any>, map2: Map<number, any>): void {
-//     map2.forEach( (ent, ent_i) => {
-//         map1.set(ent_i, lodash.cloneDeep(ent));
-//     });
-// }
-function _mergeEnts(map1: Map<number, any>, map2: Map<number, any>, type: EEntType): void {
-    map2.forEach( (ent, ent_i) => {
-        if (map1.has(ent_i)) {
-            throw new Error('Conflict merging ' + _getEntTypeStr(type) + '.');
-        }
-        map1.set(ent_i, lodash.cloneDeep(ent));
-    });
-}
-function _mergePosis(map1: Map<number, any>, map2: Map<number, any>): void {
-    map2.forEach( (verts_i, posi_i) => {
-        if (map1.has(posi_i)) {
-            const verts_i_set: Set<number> = new Set(map1.get(posi_i));
-            for (const vert_i of verts_i) {
-                verts_i_set.add(vert_i);
+    // --------------------------------------------------------------------------------------------
+    // Private methods
+    // --------------------------------------------------------------------------------------------
+    private _dumpEntsSelect(this_map: Map<number, any>, other_map: Map<number, any>, selected: Set<number>): void {
+        selected.forEach( ent_i => {
+            const ent2 = other_map.get(ent_i);
+            if (ent2 !== undefined) { this_map.set(ent_i, lodash.cloneDeep(ent2)); } // TODO change to slice() once colls have been updated
+        });
+    }
+    private _mergeEnts(this_map: Map<number, any>, other_map: Map<number, any>, type: EEntType): void {
+        other_map.forEach( (ent, ent_i) => {
+            this_map.set(ent_i, lodash.cloneDeep(ent)); // TODO change to slice() once colls have been updated
+        });
+    }
+    private _mergeObjCollEnts(other_geom: GIGeom, ent_type: EEntType): void {
+        // get key
+        const geom_array_key: string = EEntStrToGeomMaps[ent_type];
+        // get maps
+        const this_map = this._geom_maps[geom_array_key];
+        const other_map = other_geom._geom_maps[geom_array_key];
+        other_map.forEach( (ent, ent_i) => {
+            if (this_map.has(ent_i)) {
+                // check time stamp
+                if (this._geom.time_stamp.getEntTs(ent_type, ent_i) !==
+                    other_geom.time_stamp.getEntTs(ent_type, ent_i)) {
+                    throw new Error('Conflict merging ' + getEntTypeName(ent_type) + '.');
+                }
             }
-            map1.set(posi_i, Array.from(verts_i_set));
-        } else {
-            map1.set(posi_i, lodash.cloneDeep(verts_i));
-        }
-    });
-}
-// function _deepCopy(data: any) {
-//     if (Array.isArray(data)) {
-//         const copy = [];
-//         for (let i = 0, len = data.length; i < len; i++) {
-//             copy[i] = _deepCopy(data[i]);
-//         }
-//         return copy;
-//     }
-//     return data;
-// }
-function _getEntTypeStr(ent_type_str: EEntType): string {
-    switch (ent_type_str) {
-        case EEntType.POSI:
-            return 'positions';
-        case EEntType.VERT:
-            return 'vertices';
-        case EEntType.TRI:
-            return 'triangles';
-        case EEntType.EDGE:
-            return 'edges';
-        case EEntType.WIRE:
-            return 'wires';
-        case EEntType.FACE:
-            return 'faces';
-        case EEntType.POINT:
-            return 'points';
-        case EEntType.PLINE:
-            return 'polylines';
-        case EEntType.PGON:
-            return 'polygons';
-        case EEntType.COLL:
-            return 'collections';
+            this_map.set(ent_i, lodash.cloneDeep(ent)); // TODO change to slice() once colls have been updated
+        });
+    }
+    private _mergePosis(other_geom: GIGeom): void {
+        const this_map = this._geom_maps.up_posis_verts;
+        const other_map = other_geom._geom_maps.up_posis_verts;
+        other_map.forEach( (verts_i, posi_i) => {
+            if (this_map.has(posi_i)) {
+                // check time stamp
+                if (this._geom.time_stamp.getEntTs(EEntType.POSI, posi_i) !==
+                    other_geom.time_stamp.getEntTs(EEntType.POSI, posi_i)) {
+                    throw new Error('Conflict merging positions.');
+                }
+                // merge verts
+                const verts_i_set: Set<number> = new Set(this_map.get(posi_i));
+                for (const vert_i of verts_i) {
+                    verts_i_set.add(vert_i);
+                }
+                this_map.set(posi_i, Array.from(verts_i_set));
+            } else {
+                this_map.set(posi_i, verts_i.slice());
+            }
+        });
     }
 }

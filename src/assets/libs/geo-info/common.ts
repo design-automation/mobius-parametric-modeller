@@ -280,6 +280,11 @@ export interface IGeomArrays {
     up_points_colls: Map<number, number[]>; // one to many
     up_plines_colls: Map<number, number[]>; // one to many
     up_pgons_colls: Map<number, number[]>; // one to many
+    posis_ts: Map<number, number>;
+    points_ts: Map<number, number>;
+    plines_ts: Map<number, number>;
+    pgons_ts: Map<number, number>;
+    colls_ts: Map<number, number>;
 }
 
 // copy geometry
@@ -327,6 +332,7 @@ export const RE_SPACES: RegExp = /\s+/g;
 
 export interface IGeomData {
     posis_i: number[];
+    posis_ts: number[];
     verts: TVert[];
     verts_i: number[];
     tris: TTri[];

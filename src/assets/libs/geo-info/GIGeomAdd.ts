@@ -38,6 +38,9 @@ export class GIGeomAdd {
         const point_i: number = this._geom.modeldata.model.metadata.nextPoint();
         this._geom_maps.dn_points_verts.set(point_i, vert_i);
         this._geom_maps.up_verts_points.set(vert_i, point_i);
+        // time stamp
+        const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
+        this._geom_maps.posis_ts.set(posi_i, ts);
         return point_i;
     }
     /**
@@ -306,7 +309,9 @@ export class GIGeomAdd {
         // because posis are the bottom of the hierarchy
         // update up arrays
         const posi_i: number = this._geom.modeldata.model.metadata.nextPosi();
+        const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
         this._geom_maps.up_posis_verts.set(posi_i, []);
+        this._geom_maps.posis_ts.set(posi_i, ts);
         // return the numeric index of the posi
         return posi_i;
     }

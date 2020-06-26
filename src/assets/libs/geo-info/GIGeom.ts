@@ -15,6 +15,7 @@ import { GIGeomNav } from './GIGeomNav';
 import { GIGeomDelVert } from './GIGeomDelVert';
 import { GIGeomDelEdge } from './GIGeomDelEdge';
 import { GIModelData } from './GIModelData';
+import { GIGeomTimeStamp } from './GIGeomTimeStamp';
 
 /**
  * Class for geometry.
@@ -46,7 +47,12 @@ export class GIGeom {
         up_faces_pgons: new Map(),
         up_points_colls: new Map(),
         up_plines_colls: new Map(),
-        up_pgons_colls: new Map()
+        up_pgons_colls: new Map(),
+        posis_ts: new Map(),
+        points_ts: new Map(),
+        plines_ts: new Map(),
+        pgons_ts: new Map(),
+        colls_ts: new Map()
     };
     // sub classes with methods
     public io: GIGeomIO;
@@ -63,6 +69,7 @@ export class GIGeom {
     public check: GIGeomCheck;
     public compare: GIGeomCompare;
     public threejs: GIGeomThreejs;
+    public time_stamp: GIGeomTimeStamp;
     /**
      * Constructor
      */
@@ -82,6 +89,7 @@ export class GIGeom {
         this.check = new GIGeomCheck(this, this._geom_maps);
         this.compare = new GIGeomCompare(this, this._geom_maps);
         this.threejs = new GIGeomThreejs(this, this._geom_maps);
+        this.time_stamp = new GIGeomTimeStamp(this, this._geom_maps);
         this.selected = [];
     }
     /**

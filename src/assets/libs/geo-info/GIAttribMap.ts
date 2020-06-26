@@ -1,4 +1,4 @@
-import { EFilterOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribData } from './common';
+import { EFilterOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, EEntStrToGeomMaps, EEntType } from './common';
 import { arrRem } from '../util/arrs';
 import { GIModelData } from './GIModelData';
 import * as lodash from 'lodash';
@@ -16,6 +16,7 @@ import { cloneDeepMapArr } from './common_func';
 export class GIAttribMap {
     private _modeldata: GIModelData;
     private _name: string;
+    private _ent_type: EEntType;
     private _data_type: EAttribDataTypeStrs;
     private _data_length: number;
     // the two data maps that store attrib pointers
@@ -27,9 +28,10 @@ export class GIAttribMap {
      * Creates an attribute.
      * @param attrib_data
      */
-    constructor(modeldata: GIModelData, name: string, data_type: EAttribDataTypeStrs) {
+    constructor(modeldata: GIModelData, name: string, ent_type: EEntType, data_type: EAttribDataTypeStrs) {
         this._modeldata = modeldata;
         this._name = name;
+        this._ent_type = ent_type;
         this._data_type = data_type;
         if (data_type === EAttribDataTypeStrs.LIST || data_type === EAttribDataTypeStrs.DICT) {
             this._data_length = 0;
@@ -128,6 +130,12 @@ export class GIAttribMap {
         return this._map_val_i_to_ents_i.size;
     }
     /**
+     * Returns the IDs of all ents that have a value.
+     */
+    public getEnts(): number[] {
+        return Array.from(this._map_ent_i_to_val_i.keys());
+    }
+    /**
      * Delete the entities from this attribute map.
      */
     public delEnt(ents_i: number|number[]): void {
@@ -143,6 +151,8 @@ export class GIAttribMap {
                 other_ents_i.splice(other_ents_i.indexOf(ent_i), 1);
                 // clean up just in case that was the last entity with this value
                 this._cleanUp(val_i);
+                // update time stamp
+                this._modeldata.geom.time_stamp.updateEntTs(this._ent_type, ent_i);
             }
         });
         // TODO
@@ -163,22 +173,24 @@ export class GIAttribMap {
         });
         return ents_i_values;
     }
-    /**
-     * Sets the value for multiple entity-value pairs at the same time.
-     * [ [[2,4,6,8], 'hello'], [[9,10], 'world']]
-     * ~
-     * Can also set lists and dicts
-     * [ [[2,4,6,8], [1,2,3]], [[9,10], [4,5,6,7]]]
-     * [ [[2,4,6,8], {a:1, b:2}], [[9,10], {d:1, e:2, f:3}]]
-     * ~
-     * @param ent_i
-     * @param val
-     */
-    public setEntsVals(ents_i_values: [number[], TAttribDataTypes][], check_type = true): void {
-        for (let i = 0; i < ents_i_values.length; i++) {
-            this.setEntVal(ents_i_values[i][0], ents_i_values[i][1], check_type);
-        }
-    }
+
+    // /**
+    //  * Sets the value for multiple entity-value pairs at the same time.
+    //  * [ [[2,4,6,8], 'hello'], [[9,10], 'world']]
+    //  * ~
+    //  * Can also set lists and dicts
+    //  * [ [[2,4,6,8], [1,2,3]], [[9,10], [4,5,6,7]]]
+    //  * [ [[2,4,6,8], {a:1, b:2}], [[9,10], {d:1, e:2, f:3}]]
+    //  * ~
+    //  * @param ent_i
+    //  * @param val
+    //  */
+    // public setEntsVals(ents_i_values: [number[], TAttribDataTypes][], check_type = true): void {
+    //     for (let i = 0; i < ents_i_values.length; i++) {
+    //         this.setEntVal(ents_i_values[i][0], ents_i_values[i][1], check_type);
+    //     }
+    // }
+
     /**
      * Sets the value for a given entity or entities.
      *
@@ -248,6 +260,8 @@ export class GIAttribMap {
                 // clean up just in case that was the last entity with this value
                 this._cleanUp(old_val_i);
             }
+            // update the time stamp for this entity
+            this._modeldata.geom.time_stamp.updateEntTs(this._ent_type, ent_i);
         });
         // for the val_i, set it to point to all the ents that have this value
         const exist_ents_i: number[] = this._map_val_i_to_ents_i.get(val_i);
@@ -413,8 +427,6 @@ export class GIAttribMap {
             new_list[idx] = val;
             this.setEntVal(ent_i, new_list);
         });
-        // check that none of the old values need to be cleaned up
-        // TODO
     }
     /**
      * Sets the keyed value for a given entity or entities.
@@ -444,8 +456,6 @@ export class GIAttribMap {
             new_dict[key] = val;
             this.setEntVal(ent_i, new_dict);
         });
-        // check that none of the old values need to be cleaned up
-        // TODO
     }
     /**
      * Gets the value for a given entity, or an array of values given an array of entities.

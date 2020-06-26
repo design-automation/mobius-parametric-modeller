@@ -11,6 +11,7 @@ interface IAttribValues {
  * Geo-info model metadata class.
  */
 export class GIMetaData {
+    private _time_stamp: number;
     private _posi_count: number;
     private _vert_count: number;
     private _tri_count: number;
@@ -28,6 +29,7 @@ export class GIMetaData {
      */
     constructor() {
         // console.log('CREATING META OBJECT');
+        this._time_stamp = 0;
         this._posi_count = 0;
         this._vert_count = 0;
         this._tri_count = 0;
@@ -44,6 +46,12 @@ export class GIMetaData {
             list:   [[], new Map()],
             dict:   [[], new Map()]
         };
+    }
+    // get next time stamp
+    public nextTimeStamp(): number {
+        const ts: number = this._time_stamp;
+        this._time_stamp += 1;
+        return ts;
     }
     // get next index
     public nextPosi(): number {

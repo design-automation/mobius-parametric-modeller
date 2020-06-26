@@ -109,7 +109,7 @@ export class GIModelData {
         });
         // dump the selected data into this model
         // this model is assumed to be emprt
-        this.geom.io.dumpSelect(modeldata.geom._geom_maps, ent_sets);
+        this.geom.io.dumpSelect(modeldata.geom, ent_sets);
         this.attribs.io.dumpSelect(modeldata.attribs._attribs_maps, ent_sets);
     }
     /**

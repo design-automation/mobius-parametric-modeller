@@ -1,6 +1,6 @@
 
-import {  EEntType, IGeomArrays, EEntStrToGeomMaps, TWire, Txyz, TColl, TEntTypeIdx,
-    IGeomPack, TFace, EWireType, TEdge, IGeomSets as IEntSets } from './common';
+import {  EEntType, IGeomArrays, EEntStrToGeomMaps, TWire, Txyz, TEntTypeIdx,
+    TFace, EWireType, TEdge, IGeomSets as IEntSets } from './common';
 import { isPosi, isPoint, isPline, isPgon, isColl } from './id';
 import { GIGeom } from './GIGeom';
 import { vecFromTo, vecCross, vecDiv, vecNorm, vecLen, vecDot } from '../geom/vectors';
@@ -60,19 +60,19 @@ export class GIGeomQuery {
      * @param ent_type
      */
     public getEnts(ent_type: EEntType): number[] {
-        // get posis indices array from up array: up_posis_verts
-        if (isPosi(ent_type)) {
-            // const posis: number[][] = this._geom_maps.up_posis_verts;
-            const posis_i: number[] = [];
-            // for (let i = 0; i < posis.length; i++ ) {
-            //     const posi = posis[i];
-            //     if (posi !== undefined) {
-            //         posis_i.push(i);
-            //     }
-            // }
-            this._geom_maps.up_posis_verts.forEach( (_, i) => posis_i.push(i) );
-            return posis_i;
-        }
+        // // get posis indices array from up array: up_posis_verts
+        // if (isPosi(ent_type)) {
+        //     // const posis: number[][] = this._geom_maps.up_posis_verts;
+        //     const posis_i: number[] = [];
+        //     // for (let i = 0; i < posis.length; i++ ) {
+        //     //     const posi = posis[i];
+        //     //     if (posi !== undefined) {
+        //     //         posis_i.push(i);
+        //     //     }
+        //     // }
+        //     this._geom_maps.up_posis_verts.forEach( (_, i) => posis_i.push(i) );
+        //     return posis_i;
+        // }
         // get ents indices array from down arrays
         const geom_array_key: string = EEntStrToGeomMaps[ent_type];
         const geom_array: any[] = this._geom_maps[geom_array_key];
@@ -90,14 +90,14 @@ export class GIGeomQuery {
      * Returns the number of entities
      */
     public numEnts(ent_type: EEntType): number {
-        if (isPosi(ent_type)) {
-            // get posis count from up array: up_posis_verts
-            return this._geom_maps.up_posis_verts.size;
-        } else {
+        // if (isPosi(ent_type)) {
+        //     // get posis count from up array: up_posis_verts
+        //     return this._geom_maps.up_posis_verts.size;
+        // } else {
             // get ents count from down arrays
             const geom_array_key: string = EEntStrToGeomMaps[ent_type];
             return this._geom_maps[geom_array_key].size;
-        }
+        // }
     }
     /**
      * Returns the number of entities for [posis, point, polylines, polygons, collections].
@@ -135,9 +135,9 @@ export class GIGeomQuery {
      * @param index
      */
     public entExists(ent_type: EEntType, index: number): boolean {
-        if (ent_type === EEntType.POSI) {
-            return this._geom_maps.up_posis_verts.has(index);
-        }
+        // if (ent_type === EEntType.POSI) {
+        //     return this._geom_maps.up_posis_verts.has(index);
+        // }
         const geom_arrays_key: string = EEntStrToGeomMaps[ent_type];
         return this._geom_maps[geom_arrays_key].has(index);
     }

@@ -151,7 +151,7 @@ export enum EEntTypeStr {
 }
 
 export enum EEntStrToGeomMaps {
-    'posis',
+    'up_posis_verts', // 'posis',
     'dn_tris_verts',
     'dn_verts_posis',
     'dn_edges_verts',

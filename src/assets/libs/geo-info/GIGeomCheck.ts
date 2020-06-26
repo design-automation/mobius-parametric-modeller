@@ -198,14 +198,14 @@ export class GIGeomCheck {
                     errors.push('Wire ' + wire_i + ': Wire->Face null.');
                 }
                 // down from face to wires (and tris)
-                const face: TFace = this._geom_maps.dn_faces_wirestris.get(face_i);
+                const face: TFace = this._geom_maps.dn_faces_wires.get(face_i);
                 if (face === undefined) {
                     errors.push('Wire ' + wire_i + ': Face->Wire undefined.');
                 } else if (face === null) {
                     errors.push('Wire ' + wire_i + ': Face->Wire null.');
                 } else {
                     // check that this face points down to the wire
-                    if (face[0].indexOf(wire_i) === -1) {
+                    if (face.indexOf(wire_i) === -1) {
                         errors.push('Wire ' + wire_i + ': Face->Wire index is missing.');
                     }
                 }
@@ -233,11 +233,11 @@ export class GIGeomCheck {
     }
     private _checkFaces(): string[] {
         const errors: string[] = [];
-        this._geom_maps.dn_faces_wirestris.forEach( (face, face_i) => {
+        this._geom_maps.dn_faces_wires.forEach( (face, face_i) => {
             // check this face itself
             if (face === null) { errors.push('Face ' + face_i + ': null.'); return; } // deleted
             // down from face to wires
-            const wires_i: number[] = face[0];
+            const wires_i: number[] = face;
             for (const wire_i of wires_i) {
                 // check the wire
                 if (wire_i === undefined) {
@@ -249,22 +249,6 @@ export class GIGeomCheck {
                     const wire_face_i: number = this._geom_maps.up_wires_faces.get(wire_i);
                     if (wire_face_i !== face_i) {
                         errors.push('Face ' + face_i + ': Wire->Face index is incorrect.');
-                    }
-                }
-            }
-            // down from face to triangles
-            const tris_i: number[] = face[1];
-            for (const tri_i of tris_i) {
-                // check the wire
-                if (tri_i === undefined) {
-                    errors.push('Face ' + face_i + ': Face->Tri undefined.');
-                } else if (tri_i === null) {
-                    errors.push('Face ' + face_i + ': Face->Tri null.');
-                } else {
-                    // check the tri points up to this face
-                    const tri_face_i: number = this._geom_maps.up_tris_faces.get(tri_i);
-                    if (tri_face_i !== face_i) {
-                        errors.push('Face ' + face_i + ': Tri->Face index is incorrect.');
                     }
                 }
             }
@@ -285,6 +269,26 @@ export class GIGeomCheck {
                 // check that this pgon points down to this face
                 if (pgon !== face_i) {
                     errors.push('Face ' + face_i + ': Pgon->Face index is incorrect.');
+                }
+            }
+        });
+        this._geom_maps.dn_faces_tris.forEach( (facetris, face_i) => {
+            // check this face itself
+            if (facetris === null) { errors.push('Face ' + face_i + ': null.'); return; } // deleted
+            // down from face to triangles
+            const tris_i: number[] = facetris;
+            for (const tri_i of tris_i) {
+                // check the wire
+                if (tri_i === undefined) {
+                    errors.push('Face ' + face_i + ': Face->Tri undefined.');
+                } else if (tri_i === null) {
+                    errors.push('Face ' + face_i + ': Face->Tri null.');
+                } else {
+                    // check the tri points up to this face
+                    const tri_face_i: number = this._geom_maps.up_tris_faces.get(tri_i);
+                    if (tri_face_i !== face_i) {
+                        errors.push('Face ' + face_i + ': Tri->Face index is incorrect.');
+                    }
                 }
             }
         });

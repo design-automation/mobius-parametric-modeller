@@ -27,8 +27,8 @@ export class GIGeomNav {
     public getWire(wire_i: number): TWire {
         return this._geom_maps.dn_wires_edges.get(wire_i);
     }
-    public getFace(wire_i: number): TFace {
-        return this._geom_maps.dn_faces_wirestris.get(wire_i);
+    public getFace(face_i: number): TFace {
+        return this._geom_maps.dn_faces_wires.get(face_i);
     }
     public getPoint(point_i: number): TPoint {
         return this._geom_maps.dn_points_verts.get(point_i);
@@ -58,10 +58,10 @@ export class GIGeomNav {
         return this._geom_maps.dn_wires_edges.get(wire_i);
     }
     public navFaceToWire(face_i: number): number[] {
-        return this._geom_maps.dn_faces_wirestris.get(face_i)[0];
+        return this._geom_maps.dn_faces_wires.get(face_i);
     }
     public navFaceToTri(face_i: number): number[] {
-        return this._geom_maps.dn_faces_wirestris.get(face_i)[1];
+        return this._geom_maps.dn_faces_tris.get(face_i);
     }
     public navPointToVert(point_i: number): number {
         return this._geom_maps.dn_points_verts.get(point_i);

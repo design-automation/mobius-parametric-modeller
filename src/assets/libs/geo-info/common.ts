@@ -150,13 +150,13 @@ export enum EEntTypeStr {
     'mo'
 }
 
-export enum EEntStrToGeomArray {
+export enum EEntStrToGeomMaps {
     'posis',
     'dn_tris_verts',
     'dn_verts_posis',
     'dn_edges_verts',
     'dn_wires_edges',
-    'dn_faces_wirestris',
+    'dn_faces_wires',
     'dn_points_verts',
     'dn_plines_wires',
     'dn_pgons_faces',
@@ -262,7 +262,8 @@ export interface IGeomArrays {
     dn_tris_verts: Map<number, TTri>;
     dn_edges_verts: Map<number, TEdge>;
     dn_wires_edges: Map<number, TWire>;
-    dn_faces_wirestris: Map<number, TFace>;
+    dn_faces_wires: Map<number, TFace>;
+    dn_faces_tris: Map<number, TFaceTri>;
     dn_points_verts: Map<number, TPoint>;
     dn_plines_wires: Map<number, TPline>;
     dn_pgons_faces: Map<number, TPgon>;
@@ -310,7 +311,8 @@ export type TTri = [number, number, number]; // [position, position, position]
 export type TVert = number; // positions
 export type TEdge = [number, number]; // [vertex, vertex]
 export type TWire = number[]; // [edge, edge,....]
-export type TFace = [number[], number[]]; // [[wire, ....], [triangle, ...]]
+export type TFace = number[]; // [wire, ....]
+export type TFaceTri = number[]; // [triangle, ...]
 export type TPoint = number; // [vertex,....]
 export type TPline = number; // [wire,....]
 export type TPgon = number; // [face,....]
@@ -334,6 +336,7 @@ export interface IGeomData {
     wires: TWire[];
     wires_i: number[];
     faces: TFace[];
+    facetris: TFaceTri[];
     faces_i: number[];
     points: TPoint[];
     points_i: number[];

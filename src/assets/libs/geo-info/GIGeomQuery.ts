@@ -1,5 +1,5 @@
 
-import {  EEntType, IGeomArrays, EEntStrToGeomArray, TWire, Txyz, TColl, TEntTypeIdx,
+import {  EEntType, IGeomArrays, EEntStrToGeomMaps, TWire, Txyz, TColl, TEntTypeIdx,
     IGeomPack, TFace, EWireType, TEdge, IGeomSets as IEntSets } from './common';
 import { isPosi, isPoint, isPline, isPgon, isColl } from './id';
 import { GIGeom } from './GIGeom';
@@ -74,7 +74,7 @@ export class GIGeomQuery {
             return posis_i;
         }
         // get ents indices array from down arrays
-        const geom_array_key: string = EEntStrToGeomArray[ent_type];
+        const geom_array_key: string = EEntStrToGeomMaps[ent_type];
         const geom_array: any[] = this._geom_maps[geom_array_key];
         const ents_i: number[] = [];
         // for (let i = 0; i < geom_array.length; i++ ) {
@@ -95,7 +95,7 @@ export class GIGeomQuery {
             return this._geom_maps.up_posis_verts.size;
         } else {
             // get ents count from down arrays
-            const geom_array_key: string = EEntStrToGeomArray[ent_type];
+            const geom_array_key: string = EEntStrToGeomMaps[ent_type];
             return this._geom_maps[geom_array_key].size;
         }
     }
@@ -138,7 +138,7 @@ export class GIGeomQuery {
         if (ent_type === EEntType.POSI) {
             return this._geom_maps.up_posis_verts.has(index);
         }
-        const geom_arrays_key: string = EEntStrToGeomArray[ent_type];
+        const geom_arrays_key: string = EEntStrToGeomMaps[ent_type];
         return this._geom_maps[geom_arrays_key].has(index);
     }
     /**
@@ -403,7 +403,7 @@ export class GIGeomQuery {
         }
         const face_i: number = this._geom.nav.navWireToFace(wire_i);
         const face: TFace = this._geom.nav.getFace(face_i);
-        const index: number = face[0].indexOf(wire_i);
+        const index: number = face.indexOf(wire_i);
         if (index === 0) { return EWireType.PGON; }
         if (index > 0) { return EWireType.PGON_HOLE; }
         throw new Error('Inconsistencies found in the internal data structure.');
@@ -536,16 +536,14 @@ export class GIGeomQuery {
      * @param face_i
      */
     public getFaceBoundary(face_i: number): number {
-        const wires_i: number[] = this._geom_maps.dn_faces_wirestris.get(face_i)[0];
-        return wires_i[0];
+        return this._geom_maps.dn_faces_wires.get(face_i)[0];
     }
     /**
      *
      * @param face_i
      */
     public getFaceHoles(face_i: number): number[] {
-        const wires_i: number[] = this._geom_maps.dn_faces_wirestris.get(face_i)[0];
-        return wires_i.slice(1);
+        return this._geom_maps.dn_faces_wires.get(face_i).slice(1);
     }
     /**
      *
@@ -553,7 +551,7 @@ export class GIGeomQuery {
      */
     public getFaceNormal(face_i: number): Txyz {
         const normal: Txyz = [0, 0, 0];
-        const tris_i: number[] = this._geom._geom_maps.dn_faces_wirestris.get(face_i)[1];
+        const tris_i: number[] = this._geom._geom_maps.dn_faces_tris.get(face_i);
         let count = 0;
         for (const tri_i of tris_i) {
             const posis_i: number[] = this._geom_maps.dn_tris_verts.get(tri_i).map(vert_i => this._geom_maps.dn_verts_posis.get(vert_i));

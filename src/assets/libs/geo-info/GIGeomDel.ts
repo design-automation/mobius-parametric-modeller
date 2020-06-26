@@ -199,7 +199,8 @@ export class GIGeomDel {
                 arrRem(coll_pgons_i, pgon_i);
             });
             // delete the face
-            this._geom_maps.dn_faces_wirestris.delete(face_i);
+            this._geom_maps.dn_faces_wires.delete(face_i);
+            this._geom_maps.dn_faces_tris.delete(face_i);
             this._geom_maps.up_faces_pgons.delete(face_i);
             // delete the wires
             wires_i.forEach( wire_i => {

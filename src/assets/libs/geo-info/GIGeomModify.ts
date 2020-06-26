@@ -1,4 +1,4 @@
-import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz, TColl, TVert, Txy } from './common';
+import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz, TColl, TVert, Txy, TFaceTri } from './common';
 import { GIGeom } from './GIGeom';
 import { arrRem } from '../util/arrs';
 
@@ -363,9 +363,10 @@ export class GIGeomModify {
         // if this is the first wire in a face, reverse the triangles
         const face_i: number = this._geom_maps.up_wires_faces.get(wire_i);
         if (face_i !== undefined) {
-            const face: TFace = this._geom_maps.dn_faces_wirestris.get(face_i);
-            if (face[0][0] === wire_i) {
-                for (const tri_i of face[1]) {
+            const face: TFace = this._geom_maps.dn_faces_wires.get(face_i);
+            const facetris: TFaceTri = this._geom_maps.dn_faces_tris.get(face_i);
+            if (face[0] === wire_i) {
+                for (const tri_i of facetris) {
                     const tri: TTri = this._geom_maps.dn_tris_verts.get(tri_i);
                     tri.reverse();
                 }

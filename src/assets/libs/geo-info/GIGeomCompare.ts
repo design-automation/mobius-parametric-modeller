@@ -76,11 +76,11 @@ export class GIGeomCompare {
      * For making holes in faces, it is safer to use the cutFaceHoles method.
      */
     public setPgonHoles(face_i: number, holes_i: number[]): void {
-        const face: TFace = this._geom_maps.dn_faces_wirestris.get(face_i);
-        const boundary_i: number = face[0][0];
-        face[0] = [boundary_i];
+        const face: TFace = this._geom_maps.dn_faces_wires.get(face_i);
+        const wires_i: number[] = [face[0]];
         for (let i = 0; i < holes_i.length; i++) {
-            face[0][i + 1] = holes_i[i];
+            wires_i.push( holes_i[i] );
         }
+        this._geom_maps.dn_faces_wires.set(face_i, wires_i);
     }
 }

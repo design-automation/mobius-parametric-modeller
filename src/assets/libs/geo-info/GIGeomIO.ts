@@ -1,4 +1,4 @@
-import {  IGeomData, IGeomArrays, IGeomPack, EEntType, IEntSets, TTri, TEdge, TWire, IModelData, EEntStrToGeomMaps } from './common';
+import {  IGeomData, IGeomArrays, IGeomPack, EEntType, IEntSets, TTri, TEdge, TWire, EEntStrToGeomMaps } from './common';
 import { GIGeom } from './GIGeom';
 import * as lodash from 'lodash';
 import { cloneDeepMapArr, getEntTypeStr as getEntTypeName } from './common_func';
@@ -23,6 +23,23 @@ export class GIGeomIO {
      * @param geom_maps The geom_arrays of the other model.
      */
     public merge(other_geom: GIGeom): void {
+        // Check that we have correct number of time stamps
+        if (this._geom_maps.up_posis_verts.size !== this._geom_maps.posis_ts.size) {
+            throw new Error('Incorrent number of time stamps for posis.');
+        }
+        if (this._geom_maps.dn_points_verts.size !== this._geom_maps.points_ts.size) {
+            throw new Error('Incorrent number of time stamps for points.');
+        }
+        if (this._geom_maps.dn_plines_wires.size !== this._geom_maps.plines_ts.size) {
+            throw new Error('Incorrent number of time stamps for plines.');
+        }
+        if (this._geom_maps.dn_pgons_faces.size !== this._geom_maps.pgons_ts.size) {
+            throw new Error('Incorrent number of time stamps for pgons.');
+        }
+        if (this._geom_maps.dn_colls_objs.size !== this._geom_maps.colls_ts.size) {
+            throw new Error('Incorrent number of time stamps for colls.');
+        }
+        //
         const geom_maps = other_geom._geom_maps;
         // ======================================================================
         this._mergePosis(other_geom); // check for conflicts and merge verts
@@ -60,6 +77,23 @@ export class GIGeomIO {
      * @param geom_maps The geom_arrays of the other model.
      */
     public dump(geom_maps: IGeomArrays): void {
+        // Check that we have correct number of time stamps
+        if (this._geom_maps.up_posis_verts.size !== this._geom_maps.posis_ts.size) {
+            throw new Error('Incorrent number of time stamps for posis.');
+        }
+        if (this._geom_maps.dn_points_verts.size !== this._geom_maps.points_ts.size) {
+            throw new Error('Incorrent number of time stamps for points.');
+        }
+        if (this._geom_maps.dn_plines_wires.size !== this._geom_maps.plines_ts.size) {
+            throw new Error('Incorrent number of time stamps for plines.');
+        }
+        if (this._geom_maps.dn_pgons_faces.size !== this._geom_maps.pgons_ts.size) {
+            throw new Error('Incorrent number of time stamps for pgons.');
+        }
+        if (this._geom_maps.dn_colls_objs.size !== this._geom_maps.colls_ts.size) {
+            throw new Error('Incorrent number of time stamps for colls.');
+        }
+        //
         this._geom_maps.dn_points_verts = new Map(geom_maps.dn_points_verts);
         this._geom_maps.dn_plines_wires = new Map(geom_maps.dn_plines_wires);
         this._geom_maps.dn_pgons_faces = new Map(geom_maps.dn_pgons_faces);
@@ -97,6 +131,23 @@ export class GIGeomIO {
      * @param geom_maps The geom_arrays of the other model.
      */
     public dumpSelect(other_geom: GIGeom, ent_sets: IEntSets): void {
+        // Check that we have correct number of time stamps
+        if (this._geom_maps.up_posis_verts.size !== this._geom_maps.posis_ts.size) {
+            throw new Error('Incorrent number of time stamps for posis.');
+        }
+        if (this._geom_maps.dn_points_verts.size !== this._geom_maps.points_ts.size) {
+            throw new Error('Incorrent number of time stamps for points.');
+        }
+        if (this._geom_maps.dn_plines_wires.size !== this._geom_maps.plines_ts.size) {
+            throw new Error('Incorrent number of time stamps for plines.');
+        }
+        if (this._geom_maps.dn_pgons_faces.size !== this._geom_maps.pgons_ts.size) {
+            throw new Error('Incorrent number of time stamps for pgons.');
+        }
+        if (this._geom_maps.dn_colls_objs.size !== this._geom_maps.colls_ts.size) {
+            throw new Error('Incorrent number of time stamps for colls.');
+        }
+        //
         const geom_maps: IGeomArrays = other_geom._geom_maps;
         // ======================================================================
         this._dumpPosiObjCollSelect(other_geom, EEntType.POSI, ent_sets.posis_i);

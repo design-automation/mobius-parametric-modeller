@@ -14,15 +14,6 @@ export class GIGeomTimeStamp {
         this._geom = geom;
         this._geom_maps = geom_arrays;
     }
-        /**
-     * Update time stamp of an object.
-     * If the input entity is not an object, then objects will be retrieved.
-     * @param point_i
-     */
-    public updatePosisTs(ent_i: number): void {
-        const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
-        this._geom_maps.posis_ts[ent_i] = ts;
-    }
     /**
      * Update time stamp of an object.
      * If the input entity is not an object, then objects will be retrieved.
@@ -32,21 +23,21 @@ export class GIGeomTimeStamp {
         const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
         switch (ent_type) {
             case EEntType.POSI:
-                this._geom_maps.posis_ts[ent_i] = ts;
+                this._geom_maps.posis_ts.set(ent_i, ts);
                 return;
             case EEntType.POINT:
-                this._geom_maps.points_ts[ent_i] = ts;
+                this._geom_maps.points_ts.set(ent_i, ts);
                 return;
             case EEntType.PLINE:
-                this._geom_maps.plines_ts[ent_i] = ts;
+                this._geom_maps.plines_ts.set(ent_i, ts);
                 return;
             case EEntType.PGON:
-                this._geom_maps.pgons_ts[ent_i] = ts;
+                this._geom_maps.pgons_ts.set(ent_i, ts);
                 return;
             case EEntType.COLL:
-                this._geom.nav.navCollToPgon(ent_i).forEach( pgon_i => this._geom_maps.pgons_ts[pgon_i] = ts );
-                this._geom.nav.navCollToPline(ent_i).forEach( pline_i => this._geom_maps.plines_ts[pline_i] = ts );
-                this._geom.nav.navCollToPoint(ent_i).forEach( point_i => this._geom_maps.points_ts[point_i] = ts );
+                this._geom.nav.navCollToPgon(ent_i).forEach( pgon_i => this._geom_maps.pgons_ts.set(pgon_i, ts) );
+                this._geom.nav.navCollToPline(ent_i).forEach( pline_i => this._geom_maps.plines_ts.set(pline_i, ts) );
+                this._geom.nav.navCollToPoint(ent_i).forEach( point_i => this._geom_maps.points_ts.set(point_i, ts) );
                 return;
             case EEntType.FACE:
             case EEntType.WIRE:
@@ -56,16 +47,16 @@ export class GIGeomTimeStamp {
                 const [ent2_type, ent2_i]: TEntTypeIdx = this._geom.query.getTopoObj(ent_type, ent_i);
                 switch (ent2_type) {
                     case EEntType.POSI:
-                        this._geom_maps.posis_ts[ent2_i] = ts;
+                        this._geom_maps.posis_ts.set(ent2_i, ts);
                         return;
                     case EEntType.POINT:
-                        this._geom_maps.points_ts[ent2_i] = ts;
+                        this._geom_maps.points_ts.set(ent2_i, ts);
                         return;
                     case EEntType.PLINE:
-                        this._geom_maps.plines_ts[ent2_i] = ts;
+                        this._geom_maps.plines_ts.set(ent2_i, ts);
                         return;
                     case EEntType.PGON:
-                        this._geom_maps.pgons_ts[ent2_i] = ts;
+                        this._geom_maps.pgons_ts.set(ent2_i, ts);
                         return;
                 }
         }
@@ -79,19 +70,19 @@ export class GIGeomTimeStamp {
         const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
         switch (ent_type) {
             case EEntType.POSI:
-                this._geom_maps.posis_ts[ent_i] = ts;
+                this._geom_maps.posis_ts.set(ent_i, ts);
                 return;
             case EEntType.POINT:
-                this._geom_maps.points_ts[ent_i] = ts;
+                this._geom_maps.points_ts.set(ent_i, ts);
                 return;
             case EEntType.PLINE:
-                this._geom_maps.plines_ts[ent_i] = ts;
+                this._geom_maps.plines_ts.set(ent_i, ts);
                 return;
             case EEntType.PGON:
-                this._geom_maps.pgons_ts[ent_i] = ts;
+                this._geom_maps.pgons_ts.set(ent_i, ts);
                 return;
             case EEntType.COLL:
-                this._geom_maps.colls_ts[ent_i] = ts;
+                this._geom_maps.colls_ts.set(ent_i, ts);
                 return;
         }
     }
@@ -103,19 +94,19 @@ export class GIGeomTimeStamp {
         const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
         switch (ent_type) {
             case EEntType.POSI:
-                ents_i.forEach( ent_i => this._geom_maps.posis_ts[ent_i] = ts );
+                ents_i.forEach( ent_i => this._geom_maps.posis_ts.set(ent_i, ts) );
                 return;
             case EEntType.POINT:
-                ents_i.forEach( ent_i => this._geom_maps.points_ts[ent_i] = ts );
+                ents_i.forEach( ent_i => this._geom_maps.points_ts.set(ent_i, ts) );
                 return;
             case EEntType.PLINE:
-                ents_i.forEach( ent_i => this._geom_maps.plines_ts[ent_i] = ts );
+                ents_i.forEach( ent_i => this._geom_maps.plines_ts.set(ent_i, ts) );
                 return;
             case EEntType.PGON:
-                ents_i.forEach( ent_i => this._geom_maps.pgons_ts[ent_i] = ts );
+                ents_i.forEach( ent_i => this._geom_maps.pgons_ts.set(ent_i, ts) );
                 return;
             case EEntType.COLL:
-                ents_i.forEach( ent_i => this._geom_maps.colls_ts[ent_i] = ts );
+                ents_i.forEach( ent_i => this._geom_maps.colls_ts.set(ent_i, ts) );
                 return;
         }
     }
@@ -126,15 +117,15 @@ export class GIGeomTimeStamp {
     public getEntTs(ent_type: EEntType, ent_i: number): number {
         switch (ent_type) {
             case EEntType.POSI:
-                return this._geom_maps.posis_ts[ent_i];
+                return this._geom_maps.posis_ts.get(ent_i);
             case EEntType.POINT:
-                return this._geom_maps.points_ts[ent_i];
+                return this._geom_maps.points_ts.get(ent_i);
             case EEntType.PLINE:
-                return this._geom_maps.plines_ts[ent_i];
+                return this._geom_maps.plines_ts.get(ent_i);
             case EEntType.PGON:
-                return this._geom_maps.pgons_ts[ent_i];
+                return this._geom_maps.pgons_ts.get(ent_i);
             case EEntType.COLL:
-                return this._geom_maps.colls_ts[ent_i];
+                return this._geom_maps.colls_ts.get(ent_i);
             default:
                 throw new Error('Get time stamp: Entity type not recognised.');
         }
@@ -149,19 +140,19 @@ export class GIGeomTimeStamp {
     public setEntTs(ent_type: EEntType, ent_i: number, ts: number): void {
         switch (ent_type) {
             case EEntType.POSI:
-                this._geom_maps.posis_ts[ent_i] = ts;
+                this._geom_maps.posis_ts.set(ent_i, ts);
                 return;
             case EEntType.POINT:
-                this._geom_maps.points_ts[ent_i] = ts;
+                this._geom_maps.points_ts.set(ent_i, ts);
                 return;
             case EEntType.PLINE:
-                this._geom_maps.plines_ts[ent_i] = ts;
+                this._geom_maps.plines_ts.set(ent_i, ts);
                 return;
             case EEntType.PGON:
-                this._geom_maps.pgons_ts[ent_i] = ts;
+                this._geom_maps.pgons_ts.set(ent_i, ts);
                 return;
             case EEntType.COLL:
-                this._geom_maps.colls_ts[ent_i] = ts;
+                this._geom_maps.colls_ts.set(ent_i, ts);
                 return;
             default:
                 throw new Error('Get time stamp: Entity type not recognised.');

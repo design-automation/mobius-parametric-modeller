@@ -857,9 +857,9 @@ function _extrudeCopies(__model__: GIModel, ents: TEntTypeIdx|TEntTypeIdx[],
     const ents_arr: TEntTypeIdx[] = (getArrDepth(ents) === 1 ? [ents] : ents) as TEntTypeIdx[];
     const extrude_vec: Txyz = (Array.isArray(dist) ? dist : [0, 0, dist]) as Txyz;
     const extrude_vec_div: Txyz = vecDiv(extrude_vec, divisions);
-    const copies: TEntTypeIdx[] = ents_arr.slice();
+    const copies: TEntTypeIdx[] = [];
     // make the copies
-    for (let i = 1; i < divisions + 1; i++) {
+    for (let i = 0; i < divisions + 1; i++) {
         // copy the list of entities
         const copied_ents_arr: TEntTypeIdx[] = _copyGeom(__model__, ents_arr, true) as TEntTypeIdx[];
         // copy the positions that belong to the list of entities

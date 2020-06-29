@@ -1201,6 +1201,9 @@ export class GIGeomIO {
                 // check time stamp
                 const this_ts: number = this._geom.time_stamp.getEntTs(EEntType.POSI, other_posi_i);
                 if (this_ts !== other_ts) {
+                    console.log(">>> other_posi_i", other_posi_i)
+                    console.log(">>> other time stamp", other_ts)
+                    console.log(">>> other posis_ts", other_geom._geom_maps.posis_ts)
                     throw new Error('Conflict merging positions.');
                 }
                 // merge verts

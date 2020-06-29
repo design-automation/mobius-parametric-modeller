@@ -446,7 +446,7 @@ export function Rename(__model__: GIModel, ent_type_sel: _EEntTypeAndMod, old_at
     // --- Error Check ---
     const fn_name = 'attrib.Rename';
     const arg_name = 'ent_type_sel';
-    const ent_type: EEntType = _getEntTypeFromStr(ent_type_sel);;
+    const ent_type: EEntType = _getEntTypeFromStr(ent_type_sel);
     if (__model__.debug) {
         checkAttribName(fn_name , old_attrib);
         checkAttribName(fn_name , new_attrib);

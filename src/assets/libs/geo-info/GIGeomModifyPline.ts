@@ -44,14 +44,14 @@ export class GIGeomModifyPline {
     /**
      * Open a wire, by deleting the last edge.
      * ~
-     * If teh wire is already open, do nothing.
+     * If the wire is already open, do nothing.
      * ~
-     * If teh wire does not belong to apline, then do nothing.
+     * If the wire does not belong to a pline, then do nothing.
      * @param wire_i The wire to close.
      */
-    public openPline(wire_i: number): void {
+    public openPline(pline_i: number): void {
+        const wire_i: number = this._geom.nav.navPlineToWire(pline_i);
         // get the pline
-        const pline_i: number = this._geom.nav.navWireToPline(wire_i);
         if (pline_i === undefined) { return; }
         // get the wire start and end verts
         const wire: TWire = this._geom_maps.dn_wires_edges.get(wire_i);
@@ -66,6 +66,6 @@ export class GIGeomModifyPline {
         // if this wire is not closed, then return
         if (start_vert_i !== end_vert_i) { return; }
         // del the end edge from the pline
-        this._geom.del.delEdges(end_edge_i, true, false);
+        this._geom.del_edge.delEdges(end_edge_i, true, false);
     }
 }

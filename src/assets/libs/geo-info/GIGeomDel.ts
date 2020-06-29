@@ -53,6 +53,8 @@ export class GIGeomDel {
                 deleted_posis_i.push(posi_i);
             }
             // no need to update down arrays
+            // del time stamp
+            this._geom.time_stamp.delEntTs(EEntType.POSI, posi_i);
         }
         // delete all the posi attributes, for all posis that were deleted
         this._geom.modeldata.attribs.add.delEntFromAttribs(EEntType.POSI, deleted_posis_i);
@@ -78,6 +80,8 @@ export class GIGeomDel {
             this._geom_maps.posis_ts.delete(posi_i);
             deleted_posis_i.push(posi_i);
             // no need to update down arrays
+            // del time stamp
+            this._geom.time_stamp.delEntTs(EEntType.POSI, posi_i);
         }
         // delete all the posi attributes, for all posis that were deleted
         this._geom.modeldata.attribs.add.delEntFromAttribs(EEntType.POSI, deleted_posis_i);
@@ -116,6 +120,8 @@ export class GIGeomDel {
             if (del_unused_posis) {
                 this.delUnusedPosis(posi_i);
             }
+            // del time stamp
+            this._geom.time_stamp.delEntTs(EEntType.POINT, point_i);
         }
     }
     /**
@@ -170,6 +176,8 @@ export class GIGeomDel {
             if (del_unused_posis) {
                 this.delUnusedPosis(posis_i);
             }
+            // del time stamp
+            this._geom.time_stamp.delEntTs(EEntType.PLINE, pline_i);
         }
     }
     /**
@@ -238,6 +246,8 @@ export class GIGeomDel {
             if (del_unused_posis) {
                 this.delUnusedPosis(posis_i);
             }
+            // del time stamp
+            this._geom.time_stamp.delEntTs(EEntType.PGON, pgon_i);
         }
     }
     /**
@@ -284,42 +294,17 @@ export class GIGeomDel {
             });
             // down arrays
             this._geom_maps.dn_colls_objs.delete(coll_i);
+            // del time stamp
+            this._geom.time_stamp.delEntTs(EEntType.COLL, coll_i);
         }
         // check parents
         const set_colls_i: Set<number> = new Set(colls_i);
         this._geom_maps.dn_colls_objs.forEach( (coll, coll_i) => {
             if (set_colls_i.has(coll[0])) {
                 coll[0] = -1;
+                // update time stamp
+                this._geom.time_stamp.updateEntTs(EEntType.COLL, coll_i);
             }
         });
-    }
-    /**
-     * Delete edges.
-     * ~
-     * If heal=true, the gap where teh edge was get healed
-     * ~
-     * TODO implementation to be completed
-     *
-     */
-    public delEdges(edges_i: number|number[], del_unused_posis: boolean, heal: boolean): void {
-        // del attribs
-        this._geom.modeldata.attribs.add.delEntFromAttribs(EEntType.EDGE, edges_i);
-        // create array
-        edges_i = (Array.isArray(edges_i)) ? edges_i : [edges_i];
-        if (!edges_i.length) { return; }
-        // loop
-        for (const edge_i of edges_i) {
-            if (!this._geom.query.entExists(EEntType.EDGE, edge_i)) { continue; } // already deleted
-            // first get all the arrays so we dont break navigation
-            const wire_i: number = this._geom.nav.navEdgeToWire(edge_i);
-            const face_i: number = this._geom.nav.navWireToFace(wire_i); // may be undefined
-            const verts_i: number[] = this._geom.nav.navEdgeToVert(edge_i);
-            const posi0_i: number = this._geom.nav.navVertToPosi(verts_i[0]);
-            const posi1_i: number = this._geom.nav.navVertToPosi(verts_i[1]);
-            // getthe type of wire
-            const wire_typ: EWireType = this._geom.query.getWireType(wire_i);
-            // TODO
-            throw new Error('Not implemented.');
-        }
     }
 }

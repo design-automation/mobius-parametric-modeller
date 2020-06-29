@@ -90,7 +90,7 @@ export class GIGeomDelVert {
 
             // time stamp
             const pline_i: number = this._geom_maps.up_wires_plines.get(wire_i);
-            this._geom.time_stamp.updateEntTs(EEntType.PLINE, pline_i);
+            this._geom.time_stamp.updateObjsTs(EEntType.PLINE, pline_i);
 
         } else if (!wire_is_closed && index_vert_i === num_verts - 1) {
 
@@ -99,7 +99,7 @@ export class GIGeomDelVert {
 
             // time stamp
             const pline_i: number = this._geom_maps.up_wires_plines.get(wire_i);
-            this._geom.time_stamp.updateEntTs(EEntType.PLINE, pline_i);
+            this._geom.time_stamp.updateObjsTs(EEntType.PLINE, pline_i);
 
         } else {
 
@@ -110,7 +110,7 @@ export class GIGeomDelVert {
 
                 // time stamp
                 const pline_i: number = this._geom_maps.up_wires_plines.get(wire_i);
-                this._geom.time_stamp.updateEntTs(EEntType.PLINE, pline_i);
+                this._geom.time_stamp.updateObjsTs(EEntType.PLINE, pline_i);
 
             } else {
 

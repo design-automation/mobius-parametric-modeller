@@ -1,6 +1,6 @@
 
 import {  EEntType, IGeomArrays, EEntStrToGeomMaps, TWire, Txyz, TEntTypeIdx,
-    TFace, EWireType, TEdge, IEntSets } from './common';
+    TFace, EWireType, TEdge, IEntSets as IDelEntSets } from './common';
 import { isPosi, isPoint, isPline, isPgon, isColl } from './id';
 import { GIGeom } from './GIGeom';
 import { vecFromTo, vecCross, vecDiv, vecNorm, vecLen, vecDot } from '../geom/vectors';
@@ -152,7 +152,7 @@ export class GIGeomQuery {
      * ~
      * Used for deleting all entities.
      */
-    public createEntSets(ents: TEntTypeIdx[]): IEntSets {
+    public getDelEntSets(ents: TEntTypeIdx[]): IDelEntSets {
         const set_posis_i: Set<number> = new Set();
         const set_ent_posis_i: Set<number> = new Set();
         const set_points_i: Set<number> = new Set();
@@ -733,22 +733,51 @@ export class GIGeomQuery {
         return Array.from(perimeter_ents_i);
     }
     /**
+     * Get the object of a topo entity.
+     * @param ent_type
+     * @param ent_i
+     */
+    public getTopoObj(ent_type: EEntType, ent_i: number): TEntTypeIdx {
+        switch (ent_type) {
+            case EEntType.FACE:
+                return [EEntType.PGON, this._geom.nav.navFaceToPgon(ent_i)];
+            case EEntType.WIRE:
+            case EEntType.EDGE:
+            case EEntType.VERT:
+                const pgons_i: number[] = this._geom.nav.navAnyToPgon(ent_type, ent_i);
+                if (pgons_i.length !== 0) {
+                    return [EEntType.PGON, pgons_i[0]];
+                }
+                const plines_i: number[] = this._geom.nav.navAnyToPline(ent_type, ent_i);
+                if (plines_i.length !== 0) {
+                    return [EEntType.PLINE, plines_i[0]];
+                }
+                const points_i: number[] = this._geom.nav.navAnyToPoint(ent_type, ent_i);
+                if (this._geom.nav.navAnyToVert(ent_type, ent_i).length !== 0) {
+                    return [EEntType.POINT, points_i[0]];
+                }
+                break;
+            default:
+                throw new Error('Invalid entity type: Must be a topo entity.');
+        }
+    }
+    /**
      * Get the object type of a topo entity.
      * @param ent_type
-     * @param index
+     * @param ent_i
      */
-    public getTopoObjType(ent_type: EEntType, index: number): EEntType {
+    public getTopoObjType(ent_type: EEntType, ent_i: number): EEntType {
         switch (ent_type) {
             case EEntType.FACE:
                 return EEntType.PGON;
             case EEntType.WIRE:
             case EEntType.EDGE:
             case EEntType.VERT:
-                if (this._geom.nav.navAnyToFace(ent_type, index).length !== 0) {
+                if (this._geom.nav.navAnyToFace(ent_type, ent_i).length !== 0) {
                     return EEntType.PGON;
-                } else if (this._geom.nav.navAnyToWire(ent_type, index).length !== 0) {
+                } else if (this._geom.nav.navAnyToWire(ent_type, ent_i).length !== 0) {
                     return EEntType.PLINE;
-                } else if (this._geom.nav.navAnyToVert(ent_type, index).length !== 0) {
+                } else if (this._geom.nav.navAnyToVert(ent_type, ent_i).length !== 0) {
                     return EEntType.POINT;
                 }
                 break;
@@ -759,14 +788,14 @@ export class GIGeomQuery {
     /**
      * Get the topo entities of an object
      * @param ent_type
-     * @param index
+     * @param ent_i
      */
-    public getObjTopo(ent_type: EEntType, index: number): [number[], number[], number[], number[]] {
+    public getObjTopo(ent_type: EEntType, ent_i: number): [number[], number[], number[], number[]] {
         return [
-            this._geom.nav.navAnyToVert(ent_type, index),
-            this._geom.nav.navAnyToEdge(ent_type, index),
-            this._geom.nav.navAnyToWire(ent_type, index),
-            this._geom.nav.navAnyToFace(ent_type, index),
+            this._geom.nav.navAnyToVert(ent_type, ent_i),
+            this._geom.nav.navAnyToEdge(ent_type, ent_i),
+            this._geom.nav.navAnyToWire(ent_type, ent_i),
+            this._geom.nav.navAnyToFace(ent_type, ent_i),
         ];
     }
 }

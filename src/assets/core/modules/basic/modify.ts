@@ -497,7 +497,7 @@ function _reverse(__model__: GIModel, ents_arr: TEntTypeIdx[]): void {
     for (const [ent_type, ent_i] of ents_arr) {
         const wires_i: number[] = __model__.modeldata.geom.nav.navAnyToWire(ent_type, ent_i);
         wires_i.forEach( wire_i => __model__.modeldata.geom.modify.reverse(wire_i) );
-        __model__.modeldata.geom.time_stamp.updateEntTs(ent_type, ent_i);
+        __model__.modeldata.geom.time_stamp.updateObjsTs(ent_type, ent_i);
     }
 }
 // ================================================================================================
@@ -542,7 +542,7 @@ function _shift(__model__: GIModel, ents_arr: TEntTypeIdx[], offset: number): vo
     for (const [ent_type, ent_i] of ents_arr) {
         const wires_i: number[] = __model__.modeldata.geom.nav.navAnyToWire(ent_type, ent_i);
         wires_i.forEach( wire_i => __model__.modeldata.geom.modify.shift(wire_i, offset) );
-        __model__.modeldata.geom.time_stamp.updateEntTs(ent_type, ent_i);
+        __model__.modeldata.geom.time_stamp.updateObjsTs(ent_type, ent_i);
     }
 }
 // ================================================================================================
@@ -582,15 +582,14 @@ function _ring(__model__: GIModel, ents_arr: TEntTypeIdx[], method: _ERingMethod
         switch (method) {
             case _ERingMethod.CLOSE:
                 __model__.modeldata.geom.modify_pline.closePline(ent_i);
-                __model__.modeldata.geom.time_stamp.updateEntTs(ent_type, ent_i);
                 break;
             case _ERingMethod.OPEN:
                 __model__.modeldata.geom.modify_pline.openPline(ent_i);
-                __model__.modeldata.geom.time_stamp.updateEntTs(ent_type, ent_i);
                 break;
             default:
                 break;
         }
+        __model__.modeldata.geom.time_stamp.updateObjsTs(ent_type, ent_i);
     }
 }
 // ================================================================================================
@@ -791,6 +790,7 @@ function _remesh(__model__: GIModel, ents_arr: TEntTypeIdx[]): void {
             __model__.modeldata.geom.modify_pgon.triPgons(pgons_i);
         }
     }
+    // time stamp is updated by triPgons()
 }
 
 // ================================================================================================
@@ -836,7 +836,7 @@ export function Delete(__model__: GIModel, entities: TId|TId[], method: _EDelete
         ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
-    const ent_sets: IEntSets = __model__.modeldata.geom.query.createEntSets(ents_arr);
+    const ent_sets: IEntSets = __model__.modeldata.geom.query.getDelEntSets(ents_arr);
     switch (method) {
         case _EDeleteMethod.DELETE_SELECTED:
             if (isEmptyArr2(entities)) { return; }

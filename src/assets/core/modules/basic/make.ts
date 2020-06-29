@@ -1331,7 +1331,7 @@ function _divide(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], diviso
             const new_edges_i: number[] = _divideEdge(__model__, exist_edge_i, divisor, method);
             all_new_edges_i.push(...new_edges_i);
         }
-        __model__.modeldata.geom.time_stamp.updateEntTs(ent_type, index);
+        __model__.modeldata.geom.time_stamp.updateObjsTs(ent_type, index);
         return all_new_edges_i.map(one_edge_i => [EEntType.EDGE, one_edge_i] as TEntTypeIdx);
     } else {
         return [].concat(...(ents_arr as TEntTypeIdx[]).map(one_edge => _divide(__model__, one_edge, divisor, method)));

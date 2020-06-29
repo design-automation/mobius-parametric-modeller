@@ -1,5 +1,5 @@
 import { IAttribsData, IAttribData, TAttribDataTypes, EEntType,
-    IAttribsMaps, EEntTypeStr, TModelAttribValuesArr, IGeomPack, IGeomSets } from './common';
+    IAttribsMaps, EEntTypeStr, TModelAttribValuesArr, IGeomPack, IEntSets } from './common';
 import { GIAttribMap } from './GIAttribMap';
 import { GIModelData } from './GIModelData';
 import * as lodash from 'lodash';
@@ -58,7 +58,7 @@ export class GIAttribsIO {
      * Assumes this model is empty.
      * @param model_data Attribute data from the other model.
      */
-    public dumpSelect(attribs_maps: IAttribsMaps, ent_sets: IGeomSets): void {
+    public dumpSelect(attribs_maps: IAttribsMaps, ent_sets: IEntSets): void {
         if (attribs_maps.ps !== undefined) {
             this._dumpAttribsSelect(attribs_maps, EEntType.POSI, ent_sets.posis_i);
         }

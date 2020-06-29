@@ -16,12 +16,12 @@ export const XZPLANE: TPlane = [[0, 0, 0], [1, 0, 0], [0, 0, 1]];
 export type TEntTypeIdx = [EEntType, number];
 
 // For each entity type, a set of entity indexes
-export interface IGeomSets {
-    posis_i: Set<number>;
-    points_i: Set<number>;
-    plines_i: Set<number>;
-    pgons_i: Set<number>;
-    colls_i: Set<number>;
+export interface IEntSets {
+    posis_i?: Set<number>;
+    points_i?: Set<number>;
+    plines_i?: Set<number>;
+    pgons_i?: Set<number>;
+    colls_i?: Set<number>;
     obj_posis_i?: Set<number>;
     verts_i?: Set<number>;
     tris_i?: Set<number>;

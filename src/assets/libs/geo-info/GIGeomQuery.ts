@@ -1,6 +1,6 @@
 
 import {  EEntType, IGeomArrays, EEntStrToGeomMaps, TWire, Txyz, TEntTypeIdx,
-    TFace, EWireType, TEdge, IGeomSets as IEntSets } from './common';
+    TFace, EWireType, TEdge, IEntSets } from './common';
 import { isPosi, isPoint, isPline, isPgon, isColl } from './id';
 import { GIGeom } from './GIGeom';
 import { vecFromTo, vecCross, vecDiv, vecNorm, vecLen, vecDot } from '../geom/vectors';
@@ -142,7 +142,7 @@ export class GIGeomQuery {
         return this._geom_maps[geom_arrays_key].has(index);
     }
     /**
-     * Returns a geompack of unique indexes, given an array of TEntTypeIdx.
+     * Returns sets of unique indexes, given an array of TEntTypeIdx.
      * ~
      * Object positions are added to the geompack.
      * ~
@@ -217,35 +217,44 @@ export class GIGeomQuery {
             colls_i: set_colls_i,
             obj_posis_i: set_ent_posis_i
         };
-    //     // invert
-    //     const inv_colls_i: Set<number> = new Set();
-    //     this._geom_maps.dn_colls_objs.forEach( (_, coll_i) => {
-    //         if (!set_colls_i.has(coll_i)) { inv_colls_i.add(coll_i); }
-    //     });
-    //     const inv_pgons_i: Set<number> = new Set();
-    //     this._geom_maps.dn_pgons_faces.forEach( (_, pgon_i) => {
-    //         if (!set_pgons_i.has(pgon_i)) { inv_pgons_i.add(pgon_i); }
-    //     });
-    //     const inv_plines_i: Set<number> = new Set();
-    //     this._geom_maps.dn_plines_wires.forEach( (pline, pline_i) => {
-    //         if (!set_plines_i.has(pline_i)) { inv_plines_i.add(pline_i); }
-    //     });
-    //     const inv_points_i: Set<number> = new Set();
-    //     this._geom_maps.dn_points_verts.forEach( (point, point_i) => {
-    //         if (!set_points_i.has(point_i)) { inv_points_i.add(point_i); }
-    //     });
-    //     const inv_posis2_i: Set<number> = new Set();
-    //     this._geom_maps.up_posis_verts.forEach( (posi, posi_i) => {
-    //         if (!set_ent_posis_i.has(posi_i) && !set_posis_i.has(posi_i) ) { inv_posis2_i.add(posi_i); }
-    //     });
-    //     return {
-    //         posis_i: new Set(),
-    //         obj_posis_i: inv_posis2_i,
-    //         points_i: inv_points_i,
-    //         plines_i: inv_plines_i,
-    //         pgons_i: inv_pgons_i,
-    //         colls_i: inv_colls_i
-    //     };
+    }
+    /**
+     * Fill a map of sets of unique indexes
+     */
+    public getEntSets(ents: TEntTypeIdx[], ent_types: number[]): Map<number, Set<number>> {
+        const set_ent_types: Set<number> = new Set(ent_types);
+        const map: Map<number, Set<number>> = new Map();
+        ent_types.forEach( ent_type => map.set(ent_type, new Set()) );
+        for (const [ent_type, ent_i] of ents) {
+            if (set_ent_types.has(EEntType.COLL)) {
+                this._geom.nav.navAnyToColl(ent_type, ent_i).forEach( coll_i => map.get(EEntType.COLL).add(coll_i) );
+            }
+            if (set_ent_types.has(EEntType.PGON)) {
+                this._geom.nav.navAnyToPgon(ent_type, ent_i).forEach( pgon_i => map.get(EEntType.PGON).add(pgon_i) );
+            }
+            if (set_ent_types.has(EEntType.PLINE)) {
+                this._geom.nav.navAnyToPline(ent_type, ent_i).forEach( pline_i => map.get(EEntType.PLINE).add(pline_i) );
+            }
+            if (set_ent_types.has(EEntType.POINT)) {
+                this._geom.nav.navAnyToPoint(ent_type, ent_i).forEach( point_i => map.get(EEntType.POINT).add(point_i) );
+            }
+            if (set_ent_types.has(EEntType.FACE)) {
+                this._geom.nav.navAnyToFace(ent_type, ent_i).forEach( face_i => map.get(EEntType.FACE).add(face_i) );
+            }
+            if (set_ent_types.has(EEntType.WIRE)) {
+                this._geom.nav.navAnyToWire(ent_type, ent_i).forEach( wire_i => map.get(EEntType.WIRE).add(wire_i) );
+            }
+            if (set_ent_types.has(EEntType.EDGE)) {
+                this._geom.nav.navAnyToEdge(ent_type, ent_i).forEach( edge_i => map.get(EEntType.EDGE).add(edge_i) );
+            }
+            if (set_ent_types.has(EEntType.VERT)) {
+                this._geom.nav.navAnyToVert(ent_type, ent_i).forEach( vert_i => map.get(EEntType.VERT).add(vert_i) );
+            }
+            if (set_ent_types.has(EEntType.POSI)) {
+                this._geom.nav.navAnyToPosi(ent_type, ent_i).forEach( posi_i => map.get(EEntType.POSI).add(posi_i) );
+            }
+        }
+        return map;
     }
     // ============================================================================
     // Posis

@@ -1,4 +1,4 @@
-import {  IGeomData, IGeomArrays, IGeomPack, EEntType, IGeomSets, TTri, TEdge, TWire, IModelData, EEntStrToGeomMaps } from './common';
+import {  IGeomData, IGeomArrays, IGeomPack, EEntType, IEntSets, TTri, TEdge, TWire, IModelData, EEntStrToGeomMaps } from './common';
 import { GIGeom } from './GIGeom';
 import * as lodash from 'lodash';
 import { cloneDeepMapArr, getEntTypeStr as getEntTypeName } from './common_func';
@@ -96,7 +96,7 @@ export class GIGeomIO {
      * Typically, this model is assumed to be empty.
      * @param geom_maps The geom_arrays of the other model.
      */
-    public dumpSelect(other_geom: GIGeom, ent_sets: IGeomSets): void {
+    public dumpSelect(other_geom: GIGeom, ent_sets: IEntSets): void {
         const geom_maps: IGeomArrays = other_geom._geom_maps;
         // ======================================================================
         this._dumpPosiObjCollSelect(other_geom, EEntType.POSI, ent_sets.posis_i);

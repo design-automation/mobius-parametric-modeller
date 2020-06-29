@@ -19,6 +19,7 @@ export class GIGeomModifyPgon {
     }
     /**
      * Creates one or more holes in a polygon.
+     * Updates time stamp for the polygon.
      * ~
      */
     public cutPgonHoles(pgon_i: number, posis_i_arr: number[][]): number[] {
@@ -45,12 +46,15 @@ export class GIGeomModifyPgon {
         }
         // create the holes, does everything at face level
         this._cutFaceHoles(face_i, hole_wires_i);
+        // update the time stamp
+        this._geom.time_stamp.updateEntTs(EEntType.PGON, pgon_i);
         // no need to change either the up or down arrays
         // return the new wires
         return hole_wires_i;
     }
     /**
      * Retriangulate the polygons.
+     * Updates time stamp for the polygons.
      * ~
      */
     public triPgons(pgons_i: number|number[]): void {
@@ -81,6 +85,8 @@ export class GIGeomModifyPgon {
             }
             // update down array for face to tri
             this._geom_maps.dn_faces_tris.set(face_i, new_tris_i);
+            // update the time stamp
+            this._geom.time_stamp.updateEntTs(EEntType.PGON, pgons_i);
         } else { // An array of pgons
             pgons_i.forEach(pgon_i => this.triPgons(pgon_i));
         }

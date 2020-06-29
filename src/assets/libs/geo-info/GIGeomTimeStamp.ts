@@ -39,6 +39,30 @@ export class GIGeomTimeStamp {
         }
     }
     /**
+     * Update time stamp of sets of entities.
+     * @param map
+     */
+    public updateEntsTs(ent_type: EEntType, ents_i: number[]|Set<number>): void {
+        const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
+        switch (ent_type) {
+            case EEntType.POSI:
+                ents_i.forEach( ent_i => this._geom_maps.posis_ts[ent_i] = ts );
+                return;
+            case EEntType.POINT:
+                ents_i.forEach( ent_i => this._geom_maps.points_ts[ent_i] = ts );
+                return;
+            case EEntType.PLINE:
+                ents_i.forEach( ent_i => this._geom_maps.plines_ts[ent_i] = ts );
+                return;
+            case EEntType.PGON:
+                ents_i.forEach( ent_i => this._geom_maps.pgons_ts[ent_i] = ts );
+                return;
+            case EEntType.COLL:
+                ents_i.forEach( ent_i => this._geom_maps.colls_ts[ent_i] = ts );
+                return;
+        }
+    }
+    /**
      * Get the timestamp of a posi
      * @param posi_i
      */

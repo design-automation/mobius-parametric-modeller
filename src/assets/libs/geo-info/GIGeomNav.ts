@@ -1,5 +1,5 @@
 
-import {  EEntType, IGeomArrays, TVert, TEdge, TWire, TFace, TPoint, TPlane, TPline, TPgon, TColl } from './common';
+import {  EEntType, IGeomArrays, TVert, TEdge, TWire, TFace, TPoint, TPlane, TPline, TPgon, TColl, IEntSets } from './common';
 import { isPosi, isVert, isPoint, isEdge, isWire, isPline, isFace, isPgon, isColl, isTri } from './id';
 import { GIGeom } from './GIGeom';
 /**

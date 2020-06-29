@@ -1,6 +1,6 @@
 import { GIGeom } from './GIGeom';
 import { GIAttribs } from './GIAttribs';
-import { IModelData, IGeomPack, IGeomSets } from './common';
+import { IModelData, IGeomPack, IEntSets } from './common';
 import { GIModelComparator } from './GIModelComparator';
 import { GIModelThreejs } from './GIModelThreejs';
 import { GIModel } from './GIModel';
@@ -70,7 +70,7 @@ export class GIModelData {
      * For the imported data, deleted entities are also merged.
      * @param model_data The GI model.
      */
-    public dumpSelect(modeldata: GIModelData, ent_sets: IGeomSets): void {
+    public dumpSelect(modeldata: GIModelData, ent_sets: IEntSets): void {
         // add topo geom sets
         ent_sets.verts_i = new Set();
         ent_sets.tris_i = new Set();

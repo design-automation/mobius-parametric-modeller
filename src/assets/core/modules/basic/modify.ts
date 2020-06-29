@@ -11,7 +11,7 @@ import { checkIDs, IdCh } from '../_check_ids';
 import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TPlane, Txyz, EEntType, TEntTypeIdx, TRay, IGeomPack, IGeomSets} from '@libs/geo-info/common';
+import { TId, TPlane, Txyz, EEntType, TEntTypeIdx, TRay, IGeomPack, IEntSets} from '@libs/geo-info/common';
 import { getArrDepth, isEmptyArr, idsBreak } from '@libs/geo-info/id';
 import { vecAdd, vecSum, vecDiv, vecFromTo, vecNorm, vecCross, vecSetLen, vecLen, vecDot } from '@libs/geom/vectors';
 import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
@@ -494,9 +494,10 @@ export function Reverse(__model__: GIModel, entities: TId|TId[]): void {
     }
 }
 function _reverse(__model__: GIModel, ents_arr: TEntTypeIdx[]): void {
-    for (const [ent_type, index] of ents_arr) {
-        const wires_i: number[] = __model__.modeldata.geom.nav.navAnyToWire(ent_type, index);
+    for (const [ent_type, ent_i] of ents_arr) {
+        const wires_i: number[] = __model__.modeldata.geom.nav.navAnyToWire(ent_type, ent_i);
         wires_i.forEach( wire_i => __model__.modeldata.geom.modify.reverse(wire_i) );
+        __model__.modeldata.geom.time_stamp.updateEntTs(ent_type, ent_i);
     }
 }
 // ================================================================================================
@@ -538,9 +539,10 @@ export function Shift(__model__: GIModel, entities: TId|TId[], offset: number): 
     }
 }
 function _shift(__model__: GIModel, ents_arr: TEntTypeIdx[], offset: number): void {
-    for (const [ent_type, index] of ents_arr) {
-        const wires_i: number[] = __model__.modeldata.geom.nav.navAnyToWire(ent_type, index);
+    for (const [ent_type, ent_i] of ents_arr) {
+        const wires_i: number[] = __model__.modeldata.geom.nav.navAnyToWire(ent_type, ent_i);
         wires_i.forEach( wire_i => __model__.modeldata.geom.modify.shift(wire_i, offset) );
+        __model__.modeldata.geom.time_stamp.updateEntTs(ent_type, ent_i);
     }
 }
 // ================================================================================================
@@ -576,13 +578,15 @@ export enum _ERingMethod {
     CLOSE  =  'close',
 }
 function _ring(__model__: GIModel, ents_arr: TEntTypeIdx[], method: _ERingMethod): void {
-    for (const [ent_type, index] of ents_arr) {
+    for (const [ent_type, ent_i] of ents_arr) {
         switch (method) {
             case _ERingMethod.CLOSE:
-                __model__.modeldata.geom.modify_pline.closePline(index);
+                __model__.modeldata.geom.modify_pline.closePline(ent_i);
+                __model__.modeldata.geom.time_stamp.updateEntTs(ent_type, ent_i);
                 break;
             case _ERingMethod.OPEN:
-                __model__.modeldata.geom.modify_pline.openPline(index);
+                __model__.modeldata.geom.modify_pline.openPline(ent_i);
+                __model__.modeldata.geom.time_stamp.updateEntTs(ent_type, ent_i);
                 break;
             default:
                 break;
@@ -591,11 +595,12 @@ function _ring(__model__: GIModel, ents_arr: TEntTypeIdx[], method: _ERingMethod
 }
 // ================================================================================================
 export enum _EWeldMethod {
-    MERGE_POSITIONS =  'merge_positions',
-    CLONE_POSITIONS  =  'clone_positions',
+    MAKE_WELD =  'make_weld',
+    BREAK_WELD  =  'break_weld',
 }
 /**
- * Unweld vertices so that they do not share positions.
+ * Make or break welds between vertices.
+ * If two vertices are welded, then they share the same position.
  * ~
  * @param __model__
  * @param entities Entities, a list of vertices, or entities from which vertices can be extracted.
@@ -621,17 +626,20 @@ export function Weld(__model__: GIModel, entities: TId|TId[], method: _EWeldMeth
     _weld(__model__, ents_arr, method);
 }
 function _weld(__model__: GIModel, ents_arr: TEntTypeIdx[], method: _EWeldMethod): void {
+    // get unique ents
+    const map: Map<number, Set<number>> = __model__.modeldata.geom.query.getEntSets(ents_arr,
+        [EEntType.VERT, EEntType.POINT, EEntType.PLINE, EEntType.PGON] );
+    // time stamp
+    __model__.modeldata.geom.time_stamp.updateEntsTs(EEntType.POINT, map.get(EEntType.POINT));
+    __model__.modeldata.geom.time_stamp.updateEntsTs(EEntType.PLINE, map.get(EEntType.PLINE));
+    __model__.modeldata.geom.time_stamp.updateEntsTs(EEntType.PGON, map.get(EEntType.PGON));
     // get verts_i
-    const all_verts_i: number[] = []; // count number of posis
-    for (const ents of ents_arr) {
-        const verts_i: number[] = __model__.modeldata.geom.nav.navAnyToVert(ents[0], ents[1]);
-        for (const vert_i of verts_i) { all_verts_i.push(vert_i); }
-    }
+    const all_verts_i: number[] = Array.from(map.get(EEntType.VERT));
     switch (method) {
-        case _EWeldMethod.CLONE_POSITIONS:
+        case _EWeldMethod.BREAK_WELD:
             __model__.modeldata.geom.modify.cloneVertPositions(all_verts_i);
             break;
-        case _EWeldMethod.MERGE_POSITIONS:
+        case _EWeldMethod.MAKE_WELD:
             __model__.modeldata.geom.modify.mergeVertPositions(all_verts_i);
             break;
         default:
@@ -672,15 +680,15 @@ function _fuseDistSq(xyz1: number[], xyz2: number[]): number {
     return Math.pow(xyz1[0] - xyz2[0], 2) +  Math.pow(xyz1[1] - xyz2[1], 2) +  Math.pow(xyz1[2] - xyz2[2], 2);
 }
 function _fuse(__model__: GIModel, ents_arr: TEntTypeIdx[], tolerance: number): void {
-    // get unique posis
-    const set_posis_i: Set<number> = new Set();
-    for (const ents of ents_arr) {
-        const ent_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(ents[0], ents[1]);
-        for (const posi_i of ent_posis_i) {
-            set_posis_i.add(posi_i);
-        }
-    }
-    const posis_i: number[] = Array.from(set_posis_i);
+    // get unique ents
+    const map: Map<number, Set<number>> = __model__.modeldata.geom.query.getEntSets(ents_arr,
+        [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON] );
+    // time stamp
+    __model__.modeldata.geom.time_stamp.updateEntsTs(EEntType.POINT, map.get(EEntType.POINT));
+    __model__.modeldata.geom.time_stamp.updateEntsTs(EEntType.PLINE, map.get(EEntType.PLINE));
+    __model__.modeldata.geom.time_stamp.updateEntsTs(EEntType.PGON, map.get(EEntType.PGON));
+    // get posis
+    const posis_i: number[] = Array.from(map.get(EEntType.POSI));
     // find neighbour
     const map_posi_i_to_xyz: Map<number, Txyz> = new Map();
     const typed_positions = new Float32Array( posis_i.length * 4 );
@@ -828,7 +836,7 @@ export function Delete(__model__: GIModel, entities: TId|TId[], method: _EDelete
         ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
-    const ent_sets: IGeomSets = __model__.modeldata.geom.query.createEntSets(ents_arr);
+    const ent_sets: IEntSets = __model__.modeldata.geom.query.createEntSets(ents_arr);
     switch (method) {
         case _EDeleteMethod.DELETE_SELECTED:
             if (isEmptyArr2(entities)) { return; }

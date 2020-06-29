@@ -1,4 +1,4 @@
-import { IModelData, IGeomPack, EEntType, Txyz, TEntAttribValuesArr, TAttribDataTypes, TEntity, TEntTypeIdx, IGeomSets } from './common';
+import { IModelData, IGeomPack, EEntType, Txyz, TEntAttribValuesArr, TAttribDataTypes, TEntity, TEntTypeIdx, IEntSets } from './common';
 import { GIMetaData } from './GIMetaData';
 import { GIModelData } from './GIModelData';
 import { IThreeJS } from './ThreejsJSON';
@@ -79,11 +79,13 @@ export class GIModel {
     /**
      * Delete ents in teh model.
      */
-    public delete(ent_sets: IGeomSets, invert: boolean): void {
+    public delete(ent_sets: IEntSets, invert: boolean): void {
         if (ent_sets === null) {
             if (!invert) {
                 this.modeldata = new GIModelData(this);
+                //
                 // TODO save model attribs
+                //
             }
         } else if (invert) {
             const modeldata2 = new GIModelData(this);

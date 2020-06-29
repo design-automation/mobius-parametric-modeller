@@ -88,21 +88,37 @@ export class GIGeomDelVert {
             // special case, open pline, delete start edge and vert
             this.__delVert__OpenPlineStart(wire_edges_i, wire_verts_i, vert_i);
 
+            // time stamp
+            const pline_i: number = this._geom_maps.up_wires_plines.get(wire_i);
+            this._geom.time_stamp.updateEntTs(EEntType.PLINE, pline_i);
+
         } else if (!wire_is_closed && index_vert_i === num_verts - 1) {
 
             // special case, open pline, delete end edge and vert
             this.__delVert__OpenPlineEnd(wire_edges_i, wire_verts_i, vert_i);
+
+            // time stamp
+            const pline_i: number = this._geom_maps.up_wires_plines.get(wire_i);
+            this._geom.time_stamp.updateEntTs(EEntType.PLINE, pline_i);
 
         } else {
 
             // standard case, delete the prev edge and reqire the next edge
             this.__delVert__StandardCase(wire_edges_i, vert_i);
 
-            if (face_i !== undefined) {
+            if (face_i === undefined) {
+
+                // time stamp
+                const pline_i: number = this._geom_maps.up_wires_plines.get(wire_i);
+                this._geom.time_stamp.updateEntTs(EEntType.PLINE, pline_i);
+
+            } else {
 
                 // for pgons, also update tris
                 const pgon_i: number = this._geom.nav.navFaceToPgon(face_i);
                 this._geom.modify_pgon.triPgons(pgon_i);
+
+                // triPgons() updates the time stamp
 
             }
         }

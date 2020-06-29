@@ -1,4 +1,4 @@
-import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz, TColl, TVert, EWireType, IGeomPack, IGeomSets } from './common';
+import { EEntType, TTri, TEdge, TWire, TFace, IGeomArrays, Txyz, TColl, TVert, EWireType, IGeomPack, IEntSets } from './common';
 import { GIGeom } from './GIGeom';
 import { arrRem, arrIdxAdd } from '../util/arrs';
 import { vecDot } from '../geom/vectors';
@@ -23,7 +23,7 @@ export class GIGeomDel {
      * Delete ents
      * @param ent_sets
      */
-    public del(ent_sets: IGeomSets): void {
+    public del(ent_sets: IEntSets): void {
         // delete the ents
         this.delColls(Array.from(ent_sets.colls_i), true);
         this.delPgons(Array.from(ent_sets.pgons_i), true);

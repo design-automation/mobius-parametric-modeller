@@ -16,6 +16,7 @@
 function eaEval(__modules__) {
 
 __debug__ = true;
+__model__ = null;
 /** * **/
 PI = Math.PI;
 XY = __modules__._constants.XY;
@@ -655,11 +656,7 @@ __modules__._model.__preprocess__( __params__.model);
 
 let coll_option_ = __modules__.collection.Get( __params__.model, "option" );
 
-__modules__.attrib.Add( __params__.model, 'co', 'dict', "evalresult" );
-
-__modules__.attrib.Set(__params__.model, coll_option_, 'evalresult',  {"score":  __modules__.attrib.Get(__params__.model, coll_option_, 'score')} );
-
-let __return_value__ = __modules__._Output.Return(__params__.model, __modules__.attrib.Get(__params__.model, coll_option_, 'evalresult'));
+let __return_value__ = __modules__._Output.Return(__params__.model, {"score":  __modules__.attrib.Get(__params__.model, coll_option_, 'score')});
 return __return_value__;
 break; }
 }

@@ -793,9 +793,13 @@ function printFunc(_console, name, value){
 
 
 const __params__ = {};
-__params__["model"]= __modules__._model.__new__();
-__params__["model"].debug= __debug__;
-__params__["modules"]= __modules__;
+__params__["model"] = __modules__._model.__new__();
+if (__model__) {
+__params__["model"].setData(JSON.parse(__model__))
+}
+__params__["model"].debug = __debug__;
+__params__["console"] = [];
+__params__["modules"] = __modules__;
 const result = exec_eaEval(__params__);
 if (result === __params__.model) { return { "model": __params__.model, "result": null };}
 return {"model": __params__.model, "result": result};

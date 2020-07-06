@@ -27,7 +27,8 @@ export class ChromeComponent implements AfterViewInit {
         const isOpera = typeof window.opr !== 'undefined';
         const isIEedge = winNav.userAgent.indexOf('Edge') > -1;
         const isIOSChrome = winNav.userAgent.match('CriOS');
-        if (isIOSChrome) {
+        const isChrome = winNav.userAgent.indexOf('Chrome') > -1;
+        if (isIOSChrome || isChrome) {
         } else if (
           isChromium !== null &&
           typeof isChromium !== 'undefined' &&

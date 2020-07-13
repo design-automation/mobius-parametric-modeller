@@ -5,7 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { Component } from '@angular/core';
 
 import { ViewFlowchartModule, ViewGalleryModule, ViewDashboardModule,
-         ViewEditorModule, ViewAboutModule, ViewPublishModule } from '@views';
+         ViewEditorModule, ViewAboutModule, ViewPublishModule, ViewMinimalModule } from '@views';
 
 // app-routing.module.ts (this file): for development purpose, will be used when running ng build, ng serve or npm start
 // app-routing.module.prod.ts: for production purpose, will be used when running ng build --prod, ng serve --prod
@@ -17,6 +17,7 @@ const appRoutes: Routes = [
     { path: 'gallery', loadChildren: () => ViewGalleryModule },
     { path: 'dashboard', loadChildren: () => ViewDashboardModule },
     { path: 'publish', loadChildren: () => ViewPublishModule },
+    { path: 'min', loadChildren: () => ViewMinimalModule },
     { path: 'editor', loadChildren: () => ViewEditorModule },
     { path: 'about', loadChildren: () => ViewAboutModule },
     { path: '',     redirectTo: '/gallery', pathMatch: 'full' },

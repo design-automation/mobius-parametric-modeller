@@ -10,3 +10,5 @@ export * from './view-dashboard/view-dashboard.component';
 export * from './view-dashboard/view-dashboard.module';
 export * from './view-publish/view-publish.component';
 export * from './view-publish/view-publish.module';
+export * from './view-minimal/view-minimal.component';
+export * from './view-minimal/view-minimal.module';

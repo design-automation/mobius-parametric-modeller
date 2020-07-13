@@ -37,6 +37,7 @@ import { AutogrowDirective } from './directives/textarea';
 import { ProcedureInputViewerComponent } from './components/parameter-viewer/procedure-input-viewer/procedure-input-viewer.component';
 import { ParameterViewerComponent } from './components/parameter-viewer/parameter-viewer.component';
 import { SaveJavascriptComponent } from './components/file/savejavascript.component';
+import { WindowMessageComponent } from './components/window-message/window-message.component';
 
 @NgModule({
     providers: [ ],
@@ -54,6 +55,7 @@ import { SaveJavascriptComponent } from './components/file/savejavascript.compon
             AddNodeComponent, AddInputComponent, AddOutputComponent,
             // ParameterViewerComponent,  InputPortViewerComponent, ProcedureInputViewerComponent,
             NewFileComponent, SaveFileComponent, LoadFileComponent, LoadUrlComponent, SaveJavascriptComponent,
+            WindowMessageComponent,
             SpinnerComponent,
             ChromeComponent
         ],
@@ -102,6 +104,7 @@ import { SaveJavascriptComponent } from './components/file/savejavascript.compon
             // ParameterViewerComponent,
             NotificationComponent,
             NewFileComponent, SaveFileComponent, LoadFileComponent, LoadUrlComponent, SaveJavascriptComponent,
+            WindowMessageComponent,
             ParameterViewerComponent
     ]
 })

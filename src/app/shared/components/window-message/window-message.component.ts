@@ -2,6 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { DataService } from '@services';
 import { _parameterTypes } from '@assets/core/_parameterTypes';
 import { ProcedureTypes } from '@models/procedure';
+import { InputType } from '@models/port';
 
 @Component({
   selector: 'window-message',
@@ -31,16 +32,16 @@ export class WindowMessageComponent {
                 for (const prod of this.dataService.flowchart.nodes[0].procedure) {
                     if (prod.type === ProcedureTypes.Constant) {
                         if (params[prod.args[0].value] !== undefined) {
-                            prod.args[1].jsValue = params[prod.args[0].value];
                             prod.args[1].value = params[prod.args[0].value];
                         }
                         if (params[prod.args[0].jsValue] !== undefined) {
-                            prod.args[1].jsValue = params[prod.args[0].jsValue];
                             prod.args[1].value = params[prod.args[0].jsValue];
                         }
                         if (typeof prod.args[1].jsValue === 'object') {
-                            prod.args[1].jsValue = JSON.stringify(prod.args[1].jsValue);
                             prod.args[1].value = JSON.stringify(prod.args[1].jsValue);
+                        }
+                        if (prod.meta.inputMode === InputType.SimpleInput) {
+                            prod.args[1].jsValue = prod.args[1].value;
                         }
                     }
                 }

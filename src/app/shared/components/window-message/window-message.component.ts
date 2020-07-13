@@ -15,6 +15,10 @@ export class WindowMessageComponent {
 
     constructor(private dataService: DataService) {}
 
+    static SendData(data: any): void {
+        window.parent.postMessage(data, '*');
+    }
+
     @HostListener('window:message', ['$event'])
     onWindowMessage(event: MessageEvent) {
         // if (event.origin !== "http://example.com:8080") {
@@ -40,13 +44,14 @@ export class WindowMessageComponent {
                         if (typeof prod.args[1].jsValue === 'object') {
                             prod.args[1].value = JSON.stringify(prod.args[1].jsValue);
                         }
-                        if (prod.meta.inputMode === InputType.SimpleInput) {
+                        if (prod.meta.inputMode === InputType.SimpleInput || prod.meta.inputMode === InputType.URL) {
                             prod.args[1].jsValue = prod.args[1].value;
                         }
                     }
                 }
                 // checkNodeValidity(this.dataService.flowchart.nodes[0]);
                 document.getElementById('executeButton').click();
+                WindowMessageComponent.SendData('test_param');
                 break;
             case 'load_url':
                 if (!event.data.url) {
@@ -56,6 +61,7 @@ export class WindowMessageComponent {
                 console.log(x);
                 (<HTMLInputElement>document.getElementById('loadurl_input')).value = event.data.url;
                 (<HTMLElement>document.getElementById('loadurl')).click();
+                WindowMessageComponent.SendData('test_url');
                 break;
         }
     }

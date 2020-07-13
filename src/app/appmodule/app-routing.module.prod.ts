@@ -16,6 +16,7 @@ const appRoutes: Routes = [
     { path: 'gallery', loadChildren: () => import('../views/view-gallery/view-gallery.module').then(m => m.ViewGalleryModule) },
     { path: 'dashboard', loadChildren: () => import('../views/view-dashboard/view-dashboard.module').then(m => m.ViewDashboardModule) },
     { path: 'publish', loadChildren: () => import('../views/view-publish/view-publish.module').then(m => m.ViewPublishModule) },
+    { path: 'minimal', loadChildren: () => import('../views/view-minimal/view-minimal.module').then(m => m.ViewMinimalModule) },
     { path: 'editor', loadChildren: () => import('../views/view-editor/view-editor.module').then(m => m.ViewEditorModule) },
     { path: 'about', loadChildren: () => import('../views/view-about/view-about.module').then(m => m.ViewAboutModule) },
     { path: '',     redirectTo: '/gallery', pathMatch: 'full' },

@@ -14,16 +14,20 @@ import { checkMobFile } from '@shared/updateOldMobFile';
 import { SaveFileComponent } from './savefile.component';
 
 @Component({
-  selector: 'load-url',
-  template:  `<button id='loadurl' class='btn'></button>`,
-  styles: [
-            `
-            button.btn{
-                visibility: hidden;
-            }
-            `
-          ]
-})
+    selector: 'load-url',
+    template:  `<button id='loadurl' class='btn' (click)="loadInputUrl()"></button>
+                <input id='loadurl_input' type='text' class='url'>`,
+    styles: [
+              `
+              button.btn{
+                  visibility: hidden;
+              };
+              input.url {
+                  visibility: hidden;
+              }
+              `
+            ]
+  })
 // Component for loading a .mob file from a specific url into mobius.
 export class LoadUrlComponent {
 
@@ -58,7 +62,11 @@ export class LoadUrlComponent {
         }
     }
 
-
+    loadInputUrl() {
+        const input: HTMLInputElement = <HTMLInputElement> document.getElementById('loadurl_input');
+        this.loadStartUpURL('file=' + input.value);
+        input.value = '';
+    }
 
     async loadURL(url: string, nodeID?: number): Promise<boolean> {
         const p = new Promise((resolve) => {

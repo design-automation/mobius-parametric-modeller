@@ -17,7 +17,7 @@ const appRoutes: Routes = [
     { path: 'gallery', loadChildren: () => ViewGalleryModule },
     { path: 'dashboard', loadChildren: () => ViewDashboardModule },
     { path: 'publish', loadChildren: () => ViewPublishModule },
-    { path: 'min', loadChildren: () => ViewMinimalModule },
+    { path: 'minimal', loadChildren: () => ViewMinimalModule },
     { path: 'editor', loadChildren: () => ViewEditorModule },
     { path: 'about', loadChildren: () => ViewAboutModule },
     { path: '',     redirectTo: '/gallery', pathMatch: 'full' },

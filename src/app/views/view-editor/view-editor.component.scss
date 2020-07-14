@@ -206,9 +206,35 @@ procedure-item.ng-star-inserted{
 #modelViewButton--container{
     padding: 0px 13px 0px 0px;
     margin-bottom: 5px;
-    button{
+    // button{
+    //     width: 100%;
+    //     margin: 0px 5px 2px 0px;
+    
+    //     background-color: $color3;
+    //     color: $color8;
+    
+    //     text-align: left;
+    //     text-decoration: none;
+    
+    //     font-size: $fsize2;
+    //     transition: 0.4s;
+    //     border: 2px solid transparent;
+    
+    //     span{
+    //         color: $selected-color;
+    //         font-weight: 550;
+    //     }
+    //     &:hover, &:active {
+    //         // border-color: $selected-color;
+    //         background-color: $color2;
+    //         color: $color8;
+    //     }
+    // }
+
+    li{
         width: 100%;
         margin: 0px 5px 2px 0px;
+        padding: 1px 0px;
     
         background-color: $color3;
         color: $color8;
@@ -219,8 +245,10 @@ procedure-item.ng-star-inserted{
         font-size: $fsize2;
         transition: 0.4s;
         border: 2px solid transparent;
+        list-style: none;
     
         span{
+            padding-left: 6px;
             color: $selected-color;
             font-weight: 550;
         }
@@ -230,6 +258,7 @@ procedure-item.ng-star-inserted{
             color: $color8;
         }
     }
+
 }
 
 .offsetbreak {

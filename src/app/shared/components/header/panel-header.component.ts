@@ -435,13 +435,13 @@ export class PanelHeaderComponent implements OnDestroy {
         let i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName('tabContent');
         for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = 'none';
+            tabcontent[i].className = tabcontent[i].className.replace(' active', '');
         }
         tablinks = document.getElementsByClassName('tabLinks');
         for (i = 0; i < tablinks.length; i++) {
             tablinks[i].className = tablinks[i].className.replace(' active', '');
         }
-        document.getElementById(tabID).style.display = 'block';
+        document.getElementById(tabID).className += ' active';
         evt.currentTarget.className += ' active';
         this.selectedBackups = [];
     }

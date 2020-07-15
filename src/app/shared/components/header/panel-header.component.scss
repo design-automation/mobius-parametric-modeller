@@ -393,6 +393,10 @@ button.mat-menu-item:hover{
         }
         .tabContent {
             display: none;
+
+            &.active {
+                display: block;
+            }
         }
     }
     .globalFuncDialog{

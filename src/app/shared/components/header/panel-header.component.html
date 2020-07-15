@@ -190,7 +190,32 @@
     <div class='loadBackupDialog' *ngIf='checkDialog("backup")'>
         <p>Select File from Local Storage: </p>
         <br>
-        <div *ngFor='let backup of getBackupFiles()'>
+        <div class="tab">
+            <button class="tabLinks" (click)="openTab($event, 'mobFilesContainer')">Mob Files</button>
+            <button class="tabLinks" (click)="openTab($event, 'otherFilesContainer')">Others</button>
+        </div>
+        <div id="mobFilesContainer" class='tabContent'>
+            <div *ngFor='let backup of getBackupFiles()'>
+                <div class='div--chbox'>
+                    <input class="selectedBackup" type="checkbox" name={{backup}} [checked]='selectedBackup(backup)'>
+                    <label for={{backup}} (click)="selectBackup(backup, $event)" (mousedown)="prevDef($event)"></label>
+                </div>
+                <button class='loadBackupButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backup}}</button>
+                <button class='backupDateButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backupDates[backup]}}</button>
+            </div>
+        </div>
+        <div id="otherFilesContainer" class='tabContent'>
+            <div *ngFor='let backup of getBackupFiles(false)'>
+                <div class='div--chbox'>
+                    <input class="selectedBackup" type="checkbox" name={{backup}} [checked]='selectedBackup(backup)'>
+                    <label for={{backup}} (click)="selectBackup(backup, $event)" (mousedown)="prevDef($event)"></label>
+                </div>
+                <button class='loadBackupButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backup}}</button>
+                <button class='backupDateButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backupDates[backup]}}</button>
+            </div>
+        </div>
+        <br>
+        <!-- <div *ngFor='let backup of getBackupFiles()'>
             <ng-container *ngIf='backup!="___TEMP___.mob"'>
                 <div class='div--chbox'>
                     <input class="selectedBackup" type="checkbox" name={{backup}} [checked]='selectedBackup(backup)'>
@@ -199,7 +224,7 @@
                 <button class='loadBackupButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backup}}</button>
                 <button class='backupDateButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backupDates[backup]}}</button>
             </ng-container>
-        </div>
+        </div> -->
         <button id='addBackupButton' onclick="document.getElementById('addBackup').click();">+</button>
         <input id='addBackup' type="file" (change)="addBackup()" style=" display: none;"/>
         <button class='downloadBackupButton' (click)="downloadBackup($event)"><mat-icon class='icon'>cloud_download_outline</mat-icon></button>

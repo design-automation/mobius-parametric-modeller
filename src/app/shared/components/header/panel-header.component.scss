@@ -280,7 +280,7 @@ button.mat-menu-item:hover{
         top: 20%;
         max-height: 75vh;
         max-width: 805px;
-        min-width: 405px;
+        min-width: 588px;
         padding: 5px;
         overflow: scroll;
     
@@ -365,6 +365,34 @@ button.mat-menu-item:hover{
             label {
                 top: 3px;
             }
+        }
+        .tab{
+            overflow: hidden;
+            border: none;
+            background-color: $color5;
+            margin-bottom: 5px;
+
+            .tabLinks {
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 2px;
+                font-size: 14px;
+                width: 100px;
+
+                :hover {
+                    background-color: $color4;
+                }
+
+                &.active {
+                    background-color: $color3;
+                }
+            }
+        }
+        .tabContent {
+            display: none;
         }
     }
     .globalFuncDialog{

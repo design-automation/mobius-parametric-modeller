@@ -191,10 +191,10 @@
         <p>Select File from Local Storage: </p>
         <br>
         <div class="tab">
-            <button class="tabLinks" (click)="openTab($event, 'mobFilesContainer')">Mob Files</button>
+            <button class="tabLinks active" (click)="openTab($event, 'mobFilesContainer')">Mob Files</button>
             <button class="tabLinks" (click)="openTab($event, 'otherFilesContainer')">Others</button>
         </div>
-        <div id="mobFilesContainer" class='tabContent'>
+        <div id="mobFilesContainer" class='tabContent active'>
             <div *ngFor='let backup of getBackupFiles()'>
                 <div class='div--chbox'>
                     <input class="selectedBackup" type="checkbox" name={{backup}} [checked]='selectedBackup(backup)'>

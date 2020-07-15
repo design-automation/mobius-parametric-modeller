@@ -413,22 +413,47 @@ export class PanelHeaderComponent implements OnDestroy {
         }
     }
 
-    getBackupFiles() {
+    getBackupFiles(onlyMobFiles = true) {
         const items = localStorage.getItem('mobius_backup_list');
         // console.log(items)
         this.backupDates = JSON.parse(localStorage.getItem('mobius_backup_date_dict'));
         if (!items) {
             return [];
         }
-        return JSON.parse(items);
+        const all_items = JSON.parse(items);
+        const return_items = [];
+        for (const i of all_items) {
+            if (i === '___TEMP___.mob') { continue; }
+            if (i.endsWith('.mob') === onlyMobFiles) {
+                return_items.push(i);
+            }
+        }
+        return return_items;
     }
 
+    openTab(evt, tabID: string) {
+        let i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName('tabContent');
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = 'none';
+        }
+        tablinks = document.getElementsByClassName('tabLinks');
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(' active', '');
+        }
+        document.getElementById(tabID).style.display = 'block';
+        evt.currentTarget.className += ' active';
+        this.selectedBackups = [];
+    }
 
     deleteBackup(event: MouseEvent, filecode: string) {
         event.stopPropagation();
+        console.log(this.selectedBackups)
         for (filecode of this.selectedBackups) {
             SaveFileComponent.deleteFile(filecode);
-            const items: string[] = this.getBackupFiles();
+            const itemsString = localStorage.getItem('mobius_backup_list');
+            if (!itemsString) { continue; }
+            const items: string[] = JSON.parse(itemsString);
             const i = items.indexOf(filecode);
             if (i !== -1) {
                 items.splice(i, 1);
@@ -439,18 +464,6 @@ export class PanelHeaderComponent implements OnDestroy {
             }
         }
         this.selectedBackups = [];
-
-        // event.stopPropagation();
-        // SaveFileComponent.deleteFile(filecode);
-        // const items: string[] = this.getBackupFiles();
-        // const i = items.indexOf(filecode);
-        // if (i !== -1) {
-        //     items.splice(i, 1);
-        //     localStorage.setItem('mobius_backup_list', JSON.stringify(items));
-        //     const itemDates = JSON.parse(localStorage.getItem('mobius_backup_date_dict'));
-        //     itemDates[filecode] = (new Date()).toLocaleString();
-        //     localStorage.setItem('mobius_backup_date_dict', JSON.stringify(itemDates));
-        // }
     }
 
     downloadBackup(event: MouseEvent, filecode: string) {
@@ -470,6 +483,7 @@ export class PanelHeaderComponent implements OnDestroy {
             reader.readAsText(selectedFile);
         });
         SaveFileComponent.saveToLocalStorage(selectedFile.name, <string> await p);
+        (<HTMLInputElement>document.getElementById('addBackup')).value = '';
     }
 
     selectBackup(backup: string, event: MouseEvent) {

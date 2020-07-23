@@ -7,7 +7,7 @@ import { IArgument } from '@models/code';
 import { DownloadUtils } from './download.utils';
 import { _varString } from '@assets/core/modules';
 // import {js as beautify} from 'js-beautify';
-import { mergeInputsFunc, printFunc, pythonList, ExecuteComponent } from '../execute/execute.component';
+import { mergeInputsFunc, printFuncString, pythonListFunc, ExecuteComponent } from '../execute/execute.component';
 import { InputType } from '@models/port';
 import { CodeUtils } from '@shared/components/execute/code.util';
 
@@ -146,9 +146,9 @@ export class SaveJavascriptComponent {
             '/** * **/' +
             _varString + `\n\n` +
             fnString +
-            pythonList +
+            pythonListFunc +
             mergeInputsFunc +
-            printFunc +
+            printFuncString +
             `\n\nconst __params__ = {};\n` +
             `__params__["model"] = __modules__._model.__new__();\n` +
             `if (__model__) {\n` +

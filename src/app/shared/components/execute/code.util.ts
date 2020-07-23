@@ -11,7 +11,7 @@ export class CodeUtils {
 
 
     static getProcedureCode(prod: IProcedure, existingVars: string[], isMainFlowchart: Boolean,
-                            functionName?: string, nodeId?: string, usedFunctions?: string[]): string[] {
+                            functionName: string, nodeId: string, usedFunctions?: string[]): string[] {
         if (_terminateCheck === '' || prod.enabled === false ||
             prod.type === ProcedureTypes.Blank ||
             prod.type === ProcedureTypes.Comment) { return []; }
@@ -238,7 +238,14 @@ export class CodeUtils {
                     }
                 }
                 // const argValues = argVals.join(', ');
-                const fnCall = `__modules__.${prod.meta.module}.${prod.meta.name}( ${argVals.join(', ')} )`;
+                let fnCall = `__modules__.${prod.meta.module}.${prod.meta.name}( ${argVals.join(', ')} )`;
+                const fullName = prod.meta.module + '.' + prod.meta.name;
+                for (const asyncFunc of _parameterTypes.asyncFuncs) {
+                    if (fullName === asyncFunc) {
+                        fnCall = 'await ' + fnCall;
+                        break;
+                    }
+                }
                 if ( prod.meta.module.toUpperCase() === 'OUTPUT') {
                     if (prod.args[prod.args.length - 1].jsValue) {
                         codeStr.push(`return ${fnCall};`);
@@ -258,11 +265,12 @@ export class CodeUtils {
                 }
                 break;
             case ProcedureTypes.LocalFuncDef:
-                let funcDef_prefix = '';
+                // const funcDef_prefix = `${functionName}_${nodeId}_`;
+                let funcDef_prefix = `${nodeId}_`;
                 if (! isMainFlowchart) {
-                    funcDef_prefix = `${functionName}_${nodeId}_`;
+                    funcDef_prefix = `${functionName}_` + funcDef_prefix;
                 }
-                codeStr.push(`\nfunction ${funcDef_prefix}${prod.args[0].jsValue}` +
+                codeStr.push(`\nasync function ${funcDef_prefix}${prod.args[0].jsValue}` +
                              `(__params__, ${prod.args.slice(1).map(arg => arg.jsValue).join(', ')}) {`);
                 break;
             case ProcedureTypes.LocalFuncReturn:
@@ -270,16 +278,17 @@ export class CodeUtils {
                 break;
             case ProcedureTypes.LocalFuncCall:
                 const lArgsVals: any = [];
-                let funcCall_prefix = '';
+                // const funcCall_prefix = `${functionName}_${nodeId}_`;
+                let funcCall_prefix = `${nodeId}_`;
                 if (! isMainFlowchart) {
-                    funcCall_prefix = `${functionName}_${nodeId}_`;
+                    funcCall_prefix = `${functionName}_` + funcCall_prefix;
                 }
                 // let urlCheck = false;
                 for (let i = 1; i < args.length; i++) {
                     lArgsVals.push(args[i].jsValue);
                 }
 
-                const lfn = `${funcCall_prefix}${prod.meta.name}_(__params__${lArgsVals.map(val => ', ' + val).join('')})`;
+                const lfn = `await ${funcCall_prefix}${prod.meta.name}_(__params__${lArgsVals.map(val => ', ' + val).join('')})`;
                 if (args[0].name === '__none__' || !args[0].jsValue) {
                     codeStr.push(`${lfn};`);
                     codeStr.push('if (__params__.terminated) { return __params__.model;}')
@@ -329,7 +338,7 @@ export class CodeUtils {
                 }
 
                 codeStr.push(`__params__.console.push('<div style="margin: 5px 0px 5px 10px; border: 1px solid #E6E6E6"><p><b> Global Function: ${prod.meta.name}</b></p>');`);
-                const fn = `${namePrefix}${prod.meta.name}(__params__${argsVals.map(val => ', ' + val).join('')})`;
+                const fn = `await ${namePrefix}${prod.meta.name}(__params__${argsVals.map(val => ', ' + val).join('')})`;
                 // codeStr.push(`__params__.prevModel = __params__.model.clone();`);
                 if (args[0].name === '__none__' || !args[0].jsValue) {
                     codeStr.push(`${fn};`);
@@ -383,7 +392,7 @@ export class CodeUtils {
     }
 
     static getProdListCode(prodList: IProcedure[], existingVars: string[], isMainFlowchart: Boolean,
-                           functionName?: string, nodeId?: string, usedFunctions?: string[]): string[] {
+                           functionName: string, nodeId: string, usedFunctions?: string[]): string[] {
         let codeStr = [];
         let elifcount = 0;
         for (const p of prodList) {
@@ -618,7 +627,7 @@ export class CodeUtils {
     }
 
     public static getNodeCode(node: INode, isMainFlowchart = false, nodeIndices: {},
-                              functionName?: string, nodeId?: string, usedFunctions?: string[]): [string[][], string] {
+                              functionName: string, nodeId: string, usedFunctions?: string[]): [string[][], string] {
         node.hasError = false;
         let codeStr = [];
 
@@ -654,7 +663,7 @@ export class CodeUtils {
         }
 
 
-        codeStr.push('_-_-_+_-_-_')
+        codeStr.push('_-_-_+_-_-_');
         codeStr.push('while (true) {');
         codeStr.push(`__modules__.${_parameterTypes.preprocess}( __params__.model);`);
         varsDefined = [];
@@ -683,7 +692,7 @@ export class CodeUtils {
     }
 
     static getFunctionString(func: IFunction): string {
-        let fullCode = `function ${func.name}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){\n`;
+        let fullCode = `async function ${func.name}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){\n`;
 
         let fnCode = `var merged;\n`;
 
@@ -703,7 +712,7 @@ export class CodeUtils {
             } else {
                 const codeRes = CodeUtils.getNodeCode(node, false, nodeIndices, func.name, node.id)[0];
                 const nodecode = codeRes[0].join('\n').split('_-_-_+_-_-_');
-                fullCode += `${nodecode[0]}\nfunction ${nodeFuncName}` +
+                fullCode += `${nodecode[0]}\nasync function ${nodeFuncName}` +
                             `(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){` +
                             nodecode[1] + `\n}\n\n`;
 
@@ -731,7 +740,7 @@ export class CodeUtils {
                             `result_${func.name}_${nodeId[1]}`).join(', ')}]);\n`;
                     }
                 }
-                fnCode += `let result_${nodeFuncName} = ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_'
+                fnCode += `\nlet result_${nodeFuncName} = await ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_'
                             ).join('')});\n`;
 
             }

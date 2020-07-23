@@ -30,9 +30,9 @@ export const _parameterTypes = {
 
     return: '_Output.Return',
 
-    urlFunctions: [ 'util.Write', 'util.Read',
-                    'io.Write', 'io.Read',
-                    'util.ModelCompare', 'io.Import']
+    asyncFuncs: ['util.ModelCompare',
+                'io.Write', 'io.Read',
+                'io.Import', 'io.Export']
 };
 
 export const _varString = `

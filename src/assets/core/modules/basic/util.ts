@@ -15,6 +15,7 @@ import { __merge__ } from '../_model';
 import { _model } from '..';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
 import { idsBreak } from '@assets/libs/geo-info/id';
+import { _getFile } from './io';
 
 export enum _ECOmpareMethod {
     THIS_IS_SUBSET = 'subset',
@@ -409,11 +410,12 @@ function convertString(value) {
  * In the latter case, you do not specify a path, you just specify the file name, e.g. 'my_model.gi'
  *
  * @param __model__
- * @param gi_model The location of the GI Model to compare this model to.
+ * @param input_data The location of the GI Model to compare this model to.
  * @param method Enum, method used to compare this model to the other model specified in the gi_model parameter.
  * @returns Text that summarises the comparison between the two models.
  */
-export function ModelCompare(__model__: GIModel, gi_model: string, method: _ECOmpareMethod): string {
+export async function ModelCompare(__model__: GIModel, input_data: string, method: _ECOmpareMethod): Promise<string> {
+    const gi_model = await _getFile(input_data);
     const gi_obj: IModelData = JSON.parse(gi_model) as IModelData;
     const other_model = new GIModel();
     other_model.setModelData(gi_obj);

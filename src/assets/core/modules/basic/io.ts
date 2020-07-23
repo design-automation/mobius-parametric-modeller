@@ -17,6 +17,9 @@ import { __merge__ } from '../_model';
 import { _model } from '..';
 import { idsMake, idsBreak } from '@libs/geo-info/id';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
+import JSZip from 'jszip';
+
+const requestedBytes = 1024 * 1024 * 200; // 200 MB local storage quota
 
 // ================================================================================================
 declare global {
@@ -48,8 +51,8 @@ export enum _EIODataTarget {
  * @param data The data to be read (from URL or from Local Storage).
  * @returns the data.
  */
-export function Read(__model__: GIModel, data: string|{}): string|{} {
-    return data;
+export async function Read(__model__: GIModel, data: string): Promise<string|{}> {
+    return _getFile(data);
 }
 // ================================================================================================
 /**
@@ -60,7 +63,7 @@ export function Read(__model__: GIModel, data: string|{}): string|{} {
  * @param data_target Enum, where the data is to be exported to.
  * @returns whether the data is successfully saved.
  */
-export function Write(__model__: GIModel, data: string, file_name: string, data_target: _EIODataTarget): Boolean {
+export async function Write(__model__: GIModel, data: string, file_name: string, data_target: _EIODataTarget): Promise<Boolean> {
     try {
         if (data_target === _EIODataTarget.DEFAULT) {
             return download(data, file_name);
@@ -89,7 +92,8 @@ export function Write(__model__: GIModel, data: string, file_name: string, data_
  * @example io.Import ("my_data.obj", obj)
  * @example_info Imports the data from my_data.obj, from local storage.
  */
-export function Import(__model__: GIModel, model_data: string|{}, data_format: _EIODataFormat): TId|{} {
+export async function Import(__model__: GIModel, input_data: string, data_format: _EIODataFormat): Promise<TId|{}> {
+    const model_data = await _getFile(input_data);
     if (!model_data) {
         throw new Error('Invalid imported model data');
     }
@@ -235,8 +239,8 @@ export enum _EIOExportDataFormat {
  * @example io.Export (#pg, 'my_model.obj', obj)
  * @example_info Exports all the polgons in the model as an OBJ.
  */
-export function Export(__model__: GIModel, entities: TId|TId[]|TId[][],
-        file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): void {
+export async function Export(__model__: GIModel, entities: TId|TId[]|TId[][],
+        file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget) {
     if ( typeof localStorage === 'undefined') { return; }
     // --- Error Check ---
     const fn_name = 'io.Export';
@@ -257,10 +261,10 @@ export function Export(__model__: GIModel, entities: TId|TId[]|TId[][],
         }
     }
     // --- Error Check ---
-    _export(__model__, ents_arr, file_name, data_format, data_target);
+    await _export(__model__, ents_arr, file_name, data_format, data_target);
 }
-function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
-    file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): boolean {
+async function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
+    file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): Promise<boolean> {
     switch (data_format) {
         case _EIOExportDataFormat.GI:
             let gi_data = '';
@@ -272,7 +276,7 @@ function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
                 // delete the ents
                 model_clone.delete(ent_sets, false);
             }
-            model_clone.purge();
+            // model_clone.purge();
             gi_data = JSON.stringify(model_clone.getModelData());
             // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
             gi_data = gi_data.replace(/\\/g, '\\\\'); // TODO temporary fix
@@ -318,7 +322,7 @@ function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
  * Functions for saving and loading resources to file system.
  */
 
-function saveResource(file: string, name: string): boolean {
+async function saveResource(file: string, name: string): Promise<boolean> {
     const itemstring = localStorage.getItem('mobius_backup_list');
     if (!itemstring) {
         localStorage.setItem('mobius_backup_list', `["${name}"]`);
@@ -347,7 +351,6 @@ function saveResource(file: string, name: string): boolean {
         itemDates[itemstring] = (new Date()).toLocaleString();
         localStorage.setItem('mobius_backup_date_dict', JSON.stringify(itemDates));
     }
-    const requestedBytes = 1024 * 1024 * 50;
     // window['_code__'] = name;
     // window['_file__'] = file;
 
@@ -373,3 +376,137 @@ function saveResource(file: string, name: string): boolean {
     // localStorage.setItem(code, file);
 }
 
+async function getURLContent(url: string): Promise<any> {
+    url = url.replace('http://', 'https://');
+    if (url.indexOf('dropbox') !== -1) {
+        url = url.replace('www', 'dl').replace('dl=0', 'dl=1');
+    }
+    if (url[0] === '"' || url[0] === '\'') {
+        url = url.substring(1);
+    }
+    if (url[url.length - 1] === '"' || url[url.length - 1] === '\'') {
+        url = url.substring(0, url.length - 1);
+    }
+    const p = new Promise((resolve) => {
+        fetch(url).then(res => {
+            if (!res.ok) {
+                resolve('HTTP Request Error: Unable to retrieve file from ' + url);
+                return '';
+            }
+            if (url.indexOf('.zip') !== -1) {
+                res.blob().then(body => resolve(body));
+            } else {
+                res.text().then(body => resolve(body.replace(/(\\[bfnrtv\'\"\\])/g, '\\$1')));
+            }
+        });
+
+    });
+    return await p;
+}
+async function openZipFile(zipFile) {
+    let result = '{';
+    await JSZip.loadAsync(zipFile).then(async function (zip) {
+        for (const filename of Object.keys(zip.files)) {
+            // const splittedNames = filename.split('/').slice(1).join('/');
+            await zip.files[filename].async('text').then(function (fileData) {
+                result += `"${filename}": \`${fileData.replace(/\\/g, '\\\\')}\`,`;
+            });
+        }
+    });
+    result += '}';
+    return result;
+}
+async function loadFromFileSystem(filecode): Promise<any> {
+    const p = new Promise((resolve) => {
+        navigator.webkitPersistentStorage.requestQuota (
+            requestedBytes, function(grantedBytes) {
+                // @ts-ignore
+                window.webkitRequestFileSystem(PERSISTENT, grantedBytes, function(fs) {
+                    fs.root.getFile(filecode, {}, function(fileEntry) {
+                        fileEntry.file((file) => {
+                            const reader = new FileReader();
+                            reader.onerror = () => {
+                                resolve('error');
+                            };
+                            reader.onloadend = () => {
+                                if ((typeof reader.result) === 'string') {
+                                    resolve((<string>reader.result).split('_|_|_')[0]);
+                                    // const splitted = (<string>reader.result).split('_|_|_');
+                                    // let val = splitted[0];
+                                    // for (const i of splitted) {
+                                    //     if (val.length < i.length) {
+                                    //         val = i;
+                                    //     }
+                                    // }
+                                    // resolve(val);
+                                } else {
+                                    resolve(reader.result);
+                                }
+                            };
+                            reader.readAsText(file, 'text/plain;charset=utf-8');
+                        });
+                    });
+                });
+            }, function(e) { console.log('Error', e); }
+        );
+    });
+    return await p;
+}
+export async function _getFile(source: string) {
+    if (source.indexOf('__model_data__') !== -1) {
+        return source.split('__model_data__').join('');
+    } else if (source[0] === '{') {
+        return source;
+    } else if (source.indexOf('://') !== -1) {
+        const val = source.replace(/ /g, '');
+        const result = await getURLContent(val);
+        if (result === undefined) {
+            return source;
+        } else if (result.indexOf && result.indexOf('HTTP Request Error') !== -1) {
+            throw new Error(result);
+        } else if (val.indexOf('.zip') !== -1) {
+            return await openZipFile(result);
+        } else {
+            return result;
+        }
+    } else {
+        if (source.length > 1 && source[0] === '{') {
+            return null;
+        }
+        const val = source.replace(/\"|\'/g, '');
+        const backup_list: string[] = JSON.parse(localStorage.getItem('mobius_backup_list'));
+        if (val.indexOf('*') !== -1) {
+            const splittedVal = val.split('*');
+            const start = splittedVal[0] === '' ? null : splittedVal[0];
+            const end = splittedVal[1] === '' ? null : splittedVal[1];
+            let result = '{';
+            for (const backup_name of backup_list) {
+                let valid_check = true;
+                if (start && !backup_name.startsWith(start)) {
+                    valid_check = false;
+                }
+                if (end && !backup_name.endsWith(end)) {
+                    valid_check = false;
+                }
+                if (valid_check) {
+                    const backup_file = await loadFromFileSystem(backup_name);
+                    result += `"${backup_name}": \`${backup_file.replace(/\\/g, '\\\\')}\`,`;
+                }
+            }
+            result += '}';
+            return result;
+        } else {
+            if (backup_list.indexOf(val) !== -1) {
+                const result = await loadFromFileSystem(val);
+                if (!result || result === 'error') {
+                    throw(new Error(`File named ${val} does not exist in the local storage`));
+                    // return source;
+                } else {
+                    return result;
+                }
+            } else {
+                throw(new Error(`File named ${val} does not exist in the local storage`));
+            }
+        }
+    }
+}

@@ -16,7 +16,87 @@ import { _parameterTypes, _varString } from '@assets/core/_parameterTypes';
 import { isArray } from 'util';
 import JSZip from 'jszip';
 
-export const pythonList = `
+// function pythonList(x, l) {
+//     if (x < 0) {
+//         return x + l;
+//     }
+//     return x;
+// }
+// function mergeInputs(models) {
+//     const result = _parameterTypes.newFn();
+//     // try {
+//     //     result.debug = __debug__;
+//     // } catch (ex) {}
+//     for (const model of models){
+//         _parameterTypes.mergeFn(result, model);
+//     }
+//     return result;
+// }
+// function printFunc(_console, name, value){
+//     let val;
+//     let padding_style = 'padding: 2px 0px 2px 10px;';
+//     if (!value) {
+//         val = value;
+//     } else if (value === '__null__') {
+//         _console.push('<p style="' + padding_style + '"><b><i>_ ' + name + '</i></b></p>');
+//         return value;
+//     } else if (typeof value === 'number' || value === undefined) {
+//         val = value;
+//     } else if (typeof value === 'string') {
+//         val = '"' + value.replace(/\\n/g, '<br>') + '"';
+//     } else if (value.constructor === [].constructor) {
+//         let __list_check__ = false;
+//         const __value_strings__ = [];
+//         for (const __item__ of value) {
+//             if (!__item__) {
+//                 __value_strings__.push('' + __item__);
+//                 continue;
+//             }
+//             if (__item__.constructor === [].constructor || __item__.constructor === {}.constructor) {
+//                 __list_check__ = true;
+//             }
+//             __value_strings__.push(JSON.stringify(__item__).replace(/,/g, ', '));
+//         }
+//         if (__list_check__) {
+//             padding_style = 'padding: 2px 0px 0px 10px;';
+//             val = '[<p style="padding: 0px 0px 2px 40px;">' +
+//                   __value_strings__.join(',</p><p style="padding: 0px 0px 2px 40px;">') +
+//                   '</p><p style="padding: 0px 0px 2px 30px;">]</p>';
+//         } else {
+//             val = '[' + __value_strings__.join(', ') + ']';
+//         }
+//     } else if (value.constructor === {}.constructor) {
+//         let __list_check__ = false;
+//         const __value_strings__ = [];
+//         for (const __item__ in value) {
+//             if (value[__item__]) {
+//                 const __value__ = value[__item__];
+//                 if (!__value__) {
+//                     __value_strings__.push('\\<b>"' + __item__ + '\\"</b>' + ': ' + __value__);
+//                     continue;
+//                 }
+//                 if (__value__.constructor === [].constructor || __value__.constructor === {}.constructor) {
+//                     __list_check__ = true;
+//                 }
+//                 __value_strings__.push('\\<b>"' + __item__ + '\\"</b>' + ': ' + JSON.stringify(__value__).replace(/,/g, ', '));
+//             }
+//         }
+//         if (__list_check__) {
+//             padding_style = 'padding: 2px 0px 0px 10px;';
+//             val = '{<p style="padding: 0px 0px 2px 40px;">' +
+//                   __value_strings__.join(',</p><p style="padding: 0px 0px 2px 40px;">') +
+//                   '</p><p style="padding: 0px 0px 2px 30px;">}</p>';
+//         } else {
+//             val = '{' + __value_strings__.join(', ') + '}';
+//         }
+//     } else {
+//         val = value;
+//     }
+//     _console.push('<p style="' + padding_style + '"><b><i>_ ' + name+'</i></b>  = ' + val + '</p>');
+//     return val;
+// }
+
+export const pythonListFunc = `
 function pythonList(x, l){
     if (x < 0) {
         return x + l;
@@ -43,7 +123,7 @@ function duplicateModel(model){
     return result;
 }
 `;
-export const printFunc = `
+export const printFuncString = `
 function printFunc(_console, name, value){
     let val;
     let padding_style = 'padding: 2px 0px 2px 10px;';
@@ -108,6 +188,8 @@ function printFunc(_console, name, value){
 `;
 const DEBUG = false;
 
+const AsyncFunction = Object.getPrototypeOf(async function() {}).constructor;
+
 @Component({
     selector: 'execute',
     templateUrl: 'execute.component.html',
@@ -128,104 +210,105 @@ export class ExecuteComponent {
     }
 
     static async resolveImportedUrl(prodList: IProcedure[]|INode, isMainFlowchart?: boolean, isStartNode = false) {
-        if (!isArray(prodList)) {
-            await ExecuteComponent.resolveImportedUrl(prodList.procedure, isMainFlowchart, isStartNode);
-            if (prodList.localFunc) {
-                await ExecuteComponent.resolveImportedUrl(prodList.localFunc, isMainFlowchart, isStartNode);
-            }
-            return;
-        }
-        for (const prod of <IProcedure[]> prodList) {
-            if (prod.children) {await  ExecuteComponent.resolveImportedUrl(prod.children, isMainFlowchart, isStartNode); }
-            if (!prod.enabled) {
-                continue;
-            }
-            if (isMainFlowchart && prod.type === ProcedureTypes.globalFuncCall) {
-                for (let i = 1; i < prod.args.length; i++) {
-                    const arg = prod.args[i];
-                    // args.slice(1).map((arg) => {
-                    if (arg.type.toString() !== InputType.URL.toString()) { continue; }
-                    prod.resolvedValue = await CodeUtils.getStartInput(arg, InputType.URL);
-                }
-                continue;
-            }
-            if (prod.type !== ProcedureTypes.MainFunction || (isStartNode && !isMainFlowchart)) {continue; }
-            for (const func of _parameterTypes.urlFunctions) {
-                const funcMeta = func.split('.');
-                if (prod.meta.module === funcMeta[0] && prod.meta.name === funcMeta[1]) {
-                    const arg = prod.args[2];
-                    if (arg.name[0] === '_') { continue; }
-                    if (arg.value.indexOf('__model_data__') !== -1) {
-                        arg.jsValue = arg.value;
-                        prod.resolvedValue = arg.value.split('__model_data__').join('');
-                    } else if (arg.jsValue && arg.jsValue.indexOf('__model_data__') !== -1) {
-                        prod.resolvedValue = arg.jsValue.split('__model_data__').join('');
-                    } else if (arg.value.indexOf('://') !== -1) {
-                        const val = <string>(arg.value).replace(/ /g, '');
-                        const result = await CodeUtils.getURLContent(val);
-                        if (result === undefined) {
-                            prod.resolvedValue = arg.value;
-                        } else if (result.indexOf && result.indexOf('HTTP Request Error') !== -1) {
-                            throw new Error(result);
-                        } else if (val.indexOf('.zip') !== -1) {
-                            prod.resolvedValue = await ExecuteComponent.openZipFile(result);
-                        } else {
-                            prod.resolvedValue = '`' + result + '`';
-                        }
-                        break;
-                    } else if ((arg.value[0] !== '"' && arg.value[0] !== '\'')) {
-                        prod.resolvedValue = null;
-                        break;
-                    } else {
-                        let val = arg.value.slice(1, -1).trim();
-                        if (val.length > 1 && val[0] === '{') {
-                            prod.resolvedValue = null;
-                            break;
-                        }
-                        val = val.replace(/\"|\'/g, '');
-                        const backup_list: string[] = JSON.parse(localStorage.getItem('mobius_backup_list'));
-                        if (val.indexOf('*') !== -1) {
-                            const splittedVal = val.split('*');
-                            const start = splittedVal[0] === '' ? null : splittedVal[0];
-                            const end = splittedVal[1] === '' ? null : splittedVal[1];
-                            let result = '{';
-                            for (const backup_name of backup_list) {
-                                let valid_check = true;
-                                if (start && !backup_name.startsWith(start)) {
-                                    valid_check = false;
-                                }
-                                if (end && !backup_name.endsWith(end)) {
-                                    valid_check = false;
-                                }
-                                if (valid_check) {
-                                    const backup_file = await SaveFileComponent.loadFromFileSystem(backup_name);
-                                    result += `"${backup_name}": \`${backup_file.replace(/\\/g, '\\\\')}\`,`;
-                                }
-                            }
-                            result += '}';
-                            prod.resolvedValue = result;
-                            break;
-                        } else {
-                            if (backup_list.indexOf(val) !== -1) {
-                                const result = await SaveFileComponent.loadFromFileSystem(val);
-                                if (!result || result === 'error') {
-                                    prod.hasError = true;
-                                    throw(new Error(`File named ${val} does not exist in the local storage`));
-                                    // prod.resolvedValue = arg.value;
-                                } else {
-                                    prod.resolvedValue = '`' + result + '`';
-                                    break;
-                                }
-                            } else {
-                                prod.hasError = true;
-                                throw(new Error(`File named ${val} does not exist in the local storage`));
-                            }
-                        }
-                    }
-                    break;
-                }
-            }
-        }
+        return;
+        // if (!isArray(prodList)) {
+        //     await ExecuteComponent.resolveImportedUrl(prodList.procedure, isMainFlowchart, isStartNode);
+        //     if (prodList.localFunc) {
+        //         await ExecuteComponent.resolveImportedUrl(prodList.localFunc, isMainFlowchart, isStartNode);
+        //     }
+        //     return;
+        // }
+        // for (const prod of <IProcedure[]> prodList) {
+        //     if (prod.children) {await  ExecuteComponent.resolveImportedUrl(prod.children, isMainFlowchart, isStartNode); }
+        //     if (!prod.enabled) {
+        //         continue;
+        //     }
+        //     if (isMainFlowchart && prod.type === ProcedureTypes.globalFuncCall) {
+        //         for (let i = 1; i < prod.args.length; i++) {
+        //             const arg = prod.args[i];
+        //             // args.slice(1).map((arg) => {
+        //             if (arg.type.toString() !== InputType.URL.toString()) { continue; }
+        //             prod.resolvedValue = await CodeUtils.getStartInput(arg, InputType.URL);
+        //         }
+        //         continue;
+        //     }
+        //     if (prod.type !== ProcedureTypes.MainFunction || (isStartNode && !isMainFlowchart)) {continue; }
+        //     for (const func of _parameterTypes.urlFunctions) {
+        //         const funcMeta = func.split('.');
+        //         if (prod.meta.module === funcMeta[0] && prod.meta.name === funcMeta[1]) {
+        //             const arg = prod.args[2];
+        //             if (arg.name[0] === '_') { continue; }
+        //             if (arg.value.indexOf('__model_data__') !== -1) {
+        //                 arg.jsValue = arg.value;
+        //                 prod.resolvedValue = arg.value.split('__model_data__').join('');
+        //             } else if (arg.jsValue && arg.jsValue.indexOf('__model_data__') !== -1) {
+        //                 prod.resolvedValue = arg.jsValue.split('__model_data__').join('');
+        //             } else if (arg.value.indexOf('://') !== -1) {
+        //                 const val = <string>(arg.value).replace(/ /g, '');
+        //                 const result = await CodeUtils.getURLContent(val);
+        //                 if (result === undefined) {
+        //                     prod.resolvedValue = arg.value;
+        //                 } else if (result.indexOf && result.indexOf('HTTP Request Error') !== -1) {
+        //                     throw new Error(result);
+        //                 } else if (val.indexOf('.zip') !== -1) {
+        //                     prod.resolvedValue = await ExecuteComponent.openZipFile(result);
+        //                 } else {
+        //                     prod.resolvedValue = '`' + result + '`';
+        //                 }
+        //                 break;
+        //             } else if ((arg.value[0] !== '"' && arg.value[0] !== '\'')) {
+        //                 prod.resolvedValue = null;
+        //                 break;
+        //             } else {
+        //                 let val = arg.value.slice(1, -1).trim();
+        //                 if (val.length > 1 && val[0] === '{') {
+        //                     prod.resolvedValue = null;
+        //                     break;
+        //                 }
+        //                 val = val.replace(/\"|\'/g, '');
+        //                 const backup_list: string[] = JSON.parse(localStorage.getItem('mobius_backup_list'));
+        //                 if (val.indexOf('*') !== -1) {
+        //                     const splittedVal = val.split('*');
+        //                     const start = splittedVal[0] === '' ? null : splittedVal[0];
+        //                     const end = splittedVal[1] === '' ? null : splittedVal[1];
+        //                     let result = '{';
+        //                     for (const backup_name of backup_list) {
+        //                         let valid_check = true;
+        //                         if (start && !backup_name.startsWith(start)) {
+        //                             valid_check = false;
+        //                         }
+        //                         if (end && !backup_name.endsWith(end)) {
+        //                             valid_check = false;
+        //                         }
+        //                         if (valid_check) {
+        //                             const backup_file = await SaveFileComponent.loadFromFileSystem(backup_name);
+        //                             result += `"${backup_name}": \`${backup_file.replace(/\\/g, '\\\\')}\`,`;
+        //                         }
+        //                     }
+        //                     result += '}';
+        //                     prod.resolvedValue = result;
+        //                     break;
+        //                 } else {
+        //                     if (backup_list.indexOf(val) !== -1) {
+        //                         const result = await SaveFileComponent.loadFromFileSystem(val);
+        //                         if (!result || result === 'error') {
+        //                             prod.hasError = true;
+        //                             throw(new Error(`File named ${val} does not exist in the local storage`));
+        //                             // prod.resolvedValue = arg.value;
+        //                         } else {
+        //                             prod.resolvedValue = '`' + result + '`';
+        //                             break;
+        //                         }
+        //                     } else {
+        //                         prod.hasError = true;
+        //                         throw(new Error(`File named ${val} does not exist in the local storage`));
+        //                     }
+        //                 }
+        //             }
+        //             break;
+        //         }
+        //     }
+        // }
     }
 
     static async openZipFile(zipFile) {
@@ -358,13 +441,13 @@ export class ExecuteComponent {
         // execute the flowchart
         try {
             if (testing) {
-                this.executeFlowchart();
+                await this.executeFlowchart();
                 this.dataService.finalizeLog();
                 return;
             } else {
                 // setTimeout for 20ms so that the loading screen has enough time to be loaded in
-                setTimeout(() => {
-                    this.executeFlowchart();
+                setTimeout(async () => {
+                    await this.executeFlowchart();
                     this.dataService.finalizeLog();
                     this.dataService.log('<br>');
                 }, 20);
@@ -510,7 +593,7 @@ export class ExecuteComponent {
 
 
 
-    executeFlowchart() {
+    async executeFlowchart() {
         let globalVars = '';
         const constantList = {};
 
@@ -587,7 +670,7 @@ export class ExecuteComponent {
                 continue;
             }
             // execute valid node
-            globalVars = this.executeNode(node, funcStrings, globalVars, constantList, nodeIndices);
+            globalVars = await this.executeNode(node, funcStrings, globalVars, constantList, nodeIndices);
         }
 
         // delete each node.output.value to save memory
@@ -611,7 +694,7 @@ export class ExecuteComponent {
     }
 
 
-    executeNode(node: INode, funcStrings, globalVars, constantList, nodeIndices): string {
+    async executeNode(node: INode, funcStrings, globalVars, constantList, nodeIndices): Promise<string> {
         const params = {
             'currentProcedure': [''],
             'console': this.dataService.getLog(),
@@ -644,7 +727,7 @@ export class ExecuteComponent {
                 return;
             }
             const usedFuncs: string[] = [];
-            const codeResult = CodeUtils.getNodeCode(node, true, nodeIndices, undefined, undefined, usedFuncs);
+            const codeResult = CodeUtils.getNodeCode(node, true, nodeIndices, undefined, node.id, usedFuncs);
             const usedFuncsSet = new Set(usedFuncs);
             // if process is terminated, return
             if (codeResult[1]) {
@@ -664,9 +747,9 @@ export class ExecuteComponent {
             // start with asembling the node's code
             fnString =  '\n\n//  ------------ MAIN CODE ------------\n' +
                         nodeCode[0] +
-                        '\nfunction __main_node_code__(){\n' +
+                        '\nasync function __main_node_code__(__modules__, __params__){\n' +
                         nodeCode[1] +
-                        '\n}\nreturn __main_node_code__();';
+                        '\n}\nreturn __main_node_code__;';
 
             // add the user defined functions that are used in the node
             const addedFunc = new Set([]);
@@ -680,13 +763,13 @@ export class ExecuteComponent {
             });
 
             // add the constants from the start node and the predefined constants/functions (e.g. PI, sqrt, ...)
-            fnString = _varString + globalVars + fnString;
+            fnString = _varString + globalVars + '\n\n// <<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>\n\n' + fnString;
 
             // add the merge input function and the print function
             fnString = `\nconst __debug__ = ${this.dataService.mobiusSettings.debug};` +
                         '\n\n// ------ MERGE INPUTS FUNCTION ------' + mergeInputsFunc +
-                        '\n\n// ------ PRINT FUNCTION ------' + printFunc +
-                        `\n\n// ------ FUNCTION FOR PYTHON STYLE LIST ------` + pythonList +
+                        '\n\n// ------ PRINT FUNCTION ------' + printFuncString +
+                        `\n\n// ------ FUNCTION FOR PYTHON STYLE LIST ------` + pythonListFunc +
                         '\n\n// ------ CONSTANTS ------' + fnString;
 
             // ==> generated code structure:
@@ -719,11 +802,11 @@ export class ExecuteComponent {
 
             // #########################################################
             // *********************************************************
-            // console.log(fnString);
+            console.log(fnString.split('<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>')[1]);
 
             const fn = new Function('__modules__', '__params__', fnString);
             // execute the function
-            const result = fn(Modules, params);
+            const result = await fn(Modules, params)(Modules, params);
             if (params['terminated']) {
                 this.terminated = node.name;
                 this.dataService.notifyMessage(`PROCESS TERMINATED IN NODE: "${this.terminated}"`);

@@ -57,12 +57,12 @@ export class WindowMessageComponent {
                 if (!event.data.url) {
                     return;
                 }
-                let loadSettings = '&loadSettings';
-                if (event.data.hasOwnProperty('loadSettings') && event.data.loadSettings === false) {
-                    loadSettings = '';
+                let keepSettings = '';
+                if (event.data.keepSettings) {
+                    keepSettings = '&keepSettings';
                 }
                 const x = document.getElementById('savedata');
-                (<HTMLInputElement>document.getElementById('loadurl_input')).value = 'file=' + event.data.url + loadSettings;
+                (<HTMLInputElement>document.getElementById('loadurl_input')).value = 'file=' + event.data.url + keepSettings;
                 (<HTMLElement>document.getElementById('loadurl')).click();
                 WindowMessageComponent.SendData('test_url');
                 break;

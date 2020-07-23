@@ -36,20 +36,21 @@ export class LoadUrlComponent {
 
     async loadStartUpURL(routerUrl: string): Promise<boolean> {
         const url = this.extractUrl(routerUrl);
+        if (!url) { return; }
         if (routerUrl.indexOf('node=') !== -1) {
             let nodeID: any = routerUrl.split('node=')[1].split('&')[0];
             nodeID = Number(nodeID.replace(/%22|%27|'/g, ''));
-            return await this.loadURL(url, nodeID);
+            return await this.loadURL(url, nodeID, false);
         } else {
-            return await this.loadURL(url);
+            return await this.loadURL(url, null, false);
         }
     }
 
     loadInputUrl() {
         const input: HTMLInputElement = <HTMLInputElement> document.getElementById('loadurl_input');
-        const loadSettings: boolean = input.value.indexOf('loadSettings') !== -1;
+        const keepSettings: boolean = input.value.indexOf('keepSettings') !== -1;
         const url = this.extractUrl(input.value);
-        this.loadURL(url, null, loadSettings);
+        this.loadURL(url, null, keepSettings);
         input.value = '';
     }
 
@@ -75,7 +76,7 @@ export class LoadUrlComponent {
         return url;
     }
 
-    async loadURL(url: string, nodeID?: number, loadSettings?: boolean): Promise<boolean> {
+    async loadURL(url: string, nodeID?: number, keepSettings?: boolean): Promise<boolean> {
         const p = new Promise((resolve) => {
             const request = new XMLHttpRequest();
 
@@ -123,7 +124,7 @@ export class LoadUrlComponent {
         SaveFileComponent.clearModelData(this.dataService.flowchart, null);
         delete this.dataService.file.flowchart;
         this.dataService.file = loadeddata;
-        if (loadSettings === undefined || loadSettings) {
+        if (!keepSettings) {
             if (updateLocalViewerSettings(loadeddata.settings)) {
                 this.dataService.viewerSettingsUpdated = true;
             }

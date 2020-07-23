@@ -41,7 +41,7 @@ export class ViewMinimalComponent implements AfterViewInit, OnDestroy {
     }
 
     viewerData() {
-        return this.dataOutputService.getViewerData(this.getNode(), this.dataService.modelMeta, true);
+        return this.dataOutputService.getViewerData(this.getNode(), true);
     }
 
     adjustTextArea() {

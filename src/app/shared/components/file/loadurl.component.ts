@@ -35,7 +35,26 @@ export class LoadUrlComponent {
 
 
     async loadStartUpURL(routerUrl: string): Promise<boolean> {
-        let url: any = routerUrl.split('file=');
+        const url = this.extractUrl(routerUrl);
+        if (routerUrl.indexOf('node=') !== -1) {
+            let nodeID: any = routerUrl.split('node=')[1].split('&')[0];
+            nodeID = Number(nodeID.replace(/%22|%27|'/g, ''));
+            return await this.loadURL(url, nodeID);
+        } else {
+            return await this.loadURL(url);
+        }
+    }
+
+    loadInputUrl() {
+        const input: HTMLInputElement = <HTMLInputElement> document.getElementById('loadurl_input');
+        const loadSettings: boolean = input.value.indexOf('loadSettings') !== -1;
+        const url = this.extractUrl(input.value);
+        this.loadURL(url, null, loadSettings);
+        input.value = '';
+    }
+
+    extractUrl(rawUrl: string) {
+        let url: any = rawUrl.split('file=');
         if (url.length <= 1 ) {
             return false;
         }
@@ -53,22 +72,10 @@ export class LoadUrlComponent {
         if (url.indexOf('dropbox') !== -1) {
             url = url.replace('www', 'dl').replace('dl=0', 'dl=1');
         }
-        if (routerUrl.indexOf('node=') !== -1) {
-            let nodeID: any = routerUrl.split('node=')[1].split('&')[0];
-            nodeID = Number(nodeID.replace(/%22|%27|'/g, ''));
-            return await this.loadURL(url, nodeID);
-        } else {
-            return await this.loadURL(url);
-        }
+        return url;
     }
 
-    loadInputUrl() {
-        const input: HTMLInputElement = <HTMLInputElement> document.getElementById('loadurl_input');
-        this.loadStartUpURL('file=' + input.value);
-        input.value = '';
-    }
-
-    async loadURL(url: string, nodeID?: number): Promise<boolean> {
+    async loadURL(url: string, nodeID?: number, loadSettings?: boolean): Promise<boolean> {
         const p = new Promise((resolve) => {
             const request = new XMLHttpRequest();
 
@@ -116,10 +123,12 @@ export class LoadUrlComponent {
         SaveFileComponent.clearModelData(this.dataService.flowchart, null);
         delete this.dataService.file.flowchart;
         this.dataService.file = loadeddata;
-        if (updateLocalViewerSettings(loadeddata.settings)) {
-            this.dataService.viewerSettingsUpdated = true;
+        if (loadSettings === undefined || loadSettings) {
+            if (updateLocalViewerSettings(loadeddata.settings)) {
+                this.dataService.viewerSettingsUpdated = true;
+            }
+            updateCesiumViewerSettings(loadeddata.settings);
         }
-        updateCesiumViewerSettings(loadeddata.settings);
         this.dataService.newFlowchart = true;
         if ((nodeID || nodeID === 0) && nodeID >= 0 && nodeID < loadeddata.flowchart.nodes.length) {
             loadeddata.flowchart.meta.selected_nodes = [nodeID];

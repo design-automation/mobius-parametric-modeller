@@ -12,7 +12,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { importObj, exportPosiBasedObj, exportVertBasedObj } from '@libs/geo-info/io_obj';
 import { importGeojson, exportGeojson } from '@libs/geo-info/io_geojson';
 import { download } from '@libs/filesys/download';
-import { TId, EEntType, Txyz, TPlane, TRay, IGeomPack, IModelData, IGeomPackTId, TEntTypeIdx, IEntSets } from '@libs/geo-info/common';
+import { TId, EEntType, Txyz, TPlane, TRay, IGeomPack, IModelJSONData, IGeomPackTId, TEntTypeIdx, IEntSets } from '@libs/geo-info/common';
 import { __merge__ } from '../_model';
 import { _model } from '..';
 import { idsMake, idsBreak } from '@libs/geo-info/id';
@@ -137,13 +137,12 @@ export async function Import(__model__: GIModel, input_data: string, data_format
     }
     return idsMake([EEntType.COLL, coll_i]) as TId;
 }
-function _importGI(__model__: GIModel, model_data: string): number {
+function _importGI(__model__: GIModel, json_str: string): number {
     // get number of ents before merge
     const num_ents_before: number[] = __model__.modeldata.geom.query.numEntsAll();
     // import
-    const gi_json: IModelData = JSON.parse(model_data) as IModelData;
-    const gi_model: GIModel = new GIModel();
-    gi_model.setModelData(gi_json);
+    const gi_model: GIModel = new GIModel(__model__.getMetaData());
+    gi_model.setJSONStr(json_str);
     __model__.merge(gi_model);
     // get number of ents after merge
     const num_ents_after: number[] = __model__.modeldata.geom.query.numEntsAll();
@@ -229,7 +228,12 @@ export enum _EIOExportDataFormat {
 }
 /**
  * Export data from the model as a file.
- * This will result in a popup in your browser, asking you to save the file.
+ * ~
+ * If you expore to your  hard disk,
+ * it will result in a popup in your browser, asking you to save the file.
+ * ~
+ * If you export to Local Storage, there will be no popup.
+ * ~
  * @param __model__
  * @param entities Optional. Entities to be exported. If null, the whole model will be exported.
  * @param file_name Name of the file as a string.
@@ -267,7 +271,8 @@ async function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
     file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): Promise<boolean> {
     switch (data_format) {
         case _EIOExportDataFormat.GI:
-            let gi_data = '';
+            // === get model data ===
+            let model_data = '';
             // clone the model
             const model_clone: GIModel = __model__.clone();
             if (ents_arr !== null) {
@@ -276,14 +281,16 @@ async function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
                 // delete the ents
                 model_clone.delete(ent_sets, false);
             }
-            // model_clone.purge();
-            gi_data = JSON.stringify(model_clone.getModelData());
+            model_clone.purge();
+            // === get meta data ===
+            model_data = model_clone.getJSONStr();
             // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
-            gi_data = gi_data.replace(/\\/g, '\\\\'); // TODO temporary fix
+            model_data = model_data.replace(/\\/g, '\\\\'); // TODO temporary fix
+            // === save the file ===
             if (data_target === _EIODataTarget.DEFAULT) {
-                return download(gi_data , file_name);
+                return download(model_data , file_name);
             }
-            return saveResource(gi_data, file_name);
+            return saveResource(model_data, file_name);
         case _EIOExportDataFormat.OBJ_VERT:
             const obj_verts_data: string = exportVertBasedObj(__model__, ents_arr);
             // obj_data = obj_data.replace(/#/g, '%23'); // TODO temporary fix

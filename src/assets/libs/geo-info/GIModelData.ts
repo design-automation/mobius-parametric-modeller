@@ -1,6 +1,6 @@
 import { GIGeom } from './GIGeom';
 import { GIAttribs } from './GIAttribs';
-import { IModelData, IGeomPack, IEntSets } from './common';
+import { IModelJSONData, IGeomPack, IEntSets } from './common';
 import { GIModelComparator } from './GIModelComparator';
 import { GIModelThreejs } from './GIModelThreejs';
 import { GIModel } from './GIModel';
@@ -34,21 +34,20 @@ export class GIModelData {
      * Any existing data in the model is deleted.
      * @param model_data The JSON data.
      */
-    public setData (model_data: IModelData): IGeomPack {
+    public setJSONData (model_data: IModelJSONData): void {
         // console.log("SET DATA");
-        this.attribs.io.setData(model_data.attributes); // warning: must be before this.geom.io.setData()
-        const new_ents_i: IGeomPack = this.geom.io.setData(model_data.geometry);
-        return new_ents_i;
+        this.attribs.io.setJSONData(model_data.attributes);
+        this.geom.io.setJSONData(model_data.geometry);
     }
     /**
      * Returns the JSON data for this model.
      * This will include any deleted entities, which will be undefined.
      */
-    public getData(): IModelData {
+    public getJSONData(): IModelJSONData {
         // console.log("GET DATA");
         return {
-            geometry: this.geom.io.getData(),
-            attributes: this.attribs.io.getData()
+            geometry: this.geom.io.getJSONData(),
+            attributes: this.attribs.io.getJSONData()
         };
     }
     /**
@@ -114,7 +113,6 @@ export class GIModelData {
     }
     /**
      * Returns a clone of this model.
-     * Any deleted entities will remain.
      * Entity IDs will not change.
      */
     public clone(): GIModelData {
@@ -126,7 +124,7 @@ export class GIModelData {
         return clone;
     }
     /**
-     * Reomove deleted entities will be removed.
+     * Renumber entities.
      */
     public purge(): GIModelData {
         const clone: GIModelData = new GIModelData(this.model);

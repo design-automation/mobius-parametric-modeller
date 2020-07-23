@@ -59,52 +59,6 @@ export type TColor = [number, number, number]; // TODO replace with Txyz
 export type TNormal = [number, number, number]; // TODO replace with xyz
 export type TTexture = [number, number];
 
-// export interface IExpr {
-//     ent_type1: string;
-//     attrib_name1?: string;
-//     attrib_index1?: number;
-//     ent_type2?: string;
-//     attrib_name2?: string;
-//     attrib_index2?: number;
-//     operator?: string;
-//     value?: TAttribDataTypes;
-// }
-
-// export interface IExprQuery {
-//     ent_type: EEntType;
-//     attrib_name?: string;
-//     attrib_index?: number;
-//     operator?: EFilterOperatorTypes;
-//     value?: TAttribDataTypes;
-// }
-
-// export interface IExprSort {
-//     ent_type: EEntType;
-//     attrib_name: string;
-//     attrib_index?: number;
-// }
-
-// export interface IExprPush {
-//     ent_type1: EEntType;
-//     attrib_name1: string;
-//     attrib_index1?: number;
-//     ent_type2: EEntType;
-//     attrib_name2: string;
-//     attrib_index2?: number;
-// }
-
-// export enum EExprEntType {
-//     POSI =   'ps',
-//     VERT =   '_v',
-//     EDGE =   '_e',
-//     WIRE =   '_w',
-//     FACE =   '_f',
-//     POINT =  'pt',
-//     PLINE =  'pl',
-//     PGON =   'pg',
-//     COLL =   'co'
-// }
-
 // Types of entities
 export enum EEntType {
     POSI,
@@ -211,21 +165,6 @@ export enum EFilterOperatorTypes {
     EQUAL = '='
 }
 
-// /**
-//  * A query component.
-//  * Each query can consist of multiple components.
-//  * Some examples of queries
-//  * @name == value
-//  * @name > value
-//  * @name[2] <= value
-//  */
-// export interface IQueryComponent {
-//     attrib_name: string;
-//     attrib_index: number;
-//     attrib_value_str: string;
-//     operator_type: EFilterOperatorTypes;
-// }
-
 /**
  * A sort component.
  * Each sort can consist of multiple components.
@@ -253,10 +192,42 @@ export enum EAttribPush {
     LAST
 }
 
+// enums
+export enum EAttribDataTypeStrs {
+    // INT = 'Int',
+    NUMBER = 'number',
+    STRING = 'string',
+    BOOLEAN = 'boolean',
+    LIST = 'list', // a list of anything
+    DICT = 'dict // an object'
+}
+
+// types
+export type Txy = [number, number]; // north direction
+export type Txyz = [number, number, number]; // in use
+export type TPosi = number;
+export type TTri = [number, number, number]; // [position, position, position]
+export type TVert = number; // positions
+export type TEdge = [number, number]; // [vertex, vertex]
+export type TWire = number[]; // [edge, edge,....]
+export type TFace = number[]; // [wire, ....]
+export type TFaceTri = number[]; // [triangle, ...]
+export type TPoint = number; // [vertex,....]
+export type TPline = number; // [wire,....]
+export type TPgon = number; // [face,....]
+export type TColl = [number, number[], number[], number[]]; // [parent, [point, ...], [polyline, ...], [polygon, ....]]
+export type TEntity = TTri | TVert | TEdge | TWire | TFace | TPoint | TPline | TPgon | TColl;
+export type TAttribDataTypes = string | number | boolean | any[] | object;
+export type TEntAttribValuesArr = Array<[number, number[]]>;
+export type TModelAttribValuesArr = Array<[string, TAttribDataTypes]>;
+
+
+export const RE_SPACES: RegExp = /\s+/g;
+
 /**
  * Geom arrays
  */
-export interface IGeomArrays {
+export interface IGeomMaps {
     // num_posis: number;
     dn_verts_posis: Map<number, TVert>;
     dn_tris_verts: Map<number, TTri>;
@@ -294,45 +265,88 @@ export interface IGeomCopy {
     pgons: number[];
     colls: number[];
 }
-// ================================================================================================
-// JSON DATA
-// ================================================================================================
 
-// enums
-export enum EAttribDataTypeStrs {
-    // INT = 'Int',
-    NUMBER = 'number',
-    STRING = 'string',
-    BOOLEAN = 'boolean',
-    LIST = 'list', // a list of anything
-    DICT = 'dict // an object'
+// note the names of the keys must match EAttribDataTypeStrs
+export interface IAttribValues {
+    number: [number[], Map<string, number>];
+    string: [string[], Map<string, number>];
+    list:   [any[],    Map<string, number>];
+    dict:   [object[], Map<string, number>];
 }
 
-// types
-export type Txy = [number, number]; // north direction
-export type Txyz = [number, number, number]; // in use
-export type TPosi = number;
-export type TTri = [number, number, number]; // [position, position, position]
-export type TVert = number; // positions
-export type TEdge = [number, number]; // [vertex, vertex]
-export type TWire = number[]; // [edge, edge,....]
-export type TFace = number[]; // [wire, ....]
-export type TFaceTri = number[]; // [triangle, ...]
-export type TPoint = number; // [vertex,....]
-export type TPline = number; // [wire,....]
-export type TPgon = number; // [face,....]
-export type TColl = [number, number[], number[], number[]]; // [parent, [point, ...], [polyline, ...], [polygon, ....]]
-export type TEntity = TTri | TVert | TEdge | TWire | TFace | TPoint | TPline | TPgon | TColl;
-export type TAttribDataTypes = string | number | boolean | any[] | object;
-export type TEntAttribValuesArr = Array<[number, number[]]>;
-export type TModelAttribValuesArr = Array<[string, TAttribDataTypes]>;
-// interfaces for JSON data
+export interface IMetaData {
+    time_stamp: number;
+    posi_count: number;
+    vert_count: number;
+    tri_count: number;
+    edge_count: number;
+    wire_count: number;
+    face_count: number;
+    point_count: number;
+    pline_count: number;
+    pgon_count: number;
+    coll_count: number;
+    attrib_values: IAttribValues;
+}
 
-export const RE_SPACES: RegExp = /\s+/g;
+// ================================================================================================
+// JSON MODEL
+// ================================================================================================
 
-export interface IGeomData {
+export interface IModelJSON {
+    meta_data: IMetaJSONData;
+    model_data: IModelJSONData;
+}
+
+// ================================================================================================
+// JSON META DATA
+// ================================================================================================
+
+export interface IAttribJSONValues {
+    number_vals: number[];
+    number_keys: string[];
+    number_idxs: number[];
+
+    string_vals: string[];
+    string_keys: string[];
+    string_idxs: number[];
+
+    list_vals: any[];
+    list_keys: string[];
+    list_idxs: number[];
+
+    dict_vals: object[];
+    dict_keys: string[];
+    dict_idxs: number[];
+}
+
+export interface IMetaJSONData {
+    time_stamp: number;
+    posi_count: number;
+    vert_count: number;
+    tri_count: number;
+    edge_count: number;
+    wire_count: number;
+    face_count: number;
+    point_count: number;
+    pline_count: number;
+    pgon_count: number;
+    coll_count: number;
+    attrib_values: IAttribJSONValues;
+}
+
+// ================================================================================================
+// JSON MODEL DATA
+// ================================================================================================
+
+export interface IModelJSONData {
+    geometry: IGeomJSONData;
+    attributes: IAttribsJSONData;
+}
+
+export interface IGeomJSONData {
     posis_i: number[];
-    posis_ts: number[];
+    // posis_ts: number[];
     verts: TVert[];
     verts_i: number[];
     tris: TTri[];
@@ -354,25 +368,22 @@ export interface IGeomData {
     colls_i: number[];
     selected: TEntTypeIdx[];
 }
-export interface IAttribData {
+export interface IAttribJSONData {
     name: string;
     data_type: EAttribDataTypeStrs;
     data_length: number;
     data: TEntAttribValuesArr;
 }
-export interface IAttribsData {
-    posis: IAttribData[];
-    verts: IAttribData[];
-    edges: IAttribData[];
-    wires: IAttribData[];
-    faces: IAttribData[];
-    points: IAttribData[];
-    plines: IAttribData[];
-    pgons: IAttribData[];
-    colls: IAttribData[];
+export interface IAttribsJSONData {
+    posis: IAttribJSONData[];
+    verts: IAttribJSONData[];
+    edges: IAttribJSONData[];
+    wires: IAttribJSONData[];
+    faces: IAttribJSONData[];
+    points: IAttribJSONData[];
+    plines: IAttribJSONData[];
+    pgons: IAttribJSONData[];
+    colls: IAttribJSONData[];
     model: TModelAttribValuesArr;
 }
-export interface IModelData {
-    geometry: IGeomData;
-    attributes: IAttribsData;
-}
+

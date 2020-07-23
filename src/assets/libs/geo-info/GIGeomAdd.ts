@@ -1,4 +1,4 @@
-import { EEntType, TTri, TFace, Txyz, IGeomArrays, TAttribDataTypes } from './common';
+import { EEntType, TTri, TFace, Txyz, IGeomMaps, TAttribDataTypes } from './common';
 import { triangulate } from '../triangulate/triangulate';
 import { GIGeom } from './GIGeom';
 import { vecAdd } from '../geom/vectors';
@@ -8,11 +8,11 @@ import { vecAdd } from '../geom/vectors';
  */
 export class GIGeomAdd {
     private _geom: GIGeom;
-    private _geom_maps: IGeomArrays;
+    private _geom_maps: IGeomMaps;
     /**
      * Constructor
      */
-    constructor(geom: GIGeom, geom_arrays: IGeomArrays) {
+    constructor(geom: GIGeom, geom_arrays: IGeomMaps) {
         this._geom = geom;
         this._geom_maps = geom_arrays;
     }

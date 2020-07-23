@@ -1,4 +1,4 @@
-import { IModelData, IGeomPack, EEntType, Txyz, TEntAttribValuesArr, TAttribDataTypes, TEntity, TEntTypeIdx, IEntSets } from './common';
+import { IModelJSONData, IEntSets, IModelJSON } from './common';
 import { GIMetaData } from './GIMetaData';
 import { GIModelData } from './GIModelData';
 import { IThreeJS } from './ThreejsJSON';
@@ -15,27 +15,68 @@ export class GIModel {
      * Constructor
      */
     // constructor(model_data?: IModelData) {
-    constructor() {
-        this.metadata = new GIMetaData();
+    constructor(meta_data?: GIMetaData) {
+        if (meta_data === undefined) {
+            this.metadata = new GIMetaData();
+        } else {
+            this.metadata = meta_data;
+        }
         this.modeldata = new GIModelData(this);
     }
     /**
-     * Sets the data in this model from JSON data.
+     * Set all data from a JSON string.
+     * This includes both the meta data and the model data.
+     * Any existing model data wil be deleted.
+     * @param meta
+     */
+    public setJSONStr(json_str: string): void {
+        const json_data: IModelJSON = JSON.parse(json_str);
+        // merge the meta data
+        this.metadata.mergeJSONData(json_data);
+        // set the model data
+        this.modeldata.setJSONData(json_data.model_data);
+    }
+    /**
+     * Gets all data as a JSON string.
+     * This includes both the meta data and the model data.
+     */
+    public getJSONStr(): string {
+        const data: IModelJSON = {
+            meta_data: this.metadata.getJSONData(),
+            model_data: this.modeldata.getJSONData()
+        };
+        return JSON.stringify(data);
+    }
+    /**
+     * Sets the data in this model from a JSON data object using shallow copy.
      * Any existing data in the model is deleted.
-     * @param model_data The JSON data.
+     * @param model_json_data The JSON data.
      */
-    public setModelData (model_data: IModelData): IGeomPack {
-        return this.modeldata.setData(model_data);
+    public setModelData (model_json_data: IModelJSONData): void {
+        this.modeldata.setJSONData(model_json_data);
     }
     /**
-     * Returns the JSON data for this model.
-     * This will include any deleted entities, which will be undefined.
+     * Returns the JSON data for this model using shallow copy.
      */
-    public getModelData(): IModelData {
-        return this.modeldata.getData();
+    public getModelData(): IModelJSONData {
+        return this.modeldata.getJSONData();
     }
     /**
-     * Set the meta data object
+     * Set the meta data str.
+     * @param meta
+     */
+    public setModelDataJSONStr(model_json_data_str: string) {
+        this.modeldata.setJSONData(JSON.parse(model_json_data_str));
+    }
+    /**
+     * Get the meta data str.
+     */
+    public getModelDataJSONStr(): string {
+        return JSON.stringify(this.modeldata.getJSONData());
+    }
+    /**
+     * Set the meta data object.
+     * Data is not copied.
      * @param meta
      */
     public setMetaData(meta: GIMetaData) {
@@ -43,21 +84,13 @@ export class GIModel {
     }
     /**
      * Get the meta data object.
+     * Data is not copied
      */
     public getMetaData(): GIMetaData {
         return this.metadata;
     }
     /**
-     * Copys the data from a second model into this model.
-     * The existing data in this model is not deleted.
-     * For the imported data, deleted entities are also merged.
-     * @param model_data The GI model.
-     */
-    public merge(model: GIModel): void {
-        this.modeldata.merge(model.modeldata);
-    }
-    /**
-     * Returns a clone of this model.
+     * Returns a deep clone of this model.
      * Any deleted entities will remain.
      * Entity IDs will not change.
      */
@@ -69,15 +102,34 @@ export class GIModel {
         return clone;
     }
     /**
-     * Reomove deleted entities will be removed.
+     * Deep copies the model data from a second model into this model.
+     * Meta data is assumed to be the same for both models.
+     * The existing model data in this model is not deleted.
+     * Entity IDs will not change.
+     * @param model_data The GI model.
      */
-    public purge(): void {
-        const model_copy: GIModel = new GIModel();
-        model_copy.metadata = this.metadata;
-        model_copy.modeldata = this.modeldata.purge();
+    public merge(model: GIModel): void {
+        this.modeldata.merge(model.modeldata);
     }
     /**
-     * Delete ents in teh model.
+     * Deep copies the model data from a second model into this model.
+     * Meta data is assumed to be the same for both models.
+     * The existing model data in this model is not deleted.
+     * The Entity IDs in this model will not change.
+     * The Entity IDs in the second model will change.
+     * @param model_data The GI model.
+     */
+    public mergeAndPurge(model: GIModel): void {
+        this.modeldata.mergeAndPurge(model.modeldata);
+    }
+    /**
+     * Renumber entities in this model.
+     */
+    public purge(): void {
+        this.modeldata = this.modeldata.purge();
+    }
+    /**
+     * Delete ents in the model.
      */
     public delete(ent_sets: IEntSets, invert: boolean): void {
         if (ent_sets === null) {

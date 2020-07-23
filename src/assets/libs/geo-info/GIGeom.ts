@@ -1,5 +1,5 @@
 import { GIModel } from './GIModel';
-import { IGeomArrays, TVert, TWire, TColl, TPline, TEdge, TFace, TPgon, TEntTypeIdx, EEntType, TPoint } from './common';
+import { IGeomMaps, TVert, TWire, TColl, TPline, TEdge, TFace, TPgon, TEntTypeIdx, EEntType, TPoint } from './common';
 import { GIGeomAdd } from './GIGeomAdd';
 import { GIGeomModify } from './GIGeomModify';
 import { GIGeomQuery } from './GIGeomQuery';
@@ -24,7 +24,7 @@ export class GIGeom {
     public modeldata: GIModelData;
     public selected: TEntTypeIdx[]; // entities that should become selected
     //  all arrays
-    public _geom_maps: IGeomArrays = {  // TODO this should not be public
+    public _geom_maps: IGeomMaps = {  // TODO this should not be public
         // num_posis: 0,
         dn_verts_posis: new Map(),
         dn_tris_verts: new Map(),
@@ -97,7 +97,7 @@ export class GIGeom {
      */
     public toStr(): string {
         let result = '';
-        result += JSON.stringify(this.io.getData());
+        result += JSON.stringify(this.io.getJSONData());
         return result;
     }
 }

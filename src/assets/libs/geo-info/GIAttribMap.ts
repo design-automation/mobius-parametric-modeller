@@ -1,4 +1,4 @@
-import { EFilterOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribData, EEntStrToGeomMaps, EEntType } from './common';
+import { EFilterOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribJSONData, EEntStrToGeomMaps, EEntType } from './common';
 import { arrRem } from '../util/arrs';
 import { GIModelData } from './GIModelData';
 import * as lodash from 'lodash';
@@ -45,7 +45,7 @@ export class GIAttribMap {
     /**
      * Returns the JSON data for this attribute.
      */
-    public getData(): IAttribData {
+    public getJSONData(): IAttribJSONData {
         return {
             name: this._name,
             data_type: this._data_type,
@@ -57,7 +57,7 @@ export class GIAttribMap {
      * Sets the JSON data for this attribute.
      * Any existing data is deleted.
      */
-    public setData(attrib_data: IAttribData): void {
+    public setJSONData(attrib_data: IAttribJSONData): void {
         this._name = attrib_data.name;
         this._data_type = attrib_data.data_type;
         this._data_length = attrib_data.data_length;

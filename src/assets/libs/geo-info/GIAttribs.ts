@@ -2,7 +2,7 @@ import { GIAttribsAdd } from './GIAttribsAdd';
 import { GIAttribsThreejs } from './GIAttribsThreejs';
 import { GIAttribsQuery } from './GIAttribsQuery';
 import { GIModel } from './GIModel';
-import { EEntType, EAttribNames,  IAttribsData, EAttribDataTypeStrs, IAttribsMaps } from './common';
+import { EEntType, EAttribNames,  IAttribsJSONData, EAttribDataTypeStrs, IAttribsMaps } from './common';
 import { GIAttribsIO } from './GIAttribsIO';
 import { GIAttribsModify } from './GIAttribModify';
 import { GIModelData } from './GIModelData';
@@ -167,7 +167,7 @@ export class GIAttribs {
             result += ent_type_str + ': ';
             const attrib_names: string[] = this._modeldata.attribs.query.getAttribNames(ent_type);
             for (const attrib_name of attrib_names) {
-                result += JSON.stringify(this._modeldata.attribs.query.getAttrib(ent_type, attrib_name).getData());
+                result += JSON.stringify(this._modeldata.attribs.query.getAttrib(ent_type, attrib_name).getJSONData());
                 result += '\n';
             }
         }

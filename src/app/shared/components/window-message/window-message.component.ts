@@ -3,6 +3,7 @@ import { DataService } from '@services';
 import { _parameterTypes } from '@assets/core/_parameterTypes';
 import { ProcedureTypes } from '@models/procedure';
 import { InputType } from '@models/port';
+import { SaveFileComponent } from '../file';
 
 @Component({
   selector: 'window-message',
@@ -28,6 +29,27 @@ export class WindowMessageComponent {
             return;
         }
         switch (event.data.messageType) {
+            case 'save_file':
+                if (!event.data.file_data) {
+                    return;
+                }
+                const saveFileData = event.data.file_data;
+                const saveFileName = event.data.file_name ? event.data.file_name : 'Untitled';
+                SaveFileComponent.saveToLocalStorage(saveFileName, saveFileData);
+                break;
+            case 'get_file':
+                if (!event.data.file_name) {
+                    return;
+                }
+                SaveFileComponent.loadFromFileSystem(event.data.file_name).then( f => {
+                    if (!f) { return; }
+                    WindowMessageComponent.SendData({
+                        messageType: 'get_file',
+                        file_name: event.data.file_name,
+                        file_data: f
+                    });
+                });
+                break;
             case 'set_param':
                 if (!event.data.params) {
                     return;
@@ -51,7 +73,6 @@ export class WindowMessageComponent {
                 }
                 // checkNodeValidity(this.dataService.flowchart.nodes[0]);
                 document.getElementById('executeButton').click();
-                WindowMessageComponent.SendData('test_param');
                 break;
             case 'load_url':
                 if (!event.data.url) {
@@ -64,7 +85,6 @@ export class WindowMessageComponent {
                 const x = document.getElementById('savedata');
                 (<HTMLInputElement>document.getElementById('loadurl_input')).value = 'file=' + event.data.url + keepSettings;
                 (<HTMLElement>document.getElementById('loadurl')).click();
-                WindowMessageComponent.SendData('test_url');
                 break;
         }
     }

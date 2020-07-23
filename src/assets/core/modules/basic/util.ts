@@ -10,7 +10,7 @@ import { checkIDs, IdCh } from '../_check_ids';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { download } from '@libs/filesys/download';
-import { EEntType, IModelData, TId, TEntTypeIdx } from '@libs/geo-info/common';
+import { EEntType, IModelJSONData, TId, TEntTypeIdx } from '@libs/geo-info/common';
 import { __merge__ } from '../_model';
 import { _model } from '..';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
@@ -414,7 +414,7 @@ function convertString(value) {
  * @returns Text that summarises the comparison between the two models.
  */
 export function ModelCompare(__model__: GIModel, gi_model: string, method: _ECOmpareMethod): string {
-    const gi_obj: IModelData = JSON.parse(gi_model) as IModelData;
+    const gi_obj: IModelJSONData = JSON.parse(gi_model) as IModelJSONData;
     const other_model = new GIModel();
     other_model.setModelData(gi_obj);
     let result: {score: number, total: number, comment: string} = null;
@@ -445,15 +445,26 @@ export function ModelCompare(__model__: GIModel, gi_model: string, method: _ECOm
  * @returns Text that summarises what is in the model, click print to see this text.
  */
 export function ModelCheck(__model__: GIModel): string {
-    console.log("==== ==== ==== ====");
-    console.log("MODEL GEOM\n", __model__.modeldata.geom.toStr());
-    console.log("MODEL ATTRIBS\n", __model__.modeldata.attribs.toStr());
-    console.log("META\n", __model__.metadata.toStr());
-    console.log("==== ==== ==== ====");
+    console.log('==== ==== ==== ====');
+    console.log('MODEL GEOM\n', __model__.modeldata.geom.toStr());
+    console.log('MODEL ATTRIBS\n', __model__.modeldata.attribs.toStr());
+    console.log('META\n', __model__.metadata.toDebugStr());
+    console.log('==== ==== ==== ====');
     const check: string[] = __model__.check();
     if (check.length > 0) {
         return String(check);
     }
     return 'No internal inconsistencies have been found.';
+}
+// ================================================================================================
+/**
+ * Post a message to the parent window.
+ *
+ * @param __model__
+ * @param data The data to send, a list or a dictionary.
+ * @returns Text that summarises what is in the model, click print to see this text.
+ */
+export function SendData(__model__: GIModel, data: any): void {
+    window.parent.postMessage(data, '*');
 }
 // ================================================================================================

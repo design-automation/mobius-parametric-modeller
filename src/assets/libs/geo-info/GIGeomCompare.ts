@@ -1,5 +1,5 @@
 import { GIModel } from './GIModel';
-import { IGeomArrays, EEntType, TFace } from './common';
+import { IGeomMaps, EEntType, TFace } from './common';
 import { GIGeom } from './GIGeom';
 
 /**
@@ -7,11 +7,11 @@ import { GIGeom } from './GIGeom';
  */
 export class GIGeomCompare {
     private _geom: GIGeom;
-    private _geom_maps: IGeomArrays;
+    private _geom_maps: IGeomMaps;
     /**
      * Constructor
      */
-    constructor(geom: GIGeom, geom_arrays: IGeomArrays) {
+    constructor(geom: GIGeom, geom_arrays: IGeomMaps) {
         this._geom = geom;
         this._geom_maps = geom_arrays;
     }

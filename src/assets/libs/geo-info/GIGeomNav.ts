@@ -1,5 +1,5 @@
 
-import {  EEntType, IGeomArrays, TVert, TEdge, TWire, TFace, TPoint, TPlane, TPline, TPgon, TColl, IEntSets } from './common';
+import {  EEntType, IGeomMaps, TVert, TEdge, TWire, TFace, TPoint, TPlane, TPline, TPgon, TColl, IEntSets } from './common';
 import { isPosi, isVert, isPoint, isEdge, isWire, isPline, isFace, isPgon, isColl, isTri } from './id';
 import { GIGeom } from './GIGeom';
 /**
@@ -7,11 +7,11 @@ import { GIGeom } from './GIGeom';
  */
 export class GIGeomNav {
     private _geom: GIGeom;
-    private _geom_maps: IGeomArrays;
+    private _geom_maps: IGeomMaps;
     /**
      * Constructor
      */
-    constructor(geom: GIGeom, geom_arrays: IGeomArrays) {
+    constructor(geom: GIGeom, geom_arrays: IGeomMaps) {
         this._geom = geom;
         this._geom_maps = geom_arrays;
     }

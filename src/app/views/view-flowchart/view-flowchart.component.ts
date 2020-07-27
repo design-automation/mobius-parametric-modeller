@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, ViewChild, OnDestroy, HostListener } from '@angular/core';
 
 import { NodeUtils, INode } from '@models/node';
 import { IEdge } from '@models/edge';
@@ -978,6 +978,11 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
     getFlowchart() { return this.dataService.flowchart; }
     getNode() { return this.dataService.node; }
     getFlowchartName() { return this.dataService.file.name; }
+
+    @HostListener('document:mouseleave', [])
+    onmouseleave() {
+        this.flowchartSplit.notify('end');
+    }
 
 }
 

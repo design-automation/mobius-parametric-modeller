@@ -2,7 +2,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 // import @angular stuff
 import {
     Component, OnInit, Input, Output, EventEmitter,
-    Injector, ElementRef, DoCheck, OnChanges, SimpleChanges, ViewChild, OnDestroy
+    Injector, ElementRef, DoCheck, OnChanges, SimpleChanges, ViewChild, OnDestroy, HostListener
 } from '@angular/core';
 import { DataThreejs } from '../data/data.threejs';
 // import { IModel } from 'gs-json';
@@ -73,7 +73,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     public dropdownPosition = { x: 0, y: 0 };
 
     private renderInterval;
-    private isDown = false;
+    // private isDown = false;
     private lastX: number;
     private lastY: number;
     private dragHash: number;
@@ -561,56 +561,67 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }
     }
 
+    onClick(event) {
+        if (event.target.tagName !== 'CANVAS') {
+            return null;
+        } else {
+            this.onUserAction(event);
+            this.refreshLabels(this.tab_map[this.getCurrentTab()]);
+        }
+    }
     onMouseUp(event) {
-        if (event.target.tagName !== 'CANVAS') {
+        if (event.target.tagName !== 'CANVAS' || !this.lastX) {
             return null;
-        } else {
-            for (const htmlElement of this.container.children){
-                if (htmlElement.id.slice(0, 9) === 'textLabel') {
-                    htmlElement.style.display = '';
-                }
-            }
-            if (this.dragHash < 10) {
-                this.onUserAction(event);
-                this.refreshLabels(this.tab_map[this.getCurrentTab()]);
-            } else {
-                // this._data_threejs._controls.enabled = true;
-            }
-            this.isDown = false;
         }
-    }
-
-    public onMouseMove(event) {
-        const body = document.getElementsByTagName('body');
-
-        if (event.target.tagName !== 'CANVAS') {
-            // body[0].style.cursor = 'default';
-            return null;
-        } else {
-
-            if (!this.isDown) {
-                // const intersects = this.threeJSViewerService.initRaycaster(event);
-                // if (intersects && intersects.length > 0) {
-                //     body[0].style.cursor = 'pointer';
-                // } else {
-                //     body[0].style.cursor = 'default';
-                // }
-                return;
-            }
-
-            const mouseX = event.clientX - event.target.getBoundingClientRect().left;
-            const mouseY = event.clientY - event.target.getBoundingClientRect().top;
-            const dx = mouseX - this.lastX;
-            const dy = mouseY - this.lastY;
-            this.lastX = mouseX;
-            this.lastY = mouseY;
-
-            this.dragHash += Math.abs(dx) + Math.abs(dy);
-            if (this.dragHash > 4) {
-                // dragging
+        for (const htmlElement of this.container.children) {
+            if (htmlElement.id.startsWith('textLabel')) {
+                htmlElement.style.display = '';
             }
         }
+        const distX = event.clientX - event.target.getBoundingClientRect().left - this.lastX;
+        const distY = event.clientY - event.target.getBoundingClientRect().top - this.lastY;
+        const distSqr = distX * distX + distY * distY;
+        if (performance.now() - this.dragHash < 500 && distSqr < 500) {
+            this.onUserAction(event);
+            this.refreshLabels(this.tab_map[this.getCurrentTab()]);
+        } else {
+            // this._data_threejs._controls.enabled = true;
+        }
+        this.lastX = null;
+        this.lastY = null;
+        // this.isDown = false;
     }
+
+    // public onMouseMove(event) {
+    //     const body = document.getElementsByTagName('body');
+
+    //     if (event.target.tagName !== 'CANVAS') {
+    //         // body[0].style.cursor = 'default';
+    //         return null;
+    //     } else {
+    //         if (!this.isDown) {
+    //             // const intersects = this.threeJSViewerService.initRaycaster(event);
+    //             // if (intersects && intersects.length > 0) {
+    //             //     body[0].style.cursor = 'pointer';
+    //             // } else {
+    //             //     body[0].style.cursor = 'default';
+    //             // }
+    //             return;
+    //         }
+
+    //         const mouseX = event.clientX - event.target.getBoundingClientRect().left;
+    //         const mouseY = event.clientY - event.target.getBoundingClientRect().top;
+    //         const dx = mouseX - this.lastX;
+    //         const dy = mouseY - this.lastY;
+    //         this.lastX = mouseX;
+    //         this.lastY = mouseY;
+
+    //         this.dragHash += Math.abs(dx) + Math.abs(dy);
+    //         if (this.dragHash > 4) {
+    //             // dragging
+    //         }
+    //     }
+    // }
 
     onMouseDown(event) {
         if (event.target.tagName !== 'CANVAS') {
@@ -621,14 +632,14 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             this.lastY = event.clientY - event.target.getBoundingClientRect().top;
 
             for (const htmlElement of this.container.children){
-                if (htmlElement.id.slice(0, 9) === 'textLabel') {
+                if (htmlElement.id.startsWith('textLabel')) {
                     htmlElement.style.display = 'none';
                 }
             }
 
             // Put your mousedown stuff here
-            this.dragHash = 0;
-            this.isDown = true;
+            this.dragHash = performance.now();
+            // this.isDown = true;
         }
     }
 
@@ -1631,6 +1642,11 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }
     }
 
+    @HostListener('document:mouseleave', [])
+    onmouseleave() {
+        this._data_threejs.controls.saveState();
+        this._data_threejs.controls.reset();
+    }
 
 }
 

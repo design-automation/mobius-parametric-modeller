@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { isDevMode, ViewChild } from '@angular/core';
+import { isDevMode, ViewChild, HostListener } from '@angular/core';
 import { DefaultSettings, SettingsColorMap, Locale } from './gi-viewer.settings';
 // import @angular stuff
 import { Component, Input, OnInit } from '@angular/core';
@@ -10,6 +10,7 @@ import { ModalService } from './html/modal-window.service';
 import { ColorPickerService } from 'ngx-color-picker';
 import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 import { Vector3, GridHelper } from 'three';
+import { SplitComponent } from 'angular-split';
 // import others
 // import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 
@@ -44,6 +45,7 @@ export class GIViewerComponent implements OnInit {
     public attribLabelVal: String;
 
     @ViewChild(ThreejsViewerComponent, { static: true }) threejs: ThreejsViewerComponent;
+    @ViewChild(SplitComponent, { static: true }) viewerSplit: SplitComponent;
     /**
      * constructor
      * @param dataService
@@ -471,6 +473,11 @@ export class GIViewerComponent implements OnInit {
     formatNumber(value) {
         if (!value) { value = 0; }
         return Math.round(value * 100) / 100;
+    }
+
+    @HostListener('mouseleave', [])
+    onmouseleave() {
+        this.viewerSplit.notify('end');
     }
 }
 

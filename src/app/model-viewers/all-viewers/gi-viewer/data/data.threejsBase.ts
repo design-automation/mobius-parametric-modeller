@@ -1,5 +1,7 @@
 import * as THREE from 'three';
-import * as OrbitControls from 'three-orbit-controls';
+// import * as OrbitControls from 'three-orbit-controls';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
 import { GIModel } from '@libs/geo-info/GIModel';
 import { DataService } from '@services';
 import { ISettings } from './data.threejsSettings';
@@ -102,8 +104,9 @@ export class DataThreejsBase {
         this.camera.lookAt(this.scene.position);
         this.camera.updateProjectionMatrix();
         // orbit controls
-        const orbit_controls = OrbitControls(THREE);
-        this.controls = new orbit_controls(this.camera, this.renderer.domElement);
+        // const orbit_controls = OrbitControls(THREE);
+        // this.controls = new orbit_controls(this.camera, this.renderer.domElement);
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.controls.enableKeys = false;
         this.controls.update();
         // mouse

@@ -1,10 +1,11 @@
-import { Component, Input, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, Input, AfterViewInit, OnDestroy, HostListener, ViewChild } from '@angular/core';
 import { IFlowchart } from '@models/flowchart';
 import { INode } from '@models/node';
 import { DataService } from '@services';
 import { Router } from '@angular/router';
 import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
 import { DataOutputService } from '@shared/services/dataOutput.service';
+import { SplitComponent } from 'angular-split';
 
 @Component({
   selector: 'view-dashboard',
@@ -14,6 +15,7 @@ import { DataOutputService } from '@shared/services/dataOutput.service';
 export class ViewDashboardComponent implements AfterViewInit, OnDestroy {
 
     private ctx = document.createElement('canvas').getContext('2d');
+    @ViewChild('dashboardSplit', { static: true }) dashboardSplit: SplitComponent;
 
     constructor(private dataService: DataService,
                 private dataOutputService: DataOutputService,
@@ -87,5 +89,11 @@ export class ViewDashboardComponent implements AfterViewInit, OnDestroy {
     getFlowchart() { return this.dataService.flowchart; }
     getNode() { return this.dataService.node; }
     getFlowchartName() { return this.dataService.file.name; }
+
+    @HostListener('document:mouseleave', [])
+    onmouseleave() {
+        this.dashboardSplit.notify('end');
+    }
+
 }
 

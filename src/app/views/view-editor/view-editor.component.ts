@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output, AfterViewInit, HostListener, OnDestroy} from '@angular/core';
+import { Component, Input, EventEmitter, Output, AfterViewInit, HostListener, OnDestroy, ViewChild} from '@angular/core';
 import { IFlowchart } from '@models/flowchart';
 import { NodeUtils, INode } from '@models/node';
 import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
@@ -10,6 +10,7 @@ import { checkNodeValidity } from '@shared/parser';
 import { DataOutputService } from '@shared/services/dataOutput.service';
 import { SaveFileComponent } from '@shared/components/file';
 import { IArgument } from '@models/code';
+import { SplitComponent } from 'angular-split';
 
 @Component({
   selector: 'view-editor',
@@ -28,6 +29,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     // notificationTrigger = true;
 
     disableInput = false;
+    @ViewChild('editorSplit', { static: true }) editorSplit: SplitComponent;
 
     // private copyCheck = true;
     private ctx = document.createElement('canvas').getContext('2d');
@@ -690,5 +692,10 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     getFlowchart() { return this.dataService.flowchart; }
     getNode() { return this.dataService.node; }
     getFlowchartName() { return this.dataService.file.name; }
+
+    @HostListener('document:mouseleave', [])
+    onmouseleave() {
+        this.editorSplit.notify('end');
+    }
 
 }

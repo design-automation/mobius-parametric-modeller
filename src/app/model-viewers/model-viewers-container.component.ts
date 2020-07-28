@@ -30,16 +30,46 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
     constructor(private injector: Injector, private r: ComponentFactoryResolver, private dataService: DataService,
                 private giDataService: GIDataService, private router: Router) {
         let viewCheck: any;
-        if (this.router.url.split('?')[0] === '/publish') {
-            this.Viewers = [];
-            viewCheck = this.router.url.split('showViewer=');
-
-            if (viewCheck.length === 1) { viewCheck = '';
-            } else { viewCheck = viewCheck[1].split('&')[0]; }
-
+        const page = this.router.url.split('?')[0]
+        // if (page === '/publish' || page === '/minimal') {
+        //     this.Viewers = [];
+        //     viewCheck = this.router.url.split('showViewer=');
+        //     if (viewCheck.length === 1) { viewCheck = '';
+        //     } else { viewCheck = viewCheck[1].split('&')[0]; }
+        //     for (const view of Viewers) {
+        //         if (view.component.name === 'HelpViewerComponent') { continue; }
+        //         if (view.component.name === 'ConsoleViewer') {
+        //             this.Viewers.push(view);
+        //             continue;
+        //         }
+        //         if (viewCheck === '0') { continue; }
+        //         if (viewCheck === '1' && view.component.name === 'GICesiumViewerComponent') { continue; }
+        //         if (viewCheck === '2' && view.component.name === 'GIViewerComponent') { continue; }
+        //         this.Viewers.push(view);
+        //     }
+        // }
+        viewCheck = this.router.url.split('showViewer=');
+        this.Viewers = [];
+        if (viewCheck.length === 1) { viewCheck = '';
+        } else { viewCheck = decodeURIComponent(viewCheck[1].split('&')[0]); }
+        if (viewCheck.length > 0 && viewCheck[0] === '[') {
+            viewCheck = JSON.parse(viewCheck.split('&')[0]).sort();
+            for (const v of viewCheck) {
+                for (const view of Viewers) {
+                    if (v === 1 && view.component.name === 'GIViewerComponent') { this.Viewers.push(view); }
+                    if (v === 2 && view.component.name === 'GICesiumViewerComponent') { this.Viewers.push(view); }
+                    if (v === 3 && view.component.name === 'ConsoleViewerComponent') { this.Viewers.push(view); }
+                    if (v === 4 && view.component.name === 'HelpViewerComponent') { this.Viewers.push(view); }
+                }
+            }
+        } else {
             for (const view of Viewers) {
-                if (view.component.name === 'HelpViewerComponent') { continue; }
-                if (view.component.name === 'ConsoleViewer') {
+                if (view.component.name === 'HelpViewerComponent') {
+                    if (page !== '/publish' && page !== '/minimal') {
+                        this.Viewers.push(view);
+                    }
+                    continue; }
+                if (view.component.name === 'ConsoleViewerComponent') {
                     this.Viewers.push(view);
                     continue;
                 }

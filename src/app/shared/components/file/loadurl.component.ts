@@ -12,6 +12,7 @@ import { checkNodeValidity } from '@shared/parser';
 import { IdGenerator, updateLocalViewerSettings, updateCesiumViewerSettings } from '@utils';
 import { checkMobFile } from '@shared/updateOldMobFile';
 import { SaveFileComponent } from './savefile.component';
+import { InputType } from '@models/port';
 
 @Component({
     selector: 'load-url',
@@ -50,7 +51,7 @@ export class LoadUrlComponent {
         const input: HTMLInputElement = <HTMLInputElement> document.getElementById('loadurl_input');
         const keepSettings: boolean = input.value.indexOf('keepSettings') !== -1;
         const url = this.extractUrl(input.value);
-        this.loadURL(url, null, keepSettings);
+        this.loadURL(url, null, keepSettings, true);
         input.value = '';
     }
 
@@ -76,7 +77,7 @@ export class LoadUrlComponent {
         return url;
     }
 
-    async loadURL(url: string, nodeID?: number, keepSettings?: boolean): Promise<boolean> {
+    async loadURL(url: string, nodeID?: number, keepSettings?: boolean, newParams?: any): Promise<boolean> {
         const p = new Promise((resolve) => {
             const request = new XMLHttpRequest();
 
@@ -152,6 +153,25 @@ export class LoadUrlComponent {
         for (const node of loadeddata.flowchart.nodes) {
             checkNodeValidity(node);
         }
+        if (newParams) {
+            for (const prod of this.dataService.flowchart.nodes[0].procedure) {
+                if (prod.type === ProcedureTypes.Constant) {
+                    if (newParams[prod.args[0].value] !== undefined) {
+                        prod.args[1].value = newParams[prod.args[0].value];
+                    }
+                    if (newParams[prod.args[0].jsValue] !== undefined) {
+                        prod.args[1].value = newParams[prod.args[0].jsValue];
+                    }
+                    if (typeof prod.args[1].jsValue === 'object') {
+                        prod.args[1].value = JSON.stringify(prod.args[1].jsValue);
+                    }
+                    if (prod.meta.inputMode === InputType.SimpleInput || prod.meta.inputMode === InputType.URL) {
+                        prod.args[1].jsValue = prod.args[1].value;
+                    }
+                }
+            }
+
+        }
         setTimeout(() => {
             const zoomFlowchart = document.getElementById('zoomToFit');
             if (zoomFlowchart) { zoomFlowchart.click(); }
@@ -163,6 +183,7 @@ export class LoadUrlComponent {
 
         return true;
     }
+
 
     async loadTempFile() {
         let f = await SaveFileComponent.loadFromFileSystem('___TEMP___.mob');

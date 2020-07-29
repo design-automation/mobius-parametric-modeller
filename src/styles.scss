@@ -76,6 +76,17 @@ as-split-gutter{
     }
 }
 
+#minimal {
+    as-split-gutter{
+        flex-basis: unset !important;
+        height: 1px !important;
+        border: unset;
+    }
+    #attrib{
+        display: none !important;
+    }
+}
+
 // for teh 4 views
 
 .container{

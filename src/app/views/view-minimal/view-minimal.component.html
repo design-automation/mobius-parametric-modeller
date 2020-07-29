@@ -1,11 +1,11 @@
-<div class='container' (window:resize)='attribTogglePos()'>
-    <div style="display: none;">
+<div class='container'>
+    <div style="display: none;" id='published'>
         <load-url></load-url>
         <window-message></window-message>
         <execute></execute>
         <!-- <publish-header [title]='getFlowchart().name'></publish-header> -->
     </div>
-    <div class='content__viewer' >
+    <div class='content__viewer' id='minimal'>
         <model-viewers-container [data]='viewerData()'></model-viewers-container>
     </div>
 </div>

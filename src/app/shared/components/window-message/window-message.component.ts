@@ -52,8 +52,9 @@ export class WindowMessageComponent {
                     });
                 });
                 break;
-            case 'set_param':
-            case 'load_url':
+            // case 'set_param':
+            // case 'load_url':
+            case 'update':
                 if (event.data.url) {
                     const LoadUrlComp = new LoadUrlComponent(this.dataService, this.router);
                     const url = LoadUrlComp.extractUrl('file=' + event.data.url);

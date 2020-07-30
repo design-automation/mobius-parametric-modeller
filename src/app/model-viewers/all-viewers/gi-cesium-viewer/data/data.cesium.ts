@@ -482,10 +482,15 @@ export class DataCesium {
             if (allPosis.length > 0) {
                 Cesium.BoundingSphere.fromPoints(allPosis, sphere);
             }
-            this._viewer.camera.flyToBoundingSphere(sphere, {
-                duration: 0,
-                endTransform: Cesium.Matrix4.IDENTITY
-            });
+            const dist = this._viewer.camera.distanceToBoundingSphere(sphere);
+            console.log(dist);
+            // if (!document.getElementById('minimal') || this._starting) {
+            if (dist > 8000) {
+                this._viewer.camera.flyToBoundingSphere(sphere, {
+                    duration: 0,
+                    endTransform: Cesium.Matrix4.IDENTITY
+                });
+            }
             this._camera = [sphere, this._viewer.camera];
             if (this.settings.camera && this.settings.updated) {
                 const pos = this.settings.camera.pos;

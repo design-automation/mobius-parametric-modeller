@@ -413,8 +413,32 @@ export class GIViewerComponent implements OnInit {
             case 'ground.shininess':
                 this.settings.ground.shininess = Number(value);
                 break;
-            case 'select':
-                this.settings.select.enabledselector[value] = !this.settings.select.enabledselector[value];
+            case 'select.ps':
+                this.settings.select.enabledselector.ps = !this.settings.select.enabledselector.ps;
+                break;
+            case 'select._v':
+                this.settings.select.enabledselector._v = !this.settings.select.enabledselector._v;
+                break;
+            case 'select._e':
+                this.settings.select.enabledselector._e = !this.settings.select.enabledselector._e;
+                break;
+            case 'select._w':
+                this.settings.select.enabledselector._w = !this.settings.select.enabledselector._w;
+                break;
+            case 'select._f':
+                this.settings.select.enabledselector._f = !this.settings.select.enabledselector._f;
+                break;
+            case 'select.pt':
+                this.settings.select.enabledselector.pt = !this.settings.select.enabledselector.pt;
+                break;
+            case 'select.pl':
+                this.settings.select.enabledselector.pl = !this.settings.select.enabledselector.pl;
+                break;
+            case 'select.pg':
+                this.settings.select.enabledselector.pg = !this.settings.select.enabledselector.pg;
+                break;
+            case 'select.co':
+                this.settings.select.enabledselector.co = !this.settings.select.enabledselector.co;
                 break;
             default:
                 break;

@@ -70,7 +70,18 @@ export const DefaultSettings = {
     },
     select: {
         selector: {id: 5, name: 'Faces'},
-        tab: 0
+        tab: 0,
+        enabledselector: {
+            ps: true,
+            _v: true,
+            _e: true,
+            _w: true,
+            _f: true,
+            pt: true,
+            pl: true,
+            pg: true,
+            co: true
+        }
     },
     version: VERSION.version
 };

@@ -65,7 +65,18 @@ export interface ISettings {
     };
     select: {
         selector: object,
-        tab: number
+        tab: number,
+        enabledselector: {
+            ps: boolean,
+            _v: boolean,
+            _e: boolean,
+            _w: boolean,
+            _f: boolean,
+            pt: boolean,
+            pl: boolean,
+            pg: boolean,
+            co: boolean
+        }
     };
     version: string;
 }

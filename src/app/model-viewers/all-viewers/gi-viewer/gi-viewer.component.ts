@@ -11,6 +11,7 @@ import { ColorPickerService } from 'ngx-color-picker';
 import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 import { Vector3, GridHelper } from 'three';
 import { SplitComponent } from 'angular-split';
+import { ISettings } from './data/data.threejsSettings';
 // import others
 // import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 
@@ -28,7 +29,7 @@ export class GIViewerComponent implements OnInit {
     // model data passed to the viewer
     @Input() data: GIModel;
 
-    settings: Settings = DefaultSettings;
+    settings: ISettings = DefaultSettings;
 
     setting_colors = SettingsColorMap;
 
@@ -166,14 +167,17 @@ export class GIViewerComponent implements OnInit {
         if (save) {
             const _selector = JSON.parse(localStorage.getItem('mpm_selecting_entity_type'));
             const _tab = Number(JSON.parse(localStorage.getItem('mpm_attrib_current_tab')));
-            this.settings.select = { selector: _selector, tab: _tab };
+            // this.settings.select = {selector: _selector, tab: _tab, };
+            this.settings.select.selector = _selector;
+            this.settings.select.tab = _tab;
             this.settings.camera = {
                 pos: this.temp_camera_pos,
-                pos_x: this.temp_camera_pos.x,
-                pos_y: this.temp_camera_pos.y,
-                pos_z: this.temp_camera_pos.z,
+                // pos_x: this.temp_camera_pos.x,
+                // pos_y: this.temp_camera_pos.y,
+                // pos_z: this.temp_camera_pos.z,
                 target: this.temp_target_pos
             };
+            console.log('_+_+_+',this.settings.select.enabledselector)
             this.dataService.getThreejsScene().settings = this.settings;
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
             this.threejs.updateModel(this.data);
@@ -409,6 +413,9 @@ export class GIViewerComponent implements OnInit {
             case 'ground.shininess':
                 this.settings.ground.shininess = Number(value);
                 break;
+            case 'select':
+                this.settings.select.enabledselector[value] = !this.settings.select.enabledselector[value];
+                break;
             default:
                 break;
         }
@@ -481,77 +488,86 @@ export class GIViewerComponent implements OnInit {
     }
 }
 
-interface Settings {
-    normals: { show: boolean, size: number };
-    axes: { show: boolean, size: number };
-    grid: {
-        show: boolean,
-        size: number,
-        pos: Vector3,
-        pos_x: number,
-        pos_y: number,
-        pos_z: number,
-    };
-    background: {
-        show: boolean,
-        background_set: number
-    };
-    positions: { show: boolean, size: number };
-    wireframe: { show: boolean };
-    tjs_summary: { show: boolean };
-    gi_summary: { show: boolean };
-    camera: {
-        pos: Vector3,
-        pos_x: number,
-        pos_y: number,
-        pos_z: number,
-        target: Vector3
-    };
-    colors: {
-        viewer_bg: string,
-        position: string,
-        position_s: string,
-        vertex_s: string,
-        face_f: string,
-        face_f_s: string,
-        face_b: string,
-        face_b_s: string
-    };
-    ambient_light: {
-        show: boolean,
-        color: string,
-        intensity: number
-    };
-    hemisphere_light: {
-        show: boolean,
-        helper: boolean,
-        skyColor: string,
-        groundColor: string,
-        intensity: number
-    };
-    directional_light: {
-        show: boolean,
-        helper: boolean,
-        color: string,
-        intensity: number,
-        shadow: boolean,
-        azimuth: number,
-        altitude: number,
-        distance: number,
-        type: string,
-        shadowSize: number
-    };
-    ground: {
-        show: boolean,
-        width: number,
-        length: number,
-        height: number,
-        color: string,
-        shininess: number
-    };
-    select: {
-        selector: object,
-        tab: number
-    };
-    version: string;
-}
+// interface Settings {
+//     normals: { show: boolean, size: number };
+//     axes: { show: boolean, size: number };
+//     grid: {
+//         show: boolean,
+//         size: number,
+//         pos: Vector3,
+//         pos_x: number,
+//         pos_y: number,
+//         pos_z: number,
+//     };
+//     background: {
+//         show: boolean,
+//         background_set: number
+//     };
+//     positions: { show: boolean, size: number };
+//     wireframe: { show: boolean };
+//     tjs_summary: { show: boolean };
+//     gi_summary: { show: boolean };
+//     camera: {
+//         pos: Vector3,
+//         pos_x: number,
+//         pos_y: number,
+//         pos_z: number,
+//         target: Vector3
+//     };
+//     colors: {
+//         viewer_bg: string,
+//         position: string,
+//         position_s: string,
+//         vertex_s: string,
+//         face_f: string,
+//         face_f_s: string,
+//         face_b: string,
+//         face_b_s: string
+//     };
+//     ambient_light: {
+//         show: boolean,
+//         color: string,
+//         intensity: number
+//     };
+//     hemisphere_light: {
+//         show: boolean,
+//         helper: boolean,
+//         skyColor: string,
+//         groundColor: string,
+//         intensity: number
+//     };
+//     directional_light: {
+//         show: boolean,
+//         helper: boolean,
+//         color: string,
+//         intensity: number,
+//         shadow: boolean,
+//         azimuth: number,
+//         altitude: number,
+//         distance: number,
+//         type: string,
+//         shadowSize: number
+//     };
+//     ground: {
+//         show: boolean,
+//         width: number,
+//         length: number,
+//         height: number,
+//         color: string,
+//         shininess: number
+//     };
+//     select: {
+//         selector: object,
+//         tab: number,
+//         ps: boolean,
+//         _v: boolean,
+//         _e: boolean,
+//         _w: boolean,
+//         _f: boolean,
+//         pt: boolean,
+//         pl: boolean,
+//         pg: boolean,
+//         co: boolean
+//     };
+//     version: string;
+// }

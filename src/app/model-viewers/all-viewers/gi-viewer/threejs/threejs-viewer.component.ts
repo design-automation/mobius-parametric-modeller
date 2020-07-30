@@ -69,6 +69,17 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         { id: EEntType.FACE, name: 'Faces' }, { id: EEntType.POINT, name: 'Points' },
         { id: EEntType.PLINE, name: 'Polylines' }, { id: EEntType.PGON, name: 'Polygons' },
         { id: EEntType.COLL, name: 'Collections' }];
+    public default_selections = {
+        ps: { id: EEntType.POSI, name: 'Positions' },
+        _v: { id: EEntType.VERT, name: 'Vertex' },
+        _e: { id: EEntType.EDGE, name: 'Edges' },
+        _w: { id: EEntType.WIRE, name: 'Wires' },
+        _f: { id: EEntType.FACE, name: 'Faces' },
+        pt: { id: EEntType.POINT, name: 'Points' },
+        pl: { id: EEntType.PLINE, name: 'Polylines' },
+        pg: { id: EEntType.PGON, name: 'Polygons' },
+        co: { id: EEntType.COLL, name: 'Collections' }
+    };
 
     public dropdownPosition = { x: 0, y: 0 };
 
@@ -271,6 +282,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
 
     refreshLabels(ent_type): void {
+        if (!this.SelectingEntityType.id) { return; }
         const allLabels = document.getElementsByClassName(`text-label${EEntTypeStr[ent_type]}`);
         const unSorted = this.dataService.selected_ents.get(EEntTypeStr[ent_type]);
         if (unSorted === undefined) {
@@ -307,7 +319,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     }
                 }
             } else if (attr_name === '#') {
-                this.labelforindex(showSelected, allLabels, arr);
+                    this.labelforindex(showSelected, allLabels, arr);
             } else if (attr_name === '_id') {
                 for (let i = 0; i < allLabels.length; i++) {
                     const element = allLabels[i];
@@ -768,10 +780,21 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
     private getSelectingEntityType() {
         const select = JSON.parse(localStorage.getItem('mpm_settings'))['select'];
-        if (select !== undefined && select.selector) {
+        const default_selector = {id: EEntType.FACE, name: 'Faces'};
+        if (select && select.enabledselector) {
+            this.selections = [];
+            for (const i in select.enabledselector) {
+                if (select.enabledselector[i]) { this.selections.push( this.default_selections[i]); }
+            }
+        }
+        if (select !== undefined && select.selector && this.selections.indexOf(select.selector) !== -1) {
             this.SelectingEntityType = select.selector;
+        } else if (this.selections.indexOf(default_selector) !== -1) {
+            this.SelectingEntityType = default_selector;
+        } else if (this.selections.length > 0) {
+            this.SelectingEntityType = this.selections[0];
         } else {
-            this.SelectingEntityType = {id: EEntType.FACE, name: 'Faces'};
+            this.SelectingEntityType =  {id: null, name: null};
         }
         // if (localStorage.getItem('mpm_selecting_entity_type') != null) {
         //     this.SelectingEntityType = JSON.parse(localStorage.getItem('mpm_selecting_entity_type'));
@@ -1079,6 +1102,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 }
                 break;
             default:
+                return;
                 this.showMessages('Please choose an Entity type.', 'custom');
                 break;
         }

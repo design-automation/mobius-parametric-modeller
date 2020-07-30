@@ -205,10 +205,10 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     ngOnChanges(changes: SimpleChanges) {
         if (changes['model']) {
             if (this.model) {
-                if (this.dataService.switch_page) {
-                    this.dataService.switch_page = false;
-                    return;
-                }
+                // if (this.dataService.switch_page) {
+                //     this.dataService.switch_page = false;
+                //     return;
+                // }
                 this.updateModel(this.model);
             }
         }

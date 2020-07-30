@@ -483,7 +483,6 @@ export class DataCesium {
                 Cesium.BoundingSphere.fromPoints(allPosis, sphere);
             }
             const dist = this._viewer.camera.distanceToBoundingSphere(sphere);
-            console.log(dist);
             // if (!document.getElementById('minimal') || this._starting) {
             if (dist > 8000) {
                 this._viewer.camera.flyToBoundingSphere(sphere, {

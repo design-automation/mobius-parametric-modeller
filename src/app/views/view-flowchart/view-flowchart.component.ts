@@ -927,7 +927,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     dragSplitEnd(e) {
-        this.splitDragSub.unsubscribe();
+        if (this.splitDragSub) { this.splitDragSub.unsubscribe(); }
         // this.canvas.style.transition = 'transform 0ms ease-in';
         this.dataService.splitVal = e.sizes[1];
     }

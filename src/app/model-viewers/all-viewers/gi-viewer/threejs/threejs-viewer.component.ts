@@ -570,7 +570,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }
     }
     onMouseUp(event) {
-        if (event.target.tagName !== 'CANVAS' || !this.lastX) {
+        if (event.target.tagName !== 'CANVAS' || !this.lastX || !this.model) {
             return null;
         }
         for (const htmlElement of this.container.children) {
@@ -624,7 +624,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     // }
 
     onMouseDown(event) {
-        if (event.target.tagName !== 'CANVAS') {
+        if (event.target.tagName !== 'CANVAS' || !this.model) {
             return null;
         } else {
             event.stopPropagation();

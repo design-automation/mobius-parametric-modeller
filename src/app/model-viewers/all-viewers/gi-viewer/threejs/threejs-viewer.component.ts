@@ -155,7 +155,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         // set the numbers of entities
         this._threejs_nums = this._data_threejs.threejs_nums;
         // ??? What is happening here?
-        this._data_threejs.controls.addEventListener('change', this.activateRender);
+        this._data_threejs.perspControls.addEventListener('change', this.activateRender);
+        this._data_threejs.orthoControls.addEventListener('change', this.activateRender);
         this._data_threejs.renderer.render(this._data_threejs.scene, this._data_threejs.camera);
 
         if (this._data_threejs.ObjLabelMap.size !== 0) {
@@ -165,6 +166,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }
 
         this.getSelectingEntityType();
+
+        this._data_threejs.switchCamera(false);
 
         for (let i = 1; i < 10; i++) {
             setTimeout(() => {
@@ -180,6 +183,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             }
         }, 20);
     }
+
+
 
     /**
      * Called when anything changes
@@ -197,9 +202,15 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             this._width = width;
             this._height = height;
             setTimeout(() => {
-                this._data_threejs.camera.aspect = this._width / this._height;
-                this._data_threejs.camera.updateProjectionMatrix();
+                const aspect = this._width / this._height;
+                this._data_threejs.perspCam.aspect = this._width / this._height;
+                this._data_threejs.perspCam.updateProjectionMatrix();
                 this._data_threejs.renderer.setSize(this._width, this._height);
+
+                this._data_threejs.orthoCam.left = -this._data_threejs.orthoCam.top * aspect;
+                this._data_threejs.orthoCam.right = this._data_threejs.orthoCam.top * aspect;
+                this._data_threejs.orthoCam.updateProjectionMatrix();
+
                 this.activateRender();
             }, 10);
         }
@@ -250,7 +261,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this.model = null;
         clearInterval(this.renderInterval);
         this.renderInterval = null;
-        this._data_threejs.controls.removeEventListener('change', this.activateRender);
+        this._data_threejs.perspControls.removeEventListener('change', this.activateRender);
+        this._data_threejs.orthoControls.removeEventListener('change', this.activateRender);
         // this.keyboardServiceSub.unsubscribe();
     }
 
@@ -1625,7 +1637,11 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         // if (JSON.stringify(this._data_threejs._threejs_nums) === JSON.stringify([0, 0, 0])) {
         //     return;
         // }
-        this._data_threejs.lookAtObj();
+        if (this._data_threejs.currentCamera === 'Persp') {
+            this._data_threejs.lookAtObj();
+        } else {
+            this._data_threejs.orthoLookatObj();
+        }
     }
 
     private EntTypeToStr(ent_type: EEntType) {
@@ -1650,6 +1666,13 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         if (el) {
             el.click();
         }
+    }
+
+    switchCamera() {
+        this._data_threejs.switchCamera();
+        setTimeout(() => {
+            this.activateRender();
+        }, 0);
     }
 
     selectEntity(id: number) {

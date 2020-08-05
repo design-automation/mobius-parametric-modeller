@@ -30,14 +30,15 @@
         <mat-icon svgIcon="cZoom"></mat-icon>
     </button>
 
-    <!-- <button
-        id="credit"
+    <span
+        class="switchCameraButton"
         mat-icon-button
-        (click)="openCredits($event)"
-        title='Credits'
+        (click)="switchCamera()"
+        title='Switch Camera'
     >
-        <mat-icon svgIcon="cCredits"></mat-icon>
-    </button> -->
+        <mat-icon svgIcon="cControlCam"></mat-icon>
+        <p>{{_data_threejs.currentCamera}}</p>
+    </span>
 
     <button
         id="EntitySelection"

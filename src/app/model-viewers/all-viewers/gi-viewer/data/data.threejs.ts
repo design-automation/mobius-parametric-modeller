@@ -67,9 +67,9 @@ export class DataThreejs extends DataThreejsLookAt {
     public populateScene(model: GIModel, container): void {
         if (this.dataService.viewerSettingsUpdated) {
             this.settings = JSON.parse(localStorage.getItem('mpm_settings'));
-            this.camera.position.copy(this.settings.camera.pos);
+            this.perspCam.position.copy(this.settings.camera.pos);
             this.controls.target.copy(this.settings.camera.target);
-            this.camera.updateProjectionMatrix();
+            this.perspCam.updateProjectionMatrix();
             this.controls.update();
             this.dataService.viewerSettingsUpdated = false;
         }
@@ -118,7 +118,6 @@ export class DataThreejs extends DataThreejsLookAt {
 
         // add the axes, ground, lights, etc
         this._addEnv();
-
 
         setTimeout(() => {
             let old = document.getElementById('hud');
@@ -294,7 +293,6 @@ export class DataThreejs extends DataThreejsLookAt {
                     if (this.scene.children[i]['dispose']) {
                         this.scene.children[i]['dispose']();
                     }
-                    console.log(this.scene.children[i])
                     this.scene.remove(this.scene.children[i]);
                 }
             }
@@ -583,6 +581,7 @@ export class DataThreejs extends DataThreejsLookAt {
             const mergedGeom = BufferGeometryUtils.mergeBufferGeometries(shapes);
             const text = new THREE.Mesh(mergedGeom , matLite);
             this.scene.add(text);
+            // this.renderer.render(this.scene, this.camera);
             this.renderer.render(this.scene, this.camera);
         });
     }

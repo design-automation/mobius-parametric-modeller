@@ -172,12 +172,9 @@ export class GIViewerComponent implements OnInit {
             this.settings.select.tab = _tab;
             this.settings.camera = {
                 pos: this.temp_camera_pos,
-                // pos_x: this.temp_camera_pos.x,
-                // pos_y: this.temp_camera_pos.y,
-                // pos_z: this.temp_camera_pos.z,
-                target: this.temp_target_pos
+                target: this.temp_target_pos,
+                ortho: false
             };
-            console.log('_+_+_+',this.settings.select.enabledselector)
             this.dataService.getThreejsScene().settings = this.settings;
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
             this.threejs.updateModel(this.data);

@@ -25,17 +25,17 @@ export class DataThreejsLookAt extends DataThreejsSelect {
             center = selectedObjs.center;
             radius = selectedObjs.radius;
             if (radius === 0) {
-                radius = 10;
+                radius = 50;
             }
         } else if (this._all_objs_sphere) {
             center = this._all_objs_sphere.center;
             radius = this._all_objs_sphere.radius;
             if (radius === 0) {
-                radius = 10;
+                radius = 50;
             }
         } else {
             center = this.scene.position;
-            radius = 10;
+            radius = 50;
         }
 
         this._cameraLookat(center, radius);
@@ -64,18 +64,18 @@ export class DataThreejsLookAt extends DataThreejsSelect {
      * @param radius
      */
     private _cameraLookat(center, radius = 100) {
-        const fov = this.camera.fov * (Math.PI / 180);
+        const fov = this.perspCam.fov * (Math.PI / 180);
         const perspectiveNewPos: THREE.Vector3 = new THREE.Vector3();
         // Find looking direction: current camera position - current control target
         // Scale looking direction to be of length: radius / sin(fov/2)
         // New camera position: scaled looking direction + center
-        perspectiveNewPos.subVectors(this.camera.position, this.controls.target);
+        perspectiveNewPos.subVectors(this.perspCam.position, this.controls.target);
         perspectiveNewPos.setLength(radius / Math.sin(fov / 2));
         perspectiveNewPos.add(center);
 
-        this.camera.position.copy(perspectiveNewPos);
+        this.perspCam.position.copy(perspectiveNewPos);
         this.controls.target.set(center.x, center.y, center.z);
-        this.camera.updateProjectionMatrix();
+        this.perspCam.updateProjectionMatrix();
         this.controls.update();
 
         const textLabels = this.textLabels;
@@ -83,6 +83,106 @@ export class DataThreejsLookAt extends DataThreejsSelect {
             textLabels.forEach((label) => {
                 label.updatePosition();
             });
+        }
+    }
+
+    public orthoLookatObj() {
+        if (this.currentCamera === 'Top') {
+            this._orthoLookat(0, 0, 1);
+        } else if (this.currentCamera === 'Left') {
+            this._orthoLookat(-1, 0, 0);
+        } else if (this.currentCamera === 'Front') {
+            this._orthoLookat(0, -1, 0);
+        }
+    }
+
+    private _orthoLookat(dirX: number, dirY: number, dirZ: number) {
+        const selectedObjs = this._getSelectedObjs();
+        let center = null;
+        let radius = null;
+        if (selectedObjs) {
+            center = selectedObjs.center;
+            radius = selectedObjs.radius;
+            if (radius === 0) {
+                radius = 50;
+            }
+        } else if (this._all_objs_sphere) {
+            center = this._all_objs_sphere.center;
+            radius = this._all_objs_sphere.radius;
+            if (radius === 0) {
+                radius = 50;
+            }
+        } else {
+            center = new THREE.Vector3();
+            radius = 50;
+        }
+
+        const posVec = new THREE.Vector3(center.x + 1.5 * dirX * radius,
+                                         center.y + 1.5 * dirY * radius,
+                                         center.z + 1.5 * dirZ * radius);
+        this.orthoCam.left = - radius * this.orthoCam.right / this.orthoCam.top;
+        this.orthoCam.right = radius * this.orthoCam.right / this.orthoCam.top;
+        this.orthoCam.top = radius;
+        this.orthoCam.bottom = -radius;
+        this.orthoCam.zoom = 1;
+
+        this.orthoCam.position.copy(posVec);
+        this.orthoControls.target.copy(new THREE.Vector3(posVec.x * (1 - Math.abs(dirX)),
+                                    posVec.y * (1 - Math.abs(dirY)),
+                                    posVec.z * (1 - Math.abs(dirZ))));
+        this.orthoCam.updateProjectionMatrix();
+        this.orthoControls.update();
+    }
+
+    switchCamera(switchCam = true) {
+        if (switchCam) {
+            if (this.currentCamera !== 'Persp') {
+                console.log(this.orthoCam.zoom)
+                this.orthoCamPos[this.currentCamera] = {
+                    position: new THREE.Vector3().copy(this.orthoCam.position),
+                    target: new THREE.Vector3().copy(this.orthoControls.target),
+                    zoom: this.orthoCam.zoom,
+                };
+            }
+            if (this.currentCamera === 'Persp') {
+                this.currentCamera = 'Top';
+            } else if (this.currentCamera === 'Top') {
+                this.currentCamera = 'Left';
+            } else if (this.currentCamera === 'Left') {
+                this.currentCamera = 'Front';
+            } else if (this.currentCamera === 'Front') {
+                this.currentCamera = 'Persp';
+            }
+        }
+        if (this.currentCamera === 'Persp') {
+            this.orthoControls.enabled = false;
+            this.perspControls.enabled = true;
+            this.camera = this.perspCam;
+            this.controls = this.perspControls;
+            this.perspControls.update();
+            this.orthoControls.update();
+        } else {
+            this.perspControls.enabled = false;
+            this.orthoControls.enabled = true;
+            this.camera = this.orthoCam;
+            this.controls = this.orthoControls;
+            if (this.orthoCamPos[this.currentCamera]) {
+                const camPos = this.orthoCamPos[this.currentCamera];
+                this.orthoCam.position.copy(camPos.position);
+                this.orthoCam.zoom = camPos.zoom;
+                this.orthoControls.target.copy(camPos.target);
+                this.orthoCam.updateProjectionMatrix();
+            } else {
+                if (this.currentCamera === 'Top') {
+                    this._orthoLookat(0, 0, 1);
+                } else if (this.currentCamera === 'Left') {
+                    this._orthoLookat(-1, 0, 0);
+                } else if (this.currentCamera === 'Front') {
+                    this._orthoLookat(0, -1, 0);
+                }
+            }
+            this.perspControls.update();
+            this.orthoControls.update();
         }
     }
 }

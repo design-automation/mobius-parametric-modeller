@@ -20,7 +20,11 @@ export interface ISettings {
     tjs_summary: { show: boolean };
     gi_summary: { show: boolean };
     wireframe: { show: boolean };
-    camera: { pos: THREE.Vector3, target: THREE.Vector3 };
+    camera: {
+        pos: THREE.Vector3,
+        target: THREE.Vector3,
+        ortho: boolean
+    };
     colors: {
         viewer_bg: string,
         position: string,

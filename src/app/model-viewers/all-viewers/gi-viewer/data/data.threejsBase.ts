@@ -17,7 +17,15 @@ export class DataThreejsBase {
     // public basic_scene: THREE.Scene;
     public renderer: THREE.WebGLRenderer;
     public camera;
-    public controls: any;
+    public perspCam: THREE.PerspectiveCamera;
+    public orthoCam: THREE.OrthographicCamera;
+    public controls: OrbitControls;
+    public perspControls: OrbitControls;
+    public orthoControls: OrbitControls;
+    public orthoCamPos;
+
+    public currentCamera: string;
+
     public raycaster: THREE.Raycaster;
     public mouse: THREE.Vector2;
 
@@ -95,25 +103,58 @@ export class DataThreejsBase {
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         // camera settings
-        this.camera = new THREE.PerspectiveCamera(50, 1, 0.01, 1000000);
-        this.camera.position.x = -80;
-        this.camera.position.y = -80;
-        this.camera.position.z = 80;
-        this.camera.aspect = 1;
-        this.camera.up.set(0, 0, 1);
-        this.camera.lookAt(this.scene.position);
-        this.camera.updateProjectionMatrix();
+        this.perspCam = new THREE.PerspectiveCamera(50, 1, 0.01, 1000000);
+        this.perspCam.position.x = -80;
+        this.perspCam.position.y = -80;
+        this.perspCam.position.z = 80;
+        this.perspCam.aspect = 1;
+        this.perspCam.up.set(0, 0, 1);
+        this.perspCam.lookAt(this.scene.position);
+        this.perspCam.updateProjectionMatrix();
+
+        this.orthoCam = new THREE.OrthographicCamera(0, 600, 600, 0, 0.1, 2000);
+        this.orthoCam.position.x = -300;
+        this.orthoCam.position.y = 0;
+        this.orthoCam.position.z = 0;
+        this.orthoCam.up.set(0, 0, 1);
+        this.orthoCam.lookAt(this.scene.position);
+        this.orthoCam.updateProjectionMatrix();
+        this.orthoCamPos = {};
+
+        this.currentCamera = 'Persp';
+
         // orbit controls
         // const orbit_controls = OrbitControls(THREE);
         // this.controls = new orbit_controls(this.camera, this.renderer.domElement);
-        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-        this.controls.enableKeys = false;
-        this.controls.update();
+        this.perspControls = new OrbitControls(this.perspCam, this.renderer.domElement);
+        this.perspControls.enableKeys = false;
+        this.perspControls.update();
+
+        this.orthoControls = new OrbitControls(this.orthoCam, this.renderer.domElement);
+        this.orthoControls.enableKeys = false;
+        // this.orthoControls.screenSpacePanning = false;
+        this.orthoControls.screenSpacePanning = true;
+        this.orthoControls.enableRotate = false;
+        this.orthoControls.enabled = false;
+        this.orthoControls.update();
+
+        this.camera = this.perspCam;
+        this.controls = this.perspControls;
+
         // mouse
         this.mouse = new THREE.Vector2();
         // selecting
         this.raycaster = new THREE.Raycaster();
         this.raycaster.linePrecision = 0.3; // TODO this need to be set dynamically based on model size and view zoom
         this.raycaster.params.Points.threshold = 0.3; // TODO this need to be set dynamically based on model size and view zoom
+
+        setTimeout(() => {
+            const threeContainer = document.getElementById('threejs-container');
+            const aspect = (threeContainer.clientWidth / threeContainer.clientHeight + 1) / 2;
+            this.orthoCam.left = aspect * -300;
+            this.orthoCam.right = aspect * 300;
+            this.orthoCam.updateProjectionMatrix();
+            this.orthoControls.update();
+        }, 0);
     }
 }

@@ -69,14 +69,14 @@ export class DataThreejsLookAt extends DataThreejsSelect {
         // Find looking direction: current camera position - current control target
         // Scale looking direction to be of length: radius / sin(fov/2)
         // New camera position: scaled looking direction + center
-        perspectiveNewPos.subVectors(this.perspCam.position, this.controls.target);
+        perspectiveNewPos.subVectors(this.perspCam.position, this.perspControls.target);
         perspectiveNewPos.setLength(radius / Math.sin(fov / 2));
         perspectiveNewPos.add(center);
 
         this.perspCam.position.copy(perspectiveNewPos);
-        this.controls.target.set(center.x, center.y, center.z);
+        this.perspControls.target.set(center.x, center.y, center.z);
         this.perspCam.updateProjectionMatrix();
-        this.controls.update();
+        this.perspControls.update();
 
         const textLabels = this.textLabels;
         if (textLabels.size !== 0) {

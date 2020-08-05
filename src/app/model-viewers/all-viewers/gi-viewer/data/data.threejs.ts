@@ -68,9 +68,9 @@ export class DataThreejs extends DataThreejsLookAt {
         if (this.dataService.viewerSettingsUpdated) {
             this.settings = JSON.parse(localStorage.getItem('mpm_settings'));
             this.perspCam.position.copy(this.settings.camera.pos);
-            this.controls.target.copy(this.settings.camera.target);
+            this.perspControls.target.copy(this.settings.camera.target);
             this.perspCam.updateProjectionMatrix();
-            this.controls.update();
+            this.perspControls.update();
             this.dataService.viewerSettingsUpdated = false;
         }
         while (this.scene.children.length > 0) {

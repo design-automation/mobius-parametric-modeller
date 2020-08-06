@@ -134,10 +134,44 @@ export class DataThreejsLookAt extends DataThreejsSelect {
         this.orthoControls.update();
     }
 
+    updateCameraFOV() {
+        const selectedObjs = this._getSelectedObjs();
+        let center = null;
+        let radius = null;
+        if (selectedObjs) {
+            center = selectedObjs.center;
+            radius = selectedObjs.radius;
+            if (radius === 0) {
+                radius = 50;
+            }
+        } else if (this._all_objs_sphere) {
+            center = this._all_objs_sphere.center;
+            radius = this._all_objs_sphere.radius;
+            if (radius === 0) {
+                radius = 50;
+            }
+        } else {
+            center = new THREE.Vector3();
+            radius = 50;
+        }
+        this.orthoCam.left = - radius * this.orthoCam.right / this.orthoCam.top;
+        this.orthoCam.right = radius * this.orthoCam.right / this.orthoCam.top;
+        this.orthoCam.top = radius;
+        this.orthoCam.bottom = -radius;
+
+        if (this.currentCamera === 'Top') {
+            this.orthoCam.position.z = center.z + 1.5 * radius;
+        } else if (this.currentCamera === 'Left') {
+            this.orthoCam.position.x =  center.x - 1.5 * radius;
+        } else if (this.currentCamera === 'Front') {
+            this.orthoCam.position.y =  center.y - 1.5 * radius;
+        }
+
+    }
+
     switchCamera(switchCam = true) {
         if (switchCam) {
             if (this.currentCamera !== 'Persp') {
-                console.log(this.orthoCam.zoom)
                 this.orthoCamPos[this.currentCamera] = {
                     position: new THREE.Vector3().copy(this.orthoCam.position),
                     target: new THREE.Vector3().copy(this.orthoControls.target),
@@ -171,6 +205,7 @@ export class DataThreejsLookAt extends DataThreejsSelect {
                 this.orthoCam.position.copy(camPos.position);
                 this.orthoCam.zoom = camPos.zoom;
                 this.orthoControls.target.copy(camPos.target);
+                this.updateCameraFOV();
                 this.orthoCam.updateProjectionMatrix();
             } else {
                 if (this.currentCamera === 'Top') {

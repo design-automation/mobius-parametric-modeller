@@ -115,6 +115,7 @@ export class DataThreejs extends DataThreejsLookAt {
 
 
         this._all_objs_sphere = this._getAllObjsSphere();
+        this.updateCameraFOV();
 
         // add the axes, ground, lights, etc
         this._addEnv();

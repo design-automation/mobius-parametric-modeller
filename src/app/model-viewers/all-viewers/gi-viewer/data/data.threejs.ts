@@ -32,6 +32,7 @@ export class DataThreejs extends DataThreejsLookAt {
         if (this.settings.background.show) {
             this._loadBackground(this.settings.background.background_set);
         } else {
+            this.cameraBackgrounds = null;
             this.scene.background = new THREE.Color(this.settings.colors.viewer_bg);
         }
 
@@ -143,6 +144,7 @@ export class DataThreejs extends DataThreejsLookAt {
         if (this.settings.background.show) {
             this._loadBackground(this.settings.background.background_set);
         } else {
+            this.cameraBackgrounds = null;
             this.scene.background = new THREE.Color(this.settings.colors.viewer_bg);
         }
 
@@ -647,12 +649,32 @@ export class DataThreejs extends DataThreejsLookAt {
             path + 'py' + format, path + 'ny' + format,
             path + 'pz' + format, path + 'nz' + format
         ];
-        const background = new THREE.CubeTextureLoader().load(urls, texture => {
+        this.cameraBackgrounds = {};
+        new THREE.CubeTextureLoader().load(urls, texture => {
             this.renderer.render(this.scene, this.camera);
+            texture.format = THREE.RGBFormat;
+            this.cameraBackgrounds['Persp'] = texture;
+            this.scene.background = this.cameraBackgrounds[this.currentCamera];
+        });
+        new THREE.TextureLoader().load(path + 'nz' + format, texture => {
+            this.renderer.render(this.scene, this.camera);
+            texture.format = THREE.RGBFormat;
+            this.cameraBackgrounds['Top'] = texture;
+            this.scene.background = this.cameraBackgrounds[this.currentCamera];
+        });
+        new THREE.TextureLoader().load(path + '_l' + format, texture => {
+            this.renderer.render(this.scene, this.camera);
+            texture.format = THREE.RGBFormat;
+            this.cameraBackgrounds['Left'] = texture;
+            this.scene.background = this.cameraBackgrounds[this.currentCamera];
+        });
+        new THREE.TextureLoader().load(path + '_f' + format, texture => {
+            this.renderer.render(this.scene, this.camera);
+            texture.format = THREE.RGBFormat;
+            this.cameraBackgrounds['Front'] = texture;
+            this.scene.background = this.cameraBackgrounds[this.currentCamera];
         });
 
-        background.format = THREE.RGBFormat;
-        this.scene.background = background;
         // this._renderer.render(this._scene, this._camera);
     }
 

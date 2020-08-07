@@ -23,6 +23,7 @@ export class DataThreejsBase {
     public perspControls: OrbitControls;
     public orthoControls: OrbitControls;
     public orthoCamPos;
+    public cameraBackgrounds;
 
     public currentCamera: string;
 

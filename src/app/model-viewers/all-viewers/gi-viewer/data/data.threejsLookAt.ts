@@ -187,6 +187,9 @@ export class DataThreejsLookAt extends DataThreejsSelect {
             } else if (this.currentCamera === 'Front') {
                 this.currentCamera = 'Persp';
             }
+            if (this.cameraBackgrounds) {
+                this.scene.background = this.cameraBackgrounds[this.currentCamera];
+            }
         }
         if (this.currentCamera === 'Persp') {
             this.orthoControls.enabled = false;

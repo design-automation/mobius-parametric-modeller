@@ -185,6 +185,17 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             this.dataService.node.state.procedure.push(this.dataService.focusedInputProd);
             this.dataService.focusedInputProd = null;
         }
+        if (this.dataService.node.state.procedure.length === 0) {
+            if (this.dataService.node.localFunc.length === 1) {
+                if (data.type !== ProcedureTypes.LocalFuncDef && this.dataService.node.procedure.length > 1) {
+                    this.dataService.notifyMessage('Error: No selected place for adding procedure!');
+                    return;
+                }
+            } else {
+                this.dataService.notifyMessage('Error: No selected place for adding procedure!');
+                return;
+            }
+        }
         NodeUtils.add_procedure(this.dataService.node, data.type, data.data);
         let prod = this.dataService.node.state.procedure[0];
         if (prod.type === ProcedureTypes.Blank) {
@@ -365,6 +376,10 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             const redoActions = [];
             let notified = false;
             if (pastingPlace === undefined) {
+                if (node.procedure.length > 1 || node.localFunc.length > 1) {
+                    this.dataService.notifyMessage('Error: No selected place for pasting!');
+                    return;
+                }
                 for (let i = 0; i < toBePasted.length; i++) {
                     if (toBePasted[i].type === ProcedureTypes.Blank ||
                         toBePasted[i].type === ProcedureTypes.Return) { continue; }

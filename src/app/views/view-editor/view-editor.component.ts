@@ -187,7 +187,8 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         }
         if (this.dataService.node.state.procedure.length === 0) {
             if (this.dataService.node.localFunc.length === 1) {
-                if (data.type !== ProcedureTypes.LocalFuncDef && this.dataService.node.procedure.length > 1) {
+                if (data.type === ProcedureTypes.LocalFuncDef || this.dataService.node.procedure.length === 1) {
+                } else {
                     this.dataService.notifyMessage('Error: No selected place for adding procedure!');
                     return;
                 }

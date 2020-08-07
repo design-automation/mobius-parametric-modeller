@@ -458,9 +458,10 @@ export class DataThreejs extends DataThreejsLookAt {
         this._buffer_geoms.push(geom);
 
         // // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
-        const mat = new THREE.LineBasicMaterial({
+        const mat = new THREE.LineDashedMaterial({
             color: 0x000000,
-            vertexColors: THREE.VertexColors
+            vertexColors: THREE.VertexColors,
+            gapSize: 0
         });
         const line = new THREE.LineSegments(geom, mat);
         this.scene_objs.push(line);
@@ -473,9 +474,10 @@ export class DataThreejs extends DataThreejsLookAt {
         this._buffer_geoms.push(geom_white);
 
         // // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
-        const mat_white = new THREE.LineBasicMaterial({
+        const mat_white = new THREE.LineDashedMaterial({
             color: 0xFFFFFF,
-            vertexColors: THREE.VertexColors
+            vertexColors: THREE.VertexColors,
+            gapSize: 0
         });
         const line_white = new THREE.LineSegments(geom_white, mat_white);
         this.scene_objs.push(line_white);

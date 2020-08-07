@@ -840,7 +840,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     }
                 } else if (intersect0.object.type === 'LineSegments') {
                     let edge;
-                    const edge_color = (<THREE.LineBasicMaterial>(<THREE.LineSegments> intersect0.object).material).color;
+                    const edge_color = (<THREE.LineDashedMaterial>(<THREE.LineSegments> intersect0.object).material).color;
                     if (edge_color['r'] === 1 && edge_color['b'] === 1 && edge_color['g'] === 1) {
                         edge = scene.white_edge_select_map.get(intersect0.index / 2);
                     } else {
@@ -910,7 +910,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     }
                 } else if (intersect0.object.type === 'LineSegments') {
                     let edge;
-                    const edge_color = (<THREE.LineBasicMaterial>(<THREE.LineSegments> intersect0.object).material).color;
+                    const edge_color = (<THREE.LineDashedMaterial>(<THREE.LineSegments> intersect0.object).material).color;
                     if (edge_color['r'] === 1 && edge_color['b'] === 1 && edge_color['g'] === 1) {
                         edge = scene.white_edge_select_map.get(intersect0.index / 2);
                     } else {
@@ -989,7 +989,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             case EEntType.EDGE:
                 if (intersect0.object.type === 'LineSegments') {
                     let edge;
-                    const edge_color = (<THREE.LineBasicMaterial>(<THREE.LineSegments> intersect0.object).material).color;
+                    const edge_color = (<THREE.LineDashedMaterial>(<THREE.LineSegments> intersect0.object).material).color;
                     if (edge_color['r'] === 1 && edge_color['b'] === 1 && edge_color['g'] === 1) {
                         edge = scene.white_edge_select_map.get(intersect0.index / 2);
                     } else {
@@ -1025,7 +1025,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             case EEntType.WIRE:
                 if (intersect0.object.type === 'LineSegments') {
                     let edge;
-                    const edge_color = (<THREE.LineBasicMaterial>(<THREE.LineSegments> intersect0.object).material).color;
+                    const edge_color = (<THREE.LineDashedMaterial>(<THREE.LineSegments> intersect0.object).material).color;
                     if (edge_color['r'] === 1 && edge_color['b'] === 1 && edge_color['g'] === 1) {
                         edge = scene.white_edge_select_map.get(intersect0.index / 2);
                     } else {
@@ -1063,7 +1063,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             case EEntType.PLINE:
                 if (intersect0.object.type === 'LineSegments') {
                     let edge;
-                    const edge_color = (<THREE.LineBasicMaterial>(<THREE.LineSegments> intersect0.object).material).color;
+                    const edge_color = (<THREE.LineDashedMaterial>(<THREE.LineSegments> intersect0.object).material).color;
                     if (edge_color['r'] === 1 && edge_color['b'] === 1 && edge_color['g'] === 1) {
                         edge = scene.white_edge_select_map.get(intersect0.index / 2);
                     } else {
@@ -1537,7 +1537,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             colls = this.model.geom.nav.navAnyToColl(EEntType.TRI, tri);
         } else if (type === 'LineSegments') {
             let edge;
-            const edge_color = (<THREE.LineBasicMaterial>(<THREE.LineSegments> object.object).material).color;
+            const edge_color = (<THREE.LineDashedMaterial>(<THREE.LineSegments> object.object).material).color;
             if (edge_color['r'] === 1 && edge_color['b'] === 1 && edge_color['g'] === 1) {
                 edge = this._data_threejs.white_edge_select_map.get(object.index / 2);
             } else {

@@ -1,6 +1,8 @@
 import { EAttribNames, EEntType } from './common';
 import { IThreeJS } from './ThreejsJSON';
 import { GIModel } from './GIModel';
+import { isArray } from 'util';
+import { time } from 'console';
 
 /**
  * Geo-info model class.
@@ -64,6 +66,42 @@ export class GIModelThreejs {
     //     return normals;
     // }
     /**
+     * Generate a default color if none exists.
+     */
+    private _getTimelineAttr() {
+        const time_points = this._model.attribs._attribs_maps.mo.get('time_slider');
+        if (!time_points || !isArray(time_points)) {
+            return null;
+        }
+        const geom_array = this._model.geom._geom_arrays;
+        const attr_array = this._model.attribs._attribs_maps;
+        const timeline_objs = [];
+        for (const time_point of time_points) {
+            const time_point_obj = {
+                time_point: time_point,
+                pt: [],
+                pl: [],
+                pg: []
+            };
+            timeline_objs.push(time_point_obj);
+        }
+        console.log(geom_array.dn_colls_objs);
+        console.log(attr_array.co.get('visible'));
+        // for (const e of geom_array.dn_edges_verts) {
+        //     for (const v of e) {
+        //         const vert_attrb0 = colors[v * 3];
+        //         const vert_attrb1 = colors[v * 3 + 1];
+        //         const vert_attrb2 = colors[v * 3 + 2];
+        //         if (vert_attrb0 === 1 && vert_attrb1 === 1 && vert_attrb2 === 1) {
+        //             colors[v * 3] = 0;
+        //             colors[v * 3 + 1] = 0;
+        //             colors[v * 3 + 2] = 0;
+        //         }
+        //     }
+        // }
+
+    }
+    /**
      * Returns arrays for visualization in Threejs.
      */
     public get3jsData(): IThreeJS {
@@ -72,6 +110,8 @@ export class GIModelThreejs {
         const [vertex_xyz, vertex_map]: [number[], Map<number, number>]  =  this._model.attribs.threejs.get3jsSeqVertsCoords();
         const normals_values: number[] = this._model.attribs.threejs.get3jsSeqVertsNormals();
         let colors_values: number[] = this._model.attribs.threejs.get3jsSeqVertsColors();
+
+        this._getTimelineAttr();
         // add normals and colours
         // if (!normals_values) {
         //     normals_values = this._generateNormals();

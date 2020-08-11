@@ -43,6 +43,7 @@ export function ModelPurge(__model__: GIModel): void {
  * @returns Text that summarises what is in the model, click print to see this text.
  */
 export function ModelInfo(__model__: GIModel): string {
+    console.log(__model__.geom.query.getObjVisGroups());
     let info = '<h4>Model Information:</h4>';
     info += '<ul>';
     // model attribs

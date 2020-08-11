@@ -469,15 +469,84 @@ export class GIGeomQuery {
         }
         return verts_i;
     }
-    // public getWireVerts(wire_i: number): number[] {
-    //     const edges_i: number[] = this._geom_arrays.dn_wires_edges[wire_i];
-    //     const verts_i: number[] = edges_i.map(edge_i => this._geom_arrays.dn_edges_verts[edge_i][0]);
-    //     // if wire is open, then add final vertex
-    //     if (this._geom_arrays.dn_edges_verts[edges_i[0]][0] !== this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]) {
-    //         verts_i.push(this._geom_arrays.dn_edges_verts[edges_i[edges_i.length - 1]][1]);
-    //     }
-    //     return verts_i;
-    // }
+    // ============================================================================
+    // Objects
+    // ============================================================================
+    /**
+     * Returns three arrays of pairs of maps, for points, plines, and pgons.
+     * This is used for creating a timeline, and is based on an attribute called "visibility"
+     * on collections.
+     * The visibility attribute is an array of strings, where each string is a time-stamp label.
+     * ~
+     * For the first map in each pair, keys are the group names, and values are a set of entitie IDs.
+     * For the second map in each pair, keys are the time-stamp names, and values are a set of group names.
+     * @return Array of arrays of maps.
+     */
+    public getObjVisGroups():
+            [
+                [Map<string, Set<number>>, Map<string, Set<string>>],
+                [Map<string, Set<number>>, Map<string, Set<string>>],
+                [Map<string, Set<number>>, Map<string, Set<string>>]
+            ] {
+        if (!this._geom.model.attribs.query.hasAttrib(EEntType.COLL, 'visibility')) {
+            return null;
+        }
+        // return the result
+        const colls_i: number[] = this.getEnts(EEntType.COLL, false);
+        return [
+            this._getObjVisGroups(colls_i, EEntType.POINT),
+            this._getObjVisGroups(colls_i, EEntType.PLINE),
+            this._getObjVisGroups(colls_i, EEntType.PGON)
+        ];
+    }
+    private _getObjVisGroups(colls_i: number[], ent_type: EEntType): [Map<string, Set<number>>, Map<string, Set<string>>] {
+        // get objects
+        const objs_i: number[] = this.getEnts(ent_type, false);
+        // create overlapping groups of objects
+        // keys are for example "2020", "2021" etc
+        // objects can be in more than one group
+        const obj_groups: Map<string, Set<number>> = new Map();
+        for (const coll_i of colls_i) {
+            const visibility: string[] = this._geom.model.attribs.query.getAttribVal(EEntType.COLL, 'visibility', coll_i) as string[];
+            if (visibility !== undefined) {
+                // points
+                const coll_objs_i: number[] = this._geom.nav.navAnyToAny(EEntType.COLL, ent_type, coll_i);
+                if (coll_objs_i.length > 0) {
+                    for (const label of visibility) {
+                        if (!obj_groups.has(label)) { obj_groups.set(label, new Set()); }
+                    }
+                    for (const i of coll_objs_i) {
+                        for (const label of visibility) { obj_groups.get(label).add(i); }
+                    }
+                }
+            }
+        }
+        // create non-overlapping groups of objects
+        // keys are for example "2020_2021", "2022_2023_2024" etc
+        // objects will only be in one group
+        const obj_groups2: Map<string, Set<number>> = new Map();
+        const obj_labels2: Map<string, Set<string>> = new Map();
+        obj_groups2.set('default', new Set());
+        for (const i of objs_i) {
+            const labels: string[] = [];
+            obj_groups.forEach( (group, label) => {
+                if (group.has(i)) { labels.push(label); }
+            });
+            if (labels.length > 0) {
+                const label2 = labels.sort().join('_');
+                if (!obj_groups2.has(label2)) { obj_groups2.set(label2, new Set()); }
+                obj_groups2.get(label2).add(i);
+                for (const label of labels) {
+                    if (!obj_labels2.has(label)) { obj_labels2.set(label, new Set()); }
+                    obj_labels2.get(label).add(label2);
+                }
+            } else {
+                obj_groups2.get('default').add(i);
+            }
+        }
+        // return the result
+        return [obj_groups2, obj_labels2];
+    }
     // ============================================================================
     // Collections
     // ============================================================================

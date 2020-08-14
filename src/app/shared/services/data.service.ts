@@ -56,6 +56,8 @@ export class DataService {
     private static _mobiusSettings; // {'execute': true};
     private static _viewerSettingsUpdated = false;
 
+    private static _timelineDefault;
+
     private _backupDialogType: any;
 
     private _prevFlwActions = [];
@@ -213,6 +215,9 @@ export class DataService {
 
     get mobiusSettings() { return DataService._mobiusSettings; }
     set mobiusSettings(settings) { DataService._mobiusSettings = settings; }
+
+    get timelineDefault() { return DataService._timelineDefault; }
+    set timelineDefault(setting) { DataService._timelineDefault = setting; }
 
 
 

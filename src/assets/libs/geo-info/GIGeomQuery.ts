@@ -474,30 +474,44 @@ export class GIGeomQuery {
     // ============================================================================
     /**
      * Returns three arrays of pairs of maps, for points, plines, and pgons.
-     * This is used for creating a timeline, and is based on an attribute called "visibility"
+     * This is used for creating a timeline, and is based on an attribute called "visible"
      * on collections.
-     * The visibility attribute is an array of strings, where each string is a time-stamp label.
+     * The visible attribute is an array of strings, where each string is a time-stamp label.
      * ~
      * For the first map in each pair, keys are the group names, and values are a set of entitie IDs.
      * For the second map in each pair, keys are the time-stamp names, and values are a set of group names.
      * @return Array of arrays of maps.
      */
-    public getObjVisGroups():
-            [
-                [Map<string, Set<number>>, Map<string, Set<string>>],
-                [Map<string, Set<number>>, Map<string, Set<string>>],
-                [Map<string, Set<number>>, Map<string, Set<string>>]
-            ] {
-        if (!this._geom.model.attribs.query.hasAttrib(EEntType.COLL, 'visibility')) {
+    public getObjVisGroups(): [ {}, Map<string, Set<string>> ] {
+        if (!this._geom.model.attribs.query.hasAttrib(EEntType.COLL, 'visible')) {
             return null;
         }
         // return the result
         const colls_i: number[] = this.getEnts(EEntType.COLL, false);
-        return [
-            this._getObjVisGroups(colls_i, EEntType.POINT),
-            this._getObjVisGroups(colls_i, EEntType.PLINE),
-            this._getObjVisGroups(colls_i, EEntType.PGON)
-        ];
+
+        const full_obj_grp = {'default': []};
+        const full_lbl_grp = new Map<string, Set<string>>();
+        const grps = [  this._getObjVisGroups(colls_i, EEntType.POINT),
+                        this._getObjVisGroups(colls_i, EEntType.EDGE),
+                        this._getObjVisGroups(colls_i, EEntType.TRI)];
+        for (let i = 0; i < grps.length; i ++) {
+            const grp = grps[i];
+            console.log(grp)
+            full_obj_grp['default'][i] = grp[0].get('default');
+            grp[1].forEach((val, key) => {
+                let lbl_grp = full_lbl_grp.get(key);
+                if (!lbl_grp) { lbl_grp = new Set<string>(); }
+                for (const v of val) {
+                    lbl_grp.add(v);
+                    if (!full_obj_grp[v]) {
+                        full_obj_grp[v] = [null, null, null];
+                    }
+                    full_obj_grp[v][i] = grp[0].get(v);
+                }
+                full_lbl_grp.set(key, lbl_grp);
+            });
+        }
+        return [full_obj_grp, full_lbl_grp];
     }
     private _getObjVisGroups(colls_i: number[], ent_type: EEntType): [Map<string, Set<number>>, Map<string, Set<string>>] {
         // get objects
@@ -507,7 +521,7 @@ export class GIGeomQuery {
         // objects can be in more than one group
         const obj_groups: Map<string, Set<number>> = new Map();
         for (const coll_i of colls_i) {
-            const visibility: string[] = this._geom.model.attribs.query.getAttribVal(EEntType.COLL, 'visibility', coll_i) as string[];
+            const visibility: string[] = this._geom.model.attribs.query.getAttribVal(EEntType.COLL, 'visible', coll_i) as string[];
             if (visibility !== undefined) {
                 // points
                 const coll_objs_i: number[] = this._geom.nav.navAnyToAny(EEntType.COLL, ent_type, coll_i);

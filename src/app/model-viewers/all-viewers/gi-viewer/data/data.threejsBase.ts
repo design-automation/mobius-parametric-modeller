@@ -71,6 +71,12 @@ export class DataThreejsBase {
     public scene_objs_selected: Map<string, THREE.Object3D> = new Map();
     public positions: THREE.Object3D[] = [];
 
+    public timelineEnabled = null;
+    public timelineIndex = null;
+    public timelineValue = null;
+    public current_time_point = null;
+    public timeline_groups = null;
+
     // Show Normals
     public vnh: THREE.VertexNormalsHelper;
 

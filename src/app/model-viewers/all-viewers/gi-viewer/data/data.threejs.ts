@@ -87,7 +87,33 @@ export class DataThreejs extends DataThreejsLookAt {
         this.ObjLabelMap.clear();
         this.textLabels.clear();
 
+        this._addGeom(model);
 
+        const position_size = this.settings.positions.size;
+        this.raycaster.params.Points.threshold = position_size > 1 ? position_size / 3 : position_size / 4;
+
+
+        this._all_objs_sphere = this._getAllObjsSphere();
+        this.updateCameraFOV();
+
+        // add the axes, ground, lights, etc
+        this._addEnv();
+
+        setTimeout(() => {
+            let old = document.getElementById('hud');
+            if (old) {
+                container.removeChild(old);
+            }
+            setTimeout(() => { this._getNodeSelect(); }, 10);
+            if (!this.model.attribs.query.hasAttrib(EEntType.MOD, 'hud')) { return; }
+            const hud = this.model.attribs.query.getModelAttribVal('hud') as string;
+            const element = this._createHud(hud).element;
+            container.appendChild(element);
+            old = null;
+        }, 0);
+    }
+
+    private _addGeom(model: GIModel): void {
         // Add geometry
         const threejs_data: IThreeJS = model.threejs.get3jsData();
         this.tri_select_map = threejs_data.triangle_select_map;
@@ -108,30 +134,41 @@ export class DataThreejs extends DataThreejsLookAt {
         this._addTris(threejs_data.triangle_indices, verts_xyz_buffer, colors_buffer, normals_buffer, material_groups, materials);
         this._addLines(threejs_data.edge_indices, threejs_data.white_edge_indices, verts_xyz_buffer, colors_buffer, normals_buffer);
         this._addPoints(threejs_data.point_indices, verts_xyz_buffer, colors_buffer, [255, 255, 255], this.settings.positions.size + 1);
+
+        // if (threejs_data.timeline) {
+        //     this.timelineEnabled = true;
+        //     this.timeline = threejs_data.timeline.__time_points__;
+        //     if (!this.current_time_point || this.timeline.indexOf(this.current_time_point) === -1) {
+        //         this.current_time_point = this.timeline[this.timeline.length - 1];
+        //     }
+        //     this.timeline_groups = {};
+        //     for (const time_point of this.timeline) {
+        //         const obj_group = new THREE.Group();
+        //         const timeline_data = threejs_data.timeline[time_point];
+        //         const tri = this._addTimelineTris(timeline_data.triangle_indices, verts_xyz_buffer, colors_buffer,
+        //                     normals_buffer, material_groups, materials);
+        //         const lines = this._addTimelineLines(timeline_data.edge_indices, threejs_data.white_edge_indices,
+        //                     verts_xyz_buffer, colors_buffer, normals_buffer);
+        //         const points = this._addTimelinePoints(timeline_data.point_indices, verts_xyz_buffer,
+        //                     colors_buffer, [255, 255, 255], this.settings.positions.size + 1);
+        //         obj_group.add(tri);
+        //         obj_group.add(lines[0]);
+        //         obj_group.add(lines[1]);
+        //         obj_group.add(points);
+        //         this.timeline_groups[time_point] = obj_group;
+        //     }
+        //     this.scene.add(this.timeline_groups[this.current_time_point]);
+        // } else {
+        //     this.timelineEnabled = false;
+        //     this.timeline = null;
+        //     this.timeline_groups = null;
+        // }
+
         this._addPosis(threejs_data.posis_indices, posis_xyz_buffer, this.settings.colors.position, this.settings.positions.size);
+
         this._addPointLabels(model);
 
-        const position_size = this.settings.positions.size;
-        this.raycaster.params.Points.threshold = position_size > 1 ? position_size / 3 : position_size / 4;
 
-
-        this._all_objs_sphere = this._getAllObjsSphere();
-        this.updateCameraFOV();
-
-        // add the axes, ground, lights, etc
-        this._addEnv();
-
-        setTimeout(() => {
-            let old = document.getElementById('hud');
-            if (old) {
-                container.removeChild(old);
-            }
-            if (!this.model.attribs.query.hasAttrib(EEntType.MOD, 'hud')) { return; }
-            const hud = this.model.attribs.query.getModelAttribVal('hud') as string;
-            const element = this._createHud(hud).element;
-            container.appendChild(element);
-            old = null;
-        }, 0);
     }
 
 
@@ -197,6 +234,27 @@ export class DataThreejs extends DataThreejsLookAt {
         }
         if (this.settings.directional_light.show) {
             this._addDirectionalLight();
+        }
+    }
+    private _getNodeSelect(): void {
+        const select_node: any = this.model.attribs.query.getModelAttribVal('select_node');
+        this.timelineEnabled = null;
+        if (!select_node || !select_node.nodes) { return; }
+        this.timeline_groups = select_node.nodes;
+        const currentIndex = this.timeline_groups.indexOf(this.dataService.node.name);
+        if (currentIndex !== -1) {
+            this.timelineEnabled = 1;
+            this.timelineIndex = currentIndex.toString();
+            this.timelineValue = this.dataService.node.name;
+            if (select_node.widget === 'dropdown') {
+                this.timelineEnabled = 2;
+            }
+        }
+        if (this.dataService.timelineDefault && select_node.default) {
+            const nodeSelInput = <HTMLInputElement> document.getElementById('hidden_node_selection');
+            nodeSelInput.value = select_node.default;
+            (<HTMLButtonElement> document.getElementById('hidden_node_selection_button')).click();
+            this.dataService.timelineDefault = false;
         }
     }
     /**

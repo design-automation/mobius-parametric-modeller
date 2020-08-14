@@ -231,6 +231,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 //     this.dataService.switch_page = false;
                 //     return;
                 // }
+                if (!this.container) { return; }
                 this.updateModel(this.model);
             }
         }
@@ -263,6 +264,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this.renderInterval = null;
         this._data_threejs.perspControls.removeEventListener('change', this.activateRender);
         this._data_threejs.orthoControls.removeEventListener('change', this.activateRender);
+        console.log('~~~~~ destroy')
         // this.keyboardServiceSub.unsubscribe();
     }
 
@@ -1688,6 +1690,34 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             }, 0);
         }
     }
+
+    getMaxNodeSelect() {
+        if (this._data_threejs.timeline_groups) {
+            return this._data_threejs.timeline_groups.length - 1;
+        }
+        return 0;
+    }
+
+    getSliderWidth() {
+        let width = 10;
+        for (const g of this._data_threejs.timeline_groups) {
+            width += g.length * 7 + 5;
+        }
+        return width + 'px';
+    }
+
+    changeNodeSlider(event: Event) {
+        const nodeSelInput = <HTMLInputElement> document.getElementById('hidden_node_selection');
+        nodeSelInput.value = this._data_threejs.timeline_groups[(<HTMLInputElement> event.target).value];
+        (<HTMLButtonElement> document.getElementById('hidden_node_selection_button')).click();
+    }
+
+    changeNodeDropdown(event: Event) {
+        const nodeSelInput = <HTMLInputElement> document.getElementById('hidden_node_selection');
+        nodeSelInput.value = (<HTMLInputElement> event.target).value;
+        (<HTMLButtonElement> document.getElementById('hidden_node_selection_button')).click();
+    }
+
 
     @HostListener('document:mouseleave', [])
     onmouseleave() {

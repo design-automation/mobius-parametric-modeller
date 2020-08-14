@@ -881,4 +881,19 @@ export class PanelHeaderComponent implements OnDestroy {
         document.getElementById('selectImportFile').click();
         this.openHeaderDialog(event, 'globalfunc');
     }
+
+    updateNode() {
+        const nodeSelInput = <HTMLInputElement> document.getElementById('hidden_node_selection');
+        const selectedNode = nodeSelInput.value;
+        nodeSelInput.value = null;
+        if (selectedNode === this.dataService.node.name) { return; }
+        for (let i = 0; i < this.dataService.flowchart.nodes.length; i ++) {
+            const node = this.dataService.flowchart.nodes[i];
+            if (node.name === selectedNode) {
+                this.dataService.flowchart.meta.selected_nodes = [i];
+                return;
+            }
+        }
+    }
+
 }

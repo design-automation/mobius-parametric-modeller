@@ -269,6 +269,7 @@ export class ExecuteComponent {
         this.startTime = performance.now();
         this.triggerCheck = false;
         this.terminated = null;
+        this.dataService.timelineDefault = true;
 
         if (this.dataService.consoleClear) {
             this.dataService.clearLog();

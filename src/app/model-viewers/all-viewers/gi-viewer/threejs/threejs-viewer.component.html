@@ -39,36 +39,33 @@
         <mat-icon svgIcon="cControlCam"></mat-icon>
         <p>{{_data_threejs.currentCamera}}</p>
     </span>
-
-    <button
-        id="EntitySelection"
-        mat-icon-button
-        (click)="selectDropdownVisible = !selectDropdownVisible"
-        title='Selection Type'
-    >
-        <mat-icon svgIcon="select"></mat-icon>
-
-    </button>
-    <span
-        *ngIf="!selectDropdownVisible"
-        id="SelectingEntityType"
-        matTooltip="Selecting {{SelectingEntityType.name}}"
-        (click)="selectDropdownVisible = !selectDropdownVisible; needSelect=false"
-    >
-        {{EntTypeToStr(SelectingEntityType.id)}}
-    </span>
-    <div
-        id="selectDropdown"
-        *ngIf="selectDropdownVisible == true"
-    >
+    <ng-container *ngIf="enableSelect()">
         <button
-            *ngFor="let selection of selections"
-            (click)="selectEntityType(selection); needSelect=false"
-            [class.active]="SelectingEntityType.id === selection.id"
+            id="EntitySelection"
+            mat-icon-button
+            (click)="selectDropdownVisible = !selectDropdownVisible"
+            title='Selection Type'
         >
-            <span matTooltip="Select {{selection.name}}">{{EntTypeToStr(selection.id)}}</span>
+            <mat-icon svgIcon="select"></mat-icon>
         </button>
-    </div>
+        <span
+            *ngIf="!selectDropdownVisible"
+            id="SelectingEntityType"
+            matTooltip="Selecting {{SelectingEntityType.name}}"
+            (click)="selectDropdownVisible = !selectDropdownVisible; needSelect=false"
+        >
+            {{EntTypeToStr(SelectingEntityType.id)}}
+        </span>
+        <div id="selectDropdown" *ngIf="selectDropdownVisible == true" >
+            <button
+                *ngFor="let selection of selections"
+                (click)="selectEntityType(selection); needSelect=false"
+                [class.active]="SelectingEntityType.id === selection.id"
+            >
+                <span matTooltip="Select {{selection.name}}">{{EntTypeToStr(selection.id)}}</span>
+            </button>
+        </div>
+    </ng-container>
 
     <div id="giSummary" [hidden]='!this._data_threejs.settings.gi_summary.show'>
         <tbody>

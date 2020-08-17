@@ -1650,6 +1650,10 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         return EEntTypeStr[ent_type];
     }
 
+    private enableSelect() {
+        return this.selections.length > 1;
+    }
+
     private selectEntityType(selection: { id: number, name: string }) {
         this.SelectingEntityType = selection;
         localStorage.setItem('mpm_selecting_entity_type', JSON.stringify(selection));

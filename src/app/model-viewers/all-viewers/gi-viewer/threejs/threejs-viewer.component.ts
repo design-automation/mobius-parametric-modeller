@@ -264,7 +264,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this.renderInterval = null;
         this._data_threejs.perspControls.removeEventListener('change', this.activateRender);
         this._data_threejs.orthoControls.removeEventListener('change', this.activateRender);
-        console.log('~~~~~ destroy')
         // this.keyboardServiceSub.unsubscribe();
     }
 

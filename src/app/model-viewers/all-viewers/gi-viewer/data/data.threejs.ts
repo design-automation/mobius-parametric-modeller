@@ -860,7 +860,6 @@ export class DataThreejs extends DataThreejsLookAt {
             // const altitudeOffset = Math.sin(altitude * Math.PI / 180);
             this.directional_light.shadow.camera.far = scale * 20;
             this.directional_light.shadow.bias = -0.0001;
-            this.directional_light.shadow.normalBias = 0.1;
 
             let helper;
 

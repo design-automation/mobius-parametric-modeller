@@ -5,7 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { DataService } from '@services';
 import { ISettings } from './data.threejsSettings';
-import { WEBVR } from 'three/examples/jsm/vr/WebVR.js';
+// import { WEBVR } from 'three/examples/jsm/vr/WebVR.js';
 
 /**
  * ThreejsScene
@@ -113,6 +113,7 @@ export class DataThreejsBase {
         this.renderer.setSize(window.innerWidth / 1.8, window.innerHeight);
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        // this.renderer.shadowMap.type = THREE.VSMShadowMap;
         // camera settings
         this.perspCam = new THREE.PerspectiveCamera(50, 1, 0.01, 1000000);
         this.perspCam.position.x = -80;
@@ -156,7 +157,7 @@ export class DataThreejsBase {
         this.mouse = new THREE.Vector2();
         // selecting
         this.raycaster = new THREE.Raycaster();
-        this.raycaster.linePrecision = 0.3; // TODO this need to be set dynamically based on model size and view zoom
+        this.raycaster.params.Line.threshold = 0.3; // TODO this need to be set dynamically based on model size and view zoom
         this.raycaster.params.Points.threshold = 0.3; // TODO this need to be set dynamically based on model size and view zoom
 
         // this.vr = WEBVR.createButton(this.renderer);

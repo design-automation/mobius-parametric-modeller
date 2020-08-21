@@ -309,10 +309,6 @@ export class DataThreejs extends DataThreejsLookAt {
             posZ += this._all_objs_sphere.center.z;
         }
         this.directional_light.position.set(posX, posY, posZ);
-        // let radAltitude = altitude;
-        // if (altitude < 2) { radAltitude = 2; }
-        // radAltitude = radAltitude * Math.PI / 180;
-        // this.directional_light.shadow.camera.far = scale * 2 / Math.sin(radAltitude);
     }
 
     /**
@@ -801,7 +797,7 @@ export class DataThreejs extends DataThreejsLookAt {
         let distance = 0;
 
         if (this._all_objs_sphere) {
-            distance = Math.round(this._all_objs_sphere.radius);
+            distance = Math.round(this._all_objs_sphere.radius) + 1;
             // if (distance < 10000) { distance = 10000; }
         }
         this.directional_light_settings.distance = distance;
@@ -810,8 +806,6 @@ export class DataThreejs extends DataThreejsLookAt {
         this.directional_light.visible = this.directional_light_settings.show;
         // this.directional_light_settings.shadowSize = 2;
         // const shadowMapSize = this.directional_light_settings.shadowSize;
-        // this.directional_light.shadow.radius = 1.2;  // default
-        this.directional_light.shadow.bias = -0.00001;  // default
         this.directional_light.shadow.mapSize.width = this.directional_light_settings.shadowSize;  // default
         this.directional_light.shadow.mapSize.height = this.directional_light_settings.shadowSize; // default
         // this.directional_light.shadow.camera.visible = true;
@@ -860,9 +854,13 @@ export class DataThreejs extends DataThreejsLookAt {
                 }
             }
             this.directional_light.shadow.camera.near = 0.5;
-            this.directional_light.shadow.camera.far = scale * 30;
 
-            this.directional_light.shadow.bias = -0.001;
+            // let altitude = this.directional_light_settings.altitude;
+            // if (altitude < 3) { altitude = 3; }
+            // const altitudeOffset = Math.sin(altitude * Math.PI / 180);
+            this.directional_light.shadow.camera.far = scale * 20;
+            this.directional_light.shadow.bias = -0.0001;
+            this.directional_light.shadow.normalBias = 0.1;
 
             let helper;
 

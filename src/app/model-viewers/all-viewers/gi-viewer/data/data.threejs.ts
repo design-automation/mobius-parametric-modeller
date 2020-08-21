@@ -309,6 +309,10 @@ export class DataThreejs extends DataThreejsLookAt {
             posZ += this._all_objs_sphere.center.z;
         }
         this.directional_light.position.set(posX, posY, posZ);
+        // let radAltitude = altitude;
+        // if (altitude < 2) { radAltitude = 2; }
+        // radAltitude = radAltitude * Math.PI / 180;
+        // this.directional_light.shadow.camera.far = scale * 2 / Math.sin(radAltitude);
     }
 
     /**
@@ -797,7 +801,7 @@ export class DataThreejs extends DataThreejsLookAt {
         let distance = 0;
 
         if (this._all_objs_sphere) {
-            distance = Math.round(this._all_objs_sphere.radius * 3);
+            distance = Math.round(this._all_objs_sphere.radius);
             // if (distance < 10000) { distance = 10000; }
         }
         this.directional_light_settings.distance = distance;
@@ -856,7 +860,7 @@ export class DataThreejs extends DataThreejsLookAt {
                 }
             }
             this.directional_light.shadow.camera.near = 0.5;
-            this.directional_light.shadow.camera.far = scale * 3;
+            this.directional_light.shadow.camera.far = scale * 30;
 
             this.directional_light.shadow.bias = -0.001;
 

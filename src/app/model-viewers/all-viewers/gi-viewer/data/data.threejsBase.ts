@@ -5,6 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { DataService } from '@services';
 import { ISettings } from './data.threejsSettings';
+import { WEBVR } from 'three/examples/jsm/vr/WebVR.js';
 
 /**
  * ThreejsScene
@@ -45,6 +46,9 @@ export class DataThreejsBase {
     public selected_face_edges: Map<string, Map<string, number>> = new Map();
     public selected_face_wires: Map<string, Map<string, number>> = new Map();
     public text: string;
+
+    // public vrEnabled: boolean = true;
+    // public vr;
 
     // text labels
     public ObjLabelMap: Map<string, any> = new Map();
@@ -154,6 +158,8 @@ export class DataThreejsBase {
         this.raycaster = new THREE.Raycaster();
         this.raycaster.linePrecision = 0.3; // TODO this need to be set dynamically based on model size and view zoom
         this.raycaster.params.Points.threshold = 0.3; // TODO this need to be set dynamically based on model size and view zoom
+
+        // this.vr = WEBVR.createButton(this.renderer);
 
         setTimeout(() => {
             const threeContainer = document.getElementById('threejs-container');

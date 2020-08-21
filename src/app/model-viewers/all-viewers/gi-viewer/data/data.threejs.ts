@@ -299,9 +299,9 @@ export class DataThreejs extends DataThreejsLookAt {
                 azimuth_calc += angle;
             }
         }
-        let posX = Math.cos(altitude * Math.PI * 2 / 360) * Math.cos(azimuth_calc * Math.PI * 2 / 360) * scale,
-            posY = Math.cos(altitude * Math.PI * 2 / 360) * Math.sin(azimuth_calc * Math.PI * 2 / 360) * scale,
-            posZ = Math.sin(altitude * Math.PI * 2 / 360) * scale;
+        let posX = Math.cos(altitude * Math.PI * 2 / 360) * Math.cos(azimuth_calc * Math.PI * 2 / 360) * scale * 2,
+            posY = Math.cos(altitude * Math.PI * 2 / 360) * Math.sin(azimuth_calc * Math.PI * 2 / 360) * scale * 2,
+            posZ = Math.sin(altitude * Math.PI * 2 / 360) * scale * 2;
 
         if (this._all_objs_sphere) {
             posX += this._all_objs_sphere.center.x;
@@ -797,7 +797,7 @@ export class DataThreejs extends DataThreejsLookAt {
         let distance = 0;
 
         if (this._all_objs_sphere) {
-            distance = Math.round(this._all_objs_sphere.radius) + 1;
+            distance = Math.round(this._all_objs_sphere.radius);
             // if (distance < 10000) { distance = 10000; }
         }
         this.directional_light_settings.distance = distance;
@@ -864,6 +864,7 @@ export class DataThreejs extends DataThreejsLookAt {
             let helper;
 
             const cam = <THREE.OrthographicCamera> this.directional_light.shadow.camera;
+            cam.up.set(0, 0, 1);
             cam.left = -scale;
             cam.right = scale;
             cam.top = scale;
@@ -898,7 +899,7 @@ export class DataThreejs extends DataThreejsLookAt {
             // }
             helper.visible = this.directional_light_settings.helper;
             helper.name = 'DLHelper';
-            this.scene.add(helper);
+            if (size) { this.scene.add(helper); }
             this.getDLPosition(scale);
         }
     }

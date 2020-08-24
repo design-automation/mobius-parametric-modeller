@@ -13,6 +13,7 @@ import { checkArgs, ArgCh } from '../_check_args';
 
 import { idsBreak } from '@libs/geo-info/id';
 import { TEntTypeIdx } from '@libs/geo-info/common';
+import { getArrDepth2 } from '@assets/libs/util/arrs';
 
 
 // ================================================================================================
@@ -274,6 +275,17 @@ function _compareID(id1: string, id2: string): number {
     if (index1 !== index2) { return index1 -  index2; }
     return 0;
 }
+function _compareNumList(l1: any[], l2: any[], depth: number): number {
+    if (depth === 1) { return l1[0] - l2[0] as number; }
+    if (depth === 2) { return l1[0][0] - l2[0][0] as number; }
+    let val1 = l1;
+    let val2 = l2;
+    for (let i = 0; i < depth; i++) {
+        val1 = val1[0];
+        val2 = val2[0];
+    }
+    return (val1 as unknown as number) - (val2 as unknown as number);
+}
 function _sort(list: any[], method: _ESortMethod): void {
     switch (method) {
         case _ESortMethod.REV:
@@ -286,10 +298,20 @@ function _sort(list: any[], method: _ESortMethod): void {
             list.sort();
             break;
         case _ESortMethod.NUM:
-            list.sort((a, b) => a - b).reverse();
+            if (Array.isArray(list[0])) {
+                const depth: number = getArrDepth2(list[0]);
+                list.sort((a, b) => _compareNumList(a, b, depth)).reverse();
+            } else {
+                list.sort((a, b) => b - a);
+            }
             break;
         case _ESortMethod.REV_NUM:
-            list.sort((a, b) => a - b);
+            if (Array.isArray(list[0])) {
+                const depth: number = getArrDepth2(list[0]);
+                list.sort((a, b) => _compareNumList(a, b, depth));
+            } else {
+                list.sort((a, b) => a - b);
+            }
             break;
         case _ESortMethod.ID:
             list.sort(_compareID).reverse();

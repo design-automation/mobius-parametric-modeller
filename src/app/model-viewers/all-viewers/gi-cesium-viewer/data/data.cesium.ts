@@ -82,10 +82,11 @@ export class DataCesium {
                 // selectedTerrainProviderViewModel : terrainViewModels[1]
             }
         );
-        this._viewer.scene.globe.depthTestAgainstTerrain = true;
+        this._viewer.scene.globe.depthTestAgainstTerrain = false;
         this._viewer.clock.currentTime.secondsOfDay = 50000;
-        this._viewer.shadowMap.maxmimumDistance = 10000;
-        this._viewer.shadowMap.size = 2048;
+        this._viewer.shadowMap.maxmimumDistance = 500;
+        this._viewer.shadowMap.size = 10240;
+        this._viewer.shadowMap.cascadesEnabled = false;
         this._viewer.shadowMap.softShadows = false; // if true, causes some strange effects
         // document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
 

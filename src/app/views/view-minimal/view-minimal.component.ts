@@ -43,5 +43,10 @@ export class ViewMinimalComponent implements AfterViewInit {
             }
         }
     }
+
+    notifyMessage(event) {
+        this.dataService.notifyMessage(event.target.value);
+        event.target.value = '';
+    }
 }
 

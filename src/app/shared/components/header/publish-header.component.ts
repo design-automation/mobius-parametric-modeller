@@ -32,4 +32,8 @@ export class PublishHeaderComponent {
         }
     }
 
+    notifyMessage(event) {
+        this.dataService.notifyMessage(event.target.value);
+        event.target.value = '';
+    }
 }

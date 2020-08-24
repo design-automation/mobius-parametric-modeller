@@ -896,4 +896,8 @@ export class PanelHeaderComponent implements OnDestroy {
         }
     }
 
+    notifyMessage(event) {
+        this.dataService.notifyMessage(event.target.value);
+        event.target.value = '';
+    }
 }

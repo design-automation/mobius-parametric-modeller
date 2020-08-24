@@ -2,8 +2,6 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { CesiumSettings } from '../gi-cesium-viewer.settings';
 import { EEntType, Txyz, TAttribDataTypes, LONGLAT } from '@libs/geo-info/common';
 // import { HereMapsImageryProvider } from './HereMapsImageryProvider.js';
-import Shape from '@doodle3d/clipper-js';
-import { DataService } from '@shared/services';
 
 /**
  * Cesium data
@@ -82,6 +80,7 @@ export class DataCesium {
                 // selectedTerrainProviderViewModel : terrainViewModels[1]
             }
         );
+        this._viewer.scene.postProcessStages.fxaa.enabled = true;
         this._viewer.scene.globe.depthTestAgainstTerrain = false;
         this._viewer.clock.currentTime.secondsOfDay = 50000;
         this._viewer.shadowMap.maxmimumDistance = 500;
@@ -294,6 +293,12 @@ export class DataCesium {
         if (model) {
             // get each polygon
             const pgons_i: number[] = model.geom.query.getEnts(EEntType.PGON, false);
+            if (pgons_i.length > 100000) {
+                const notify = <HTMLInputElement> document.getElementById('hidden_notify_button');
+                notify.value = 'Model too big to be rendered by Cesium';
+                notify.click();
+                return;
+            }
             // get each triangle
             const lines_instances: any[] = [];
             const tris_instances: any[] = [];

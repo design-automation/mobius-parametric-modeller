@@ -1651,7 +1651,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         return EEntTypeStr[ent_type];
     }
 
-    private enableSelect() {
+    enableSelect() {
         return this.selections.length > 1;
     }
 

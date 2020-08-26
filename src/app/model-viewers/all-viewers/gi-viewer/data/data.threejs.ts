@@ -806,6 +806,12 @@ export class DataThreejs extends DataThreejsLookAt {
         this.directional_light.visible = this.directional_light_settings.show;
         // this.directional_light_settings.shadowSize = 2;
         // const shadowMapSize = this.directional_light_settings.shadowSize;
+        if (this.directional_light_settings.shadowSize <= 10) {
+            this.directional_light_settings.shadowSize = this.directional_light_settings.shadowSize * 512;
+        }
+        if (this.directional_light_settings.shadowSize < 1024) {
+            this.directional_light_settings.shadowSize = 2048;
+        }
         this.directional_light.shadow.mapSize.width = this.directional_light_settings.shadowSize;  // default
         this.directional_light.shadow.mapSize.height = this.directional_light_settings.shadowSize; // default
         // this.directional_light.shadow.camera.visible = true;

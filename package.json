@@ -1,6 +1,6 @@
 {
   "name": "mobius-parametric-modeller",
-  "version": "0.5.60",
+  "version": "0.5.72",
   "license": "MIT",
   "config": {
     "dev_url": "https://mobius.design-automation.net/",
@@ -86,7 +86,7 @@
     "@types/offscreencanvas": "^2019.6.2",
     "@types/three": "^0.93.31",
     "@types/webgl2": "0.0.5",
-    "angular-cli-ghpages": "^0.6.2",
+    "angular-cli-ghpages": "^0.5.3",
     "codelyzer": "^5.0.1",
     "git-describe": "^4.0.4",
     "jasmine-core": "^3.4.0",

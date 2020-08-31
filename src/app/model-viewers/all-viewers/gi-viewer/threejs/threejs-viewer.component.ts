@@ -152,6 +152,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this._data_threejs = this.dataService.getThreejsScene();
         this.threeJSViewerService.DataThreejs = this._data_threejs;
         this.container.appendChild(this._data_threejs.renderer.domElement);
+        this._data_threejs.renderer.domElement.style.outline = 'none';
         // this.container.appendChild(this._data_threejs.vr);
         // console.log(this._data_threejs.vr)
         // set the numbers of entities

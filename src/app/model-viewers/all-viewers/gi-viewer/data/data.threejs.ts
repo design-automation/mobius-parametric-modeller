@@ -722,13 +722,13 @@ export class DataThreejs extends DataThreejsLookAt {
             this.cameraBackgrounds['Top'] = texture;
             this.scene.background = this.cameraBackgrounds[this.currentCamera];
         });
-        new THREE.TextureLoader().load(path + '_l' + format, texture => {
+        new THREE.TextureLoader().load(path + 'left' + format, texture => {
             this.renderer.render(this.scene, this.camera);
             texture.format = THREE.RGBFormat;
             this.cameraBackgrounds['Left'] = texture;
             this.scene.background = this.cameraBackgrounds[this.currentCamera];
         });
-        new THREE.TextureLoader().load(path + '_f' + format, texture => {
+        new THREE.TextureLoader().load(path + 'front' + format, texture => {
             this.renderer.render(this.scene, this.camera);
             texture.format = THREE.RGBFormat;
             this.cameraBackgrounds['Front'] = texture;

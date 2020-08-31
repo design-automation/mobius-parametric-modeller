@@ -68,3 +68,9 @@ In the latter case, you do not specify a path, you just specify the file name, e
 * **Parameters:**  
 * **Returns:** Text that summarises what is in the model, click print to see this text.  
   
+## SendData  
+* **Description:** Post a message to the parent window.  
+* **Parameters:**  
+  * *data:* The data to send, a list or a dictionary.  
+* **Returns:** Text that summarises what is in the model, click print to see this text.  
+  

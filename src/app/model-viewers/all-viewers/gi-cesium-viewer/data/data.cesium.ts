@@ -613,10 +613,18 @@ export class DataCesium {
         if (newSetting.time) {
             if (newSetting.time.date) {
                 this.settings.time.date = newSetting.time.date;
-                Cesium.JulianDate.fromIso8601(this.settings.time.date, this._viewer.clock.currentTime);
-                Cesium.JulianDate.addDays(this._viewer.clock.currentTime, -1, this._viewer.clock.startTime);
-                Cesium.JulianDate.addDays(this._viewer.clock.currentTime, 1, this._viewer.clock.stopTime);
-                this._viewer.timeline.zoomTo(this._viewer.clock.startTime, this._viewer.clock.stopTime);
+                if (this.settings.time.date.indexOf('T') === -1) {
+                    Cesium.JulianDate.fromIso8601(this.settings.time.date, this._viewer.clock.currentTime);
+                    Cesium.JulianDate.addDays(this._viewer.clock.currentTime, -1, this._viewer.clock.startTime);
+                    Cesium.JulianDate.addDays(this._viewer.clock.currentTime, 1, this._viewer.clock.stopTime);
+                    this._viewer.timeline.zoomTo(this._viewer.clock.startTime, this._viewer.clock.stopTime);
+                } else {
+                    Cesium.JulianDate.fromIso8601(this.settings.time.date.split('T')[0], this._viewer.clock.currentTime);
+                    Cesium.JulianDate.addDays(this._viewer.clock.currentTime, -1, this._viewer.clock.startTime);
+                    Cesium.JulianDate.addDays(this._viewer.clock.currentTime, 1, this._viewer.clock.stopTime);
+                    Cesium.JulianDate.fromIso8601(this.settings.time.date + ':00Z', this._viewer.clock.currentTime);
+                    this._viewer.timeline.zoomTo(this._viewer.clock.startTime, this._viewer.clock.stopTime);
+                }
             }
         }
         if (newSetting.updated) {

@@ -3,10 +3,7 @@
   "compilerOptions": {
     "outDir": "../out-tsc/app",
     "baseUrl": "./",
-    "types": [
-        "node",
-        "webgl2"
-    ],
+    "types": ["node", "webgl2", "offscreencanvas"],
     "paths": {
       "@assets/*" : ["assets/*"],
       "@env/*" : ["environments/*"],

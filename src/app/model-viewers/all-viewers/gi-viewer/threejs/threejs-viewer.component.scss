@@ -45,7 +45,52 @@ button{
     }
 }
 
+#nodeSelect_slider{
+    position: absolute;
+    bottom: 5px;
+    right: 50px;
+    background: rgba(255,255,255,0.3);
+    padding: 10px 25px 10px 10px;
+    color: $color1;
 
+    datalist {
+        width: 121%;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
+    
+    datalist option {
+        width: 15px;
+        padding: none;
+        flex-grow: 1;
+        right: 1px;
+    }
+}
+#nodeSelect_dropdown{
+    position: absolute;
+    bottom: 5px;
+    right: 50px;
+    background: rgba(255,255,255,0.3);
+    padding: 10px 25px 10px 10px;
+    color: $color1;
+
+    datalist {
+        width: 121%;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
+    
+    datalist option {
+        width: 15px;
+        padding: none;
+        flex-grow: 1;
+        right: 1px;
+    }
+}
 /*#rotating{
     width: 30px;
     height: 25px;
@@ -188,20 +233,26 @@ button{
 }
 
 
-#credit{
-    width: 40px;
-    height: 30px;
+.switchCameraButton{
+    cursor: pointer;
     font-size:$fsize1;
     position: absolute;
-    bottom:10px;
-    right:0px; 
+    width: 40px;
+    bottom:2px;
+    right:2px; 
     text-align:center;
     color: $color1;
     background-color:transparent;
     border:0;
+    user-select: none;
     &:hover {
         color:$selected-color;
     }
+    // mat-icon {
+    //     svg {
+    //         fill: $color1 !important;
+    //     }
+    // }
 }
 
 .visible{

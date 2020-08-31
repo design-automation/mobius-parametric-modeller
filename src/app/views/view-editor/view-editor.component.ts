@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output, AfterViewInit, HostListener, OnDestroy} from '@angular/core';
+import { Component, Input, EventEmitter, Output, AfterViewInit, HostListener, OnDestroy, ViewChild} from '@angular/core';
 import { IFlowchart } from '@models/flowchart';
 import { NodeUtils, INode } from '@models/node';
 import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
@@ -10,6 +10,7 @@ import { checkNodeValidity } from '@shared/parser';
 import { DataOutputService } from '@shared/services/dataOutput.service';
 import { SaveFileComponent } from '@shared/components/file';
 import { IArgument } from '@models/code';
+import { SplitComponent } from 'angular-split';
 
 @Component({
   selector: 'view-editor',
@@ -28,6 +29,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     // notificationTrigger = true;
 
     disableInput = false;
+    @ViewChild('editorSplit', { static: true }) editorSplit: SplitComponent;
 
     // private copyCheck = true;
     private ctx = document.createElement('canvas').getContext('2d');
@@ -182,6 +184,18 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             this.dataService.focusedInputProd.lastSelected = true;
             this.dataService.node.state.procedure.push(this.dataService.focusedInputProd);
             this.dataService.focusedInputProd = null;
+        }
+        if (this.dataService.node.state.procedure.length === 0) {
+            if (this.dataService.node.localFunc.length === 1) {
+                if (data.type === ProcedureTypes.LocalFuncDef || this.dataService.node.procedure.length === 1) {
+                } else {
+                    this.dataService.notifyMessage('Error: No selected place for adding procedure!');
+                    return;
+                }
+            } else {
+                this.dataService.notifyMessage('Error: No selected place for adding procedure!');
+                return;
+            }
         }
         NodeUtils.add_procedure(this.dataService.node, data.type, data.data);
         let prod = this.dataService.node.state.procedure[0];
@@ -348,11 +362,11 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         const node = this.dataService.node;
         if (document.activeElement.nodeName !== 'INPUT'
         && document.activeElement.nodeName !== 'TEXTAREA'
-        && this.router.url.slice(0, 7) === '/editor') {
+        && this.router.url.startsWith('/editor')) {
         // if (this.copyCheck
         // && document.activeElement.nodeName !== 'INPUT'
         // && document.activeElement.nodeName !== 'TEXTAREA'
-        // && this.router.url.slice(0, 7) === '/editor') {
+        // && this.router.url.startsWith('/editor')) {
             const copiedProds = localStorage.getItem('mobius_copied_procedures');
             if (!copiedProds) {
                 this.dataService.notifyMessage('Error: No saved procedure to be pasted!');
@@ -363,6 +377,10 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             const redoActions = [];
             let notified = false;
             if (pastingPlace === undefined) {
+                if (node.procedure.length > 1 || node.localFunc.length > 1) {
+                    this.dataService.notifyMessage('Error: No selected place for pasting!');
+                    return;
+                }
                 for (let i = 0; i < toBePasted.length; i++) {
                     if (toBePasted[i].type === ProcedureTypes.Blank ||
                         toBePasted[i].type === ProcedureTypes.Return) { continue; }
@@ -690,5 +708,10 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     getFlowchart() { return this.dataService.flowchart; }
     getNode() { return this.dataService.node; }
     getFlowchartName() { return this.dataService.file.name; }
+
+    @HostListener('document:mouseleave', [])
+    onmouseleave() {
+        this.editorSplit.notify('end');
+    }
 
 }

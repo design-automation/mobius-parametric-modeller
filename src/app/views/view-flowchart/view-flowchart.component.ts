@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, ViewChild, OnDestroy, HostListener } from '@angular/core';
 
 import { NodeUtils, INode } from '@models/node';
 import { IEdge } from '@models/edge';
@@ -175,7 +175,8 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
         // paste: paste copied node
         this.pasteSub = this.pasteListener.subscribe((val: ClipboardEvent) => {
             //
-            if (!this.listenerActive || document.activeElement.tagName === 'TEXTAREA' || this.router.url !== '/flowchart') { return; }
+            if (!this.listenerActive || document.activeElement.tagName === 'TEXTAREA' ||
+            !this.router.url.startsWith('/flowchart')) { return; }
             const copiedNodes = circularJSON.parse(localStorage.getItem('mobius_copied_nodes'));
             if (copiedNodes.length === 0) {
                 this.dataService.notifyMessage(`Error: No saved nodes to be pasted!`);
@@ -210,7 +211,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
 
         // delete: delete selected edge(s)
         this.keyupSub = this.keyupListener.subscribe((event: KeyboardEvent) => {
-            if (!this.listenerActive || this.router.url !== '/flowchart') { return; }
+            if (!this.listenerActive || !this.router.url.startsWith('/flowchart')) { return; }
             if (event.key === 'Delete') {
                 if (this.selectedEdge.length > 0) {
                     this.deleteSelectedEdges();
@@ -927,7 +928,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     dragSplitEnd(e) {
-        this.splitDragSub.unsubscribe();
+        if (this.splitDragSub) { this.splitDragSub.unsubscribe(); }
         // this.canvas.style.transition = 'transform 0ms ease-in';
         this.dataService.splitVal = e.sizes[1];
     }
@@ -978,6 +979,11 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
     getFlowchart() { return this.dataService.flowchart; }
     getNode() { return this.dataService.node; }
     getFlowchartName() { return this.dataService.file.name; }
+
+    @HostListener('document:mouseleave', [])
+    onmouseleave() {
+        this.flowchartSplit.notify('end');
+    }
 
 }
 

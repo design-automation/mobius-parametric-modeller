@@ -453,8 +453,8 @@ export function Sky(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], detail:
     // --- Error Check ---
     const fn_name = 'analyze.Sky';
     let ents_arrs: TEntTypeIdx[];
-    let latitude: number = null;
-    let north: Txy = [0, 1];
+    // let latitude: number = null;
+    // let north: Txy = [0, 1];
     if (__model__.debug) {
         checkArgs(fn_name, 'origins', origins, [ArgCh.isXYZL, ArgCh.isRayL, ArgCh.isPlnL]);
         checkArgs(fn_name, 'detail', detail, [ArgCh.isInt]);
@@ -466,11 +466,11 @@ export function Sky(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], detail:
             [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
     } else {
         ents_arrs = idsBreak(entities) as TEntTypeIdx[];
-        const geolocation = __model__.attribs.query.getModelAttribVal('geolocation');
-        latitude = geolocation['latitude'];
-        if (__model__.attribs.query.hasModelAttrib('north')) {
-            north = __model__.attribs.query.getModelAttribVal('north') as Txy;
-        }
+        // const geolocation = __model__.attribs.query.getModelAttribVal('geolocation');
+        // latitude = geolocation['latitude'];
+        // if (__model__.attribs.query.hasModelAttrib('north')) {
+        //     north = __model__.attribs.query.getModelAttribVal('north') as Txy;
+        // }
     }
     // TODO
     // TODO

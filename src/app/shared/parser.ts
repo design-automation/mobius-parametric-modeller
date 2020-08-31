@@ -519,7 +519,14 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
             newString += comps[i].value;
             jsString += comps[i].value;
         }
-
+        if (i + 1 < comps.length && comps[i + 1].value === '[') {
+            const bResult = analyzePythonSlicing(comps, i + 1, vars, jsString, false);
+            if (bResult.error) { return bResult; }
+            newString += bResult.str;
+            jsString +=  bResult.jsStr;
+            // arrayName = bResult.arrayName;
+            i = bResult.i;
+        }
     // if "-" or "!" or "not" ==> add the operator then analyzeComp the next
     } else if (prefixUnaryOperators.has(comps[i].value)) {
         newString += comps[i].value; //////////
@@ -558,7 +565,18 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
         i = result.i + 1;
         newString += `(${result.str})`; //////////
         jsString += `(${result.jsStr})`; //////////
-
+        if (i + 1 < comps.length && comps[i + 1].value === '[') {
+            // look for all subsequent "." or "[]" for the variable
+            // e.g. a[:][0].b.x[-1]
+            while (i + 1 < comps.length && comps[i + 1].value === '[') {
+                const bResult = analyzePythonSlicing(comps, i + 1, vars, jsString, false);
+                if (bResult.error) { return bResult; }
+                newString += bResult.str;
+                jsString +=  bResult.jsStr;
+                // arrayName = bResult.arrayName;
+                i = bResult.i;
+            }
+        }
     // if '[' ==> array
     } else if (comps[i].value === '[') {
         if (comps[i + 1].value === ']') {

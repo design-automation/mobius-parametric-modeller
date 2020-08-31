@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { isDevMode, ViewChild } from '@angular/core';
+import { isDevMode, ViewChild, HostListener } from '@angular/core';
 import { DefaultSettings, SettingsColorMap, Locale } from './gi-viewer.settings';
 // import @angular stuff
 import { Component, Input, OnInit } from '@angular/core';
@@ -10,6 +10,8 @@ import { ModalService } from './html/modal-window.service';
 import { ColorPickerService } from 'ngx-color-picker';
 import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 import { Vector3, GridHelper } from 'three';
+import { SplitComponent } from 'angular-split';
+import { ISettings } from './data/data.threejsSettings';
 // import others
 // import { ThreejsViewerComponent } from './threejs/threejs-viewer.component';
 
@@ -27,7 +29,7 @@ export class GIViewerComponent implements OnInit {
     // model data passed to the viewer
     @Input() data: GIModel;
 
-    settings: Settings = DefaultSettings;
+    settings: ISettings = DefaultSettings;
 
     setting_colors = SettingsColorMap;
 
@@ -44,6 +46,7 @@ export class GIViewerComponent implements OnInit {
     public attribLabelVal: String;
 
     @ViewChild(ThreejsViewerComponent, { static: true }) threejs: ThreejsViewerComponent;
+    @ViewChild(SplitComponent, { static: true }) viewerSplit: SplitComponent;
     /**
      * constructor
      * @param dataService
@@ -102,7 +105,7 @@ export class GIViewerComponent implements OnInit {
             this.dataService.setThreejsScene(this.settings);
         }
         localStorage.setItem('mpm_default_settings', JSON.stringify(DefaultSettings));
-        this.temp_camera_pos = this.dataService.getThreejsScene().camera.position;
+        this.temp_camera_pos = this.dataService.getThreejsScene().perspCam.position;
     }
 
     private getSettings() {
@@ -164,13 +167,13 @@ export class GIViewerComponent implements OnInit {
         if (save) {
             const _selector = JSON.parse(localStorage.getItem('mpm_selecting_entity_type'));
             const _tab = Number(JSON.parse(localStorage.getItem('mpm_attrib_current_tab')));
-            this.settings.select = { selector: _selector, tab: _tab };
+            // this.settings.select = {selector: _selector, tab: _tab, };
+            this.settings.select.selector = _selector;
+            this.settings.select.tab = _tab;
             this.settings.camera = {
                 pos: this.temp_camera_pos,
-                pos_x: this.temp_camera_pos.x,
-                pos_y: this.temp_camera_pos.y,
-                pos_z: this.temp_camera_pos.z,
-                target: this.temp_target_pos
+                target: this.temp_target_pos,
+                ortho: false
             };
             this.dataService.getThreejsScene().settings = this.settings;
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
@@ -315,7 +318,7 @@ export class GIViewerComponent implements OnInit {
                 this.temp_target_pos.z = Math.round(value);
                 break;
             case 'camera.get_target_pos':
-                this.temp_target_pos = this.dataService.getThreejsScene().controls.target;
+                this.temp_target_pos = this.dataService.getThreejsScene().perspControls.target;
                 this.settings.camera.target = this.temp_target_pos;
                 break;
             case 'ambient_light.show': // Ambient Light
@@ -407,6 +410,33 @@ export class GIViewerComponent implements OnInit {
             case 'ground.shininess':
                 this.settings.ground.shininess = Number(value);
                 break;
+            case 'select.ps':
+                this.settings.select.enabledselector.ps = !this.settings.select.enabledselector.ps;
+                break;
+            case 'select._v':
+                this.settings.select.enabledselector._v = !this.settings.select.enabledselector._v;
+                break;
+            case 'select._e':
+                this.settings.select.enabledselector._e = !this.settings.select.enabledselector._e;
+                break;
+            case 'select._w':
+                this.settings.select.enabledselector._w = !this.settings.select.enabledselector._w;
+                break;
+            case 'select._f':
+                this.settings.select.enabledselector._f = !this.settings.select.enabledselector._f;
+                break;
+            case 'select.pt':
+                this.settings.select.enabledselector.pt = !this.settings.select.enabledselector.pt;
+                break;
+            case 'select.pl':
+                this.settings.select.enabledselector.pl = !this.settings.select.enabledselector.pl;
+                break;
+            case 'select.pg':
+                this.settings.select.enabledselector.pg = !this.settings.select.enabledselector.pg;
+                break;
+            case 'select.co':
+                this.settings.select.enabledselector.co = !this.settings.select.enabledselector.co;
+                break;
             default:
                 break;
         }
@@ -457,94 +487,108 @@ export class GIViewerComponent implements OnInit {
     setCamera(x = null, y = null, z = null) {
         const scene = this.dataService.getThreejsScene();
         if (x) {
-            scene.camera.position.x = x;
+            scene.perspCam.position.x = x;
         }
         if (y) {
-            scene.camera.position.y = y;
+            scene.perspCam.position.y = y;
         }
         if (z) {
-            scene.camera.position.z = z;
+            scene.perspCam.position.z = z;
         }
-        scene.camera.lookAt(scene.scene.position);
-        scene.camera.updateProjectionMatrix();
+        scene.perspCam.lookAt(scene.scene.position);
+        scene.perspCam.updateProjectionMatrix();
     }
     formatNumber(value) {
         if (!value) { value = 0; }
         return Math.round(value * 100) / 100;
     }
+
+    @HostListener('mouseleave', [])
+    onmouseleave() {
+        this.viewerSplit.notify('end');
+    }
 }
 
-interface Settings {
-    normals: { show: boolean, size: number };
-    axes: { show: boolean, size: number };
-    grid: {
-        show: boolean,
-        size: number,
-        pos: Vector3,
-        pos_x: number,
-        pos_y: number,
-        pos_z: number,
-    };
-    background: {
-        show: boolean,
-        background_set: number
-    };
-    positions: { show: boolean, size: number };
-    wireframe: { show: boolean };
-    tjs_summary: { show: boolean };
-    gi_summary: { show: boolean };
-    camera: {
-        pos: Vector3,
-        pos_x: number,
-        pos_y: number,
-        pos_z: number,
-        target: Vector3
-    };
-    colors: {
-        viewer_bg: string,
-        position: string,
-        position_s: string,
-        vertex_s: string,
-        face_f: string,
-        face_f_s: string,
-        face_b: string,
-        face_b_s: string
-    };
-    ambient_light: {
-        show: boolean,
-        color: string,
-        intensity: number
-    };
-    hemisphere_light: {
-        show: boolean,
-        helper: boolean,
-        skyColor: string,
-        groundColor: string,
-        intensity: number
-    };
-    directional_light: {
-        show: boolean,
-        helper: boolean,
-        color: string,
-        intensity: number,
-        shadow: boolean,
-        azimuth: number,
-        altitude: number,
-        distance: number,
-        type: string,
-        shadowSize: number
-    };
-    ground: {
-        show: boolean,
-        width: number,
-        length: number,
-        height: number,
-        color: string,
-        shininess: number
-    };
-    select: {
-        selector: object,
-        tab: number
-    };
-    version: string;
-}
+// interface Settings {
+//     normals: { show: boolean, size: number };
+//     axes: { show: boolean, size: number };
+//     grid: {
+//         show: boolean,
+//         size: number,
+//         pos: Vector3,
+//         pos_x: number,
+//         pos_y: number,
+//         pos_z: number,
+//     };
+//     background: {
+//         show: boolean,
+//         background_set: number
+//     };
+//     positions: { show: boolean, size: number };
+//     wireframe: { show: boolean };
+//     tjs_summary: { show: boolean };
+//     gi_summary: { show: boolean };
+//     camera: {
+//         pos: Vector3,
+//         pos_x: number,
+//         pos_y: number,
+//         pos_z: number,
+//         target: Vector3
+//     };
+//     colors: {
+//         viewer_bg: string,
+//         position: string,
+//         position_s: string,
+//         vertex_s: string,
+//         face_f: string,
+//         face_f_s: string,
+//         face_b: string,
+//         face_b_s: string
+//     };
+//     ambient_light: {
+//         show: boolean,
+//         color: string,
+//         intensity: number
+//     };
+//     hemisphere_light: {
+//         show: boolean,
+//         helper: boolean,
+//         skyColor: string,
+//         groundColor: string,
+//         intensity: number
+//     };
+//     directional_light: {
+//         show: boolean,
+//         helper: boolean,
+//         color: string,
+//         intensity: number,
+//         shadow: boolean,
+//         azimuth: number,
+//         altitude: number,
+//         distance: number,
+//         type: string,
+//         shadowSize: number
+//     };
+//     ground: {
+//         show: boolean,
+//         width: number,
+//         length: number,
+//         height: number,
+//         color: string,
+//         shininess: number
+//     };
+//     select: {
+//         selector: object,
+//         tab: number,
+//         ps: boolean,
+//         _v: boolean,
+//         _e: boolean,
+//         _w: boolean,
+//         _f: boolean,
+//         pt: boolean,
+//         pl: boolean,
+//         pg: boolean,
+//         co: boolean
+//     };
+//     version: string;
+// }

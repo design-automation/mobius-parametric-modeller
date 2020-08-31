@@ -12,18 +12,23 @@ import { checkNodeValidity } from '@shared/parser';
 import { IdGenerator, updateLocalViewerSettings, updateCesiumViewerSettings } from '@utils';
 import { checkMobFile } from '@shared/updateOldMobFile';
 import { SaveFileComponent } from './savefile.component';
+import { InputType } from '@models/port';
 
 @Component({
-  selector: 'load-url',
-  template:  `<button id='loadurl' class='btn'></button>`,
-  styles: [
-            `
-            button.btn{
-                visibility: hidden;
-            }
-            `
-          ]
-})
+    selector: 'load-url',
+    template:  `<button id='loadurl' class='btn' (click)="loadInputUrl()"></button>
+                <input id='loadurl_input' type='text' class='url'>`,
+    styles: [
+              `
+              button.btn{
+                  visibility: hidden;
+              };
+              input.url {
+                  visibility: hidden;
+              }
+              `
+            ]
+  })
 // Component for loading a .mob file from a specific url into mobius.
 export class LoadUrlComponent {
 
@@ -31,7 +36,27 @@ export class LoadUrlComponent {
 
 
     async loadStartUpURL(routerUrl: string): Promise<boolean> {
-        let url: any = routerUrl.split('file=');
+        const url = this.extractUrl(routerUrl);
+        if (!url) { return; }
+        if (routerUrl.indexOf('node=') !== -1) {
+            let nodeID: any = routerUrl.split('node=')[1].split('&')[0];
+            nodeID = Number(nodeID.replace(/%22|%27|'/g, ''));
+            return await this.loadURL(url, nodeID, false);
+        } else {
+            return await this.loadURL(url, null, false);
+        }
+    }
+
+    loadInputUrl() {
+        const input: HTMLInputElement = <HTMLInputElement> document.getElementById('loadurl_input');
+        const keepSettings: boolean = input.value.indexOf('keepSettings') !== -1;
+        const url = this.extractUrl(input.value);
+        this.loadURL(url, null, keepSettings, true);
+        input.value = '';
+    }
+
+    extractUrl(rawUrl: string) {
+        let url: any = rawUrl.split('file=');
         if (url.length <= 1 ) {
             return false;
         }
@@ -49,18 +74,10 @@ export class LoadUrlComponent {
         if (url.indexOf('dropbox') !== -1) {
             url = url.replace('www', 'dl').replace('dl=0', 'dl=1');
         }
-        if (routerUrl.indexOf('node=') !== -1) {
-            let nodeID: any = routerUrl.split('node=')[1].split('&')[0];
-            nodeID = Number(nodeID.replace(/%22|%27|'/g, ''));
-            return await this.loadURL(url, nodeID);
-        } else {
-            return await this.loadURL(url);
-        }
+        return url;
     }
 
-
-
-    async loadURL(url: string, nodeID?: number): Promise<boolean> {
+    async loadURL(url: string, nodeID?: number, keepSettings?: boolean, newParams?: any): Promise<boolean> {
         const p = new Promise((resolve) => {
             const request = new XMLHttpRequest();
 
@@ -108,10 +125,12 @@ export class LoadUrlComponent {
         SaveFileComponent.clearModelData(this.dataService.flowchart, null);
         delete this.dataService.file.flowchart;
         this.dataService.file = loadeddata;
-        if (updateLocalViewerSettings(loadeddata.settings)) {
-            this.dataService.viewerSettingsUpdated = true;
+        if (!keepSettings) {
+            if (updateLocalViewerSettings(loadeddata.settings)) {
+                this.dataService.viewerSettingsUpdated = true;
+            }
+            updateCesiumViewerSettings(loadeddata.settings);
         }
-        updateCesiumViewerSettings(loadeddata.settings);
         this.dataService.newFlowchart = true;
         if ((nodeID || nodeID === 0) && nodeID >= 0 && nodeID < loadeddata.flowchart.nodes.length) {
             loadeddata.flowchart.meta.selected_nodes = [nodeID];
@@ -134,6 +153,25 @@ export class LoadUrlComponent {
         for (const node of loadeddata.flowchart.nodes) {
             checkNodeValidity(node);
         }
+        if (newParams) {
+            for (const prod of this.dataService.flowchart.nodes[0].procedure) {
+                if (prod.type === ProcedureTypes.Constant) {
+                    if (newParams[prod.args[0].value] !== undefined) {
+                        prod.args[1].value = newParams[prod.args[0].value];
+                    }
+                    if (newParams[prod.args[0].jsValue] !== undefined) {
+                        prod.args[1].value = newParams[prod.args[0].jsValue];
+                    }
+                    if (typeof prod.args[1].jsValue === 'object') {
+                        prod.args[1].value = JSON.stringify(prod.args[1].jsValue);
+                    }
+                    if (prod.meta.inputMode === InputType.SimpleInput || prod.meta.inputMode === InputType.URL) {
+                        prod.args[1].jsValue = prod.args[1].value;
+                    }
+                }
+            }
+
+        }
         setTimeout(() => {
             const zoomFlowchart = document.getElementById('zoomToFit');
             if (zoomFlowchart) { zoomFlowchart.click(); }
@@ -145,6 +183,7 @@ export class LoadUrlComponent {
 
         return true;
     }
+
 
     async loadTempFile() {
         let f = await SaveFileComponent.loadFromFileSystem('___TEMP___.mob');

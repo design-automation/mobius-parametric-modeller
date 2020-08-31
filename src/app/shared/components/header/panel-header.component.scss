@@ -280,7 +280,7 @@ button.mat-menu-item:hover{
         top: 20%;
         max-height: 75vh;
         max-width: 805px;
-        min-width: 405px;
+        min-width: 588px;
         padding: 5px;
         overflow: scroll;
     
@@ -320,6 +320,22 @@ button.mat-menu-item:hover{
                 // color: $color3;
             }
         }
+        .downloadBackupButton{
+            width: 34px;
+            width: fit-content;
+            margin-bottom: 2px;
+            margin-left: 2px;
+            padding: 0px 2px 0px 8px;
+            background-color: $color5;
+            color: $color1;
+            display: inline-block;
+
+            .icon{
+                font-size: 18px;
+                padding-top: 5px;
+                height: 18px;
+            }
+        }
         .deleteBackupButton{
             width: 34px;
             width: fit-content;
@@ -348,6 +364,38 @@ button.mat-menu-item:hover{
             position: absolute;
             label {
                 top: 3px;
+            }
+        }
+        .tab{
+            overflow: hidden;
+            border: none;
+            background-color: $color5;
+            margin-bottom: 5px;
+
+            .tabLinks {
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 2px;
+                font-size: 14px;
+                width: 100px;
+
+                :hover {
+                    background-color: $color4;
+                }
+
+                &.active {
+                    background-color: $color3;
+                }
+            }
+        }
+        .tabContent {
+            display: none;
+
+            &.active {
+                display: block;
             }
         }
     }
@@ -456,16 +504,5 @@ button.mat-menu-item:hover{
             background-color: $color6;
         }
     }
-    .creditsDialog{
-        font-family: 12px sans-serif;
-        color: $color1;
-        background-color: $color6;
-        top: 30%;
-        width: 605px;
-        padding: 5px;
-    }
 }
 
-#openCredits{
-    display: none;
-}

@@ -34,7 +34,7 @@ export const cesium_default_settings: CesiumSettings = {
         'right': {'x': 0, 'y': 0, 'z': 0}
     },
     'time': {
-        'date': (new Date()).toISOString().split('T')[0]
+        'date': (new Date()).toISOString().split(':').slice(0, 2).join(':'),
     },
     'cesium': {
         'ion': '',

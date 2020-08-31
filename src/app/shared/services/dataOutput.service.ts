@@ -10,7 +10,8 @@ export class DataOutputService {
 
     getViewerData(node: INode, getViewOutput: boolean) {
         const webWorker = new WebWorkerService();
-        if (!node || !node.enabled || !node.model) { return this.emptyModel; }
+        if (!node || !node.enabled || !node.model) {
+            return null; }
         if (this.iModel.nodeID === node.id && this.iModel.getOutput === getViewOutput) {
             return this.iModel.model;
         }

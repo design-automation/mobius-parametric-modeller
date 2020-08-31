@@ -1,5 +1,5 @@
 <div class='container' id='view-editor-container'>
-    <as-split direction="horizontal" (dragEnd)='setSplit($event)'>
+    <as-split #editorSplit direction="horizontal" (dragEnd)='setSplit($event)'>
         <as-split-area [size]="100 - getSplit()">
             <panel-header [flowchart]='getFlowchart()'></panel-header>
             <!-- viewchild content -->
@@ -42,10 +42,10 @@
                             <div class = 'procedureln--container'  [ngClass]="{'procedureln--container-start': getNode().type == 'start'}">
                                 <!-- list of procedure items for all nodes -->
                                 <div id='modelViewButton--container' *ngIf='getNode().type != "start"'>
-                                    <button (click)='toggleShowFunc()'>
+                                    <li (click)='toggleShowFunc()'>
                                         <span *ngIf='getNode().state.show_func'>Local Function</span>
                                         <span *ngIf='!getNode().state.show_func'>Local Function - Hidden</span>
-                                    </button>
+                                    </li>
                                 </div>
                                 <div class = 'pro-container' *ngIf='getNode().state.show_func' [hidden]="getNode().type == 'start' && !getViewOutput()">
                                     <procedure-item 
@@ -57,10 +57,10 @@
                                     <br>
                                 </div>
                                 <div id='modelViewButton--container'>
-                                    <button (click)='toggleShowCode()'> 
+                                    <li (click)='toggleShowCode()'> 
                                         <span *ngIf='getNode().state.show_code'>Main Code</span>
                                         <span *ngIf='!getNode().state.show_code'>Main Code - Hidden</span>
-                                    </button>
+                                    </li>
                                 </div>
                                 <div class = 'pro-container' *ngIf='getNode().state.show_code' [hidden]="getNode().type == 'start' && !getViewOutput()">
                                     <procedure-item 

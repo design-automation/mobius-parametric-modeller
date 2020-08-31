@@ -35,10 +35,10 @@ export class PanelHeaderComponent implements OnDestroy {
 
     constructor(private dataService: DataService, private keyboardService: KeyboardService, private router: Router) {
         SaveFileComponent.updateBackupList();
-        if (this.router.url === '/about') {
+        if (this.router.url.startsWith('/about')) {
             this.executeCheck = false;
             this.nodeListCheck = false;
-        } else if (this.router.url === '/gallery') {
+        } else if (this.router.url.startsWith('/gallery')) {
             this.executeCheck = true;
             this.nodeListCheck = false;
         } else {
@@ -74,7 +74,7 @@ export class PanelHeaderComponent implements OnDestroy {
 
     changeNode(index: number) {
         this.dataService.flowchart.meta.selected_nodes = [index];
-        if (this.router.url === '/editor') {
+        if (this.router.url.startsWith('/editor')) {
             this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[index].id);
             if ((index === 0 || index === this.dataService.flowchart.nodes.length - 1)) {
                 setTimeout(() => {
@@ -413,22 +413,47 @@ export class PanelHeaderComponent implements OnDestroy {
         }
     }
 
-    getBackupFiles() {
+    getBackupFiles(onlyMobFiles = true) {
         const items = localStorage.getItem('mobius_backup_list');
         // console.log(items)
         this.backupDates = JSON.parse(localStorage.getItem('mobius_backup_date_dict'));
         if (!items) {
             return [];
         }
-        return JSON.parse(items);
+        const all_items = JSON.parse(items);
+        const return_items = [];
+        for (const i of all_items) {
+            if (i === '___TEMP___.mob') { continue; }
+            if (i.endsWith('.mob') === onlyMobFiles) {
+                return_items.push(i);
+            }
+        }
+        return return_items;
     }
 
+    openTab(evt, tabID: string) {
+        let i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName('tabContent');
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].className = tabcontent[i].className.replace(' active', '');
+        }
+        tablinks = document.getElementsByClassName('tabLinks');
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(' active', '');
+        }
+        document.getElementById(tabID).className += ' active';
+        evt.currentTarget.className += ' active';
+        this.selectedBackups = [];
+    }
 
     deleteBackup(event: MouseEvent, filecode: string) {
         event.stopPropagation();
+        console.log(this.selectedBackups)
         for (filecode of this.selectedBackups) {
             SaveFileComponent.deleteFile(filecode);
-            const items: string[] = this.getBackupFiles();
+            const itemsString = localStorage.getItem('mobius_backup_list');
+            if (!itemsString) { continue; }
+            const items: string[] = JSON.parse(itemsString);
             const i = items.indexOf(filecode);
             if (i !== -1) {
                 items.splice(i, 1);
@@ -439,18 +464,6 @@ export class PanelHeaderComponent implements OnDestroy {
             }
         }
         this.selectedBackups = [];
-
-        // event.stopPropagation();
-        // SaveFileComponent.deleteFile(filecode);
-        // const items: string[] = this.getBackupFiles();
-        // const i = items.indexOf(filecode);
-        // if (i !== -1) {
-        //     items.splice(i, 1);
-        //     localStorage.setItem('mobius_backup_list', JSON.stringify(items));
-        //     const itemDates = JSON.parse(localStorage.getItem('mobius_backup_date_dict'));
-        //     itemDates[filecode] = (new Date()).toLocaleString();
-        //     localStorage.setItem('mobius_backup_date_dict', JSON.stringify(itemDates));
-        // }
     }
 
     downloadBackup(event: MouseEvent, filecode: string) {
@@ -470,6 +483,7 @@ export class PanelHeaderComponent implements OnDestroy {
             reader.readAsText(selectedFile);
         });
         SaveFileComponent.saveToLocalStorage(selectedFile.name, <string> await p);
+        (<HTMLInputElement>document.getElementById('addBackup')).value = '';
     }
 
     selectBackup(backup: string, event: MouseEvent) {
@@ -579,23 +593,24 @@ export class PanelHeaderComponent implements OnDestroy {
 
     @HostListener('window:copy', ['$event'])
     onWindowCopy(event: KeyboardEvent) {
-        if (this.router.url === '/editor') {
+        if (this.router.url.startsWith('/editor')) {
             document.getElementById('copyProdButton').click();
         }
     }
 
     @HostListener('window:cut', ['$event'])
     onWindowCut(event: KeyboardEvent) {
-        if (this.router.url === '/editor') {
+        if (this.router.url.startsWith('/editor')) {
             document.getElementById('cutProdButton').click();
         }
     }
     @HostListener('window:paste', ['$event'])
     onWindowPaste(event: KeyboardEvent) {
-        if (this.router.url === '/editor') {
+        if (this.router.url.startsWith('/editor')) {
             document.getElementById('pasteProdButton').click();
         }
     }
+
 
     saveBackup() {
         try {
@@ -865,5 +880,24 @@ export class PanelHeaderComponent implements OnDestroy {
     addGlobalFunc(event: MouseEvent) {
         document.getElementById('selectImportFile').click();
         this.openHeaderDialog(event, 'globalfunc');
+    }
+
+    updateNode() {
+        const nodeSelInput = <HTMLInputElement> document.getElementById('hidden_node_selection');
+        const selectedNode = nodeSelInput.value;
+        nodeSelInput.value = null;
+        if (selectedNode === this.dataService.node.name) { return; }
+        for (let i = 0; i < this.dataService.flowchart.nodes.length; i ++) {
+            const node = this.dataService.flowchart.nodes[i];
+            if (node.name === selectedNode) {
+                this.dataService.flowchart.meta.selected_nodes = [i];
+                return;
+            }
+        }
+    }
+
+    notifyMessage(event) {
+        this.dataService.notifyMessage(event.target.value);
+        event.target.value = '';
     }
 }

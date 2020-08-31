@@ -1,5 +1,5 @@
 <div class='container'>
-    <as-split direction="horizontal" (dragEnd)='setSplit($event)'>
+    <as-split #dashboardSplit direction="horizontal" (dragEnd)='setSplit($event)'>
         
         <as-split-area [size]="100 - getSplit()">
             <panel-header [flowchart]='getFlowchart()'></panel-header>

@@ -673,77 +673,79 @@
     </div>
 
     <!-- LocalFuncDef -->
-    <div class='container--line' 
-    [class.strong]="true"
-    [class.selected]="data.selected"
-    [class.lastSelected]="data.lastSelected"
-    [class.error]="data.hasError"
-    [class.disabled]="!data.enabled"
-    [class.printing]='data.print'
-    [class.selectGeom]='data.selectGeom'
-    [ngSwitch]="data.type"
-    (click)='emitSelect($event, data)'
-    (mousedown)='disableShift($event)'
-    (mouseenter)='onenter($event)'
-    (mouseleave)='onleave($event)'
-    *ngSwitchCase="ProcedureTypes.LocalFuncDef">
-        <div class='container--item' >
-            <div class='line--item'>
-                <div class='basic-function-text'>Def  </div>
-                <input class='input--arg' 
-                *ngIf="data.args[0].name[0] !== '_'" 
-                [(ngModel)]='data.args[0].value'
-                [class.error]='data.args[0].invalidVar'
-                [class.linked]='data.args[0].linked'
-                [class.disabled]='disableInput'
-                (blur)='varMod(0)'
-                placeholder={{data.args[0].name}}
-                [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
-                >
-                <span class='function-text'>  Function</span>
-                <ng-container *ngFor='let p of data.args;let i=index'>
-                    <input class='input--var' 
-                    *ngIf="p.name[0] !== '_' && i > 0" 
-                    [(ngModel)]='p.value'
-                    [class.error]='p.invalidVar'
-                    [class.linked]='p.linked'
+    <ng-container *ngSwitchCase="ProcedureTypes.LocalFuncDef">
+        <div class='container--line' 
+        [class.strong]="true"
+        [class.selected]="data.selected"
+        [class.lastSelected]="data.lastSelected"
+        [class.error]="data.hasError"
+        [class.disabled]="!data.enabled"
+        [class.printing]='data.print'
+        [class.selectGeom]='data.selectGeom'
+        [ngSwitch]="data.type"
+        (click)='emitSelect($event, data)'
+        (mousedown)='disableShift($event)'
+        (mouseenter)='onenter($event)'
+        (mouseleave)='onleave($event)'>
+            <div class='container--item' >
+                <div class='line--item'>
+                    <div class='basic-function-text'>Def  </div>
+                    <input class='input--arg' 
+                    *ngIf="data.args[0].name[0] !== '_'" 
+                    [(ngModel)]='data.args[0].value'
+                    [class.error]='data.args[0].invalidVar'
+                    [class.linked]='data.args[0].linked'
                     [class.disabled]='disableInput'
-                    (focus)='onInputFocus(i, true)'
-                    (blur)='varMod(i)'
-                    placeholder={{p.name}}
-                    [style.width.px]='inputSize(p.value||p.name)'
+                    (blur)='varMod(0)'
+                    placeholder={{data.args[0].name}}
+                    [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
                     >
-                </ng-container>
+                    <span class='function-text'>  Function</span>
+                    <ng-container *ngFor='let p of data.args;let i=index'>
+                        <input class='input--var' 
+                        *ngIf="p.name[0] !== '_' && i > 0" 
+                        [(ngModel)]='p.value'
+                        [class.error]='p.invalidVar'
+                        [class.linked]='p.linked'
+                        [class.disabled]='disableInput'
+                        (focus)='onInputFocus(i, true)'
+                        (blur)='varMod(i)'
+                        placeholder={{p.name}}
+                        [style.width.px]='inputSize(p.value||p.name)'
+                        >
+                    </ng-container>
+                </div>
+                                    
+                <div class='container--nested' *ngIf='checkCollapse()'>
+                    <procedure-item 
+                        *ngFor="let line of data?.children; let idx=index" 
+                        [data]="line"
+                        [disableInput]="disableInput"
+                        (eventAction)='performAction($event, idx)'
+                        ></procedure-item>
+                </div>
+        
             </div>
-                                
-            <div class='container--nested' *ngIf='checkCollapse()'>
-                <procedure-item 
-                    *ngFor="let line of data?.children; let idx=index" 
-                    [data]="line"
-                    [disableInput]="disableInput"
-                    (eventAction)='performAction($event, idx)'
-                    ></procedure-item>
+            <div class = "btn-container">
+                <div class = "btns">
+                    <!-- collapse/expand local function button-->
+                    <button class='btn' mat-icon-button title="collapse/expand function" (click)='toggleCollapse($event)'>
+                        <mat-icon class='icon' svgIcon='cDnArrow' *ngIf='data.meta.otherInfo["collapsed"]'></mat-icon>
+                        <mat-icon class='icon' svgIcon='cUpArrow' *ngIf='!data.meta.otherInfo["collapsed"]'></mat-icon>
+                    </button>
+                    <!-- add arg button-->
+                    <button class='btn' mat-icon-button title="Add Argument" (click)='addArg($event)'>
+                        <mat-icon class='icon' svgIcon='cAdd'></mat-icon>
+                    </button>
+                    <!-- remove arg button-->
+                    <button *ngIf='data.argCount > 1' class='btn' mat-icon-button title="Remove Argument" (click)='rmArg($event)'>
+                        <mat-icon class='icon' svgIcon='cRemove'></mat-icon>
+                    </button>
+                </div>
             </div>
-    
         </div>
-        <div class = "btn-container">
-            <div class = "btns">
-                <!-- collapse/expand local function button-->
-                <button class='btn' mat-icon-button title="collapse/expand function" (click)='toggleCollapse($event)'>
-                    <mat-icon class='icon' svgIcon='cDnArrow' *ngIf='data.meta.otherInfo["collapsed"]'></mat-icon>
-                    <mat-icon class='icon' svgIcon='cUpArrow' *ngIf='!data.meta.otherInfo["collapsed"]'></mat-icon>
-                </button>
-                <!-- add arg button-->
-                <button class='btn' mat-icon-button title="Add Argument" (click)='addArg($event)'>
-                    <mat-icon class='icon' svgIcon='cAdd'></mat-icon>
-                </button>
-                <!-- remove arg button-->
-                <button *ngIf='data.argCount > 1' class='btn' mat-icon-button title="Remove Argument" (click)='rmArg($event)'>
-                    <mat-icon class='icon' svgIcon='cRemove'></mat-icon>
-                </button>
-            </div>
-        </div>
-    </div>
+        <hr>
+    </ng-container>
 
     <!-- LocalFuncReturn -->
     <div class='container--line' 

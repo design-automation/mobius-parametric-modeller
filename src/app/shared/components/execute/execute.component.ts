@@ -43,6 +43,29 @@ function duplicateModel(model){
     return result;
 }
 `;
+// export const mergeInputsFunc = `
+// function mergeInputs(models){
+//     const start = performance.now()
+//     let result = __modules__.${_parameterTypes.new}();
+//     try {
+//         result.debug = __debug__;
+//     } catch (ex) {}
+//     for (let model of models){
+//         __modules__.${_parameterTypes.merge}(result, model);
+//     }
+//     console.log('merge time:', (performance.now() - start ) / 1000, 'sec')
+//     return result;
+// }
+// function duplicateModel(model){
+//     const start = performance.now()
+//     const result = model.clone();
+//     try {
+//         result.debug = __debug__;
+//     } catch (ex) {}
+//     console.log('clone time:', (performance.now() - start ) / 1000, 'sec')
+//     return result;
+// }
+// `;
 export const printFunc = `
 function printFunc(_console, name, value){
     let val;
@@ -246,6 +269,7 @@ export class ExecuteComponent {
         this.startTime = performance.now();
         this.triggerCheck = false;
         this.terminated = null;
+        this.dataService.timelineDefault = true;
 
         if (this.dataService.consoleClear) {
             this.dataService.clearLog();
@@ -607,7 +631,15 @@ export class ExecuteComponent {
         document.getElementById('spinner-off').click();
         const category = this.isDev ? 'dev' : 'execute';
         this.googleAnalyticsService.trackEvent(category, 'successful', 'click', performance.now() - this.startTime);
-        console.log('total execute time:', (performance.now() - this.startTime) / 1000, 'sec');
+        const duration: number = Math.round(performance.now() - this.startTime);
+        let duration_msg: string;
+        if (duration < 1000)  {
+            duration_msg = '<p style="padding: 2px 0px 2px 0px;"><i>Total Execute Time: ' + duration + ' milliseconds.</i></p>';
+        } else {
+            duration_msg = '<p style="padding: 2px 0px 2px 0px;"><i>Total Execute Time: ' + duration / 1000 + ' seconds.</i></p>';
+        }
+        this.dataService.log(duration_msg);
+        console.log('total execute time:', duration / 1000, 'sec');
     }
 
 
@@ -696,7 +728,7 @@ export class ExecuteComponent {
             //  4. main node code
 
             // print the code
-            this.dataService.log(`<h3  style="padding: 10px 0px 2px 0px;">Executing node: ${node.name}</h3>`);
+            this.dataService.log(`<h3  style="padding: 10px 0px 2px 5px; background-color: #B3B3B3; color: #373737 ">Executing node: ${node.name}</h3>`);
             if (DEBUG) {
                 console.log(`______________________________________________________________\n/*     ${node.name.toUpperCase()}     */\n`);
                 console.log(fnString);

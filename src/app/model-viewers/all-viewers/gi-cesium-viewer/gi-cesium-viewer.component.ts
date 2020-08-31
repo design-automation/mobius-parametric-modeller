@@ -100,11 +100,12 @@ export class GICesiumViewerComponent implements OnInit {
                 this.settings.camera.right.z = camera_right.z;
                 break;
             case 'time.date':
-                this.settings.time.date = Cesium.JulianDate.toIso8601(
-                    this.dataService.getCesiumScene()._viewer.clock.currentTime).split('T')[0];
+                const current_time = Cesium.JulianDate.toIso8601(this.dataService.getCesiumScene()._viewer.clock.currentTime).split(':');
+                this.settings.time.date = current_time[0] + ':' + current_time[1];
                 break;
             case 'time.current':
-                this.settings.time.date = (new Date()).toISOString().split('T')[0];
+                const reset_time = (new Date()).toISOString().split(':');
+                this.settings.time.date = reset_time[0] + ':' + reset_time[1];
                 break;
         }
     }

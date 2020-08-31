@@ -43,6 +43,7 @@ export function ModelPurge(__model__: GIModel): void {
  * @returns Text that summarises what is in the model, click print to see this text.
  */
 export function ModelInfo(__model__: GIModel): string {
+    console.log(__model__.geom.query.getObjVisGroups());
     let info = '<h4>Model Information:</h4>';
     info += '<ul>';
     // model attribs
@@ -446,10 +447,19 @@ export function ModelCompare(__model__: GIModel, gi_model: string, method: _ECOm
 export function ModelCheck(__model__: GIModel): string {
     const check: string[] = __model__.check();
     if (check.length > 0) {
-        console.log(__model__);
         return String(check);
     }
-    console.log(__model__);
     return 'No internal inconsistencies have been found.';
+}
+// ================================================================================================
+/**
+ * Post a message to the parent window.
+ *
+ * @param __model__
+ * @param data The data to send, a list or a dictionary.
+ * @returns Text that summarises what is in the model, click print to see this text.
+ */
+export function SendData(__model__: GIModel, data: any): void {
+    window.parent.postMessage(data, '*');
 }
 // ================================================================================================

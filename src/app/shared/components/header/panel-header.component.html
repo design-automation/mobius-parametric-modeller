@@ -5,24 +5,16 @@
         <file-new></file-new>
         <file-save></file-save>
         <file-load></file-load>
+        <load-url></load-url>
+        <window-message></window-message>
         <javascript-save></javascript-save>
+        <input id='hidden_node_selection' value=''>
+        <input id='hidden_node_selection_button' (click)=updateNode() >
+        <input id='hidden_notify_button' value='' (click)=notifyMessage($event) >
     </div>
 
     <!-- buttons -->
     <div class='header-btn-group'>
-
-        <!-- top left dropdown menu -->
-        <!-- <div class="dropmenu"> -->
-            <!-- dropdown menu for new file, save file, loaf file-->
-            <!-- <div> -->
-                <!--
-                <button id='dropdownButton' class='btn' mat-icon-button (click)='openDropdownMenu($event)'>
-                    <mat-icon svgIcon="cMenu" id='dropdownIcon'></mat-icon>
-                </button>
-                -->
-            <!-- </div>
-        </div> -->
-                        
 
         <!-- buttons to navigate to the 4 pages -->
         <button class='btn' [class.active]='getUrl()=="/about"' [routerLink]="'/about'" title='About'>
@@ -116,14 +108,12 @@
                 <button (click)="openHeaderDialog($event, 'settings')"
                 title="Generate Möbius view url from url of .mob file">
                     <mat-icon class='mat-icon-svg' svgIcon="settings"></mat-icon>
-                    <!-- <mat-icon>settings</mat-icon> -->
                     Settings
                 </button>
             </div>
         </div>
     </div>
 </div>
-<!-- <button id='openCredits' (click)="openHeaderDialog($event, 'credits')" title="credits"></button> -->
 
 <dialog id='headerDialog'>
     <div class='genUrlDialog' *ngIf='checkDialog("url")'>
@@ -151,7 +141,6 @@
                 <input id='radio4' type='radio' name='displayType' value='' [(ngModel)]='urlSet[2]'/> <label for='radio4'>Show Dashboard</label> 
                 <hr>
                 <ng-container *ngIf='urlSet[2] == "&node="'>
-                    <!-- Shown Node Index: <input [(ngModel)]='urlSet[3]'/> -->
                     Node Shown: <select [(ngModel)]='urlSet[3]'>
                         <option *ngFor='let node of urlNodes; let i = index' value={{i}}>{{i}}. {{node.name}}</option>
                     </select>
@@ -188,19 +177,34 @@
     <div class='loadBackupDialog' *ngIf='checkDialog("backup")'>
         <p>Select File from Local Storage: </p>
         <br>
-        <div *ngFor='let backup of getBackupFiles()'>
-            <ng-container *ngIf='backup!="___TEMP___.mob"'>
+        <div class="tab">
+            <button class="tabLinks active" (click)="openTab($event, 'mobFilesContainer')">Mob Files</button>
+            <button class="tabLinks" (click)="openTab($event, 'otherFilesContainer')">Others</button>
+        </div>
+        <div id="mobFilesContainer" class='tabContent active'>
+            <div *ngFor='let backup of getBackupFiles()'>
                 <div class='div--chbox'>
                     <input class="selectedBackup" type="checkbox" name={{backup}} [checked]='selectedBackup(backup)'>
                     <label for={{backup}} (click)="selectBackup(backup, $event)" (mousedown)="prevDef($event)"></label>
                 </div>
                 <button class='loadBackupButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backup}}</button>
                 <button class='backupDateButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backupDates[backup]}}</button>
-            </ng-container>
+            </div>
         </div>
+        <div id="otherFilesContainer" class='tabContent'>
+            <div *ngFor='let backup of getBackupFiles(false)'>
+                <div class='div--chbox'>
+                    <input class="selectedBackup" type="checkbox" name={{backup}} [checked]='selectedBackup(backup)'>
+                    <label for={{backup}} (click)="selectBackup(backup, $event)" (mousedown)="prevDef($event)"></label>
+                </div>
+                <button class='loadBackupButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backup}}</button>
+                <button class='backupDateButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backupDates[backup]}}</button>
+            </div>
+        </div>
+        <br>
         <button id='addBackupButton' onclick="document.getElementById('addBackup').click();">+</button>
         <input id='addBackup' type="file" (change)="addBackup()" style=" display: none;"/>
-        <button class='deleteBackupButton' (click)="downloadBackup($event)"><mat-icon class='icon'>cloud_download_outline</mat-icon></button>
+        <button class='downloadBackupButton' (click)="downloadBackup($event)"><mat-icon class='icon'>cloud_download_outline</mat-icon></button>
         <button class='deleteBackupButton' (click)="deleteBackup($event)"><mat-icon class='icon'>delete_outline</mat-icon></button>
     </div>
     <div class='globalFuncDialog' *ngIf='checkDialog("globalfunc")'>
@@ -298,15 +302,5 @@
         <br>
         <button class='settingsButton' (click)="updateSettings($event, backup)">Apply</button>
         <button class='settingsButton' (click)="closeDialog()">Cancel</button>
-    </div>
-    <div class='creditsDialog' *ngIf='checkDialog("credits")'>
-        <p>Credits to: </p>
-        <br>
-        <p>Skybox background:</p>
-        <p>&nbsp; _ "stars" by Quinton Reeves</p>
-        <p>&nbsp; _ "sunsetflat" by LedIris (07/08/2009)</p>
-        <p>&nbsp; _ "skyhigh" by Pieter Verhoeven</p>
-        <p>&nbsp; _ "interstellar", "miramar", and "stormydays" by Jockum "hipshot" Skoglund</p>
-        <p>&nbsp; &nbsp; &nbsp; &nbsp; hipshot@zfight.com / www.zfight.com</p>
     </div>
 </dialog>

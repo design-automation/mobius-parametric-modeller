@@ -138,7 +138,7 @@ export class GIAttribsIO {
             let attrib_has_ents = false;
             for (const ents_i_value of ents_i_values) {
                 ents_i_value[0] = ents_i_value[0].map( ent_i => geom_map.get(ent_i) ); // shift
-                attrib_has_ents = ents_i_value[0].length > 0;
+                if (!attrib_has_ents && ents_i_value[0].length > 0) { attrib_has_ents = true; }
             }
             if (attrib_has_ents) {
                 // get the name

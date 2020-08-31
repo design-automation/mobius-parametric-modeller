@@ -16,7 +16,7 @@ import { AppComponent } from './app.component';
 import {ViewEditorModule, ViewDashboardModule, ViewGalleryModule,
     ViewEditorComponent, ViewDashboardComponent, ViewGalleryComponent,
     ViewFlowchartComponent, ViewFlowchartModule,
-    ViewAboutComponent, ViewAboutModule, ViewPublishModule, ViewPublishComponent} from '@views';
+    ViewAboutComponent, ViewAboutModule, ViewPublishModule, ViewPublishComponent, ViewMinimalModule, ViewMinimalComponent} from '@views';
 import { AppRoutingModule } from './app-routing.module';
 import { GoogleAnalyticsService } from '@shared/services/google.analytics';
 import { DataCesiumService } from '../model-viewers/all-viewers/gi-cesium-viewer/data/data.cesium.service';
@@ -43,6 +43,7 @@ import { CytoscapeService } from '../model-viewers/all-viewers/cytoscape-viewer/
         ViewEditorModule,
         ViewDashboardModule,
         ViewPublishModule,
+        ViewMinimalModule,
         ViewFlowchartModule,
         ViewAboutModule,
         SharedModule,
@@ -51,6 +52,7 @@ import { CytoscapeService } from '../model-viewers/all-viewers/cytoscape-viewer/
         ViewEditorComponent,
         ViewDashboardComponent,
         ViewPublishComponent,
+        ViewMinimalComponent,
         ViewFlowchartComponent,
         ViewGalleryComponent,
         ViewAboutComponent,

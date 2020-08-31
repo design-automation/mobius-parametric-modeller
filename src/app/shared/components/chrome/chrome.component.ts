@@ -1,6 +1,7 @@
 
 import { Component, AfterViewInit, } from '@angular/core';
 import { Router } from '@angular/router';
+import { DataService } from '@shared/services';
 
 @Component({
     selector: 'chrome',
@@ -11,7 +12,7 @@ export class ChromeComponent implements AfterViewInit {
 
     check: boolean;
 
-    constructor(private router: Router) {
+    constructor(private router: Router, private dataservice: DataService) {
 
     }
 
@@ -26,8 +27,10 @@ export class ChromeComponent implements AfterViewInit {
         // @ts-ignore
         const isOpera = typeof window.opr !== 'undefined';
         const isIEedge = winNav.userAgent.indexOf('Edge') > -1;
-        const isIOSChrome = winNav.userAgent.match('CriOS');
-        if (isIOSChrome) {
+        const isIOSChrome = winNav.userAgent.indexOf('CriOS') > -1;
+        const isChrome = winNav.userAgent.indexOf('Chrome') > -1;
+
+        if (isIOSChrome || isChrome) {
         } else if (
           isChromium !== null &&
           typeof isChromium !== 'undefined' &&

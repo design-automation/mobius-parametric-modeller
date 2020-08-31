@@ -2,8 +2,6 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { CesiumSettings } from '../gi-cesium-viewer.settings';
 import { EEntType, Txyz, TAttribDataTypes, LONGLAT } from '@libs/geo-info/common';
 // import { HereMapsImageryProvider } from './HereMapsImageryProvider.js';
-import Shape from '@doodle3d/clipper-js';
-import { DataService } from '@shared/services';
 
 /**
  * Cesium data
@@ -82,10 +80,12 @@ export class DataCesium {
                 // selectedTerrainProviderViewModel : terrainViewModels[1]
             }
         );
-        this._viewer.scene.globe.depthTestAgainstTerrain = true;
+        this._viewer.scene.postProcessStages.fxaa.enabled = true;
+        this._viewer.scene.globe.depthTestAgainstTerrain = false;
         this._viewer.clock.currentTime.secondsOfDay = 50000;
-        this._viewer.shadowMap.maxmimumDistance = 10000;
-        this._viewer.shadowMap.size = 2048;
+        this._viewer.shadowMap.maxmimumDistance = 500;
+        this._viewer.shadowMap.size = 6144;
+        this._viewer.shadowMap.cascadesEnabled = false;
         this._viewer.shadowMap.softShadows = false; // if true, causes some strange effects
         // document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
 
@@ -293,6 +293,12 @@ export class DataCesium {
         if (model) {
             // get each polygon
             const pgons_i: number[] = model.geom.query.getEnts(EEntType.PGON, false);
+            if (pgons_i.length > 100000) {
+                const notify = <HTMLInputElement> document.getElementById('hidden_notify_button');
+                notify.value = 'Model too big to be rendered by Cesium';
+                notify.click();
+                return;
+            }
             // get each triangle
             const lines_instances: any[] = [];
             const tris_instances: any[] = [];
@@ -482,10 +488,14 @@ export class DataCesium {
             if (allPosis.length > 0) {
                 Cesium.BoundingSphere.fromPoints(allPosis, sphere);
             }
-            this._viewer.camera.flyToBoundingSphere(sphere, {
-                duration: 0,
-                endTransform: Cesium.Matrix4.IDENTITY
-            });
+            const dist = this._viewer.camera.distanceToBoundingSphere(sphere);
+            // if (!document.getElementById('minimal') || this._starting) {
+            if (dist > 8000) {
+                this._viewer.camera.flyToBoundingSphere(sphere, {
+                    duration: 0,
+                    endTransform: Cesium.Matrix4.IDENTITY
+                });
+            }
             this._camera = [sphere, this._viewer.camera];
             if (this.settings.camera && this.settings.updated) {
                 const pos = this.settings.camera.pos;
@@ -603,10 +613,18 @@ export class DataCesium {
         if (newSetting.time) {
             if (newSetting.time.date) {
                 this.settings.time.date = newSetting.time.date;
-                Cesium.JulianDate.fromIso8601(this.settings.time.date, this._viewer.clock.currentTime);
-                Cesium.JulianDate.addDays(this._viewer.clock.currentTime, -1, this._viewer.clock.startTime);
-                Cesium.JulianDate.addDays(this._viewer.clock.currentTime, 1, this._viewer.clock.stopTime);
-                this._viewer.timeline.zoomTo(this._viewer.clock.startTime, this._viewer.clock.stopTime);
+                if (this.settings.time.date.indexOf('T') === -1) {
+                    Cesium.JulianDate.fromIso8601(this.settings.time.date, this._viewer.clock.currentTime);
+                    Cesium.JulianDate.addDays(this._viewer.clock.currentTime, -1, this._viewer.clock.startTime);
+                    Cesium.JulianDate.addDays(this._viewer.clock.currentTime, 1, this._viewer.clock.stopTime);
+                    this._viewer.timeline.zoomTo(this._viewer.clock.startTime, this._viewer.clock.stopTime);
+                } else {
+                    Cesium.JulianDate.fromIso8601(this.settings.time.date.split('T')[0], this._viewer.clock.currentTime);
+                    Cesium.JulianDate.addDays(this._viewer.clock.currentTime, -1, this._viewer.clock.startTime);
+                    Cesium.JulianDate.addDays(this._viewer.clock.currentTime, 1, this._viewer.clock.stopTime);
+                    Cesium.JulianDate.fromIso8601(this.settings.time.date + ':00Z', this._viewer.clock.currentTime);
+                    this._viewer.timeline.zoomTo(this._viewer.clock.startTime, this._viewer.clock.stopTime);
+                }
             }
         }
         if (newSetting.updated) {

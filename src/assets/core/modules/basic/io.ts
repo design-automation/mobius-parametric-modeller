@@ -236,6 +236,7 @@ export enum _EIOExportDataFormat {
  */
 export function Export(__model__: GIModel, entities: TId|TId[]|TId[][],
         file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): void {
+    if ( typeof localStorage === 'undefined') { return; }
     // --- Error Check ---
     const fn_name = 'io.Export';
     let ents_arr = null;

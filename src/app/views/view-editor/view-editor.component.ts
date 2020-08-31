@@ -362,11 +362,11 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         const node = this.dataService.node;
         if (document.activeElement.nodeName !== 'INPUT'
         && document.activeElement.nodeName !== 'TEXTAREA'
-        && this.router.url.slice(0, 7) === '/editor') {
+        && this.router.url.startsWith('/editor')) {
         // if (this.copyCheck
         // && document.activeElement.nodeName !== 'INPUT'
         // && document.activeElement.nodeName !== 'TEXTAREA'
-        // && this.router.url.slice(0, 7) === '/editor') {
+        // && this.router.url.startsWith('/editor')) {
             const copiedProds = localStorage.getItem('mobius_copied_procedures');
             if (!copiedProds) {
                 this.dataService.notifyMessage('Error: No saved procedure to be pasted!');

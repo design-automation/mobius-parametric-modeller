@@ -5,7 +5,7 @@
             "files": [
                 "Floor_area_constraint.mob",
                 "Form_Finding_Solver.mob",
-                "Minimise_Detour_solver.mob",
+                "Minimise_Detours_Solver.mob",
                 "Rectangle_Solver.mob"
             ],
             "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/generative_modelling_examples/"

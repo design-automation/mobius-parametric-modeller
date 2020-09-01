@@ -8,7 +8,7 @@
                 "Minimise_Detours_Solver.mob",
                 "Rectangle_Solver.mob"
             ],
-            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/generative_modelling_examples/"
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/generative_modelling_examples/"
         },
         {
             "name": "Analysis Examples",
@@ -20,7 +20,7 @@
                 "Ray_casting.mob",
                 "Sky_and_sun_exposure.mob"
             ],
-            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/analysis_examples/"
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/analysis_examples/"
         },
         {
             "name": "Global Function Examples",
@@ -35,7 +35,7 @@
                 "hello_example.mob&node=1",
                 "hello_func.mob&node=0"
             ],
-            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/user_functions_examples/"
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/user_functions_examples/"
         },
         {
             "name": "Basic Examples",

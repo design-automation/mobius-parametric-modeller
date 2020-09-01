@@ -1,0 +1,26 @@
+<div id='console-container'>
+    <div class='container'>
+        <!-- <ng-container *ngFor='let text of logs'> -->
+            <div id='userConsole'>
+                <!-- <p class='normalText line'  *ngFor='let splittedText of text.split("\n")' >{{splittedText}}</p> -->
+            </div>
+        <!-- </ng-container> -->
+    </div>
+    <form id='toggleClearConsole' title="Check to clear console every time the flowchart is executed.">
+        <div class='div--chbox'>
+            <div class='chbox-text'>Clear Console</div> 
+            <input id='consoleClearCheck' 
+            name='consoleClearCheck' 
+            type="checkbox" 
+            [ngModel]='consoleClearCheck' 
+            (ngModelChange)='toggleConsoleClear()'>
+            <label for='consoleClearCheck'></label>
+        </div>
+    </form>
+    <button id="clearConsole"
+        mat-icon-button
+        (click)="clearConsole()"
+        title='Clear Console'>
+        <mat-icon>block</mat-icon>
+    </button> 
+</div>

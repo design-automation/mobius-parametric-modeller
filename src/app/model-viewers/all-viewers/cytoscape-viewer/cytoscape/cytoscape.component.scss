@@ -1,0 +1,29 @@
+@import '~scss/colors';
+@import '~scss/variables';
+
+#cytoscape {
+    width: 100%;
+    height: 100%;
+}
+
+#cytoscape_zoom_fit{
+    outline: none;
+    width: 40px;
+    height: 30px;
+    font-size:$fsize1;
+    position: absolute;
+    top: 30px;
+    right:0px; 
+    text-align:center;
+    color: $color1;
+    background-color:transparent;
+    border:0;
+    cursor: pointer;
+    &:hover {
+        color:$selected-color;
+    }
+}
+
+.hidden_btn {
+    display: none;
+}

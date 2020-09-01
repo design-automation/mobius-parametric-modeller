@@ -1,0 +1,5 @@
+@import './colors';
+
+.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background{
+    background-color: $color1;
+}

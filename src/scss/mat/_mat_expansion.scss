@@ -1,0 +1,72 @@
+@import './colors';
+
+.mat-expansion-indicator{
+    color: $color1 !important;
+}
+
+.mat-expansion-panel-header{
+    height: 28px !important;
+    background-color: white !important;
+    border-top: 1px solid $color2 !important;
+    border-bottom: 1px solid $color2 !important;
+    padding-left: $default-side-padding !important;
+    .mat-expansion-panel-header-title{
+        color: $color1 !important;
+        font-weight: bold !important;
+        font-size: $fsize2 !important;
+    }
+    &:hover{
+        background-color: white !important;
+    }
+}
+
+.mat-expansion-panel-body{
+        height: 100%;
+        color: $color1;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+
+    span{
+        color: $color1;
+        padding: 0 !important;
+        &:hover{
+            cursor: pointer;
+            color: $color4;
+            border: 0px !important;
+        }
+    }
+    .content{
+        color: $color1 !important;
+        
+        select{
+            color:$color1 !important;
+            border-color: $color1 !important;
+            &:focus{
+                background-color:$color4 !important;
+            }
+        }
+        
+        &:hover{
+            color:$color4 !important;
+            cursor: text !important;
+        }
+
+        &:focus{
+            background-color: $color4 !important;
+            color: $color1 !important;
+        }
+
+    }
+    .label{
+
+        color: $color2 !important;
+
+        &:hover{
+            cursor: default !important;
+        }
+    }
+}
+
+.mat-expansion-panel{
+    box-shadow: none !important;
+}

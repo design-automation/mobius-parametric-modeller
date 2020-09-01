@@ -1,0 +1,66 @@
+{
+    "data": [
+        {
+            "name": "Basic Examples",
+            "files": [
+                "basic_variable",
+                "basic_ifelseif",
+                "basic_foreach",
+                "basic_while"
+            ],
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/basic_examples/"
+        },
+        {
+            "name": "Function Examples",
+            "files": [
+                "query_Get",
+                "query_Count",
+                "query_Neighbours",
+                "query_Sort",
+                "query_IsClosed",
+                "polyline_example",
+                "calc_Distance",
+                "calc_Length",
+                "calc_Area",
+                "calc_Vectore",
+                "calc_Centroid",
+                "calc_Normal",
+                "calc_ParamTToXyz",
+                "calc_ParamXyzToT"
+            ],
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/function_examples/"
+        },
+        {
+            "name": "Attribute Examples",
+            "files": [
+                "set_attribs",
+                "get_attribs",
+                "set_indexed_attribs",
+                "get_indexed_attribs"
+            ],
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/attribute_examples/"
+        },
+        {
+            "name": "Query and Sort Examples",
+            "files": [
+                "xyz_queries",
+                "xyz_sort"
+            ],
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/query_sort_examples/"
+        },
+        {
+            "name": "Imported Models",
+            "files": [
+                "box_with_holes",
+                "geometry_with_attribs",
+                "pig_head",
+                "point_line_polygon_with_attribs",
+                "point_line_polygon",
+                "rubber_toy",
+                "torus_with_holes",
+                "two_polygons_with_holes"
+            ],
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller/master/src/assets/gallery/imported_models/"
+        }
+    ]
+}

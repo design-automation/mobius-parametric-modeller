@@ -1,0 +1,193 @@
+
+<!-- svg group for the selectable and draggable area of normal node -->
+<svg:g (click)='nodeSelect($event)' draggable="true" 
+(mousedown)='startDragNode($event)' 
+(dblclick)='switchToProcedure($event)'
+*ngIf='node.type==""'>
+
+    <rect
+    width="110" height="90"
+    class='outputPort'
+    id = 'node.output.id'
+    (mousedown)='startDragPort($event, "output")'
+    [attr.x]="node.position.x - 5" 
+    [attr.y]="node.position.y - 5"
+    />
+
+    <!-- rectangular box with border -->
+    <rect class="node" 
+    width="100" height="80"
+    [class.node--selected]='selected'
+    [class.node--editing]='editing'
+    [class.node--error]="node.hasError"
+    [class.node--disabled]='!node.enabled'
+    [attr.x]="node.position.x" 
+    [attr.y]="node.position.y"
+    />
+
+    <!-- node description inside the rectangular box -->
+    <svg:foreignObject [attr.x]="node.position.x" [attr.y]="node.position.y + 3" 
+    width="100" height = "80"
+    >
+        <xhtml:div class='textdiv'>
+            <textarea 
+                id={{node.id}}
+                autocomplete=off 
+                [(ngModel)]='node.name'
+                [class.selected]='selected'
+                [class.disabled]='!node.enabled'
+                (focus)='editing = true'
+                (blur)='editing = false'
+                title={{node.name}}
+                style="font-weight: 600;"
+                placeholder='Description of Node'></textarea>
+        </xhtml:div>
+    </svg:foreignObject>
+</svg:g>
+
+<!-- svg group for the selectable and draggable area of start node -->
+<svg:g (click)='nodeSelect($event)' draggable="true" 
+(mousedown)='startDragNode($event)' 
+(dblclick)='switchToProcedure($event)'
+*ngIf='node.type=="start"'>
+
+    <path
+    class='outputPort'
+    id = 'node.output.id'
+    (mousedown)='startDragPort($event, "output")'
+    [attr.d]="'M' + (node.position.x - 5) +' '+ (node.position.y + 5) +
+             ' L' + (node.position.x - 5) +' '+ (node.position.y + 43) +
+             ' L' + (node.position.x + 50) +' '+ (node.position.y + 65) +
+             ' L' + (node.position.x + 105) +' '+ (node.position.y + 43) +
+             ' L' + (node.position.x + 105) +' '+ (node.position.y + 5) + ' Z'" 
+    />
+
+
+    <!-- Triangle with border -->
+    <path class="node" 
+        [class.node--selected]='selected'
+        [class.node--error]="node.hasError"
+        [attr.d]="'M'+node.position.x +' '+ (node.position.y + 10) +
+                 ' L'+ node.position.x +' '+ (node.position.y + 40) +
+                 ' L'+ (node.position.x + 50) +' '+ (node.position.y + 60) +
+                 ' L'+ (node.position.x + 100) +' '+ (node.position.y + 40) +
+                 ' L'+ (node.position.x + 100) +' '+ (node.position.y + 10) + ' Z'" 
+        />
+
+    <!-- circles as inputs of the node -->
+    <!-- <svg:circle
+    *ngFor="let prod of node.procedure; let i=index"
+    r=3
+    [attr.cx]="node.position.x + (100 * (i+1) / (node.procedure.length + 1))" 
+    [attr.cy]="node.position.y + 22"
+    class='inputPort'/> -->
+
+
+
+    <!-- node description inside start node -->
+    <svg:foreignObject 
+    [attr.x]="node.position.x" [attr.y]="node.position.y + 18" 
+    width="100" height = "20">
+        <xhtml:div class='textdiv'>
+            <textarea 
+                id={{node.id}}
+                class='textarea_startend'
+                autocomplete=off 
+                [class.selected]='selected'
+                [(ngModel)]='node.name'></textarea>
+        </xhtml:div>
+    </svg:foreignObject>
+</svg:g>
+
+<!-- svg group for the selectable and draggable area of end node -->
+<svg:g (click)='nodeSelect($event)' draggable="true" 
+(mousedown)='startDragNode($event)' 
+(dblclick)='switchToProcedure($event)'
+*ngIf='node.type=="end"'>
+
+    <path
+    class='outputPort'
+    id = 'node.output.id'
+    [attr.d]="'M'+ (node.position.x - 5)   +' '+ (node.position.y + 75) +
+            ' L' + (node.position.x - 5)   +' '+ (node.position.y + 37) +
+            ' L' + (node.position.x + 50)  +' '+ (node.position.y + 15) +
+            ' L' + (node.position.x + 105) +' '+ (node.position.y + 37) +
+            ' L' + (node.position.x + 105) +' '+ (node.position.y + 75) + ' Z'" 
+    />
+
+    <!-- Triangle with border -->
+    <path class="node" 
+        [class.node--selected]='selected'
+        [class.node--error]="node.hasError"
+        [class.node--disabled]='!node.enabled'
+        [attr.d]="'M'+node.position.x +' '+ (node.position.y + 70) +
+                 ' L' + node.position.x +' '+ (node.position.y + 40) +
+                 ' L'+ (node.position.x + 50) +' '+ (node.position.y + 20) +
+                 ' L'+ (node.position.x + 100) +' '+ (node.position.y + 40) +
+                 ' L'+ (node.position.x + 100) +' '+ (node.position.y + 70) + ' Z'" 
+        />
+
+    <!-- <svg:circle
+    *ngIf="node.procedure.length > 0"
+    r=3
+    [attr.cx]="node.position.x + 50" 
+    [attr.cy]="node.position.y + 58"
+    class='inputPort'/> -->
+    
+
+    <!-- node description inside end node -->
+    <svg:foreignObject [attr.x]="node.position.x" [attr.y]="node.position.y + 38" 
+    width="100" height = "20">
+        <!-- <div class='textdiv'>
+            <textarea 
+                id={{node.id}}
+                class='textarea_startend'
+                autocomplete=off 
+                [class.selected]='selected'
+                [class.disabled]='!node.enabled'
+                [(ngModel)]='node.name'>
+        </div> -->
+        <xhtml:div class='textdiv'>
+            <textarea 
+            id={{node.id}}
+            class='textarea_startend'
+            autocomplete=off 
+            [class.selected]='selected'
+            [class.disabled]='!node.enabled'
+            [(ngModel)]='node.name'></textarea>
+
+            <!-- <xhtml:textarea 
+                id={{node.id}}
+                class='textarea_startend'
+                autocomplete=off 
+                [class.selected]='selected'
+                [class.disabled]='!node.enabled'
+                [(ngModel)]='node.name'></xhtml:textarea> -->
+        </xhtml:div>
+    </svg:foreignObject>
+</svg:g>
+
+
+
+
+<!-- <svg:circle
+r=3
+[attr.cx]="node.position.x + inputOffset[0]" 
+[attr.cy]="node.position.y + inputOffset[1]"
+[class.disabled]='!node.enabled'
+*ngIf="inputDraggable()" 
+class='inputPort'
+id = 'node.input.id'
+(mousedown)='startDragPort($event, "input")'/> -->
+
+<!-- <svg:circle *ngIf="outputDraggable()" 
+class='outputPort'
+id = 'node.output.id'
+(mousedown)='startDragPort($event, "output")' 
+[attr.cx]="node.position.x + outputOffset[0]" 
+[attr.cy]="node.position.y + outputOffset[1]" 
+[class.disabled]='!node.enabled'
+pointer-events="all"
+r=3
+fill="black"/> -->
+

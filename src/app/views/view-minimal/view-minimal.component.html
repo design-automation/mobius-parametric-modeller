@@ -1,0 +1,13 @@
+<div class='container' (window:resize)='attribTogglePos()'>
+    <div style="display: none;">
+        <load-url></load-url>
+        <window-message></window-message>
+        <execute></execute>
+        <!-- <publish-header [title]='getFlowchart().name'></publish-header> -->
+    </div>
+    <div class='content__viewer' >
+        <model-viewers-container [data]='viewerData()'></model-viewers-container>
+    </div>
+</div>
+<spinner></spinner>
+<chrome></chrome>

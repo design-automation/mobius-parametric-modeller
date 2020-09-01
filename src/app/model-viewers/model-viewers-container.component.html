@@ -1,0 +1,16 @@
+<div class='viewers-container'>  
+
+    <div class='container__header'>
+        <div class="header-btn-group">
+            <button class='btn' mat-icon-button *ngFor='let view of Viewers;' id='{{view.name}}'
+            [class.active]='view.name == activeView.name' (click)='updateView(view)' title='{{view.name}}'>
+                <mat-icon [svgIcon]='"c"+view.name'></mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <div class='content__panel'>
+        <ng-container #vc></ng-container>
+    </div>
+
+</div>

@@ -1,0 +1,411 @@
+@import '~scss/colors';
+@import '~scss/variables';
+
+#gi-viewer-container {
+    // position: absolute;
+    width: 100%;
+    height: 100%;
+    // background-color: yellow;
+    overflow:hidden;
+}
+.mat-tab-group {
+    margin-bottom: 0px;
+}
+
+as-split-area{
+    position: relative;
+    overflow: hidden auto !important;
+}
+
+
+#settings_button{
+    outline: none;
+    width: 40px;
+    height: 30px;
+    font-size:$fsize1;
+    position: absolute;
+    top:0px;
+    right:0px; 
+    text-align:center;
+    color: $color1;
+    background-color:transparent;
+    border:0;
+    cursor: pointer;
+    &:hover {
+        color:$selected-color;
+    }
+}
+
+#attrib{
+    overflow: hidden !important;
+    attribute{
+        height: calc(100% - 10px);
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: space-between;
+    }
+}
+
+
+modal-window {
+    display: none;
+    h1{
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 35px;
+    }
+    dl{
+        margin: 20px 0;
+        padding: 0;
+        background-color: transparent;
+        dd{
+            list-style: none;
+            padding: 8px 0;
+            margin-left: 20px;
+            background-color: inherit;
+            // height: $fsize1;
+            min-height: 12px;
+            box-sizing: content-box;
+            color: $color8;
+            font-size: $fsize2;
+            font-style: normal;
+            .label{
+                float: left;
+                line-height: 15px;
+                width: 120px;
+            }
+            .label + div{
+                float: left;
+            }
+            .label, input{
+                color: $color8;
+                font-size: $fsize2;
+                font-style: normal;
+                &:hover{
+                    background-color: inherit;
+                }
+            }
+            &.colors{
+                hr{
+                    margin: 20px 0px 0px;
+                }
+                .label{
+                    line-height: 20px;
+                }
+                input{
+                    padding-left:5px;
+                    margin-left: 0px !important;
+                    border:1px solid #E6E6E6;
+                    width: 120px;
+                    vertical-align: top;
+                    text-transform: uppercase;
+                    &.light{
+                        color: #ffffff !important;
+                    }
+                }
+            }
+        }
+    }
+    .save {
+        cursor: pointer;
+        background: $selected-color;
+        color: #ffffff;
+        height: 20px;
+    }
+    .closebtn{
+        cursor: pointer;
+        background: $color7;
+        border: 1px solid $color4;
+        box-sizing: border-box;
+        margin-left: 10px;
+        height: 20px;
+        // padding: 3px 10px;
+        // cursor: pointer;
+        // margin-right: 10px;
+        // width: 75px;
+        // font-size: $fsize2;
+        // &.primary{
+        //     background: $selected-color;
+        //     border-color: $selected-color;
+        //     color: white;
+        //     &:hover{
+        //         background: rgba($selected-color,0.75);
+        //     }
+        // }
+        // &:focus{
+        //     outline: none;
+        // }
+    }
+
+    .getbtn{
+        cursor: pointer;
+        background: $color7;
+        border: 1px solid $color4;
+        box-sizing: border-box;
+        margin-left: 10px;
+        height: 20px;
+        width: 50px;
+    }
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
+
+#settings_modal{
+    .filebtn.setting{
+        margin-top: 20px;
+    }
+    ::ng-deep .modal-window .modal-body{
+        background: $color6;
+    }
+
+    .onoffswitch {
+        position: relative; 
+        width: 17px;
+        height: 6px;
+        top: 4px;
+        box-sizing: border-box;
+        vertical-align: middle;
+        -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+    }
+    .onoffswitch-checkbox {
+        display: none;
+    }
+    .onoffswitch-label {
+        display: block;
+        overflow: hidden;
+        height: inherit;
+        background-color: #dedede;
+        cursor: pointer;
+    }
+
+    .onoffswitch-switch {
+        position: absolute;
+        top: -4px;
+        left: 0px;
+        width: 3px;
+        height: 12px;
+        background: #ccc;
+        border: 1px solid #ccc;
+    }
+
+    
+    .onoffswitch-checkbox:hover:not(:checked) + .onoffswitch-label{
+        background-color: rgba($selected-color, 0.4);
+        .onoffswitch-switch{
+            // box-shadow: 2px 0px 0px 0px;
+        }
+    }
+
+    .onoffswitch-checkbox:disabled + .onoffswitch-label{
+        background-color: #dedede !important;
+        .onoffswitch-switch{
+            box-shadow: none !important;
+        }
+    }
+
+    .onoffswitch-checkbox:checked + .onoffswitch-label{
+        background-color: $selected-color; 
+        .onoffswitch-switch {
+            right: 0px; 
+            
+            left: calc(100% + 1px);
+            transform: translateX(-100%);
+        }
+    }
+
+    .onoffswitch-checkbox:disabled:checked + .onoffswitch-label .onoffswitch-inner,
+    .onoffswitch-checkbox:disabled:checked + .onoffswitch-label .onoffswitch-switch{
+        cursor: help;
+    }
+
+
+    // Grid Size Slider
+    .slidecontainer {
+        width: 100%; /* Width of the outside container */
+        height: $fsize1;
+        &:hover{
+            background-color: transparent;  
+        }
+        &.light{
+            width: calc(100% - 120px);
+            .slider{
+                margin-left: 0px !important;
+                width: calc(100% - 80px);
+            }
+            .slider + input[type='text']{
+                margin-left: 15px !important;
+            }
+        }
+    }
+      
+    /* The slider itself */
+    .slider {
+        -webkit-appearance: none;  /* Override default CSS styles */
+        appearance: none;
+        width: 210px;
+        max-width: 500px;
+        height: $fsize1; /* Specified height */
+        background: $color5-5; /* Grey background */
+        box-sizing: border-box;
+        border: 2px solid $color5;
+        outline: none; /* Remove outline */
+        opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+        -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+        transition: opacity .2s;
+        margin: 0;
+        margin-left: 10px !important;
+    }
+    
+    /* Mouse-over effects */
+    .slider:hover {
+        opacity: 1; /* Fully shown on mouse-over */
+    }
+    
+    /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none; 
+        appearance: none;
+        width: 5px; 
+        height: $fsize1; 
+        background: $color4; 
+        border: 1px solid $color1;
+        cursor: pointer; 
+        &:hover, &:active{
+            background: $selected-color;
+        }
+    }
+    
+    .slider::-moz-range-thumb {
+        width: 5px; 
+        height: $fsize1; 
+        background: $color4; 
+        cursor: pointer;
+    }
+    .slider:disabled::-webkit-slider-thumb {
+        background: $color7;
+    }
+
+    .slider:disabled::-moz-range-thumb {
+        background: $color7; 
+    }
+
+    .slider:disabled{
+        cursor: help;
+    }
+
+    input + input{
+        vertical-align: top;
+        border: none;
+        line-height: 20px;
+        background: transparent;
+        width: 55px;
+        margin-left: 10px !important;
+        height: 14px;
+    }
+
+    .number{
+        width: 100px;
+        padding-left: 5px;
+        border:1px solid #dddddd;
+    }
+    .light-shadow{
+        width: 120px;
+        float: left;
+    }
+
+    #camera, #camera_target, #grid_pos{
+        input{
+            width: 65px;
+            border: 1px solid #bdbdbd;
+            height: 16px;
+            margin-right: 3px;
+            text-align: right;
+            padding-right: 3px
+        }
+    }
+}
+
+::ng-deep #settingsTab{
+    height: 100%;
+    width: 100%;
+    overflow-x: scroll;
+    
+    ul{
+      background-color: transparent;
+      margin: 0;
+      padding-left: 0px;
+      // border-bottom: 1px solid $color3;
+      white-space: nowrap;
+      width: 100%;
+      min-width: fit-content;
+      display: inline-flex;
+      li{
+        list-style: none;
+        // display: inline-block;
+        float: left;
+        min-width: 75px;
+        color: $color1;
+        overflow:visible;
+        cursor: pointer;
+        position: relative;
+        height: inherit;
+        padding: 0px;
+        span{
+            font-family: sans-serif;
+            margin-right: 2px;
+            font-weight: 550;
+            font-size: $fsize2;
+            line-height: $fsize1;
+            border: 1px solid transparent;
+            position: relative;
+            display: block;
+            padding: 2px 7px;
+            text-align: center;
+            width: inherit;
+            box-sizing: border-box;
+            width: 100%;
+            margin-top: -1px;
+            height: 21px;
+        }
+        &:hover{
+            background-color: transparent;
+            span{
+                color: $selected-color;
+                background-color: transparent;
+            }
+        }
+        &.active{
+          background-color: transparent;
+          span{
+            color: $selected-color;
+            cursor: default;
+            background-color: #fafafb;
+            border: 1px solid $color3;
+            border-bottom: 0px;
+          }
+        }
+      }
+    }
+    // contains everything
+    .pane{
+      margin-top: -1px;
+      border: 1px solid #B3B3B3;
+    //   height: calc(100% - 20px);
+      .mat-elevation-z1{
+        display: flex;
+        flex-flow: column nowrap;
+        // height: 100%;
+        justify-content: space-between;
+        box-shadow: none;
+      }
+    }
+
+    hr{
+        border: 1px solid #dfdfdf;
+        background: #dfdfdf;
+    }
+  }
+

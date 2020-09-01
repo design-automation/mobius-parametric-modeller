@@ -1,0 +1,41 @@
+<div class = 'attrib--container'>
+  <my-tabs id="attribTab" (selectedTab) = "_setDataSource($event)" (selectedTopology) = "_setDataSource($event)" [hidden]="dataSource === undefined">
+    <my-tab *ngFor="let tab of tabs; let i = index" tabTitle="{{tab.title}}" index="{{i}}">
+      <div class="mat-elevation-z1">
+        <div class = "table--container">
+          <!-- <dl id='attribLabel'>
+              <dd *ngFor="let label of displayedColumns;">
+                <span [class]='label'></span>
+              </dd>
+          </dl> -->
+          <table mat-table [dataSource]="dataSource" matSort [class] = 'columnItalic' id = 'attribTable'>
+            <ng-container *ngFor="let column of displayedColumns;" [matColumnDef]="column" [sticky] = 'column === "_id"'>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="updateSortHeader($event, column)"> {{column}} 
+                  <i class="material-icons" (click)="showAttribLabel($event, column)" [class.active]="currentShowingCol === column">visibility</i>
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.selected-row]='row.selected?row.selected:false' (click)="selectRow(row._id, $event)"></tr>
+          </table>
+          <div *ngIf="dataSource && dataSource.data.length === 0" id="emptyMessage">
+            No Data
+          </div>
+           
+        </div>
+        <div class = 'btm--container'>
+          <div id="displaySelected">
+            <label class="container">Show Selected
+              <input type="checkbox" id="switch" (click)="showSelectedSwitch();" [checked]="showSelected"/>
+              <span class="checkmark"></span>
+            </label>
+          </div>
+          <div class = 'paginator--container'>
+            <mat-paginator id="matPaginator" [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
+          </div>
+        </div>
+      </div>
+    </my-tab>
+  </my-tabs>
+</div>
+  

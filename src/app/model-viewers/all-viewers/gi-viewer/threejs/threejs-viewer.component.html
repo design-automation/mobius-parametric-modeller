@@ -1,7 +1,6 @@
 <div
     id="threejs-container"
     (window:mousedown)="onMouseDown($event)"
-    (window:mousemove)="onMouseMove($event)"
     (window:mouseup)="onMouseUp($event)"
 >
     <div
@@ -31,44 +30,42 @@
         <mat-icon svgIcon="cZoom"></mat-icon>
     </button>
 
-    <!-- <button
-        id="credit"
-        mat-icon-button
-        (click)="openCredits($event)"
-        title='Credits'
-    >
-        <mat-icon svgIcon="cCredits"></mat-icon>
-    </button> -->
-
-    <button
-        id="EntitySelection"
-        mat-icon-button
-        (click)="selectDropdownVisible = !selectDropdownVisible"
-        title='Selection Type'
-    >
-        <mat-icon svgIcon="select"></mat-icon>
-
-    </button>
     <span
-        *ngIf="!selectDropdownVisible"
-        id="SelectingEntityType"
-        matTooltip="Selecting {{SelectingEntityType.name}}"
-        (click)="selectDropdownVisible = !selectDropdownVisible; needSelect=false"
+        class="switchCameraButton"
+        mat-icon-button
+        (click)="switchCamera()"
+        title='Switch Camera'
     >
-        {{EntTypeToStr(SelectingEntityType.id)}}
+        <mat-icon svgIcon="cControlCam"></mat-icon>
+        <p>{{_data_threejs.currentCamera}}</p>
     </span>
-    <div
-        id="selectDropdown"
-        *ngIf="selectDropdownVisible == true"
-    >
+    <ng-container *ngIf="enableSelect()">
         <button
-            *ngFor="let selection of selections"
-            (click)="selectEntityType(selection); needSelect=false"
-            [class.active]="SelectingEntityType.id === selection.id"
+            id="EntitySelection"
+            mat-icon-button
+            (click)="selectDropdownVisible = !selectDropdownVisible"
+            title='Selection Type'
         >
-            <span matTooltip="Select {{selection.name}}">{{EntTypeToStr(selection.id)}}</span>
+            <mat-icon svgIcon="select"></mat-icon>
         </button>
-    </div>
+        <span
+            *ngIf="!selectDropdownVisible"
+            id="SelectingEntityType"
+            matTooltip="Selecting {{SelectingEntityType.name}}"
+            (click)="selectDropdownVisible = !selectDropdownVisible; needSelect=false"
+        >
+            {{EntTypeToStr(SelectingEntityType.id)}}
+        </span>
+        <div id="selectDropdown" *ngIf="selectDropdownVisible == true" >
+            <button
+                *ngFor="let selection of selections"
+                (click)="selectEntityType(selection); needSelect=false"
+                [class.active]="SelectingEntityType.id === selection.id"
+            >
+                <span matTooltip="Select {{selection.name}}">{{EntTypeToStr(selection.id)}}</span>
+            </button>
+        </div>
+    </ng-container>
 
     <div id="giSummary" [hidden]='!this._data_threejs.settings.gi_summary.show'>
         <tbody>
@@ -122,6 +119,22 @@
                 </td>
             </tr>
         </tbody>
+    </div>
+
+    <div id="nodeSelect_slider" *ngIf='this._data_threejs.timelineEnabled == 1'>
+        <input type="range" id="nodeSelect_slider_input"
+            min="0" [max]=getMaxNodeSelect() step="1"
+            [style.width]=getSliderWidth()
+            [value]=_data_threejs.timelineIndex (change)='changeNodeSlider($event)'
+            list="nodeSelect_datalist">
+        <datalist id="nodeSelect_datalist">
+            <option *ngFor='let time_point of _data_threejs.timeline_groups' value={{time_point}} label={{time_point}}></option>
+        </datalist>
+    </div>
+    <div id="nodeSelect_dropdown" *ngIf='this._data_threejs.timelineEnabled == 2'>
+        <select  type="range" id="nodeSelect_dropdown_input" [value]=_data_threejs.timelineValue (change)='changeNodeDropdown($event)'>
+            <option *ngFor='let time_point of _data_threejs.timeline_groups' value={{time_point}} label={{time_point}}></option>
+        </select>
     </div>
 
     <dropdown-menu (selected)='selectEntity($event)'></dropdown-menu>

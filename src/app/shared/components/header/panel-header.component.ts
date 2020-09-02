@@ -35,10 +35,10 @@ export class PanelHeaderComponent implements OnDestroy {
 
     constructor(private dataService: DataService, private keyboardService: KeyboardService, private router: Router) {
         SaveFileComponent.updateBackupList();
-        if (this.router.url === '/about') {
+        if (this.router.url.startsWith('/about')) {
             this.executeCheck = false;
             this.nodeListCheck = false;
-        } else if (this.router.url === '/gallery') {
+        } else if (this.router.url.startsWith('/gallery')) {
             this.executeCheck = true;
             this.nodeListCheck = false;
         } else {
@@ -74,7 +74,7 @@ export class PanelHeaderComponent implements OnDestroy {
 
     changeNode(index: number) {
         this.dataService.flowchart.meta.selected_nodes = [index];
-        if (this.router.url === '/editor') {
+        if (this.router.url.startsWith('/editor')) {
             this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[index].id);
             if ((index === 0 || index === this.dataService.flowchart.nodes.length - 1)) {
                 setTimeout(() => {
@@ -593,20 +593,20 @@ export class PanelHeaderComponent implements OnDestroy {
 
     @HostListener('window:copy', ['$event'])
     onWindowCopy(event: KeyboardEvent) {
-        if (this.router.url === '/editor') {
+        if (this.router.url.startsWith('/editor')) {
             document.getElementById('copyProdButton').click();
         }
     }
 
     @HostListener('window:cut', ['$event'])
     onWindowCut(event: KeyboardEvent) {
-        if (this.router.url === '/editor') {
+        if (this.router.url.startsWith('/editor')) {
             document.getElementById('cutProdButton').click();
         }
     }
     @HostListener('window:paste', ['$event'])
     onWindowPaste(event: KeyboardEvent) {
-        if (this.router.url === '/editor') {
+        if (this.router.url.startsWith('/editor')) {
             document.getElementById('pasteProdButton').click();
         }
     }
@@ -880,5 +880,24 @@ export class PanelHeaderComponent implements OnDestroy {
     addGlobalFunc(event: MouseEvent) {
         document.getElementById('selectImportFile').click();
         this.openHeaderDialog(event, 'globalfunc');
+    }
+
+    updateNode() {
+        const nodeSelInput = <HTMLInputElement> document.getElementById('hidden_node_selection');
+        const selectedNode = nodeSelInput.value;
+        nodeSelInput.value = null;
+        if (selectedNode === this.dataService.node.name) { return; }
+        for (let i = 0; i < this.dataService.flowchart.nodes.length; i ++) {
+            const node = this.dataService.flowchart.nodes[i];
+            if (node.name === selectedNode) {
+                this.dataService.flowchart.meta.selected_nodes = [i];
+                return;
+            }
+        }
+    }
+
+    notifyMessage(event) {
+        this.dataService.notifyMessage(event.target.value);
+        event.target.value = '';
     }
 }

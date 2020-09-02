@@ -1,6 +1,28 @@
 {
     "data": [
         {
+            "name": "Generative Modelling Examples",
+            "files": [
+                "Floor_area_constraint.mob",
+                "Form_Finding_Solver.mob",
+                "Minimise_Detours_Solver.mob",
+                "Rectangle_Solver.mob"
+            ],
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev2/master/src/assets/gallery/generative_modelling_examples/"
+        },
+        {
+            "name": "Analysis Examples",
+            "files": [
+                "Centrality_Analysis.mob",
+                "Facade_sky_and_sun_analysis.mob",
+                "Isovist.mob",
+                "Proximity_Analysis.mob",
+                "Ray_casting.mob",
+                "Sky_and_sun_exposure.mob"
+            ],
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev2/master/src/assets/gallery/analysis_examples/"
+        },
+        {
             "name": "Global Function Examples",
             "files": [
                 "pyramids_from_pgons_example.mob&node=1",
@@ -13,7 +35,7 @@
                 "hello_example.mob&node=1",
                 "hello_func.mob&node=0"
             ],
-            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/user_functions_examples/"
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev2/master/src/assets/gallery/user_functions_examples/"
         },
         {
             "name": "Basic Examples",
@@ -23,7 +45,7 @@
                 "basic_foreach.mob&node=1",
                 "basic_while.mob&node=1"
             ],
-            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/basic_examples/"
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev2/master/src/assets/gallery/basic_examples/"
         },
         {
             "name": "Function Examples",
@@ -34,21 +56,21 @@
                 "make.Polygon.mob&node=1",
                 "make.Collection.mob&node=1"
             ],
-            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/function_examples/"
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev2/master/src/assets/gallery/function_examples/"
         },
         {
             "name": "Shapes Examples",
             "files": [
                 "torus.mob&node=2"
             ],
-            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/shapes_examples/"
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev2/master/src/assets/gallery/shapes_examples/"
         },
         {
             "name": "Flow Examples",
             "files": [
                 "podium_with_towers.mob"
             ],
-            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/flow_examples/"
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev2/master/src/assets/gallery/flow_examples/"
         },
         {
             "name": "Material Examples",
@@ -56,7 +78,7 @@
                 "glass_materials.mob&node=2",
                 "front_and_back_materials.mob&node=1"
             ],
-            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev/master/src/assets/gallery/rendering_examples/"
+            "link": "https://raw.githubusercontent.com/design-automation/mobius-parametric-modeller-dev2/master/src/assets/gallery/rendering_examples/"
         }
     ]
 }

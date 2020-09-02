@@ -8,7 +8,7 @@ export class ThreeJSViewerService {
         scene.mouse.y = - ((event.clientY - rect.top) / rect.height) * 2 + 1;
         scene.raycaster.setFromCamera(scene.mouse, scene.camera);
         const precision = 0.01 * scene.controls.target.distanceTo( scene.controls.object.position );
-        scene.raycaster.linePrecision = precision;
+        scene.raycaster.params.Line.threshold = precision;
         scene.raycaster.params.Points.threshold = precision;
         return scene.raycaster.intersectObjects(scene.scene_objs);
     }

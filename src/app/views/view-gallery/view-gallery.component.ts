@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, HostListener, ViewChild } from '@angular/core';
 import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
 import { HttpClient } from '@angular/common/http';
 import { Constants } from './view-gallery.config';
@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 
 import * as galleryUrls from '@assets/gallery/__config__.json';
 import { DataOutputService } from '@shared/services/dataOutput.service';
+import { SplitComponent } from 'angular-split';
 
 @Component({
   selector: 'view-gallery',
@@ -23,6 +24,7 @@ export class ViewGalleryComponent {
     // private allFiles: Observable<any>;
     allGalleries = [];
     @Output() switch = new EventEmitter();
+    @ViewChild('gallerySplit', { static: false }) gallerySplit: SplitComponent;
 
     /*
     constructor(private http: HttpClient, private dataService: DataService, private router: Router) {
@@ -148,4 +150,10 @@ export class ViewGalleryComponent {
     getNode() { return this.dataService.node; }
     getActiveGallery() { return this.dataService.activeGallery; }
     getFlowchartName() { return this.dataService.file.name; }
+
+    @HostListener('document:mouseleave', [])
+    onmouseleave() {
+        this.gallerySplit.notify('end');
+    }
+
 }

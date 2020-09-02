@@ -33,7 +33,7 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
         setTimeout(() => {
             // this.adjustTextArea();
             this.dataService.attribVal = 0;
-        }, 100);
+        }, 1000);
     }
 
     ngOnDestroy() {

@@ -2,7 +2,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 // import @angular stuff
 import {
     Component, OnInit, Input, Output, EventEmitter,
-    Injector, ElementRef, DoCheck, OnChanges, SimpleChanges, ViewChild, OnDestroy
+    Injector, ElementRef, DoCheck, OnChanges, SimpleChanges, ViewChild, OnDestroy, HostListener
 } from '@angular/core';
 import { DataThreejs } from '../data/data.threejs';
 // import { IModel } from 'gs-json';
@@ -67,11 +67,22 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         { id: EEntType.FACE, name: 'Faces' }, { id: EEntType.POINT, name: 'Points' },
         { id: EEntType.PLINE, name: 'Polylines' }, { id: EEntType.PGON, name: 'Polygons' },
         { id: EEntType.COLL, name: 'Collections' }];
+    public default_selections = {
+        ps: { id: EEntType.POSI, name: 'Positions' },
+        _v: { id: EEntType.VERT, name: 'Vertex' },
+        _e: { id: EEntType.EDGE, name: 'Edges' },
+        _w: { id: EEntType.WIRE, name: 'Wires' },
+        _f: { id: EEntType.FACE, name: 'Faces' },
+        pt: { id: EEntType.POINT, name: 'Points' },
+        pl: { id: EEntType.PLINE, name: 'Polylines' },
+        pg: { id: EEntType.PGON, name: 'Polygons' },
+        co: { id: EEntType.COLL, name: 'Collections' }
+    };
 
     public dropdownPosition = { x: 0, y: 0 };
 
     private renderInterval;
-    private isDown = false;
+    // private isDown = false;
     private lastX: number;
     private lastY: number;
     private dragHash: number;
@@ -139,10 +150,14 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this._data_threejs = this.dataService.getThreejsScene();
         this.threeJSViewerService.DataThreejs = this._data_threejs;
         this.container.appendChild(this._data_threejs.renderer.domElement);
+        this._data_threejs.renderer.domElement.style.outline = 'none';
+        // this.container.appendChild(this._data_threejs.vr);
+        // console.log(this._data_threejs.vr)
         // set the numbers of entities
         this._threejs_nums = this._data_threejs.threejs_nums;
         // ??? What is happening here?
-        this._data_threejs.controls.addEventListener('change', this.activateRender);
+        this._data_threejs.perspControls.addEventListener('change', this.activateRender);
+        this._data_threejs.orthoControls.addEventListener('change', this.activateRender);
         this._data_threejs.renderer.render(this._data_threejs.scene, this._data_threejs.camera);
 
         if (this._data_threejs.ObjLabelMap.size !== 0) {
@@ -152,6 +167,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }
 
         this.getSelectingEntityType();
+
+        this._data_threejs.switchCamera(false);
 
         for (let i = 1; i < 10; i++) {
             setTimeout(() => {
@@ -167,6 +184,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             }
         }, 20);
     }
+
+
 
     /**
      * Called when anything changes
@@ -184,9 +203,15 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             this._width = width;
             this._height = height;
             setTimeout(() => {
-                this._data_threejs.camera.aspect = this._width / this._height;
-                this._data_threejs.camera.updateProjectionMatrix();
+                const aspect = this._width / this._height;
+                this._data_threejs.perspCam.aspect = this._width / this._height;
+                this._data_threejs.perspCam.updateProjectionMatrix();
                 this._data_threejs.renderer.setSize(this._width, this._height);
+
+                this._data_threejs.orthoCam.left = -this._data_threejs.orthoCam.top * aspect;
+                this._data_threejs.orthoCam.right = this._data_threejs.orthoCam.top * aspect;
+                this._data_threejs.orthoCam.updateProjectionMatrix();
+
                 this.activateRender();
             }, 10);
         }
@@ -203,10 +228,11 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     ngOnChanges(changes: SimpleChanges) {
         if (changes['model']) {
             if (this.model) {
-                if (this.dataService.switch_page) {
-                    this.dataService.switch_page = false;
-                    return;
-                }
+                // if (this.dataService.switch_page) {
+                //     this.dataService.switch_page = false;
+                //     return;
+                // }
+                if (!this.container) { return; }
                 this.updateModel(this.model);
             }
         }
@@ -237,7 +263,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this.model = null;
         clearInterval(this.renderInterval);
         this.renderInterval = null;
-        this._data_threejs.controls.removeEventListener('change', this.activateRender);
+        this._data_threejs.perspControls.removeEventListener('change', this.activateRender);
+        this._data_threejs.orthoControls.removeEventListener('change', this.activateRender);
         // this.keyboardServiceSub.unsubscribe();
     }
 
@@ -269,6 +296,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
 
     refreshLabels(ent_type): void {
+        if (!this.SelectingEntityType.id) { return; }
         const allLabels = document.getElementsByClassName(`text-label${EEntTypeStr[ent_type]}`);
         const unSorted = this.dataService.selected_ents.get(EEntTypeStr[ent_type]);
         if (unSorted === undefined) {
@@ -305,7 +333,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     }
                 }
             } else if (attr_name === '#') {
-                this.labelforindex(showSelected, allLabels, arr);
+                    this.labelforindex(showSelected, allLabels, arr);
             } else if (attr_name === '_id') {
                 for (let i = 0; i < allLabels.length; i++) {
                     const element = allLabels[i];
@@ -559,59 +587,70 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }
     }
 
+    onClick(event) {
+        if (event.target.tagName !== 'CANVAS') {
+            return null;
+        } else {
+            this.onUserAction(event);
+            this.refreshLabels(this.tab_map[this.getCurrentTab()]);
+        }
+    }
     onMouseUp(event) {
-        if (event.target.tagName !== 'CANVAS') {
+        if (event.target.tagName !== 'CANVAS' || !this.lastX || !this.model) {
             return null;
-        } else {
-            for (const htmlElement of this.container.children){
-                if (htmlElement.id.slice(0, 9) === 'textLabel') {
-                    htmlElement.style.display = '';
-                }
-            }
-            if (this.dragHash < 10) {
-                this.onUserAction(event);
-                this.refreshLabels(this.tab_map[this.getCurrentTab()]);
-            } else {
-                // this._data_threejs._controls.enabled = true;
-            }
-            this.isDown = false;
         }
-    }
-
-    public onMouseMove(event) {
-        const body = document.getElementsByTagName('body');
-
-        if (event.target.tagName !== 'CANVAS') {
-            // body[0].style.cursor = 'default';
-            return null;
-        } else {
-
-            if (!this.isDown) {
-                // const intersects = this.threeJSViewerService.initRaycaster(event);
-                // if (intersects && intersects.length > 0) {
-                //     body[0].style.cursor = 'pointer';
-                // } else {
-                //     body[0].style.cursor = 'default';
-                // }
-                return;
-            }
-
-            const mouseX = event.clientX - event.target.getBoundingClientRect().left;
-            const mouseY = event.clientY - event.target.getBoundingClientRect().top;
-            const dx = mouseX - this.lastX;
-            const dy = mouseY - this.lastY;
-            this.lastX = mouseX;
-            this.lastY = mouseY;
-
-            this.dragHash += Math.abs(dx) + Math.abs(dy);
-            if (this.dragHash > 4) {
-                // dragging
+        for (const htmlElement of this.container.children) {
+            if (htmlElement.id.startsWith('textLabel')) {
+                htmlElement.style.display = '';
             }
         }
+        const distX = event.clientX - event.target.getBoundingClientRect().left - this.lastX;
+        const distY = event.clientY - event.target.getBoundingClientRect().top - this.lastY;
+        const distSqr = distX * distX + distY * distY;
+        if (performance.now() - this.dragHash < 500 && distSqr < 500) {
+            this.onUserAction(event);
+            this.refreshLabels(this.tab_map[this.getCurrentTab()]);
+        } else {
+            // this._data_threejs._controls.enabled = true;
+        }
+        this.lastX = null;
+        this.lastY = null;
+        // this.isDown = false;
     }
+
+    // public onMouseMove(event) {
+    //     const body = document.getElementsByTagName('body');
+
+    //     if (event.target.tagName !== 'CANVAS') {
+    //         // body[0].style.cursor = 'default';
+    //         return null;
+    //     } else {
+    //         if (!this.isDown) {
+    //             // const intersects = this.threeJSViewerService.initRaycaster(event);
+    //             // if (intersects && intersects.length > 0) {
+    //             //     body[0].style.cursor = 'pointer';
+    //             // } else {
+    //             //     body[0].style.cursor = 'default';
+    //             // }
+    //             return;
+    //         }
+
+    //         const mouseX = event.clientX - event.target.getBoundingClientRect().left;
+    //         const mouseY = event.clientY - event.target.getBoundingClientRect().top;
+    //         const dx = mouseX - this.lastX;
+    //         const dy = mouseY - this.lastY;
+    //         this.lastX = mouseX;
+    //         this.lastY = mouseY;
+
+    //         this.dragHash += Math.abs(dx) + Math.abs(dy);
+    //         if (this.dragHash > 4) {
+    //             // dragging
+    //         }
+    //     }
+    // }
 
     onMouseDown(event) {
-        if (event.target.tagName !== 'CANVAS') {
+        if (event.target.tagName !== 'CANVAS' || !this.model) {
             return null;
         } else {
             event.stopPropagation();
@@ -619,14 +658,14 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             this.lastY = event.clientY - event.target.getBoundingClientRect().top;
 
             for (const htmlElement of this.container.children){
-                if (htmlElement.id.slice(0, 9) === 'textLabel') {
+                if (htmlElement.id.startsWith('textLabel')) {
                     htmlElement.style.display = 'none';
                 }
             }
 
             // Put your mousedown stuff here
-            this.dragHash = 0;
-            this.isDown = true;
+            this.dragHash = performance.now();
+            // this.isDown = true;
         }
     }
 
@@ -755,10 +794,21 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
     private getSelectingEntityType() {
         const select = JSON.parse(localStorage.getItem('mpm_settings'))['select'];
-        if (select !== undefined && select.selector) {
+        const default_selector = {id: EEntType.FACE, name: 'Faces'};
+        if (select && select.enabledselector) {
+            this.selections = [];
+            for (const i in select.enabledselector) {
+                if (select.enabledselector[i]) { this.selections.push( this.default_selections[i]); }
+            }
+        }
+        if (select !== undefined && select.selector && this.selections.indexOf(select.selector) !== -1) {
             this.SelectingEntityType = select.selector;
+        } else if (this.selections.indexOf(default_selector) !== -1) {
+            this.SelectingEntityType = default_selector;
+        } else if (this.selections.length > 0) {
+            this.SelectingEntityType = this.selections[0];
         } else {
-            this.SelectingEntityType = {id: EEntType.FACE, name: 'Faces'};
+            this.SelectingEntityType =  {id: null, name: null};
         }
         // if (localStorage.getItem('mpm_selecting_entity_type') != null) {
         //     this.SelectingEntityType = JSON.parse(localStorage.getItem('mpm_selecting_entity_type'));
@@ -792,7 +842,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     }
                 } else if (intersect0.object.type === 'LineSegments') {
                     let edge;
-                    const edge_color = (<THREE.LineBasicMaterial>(<THREE.LineSegments> intersect0.object).material).color;
+                    const edge_color = (<THREE.LineDashedMaterial>(<THREE.LineSegments> intersect0.object).material).color;
                     if (edge_color['r'] === 1 && edge_color['b'] === 1 && edge_color['g'] === 1) {
                         edge = scene.white_edge_select_map.get(intersect0.index / 2);
                     } else {
@@ -862,7 +912,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     }
                 } else if (intersect0.object.type === 'LineSegments') {
                     let edge;
-                    const edge_color = (<THREE.LineBasicMaterial>(<THREE.LineSegments> intersect0.object).material).color;
+                    const edge_color = (<THREE.LineDashedMaterial>(<THREE.LineSegments> intersect0.object).material).color;
                     if (edge_color['r'] === 1 && edge_color['b'] === 1 && edge_color['g'] === 1) {
                         edge = scene.white_edge_select_map.get(intersect0.index / 2);
                     } else {
@@ -941,7 +991,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             case EEntType.EDGE:
                 if (intersect0.object.type === 'LineSegments') {
                     let edge;
-                    const edge_color = (<THREE.LineBasicMaterial>(<THREE.LineSegments> intersect0.object).material).color;
+                    const edge_color = (<THREE.LineDashedMaterial>(<THREE.LineSegments> intersect0.object).material).color;
                     if (edge_color['r'] === 1 && edge_color['b'] === 1 && edge_color['g'] === 1) {
                         edge = scene.white_edge_select_map.get(intersect0.index / 2);
                     } else {
@@ -977,7 +1027,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             case EEntType.WIRE:
                 if (intersect0.object.type === 'LineSegments') {
                     let edge;
-                    const edge_color = (<THREE.LineBasicMaterial>(<THREE.LineSegments> intersect0.object).material).color;
+                    const edge_color = (<THREE.LineDashedMaterial>(<THREE.LineSegments> intersect0.object).material).color;
                     if (edge_color['r'] === 1 && edge_color['b'] === 1 && edge_color['g'] === 1) {
                         edge = scene.white_edge_select_map.get(intersect0.index / 2);
                     } else {
@@ -1015,7 +1065,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             case EEntType.PLINE:
                 if (intersect0.object.type === 'LineSegments') {
                     let edge;
-                    const edge_color = (<THREE.LineBasicMaterial>(<THREE.LineSegments> intersect0.object).material).color;
+                    const edge_color = (<THREE.LineDashedMaterial>(<THREE.LineSegments> intersect0.object).material).color;
                     if (edge_color['r'] === 1 && edge_color['b'] === 1 && edge_color['g'] === 1) {
                         edge = scene.white_edge_select_map.get(intersect0.index / 2);
                     } else {
@@ -1066,6 +1116,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 }
                 break;
             default:
+                return;
                 this.showMessages('Please choose an Entity type.', 'custom');
                 break;
         }
@@ -1488,7 +1539,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             colls = this.model.modeldata.geom.nav.navAnyToColl(EEntType.TRI, tri);
         } else if (type === 'LineSegments') {
             let edge;
-            const edge_color = (<THREE.LineBasicMaterial>(<THREE.LineSegments> object.object).material).color;
+            const edge_color = (<THREE.LineDashedMaterial>(<THREE.LineSegments> object.object).material).color;
             if (edge_color['r'] === 1 && edge_color['b'] === 1 && edge_color['g'] === 1) {
                 edge = this._data_threejs.white_edge_select_map.get(object.index / 2);
             } else {
@@ -1588,11 +1639,19 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         // if (JSON.stringify(this._data_threejs._threejs_nums) === JSON.stringify([0, 0, 0])) {
         //     return;
         // }
-        this._data_threejs.lookAtObj();
+        if (this._data_threejs.currentCamera === 'Persp') {
+            this._data_threejs.lookAtObj();
+        } else {
+            this._data_threejs.orthoLookatObj();
+        }
     }
 
     private EntTypeToStr(ent_type: EEntType) {
         return EEntTypeStr[ent_type];
+    }
+
+    enableSelect() {
+        return this.selections.length > 1;
     }
 
     private selectEntityType(selection: { id: number, name: string }) {
@@ -1615,6 +1674,13 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }
     }
 
+    switchCamera() {
+        this._data_threejs.switchCamera();
+        setTimeout(() => {
+            this.activateRender();
+        }, 0);
+    }
+
     selectEntity(id: number) {
         if (this.SelectingEntityType.id === EEntType.COLL) {
             this.chooseColl(id);
@@ -1629,6 +1695,39 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }
     }
 
+    getMaxNodeSelect() {
+        if (this._data_threejs.timeline_groups) {
+            return this._data_threejs.timeline_groups.length - 1;
+        }
+        return 0;
+    }
+
+    getSliderWidth() {
+        let width = 10;
+        for (const g of this._data_threejs.timeline_groups) {
+            width += g.length * 7 + 5;
+        }
+        return width + 'px';
+    }
+
+    changeNodeSlider(event: Event) {
+        const nodeSelInput = <HTMLInputElement> document.getElementById('hidden_node_selection');
+        nodeSelInput.value = this._data_threejs.timeline_groups[(<HTMLInputElement> event.target).value];
+        (<HTMLButtonElement> document.getElementById('hidden_node_selection_button')).click();
+    }
+
+    changeNodeDropdown(event: Event) {
+        const nodeSelInput = <HTMLInputElement> document.getElementById('hidden_node_selection');
+        nodeSelInput.value = (<HTMLInputElement> event.target).value;
+        (<HTMLButtonElement> document.getElementById('hidden_node_selection_button')).click();
+    }
+
+
+    @HostListener('document:mouseleave', [])
+    onmouseleave() {
+        this._data_threejs.controls.saveState();
+        this._data_threejs.controls.reset();
+    }
 
 }
 

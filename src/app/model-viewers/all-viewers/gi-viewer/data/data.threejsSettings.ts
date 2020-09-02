@@ -20,7 +20,11 @@ export interface ISettings {
     tjs_summary: { show: boolean };
     gi_summary: { show: boolean };
     wireframe: { show: boolean };
-    camera: { pos: THREE.Vector3, target: THREE.Vector3 };
+    camera: {
+        pos: THREE.Vector3,
+        target: THREE.Vector3,
+        ortho: boolean
+    };
     colors: {
         viewer_bg: string,
         position: string,
@@ -65,7 +69,18 @@ export interface ISettings {
     };
     select: {
         selector: object,
-        tab: number
+        tab: number,
+        enabledselector: {
+            ps: boolean,
+            _v: boolean,
+            _e: boolean,
+            _w: boolean,
+            _f: boolean,
+            pt: boolean,
+            pl: boolean,
+            pg: boolean,
+            co: boolean
+        }
     };
     version: string;
 }

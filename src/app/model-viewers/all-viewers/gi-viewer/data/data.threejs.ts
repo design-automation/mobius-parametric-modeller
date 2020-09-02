@@ -32,6 +32,7 @@ export class DataThreejs extends DataThreejsLookAt {
         if (this.settings.background.show) {
             this._loadBackground(this.settings.background.background_set);
         } else {
+            this.cameraBackgrounds = null;
             this.scene.background = new THREE.Color(this.settings.colors.viewer_bg);
         }
 
@@ -67,10 +68,10 @@ export class DataThreejs extends DataThreejsLookAt {
     public populateScene(model: GIModel, container): void {
         if (this.dataService.viewerSettingsUpdated) {
             this.settings = JSON.parse(localStorage.getItem('mpm_settings'));
-            this.camera.position.copy(this.settings.camera.pos);
-            this.controls.target.copy(this.settings.camera.target);
-            this.camera.updateProjectionMatrix();
-            this.controls.update();
+            this.perspCam.position.copy(this.settings.camera.pos);
+            this.perspControls.target.copy(this.settings.camera.target);
+            this.perspCam.updateProjectionMatrix();
+            this.perspControls.update();
             this.dataService.viewerSettingsUpdated = false;
         }
         while (this.scene.children.length > 0) {
@@ -86,7 +87,33 @@ export class DataThreejs extends DataThreejsLookAt {
         this.ObjLabelMap.clear();
         this.textLabels.clear();
 
+        this._addGeom(model);
 
+        const position_size = this.settings.positions.size;
+        this.raycaster.params.Points.threshold = position_size > 1 ? position_size / 3 : position_size / 4;
+
+
+        this._all_objs_sphere = this._getAllObjsSphere();
+        this.updateCameraFOV();
+
+        // add the axes, ground, lights, etc
+        this._addEnv();
+
+        setTimeout(() => {
+            let old = document.getElementById('hud');
+            if (old) {
+                container.removeChild(old);
+            }
+            setTimeout(() => { this._getNodeSelect(); }, 10);
+            if (!this.model.attribs.query.hasAttrib(EEntType.MOD, 'hud')) { return; }
+            const hud = this.model.attribs.query.getModelAttribVal('hud') as string;
+            const element = this._createHud(hud).element;
+            container.appendChild(element);
+            old = null;
+        }, 0);
+    }
+
+    private _addGeom(model: GIModel): void {
         // Add geometry
         const threejs_data: IThreeJS = model.get3jsData();
         this.tri_select_map = threejs_data.triangle_select_map;
@@ -107,30 +134,40 @@ export class DataThreejs extends DataThreejsLookAt {
         this._addTris(threejs_data.triangle_indices, verts_xyz_buffer, colors_buffer, normals_buffer, material_groups, materials);
         this._addLines(threejs_data.edge_indices, threejs_data.white_edge_indices, verts_xyz_buffer, colors_buffer, normals_buffer);
         this._addPoints(threejs_data.point_indices, verts_xyz_buffer, colors_buffer, [255, 255, 255], this.settings.positions.size + 1);
+
+        // if (threejs_data.timeline) {
+        //     this.timelineEnabled = true;
+        //     this.timeline = threejs_data.timeline.__time_points__;
+        //     if (!this.current_time_point || this.timeline.indexOf(this.current_time_point) === -1) {
+        //         this.current_time_point = this.timeline[this.timeline.length - 1];
+        //     }
+        //     this.timeline_groups = {};
+        //     for (const time_point of this.timeline) {
+        //         const obj_group = new THREE.Group();
+        //         const timeline_data = threejs_data.timeline[time_point];
+        //         const tri = this._addTimelineTris(timeline_data.triangle_indices, verts_xyz_buffer, colors_buffer,
+        //                     normals_buffer, material_groups, materials);
+        //         const lines = this._addTimelineLines(timeline_data.edge_indices, threejs_data.white_edge_indices,
+        //                     verts_xyz_buffer, colors_buffer, normals_buffer);
+        //         const points = this._addTimelinePoints(timeline_data.point_indices, verts_xyz_buffer,
+        //                     colors_buffer, [255, 255, 255], this.settings.positions.size + 1);
+        //         obj_group.add(tri);
+        //         obj_group.add(lines[0]);
+        //         obj_group.add(lines[1]);
+        //         obj_group.add(points);
+        //         this.timeline_groups[time_point] = obj_group;
+        //     }
+        //     this.scene.add(this.timeline_groups[this.current_time_point]);
+        // } else {
+        //     this.timelineEnabled = false;
+        //     this.timeline = null;
+        //     this.timeline_groups = null;
+        // }
+
         this._addPosis(threejs_data.posis_indices, posis_xyz_buffer, this.settings.colors.position, this.settings.positions.size);
+
         this._addPointLabels(model);
 
-        const position_size = this.settings.positions.size;
-        this.raycaster.params.Points.threshold = position_size > 1 ? position_size / 3 : position_size / 4;
-
-
-        this._all_objs_sphere = this._getAllObjsSphere();
-
-        // add the axes, ground, lights, etc
-        this._addEnv();
-
-
-        setTimeout(() => {
-            let old = document.getElementById('hud');
-            if (old) {
-                container.removeChild(old);
-            }
-            if (!this.model.modeldata.attribs.query.hasAttrib(EEntType.MOD, 'hud')) { return; }
-            const hud = this.model.modeldata.attribs.query.getModelAttribVal('hud') as string;
-            const element = this._createHud(hud).element;
-            container.appendChild(element);
-            old = null;
-        }, 0);
     }
 
 
@@ -143,6 +180,7 @@ export class DataThreejs extends DataThreejsLookAt {
         if (this.settings.background.show) {
             this._loadBackground(this.settings.background.background_set);
         } else {
+            this.cameraBackgrounds = null;
             this.scene.background = new THREE.Color(this.settings.colors.viewer_bg);
         }
 
@@ -197,6 +235,27 @@ export class DataThreejs extends DataThreejsLookAt {
             this._addDirectionalLight();
         }
     }
+    private _getNodeSelect(): void {
+        const select_node: any = this.model.attribs.query.getModelAttribVal('select_node');
+        this.timelineEnabled = null;
+        if (!select_node || !select_node.nodes) { return; }
+        this.timeline_groups = select_node.nodes;
+        const currentIndex = this.timeline_groups.indexOf(this.dataService.node.name);
+        if (currentIndex !== -1) {
+            this.timelineEnabled = 1;
+            this.timelineIndex = currentIndex.toString();
+            this.timelineValue = this.dataService.node.name;
+            if (select_node.widget === 'dropdown') {
+                this.timelineEnabled = 2;
+            }
+        }
+        if (this.dataService.timelineDefault && select_node.default) {
+            const nodeSelInput = <HTMLInputElement> document.getElementById('hidden_node_selection');
+            nodeSelInput.value = select_node.default;
+            (<HTMLButtonElement> document.getElementById('hidden_node_selection_button')).click();
+            this.dataService.timelineDefault = false;
+        }
+    }
     /**
      *
      * @param scale
@@ -239,9 +298,9 @@ export class DataThreejs extends DataThreejsLookAt {
                 azimuth_calc += angle;
             }
         }
-        let posX = Math.cos(altitude * Math.PI * 2 / 360) * Math.cos(azimuth_calc * Math.PI * 2 / 360) * scale,
-            posY = Math.cos(altitude * Math.PI * 2 / 360) * Math.sin(azimuth_calc * Math.PI * 2 / 360) * scale,
-            posZ = Math.sin(altitude * Math.PI * 2 / 360) * scale;
+        let posX = Math.cos(altitude * Math.PI * 2 / 360) * Math.cos(azimuth_calc * Math.PI * 2 / 360) * scale * 2,
+            posY = Math.cos(altitude * Math.PI * 2 / 360) * Math.sin(azimuth_calc * Math.PI * 2 / 360) * scale * 2,
+            posZ = Math.sin(altitude * Math.PI * 2 / 360) * scale * 2;
 
         if (this._all_objs_sphere) {
             posX += this._all_objs_sphere.center.x;
@@ -294,7 +353,6 @@ export class DataThreejs extends DataThreejsLookAt {
                     if (this.scene.children[i]['dispose']) {
                         this.scene.children[i]['dispose']();
                     }
-                    console.log(this.scene.children[i])
                     this.scene.remove(this.scene.children[i]);
                 }
             }
@@ -457,9 +515,10 @@ export class DataThreejs extends DataThreejsLookAt {
         this._buffer_geoms.push(geom);
 
         // // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
-        const mat = new THREE.LineBasicMaterial({
+        const mat = new THREE.LineDashedMaterial({
             color: 0x000000,
-            vertexColors: THREE.VertexColors
+            vertexColors: THREE.VertexColors,
+            gapSize: 0
         });
         const line = new THREE.LineSegments(geom, mat);
         this.scene_objs.push(line);
@@ -472,9 +531,10 @@ export class DataThreejs extends DataThreejsLookAt {
         this._buffer_geoms.push(geom_white);
 
         // // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
-        const mat_white = new THREE.LineBasicMaterial({
+        const mat_white = new THREE.LineDashedMaterial({
             color: 0xFFFFFF,
-            vertexColors: THREE.VertexColors
+            vertexColors: THREE.VertexColors,
+            gapSize: 0
         });
         const line_white = new THREE.LineSegments(geom_white, mat_white);
         this.scene_objs.push(line_white);
@@ -583,6 +643,7 @@ export class DataThreejs extends DataThreejsLookAt {
             const mergedGeom = BufferGeometryUtils.mergeBufferGeometries(shapes);
             const text = new THREE.Mesh(mergedGeom , matLite);
             this.scene.add(text);
+            // this.renderer.render(this.scene, this.camera);
             this.renderer.render(this.scene, this.camera);
         });
     }
@@ -647,12 +708,32 @@ export class DataThreejs extends DataThreejsLookAt {
             path + 'py' + format, path + 'ny' + format,
             path + 'pz' + format, path + 'nz' + format
         ];
-        const background = new THREE.CubeTextureLoader().load(urls, texture => {
+        this.cameraBackgrounds = {};
+        new THREE.CubeTextureLoader().load(urls, texture => {
             this.renderer.render(this.scene, this.camera);
+            texture.format = THREE.RGBFormat;
+            this.cameraBackgrounds['Persp'] = texture;
+            this.scene.background = this.cameraBackgrounds[this.currentCamera];
+        });
+        new THREE.TextureLoader().load(path + 'nz' + format, texture => {
+            this.renderer.render(this.scene, this.camera);
+            texture.format = THREE.RGBFormat;
+            this.cameraBackgrounds['Top'] = texture;
+            this.scene.background = this.cameraBackgrounds[this.currentCamera];
+        });
+        new THREE.TextureLoader().load(path + 'left' + format, texture => {
+            this.renderer.render(this.scene, this.camera);
+            texture.format = THREE.RGBFormat;
+            this.cameraBackgrounds['Left'] = texture;
+            this.scene.background = this.cameraBackgrounds[this.currentCamera];
+        });
+        new THREE.TextureLoader().load(path + 'front' + format, texture => {
+            this.renderer.render(this.scene, this.camera);
+            texture.format = THREE.RGBFormat;
+            this.cameraBackgrounds['Front'] = texture;
+            this.scene.background = this.cameraBackgrounds[this.currentCamera];
         });
 
-        background.format = THREE.RGBFormat;
-        this.scene.background = background;
         // this._renderer.render(this._scene, this._camera);
     }
 
@@ -715,7 +796,7 @@ export class DataThreejs extends DataThreejsLookAt {
         let distance = 0;
 
         if (this._all_objs_sphere) {
-            distance = Math.round(this._all_objs_sphere.radius * 3);
+            distance = Math.round(this._all_objs_sphere.radius);
             // if (distance < 10000) { distance = 10000; }
         }
         this.directional_light_settings.distance = distance;
@@ -724,8 +805,12 @@ export class DataThreejs extends DataThreejsLookAt {
         this.directional_light.visible = this.directional_light_settings.show;
         // this.directional_light_settings.shadowSize = 2;
         // const shadowMapSize = this.directional_light_settings.shadowSize;
-        // this.directional_light.shadow.radius = 1.2;  // default
-        this.directional_light.shadow.bias = -0.00001;  // default
+        if (this.directional_light_settings.shadowSize <= 10) {
+            this.directional_light_settings.shadowSize = this.directional_light_settings.shadowSize * 512;
+        }
+        if (this.directional_light_settings.shadowSize < 1024) {
+            this.directional_light_settings.shadowSize = 2048;
+        }
         this.directional_light.shadow.mapSize.width = this.directional_light_settings.shadowSize;  // default
         this.directional_light.shadow.mapSize.height = this.directional_light_settings.shadowSize; // default
         // this.directional_light.shadow.camera.visible = true;
@@ -774,13 +859,17 @@ export class DataThreejs extends DataThreejsLookAt {
                 }
             }
             this.directional_light.shadow.camera.near = 0.5;
-            this.directional_light.shadow.camera.far = scale * 3;
 
-            this.directional_light.shadow.bias = -0.001;
+            // let altitude = this.directional_light_settings.altitude;
+            // if (altitude < 3) { altitude = 3; }
+            // const altitudeOffset = Math.sin(altitude * Math.PI / 180);
+            this.directional_light.shadow.camera.far = scale * 20;
+            this.directional_light.shadow.bias = -0.0001;
 
             let helper;
 
             const cam = <THREE.OrthographicCamera> this.directional_light.shadow.camera;
+            cam.up.set(0, 0, 1);
             cam.left = -scale;
             cam.right = scale;
             cam.top = scale;
@@ -815,7 +904,7 @@ export class DataThreejs extends DataThreejsLookAt {
             // }
             helper.visible = this.directional_light_settings.helper;
             helper.name = 'DLHelper';
-            this.scene.add(helper);
+            if (size) { this.scene.add(helper); }
             this.getDLPosition(scale);
         }
     }

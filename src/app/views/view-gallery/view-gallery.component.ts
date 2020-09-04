@@ -120,7 +120,7 @@ export class ViewGalleryComponent implements AfterViewInit {
         //     linkSplit[0] = linkSplit[0].concat('.mob');
         // }
         if (linkSplit.length > 1) {
-            new LoadUrlComponent(this.dataService, this.router).loadURL(linkSplit[0], linkSplit[1].split('&')[0].trim());
+            new LoadUrlComponent(this.dataService, this.router).loadURL(linkSplit[0], Number(linkSplit[1].split('&')[0].trim()));
         } else {
             new LoadUrlComponent(this.dataService, this.router).loadURL(linkSplit[0]);
         }

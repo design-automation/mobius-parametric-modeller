@@ -24,6 +24,7 @@ export class ViewGalleryComponent implements AfterViewInit {
     // private allFiles: Observable<any>;
     allGalleries = [];
     allGalleriesData = galleryUrls.data;
+    urlPrefix = '';
     @Output() switch = new EventEmitter();
     @ViewChild('gallerySplit', { static: false }) gallerySplit: SplitComponent;
 
@@ -37,6 +38,9 @@ export class ViewGalleryComponent implements AfterViewInit {
     constructor(private http: HttpClient, private dataService: DataService,
                 private dataOutputService: DataOutputService, private router: Router) {
         this.allGalleries = this.allGalleriesData.map(gallery => gallery.name);
+        if (window.location.href.indexOf('design-automation.github.io') !== -1) {
+            this.urlPrefix = '/' + window.location.href.split('design-automation.github.io/')[1].split('/')[0];
+        }
         /*
         if (!this.dataService.galleryFiles) {
             this.dataService.galleryFiles = this.getFilesFromURL();
@@ -110,7 +114,7 @@ export class ViewGalleryComponent implements AfterViewInit {
     }
 
     loadFile(fileLink) {
-        const linkSplit = fileLink.split(/\s*&*\s*node\s*=/);
+        const linkSplit = (this.urlPrefix + fileLink).split(/\s*&*\s*node\s*=/);
         linkSplit[0] = linkSplit[0].trim();
         // if (!linkSplit[0].endsWith('.mob')) {
         //     linkSplit[0] = linkSplit[0].concat('.mob');
@@ -163,6 +167,10 @@ export class ViewGalleryComponent implements AfterViewInit {
         //     this.router.navigate(['/dashboard']);
         //     document.getElementById('executeButton').click();
         // });
+    }
+
+    getImgURL(imgLink: string, f) {
+        return this.urlPrefix + imgLink + 'imgs/' + f.split('.mob')[0] + '.JPG';
     }
 
     // viewerData(): any {

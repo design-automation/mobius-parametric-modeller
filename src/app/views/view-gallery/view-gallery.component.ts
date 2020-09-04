@@ -79,6 +79,10 @@ export class ViewGalleryComponent implements AfterViewInit {
                 lastHeader = 0;
             }
         }
+        if (lastHeader !== 0) {
+            lastHeader.classList.add('sticky');
+            lastHeader = 0;
+        }
     }
 
     openGalleryMenu(e: MouseEvent) {

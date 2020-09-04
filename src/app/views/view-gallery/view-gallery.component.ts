@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit, HostListener, ViewChild } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, HostListener, ViewChild, AfterViewInit } from '@angular/core';
 import { LoadUrlComponent } from '@shared/components/file/loadurl.component';
 import { HttpClient } from '@angular/common/http';
 import { Constants } from './view-gallery.config';
@@ -19,10 +19,11 @@ import { SplitComponent } from 'angular-split';
   templateUrl: './view-gallery.component.html',
   styleUrls: ['./view-gallery.component.scss']
 })
-export class ViewGalleryComponent {
+export class ViewGalleryComponent implements AfterViewInit {
 
     // private allFiles: Observable<any>;
     allGalleries = [];
+    allGalleriesData = galleryUrls.data;
     @Output() switch = new EventEmitter();
     @ViewChild('gallerySplit', { static: false }) gallerySplit: SplitComponent;
 
@@ -35,10 +36,7 @@ export class ViewGalleryComponent {
 
     constructor(private http: HttpClient, private dataService: DataService,
                 private dataOutputService: DataOutputService, private router: Router) {
-        this.allGalleries = galleryUrls.data.map(gallery => gallery.name);
-        if (!this.dataService.activeGallery || !this.switchGallery(this.dataService.activeGallery.name)) {
-            this.dataService.activeGallery = galleryUrls.data[0];
-        }
+        this.allGalleries = this.allGalleriesData.map(gallery => gallery.name);
         /*
         if (!this.dataService.galleryFiles) {
             this.dataService.galleryFiles = this.getFilesFromURL();
@@ -47,34 +45,68 @@ export class ViewGalleryComponent {
         new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url);
    }
 
-   viewerData() {
-    return this.dataOutputService.getViewerData(this.getNode(), true);
-}
+    ngAfterViewInit() {
+        if (!this.dataService.activeGallery || !this.switchGallery(this.dataService.activeGallery)) {
+            this.dataService.activeGallery = this.allGalleriesData[0].name;
+        }
+    }
+
+    viewerData() {
+        return this.dataOutputService.getViewerData(this.getNode(), true);
+    }
 
     getFilesFromURL(): Observable<any> {
         return this.http.get(Constants.GALLERY_URL, {responseType: 'json'});
     }
 
+    onGalleryScroll(e: MouseEvent) {
+        const contentPanel = document.getElementById('gallery_content_panel');
+        const scrollPos = contentPanel.scrollTop + 80;
+        let lastHeader = null;
+        for (const gallery of this.allGalleriesData) {
+            const gallery_header = document.getElementById('gallery-tab_' + gallery.name);
+            gallery_header.classList.remove('sticky');
+            if (lastHeader === 0) {
+            } else if (scrollPos > gallery_header.offsetTop) {
+                lastHeader = gallery_header;
+                this.dataService.activeGallery = gallery.name;
+            } else {
+                lastHeader.classList.add('sticky');
+                lastHeader = 0;
+            }
+        }
+    }
+
     openGalleryMenu(e: MouseEvent) {
-        let stl = document.getElementById('galleryMenu').style;
-        if (!stl.display || stl.display === 'none') {
-            stl.display = 'block';
+        const header = document.getElementById('galleryMenu');
+        if (!header.style.display || header.style.display === 'none') {
+            header.style.display = 'block';
+            let top = e.screenY - 60;
+            if (header.offsetHeight + top > window.innerHeight) {
+                top = window.innerHeight - header.offsetHeight;
+            }
+            header.style.top = top + 'px';
         } else {
-            stl.display = 'none';
+            header.style.display = 'none';
         }
         e.stopPropagation();
-        stl = null;
     }
 
 
     switchGallery(galleryName: string): boolean {
-        for (const gallery of galleryUrls.data) {
-            if (gallery.name === galleryName) {
-                this.dataService.activeGallery = gallery;
-                return true;
-            }
-        }
-        return false;
+        const contentPanel = document.getElementById('gallery_content_panel');
+        const galleryElm = document.getElementById('gallery-tab_' + galleryName);
+        if (!galleryElm) { return false; }
+        contentPanel.scrollTop = galleryElm.offsetTop - 41;
+        this.dataService.activeGallery = galleryName;
+        return true;
+        // for (const gallery of this.allGalleriesData) {
+        //     if (gallery.name === galleryName) {
+        //         this.dataService.activeGallery = gallery;
+        //         return true;
+        //     }
+        // }
+        // return false;
     }
 
     loadFile(fileLink) {

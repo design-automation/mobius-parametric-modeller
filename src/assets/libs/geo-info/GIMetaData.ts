@@ -277,7 +277,6 @@ export class GIMetaData {
         return this._data.attrib_values[data_type][1].get(key);
     }
     public hasAttribKey(key: string|number, data_type: EAttribDataTypeStrs): boolean {
-        console.log(">>>", key, data_type, this._data)
         return this._data.attrib_values[data_type][1].has(key);
     }
     // create string for debugging

@@ -105,8 +105,8 @@ export class DataThreejs extends DataThreejsLookAt {
                 container.removeChild(old);
             }
             setTimeout(() => { this._getNodeSelect(); }, 10);
-            if (!this.model.attribs.query.hasAttrib(EEntType.MOD, 'hud')) { return; }
-            const hud = this.model.attribs.query.getModelAttribVal('hud') as string;
+            if (!this.model.modeldata.attribs.query.hasAttrib(EEntType.MOD, 'hud')) { return; }
+            const hud = this.model.modeldata.attribs.query.getModelAttribVal('hud') as string;
             const element = this._createHud(hud).element;
             container.appendChild(element);
             old = null;
@@ -236,7 +236,7 @@ export class DataThreejs extends DataThreejsLookAt {
         }
     }
     private _getNodeSelect(): void {
-        const select_node: any = this.model.attribs.query.getModelAttribVal('select_node');
+        const select_node: any = this.model.modeldata.attribs.query.getModelAttribVal('select_node');
         this.timelineEnabled = null;
         if (!select_node || !select_node.nodes) { return; }
         this.timeline_groups = select_node.nodes;
@@ -272,7 +272,7 @@ export class DataThreejs extends DataThreejsLookAt {
         if (!altitude && altitude !== 0) {
             altitude = this.directional_light_settings.altitude;
         }
-        if (this.model && this.model.attribs && this.model.modeldata.attribs.query
+        if (this.model && this.model.modeldata.attribs && this.model.modeldata.attribs.query
         && this.model.modeldata.attribs.query.hasModelAttrib('directional_light')) {
             const model_light_settings: any = this.model.modeldata.attribs.query.getModelAttribVal('directional_light');
             if (model_light_settings.constructor === {}.constructor) {
@@ -286,7 +286,7 @@ export class DataThreejs extends DataThreejsLookAt {
         }
         if (scale === 0) { scale = 10000; }
         let azimuth_calc = 90 - azimuth;
-        if (this.model && this.model.attribs && this.model.modeldata.attribs.query
+        if (this.model && this.model.modeldata.attribs && this.model.modeldata.attribs.query
         && this.model.modeldata.attribs.query.hasModelAttrib('north')) {
             const north_attr: number[] = this.model.modeldata.attribs.query.getModelAttribVal('north') as number[];
             const north_vec = new THREE.Vector3(north_attr[0], north_attr[1], 0);
@@ -770,7 +770,7 @@ export class DataThreejs extends DataThreejsLookAt {
     private _addDirectionalLight(): void {
         this.directional_light_settings = JSON.parse(JSON.stringify(this.settings.directional_light));
         if (this.model
-        && this.model.attribs
+        && this.model.modeldata.attribs
         && this.model.modeldata.attribs.query
         && this.model.modeldata.attribs.query.hasModelAttrib('directional_light')) {
             const model_light_settings: any = this.model.modeldata.attribs.query.getModelAttribVal('directional_light');

@@ -292,7 +292,7 @@ export class DataCesium {
         // add geom
         if (model) {
             // get each polygon
-            const pgons_i: number[] = model.geom.query.getEnts(EEntType.PGON, false);
+            const pgons_i: number[] = model.modeldata.geom.query.getEnts(EEntType.PGON);
             if (pgons_i.length > 100000) {
                 const notify = <HTMLInputElement> document.getElementById('hidden_notify_button');
                 notify.value = 'Model too big to be rendered by Cesium';

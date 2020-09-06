@@ -138,7 +138,7 @@ export class GIModelData {
      * @param model_data The GI model.
      */
     public mergeAndPurge(modeldata: GIModelData): void {
-        const geom_maps: Map<number, number>[] = this.geom.io.mergeAndPurge(modeldata.geom._geom_maps);
+        const geom_maps: Map<string, Map<number, number>> = this.geom.io.mergeAndPurge(modeldata.geom._geom_maps);
         this.attribs.io.mergeAndPurge(modeldata.attribs._attribs_maps, geom_maps);
     }
     /**

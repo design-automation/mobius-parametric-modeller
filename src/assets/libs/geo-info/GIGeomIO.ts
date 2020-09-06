@@ -188,7 +188,7 @@ export class GIGeomIO {
      * The entities in the other model are renumbered.
      * @param other_geom_maps The geom_arrays of the other model.
      */
-    public mergeAndPurge(other_geom_maps: IGeomMaps): Map<number, number>[] {
+    public mergeAndPurge(other_geom_maps: IGeomMaps): Map<string, Map<number, number>> {
         // get lengths of existing entities before we start adding stuff
         // const num_posis: number = this._geom_maps.num_posis;
         const num_posis: number = this._geom_maps.up_posis_verts.size;
@@ -221,64 +221,69 @@ export class GIGeomIO {
         const renum_tris_map: Map<number, number> = new Map();
         let tris_count = 0;
         other_geom_maps.dn_tris_verts.forEach( (_, other_tri_i) => {
-            renum_verts_map.set(other_tri_i, tris_count + num_tris);
+            renum_tris_map.set(other_tri_i, tris_count + num_tris);
             tris_count += 1;
         });
         // edges
         const renum_edges_map: Map<number, number> = new Map();
         let edges_count = 0;
         other_geom_maps.dn_edges_verts.forEach( (_, other_edge_i) => {
-            renum_verts_map.set(other_edge_i, edges_count + num_edges);
+            renum_edges_map.set(other_edge_i, edges_count + num_edges);
             edges_count += 1;
         });
         // wires
         const renum_wires_map: Map<number, number> = new Map();
         let wires_count = 0;
         other_geom_maps.dn_wires_edges.forEach( (_, other_wire_i) => {
-            renum_verts_map.set(other_wire_i, wires_count + num_wires);
+            renum_wires_map.set(other_wire_i, wires_count + num_wires);
             wires_count += 1;
         });
         // faces
         const renum_faces_map: Map<number, number> = new Map();
         let faces_count = 0;
         other_geom_maps.dn_faces_wires.forEach( (_, other_face_i) => {
-            renum_verts_map.set(other_face_i, faces_count + num_faces);
+            renum_faces_map.set(other_face_i, faces_count + num_faces);
             faces_count += 1;
         });
         // points
         const renum_points_map: Map<number, number> = new Map();
         let points_count = 0;
         other_geom_maps.dn_points_verts.forEach( (_, other_point_i) => {
-            renum_verts_map.set(other_point_i, points_count + num_points);
+            renum_points_map.set(other_point_i, points_count + num_points);
             points_count += 1;
         });
         // plines
         const renum_plines_map: Map<number, number> = new Map();
         let plines_count = 0;
         other_geom_maps.dn_plines_wires.forEach( (_, other_wire_i) => {
-            renum_verts_map.set(other_wire_i, plines_count + num_plines);
+            renum_plines_map.set(other_wire_i, plines_count + num_plines);
             plines_count += 1;
         });
         // pgons
         const renum_pgons_map: Map<number, number> = new Map();
         let pgons_count = 0;
         other_geom_maps.dn_pgons_faces.forEach( (_, other_pgon_i) => {
-            renum_verts_map.set(other_pgon_i, pgons_count + num_pgons);
+            renum_pgons_map.set(other_pgon_i, pgons_count + num_pgons);
             pgons_count += 1;
         });
         // colls
         const renum_colls_map: Map<number, number> = new Map();
         let colls_count = 0;
         other_geom_maps.dn_colls_objs.forEach( (_, other_coll_i) => {
-            renum_verts_map.set(other_coll_i, colls_count + num_colls);
+            renum_colls_map.set(other_coll_i, colls_count + num_colls);
             colls_count += 1;
         });
         // create data to return
-        const renum_maps: Map<number, number>[] = [
-            renum_posis_map,
-            renum_verts_map, renum_edges_map, renum_wires_map, renum_faces_map,
-            renum_points_map, renum_plines_map, renum_pgons_map, renum_colls_map
-        ];
+        const renum_maps: Map<string, Map<number, number>> = new Map();
+        renum_maps.set('posis', renum_posis_map);
+        renum_maps.set('verts', renum_verts_map);
+        renum_maps.set('edges', renum_edges_map);
+        renum_maps.set('wires', renum_wires_map);
+        renum_maps.set('faces', renum_faces_map);
+        renum_maps.set('points', renum_points_map);
+        renum_maps.set('plines', renum_plines_map);
+        renum_maps.set('pgons', renum_pgons_map);
+        renum_maps.set('colls', renum_colls_map);
         // ======================================================================
         // update down arrays
         // add vertices to model

@@ -93,23 +93,17 @@ export class GIAttribsIO {
      * The existing data in the model is not deleted.
      * @param model_data Attribute data from the other model.
      */
-    public mergeAndPurge(attribs_maps: IAttribsMaps, renum_maps: Map<number, number>[]): void {
-        // get the maps
-        const [
-            renum_posis_map,
-            renum_verts_map, renum_edges_map, renum_wires_map, renum_faces_map,
-            renum_points_map, renum_plines_map, renum_pgons_map, renum_colls_map
-        ]: Map<number, number>[] = renum_maps;
+    public mergeAndPurge(attribs_maps: IAttribsMaps, renum_maps: Map<string, Map<number, number>>): void {
         // add the attribute data
-        if (attribs_maps.ps !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.POSI, renum_posis_map); }
-        if (attribs_maps._v !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.VERT, renum_verts_map); }
-        if (attribs_maps._e !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.EDGE, renum_edges_map); }
-        if (attribs_maps._w !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.WIRE, renum_wires_map); }
-        if (attribs_maps._f !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.FACE, renum_faces_map); }
-        if (attribs_maps.pt !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.POINT, renum_points_map); }
-        if (attribs_maps.pl !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.PLINE, renum_plines_map); }
-        if (attribs_maps.pg !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.PGON, renum_pgons_map); }
-        if (attribs_maps.co !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.COLL, renum_colls_map); }
+        if (attribs_maps.ps !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.POSI, renum_maps.get('posis')); }
+        if (attribs_maps._v !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.VERT, renum_maps.get('verts')); }
+        if (attribs_maps._e !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.EDGE, renum_maps.get('edges')); }
+        if (attribs_maps._w !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.WIRE, renum_maps.get('wires')); }
+        if (attribs_maps._f !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.FACE, renum_maps.get('faces')); }
+        if (attribs_maps.pt !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.POINT, renum_maps.get('points')); }
+        if (attribs_maps.pl !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.PLINE, renum_maps.get('plines')); }
+        if (attribs_maps.pg !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.PGON, renum_maps.get('pgons')); }
+        if (attribs_maps.co !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.COLL, renum_maps.get('colls')); }
         if (attribs_maps.mo !== undefined) { this._mergeModelAttribs(attribs_maps); }
     }
     /**

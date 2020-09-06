@@ -281,7 +281,6 @@ async function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
                 // delete the ents
                 model_clone.delete(ent_sets, false);
             }
-            model_clone.purge();
             // === get meta data ===
             model_data = model_clone.getJSONStr();
             // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix

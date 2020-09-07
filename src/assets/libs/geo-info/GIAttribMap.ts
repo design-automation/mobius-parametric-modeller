@@ -14,16 +14,16 @@ import { cloneDeepMapArr } from './common_func';
  *
  */
 export class GIAttribMap {
-    private _modeldata: GIModelData;
-    private _name: string;
-    private _ent_type: EEntType;
-    private _data_type: EAttribDataTypeStrs;
-    private _data_length: number;
+    protected _modeldata: GIModelData;
+    protected _name: string;
+    protected _ent_type: EEntType;
+    protected _data_type: EAttribDataTypeStrs;
+    protected _data_length: number;
     // the two data maps that store attrib pointers
     // private _map_val_k_to_val_i: Map<string|number, number>; // unique, no duplicates
     // private _map_val_i_to_val: Map<number, TAttribDataTypes>; // unique, no duplicates
-    private _map_val_i_to_ents_i: Map<number, number[]>;
-    private _map_ent_i_to_val_i: Map<number, number>;
+    protected _map_val_i_to_ents_i: Map<number, number[]>;
+    protected _map_ent_i_to_val_i: Map<number, number>;
     /**
      * Creates an attribute.
      * @param attrib_data
@@ -173,24 +173,6 @@ export class GIAttribMap {
         });
         return ents_i_values;
     }
-
-    // /**
-    //  * Sets the value for multiple entity-value pairs at the same time.
-    //  * [ [[2,4,6,8], 'hello'], [[9,10], 'world']]
-    //  * ~
-    //  * Can also set lists and dicts
-    //  * [ [[2,4,6,8], [1,2,3]], [[9,10], [4,5,6,7]]]
-    //  * [ [[2,4,6,8], {a:1, b:2}], [[9,10], {d:1, e:2, f:3}]]
-    //  * ~
-    //  * @param ent_i
-    //  * @param val
-    //  */
-    // public setEntsVals(ents_i_values: [number[], TAttribDataTypes][], check_type = true): void {
-    //     for (let i = 0; i < ents_i_values.length; i++) {
-    //         this.setEntVal(ents_i_values[i][0], ents_i_values[i][1], check_type);
-    //     }
-    // }
-
     /**
      * Sets the value for a given entity or entities.
      *
@@ -226,10 +208,7 @@ export class GIAttribMap {
             }
         }
         const val_k: string | number = this._valToValkey(val);
-        // check if this val already exists, if not create it
-        // if (!this._map_val_k_to_val_i.has(val_k)) {
-        //     this._map_val_k_to_val_i.set(val_k, this._num_vals);
-        //     this._map_val_i_to_val.set(this._num_vals, val);
+        // get the index to the value
         let val_i: number;
         if (this._modeldata.model.metadata.hasAttribKey(val_k, this._data_type)) {
             val_i = this._modeldata.model.metadata.getAttribIdxFromKey(val_k, this._data_type);
@@ -240,8 +219,6 @@ export class GIAttribMap {
             val_i = this._modeldata.model.metadata.addAttribByKeyVal(val_k, val, this._data_type);
             this._map_val_i_to_ents_i.set(val_i, []);
         }
-        // get the new val_i
-        // const new_val_i: number = this._map_val_k_to_val_i.get(val_k);
         // an array of ents
         ents_i = (Array.isArray(ents_i)) ? ents_i : [ents_i];
         // loop through all the unique ents, and set _map_ent_i_to_val_i
@@ -282,57 +259,6 @@ export class GIAttribMap {
                 this._data_length = arr_len;
             }
         }
-    }
-    // /**
-    //  * Merges the value for multiple entity-value pairs at the same time.
-    //  * This method is for merging two model, and focuses on fast merging.
-    //  * It assume that the ents are new ents with no existing attribute values.
-    //  * ~
-    //  * For setting entity attributes, use the setEntsVals() method.
-    //  * ~
-    //  * [ [[2,4,6,8], 'hello'], [[9,10], 'world']]
-    //  * ~
-    //  * Can also set lists and dicts
-    //  * [ [[2,4,6,8], [1,2,3]], [[9,10], [4,5,6,7]]]
-    //  * [ [[2,4,6,8], {a:1, b:2}], [[9,10], {d:1, e:2, f:3}]]
-    //  * ~
-    //  * @param ent_i
-    //  * @param val
-    //  */
-    public mergeEntsVals(ents_i_values: [number[], TAttribDataTypes][]): void {
-        throw new Error('Not implemented');
-        // for (const [ents_i, val] of ents_i_values) {
-        //     // get key
-        //     const val_k: string | number = this._valToValkey(val);
-        //     // check if this val already exists, if not create it
-        //     // if (!this._map_val_k_to_val_i.has(val_k)) {
-        //     //     this._map_val_k_to_val_i.set(val_k, this._num_vals);
-        //     //     this._map_val_i_to_val.set(this._num_vals, val);
-        // if (!this._model.meta.hasAttribKey(val_k, this._data_type)) {
-        //         const val_i: number = this._model.meta.addAttribByKeyVal(val_k, val, this._data_type);
-        //         this._map_val_i_to_ents_i.set(val_i, []);
-        //         this._num_vals += 1;
-        //     }
-        //     // get the new val_i
-        //     const val_i: number = this._map_val_k_to_val_i.get(val_k);
-        //     // for each ent_i, set the new val_i
-        //     ents_i.forEach( ent_i => {
-        //         this._map_ent_i_to_val_i.set(ent_i, val_i);
-        //         this._map_val_i_to_ents_i.get(val_i).push(ent_i);
-        //     });
-        //     // update the _data_length for lists and objects
-        //     if (this._data_type === EAttribDataTypeStrs.LIST) {
-        //         const arr_len: number = (val as any[]).length;
-        //         if (arr_len > this._data_length) {
-        //             this._data_length = arr_len;
-        //         }
-        //     } else if (this._data_type === EAttribDataTypeStrs.DICT) {
-        //         const arr_len: number = Object.keys((val as object)).length;
-        //         if (arr_len > this._data_length) {
-        //             this._data_length = arr_len;
-        //         }
-        //     }
-        // }
     }
     /**
      * Renumber the entity IDs.
@@ -382,7 +308,7 @@ export class GIAttribMap {
         this._map_val_i_to_ents_i = cloneDeepMapArr(attrib_map._map_val_i_to_ents_i);
         this._map_ent_i_to_val_i = new Map(attrib_map._map_ent_i_to_val_i);
     }
-        /**
+    /**
      * Dumps another attrib map into this attrib map
      * Assumes tha this map is empty
      * @param attrib_map The attrib map to merge into this map
@@ -663,7 +589,7 @@ export class GIAttribMap {
      * boolean -> number (1 or 0)
      * list -> string
      */
-    private _valToValkey(val: TAttribDataTypes): string|number {
+    protected _valToValkey(val: TAttribDataTypes): string|number {
         if (this._data_type === EAttribDataTypeStrs.STRING) {
             if (typeof val !== 'string') {
                 throw new Error('Value must be of type "string".');
@@ -705,7 +631,7 @@ export class GIAttribMap {
      * _map_val_i_to_val
      * _map_val_k_to_val_i
      */
-    private _cleanUp(val_i: number): void {
+    protected _cleanUp(val_i: number): void {
         if (val_i !== undefined) {
             // _map_val_i_to_ents_i: Map<number, number[]>
             const ents_i: number[] = this._map_val_i_to_ents_i.get(val_i);
@@ -729,7 +655,7 @@ export class GIAttribMap {
      * @param val1
      * @param val2
      */
-    private _compare(operator: EFilterOperatorTypes, val1: any, val2: any): boolean {
+    protected _compare(operator: EFilterOperatorTypes, val1: any, val2: any): boolean {
         if (Array.isArray(val1)) {
             if (!Array.isArray(val2)) { return false; }
             if (val1.length !== val2.length) { return false; }
@@ -768,7 +694,7 @@ export class GIAttribMap {
     /**
      * Searches for the number value using the operator
      */
-    private _searchNumVal(ents_i: number[], operator: EFilterOperatorTypes, search_val: number): number[] {
+    protected _searchNumVal(ents_i: number[], operator: EFilterOperatorTypes, search_val: number): number[] {
         // first deal with null cases
         if (search_val === null && operator === EFilterOperatorTypes.IS_EQUAL ) {
             return this.getEntsWithoutVal(ents_i);
@@ -805,7 +731,7 @@ export class GIAttribMap {
     /**
      * Searches for the string value using the operator
      */
-    private _searchStrVal(ents_i: number[], operator: EFilterOperatorTypes, search_val: string): number[] {
+    protected _searchStrVal(ents_i: number[], operator: EFilterOperatorTypes, search_val: string): number[] {
         // first deal with null cases
         if (search_val === null && operator === EFilterOperatorTypes.IS_EQUAL ) {
             return this.getEntsWithoutVal(ents_i);
@@ -835,7 +761,7 @@ export class GIAttribMap {
     /**
      * Searches for the boolean value using the operator
      */
-    private _searchBoolVal(ents_i: number[], operator: EFilterOperatorTypes, search_val: boolean): number[] {
+    protected _searchBoolVal(ents_i: number[], operator: EFilterOperatorTypes, search_val: boolean): number[] {
         // first deal with null cases
         if (search_val === null && operator === EFilterOperatorTypes.IS_EQUAL ) {
             return this.getEntsWithoutVal(ents_i);
@@ -865,7 +791,7 @@ export class GIAttribMap {
     /**
      * Searches for the list value using the operator
      */
-    private _searchListVal(ents_i: number[], operator: EFilterOperatorTypes, search_val: any[]): number[] {
+    protected _searchListVal(ents_i: number[], operator: EFilterOperatorTypes, search_val: any[]): number[] {
         // first deal with null cases
         if (search_val === null && operator === EFilterOperatorTypes.IS_EQUAL ) {
             return this.getEntsWithoutVal(ents_i);
@@ -902,7 +828,7 @@ export class GIAttribMap {
     /**
      * Searches for the object value using the operator
      */
-    private _searchObjVal(ents_i: number[], operator: EFilterOperatorTypes, search_val: object): number[] {
+    protected _searchObjVal(ents_i: number[], operator: EFilterOperatorTypes, search_val: object): number[] {
         // first deal with null cases
         if (search_val === null && operator === EFilterOperatorTypes.IS_EQUAL ) {
             return this.getEntsWithoutVal(ents_i);
@@ -932,7 +858,7 @@ export class GIAttribMap {
     /**
      * Searches for the value using the operator
      */
-    private _searchListIdxVal(ents_i: number[], arr_idx: number, operator: EFilterOperatorTypes, search_val: any): number[] {
+    protected _searchListIdxVal(ents_i: number[], arr_idx: number, operator: EFilterOperatorTypes, search_val: any): number[] {
         // do the search
         const found_ents_i: number[] = [];
         for (const ent_i of ents_i) {
@@ -949,7 +875,7 @@ export class GIAttribMap {
 /**
      * Searches for the value using the operator
      */
-    private _searchDictKeyVal(ents_i: number[], obj_key: string, operator: EFilterOperatorTypes, search_val: any): number[] {
+    protected _searchDictKeyVal(ents_i: number[], obj_key: string, operator: EFilterOperatorTypes, search_val: any): number[] {
         // do the search
         const found_ents_i: number[] = [];
         for (const ent_i of ents_i) {

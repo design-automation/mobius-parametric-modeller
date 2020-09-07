@@ -1,6 +1,5 @@
 import { IAttribsJSONData, IAttribJSONData, TAttribDataTypes, EEntType,
-    IAttribsMaps, EEntTypeStr, TModelAttribValuesArr, IGeomPack, IEntSets } from './common';
-import { GIAttribMap } from './GIAttribMap';
+    IAttribsMaps, EEntTypeStr, TModelAttribValuesArr, IEntSets, TAttribMap } from './common';
 import { GIModelData } from './GIModelData';
 import * as lodash from 'lodash';
 
@@ -21,7 +20,7 @@ export class GIAttribsIO {
     }
     /**
      * Adds data to this model from another model.
-     * The existing data in the model is not deleted.
+     * The existing data in the model is not deleted - checks for conflicts.
      * @param model_data Attribute data from the other model.
      */
     public merge(attribs_maps: IAttribsMaps): void {
@@ -38,7 +37,7 @@ export class GIAttribsIO {
     }
     /**
      * Adds data to this model from another model.
-     * Assumes this model is empty.
+     * Assumes this model is empty - no conflict detection.
      * @param model_data Attribute data from the other model.
      */
     public dump(attribs_maps: IAttribsMaps): void {
@@ -55,7 +54,7 @@ export class GIAttribsIO {
     }
     /**
      * Adds selected data to this model from another model.
-     * Assumes this model is empty.
+     * Assumes this model is empty - no conflict detection.
      * @param model_data Attribute data from the other model.
      */
     public dumpSelect(attribs_maps: IAttribsMaps, ent_sets: IEntSets): void {
@@ -203,17 +202,16 @@ export class GIAttribsIO {
      * @param attribs_maps
      */
     private _mergeAttribs(attribs_maps: IAttribsMaps, ent_type: EEntType) {
-        const other_attribs: Map<string, GIAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
-        const this_attribs: Map<string, GIAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
+        const other_attribs: Map<string, TAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
+        const this_attribs: Map<string, TAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
         other_attribs.forEach( other_attrib => {
             if (other_attrib.numEnts() > 0) {
                 // get the name
                 const name: string = other_attrib.getName();
                 // get or create the attrib
-                let this_attrib: GIAttribMap;
+                let this_attrib: TAttribMap;
                 if (!this_attribs.has(name)) {
-                    this_attrib = new GIAttribMap(this._modeldata, name, ent_type, other_attrib.getDataType());
-                    this_attribs.set(name, this_attrib );
+                    this_attrib = this._modeldata.attribs.add.addEntAttrib(ent_type, name, other_attrib.getDataType());
                 } else {
                     this_attrib = this_attribs.get(name);
                     if (this_attrib.getDataType() !== other_attrib.getDataType()) {
@@ -233,17 +231,16 @@ export class GIAttribsIO {
      * @param attribs_maps
      */
     private _mergeAndPurgeAttribs(attribs_maps: IAttribsMaps, ent_type: EEntType, renum_map: Map<number, number>) {
-        const other_attribs: Map<string, GIAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
-        const this_attribs: Map<string, GIAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
+        const other_attribs: Map<string, TAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
+        const this_attribs: Map<string, TAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
         other_attribs.forEach( other_attrib => {
             if (other_attrib.numEnts() > 0) {
                 // get the name
                 const name: string = other_attrib.getName();
                 // get or create the attrib
-                let this_attrib: GIAttribMap;
+                let this_attrib: TAttribMap;
                 if (!this_attribs.has(name)) {
-                    this_attrib = new GIAttribMap(this._modeldata, name, ent_type, other_attrib.getDataType());
-                    this_attribs.set(name, this_attrib );
+                    this_attrib = this._modeldata.attribs.add.addEntAttrib(ent_type, name, other_attrib.getDataType());
                 } else {
                     this_attrib = this_attribs.get(name);
                     if (this_attrib.getDataType() !== other_attrib.getDataType()) {
@@ -263,13 +260,13 @@ export class GIAttribsIO {
      * @param attribs_maps
      */
     private _dumpAttribs(attribs_maps: IAttribsMaps, ent_type: EEntType) {
-        const other_attribs: Map<string, GIAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
-        const this_attribs: Map<string, GIAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
+        const other_attribs: Map<string, TAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
         other_attribs.forEach( other_attrib => {
             if (other_attrib.numEnts() > 0) {
-                const name: string = other_attrib.getName();
-                const this_attrib = new GIAttribMap(this._modeldata, name, ent_type, other_attrib.getDataType());
-                this_attribs.set(name, this_attrib );
+                const this_attrib: TAttribMap = this._modeldata.attribs.add.addEntAttrib(
+                    ent_type,
+                    other_attrib.getName(),
+                    other_attrib.getDataType());
                 this_attrib.dump(other_attrib);
             }
         });
@@ -279,14 +276,14 @@ export class GIAttribsIO {
      * Assumes that the existing model is empty
      * @param attribs_maps
      */
-    private _dumpAttribsSelect(attribs_maps: IAttribsMaps, ent_type: EEntType, selected: Set<number>) {
-        const other_attribs: Map<string, GIAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
-        const this_attribs: Map<string, GIAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
+    private _dumpAttribsSelect(attribs_maps: IAttribsMaps, ent_type: EEntType, selected: Set<number>): void {
+        const other_attribs: Map<string, TAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
         other_attribs.forEach( other_attrib => {
             if (other_attrib.numEnts() > 0) {
-                const name: string = other_attrib.getName();
-                const this_attrib = new GIAttribMap(this._modeldata, name, ent_type, other_attrib.getDataType());
-                this_attribs.set(name, this_attrib );
+                const this_attrib = this._modeldata.attribs.add.addEntAttrib(
+                    ent_type,
+                    other_attrib.getName(),
+                    other_attrib.getDataType());
                 this_attrib.dumpSelect(other_attrib, selected);
             }
         });
@@ -294,15 +291,16 @@ export class GIAttribsIO {
     /**
      * From JSON data
      * Existing attributes are deleted
-     * @param new_attribs_data
+     * @param attribs_data
      */
-    private _setAttribsJSONData(new_attribs_data: IAttribJSONData[], ent_type: EEntType) {
-        const this_attribs: Map<string, GIAttribMap> = new Map();
-        new_attribs_data.forEach( new_attrib_data => {
-            const this_attrib: GIAttribMap = new GIAttribMap(this._modeldata, new_attrib_data.name, ent_type, new_attrib_data.data_type );
-            this_attrib.setJSONData(new_attrib_data);
-            this_attribs.set(new_attrib_data.name, this_attrib);
+    private _setAttribsJSONData(attribs_data: IAttribJSONData[], ent_type: EEntType): void {
+        this._attribs_maps[EEntTypeStr[ ent_type ]] = new Map();
+        attribs_data.forEach( attrib_data => {
+            const this_attrib: TAttribMap = this._modeldata.attribs.add.addEntAttrib(
+                ent_type,
+                attrib_data.name,
+                attrib_data.data_type);
+            this_attrib.setJSONData(attrib_data);
         });
-        this._attribs_maps[EEntTypeStr[ ent_type ]] = this_attribs;
     }
 }

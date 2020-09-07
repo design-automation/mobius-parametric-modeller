@@ -1,5 +1,4 @@
-import { TAttribDataTypes, EEntType, IAttribsMaps, EAttribNames, EEntTypeStr, Txyz} from './common';
-import { GIAttribMap } from './GIAttribMap';
+import { TAttribDataTypes, EEntType, IAttribsMaps, EAttribNames, EEntTypeStr, Txyz, TAttribMap} from './common';
 import { isString } from 'util';
 import { sortByKey } from '../util/maps';
 import { GIModelData } from './GIModelData';
@@ -29,7 +28,7 @@ export class GIAttribsThreejs {
      * @param verts An array of vertex indices pointing to the position.
      */
     public get3jsSeqPosisCoords(): [number[], Map<number, number>] {
-        const coords_attrib: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
+        const coords_attrib: TAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
         //
         const coords: number[][] = [];
         const posi_map: Map<number, number> = new Map();
@@ -59,7 +58,7 @@ export class GIAttribsThreejs {
      * @param verts An array of vertex indices pointing to the positio.
      */
     public get3jsSeqVertsCoords(): [number[], Map<number, number>] {
-        const coords_attrib: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
+        const coords_attrib: TAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
         //
         const coords: number[][] = [];
         const vertex_map: Map<number, number> = new Map();
@@ -89,7 +88,7 @@ export class GIAttribsThreejs {
     public get3jsSeqVertsNormals(): number[] {
         if (!this._attribs_maps._v.has(EAttribNames.NORMAL)) { return null; }
         // create a sparse arrays of normals of all verts of polygons
-        const verts_attrib: GIAttribMap = this._attribs_maps._v.get(EAttribNames.NORMAL);
+        const verts_attrib: TAttribMap = this._attribs_maps._v.get(EAttribNames.NORMAL);
         const normals: Txyz[] = [];
         for (const pgon_i of this._modeldata.geom.query.getEnts(EEntType.PGON)) {
             let pgon_normal: Txyz = null;
@@ -121,11 +120,10 @@ export class GIAttribsThreejs {
 
     /**
      * Get a flat array of colors values for all the vertices.
-     * Verts that have been deleted will not be included
      */
     public get3jsSeqVertsColors(): number[] {
         if (!this._attribs_maps._v.has(EAttribNames.COLOR)) { return null; }
-        const verts_attrib: GIAttribMap = this._attribs_maps._v.get(EAttribNames.COLOR);
+        const verts_attrib: TAttribMap = this._attribs_maps._v.get(EAttribNames.COLOR);
         // get all the colors
         const verts_colors: TAttribDataTypes[] = [];
         const verts_i: number[] = this._modeldata.geom.query.getEnts(EEntType.VERT);
@@ -164,7 +162,7 @@ export class GIAttribsThreejs {
     public getAttribsForTable(ent_type: EEntType): {data: any[], ents: number[]} {
         // get the attribs map for this ent type
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attribs: Map<string, TAttribMap> = this._attribs_maps[attribs_maps_key];
 
         // create a map of objects to store the data
         // const data_obj_map: Map< number, { '#': number, _id: string} > = new Map();
@@ -242,7 +240,7 @@ export class GIAttribsThreejs {
      */
     public getEntsVals(selected_ents: Map<string, number>, ent_type: EEntType): any[] {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attribs: Map<string, TAttribMap> = this._attribs_maps[attribs_maps_key];
         const data_obj_map: Map< number, { _id: string} > = new Map();
         if (!selected_ents || selected_ents === undefined) {
             return [];

@@ -1,6 +1,6 @@
 
 import {  EEntType, IGeomMaps, EEntStrToGeomMaps, TWire, Txyz, TEntTypeIdx,
-    TFace, EWireType, TEdge, IEntSets as IDelEntSets } from './common';
+    TFace, EWireType, TEdge, IEntSets } from './common';
 import { isPosi, isPoint, isPline, isPgon, isColl } from './id';
 import { GIGeom } from './GIGeom';
 import { vecFromTo, vecCross, vecDiv, vecNorm, vecLen, vecDot } from '../geom/vectors';
@@ -21,83 +21,25 @@ export class GIGeomQuery {
     // ============================================================================
     // Entities
     // ============================================================================
-
-    /**
-     * Returns a sparse list of indices for ents.
-     * ~
-     * If include_deleted=true, it will include ents that are null.
-     * @param ent_type
-     */
-    // public getEntsSparse(ent_type: EEntType): number[] {
-    //     // get posis indices array from up array: up_posis_verts
-    //     if (isPosi(ent_type)) {
-    //         const posis: number[][] = this._geom_maps.up_posis_verts;
-    //         const posis_i: number[] = [];
-    //             for (let i = 0; i < posis.length; i++ ) {
-    //                 const posi = posis[i];
-    //                 if (posi !== null && posi !== undefined) {
-    //                     posis_i[i] = i;
-    //                 }
-    //             }
-
-    //         return posis_i;
-    //     }
-    //     // get ents indices array from down arrays
-    //     const geom_array_key: string = EEntStrToGeomArray[ent_type];
-    //     const geom_array: any[] = this._geom_maps[geom_array_key];
-    //     const ents_i: number[] = [];
-    //     for (let i = 0; i < geom_array.length; i++ ) {
-    //         const ent = geom_array[i];
-    //         if (ent !== null && ent !== undefined) {
-    //             ents_i[i] = i;
-    //         }
-    //     }
-
-    //     return ents_i;
-    // }
     /**
      * Returns a list of indices for ents.
      * @param ent_type
      */
     public getEnts(ent_type: EEntType): number[] {
-        // // get posis indices array from up array: up_posis_verts
-        // if (isPosi(ent_type)) {
-        //     // const posis: number[][] = this._geom_maps.up_posis_verts;
-        //     const posis_i: number[] = [];
-        //     // for (let i = 0; i < posis.length; i++ ) {
-        //     //     const posi = posis[i];
-        //     //     if (posi !== undefined) {
-        //     //         posis_i.push(i);
-        //     //     }
-        //     // }
-        //     this._geom_maps.up_posis_verts.forEach( (_, i) => posis_i.push(i) );
-        //     return posis_i;
-        // }
         // get ents indices array from down arrays
-        const geom_array_key: string = EEntStrToGeomMaps[ent_type];
-        const geom_array: any[] = this._geom_maps[geom_array_key];
-        const ents_i: number[] = [];
-        // for (let i = 0; i < geom_array.length; i++ ) {
-        //     const ent = geom_array[i];
-        //     if (ent !== undefined) {
-        //         ents_i.push(i);
-        //     }
-        // }
-        geom_array.forEach( (_, i) => ents_i.push(i) );
-        return ents_i;
+        const geom_map_key: string = EEntStrToGeomMaps[ent_type];
+        const geom_map: Map<number, any> = this._geom_maps[geom_map_key];
+        return Array.from(geom_map.keys());
+        // const ents_i: number[] = [];
+        // geom_map.forEach( (_, i) => ents_i.push(i) );
+        // return ents_i;
     }
     /**
      * Returns the number of entities
      */
     public numEnts(ent_type: EEntType): number {
-        // if (isPosi(ent_type)) {
-        //     // get posis count from up array: up_posis_verts
-        //     return this._geom_maps.up_posis_verts.size;
-        // } else {
-            // get ents count from down arrays
-            const geom_array_key: string = EEntStrToGeomMaps[ent_type];
-            return this._geom_maps[geom_array_key].size;
-        // }
+        const geom_array_key: string = EEntStrToGeomMaps[ent_type];
+        return this._geom_maps[geom_array_key].size;
     }
     /**
      * Returns the number of entities for [posis, point, polylines, polygons, collections].
@@ -111,24 +53,6 @@ export class GIGeomQuery {
             this.numEnts(EEntType.COLL)
         ];
     }
-    // private getNumEntsInclDel(ent_type: EEntType): number {
-    //     let count = 0;
-    //     let geom_array: any[] = null;
-    //     if (isPosi(ent_type)) {
-    //         // get posis count from up array: up_posis_verts
-    //         geom_array = this._geom_maps.up_posis_verts;
-    //     } else {
-    //         // get ents count from down arrays
-    //         const geom_array_key: string = EEntStrToGeomArray[ent_type];
-    //         geom_array = this._geom_maps[geom_array_key];
-    //     }
-    //     for (let i = 0; i < geom_array.length; i++) {
-    //         if (geom_array[i] !== undefined) {
-    //             count += 1;
-    //         }
-    //     }
-    //     return count;
-    // }
     /**
      * Check if an entity exists
      * @param ent_type
@@ -152,7 +76,7 @@ export class GIGeomQuery {
      * ~
      * Used for deleting all entities.
      */
-    public getDelEntSets(ents: TEntTypeIdx[]): IDelEntSets {
+    public getDelEntSets(ents: TEntTypeIdx[]): IEntSets {
         const set_posis_i: Set<number> = new Set();
         const set_ent_posis_i: Set<number> = new Set();
         const set_points_i: Set<number> = new Set();
@@ -445,95 +369,95 @@ export class GIGeomQuery {
     // ============================================================================
     // Objects
     // ============================================================================
-    /**
-     * Returns three arrays of pairs of maps, for points, plines, and pgons.
-     * This is used for creating a timeline, and is based on an attribute called "visible"
-     * on collections.
-     * The visible attribute is an array of strings, where each string is a time-stamp label.
-     * ~
-     * For the first map in each pair, keys are the group names, and values are a set of entitie IDs.
-     * For the second map in each pair, keys are the time-stamp names, and values are a set of group names.
-     * @return Array of arrays of maps.
-     */
-    public getObjVisGroups(): [ {}, Map<string, Set<string>> ] {
-        if (!this._geom.modeldata.attribs.query.hasAttrib(EEntType.COLL, 'visible')) {
-            return null;
-        }
-        // return the result
-        const colls_i: number[] = this.getEnts(EEntType.COLL);
+    // /**
+    //  * Returns three arrays of pairs of maps, for points, plines, and pgons.
+    //  * This is used for creating a timeline, and is based on an attribute called "visible"
+    //  * on collections.
+    //  * The visible attribute is an array of strings, where each string is a time-stamp label.
+    //  * ~
+    //  * For the first map in each pair, keys are the group names, and values are a set of entitie IDs.
+    //  * For the second map in each pair, keys are the time-stamp names, and values are a set of group names.
+    //  * @return Array of arrays of maps.
+    //  */
+    // public getObjVisGroups(): [ {}, Map<string, Set<string>> ] {
+    //     if (!this._geom.modeldata.attribs.query.hasAttrib(EEntType.COLL, 'visible')) {
+    //         return null;
+    //     }
+    //     // return the result
+    //     const colls_i: number[] = this.getEnts(EEntType.COLL);
 
-        const full_obj_grp = {'default': []};
-        const full_lbl_grp = new Map<string, Set<string>>();
-        const grps = [  this._getObjVisGroups(colls_i, EEntType.POINT),
-                        this._getObjVisGroups(colls_i, EEntType.EDGE),
-                        this._getObjVisGroups(colls_i, EEntType.TRI)];
-        for (let i = 0; i < grps.length; i ++) {
-            const grp = grps[i];
-            console.log(grp)
-            full_obj_grp['default'][i] = grp[0].get('default');
-            grp[1].forEach((val, key) => {
-                let lbl_grp = full_lbl_grp.get(key);
-                if (!lbl_grp) { lbl_grp = new Set<string>(); }
-                for (const v of val) {
-                    lbl_grp.add(v);
-                    if (!full_obj_grp[v]) {
-                        full_obj_grp[v] = [null, null, null];
-                    }
-                    full_obj_grp[v][i] = grp[0].get(v);
-                }
-                full_lbl_grp.set(key, lbl_grp);
-            });
-        }
-        return [full_obj_grp, full_lbl_grp];
-    }
-    private _getObjVisGroups(colls_i: number[], ent_type: EEntType): [Map<string, Set<number>>, Map<string, Set<string>>] {
-        // get objects
-        const objs_i: number[] = this.getEnts(ent_type);
-        // create overlapping groups of objects
-        // keys are for example "2020", "2021" etc
-        // objects can be in more than one group
-        const obj_groups: Map<string, Set<number>> = new Map();
-        for (const coll_i of colls_i) {
-            const visibility: string[] = this._geom.modeldata.attribs.query.getAttribVal(EEntType.COLL, 'visible', coll_i) as string[];
-            if (visibility !== undefined) {
-                // points
-                const coll_objs_i: number[] = this._geom.nav.navAnyToAny(EEntType.COLL, ent_type, coll_i);
-                if (coll_objs_i.length > 0) {
-                    for (const label of visibility) {
-                        if (!obj_groups.has(label)) { obj_groups.set(label, new Set()); }
-                    }
-                    for (const i of coll_objs_i) {
-                        for (const label of visibility) { obj_groups.get(label).add(i); }
-                    }
-                }
-            }
-        }
-        // create non-overlapping groups of objects
-        // keys are for example "2020_2021", "2022_2023_2024" etc
-        // objects will only be in one group
-        const obj_groups2: Map<string, Set<number>> = new Map();
-        const obj_labels2: Map<string, Set<string>> = new Map();
-        obj_groups2.set('default', new Set());
-        for (const i of objs_i) {
-            const labels: string[] = [];
-            obj_groups.forEach( (group, label) => {
-                if (group.has(i)) { labels.push(label); }
-            });
-            if (labels.length > 0) {
-                const label2 = labels.sort().join('_');
-                if (!obj_groups2.has(label2)) { obj_groups2.set(label2, new Set()); }
-                obj_groups2.get(label2).add(i);
-                for (const label of labels) {
-                    if (!obj_labels2.has(label)) { obj_labels2.set(label, new Set()); }
-                    obj_labels2.get(label).add(label2);
-                }
-            } else {
-                obj_groups2.get('default').add(i);
-            }
-        }
-        // return the result
-        return [obj_groups2, obj_labels2];
-    }
+    //     const full_obj_grp = {'default': []};
+    //     const full_lbl_grp = new Map<string, Set<string>>();
+    //     const grps = [  this._getObjVisGroups(colls_i, EEntType.POINT),
+    //                     this._getObjVisGroups(colls_i, EEntType.EDGE),
+    //                     this._getObjVisGroups(colls_i, EEntType.TRI)];
+    //     for (let i = 0; i < grps.length; i ++) {
+    //         const grp = grps[i];
+    //         console.log(grp)
+    //         full_obj_grp['default'][i] = grp[0].get('default');
+    //         grp[1].forEach((val, key) => {
+    //             let lbl_grp = full_lbl_grp.get(key);
+    //             if (!lbl_grp) { lbl_grp = new Set<string>(); }
+    //             for (const v of val) {
+    //                 lbl_grp.add(v);
+    //                 if (!full_obj_grp[v]) {
+    //                     full_obj_grp[v] = [null, null, null];
+    //                 }
+    //                 full_obj_grp[v][i] = grp[0].get(v);
+    //             }
+    //             full_lbl_grp.set(key, lbl_grp);
+    //         });
+    //     }
+    //     return [full_obj_grp, full_lbl_grp];
+    // }
+    // private _getObjVisGroups(colls_i: number[], ent_type: EEntType): [Map<string, Set<number>>, Map<string, Set<string>>] {
+    //     // get objects
+    //     const objs_i: number[] = this.getEnts(ent_type);
+    //     // create overlapping groups of objects
+    //     // keys are for example "2020", "2021" etc
+    //     // objects can be in more than one group
+    //     const obj_groups: Map<string, Set<number>> = new Map();
+    //     for (const coll_i of colls_i) {
+    //         const visibility: string[] = this._geom.modeldata.attribs.query.getAttribVal(EEntType.COLL, 'visible', coll_i) as string[];
+    //         if (visibility !== undefined) {
+    //             // points
+    //             const coll_objs_i: number[] = this._geom.nav.navAnyToAny(EEntType.COLL, ent_type, coll_i);
+    //             if (coll_objs_i.length > 0) {
+    //                 for (const label of visibility) {
+    //                     if (!obj_groups.has(label)) { obj_groups.set(label, new Set()); }
+    //                 }
+    //                 for (const i of coll_objs_i) {
+    //                     for (const label of visibility) { obj_groups.get(label).add(i); }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     // create non-overlapping groups of objects
+    //     // keys are for example "2020_2021", "2022_2023_2024" etc
+    //     // objects will only be in one group
+    //     const obj_groups2: Map<string, Set<number>> = new Map();
+    //     const obj_labels2: Map<string, Set<string>> = new Map();
+    //     obj_groups2.set('default', new Set());
+    //     for (const i of objs_i) {
+    //         const labels: string[] = [];
+    //         obj_groups.forEach( (group, label) => {
+    //             if (group.has(i)) { labels.push(label); }
+    //         });
+    //         if (labels.length > 0) {
+    //             const label2 = labels.sort().join('_');
+    //             if (!obj_groups2.has(label2)) { obj_groups2.set(label2, new Set()); }
+    //             obj_groups2.get(label2).add(i);
+    //             for (const label of labels) {
+    //                 if (!obj_labels2.has(label)) { obj_labels2.set(label, new Set()); }
+    //                 obj_labels2.get(label).add(label2);
+    //             }
+    //         } else {
+    //             obj_groups2.get('default').add(i);
+    //         }
+    //     }
+    //     // return the result
+    //     return [obj_groups2, obj_labels2];
+    // }
     // ============================================================================
     // Collections
     // ============================================================================

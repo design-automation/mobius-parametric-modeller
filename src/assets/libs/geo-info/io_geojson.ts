@@ -1,5 +1,5 @@
 import { GIModel } from './GIModel';
-import { TNormal, TTexture, EAttribNames, Txyz, EEntType, EAttribDataTypeStrs, TAttribDataTypes, LONGLAT, IGeomPack, Txy, TEntTypeIdx } from './common';
+import { Txyz, EEntType, TAttribDataTypes, LONGLAT, Txy, TEntTypeIdx, IEntSets } from './common';
 import { getArrDepth } from './id';
 import proj4 from 'proj4';
 import { vecAng2, vecDot } from '../geom/vectors';
@@ -129,7 +129,7 @@ function _createGeojsonLineString(model: GIModel, pline_i: number, proj_obj: any
  /**
  * Import geojson
  */
-export function importGeojson(model: GIModel, geojson_str: string, elevation: number): IGeomPack {
+export function importGeojson(model: GIModel, geojson_str: string, elevation: number): IEntSets {
     // parse the json data str
     const geojson_obj: any = JSON.parse(geojson_str);
     const proj_obj: proj4.Converter = _createProjection(model);
@@ -151,10 +151,10 @@ export function importGeojson(model: GIModel, geojson_str: string, elevation: nu
     const multipolygon_f: any[] = [];
     const other_f: any[] = [];
     // arrays for objects
-    const points_i: number[] = [];
-    const plines_i: number[] = [];
-    const pgons_i: number[] = [];
-    const colls_i: number[] = [];
+    const points_i: Set<number> = new Set();
+    const plines_i: Set<number> = new Set();
+    const pgons_i: Set<number> = new Set();
+    const colls_i: Set<number> = new Set();
     // loop
     for (const feature of geojson_obj.features) {
         // get the features
@@ -162,59 +162,49 @@ export function importGeojson(model: GIModel, geojson_str: string, elevation: nu
             case EGeojsoFeatureType.POINT:
                 point_f.push(feature);
                 const point_i: number = _addPointToModel(model, feature, proj_obj, rot_matrix, elevation);
-                points_i.push(point_i);
+                points_i.add(point_i);
                 break;
             case EGeojsoFeatureType.LINESTRING:
                 linestring_f.push(feature);
                 const pline_i: number = _addPlineToModel(model, feature, proj_obj, rot_matrix, elevation);
-                plines_i.push(pline_i);
+                plines_i.add(pline_i);
                 break;
             case EGeojsoFeatureType.POLYGON:
                 polygon_f.push(feature);
                 const pgon_i: number = _addPgonToModel(model, feature, proj_obj, rot_matrix, elevation);
-                pgons_i.push(pgon_i);
+                pgons_i.add(pgon_i);
                 break;
             case EGeojsoFeatureType.MULTIPOINT:
                 multipoint_f.push(feature);
                 const points_coll_i: [number[], number] = _addPointCollToModel(model, feature, proj_obj, rot_matrix, elevation);
                 for (const point_coll_i of points_coll_i[0]) {
-                    points_i.push(point_coll_i);
+                    points_i.add(point_coll_i);
                 }
-                colls_i.push(points_coll_i[1]);
+                colls_i.add(points_coll_i[1]);
                 break;
             case EGeojsoFeatureType.MULTILINESTRING:
                 multilinestring_f.push(feature);
                 const plines_coll_i: [number[], number] = _addPlineCollToModel(model, feature, proj_obj, rot_matrix, elevation);
                 for (const pline_coll_i of plines_coll_i[0]) {
-                    plines_i.push(pline_coll_i);
+                    plines_i.add(pline_coll_i);
                 }
-                colls_i.push(plines_coll_i[1]);
+                colls_i.add(plines_coll_i[1]);
                 break;
             case EGeojsoFeatureType.MULTIPOLYGON:
                 multipolygon_f.push(feature);
                 const pgons_coll_i: [number[], number] = _addPgonCollToModel(model, feature, proj_obj, rot_matrix, elevation);
                 for (const pgon_coll_i of pgons_coll_i[0]) {
-                    pgons_i.push(pgon_coll_i);
+                    pgons_i.add(pgon_coll_i);
                 }
-                colls_i.push(pgons_coll_i[1]);
+                colls_i.add(pgons_coll_i[1]);
                 break;
             default:
                 other_f.push(feature);
                 break;
         }
     }
-    // log message
-    // console.log(
-    //     'Point: '           + point_f.length + '\n' +
-    //     'LineString: '      + linestring_f.length + '\n' +
-    //     'Polygon: '         + polygon_f.length + '\n' +
-    //     'MultiPoint: '      + multipoint_f.length + '\n' +
-    //     'MultiLineString: ' + multilinestring_f.length + '\n' +
-    //     'MultiPolygon: '    + multipolygon_f.length + '\n' +
-    //     'Other: '           + other_f + '\n\n');
-    // return a geom pack with all the new entities that have been added
+    // return sets
     return {
-        posis_i: [],
         points_i: points_i,
         plines_i: plines_i,
         pgons_i: pgons_i,
@@ -518,7 +508,7 @@ function _addAttribsToModel(model: GIModel, ent_type: EEntType, ent_i: number, f
         if (value_type === 'object') {
             value = JSON.stringify(value);
         }
-        model.modeldata.attribs.add.setAttribVal(ent_type, ent_i, name, value);
+        model.modeldata.attribs.add.setEntAttribVal(ent_type, ent_i, name, value);
     }
 }
 

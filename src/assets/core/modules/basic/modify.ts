@@ -11,7 +11,7 @@ import { checkIDs, IdCh } from '../_check_ids';
 import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TPlane, Txyz, EEntType, TEntTypeIdx, TRay, IGeomPack, IEntSets} from '@libs/geo-info/common';
+import { TId, TPlane, Txyz, EEntType, TEntTypeIdx, TRay, IEntSets} from '@libs/geo-info/common';
 import { getArrDepth, isEmptyArr, idsBreak } from '@libs/geo-info/id';
 import { vecAdd, vecSum, vecDiv, vecFromTo, vecNorm, vecCross, vecSetLen, vecLen, vecDot } from '@libs/geom/vectors';
 import { rotateMatrix, multMatrix, scaleMatrix, mirrorMatrix, xfromSourceTargetMatrix } from '@libs/geom/matrix';
@@ -850,26 +850,7 @@ export function Delete(__model__: GIModel, entities: TId|TId[], method: _EDelete
             throw new Error(fn_name + ' : Method not recognised.');
     }
 }
-// function _deleteAll(__model__: GIModel): void {
-//     // delete the ents
-//     __model__.modeldata.geom.del.delColls(__model__.modeldata.geom.query.getEnts(EEntType.COLL), false);
-//     __model__.modeldata.geom.del.delPgons(__model__.modeldata.geom.query.getEnts(EEntType.PGON), false);
-//     __model__.modeldata.geom.del.delPlines(__model__.modeldata.geom.query.getEnts(EEntType.PLINE), false);
-//     __model__.modeldata.geom.del.delPoints(__model__.modeldata.geom.query.getEnts(EEntType.POINT), false);
-//     __model__.modeldata.geom.del.delPosis(__model__.modeldata.geom.query.getEnts(EEntType.POSI));
-// }
-// function _delete(__model__: GIModel, ents_arr: TEntTypeIdx[], invert: boolean): void {
-//     // get the ents
-//     const gp: IGeomPack = __model__.modeldata.geom.query.createGeomPack(ents_arr, invert);
-//     // console.log("geom pack = ", gp);
-//     // delete the ents
-//     __model__.modeldata.geom.del.delColls(gp.colls_i, true);
-//     __model__.modeldata.geom.del.delPgons(gp.pgons_i, true);
-//     __model__.modeldata.geom.del.delPlines(gp.plines_i, true);
-//     __model__.modeldata.geom.del.delPoints(gp.points_i, true);
-//     __model__.modeldata.geom.del.delPosis(gp.posis_i);
-//     __model__.modeldata.geom.del.delUnusedPosis(gp.posis2_i);
-// }
+
 
 
 

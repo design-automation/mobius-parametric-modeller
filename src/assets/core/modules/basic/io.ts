@@ -12,7 +12,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { importObj, exportPosiBasedObj, exportVertBasedObj } from '@libs/geo-info/io_obj';
 import { importGeojson, exportGeojson } from '@libs/geo-info/io_geojson';
 import { download } from '@libs/filesys/download';
-import { TId, EEntType, Txyz, TPlane, TRay, IGeomPack, IModelJSONData, IGeomPackTId, TEntTypeIdx, IEntSets } from '@libs/geo-info/common';
+import { TId, EEntType, TEntTypeIdx, IEntSets } from '@libs/geo-info/common';
 import { __merge__ } from '../_model';
 import { _model } from '..';
 import { idsMake, idsBreak } from '@libs/geo-info/id';
@@ -277,9 +277,9 @@ async function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
             const model_clone: GIModel = __model__.clone();
             if (ents_arr !== null) {
                 // get the ents
-                const ent_sets: IEntSets = model_clone.geom.query.createGeomSets(ents_arr, true);
+                const ent_sets: IEntSets = model_clone.modeldata.geom.query.getDelEntSets(ents_arr);
                 // delete the ents
-                model_clone.delete(ent_sets, false);
+                model_clone.delete(ent_sets, true);
             }
             // === get meta data ===
             model_data = model_clone.getJSONStr();

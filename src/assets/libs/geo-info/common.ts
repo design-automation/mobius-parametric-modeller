@@ -1,4 +1,5 @@
 import { GIAttribMap } from './GIAttribMap';
+import { GIAttribMapBool } from './GIAttribMapBool';
 
 // longitude latitude in Singapore, NUS
 export const LONGLAT = [103.778329, 1.298759];
@@ -30,24 +31,24 @@ export interface IEntSets {
     faces_i?: Set<number>;
 }
 
-// Posis, Points, Plines, Pgons, Colls
-export interface IGeomPack {
-    posis_i: number[];
-    points_i: number[];
-    plines_i: number[];
-    pgons_i: number[];
-    colls_i: number[];
-    // posis2_i?: number[];
-}
+// // Posis, Points, Plines, Pgons, Colls
+// export interface IGeomPack {
+//     posis_i: number[];
+//     points_i: number[];
+//     plines_i: number[];
+//     pgons_i: number[];
+//     colls_i: number[];
+//     // posis2_i?: number[];
+// }
 
-// Object for entities
-export interface IGeomPackTId {
-    ps: TId[];
-    po: TId[];
-    pl: TId[];
-    pg: TId[];
-    co: TId[];
-}
+// // Object for entities
+// export interface IGeomPackTId {
+//     ps: TId[];
+//     po: TId[];
+//     pl: TId[];
+//     pg: TId[];
+//     co: TId[];
+// }
 
 // Types
 export type TRay = [Txyz, Txyz]; // an origin and a direction vector
@@ -120,16 +121,19 @@ export enum EEntStrToGeomMaps {
 /**
  * Attribute maps
  */
+
+export type TAttribMap = GIAttribMap | GIAttribMapBool;
+
 export interface IAttribsMaps {
-    ps: Map<string, GIAttribMap>;
-    _v: Map<string, GIAttribMap>;
-    _e: Map<string, GIAttribMap>;
-    _w: Map<string, GIAttribMap>;
-    _f: Map<string, GIAttribMap>;
-    pt: Map<string, GIAttribMap>;
-    pl: Map<string, GIAttribMap>;
-    pg: Map<string, GIAttribMap>;
-    co: Map<string, GIAttribMap>;
+    ps: Map<string, TAttribMap>;
+    _v: Map<string, TAttribMap>;
+    _e: Map<string, TAttribMap>;
+    _w: Map<string, TAttribMap>;
+    _f: Map<string, TAttribMap>;
+    pt: Map<string, TAttribMap>;
+    pl: Map<string, TAttribMap>;
+    pg: Map<string, TAttribMap>;
+    co: Map<string, TAttribMap>;
     mo: Map<string, any>;
 }
 

@@ -1,8 +1,9 @@
-import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
+import { Component, Injector, OnInit, OnDestroy, Injectable } from '@angular/core';
 import { DataService } from '@services';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { GoogleAnalyticsService } from '@shared/services/google.analytics';
+import { HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 
 @Component({
     selector: 'app-root',
@@ -70,4 +71,19 @@ export class AppComponent implements OnInit, OnDestroy {
         return this.dataService.notificationTrigger;
     }
 
+}
+
+@Injectable()
+export class NoCacheHeadersInterceptor implements HttpInterceptor {
+intercept(req: HttpRequest<any>, next: HttpHandler) {
+    const authReq = req.clone({
+      // Prevent caching in IE, in particular IE11.
+      // See: https://support.microsoft.com/en-us/help/234067/how-to-prevent-caching-in-internet-explorer
+      setHeaders: {
+        'Cache-Control': 'no-cache',
+        Pragma: 'no-cache'
+      }
+    });
+    return next.handle(authReq);
+  }
 }

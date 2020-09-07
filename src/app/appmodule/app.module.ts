@@ -3,7 +3,7 @@ import { NgModule, Component } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 // import app services
 import { DataService, KeyboardService } from '@services';
 import { DataService as GiViewerDataService } from '../model-viewers/all-viewers/gi-viewer/data/data.service';
@@ -12,7 +12,7 @@ import { DataService as GiViewerDataService } from '../model-viewers/all-viewers
 import { SharedModule } from '@shared/shared.module';
 // import { AppRoutingModule } from './app-routing.module';
 // import app components
-import { AppComponent } from './app.component';
+import { AppComponent, NoCacheHeadersInterceptor } from './app.component';
 import {ViewEditorModule, ViewDashboardModule, ViewGalleryModule,
     ViewEditorComponent, ViewDashboardComponent, ViewGalleryComponent,
     ViewFlowchartComponent, ViewFlowchartModule,
@@ -59,7 +59,12 @@ import { CytoscapeService } from '../model-viewers/all-viewers/cytoscape-viewer/
     ],
     providers: [ DataService, DataOutputService, KeyboardService,
                  GiViewerDataService, DataCesiumService, CytoscapeService,
-                 GoogleAnalyticsService],
+                 GoogleAnalyticsService,
+                 {
+                    provide: HTTP_INTERCEPTORS,
+                    useClass: NoCacheHeadersInterceptor,
+                    multi: true
+                 }],
     bootstrap: [ AppComponent ]
 })
 export class AppModule {

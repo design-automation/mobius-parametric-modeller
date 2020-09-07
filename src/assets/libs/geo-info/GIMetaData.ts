@@ -1,4 +1,5 @@
-import { EAttribDataTypeStrs, TAttribDataTypes, IMetaData, IMetaJSONData, IAttribJSONValues, IModelJSON, IModelJSONData } from './common';
+import { EAttribDataTypeStrs, TAttribDataTypes, IMetaData, IMetaJSONData, IAttribJSONValues,
+    IModelJSON, IModelJSONData, IAttribJSONData } from './common';
 
 /**
  * Geo-info model metadata class.
@@ -68,7 +69,7 @@ export class GIMetaData {
      * The entity counts will be updated.
      * The attribute values will be added, if they do not already exist.
      * The attribute indexes in model data will also be renumbered.
-     * @param attrib_vals
+     * @param data
      */
     public mergeJSONData(data: IModelJSON): void {
         const meta_data: IMetaJSONData = data.meta_data;
@@ -135,39 +136,20 @@ export class GIMetaData {
             }
         }
         // apply the renumbering of attribute indexes in the model data
-        const renum_attrib_vals = {
-            [EAttribDataTypeStrs.NUMBER]: renum_num_attrib_vals,
-            [EAttribDataTypeStrs.STRING]: renum_str_attrib_vals,
-            [EAttribDataTypeStrs.LIST]: renum_list_attrib_vals,
-            [EAttribDataTypeStrs.DICT]: renum_dict_attrib_vals
-        };
-        model_data.attributes.posis.forEach( attrib => {
-            attrib.data[0] = renum_attrib_vals[attrib.data_type].get(attrib.data[0]);
-        });
-        model_data.attributes.verts.forEach( attrib => {
-            attrib.data[0] = renum_attrib_vals[attrib.data_type].get(attrib.data[0]);
-        });
-        model_data.attributes.edges.forEach( attrib => {
-            attrib.data[0] = renum_attrib_vals[attrib.data_type].get(attrib.data[0]);
-        });
-        model_data.attributes.wires.forEach( attrib => {
-            attrib.data[0] = renum_attrib_vals[attrib.data_type].get(attrib.data[0]);
-        });
-        model_data.attributes.faces.forEach( attrib => {
-            attrib.data[0] = renum_attrib_vals[attrib.data_type].get(attrib.data[0]);
-        });
-        model_data.attributes.points.forEach( attrib => {
-            attrib.data[0] = renum_attrib_vals[attrib.data_type].get(attrib.data[0]);
-        });
-        model_data.attributes.plines.forEach( attrib => {
-            attrib.data[0] = renum_attrib_vals[attrib.data_type].get(attrib.data[0]);
-        });
-        model_data.attributes.pgons.forEach( attrib => {
-            attrib.data[0] = renum_attrib_vals[attrib.data_type].get(attrib.data[0]);
-        });
-        model_data.attributes.colls.forEach( attrib => {
-            attrib.data[0] = renum_attrib_vals[attrib.data_type].get(attrib.data[0]);
-        });
+        const renum_attrib_vals: Map<string, Map<number, number>> = new Map();
+        renum_attrib_vals.set(EAttribDataTypeStrs.NUMBER, renum_num_attrib_vals);
+        renum_attrib_vals.set(EAttribDataTypeStrs.STRING, renum_str_attrib_vals);
+        renum_attrib_vals.set(EAttribDataTypeStrs.LIST, renum_list_attrib_vals);
+        renum_attrib_vals.set(EAttribDataTypeStrs.DICT, renum_dict_attrib_vals);
+        this._renumAttribValues(model_data.attributes.posis, renum_attrib_vals);
+        this._renumAttribValues(model_data.attributes.verts, renum_attrib_vals);
+        this._renumAttribValues(model_data.attributes.edges, renum_attrib_vals);
+        this._renumAttribValues(model_data.attributes.wires, renum_attrib_vals);
+        this._renumAttribValues(model_data.attributes.faces, renum_attrib_vals);
+        this._renumAttribValues(model_data.attributes.points, renum_attrib_vals);
+        this._renumAttribValues(model_data.attributes.plines, renum_attrib_vals);
+        this._renumAttribValues(model_data.attributes.pgons, renum_attrib_vals);
+        this._renumAttribValues(model_data.attributes.colls, renum_attrib_vals);
         // no need to return the model data
     }
     // get next time stamp
@@ -294,5 +276,20 @@ export class GIMetaData {
             '\ndict: ' +
             JSON.stringify(this._data.attrib_values['dict'][0]) +
             JSON.stringify(Array.from(this._data.attrib_values['dict'][1]));
+    }
+    // --------------------------------------------
+
+    /**
+     * Helper method to renumber the indexes of the attribute values in the JSON data.
+     * @param attribs_data the attribute data, [val_index, [list of ents]]
+     * @param renum_attrib_vals A map of maps, old numbering -> new numbering
+     */
+    private _renumAttribValues(attribs_data: IAttribJSONData[], renum_attrib_vals: Map<string, Map<number, number>>): void {
+        for (const attrib_data of attribs_data) {
+            const renum: Map<number, number> = renum_attrib_vals.get(attrib_data.data_type);
+            for (const val_i_ents of attrib_data.data) {
+                val_i_ents[0] = renum.get(val_i_ents[0]);
+            }
+        }
     }
 }

@@ -335,6 +335,23 @@ export class GIAttribMap {
         // }
     }
     /**
+     * Renumber the entity IDs.
+     * This gets called when this data is being meregd into another model.
+     * In such a case, entity IDs need to be renumbered to avoid conflicts.
+     * The new entity IDs are defined in the renum_map argument.
+     * @param renum_map
+     */
+    public renumEnts(renum_map: Map<number, number>): void {
+        // private _map_val_i_to_ents_i: Map<number, number[]>;
+        this._map_val_i_to_ents_i.forEach( (ents_i, val_i) => {
+            for (let i = 0; i < ents_i.length; i++) {
+                const new_ent_i: number = renum_map.get(ents_i[i]); // shift
+                ents_i[i] = new_ent_i;
+                this._map_ent_i_to_val_i.set(new_ent_i, val_i);
+            }
+        });
+    }
+    /**
      * Merges another attrib map into this attrib map
      * @param attrib_map The attrib map to merge into this map
      */

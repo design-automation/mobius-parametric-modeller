@@ -165,9 +165,14 @@ export class GIAttribs {
         for (const ent_type of eny_type_array) {
             const ent_type_str: string = ent_type_strs.get(ent_type);
             result += ent_type_str + ': ';
-            const attrib_names: string[] = this._modeldata.attribs.query.getAttribNames(ent_type);
+            // const attrib_names: string[] = this._modeldata.attribs.query.getAttribNames(ent_type);
+            // for (const attrib_name of attrib_names) {
+            //     result += JSON.stringify(this._modeldata.attribs.query.getAttrib(ent_type, attrib_name).getJSONData());
+            //     result += '\n';
+            // }
+            const attrib_names: string[] = this.query.getAttribNames(ent_type);
             for (const attrib_name of attrib_names) {
-                result += JSON.stringify(this._modeldata.attribs.query.getAttrib(ent_type, attrib_name).getJSONData());
+                result += JSON.stringify(this.query.getAttrib(ent_type, attrib_name).getJSONData());
                 result += '\n';
             }
         }

@@ -205,7 +205,6 @@ export class GIAttribsIO {
     private _mergeAttribs(attribs_maps: IAttribsMaps, ent_type: EEntType) {
         const other_attribs: Map<string, GIAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
         const this_attribs: Map<string, GIAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
-        // const num_ents: number = this._model.modeldata.geom.query.numEnts(ent_type, true); // incude deleted ents
         other_attribs.forEach( other_attrib => {
             if (other_attrib.numEnts() > 0) {
                 // get the name
@@ -221,6 +220,38 @@ export class GIAttribsIO {
                         throw new Error('Merge Error: Cannot merge attributes with different data types.');
                     }
                 }
+                // merge
+                this_attrib.merge(other_attrib);
+            }
+        });
+    }
+    /**
+     * merge attributes from another model into this model.
+     * It is assumed that a purge has been performed, so the entity IDs will have changed.
+     * The new entity IDs are defined in the renum_map argument.
+     * The existing attributes are not deleted.
+     * @param attribs_maps
+     */
+    private _mergeAndPurgeAttribs(attribs_maps: IAttribsMaps, ent_type: EEntType, renum_map: Map<number, number>) {
+        const other_attribs: Map<string, GIAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
+        const this_attribs: Map<string, GIAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
+        other_attribs.forEach( other_attrib => {
+            if (other_attrib.numEnts() > 0) {
+                // get the name
+                const name: string = other_attrib.getName();
+                // get or create the attrib
+                let this_attrib: GIAttribMap;
+                if (!this_attribs.has(name)) {
+                    this_attrib = new GIAttribMap(this._modeldata, name, ent_type, other_attrib.getDataType());
+                    this_attribs.set(name, this_attrib );
+                } else {
+                    this_attrib = this_attribs.get(name);
+                    if (this_attrib.getDataType() !== other_attrib.getDataType()) {
+                        throw new Error('Merge Error: Cannot merge attributes with different data types.');
+                    }
+                }
+                // shift
+                other_attrib.renumEnts(renum_map);
                 // merge
                 this_attrib.merge(other_attrib);
             }
@@ -259,67 +290,6 @@ export class GIAttribsIO {
                 this_attrib.dumpSelect(other_attrib, selected);
             }
         });
-    }
-    /**
-     * merge attributes from another model into this model.
-     * It is assumed that a purge has been performed, so the entity IDs will have changed.
-     * The new entity IDs are defined in the renum_map argument.
-     * The existing attributes are not deleted.
-     * @param attribs_maps
-     */
-    private _mergeAndPurgeAttribs(attribs_maps: IAttribsMaps, ent_type: EEntType, renum_map: Map<number, number>) {
-        const other_attribs: Map<string, GIAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
-        const this_attribs: Map<string, GIAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
-        // const num_ents: number = this._model.modeldata.geom.query.numEnts(ent_type, true); // incude deleted ents
-        other_attribs.forEach( other_attrib => {
-            if (other_attrib.numEnts() > 0) {
-                // get the name
-                const name: string = other_attrib.getName();
-                // get or create the attrib
-                let this_attrib: GIAttribMap;
-                if (!this_attribs.has(name)) {
-                    this_attrib = new GIAttribMap(this._modeldata, name, ent_type, other_attrib.getDataType());
-                    this_attribs.set(name, this_attrib );
-                } else {
-                    this_attrib = this_attribs.get(name);
-                    if (this_attrib.getDataType() !== other_attrib.getDataType()) {
-                        throw new Error('Merge Error: Cannot merge attributes with different data types.');
-                    }
-                }
-                // shift
-                const ents_i_values: [number[], TAttribDataTypes][] = other_attrib.getEntsVals();
-                for (const ents_i_value of ents_i_values) {
-                    ents_i_value[0] = ents_i_value[0].map( ent_i => renum_map.get(ent_i) ); // shift
-                }
-                // merge
-                this_attrib.merge(other_attrib);
-            }
-        });
-
-        // const other_attribs: Map<string, GIAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
-        // const this_attribs: Map<string, GIAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
-        // // const num_ents: number = this._model.modeldata.geom.query.numEnts(ent_type, true); // incude deleted ents
-        // other_attribs.forEach( other_attrib => {
-        //     // get the data
-        //     const ents_i_values: [number[], TAttribDataTypes][] = other_attrib.getEntsVals();
-        //     let attrib_has_ents = false;
-        //     for (const ents_i_value of ents_i_values) {
-        //         // for merge and purge, IDs need to be shifted
-        //         ents_i_value[0] = ents_i_value[0].map( ent_i => geom_map.get(ent_i) ); // shift
-        //         attrib_has_ents = ents_i_value[0].length > 0;
-        //     }
-        //     if (attrib_has_ents) {
-        //         // get the name
-        //         const name: string = other_attrib.getName();
-        //         // get or create the attrib
-        //         if (!this_attribs.has(name)) {
-        //             this_attribs.set(name, new GIAttribMap(this._modeldata, name, ent_type, other_attrib.getDataType()) );
-        //         }
-        //         const to_attrib: GIAttribMap = this_attribs.get(name);
-        //         // set the data
-        //         to_attrib.mergeEntsVals(ents_i_values);
-        //     }
-        // });
     }
     /**
      * From JSON data

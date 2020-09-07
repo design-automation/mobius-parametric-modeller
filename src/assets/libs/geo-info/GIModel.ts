@@ -26,6 +26,7 @@ export class GIModel {
     /**
      * Set all data from a JSON string.
      * This includes both the meta data and the model data.
+     * Any existing metadata will be kept, the new data gets appended.
      * Any existing model data wil be deleted.
      * @param meta
      */

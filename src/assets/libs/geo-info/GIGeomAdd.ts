@@ -324,9 +324,6 @@ export class GIGeomAdd {
         const vert_i: number = this._geom.modeldata.model.metadata.nextVert();
         this._geom_maps.dn_verts_posis.set(vert_i, posi_i);
         // update up arrays
-            // if (this._geom_maps.up_posis_verts.get(posi_i] === undefined) {
-            //     this._geom_maps.up_posis_verts.get(posi_i] = [];
-            // }
         this._geom_maps.up_posis_verts.get(posi_i).push(vert_i);
         // return the numeric index of the vertex
         return vert_i;

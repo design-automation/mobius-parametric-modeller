@@ -37,7 +37,7 @@ export class GIMetaData {
     public getJSONData(): IMetaJSONData {
         const data: IMetaJSONData = {
             time_stamp: this._data.time_stamp,
-            posi_count: this._data.point_count,
+            posi_count: this._data.posi_count,
             vert_count: this._data.vert_count,
             tri_count: this._data.tri_count,
             edge_count: this._data.edge_count,

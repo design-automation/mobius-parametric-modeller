@@ -107,7 +107,7 @@ export class GIGeomDel {
             this._geom_maps.dn_points_verts.delete(point_i);
             this._geom_maps.dn_points_verts.delete(point_i);
             this._geom_maps.dn_colls_objs.forEach( coll => {
-                const coll_points_i: number[] = coll[3];
+                const coll_points_i: number[] = coll[1];
                 arrRem(coll_points_i, point_i);
             });
             // delete the vert by setting the up and down arrays to undefined
@@ -147,7 +147,7 @@ export class GIGeomDel {
             this._geom_maps.dn_plines_wires.delete(pline_i);
             this._geom_maps.up_plines_colls.delete(pline_i);
             this._geom_maps.dn_colls_objs.forEach( coll => {
-                const coll_plines_i: number[] = coll[3];
+                const coll_plines_i: number[] = coll[2];
                 arrRem(coll_plines_i, pline_i);
             });
             // delete the wire

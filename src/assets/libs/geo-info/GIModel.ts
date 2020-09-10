@@ -136,6 +136,7 @@ export class GIModel {
         if (ent_sets === null) {
             if (!invert) {
                 this.modeldata = new GIModelData(this);
+                console.log("WARNING: Model attributes being deleted as well");
                 //
                 //
                 // TODO save model attribs

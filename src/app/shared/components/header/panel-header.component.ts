@@ -466,7 +466,7 @@ export class PanelHeaderComponent implements OnDestroy {
         this.selectedBackups = [];
     }
 
-    downloadBackup(event: MouseEvent, filecode: string) {
+    downloadBackup(event: MouseEvent) {
         event.stopPropagation();
         SaveFileComponent.downloadLocalStorageFile(this.selectedBackups);
         // event.stopPropagation();

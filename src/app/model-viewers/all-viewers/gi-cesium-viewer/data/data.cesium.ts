@@ -611,6 +611,14 @@ export class DataCesium {
                     }
                 }
             }
+            if (newSetting.imagery.apiKey) {
+                if (!this.settings.imagery.apiKey) {
+                    this.settings.imagery.apiKey = {};
+                }
+                for (const i of Object.keys(newSetting.imagery.apiKey)) {
+                    this.settings.imagery.apiKey[i] = newSetting.imagery.apiKey[i];
+                }
+            }
             if (newSetting.imagery.terrain && (this.settings.imagery.terrain !== newSetting.imagery.terrain || ionChange)) {
                 for (const terrainProvider of this._viewTerrainProviders) {
                     if (terrainProvider.name === newSetting.imagery.terrain) {

@@ -3,6 +3,30 @@ import { CesiumSettings } from '../gi-cesium-viewer.settings';
 import { EEntType, Txyz, TAttribDataTypes, LONGLAT } from '@libs/geo-info/common';
 // import { HereMapsImageryProvider } from './HereMapsImageryProvider.js';
 
+
+export const API_MAPS = [
+                            'Here map normal',
+                            'Here map normal grey',
+                            'Here map normal traffic',
+                            'Here map normal reduced',
+                            'Here map normal pedestrian',
+                            'Here map aerial terrain',
+                            'Here map aerial satellite',
+                            'Here map aerial hybrid',
+                            'Bing Map'
+                        ];
+export const API_MAPS_KEY_MAPPING = {
+    'Here map normal': 'here',
+    'Here map normal grey': 'here',
+    'Here map normal traffic': 'here',
+    'Here map normal reduced': 'here',
+    'Here map normal pedestrian': 'here',
+    'Here map aerial terrain': 'here',
+    'Here map aerial satellite': 'here',
+    'Here map aerial hybrid': 'here',
+    'Bing Map': 'bing'
+};
+
 /**
  * Cesium data
  */
@@ -94,7 +118,8 @@ export class DataCesium {
                 for (const layerProvider of this._viewLayerProviders) {
                     if (layerProvider.name === this.settings.imagery.layer) {
                         const viewer_layers = this._viewer.imageryLayers;
-                        const newLayer = new Cesium.ImageryLayer(layerProvider.creationCommand());
+                        const newLayer = new Cesium.ImageryLayer(layerProvider.creationCommand(
+                            this.settings.imagery.apiKey[API_MAPS_KEY_MAPPING[this.settings.imagery.layer]]));
                         viewer_layers.removeAll();
                         viewer_layers.add(newLayer);
                     }
@@ -578,7 +603,8 @@ export class DataCesium {
                 for (const layerProvider of this._viewLayerProviders) {
                     if (layerProvider.name === newSetting.imagery.layer) {
                         const viewer_layers = this._viewer.imageryLayers;
-                        const newLayer = new Cesium.ImageryLayer(layerProvider.creationCommand());
+                        const newLayer = new Cesium.ImageryLayer(layerProvider.creationCommand(
+                            this.settings.imagery.apiKey[API_MAPS_KEY_MAPPING[this.settings.imagery.layer]]));
                         viewer_layers.removeAll();
                         viewer_layers.add(newLayer);
                         this.settings.imagery.layer = newSetting.imagery.layer;
@@ -789,6 +815,202 @@ export class DataCesium {
                 });
             },
         }));
+
+
+        this._viewLayerProviders.push(new Cesium.ProviderViewModel({
+            name: 'Google map roadmap',
+            iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
+            tooltip: '',
+            creationFunction: function () {
+                return new Cesium.UrlTemplateImageryProvider({
+                    url: 'http://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+                });
+            },
+        }));
+
+
+        this._viewLayerProviders.push(new Cesium.ProviderViewModel({
+            name: 'Google map terrain',
+            iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
+            tooltip: '',
+            creationFunction: function () {
+                return new Cesium.UrlTemplateImageryProvider({
+                    url: 'http://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',
+                });
+            },
+        }));
+
+
+        this._viewLayerProviders.push(new Cesium.ProviderViewModel({
+            name: 'Google map altered roadmap',
+            iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
+            tooltip: '',
+            creationFunction: function () {
+                return new Cesium.UrlTemplateImageryProvider({
+                    url: 'http://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}',
+                });
+            },
+        }));
+
+
+        this._viewLayerProviders.push(new Cesium.ProviderViewModel({
+            name: 'Google map satellite only',
+            iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
+            tooltip: '',
+            creationFunction: function () {
+                return new Cesium.UrlTemplateImageryProvider({
+                    url: 'http://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+                });
+            },
+        }));
+
+
+        this._viewLayerProviders.push(new Cesium.ProviderViewModel({
+            name: 'Google map terrain only',
+            iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
+            tooltip: '',
+            creationFunction: function () {
+                return new Cesium.UrlTemplateImageryProvider({
+                    url: 'http://mt1.google.com/vt/lyrs=t&x={x}&y={y}&z={z}',
+                });
+            },
+        }));
+
+
+        this._viewLayerProviders.push(new Cesium.ProviderViewModel({
+            name: 'Google map hybrid',
+            iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
+            tooltip: '',
+            creationFunction: function () {
+                return new Cesium.UrlTemplateImageryProvider({
+                    url: 'http://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+                });
+            },
+        }));
+
+        this._viewLayerProviders.push(new Cesium.ProviderViewModel({
+            name: 'ArcGis map',
+            iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
+            tooltip: 'Stamen World terrain (Background).\nhttp://www.maps.stamen.com/',
+            creationFunction: function () {
+                return new Cesium.ArcGisMapServerImageryProvider({
+                    url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
+                });
+            },
+        }));
+
+        // https://2.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/11/525/761/256/png8?apiKey=
+        // https://3.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/terrain.day/7/66/45/256/png8?apiKey=
+
+        // https://2.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/{z}/{x}/{y}/{width}/png8?apiKey=
+        // 7vMRjLNCpcOAUQXU61eUp6EFbWCy7WLNmy9qLHO-1Bw
+        const here1 = 'https://1.';
+        const here2 = '.maps.ls.hereapi.com/maptile/2.1/maptile/newest/';
+        const here3 = '/{z}/{x}/{y}/{width}/png8?apiKey=';
+        const k1 = '7vMRjLNCpcOAUQXU61eUp';
+        const k2 = '6EFbWCy7WLNmy9qLHO-1Bw';
+
+        this._viewLayerProviders.push(new Cesium.ProviderViewModel({
+            name: 'Here map normal',
+            iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
+            tooltip: 'Here',
+            creationFunction: function (apiKey) {
+                console.log(apiKey)
+                return new Cesium.UrlTemplateImageryProvider({
+                    url: here1 + 'base' + here2 + 'normal.day' + here3 + apiKey,
+                });
+            },
+        }));
+
+        this._viewLayerProviders.push(new Cesium.ProviderViewModel({
+            name: 'Here map normal grey',
+            iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
+            tooltip: 'Here',
+            creationFunction: function (apiKey) {
+                return new Cesium.UrlTemplateImageryProvider({
+                    url: here1 + 'base' + here2 + 'normal.day.grey' + here3 + apiKey,
+                });
+            },
+        }));
+
+        this._viewLayerProviders.push(new Cesium.ProviderViewModel({
+            name: 'Here map normal traffic',
+            iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
+            tooltip: 'Here',
+            creationFunction: function (apiKey) {
+                return new Cesium.UrlTemplateImageryProvider({
+                    url: here1 + 'base' + here2 + 'normal.day.transit' + here3 + apiKey,
+                });
+            },
+        }));
+
+        this._viewLayerProviders.push(new Cesium.ProviderViewModel({
+            name: 'Here map normal reduced',
+            iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
+            tooltip: 'Here',
+            creationFunction: function (apiKey) {
+                return new Cesium.UrlTemplateImageryProvider({
+                    url: here1 + 'base' + here2 + 'reduced.day' + here3 + apiKey,
+                });
+            },
+        }));
+
+        this._viewLayerProviders.push(new Cesium.ProviderViewModel({
+            name: 'Here map normal pedestrian',
+            iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
+            tooltip: 'Here',
+            creationFunction: function (apiKey) {
+                return new Cesium.UrlTemplateImageryProvider({
+                    url: here1 + 'base' + here2 + 'pedestrian.day' + here3 + apiKey,
+                });
+            },
+        }));
+
+        this._viewLayerProviders.push(new Cesium.ProviderViewModel({
+            name: 'Here map aerial terrain',
+            iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
+            tooltip: 'Here',
+            creationFunction: function (apiKey) {
+                return new Cesium.UrlTemplateImageryProvider({
+                    url: here1 + 'aerial' + here2 + 'terrain.day' + here3 + apiKey,
+                });
+            },
+        }));
+
+        this._viewLayerProviders.push(new Cesium.ProviderViewModel({
+            name: 'Here map aerial satellite',
+            iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
+            tooltip: 'Here',
+            creationFunction: function (apiKey) {
+                return new Cesium.UrlTemplateImageryProvider({
+                    url: here1 + 'aerial' + here2 + 'satellite.day' + here3 + apiKey,
+                });
+            },
+        }));
+
+        this._viewLayerProviders.push(new Cesium.ProviderViewModel({
+            name: 'Here map aerial hybrid',
+            iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
+            tooltip: 'Here',
+            creationFunction: function (apiKey) {
+                return new Cesium.UrlTemplateImageryProvider({
+                    url: here1 + 'aerial' + here2 + 'hybrid.day' + here3 + apiKey,
+                });
+            },
+        }));
+
+        this._viewLayerProviders.push(new Cesium.ProviderViewModel({
+            name: 'Bing Map',
+            iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
+            tooltip: 'Bing',
+            creationFunction: function (apiKey) {
+                return new Cesium.BingMapsImageryProvider({
+                    url: 'https://dev.virtualearth.net',
+                    key : apiKey,
+                    mapStyle : Cesium.BingMapsStyle.AERIAL
+                });
+            },
+        }));
     }
 
     private _getTerrains() {
@@ -805,6 +1027,16 @@ export class DataCesium {
             iconUrl: Cesium.buildModuleUrl('Widgets/Images/ImageryProviders/stamenToner.png'),
             tooltip: 'Cesium World Terrain',
             creationFunction: Cesium.createWorldTerrain,
+        }));
+        this._viewTerrainProviders.push(new Cesium.ProviderViewModel({
+            name: 'ArcGIS Terrain',
+            iconUrl: Cesium.buildModuleUrl('Widgets/Images/ImageryProviders/stamenToner.png'),
+            tooltip: 'Cesium World Terrain',
+            creationFunction: function () {
+                return new Cesium.ArcGISTiledElevationTerrainProvider({
+                    url : 'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer'
+                });
+            },
         }));
     }
 

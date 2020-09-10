@@ -17,6 +17,14 @@
                                 <option *ngFor="let item of layerList" value ={{item}}>{{item}}</option>
                             </select>
                         </dd>
+                        <ng-container *ngIf='checkAPIKeyInput()'>
+                            <dd>
+                                <div class="label">Imagery API key:</div>
+                            </dd>
+                            <dd>
+                                <textarea class="tArea"  [(ngModel)]='settings.imagery.apiKey[_keyMapping[settings.imagery.layer]]'></textarea>
+                            </dd>
+                        </ng-container>
                         <dd>
                             <div class="label">Terrain:</div>
                             <select [(ngModel)]='settings.imagery.terrain'>

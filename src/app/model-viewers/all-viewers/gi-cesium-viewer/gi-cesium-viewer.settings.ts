@@ -4,6 +4,7 @@ export interface CesiumSettings {
     imagery: {
         layer: string;
         terrain: string;
+        apiKey: any;
     };
     camera: {
         pos: {x: number, y: number, z: number};
@@ -25,7 +26,10 @@ export interface CesiumSettings {
 export const cesium_default_settings: CesiumSettings = {
     'imagery': {
         'layer': 'Open Street Map',
-        'terrain': 'Ellipsoid'
+        'terrain': 'Ellipsoid',
+        'apiKey': {
+            'here': '7vMRjLNCpcOAUQXU61eUp6EFbWCy7WLNmy9qLHO-1Bw'
+        }
     },
     'camera': {
         'pos': {'x': 0, 'y': 0, 'z': 0},

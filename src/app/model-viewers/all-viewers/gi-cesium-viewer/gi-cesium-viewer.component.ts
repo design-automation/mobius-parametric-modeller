@@ -9,6 +9,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { DataCesiumService } from './data/data.cesium.service';
 import { ModalService } from './html/modal-window.service';
 import { ColorPickerService } from 'ngx-color-picker';
+import { API_MAPS, API_MAPS_KEY_MAPPING } from './data/data.cesium';
 
 // import others
 
@@ -32,6 +33,8 @@ export class GICesiumViewerComponent implements OnInit {
 
     public layerList: string[];
     public terrainList: string[];
+
+    public _keyMapping = API_MAPS_KEY_MAPPING;
 
     /**
      * constructor
@@ -140,6 +143,16 @@ export class GICesiumViewerComponent implements OnInit {
         } else {
             this.settings = this.backup_settings;
         }
+    }
+
+    public checkAPIKeyInput() {
+        if (API_MAPS.indexOf(this.settings.imagery.layer)  !== -1) {
+            if (!this.settings.imagery.apiKey[API_MAPS_KEY_MAPPING[this.settings.imagery.layer]]) {
+                this.settings.imagery.apiKey[API_MAPS_KEY_MAPPING[this.settings.imagery.layer]] = '';
+            }
+            return true;
+        }
+        return false;
     }
 
     public onCloseModal() {

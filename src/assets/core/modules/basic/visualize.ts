@@ -80,7 +80,7 @@ function _color(__model__: GIModel, ents_arr: TEntTypeIdx[], color: TColor): voi
         }
     }
     // set all verts to have same color
-    __model__.modeldata.attribs.add.setAttribVal(EEntType.VERT, all_verts_i, EAttribNames.COLOR, color);
+    __model__.modeldata.attribs.add.setEntAttribVal(EEntType.VERT, all_verts_i, EAttribNames.COLOR, color);
 }
 // ================================================================================================
 /**
@@ -263,7 +263,7 @@ function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: str
     values_map.forEach((col_and_verts_i) => {
         const col: TColor = col_and_verts_i[0];
         const verts_i: number[] = col_and_verts_i[1];
-        __model__.modeldata.attribs.add.setAttribVal(EEntType.VERT, verts_i, EAttribNames.COLOR, col);
+        __model__.modeldata.attribs.add.setEntAttribVal(EEntType.VERT, verts_i, EAttribNames.COLOR, col);
     });
 }
 // ================================================================================================
@@ -329,7 +329,7 @@ export function Edge(__model__: GIModel, entities: TId|TId[], method: _EEdgeMeth
     }
     // Set edge visibility
     const setting: string = method === _EEdgeMethod.VISIBLE ? null : 'hidden';
-    __model__.modeldata.attribs.add.setAttribVal(EEntType.EDGE, edges_i, EAttribNames.VISIBILITY, setting);
+    __model__.modeldata.attribs.add.setEntAttribVal(EEntType.EDGE, edges_i, EAttribNames.VISIBILITY, setting);
 }
 // ================================================================================================
 export enum _EMeshMethod {
@@ -440,7 +440,7 @@ function _meshFaceted(__model__: GIModel, verts_i: number[]): void {
     // set the normal
     map_vert_pgons.forEach( (pgon_i, vert_i) => {
         const normal: Txyz = normals[pgon_i];
-        __model__.modeldata.attribs.add.setAttribVal(EEntType.VERT, vert_i, EAttribNames.NORMAL, normal);
+        __model__.modeldata.attribs.add.setEntAttribVal(EEntType.VERT, vert_i, EAttribNames.NORMAL, normal);
     });
 }
 function _meshSmooth(__model__: GIModel, verts_i: number[]): void {
@@ -483,7 +483,7 @@ function _meshSmooth(__model__: GIModel, verts_i: number[]): void {
         const div: number = posi_pgons_i.length;
         normal = [normal[0] / div, normal[1] / div, normal[2] / div];
         normal = vecNorm(normal);
-        __model__.modeldata.attribs.add.setAttribVal(EEntType.VERT, vert_i, EAttribNames.NORMAL, normal);
+        __model__.modeldata.attribs.add.setEntAttribVal(EEntType.VERT, vert_i, EAttribNames.NORMAL, normal);
     }
 }
 // ================================================================================================

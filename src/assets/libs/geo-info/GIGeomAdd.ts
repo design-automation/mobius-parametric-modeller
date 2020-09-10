@@ -158,7 +158,7 @@ export class GIGeomAdd {
                     if (attrib_name !== 'xyz') {
                         const value: TAttribDataTypes =
                             this._geom.modeldata.attribs.query.getAttribVal(EEntType.POSI, attrib_name, posis_i) as TAttribDataTypes;
-                        this._geom.modeldata.attribs.add.setAttribVal(EEntType.POSI, new_posi_i, attrib_name, value);
+                        this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.POSI, new_posi_i, attrib_name, value);
                     }
                 }
             }
@@ -183,7 +183,7 @@ export class GIGeomAdd {
                 for (const attrib_name of attrib_names) {
                     const value: TAttribDataTypes =
                         this._geom.modeldata.attribs.query.getAttribVal(EEntType.POSI, attrib_name, posis_i) as TAttribDataTypes;
-                    this._geom.modeldata.attribs.add.setAttribVal(EEntType.POSI, new_posi_i, attrib_name, value);
+                    this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.POSI, new_posi_i, attrib_name, value);
                 }
             }
             return new_posi_i;

@@ -7,7 +7,7 @@ import { IThreeJS } from './ThreejsJSON';
  * Geo-info model class.
  */
 export class GIModel {
-    [x: string]: any; // TODO: What is this???
+    // [x: string]: any; // TODO: What is this???
     public metadata: GIMetaData;
     public modeldata: GIModelData;
     public debug = true;
@@ -137,7 +137,9 @@ export class GIModel {
             if (!invert) {
                 this.modeldata = new GIModelData(this);
                 //
+                //
                 // TODO save model attribs
+                //
                 //
             }
         } else if (invert) {

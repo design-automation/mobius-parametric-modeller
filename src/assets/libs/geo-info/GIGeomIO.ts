@@ -1,4 +1,4 @@
-import { IGeomJSONData, IGeomMaps, IGeomPack, EEntType, IEntSets, TTri, TEdge, TWire, TFace,
+import { IGeomJSONData, IGeomMaps, EEntType, IEntSets, TTri, TEdge, TWire, TFace,
     EEntStrToGeomMaps, TVert, TFaceTri, TPoint, TPline, TPgon, TColl } from './common';
 import { GIGeom } from './GIGeom';
 import * as lodash from 'lodash';

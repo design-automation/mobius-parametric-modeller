@@ -2,7 +2,7 @@ import { GIAttribsAdd } from './GIAttribsAdd';
 import { GIAttribsThreejs } from './GIAttribsThreejs';
 import { GIAttribsQuery } from './GIAttribsQuery';
 import { GIModel } from './GIModel';
-import { EEntType, EAttribNames,  IAttribsJSONData, EAttribDataTypeStrs, IAttribsMaps } from './common';
+import { EEntType, EAttribNames,  IAttribsJSONData, EAttribDataTypeStrs, IAttribsMaps, TAttribMap } from './common';
 import { GIAttribsIO } from './GIAttribsIO';
 import { GIAttribsModify } from './GIAttribModify';
 import { GIModelData } from './GIModelData';
@@ -74,6 +74,7 @@ export class GIAttribs {
         this.modify = new GIAttribsModify(modeldata, this._attribs_maps);
         this.query = new GIAttribsQuery(modeldata, this._attribs_maps);
         this.threejs = new GIAttribsThreejs(modeldata, this._attribs_maps);
+        // create xyz on posis
         this.add.addAttrib(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.LIST);
     }
     /**

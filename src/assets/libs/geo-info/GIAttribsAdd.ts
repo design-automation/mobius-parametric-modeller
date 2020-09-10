@@ -1,10 +1,11 @@
 import { GIModel } from './GIModel';
 import { TAttribDataTypes, EEntType,
-    EAttribDataTypeStrs, IAttribsMaps, EAttribNames, Txyz, EEntTypeStr, EAttribPush } from './common';
-import { GIAttribMap } from './GIAttribMap';
+    EAttribDataTypeStrs, IAttribsMaps, EAttribNames, Txyz, EEntTypeStr, EAttribPush, TAttribMap } from './common';
 import { vecAdd } from '@libs/geom/vectors';
 import * as mathjs from 'mathjs';
 import { GIModelData } from './GIModelData';
+import { GIAttribMapBool } from './GIAttribMapBool';
+import { GIAttribMap } from './GIAttribMap';
 
 /**
  * Class for attributes.
@@ -22,6 +23,7 @@ export class GIAttribsAdd {
     }
     /**
      * Creates a new attribte, at either the model level or the entity level.
+     * This function is call by var@att_name and by @att_name
      *
      * For entity attributes, if an attribute with the same name but different data_type already exists,
      * then an error is thrown.
@@ -34,19 +36,50 @@ export class GIAttribsAdd {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, any> = this._attribs_maps[attribs_maps_key];
         if (ent_type === EEntType.MOD) {
-            if (!attribs.has(name)) {
-                attribs.set(name, null);
-            }
+            this.addModelAttrib(name);
         } else {
-            if (!attribs.has(name)) {
-                const attrib: GIAttribMap = new GIAttribMap(this._modeldata, name, ent_type, data_type);
-                attribs.set(name, attrib);
+            this.addEntAttrib(ent_type, name, data_type);
+        }
+    }
+    /**
+     * Creates a new attribte at the model level
+     *
+     * @param name The name of the attribute.
+     */
+    public addModelAttrib(name: string): void {
+        const attribs: Map<string, any> = this._attribs_maps[EEntTypeStr.mo];
+        if (!attribs.has(name)) {
+            attribs.set(name, null);
+        }
+    }
+    /**
+     * Creates a new attribte at an  entity level.
+     *
+     * For entity attributes, if an attribute with the same name but different data_type already exists,
+     * then an error is thrown.
+     *
+     * @param ent_type The level at which to create the attribute.
+     * @param name The name of the attribute.
+     * @param data_type The data type of the attribute.
+     */
+    public addEntAttrib(ent_type: EEntType, name: string, data_type: EAttribDataTypeStrs): TAttribMap {
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
+        const attribs: Map<string, any> = this._attribs_maps[attribs_maps_key];
+        let attrib: TAttribMap;
+        if (!attribs.has(name)) {
+            if (data_type === EAttribDataTypeStrs.BOOLEAN) {
+                attrib = new GIAttribMapBool(this._modeldata, name, ent_type, data_type);
             } else {
-                if (attribs.get(name).getDataType() !== data_type) {
-                    throw new Error('Attribute could not be created due to conflict with existing attribute with same name.');
-                }
+                attrib = new GIAttribMap(this._modeldata, name, ent_type, data_type);
+            }
+            attribs.set(name, attrib);
+        } else {
+            attrib = attribs.get(name);
+            if (attrib.getDataType() !== data_type) {
+                throw new Error('Attribute could not be created due to conflict with existing attribute with same name.');
             }
         }
+        return attrib;
     }
     /**
      * Set a model attrib value
@@ -100,9 +133,9 @@ export class GIAttribsAdd {
      * @param name
      * @param value
      */
-    public setAttribVal(ent_type: EEntType, ents_i: number|number[], name: string, value: TAttribDataTypes): void {
+    public setEntAttribVal(ent_type: EEntType, ents_i: number|number[], name: string, value: TAttribDataTypes): void {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attribs: Map<string, TAttribMap> = this._attribs_maps[attribs_maps_key];
         if (attribs.get(name) === undefined) {
             const new_data_type: EAttribDataTypeStrs = this._checkDataType(value);
             this.addAttrib(ent_type, name, new_data_type);
@@ -116,11 +149,11 @@ export class GIAttribsAdd {
      * @param name
      * @param value
      */
-    public setAttribListIdxVal(ent_type: EEntType, ents_i: number|number[], name: string,
+    public setEntAttribListIdxVal(ent_type: EEntType, ents_i: number|number[], name: string,
             idx: number, value: any): void {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
-        const attrib: GIAttribMap = attribs.get(name);
+        const attribs: Map<string, TAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attrib: TAttribMap = attribs.get(name);
         if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
         if (attrib.getDataType() !== EAttribDataTypeStrs.LIST) {
             throw new Error('Attribute is not a list, so indexed values are not allowed.');
@@ -134,11 +167,11 @@ export class GIAttribsAdd {
      * @param name
      * @param value
      */
-    public setAttribDictKeyVal(ent_type: EEntType, ents_i: number|number[], name: string,
+    public setEntAttribDictKeyVal(ent_type: EEntType, ents_i: number|number[], name: string,
         key: string, value: any): void {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
-        const attrib: GIAttribMap = attribs.get(name);
+        const attribs: Map<string, TAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attrib: TAttribMap = attribs.get(name);
         if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
         if (attrib.getDataType() !== EAttribDataTypeStrs.DICT) {
             throw new Error('Attribute is not a dictionary, so keyed values are not allowed.');
@@ -155,7 +188,7 @@ export class GIAttribsAdd {
     public delEntFromAttribs(ent_type: EEntType, ents_i: number|number[]): void {
         // get the attrib names
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attribs: Map<string, TAttribMap> = this._attribs_maps[attribs_maps_key];
         attribs.forEach( attrib => attrib.delEnt(ents_i) );
     }
     /**
@@ -184,11 +217,11 @@ export class GIAttribsAdd {
     public copyAttribs(ent_type: EEntType, from_ent_i: number, to_ent_i: number): void {
         // get the attrib names
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attribs: Map<string, TAttribMap> = this._attribs_maps[attribs_maps_key];
         const attrib_names: string[] = Array.from(attribs.keys());
         // copy each attrib
         for (const attrib_name of attrib_names) {
-            const attrib: GIAttribMap = attribs.get(attrib_name);
+            const attrib: TAttribMap = attribs.get(attrib_name);
             const attrib_value: TAttribDataTypes =  attrib.getEntVal(from_ent_i) as TAttribDataTypes;
             attrib.setEntVal(to_ent_i, attrib_value);
         }
@@ -277,11 +310,11 @@ export class GIAttribsAdd {
             const target_ents_i: number[] = this._modeldata.geom.query.getEnts(target_ent_type);
             for (const target_ent_i of target_ents_i) {
                 if (typeof target_attrib_idx_key === 'number') {
-                    this.setAttribListIdxVal(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
+                    this.setEntAttribListIdxVal(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
                 } else if (typeof target_attrib_idx_key === 'string') {
-                    this.setAttribDictKeyVal(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
+                    this.setEntAttribDictKeyVal(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
                 } else {
-                    this.setAttribVal(target_ent_type, target_ent_i, target_attrib_name, value);
+                    this.setEntAttribVal(target_ent_type, target_ent_i, target_attrib_name, value);
                 }
             }
             return;
@@ -321,11 +354,11 @@ export class GIAttribsAdd {
                 value = this._aggregateVals(attrib_values, target_data_size, method);
             }
             if (typeof target_attrib_idx_key === 'number') {
-                this.setAttribListIdxVal(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
+                this.setEntAttribListIdxVal(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
             } else if (typeof target_attrib_idx_key === 'string') {
-                this.setAttribDictKeyVal(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
+                this.setEntAttribDictKeyVal(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
             } else {
-                this.setAttribVal(target_ent_type, target_ent_i, target_attrib_name, value);
+                this.setEntAttribVal(target_ent_type, target_ent_i, target_attrib_name, value);
             }
         });
     }
@@ -392,34 +425,6 @@ export class GIAttribsAdd {
                 return values[0]; // EAttribPush.FIRST
         }
     }
-    // /**
-    //  * Utility method to check the data type and size of a value
-    //  * @param value
-    //  */
-    // private _checkDataTypeSize(value: TAttribDataTypes): [EAttribDataTypeStrs, number] {
-    //     let data_size: number;
-    //     let first_value = null;
-    //     if (Array.isArray(value)) {
-    //         const values = value as number[] | string[];
-    //         if (values.length === 1) {
-    //             throw new Error('An array data type must have more than one value.');
-    //         }
-    //         first_value = values[0];
-    //         data_size = values.length;
-    //     } else {
-    //         first_value = value;
-    //         data_size = 1;
-    //     }
-    //     let data_type: EAttribDataTypeStrs = null;
-    //     if (typeof first_value === 'number') {
-    //         data_type = EAttribDataTypeStrs.NUMBER;
-    //     } else if (typeof first_value === 'string') {
-    //         data_type = EAttribDataTypeStrs.STRING;
-    //     } else {
-    //         throw new Error('Data type for new attribute not recognised.');
-    //     }
-    //     return [data_type, data_size];
-    // }
     /**
      * Utility method to check the data type of an attribute.
      * @param value

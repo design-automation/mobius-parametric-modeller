@@ -1,7 +1,6 @@
 import { TAttribDataTypes, IAttribsMaps,
     Txyz, EAttribNames, EEntType,  ESort,
-    EAttribDataTypeStrs, EEntTypeStr, EFilterOperatorTypes } from './common';
-import { GIAttribMap } from './GIAttribMap';
+    EAttribDataTypeStrs, EEntTypeStr, EFilterOperatorTypes, TAttribMap } from './common';
 import { GIModelData } from './GIModelData';
 
 /**
@@ -35,7 +34,7 @@ export class GIAttribsQuery {
      */
     public getAttribDataType(ent_type: EEntType, name: string): EAttribDataTypeStrs {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMap>|Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
+        const attribs: Map<string, TAttribMap>|Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
         if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
         if (ent_type === EEntType.MOD) {
             const mod_attribs: Map<string, TAttribDataTypes> = attribs as Map<string, TAttribDataTypes>;
@@ -53,7 +52,7 @@ export class GIAttribsQuery {
             }
             throw new Error('Datatype of model attribute not recognised.');
         } else {
-            const ent_attribs: Map<string, GIAttribMap> = attribs as Map<string, GIAttribMap>;
+            const ent_attribs: Map<string, TAttribMap> = attribs as Map<string, TAttribMap>;
             return ent_attribs.get(name).getDataType();
         }
     }
@@ -65,7 +64,7 @@ export class GIAttribsQuery {
      */
     public getAttribDataLength(ent_type: EEntType, name: string): number {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMap>|Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
+        const attribs: Map<string, TAttribMap>|Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
         if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
         if (ent_type === EEntType.MOD) {
             const mod_attribs: Map<string, TAttribDataTypes> = attribs as Map<string, TAttribDataTypes>;
@@ -79,7 +78,7 @@ export class GIAttribsQuery {
             }
             throw new Error('Datatype of model attribute not recognised.');
         } else {
-            const ent_attribs: Map<string, GIAttribMap> = attribs as Map<string, GIAttribMap>;
+            const ent_attribs: Map<string, TAttribMap> = attribs as Map<string, TAttribMap>;
             return ent_attribs.get(name).getDataLength();
         }
     }
@@ -183,8 +182,8 @@ export class GIAttribsQuery {
      */
     public getAttribVal(ent_type: EEntType, name: string, ents_i: number|number[]): TAttribDataTypes|TAttribDataTypes[] {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
-        const attrib: GIAttribMap = attribs.get(name);
+        const attribs: Map<string, TAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attrib: TAttribMap = attribs.get(name);
         if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
         return attrib.getEntVal(ents_i);
     }
@@ -200,8 +199,8 @@ export class GIAttribsQuery {
      */
     public getAttribListIdxVal(ent_type: EEntType, name: string, ents_i: number|number[], idx: number): any {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
-        const attrib: GIAttribMap = attribs.get(name);
+        const attribs: Map<string, TAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attrib: TAttribMap = attribs.get(name);
         if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
         return attrib.getEntListIdxVal(ents_i, idx);
     }
@@ -217,8 +216,8 @@ export class GIAttribsQuery {
      */
     public getAttribDictKeyVal(ent_type: EEntType, name: string, ents_i: number|number[], key: string): any {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
-        const attrib: GIAttribMap = attribs.get(name);
+        const attribs: Map<string, TAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attrib: TAttribMap = attribs.get(name);
         if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
         return attrib.getEntDictKeyVal(ents_i, key);
     }
@@ -229,7 +228,7 @@ export class GIAttribsQuery {
      */
     public hasAttrib(ent_type: EEntType, name: string): boolean {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attribs: Map<string, TAttribMap> = this._attribs_maps[attribs_maps_key];
         return attribs.has(name);
     }
     /**
@@ -238,7 +237,7 @@ export class GIAttribsQuery {
      */
     public getAttribNames(ent_type: EEntType): string[] {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs_map: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attribs_map: Map<string, TAttribMap> = this._attribs_maps[attribs_maps_key];
         return Array.from(attribs_map.keys());
     }
     /**
@@ -248,7 +247,7 @@ export class GIAttribsQuery {
      */
     public getAttribNamesUser(ent_type: EEntType): string[] {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs_map: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attribs_map: Map<string, TAttribMap> = this._attribs_maps[attribs_maps_key];
         let attribs: string[] = Array.from(attribs_map.keys());
         if (ent_type === EEntType.POSI) {
             attribs = attribs.filter(attrib => attrib !== 'xyz');
@@ -261,9 +260,9 @@ export class GIAttribsQuery {
      * @param ent_type
      * @param name
      */
-    public getAttrib(ent_type: EEntType, name: string): GIAttribMap {
+    public getAttrib(ent_type: EEntType, name: string): TAttribMap {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attribs: Map<string, TAttribMap> = this._attribs_maps[attribs_maps_key];
         return attribs.get(name);
     }
     // /**
@@ -276,7 +275,7 @@ export class GIAttribsQuery {
     // public queryAttribs(ent_type: EEntType, query_str: string, indices: number[]): number[] {
     //     // get the map that contains all the ettributes for the ent_type
     //     const attribs_maps_key: string = EEntTypeStr[ent_type];
-    //     const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+    //     const attribs: Map<string, TAttribMap> = this._attribs_maps[attribs_maps_key];
     //     // parse the query
     //     const queries: IQueryComponent[][] = parseQuery(query_str);
     //     if (!queries) { return []; }
@@ -294,7 +293,7 @@ export class GIAttribsQuery {
     //         // do the '&&' queries
     //         for (const and_query of and_queries) {
     //             if (attribs && attribs.has(and_query.attrib_name)) {
-    //                 const attrib: GIAttribMap = attribs.get(and_query.attrib_name);
+    //                 const attrib: TAttribMap = attribs.get(and_query.attrib_name);
     //                 query_ents_i = attrib.queryVal(
     //                     query_ents_i,
     //                     and_query.attrib_index,
@@ -327,10 +326,10 @@ export class GIAttribsQuery {
             name: string, idx_or_key: number|string, op_type: EFilterOperatorTypes, value: TAttribDataTypes): number[] {
         // get the map that contains all the attributes for the ent_type
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attribs: Map<string, TAttribMap> = this._attribs_maps[attribs_maps_key];
         // do the query
         if (attribs && attribs.has(name)) {
-            const attrib: GIAttribMap = attribs.get(name);
+            const attrib: TAttribMap = attribs.get(name);
             let query_ents_i: number[];
             if (typeof idx_or_key === 'number') {
                 query_ents_i = attrib.queryListIdxVal(ents_i, idx_or_key, op_type, value);
@@ -358,10 +357,10 @@ export class GIAttribsQuery {
             name: string, idx_or_key: number|string, method: ESort): number[] {
         // get the map that contains all the ettributes for the ent_type
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attribs: Map<string, TAttribMap> = this._attribs_maps[attribs_maps_key];
         if (!attribs)  { throw new Error('Bad sort: Entity type does not exist.'); }
         // get the attribute from the map
-        const attrib: GIAttribMap = attribs.get(name);
+        const attrib: TAttribMap = attribs.get(name);
         if (attrib === undefined) {
             // if the attribute does not exist then no sort is performed
             return ents_i;
@@ -479,7 +478,7 @@ export class GIAttribsQuery {
      */
     public getEntCoords(ent_type: EEntType, ent_i: number): Txyz[] {
         const posis_i: number[] = this._modeldata.geom.nav.navAnyToPosi(ent_type, ent_i);
-        const coords_map: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
+        const coords_map: TAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
         return coords_map.getEntVal(posis_i) as Txyz[];
     }
     // /**
@@ -488,7 +487,7 @@ export class GIAttribsQuery {
     //  */
     // public getAllPosisCoords(): Txyz[] {
     //     const posis_i: number[] = this._model.modeldata.geom.query.getEnts(EEntType.POSI);
-    //     const coords_map: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
+    //     const coords_map: TAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
     //     return coords_map.getEntVal(posis_i) as Txyz[];
     // }
     // /**
@@ -498,7 +497,7 @@ export class GIAttribsQuery {
     // public getAllVertsCoords(attrib_name: string): Txyz[] {
     //     const verts_i: number[] = this._model.modeldata.geom.query.getEnts(EEntType.VERT);
     //     const posis_i: number[] = verts_i.map( vert_i => this._model.modeldata.geom.nav.navVertToPosi(vert_i));
-    //     const coords_map: GIAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
+    //     const coords_map: TAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
     //     return coords_map.getEntVal(posis_i) as Txyz[];
     // }
 }

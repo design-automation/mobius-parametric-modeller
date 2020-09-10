@@ -1,4 +1,4 @@
-import { EEntType, TTri, TEdge, TWire, TFace, IGeomMaps, Txyz, TColl, TVert, EWireType, IGeomPack, IEntSets } from './common';
+import { EEntType, IGeomMaps, TColl, IEntSets } from './common';
 import { GIGeom } from './GIGeom';
 import { arrRem, arrIdxAdd } from '../util/arrs';
 import { vecDot } from '../geom/vectors';

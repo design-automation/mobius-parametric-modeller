@@ -1,6 +1,6 @@
 import { GIGeom } from './GIGeom';
 import { GIAttribs } from './GIAttribs';
-import { IModelJSONData, IGeomPack, IEntSets } from './common';
+import { IModelJSONData, IEntSets } from './common';
 import { GIModelComparator } from './GIModelComparator';
 import { GIModelThreejs } from './GIModelThreejs';
 import { GIModel } from './GIModel';

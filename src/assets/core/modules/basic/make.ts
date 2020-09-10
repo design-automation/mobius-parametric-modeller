@@ -65,7 +65,7 @@ function _position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TEntTypeId
     if (depth === 1) {
         const coord1: Txyz = coords as Txyz;
         const posi_i: number = __model__.modeldata.geom.add.addPosi();
-        __model__.modeldata.attribs.add.setAttribVal(EEntType.POSI, posi_i, EAttribNames.COORDS, coord1);
+        __model__.modeldata.attribs.add.setEntAttribVal(EEntType.POSI, posi_i, EAttribNames.COORDS, coord1);
         return [EEntType.POSI, posi_i] as TEntTypeIdx;
     } else if (depth === 2) {
         const coords2: Txyz[] = coords as Txyz[];

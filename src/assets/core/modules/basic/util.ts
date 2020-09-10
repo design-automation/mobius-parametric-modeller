@@ -452,6 +452,7 @@ export function ModelCheck(__model__: GIModel): string {
     console.log('MODEL ATTRIBS\n', __model__.modeldata.attribs.toStr());
     console.log('META\n', __model__.metadata.toDebugStr());
     console.log('==== ==== ==== ====');
+    console.log(__model__);
     const check: string[] = __model__.check();
     if (check.length > 0) {
         return String(check);

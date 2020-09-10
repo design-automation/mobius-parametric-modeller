@@ -258,7 +258,8 @@ function _filter(__model__: GIModel, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][],
             ents_i.push(ent_arr[1]);
         }
         // filter the entities
-        const query_result: number[] = __model__.modeldata.attribs.query.filterByAttribs(ent_type, ents_i, name, idx_or_key, op_type, value);
+        const query_result: number[] =
+            __model__.modeldata.attribs.query.filterByAttribs(ent_type, ents_i, name, idx_or_key, op_type, value);
         if (query_result.length === 0) { return []; }
         return query_result.map( entity_i => [ent_type, entity_i]) as TEntTypeIdx[];
     } else { // depth === 3

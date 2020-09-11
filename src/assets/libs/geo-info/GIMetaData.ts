@@ -94,10 +94,10 @@ export class GIMetaData {
                 // string_keys: Array.from(data_filtered.string[1].keys()),
                 string_idxs: Array.from(data_filtered.string[1].values()),
                 list_vals: data_filtered.list[0],
-                list_keys: Array.from(data_filtered.list[1].keys()),
+                // list_keys: Array.from(data_filtered.list[1].keys()),
                 list_idxs: Array.from(data_filtered.list[1].values()),
                 dict_vals: data_filtered.dict[0],
-                dict_keys: Array.from(data_filtered.dict[1].keys()),
+                // dict_keys: Array.from(data_filtered.dict[1].keys()),
                 dict_idxs: Array.from(data_filtered.dict[1].values()),
             }
         };
@@ -154,7 +154,7 @@ export class GIMetaData {
         }
         const renum_list_attrib_vals: Map<number, number>  = new Map();
         for (let i = 0; i < attrib_vals.list_vals.length; i++) {
-            const other_key: string = attrib_vals.list_keys[i];
+            const other_key: string = JSON.stringify(attrib_vals.list_vals[i]);
             const other_idx: number = attrib_vals.list_idxs[i];
             if (this.hasAttribKey(other_key, EAttribDataTypeStrs.LIST)) {
                 renum_list_attrib_vals.set(other_idx, this.getAttribIdxFromKey(other_key, EAttribDataTypeStrs.LIST));
@@ -166,7 +166,7 @@ export class GIMetaData {
         }
         const renum_dict_attrib_vals: Map<number, number>  = new Map();
         for (let i = 0; i < attrib_vals.dict_vals.length; i++) {
-            const other_key: string = attrib_vals.dict_keys[i];
+            const other_key: string = JSON.stringify(attrib_vals.dict_vals[i]);
             const other_idx: number = attrib_vals.dict_idxs[i];
             if (this.hasAttribKey(other_key, EAttribDataTypeStrs.DICT)) {
                 renum_dict_attrib_vals.set(other_idx, this.getAttribIdxFromKey(other_key, EAttribDataTypeStrs.DICT));

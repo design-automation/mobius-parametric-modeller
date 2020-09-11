@@ -316,11 +316,11 @@ export interface IAttribJSONValues {
     string_idxs: number[];
 
     list_vals: any[];
-    list_keys: string[];
+    // list_keys: string[];
     list_idxs: number[];
 
     dict_vals: object[];
-    dict_keys: string[];
+    // dict_keys: string[];
     dict_idxs: number[];
 }
 

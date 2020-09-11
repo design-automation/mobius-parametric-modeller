@@ -97,7 +97,6 @@ export async function Import(__model__: GIModel, input_data: string, data_format
     if (!model_data) {
         throw new Error('Invalid imported model data');
     }
-    console.log(model_data)
     let coll_i: number = null;
     if (model_data.constructor === {}.constructor) {
         let import_func: Function;

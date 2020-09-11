@@ -55,9 +55,14 @@ export class GIAttribsIO {
     /**
      * Adds selected data to this model from another model.
      * Assumes this model is empty - no conflict detection.
+     * If ent_sets is null, then only copy model attribs.
      * @param model_data Attribute data from the other model.
      */
     public dumpSelect(attribs_maps: IAttribsMaps, ent_sets: IEntSets): void {
+        if (ent_sets === null) {
+            if (attribs_maps.mo !== undefined) { this._dumpModelAttribs(attribs_maps); }
+            return;
+        }
         if (attribs_maps.ps !== undefined) {
             this._dumpAttribsSelect(attribs_maps, EEntType.POSI, ent_sets.posis_i);
         }

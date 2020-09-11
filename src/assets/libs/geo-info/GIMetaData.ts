@@ -18,7 +18,7 @@ export class GIMetaData {
         pgon_count: 0,
         coll_count: 0,
         attrib_values: {
-            number: [[], new Map()],    // an array of numbers, and a map: string key -> array index
+            number: [[], new Map()],    // an array of numbers, and a map: number key -> array index
             string: [[], new Map()],    // an array of strings, and a map: string key -> array index
             list:   [[], new Map()],    // an array of lists, and a map: string key -> array index
             dict:   [[], new Map()]     // an array of dicts, and a map: string key -> array index
@@ -32,7 +32,6 @@ export class GIMetaData {
     }
     /**
      * Get the meta data.
-     * Returned data object is passed by reference.
      */
     public getJSONData(model_data: IModelJSONData): IMetaJSONData {
         const data_filtered: IAttribValues = {
@@ -41,6 +40,8 @@ export class GIMetaData {
             list: [[], new Map()],
             dict: [[], new Map()],
         };
+        // filter the metadata values
+        // we only want the valyes that are actually used in this model
         for (const key of Object.keys(model_data.attributes)) {
             if (key !== 'model') {
                 for (const attrib of model_data.attributes[key]) {
@@ -74,31 +75,10 @@ export class GIMetaData {
             pgon_count: this._data.pgon_count,
             coll_count: this._data.coll_count,
             attrib_values: {
-                // number_vals: this._data.attrib_values.number[0],
-                // number_keys: Array.from(this._data.attrib_values.number[1].keys()),
-                // number_idxs: Array.from(this._data.attrib_values.number[1].values()),
-                // string_vals: this._data.attrib_values.string[0],
-                // string_keys: Array.from(this._data.attrib_values.string[1].keys()),
-                // string_idxs: Array.from(this._data.attrib_values.string[1].values()),
-                // list_vals: this._data.attrib_values.list[0],
-                // list_keys: Array.from(this._data.attrib_values.list[1].keys()),
-                // list_idxs: Array.from(this._data.attrib_values.list[1].values()),
-                // dict_vals: this._data.attrib_values.dict[0],
-                // dict_keys: Array.from(this._data.attrib_values.dict[1].keys()),
-                // dict_idxs: Array.from(this._data.attrib_values.dict[1].values()),
-                //-------------------------------------------
                 number_vals: data_filtered.number[0],
-                // number_keys: Array.from(data_filtered.number[1].keys()),
-                number_idxs: Array.from(data_filtered.number[1].values()),
                 string_vals: data_filtered.string[0],
-                // string_keys: Array.from(data_filtered.string[1].keys()),
-                string_idxs: Array.from(data_filtered.string[1].values()),
                 list_vals: data_filtered.list[0],
-                // list_keys: Array.from(data_filtered.list[1].keys()),
-                list_idxs: Array.from(data_filtered.list[1].values()),
-                dict_vals: data_filtered.dict[0],
-                // dict_keys: Array.from(data_filtered.dict[1].keys()),
-                dict_idxs: Array.from(data_filtered.dict[1].values()),
+                dict_vals: data_filtered.dict[0]
             }
         };
         return data;
@@ -127,51 +107,45 @@ export class GIMetaData {
         // create the renumbering maps
         const attrib_vals: IAttribJSONValues = meta_data.attrib_values;
         const renum_num_attrib_vals: Map<number, number>  = new Map();
-        for (let i = 0; i < attrib_vals.number_vals.length; i++) {
-            // const other_key: string = attrib_vals.number_keys[i];
-            const other_key: number = attrib_vals.number_vals[i];
-            const other_idx: number = attrib_vals.number_idxs[i];
+        for (let other_idx = 0; other_idx < attrib_vals.number_vals.length; other_idx++) {
+            const other_key: number = attrib_vals.number_vals[other_idx];
             if (this.hasAttribKey(other_key, EAttribDataTypeStrs.NUMBER)) {
                 renum_num_attrib_vals.set(other_idx, this.getAttribIdxFromKey(other_key, EAttribDataTypeStrs.NUMBER));
             } else {
-                const other_val: number = attrib_vals.number_vals[i];
+                const other_val: number = attrib_vals.number_vals[other_idx];
                 const new_idx: number = this.addAttribByKeyVal(other_key, other_val, EAttribDataTypeStrs.NUMBER);
                 renum_num_attrib_vals.set(other_idx, new_idx);
             }
         }
         const renum_str_attrib_vals: Map<number, number>  = new Map();
-        for (let i = 0; i < attrib_vals.string_vals.length; i++) {
-            // const other_key: string = attrib_vals.string_keys[i];
-            const other_key: string = attrib_vals.string_vals[i];
-            const other_idx: number = attrib_vals.string_idxs[i];
+        for (let other_idx = 0; other_idx < attrib_vals.string_vals.length; other_idx++) {
+            const other_key: string = attrib_vals.string_vals[other_idx];
             if (this.hasAttribKey(other_key, EAttribDataTypeStrs.STRING)) {
                 renum_str_attrib_vals.set(other_idx, this.getAttribIdxFromKey(other_key, EAttribDataTypeStrs.STRING));
             } else {
-                const other_val: string = attrib_vals.string_vals[i];
+                const other_val: string = attrib_vals.string_vals[other_idx];
                 const new_idx: number = this.addAttribByKeyVal(other_key, other_val, EAttribDataTypeStrs.STRING);
                 renum_str_attrib_vals.set(other_idx, new_idx);
             }
         }
         const renum_list_attrib_vals: Map<number, number>  = new Map();
-        for (let i = 0; i < attrib_vals.list_vals.length; i++) {
-            const other_key: string = JSON.stringify(attrib_vals.list_vals[i]);
-            const other_idx: number = attrib_vals.list_idxs[i];
+        for (let other_idx = 0; other_idx < attrib_vals.list_vals.length; other_idx++) {
+            const other_key: string = JSON.stringify(attrib_vals.list_vals[other_idx]);
             if (this.hasAttribKey(other_key, EAttribDataTypeStrs.LIST)) {
                 renum_list_attrib_vals.set(other_idx, this.getAttribIdxFromKey(other_key, EAttribDataTypeStrs.LIST));
             } else {
-                const other_val: any[] = attrib_vals.list_vals[i];
+                const other_val: any[] = attrib_vals.list_vals[other_idx];
                 const new_idx: number = this.addAttribByKeyVal(other_key, other_val, EAttribDataTypeStrs.LIST);
                 renum_list_attrib_vals.set(other_idx, new_idx);
             }
         }
         const renum_dict_attrib_vals: Map<number, number>  = new Map();
-        for (let i = 0; i < attrib_vals.dict_vals.length; i++) {
-            const other_key: string = JSON.stringify(attrib_vals.dict_vals[i]);
-            const other_idx: number = attrib_vals.dict_idxs[i];
+        for (let other_idx = 0; other_idx < attrib_vals.dict_vals.length; other_idx++) {
+            const other_key: string = JSON.stringify(attrib_vals.dict_vals[other_idx]);
             if (this.hasAttribKey(other_key, EAttribDataTypeStrs.DICT)) {
                 renum_dict_attrib_vals.set(other_idx, this.getAttribIdxFromKey(other_key, EAttribDataTypeStrs.DICT));
             } else {
-                const other_val: object = attrib_vals.dict_vals[i];
+                const other_val: object = attrib_vals.dict_vals[other_idx];
                 const new_idx: number = this.addAttribByKeyVal(other_key, other_val, EAttribDataTypeStrs.DICT);
                 renum_dict_attrib_vals.set(other_idx, new_idx);
             }

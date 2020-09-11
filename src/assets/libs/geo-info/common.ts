@@ -309,19 +309,19 @@ export interface IModelJSON {
 export interface IAttribJSONValues {
     number_vals: number[];
     // number_keys: string[];
-    number_idxs: number[];
+    // number_idxs: number[];
 
     string_vals: string[];
     // string_keys: string[];
-    string_idxs: number[];
+    // string_idxs: number[];
 
     list_vals: any[];
     // list_keys: string[];
-    list_idxs: number[];
+    // list_idxs: number[];
 
     dict_vals: object[];
     // dict_keys: string[];
-    dict_idxs: number[];
+    // dict_idxs: number[];
 }
 
 export interface IMetaJSONData {

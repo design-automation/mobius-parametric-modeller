@@ -1,4 +1,4 @@
-import { IModelJSONData, IEntSets, IModelJSON } from './common';
+import { IModelJSONData, IEntSets, IModelJSON, IMetaJSONData, EEntType } from './common';
 import { GIMetaData } from './GIMetaData';
 import { GIModelData } from './GIModelData';
 import { IThreeJS } from './ThreejsJSON';
@@ -42,9 +42,12 @@ export class GIModel {
      * This includes both the meta data and the model data.
      */
     public getJSONStr(): string {
+        const model_data: IModelJSONData = this.modeldata.getJSONData();
+        const meta_data: IMetaJSONData = this.metadata.getJSONData(model_data);
+
         const data: IModelJSON = {
-            meta_data: this.metadata.getJSONData(),
-            model_data: this.modeldata.getJSONData()
+            meta_data: meta_data,
+            model_data: model_data
         };
         return JSON.stringify(data);
     }
@@ -131,22 +134,33 @@ export class GIModel {
     }
     /**
      * Delete ents in the model.
+     * This does not affect the model attribs.
      */
     public delete(ent_sets: IEntSets, invert: boolean): void {
         if (ent_sets === null) {
-            if (!invert) {
-                this.modeldata = new GIModelData(this);
-                console.log("WARNING: Model attributes being deleted as well");
-                //
-                //
-                // TODO save model attribs
-                //
-                //
+            if (invert) {
+                // delete nothing
+                return;
+            } else {
+                // delete everything
+                const new_model_data: GIModelData = new GIModelData(this);
+                // copy model attribs from existing
+                new_model_data.dumpSelect(this.modeldata, ent_sets);
+                // reset model data
+                this.modeldata = new_model_data;
+                // const model_attrib_names: string[] = this.modeldata.attribs.query.getAttribNames(EEntType.MOD);
+                // for (const name of model_attrib_names) {
+                //     new_model_data.attribs.add.setModelAttribVal(name, this.modeldata.attribs.query.getModelAttribVal(name));
+                // }
+                // this.modeldata = new_model_data;
             }
         } else if (invert) {
-            const modeldata2 = new GIModelData(this);
-            modeldata2.dumpSelect(this.modeldata, ent_sets);
-            this.modeldata = modeldata2;
+            // create empty model data
+            const new_model_data = new GIModelData(this);
+            // copy data from existing model data
+            new_model_data.dumpSelect(this.modeldata, ent_sets);
+            // reset model data
+            this.modeldata = new_model_data;
         } else {
             this.modeldata.geom.del.del(ent_sets);
         }

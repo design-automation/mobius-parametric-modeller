@@ -132,9 +132,11 @@ export class GIGeomIO {
      * The data is deep copied.
      * No conflict detection is performed.
      * Typically, this model is assumed to be empty.
+     * If ent_sets is null, do nothing.
      * @param geom_maps The geom_arrays of the other model.
      */
     public dumpSelect(other_geom: GIGeom, ent_sets: IEntSets): void {
+        if (ent_sets === null) { return; }
         // Check that we have correct number of time stamps
         if (this._geom_maps.up_posis_verts.size !== this._geom_maps.posis_ts.size) {
             throw new Error('Incorrent number of time stamps for posis.');

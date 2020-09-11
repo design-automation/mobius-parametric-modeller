@@ -64,12 +64,16 @@ export class GIModelData {
         this.model.metadata = modeldata.model.metadata;
     }
     /**
-     * Copys the data from a second model into this model.
-     * The existing data in this model is not deleted.
-     * For the imported data, deleted entities are also merged.
+     * Copys the data from a second model into this model without conflict detection.
+     * Usually, this model is assumed to be empty.
+     * If ent_sets is null, then only model attribs are copied.
      * @param model_data The GI model.
      */
     public dumpSelect(modeldata: GIModelData, ent_sets: IEntSets): void {
+        if (ent_sets === null) {
+            this.attribs.io.dumpSelect(modeldata.attribs._attribs_maps, ent_sets);
+            return;
+        }
         // add topo geom sets
         ent_sets.verts_i = new Set();
         ent_sets.tris_i = new Set();

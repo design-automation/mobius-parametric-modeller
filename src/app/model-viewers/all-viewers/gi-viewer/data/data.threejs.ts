@@ -357,7 +357,7 @@ export class DataThreejs extends DataThreejsLookAt {
                 }
             }
         }
-        this.grid = new THREE.GridHelper(size, size / 10);
+        this.grid = new THREE.GridHelper(size, size / 10, 0x888888, 0x888888);
         this.grid.visible = this.settings.grid.show;
         // todo: change grid -> grid_value
         if (this.grid.visible) {

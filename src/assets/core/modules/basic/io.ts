@@ -97,6 +97,7 @@ export async function Import(__model__: GIModel, input_data: string, data_format
     if (!model_data) {
         throw new Error('Invalid imported model data');
     }
+    console.log(model_data)
     let coll_i: number = null;
     if (model_data.constructor === {}.constructor) {
         let import_func: Function;
@@ -284,7 +285,7 @@ async function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
             // === get meta data ===
             model_data = model_clone.getJSONStr();
             // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
-            model_data = model_data.replace(/\\/g, '\\\\'); // TODO temporary fix
+            model_data = model_data.replace(/\\/g, '\\\\\\'); // TODO temporary fix
             // === save the file ===
             if (data_target === _EIODataTarget.DEFAULT) {
                 return download(model_data , file_name);

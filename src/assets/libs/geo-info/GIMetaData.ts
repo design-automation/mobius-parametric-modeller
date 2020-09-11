@@ -88,10 +88,10 @@ export class GIMetaData {
                 // dict_idxs: Array.from(this._data.attrib_values.dict[1].values()),
                 //-------------------------------------------
                 number_vals: data_filtered.number[0],
-                number_keys: Array.from(data_filtered.number[1].keys()),
+                // number_keys: Array.from(data_filtered.number[1].keys()),
                 number_idxs: Array.from(data_filtered.number[1].values()),
                 string_vals: data_filtered.string[0],
-                string_keys: Array.from(data_filtered.string[1].keys()),
+                // string_keys: Array.from(data_filtered.string[1].keys()),
                 string_idxs: Array.from(data_filtered.string[1].values()),
                 list_vals: data_filtered.list[0],
                 list_keys: Array.from(data_filtered.list[1].keys()),
@@ -128,7 +128,8 @@ export class GIMetaData {
         const attrib_vals: IAttribJSONValues = meta_data.attrib_values;
         const renum_num_attrib_vals: Map<number, number>  = new Map();
         for (let i = 0; i < attrib_vals.number_vals.length; i++) {
-            const other_key: string = attrib_vals.number_keys[i];
+            // const other_key: string = attrib_vals.number_keys[i];
+            const other_key: number = attrib_vals.number_vals[i];
             const other_idx: number = attrib_vals.number_idxs[i];
             if (this.hasAttribKey(other_key, EAttribDataTypeStrs.NUMBER)) {
                 renum_num_attrib_vals.set(other_idx, this.getAttribIdxFromKey(other_key, EAttribDataTypeStrs.NUMBER));
@@ -140,7 +141,8 @@ export class GIMetaData {
         }
         const renum_str_attrib_vals: Map<number, number>  = new Map();
         for (let i = 0; i < attrib_vals.string_vals.length; i++) {
-            const other_key: string = attrib_vals.string_keys[i];
+            // const other_key: string = attrib_vals.string_keys[i];
+            const other_key: string = attrib_vals.string_vals[i];
             const other_idx: number = attrib_vals.string_idxs[i];
             if (this.hasAttribKey(other_key, EAttribDataTypeStrs.STRING)) {
                 renum_str_attrib_vals.set(other_idx, this.getAttribIdxFromKey(other_key, EAttribDataTypeStrs.STRING));

@@ -308,11 +308,11 @@ export interface IModelJSON {
 
 export interface IAttribJSONValues {
     number_vals: number[];
-    number_keys: string[];
+    // number_keys: string[];
     number_idxs: number[];
 
     string_vals: string[];
-    string_keys: string[];
+    // string_keys: string[];
     string_idxs: number[];
 
     list_vals: any[];

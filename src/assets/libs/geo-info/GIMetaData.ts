@@ -1,5 +1,5 @@
 import { EAttribDataTypeStrs, TAttribDataTypes, IMetaData, IMetaJSONData, IAttribJSONValues,
-    IModelJSON, IModelJSONData, IAttribJSONData } from './common';
+    IModelJSON, IModelJSONData, IAttribJSONData, IAttribValues } from './common';
 
 /**
  * Geo-info model metadata class.
@@ -32,9 +32,35 @@ export class GIMetaData {
     }
     /**
      * Get the meta data.
-     * Data object is passed by reference.
+     * Returned data object is passed by reference.
      */
-    public getJSONData(): IMetaJSONData {
+    public getJSONData(model_data: IModelJSONData): IMetaJSONData {
+        const data_filtered: IAttribValues = {
+            number: [[], new Map()],
+            string: [[], new Map()],
+            list: [[], new Map()],
+            dict: [[], new Map()],
+        };
+        for (const key of Object.keys(model_data.attributes)) {
+            if (key !== 'model') {
+                for (const attrib of model_data.attributes[key]) {
+                    const data_type = attrib.data_type;
+                    for (const item of attrib.data) {
+                        const attrib_idx = item[0];
+                        const attrib_val = this._data.attrib_values[data_type][0][attrib_idx];
+                        const attrib_key = (data_type === 'number' || data_type === 'string') ? attrib_val : JSON.stringify(attrib_val);
+                        let new_attrib_idx: number;
+                        if (attrib_key in data_filtered[data_type][1]) {
+                            new_attrib_idx = data_filtered[data_type][1].get(attrib_key);
+                        } else {
+                            new_attrib_idx = data_filtered[data_type][0].push(attrib_val) - 1;
+                            data_filtered[data_type][1].set(attrib_key, new_attrib_idx);
+                        }
+                        item[0] = new_attrib_idx;
+                    }
+                }
+            }
+        }
         const data: IMetaJSONData = {
             time_stamp: this._data.time_stamp,
             posi_count: this._data.posi_count,
@@ -48,18 +74,31 @@ export class GIMetaData {
             pgon_count: this._data.pgon_count,
             coll_count: this._data.coll_count,
             attrib_values: {
-                number_vals: this._data.attrib_values.number[0],
-                number_keys: Array.from(this._data.attrib_values.number[1].keys()),
-                number_idxs: Array.from(this._data.attrib_values.number[1].values()),
-                string_vals: this._data.attrib_values.string[0],
-                string_keys: Array.from(this._data.attrib_values.string[1].keys()),
-                string_idxs: Array.from(this._data.attrib_values.string[1].values()),
-                list_vals: this._data.attrib_values.list[0],
-                list_keys: Array.from(this._data.attrib_values.list[1].keys()),
-                list_idxs: Array.from(this._data.attrib_values.list[1].values()),
-                dict_vals: this._data.attrib_values.dict[0],
-                dict_keys: Array.from(this._data.attrib_values.dict[1].keys()),
-                dict_idxs: Array.from(this._data.attrib_values.dict[1].values()),
+                // number_vals: this._data.attrib_values.number[0],
+                // number_keys: Array.from(this._data.attrib_values.number[1].keys()),
+                // number_idxs: Array.from(this._data.attrib_values.number[1].values()),
+                // string_vals: this._data.attrib_values.string[0],
+                // string_keys: Array.from(this._data.attrib_values.string[1].keys()),
+                // string_idxs: Array.from(this._data.attrib_values.string[1].values()),
+                // list_vals: this._data.attrib_values.list[0],
+                // list_keys: Array.from(this._data.attrib_values.list[1].keys()),
+                // list_idxs: Array.from(this._data.attrib_values.list[1].values()),
+                // dict_vals: this._data.attrib_values.dict[0],
+                // dict_keys: Array.from(this._data.attrib_values.dict[1].keys()),
+                // dict_idxs: Array.from(this._data.attrib_values.dict[1].values()),
+                //-------------------------------------------
+                number_vals: data_filtered.number[0],
+                number_keys: Array.from(data_filtered.number[1].keys()),
+                number_idxs: Array.from(data_filtered.number[1].values()),
+                string_vals: data_filtered.string[0],
+                string_keys: Array.from(data_filtered.string[1].keys()),
+                string_idxs: Array.from(data_filtered.string[1].values()),
+                list_vals: data_filtered.list[0],
+                list_keys: Array.from(data_filtered.list[1].keys()),
+                list_idxs: Array.from(data_filtered.list[1].values()),
+                dict_vals: data_filtered.dict[0],
+                dict_keys: Array.from(data_filtered.dict[1].keys()),
+                dict_idxs: Array.from(data_filtered.dict[1].values()),
             }
         };
         return data;

@@ -1,4 +1,4 @@
-import { IModelJSONData, IEntSets, IModelJSON } from './common';
+import { IModelJSONData, IEntSets, IModelJSON, IMetaJSONData } from './common';
 import { GIMetaData } from './GIMetaData';
 import { GIModelData } from './GIModelData';
 import { IThreeJS } from './ThreejsJSON';
@@ -42,9 +42,12 @@ export class GIModel {
      * This includes both the meta data and the model data.
      */
     public getJSONStr(): string {
+        const model_data: IModelJSONData = this.modeldata.getJSONData();
+        const meta_data: IMetaJSONData = this.metadata.getJSONData(model_data);
+
         const data: IModelJSON = {
-            meta_data: this.metadata.getJSONData(),
-            model_data: this.modeldata.getJSONData()
+            meta_data: meta_data,
+            model_data: model_data
         };
         return JSON.stringify(data);
     }

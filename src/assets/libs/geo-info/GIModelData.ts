@@ -59,7 +59,7 @@ export class GIModelData {
     public merge(modeldata: GIModelData): void {
         // const geom_maps: Map<number, number>[] = this.geom.io.merge(model.modeldata.geom._geom_maps);
         // this.attribs.io.merge(model.modeldata.attribs._attribs_maps, geom_maps);
-        this.geom.io.merge(modeldata.geom);
+        this.geom.merge.merge(modeldata.geom);
         this.attribs.io.merge(modeldata.attribs._attribs_maps);
         this.model.metadata = modeldata.model.metadata;
     }
@@ -69,9 +69,9 @@ export class GIModelData {
      * If ent_sets is null, then only model attribs are copied.
      * @param model_data The GI model.
      */
-    public dumpSelect(modeldata: GIModelData, ent_sets: IEntSets): void {
+    public dumpEnts(modeldata: GIModelData, ent_sets: IEntSets): void {
         if (ent_sets === null) {
-            this.attribs.io.dumpSelect(modeldata.attribs._attribs_maps, ent_sets);
+            this.attribs.io.dumpEnts(modeldata.attribs._attribs_maps, ent_sets);
             return;
         }
         // add topo geom sets
@@ -112,8 +112,8 @@ export class GIModelData {
         });
         // dump the selected data into this model
         // this model is assumed to be emprt
-        this.geom.io.dumpSelect(modeldata.geom, ent_sets);
-        this.attribs.io.dumpSelect(modeldata.attribs._attribs_maps, ent_sets);
+        this.geom.dump.dumpEnts(modeldata.geom, ent_sets);
+        this.attribs.io.dumpEnts(modeldata.attribs._attribs_maps, ent_sets);
     }
     /**
      * Returns a clone of this model.
@@ -121,7 +121,7 @@ export class GIModelData {
      */
     public clone(): GIModelData {
         const clone: GIModelData = new GIModelData(this.model);
-        clone.geom.io.dump(this.geom._geom_maps);
+        clone.geom.dump.dump(this.geom._geom_maps);
         clone.attribs.io.dump(this.attribs._attribs_maps);
         // this.model.metadata = this.model.metadata;
         // clone.dump(this);
@@ -132,7 +132,7 @@ export class GIModelData {
      */
     public purge(): GIModelData {
         const clone: GIModelData = new GIModelData(this.model);
-        clone.mergeAndPurge(this);
+        clone.append(this);
         return clone;
     }
     /**
@@ -141,9 +141,9 @@ export class GIModelData {
      * For the imported data, deleted entities are filtered out (i.e. not merged).
      * @param model_data The GI model.
      */
-    public mergeAndPurge(modeldata: GIModelData): void {
-        const geom_maps: Map<string, Map<number, number>> = this.geom.io.mergeAndPurge(modeldata.geom._geom_maps);
-        this.attribs.io.mergeAndPurge(modeldata.attribs._attribs_maps, geom_maps);
+    public append(modeldata: GIModelData): void {
+        const geom_maps: Map<string, Map<number, number>> = this.geom.append.append(modeldata.geom._geom_maps);
+        this.attribs.io.append(modeldata.attribs._attribs_maps, geom_maps);
     }
     /**
      * Check model for internal consistency

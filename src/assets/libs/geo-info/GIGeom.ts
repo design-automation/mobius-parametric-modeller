@@ -1,5 +1,5 @@
 import { GIModel } from './GIModel';
-import { IGeomMaps, TVert, TWire, TColl, TPline, TEdge, TFace, TPgon, TEntTypeIdx, EEntType, TPoint } from './common';
+import { IGeomMaps, TEntTypeIdx } from './common';
 import { GIGeomAdd } from './GIGeomAdd';
 import { GIGeomModify } from './GIGeomModify';
 import { GIGeomQuery } from './GIGeomQuery';
@@ -16,6 +16,9 @@ import { GIGeomDelVert } from './GIGeomDelVert';
 import { GIGeomDelEdge } from './GIGeomDelEdge';
 import { GIModelData } from './GIModelData';
 import { GIGeomTimeStamp } from './GIGeomTimeStamp';
+import { GIGeomMerge } from './GIGeomMerge';
+import { GIGeomDump } from './GIGeomDump';
+import { GIGeomAppend } from './GIGeomAppend';
 
 /**
  * Class for geometry.
@@ -35,7 +38,10 @@ export class GIGeom {
         dn_points_verts: new Map(),
         dn_plines_wires: new Map(),
         dn_pgons_faces: new Map(),
-        dn_colls_objs: new Map(),
+        // dn_colls_objs: new Map(),
+        dn_colls_points: new Map(),
+        dn_colls_plines: new Map(),
+        dn_colls_pgons: new Map(),
         up_posis_verts: new Map(),
         up_tris_faces: new Map(),
         up_verts_edges: new Map(),
@@ -48,6 +54,7 @@ export class GIGeom {
         up_points_colls: new Map(),
         up_plines_colls: new Map(),
         up_pgons_colls: new Map(),
+        up_colls_colls: new Map(),
         posis_ts: new Map(),
         points_ts: new Map(),
         plines_ts: new Map(),
@@ -56,6 +63,9 @@ export class GIGeom {
     };
     // sub classes with methods
     public io: GIGeomIO;
+    public merge: GIGeomMerge;
+    public append: GIGeomAppend;
+    public dump: GIGeomDump;
     public add: GIGeomAdd;
     public del: GIGeomDel;
     public del_vert: GIGeomDelVert;
@@ -76,6 +86,9 @@ export class GIGeom {
     constructor(model: GIModelData) {
         this.modeldata = model;
         this.io = new GIGeomIO(this, this._geom_maps);
+        this.merge = new GIGeomMerge(this, this._geom_maps);
+        this.append = new GIGeomAppend(this, this._geom_maps);
+        this.dump = new GIGeomDump(this, this._geom_maps);
         this.add = new GIGeomAdd(this, this._geom_maps);
         this.del = new GIGeomDel(this, this._geom_maps);
         this.del_vert = new GIGeomDelVert(this, this._geom_maps);

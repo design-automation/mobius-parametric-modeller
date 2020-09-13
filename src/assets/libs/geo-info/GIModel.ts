@@ -99,6 +99,7 @@ export class GIModel {
      * Entity IDs will not change.
      */
     public clone(): GIModel {
+        console.log("CLONE");
         const clone: GIModel = new GIModel();
         clone.metadata = this.metadata;
         clone.modeldata = this.modeldata.clone();
@@ -113,6 +114,7 @@ export class GIModel {
      * @param model_data The GI model.
      */
     public merge(model: GIModel): void {
+        console.log("MERGE");
         this.modeldata.merge(model.modeldata);
     }
     /**
@@ -123,8 +125,8 @@ export class GIModel {
      * The Entity IDs in the second model will change.
      * @param model_data The GI model.
      */
-    public mergeAndPurge(model: GIModel): void {
-        this.modeldata.mergeAndPurge(model.modeldata);
+    public append(model: GIModel): void {
+        this.modeldata.append(model.modeldata);
     }
     /**
      * Renumber entities in this model.
@@ -134,7 +136,7 @@ export class GIModel {
     }
     /**
      * Delete ents in the model.
-     * This does not affect the model attribs.
+     * This does not affect the attribs at the model level.
      */
     public delete(ent_sets: IEntSets, invert: boolean): void {
         if (ent_sets === null) {
@@ -145,7 +147,7 @@ export class GIModel {
                 // delete everything
                 const new_model_data: GIModelData = new GIModelData(this);
                 // copy model attribs from existing
-                new_model_data.dumpSelect(this.modeldata, ent_sets);
+                new_model_data.dumpEnts(this.modeldata, ent_sets);
                 // reset model data
                 this.modeldata = new_model_data;
                 // const model_attrib_names: string[] = this.modeldata.attribs.query.getAttribNames(EEntType.MOD);
@@ -158,7 +160,7 @@ export class GIModel {
             // create empty model data
             const new_model_data = new GIModelData(this);
             // copy data from existing model data
-            new_model_data.dumpSelect(this.modeldata, ent_sets);
+            new_model_data.dumpEnts(this.modeldata, ent_sets);
             // reset model data
             this.modeldata = new_model_data;
         } else {

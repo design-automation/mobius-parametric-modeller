@@ -22,7 +22,7 @@ export class GIGeomModifyColl {
      * @param parent_coll_i
      */
     public setCollParent(coll_i: number, parent_coll_i: number): void {
-        this._geom_maps.dn_colls_objs.get(coll_i)[0] = parent_coll_i;
+        this._geom_maps.up_colls_colls.set(coll_i, parent_coll_i);
         // update time stamp
         this._geom.time_stamp.updateEntTs(EEntType.COLL, coll_i);
     }
@@ -35,8 +35,7 @@ export class GIGeomModifyColl {
      * @param pgons_i
      */
     public collAddEnts(coll_i: number, points_i: number[], plines_i: number[], pgons_i: number[]): void {
-        const coll: TColl = this._geom_maps.dn_colls_objs.get(coll_i);
-        const coll_points: number[] = coll[1];
+        const coll_points: number[] = this._geom_maps.dn_colls_points.get(coll_i);
         if (points_i.length) {
             for (const point_i of points_i) {
                 if (coll_points.indexOf(point_i) === -1) {
@@ -51,7 +50,7 @@ export class GIGeomModifyColl {
                 }
             }
         }
-        const coll_plines: number[] = coll[2];
+        const coll_plines: number[] = this._geom_maps.dn_colls_plines.get(coll_i);
         if (plines_i.length) {
             for (const pline_i of plines_i) {
                 if (coll_plines.indexOf(pline_i) === -1) {
@@ -66,7 +65,7 @@ export class GIGeomModifyColl {
                 }
             }
         }
-        const coll_pgons: number[] = coll[3];
+        const coll_pgons: number[] = this._geom_maps.dn_colls_pgons.get(coll_i);
         if (pgons_i.length) {
             for (const pgon_i of pgons_i) {
                 if (coll_pgons.indexOf(pgon_i) === -1) {
@@ -83,7 +82,8 @@ export class GIGeomModifyColl {
         }
     }
     /**
-     * Remove entities from a collection.
+     * Remove objects from a collection.
+     * If the objects are not in the collection, then no error is thrown.
      * Time stamp is not updated.
      * @param coll_i
      * @param points_i
@@ -91,32 +91,31 @@ export class GIGeomModifyColl {
      * @param pgons_i
      */
     public collRemoveEnts(coll_i: number, points_i: number[], plines_i: number[], pgons_i: number[]): void {
-        const coll: TColl = this._geom_maps.dn_colls_objs.get(coll_i);
-        const coll_points: number[] = coll[1];
+        const coll_points: number[] = this._geom_maps.dn_colls_points.get(coll_i);
         if (points_i && points_i.length) {
             for (const point_i of points_i) {
                 // update down arrays
-                arrRem(coll_points, point_i);
+                const index = arrRem(coll_points, point_i);
                 // update up arrays
-                arrRem(this._geom_maps.up_points_colls.get(point_i), coll_i);
+                if (index !== -1) { arrRem(this._geom_maps.up_points_colls.get(point_i), coll_i); }
             }
         }
-        const coll_plines: number[] = coll[2];
+        const coll_plines: number[] = this._geom_maps.dn_colls_plines.get(coll_i);
         if (plines_i && plines_i.length) {
             for (const pline_i of plines_i) {
                 // update down arrays
-                arrRem(coll_plines, pline_i);
+                const index = arrRem(coll_plines, pline_i);
                 // update up arrays
-                arrRem(this._geom_maps.up_plines_colls.get(pline_i), coll_i);
+                if (index !== -1) { arrRem(this._geom_maps.up_plines_colls.get(pline_i), coll_i); }
             }
         }
-        const coll_pgons: number[] = coll[3];
+        const coll_pgons: number[] = this._geom_maps.dn_colls_pgons.get(coll_i);
         if (pgons_i && pgons_i.length) {
             for (const pgon_i of pgons_i) {
                 // update down arrays
-                arrRem(coll_pgons, pgon_i);
+                const index = arrRem(coll_pgons, pgon_i);
                 // update up arrays
-                arrRem(this._geom_maps.up_pgons_colls.get(pgon_i), coll_i);
+                if (index !== -1) { arrRem(this._geom_maps.up_pgons_colls.get(pgon_i), coll_i); }
             }
         }
     }

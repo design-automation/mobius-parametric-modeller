@@ -1,12 +1,15 @@
 /**
  * Remove an item from an array
+ * Return teh index where the item was removed.
+ * Returns -1 if teh item was not found.
  * @param arr
  * @param item
  */
-export function arrRem(arr: any[], item: any): void {
+export function arrRem(arr: any[], item: any): number {
     const index: number = arr.indexOf(item);
-    if (index === -1) { return; }
+    if (index === -1) { return -1; }
     arr.splice(index, 1);
+    return index;
 }
 
 /**

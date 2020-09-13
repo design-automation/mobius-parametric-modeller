@@ -1,4 +1,4 @@
-import { EEntType, TTri, TEdge, TWire, TFace, IGeomMaps, Txyz, TColl, TVert, TEntTypeIdx } from './common';
+import { EEntType, IGeomMaps, TEntTypeIdx } from './common';
 import { GIGeom } from './GIGeom';
 
 /**

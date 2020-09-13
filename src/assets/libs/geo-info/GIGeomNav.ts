@@ -18,30 +18,30 @@ export class GIGeomNav {
     // ============================================================================
     // Get entities
     // ============================================================================
-    public getVert(vert_i: number): TVert {
-        return this._geom_maps.dn_verts_posis.get(vert_i);
-    }
-    public getEdge(edge_i: number): TEdge {
-        return this._geom_maps.dn_edges_verts.get(edge_i);
-    }
-    public getWire(wire_i: number): TWire {
-        return this._geom_maps.dn_wires_edges.get(wire_i);
-    }
-    public getFace(face_i: number): TFace {
-        return this._geom_maps.dn_faces_wires.get(face_i);
-    }
-    public getPoint(point_i: number): TPoint {
-        return this._geom_maps.dn_points_verts.get(point_i);
-    }
-    public getPline(pline_i: number): TPline {
-        return this._geom_maps.dn_plines_wires.get(pline_i);
-    }
-    public getPgon(pgon_i: number): TPgon {
-        return this._geom_maps.dn_pgons_faces.get(pgon_i);
-    }
-    public getColl(coll_i: number): TColl {
-        return this._geom_maps.dn_colls_objs.get(coll_i);
-    }
+    // public getVert(vert_i: number): TVert {
+    //     return this._geom_maps.dn_verts_posis.get(vert_i);
+    // }
+    // public getEdge(edge_i: number): TEdge {
+    //     return this._geom_maps.dn_edges_verts.get(edge_i);
+    // }
+    // public getWire(wire_i: number): TWire {
+    //     return this._geom_maps.dn_wires_edges.get(wire_i);
+    // }
+    // public getFace(face_i: number): TFace {
+    //     return this._geom_maps.dn_faces_wires.get(face_i);
+    // }
+    // public getPoint(point_i: number): TPoint {
+    //     return this._geom_maps.dn_points_verts.get(point_i);
+    // }
+    // public getPline(pline_i: number): TPline {
+    //     return this._geom_maps.dn_plines_wires.get(pline_i);
+    // }
+    // public getPgon(pgon_i: number): TPgon {
+    //     return this._geom_maps.dn_pgons_faces.get(pgon_i);
+    // }
+    // public getColl(coll_i: number): TColl {
+    //     return this._geom_maps.dn_colls_objs.get(coll_i);
+    // }
     // ============================================================================
     // Navigate down the hierarchy
     // ============================================================================
@@ -77,13 +77,13 @@ export class GIGeomNav {
         const coll_and_desc_i: number[] = this._geom.query.getCollDescendents(coll_i);
         // if no descendants, just return the the ents in this coll
         if (coll_and_desc_i.length === 0) {
-            return this._geom_maps.dn_colls_objs.get(coll_i)[1]; // coll points
+            return this._geom_maps.dn_colls_points.get(coll_i); // coll points
         }
         // we have descendants, so get all points
         coll_and_desc_i.splice(0, 0, coll_i);
         const points_i_set: Set<number> = new Set();
         for (const one_coll_i of coll_and_desc_i) {
-            for (const point_i of this._geom_maps.dn_colls_objs.get(one_coll_i)[1]) {
+            for (const point_i of this._geom_maps.dn_colls_points.get(one_coll_i)) {
                 points_i_set.add(point_i);
             }
         }
@@ -94,13 +94,13 @@ export class GIGeomNav {
         const coll_and_desc_i: number[] = this._geom.query.getCollDescendents(coll_i);
         // if no descendants, just return the the ents in this coll
         if (coll_and_desc_i.length === 0) {
-            return this._geom_maps.dn_colls_objs.get(coll_i)[2]; // coll lines
+            return this._geom_maps.dn_colls_plines.get(coll_i); // coll lines
         }
         // we have descendants, so get all plines
         coll_and_desc_i.splice(0, 0, coll_i);
         const plines_i_set: Set<number> = new Set();
         for (const one_coll_i of coll_and_desc_i) {
-            for (const pline_i of this._geom_maps.dn_colls_objs.get(one_coll_i)[2]) {
+            for (const pline_i of this._geom_maps.dn_colls_plines.get(one_coll_i)) {
                 plines_i_set.add(pline_i);
             }
         }
@@ -111,13 +111,13 @@ export class GIGeomNav {
         const coll_and_desc_i: number[] = this._geom.query.getCollDescendents(coll_i);
         // if no descendants, just return the the ents in this coll
         if (coll_and_desc_i.length === 0) {
-            return this._geom_maps.dn_colls_objs.get(coll_i)[3]; // coll pgons
+            return this._geom_maps.dn_colls_pgons.get(coll_i); // coll pgons
         }
         // we have descendants, so get all pgons
         coll_and_desc_i.splice(0, 0, coll_i);
         const pgons_i_set: Set<number> = new Set();
         for (const one_coll_i of coll_and_desc_i) {
-            for (const pgon_i of this._geom_maps.dn_colls_objs.get(one_coll_i)[3]) {
+            for (const pgon_i of this._geom_maps.dn_colls_pgons.get(one_coll_i)) {
                 pgons_i_set.add(pgon_i);
             }
         }
@@ -157,13 +157,16 @@ export class GIGeomNav {
         return this._geom_maps.up_faces_pgons.get(face);
     }
     public navPointToColl(point_i: number): number[] {
-        return this._geom_maps.up_points_colls.get(point_i);
+        const colls_i: number[] = this._geom_maps.up_points_colls.get(point_i);
+        return colls_i ? colls_i : [];
     }
     public navPlineToColl(line_i: number): number[] {
-        return this._geom_maps.up_plines_colls.get(line_i);
+        const colls_i: number[] = this._geom_maps.up_plines_colls.get(line_i);
+        return colls_i ? colls_i : [];
     }
     public navPgonToColl(pgon_i: number): number[] {
-        return this._geom_maps.up_pgons_colls.get(pgon_i);
+        const colls_i: number[] = this._geom_maps.up_pgons_colls.get(pgon_i);
+        return colls_i ? colls_i : [];
     }
     public navCollToCollParent(coll_i: number): number {
         return this._geom.query.getCollParent(coll_i); // coll parent

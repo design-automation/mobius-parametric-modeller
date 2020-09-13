@@ -114,7 +114,10 @@ export class GIGeomAdd {
         parent_i = parent_i === null ? -1 : parent_i;
         // create collection
         const coll_i: number = this._geom.modeldata.model.metadata.nextColl();
-        this._geom_maps.dn_colls_objs.set(coll_i, [parent_i, points_i, plines_i, pgons_i]);
+        this._geom_maps.dn_colls_points.set(coll_i, points_i);
+        this._geom_maps.dn_colls_plines.set(coll_i, plines_i);
+        this._geom_maps.dn_colls_pgons.set(coll_i, pgons_i);
+        this._geom_maps.up_colls_colls.set(coll_i, parent_i);
         for (const point_i of points_i) {
             if (!this._geom_maps.up_points_colls.has(point_i)) {
                 this._geom_maps.up_points_colls.set(point_i, [coll_i]);

@@ -25,7 +25,7 @@ export class GIGeomDel {
      */
     public del(ent_sets: IEntSets): void {
         // delete the ents
-        this.delColls(Array.from(ent_sets.colls_i), true);
+        this.delColls(Array.from(ent_sets.colls_i));
         this.delPgons(Array.from(ent_sets.pgons_i), true);
         this.delPlines(Array.from(ent_sets.plines_i), true);
         this.delPoints(Array.from(ent_sets.points_i), true);
@@ -104,12 +104,12 @@ export class GIGeomDel {
             if (vert_i === undefined) { continue; } // already deleted
             const posi_i: number = this._geom_maps.dn_verts_posis.get(vert_i);
             // delete the point and check collections
+            const colls_i: number[] = this._geom_maps.up_points_colls.get(point_i);
+            if (colls_i) {
+                colls_i.forEach( coll_i => arrRem(this._geom_maps.dn_colls_points.get(coll_i), point_i) );
+            }
             this._geom_maps.dn_points_verts.delete(point_i);
             this._geom_maps.dn_points_verts.delete(point_i);
-            this._geom_maps.dn_colls_objs.forEach( coll => {
-                const coll_points_i: number[] = coll[1];
-                arrRem(coll_points_i, point_i);
-            });
             // delete the vert by setting the up and down arrays to undefined
             this._geom_maps.dn_verts_posis.delete(vert_i);
             this._geom_maps.up_verts_points.delete(vert_i);
@@ -144,12 +144,12 @@ export class GIGeomDel {
             const verts_i: number[] = this._geom.nav.navAnyToVert(EEntType.PLINE, pline_i);
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PLINE, pline_i);
             // delete the pline and check collections
+            const colls_i: number[] = this._geom_maps.up_plines_colls.get(pline_i);
+            if (colls_i) {
+                colls_i.forEach( coll_i => arrRem(this._geom_maps.dn_colls_plines.get(coll_i), pline_i) );
+            }
             this._geom_maps.dn_plines_wires.delete(pline_i);
             this._geom_maps.up_plines_colls.delete(pline_i);
-            this._geom_maps.dn_colls_objs.forEach( coll => {
-                const coll_plines_i: number[] = coll[2];
-                arrRem(coll_plines_i, pline_i);
-            });
             // delete the wire
             this._geom_maps.dn_wires_edges.delete(wire_i);
             this._geom_maps.up_wires_plines.delete(wire_i);
@@ -202,12 +202,12 @@ export class GIGeomDel {
             const tris_i: number[] = this._geom.nav.navAnyToTri(EEntType.PGON, pgon_i);
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PGON, pgon_i);
             // delete the pgon and check the collections
+            const colls_i: number[] = this._geom_maps.up_pgons_colls.get(pgon_i);
+            if (colls_i) {
+                colls_i.forEach( coll_i => arrRem(this._geom_maps.dn_colls_pgons.get(coll_i), pgon_i) );
+            }
             this._geom_maps.dn_pgons_faces.delete(pgon_i);
             this._geom_maps.up_pgons_colls.delete(pgon_i);
-            this._geom_maps.dn_colls_objs.forEach( coll => {
-                const coll_pgons_i: number[] = coll[3];
-                arrRem(coll_pgons_i, pgon_i);
-            });
             // delete the face
             this._geom_maps.dn_faces_wires.delete(face_i);
             this._geom_maps.dn_faces_tris.delete(face_i);
@@ -257,7 +257,7 @@ export class GIGeomDel {
      * Also, does not delete any positions.
      * @param colls_i The collections to delete
      */
-    public delColls(colls_i: number|number[], del_unused_posis: boolean): void {
+    public delColls(colls_i: number|number[]): void {
         // del attribs
         this._geom.modeldata.attribs.add.delEntFromAttribs(EEntType.COLL, colls_i);
         // create array
@@ -265,10 +265,11 @@ export class GIGeomDel {
         if (!colls_i.length) { return; }
         // loop
         for (const coll_i of colls_i) {
-            const coll: TColl = this._geom_maps.dn_colls_objs.get(coll_i);
-            if (coll === undefined) { continue; } // already deleted
+            const coll_parent: number = this._geom_maps.up_colls_colls.get(coll_i);
+            if (coll_parent === undefined) { continue; } // already deleted
             // up arrays, delete points, plines, pgons
-            const points_i: number[] = coll[1];
+            this._geom_maps.up_colls_colls.delete(coll_i);
+            const points_i: number[] = this._geom_maps.dn_colls_points.get(coll_i);
             points_i.forEach(point_i =>  {
                 const other_colls_i: number[] = this._geom_maps.up_points_colls.get(point_i);
                 arrRem(other_colls_i, coll_i);
@@ -276,7 +277,7 @@ export class GIGeomDel {
                     this._geom_maps.up_points_colls.delete(point_i);
                 }
             });
-            const plines_i: number[] = coll[2];
+            const plines_i: number[] = this._geom_maps.dn_colls_plines.get(coll_i);
             plines_i.forEach(pline_i =>  {
                 const other_colls_i: number[] = this._geom_maps.up_plines_colls.get(pline_i);
                 arrRem(other_colls_i, coll_i);
@@ -284,7 +285,7 @@ export class GIGeomDel {
                     this._geom_maps.up_plines_colls.delete(pline_i);
                 }
             });
-            const pgons_i: number[] = coll[3];
+            const pgons_i: number[] = this._geom_maps.dn_colls_pgons.get(coll_i);
             pgons_i.forEach(pgon_i =>  {
                 const other_colls_i: number[] = this._geom_maps.up_pgons_colls.get(pgon_i);
                 arrRem(other_colls_i, coll_i);
@@ -293,15 +294,17 @@ export class GIGeomDel {
                 }
             });
             // down arrays
-            this._geom_maps.dn_colls_objs.delete(coll_i);
+            this._geom_maps.dn_colls_points.delete(coll_i);
+            this._geom_maps.dn_colls_plines.delete(coll_i);
+            this._geom_maps.dn_colls_pgons.delete(coll_i);
             // del time stamp
             this._geom.time_stamp.delEntTs(EEntType.COLL, coll_i);
         }
-        // check parents
+        // check if the deleted coll is a parent of other colls
         const set_colls_i: Set<number> = new Set(colls_i);
-        this._geom_maps.dn_colls_objs.forEach( (coll, coll_i) => {
-            if (set_colls_i.has(coll[0])) {
-                coll[0] = -1;
+        this._geom_maps.up_colls_colls.forEach( (coll_parent, coll_i) => {
+            if (set_colls_i.has(coll_parent)) {
+                this._geom_maps.up_colls_colls.set(coll_i, -1);
                 // update time stamp
                 this._geom.time_stamp.updateEntTs(EEntType.COLL, coll_i);
             }

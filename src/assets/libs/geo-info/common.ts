@@ -115,7 +115,7 @@ export enum EEntStrToGeomMaps {
     'dn_points_verts',
     'dn_plines_wires',
     'dn_pgons_faces',
-    'dn_colls_objs'
+    'up_colls_colls'
 }
 
 /**
@@ -242,7 +242,10 @@ export interface IGeomMaps {
     dn_points_verts: Map<number, TPoint>;
     dn_plines_wires: Map<number, TPline>;
     dn_pgons_faces: Map<number, TPgon>;
-    dn_colls_objs: Map<number, TColl>;
+    // dn_colls_objs: Map<number, TColl>;
+    dn_colls_points: Map<number, number[]>;
+    dn_colls_plines: Map<number, number[]>;
+    dn_colls_pgons: Map<number, number[]>;
     up_posis_verts: Map<number, number[]>; // one to many
     up_tris_faces: Map<number, number>;
     up_verts_edges: Map<number, number[]>; // one to two
@@ -255,6 +258,7 @@ export interface IGeomMaps {
     up_points_colls: Map<number, number[]>; // one to many
     up_plines_colls: Map<number, number[]>; // one to many
     up_pgons_colls: Map<number, number[]>; // one to many
+    up_colls_colls: Map<number, number>;
     posis_ts: Map<number, number>;
     points_ts: Map<number, number>;
     plines_ts: Map<number, number>;
@@ -368,7 +372,10 @@ export interface IGeomJSONData {
     plines_i: number[];
     pgons: TPgon[];
     pgons_i: number[];
-    colls: TColl[];
+    colls_points: number[][];
+    colls_plines: number[][];
+    colls_pgons: number[][];
+    colls_parents: number[];
     colls_i: number[];
     selected: TEntTypeIdx[];
 }

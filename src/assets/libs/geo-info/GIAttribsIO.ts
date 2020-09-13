@@ -58,7 +58,7 @@ export class GIAttribsIO {
      * If ent_sets is null, then only copy model attribs.
      * @param model_data Attribute data from the other model.
      */
-    public dumpSelect(attribs_maps: IAttribsMaps, ent_sets: IEntSets): void {
+    public dumpEnts(attribs_maps: IAttribsMaps, ent_sets: IEntSets): void {
         if (ent_sets === null) {
             if (attribs_maps.mo !== undefined) { this._dumpModelAttribs(attribs_maps); }
             return;
@@ -97,17 +97,17 @@ export class GIAttribsIO {
      * The existing data in the model is not deleted.
      * @param model_data Attribute data from the other model.
      */
-    public mergeAndPurge(attribs_maps: IAttribsMaps, renum_maps: Map<string, Map<number, number>>): void {
+    public append(attribs_maps: IAttribsMaps, renum_maps: Map<string, Map<number, number>>): void {
         // add the attribute data
-        if (attribs_maps.ps !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.POSI, renum_maps.get('posis')); }
-        if (attribs_maps._v !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.VERT, renum_maps.get('verts')); }
-        if (attribs_maps._e !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.EDGE, renum_maps.get('edges')); }
-        if (attribs_maps._w !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.WIRE, renum_maps.get('wires')); }
-        if (attribs_maps._f !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.FACE, renum_maps.get('faces')); }
-        if (attribs_maps.pt !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.POINT, renum_maps.get('points')); }
-        if (attribs_maps.pl !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.PLINE, renum_maps.get('plines')); }
-        if (attribs_maps.pg !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.PGON, renum_maps.get('pgons')); }
-        if (attribs_maps.co !== undefined) { this._mergeAndPurgeAttribs(attribs_maps, EEntType.COLL, renum_maps.get('colls')); }
+        if (attribs_maps.ps !== undefined) { this._appendAttribs(attribs_maps, EEntType.POSI, renum_maps.get('posis')); }
+        if (attribs_maps._v !== undefined) { this._appendAttribs(attribs_maps, EEntType.VERT, renum_maps.get('verts')); }
+        if (attribs_maps._e !== undefined) { this._appendAttribs(attribs_maps, EEntType.EDGE, renum_maps.get('edges')); }
+        if (attribs_maps._w !== undefined) { this._appendAttribs(attribs_maps, EEntType.WIRE, renum_maps.get('wires')); }
+        if (attribs_maps._f !== undefined) { this._appendAttribs(attribs_maps, EEntType.FACE, renum_maps.get('faces')); }
+        if (attribs_maps.pt !== undefined) { this._appendAttribs(attribs_maps, EEntType.POINT, renum_maps.get('points')); }
+        if (attribs_maps.pl !== undefined) { this._appendAttribs(attribs_maps, EEntType.PLINE, renum_maps.get('plines')); }
+        if (attribs_maps.pg !== undefined) { this._appendAttribs(attribs_maps, EEntType.PGON, renum_maps.get('pgons')); }
+        if (attribs_maps.co !== undefined) { this._appendAttribs(attribs_maps, EEntType.COLL, renum_maps.get('colls')); }
         if (attribs_maps.mo !== undefined) { this._mergeModelAttribs(attribs_maps); }
     }
     /**
@@ -235,7 +235,7 @@ export class GIAttribsIO {
      * The existing attributes are not deleted.
      * @param attribs_maps
      */
-    private _mergeAndPurgeAttribs(attribs_maps: IAttribsMaps, ent_type: EEntType, renum_map: Map<number, number>) {
+    private _appendAttribs(attribs_maps: IAttribsMaps, ent_type: EEntType, renum_map: Map<number, number>) {
         const other_attribs: Map<string, TAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
         const this_attribs: Map<string, TAttribMap> = this._attribs_maps[EEntTypeStr[ ent_type ]];
         other_attribs.forEach( other_attrib => {
@@ -289,7 +289,7 @@ export class GIAttribsIO {
                     ent_type,
                     other_attrib.getName(),
                     other_attrib.getDataType());
-                this_attrib.dumpSelect(other_attrib, selected);
+                this_attrib.dumpEnts(other_attrib, selected);
             }
         });
     }

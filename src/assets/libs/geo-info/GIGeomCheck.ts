@@ -317,10 +317,10 @@ export class GIGeomCheck {
                     errors.push('Point ' + point_i + ': Point->Coll null.');
                 }
                 // down from coll to points
-                const coll: TColl = this._geom_maps.dn_colls_objs.get(coll_i);
-                if (coll === undefined) { errors.push('Point ' + point_i + ': Coll->Objs undefined.'); }
-                if (coll === null) { errors.push('Point ' + point_i + ': Coll->Objs null.'); }
-                if (coll[1].indexOf(point_i) === -1) {
+                const coll_points: number[] = this._geom_maps.dn_colls_points.get(coll_i);
+                if (coll_points === undefined) { errors.push('Point ' + point_i + ': Coll->Objs undefined.'); }
+                if (coll_points === null) { errors.push('Point ' + point_i + ': Coll->Objs null.'); }
+                if (coll_points.indexOf(point_i) === -1) {
                     errors.push('Point ' + point_i + ': Coll->Point missing.');
                 }
             }
@@ -350,10 +350,10 @@ export class GIGeomCheck {
                     errors.push('Pline ' + pline_i + ': Pline->Coll null.');
                 }
                 // down from coll to plines
-                const coll: TColl = this._geom_maps.dn_colls_objs.get(coll_i);
-                if (coll === undefined) { errors.push('Pline ' + pline_i + ': Coll->Objs undefined.'); }
-                if (coll === null) { errors.push('Pline ' + pline_i + ': Coll->Objs null.'); }
-                if (coll[2].indexOf(pline_i) === -1) {
+                const coll_plines: number[] = this._geom_maps.dn_colls_plines.get(coll_i);
+                if (coll_plines === undefined) { errors.push('Pline ' + pline_i + ': Coll->Objs undefined.'); }
+                if (coll_plines === null) { errors.push('Pline ' + pline_i + ': Coll->Objs null.'); }
+                if (coll_plines.indexOf(pline_i) === -1) {
                     errors.push('Pline ' + pline_i + ': Coll->Pline missing.');
                 }
             }
@@ -384,10 +384,10 @@ export class GIGeomCheck {
                     errors.push('Pgon ' + pgon_i + ': Pgon->Coll null.');
                 }
                 // down from coll to pgons
-                const coll: TColl = this._geom_maps.dn_colls_objs.get(coll_i);
-                if (coll === undefined) { errors.push('Pgon ' + pgon_i + ': Coll->Objs undefined.'); }
-                if (coll === null) { errors.push('Pgon ' + pgon_i + ': Coll->Objs null.'); }
-                if (coll[3].indexOf(pgon_i) === -1) {
+                const coll_pgons: number[] = this._geom_maps.dn_colls_pgons.get(coll_i);
+                if (coll_pgons === undefined) { errors.push('Pgon ' + pgon_i + ': Coll->Objs undefined.'); }
+                if (coll_pgons === null) { errors.push('Pgon ' + pgon_i + ': Coll->Objs null.'); }
+                if (coll_pgons.indexOf(pgon_i) === -1) {
                     errors.push('Pgon ' + pgon_i + ': Coll->Pgon missing.');
                 }
             }

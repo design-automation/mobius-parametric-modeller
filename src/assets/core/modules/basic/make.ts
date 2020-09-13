@@ -13,8 +13,8 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { EAttribNames, TId, EEntType, Txyz, TEntTypeIdx, TPlane } from '@libs/geo-info/common';
 import { isDim0, isDim2, isColl,
     isEdge, isFace, idsMake, idIndicies, getArrDepth, isEmptyArr, isWire, idsBreak } from '@libs/geo-info/id';
-import { __merge__} from '../_model';
-import { _model } from '..';
+// import { __merge__} from '../_model';
+// import { _model } from '..';
 import { vecDiv, vecMult, interpByNum, interpByLen, vecAdd, vecFromTo, vecCross } from '@libs/geom/vectors';
 import { distance } from '@libs/geom/distance';
 import { arrMakeFlat } from '@libs/util/arrs';

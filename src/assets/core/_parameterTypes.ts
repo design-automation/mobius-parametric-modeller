@@ -1,4 +1,4 @@
-import {__new__, __merge__} from './modules/_model';
+import {__new__, __merge__, __clone__} from './modules/_model';
 import { GIMetaData } from '@assets/libs/geo-info/GIMetaData';
 
 export const _parameterTypes = {
@@ -15,6 +15,7 @@ export const _parameterTypes = {
 
     merge: '_model.__merge__',
     mergeFn: __merge__,
+    cloneFn: __clone__,
 
     addData: '_model.addGiData',
 

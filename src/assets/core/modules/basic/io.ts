@@ -13,8 +13,8 @@ import { importObj, exportPosiBasedObj, exportVertBasedObj } from '@libs/geo-inf
 import { importGeojson, exportGeojson } from '@libs/geo-info/io_geojson';
 import { download } from '@libs/filesys/download';
 import { TId, EEntType, TEntTypeIdx, IEntSets } from '@libs/geo-info/common';
-import { __merge__ } from '../_model';
-import { _model } from '..';
+// import { __merge__ } from '../_model';
+// import { _model } from '..';
 import { idsMake, idsBreak } from '@libs/geo-info/id';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
 import JSZip from 'jszip';

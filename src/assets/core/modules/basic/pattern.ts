@@ -11,10 +11,10 @@ import { checkArgs, ArgCh } from '../_check_args';
 
 import { Txyz, TPlane, XYPLANE, TId, EEntType } from '@libs/geo-info/common';
 import { getArrDepth, idsMakeFromIndicies } from '@libs/geo-info/id';
-import { vecAdd, vecFromTo, vecDiv, vecMult } from '@libs/geom/vectors';
+import { vecAdd } from '@libs/geom/vectors';
 import { xfromSourceTargetMatrix, multMatrix } from '@libs/geom/matrix';
 import { Matrix4 } from 'three';
-import { __merge__ } from '../_model';
+// import { __merge__ } from '../_model';
 import { GIModel } from '@libs/geo-info/GIModel';
 import * as THREE from 'three';
 import * as VERB from '@assets/libs/verb/verb';

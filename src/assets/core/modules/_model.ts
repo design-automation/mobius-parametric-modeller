@@ -49,6 +49,15 @@ export function __merge__(model1: GIModel, model2: GIModel): void {
 }
 //  ===============================================================================================
 /**
+ * Clone a model.
+ *
+ * @param model The model to clone.
+ */
+export function __clone__(model: GIModel): GIModel {
+    return model.clone();
+}
+//  ===============================================================================================
+/**
  * Returns a string representation of this model.
  * @param __model__
  */

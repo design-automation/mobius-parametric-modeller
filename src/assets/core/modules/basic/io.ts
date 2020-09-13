@@ -252,7 +252,7 @@ export async function Export(__model__: GIModel, entities: TId|TId[]|TId[][],
     if (__model__.debug) {
         if (entities !== null) {
             entities = arrMakeFlat(entities) as TId[];
-            ents_arr = checkIDs(fn_name, 'entities', entities,
+            ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
                 [IdCh.isIdL], [EEntType.PLINE, EEntType.PGON, EEntType.COLL])  as TEntTypeIdx[];
         }
         checkArgs(fn_name, 'file_name', file_name, [ArgCh.isStr, ArgCh.isStrL]);

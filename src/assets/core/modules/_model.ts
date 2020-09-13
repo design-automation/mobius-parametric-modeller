@@ -131,7 +131,7 @@ export function __checkModel__(__model__: GIModel): string[] {
 //     const fn_name = 'entities@' + attrib_name;
 //     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
 //     if (entities !== null && entities !== undefined) {
-//         ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+//         ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
 //     }
 //     checkAttribName(fn_name , attrib_name);
 //     // --- Error Check ---
@@ -242,7 +242,7 @@ export function __checkModel__(__model__: GIModel): string[] {
 //     const fn_name = 'Inline.__getAttrib__';
 //     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
 //     if (entities !== null && entities !== undefined) {
-//         ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+//         ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
 //     }
 //     checkCommTypes(fn_name, 'attrib_name', attrib_name, [TypeCheckObj.isString]);
 //     if (idx_or_key !== null && idx_or_key !== undefined) {

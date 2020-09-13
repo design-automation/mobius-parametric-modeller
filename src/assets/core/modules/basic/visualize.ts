@@ -44,7 +44,7 @@ export function Color(__model__: GIModel, entities: TId|TId[], color: TColor): v
     let ents_arr: TEntTypeIdx[] = null;
     if (__model__.debug) {
         if (entities !== null) {
-            ents_arr = checkIDs(fn_name, 'entities', entities,
+            ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
                 [IdCh.isId, IdCh.isIdL, IdCh.isIdLL], null) as TEntTypeIdx[];
         }
         checkArgs(fn_name, 'color', color, [ArgCh.isColor]);
@@ -105,7 +105,7 @@ export function Gradient(__model__: GIModel, entities: TId|TId[], attrib: string
         let attrib_name: string;
         let attrib_idx_or_key: number|string;
         if (__model__.debug) {
-            ents_arr = checkIDs(fn_name, 'entities', entities,
+            ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
                 [IdCh.isId, IdCh.isIdL, IdCh.isIdLL], null) as TEntTypeIdx[];
             checkArgs(fn_name, 'attrib', attrib,
                 [ArgCh.isStr, ArgCh.isStrStr, ArgCh.isStrNum]);
@@ -291,7 +291,7 @@ export function Edge(__model__: GIModel, entities: TId|TId[], method: _EEdgeMeth
     let ents_arr: TEntTypeIdx[] = null;
     if (__model__.debug) {
         if (entities !== null) {
-            ents_arr = checkIDs(fn_name, 'entities', entities,
+            ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
                 [IdCh.isIdL], null) as TEntTypeIdx[];
         }
     } else {
@@ -355,7 +355,7 @@ export function Mesh(__model__: GIModel, entities: TId|TId[], method: _EMeshMeth
     let ents_arr: TEntTypeIdx[] = null;
     if (__model__.debug) {
         if (entities !== null) {
-            ents_arr = checkIDs(fn_name, 'entities', entities,
+            ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
                 [IdCh.isIdL], null) as TEntTypeIdx[];
         }
     } else {

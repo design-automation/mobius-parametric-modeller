@@ -51,7 +51,7 @@ export function idsBreak(id: TId|TId[]|TId[][]|TId[][][]): TEntTypeIdx|TEntTypeI
         // if (id.length < 3) { throw new Error('String is not an entity ID.'); }
         const ent_type_str: string = id.slice(0, 2);
         const ent_type: EEntType = EEntTypeStr[ent_type_str];
-        if (ent_type === undefined) { throw new Error('String is not an entity ID.'); }
+        if (ent_type === undefined) { throw new Error('The ID "' + id + '" is not an entity ID.'); }
         const index: number = Number(id.slice(2));
         return [ent_type, index];
     } else {

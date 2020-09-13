@@ -112,7 +112,7 @@ export function Set(__model__: GIModel, entities: TId|TId[], material: string): 
         const fn_name = 'matrial.Set';
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
-            ents_arr = checkIDs(fn_name, 'entities', entities,
+            ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
                 [IdCh.isId, IdCh.isIdL, IdCh.isIdLL], null) as TEntTypeIdx[];
             checkArgs(fn_name, 'material', material, [ArgCh.isStr]);
         } else {

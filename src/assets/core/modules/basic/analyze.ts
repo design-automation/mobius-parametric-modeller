@@ -102,7 +102,7 @@ export function Raytrace(__model__: GIModel, rays: TRay|TRay[]|TRay[][],
     let ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
         checkArgs(fn_name, 'rays', rays, [ArgCh.isRay, ArgCh.isRayL, ArgCh.isRayLL]);
-        ents_arrs = checkIDs(fn_name, 'entities', entities,
+        ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
             [IdCh.isId, IdCh.isIdL],
             [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         checkArgs(fn_name, 'dist', dist, [ArgCh.isNum, ArgCh.isNumL]);
@@ -266,7 +266,7 @@ export function Isovist(__model__: GIModel, origins: TRay[]|TPlane[],
     let ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
         checkArgs(fn_name, 'origins', origins, [ArgCh.isRayL, ArgCh.isPlnL]);
-        ents_arrs = checkIDs(fn_name, 'entities', entities,
+        ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
             [IdCh.isIdL],
             [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         checkArgs(fn_name, 'dist', radius, [ArgCh.isNum, ArgCh.isNumL]);
@@ -461,7 +461,7 @@ export function Sky(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], detail:
         if (detail < 0 || detail > 3) {
             throw new Error (fn_name + ': "detail" must be an integer between 0 and 3 inclusive.');
         }
-        ents_arrs = checkIDs(fn_name, 'entities', entities,
+        ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
             [IdCh.isId, IdCh.isIdL],
             [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
     } else {
@@ -603,7 +603,7 @@ export function Sun(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], detail:
         if (detail < 0 || detail > 3) {
             throw new Error (fn_name + ': "detail" must be an integer between 0 and 3 inclusive.');
         }
-        ents_arrs = checkIDs(fn_name, 'entities', entities,
+        ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
             [IdCh.isId, IdCh.isIdL],
             [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         if (!__model__.modeldata.attribs.query.hasModelAttrib('geolocation')) {
@@ -999,9 +999,9 @@ export function Nearest(__model__: GIModel,
     let source_ents_arrs: TEntTypeIdx[];
     let target_ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
-        source_ents_arrs = checkIDs(fn_name, 'origins', source,
+        source_ents_arrs = checkIDs(__model__, fn_name, 'origins', source,
             [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
-        target_ents_arrs = checkIDs(fn_name, 'destinations', target,
+        target_ents_arrs = checkIDs(__model__, fn_name, 'destinations', target,
             [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
     } else {
         // source_ents_arrs = splitIDs(fn_name, 'origins', source,
@@ -1180,11 +1180,11 @@ export function ShortestPath(__model__: GIModel, source: TId|TId[]|TId[][][], ta
     let target_ents_arrs: TEntTypeIdx[];
     let ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
-        source_ents_arrs = checkIDs(fn_name, 'origins', source,
+        source_ents_arrs = checkIDs(__model__, fn_name, 'origins', source,
             [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
-        target_ents_arrs = checkIDs(fn_name, 'destinations', target,
+        target_ents_arrs = checkIDs(__model__, fn_name, 'destinations', target,
             [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
-        ents_arrs = checkIDs(fn_name, 'entities', entities,
+        ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
             [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
     } else {
         // source_ents_arrs = splitIDs(fn_name, 'origins', source,
@@ -1480,11 +1480,11 @@ export function ClosestPath(__model__: GIModel, source: TId|TId[]|TId[][][], tar
     let target_ents_arrs: TEntTypeIdx[];
     let ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
-        source_ents_arrs = checkIDs(fn_name, 'origins', source,
+        source_ents_arrs = checkIDs(__model__, fn_name, 'origins', source,
             [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
-        target_ents_arrs = checkIDs(fn_name, 'destinations', target,
+        target_ents_arrs = checkIDs(__model__, fn_name, 'destinations', target,
             [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
-        ents_arrs = checkIDs(fn_name, 'entities', entities,
+        ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
             [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
     } else {
         // source_ents_arrs = splitIDs(fn_name, 'origins', source,
@@ -1769,10 +1769,10 @@ export function Degree(__model__: GIModel, source: TId|TId[]|TId[][][],
     let ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
         if (source.length > 0) {
-            source_ents_arrs = checkIDs(fn_name, 'source', source,
+            source_ents_arrs = checkIDs(__model__, fn_name, 'source', source,
                 [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
         }
-        ents_arrs = checkIDs(fn_name, 'entities', entities,
+        ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
             [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
     } else {
         // if (source.length > 0) {
@@ -1904,10 +1904,10 @@ export function Centrality(__model__: GIModel, source: TId|TId[]|TId[][][],
     let ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
         if (source.length > 0) {
-            source_ents_arrs = checkIDs(fn_name, 'source', source,
+            source_ents_arrs = checkIDs(__model__, fn_name, 'source', source,
                 [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
         }
-        ents_arrs = checkIDs(fn_name, 'entities', entities,
+        ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
             [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
     } else {
         // if (source.length > 0) {

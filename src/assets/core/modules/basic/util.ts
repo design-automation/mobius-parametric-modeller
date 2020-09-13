@@ -151,7 +151,7 @@ export function EntityInfo(__model__: GIModel, entities: TId|TId[]): string {
     const fn_name = 'collection.Info';
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
-        ents_arr = checkIDs(fn_name, 'coll', entities,
+        ents_arr = checkIDs(__model__, fn_name, 'coll', entities,
             [IdCh.isId, IdCh.isIdL],
             [EEntType.COLL, EEntType.PGON, EEntType.PLINE, EEntType.POINT]) as TEntTypeIdx[];
     } else {

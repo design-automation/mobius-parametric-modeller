@@ -592,10 +592,24 @@ export class CodeUtils {
         });
     }
 
+    // static mergeInputs(models): any {
+    //     const result = _parameterTypes.newFn();
+    //     for (const model of models) {
+    //         _parameterTypes.mergeFn(result, model);
+    //     }
+    //     return result;
+    // }
     static mergeInputs(models): any {
-        const result = _parameterTypes.newFn();
-        for (const model of models) {
-            _parameterTypes.mergeFn(result, model);
+        let result = null;
+        if (models.length === 0) {
+            result = _parameterTypes.newFn();
+        } else if (models.length === 1) {
+            result = models[0].clone();
+        } else {
+            result = models[0].clone();
+            for (let i = 1; i < models.length; i++) {
+                _parameterTypes.mergeFn(result, models[i]);
+            }
         }
         return result;
     }

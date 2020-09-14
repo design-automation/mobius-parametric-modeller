@@ -104,15 +104,33 @@ function pythonList(x, l){
     return x;
 }
 `;
+// export const mergeInputsFunc = `
+// function mergeInputs(models){
+//     let result = __modules__.${_parameterTypes.new}();
+//     try {
+//         result.debug = __debug__;
+//     } catch (ex) {}
+//     for (let model of models){
+//         __modules__.${_parameterTypes.merge}(result, model);
+//     }
+//     return result;
+// }
 export const mergeInputsFunc = `
 function mergeInputs(models){
-    let result = __modules__.${_parameterTypes.new}();
+    let result = null;
+    if (models.length === 0) {
+        result = __modules__.${_parameterTypes.new}();
+    } else if (models.length === 1) {
+        result = models[0].clone();
+    } else {
+        result = models[0].clone();
+        for (let i = 1; i < models.length; i++) {
+            __modules__.${_parameterTypes.merge}(result, models[i]);
+        }
+    }
     try {
         result.debug = __debug__;
     } catch (ex) {}
-    for (let model of models){
-        __modules__.${_parameterTypes.merge}(result, model);
-    }
     return result;
 }
 function duplicateModel(model){

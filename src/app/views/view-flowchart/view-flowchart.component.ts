@@ -982,7 +982,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
 
     @HostListener('document:mouseleave', [])
     onmouseleave() {
-        this.flowchartSplit.notify('end');
+        this.flowchartSplit.notify('end', this.flowchartSplit.gutterSize);
     }
 
 }

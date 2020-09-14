@@ -505,7 +505,7 @@ export class GIViewerComponent implements OnInit {
 
     @HostListener('mouseleave', [])
     onmouseleave() {
-        this.viewerSplit.notify('end');
+        this.viewerSplit.notify('end', this.viewerSplit.gutterSize);
     }
 }
 

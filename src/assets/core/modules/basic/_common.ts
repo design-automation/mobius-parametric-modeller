@@ -7,7 +7,7 @@
 /**
  *
  */
-import { checkIDs, IdCh } from '../_check_ids';
+import { checkIDs, ID } from '../_check_ids';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EEntType, TRay, TEntTypeIdx, EEntTypeStr, Txy} from '@libs/geo-info/common';
@@ -51,7 +51,7 @@ export function getCentoridFromEnts(__model__: GIModel, ents: TId|TId[], fn_name
     // this must be an ID or an array of IDs, so lets get the centroid
     // TODO this error message is confusing
     const ents_arr: TEntTypeIdx|TEntTypeIdx[] = checkIDs(__model__, fn_name, 'ents', ents,
-        [IdCh.isId, IdCh.isIdL],
+        [ID.isID, ID.isIDL],
         [EEntType.POSI, EEntType.VERT, EEntType.POINT, EEntType.EDGE, EEntType.WIRE,
             EEntType.PLINE, EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx;
     const centroid: Txyz|Txyz[] = getCentroid(__model__, ents_arr);

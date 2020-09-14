@@ -66,14 +66,14 @@ export class GIModel {
         return this.modeldata.getJSONData();
     }
     /**
-     * Set the meta data str.
+     * Set the model data (geom and attribs) str.
      * @param meta
      */
-    public setModelDataJSONStr(model_json_data_str: string) {
+    public setModelDataJSONStr(model_json_data_str: string): void {
         this.modeldata.setJSONData(JSON.parse(model_json_data_str));
     }
     /**
-     * Get the meta data str.
+     * Get the model data (geom and attribs) str.
      */
     public getModelDataJSONStr(): string {
         return JSON.stringify(this.modeldata.getJSONData());

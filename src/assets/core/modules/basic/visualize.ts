@@ -7,7 +7,7 @@
  *
  */
 
-import { checkIDs, IdCh } from '../_check_ids';
+import { checkIDs, ID } from '../_check_ids';
 import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
@@ -45,7 +45,7 @@ export function Color(__model__: GIModel, entities: TId|TId[], color: TColor): v
     if (__model__.debug) {
         if (entities !== null) {
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-                [IdCh.isId, IdCh.isIdL, IdCh.isIdLL], null) as TEntTypeIdx[];
+                [ID.isID, ID.isIDL, ID.isIDLL], null) as TEntTypeIdx[];
         }
         checkArgs(fn_name, 'color', color, [ArgCh.isColor]);
     } else {
@@ -106,7 +106,7 @@ export function Gradient(__model__: GIModel, entities: TId|TId[], attrib: string
         let attrib_idx_or_key: number|string;
         if (__model__.debug) {
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-                [IdCh.isId, IdCh.isIdL, IdCh.isIdLL], null) as TEntTypeIdx[];
+                [ID.isID, ID.isIDL, ID.isIDLL], null) as TEntTypeIdx[];
             checkArgs(fn_name, 'attrib', attrib,
                 [ArgCh.isStr, ArgCh.isStrStr, ArgCh.isStrNum]);
             checkArgs(fn_name, 'range', range, [ArgCh.isNull, ArgCh.isNum, ArgCh.isNumL]);
@@ -292,7 +292,7 @@ export function Edge(__model__: GIModel, entities: TId|TId[], method: _EEdgeMeth
     if (__model__.debug) {
         if (entities !== null) {
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-                [IdCh.isIdL], null) as TEntTypeIdx[];
+                [ID.isIDL], null) as TEntTypeIdx[];
         }
     } else {
         // if (entities !== null) {
@@ -356,7 +356,7 @@ export function Mesh(__model__: GIModel, entities: TId|TId[], method: _EMeshMeth
     if (__model__.debug) {
         if (entities !== null) {
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-                [IdCh.isIdL], null) as TEntTypeIdx[];
+                [ID.isIDL], null) as TEntTypeIdx[];
         }
     } else {
         // if (entities !== null) {

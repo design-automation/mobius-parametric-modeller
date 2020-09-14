@@ -6,7 +6,7 @@
  *
  */
 
-import { checkIDs, IdCh } from '../_check_ids';
+import { checkIDs, ID } from '../_check_ids';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { download } from '@libs/filesys/download';
@@ -152,7 +152,7 @@ export function EntityInfo(__model__: GIModel, entities: TId|TId[]): string {
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'coll', entities,
-            [IdCh.isId, IdCh.isIdL],
+            [ID.isID, ID.isIDL],
             [EEntType.COLL, EEntType.PGON, EEntType.PLINE, EEntType.POINT]) as TEntTypeIdx[];
     } else {
         // ents_arr = splitIDs(fn_name, 'coll', entities,

@@ -5,7 +5,7 @@
 /**
  *
  */
-import { checkIDs, IdCh } from '../_check_ids';
+import { checkIDs, ID } from '../_check_ids';
 import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
@@ -325,9 +325,9 @@ export function Voronoi(__model__: GIModel, pgons: TId|TId[], entities: TId|TId[
     let posis_ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         pgons_ents_arr = checkIDs(__model__, fn_name, 'pgons', pgons,
-            [IdCh.isIdL], null) as TEntTypeIdx[];
+            [ID.isIDL], null) as TEntTypeIdx[];
         posis_ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-            [IdCh.isIdL], null) as TEntTypeIdx[];
+            [ID.isIDL], null) as TEntTypeIdx[];
     } else {
         // pgons_ents_arr = splitIDs(fn_name, 'pgons', pgons,
         //     [IDcheckObj.isIDList], null) as TEntTypeIdx[];
@@ -439,7 +439,7 @@ export function Delaunay(__model__: GIModel, entities: TId|TId[]): TId[] {
     let posis_ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         posis_ents_arr = checkIDs(__model__, fn_name, 'entities1', entities,
-            [IdCh.isIdL], null) as TEntTypeIdx[];
+            [ID.isIDL], null) as TEntTypeIdx[];
     } else {
         // posis_ents_arr = splitIDs(fn_name, 'entities1', entities,
         // [IDcheckObj.isIDList], null) as TEntTypeIdx[];
@@ -497,7 +497,7 @@ export function ConvexHull(__model__: GIModel, entities: TId|TId[]): TId {
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-        [IdCh.isIdL], null) as TEntTypeIdx[];
+        [ID.isIDL], null) as TEntTypeIdx[];
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,
         // [IDcheckObj.isIDList], null) as TEntTypeIdx[];
@@ -555,7 +555,7 @@ export function BBoxPolygon(__model__: GIModel, entities: TId|TId[], method: _EB
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-        [IdCh.isIdL], null) as TEntTypeIdx[];
+        [ID.isIDL], null) as TEntTypeIdx[];
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,
         // [IDcheckObj.isIDList], null) as TEntTypeIdx[];
@@ -671,7 +671,7 @@ export function Union(__model__: GIModel, entities: TId|TId[]): TId[] {
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-        [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+        [ID.isID, ID.isIDL], null) as TEntTypeIdx[];
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,
         // [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
@@ -715,9 +715,9 @@ export function Boolean(__model__: GIModel, a_entities: TId|TId[], b_entities: T
     let b_ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         a_ents_arr = checkIDs(__model__, fn_name, 'a_entities', a_entities,
-        [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+        [ID.isID, ID.isIDL], null) as TEntTypeIdx[];
         b_ents_arr = checkIDs(__model__, fn_name, 'b_entities', b_entities,
-        [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+        [ID.isID, ID.isIDL], null) as TEntTypeIdx[];
     } else {
         // a_ents_arr = splitIDs(fn_name, 'a_entities', a_entities,
         // [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
@@ -840,7 +840,7 @@ export function OffsetMitre(__model__: GIModel, entities: TId|TId[], dist: numbe
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-            [IdCh.isId, IdCh.isIdL], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+            [ID.isID, ID.isIDL], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
         checkArgs(fn_name, 'miter_limit', limit, [ArgCh.isNum]);
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,
@@ -898,7 +898,7 @@ export function OffsetChamfer(__model__: GIModel, entities: TId|TId[], dist: num
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-        [IdCh.isId, IdCh.isIdL], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+        [ID.isID, ID.isIDL], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,
         // [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
@@ -955,7 +955,7 @@ export function OffsetRound(__model__: GIModel, entities: TId|TId[], dist: numbe
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-            [IdCh.isId, IdCh.isIdL], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+            [ID.isID, ID.isIDL], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
         checkArgs(fn_name, 'tolerance', tolerance, [ArgCh.isNum]);
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,
@@ -1027,7 +1027,7 @@ export function Stitch(__model__: GIModel, entities: TId|TId[]): TId[] {
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-        [IdCh.isIdL], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+        [ID.isIDL], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,
         // [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
@@ -1255,7 +1255,7 @@ export function Clean(__model__: GIModel, entities: TId|TId[], tolerance: number
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-            [IdCh.isId, IdCh.isIdL], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+            [ID.isID, ID.isIDL], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
         checkArgs(fn_name, 'tolerance', tolerance, [ArgCh.isNum]);
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,

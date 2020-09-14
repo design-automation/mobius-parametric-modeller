@@ -1,94 +1,76 @@
 import { GIModel } from '@assets/libs/geo-info/GIModel';
 import { EEntType, TEntTypeIdx } from '@libs/geo-info/common';
-import { idsBreak } from '@libs/geo-info/id';
+import { getArrDepth, idsBreak } from '@libs/geo-info/id';
 
-export class IdCh {
-    static default_ent_type_strs = [EEntType.POSI,
-                                    EEntType.TRI,
-                                    EEntType.VERT,
-                                    EEntType.EDGE,
-                                    EEntType.WIRE,
-                                    EEntType.FACE,
-                                    EEntType.POINT,
-                                    EEntType.PLINE,
-                                    EEntType.PGON,
-                                    EEntType.COLL];
+export const ID = {
+    isID: 0,
+    isIDL: 1,
+    isIDLL: 2,
+    isIDLLL: 3
+};
+const ID_STRS = ['an entity ID', 'a list of entity IDs', 'a list of lists of entity IDs', 'a nested list of entity IDs'];
 
-    static isId(__model__: GIModel, fn_name: string, arg_name: string, arg: any, ent_type_strs: EEntType[]|null): TEntTypeIdx {
+function checkId(__model__: GIModel, arg: any, ent_types_set: Set<number>):
+        TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
+    if (!Array.isArray(arg)) {
         let ent_arr;
         try {
             ent_arr = idsBreak(arg) as TEntTypeIdx; // split
         } catch (err) {
-            throw new Error(fn_name + ': The entity ID "' + arg + '" is not a valid Entity ID.'); // check valid id
+            throw new Error('The entity ID "' + arg + '" is not a valid Entity ID.'); // check valid id
         }
+        // check entity exists
         if (!__model__.modeldata.geom.query.entExists(ent_arr[0], ent_arr[1])) {
-            throw new Error(fn_name + ': The entity ID "' + arg + '" does not exist in the model.'); // check id exists
+            throw new Error('The entity ID "' + arg + '" does not exist in the model.'); // check id exists
         }
-        if (ent_type_strs === null) {
-            ent_type_strs = IdCh.default_ent_type_strs;
+        // check entity type
+        if (!ent_types_set.has(ent_arr[0])) {
+            throw new Error('The entity ID "' + arg + '" is not one of the following valid types - ' +
+                Array.from(ent_types_set).map((ent_type) => EEntType[ent_type]).toString());
         }
-        let pass = false;
-        for (let i = 0; i < ent_type_strs.length; i++) {
-            if (ent_arr[0] === ent_type_strs[i]) {
-                pass = true;
-                break;
-            }
-        }
-        if (pass === false) {
-            throw new Error(fn_name + ': The entity ID "' + arg + '" is not one of the following valid types - ' +
-                            ent_type_strs.map((test_ent) => EEntType[test_ent]).toString());
-        }
-        return ent_arr;
-    }
-    static isIdL(__model__: GIModel, fn_name: string, arg_name: string, arg_list: any[], ent_type_strs: EEntType[]|null): TEntTypeIdx[] {
-        if (!Array.isArray(arg_list)) {
-            throw new Error(fn_name + ': The argument is not list of entity IDs.');
-        }
-        const ret_arr = [];
-        if (ent_type_strs === null) {
-            ent_type_strs = IdCh.default_ent_type_strs;
-        }
-        for (let i = 0; i < arg_list.length; i++) {
-            ret_arr.push(IdCh.isId(__model__, fn_name, arg_name + '[' + i + ']', arg_list[i], ent_type_strs));
-        }
-        return ret_arr as TEntTypeIdx[];
-    }
-    static isIdLL(__model__: GIModel, fn_name: string, arg_name: string, arg_list: any, ent_type_strs: EEntType[]|null): TEntTypeIdx[][] {
-        if (!Array.isArray(arg_list)) {
-            throw new Error(fn_name + ': The argument is not list of lists of entity IDs.');
-        }
-        const ret_arr = [];
-        if (ent_type_strs === null) {
-            ent_type_strs = IdCh.default_ent_type_strs;
-        }
-        for (let i = 0; i < arg_list.length; i++) {
-            ret_arr.push(IdCh.isIdL(__model__, fn_name, arg_name + '[' + i + ']', arg_list[i], ent_type_strs));
-        }
-        return ret_arr as TEntTypeIdx[][];
+        // return the ent array
+        return ent_arr as TEntTypeIdx;
+    } else {
+        return arg.map( a_arg => checkId(__model__, a_arg, ent_types_set)) as TEntTypeIdx[]|TEntTypeIdx[][];
     }
 }
 
-export function checkIDs(__model__: GIModel, fn_name: string, arg_name: string, arg: any, check_fns: Function[],
-                         IDchecks: EEntType[]|null): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
-    let pass = false;
-    const err_arr = [];
-    let ret: TEntTypeIdx|TEntTypeIdx[];
+export function checkIDs(__model__: GIModel, fn_name: string, arg_name: string, arg: any, id_types: number[],
+                         ent_types: EEntType[]|null): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
     if (arg === undefined) {
-        throw new Error(fn_name + ': The argument "' + arg_name + '" is undefined' + '<br>');
+        throw new Error(fn_name + ': The argument "' + arg_name + '" is undefined.' + '<br>');
     }
-    for (let i = 0; i < check_fns.length; i++) {
-        try {
-           ret =  check_fns[i](__model__, fn_name, arg_name, arg, IDchecks);
-        } catch (err) {
-            err_arr.push(err.message + '<br>');
-            continue;
-        }
-        pass = true;
-        break; // passed
+    // check list depths
+    const arg_depth: number = getArrDepth(arg);
+    if (id_types.indexOf(arg_depth) === -1) {
+        const options = id_types.map( depth => ID_STRS[depth] );
+        throw new Error(fn_name + ': The argument "' + arg_name + '" has the wrong structure.<br>' +
+            'The argument can be: ' + options.join(', ') + '.');
     }
-    if (pass === false) { // Failed all tests: argument does not fall into any valid types
-        const ret_msg = fn_name + ': The argument "' + arg_name + '" failed the following tests:<br>';
-        throw new Error(ret_msg + err_arr.join(''));
+    // check the IDs
+    let ents: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
+    // create a set of allowable entity types
+    let ent_types_set: Set<number>;
+    if (ent_types === null) {
+        ent_types_set = new Set([
+            EEntType.POSI,
+            EEntType.TRI,
+            EEntType.VERT,
+            EEntType.EDGE,
+            EEntType.WIRE,
+            EEntType.FACE,
+            EEntType.POINT,
+            EEntType.PLINE,
+            EEntType.PGON,
+            EEntType.COLL]);
+    } else {
+        ent_types_set = new Set(ent_types);
     }
-    return ret; // returns TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]; depends on which passes
+    try {
+        ents = checkId(__model__, arg, ent_types_set);
+    } catch (err) {
+        throw new Error(fn_name + ': The argument "' + arg_name + '" contains bad IDs:<br>' + err.message + '<br>');
+    }
+    // return the ents
+    return ents; // returns TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]; depends on which passes
 }

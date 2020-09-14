@@ -23,8 +23,15 @@ export class GIGeomAdd {
      * Adds a new position to the model and returns the index to that position.
      */
     public addPosi(): number {
-        // create posi
-        const posi_i: number = this._addPosi();
+        // in this case, there are no down arrays
+        // because posis are the bottom of the hierarchy
+        // update up arrays
+        const posi_i: number = this._geom.modeldata.model.metadata.nextPosi();
+        this._geom_maps.up_posis_verts.set(posi_i, []);
+        // time stamp
+        const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
+        this._geom_maps.posis_ts.set(posi_i, ts);
+        // return entity number
         return posi_i;
     }
     /**
@@ -41,6 +48,7 @@ export class GIGeomAdd {
         // time stamp
         const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
         this._geom_maps.posis_ts.set(posi_i, ts);
+        // return entity number
         return point_i;
     }
     /**
@@ -62,6 +70,10 @@ export class GIGeomAdd {
         const pline_i: number = this._geom.modeldata.model.metadata.nextPline();
         this._geom_maps.dn_plines_wires.set(pline_i, wire_i);
         this._geom_maps.up_wires_plines.set(wire_i, pline_i);
+        // time stamp
+        const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
+        this._geom_maps.plines_ts.set(pline_i, ts);
+        // return entity number
         return pline_i;
     }
     /**
@@ -101,6 +113,10 @@ export class GIGeomAdd {
         const pgon_i: number = this._geom.modeldata.model.metadata.nextPgon();
         this._geom_maps.dn_pgons_faces.set(pgon_i, face_i);
         this._geom_maps.up_faces_pgons.set(face_i, pgon_i);
+        // time stamp
+        const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
+        this._geom_maps.pgons_ts.set(pgon_i, ts);
+        // return entity number
         return pgon_i;
     }
     /**
@@ -139,6 +155,10 @@ export class GIGeomAdd {
                 this._geom_maps.up_pgons_colls.get(pgon_i).push(coll_i);
             }
         }
+        // time stamp
+        const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
+        this._geom_maps.colls_ts.set(coll_i, ts);
+        // return entity number
         return coll_i;
     }
     // ============================================================================
@@ -304,20 +324,6 @@ export class GIGeomAdd {
     // These methods have been made public for access from GIGeomModify
     // They should not be called externally, hence the underscore.
     // ============================================================================
-    /**
-     * Adds a position and updates the arrays.
-     */
-    public _addPosi(): number {
-        // in this case, there are no down arrays
-        // because posis are the bottom of the hierarchy
-        // update up arrays
-        const posi_i: number = this._geom.modeldata.model.metadata.nextPosi();
-        const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
-        this._geom_maps.up_posis_verts.set(posi_i, []);
-        this._geom_maps.posis_ts.set(posi_i, ts);
-        // return the numeric index of the posi
-        return posi_i;
-    }
     /**
      * Adds a vertex and updates the arrays.
      * @param posi_i

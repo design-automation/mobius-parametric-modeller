@@ -6,7 +6,7 @@
 /**
  *
  */
-import { checkIDs, IdCh } from '../_check_ids';
+import { checkIDs, ID } from '../_check_ids';
 import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
@@ -103,7 +103,7 @@ export function Raytrace(__model__: GIModel, rays: TRay|TRay[]|TRay[][],
     if (__model__.debug) {
         checkArgs(fn_name, 'rays', rays, [ArgCh.isRay, ArgCh.isRayL, ArgCh.isRayLL]);
         ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
-            [IdCh.isId, IdCh.isIdL],
+            [ID.isID, ID.isIDL],
             [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         checkArgs(fn_name, 'dist', dist, [ArgCh.isNum, ArgCh.isNumL]);
         if (Array.isArray(dist)) {
@@ -267,7 +267,7 @@ export function Isovist(__model__: GIModel, origins: TRay[]|TPlane[],
     if (__model__.debug) {
         checkArgs(fn_name, 'origins', origins, [ArgCh.isRayL, ArgCh.isPlnL]);
         ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
-            [IdCh.isIdL],
+            [ID.isIDL],
             [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         checkArgs(fn_name, 'dist', radius, [ArgCh.isNum, ArgCh.isNumL]);
         if (Array.isArray(radius)) {
@@ -462,7 +462,7 @@ export function Sky(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], detail:
             throw new Error (fn_name + ': "detail" must be an integer between 0 and 3 inclusive.');
         }
         ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
-            [IdCh.isId, IdCh.isIdL],
+            [ID.isID, ID.isIDL],
             [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
     } else {
         ents_arrs = idsBreak(entities) as TEntTypeIdx[];
@@ -604,7 +604,7 @@ export function Sun(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], detail:
             throw new Error (fn_name + ': "detail" must be an integer between 0 and 3 inclusive.');
         }
         ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
-            [IdCh.isId, IdCh.isIdL],
+            [ID.isID, ID.isIDL],
             [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         if (!__model__.modeldata.attribs.query.hasModelAttrib('geolocation')) {
             throw new Error('analyze.Solar: model attribute "geolocation" is missing, \
@@ -1000,9 +1000,9 @@ export function Nearest(__model__: GIModel,
     let target_ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
         source_ents_arrs = checkIDs(__model__, fn_name, 'origins', source,
-            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+            [ID.isID, ID.isIDL], null) as TEntTypeIdx[];
         target_ents_arrs = checkIDs(__model__, fn_name, 'destinations', target,
-            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+            [ID.isID, ID.isIDL], null) as TEntTypeIdx[];
     } else {
         // source_ents_arrs = splitIDs(fn_name, 'origins', source,
         //     [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
@@ -1181,11 +1181,11 @@ export function ShortestPath(__model__: GIModel, source: TId|TId[]|TId[][][], ta
     let ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
         source_ents_arrs = checkIDs(__model__, fn_name, 'origins', source,
-            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+            [ID.isID, ID.isIDL], null) as TEntTypeIdx[];
         target_ents_arrs = checkIDs(__model__, fn_name, 'destinations', target,
-            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+            [ID.isID, ID.isIDL], null) as TEntTypeIdx[];
         ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
-            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+            [ID.isID, ID.isIDL], null) as TEntTypeIdx[];
     } else {
         // source_ents_arrs = splitIDs(fn_name, 'origins', source,
         //     [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
@@ -1481,11 +1481,11 @@ export function ClosestPath(__model__: GIModel, source: TId|TId[]|TId[][][], tar
     let ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
         source_ents_arrs = checkIDs(__model__, fn_name, 'origins', source,
-            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+            [ID.isID, ID.isIDL], null) as TEntTypeIdx[];
         target_ents_arrs = checkIDs(__model__, fn_name, 'destinations', target,
-            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+            [ID.isID, ID.isIDL], null) as TEntTypeIdx[];
         ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
-            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+            [ID.isID, ID.isIDL], null) as TEntTypeIdx[];
     } else {
         // source_ents_arrs = splitIDs(fn_name, 'origins', source,
         //     [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
@@ -1770,10 +1770,10 @@ export function Degree(__model__: GIModel, source: TId|TId[]|TId[][][],
     if (__model__.debug) {
         if (source.length > 0) {
             source_ents_arrs = checkIDs(__model__, fn_name, 'source', source,
-                [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+                [ID.isID, ID.isIDL], null) as TEntTypeIdx[];
         }
         ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
-            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+            [ID.isID, ID.isIDL], null) as TEntTypeIdx[];
     } else {
         // if (source.length > 0) {
         //     source_ents_arrs = splitIDs(fn_name, 'source', source,
@@ -1905,10 +1905,10 @@ export function Centrality(__model__: GIModel, source: TId|TId[]|TId[][][],
     if (__model__.debug) {
         if (source.length > 0) {
             source_ents_arrs = checkIDs(__model__, fn_name, 'source', source,
-                [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+                [ID.isID, ID.isIDL], null) as TEntTypeIdx[];
         }
         ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
-            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+            [ID.isID, ID.isIDL], null) as TEntTypeIdx[];
     } else {
         // if (source.length > 0) {
         //     source_ents_arrs = splitIDs(fn_name, 'source', source,

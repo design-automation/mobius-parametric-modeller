@@ -5,7 +5,7 @@
 /**
  *
  */
-import { checkIDs, IdCh } from '../_check_ids';
+import { checkIDs, ID } from '../_check_ids';
 import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
@@ -253,7 +253,7 @@ export async function Export(__model__: GIModel, entities: TId|TId[]|TId[][],
         if (entities !== null) {
             entities = arrMakeFlat(entities) as TId[];
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-                [IdCh.isIdL], [EEntType.PLINE, EEntType.PGON, EEntType.COLL])  as TEntTypeIdx[];
+                [ID.isIDL], [EEntType.PLINE, EEntType.PGON, EEntType.COLL])  as TEntTypeIdx[];
         }
         checkArgs(fn_name, 'file_name', file_name, [ArgCh.isStr, ArgCh.isStrL]);
     } else {

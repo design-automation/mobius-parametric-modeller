@@ -5,7 +5,7 @@
 /**
  *
  */
-import { checkIDs, IdCh } from '../_check_ids';
+import { checkIDs, ID } from '../_check_ids';
 import { checkArgs, ArgCh } from '../_check_args';
 
 import { TId, Txyz, EEntType, TPlane, TRay, TEntTypeIdx } from '@libs/geo-info/common';
@@ -40,7 +40,7 @@ export function RayFace(__model__: GIModel, ray: TRay, entities: TId|TId[]): Txy
     if (__model__.debug) {
         checkArgs(fn_name, 'ray', ray, [ArgCh.isRay]);
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-            [IdCh.isId, IdCh.isIdL],
+            [ID.isID, ID.isIDL],
             [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,
@@ -113,7 +113,7 @@ export function PlaneEdge(__model__: GIModel, plane: TRay|TPlane, entities: TId|
     if (__model__.debug) {
         checkArgs(fn_name, 'plane', plane, [ArgCh.isPln]);
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-            [IdCh.isId, IdCh.isIdL],
+            [ID.isID, ID.isIDL],
             [EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,

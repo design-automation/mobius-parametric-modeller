@@ -151,8 +151,7 @@ export class GIAttribMap {
                 other_ents_i.splice(other_ents_i.indexOf(ent_i), 1);
                 // clean up just in case that was the last entity with this value
                 this._cleanUp(val_i);
-                // update time stamp
-                this._modeldata.geom.time_stamp.updateEntTs(this._ent_type, ent_i);
+                // time stamp has already been deleted
             }
         });
         // TODO

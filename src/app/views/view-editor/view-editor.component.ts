@@ -711,7 +711,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
     @HostListener('document:mouseleave', [])
     onmouseleave() {
-        this.editorSplit.notify('end');
+        this.editorSplit.notify('end', this.editorSplit.gutterSize);
     }
 
 }

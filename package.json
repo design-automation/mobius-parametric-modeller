@@ -43,7 +43,7 @@
     "@types/circular-json": "^0.4.0",
     "@types/cytoscape": "^3.14.0",
     "@types/proj4": "^2.5.0",
-    "angular-split": "^1.0.4",
+    "angular-split": "^4.0.0",
     "cesium": "^1.72.0",
     "chroma-js": "^1.4.1",
     "circular-json": "^0.4.0",

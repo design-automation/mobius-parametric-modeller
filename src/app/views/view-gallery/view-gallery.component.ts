@@ -197,7 +197,7 @@ export class ViewGalleryComponent implements AfterViewInit {
 
     @HostListener('document:mouseleave', [])
     onmouseleave() {
-        this.gallerySplit.notify('end');
+        this.gallerySplit.notify('end', this.gallerySplit.gutterSize);
     }
 
 }

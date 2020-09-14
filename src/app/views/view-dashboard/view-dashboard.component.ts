@@ -92,7 +92,7 @@ export class ViewDashboardComponent implements AfterViewInit, OnDestroy {
 
     @HostListener('document:mouseleave', [])
     onmouseleave() {
-        this.dashboardSplit.notify('end');
+        this.dashboardSplit.notify('end', this.dashboardSplit.gutterSize);
     }
 
 }

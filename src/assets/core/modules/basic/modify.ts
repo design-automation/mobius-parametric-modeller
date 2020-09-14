@@ -53,9 +53,6 @@ export function Move(__model__: GIModel, entities: TId|TId[], vectors: Txyz|Txyz
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL], null) as TEntTypeIdx[];
             checkArgs(fn_name, 'vectors', vectors, [ArgCh.isXYZ, ArgCh.isXYZL]);
         } else {
-            // ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
-            // [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
-            // EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
         // --- Error Check ---

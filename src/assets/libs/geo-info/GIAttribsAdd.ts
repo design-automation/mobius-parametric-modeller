@@ -33,8 +33,6 @@ export class GIAttribsAdd {
      * @param data_type The data type of the attribute.
      */
     public addAttrib(ent_type: EEntType, name: string, data_type: EAttribDataTypeStrs): void {
-        const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, any> = this._attribs_maps[attribs_maps_key];
         if (ent_type === EEntType.MOD) {
             this.addModelAttrib(name);
         } else {
@@ -47,9 +45,8 @@ export class GIAttribsAdd {
      * @param name The name of the attribute.
      */
     public addModelAttrib(name: string): void {
-        const attribs: Map<string, any> = this._attribs_maps[EEntTypeStr.mo];
-        if (!attribs.has(name)) {
-            attribs.set(name, null);
+        if (!this._attribs_maps.mo.has(name)) {
+            this._attribs_maps.mo.set(name, null);
         }
     }
     /**
@@ -88,9 +85,7 @@ export class GIAttribsAdd {
      * @param value
      */
     public setModelAttribVal(name: string, value: TAttribDataTypes): void {
-        const attribs_maps_key: string = EEntTypeStr[EEntType.MOD];
-        const attrib: Map<string, any> = this._attribs_maps[attribs_maps_key];
-        attrib.set(name, value);
+        this._attribs_maps.mo.set(name, value);
     }
     /**
      * Set a model attrib indexed value.
@@ -100,9 +95,7 @@ export class GIAttribsAdd {
      * @param value
      */
     public setModelAttribListIdxVal(name: string, idx: number, value: any): void {
-        const attribs_maps_key: string = EEntTypeStr[EEntType.MOD];
-        const attrib: Map<string, any> = this._attribs_maps[attribs_maps_key];
-        const list_value: TAttribDataTypes = attrib.get(name);
+        const list_value: TAttribDataTypes = this._attribs_maps.mo.get(name);
         if (list_value === undefined) { throw new Error('Attribute with this name does not exist.'); }
         if (!Array.isArray(list_value)) {
             throw new Error('Attribute is not a list, so indexed values are not allowed.');
@@ -117,9 +110,7 @@ export class GIAttribsAdd {
      * @param value
      */
     public setModelAttribDictKeyVal(name: string, key: string, value: any): void {
-        const attribs_maps_key: string = EEntTypeStr[EEntType.MOD];
-        const attrib: Map<string, any> = this._attribs_maps[attribs_maps_key];
-        const dict_value: TAttribDataTypes = attrib.get(name);
+        const dict_value: TAttribDataTypes = this._attribs_maps.mo.get(name);
         if (dict_value === undefined) { throw new Error('Attribute with this name does not exist.'); }
         if (Array.isArray(dict_value) || typeof dict_value !== 'object') {
             throw new Error('Attribute is not a dictionary, so keyed values are not allowed.');

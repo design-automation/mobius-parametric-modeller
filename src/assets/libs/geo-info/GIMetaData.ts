@@ -41,23 +41,25 @@ export class GIMetaData {
             dict: [[], new Map()],
         };
         // filter the metadata values
-        // we only want the valyes that are actually used in this model
+        // we only want the values that are actually used in this model
         for (const key of Object.keys(model_data.attributes)) {
             if (key !== 'model') {
                 for (const attrib of model_data.attributes[key]) {
-                    const data_type = attrib.data_type;
-                    for (const item of attrib.data) {
-                        const attrib_idx = item[0];
-                        const attrib_val = this._data.attrib_values[data_type][0][attrib_idx];
-                        const attrib_key = (data_type === 'number' || data_type === 'string') ? attrib_val : JSON.stringify(attrib_val);
-                        let new_attrib_idx: number;
-                        if (attrib_key in data_filtered[data_type][1]) {
-                            new_attrib_idx = data_filtered[data_type][1].get(attrib_key);
-                        } else {
-                            new_attrib_idx = data_filtered[data_type][0].push(attrib_val) - 1;
-                            data_filtered[data_type][1].set(attrib_key, new_attrib_idx);
+                    const data_type: EAttribDataTypeStrs = attrib.data_type;
+                    if (data_type !== EAttribDataTypeStrs.BOOLEAN) {
+                        for (const item of attrib.data) {
+                            const attrib_idx = item[0];
+                            const attrib_val = this._data.attrib_values[data_type][0][attrib_idx];
+                            const attrib_key = (data_type === 'number' || data_type === 'string') ? attrib_val : JSON.stringify(attrib_val);
+                            let new_attrib_idx: number;
+                            if (attrib_key in data_filtered[data_type][1]) {
+                                new_attrib_idx = data_filtered[data_type][1].get(attrib_key);
+                            } else {
+                                new_attrib_idx = data_filtered[data_type][0].push(attrib_val) - 1;
+                                data_filtered[data_type][1].set(attrib_key, new_attrib_idx);
+                            }
+                            item[0] = new_attrib_idx;
                         }
-                        item[0] = new_attrib_idx;
                     }
                 }
             }

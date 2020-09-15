@@ -305,7 +305,9 @@ export class GIMetaData {
         for (const attrib_data of attribs_data) {
             const renum: Map<number, number> = renum_attrib_vals.get(attrib_data.data_type);
             for (const val_i_ents of attrib_data.data) {
-                val_i_ents[0] = renum.get(val_i_ents[0]);
+                if (attrib_data.data_type !== EAttribDataTypeStrs.BOOLEAN) {
+                    val_i_ents[0] = renum.get(val_i_ents[0]);
+                }
             }
         }
     }

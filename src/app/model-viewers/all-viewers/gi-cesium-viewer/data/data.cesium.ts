@@ -830,7 +830,7 @@ export class DataCesium {
             tooltip: '',
             creationFunction: function () {
                 return new Cesium.UrlTemplateImageryProvider({
-                    url: 'http://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+                    url: 'https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
                 });
             },
         }));
@@ -842,7 +842,7 @@ export class DataCesium {
             tooltip: '',
             creationFunction: function () {
                 return new Cesium.UrlTemplateImageryProvider({
-                    url: 'http://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',
+                    url: 'https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',
                 });
             },
         }));
@@ -854,7 +854,7 @@ export class DataCesium {
             tooltip: '',
             creationFunction: function () {
                 return new Cesium.UrlTemplateImageryProvider({
-                    url: 'http://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}',
+                    url: 'https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}',
                 });
             },
         }));
@@ -866,7 +866,7 @@ export class DataCesium {
             tooltip: '',
             creationFunction: function () {
                 return new Cesium.UrlTemplateImageryProvider({
-                    url: 'http://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+                    url: 'https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
                 });
             },
         }));
@@ -878,7 +878,7 @@ export class DataCesium {
             tooltip: '',
             creationFunction: function () {
                 return new Cesium.UrlTemplateImageryProvider({
-                    url: 'http://mt1.google.com/vt/lyrs=t&x={x}&y={y}&z={z}',
+                    url: 'https://mt1.google.com/vt/lyrs=t&x={x}&y={y}&z={z}',
                 });
             },
         }));
@@ -890,7 +890,7 @@ export class DataCesium {
             tooltip: '',
             creationFunction: function () {
                 return new Cesium.UrlTemplateImageryProvider({
-                    url: 'http://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+                    url: 'https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
                 });
             },
         }));
@@ -914,8 +914,6 @@ export class DataCesium {
         const here1 = 'https://1.';
         const here2 = '.maps.ls.hereapi.com/maptile/2.1/maptile/newest/';
         const here3 = '/{z}/{x}/{y}/{width}/png8?apiKey=';
-        const k1 = '7vMRjLNCpcOAUQXU61eUp';
-        const k2 = '6EFbWCy7WLNmy9qLHO-1Bw';
 
         this._viewLayerProviders.push(new Cesium.ProviderViewModel({
             name: 'Here map normal',

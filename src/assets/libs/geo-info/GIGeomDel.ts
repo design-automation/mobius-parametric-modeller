@@ -49,12 +49,12 @@ export class GIGeomDel {
             const verts_i: number[] = this._geom_maps.up_posis_verts.get(posi_i);
             if ( verts_i.length === 0) { // only delete posis with no verts
                 this._geom_maps.up_posis_verts.delete(posi_i);
-                this._geom_maps.posis_ts.delete(posi_i);
+                // del time stamp
+                this._geom.time_stamp.delEntTs(EEntType.POSI, posi_i);
+                // save deleted posi
                 deleted_posis_i.push(posi_i);
             }
             // no need to update down arrays
-            // del time stamp
-            this._geom.time_stamp.delEntTs(EEntType.POSI, posi_i);
         }
         // delete all the posi attributes, for all posis that were deleted
         this._geom.modeldata.attribs.add.delEntFromAttribs(EEntType.POSI, deleted_posis_i);
@@ -77,11 +77,11 @@ export class GIGeomDel {
             copy_verts_i.forEach(vert_i => this._geom.del_vert.delVert(vert_i));
             // delete the posi
             this._geom_maps.up_posis_verts.delete(posi_i);
-            this._geom_maps.posis_ts.delete(posi_i);
-            deleted_posis_i.push(posi_i);
-            // no need to update down arrays
             // del time stamp
             this._geom.time_stamp.delEntTs(EEntType.POSI, posi_i);
+            // save deleted posi
+            deleted_posis_i.push(posi_i);
+            // no need to update down arrays
         }
         // delete all the posi attributes, for all posis that were deleted
         this._geom.modeldata.attribs.add.delEntFromAttribs(EEntType.POSI, deleted_posis_i);

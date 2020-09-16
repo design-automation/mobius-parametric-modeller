@@ -7,7 +7,10 @@
                 "Form_Finding_Solver.mob",
                 "Minimise_Detours_Solver.mob",
                 "Rectangle_Solver.mob",
-                "Urban_plot_subdivision.mob"
+                "Urban_plot_subdivision.mob",
+                "Podium_tower_options_part1.mob",
+                "Podium_tower_options_part2.mob",
+                "Podium_tower_options_part3.mob"
             ],
             "link": "/assets/gallery/generative_modelling_examples/"
         },

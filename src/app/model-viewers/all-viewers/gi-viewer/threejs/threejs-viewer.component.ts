@@ -296,7 +296,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
 
     refreshLabels(ent_type): void {
-        if (!this.SelectingEntityType.id) { return; }
+        if (!this.SelectingEntityType.id && this.SelectingEntityType.id !== 0) { return; }
         const allLabels = document.getElementsByClassName(`text-label${EEntTypeStr[ent_type]}`);
         const unSorted = this.dataService.selected_ents.get(EEntTypeStr[ent_type]);
         if (unSorted === undefined) {
@@ -317,6 +317,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         } else {
             isArr = false;
         }
+        console.log('~~~~', attr_name, key);
         if (attr_name !== '') {
             if (attr_names.includes(attr_name)) {
                 for (let i = 0; i < allLabels.length; i++) {

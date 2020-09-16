@@ -380,82 +380,59 @@ export class ExecuteComponent {
 
             // resolve all urls (or local storage files) in the node, calling the url and retrieving the data
             // the data is then saved as resolvedValue in its respective argument in the procedure (in JSON format)
-            try {
-                await  ExecuteComponent.resolveImportedUrl(node, true, node.type === 'start');
-            } catch (ex) {
-                node.hasError = true;
-                this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-                document.getElementById('spinner-off').click();
-                document.getElementById('Console').click();
-                this.dataService.log(`<h4 style="padding: 2px 0px 2px 0px; color:red;">Error: ${ex.message}</h4>`);
-                const _category = this.isDev ? 'dev' : 'execute';
-                this.googleAnalyticsService.trackEvent(_category, `error: ${ex.name}`, 'click', performance.now() - this.startTime);
-                throw ex;
-            }
+            // try {
+            //     await  ExecuteComponent.resolveImportedUrl(node, true, node.type === 'start');
+            // } catch (ex) {
+            //     node.hasError = true;
+            //     this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
+            //     document.getElementById('spinner-off').click();
+            //     document.getElementById('Console').click();
+            //     this.dataService.log(`<h4 style="padding: 2px 0px 2px 0px; color:red;">Error: ${ex.message}</h4>`);
+            //     const _category = this.isDev ? 'dev' : 'execute';
+            //     this.googleAnalyticsService.trackEvent(_category, `error: ${ex.name}`, 'click', performance.now() - this.startTime);
+            //     throw ex;
+            // }
             let validCheck = await this.checkProdValidity(node, node.localFunc);
             InvalidECheck = InvalidECheck || validCheck[0];
             EmptyECheck = EmptyECheck || validCheck[1];
             validCheck = await this.checkProdValidity(node, node.procedure);
             InvalidECheck = InvalidECheck || validCheck[0];
             EmptyECheck = EmptyECheck || validCheck[1];
-            // // Empty argument error
-            // if (EmptyECheck) {
-            //     document.getElementById('Console').click();
-            //     this.dataService.log('<h4 style="padding: 2px 0px 2px 0px; color:red;">Error: Empty Argument detected. ' +
-            //                          'Check marked node(s) and procedure(s)!</h5>');
-            //     this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-            //     document.getElementById('spinner-off').click();
-            //     const _category = this.isDev ? 'dev' : 'execute';
-            //     this.googleAnalyticsService.trackEvent(_category, `error: Empty Argument`, 'click', performance.now() - this.startTime);
-            //     throw new Error('Empty Argument');
-            // }
-            // // Invalid argument value error
-            // if (InvalidECheck) {
-            //     document.getElementById('Console').click();
-            //     this.dataService.log('<h4 style="padding: 2px 0px 2px 0px; style="color:red">Error: Invalid Argument or ' +
-            //                          'Argument with Reserved Word detected. Check marked node(s) and procedure(s)!</h5>');
-            //     document.getElementById('spinner-off').click();
-            //     this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-            //     const _category = this.isDev ? 'dev' : 'execute';
-            //     this.googleAnalyticsService.trackEvent(_category, `error: Reserved Word Argument`,
-            //         'click', performance.now() - this.startTime);
-            //     throw new Error('Reserved Word Argument');
-            // }
         }
 
-        // resolve urls for each imported functions and subFunctions
-        for (const func of this.dataService.flowchart.functions) {
-            for (const node of func.flowchart.nodes) {
-                try {
-                    await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
-                } catch (ex) {
-                    document.getElementById('spinner-off').click();
-                    document.getElementById('Console').click();
-                    this.dataService.log(`<h4 style="padding: 2px 0px 2px 0px; color:red;">` +
-                                         `Error in global function ${func.name}: ${ex.message}</h4>`);
-                    const _category = this.isDev ? 'dev' : 'execute';
-                    this.googleAnalyticsService.trackEvent(_category, `error: ${ex.name}`, 'click', performance.now() - this.startTime);
-                    throw ex;
-                }
-            }
-        }
-        if (this.dataService.flowchart.subFunctions) {
-            for (const func of this.dataService.flowchart.subFunctions) {
-                for (const node of func.flowchart.nodes) {
-                    try {
-                        await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
-                    } catch (ex) {
-                        document.getElementById('spinner-off').click();
-                        document.getElementById('Console').click();
-                        this.dataService.log(`<h4 style="padding: 2px 0px 2px 0px; color:red;">` +
-                                             `Error in global function ${func.name.split('_')[0]}: ${ex.message}</h4>`);
-                        const _category = this.isDev ? 'dev' : 'execute';
-                        this.googleAnalyticsService.trackEvent(_category, `error: ${ex.name}`, 'click', performance.now() - this.startTime);
-                        throw ex;
-                    }
-                }
-            }
-        }
+        // // resolve urls for each imported functions and subFunctions
+        // for (const func of this.dataService.flowchart.functions) {
+        //     for (const node of func.flowchart.nodes) {
+        //         try {
+        //             await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
+        //         } catch (ex) {
+        //             document.getElementById('spinner-off').click();
+        //             document.getElementById('Console').click();
+        //             this.dataService.log(`<h4 style="padding: 2px 0px 2px 0px; color:red;">` +
+        //                                  `Error in global function ${func.name}: ${ex.message}</h4>`);
+        //             const _category = this.isDev ? 'dev' : 'execute';
+        //             this.googleAnalyticsService.trackEvent(_category, `error: ${ex.name}`, 'click', performance.now() - this.startTime);
+        //             throw ex;
+        //         }
+        //     }
+        // }
+        // if (this.dataService.flowchart.subFunctions) {
+        //     for (const func of this.dataService.flowchart.subFunctions) {
+        //         for (const node of func.flowchart.nodes) {
+        //             try {
+        //                 await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
+        //             } catch (ex) {
+        //                 document.getElementById('spinner-off').click();
+        //                 document.getElementById('Console').click();
+        //                 this.dataService.log(`<h4 style="padding: 2px 0px 2px 0px; color:red;">` +
+        //                                      `Error in global function ${func.name.split('_')[0]}: ${ex.message}</h4>`);
+        //                 const _category = this.isDev ? 'dev' : 'execute';
+        //                 this.googleAnalyticsService.trackEvent(_category, `error: ${ex.name}`, 'click', performance.now() - this.startTime);
+        //                 throw ex;
+        //             }
+        //         }
+        //     }
+        // }
 
         // execute the flowchart
         try {

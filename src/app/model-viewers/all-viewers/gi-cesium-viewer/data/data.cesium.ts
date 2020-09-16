@@ -920,7 +920,6 @@ export class DataCesium {
             iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
             tooltip: 'Here',
             creationFunction: function (apiKey) {
-                console.log(apiKey)
                 return new Cesium.UrlTemplateImageryProvider({
                     url: here1 + 'base' + here2 + 'normal.day' + here3 + apiKey,
                 });

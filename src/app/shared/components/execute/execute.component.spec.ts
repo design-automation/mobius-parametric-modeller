@@ -80,9 +80,10 @@ describe('Execute Component test', () => {
                 expect(testName.split('.mob')[0]).toBe(dataService.file.name,
                     'Loaded file name and the file name in dataService do not match.');
                 const output = dataService.flowchart.nodes[dataService.flowchart.nodes.length - 1];
-                const model = JSON.parse(output.model);
-                const oModel = _parameterTypes.newFn();
-                oModel.setModelData(model);
+                const omodel = _parameterTypes.newFn();
+                // const model = JSON.parse(output.model);
+                // omodel.setModelData(model);
+                omodel.setModelDataJSONStr(output.model);
                 if (test.requirements.hasOwnProperty('geometry')) {
                     if (test.requirements.geometry.hasOwnProperty('num_positions')) {
                         expect(omodel.modeldata.geom.query.numEnts(EEntType.POSI)).
@@ -178,7 +179,7 @@ describe('Execute Component test', () => {
                 if (test.returns) {
                     expect(output.output.value).toBe(test.returns, 'Return values do not match');
                 }
-                expect(_model.__checkModel__(oModel)).toEqual([], '_model.__checkModel__ failed');
+                expect(_model.__checkModel__(omodel)).toEqual([], '_model.__checkModel__ failed');
             }
             done();
         });
@@ -248,16 +249,18 @@ describe('Execute Model Comparison test', () => {
             if (dataService.file.flowchart) {
                 await executeFixture.componentInstance.execute(true);
                 const output1 = dataService.flowchart.nodes[dataService.flowchart.nodes.length - 1];
-                const model1 = JSON.parse(output1.model);
-                oModel1.setModelData(model1);
+                // const model1 = JSON.parse(output1.model);
+                // oModel1.setModelData(model1);
+                oModel1.setModelDataJSONStr(output1.model);
             }
             loadCheck = await loadURLfixture.componentInstance.loadStartUpURL(`?file=${test.url2}`);
             expect(loadCheck).toBeTruthy(`Unable to load ${testName2}`);
             if (dataService.file.flowchart) {
                 await executeFixture.componentInstance.execute(true);
                 const output2 = dataService.flowchart.nodes[dataService.flowchart.nodes.length - 1];
-                const model2 = JSON.parse(output2.model);
-                oModel2.setModelData(model2);
+                // const model2 = JSON.parse(output2.model);
+                // oModel2.setModelData(model2);
+                oModel1.setModelDataJSONStr(output2.model);
             }
             const compResult = oModel1.compare(oModel2, normalize, check_geom_equality, check_attrib_equality);
             expect(compResult.percent).toEqual(test.percent, 'The two percentages do not match');

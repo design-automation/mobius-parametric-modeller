@@ -21,28 +21,41 @@ export class DataOutputService {
         const model = _parameterTypes.newFn();
         model.setMetaData(meta);
         if (getViewOutput) {
-            const result = webWorker.run(input => {
-                return JSON.parse(input);
-            }, node.model);
-            result.then(r => {
-                model.setModelData(r);
-                this.iModel.model = model;
-            });
+            model.setModelDataJSONStr(node.model);
+            this.iModel.model = model;
             this.iModel.getOutput = true;
             this.iModel.nodeID = node.id;
             return this.iModel.model;
+
+            // const result = webWorker.run(input => {
+            //     return JSON.parse(input);
+            // }, node.model);
+            // result.then(r => {
+            //     model.setModelData(r);
+            //     this.iModel.model = model;
+            // });
+            // this.iModel.getOutput = true;
+            // this.iModel.nodeID = node.id;
+            // return this.iModel.model;
+
             // model.setData(JSON.parse(node.model));
         } else if (node.input.edges.length === 1) {
-            const result = webWorker.run(input => {
-                return JSON.parse(input);
-            }, node.input.edges[0].source.parentNode.model);
-            result.then(r => {
-                model.setModelData(r);
-                this.iModel.model = model;
-            });
+            model.setModelDataJSONStr(node.input.edges[0].source.parentNode.model);
+            this.iModel.model = model;
             this.iModel.getOutput = false;
             this.iModel.nodeID = node.id;
             return this.iModel.model;
+
+            // const result = webWorker.run(input => {
+            //     return JSON.parse(input);
+            // }, node.input.edges[0].source.parentNode.model);
+            // result.then(r => {
+            //     model.setModelData(r);
+            //     this.iModel.model = model;
+            // });
+            // this.iModel.getOutput = false;
+            // this.iModel.nodeID = node.id;
+            // return this.iModel.model;
             // model.setData(JSON.parse(node.input.edges[0].source.parentNode.model));
         } else {
             for (const edge of node.input.edges) {
@@ -50,7 +63,8 @@ export class DataOutputService {
                     continue;
                 }
                 const newModel = _parameterTypes.newFn();
-                newModel.setModelData(JSON.parse(edge.source.parentNode.model));
+                // newModel.setModelData(JSON.parse(edge.source.parentNode.model));
+                newModel.setModelDataJSONStr(edge.source.parentNode.model);
                 newModel.setMetaData(meta);
                 model.merge(newModel);
             }

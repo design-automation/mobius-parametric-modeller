@@ -148,6 +148,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this._height = this.container.offsetHeight; // container.client_height;
 
         this._data_threejs = this.dataService.getThreejsScene();
+        if (this.model && this._data_threejs.model !== this.model) {
+            this.updateModel(this.model);
+        }
         this.threeJSViewerService.DataThreejs = this._data_threejs;
         this.container.appendChild(this._data_threejs.renderer.domElement);
         this._data_threejs.renderer.domElement.style.outline = 'none';
@@ -296,7 +299,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
 
     refreshLabels(ent_type): void {
-        if (!this.SelectingEntityType.id) { return; }
+        if (!this.SelectingEntityType.id && this.SelectingEntityType.id !== 0) { return; }
         const allLabels = document.getElementsByClassName(`text-label${EEntTypeStr[ent_type]}`);
         const unSorted = this.dataService.selected_ents.get(EEntTypeStr[ent_type]);
         if (unSorted === undefined) {

@@ -113,7 +113,7 @@
             "module": "modify",
             "name": "Weld",
             "values": {
-                "method": "'clone_positions'"
+                "method": "'break_weld'"
             }
         }
     },

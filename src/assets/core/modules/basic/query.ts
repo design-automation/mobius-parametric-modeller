@@ -98,12 +98,10 @@ export function Get(__model__: GIModel, ent_type_enum: _EEntType, entities: TId|
     if (__model__.debug) {
         if (entities !== null && entities !== undefined) {
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-                [ID.isID, ID.isIDL, ID.isIDLL], null) as TEntTypeIdx|TEntTypeIdx[];
+                [ID.isID, ID.isIDL, ID.isIDLL], null, false) as TEntTypeIdx|TEntTypeIdx[];
         }
     } else {
         if (entities !== null && entities !== undefined) {
-            // ents_arr = splitIDs(fn_name, 'entities', entities,
-            //     [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDListOfLists], null) as TEntTypeIdx|TEntTypeIdx[];
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
     }
@@ -186,7 +184,7 @@ export function Filter(__model__: GIModel,
     if (__model__.debug) {
         if (entities !== null && entities !== undefined) {
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-                [ID.isID, ID.isIDL, ID.isIDLL], null) as TEntTypeIdx|TEntTypeIdx[];
+                [ID.isID, ID.isIDL, ID.isIDLL], null, false) as TEntTypeIdx|TEntTypeIdx[];
         }
         [attrib_name, attrib_idx_key] = checkAttribNameIdxKey(fn_name, attrib);
         checkAttribValue(fn_name, value);
@@ -292,7 +290,7 @@ export function Invert(__model__: GIModel, ent_type_enum: _EEntType, entities: T
     let ents_arr: TEntTypeIdx[] = null;
     if (__model__.debug) {
         if (entities !== null && entities !== undefined) {
-            ents_arr = checkIDs(__model__, 'query.Invert', 'entities', entities, [ID.isIDL], null) as TEntTypeIdx[];
+            ents_arr = checkIDs(__model__, 'query.Invert', 'entities', entities, [ID.isIDL], null, false) as TEntTypeIdx[];
         }
     } else {
         if (entities !== null && entities !== undefined) {
@@ -498,7 +496,7 @@ export function Type(__model__: GIModel, entities: TId|TId[], type_query_enum: _
     const fn_name = 'query.Type';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
     if (__model__.debug) {
-        ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL], null) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL], null, false) as TEntTypeIdx|TEntTypeIdx[];
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
         ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];

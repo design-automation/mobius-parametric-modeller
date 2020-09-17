@@ -1,7 +1,7 @@
 {
     "data": [
         {
-            "name": "Generative Modelling Examples",
+            "name": "Generative Examples",
             "files": [
                 "Floor_area_constraint.mob",
                 "Form_Finding_Solver.mob",
@@ -29,15 +29,11 @@
             "link": "/assets/gallery/analysis_examples/"
         },
         {
-            "name": "Save Wall Examples",
+            "name": "Law Curve Examples",
             "files": [
-                "Example_1.mob",
-                "Example_2.mob",
-                "Example_3.mob",
-                "ScaleEndExtrude.mob",
-                "sincoswave.mob"
+                "Example_1.mob"
             ],
-            "link": "/assets/gallery/example_sinewave_wall/"
+            "link": "/assets/gallery/law_curve_examples/"
         },
         {
             "name": "Global Function Examples",
@@ -55,26 +51,21 @@
             "link": "/assets/gallery/user_functions_examples/"
         },
         {
-            "name": "Basic Examples",
+            "name": "Import Examples",
             "files": [
-                "basic_variable.mob&node=1",
-                "basic_ifelse.mob&node=1",
-                "basic_foreach.mob&node=1",
-                "basic_while.mob&node=1",
-                "Basic_import_and_export.mob&node=7"
+                "Import_data.mob&node=1",
+                "Import_and_export.mob&node=7"
             ],
             "link": "/assets/gallery/basic_examples/"
         },
         {
-            "name": "Function Examples",
+            "name": "Material Examples",
             "files": [
-                "make.Position.mob&node=1",
-                "make.Point.mob&node=1",
-                "make.Polyline.mob&node=1",
-                "make.Polygon.mob&node=1",
-                "make.Collection.mob&node=1"
+                "glass_materials.mob&node=2",
+                "front_and_back_materials.mob&node=1",
+                "Visualising_materials.mob&node=10"
             ],
-            "link": "/assets/gallery/function_examples/"
+            "link": "/assets/gallery/rendering_examples/"
         },
         {
             "name": "Shapes Examples",
@@ -88,20 +79,27 @@
             "link": "/assets/gallery/shapes_examples/"
         },
         {
-            "name": "Flow Examples",
+            "name": "Basic Examples",
             "files": [
-                "podium_with_towers.mob"
+                "basic_variable.mob&node=1",
+                "basic_ifelse.mob&node=1",
+                "basic_foreach.mob&node=1",
+                "basic_while.mob&node=1",
+                "podium_with_towers.mob",
+                "block_patterns.mob"
             ],
-            "link": "/assets/gallery/flow_examples/"
+            "link": "/assets/gallery/basic_examples/"
         },
         {
-            "name": "Material Examples",
+            "name": "Function Examples",
             "files": [
-                "glass_materials.mob&node=2",
-                "front_and_back_materials.mob&node=1",
-                "Visualising_materials.mob&node=10"
+                "make.Position.mob&node=1",
+                "make.Point.mob&node=1",
+                "make.Polyline.mob&node=1",
+                "make.Polygon.mob&node=1",
+                "make.Collection.mob&node=1"
             ],
-            "link": "/assets/gallery/rendering_examples/"
+            "link": "/assets/gallery/function_examples/"
         }
     ]
 }

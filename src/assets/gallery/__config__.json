@@ -29,6 +29,17 @@
             "link": "/assets/gallery/analysis_examples/"
         },
         {
+            "name": "Save Wall Examples",
+            "files": [
+                "Example_1.mob",
+                "Example_2.mob",
+                "Example_3.mob",
+                "ScaleEndExtrude.mob",
+                "sincoswave.mob"
+            ],
+            "link": "/assets/gallery/example_sinewave_wall/"
+        },
+        {
             "name": "Global Function Examples",
             "files": [
                 "pyramids_from_pgons_example.mob&node=1",

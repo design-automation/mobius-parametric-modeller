@@ -18,6 +18,7 @@
             "name": "Analysis Examples",
             "files": [
                 "Centrality_Analysis.mob",
+                "Sky_and_Sun_dome.mob",
                 "Facade_sky_and_sun_analysis.mob",
                 "Isovist.mob",
                 "Isovist_T_shapes.mob",

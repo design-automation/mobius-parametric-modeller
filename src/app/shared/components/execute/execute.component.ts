@@ -871,7 +871,8 @@ export class ExecuteComponent {
             } else {
                 // node.model = diff(node.input.value.getData(), params['model'].getModelData());
             }
-            node.model = JSON.stringify(params['model'].getModelData());
+            // node.model = JSON.stringify(params['model'].getModelData());
+            node.model = params['model'].getModelDataJSONStr();
             node.input.value = null;
 
             const endTime = performance.now();

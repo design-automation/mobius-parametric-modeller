@@ -94,6 +94,8 @@ export class DataThreejsBase {
     protected _buffer_geoms: THREE.BufferGeometry[] = [];
     protected _all_objs_sphere: THREE.Sphere;
 
+    protected _text_font: THREE.Font;
+
     /**
      * Constructs a new data subscriber.
      */
@@ -103,6 +105,9 @@ export class DataThreejsBase {
             this.settings.directional_light.type = 'directional';
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
         }
+        const textFontLoader = new THREE.FontLoader();
+        textFontLoader.load( 'assets/fonts/helvetiker_regular.typeface.json', font => { this._text_font = font; });
+
         // scene
         this.scene = new THREE.Scene();
         // renderer

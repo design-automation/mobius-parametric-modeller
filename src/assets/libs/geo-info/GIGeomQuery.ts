@@ -735,6 +735,7 @@ export class GIGeomQuery {
     }
     /**
      * Get the object of a topo entity.
+     * Returns a point, pline, or pgon. (no posis)
      * @param ent_type
      * @param ent_i
      */

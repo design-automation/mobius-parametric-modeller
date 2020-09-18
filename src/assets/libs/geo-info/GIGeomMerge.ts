@@ -24,22 +24,8 @@ export class GIGeomMerge {
      */
     public merge(other_geom: GIGeom): void {
         // Check that we have correct number of time stamps
-        // TODO this can be removed later
-        if (this._geom_maps.up_posis_verts.size !== this._geom_maps.posis_ts.size) {
-            throw new Error('Incorrent number of time stamps for posis.');
-        }
-        if (this._geom_maps.dn_points_verts.size !== this._geom_maps.points_ts.size) {
-            throw new Error('Incorrent number of time stamps for points.');
-        }
-        if (this._geom_maps.dn_plines_wires.size !== this._geom_maps.plines_ts.size) {
-            throw new Error('Incorrent number of time stamps for plines.');
-        }
-        if (this._geom_maps.dn_pgons_faces.size !== this._geom_maps.pgons_ts.size) {
-            throw new Error('Incorrent number of time stamps for pgons.');
-        }
-        if (this._geom_maps.up_colls_colls.size !== this._geom_maps.colls_ts.size) {
-            throw new Error('Incorrent number of time stamps for colls.');
-        }
+        // TODO this can be deleted later
+        this._geom.time_stamp.checkTimeStamps();
         //
         const geom_maps = other_geom._geom_maps;
         // ======================================================================
@@ -73,6 +59,10 @@ export class GIGeomMerge {
         this._mergeCollObjs(this._geom_maps.up_pgons_colls, geom_maps.up_pgons_colls); // merge colls, no check for conflicts
         // ======================================================================
         // time stamp updated in _mergePosis() and _mergeObjCollEnts() methods
+
+        // Check that we have correct number of time stamps
+        // TODO this can be deleted later
+        this._geom.time_stamp.checkTimeStamps();
     }
     // --------------------------------------------------------------------------------------------
     // Private methods

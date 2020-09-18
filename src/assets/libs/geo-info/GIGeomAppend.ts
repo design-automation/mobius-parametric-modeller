@@ -1,5 +1,5 @@
 import { IGeomMaps, TTri, TEdge, TWire, TFace,
-    TVert, TFaceTri, TPoint, TPline, TPgon } from './common';
+    TVert, TFaceTri, TPoint, TPline, TPgon, EEntType } from './common';
 import { GIGeom } from './GIGeom';
 
 /**
@@ -164,24 +164,30 @@ export class GIGeomAppend {
         });
         // add points to model
         other_geom_maps.dn_points_verts.forEach( (other_vert_i, other_point_i) => {
+            const new_point_i: number = renum_points_map.get(other_point_i);
             this._geom_maps.dn_points_verts.set(
-                renum_points_map.get(other_point_i),
+                new_point_i,
                 renum_verts_map.get(other_vert_i) as TPoint
             );
+            this._geom.time_stamp.updateEntTs(EEntType.POINT, new_point_i);
         });
         // add plines to model
         other_geom_maps.dn_plines_wires.forEach( (other_wire_i, other_pline_i) => {
+            const new_pline_i: number = renum_plines_map.get(other_pline_i);
             this._geom_maps.dn_plines_wires.set(
-                renum_plines_map.get(other_pline_i),
+                new_pline_i,
                 renum_wires_map.get(other_wire_i) as TPline
             );
+            this._geom.time_stamp.updateEntTs(EEntType.PLINE, new_pline_i);
         });
         // add pgons to model
         other_geom_maps.dn_pgons_faces.forEach( (other_face_i, other_pgon_i) => {
+            const new_pgon_i: number = renum_pgons_map.get(other_pgon_i);
             this._geom_maps.dn_pgons_faces.set(
-                renum_pgons_map.get(other_pgon_i),
+                new_pgon_i,
                 renum_faces_map.get(other_face_i) as TPgon
             );
+            this._geom.time_stamp.updateEntTs(EEntType.PGON, new_pgon_i);
         });
         // add collections to model
         other_geom_maps.dn_colls_points.forEach( (other_points_i, other_coll_i) => {
@@ -207,10 +213,12 @@ export class GIGeomAppend {
         // update posis to verts (they can be null or [])
         // this array is used to capture deleted posis
         other_geom_maps.up_posis_verts.forEach( (other_verts_i, other_posi_i) => {
+            const new_posi_i: number = renum_posis_map.get(other_posi_i);
             this._geom_maps.up_posis_verts.set(
-                renum_posis_map.get(other_posi_i),
+                new_posi_i,
                 other_verts_i.map( other_vert_i => renum_verts_map.get(other_vert_i))
             );
+            this._geom.time_stamp.updateEntTs(EEntType.POSI, new_posi_i);
         });
         // update verts to tris
         other_geom_maps.up_verts_tris.forEach( (other_tris_i, other_vert_i) => {
@@ -291,11 +299,16 @@ export class GIGeomAppend {
         });
         // update colls to colls
         other_geom_maps.up_colls_colls.forEach( (other_parent_coll_i, other_coll_i) => {
+            const new_coll_i: number = renum_colls_map.get(other_coll_i);
             this._geom_maps.up_colls_colls.set(
-                renum_colls_map.get(other_coll_i),
+                new_coll_i,
                 renum_colls_map.get(other_parent_coll_i),
             );
+            this._geom.time_stamp.updateEntTs(EEntType.COLL, new_coll_i);
         });
+        // Check that we have correct number of time stamps
+        // TODO this can be deleted later
+        this._geom.time_stamp.checkTimeStamps();
         // return the maps
         return renum_maps;
     }

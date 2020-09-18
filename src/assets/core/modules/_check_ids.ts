@@ -43,7 +43,7 @@ function checkId(__model__: GIModel, arg: any, ent_types_set: Set<number>, check
 }
 
 export function checkIDs(__model__: GIModel, fn_name: string, arg_name: string, arg: any, id_types: number[],
-                         ent_types: EEntType[]|null, check_exists = false): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
+                         ent_types: EEntType[]|null, check_exists = true): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
     if (arg === undefined) {
         throw new Error(fn_name + ': The argument "' + arg_name + '" is undefined.' + '<br>');
     }

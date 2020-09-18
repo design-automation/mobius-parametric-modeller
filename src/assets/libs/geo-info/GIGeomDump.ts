@@ -26,22 +26,8 @@ export class GIGeomDump {
      */
     public dump(geom_maps: IGeomMaps): void {
         // Check that we have correct number of time stamps
-        // TODO this can be removed later
-        if (this._geom_maps.up_posis_verts.size !== this._geom_maps.posis_ts.size) {
-            throw new Error('Incorrent number of time stamps for posis.');
-        }
-        if (this._geom_maps.dn_points_verts.size !== this._geom_maps.points_ts.size) {
-            throw new Error('Incorrent number of time stamps for points.');
-        }
-        if (this._geom_maps.dn_plines_wires.size !== this._geom_maps.plines_ts.size) {
-            throw new Error('Incorrent number of time stamps for plines.');
-        }
-        if (this._geom_maps.dn_pgons_faces.size !== this._geom_maps.pgons_ts.size) {
-            throw new Error('Incorrent number of time stamps for pgons.');
-        }
-        if (this._geom_maps.up_colls_colls.size !== this._geom_maps.colls_ts.size) {
-            throw new Error('Incorrent number of time stamps for colls.');
-        }
+        // TODO this can be deleted later
+        this._geom.time_stamp.checkTimeStamps();
         // may deep copys of all maps
         this._geom_maps.dn_points_verts = new Map(geom_maps.dn_points_verts);
         this._geom_maps.dn_plines_wires = new Map(geom_maps.dn_plines_wires);
@@ -75,6 +61,9 @@ export class GIGeomDump {
         this._geom_maps.plines_ts = new Map(geom_maps.plines_ts);
         this._geom_maps.pgons_ts = new Map(geom_maps.pgons_ts);
         this._geom_maps.colls_ts = new Map(geom_maps.colls_ts);
+        // Check that we have correct number of time stamps
+        // TODO this can be deleted later
+        this._geom.time_stamp.checkTimeStamps();
     }
     /**
      * Adds data to this model from another model.
@@ -88,21 +77,7 @@ export class GIGeomDump {
         if (ent_sets === null) { return; }
         // Check that we have correct number of time stamps
         // TODO this can be deleted later
-        if (this._geom_maps.up_posis_verts.size !== this._geom_maps.posis_ts.size) {
-            throw new Error('Incorrent number of time stamps for posis.');
-        }
-        if (this._geom_maps.dn_points_verts.size !== this._geom_maps.points_ts.size) {
-            throw new Error('Incorrent number of time stamps for points.');
-        }
-        if (this._geom_maps.dn_plines_wires.size !== this._geom_maps.plines_ts.size) {
-            throw new Error('Incorrent number of time stamps for plines.');
-        }
-        if (this._geom_maps.dn_pgons_faces.size !== this._geom_maps.pgons_ts.size) {
-            throw new Error('Incorrent number of time stamps for pgons.');
-        }
-        if (this._geom_maps.up_colls_colls.size !== this._geom_maps.colls_ts.size) {
-            throw new Error('Incorrent number of time stamps for colls.');
-        }
+        this._geom.time_stamp.checkTimeStamps();
         //
         const geom_maps: IGeomMaps = other_geom._geom_maps;
         // ======================================================================
@@ -138,7 +113,11 @@ export class GIGeomDump {
 
         // TODO if the objs are in colls, but the colls are deleted, then the objs refs to teh colls need to be removed as well
 
+        // Check that we have correct number of time stamps
+        // TODO this can be deleted later
+        this._geom.time_stamp.checkTimeStamps();
     }
+
     // --------------------------------------------------------------------------------------------
     // Private methods
     // --------------------------------------------------------------------------------------------
@@ -165,7 +144,7 @@ export class GIGeomDump {
      * @param other_map
      * @param other_colls_i
      */
-    private _dumpDnCollsObjsDeepCopy(this_map: Map<number, number[]>, other_map: Map<number, number[]>, other_colls_i: Set<number>, 
+    private _dumpDnCollsObjsDeepCopy(this_map: Map<number, number[]>, other_map: Map<number, number[]>, other_colls_i: Set<number>,
             other_ents_i: Set<number>): void {
         other_colls_i.forEach( other_coll_i => {
             const other_coll_ents_i = other_map.get(other_coll_i);

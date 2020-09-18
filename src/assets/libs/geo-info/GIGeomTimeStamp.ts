@@ -15,9 +15,11 @@ export class GIGeomTimeStamp {
         this._geom_maps = geom_arrays;
     }
     /**
-     * Update time stamp of an object.
-     * If the input entity is not an object, then objects will be retrieved.
-     * @param point_i
+     * Update time stamp of an object (point, pline, pgon)
+     * If the input entity is a topo entity, then objects will be retrieved.
+     * (Does not work with posis.)
+     * @param ent_type
+     * @param ent_i
      */
     public updateObjsTs(ent_type: EEntType, ent_i: number): void {
         const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
@@ -46,9 +48,6 @@ export class GIGeomTimeStamp {
                 // get the topo object
                 const [ent2_type, ent2_i]: TEntTypeIdx = this._geom.query.getTopoObj(ent_type, ent_i);
                 switch (ent2_type) {
-                    case EEntType.POSI:
-                        this._geom_maps.posis_ts.set(ent2_i, ts);
-                        return;
                     case EEntType.POINT:
                         this._geom_maps.points_ts.set(ent2_i, ts);
                         return;
@@ -182,6 +181,26 @@ export class GIGeomTimeStamp {
                 return;
             default:
                 throw new Error('Get time stamp: Entity type not recognised.');
+        }
+    }
+    /**
+     * Check that the number of time stamps are correct.
+     */
+    public checkTimeStamps() {
+        if (this._geom_maps.up_posis_verts.size !== this._geom_maps.posis_ts.size) {
+            throw new Error('Incorrent number of time stamps for posis.');
+        }
+        if (this._geom_maps.dn_points_verts.size !== this._geom_maps.points_ts.size) {
+            throw new Error('Incorrent number of time stamps for points.');
+        }
+        if (this._geom_maps.dn_plines_wires.size !== this._geom_maps.plines_ts.size) {
+            throw new Error('Incorrent number of time stamps for plines.');
+        }
+        if (this._geom_maps.dn_pgons_faces.size !== this._geom_maps.pgons_ts.size) {
+            throw new Error('Incorrent number of time stamps for pgons.');
+        }
+        if (this._geom_maps.up_colls_colls.size !== this._geom_maps.colls_ts.size) {
+            throw new Error('Incorrent number of time stamps for colls.');
         }
     }
 }

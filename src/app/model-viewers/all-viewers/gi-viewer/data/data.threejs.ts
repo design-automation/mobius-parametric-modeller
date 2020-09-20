@@ -579,73 +579,71 @@ export class DataThreejs extends DataThreejsLookAt {
         if (!labels || !isArray(labels) || labels.length === 0) {
             return;
         }
-        const loader = new THREE.FontLoader();
-        loader.load( 'assets/fonts/helvetiker_regular.typeface.json', font => {
-            const matLite = new THREE.MeshBasicMaterial( {
-                transparent: false,
-                side: THREE.DoubleSide,
-                vertexColors: THREE.VertexColors
-            } );
-            const shapes = [];
 
-            const fromVec = new THREE.Vector3(0, 0, 1);
-            const checkVecFrom = new THREE.Vector3(1, 0, 0);
+        const matLite = new THREE.MeshBasicMaterial( {
+            transparent: false,
+            side: THREE.DoubleSide,
+            vertexColors: THREE.VertexColors
+        } );
+        const shapes = [];
 
-            for (const label of labels) {
-                const labelText = label.text;
-                const labelOrient = label.position || label.location;
-                if (!labelText || !labelOrient || !isArray(labelOrient)) { continue; }
-                const labelSize = label.size || 20;
+        const fromVec = new THREE.Vector3(0, 0, 1);
+        const checkVecFrom = new THREE.Vector3(1, 0, 0);
 
-                const shape = font.generateShapes( labelText, labelSize , 1);
-                const geom = new THREE.ShapeBufferGeometry(shape);
+        for (const label of labels) {
+            const labelText = label.text;
+            const labelOrient = label.position || label.location;
+            if (!labelText || !labelOrient || !isArray(labelOrient)) { continue; }
+            const labelSize = label.size || 20;
 
-                let labelPos = labelOrient[0];
+            const shape = this._text_font.generateShapes( labelText, labelSize , 1);
+            const geom = new THREE.ShapeBufferGeometry(shape);
 
-                if (!isArray(labelPos)) {
-                    labelPos = labelOrient;
-                } else {
-                    let toVec = new THREE.Vector3(...labelOrient[1]);
-                    const pVec2 = new THREE.Vector3(...labelOrient[2]);
-                    toVec = toVec.cross(pVec2).normalize();
+            let labelPos = labelOrient[0];
 
-                    if (labelOrient[1][0] !== 0 || labelOrient[1][1] !== 0) {
-                        const checkVecTo = new THREE.Vector3(labelOrient[1][0], labelOrient[1][1], 0).normalize();
-                        const rotateQuat = new THREE.Quaternion();
-                        rotateQuat.setFromUnitVectors(checkVecFrom, checkVecTo);
-                        const rotateMat = new THREE.Matrix4(); // create one and reuse it
-                        rotateMat.makeRotationFromQuaternion(rotateQuat);
-                        geom.applyMatrix(rotateMat);
-                    }
+            if (!isArray(labelPos)) {
+                labelPos = labelOrient;
+            } else {
+                let toVec = new THREE.Vector3(...labelOrient[1]);
+                const pVec2 = new THREE.Vector3(...labelOrient[2]);
+                toVec = toVec.cross(pVec2).normalize();
 
-                    const quaternion = new THREE.Quaternion();
-                    quaternion.setFromUnitVectors(fromVec, toVec);
-                    const matrix = new THREE.Matrix4(); // create one and reuse it
-                    matrix.makeRotationFromQuaternion(quaternion);
-                    geom.applyMatrix(matrix);
+                if (labelOrient[1][0] !== 0 || labelOrient[1][1] !== 0) {
+                    const checkVecTo = new THREE.Vector3(labelOrient[1][0], labelOrient[1][1], 0).normalize();
+                    const rotateQuat = new THREE.Quaternion();
+                    rotateQuat.setFromUnitVectors(checkVecFrom, checkVecTo);
+                    const rotateMat = new THREE.Matrix4(); // create one and reuse it
+                    rotateMat.makeRotationFromQuaternion(rotateQuat);
+                    geom.applyMatrix(rotateMat);
                 }
-                geom.translate( labelPos[0], labelPos[1], labelPos[2]);
 
-                let color = new THREE.Color(0);
-                if (label.color  && label.color.length === 3) {
-                    color = new THREE.Color(`rgb(${label.color[0]}, ${label.color[1]}, ${label.color[2]})`);
-                }
-                const colors_buffer = new THREE.Float32BufferAttribute(geom.attributes.position.count * 3, 3);
-                if (label.color && label.color.length === 3) {
-                    for (let i = 0; i < colors_buffer.count; i++) {
-                        colors_buffer.setXYZ(i, label.color[0], label.color[1], label.color[2]);
-                    }
-                }
-                geom.setAttribute('color', colors_buffer);
-                shapes.push(geom);
+                const quaternion = new THREE.Quaternion();
+                quaternion.setFromUnitVectors(fromVec, toVec);
+                const matrix = new THREE.Matrix4(); // create one and reuse it
+                matrix.makeRotationFromQuaternion(quaternion);
+                geom.applyMatrix(matrix);
             }
-            if (shapes.length === 0) { return; }
-            const mergedGeom = BufferGeometryUtils.mergeBufferGeometries(shapes);
-            const text = new THREE.Mesh(mergedGeom , matLite);
-            this.scene.add(text);
-            // this.renderer.render(this.scene, this.camera);
-            this.renderer.render(this.scene, this.camera);
-        });
+            geom.translate( labelPos[0], labelPos[1], labelPos[2]);
+
+            let color = new THREE.Color(0);
+            if (label.color  && label.color.length === 3) {
+                color = new THREE.Color(`rgb(${label.color[0]}, ${label.color[1]}, ${label.color[2]})`);
+            }
+            const colors_buffer = new THREE.Float32BufferAttribute(geom.attributes.position.count * 3, 3);
+            if (label.color && label.color.length === 3) {
+                for (let i = 0; i < colors_buffer.count; i++) {
+                    colors_buffer.setXYZ(i, label.color[0], label.color[1], label.color[2]);
+                }
+            }
+            geom.setAttribute('color', colors_buffer);
+            shapes.push(geom);
+        }
+        if (shapes.length === 0) { return; }
+        const mergedGeom = BufferGeometryUtils.mergeBufferGeometries(shapes);
+        const text = new THREE.Mesh(mergedGeom , matLite);
+        this.scene.add(text);
+        // this.renderer.render(this.scene, this.camera);
+        this.renderer.render(this.scene, this.camera);
     }
 
 

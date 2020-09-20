@@ -22,7 +22,7 @@ export class GIGeomTimeStamp {
      * @param ent_i
      */
     public updateObjsTs(ent_type: EEntType, ent_i: number): void {
-        const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
+        const ts: number = this._geom.modeldata.model.metadata.getTimeStamp();
         switch (ent_type) {
             case EEntType.POSI:
                 this._geom_maps.posis_ts.set(ent_i, ts);
@@ -66,7 +66,7 @@ export class GIGeomTimeStamp {
      * @param point_i
      */
     public updateEntTs(ent_type: EEntType, ent_i: number): void {
-        const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
+        const ts: number = this._geom.modeldata.model.metadata.getTimeStamp();
         switch (ent_type) {
             case EEntType.POSI:
                 this._geom_maps.posis_ts.set(ent_i, ts);
@@ -90,7 +90,7 @@ export class GIGeomTimeStamp {
      * @param map
      */
     public updateEntsTs(ent_type: EEntType, ents_i: number[]|Set<number>): void {
-        const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
+        const ts: number = this._geom.modeldata.model.metadata.getTimeStamp();
         switch (ent_type) {
             case EEntType.POSI:
                 ents_i.forEach( ent_i => this._geom_maps.posis_ts.set(ent_i, ts) );

@@ -29,7 +29,7 @@ export class GIGeomAdd {
         const posi_i: number = this._geom.modeldata.model.metadata.nextPosi();
         this._geom_maps.up_posis_verts.set(posi_i, []);
         // time stamp
-        const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
+        const ts: number = this._geom.modeldata.model.metadata.getTimeStamp();
         this._geom_maps.posis_ts.set(posi_i, ts);
         // return entity number
         return posi_i;
@@ -46,7 +46,7 @@ export class GIGeomAdd {
         this._geom_maps.dn_points_verts.set(point_i, vert_i);
         this._geom_maps.up_verts_points.set(vert_i, point_i);
         // time stamp
-        const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
+        const ts: number = this._geom.modeldata.model.metadata.getTimeStamp();
         this._geom_maps.posis_ts.set(posi_i, ts);
         // return entity number
         return point_i;
@@ -71,7 +71,7 @@ export class GIGeomAdd {
         this._geom_maps.dn_plines_wires.set(pline_i, wire_i);
         this._geom_maps.up_wires_plines.set(wire_i, pline_i);
         // time stamp
-        const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
+        const ts: number = this._geom.modeldata.model.metadata.getTimeStamp();
         this._geom_maps.plines_ts.set(pline_i, ts);
         // return entity number
         return pline_i;
@@ -114,7 +114,7 @@ export class GIGeomAdd {
         this._geom_maps.dn_pgons_faces.set(pgon_i, face_i);
         this._geom_maps.up_faces_pgons.set(face_i, pgon_i);
         // time stamp
-        const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
+        const ts: number = this._geom.modeldata.model.metadata.getTimeStamp();
         this._geom_maps.pgons_ts.set(pgon_i, ts);
         // return entity number
         return pgon_i;
@@ -156,7 +156,7 @@ export class GIGeomAdd {
             }
         }
         // time stamp
-        const ts: number = this._geom.modeldata.model.metadata.nextTimeStamp();
+        const ts: number = this._geom.modeldata.model.metadata.getTimeStamp();
         this._geom_maps.colls_ts.set(coll_i, ts);
         // return entity number
         return coll_i;

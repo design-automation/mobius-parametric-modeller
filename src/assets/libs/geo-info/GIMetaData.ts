@@ -175,6 +175,12 @@ export class GIMetaData {
         this._data.time_stamp += 1;
         return ts;
     }
+    // get next time stamp
+    public getTimeStamp(): number {
+        // const ts: number = this._data.time_stamp;
+        // this._data.time_stamp += 1;
+        return this._data.time_stamp;
+    }
     // get next index
     public nextPosi(): number {
         const index: number = this._data.posi_count;

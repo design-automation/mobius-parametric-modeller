@@ -24,7 +24,8 @@ export function __new__(): GIModel {
  * @param model The model to preprocess.
  */
 export function __preprocess__(__model__: GIModel): void {
-    // TODO
+    const time_stamp = __model__.metadata.nextTimeStamp();
+    console.log("Time stamp = ", time_stamp);
 }
 //  ===============================================================================================
 /**

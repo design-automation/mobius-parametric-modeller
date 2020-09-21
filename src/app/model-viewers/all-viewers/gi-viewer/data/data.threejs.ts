@@ -80,6 +80,7 @@ export class DataThreejs extends DataThreejsLookAt {
             this.scene.remove(this.scene.children[0]);
         }
         this.scene_objs = [];
+        // this._buffer_geoms = [];
 
         document.querySelectorAll('[id^=textLabel_]').forEach(value => {
             container.removeChild(value);
@@ -122,6 +123,7 @@ export class DataThreejs extends DataThreejsLookAt {
         this.point_select_map = threejs_data.point_select_map;
         this.posis_map = threejs_data.posis_map;
         this.vertex_map = threejs_data.vertex_map;
+        this.positions = [];
 
         const material_groups = threejs_data.material_groups;
         const materials = threejs_data.materials;
@@ -437,7 +439,7 @@ export class DataThreejs extends DataThreejsLookAt {
         material_groups.forEach(element => {
             geom.addGroup(element[0], element[1], element[2]);
         });
-        this._buffer_geoms.push(geom);
+        // this._buffer_geoms.push(geom);
 
         const material_arr = [];
         let index = 0;
@@ -512,7 +514,7 @@ export class DataThreejs extends DataThreejsLookAt {
         geom.setIndex(lines_i);
         geom.setAttribute('position', posis_buffer);
         geom.setAttribute('color', color_buffer);
-        this._buffer_geoms.push(geom);
+        // this._buffer_geoms.push(geom);
 
         // // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
         const mat = new THREE.LineDashedMaterial({
@@ -528,7 +530,7 @@ export class DataThreejs extends DataThreejsLookAt {
         geom_white.setIndex(white_line_i);
         geom_white.setAttribute('position', posis_buffer);
         geom_white.setAttribute('color', color_buffer);
-        this._buffer_geoms.push(geom_white);
+        // this._buffer_geoms.push(geom_white);
 
         // // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
         const mat_white = new THREE.LineDashedMaterial({
@@ -556,7 +558,7 @@ export class DataThreejs extends DataThreejsLookAt {
         geom.setAttribute('position', posis_buffer);
         geom.setAttribute('color', colors_buffer);
 
-        this._buffer_geoms.push(geom);
+        // this._buffer_geoms.push(geom);
         // geom.computeBoundingSphere();
         const rgb = `rgb(${color.toString()})`;
         const mat = new THREE.PointsMaterial({
@@ -659,7 +661,7 @@ export class DataThreejs extends DataThreejsLookAt {
         geom.setIndex(points_i);
         // geom.addAttribute('position', posis_buffer);
         geom.setAttribute('position', posis_buffer);
-        this._buffer_geoms.push(geom);
+        // this._buffer_geoms.push(geom);
         // geom.computeBoundingSphere();
         const mat = new THREE.PointsMaterial({
             color: new THREE.Color(parseInt(color.replace('#', '0x'), 16)),

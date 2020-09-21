@@ -91,7 +91,7 @@ export class DataThreejsBase {
     protected origin: THREE.Vector3 = new THREE.Vector3(0, 1, 0);
 
     // BufferGeoms
-    protected _buffer_geoms: THREE.BufferGeometry[] = [];
+    // protected _buffer_geoms: THREE.BufferGeometry[] = [];
     protected _all_objs_sphere: THREE.Sphere;
 
     protected _text_font: THREE.Font;

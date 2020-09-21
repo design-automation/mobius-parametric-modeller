@@ -92,19 +92,9 @@ export class GIMetaData {
      * The attribute indexes in model data will also be renumbered.
      * @param data
      */
-    public mergeJSONData(data: IModelJSON): void {
+    public  mergeJSONData(data: IModelJSON): void {
         const meta_data: IMetaJSONData = data.meta_data;
         const model_data: IModelJSONData = data.model_data;
-        this._data.posi_count += meta_data.posi_count;
-        this._data.vert_count += meta_data.vert_count;
-        this._data.tri_count += meta_data.tri_count;
-        this._data.edge_count += meta_data.edge_count;
-        this._data.wire_count += meta_data.wire_count;
-        this._data.face_count += meta_data.face_count;
-        this._data.point_count += meta_data.point_count;
-        this._data.pline_count += meta_data.pline_count;
-        this._data.pgon_count += meta_data.pgon_count;
-        this._data.coll_count += meta_data.coll_count;
         // update the attribute values in this meta
         // create the renumbering maps
         const attrib_vals: IAttribJSONValues = meta_data.attrib_values;
@@ -287,6 +277,16 @@ export class GIMetaData {
     // create string for debugging
     public toDebugStr(): string {
         return '' +
+            'posi_count = ' + this._data.posi_count + '\n' +
+            'vert_count = ' + this._data.vert_count + '\n' +
+            'tri_count = ' + this._data.tri_count + '\n' +
+            'edge_count = ' + this._data.edge_count + '\n' +
+            'wire_count = ' + this._data.wire_count + '\n' +
+            'face_count = ' + this._data.face_count + '\n' +
+            'point_count = ' + this._data.point_count + '\n' +
+            'pline_count = ' + this._data.pline_count + '\n' +
+            'pgon_count = ' + this._data.pgon_count + '\n' +
+            'coll_count = ' + this._data.coll_count + '\n' +
             'number: ' +
             JSON.stringify(this._data.attrib_values['number'][0]) +
             JSON.stringify(Array.from(this._data.attrib_values['number'][1])) +

@@ -29,6 +29,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     // notificationTrigger = true;
 
     disableInput = false;
+    keyboardSub = null;
     @ViewChild('editorSplit', { static: true }) editorSplit: SplitComponent;
 
     // private copyCheck = true;
@@ -39,7 +40,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 private keyboardService: KeyboardService,
                 private router: Router) {
         new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url);
-        this.keyboardService.shiftKeyPushed$.subscribe(() => {
+        this.keyboardSub = this.keyboardService.shiftKeyPushed$.subscribe(() => {
             this.disableInput = true;
         });
         this.ctx.font = 'bold 12px arial';
@@ -54,6 +55,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
     ngOnDestroy() {
         this.ctx = null;
+        this.keyboardSub.unsubscribe();
     }
 
     viewerData() {

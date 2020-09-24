@@ -16,12 +16,6 @@ export class GIGeomThreejs {
         this._geom = geom;
         this._geom_maps = geom_arrays;
     }
-    // ============================================================================
-    // ThreeJS
-    // Get arrays for threejs, these retrun arrays of indexes to positions
-    // For a method to get the array of positions, see the attrib class
-    // getSeqCoords()
-    // ============================================================================
     /**
      * Returns that data required for threejs triangles.
      * 0) the vertices, as a flat array

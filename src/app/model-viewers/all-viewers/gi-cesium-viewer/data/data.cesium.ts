@@ -142,7 +142,9 @@ export class DataCesium {
         // change camera controlling action: left mouse drag for rotating, right mouse drag for panning, wheel for zooming
         const cameraController = this._viewer.scene.screenSpaceCameraController;
 
-        cameraController.rotateEventTypes = Cesium.CameraEventType.RIGHT_DRAG;
+        cameraController.rotateEventTypes = [Cesium.CameraEventType.RIGHT_DRAG,
+                                            {'eventType': Cesium.CameraEventType.LEFT_DRAG,
+                                             'modifier': Cesium.KeyboardEventModifier.CTRL}];
         cameraController.tiltEventTypes  = Cesium.CameraEventType.LEFT_DRAG;
         cameraController.translateEventTypes = Cesium.CameraEventType.LEFT_DRAG;
         // cameraController.lookEventTypes = [Cesium.CameraEventType.RIGHT_DRAG,

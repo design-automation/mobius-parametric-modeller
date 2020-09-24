@@ -48,7 +48,7 @@ export class GIGeomThreejs {
         const materials: object[] = [this._getPgonMaterial( mat_front ), this._getPgonMaterial( mat_back )];
         const material_names:  string[] = ['default_front', 'default_back'];
         // get the material attribute from polygons
-        const material_attrib: GIAttribMap = this._geom.modeldata.attribs._attribs_maps.pg.get('material');
+        const pgon_material_attrib: GIAttribMap = this._geom.modeldata.attribs._attribs_maps.pg.get('material');
         // loop through all tris
         this._geom_maps.dn_tris_verts.forEach( (tri_verts_i, tri_i) => {
             // get the verts, face and the polygon for this tri
@@ -57,8 +57,8 @@ export class GIGeomThreejs {
             const tri_face_i: number = this._geom_maps.up_tris_faces.get(tri_i);
             const tri_pgon_i: number = this._geom_maps.up_faces_pgons.get(tri_face_i);
             const tri_mat_indices: number[] = [];
-            if (material_attrib !== undefined) {
-                const mat_attrib_val: string|string[] = material_attrib.getEntVal(tri_pgon_i) as string|string[];
+            if (pgon_material_attrib !== undefined) {
+                const mat_attrib_val: string|string[] = pgon_material_attrib.getEntVal(tri_pgon_i) as string|string[];
                 const pgon_mat_names: string[] = (Array.isArray(mat_attrib_val)) ? mat_attrib_val : [mat_attrib_val];
                 for (const pgon_mat_name of pgon_mat_names) {
                     let pgon_mat_index: number = material_names.indexOf(pgon_mat_name);
@@ -86,7 +86,9 @@ export class GIGeomThreejs {
         });
         // sort that data_array, so that we get triangls sorted according to their materials
         // for each entry in the data_array, the first item is the material indices, so that they are sorted correctly
-        tri_data_arrs.sort();
+        if (pgon_material_attrib !== undefined) {
+            tri_data_arrs.sort();
+        }
         // loop through the sorted array and create the tris and groups data for threejs
         const tris_verts_i: TTri[] = [];
         const tri_select_map: Map<number, number> = new Map();
@@ -187,7 +189,9 @@ export class GIGeomThreejs {
         });
         // sort that data_array, so that we get edges sorted according to their materials
         // for each entry in the data_array, the first item is the material indices, so that they are sorted correctly
-        edge_data_arrs.sort();
+        if (pline_material_attrib !== undefined) {
+            edge_data_arrs.sort();
+        }
         // loop through the sorted array and create the edge and groups data for threejs
         const edges_verts_i: TEdge[] = [];
         const edge_select_map: Map<number, number> = new Map();

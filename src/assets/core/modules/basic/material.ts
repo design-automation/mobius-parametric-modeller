@@ -117,7 +117,7 @@ export function Set(__model__: GIModel, entities: TId|TId[], material: string|st
         if (__model__.debug) {
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
                 [ID.isID, ID.isIDL, ID.isIDLL], null) as TEntTypeIdx[];
-            checkArgs(fn_name, 'material', material, [ArgCh.isStr]);
+            checkArgs(fn_name, 'material', material, [ArgCh.isStr, ArgCh.isStrL]);
         } else {
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
@@ -209,14 +209,14 @@ function _meshMaterial(__model__: GIModel, ents_arr: TEntTypeIdx[], material: st
  * @param select_vert_colors Enum, select whether to use vertex colors if they exist.
  * @returns void
  */
-export function Line(__model__: GIModel, name: string,
+export function LineMat(__model__: GIModel, name: string,
             color: Txyz,
             dash_gap_scale: number|number[],
             select_vert_colors: _Ecolors
         ): void {
     // --- Error Check ---
     if (__model__.debug) {
-        const fn_name = 'material.Line';
+        const fn_name = 'material.LineMat';
         checkArgs(fn_name, 'name', name, [ArgCh.isStr]);
         checkArgs(fn_name, 'color', color, [ArgCh.isColor]);
         checkArgs(fn_name, 'dash_gap_scale', dash_gap_scale, [ArgCh.isNull, ArgCh.isNum, ArgCh.isNumL]);
@@ -280,7 +280,7 @@ export function Line(__model__: GIModel, name: string,
  * @param select_vert_colors Enum, select whether to use vertex colors if they exist.
  * @returns void
  */
-export function BasicMesh(__model__: GIModel, name: string,
+export function MeshMat(__model__: GIModel, name: string,
             color: Txyz,
             opacity: number,
             select_side: _ESide,
@@ -288,7 +288,7 @@ export function BasicMesh(__model__: GIModel, name: string,
         ): void {
     // --- Error Check ---
     if (__model__.debug) {
-        const fn_name = 'material.BasicMesh';
+        const fn_name = 'material.MeshMat';
         checkArgs(fn_name, 'name', name, [ArgCh.isStr]);
         checkArgs(fn_name, 'color', color, [ArgCh.isColor]);
         checkArgs(fn_name, 'opacity', opacity, [ArgCh.isNum01]);

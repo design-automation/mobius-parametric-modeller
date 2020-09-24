@@ -3,6 +3,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { IThreeJS } from '@libs/geo-info/ThreejsJSON';
 import { EEntTypeStr, EEntType } from '@libs/geo-info/common';
 import { Vector3 } from 'three';
+import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
 import { DataService } from '@services';
 import { Vector } from '@assets/core/modules/basic/calc';
 import { ISettings } from './data.threejsSettings';
@@ -101,6 +102,7 @@ export class DataThreejs extends DataThreejsLookAt {
         this._addEnv();
 
         setTimeout(() => {
+            // this.exportGLTF(this.scene);
             let old = document.getElementById('hud');
             if (old) {
                 container.removeChild(old);
@@ -909,6 +911,32 @@ export class DataThreejs extends DataThreejsLookAt {
         }
     }
 
+    exportGLTF( input ) {
+        let i = 0;
+        input.children.splice(3, 1);
+        input.children.splice(0, 1);
+        while (i < input.children.length) {
+            console.log(input.children[i])
+            if (input.children[i].name !== '' || input.children[i].type === 'AmbientLight' ||
+            input.children[i].type === 'HemisphereLight'
+            // || input.children[i].type === 'LineSegments'
+            ) {
+                input.children.splice(i, 1);
+                continue;
+            }
+            i++;
+        }
+        const gltfExporter = new GLTFExporter();
+        const options = {
+            trs: false,
+            onlyVisible: false
+        };
+        gltfExporter.parse( input, function ( result ) {
+                const output = JSON.stringify( result, null, 2 );
+                console.log( output );
+        }, options );
+    }
+
 
     // ============================================================================
     // ============================================================================
@@ -1032,5 +1060,6 @@ export class DataThreejs extends DataThreejsLookAt {
     //     }
     //     return true;
     // }
+
 }
 

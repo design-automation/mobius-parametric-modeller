@@ -137,7 +137,7 @@ export async function Import(__model__: GIModel, input_data: string, data_format
     }
     return idsMake([EEntType.COLL, coll_i]) as TId;
 }
-function _importGI(__model__: GIModel, json_str: string): number {
+export function _importGI(__model__: GIModel, json_str: string): number {
     // get number of ents before merge
     const num_ents_before: number[] = __model__.modeldata.geom.query.numEntsAll();
     // import

@@ -134,13 +134,13 @@ export class SaveJavascriptComponent {
             ` * e.g.:\n` +
             ` * const ${funcName} = require('./${funcName}.js').${funcName}\n` +
             ` * const module = require('gi-module')\n` +
-            ` * const result = ${funcName}(module, start_input_1, start_input_2, ...);\n *\n` +
+            ` * const result = await ${funcName}(module, start_input_1, start_input_2, ...);\n *\n` +
             ` * returns: a json object:\n` +
             ` *   _ result.model -> gi model of the flowchart\n` +
             ` *   _ result.result -> returned output of the flowchart, if the flowchart does not return any value,` +
             ` result.result is the model of the flowchart\n */\n\n` +
             argString.replace(/\\/g, '\\\\') +  '\n\n' +
-            `function ${funcName}(__modules__` + func.args.map(arg => ', ' + arg.name).join('') + `) {\n\n` +
+            `async function ${funcName}(__modules__` + func.args.map(arg => ', ' + arg.name).join('') + `) {\n\n` +
             `__debug__ = ${this.dataService.mobiusSettings.debug};\n` +
             `__model__ = null;\n` +
             '/** * **/' +
@@ -152,12 +152,12 @@ export class SaveJavascriptComponent {
             `\n\nconst __params__ = {};\n` +
             `__params__["model"] = __modules__._model.__new__();\n` +
             `if (__model__) {\n` +
-            `__params__["model"].setModelDataJSONStr(__model__)\n` +
+            `__modules__.io._importGI(__params__["model"], __model__);\n` +
             `}\n` +
             `__params__["model"].debug = __debug__;\n` +
             `__params__["console"] = [];\n` +
             `__params__["modules"] = __modules__;\n` +
-            `const result = exec_${funcName}(__params__` +
+            `const result = await exec_${funcName}(__params__` +
             func.args.map(arg => ', ' + arg.name).join('') +
             `);\n` +
             `if (result === __params__.model) { return { "model": __params__.model, "result": null };}\n` +

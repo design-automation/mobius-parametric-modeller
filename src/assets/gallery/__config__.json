@@ -24,7 +24,8 @@
                 "Isovist_T_shapes.mob",
                 "Proximity_Analysis.mob",
                 "Ray_casting.mob",
-                "Sky_and_sun_exposure.mob"
+                "Sky_and_sun_exposure.mob",
+                "Wind_paths.mob"
             ],
             "link": "/assets/gallery/analysis_examples/"
         },

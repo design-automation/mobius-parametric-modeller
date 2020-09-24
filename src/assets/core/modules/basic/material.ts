@@ -1,7 +1,6 @@
 /**
  * The `material` module has functions for defining materials.
  * The material definitions are saved as attributes at the model level.
- * More advanced materials can be created.
  * For more informtion, see the threejs docs: https://threejs.org/
  */
 
@@ -345,7 +344,7 @@ export function Glass(__model__: GIModel, name: string, opacity: number): void {
 // ================================================================================================
 /**
  * Creates a Lambert material and saves it in the model attributes.
- * If a Basic material with the same name already exits, these settings will be added to the basic material.
+ * If a material with the same name already exits, these settings will be added to the existing material.
  * ~
  * [See the threejs docs](https://threejs.org/docs/#api/en/materials/MeshLambertMaterial)
  * ~
@@ -374,7 +373,7 @@ export function Lambert(__model__: GIModel, name: string, emissive: Txyz): void 
 // ================================================================================================
 /**
  * Creates a Phong material and saves it in the model attributes.
- * If a Basic material with the same name already exits, these settings will be added to the basic material.
+ * If a material with the same name already exits, these settings will be added to the existing material.
  * ~
  * [See the threejs docs](https://threejs.org/docs/#api/en/materials/MeshPhongMaterial)
  * ~
@@ -416,7 +415,7 @@ export function Phong(__model__: GIModel, name: string,
 // ================================================================================================
 /**
  * Creates a Standard material and saves it in the model attributes.
- * If a Basic material with the same name already exits, these settings will be added to the basic material.
+ * If a material with the same name already exits, these settings will be added to the existing material.
  * ~
  * [See the threejs docs](https://threejs.org/docs/#api/en/materials/MeshStandardMaterial)
  * ~
@@ -459,7 +458,7 @@ export function Standard(__model__: GIModel, name: string,
 // ================================================================================================
 /**
  * Creates a Physical material and saves it in the model attributes.
- * If a Basic material with the same name already exits, these settings will be added to the basic material.
+ * If a material with the same name already exits, these settings will be added to the existing material.
  * ~
  * [See the threejs docs](https://threejs.org/docs/#api/en/materials/MeshPhysicalMaterial)
  * ~

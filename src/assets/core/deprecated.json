@@ -124,7 +124,7 @@
         },
         "new_func": {
             "module": "material",
-            "name": "Basic",
+            "name": "BasicMesh",
             "replace": {
                 "color": "colour",
                 "select_vert_colors": "select_vert_colours"

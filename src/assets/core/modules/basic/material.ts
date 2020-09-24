@@ -130,7 +130,7 @@ export function Set(__model__: GIModel, entities: TId|TId[], material: string|st
         } else {
             material_dict = __model__.modeldata.attribs.query.getModelAttribVal(material as string) as object;
         }
-        if (material_dict === undefined) {
+        if (!material_dict) {
             throw new Error('Material does not exist: ' + material);
         }
         const material_type = material_dict['type'];

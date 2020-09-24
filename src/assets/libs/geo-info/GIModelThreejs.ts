@@ -40,7 +40,7 @@ export class GIModelThreejs {
         // get posi indices
         const posis_indices: number[] = Array.from(posis_map.values());
         // get the data for triangles
-        const [tris_verts_i, triangle_select_map, pgon_materials, pgon_material_groups]:
+        const [tris_verts_i, tri_select_map, pgon_materials, pgon_material_groups]:
             [number[], Map<number, number>, object[], [number, number, number][]] = this._modeldata.geom.threejs.get3jsTris(vertex_map);
         // get the data for edges
         const [edges_verts_i, edge_select_map, pline_materials, pline_material_groups]:
@@ -52,8 +52,8 @@ export class GIModelThreejs {
             posis_xyz: posis_xyz,
             posis_indices: posis_indices,
             posis_map: posis_map,
-            vertex_xyz: vertex_xyz,
-            vertex_map: vertex_map,
+            verts_xyz: vertex_xyz,
+            verts_map: vertex_map,
             normals: normals_values,
             colors: colors_values,
             point_indices: points_verts_i,
@@ -62,8 +62,8 @@ export class GIModelThreejs {
             edge_select_map: edge_select_map,
             white_edge_indices: [], // TODO remove
             white_edge_select_map: new Map(), // TODO remove
-            triangle_indices: tris_verts_i,
-            triangle_select_map: triangle_select_map,
+            tri_indices: tris_verts_i,
+            tri_select_map: tri_select_map,
             pline_materials: pline_materials,
             pline_material_groups: pline_material_groups,
             pgon_materials: pgon_materials,

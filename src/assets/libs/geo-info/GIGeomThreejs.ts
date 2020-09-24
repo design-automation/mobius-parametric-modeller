@@ -251,7 +251,7 @@ export class GIGeomThreejs {
      * Create a threejs material
      * @param settings
      */
-    private _convertMatGroups(mat_groups_map: Map<number, [number, number][]>):[number, number, number][] {
+    private _convertMatGroups(mat_groups_map: Map<number, [number, number][]>): [number, number, number][] {
         // convert the mat_groups_map into the format required for threejs
         // for each material group, we need an array [start, count, mat_index]
         const material_groups: [number, number, number][] = []; // [start, count, mat_index][]

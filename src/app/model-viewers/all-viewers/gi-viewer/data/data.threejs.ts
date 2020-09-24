@@ -117,12 +117,12 @@ export class DataThreejs extends DataThreejsLookAt {
     private _addGeom(model: GIModel): void {
         // Add geometry
         const threejs_data: IThreeJS = model.get3jsData();
-        this.tri_select_map = threejs_data.triangle_select_map;
+        this.tri_select_map = threejs_data.tri_select_map;
         this.edge_select_map = threejs_data.edge_select_map;
         this.white_edge_select_map = threejs_data.white_edge_select_map;
         this.point_select_map = threejs_data.point_select_map;
         this.posis_map = threejs_data.posis_map;
-        this.vertex_map = threejs_data.vertex_map;
+        this.vertex_map = threejs_data.verts_map;
         this.positions = [];
 
         // Get materials
@@ -132,11 +132,11 @@ export class DataThreejs extends DataThreejsLookAt {
         const pgon_materials = threejs_data.pgon_materials;
 
         // Create buffers that will be used by all geometry
-        const verts_xyz_buffer = new THREE.Float32BufferAttribute(threejs_data.vertex_xyz, 3);
+        const verts_xyz_buffer = new THREE.Float32BufferAttribute(threejs_data.verts_xyz, 3);
         const normals_buffer = new THREE.Float32BufferAttribute(threejs_data.normals, 3);
         const colors_buffer = new THREE.Float32BufferAttribute(threejs_data.colors, 3);
         const posis_xyz_buffer = new THREE.Float32BufferAttribute(threejs_data.posis_xyz, 3);
-        this._addTris(threejs_data.triangle_indices, verts_xyz_buffer, colors_buffer, normals_buffer, pgon_material_groups, pgon_materials);
+        this._addTris(threejs_data.tri_indices, verts_xyz_buffer, colors_buffer, normals_buffer, pgon_material_groups, pgon_materials);
         this._addLines(threejs_data.edge_indices, threejs_data.white_edge_indices, verts_xyz_buffer, colors_buffer, normals_buffer);
         this._addPoints(threejs_data.point_indices, verts_xyz_buffer, colors_buffer, [255, 255, 255], this.settings.positions.size + 1);
 

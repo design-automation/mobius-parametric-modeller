@@ -171,15 +171,18 @@ export class GIGeomThreejs {
                 let pline_mat_index = 0; // default black line
                 if (pline_material_attrib !== undefined) {
                     const pline_mat_name: string = pline_material_attrib.getEntVal(edge_pline_i) as string;
-                    pline_mat_index = material_names.indexOf(pline_mat_name);
-                    // add material
-                    if (pline_mat_index === -1) {
-                        const mat_settings_obj: object = this._geom.modeldata.attribs._attribs_maps.mo.get(pline_mat_name);
-                        if (mat_settings_obj !== undefined) {
-                            pline_mat_index = material_names.push(pline_mat_name) - 1;
-                            materials.push(this._getPlineMaterial(mat_settings_obj));
-                        } else {
-                            throw new Error('Material not found: ' + pline_mat_name);
+                    // check if the polyline has a material?
+                    if (pline_mat_name !== undefined) {
+                        pline_mat_index = material_names.indexOf(pline_mat_name);
+                        // add material
+                        if (pline_mat_index === -1) {
+                            const mat_settings_obj: object = this._geom.modeldata.attribs._attribs_maps.mo.get(pline_mat_name);
+                            if (mat_settings_obj !== undefined) {
+                                pline_mat_index = material_names.push(pline_mat_name) - 1;
+                                materials.push(this._getPlineMaterial(mat_settings_obj));
+                            } else {
+                                throw new Error('Material not found: ' + pline_mat_name);
+                            }
                         }
                     }
                 }

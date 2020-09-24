@@ -64,14 +64,24 @@ function _clampArr01(vals: number[]): void {
 function _getTjsColor(col: Txyz): THREE.Color {
     return new THREE.Color(col[0], col[1], col[2]);
 }
-
+enum _ELineMaterialType {
+    BASIC = 'LineBasicMaterial',
+    DASHED = 'LineDashedMaterial'
+}
+enum _EMeshMaterialType {
+    BASIC = 'MeshBasicMaterial',
+    LAMBERT = 'MeshLambertMaterial',
+    PHONG = 'MeshPhongMaterial',
+    STANDARD = 'MeshStandardMaterial',
+    PHYSICAL = 'MeshPhysicalMaterial'
+}
 function _setMaterialModelAttrib(__model__: GIModel, name: string, settings_obj: object) {
     // if the material already exists, then existing settings will be added
     // but new settings will take precedence
     if (__model__.modeldata.attribs.query.hasModelAttrib(name)) {
         const exist_settings_obj: object = __model__.modeldata.attribs.query.getModelAttribVal(name) as object;
         // check that the existing material is a Basic one
-        if (exist_settings_obj['type'] !== _EMaterialType.BASIC) {
+        if (exist_settings_obj['type'] !== _EMeshMaterialType.BASIC) {
             if (settings_obj['type'] !== exist_settings_obj['type']) {
                 throw new Error('Error creating material: non-basic material with this name already exists.');
             }
@@ -88,13 +98,6 @@ function _setMaterialModelAttrib(__model__: GIModel, name: string, settings_obj:
     // const settings_str: string = JSON.stringify(settings_obj);
     __model__.modeldata.attribs.add.setModelAttribVal(name, settings_obj);
 }
-enum _EMaterialType {
-    BASIC = 'MeshBasicMaterial',
-    LAMBERT = 'MeshLambertMaterial',
-    PHONG = 'MeshPhongMaterial',
-    STANDARD = 'MeshStandardMaterial',
-    PHYSICAL = 'MeshPhysicalMaterial'
-}
 // ================================================================================================
 /**
  * Sets material by creating a polygon attribute called 'material' and setting the value.
@@ -105,7 +108,7 @@ enum _EMaterialType {
  * @param material The name of the material.
  * @returns void
  */
-export function Set(__model__: GIModel, entities: TId|TId[], material: string): void {
+export function Set(__model__: GIModel, entities: TId|TId[], material: string|string[]): void {
     entities = arrMakeFlat(entities) as TId[];
     if (!isEmptyArr(entities)) {
         // --- Error Check ---
@@ -116,17 +119,56 @@ export function Set(__model__: GIModel, entities: TId|TId[], material: string): 
                 [ID.isID, ID.isIDL, ID.isIDLL], null) as TEntTypeIdx[];
             checkArgs(fn_name, 'material', material, [ArgCh.isStr]);
         } else {
-            // ents_arr = splitIDs(fn_name, 'entities', entities,
-            //     [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDListOfLists], null) as TEntTypeIdx[];
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
         // --- Error Check ---
-        _material(__model__, ents_arr, material);
+        let material_dict: object;
+        let is_list = false;
+        if (Array.isArray(material)) {
+            is_list = true;
+            material_dict = __model__.modeldata.attribs.query.getModelAttribVal(material[0] as string) as object;
+        } else {
+            material_dict = __model__.modeldata.attribs.query.getModelAttribVal(material as string) as object;
+        }
+        if (material_dict === undefined) {
+            throw new Error('Material does not exist: ' + material);
+        }
+        const material_type = material_dict['type'];
+        if (material_type === undefined) {
+            throw new Error('Material is not valid: ' + material_dict);
+        }
+        if (material_type === _ELineMaterialType.BASIC || material_type === _ELineMaterialType.DASHED) {
+            if (is_list) {
+                throw new Error('A line can only have a single material: ' + material_dict);
+            }
+            _lineMaterial(__model__, ents_arr, material as string);
+        } else {
+            if (is_list) {
+                if (material.length > 2) {
+                    throw new Error('A maximum of materials can be specified, for the front and back of the polygon : ' + material);
+                }
+            } else {
+                material = [material as string];
+            }
+            _meshMaterial(__model__, ents_arr, material as string[]);
+        }
     }
 }
-function _material(__model__: GIModel, ents_arr: TEntTypeIdx[], material: string): void {
+function _lineMaterial(__model__: GIModel, ents_arr: TEntTypeIdx[], material: string): void {
+    if (!__model__.modeldata.attribs.query.hasAttrib(EEntType.PLINE, EAttribNames.MATERIAL)) {
+        __model__.modeldata.attribs.add.addAttrib(EEntType.PLINE, EAttribNames.MATERIAL, EAttribDataTypeStrs.STRING);
+    }
+    for (const ent_arr of ents_arr) {
+        const [ent_type, ent_i]: [number, number] = ent_arr as TEntTypeIdx;
+        const plines_i: number[] = __model__.modeldata.geom.nav.navAnyToPline(ent_type, ent_i);
+        for (const pline_i of plines_i) {
+            __model__.modeldata.attribs.add.setEntAttribVal(EEntType.PLINE, pline_i, EAttribNames.MATERIAL, material);
+        }
+    }
+}
+function _meshMaterial(__model__: GIModel, ents_arr: TEntTypeIdx[], material: string[]): void {
     if (!__model__.modeldata.attribs.query.hasAttrib(EEntType.PGON, EAttribNames.MATERIAL)) {
-        __model__.modeldata.attribs.add.addAttrib(EEntType.PGON, EAttribNames.MATERIAL, EAttribDataTypeStrs.STRING);
+        __model__.modeldata.attribs.add.addAttrib(EEntType.PGON, EAttribNames.MATERIAL, EAttribDataTypeStrs.LIST);
     }
     for (const ent_arr of ents_arr) {
         const [ent_type, ent_i]: [number, number] = ent_arr as TEntTypeIdx;
@@ -135,6 +177,138 @@ function _material(__model__: GIModel, ents_arr: TEntTypeIdx[], material: string
             __model__.modeldata.attribs.add.setEntAttribVal(EEntType.PGON, pgon_i, EAttribNames.MATERIAL, material);
         }
     }
+}
+// ================================================================================================
+/**
+ * Creates a line material and saves it in the model attributes.
+ * ~
+ * [See the threejs docs](https://threejs.org/docs/#api/en/materials/LineBasicMaterial)
+ * [See the threejs docs](https://threejs.org/docs/#api/en/materials/LineDashedMaterial)
+ * ~
+ * The color of the material can either ignore or apply the vertex rgb colors.
+ * If 'apply' id selected, then the actual color will be a combination of the material color
+ * and the vertex colors, as specified by the a vertex attribute called 'rgb'.
+ * In such a case, if material color is set to white, then it will
+ * have no effect, and the color will be defined by the vertex [r,g,b] values.
+ * ~
+ * In order to assign a material to polylines in the model, a polyline attribute called 'material'.
+ * will be created. The value for each polyline must either be null, or must be a material name.
+ * ~
+ * For dashed lines, the 'dash_gap_scale' parameter can be set.
+ * - If 'dash_gap_scale' is null will result in a continouse line.
+ * - If 'dash_gap_scale' is a single number: dash = gap = dash_gap_scale, scale = 1.
+ * - If 'dash_gap_scale' is a list of two numbers: dash = dash_gap_scale[0], gap = dash_gap_scale[1], scale = 1.
+ * - If 'dash_gap_scale' is a list of three numbers: dash = dash_gap_scale[0], gap = dash_gap_scale[1], scale = dash_gap_scale[2].
+ * ~
+ * Due to limitations of the OpenGL Core Profile with the WebGL renderer on most platforms,
+ * line widths cannot be rendered. As a result, lines width will always be set to 1.
+ * ~
+ * @param name The name of the material.
+ * @param color The diffuse color, as [r, g, b] values between 0 and 1. White is [1, 1, 1].
+ * @param dash_gap_scale Size of the dash and gap, and a scale factor. (The gap and scale are optional.)
+ * @param select_vert_colors Enum, select whether to use vertex colors if they exist.
+ * @returns void
+ */
+export function Line(__model__: GIModel, name: string,
+            color: Txyz,
+            dash_gap_scale: number|number[],
+            select_vert_colors: _Ecolors
+        ): void {
+    // --- Error Check ---
+    if (__model__.debug) {
+        const fn_name = 'material.Line';
+        checkArgs(fn_name, 'name', name, [ArgCh.isStr]);
+        checkArgs(fn_name, 'color', color, [ArgCh.isColor]);
+        checkArgs(fn_name, 'dash_gap_scale', dash_gap_scale, [ArgCh.isNull, ArgCh.isNum, ArgCh.isNumL]);
+    }
+    // --- Error Check ---
+    const vert_colors: number = _convertSelectEcolorsToNum(select_vert_colors);
+    _clampArr01(color);
+
+    let settings_obj: object;
+    if (dash_gap_scale === null) {
+        settings_obj = {
+            // type: _ELineMaterialType.BASIC,
+            // color: _getTjsColor(color),
+            // vertexColors: vert_colors
+            type: _ELineMaterialType.DASHED,
+            color: _getTjsColor(color),
+            vertexColors: vert_colors,
+            dashSize: 0,
+            gapSize: 0,
+            scale: 1
+        };
+    } else {
+        dash_gap_scale = Array.isArray(dash_gap_scale) ? dash_gap_scale : [dash_gap_scale];
+        const dash = dash_gap_scale[0] === undefined ? 0 : dash_gap_scale[0];
+        const gap = dash_gap_scale[1] === undefined ? dash : dash_gap_scale[1];
+        const scale = dash_gap_scale[2] === undefined ? 1 : dash_gap_scale[2];
+        settings_obj = {
+            type: _ELineMaterialType.DASHED,
+            color: _getTjsColor(color),
+            vertexColors: vert_colors,
+            dashSize: dash,
+            gapSize: gap,
+            scale: scale
+        };
+    }
+    _setMaterialModelAttrib(__model__, name, settings_obj);
+}
+// ================================================================================================
+/**
+ * Creates a basic mesh material and saves it in the model attributes.
+ * ~
+ * [See the threejs docs](https://threejs.org/docs/#api/en/materials/MeshBasicMaterial)
+ * ~
+ * The color of the material can either ignore or apply the vertex rgb colors.
+ * If 'apply' id selected, then the actual color will be a combination of the material color
+ * and the vertex colors, as specified by the a vertex attribute called 'rgb'.
+ * In such a case, if material color is set to white, then it will
+ * have no effect, and the color will be defined by the vertex [r,g,b] values.
+ * ~
+ * Additional material properties can be set by calling the functions for the more advanced materials.
+ * These include LambertMaterial, PhongMaterial, StandardMaterial, and Physical Material.
+ * Each of these more advanced materials allows you to specify certain additional settings.
+ * ~
+ * In order to assign a material to polygons in the model, a polygon attribute called 'material'.
+ * needs to be created. The value for each polygon must either be null, or must be a material name.
+ * ~
+ * @param name The name of the material.
+ * @param color The diffuse color, as [r, g, b] values between 0 and 1. White is [1, 1, 1].
+ * @param opacity The opacity of the glass, between 0 (totally transparent) and 1 (totally opaque).
+ * @param select_side Enum, select front, back, or both.
+ * @param select_vert_colors Enum, select whether to use vertex colors if they exist.
+ * @returns void
+ */
+export function BasicMesh(__model__: GIModel, name: string,
+            color: Txyz,
+            opacity: number,
+            select_side: _ESide,
+            select_vert_colors: _Ecolors
+        ): void {
+    // --- Error Check ---
+    if (__model__.debug) {
+        const fn_name = 'material.BasicMesh';
+        checkArgs(fn_name, 'name', name, [ArgCh.isStr]);
+        checkArgs(fn_name, 'color', color, [ArgCh.isColor]);
+        checkArgs(fn_name, 'opacity', opacity, [ArgCh.isNum01]);
+    }
+    // --- Error Check ---
+    const side: number = _convertSelectESideToNum(select_side);
+    const vert_colors: number = _convertSelectEcolorsToNum(select_vert_colors);
+    opacity = _clamp01(opacity);
+    const transparent: boolean = opacity < 1;
+    _clampArr01(color);
+
+    const settings_obj = {
+        type: _EMeshMaterialType.BASIC,
+        side: side,
+        vertexColors: vert_colors,
+        opacity: opacity,
+        transparent: transparent,
+        color: _getTjsColor(color)
+    };
+    _setMaterialModelAttrib(__model__, name, settings_obj);
 }
 // ================================================================================================
 /**
@@ -158,70 +332,13 @@ export function Glass(__model__: GIModel, name: string, opacity: number): void {
     opacity = _clamp01(opacity);
     const transparent: boolean = opacity < 1;
     const settings_obj = {
-        type: _EMaterialType.PHONG,
+        type: _EMeshMaterialType.PHONG,
         opacity: opacity,
         transparent: transparent,
         shininess: 90,
         color: new THREE.Color(1, 1, 1),
         emissive: new THREE.Color(0, 0, 0),
         side: THREE.DoubleSide
-    };
-    _setMaterialModelAttrib(__model__, name, settings_obj);
-}
-
-// ================================================================================================
-/**
- * Creates a Basic material and saves it in the model attributes.
- * ~
- * [See the threejs docs](https://threejs.org/docs/#api/en/materials/MeshBasicMaterial)
- * ~
- * The color pf the material can either ignore or apply the vertex rgb colors.
- * If 'apply' id selected, then the actual color will be a combination of the material color
- * and the vertex colors, as specified by the a vertex attribute called 'rgb'.
- * In such a case, if material color is set to white, then it will
- * have no effect, and the color will be defined by the vertex [r,g,b] values.
- * ~
- * Additional material properties can be set by calling the functions for the more advanced materials.
- * These include LambertMaterial, PhongMaterial, StandardMaterial, and Physical Material.
- * Each of these more advanced materials allows you to specify certain additional settings.
- * ~
- * In order to assign a material to polygons in the model, a polygon attribute called 'material'.
- * needs to be created. The value for each polygon must either be null, or must be a material name.
- * ~
- * @param name The name of the material.
- * @param color The diffuse color, as [r, g, b] values between 0 and 1. White is [1, 1, 1].
- * @param opacity The opacity of the glass, between 0 (totally transparent) and 1 (totally opaque).
- * @param select_side Enum, select front, back, or both.
- * @param select_vert_colors Enum, select whether to use vertex colors if they exist.
- * @returns void
- */
-export function Basic(__model__: GIModel, name: string,
-            color: Txyz,
-            opacity: number,
-            select_side: _ESide,
-            select_vert_colors: _Ecolors
-        ): void {
-    // --- Error Check ---
-    if (__model__.debug) {
-        const fn_name = 'material.Basic';
-        checkArgs(fn_name, 'name', name, [ArgCh.isStr]);
-        checkArgs(fn_name, 'color', color, [ArgCh.isColor]);
-        checkArgs(fn_name, 'opacity', opacity, [ArgCh.isNum01]);
-    }
-    // --- Error Check ---
-    const side: number = _convertSelectESideToNum(select_side);
-    const vert_colors: number = _convertSelectEcolorsToNum(select_vert_colors);
-    opacity = _clamp01(opacity);
-    const transparent: boolean = opacity < 1;
-    _clampArr01(color);
-
-    const settings_obj = {
-        type: _EMaterialType.BASIC,
-        side: side,
-        vertexColors: vert_colors,
-        opacity: opacity,
-        transparent: transparent,
-        color: _getTjsColor(color)
     };
     _setMaterialModelAttrib(__model__, name, settings_obj);
 }
@@ -249,7 +366,7 @@ export function Lambert(__model__: GIModel, name: string, emissive: Txyz): void 
     // --- Error Check ---
     _clampArr01(emissive);
     const settings_obj = {
-        type: _EMaterialType.LAMBERT,
+        type: _EMeshMaterialType.LAMBERT,
         emissive: _getTjsColor(emissive)
     };
     _setMaterialModelAttrib(__model__, name, settings_obj);
@@ -289,7 +406,7 @@ export function Phong(__model__: GIModel, name: string,
     shininess = Math.floor(_clamp0100(shininess));
 
     const settings_obj = {
-        type: _EMaterialType.PHONG,
+        type: _EMeshMaterialType.PHONG,
         emissive: _getTjsColor(emissive),
         specular: _getTjsColor(specular),
         shininess: shininess
@@ -332,7 +449,7 @@ export function Standard(__model__: GIModel, name: string,
     metalness = _clamp01(metalness);
 
     const settings_obj = {
-        type: _EMaterialType.STANDARD,
+        type: _EMeshMaterialType.STANDARD,
         emissive: _getTjsColor(emissive),
         roughness: roughness,
         metalness: metalness
@@ -378,7 +495,7 @@ export function Physical(__model__: GIModel, name: string,
     reflectivity = _clamp01(reflectivity);
 
     const settings_obj = {
-        type: _EMaterialType.PHYSICAL,
+        type: _EMeshMaterialType.PHYSICAL,
         emissive: _getTjsColor(emissive),
         roughness: roughness,
         metalness: metalness,

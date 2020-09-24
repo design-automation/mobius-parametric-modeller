@@ -203,5 +203,15 @@
                 "method": "'ps_average'"
             }
         }
+    },
+    {
+        "old_func": {
+            "module": "material",
+            "name": "Basic"
+        },
+        "new_func": {
+            "module": "material",
+            "name": "BasicMesh"
+        }
     }
 ]

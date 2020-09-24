@@ -124,7 +124,7 @@ export class AttributeComponent implements OnChanges {
     // }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['data'] && this.model) {
+        if (changes['model'] && this.model) {
             this.refreshTable();
         }
         if (changes['reset']) {

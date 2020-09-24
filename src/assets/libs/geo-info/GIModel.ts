@@ -99,7 +99,7 @@ export class GIModel {
      * Entity IDs will not change.
      */
     public clone(): GIModel {
-        console.log("CLONE");
+        // console.log("CLONE");
         const clone: GIModel = new GIModel();
         clone.metadata = this.metadata;
         clone.modeldata = this.modeldata.clone();
@@ -114,7 +114,7 @@ export class GIModel {
      * @param model_data The GI model.
      */
     public merge(model: GIModel): void {
-        console.log("MERGE");
+        // console.log("MERGE");
         this.modeldata.merge(model.modeldata);
     }
     /**

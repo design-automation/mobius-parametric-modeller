@@ -125,15 +125,18 @@ export class DataThreejs extends DataThreejsLookAt {
         this.vertex_map = threejs_data.vertex_map;
         this.positions = [];
 
-        const material_groups = threejs_data.material_groups;
-        const materials = threejs_data.materials;
+        // Get materials
+        const pline_material_groups = threejs_data.pline_material_groups;
+        const pline_materials = threejs_data.pline_materials;
+        const pgon_material_groups = threejs_data.pgon_material_groups;
+        const pgon_materials = threejs_data.pgon_materials;
 
         // Create buffers that will be used by all geometry
         const verts_xyz_buffer = new THREE.Float32BufferAttribute(threejs_data.vertex_xyz, 3);
         const normals_buffer = new THREE.Float32BufferAttribute(threejs_data.normals, 3);
         const colors_buffer = new THREE.Float32BufferAttribute(threejs_data.colors, 3);
         const posis_xyz_buffer = new THREE.Float32BufferAttribute(threejs_data.posis_xyz, 3);
-        this._addTris(threejs_data.triangle_indices, verts_xyz_buffer, colors_buffer, normals_buffer, material_groups, materials);
+        this._addTris(threejs_data.triangle_indices, verts_xyz_buffer, colors_buffer, normals_buffer, pgon_material_groups, pgon_materials);
         this._addLines(threejs_data.edge_indices, threejs_data.white_edge_indices, verts_xyz_buffer, colors_buffer, normals_buffer);
         this._addPoints(threejs_data.point_indices, verts_xyz_buffer, colors_buffer, [255, 255, 255], this.settings.positions.size + 1);
 

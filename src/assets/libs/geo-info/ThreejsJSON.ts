@@ -10,11 +10,13 @@ export interface IThreeJS {
     point_select_map: Map<number, number>;
     edge_indices: number[];
     edge_select_map: Map<number, number>;
-    white_edge_indices: number[];
-    white_edge_select_map: Map<number, number>;
+    white_edge_indices: number[]; // TODO remove
+    white_edge_select_map: Map<number, number>; // TODO remove
     triangle_indices: number[];
     triangle_select_map: Map<number, number>;
-    materials: object[];
-    material_groups: [number, number, number][];
+    pline_materials: object[];
+    pline_material_groups: [number, number, number][];
+    pgon_materials: object[];
+    pgon_material_groups: [number, number, number][];
 }
 

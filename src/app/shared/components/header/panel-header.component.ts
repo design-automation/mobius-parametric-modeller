@@ -448,7 +448,6 @@ export class PanelHeaderComponent implements OnDestroy {
 
     deleteBackup(event: MouseEvent, filecode: string) {
         event.stopPropagation();
-        console.log(this.selectedBackups)
         for (filecode of this.selectedBackups) {
             SaveFileComponent.deleteFile(filecode);
             const itemsString = localStorage.getItem('mobius_backup_list');

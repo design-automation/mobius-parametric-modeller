@@ -26,13 +26,12 @@ export class GIGeomQuery {
      * @param ent_type
      */
     public getEnts(ent_type: EEntType): number[] {
-        // get ents indices array from down arrays
         const geom_map_key: string = EEntStrToGeomMaps[ent_type];
+        // collections
+        if (ent_type === EEntType.COLL) { return Array.from(this._geom_maps[geom_map_key]); }
+        // get ents indices array from down arrays
         const geom_map: Map<number, any> = this._geom_maps[geom_map_key];
         return Array.from(geom_map.keys());
-        // const ents_i: number[] = [];
-        // geom_map.forEach( (_, i) => ents_i.push(i) );
-        // return ents_i;
     }
     /**
      * Returns the number of entities
@@ -59,15 +58,7 @@ export class GIGeomQuery {
      * @param index
      */
     public entExists(ent_type: EEntType, index: number): boolean {
-        // if (ent_type === EEntType.POSI) {
-        //     return this._geom_maps.up_posis_verts.has(index);
-        // }
         const geom_maps_key: string = EEntStrToGeomMaps[ent_type];
-
-        if (this._geom_maps[geom_maps_key] === undefined) {
-            console.log(">>>>", ent_type, index,  geom_maps_key)
-        }
-        
         return this._geom_maps[geom_maps_key].has(index);
     }
     /**
@@ -93,17 +84,17 @@ export class GIGeomQuery {
             const [ent_type, ent_i]: TEntTypeIdx = ent_arr as TEntTypeIdx;
             if (isColl(ent_type)) {
                 // get the descendants of this collection
-                const coll_and_desc_i: number[] = this._geom.query.getCollDescendents(ent_i);
+                const coll_and_desc_i: number[] = this._geom.modeldata.attribs.colls.getCollDescendents(ent_i);
                 coll_and_desc_i.splice(0, 0, ent_i);
                 // get all the objs
                 for (const one_coll_i of coll_and_desc_i) {
-                    for (const point_i of this._geom_maps.dn_colls_points.get(one_coll_i)) {
+                    for (const point_i of this._geom.modeldata.attribs.colls.getCollPoints(one_coll_i)) {
                         set_points_i.add(point_i);
                     }
-                    for (const pline_i of this._geom_maps.dn_colls_plines.get(one_coll_i)) {
+                    for (const pline_i of this._geom.modeldata.attribs.colls.getCollPlines(one_coll_i)) {
                         set_plines_i.add(pline_i);
                     }
-                    for (const pgon_i of this._geom_maps.dn_colls_pgons.get(one_coll_i)) {
+                    for (const pgon_i of this._geom.modeldata.attribs.colls.getCollPgons(one_coll_i)) {
                         set_pgons_i.add(pgon_i);
                     }
                     set_colls_i.add(one_coll_i);
@@ -466,78 +457,78 @@ export class GIGeomQuery {
     // ============================================================================
     // Collections
     // ============================================================================
-    /**
-     * Get the parent of a collection.
-     * @param coll_i
-     */
-    public getCollParent(coll_i: number): number {
-        return this._geom_maps.up_colls_colls.get(coll_i);
-    }
-    /**
-     * Get the children collections of a collection.
-     * @param coll_i
-     */
-    public getCollChildren(coll_i: number): number[] {
-        const children: number[] = [];
-        this._geom_maps.up_colls_colls.forEach( (coll2_parent, coll2_i) => {
-            if (coll2_parent === coll_i) {
-                children.push(coll2_i);
-            }
-        });
-        return children;
-    }
-    /**
-     * Get the ancestor collections of a collection.
-     * @param coll_i
-     */
-    public getCollAncestors(coll_i: number): number[] {
-        const ancestor_colls_i: number[] = [];
-        let parent_coll_i: number = this._geom_maps.up_colls_colls.get(coll_i);
-        while (parent_coll_i !== -1) {
-            ancestor_colls_i.push(parent_coll_i);
-            parent_coll_i = this._geom_maps.up_colls_colls.get(parent_coll_i);
-        }
-        return ancestor_colls_i;
-    }
-    /**
-     * Get the descendent collections of a collection.
-     * @param coll_i
-     */
-    public getCollDescendents(coll_i: number): number[] {
-        const descendent_colls_i: number[] = [];
-        this._geom_maps.up_colls_colls.forEach( (coll2_parent, coll2_i) => {
-            if (coll2_parent !== -1 && coll2_i !== coll_i) {
-                if (this.isCollDescendent(coll2_i, coll_i)) {
-                    descendent_colls_i.push(coll2_i);
-                }
-            }
-        });
-        return descendent_colls_i;
-    }
-    /**
-     * Returns true if the first coll is a descendent of the second coll.
-     * @param coll_i
-     */
-    public isCollDescendent(coll1_i: number, coll2_i: number): boolean {
-        let parent_coll_i: number = this._geom_maps.up_colls_colls.get(coll1_i);
-        while (parent_coll_i !== -1) {
-            if (parent_coll_i === coll2_i) { return true; }
-            parent_coll_i = this._geom_maps.up_colls_colls.get(parent_coll_i);
-        }
-        return false;
-    }
-    /**
-     * Returns true if the first coll is an ancestor of the second coll.
-     * @param coll_i
-     */
-    public isCollAncestor(coll1_i: number, coll2_i: number): boolean {
-        let parent_coll_i: number = this._geom_maps.up_colls_colls.get(coll2_i);
-        while (parent_coll_i !== -1) {
-            if (parent_coll_i === coll1_i) { return true; }
-            parent_coll_i = this._geom_maps.up_colls_colls.get(parent_coll_i);
-        }
-        return false;
-    }
+    // /**
+    //  * Get the parent of a collection.
+    //  * @param coll_i
+    //  */
+    // public getCollParent(coll_i: number): number {
+    //     return this._geom_maps.up_colls_colls.get(coll_i);
+    // }
+    // /**
+    //  * Get the children collections of a collection.
+    //  * @param coll_i
+    //  */
+    // public getCollChildren(coll_i: number): number[] {
+    //     const children: number[] = [];
+    //     this._geom_maps.up_colls_colls.forEach( (coll2_parent, coll2_i) => {
+    //         if (coll2_parent === coll_i) {
+    //             children.push(coll2_i);
+    //         }
+    //     });
+    //     return children;
+    // }
+    // /**
+    //  * Get the ancestor collections of a collection.
+    //  * @param coll_i
+    //  */
+    // public getCollAncestors(coll_i: number): number[] {
+    //     const ancestor_colls_i: number[] = [];
+    //     let parent_coll_i: number = this._geom_maps.up_colls_colls.get(coll_i);
+    //     while (parent_coll_i !== -1) {
+    //         ancestor_colls_i.push(parent_coll_i);
+    //         parent_coll_i = this._geom_maps.up_colls_colls.get(parent_coll_i);
+    //     }
+    //     return ancestor_colls_i;
+    // }
+    // /**
+    //  * Get the descendent collections of a collection.
+    //  * @param coll_i
+    //  */
+    // public getCollDescendents(coll_i: number): number[] {
+    //     const descendent_colls_i: number[] = [];
+    //     this._geom_maps.up_colls_colls.forEach( (coll2_parent, coll2_i) => {
+    //         if (coll2_parent !== -1 && coll2_i !== coll_i) {
+    //             if (this.isCollDescendent(coll2_i, coll_i)) {
+    //                 descendent_colls_i.push(coll2_i);
+    //             }
+    //         }
+    //     });
+    //     return descendent_colls_i;
+    // }
+    // /**
+    //  * Returns true if the first coll is a descendent of the second coll.
+    //  * @param coll_i
+    //  */
+    // public isCollDescendent(coll1_i: number, coll2_i: number): boolean {
+    //     let parent_coll_i: number = this._geom_maps.up_colls_colls.get(coll1_i);
+    //     while (parent_coll_i !== -1) {
+    //         if (parent_coll_i === coll2_i) { return true; }
+    //         parent_coll_i = this._geom_maps.up_colls_colls.get(parent_coll_i);
+    //     }
+    //     return false;
+    // }
+    // /**
+    //  * Returns true if the first coll is an ancestor of the second coll.
+    //  * @param coll_i
+    //  */
+    // public isCollAncestor(coll1_i: number, coll2_i: number): boolean {
+    //     let parent_coll_i: number = this._geom_maps.up_colls_colls.get(coll2_i);
+    //     while (parent_coll_i !== -1) {
+    //         if (parent_coll_i === coll1_i) { return true; }
+    //         parent_coll_i = this._geom_maps.up_colls_colls.get(parent_coll_i);
+    //     }
+    //     return false;
+    // }
     // ============================================================================
     // Faces
     // ============================================================================

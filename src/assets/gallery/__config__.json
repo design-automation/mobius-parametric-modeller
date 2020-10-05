@@ -25,16 +25,13 @@
                 "Proximity_Analysis.mob",
                 "Ray_casting.mob",
                 "Sky_and_sun_exposure.mob",
+                "View_tower_block_options_part_1.mob",
+                "View_tower_block_options_part_2.mob",
+                "Multiple_criteria_part_1.mob",
+                "Multiple_criteria_part_2.mob",
                 "Wind_paths.mob"
             ],
             "link": "/assets/gallery/analysis_examples/"
-        },
-        {
-            "name": "Law Curve Examples",
-            "files": [
-                "Example_1.mob"
-            ],
-            "link": "/assets/gallery/law_curve_examples/"
         },
         {
             "name": "Global Function Examples",
@@ -54,10 +51,10 @@
         {
             "name": "Import Examples",
             "files": [
-                "Import_data.mob&node=1",
-                "Import_and_export.mob&node=7"
+                "Import_geojson_map.mob&node=3",
+                "Import_geojson_data.mob&node=7"
             ],
-            "link": "/assets/gallery/basic_examples/"
+            "link": "/assets/gallery/import_examples/"
         },
         {
             "name": "Material Examples",

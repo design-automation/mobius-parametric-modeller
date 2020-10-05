@@ -121,14 +121,15 @@ function checkMissingProd(prodList: any[], fileVersion: string) {
                         break;
                     }
                 }
-                if (dpFn.old_func.name === dpFn.new_func.name && prod.argCount === (data.argCount + 1)
+                if (dpFn.old_func.module === dpFn.new_func.module
+                && dpFn.old_func.name === dpFn.new_func.name && prod.argCount === (data.argCount + 1)
                 && !dpFn.new_func.values && !dpFn.new_func.replace) { break; }
-
+                console.log(prod)
                 prod.meta = { module: data.module, name: data.name};
                 prod.argCount = data.argCount + 1;
-                let returnArg = {name: 'var_name', value: undefined};
+                let returnArg = {name: 'var_name', value: 'var', jsValue: 'var'};
                 if (!data.hasReturn) {
-                    returnArg = {name: '__none__', value: undefined};
+                    returnArg = {name: '__none__', value: undefined, jsValue: undefined};
                 } else if (prod.args[0].name !== '__none__') {
                     returnArg.value = prod.args[0].value;
                 }
@@ -171,6 +172,7 @@ function checkMissingProd(prodList: any[], fileVersion: string) {
                     }
                 }
                 prod.args = [ returnArg, ...data.args];
+                console.log(prod)
                 break;
             }
         }

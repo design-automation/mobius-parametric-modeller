@@ -7,15 +7,13 @@ import { GIModelData } from './GIModelData';
  * Class for attributes.
  */
 export class GIAttribsThreejs {
-    private _modeldata: GIModelData;
-    private _attribs_maps: IAttribsMaps;
+    private modeldata: GIModelData;
    /**
      * Creates an object to store the attribute data.
      * @param modeldata The JSON data
      */
-    constructor(modeldata: GIModelData, attribs_maps: IAttribsMaps) {
-        this._modeldata = modeldata;
-        this._attribs_maps = attribs_maps;
+    constructor(modeldata: GIModelData) {
+        this.modeldata = modeldata;
     }
     // ============================================================================
     // Threejs
@@ -27,28 +25,17 @@ export class GIAttribsThreejs {
      * Verts that have been deleted will not be included
      * @param verts An array of vertex indices pointing to the position.
      */
-    public get3jsSeqPosisCoords(): [number[], Map<number, number>] {
-        const coords_attrib: TAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
+    public get3jsSeqPosisCoords(ssid: number): [number[], Map<number, number>] {
+        const coords_attrib: TAttribMap = this.modeldata.attribs.attribs_maps.get(ssid).ps.get(EAttribNames.COORDS);
         //
         const coords: number[][] = [];
         const posi_map: Map<number, number> = new Map();
-        const posis_i: number[] = this._modeldata.geom.query.getEnts(EEntType.POSI);
+        const posis_i: number[] = this.modeldata.geom.snapshot.getEnts(ssid, EEntType.POSI);
 
         for (const posi_i of posis_i) {
             const tjs_index: number = coords.push( coords_attrib.getEntVal(posi_i) as number[] ) - 1;
             posi_map.set(posi_i, tjs_index);
         }
-
-        // console.log("LIST OF THREEJS COORDS", coords)
-
-        // posis_i.forEach( (posi_i, gi_index) => {
-        //     if (posi_i !== null) {
-        //         const tjs_index: number = coords.push( coords_attrib.getEntVal(posi_i) as number[] ) - 1;
-        //         posi_map.set(gi_index, tjs_index);
-        //     }
-        // });
-
-
         // @ts-ignore
         return [coords.flat(1), posi_map];
     }
@@ -57,27 +44,18 @@ export class GIAttribsThreejs {
      * Verts that have been deleted will not be included
      * @param verts An array of vertex indices pointing to the positio.
      */
-    public get3jsSeqVertsCoords(): [number[], Map<number, number>] {
-        const coords_attrib: TAttribMap = this._attribs_maps.ps.get(EAttribNames.COORDS);
+    public get3jsSeqVertsCoords(ssid: number): [number[], Map<number, number>] {
+        const coords_attrib: TAttribMap = this.modeldata.attribs.attribs_maps.get(ssid).ps.get(EAttribNames.COORDS);
         //
         const coords: number[][] = [];
         const vertex_map: Map<number, number> = new Map();
-        const verts_i: number[] = this._modeldata.geom.query.getEnts(EEntType.VERT);
+        const verts_i: number[] = this.modeldata.geom.snapshot.getEnts(ssid, EEntType.VERT);
 
         for (const vert_i of verts_i) {
-            const posi_i: number = this._modeldata.geom.nav.navVertToPosi(vert_i);
+            const posi_i: number = this.modeldata.geom.nav.navVertToPosi(vert_i);
             const tjs_index: number = coords.push( coords_attrib.getEntVal(posi_i) as number[] ) - 1;
             vertex_map.set(vert_i, tjs_index);
         }
-
-        // verts_i.forEach( (vert_i, gi_index) => {
-        //     if (vert_i !== null) {
-        //         const posi_i: number = this._model.modeldata.geom.nav.navVertToPosi(vert_i);
-        //         const tjs_index: number = coords.push( coords_attrib.getEntVal(posi_i) as number[] ) - 1;
-        //         vertex_map.set(gi_index, tjs_index);
-        //     }
-        // });
-
         // @ts-ignore
         return [coords.flat(1), vertex_map];
     }
@@ -85,19 +63,20 @@ export class GIAttribsThreejs {
      * Get a flat array of normals values for all the vertices.
      * Verts that have been deleted will not be included
      */
-    public get3jsSeqVertsNormals(): number[] {
-        if (!this._attribs_maps._v.has(EAttribNames.NORMAL)) { return null; }
+    public get3jsSeqVertsNormals(ssid: number): number[] {
+        if (!this.modeldata.attribs.attribs_maps.get(ssid)._v.has(EAttribNames.NORMAL)) { return null; }
         // create a sparse arrays of normals of all verts of polygons
-        const verts_attrib: TAttribMap = this._attribs_maps._v.get(EAttribNames.NORMAL);
+        const verts_attrib: TAttribMap = this.modeldata.attribs.attribs_maps.get(ssid)._v.get(EAttribNames.NORMAL);
         const normals: Txyz[] = [];
-        for (const pgon_i of this._modeldata.geom.query.getEnts(EEntType.PGON)) {
+        const pgons_i: number[] = this.modeldata.geom.snapshot.getEnts(ssid, EEntType.PGON);
+        for (const pgon_i of pgons_i) {
             let pgon_normal: Txyz = null;
-            for (const vert_i of this._modeldata.geom.nav.navAnyToVert(EEntType.PGON, pgon_i)) {
+            for (const vert_i of this.modeldata.geom.nav.navAnyToVert(EEntType.PGON, pgon_i)) {
                 let normal: Txyz = verts_attrib.getEntVal(vert_i) as Txyz;
                 if (!Array.isArray(normal)) {
                     if (pgon_normal === null) {
-                        const face_i: number = this._modeldata.geom.nav.navPgonToFace(pgon_i);
-                        pgon_normal = this._modeldata.geom.query.getFaceNormal(face_i);
+                        const face_i: number = this.modeldata.geom.nav.navPgonToFace(pgon_i);
+                        pgon_normal = this.modeldata.geom.query.getFaceNormal(face_i);
                     }
                     normal = pgon_normal;
                 }
@@ -106,7 +85,7 @@ export class GIAttribsThreejs {
         }
         // get all the normals
         const verts_normals: TAttribDataTypes[] = [];
-        const verts_i: number[] = this._modeldata.geom.query.getEnts(EEntType.VERT);
+        const verts_i: number[] = this.modeldata.geom.snapshot.getEnts(ssid, EEntType.VERT);
         for (const vert_i of verts_i) {
             if (vert_i !== undefined) {
                 let normal: Txyz = normals[vert_i];
@@ -121,12 +100,12 @@ export class GIAttribsThreejs {
     /**
      * Get a flat array of colors values for all the vertices.
      */
-    public get3jsSeqVertsColors(): number[] {
-        if (!this._attribs_maps._v.has(EAttribNames.COLOR)) { return null; }
-        const verts_attrib: TAttribMap = this._attribs_maps._v.get(EAttribNames.COLOR);
+    public get3jsSeqVertsColors(ssid: number): number[] {
+        if (!this.modeldata.attribs.attribs_maps.get(ssid)._v.has(EAttribNames.COLOR)) { return null; }
+        const verts_attrib: TAttribMap = this.modeldata.attribs.attribs_maps.get(ssid)._v.get(EAttribNames.COLOR);
         // get all the colors
         const verts_colors: TAttribDataTypes[] = [];
-        const verts_i: number[] = this._modeldata.geom.query.getEnts(EEntType.VERT);
+        const verts_i: number[] = this.modeldata.geom.snapshot.getEnts(ssid, EEntType.VERT);
         for (const vert_i of verts_i) {
             if (vert_i !== undefined) {
                 const value = verts_attrib.getEntVal(vert_i) as TAttribDataTypes;
@@ -141,12 +120,11 @@ export class GIAttribsThreejs {
     /**
      *
      */
-    public getModelAttribsForTable(): any[] {
-        const attribs_maps_key: string = EEntTypeStr[ EEntType.MOD ];
-        const attribs: Map<string, TAttribDataTypes> = this._attribs_maps[attribs_maps_key];
-        if (attribs === undefined) { return []; }
+    public getModelAttribsForTable(ssid: number): any[] {
+        const attrib: Map<string, TAttribDataTypes> = this.modeldata.attribs.attribs_maps.get(ssid).mo;
+        if (attrib === undefined) { return []; }
         const arr = [];
-        attribs.forEach((value, key) => {
+        attrib.forEach((value, key) => {
             // const _value = isString(value) ? `'${value}'` : value;
             const _value = JSON.stringify(value);
             const obj = {Name: key, Value: _value};
@@ -159,17 +137,17 @@ export class GIAttribsThreejs {
      *
      * @param ent_type
      */
-    public getAttribsForTable(ent_type: EEntType): {data: any[], ents: number[]} {
+    public getAttribsForTable(ssid: number, ent_type: EEntType): {data: any[], ents: number[]} {
         // get the attribs map for this ent type
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, TAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attribs: Map<string, TAttribMap> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
 
         // create a map of objects to store the data
         // const data_obj_map: Map< number, { '#': number, _id: string} > = new Map();
         const data_obj_map: Map< number, {_id: string} > = new Map();
 
         // create the ID for each table row
-        const ents_i: number[] = this._modeldata.geom.query.getEnts(ent_type);
+        const ents_i: number[] = this.modeldata.geom.snapshot.getEnts(ssid, ent_type);
 
         // sessionStorage.setItem('attrib_table_ents', JSON.stringify(ents_i));
         let i = 0;
@@ -177,7 +155,7 @@ export class GIAttribsThreejs {
             // data_obj_map.set(ent_i, { '#': i, _id: `${attribs_maps_key}${ent_i}`} );
             data_obj_map.set(ent_i, {_id: `${attribs_maps_key}${ent_i}`} );
             if (ent_type === EEntType.COLL) {
-                const coll_parent = this._modeldata.geom.query.getCollParent(ent_i);
+                const coll_parent = this.modeldata.attribs.colls.getCollParent(ent_i);
                 data_obj_map.get(ent_i)['_parent'] = coll_parent === -1 ? '' : 'co' + coll_parent;
             }
             i++;
@@ -238,9 +216,9 @@ export class GIAttribsThreejs {
      * @param ent_type
      * @param ents_i
      */
-    public getEntsVals(selected_ents: Map<string, number>, ent_type: EEntType): any[] {
+    public getEntsVals(ssid: number, selected_ents: Map<string, number>, ent_type: EEntType): any[] {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, TAttribMap> = this._attribs_maps[attribs_maps_key];
+        const attribs: Map<string, TAttribMap> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
         const data_obj_map: Map< number, { _id: string} > = new Map();
         if (!selected_ents || selected_ents === undefined) {
             return [];
@@ -250,7 +228,7 @@ export class GIAttribsThreejs {
         selected_ents_sorted.forEach(ent => {
             data_obj_map.set(ent, { _id: `${attribs_maps_key}${ent}` } );
             if (ent_type === EEntType.COLL) {
-                const coll_parent = this._modeldata.geom.query.getCollParent(ent);
+                const coll_parent = this.modeldata.attribs.colls.getCollParent(ent);
                 data_obj_map.get(ent)['_parent'] = coll_parent === -1 ? '' : coll_parent;
             }
             i++;
@@ -310,16 +288,4 @@ export class GIAttribsThreejs {
         }
         return Array.from(data_obj_map.values());
     }
-    // /**
-    //  * TODO
-    //  * This is confusing... will this not always return the same, i.e. id = index
-    //  * @param ent_type
-    //  * @param id
-    //  */
-    // public getIdIndex(ent_type: EEntType, id: number) {
-    //     const ents_i = this._model.modeldata.geom.query.getEnts(ent_type);
-    //     const index = ents_i.findIndex(ent_i => ent_i === id);
-    //     console.log('calling getIdIndex in GIATtribsThreejs', id, index);
-    //     return index;
-    // }
 }

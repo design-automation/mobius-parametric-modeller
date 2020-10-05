@@ -68,6 +68,9 @@ export class GIAttribMapBool extends GIAttribMap {
         if (ents_i.length > 1) {
             unique_ents_i = Array.from(new Set(ents_i));
         }
+        // snapshot copy ents
+        // unique_ents_i = this.modeldata.geom.snapshot.copyEnts(this._ent_type, unique_ents_i) as number[];
+        // loop
         unique_ents_i.forEach( ent_i => {
             // keep the old value for later
             const old_val_i: number = this._map_ent_i_to_val_i.get(ent_i);
@@ -80,7 +83,8 @@ export class GIAttribMapBool extends GIAttribMap {
                 this._cleanUp(old_val_i);
             }
             // update the time stamp for this entity
-            this._modeldata.geom.time_stamp.updateEntTs(this._ent_type, ent_i);
+            // snapshot: new ts no longer required
+            // this.modeldata.geom.time_stamp.updateEntTs(this._ent_type, ent_i);
         });
         // for the val_i, set it to point to all the ents that have this value
         const exist_ents_i: number[] = this._map_val_i_to_ents_i.get(val_i);

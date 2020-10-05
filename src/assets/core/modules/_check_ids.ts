@@ -27,7 +27,7 @@ function checkId(__model__: GIModel, arg: any, ent_types_set: Set<number>, check
             throw new Error('<ul><li>The entity ID "' + arg + '" is not a valid Entity ID.</li></ul>'); // check valid id
         }
         // check entity exists
-        if (check_exists && !__model__.modeldata.geom.query.entExists(ent_arr[0], ent_arr[1])) {
+        if (check_exists && !__model__.modeldata.geom.snapshot.hasEnt(__model__.modeldata.time_stamp, ent_arr[0], ent_arr[1])) {
             throw new Error('<ul><li>The entity ID "' + arg + '" does not exist in the model.</li></ul>'); // check id exists
         }
         // check entity type

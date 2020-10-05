@@ -77,7 +77,7 @@ function _createGeojsonPolygon(model: GIModel, pgon_i: number, proj_obj: any, ro
     }
     const all_props = {};
     for (const name of model.modeldata.attribs.query.getAttribNames(EEntType.PGON)) {
-        all_props[name] = model.modeldata.attribs.query.getAttribVal(EEntType.PGON, name, pgon_i);
+        all_props[name] = model.modeldata.attribs.query.getEntAttribVal(EEntType.PGON, pgon_i, name);
     }
     return {
         'type': 'Feature',
@@ -115,7 +115,7 @@ function _createGeojsonLineString(model: GIModel, pline_i: number, proj_obj: any
     }
     const all_props = {};
     for (const name of model.modeldata.attribs.query.getAttribNames(EEntType.PLINE)) {
-        all_props[name] = model.modeldata.attribs.query.getAttribVal(EEntType.PLINE, name, pline_i);
+        all_props[name] = model.modeldata.attribs.query.getEntAttribVal(EEntType.PLINE, pline_i, name);
     }
     return {
         'type': 'Feature',
@@ -423,7 +423,8 @@ function _addPointCollToModel(model: GIModel, multipoint: any,
         points_i.push(point_i);
     }
     // create the collection
-    const coll_i: number = model.modeldata.geom.add.addColl(null, [], points_i, []);
+    const coll_i: number = model.modeldata.geom.add.addColl();
+    model.modeldata.attribs.colls.setCollPoints(coll_i, points_i);
     // add attribs
     _addAttribsToModel(model, EEntType.COLL, coll_i, multipoint);
     // return the indices of the plines and the index of the collection
@@ -453,7 +454,8 @@ function _addPlineCollToModel(model: GIModel, multilinestring: any,
         plines_i.push(pline_i);
     }
     // create the collection
-    const coll_i: number = model.modeldata.geom.add.addColl(null, [], plines_i, []);
+    const coll_i: number = model.modeldata.geom.add.addColl();
+    model.modeldata.attribs.colls.setCollPlines(coll_i, plines_i);
     // add attribs
     _addAttribsToModel(model, EEntType.COLL, coll_i, multilinestring);
     // return the indices of the plines and the index of the collection
@@ -488,7 +490,8 @@ function _addPgonCollToModel(model: GIModel, multipolygon: any,
         pgons_i.push(pgon_i);
     }
     // create the collection
-    const coll_i: number = model.modeldata.geom.add.addColl(null, [], [], pgons_i);
+    const coll_i: number = model.modeldata.geom.add.addColl();
+    model.modeldata.attribs.colls.setCollPgons(coll_i, pgons_i);
     // add attribs
     _addAttribsToModel(model, EEntType.COLL, coll_i, multipolygon);
     // return the indices of the plines and the index of the collection

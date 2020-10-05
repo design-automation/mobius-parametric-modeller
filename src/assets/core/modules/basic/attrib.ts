@@ -308,11 +308,11 @@ function _get(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
         }
         // get the attrib values from the ents
         if (typeof attrib_idx_key === 'number') {
-            return __model__.modeldata.attribs.query.getAttribListIdxVal(ent_type, attrib_name, ent_i, attrib_idx_key as number);
+            return __model__.modeldata.attribs.query.getEntAttribListIdxVal(ent_type, ent_i, attrib_name, attrib_idx_key as number);
         } else if (typeof attrib_idx_key === 'string') {
-            return __model__.modeldata.attribs.query.getAttribDictKeyVal(ent_type, attrib_name, ent_i, attrib_idx_key as string);
+            return __model__.modeldata.attribs.query.getEntAttribDictKeyVal(ent_type, ent_i, attrib_name, attrib_idx_key as string);
         } else {
-            return __model__.modeldata.attribs.query.getAttribVal(ent_type, attrib_name, ent_i);
+            return __model__.modeldata.attribs.query.getEntAttribVal(ent_type, ent_i, attrib_name);
         }
     } else {
         return (ents_arr as TEntTypeIdx[]).map( ent_arr =>
@@ -323,6 +323,7 @@ function _get(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
 /**
  * Add one or more attributes to the model.
  * The attribute will appear as a new column in the attribute table.
+ * (At least one entity must have a value for the column to be visible in the attribute table).
  * All attribute values will be set to null.
  * ~
  * @param __model__
@@ -551,6 +552,8 @@ export function Push(__model__: GIModel, entities: TId|TId[],
         }
         // get the target ent_type
         target = _getAttribPushTarget(ent_type_sel);
+        //
+        throw new Error('Snapshot Not implemented');
     }
 
     // let ents_arr: TEntTypeIdx[] = null;

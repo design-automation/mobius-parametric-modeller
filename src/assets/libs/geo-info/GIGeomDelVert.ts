@@ -16,6 +16,12 @@ export class GIGeomDelVert {
         this._geom_maps = geom_arrays;
     }
     /**
+     * Deletes multiple verts.
+     */
+    public delVerts(verts_i: number[]): void {
+        verts_i.forEach( vert_i => this.delVert(vert_i) );
+    }
+    /**
      * Deletes a vert.
      *
      * In the general case, the two edges adjacent to the deleted vert will be merged.
@@ -48,12 +54,12 @@ export class GIGeomDelVert {
         // check, is this a point, then delete the point and vertex
         const point_i: number = this._geom_maps.up_verts_points.get(vert_i); // this may be undefined
         if (point_i !== undefined) {
-            this._geom.del.delPoints(point_i, false);
+            this._geom.snapshot.delPoints(point_i, false);
             return;
         }
         // get the posis, edges, and wires, and other info
-        const edges_i: number[] = this._geom_maps.up_verts_edges.get(vert_i);
-        const wire_i: number = this._geom_maps.up_edges_wires.get(edges_i[0]);
+        const edges_i: number[] = this._geom_maps.up_verts_edges.get(vert_i); // never undefined
+        const wire_i: number = this._geom_maps.up_edges_wires.get(edges_i[0]); // never undefined
         const face_i: number = this._geom_maps.up_wires_faces.get(wire_i); // this may be undefined
         const wire_edges_i: number[] = this._geom_maps.dn_wires_edges.get(wire_i);
         const wire_verts_i: number[] = this._geom.nav.navAnyToVert(EEntType.WIRE, wire_i);
@@ -85,40 +91,48 @@ export class GIGeomDelVert {
             }
         } else if (!wire_is_closed && index_vert_i === 0) {
 
+            // check the object time stamp
+            const pline_i: number = this._geom_maps.up_wires_plines.get(wire_i);
+            this._geom.modeldata.checkObjsTs(EEntType.PLINE, pline_i);
+
             // special case, open pline, delete start edge and vert
             this.__delVert__OpenPlineStart(wire_edges_i, wire_verts_i, vert_i);
 
-            // time stamp
-            const pline_i: number = this._geom_maps.up_wires_plines.get(wire_i);
-            this._geom.time_stamp.updateObjsTs(EEntType.PLINE, pline_i);
 
         } else if (!wire_is_closed && index_vert_i === num_verts - 1) {
+
+            // check the object time stamp
+            const pline_i: number = this._geom_maps.up_wires_plines.get(wire_i);
+            this._geom.modeldata.checkObjsTs(EEntType.PLINE, pline_i);
 
             // special case, open pline, delete end edge and vert
             this.__delVert__OpenPlineEnd(wire_edges_i, wire_verts_i, vert_i);
 
-            // time stamp
-            const pline_i: number = this._geom_maps.up_wires_plines.get(wire_i);
-            this._geom.time_stamp.updateObjsTs(EEntType.PLINE, pline_i);
-
         } else {
+
+            if (face_i === undefined) {
+
+                // check the object time stamp
+                const pline_i: number = this._geom_maps.up_wires_plines.get(wire_i);
+                this._geom.modeldata.checkObjsTs(EEntType.PLINE, pline_i);
+
+
+            } else {
+
+                // check the object time stamp
+                const pgon_i: number = this._geom.nav.navFaceToPgon(face_i);
+                this._geom.modeldata.checkObjsTs(EEntType.PGON, pgon_i);
+
+            }
 
             // standard case, delete the prev edge and reqire the next edge
             this.__delVert__StandardCase(wire_edges_i, vert_i);
 
-            if (face_i === undefined) {
-
-                // time stamp
-                const pline_i: number = this._geom_maps.up_wires_plines.get(wire_i);
-                this._geom.time_stamp.updateObjsTs(EEntType.PLINE, pline_i);
-
-            } else {
+            if (face_i !== undefined) {
 
                 // for pgons, also update tris
                 const pgon_i: number = this._geom.nav.navFaceToPgon(face_i);
                 this._geom.modify_pgon.triPgons(pgon_i);
-
-                // triPgons() updates the time stamp
 
             }
         }
@@ -129,7 +143,7 @@ export class GIGeomDelVert {
      */
     private __delVert__OpenPline1Edge(wire_i: number) {
         const pline_i: number = this._geom_maps.up_wires_plines.get(wire_i);
-        this._geom.del.delPlines(pline_i, false);
+        this._geom.snapshot.delPlines(pline_i, false);
     }
     /**
      * Special case, delete either the pgon
@@ -137,7 +151,7 @@ export class GIGeomDelVert {
      */
     private __delVert__PgonBoundaryWire3Edge(face_i: number) {
         const pgon_i: number = this._geom_maps.up_faces_pgons.get(face_i);
-        this._geom.del.delPgons(pgon_i, false);
+        this._geom.snapshot.delPgons(pgon_i, false);
     }
     /**
      * Special case, delete either the hole
@@ -145,7 +159,7 @@ export class GIGeomDelVert {
      */
     private __delVert__PgonHoleWire3Edge(face_i: number, wire_i: number) {
         // TODO
-        console.log('not implemented');
+        console.log('Not implemented');
     }
     /**
      * Special case, delete the first edge

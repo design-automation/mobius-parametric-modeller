@@ -1,4 +1,4 @@
-import { EEntType, TTri, TFace, Txyz, IGeomMaps, TAttribDataTypes } from './common';
+import { EEntType, TTri, TFace, Txyz, IGeomMaps, TAttribDataTypes, EAttribNames } from './common';
 import { triangulate } from '../triangulate/triangulate';
 import { GIGeom } from './GIGeom';
 import { vecAdd } from '../geom/vectors';
@@ -28,9 +28,8 @@ export class GIGeomAdd {
         // update up arrays
         const posi_i: number = this._geom.modeldata.model.metadata.nextPosi();
         this._geom_maps.up_posis_verts.set(posi_i, []);
-        // time stamp
-        const ts: number = this._geom.modeldata.model.metadata.getTimeStamp();
-        this._geom_maps.posis_ts.set(posi_i, ts);
+        // snapshot
+        this._geom.modeldata.geom.snapshot.addEntsActive(EEntType.POSI, posi_i);
         // return entity number
         return posi_i;
     }
@@ -46,8 +45,10 @@ export class GIGeomAdd {
         this._geom_maps.dn_points_verts.set(point_i, vert_i);
         this._geom_maps.up_verts_points.set(vert_i, point_i);
         // time stamp
-        const ts: number = this._geom.modeldata.model.metadata.getTimeStamp();
-        this._geom_maps.posis_ts.set(posi_i, ts);
+        this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.POINT, point_i,
+            EAttribNames.TIMESTAMP, this._geom.modeldata.time_stamp);
+        // snapshot
+        this._geom.modeldata.geom.snapshot.addEntsActive(EEntType.POINT, point_i);
         // return entity number
         return point_i;
     }
@@ -71,8 +72,10 @@ export class GIGeomAdd {
         this._geom_maps.dn_plines_wires.set(pline_i, wire_i);
         this._geom_maps.up_wires_plines.set(wire_i, pline_i);
         // time stamp
-        const ts: number = this._geom.modeldata.model.metadata.getTimeStamp();
-        this._geom_maps.plines_ts.set(pline_i, ts);
+        this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.PLINE, pline_i,
+            EAttribNames.TIMESTAMP, this._geom.modeldata.time_stamp);
+        // snapshot
+        this._geom.modeldata.geom.snapshot.addEntsActive(EEntType.PLINE, pline_i);
         // return entity number
         return pline_i;
     }
@@ -114,50 +117,29 @@ export class GIGeomAdd {
         this._geom_maps.dn_pgons_faces.set(pgon_i, face_i);
         this._geom_maps.up_faces_pgons.set(face_i, pgon_i);
         // time stamp
-        const ts: number = this._geom.modeldata.model.metadata.getTimeStamp();
-        this._geom_maps.pgons_ts.set(pgon_i, ts);
+        this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.PGON, pgon_i,
+            EAttribNames.TIMESTAMP, this._geom.modeldata.time_stamp);
+        // snapshot
+        this._geom.modeldata.geom.snapshot.addEntsActive(EEntType.PGON, pgon_i);
         // return entity number
         return pgon_i;
     }
     /**
-     * Adds a collection and updates the rev array using numeric indices.
+     * Adds a collection.
      * @param parent_i
      * @param points_i
      * @param plines_i
      * @param pgons_i
      */
-    public addColl(parent_i: number, points_i: number[], plines_i: number[], pgons_i: number[]): number {
-        parent_i = parent_i === null ? -1 : parent_i;
+    public addColl(): number {
         // create collection
         const coll_i: number = this._geom.modeldata.model.metadata.nextColl();
-        this._geom_maps.dn_colls_points.set(coll_i, points_i);
-        this._geom_maps.dn_colls_plines.set(coll_i, plines_i);
-        this._geom_maps.dn_colls_pgons.set(coll_i, pgons_i);
-        this._geom_maps.up_colls_colls.set(coll_i, parent_i);
-        for (const point_i of points_i) {
-            if (!this._geom_maps.up_points_colls.has(point_i)) {
-                this._geom_maps.up_points_colls.set(point_i, [coll_i]);
-            } else {
-                this._geom_maps.up_points_colls.get(point_i).push(coll_i);
-            }
-        }
-        for (const pline_i of plines_i) {
-            if (!this._geom_maps.up_plines_colls.has(pline_i)) {
-                this._geom_maps.up_plines_colls.set(pline_i, [coll_i]);
-            } else {
-                this._geom_maps.up_plines_colls.get(pline_i).push(coll_i);
-            }
-        }
-        for (const pgon_i of pgons_i) {
-            if (!this._geom_maps.up_pgons_colls.has(pgon_i)) {
-                this._geom_maps.up_pgons_colls.set(pgon_i, [coll_i]);
-            } else {
-                this._geom_maps.up_pgons_colls.get(pgon_i).push(coll_i);
-            }
-        }
+        this._geom_maps.colls.add(coll_i);
         // time stamp
-        const ts: number = this._geom.modeldata.model.metadata.getTimeStamp();
-        this._geom_maps.colls_ts.set(coll_i, ts);
+        this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.COLL, coll_i,
+            EAttribNames.TIMESTAMP, this._geom.modeldata.time_stamp);
+        // snapshot
+        this._geom.modeldata.geom.snapshot.addEntsActive(EEntType.COLL, coll_i);
         // return entity number
         return coll_i;
     }
@@ -169,23 +151,25 @@ export class GIGeomAdd {
      * @param posis_i
      * @param copy_attribs
      */
-    public copyMovePosis(posis_i: number|number[], move_vector: Txyz, copy_attribs: boolean): number|number[] {
-        if (!Array.isArray(posis_i)) {
-            const posi_i: number = posis_i as number;
-            const xyz: Txyz = this._geom.modeldata.attribs.query.getPosiCoords(posi_i);
-            const new_posi_i: number = this.addPosi();
-            this._geom.modeldata.attribs.add.setPosiCoords(new_posi_i, vecAdd(xyz, move_vector));
-            if (copy_attribs) {
-                const attrib_names: string[] = this._geom.modeldata.attribs.query.getAttribNames(EEntType.POSI);
-                for (const attrib_name of attrib_names) {
-                    if (attrib_name !== 'xyz') {
-                        const value: TAttribDataTypes =
-                            this._geom.modeldata.attribs.query.getAttribVal(EEntType.POSI, attrib_name, posis_i) as TAttribDataTypes;
-                        this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.POSI, new_posi_i, attrib_name, value);
-                    }
+    public copyMovePosi(posi_i: number, move_vector: Txyz, copy_attribs: boolean): number {
+        const xyz: Txyz = this._geom.modeldata.attribs.query.getPosiCoords(posi_i);
+        const new_posi_i: number = this.addPosi();
+        this._geom.modeldata.attribs.add.setPosiCoords(new_posi_i, vecAdd(xyz, move_vector));
+        if (copy_attribs) {
+            const attrib_names: string[] = this._geom.modeldata.attribs.query.getAttribNames(EEntType.POSI);
+            for (const attrib_name of attrib_names) {
+                if (attrib_name !== 'xyz') {
+                    const value: TAttribDataTypes =
+                        this._geom.modeldata.attribs.query.getEntAttribVal(EEntType.POSI, posi_i, attrib_name) as TAttribDataTypes;
+                    this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.POSI, new_posi_i, attrib_name, value);
                 }
             }
-            return new_posi_i;
+        }
+        return new_posi_i;
+    }
+    public copyMovePosis(posis_i: number|number[], move_vector: Txyz, copy_attribs: boolean): number|number[] {
+        if (!Array.isArray(posis_i)) {
+            return this.copyMovePosi(posis_i, move_vector, copy_attribs);
         } else {
             return (posis_i as number[]).map(posi_i => this.copyPosis(posi_i, copy_attribs)) as number[];
         }
@@ -195,21 +179,23 @@ export class GIGeomAdd {
      * @param posis_i
      * @param copy_attribs
      */
+    public copyPosi(posi_i: number, copy_attribs: boolean): number {
+        const xyz: Txyz = this._geom.modeldata.attribs.query.getPosiCoords(posi_i);
+        const new_posi_i: number = this.addPosi();
+        this._geom.modeldata.attribs.add.setPosiCoords(new_posi_i, xyz);
+        if (copy_attribs) {
+            const attrib_names: string[] = this._geom.modeldata.attribs.query.getAttribNames(EEntType.POSI);
+            for (const attrib_name of attrib_names) {
+                const value: TAttribDataTypes =
+                    this._geom.modeldata.attribs.query.getEntAttribVal(EEntType.POSI, posi_i, attrib_name) as TAttribDataTypes;
+                this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.POSI, new_posi_i, attrib_name, value);
+            }
+        }
+        return new_posi_i;
+    }
     public copyPosis(posis_i: number|number[], copy_attribs: boolean): number|number[] {
         if (!Array.isArray(posis_i)) {
-            const posi_i: number = posis_i as number;
-            const xyz: Txyz = this._geom.modeldata.attribs.query.getPosiCoords(posi_i);
-            const new_posi_i: number = this.addPosi();
-            this._geom.modeldata.attribs.add.setPosiCoords(new_posi_i, xyz);
-            if (copy_attribs) {
-                const attrib_names: string[] = this._geom.modeldata.attribs.query.getAttribNames(EEntType.POSI);
-                for (const attrib_name of attrib_names) {
-                    const value: TAttribDataTypes =
-                        this._geom.modeldata.attribs.query.getAttribVal(EEntType.POSI, attrib_name, posis_i) as TAttribDataTypes;
-                    this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.POSI, new_posi_i, attrib_name, value);
-                }
-            }
-            return new_posi_i;
+            return this.copyPosi(posis_i, copy_attribs);
         } else {
             return (posis_i as number[]).map(posi_i => this.copyPosis(posi_i, copy_attribs)) as number[];
         }
@@ -220,17 +206,22 @@ export class GIGeomAdd {
      * @param index
      * @param copy_attribs
      */
+    public copyPoint(old_point_i: number, copy_attribs: boolean): number {
+        const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.POINT, old_point_i);
+        const new_point_i: number = this.addPoint(posis_i[0]);
+        if (copy_attribs) {
+            this._geom.modeldata.attribs.add.copyAttribs(EEntType.POINT, old_point_i, new_point_i);
+        }
+        // time stamp
+        this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.POINT, new_point_i,
+            EAttribNames.TIMESTAMP, this._geom.modeldata.time_stamp);
+        // return the new point
+        return new_point_i;
+    }
     public copyPoints(points_i: number|number[], copy_attribs: boolean): number|number[] {
-        // make copies
         if (!Array.isArray(points_i)) {
-            const old_point_i: number = points_i as number;
-            const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.POINT, old_point_i);
-            const new_point_i: number = this.addPoint(posis_i[0]);
-            if (copy_attribs) {
-                this._geom.modeldata.attribs.add.copyAttribs(EEntType.POINT, old_point_i, new_point_i);
-            }
-            return new_point_i;
-        } else { // An array of ent_i
+            return this.copyPoint(points_i, copy_attribs);
+        } else {
             return (points_i as number[]).map(point_i => this.copyPoints(point_i, copy_attribs)) as number[];
         }
     }
@@ -240,81 +231,88 @@ export class GIGeomAdd {
      * @param index
      * @param copy_attribs
      */
+    public copyPline(old_pline_i: number, copy_attribs: boolean): number {
+        const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PLINE, old_pline_i);
+        const wire_i: number = this._geom.nav.navPlineToWire(old_pline_i);
+        const is_closed: boolean = this._geom.query.isWireClosed(wire_i);
+        const new_pline_i: number = this.addPline(posis_i, is_closed);
+        if (copy_attribs) {
+            this._geom.modeldata.attribs.add.copyAttribs(EEntType.PLINE, old_pline_i, new_pline_i);
+        }
+        // time stamp
+        this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.PLINE, new_pline_i,
+            EAttribNames.TIMESTAMP, this._geom.modeldata.time_stamp);
+        // return the new polyline
+        return new_pline_i;
+    }
     public copyPlines(plines_i: number|number[], copy_attribs: boolean): number|number[] {
-        // make copies
         if (!Array.isArray(plines_i)) {
-            const old_pline_i: number = plines_i as number;
-            const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PLINE, old_pline_i);
-            const wire_i: number = this._geom.nav.navPlineToWire(old_pline_i);
-            const is_closed: boolean = this._geom.query.isWireClosed(wire_i);
-            const new_pline_i: number = this.addPline(posis_i, is_closed);
-            if (copy_attribs) {
-                this._geom.modeldata.attribs.add.copyAttribs(EEntType.PLINE, old_pline_i, new_pline_i);
-            }
-            return new_pline_i;
-        } else { // An array of ent_i
+            return this.copyPline(plines_i, copy_attribs);
+        } else {
             return (plines_i as number[]).map(pline_i => this.copyPlines(pline_i, copy_attribs)) as number[];
         }
     }
     /**
-     * Copy polygons.
+     * Copy polygon.
      * TODO copy attribs of topo entities
      * @param index
      * @param copy_attribs
      */
+    public copyPgon(old_pgon_i: number, copy_attribs: boolean): number {
+        const wires_i: number[] = this._geom.nav.navAnyToWire(EEntType.PGON, old_pgon_i);
+        const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.WIRE, wires_i[0] as number);
+        let new_pgon_i: number;
+        if (wires_i.length === 1) {
+            new_pgon_i = this.addPgon(posis_i);
+        } else {
+            const holes_posis_i: number[][] = [];
+            for (let i = 1; i < wires_i.length; i++) {
+                const hole_posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.WIRE, wires_i[i] as number);
+                holes_posis_i.push(hole_posis_i);
+            }
+            new_pgon_i = this.addPgon(posis_i, holes_posis_i);
+        }
+        if (copy_attribs) {
+            this._geom.modeldata.attribs.add.copyAttribs(EEntType.PGON, old_pgon_i, new_pgon_i);
+        }
+        // time stamp
+        this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.PGON, new_pgon_i,
+            EAttribNames.TIMESTAMP, this._geom.modeldata.time_stamp);
+        // return the new polygon
+        return new_pgon_i;
+    }
     public copyPgons(pgons_i: number|number[], copy_attribs: boolean): number|number[] {
-        // make copies
         if (!Array.isArray(pgons_i)) {
-            const old_pgon_i: number = pgons_i as number;
-            const wires_i: number[] = this._geom.nav.navAnyToWire(EEntType.PGON, old_pgon_i);
-            const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.WIRE, wires_i[0] as number);
-            let new_pgon_i: number;
-            if (wires_i.length === 1) {
-                new_pgon_i = this.addPgon(posis_i);
-            } else {
-                const holes_posis_i: number[][] = [];
-                for (let i = 1; i < wires_i.length; i++) {
-                    const hole_posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.WIRE, wires_i[i] as number);
-                    holes_posis_i.push(hole_posis_i);
-                }
-                new_pgon_i = this.addPgon(posis_i, holes_posis_i);
-            }
-            if (copy_attribs) {
-                this._geom.modeldata.attribs.add.copyAttribs(EEntType.PGON, old_pgon_i, new_pgon_i);
-            }
-            return new_pgon_i;
-        } else { // AN array of ent_i
+            return this.copyPgon(pgons_i, copy_attribs);
+        } else {
             return (pgons_i as number[]).map(pgon_i => this.copyPgons(pgon_i, copy_attribs)) as number[];
         }
     }
    /**
      * Copy a collection
-     * TODO Copy attribs of object and topo entities
+     * This also copies the entities in the collection.
      * @param ent_type
      * @param index
      * @param copy_posis
      * @param copy_attribs
      */
+    public copyColl(old_coll_i: number, copy_attribs: boolean): number {
+        // add the new collection
+        const new_coll_i: number = this.addColl();
+        // copy the attributes from old collection to new collection
+        if (copy_attribs) {
+            this._geom.modeldata.attribs.add.copyAttribs(EEntType.COLL, old_coll_i, new_coll_i);
+        }
+        // time stamp
+        this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.COLL, new_coll_i,
+            EAttribNames.TIMESTAMP, this._geom.modeldata.time_stamp);
+        // return the new collection
+        return new_coll_i;
+    }
     public copyColls(colls_i: number|number[], copy_attribs: boolean): number|number[] {
         // make copies
         if (!Array.isArray(colls_i)) {
-            const old_coll_i: number = colls_i as number;
-            // make a deep copy of the objects in the collection
-            const points_i: number[] = this._geom.nav.navCollToPoint(old_coll_i);
-            const res1 = this.copyPoints(points_i, copy_attribs) as number[];
-            const plines_i: number[] = this._geom.nav.navCollToPline(old_coll_i);
-            const res2 = this.copyPlines(plines_i, copy_attribs) as number[];
-            const pgons_i: number[] = this._geom.nav.navCollToPgon(old_coll_i);
-            const res3 = this.copyPgons(pgons_i, copy_attribs) as number[];
-            const parent: number = this._geom.query.getCollParent(old_coll_i);
-            // add the new collection
-            const new_coll_i: number = this.addColl(parent, res1, res2, res3);
-            // copy the attributes from old collection to new collection
-            if (copy_attribs) {
-                this._geom.modeldata.attribs.add.copyAttribs(EEntType.COLL, old_coll_i, new_coll_i);
-            }
-            // return the new collection
-            return new_coll_i;
+            return this.copyColl(colls_i, copy_attribs);
         } else {
             return (colls_i as number[]).map(coll_i => this.copyColls(coll_i, copy_attribs)) as number[];
         }

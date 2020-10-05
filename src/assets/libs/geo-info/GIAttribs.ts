@@ -1,20 +1,14 @@
 import { GIAttribsAdd } from './GIAttribsAdd';
-import { GIAttribsThreejs } from './GIAttribsThreejs';
 import { GIAttribsQuery } from './GIAttribsQuery';
 import { GIModel } from './GIModel';
 import { EEntType, EAttribNames,  IAttribsJSONData, EAttribDataTypeStrs, IAttribsMaps, TAttribMap } from './common';
 import { GIAttribsIO } from './GIAttribsIO';
 import { GIAttribsModify } from './GIAttribModify';
 import { GIModelData } from './GIModelData';
+import { GIAttribsSnapshot } from './GIAttribsSnapshot';
+import { GIAttribsThreejs } from './GIAttribsThreejs';
+import { GIAttribsColls } from './GIAttribsColls';
 
-function hashCode(s: string) {
-    let h: number;
-    for (let i = 0; i < s.length; i++) {
-          // tslint:disable-next-line:no-bitwise
-          h = Math.imul(31, h) + s.charCodeAt(i) | 0;
-    }
-    return h;
-}
 const eny_type_array: EEntType[] = [
     EEntType.POSI,
     EEntType.VERT,
@@ -43,39 +37,30 @@ const ent_type_strs: Map<EEntType, string> = new Map([
  * Class for attributes.
  */
 export class GIAttribs {
-    private _modeldata: GIModelData;
+    private modeldata: GIModelData;
     // maps, the key is the name, the value is the attrib map clas
-    public _attribs_maps: IAttribsMaps = { // TODO this should not be public
-        ps: new Map(),
-        _v: new Map(),
-        _e: new Map(),
-        _w: new Map(),
-        _f: new Map(),
-        pt: new Map(),
-        pl: new Map(),
-        pg: new Map(),
-        co: new Map(),
-        mo: new Map()
-    };
+    public attribs_maps: Map<number, IAttribsMaps> = new Map();
     // sub classes with methods
     public io: GIAttribsIO;
     public add: GIAttribsAdd;
     public modify: GIAttribsModify;
     public query: GIAttribsQuery;
+    public snapshot: GIAttribsSnapshot;
+    public colls: GIAttribsColls;
     public threejs: GIAttribsThreejs;
    /**
      * Creates an object to store the attribute data.
      * @param modeldata The JSON data
      */
     constructor(modeldata: GIModelData) {
-        this._modeldata = modeldata;
-        this.io = new GIAttribsIO(modeldata, this._attribs_maps);
-        this.add = new GIAttribsAdd(modeldata, this._attribs_maps);
-        this.modify = new GIAttribsModify(modeldata, this._attribs_maps);
-        this.query = new GIAttribsQuery(modeldata, this._attribs_maps);
-        this.threejs = new GIAttribsThreejs(modeldata, this._attribs_maps);
-        // create xyz on posis
-        this.add.addAttrib(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.LIST);
+        this.modeldata = modeldata;
+        this.io = new GIAttribsIO(modeldata);
+        this.add = new GIAttribsAdd(modeldata);
+        this.modify = new GIAttribsModify(modeldata);
+        this.query = new GIAttribsQuery(modeldata);
+        this.snapshot = new GIAttribsSnapshot(modeldata);
+        this.colls = new GIAttribsColls(modeldata);
+        this.threejs = new GIAttribsThreejs(modeldata);
     }
     /**
      * Compares this model and another model.
@@ -88,7 +73,7 @@ export class GIAttribs {
      * ~
      * @param other_model The model to compare with.
      */
-    compare(other_model: GIModel, result: {score: number, total: number, comment: any[]}): void {
+    public compare(other_model: GIModel, result: {score: number, total: number, comment: any[]}): void {
         result.comment.push('Comparing attribute names and types.');
         // compare all attributes except model attributes
         // check that this model is a subset of other model
@@ -99,7 +84,7 @@ export class GIAttribs {
         for (const ent_type of eny_type_array) {
             // get the attrib names
             const ent_type_str: string = ent_type_strs.get(ent_type);
-            const this_attrib_names: string[] = this._modeldata.attribs.query.getAttribNames(ent_type);
+            const this_attrib_names: string[] = this.modeldata.attribs.query.getAttribNames(ent_type);
             const other_attrib_names: string[] = other_model.modeldata.attribs.query.getAttribNames(ent_type);
             attrib_names.set(ent_type, this_attrib_names);
             // check that each attribute in this model exists in the other model
@@ -118,7 +103,7 @@ export class GIAttribs {
                 } else {
                     // get the data types
                     const data_type_1: EAttribDataTypeStrs =
-                        this._modeldata.attribs.query.getAttribDataType(ent_type, this_attrib_name);
+                        this.modeldata.attribs.query.getAttribDataType(ent_type, this_attrib_name);
                     const data_type_2: EAttribDataTypeStrs =
                         other_model.modeldata.attribs.query.getAttribDataType(ent_type, this_attrib_name);
                     // compare data types
@@ -161,13 +146,14 @@ export class GIAttribs {
     /**
      * Generate a string for debugging
      */
-    public toStr(): string {
+    public toStr(ssid: number): string {
         let result = '';
         for (const ent_type of eny_type_array) {
             const ent_type_str: string = ent_type_strs.get(ent_type);
             result += ent_type_str + ': ';
             if (ent_type === EEntType.MOD) {
                 // TODO
+                throw new Error('Not implemented.');
             } else {
                 const attrib_names: string[] = this.query.getAttribNames(ent_type);
                 for (const attrib_name of attrib_names) {

@@ -24,6 +24,9 @@ export {make};
 import * as modify from './basic/modify';
 export {modify};
 
+import * as edit from './basic/edit';
+export {edit};
+
 import * as attrib from './basic/attrib';
 export {attrib};
 

@@ -12,7 +12,7 @@ import { getArrDepth, idsBreak } from '@libs/geo-info/id';
  */
 export function __new__(): GIModel {
     const model: GIModel = new GIModel();
-    model.modeldata.attribs.add.addAttrib(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.LIST);
+    // model.modeldata.attribs.add.addAttrib(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.LIST);
     return model;
 }
 //  ===============================================================================================
@@ -24,8 +24,7 @@ export function __new__(): GIModel {
  * @param model The model to preprocess.
  */
 export function __preprocess__(__model__: GIModel): void {
-    const time_stamp = __model__.metadata.nextTimeStamp();
-    // console.log("Time stamp = ", time_stamp);
+
 }
 //  ===============================================================================================
 /**
@@ -46,7 +45,8 @@ export function __postprocess__(__model__: GIModel): void {
  * @param model2 The model to merge from    .
  */
 export function __merge__(model1: GIModel, model2: GIModel): void {
-    model1.merge(model2);
+    // model1.merge(model2);
+    throw new Error('Deprecated');
 }
 //  ===============================================================================================
 /**
@@ -55,7 +55,8 @@ export function __merge__(model1: GIModel, model2: GIModel): void {
  * @param model The model to clone.
  */
 export function __clone__(model: GIModel): GIModel {
-    return model.clone();
+    // return model.clone();
+    throw new Error('Deprecated');
 }
 //  ===============================================================================================
 /**
@@ -63,7 +64,8 @@ export function __clone__(model: GIModel): GIModel {
  * @param __model__
  */
 export function __stringify__(__model__: GIModel): string {
-    return JSON.stringify(__model__.getModelData());
+    // return JSON.stringify(__model__.getModelData());
+    throw new Error('Not implemented');
 }
 //  ===============================================================================================
 /**

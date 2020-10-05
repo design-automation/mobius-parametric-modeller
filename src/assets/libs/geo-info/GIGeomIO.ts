@@ -21,9 +21,9 @@ export class GIGeomIO {
      * All entities get the same time stamp.
      * @param geom_data The JSON data
      */
-    public setJSONData(geom_data: IGeomJSONData): void {
+    public setJSONData(ssid: number, geom_data: IGeomJSONData): void {
         // all entities get the same time stamp
-        const ts: number = this._geom.modeldata.model.metadata.getTimeStamp();
+        const ts: number = this._geom.modeldata.time_stamp;
         // update the down arrays
         // add vertices to model
         this._geom_maps.dn_verts_posis = new Map();
@@ -56,31 +56,29 @@ export class GIGeomIO {
         this._geom_maps.dn_points_verts = new Map();
         for (let i = 0; i < geom_data.points.length; i++) {
             this._geom_maps.dn_points_verts.set(geom_data.points_i[i], geom_data.points[i]);
-            this._geom.time_stamp.setEntTs(EEntType.POINT, geom_data.points_i[i], ts); // time stamp
+            this._geom.modeldata.updateObjsTs(EEntType.POINT, geom_data.points_i[i]); // time stamp
         }
         // add plines to model
         this._geom_maps.dn_plines_wires = new Map();
         for (let i = 0; i < geom_data.plines.length; i++) {
             this._geom_maps.dn_plines_wires.set(geom_data.plines_i[i], geom_data.plines[i]);
-            this._geom.time_stamp.setEntTs(EEntType.PLINE, geom_data.plines_i[i], ts); // time stamp
+            this._geom.modeldata.updateObjsTs(EEntType.PLINE, geom_data.plines_i[i]); // time stamp
         }
         // add pgons to model
         this._geom_maps.dn_pgons_faces = new Map();
         for (let i = 0; i < geom_data.pgons.length; i++) {
             this._geom_maps.dn_pgons_faces.set(geom_data.pgons_i[i], geom_data.pgons[i]);
-            this._geom.time_stamp.setEntTs(EEntType.PGON, geom_data.pgons_i[i], ts); // time stamp
+            this._geom.modeldata.updateObjsTs(EEntType.PGON, geom_data.pgons_i[i]); // time stamp
         }
         // add collections to model
-        this._geom_maps.dn_colls_points = new Map();
-        this._geom_maps.dn_colls_plines = new Map();
-        this._geom_maps.dn_colls_pgons = new Map();
-        this._geom_maps.up_colls_colls = new Map();
+        this._geom_maps.colls = new Set();
         for (let i = 0; i < geom_data.colls_i.length; i++) {
-            this._geom_maps.dn_colls_points.set(geom_data.colls_i[i], geom_data.colls_points[i]);
-            this._geom_maps.dn_colls_plines.set(geom_data.colls_i[i], geom_data.colls_plines[i]);
-            this._geom_maps.dn_colls_pgons.set(geom_data.colls_i[i], geom_data.colls_pgons[i]);
-            this._geom_maps.up_colls_colls.set(geom_data.colls_i[i], geom_data.colls_parents[i]);
-            this._geom.time_stamp.setEntTs(EEntType.COLL, geom_data.colls_i[i], ts); // time stamp
+            throw new Error('Not implemented');
+            // this._geom.modeldata.attribs.colls.setCollPoints(geom_data.colls_i[i], geom_data.colls_points[i]);
+            // this._geom.modeldata.attribs.colls.setCollPlines(geom_data.colls_i[i], geom_data.colls_plines[i]);
+            // this._geom.modeldata.attribs.colls.setCollPgons(geom_data.colls_i[i], geom_data.colls_pgons[i]);
+            // this._geom_maps.up_colls_colls.set(geom_data.colls_i[i], geom_data.colls_parents[i]);
+            this._geom.modeldata.updateObjsTs(EEntType.COLL, geom_data.colls_i[i]); // time stamp
         }
         // set selected
         this._geom.selected = geom_data.selected;
@@ -90,7 +88,6 @@ export class GIGeomIO {
         this._geom_maps.up_posis_verts = new Map();
         for (let i = 0; i < geom_data.posis_i.length; i++) {
             this._geom_maps.up_posis_verts.set(geom_data.posis_i[i], []);
-            this._geom.time_stamp.setEntTs(EEntType.POSI, geom_data.posis_i[i], ts); // time stamp
         }
         // posis->verts
         this._geom_maps.dn_verts_posis.forEach( (posi_i, vert_i) => {
@@ -158,43 +155,43 @@ export class GIGeomIO {
         this._geom_maps.dn_pgons_faces.forEach( (face_i, pgon_i) => {
             this._geom_maps.up_faces_pgons.set(face_i, pgon_i);
         });
-        // collections of points, polylines, polygons
-        this._geom_maps.up_points_colls = new Map();
-        this._geom_maps.dn_colls_points.forEach( (point_i_arr, coll_i) => {
-            point_i_arr.forEach( point_i => {
-                if (!this._geom_maps.up_points_colls.has(point_i)) {
-                    this._geom_maps.up_points_colls.set(point_i, [coll_i]);
-                } else {
-                    this._geom_maps.up_points_colls.get(point_i).push(coll_i);
-                }
-            });
-        });
-        this._geom_maps.up_plines_colls = new Map();
-        this._geom_maps.dn_colls_plines.forEach( (pline_i_arr, coll_i) => {
-            pline_i_arr.forEach( pline_i => {
-                if (!this._geom_maps.up_plines_colls.has(pline_i)) {
-                    this._geom_maps.up_plines_colls.set(pline_i, [coll_i]);
-                } else {
-                    this._geom_maps.up_plines_colls.get(pline_i).push(coll_i);
-                }
-            });
-        });
-        this._geom_maps.up_pgons_colls = new Map();
-        this._geom_maps.dn_colls_pgons.forEach( (pgon_i_arr, coll_i) => {
-            pgon_i_arr.forEach( pgon_i => {
-                if (!this._geom_maps.up_pgons_colls.has(pgon_i)) {
-                    this._geom_maps.up_pgons_colls.set(pgon_i, [coll_i]);
-                } else {
-                    this._geom_maps.up_pgons_colls.get(pgon_i).push(coll_i);
-                }
-            });
-        });
+        // // collections of points, polylines, polygons
+        // this._geom_maps.up_points_colls = new Map();
+        // this._geom_maps.dn_colls_points.forEach( (point_i_arr, coll_i) => {
+        //     point_i_arr.forEach( point_i => {
+        //         if (!this._geom.modeldata.attribs.colls.getPointColls(point_i)) {
+        //             this._geom_maps.up_points_colls.set(point_i, [coll_i]);
+        //         } else {
+        //             this._geom_maps.up_points_colls.get(point_i).push(coll_i);
+        //         }
+        //     });
+        // });
+        // this._geom_maps.up_plines_colls = new Map();
+        // this._geom_maps.dn_colls_plines.forEach( (pline_i_arr, coll_i) => {
+        //     pline_i_arr.forEach( pline_i => {
+        //         if (!this._geom.modeldata.attribs.colls.getPlineColls(pline_i)) {
+        //             this._geom_maps.up_plines_colls.set(pline_i, [coll_i]);
+        //         } else {
+        //             this._geom_maps.up_plines_colls.get(pline_i).push(coll_i);
+        //         }
+        //     });
+        // });
+        // this._geom_maps.up_pgons_colls = new Map();
+        // this._geom_maps.dn_colls_pgons.forEach( (pgon_i_arr, coll_i) => {
+        //     pgon_i_arr.forEach( pgon_i => {
+        //         if (!this._geom.modeldata.attribs.colls.getPgonsColls(pgon_i)) {
+        //             this._geom_maps.up_pgons_colls.set(pgon_i, [coll_i]);
+        //         } else {
+        //             this._geom_maps.up_pgons_colls.get(pgon_i).push(coll_i);
+        //         }
+        //     });
+        // });
     }
     /**
      * Returns the JSON data for this model.
      * The data is shallow copied.
      */
-    public getJSONData(): IGeomJSONData {
+    public getJSONData(ssid: number): IGeomJSONData {
         const data: IGeomJSONData = {
             posis_i: [],
             verts: [], verts_i: [],
@@ -205,7 +202,8 @@ export class GIGeomIO {
             points: [], points_i: [],
             plines: [], plines_i: [],
             pgons: [], pgons_i: [],
-            colls_points: [], colls_plines: [], colls_pgons: [], colls_parents: [], colls_i: [],
+            colls_i: [],
+            // colls_points: [], colls_plines: [], colls_pgons: [], colls_parents: [], colls_i: [],
             selected: this._geom.selected
         };
         this._geom_maps.up_posis_verts.forEach( (_, i) => {
@@ -248,19 +246,19 @@ export class GIGeomIO {
             data.pgons_i.push(i);
         });
         // collections
-        this._geom_maps.dn_colls_points.forEach( (ent, _) => {
-            data.colls_points.push(ent);
-        });
-        this._geom_maps.dn_colls_plines.forEach( (ent, _) => {
-            data.colls_plines.push(ent);
-        });
-        this._geom_maps.dn_colls_pgons.forEach( (ent, _) => {
-            data.colls_pgons.push(ent);
-        });
-        this._geom_maps.up_colls_colls.forEach( (ent, i) => {
-            data.colls_parents.push(ent);
-            data.colls_i.push(i);
-        });
+        // this._geom_maps.dn_colls_points.forEach( (ent, _) => {
+        //     data.colls_points.push(ent);
+        // });
+        // this._geom_maps.dn_colls_plines.forEach( (ent, _) => {
+        //     data.colls_plines.push(ent);
+        // });
+        // this._geom_maps.dn_colls_pgons.forEach( (ent, _) => {
+        //     data.colls_pgons.push(ent);
+        // });
+        // this._geom_maps.up_colls_colls.forEach( (ent, i) => {
+        //     data.colls_parents.push(ent);
+        //     data.colls_i.push(i);
+        // });
         return data;
     }
 }

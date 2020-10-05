@@ -49,10 +49,6 @@ export function Color(__model__: GIModel, entities: TId|TId[], color: TColor): v
         }
         checkArgs(fn_name, 'color', color, [ArgCh.isColor]);
     } else {
-        // if (entities !== null) {
-        //     ents_arr = splitIDs(fn_name, 'entities', entities,
-        //         [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDListOfLists], null) as TEntTypeIdx[];
-        // }
         ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
@@ -65,7 +61,7 @@ function _color(__model__: GIModel, ents_arr: TEntTypeIdx[], color: TColor): voi
     // make a list of all the verts
     let all_verts_i: number[] = [];
     if (ents_arr === null) {
-        all_verts_i = __model__.modeldata.geom.query.getEnts(EEntType.VERT);
+        all_verts_i = __model__.modeldata.geom.snapshot.getEntsActive(EEntType.VERT);
     } else {
         for (const ent_arr of ents_arr) {
             const [ent_type, ent_i]: [number, number] = ent_arr as TEntTypeIdx;
@@ -119,8 +115,8 @@ export function Gradient(__model__: GIModel, entities: TId|TId[], attrib: string
                 if (attrib_idx_or_key === null) {
                     data_type = __model__.modeldata.attribs.query.getAttribDataType(ents_arr[0][0], attrib_name);
                 } else {
-                    const first_val = __model__.modeldata.attribs.query.getAttribValAny(ents_arr[0][0], attrib_name,
-                                                                              ents_arr[0][1], attrib_idx_or_key);
+                    const first_val = __model__.modeldata.attribs.query.getEntAttribValAny(
+                        ents_arr[0][0], ents_arr[0][1], attrib_name, attrib_idx_or_key);
                 }
                 if (data_type !== EAttribDataTypeStrs.NUMBER) {
                     throw new Error(fn_name + ': The attribute with name "' + attrib_name + '" is not a number data type.' +
@@ -217,7 +213,7 @@ function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: str
         }
     }
     // get the attribute values
-    const vert_values: number[] = __model__.modeldata.attribs.query.getAttribVal(EEntType.VERT, attrib_name, all_verts_i) as number[];
+    const vert_values: number[] = __model__.modeldata.attribs.query.getEntAttribVal(EEntType.VERT, all_verts_i, attrib_name) as number[];
     // if range[0] is null, get min value
     if (range[0] === null) {
         range[0] = min(vert_values);
@@ -325,7 +321,7 @@ export function Edge(__model__: GIModel, entities: TId|TId[], method: _EEdgeMeth
         }
         edges_i = Array.from(set_edges_i);
     } else {
-        edges_i = __model__.modeldata.geom.query.getEnts(EEntType.EDGE);
+        edges_i = __model__.modeldata.geom.snapshot.getEntsActive(EEntType.EDGE);
     }
     // Set edge visibility
     const setting: string = method === _EEdgeMethod.VISIBLE ? null : 'hidden';
@@ -403,7 +399,7 @@ export function Mesh(__model__: GIModel, entities: TId|TId[], method: _EMeshMeth
         }
         verts_i = Array.from(set_verts_i);
     } else {
-        verts_i = __model__.modeldata.geom.query.getEnts(EEntType.VERT);
+        verts_i = __model__.modeldata.geom.snapshot.getEntsActive(EEntType.VERT);
     }
     // calc vertex normals and set edge visibility
     switch (method) {

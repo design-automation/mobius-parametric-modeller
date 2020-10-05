@@ -201,8 +201,10 @@ export class DataCesium {
      * @param model
      * @param container
      */
-    public addGeometry(model: GIModel, container: any): void { // TODO delete container
-        this.updateSettings();
+    public addGeometry(model: GIModel, container: any, updateSettings = true): void { // TODO delete container
+        if (updateSettings) {
+            this.updateSettings();
+        }
         this._viewer.scene.primitives.removeAll();
         // the origin of the model
         let longitude = LONGLAT[0];
@@ -339,7 +341,7 @@ export class DataCesium {
                     const verts_i: number[] = model.modeldata.geom.nav.navAnyToVert(EEntType.PGON, pgon_i);
                     const rgb_sum: Txyz = [0, 0, 0];
                     for (const vert_i of verts_i) {
-                        let vert_rgb: Txyz = model.modeldata.attribs.query.getAttribVal(EEntType.VERT, 'rgb', vert_i) as Txyz;
+                        let vert_rgb: Txyz = model.modeldata.attribs.query.getEntAttribVal(EEntType.VERT, vert_i, 'rgb') as Txyz;
                         if (!vert_rgb) { vert_rgb = [1, 1, 1]; }
                         rgb_sum[0] = rgb_sum[0] + vert_rgb[0];
                         rgb_sum[1] = rgb_sum[1] + vert_rgb[1];
@@ -350,7 +352,7 @@ export class DataCesium {
                 }
 
                 if (model.modeldata.attribs.query.hasAttrib(EEntType.PGON, 'material')) {
-                    let mat_name: any = model.modeldata.attribs.query.getAttribVal(EEntType.PGON, 'material', pgon_i);
+                    let mat_name: any = model.modeldata.attribs.query.getEntAttribVal(EEntType.PGON, pgon_i, 'material');
                     if (mat_name) {
                         if (mat_name.constructor === [].constructor) { mat_name = mat_name[0]; }
                         const pgon_mat: any = model.modeldata.attribs.query.getModelAttribVal(mat_name);
@@ -434,45 +436,87 @@ export class DataCesium {
                     }
                 }
             }
-            const plines_i: number[] = model.modeldata.geom.query.getEnts(EEntType.PLINE);
-            // get each pline
-            for (const pline_i of plines_i) {
-                let pline_colour = Cesium.Color.BLACK;
-                if (model.modeldata.attribs.query.hasAttrib(EEntType.VERT, 'rgb')) {
-                    const verts_i: number[] = model.modeldata.geom.nav.navAnyToVert(EEntType.PLINE, pline_i);
-                    const rgb_sum: Txyz = [0, 0, 0];
-                    for (const vert_i of verts_i) {
-                        let vert_rgb: Txyz = model.modeldata.attribs.query.getAttribVal(EEntType.VERT, 'rgb', vert_i) as Txyz;
-                        if (!vert_rgb) { vert_rgb = [0, 0, 0]; }
-                        rgb_sum[0] = rgb_sum[0] + vert_rgb[0];
-                        rgb_sum[1] = rgb_sum[1] + vert_rgb[1];
-                        rgb_sum[2] = rgb_sum[2] + vert_rgb[2];
-                    }
-                    const num_verts: number = verts_i.length;
-                    pline_colour = new Cesium.Color(rgb_sum[0] / num_verts, rgb_sum[1] / num_verts, rgb_sum[2] / num_verts, 1.0);
-                }
-                // create the edges
-                const wire_i: number = model.modeldata.geom.nav.navPlineToWire(pline_i);
-                const wire_posis_i: number[] = model.modeldata.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
-                if (wire_posis_i.length > 1) {
-                    const wire_points: any[] = wire_posis_i.map( wire_posi_i => posi_to_point_map.get(wire_posi_i) );
-                    if (model.modeldata.geom.query.isWireClosed(wire_i)) {
-                        wire_points.push(wire_points[0]);
-                    }
-                    const line_geom = new Cesium.SimplePolylineGeometry({
-                        positions: wire_points,
-                        vertexFormat: Cesium.PerInstanceColorAppearance.VERTEX_FORMAT,
-                        perPositionHeight: true,
-                        // arcType: Cesium.ArcType.NONE,
-                        width: 1.0
-                    });
-                    const line_instance = new Cesium.GeometryInstance({
-                        geometry : line_geom,
-                        attributes : {
-                            color : Cesium.ColorGeometryInstanceAttribute.fromColor(pline_colour)
+
+            if (this.settings.model.polygonEdge) {
+                const edges_i: number[] = model.modeldata.geom.query.getEnts(EEntType.EDGE);
+                console.log(edges_i.length)
+                // get each pline
+                for (const edge_i of edges_i) {
+                    let edge_colour = Cesium.Color.BLACK;
+                    if (model.modeldata.attribs.query.hasAttrib(EEntType.VERT, 'rgb')) {
+                        const verts_i: number[] = model.modeldata.geom.nav.navAnyToVert(EEntType.EDGE, edge_i);
+                        const rgb_sum: Txyz = [0, 0, 0];
+                        for (const vert_i of verts_i) {
+                            let vert_rgb: Txyz = model.modeldata.attribs.query.getEntAttribVal(EEntType.VERT, vert_i, 'rgb') as Txyz;
+                            if (!vert_rgb) { vert_rgb = [0, 0, 0]; }
+                            rgb_sum[0] = rgb_sum[0] + vert_rgb[0];
+                            rgb_sum[1] = rgb_sum[1] + vert_rgb[1];
+                            rgb_sum[2] = rgb_sum[2] + vert_rgb[2];
                         }
-                    });
-                    lines_instances.push(line_instance);
+                        const num_verts: number = verts_i.length;
+                        edge_colour = new Cesium.Color(rgb_sum[0] / num_verts, rgb_sum[1] / num_verts, rgb_sum[2] / num_verts, 1.0);
+                    }
+                    // create the edges
+                    const edge_posis_i: number[] = model.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
+                    if (edge_posis_i.length > 1) {
+                        const edge_points: any[] = edge_posis_i.map( edge_posi_i => posi_to_point_map.get(edge_posi_i) );
+                        const line_geom = new Cesium.SimplePolylineGeometry({
+                            positions: edge_points,
+                            vertexFormat: Cesium.PerInstanceColorAppearance.VERTEX_FORMAT,
+                            perPositionHeight: true,
+                            // arcType: Cesium.ArcType.NONE,
+                            width: 1.0
+                        });
+                        const line_instance = new Cesium.GeometryInstance({
+                            geometry : line_geom,
+                            attributes : {
+                                color : Cesium.ColorGeometryInstanceAttribute.fromColor(edge_colour)
+                            }
+                        });
+                        lines_instances.push(line_instance);
+                    }
+                }
+            } else {
+                const plines_i: number[] = model.modeldata.geom.query.getEnts(EEntType.PLINE);
+                // get each pline
+                for (const pline_i of plines_i) {
+                    let pline_colour = Cesium.Color.BLACK;
+                    if (model.modeldata.attribs.query.hasAttrib(EEntType.VERT, 'rgb')) {
+                        const verts_i: number[] = model.modeldata.geom.nav.navAnyToVert(EEntType.PLINE, pline_i);
+                        const rgb_sum: Txyz = [0, 0, 0];
+                        for (const vert_i of verts_i) {
+                            let vert_rgb: Txyz = model.modeldata.attribs.query.getEntAttribVal(EEntType.VERT, vert_i, 'rgb') as Txyz;
+                            if (!vert_rgb) { vert_rgb = [0, 0, 0]; }
+                            rgb_sum[0] = rgb_sum[0] + vert_rgb[0];
+                            rgb_sum[1] = rgb_sum[1] + vert_rgb[1];
+                            rgb_sum[2] = rgb_sum[2] + vert_rgb[2];
+                        }
+                        const num_verts: number = verts_i.length;
+                        pline_colour = new Cesium.Color(rgb_sum[0] / num_verts, rgb_sum[1] / num_verts, rgb_sum[2] / num_verts, 1.0);
+                    }
+                    // create the edges
+                    const wire_i: number = model.modeldata.geom.nav.navPlineToWire(pline_i);
+                    const wire_posis_i: number[] = model.modeldata.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
+                    if (wire_posis_i.length > 1) {
+                        const wire_points: any[] = wire_posis_i.map( wire_posi_i => posi_to_point_map.get(wire_posi_i) );
+                        if (model.modeldata.geom.query.isWireClosed(wire_i)) {
+                            wire_points.push(wire_points[0]);
+                        }
+                        const line_geom = new Cesium.SimplePolylineGeometry({
+                            positions: wire_points,
+                            vertexFormat: Cesium.PerInstanceColorAppearance.VERTEX_FORMAT,
+                            perPositionHeight: true,
+                            // arcType: Cesium.ArcType.NONE,
+                            width: 1.0
+                        });
+                        const line_instance = new Cesium.GeometryInstance({
+                            geometry : line_geom,
+                            attributes : {
+                                color : Cesium.ColorGeometryInstanceAttribute.fromColor(pline_colour)
+                            }
+                        });
+                        lines_instances.push(line_instance);
+                    }
                 }
             }
             const lines_primitive = new Cesium.Primitive({
@@ -660,6 +704,16 @@ export class DataCesium {
                     Cesium.JulianDate.fromIso8601(this.settings.time.date + ':00Z', this._viewer.clock.currentTime);
                     this._viewer.timeline.zoomTo(this._viewer.clock.startTime, this._viewer.clock.stopTime);
                 }
+            }
+        }
+        if (newSetting.model) {
+            console.log(newSetting)
+            console.log(this.settings)
+            if (newSetting.model.polygonEdge !== this.settings.model.polygonEdge) {
+                this.settings.model.polygonEdge = newSetting.model.polygonEdge;
+                setTimeout(() => {
+                    this.addGeometry(this._model, null, false);
+                }, 0);
             }
         }
         if (newSetting.updated) {

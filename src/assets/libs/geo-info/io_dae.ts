@@ -140,7 +140,7 @@ function processColls(model: GIModel): void {
     // go through the collections
     const colls_i: number[] = model.modeldata.geom.query.getEnts(EEntType.COLL);
     for (const coll_i of colls_i) {
-        const parent: number = model.modeldata.geom.query.getCollParent(coll_i);
+        const parent: number = model.modeldata.attribs.colls.getCollParent(coll_i);
         // const pgons_i: number[] = model.modeldata.geom.nav.navCollToPgon(coll_i);
         // const plines_i: number[] = model.modeldata.geom.nav.navCollToPline(coll_i);
         if ( !colls_map.has(parent) ) {
@@ -166,7 +166,7 @@ function processMaterialPgon(model: GIModel, pgon_i: number, has_color_attrib: b
     if (has_color_attrib) {
         let color: TColor = [0, 0, 0];
         for (const pgon_vert_i of pgon_verts_i) {
-            let vert_color: TColor = model.modeldata.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, pgon_vert_i) as TColor;
+            let vert_color: TColor = model.modeldata.attribs.query.getEntAttribVal(EEntType.VERT, pgon_vert_i, EAttribNames.COLOR) as TColor;
             if (vert_color === null || vert_color === undefined) { vert_color = [1, 1, 1]; }
             color = [color[0] + vert_color[0], color[1] + vert_color[1], color[2] + vert_color[2]];
         }
@@ -225,7 +225,7 @@ function processMaterialPline(model: GIModel, pline_i: number, has_color_attrib:
     if (has_color_attrib) {
         let color: TColor = [0, 0, 0];
         for (const pline_vert_i of pline_verts_i) {
-            let vert_color: TColor = model.modeldata.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, pline_vert_i) as TColor;
+            let vert_color: TColor = model.modeldata.attribs.query.getEntAttribVal(EEntType.VERT, pline_vert_i, EAttribNames.COLOR) as TColor;
             if (vert_color === null || vert_color === undefined) { vert_color = [1, 1, 1]; }
             color = [color[0] + vert_color[0], color[1] + vert_color[1], color[2] + vert_color[2]];
         }

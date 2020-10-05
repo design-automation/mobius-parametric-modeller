@@ -43,6 +43,24 @@
                         <dd>
                             <hr>
                         </dd>
+                        <dd id='cesium_Model'>
+                            <div class="label">Polygon Edge:</div>
+                            <div class="onoffswitch">
+                                <input type="checkbox"
+                                name="onoffswitch"
+                                class="onoffswitch-checkbox"
+                                id="polygonEdgeDis"
+                                [(ngModel)]='settings.model.polygonEdge'
+                                >
+                                <label class="onoffswitch-label" for="polygonEdgeDis">
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                            </div>
+                        </dd>
+                        <dd>
+                            <hr>
+                        </dd>
                         <dd id='cesium_camera'>
                             <div>Camera Position:</div>
                             <div class='coord'> x: <input disabled [value]='settings.camera.pos.x'></div>

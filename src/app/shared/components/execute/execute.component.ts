@@ -15,6 +15,7 @@ import { SaveFileComponent } from '@shared/components/file';
 import { _parameterTypes, _varString } from '@assets/core/_parameterTypes';
 import { isArray } from 'util';
 import JSZip from 'jszip';
+import { GIModel } from '@assets/libs/geo-info/GIModel';
 
 // function pythonList(x, l) {
 //     if (x < 0) {
@@ -227,108 +228,6 @@ export class ExecuteComponent {
         this.isDev = isDevMode();
     }
 
-    static async resolveImportedUrl(prodList: IProcedure[]|INode, isMainFlowchart?: boolean, isStartNode = false) {
-        return;
-        // if (!isArray(prodList)) {
-        //     await ExecuteComponent.resolveImportedUrl(prodList.procedure, isMainFlowchart, isStartNode);
-        //     if (prodList.localFunc) {
-        //         await ExecuteComponent.resolveImportedUrl(prodList.localFunc, isMainFlowchart, isStartNode);
-        //     }
-        //     return;
-        // }
-        // for (const prod of <IProcedure[]> prodList) {
-        //     if (prod.children) {await  ExecuteComponent.resolveImportedUrl(prod.children, isMainFlowchart, isStartNode); }
-        //     if (!prod.enabled) {
-        //         continue;
-        //     }
-        //     if (isMainFlowchart && prod.type === ProcedureTypes.globalFuncCall) {
-        //         for (let i = 1; i < prod.args.length; i++) {
-        //             const arg = prod.args[i];
-        //             // args.slice(1).map((arg) => {
-        //             if (arg.type.toString() !== InputType.URL.toString()) { continue; }
-        //             prod.resolvedValue = await CodeUtils.getStartInput(arg, InputType.URL);
-        //         }
-        //         continue;
-        //     }
-        //     if (prod.type !== ProcedureTypes.MainFunction || (isStartNode && !isMainFlowchart)) {continue; }
-        //     for (const func of _parameterTypes.urlFunctions) {
-        //         const funcMeta = func.split('.');
-        //         if (prod.meta.module === funcMeta[0] && prod.meta.name === funcMeta[1]) {
-        //             const arg = prod.args[2];
-        //             if (arg.name[0] === '_') { continue; }
-        //             if (arg.value.indexOf('__model_data__') !== -1) {
-        //                 arg.jsValue = arg.value;
-        //                 prod.resolvedValue = arg.value.split('__model_data__').join('');
-        //             } else if (arg.jsValue && arg.jsValue.indexOf('__model_data__') !== -1) {
-        //                 prod.resolvedValue = arg.jsValue.split('__model_data__').join('');
-        //             } else if (arg.value.indexOf('://') !== -1) {
-        //                 const val = <string>(arg.value).replace(/ /g, '');
-        //                 const result = await CodeUtils.getURLContent(val);
-        //                 if (result === undefined) {
-        //                     prod.resolvedValue = arg.value;
-        //                 } else if (result.indexOf && result.indexOf('HTTP Request Error') !== -1) {
-        //                     throw new Error(result);
-        //                 } else if (val.indexOf('.zip') !== -1) {
-        //                     prod.resolvedValue = await ExecuteComponent.openZipFile(result);
-        //                 } else {
-        //                     prod.resolvedValue = '`' + result + '`';
-        //                 }
-        //                 break;
-        //             } else if ((arg.value[0] !== '"' && arg.value[0] !== '\'')) {
-        //                 prod.resolvedValue = null;
-        //                 break;
-        //             } else {
-        //                 let val = arg.value.slice(1, -1).trim();
-        //                 if (val.length > 1 && val[0] === '{') {
-        //                     prod.resolvedValue = null;
-        //                     break;
-        //                 }
-        //                 val = val.replace(/\"|\'/g, '');
-        //                 const backup_list: string[] = JSON.parse(localStorage.getItem('mobius_backup_list'));
-        //                 if (val.indexOf('*') !== -1) {
-        //                     const splittedVal = val.split('*');
-        //                     const start = splittedVal[0] === '' ? null : splittedVal[0];
-        //                     const end = splittedVal[1] === '' ? null : splittedVal[1];
-        //                     let result = '{';
-        //                     for (const backup_name of backup_list) {
-        //                         let valid_check = true;
-        //                         if (start && !backup_name.startsWith(start)) {
-        //                             valid_check = false;
-        //                         }
-        //                         if (end && !backup_name.endsWith(end)) {
-        //                             valid_check = false;
-        //                         }
-        //                         if (valid_check) {
-        //                             const backup_file = await SaveFileComponent.loadFromFileSystem(backup_name);
-        //                             result += `"${backup_name}": \`${backup_file.replace(/\\/g, '\\\\')}\`,`;
-        //                         }
-        //                     }
-        //                     result += '}';
-        //                     prod.resolvedValue = result;
-        //                     break;
-        //                 } else {
-        //                     if (backup_list.indexOf(val) !== -1) {
-        //                         const result = await SaveFileComponent.loadFromFileSystem(val);
-        //                         if (!result || result === 'error') {
-        //                             prod.hasError = true;
-        //                             throw(new Error(`File named ${val} does not exist in the local storage`));
-        //                             // prod.resolvedValue = arg.value;
-        //                         } else {
-        //                             prod.resolvedValue = '`' + result + '`';
-        //                             break;
-        //                         }
-        //                     } else {
-        //                         prod.hasError = true;
-        //                         throw(new Error(`File named ${val} does not exist in the local storage`));
-        //                     }
-        //                 }
-        //             }
-        //             break;
-        //         }
-        //     }
-        // }
-    }
-
     static async openZipFile(zipFile) {
         let result = '{';
         await JSZip.loadAsync(zipFile).then(async function (zip) {
@@ -348,6 +247,8 @@ export class ExecuteComponent {
         this.triggerCheck = false;
         this.terminated = null;
         this.dataService.timelineDefault = true;
+        this.dataService.flowchart.model = _parameterTypes.newFn();
+        this.dataService.flowchart.model.debug = this.dataService.mobiusSettings.debug;
 
         if (this.dataService.consoleClear) {
             this.dataService.clearLog();
@@ -369,29 +270,16 @@ export class ExecuteComponent {
 
             // reset node input value to undefined --> save memory
             if (node.type !== 'start') {
-                if (node.input.edges) {
-                    node.input.value = undefined;
-                }
+                node.input.value = null;
+                // if (node.input.edges) {
+                //     node.input.value = null;
+                // }
             }
 
             if (!node.enabled) {
                 continue;
             }
 
-            // resolve all urls (or local storage files) in the node, calling the url and retrieving the data
-            // the data is then saved as resolvedValue in its respective argument in the procedure (in JSON format)
-            // try {
-            //     await  ExecuteComponent.resolveImportedUrl(node, true, node.type === 'start');
-            // } catch (ex) {
-            //     node.hasError = true;
-            //     this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-            //     document.getElementById('spinner-off').click();
-            //     document.getElementById('Console').click();
-            //     this.dataService.log(`<h4 style="padding: 2px 0px 2px 0px; color:red;">Error: ${ex.message}</h4>`);
-            //     const _category = this.isDev ? 'dev' : 'execute';
-            //     this.googleAnalyticsService.trackEvent(_category, `error: ${ex.name}`, 'click', performance.now() - this.startTime);
-            //     throw ex;
-            // }
             let validCheck = await this.checkProdValidity(node, node.localFunc);
             InvalidECheck = InvalidECheck || validCheck[0];
             EmptyECheck = EmptyECheck || validCheck[1];
@@ -399,40 +287,6 @@ export class ExecuteComponent {
             InvalidECheck = InvalidECheck || validCheck[0];
             EmptyECheck = EmptyECheck || validCheck[1];
         }
-
-        // // resolve urls for each imported functions and subFunctions
-        // for (const func of this.dataService.flowchart.functions) {
-        //     for (const node of func.flowchart.nodes) {
-        //         try {
-        //             await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
-        //         } catch (ex) {
-        //             document.getElementById('spinner-off').click();
-        //             document.getElementById('Console').click();
-        //             this.dataService.log(`<h4 style="padding: 2px 0px 2px 0px; color:red;">` +
-        //                                  `Error in global function ${func.name}: ${ex.message}</h4>`);
-        //             const _category = this.isDev ? 'dev' : 'execute';
-        //             this.googleAnalyticsService.trackEvent(_category, `error: ${ex.name}`, 'click', performance.now() - this.startTime);
-        //             throw ex;
-        //         }
-        //     }
-        // }
-        // if (this.dataService.flowchart.subFunctions) {
-        //     for (const func of this.dataService.flowchart.subFunctions) {
-        //         for (const node of func.flowchart.nodes) {
-        //             try {
-        //                 await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
-        //             } catch (ex) {
-        //                 document.getElementById('spinner-off').click();
-        //                 document.getElementById('Console').click();
-        //                 this.dataService.log(`<h4 style="padding: 2px 0px 2px 0px; color:red;">` +
-        //                                      `Error in global function ${func.name.split('_')[0]}: ${ex.message}</h4>`);
-        //                 const _category = this.isDev ? 'dev' : 'execute';
-        //                 this.googleAnalyticsService.trackEvent(_category, `error: ${ex.name}`, 'click', performance.now() - this.startTime);
-        //                 throw ex;
-        //             }
-        //         }
-        //     }
-        // }
 
         // execute the flowchart
         try {
@@ -467,11 +321,6 @@ export class ExecuteComponent {
                     InvalidECheck = true;
                 }
             }
-            // if (prod.argCount > 0 && prod.args[0].invalidVar) {
-            //     node.hasError = true;
-            //     prod.hasError = true;
-            //     InvalidECheck = true;
-            // }
 
             // for start node constant procedures (start node parameters)
             if (prod.type === ProcedureTypes.Constant) {
@@ -648,23 +497,22 @@ export class ExecuteComponent {
                 node.output.value = undefined;
                 continue;
             }
-            nodeIndices[node.id] = i;
 
             // if the node is not to be executed
-            if (!executeSet.has(i)) {
-                let exCheck = false;
-                for (const edge of node.output.edges) {
-                    if (!edge.target.parentNode.hasExecuted) {
-                        exCheck = true;
-                    }
-                }
-                if (exCheck) {
-                    node.output.value = _parameterTypes.newFn();
-                    node.output.value.debug = this.dataService.mobiusSettings.debug;
-                    node.output.value.setData(JSON.parse(node.model));
-                }
-                continue;
-            }
+            // if (!executeSet.has(i)) {
+            //     let exCheck = false;
+            //     for (const edge of node.output.edges) {
+            //         if (!edge.target.parentNode.hasExecuted) {
+            //             exCheck = true;
+            //         }
+            //     }
+            //     if (exCheck) {
+            //         node.output.value = _parameterTypes.newFn();
+            //         node.output.value.debug = this.dataService.mobiusSettings.debug;
+            //         node.output.value.setData(JSON.parse(node.model));
+            //     }
+            //     continue;
+            // }
             // execute valid node
             globalVars = await this.executeNode(node, funcStrings, globalVars, constantList, nodeIndices);
         }
@@ -796,11 +644,8 @@ export class ExecuteComponent {
                 }
             }
 
-            params['model'] = node.input.value;
-            // console.log(node.input.value)
-            // _parameterTypes.mergeFn(params['model'], node.input.value);
-            params['model'].debug = this.dataService.mobiusSettings.debug;
-            params['model'].setMetaData(this.dataService.modelMeta);
+            params['model'] = this.dataService.flowchart.model;
+            node.model = params['model'].nextSnapshot(node.input.value);
 
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
 
@@ -839,7 +684,7 @@ export class ExecuteComponent {
             if (node.type === 'end') {
                 node.output.value = result;
             } else {
-                node.output.value = params['model'];
+                node.output.value = null;
             }
 
             // mark the node as has been executed
@@ -872,7 +717,7 @@ export class ExecuteComponent {
                 // node.model = diff(node.input.value.getData(), params['model'].getModelData());
             }
             // node.model = JSON.stringify(params['model'].getModelData());
-            node.model = params['model'].getModelDataJSONStr();
+            // node.model = params['model'];
             node.input.value = null;
 
             const endTime = performance.now();

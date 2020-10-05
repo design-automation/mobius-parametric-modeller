@@ -1,5 +1,5 @@
 import { GIGeom } from './GIGeom';
-import { IGeomMaps, TTri, TEdge, TPoint, TPline, TWire } from './common';
+import { IGeomMaps, TTri, TEdge, TPoint, TPline, TWire, EEntType } from './common';
 import { GIAttribMap } from './GIAttribMap';
 import * as THREE from 'three';
 
@@ -23,7 +23,7 @@ export class GIGeomThreejs {
      * 2) the materials array, which is an array of objects
      * 3) the material groups array, which is an array of [ start, count, mat_index ]
      */
-    public get3jsTris(vertex_map: Map<number, number>): [number[], Map<number, number>, object[], [number, number, number][]] {
+    public get3jsTris(ssid: number, vertex_map: Map<number, number>): [number[], Map<number, number>, object[], [number, number, number][]] {
 
         // TODO this should not be parsed each time
         const settings = JSON.parse(localStorage.getItem('mpm_settings'));
@@ -48,9 +48,12 @@ export class GIGeomThreejs {
         const materials: object[] = [this._getPgonMaterial( mat_front ), this._getPgonMaterial( mat_back )];
         const material_names:  string[] = ['default_front', 'default_back'];
         // get the material attribute from polygons
-        const pgon_material_attrib: GIAttribMap = this._geom.modeldata.attribs._attribs_maps.pg.get('material');
+        const pgon_material_attrib: GIAttribMap = this._geom.modeldata.attribs.attribs_maps.get(ssid).pg.get('material');
         // loop through all tris
-        this._geom_maps.dn_tris_verts.forEach( (tri_verts_i, tri_i) => {
+        // get ents from snapshot
+        const tris_i: number[] = this._geom.snapshot.getEnts(ssid, EEntType.TRI);
+        for (const tri_i of tris_i) {
+            const tri_verts_i: number[] = this._geom_maps.dn_tris_verts.get(tri_i);
             // get the verts, face and the polygon for this tri
             const new_tri_verts_i: TTri = tri_verts_i.map(v => vertex_map.get(v)) as TTri;
             // get the materials for this tri from the polygon
@@ -63,7 +66,7 @@ export class GIGeomThreejs {
                 for (const pgon_mat_name of pgon_mat_names) {
                     let pgon_mat_index: number = material_names.indexOf(pgon_mat_name);
                     if (pgon_mat_index === -1) {
-                        const mat_settings_obj: object = this._geom.modeldata.attribs._attribs_maps.mo.get(pgon_mat_name);
+                        const mat_settings_obj: object = this._geom.modeldata.attribs.attribs_maps.get(ssid).mo.get(pgon_mat_name);
                         if (mat_settings_obj !== undefined) {
                             pgon_mat_index = materials.length;
                             material_names.push(pgon_mat_name);
@@ -83,7 +86,7 @@ export class GIGeomThreejs {
             }
             // add the data to the data_array
             tri_data_arrs.push( [ tri_mat_indices, new_tri_verts_i, tri_i ] );
-        });
+        }
         // sort that data_array, so that we get triangls sorted according to their materials
         // for each entry in the data_array, the first item is the material indices, so that they are sorted correctly
         if (pgon_material_attrib !== undefined) {
@@ -115,7 +118,7 @@ export class GIGeomThreejs {
         }
         // convert the mat_groups_map into the format required for threejs
         // for each material group, we need an array [start, count, mat_index]
-        const material_groups: [number, number, number][] = this._convertMatGroups(mat_groups_map);
+        const material_groups: [number, number, number][] = this._convertMatGroups(mat_groups_map, 3);
         // convert the verts list to a flat array
         // tslint:disable-next-line:no-unused-expression
         // @ts-ignore
@@ -136,7 +139,7 @@ export class GIGeomThreejs {
      * 2) the materials array, which is an array of objects
      * 3) the material groups array, which is an array of [ start, count, mat_index ]
      */
-    public get3jsEdges(vertex_map: Map<number, number>): [number[], Map<number, number>, object[], [number, number, number][]] {
+    public get3jsEdges(ssid: number, vertex_map: Map<number, number>): [number[], Map<number, number>, object[], [number, number, number][]] {
         // arrays to store threejs data
         const edge_data_arrs: [number, TEdge, number][] = []; // edge_mat_indices, new_edge_verts_i, edge_i
         // materials
@@ -151,15 +154,18 @@ export class GIGeomThreejs {
         const materials: object[] = [this._getPlineMaterial( line_mat_black ), this._getPlineMaterial( line_mat_white )];
         const material_names:  string[] = ['black', 'white'];
         // check the hidden edges
-        const visibility_attrib = this._geom.modeldata.attribs._attribs_maps._e.get('visibility');
+        const visibility_attrib = this._geom.modeldata.attribs.attribs_maps.get(ssid)._e.get('visibility');
         let hidden_edges_set: Set<number>;
         if (visibility_attrib) {
             hidden_edges_set = new Set(visibility_attrib.getEntsFromVal('hidden'));
         }
         // get the edge material attrib
-        const pline_material_attrib = this._geom.modeldata.attribs._attribs_maps.pl.get('material');
+        const pline_material_attrib = this._geom.modeldata.attribs.attribs_maps.get(ssid).pl.get('material');
         // loop through all edges
-        this._geom_maps.dn_edges_verts.forEach( (edge_verts_i, edge_i) => {
+        // get ents from snapshot
+        const edges_i: number[] = this._geom.snapshot.getEnts(ssid, EEntType.EDGE);
+        for (const edge_i of edges_i) {
+            const edge_verts_i: TEdge = this._geom_maps.dn_edges_verts.get(edge_i);
             // check hidden
             const hidden: boolean = visibility_attrib && hidden_edges_set.has(edge_i);
             if (!hidden) {
@@ -176,7 +182,7 @@ export class GIGeomThreejs {
                         pline_mat_index = material_names.indexOf(pline_mat_name);
                         // add material
                         if (pline_mat_index === -1) {
-                            const mat_settings_obj: object = this._geom.modeldata.attribs._attribs_maps.mo.get(pline_mat_name);
+                            const mat_settings_obj: object = this._geom.modeldata.attribs.attribs_maps.get(ssid).mo.get(pline_mat_name);
                             if (mat_settings_obj !== undefined) {
                                 pline_mat_index = material_names.push(pline_mat_name) - 1;
                                 materials.push(this._getPlineMaterial(mat_settings_obj));
@@ -189,7 +195,7 @@ export class GIGeomThreejs {
                 // add the data to the data_array
                 edge_data_arrs.push( [ pline_mat_index, new_edge_verts_i, edge_i ] );
             }
-        });
+        }
         // sort that data_array, so that we get edges sorted according to their materials
         // for each entry in the data_array, the first item is the material indices, so that they are sorted correctly
         if (pline_material_attrib !== undefined) {
@@ -220,7 +226,7 @@ export class GIGeomThreejs {
         }
         // convert the mat_groups_map into the format required for threejs
         // for each material group, we need an array [start, count, mat_index]
-        const material_groups: [number, number, number][] = this._convertMatGroups(mat_groups_map);
+        const material_groups: [number, number, number][] = this._convertMatGroups(mat_groups_map, 2);
         // convert the verts list to a flat array
         // tslint:disable-next-line:no-unused-expression
         // @ts-ignore
@@ -238,21 +244,24 @@ export class GIGeomThreejs {
      * Returns a flat list of the sequence of verices for all the points.
      * The indices in the list point to the vertices.
      */
-    public get3jsPoints(vertex_map: Map<number, number>): [number[], Map<number, number>] {
+    public get3jsPoints(ssid: number, vertex_map: Map<number, number>): [number[], Map<number, number>] {
         const points_verts_i_filt: TPoint[] = [];
         const point_select_map: Map<number, number> = new Map();
-        this._geom_maps.dn_points_verts.forEach( (vert_i, point_i) => {
+        // get ents from snapshot
+        const points_i: number[] = this._geom.snapshot.getEnts(ssid, EEntType.POINT);
+        for (const point_i of points_i) {
+            const vert_i: number = this._geom_maps.dn_points_verts.get(point_i);
             const new_point_verts_i: TPoint = vertex_map.get(vert_i) as TPoint;
             const tjs_i = points_verts_i_filt.push(new_point_verts_i) - 1;
             point_select_map.set(tjs_i, point_i);
-        });
+        }
         return [points_verts_i_filt, point_select_map];
     }
         /**
      * Create a threejs material
      * @param settings
      */
-    private _convertMatGroups(mat_groups_map: Map<number, [number, number][]>): [number, number, number][] {
+    private _convertMatGroups(mat_groups_map: Map<number, [number, number][]>, num_verts: number): [number, number, number][] {
         // convert the mat_groups_map into the format required for threejs
         // for each material group, we need an array [start, count, mat_index]
         const material_groups: [number, number, number][] = []; // [start, count, mat_index][]
@@ -260,7 +269,7 @@ export class GIGeomThreejs {
             for (const start_end of start_end_arrs) {
                 const start: number = start_end[0];
                 const count: number = start_end[1] - start_end[0] + 1;
-                material_groups.push( [ start * 3, count * 3, mat_index ] );
+                material_groups.push( [ start * num_verts, count * num_verts, mat_index ] );
             }
         });
         return material_groups;

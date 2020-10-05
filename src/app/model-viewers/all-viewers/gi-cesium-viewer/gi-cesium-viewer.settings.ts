@@ -15,6 +15,9 @@ export interface CesiumSettings {
     time: {
         date: string;
     };
+    model: {
+        polygonEdge: boolean;
+    };
     cesium: {
         ion: string;
         assetid: string;
@@ -39,6 +42,9 @@ export const cesium_default_settings: CesiumSettings = {
     },
     'time': {
         'date': (new Date()).toISOString().split(':').slice(0, 2).join(':'),
+    },
+    'model': {
+        'polygonEdge': false
     },
     'cesium': {
         'ion': '',

@@ -118,10 +118,9 @@ export class DataThreejs extends DataThreejsLookAt {
 
     private _addGeom(model: GIModel): void {
         // Add geometry
-        const threejs_data: IThreeJS = model.get3jsData();
+        const threejs_data: IThreeJS = model.get3jsData(model.outputSnapshot);
         this.tri_select_map = threejs_data.tri_select_map;
         this.edge_select_map = threejs_data.edge_select_map;
-        this.white_edge_select_map = threejs_data.white_edge_select_map;
         this.point_select_map = threejs_data.point_select_map;
         this.posis_map = threejs_data.posis_map;
         this.vertex_map = threejs_data.verts_map;
@@ -139,7 +138,7 @@ export class DataThreejs extends DataThreejsLookAt {
         const colors_buffer = new THREE.Float32BufferAttribute(threejs_data.colors, 3);
         const posis_xyz_buffer = new THREE.Float32BufferAttribute(threejs_data.posis_xyz, 3);
         this._addTris(threejs_data.tri_indices, verts_xyz_buffer, colors_buffer, normals_buffer, pgon_material_groups, pgon_materials);
-        this._addLines(threejs_data.edge_indices, threejs_data.white_edge_indices, verts_xyz_buffer, colors_buffer, normals_buffer);
+        this._addLines(threejs_data.edge_indices, verts_xyz_buffer, colors_buffer, pline_material_groups, pline_materials);
         this._addPoints(threejs_data.point_indices, verts_xyz_buffer, colors_buffer, [255, 255, 255], this.settings.positions.size + 1);
 
         // if (threejs_data.timeline) {
@@ -488,6 +487,7 @@ export class DataThreejs extends DataThreejsLookAt {
             material_arr.push(mat);
         }
         const mesh = new THREE.Mesh(geom, material_arr);
+        mesh.name = 'obj_tri';
 
         mesh.geometry.computeBoundingSphere();
         if (normals_buffer.count === 0) {
@@ -510,44 +510,82 @@ export class DataThreejs extends DataThreejsLookAt {
     /**
      * Add threejs lines to the scene
      */
-    private _addLines(lines_i: number[], white_line_i: number[],
+    private _addLines(lines_i: number[],
                     posis_buffer: THREE.Float32BufferAttribute,
                     color_buffer: THREE.Float32BufferAttribute,
-                    normals_buffer: THREE.Float32BufferAttribute,
-                    size: number = 1): void {
+                    material_groups, materials): void {
         const geom = new THREE.BufferGeometry();
         geom.setIndex(lines_i);
         geom.setAttribute('position', posis_buffer);
         geom.setAttribute('color', color_buffer);
         // this._buffer_geoms.push(geom);
 
-        // // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
-        const mat = new THREE.LineDashedMaterial({
-            color: 0x000000,
-            vertexColors: THREE.VertexColors,
-            gapSize: 0
+        // // // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
+        // const mat = new THREE.LineDashedMaterial({
+        //     color: 0x000000,
+        //     vertexColors: THREE.VertexColors,
+        //     gapSize: 0
+        // });
+        // const line = new THREE.LineSegments(geom, mat);
+        // this.scene_objs.push(line);
+        // this.scene.add(line);
+
+        // const geom_white = new THREE.BufferGeometry();
+        // geom_white.setIndex(white_line_i);
+        // geom_white.setAttribute('position', posis_buffer);
+        // geom_white.setAttribute('color', color_buffer);
+        // // this._buffer_geoms.push(geom_white);
+
+        // // // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
+        // const mat_white = new THREE.LineDashedMaterial({
+        //     color: 0xFFFFFF,
+        //     vertexColors: THREE.VertexColors,
+        //     gapSize: 0
+        // });
+        // const line_white = new THREE.LineSegments(geom_white, mat_white);
+        // this.scene_objs.push(line_white);
+        // this.scene.add(line_white);
+
+        // this.threejs_nums[1] = lines_i.length  / 2;
+
+
+        const material_arr = [];
+        let index = 0;
+        const l = materials.length;
+        for (; index < l; index++) {
+            const element = materials[index];
+            if (element.type === 'LineBasicMaterial') {
+                const mat = new THREE.LineDashedMaterial({
+                    color: element.color || 0,
+                    vertexColors: THREE.VertexColors,
+                    scale: 1,
+                    dashSize: 1000,
+                    gapSize: 0,
+                });
+                material_arr.push(mat);
+            } else {
+                const mat = new THREE.LineDashedMaterial({
+                    color: element.color || 0,
+                    scale: element.scale || 1,
+                    dashSize: element.dashSize || 2,
+                    gapSize: element.gapSize || 1,
+                    vertexColors: THREE.VertexColors
+                });
+                material_arr.push(mat);
+            }
+        }
+        material_groups.forEach(element => {
+            geom.addGroup(element[0], element[1], element[2]);
         });
-        const line = new THREE.LineSegments(geom, mat);
+        const newGeom = geom.toNonIndexed();
+
+        const line = new THREE.LineSegments(newGeom, material_arr);
+        line.name = 'obj_line';
+        line.computeLineDistances();
         this.scene_objs.push(line);
         this.scene.add(line);
+        this.threejs_nums[1] = lines_i.length / 2;
 
-        const geom_white = new THREE.BufferGeometry();
-        geom_white.setIndex(white_line_i);
-        geom_white.setAttribute('position', posis_buffer);
-        geom_white.setAttribute('color', color_buffer);
-        // this._buffer_geoms.push(geom_white);
-
-        // // geom.addAttribute( 'color', new THREE.Float32BufferAttribute( colors_flat, 3 ) );
-        const mat_white = new THREE.LineDashedMaterial({
-            color: 0xFFFFFF,
-            vertexColors: THREE.VertexColors,
-            gapSize: 0
-        });
-        const line_white = new THREE.LineSegments(geom_white, mat_white);
-        this.scene_objs.push(line_white);
-        this.scene.add(line_white);
-
-        this.threejs_nums[1] = (lines_i.length + white_line_i.length) / 2;
     }
     // ============================================================================
     /**
@@ -573,6 +611,7 @@ export class DataThreejs extends DataThreejsLookAt {
             sizeAttenuation: false
         });
         const point = new THREE.Points(geom, mat);
+        point.name = 'obj_pt';
         this.scene_objs.push(point);
         this.scene.add(point);
         this.threejs_nums[0] = points_i.length;

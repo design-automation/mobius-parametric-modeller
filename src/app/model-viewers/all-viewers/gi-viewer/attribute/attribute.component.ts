@@ -27,6 +27,7 @@ export class AttributeComponent implements OnChanges {
     @ViewChild(ATabsComponent, { static: true }) child: ATabsComponent;
 
     @Input() model: GIModel;
+    @Input() nodeIndex: number;
     @Input() refresh: Event;
     @Input() reset: Event;
     @Output() attrTableSelect = new EventEmitter<Object>();
@@ -139,17 +140,17 @@ export class AttributeComponent implements OnChanges {
     }
 
     generateTable(tabIndex: number) {
-        if (this.model) {
+        if (this.model && this.nodeIndex) {
             const ThreeJSData = this.model.modeldata.attribs.threejs;
             if (Number(tabIndex) === 9) {
-                this.displayData = ThreeJSData.getModelAttribsForTable();
+                this.displayData = ThreeJSData.getModelAttribsForTable(this.nodeIndex);
             } else {
                 const ready = this.model.modeldata.attribs.threejs instanceof GIAttribsThreejs;
                 this.selected_ents = this.dataService.selected_ents.get(EEntTypeStr[this.tab_map[tabIndex]]);
 
                 if (!ready) { return; }
                 if (this.showSelected) {
-                    const SelectedAttribData = ThreeJSData.getEntsVals(this.selected_ents, this.tab_map[tabIndex]);
+                    const SelectedAttribData = ThreeJSData.getEntsVals(this.nodeIndex, this.selected_ents, this.tab_map[tabIndex]);
                     SelectedAttribData.map(row => {
                         if (this.selected_ents.has(row._id)) {
                             return row.selected = true;
@@ -157,7 +158,7 @@ export class AttributeComponent implements OnChanges {
                     });
                     this.displayData = SelectedAttribData;
                 } else {
-                    const AllAttribData = ThreeJSData.getAttribsForTable(this.tab_map[tabIndex]).data;
+                    const AllAttribData = ThreeJSData.getAttribsForTable(this.nodeIndex, this.tab_map[tabIndex]).data;
                     AllAttribData.map(row => {
                         if (this.selected_ents.has(row._id)) {
                             return row.selected = true;
@@ -350,8 +351,9 @@ export class AttributeComponent implements OnChanges {
         }
         const id = Number(ent_id.substr(2));
         // Multiple row selection
+        console.log('~~~~~~~~~~~~~~',this.nodeIndex)
         const ThreeJSData = this.model.modeldata.attribs.threejs;
-        const attrib_table = ThreeJSData.getAttribsForTable(this.tab_map[currentTab]);
+        const attrib_table = ThreeJSData.getAttribsForTable(this.nodeIndex, this.tab_map[currentTab]);
         this.current_selected = id;
         const s = this.multi_selection;
 

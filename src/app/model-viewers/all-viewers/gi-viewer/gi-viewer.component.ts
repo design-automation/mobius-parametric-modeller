@@ -28,6 +28,7 @@ export class GIViewerComponent implements OnInit {
     dataservice: DataService;
     // model data passed to the viewer
     @Input() data: GIModel;
+    @Input() nodeIndex: number;
 
     settings: ISettings = DefaultSettings;
 

@@ -56,7 +56,7 @@ export class ViewGalleryComponent implements AfterViewInit {
     }
 
     viewerData() {
-        return this.dataOutputService.getViewerData(this.getNode(), this.dataService.modelMeta, true);
+        return this.dataOutputService.getViewerData(this.getNode(), this.dataService.flowchart.model, true);
     }
 
     getFilesFromURL(): Observable<any> {

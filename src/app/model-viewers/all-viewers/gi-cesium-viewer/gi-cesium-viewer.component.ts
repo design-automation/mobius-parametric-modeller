@@ -26,6 +26,7 @@ export class GICesiumViewerComponent implements OnInit {
     public dataservice: DataCesiumService;
     // model data passed to the viewer
     @Input() data: GIModel;
+    @Input() nodeIndex: number;
     public modelData: GIModel;
     public settings: CesiumSettings;
     public backup_settings: CesiumSettings;

@@ -1,12 +1,12 @@
 import { EAttribDataTypeStrs, TAttribDataTypes, IMetaData, IMetaJSONData, IAttribJSONValues,
-    IModelJSON, IModelJSONData, IAttribJSONData, IAttribValues } from './common';
+    IModelJSON, IModelJSONData, IAttribJSONData, IAttribValues, EEntType } from './common';
 
 /**
  * Geo-info model metadata class.
  */
 export class GIMetaData {
     private _data: IMetaData = {
-        time_stamp: 0,
+        // time_stamp: 0,
         posi_count: 0,
         vert_count: 0,
         tri_count: 0,
@@ -65,7 +65,7 @@ export class GIMetaData {
             }
         }
         const data: IMetaJSONData = {
-            time_stamp: this._data.time_stamp,
+            // time_stamp: this._data.time_stamp,
             posi_count: this._data.posi_count,
             vert_count: this._data.vert_count,
             tri_count: this._data.tri_count,
@@ -159,17 +159,15 @@ export class GIMetaData {
         this._renumAttribValues(model_data.attributes.colls, renum_attrib_vals);
         // no need to return the model data
     }
-    // get next time stamp
-    public nextTimeStamp(): number {
-        const ts: number = this._data.time_stamp;
-        this._data.time_stamp += 1;
-        return ts;
-    }
-    // get next time stamp
-    public getTimeStamp(): number {
-        // const ts: number = this._data.time_stamp;
-        // this._data.time_stamp += 1;
-        return this._data.time_stamp;
+    //
+    public getEntCounts(): number[] {
+        return [
+            this._data.posi_count,
+            this._data.point_count,
+            this._data.pline_count,
+            this._data.pgon_count,
+            this._data.coll_count
+        ];
     }
     // get next index
     public nextPosi(): number {
@@ -263,6 +261,13 @@ export class GIMetaData {
         return index;
     }
     public getAttribValFromIdx(index: number, data_type: EAttribDataTypeStrs): TAttribDataTypes {
+        // TODO this is doing deep copy
+        // This may not be a good idea
+        if (data_type === EAttribDataTypeStrs.LIST) {
+            return this._data.attrib_values[data_type][0][index].slice();
+        } else if (data_type === EAttribDataTypeStrs.DICT) {
+            return this._data.attrib_values[data_type][0][index].deepCopy();
+        }
         return this._data.attrib_values[data_type][0][index];
     }
     public getAttribValFromKey(key: string|number, data_type: EAttribDataTypeStrs): TAttribDataTypes {

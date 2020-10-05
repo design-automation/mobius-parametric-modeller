@@ -34,7 +34,8 @@ export enum _ECOmpareMethod {
  * @returns void
  */
 export function ModelPurge(__model__: GIModel): void {
-    __model__.purge();
+    // __model__.purge();
+    throw new Error('Not implemented');
 }
 // ================================================================================================
 /**
@@ -187,7 +188,7 @@ function _getAttribs(__model__: GIModel, ent_type: EEntType, ent_i: number): str
     const names: string[] = __model__.modeldata.attribs.query.getAttribNames(ent_type);
     const attribs_with_vals = [];
     for (const name of names) {
-        const val = __model__.modeldata.attribs.query.getAttribVal(ent_type, name, ent_i);
+        const val = __model__.modeldata.attribs.query.getEntAttribVal(ent_type, ent_i, name);
         if (val !== undefined) {
             attribs_with_vals.push(name);
         }
@@ -197,7 +198,7 @@ function _getAttribs(__model__: GIModel, ent_type: EEntType, ent_i: number): str
 function _getColls(__model__: GIModel, ent_type: EEntType, ent_i: number): string[] {
     let colls_i: number[] = [];
     if (ent_type === EEntType.COLL) {
-        const parent: number = __model__.modeldata.geom.query.getCollParent(ent_i);
+        const parent: number = __model__.modeldata.attribs.colls.getCollParent(ent_i);
         if (parent !== -1) { colls_i = [parent]; }
     } else {
         colls_i = __model__.modeldata.geom.nav.navAnyToColl(ent_type, ent_i);
@@ -206,7 +207,7 @@ function _getColls(__model__: GIModel, ent_type: EEntType, ent_i: number): strin
     for (const coll_i of colls_i) {
         let coll_name = 'No name';
         if (__model__.modeldata.attribs.query.hasAttrib(EEntType.COLL, 'name')) {
-            coll_name = __model__.modeldata.attribs.query.getAttribVal(EEntType.COLL, 'name', coll_i) as string;
+            coll_name = __model__.modeldata.attribs.query.getEntAttribVal(EEntType.COLL, coll_i, 'name') as string;
         }
         colls_names.push(coll_name);
     }
@@ -285,7 +286,7 @@ function _collInfo(__model__: GIModel, coll_i: number): string {
     // get the data
     let coll_name = 'None';
     if (__model__.modeldata.attribs.query.hasAttrib(EEntType.COLL, 'name')) {
-        coll_name = __model__.modeldata.attribs.query.getAttribVal(EEntType.COLL, 'name', coll_i) as string;
+        coll_name = __model__.modeldata.attribs.query.getEntAttribVal(EEntType.COLL, coll_i, 'name') as string;
     }
     const attribs: string[] = _getAttribs(__model__, EEntType.COLL, coll_i);
     const num_pgons: number = __model__.modeldata.geom.nav.navCollToPgon(coll_i).length;
@@ -306,7 +307,7 @@ function _collInfo(__model__: GIModel, coll_i: number): string {
     } else if (colls_names.length > 1) {
         info += '<li>In ' + colls_names.length + ' collections: ' + colls_names.join(', ') + '</li>';
     }
-    const children: number[] = __model__.modeldata.geom.query.getCollChildren(coll_i);
+    const children: number[] = __model__.modeldata.attribs.colls.getCollChildren(coll_i);
     if (children.length > 0) {
         info += '<li>Child collections: </li>';
         for (const child of children) {
@@ -365,7 +366,7 @@ export function ExportIO(__model__: GIModel, __console__: string[], __constList_
         'fileName': __fileName__,
         'params' : newConstList,
         'console': consolidatedConsole.join('\n'),
-        'model'  : __model__.getModelData()
+        'model'  : __model__.getModelData(__model__.modeldata.time_stamp)
     };
     if (exportParams === _EIOExportParams.NO) {
         edxAnswer['params'] = undefined;
@@ -418,7 +419,7 @@ export async function ModelCompare(__model__: GIModel, input_data: string, metho
     const gi_model = await _getFile(input_data);
     const gi_obj: IModelJSONData = JSON.parse(gi_model) as IModelJSONData;
     const other_model = new GIModel();
-    other_model.setModelData(gi_obj);
+    other_model.setModelData(other_model.modeldata.time_stamp, gi_obj);
     let result: {score: number, total: number, comment: string} = null;
     // compare function has three boolean args
     // normalize: boolean
@@ -449,7 +450,7 @@ export async function ModelCompare(__model__: GIModel, input_data: string, metho
 export function ModelCheck(__model__: GIModel): string {
     console.log('==== ==== ==== ====');
     console.log('MODEL GEOM\n', __model__.modeldata.geom.toStr());
-    console.log('MODEL ATTRIBS\n', __model__.modeldata.attribs.toStr());
+    // console.log('MODEL ATTRIBS\n', __model__.modeldata.attribs.toStr());
     console.log('META\n', __model__.metadata.toDebugStr());
     console.log('==== ==== ==== ====');
     console.log(__model__);

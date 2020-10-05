@@ -2,20 +2,22 @@
 	<as-split #viewerSplit direction="vertical" (dragEnd)='dragSplitEnd($event)' [disabled]='checkPublish()'>
 		<as-split-area [size]="100 - getSplit()" id="three-js">
 			<threejs-viewer [model]='data'
+            [attr_table_select]='attrTableSelect'
+            [selectSwitch] = 'selectSwitchOnOff'
+            [attribLabel] = 'attribLabelVal'
+            [nodeIndex] = 'nodeIndex'
 			(action)="threejsAction($event)"
-				[attr_table_select]='attrTableSelect'
-				[selectSwitch] = 'selectSwitchOnOff'
-				[attribLabel] = 'attribLabelVal'
 			></threejs-viewer>
 			<button class='btn' id="settings_button" mat-icon-button (click)="openModal('settings_modal')" title="Settings"><mat-icon svgIcon="settings"></mat-icon></button>
 		</as-split-area>
 		<as-split-area [size]='getSplit()' id="attrib">
 			<attribute [model]="data"
-				[refresh]="clickedEvent"
-				[reset]="attrTableReset"
-				(attrTableSelect) = "attribTableSelected($event)"
-				(selectSwitch) = "selectSwitch($event)"
-				(attribLabel) = "attribLabel($event)"
+            [nodeIndex] = 'nodeIndex'
+            [refresh]="clickedEvent"
+            [reset]="attrTableReset"
+            (attrTableSelect) = "attribTableSelected($event)"
+            (selectSwitch) = "selectSwitch($event)"
+            (attribLabel) = "attribLabel($event)"
 			>
 			</attribute>
 		</as-split-area>

@@ -90,15 +90,15 @@ export class SaveJavascriptComponent {
             func.hasReturn = false;
         }
 
-        for (const node of func.flowchart.nodes) {
-            await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
-        }
+        // for (const node of func.flowchart.nodes) {
+        //     await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
+        // }
         let fnString = CodeUtils.getFunctionString(func);
 
         for (const i of fl.functions) {
-            for (const node of i.flowchart.nodes) {
-                await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
-            }
+            // for (const node of i.flowchart.nodes) {
+            //     await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
+            // }
             const nFunc = <IFunction> {
                 module: i.module,
                 name: func.name + '_' + i.name,
@@ -111,9 +111,9 @@ export class SaveJavascriptComponent {
         }
         if (fl.subFunctions) {
             for (const i of fl.subFunctions) {
-                for (const node of i.flowchart.nodes) {
-                    await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
-                }
+                // for (const node of i.flowchart.nodes) {
+                //     await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
+                // }
                 const nFunc = <IFunction> {
                     module: i.module,
                     name: func.name + '_' + i.name,

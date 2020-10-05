@@ -502,7 +502,6 @@ function _skyRayDirsTjs(detail: number): THREE.Vector3[] {
             vecs.push(vec);
         }
     }
-    //console.log("num rays = ", vecs.length);
     return vecs;
 }
 // ================================================================================================
@@ -1363,7 +1362,7 @@ function _cytoscapeGetElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
             const edge_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
             let weight = 1.0;
             if (has_weight_attrib) {
-                weight = __model__.modeldata.attribs.query.getAttribVal(EEntType.EDGE, 'weight', edge_i) as number;
+                weight = __model__.modeldata.attribs.query.getEntAttribVal(EEntType.EDGE, edge_i, 'weight') as number;
             } else {
                 const c0: Txyz = __model__.modeldata.attribs.query.getPosiCoords(edge_posis_i[0]);
                 const c1: Txyz = __model__.modeldata.attribs.query.getPosiCoords(edge_posis_i[1]);
@@ -1386,7 +1385,7 @@ function _cytoscapeGetElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
             } else {
                 let weight = 1.0;
                 if (has_weight_attrib) {
-                    weight = __model__.modeldata.attribs.query.getAttribVal(EEntType.EDGE, 'weight', edge_i) as number;
+                    weight = __model__.modeldata.attribs.query.getEntAttribVal(EEntType.EDGE, edge_i, 'weight') as number;
                 } else {
                     const c0: Txyz = __model__.modeldata.attribs.query.getPosiCoords(edge_posis_i[0]);
                     const c1: Txyz = __model__.modeldata.attribs.query.getPosiCoords(edge_posis_i[1]);
@@ -1667,7 +1666,7 @@ function _cyGetPosisAndElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
             const edge_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
             let weight = 1.0;
             if (has_weight_attrib) {
-                weight = __model__.modeldata.attribs.query.getAttribVal(EEntType.EDGE, 'weight', edge_i) as number;
+                weight = __model__.modeldata.attribs.query.getEntAttribVal(EEntType.EDGE, edge_i, 'weight') as number;
             } else {
                 // const c0: Txyz = __model__.modeldata.attribs.query.getPosiCoords(edge_posis_i[0]);
                 // const c1: Txyz = __model__.modeldata.attribs.query.getPosiCoords(edge_posis_i[1]);
@@ -1690,7 +1689,7 @@ function _cyGetPosisAndElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
             } else {
                 let weight = 1.0;
                 if (has_weight_attrib) {
-                    weight = __model__.modeldata.attribs.query.getAttribVal(EEntType.EDGE, 'weight', edge_i) as number;
+                    weight = __model__.modeldata.attribs.query.getEntAttribVal(EEntType.EDGE, edge_i, 'weight') as number;
                 } else {
                     // const c0: Txyz = __model__.modeldata.attribs.query.getPosiCoords(edge_posis_i[0]);
                     // const c1: Txyz = __model__.modeldata.attribs.query.getPosiCoords(edge_posis_i[1]);

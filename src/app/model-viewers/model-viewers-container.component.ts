@@ -5,6 +5,8 @@ import { Viewers } from './model-viewers.config';
 import { DataService } from '@services';
 import { DataService as GIDataService } from './all-viewers/gi-viewer/data/data.service';
 import { Router } from '@angular/router';
+import { GIModel } from '@assets/libs/geo-info/GIModel';
+import { _parameterTypes } from '@assets/core/modules';
 
 /**
  * A component that contains all the viewers.
@@ -18,9 +20,10 @@ import { Router } from '@angular/router';
 })
 export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy {
     @ViewChild('vc', { read: ViewContainerRef, static: true }) vc: ViewContainerRef;
-    @Input() data: any;
+    // @Input() data: any;
     private views = [];
     private activeView: IView;
+    private emptyModel: GIModel;
     Viewers = Viewers;
     /**
      * Construct the viewer container.
@@ -30,6 +33,9 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
     constructor(private injector: Injector, private r: ComponentFactoryResolver, private dataService: DataService,
                 private giDataService: GIDataService, private router: Router) {
         let viewCheck: any;
+        this.emptyModel = _parameterTypes.newFn();
+        this.emptyModel.nextSnapshot([]);
+
         const page = this.router.url.split('?')[0]
         // if (page === '/publish' || page === '/minimal') {
         //     this.Viewers = [];
@@ -178,7 +184,13 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
             if (this.activeView.name === 'Help') {
                 // componentRef.instance['output'] = this.dataService.helpView[1];
             } else if (this.activeView.name !== 'Console') {
-                componentRef.instance['data'] = this.data;
+                if (!this.dataService.node.enabled) {
+                    componentRef.instance['data'] = this.emptyModel;
+                    componentRef.instance['nodeIndex'] = 1;
+                } else {
+                    componentRef.instance['data'] = this.dataService.flowchart.model;
+                    componentRef.instance['nodeIndex'] = this.dataService.node.model;
+                }
             // } else {
             //     componentRef.instance['scrollcheck'] = true;
             }

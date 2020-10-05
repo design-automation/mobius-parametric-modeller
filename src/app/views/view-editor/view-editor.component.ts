@@ -59,7 +59,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     }
 
     viewerData() {
-        return this.dataOutputService.getViewerData(this.getNode(), this.dataService.modelMeta, this.getViewOutput());
+        return this.dataOutputService.getViewerData(this.getNode(), this.dataService.flowchart.model, this.getViewOutput());
     }
 
     performAction_param_editor(event: any) {

@@ -88,7 +88,7 @@ export function exportVertBasedObj(model: GIModel, entities: TEntTypeIdx[]): str
         const vert_i: number =  verts_i[i];
         const coord: Txyz = model.modeldata.attribs.query.getVertCoords(vert_i);
         if (has_color_attrib) {
-            let color: TColor = model.modeldata.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, vert_i) as TColor;
+            let color: TColor = model.modeldata.attribs.query.getEntAttribVal(EEntType.VERT, vert_i, EAttribNames.COLOR) as TColor;
             if (color === undefined) { color = [1, 1, 1]; }
             v_str += 'v ' + coord.map( v => v.toString() ).join(' ')  + ' ' + color.map( c => c.toString() ).join(' ') + '\n';
         } else {
@@ -184,7 +184,7 @@ export function exportPosiBasedObj(model: GIModel, entities: TEntTypeIdx[]): str
             let color: TColor = [0, 0, 0];
             for (const posi_vert_i of posi_verts_i) {
                 let vert_color: TColor =
-                    model.modeldata.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.COLOR, posi_vert_i) as TColor;
+                    model.modeldata.attribs.query.getEntAttribVal(EEntType.VERT, posi_vert_i, EAttribNames.COLOR) as TColor;
                 if (vert_color === undefined) { vert_color = [1, 1, 1]; }
                 color = [color[0] + vert_color[0], color[1] + vert_color[1], color[2] + vert_color[2]];
             }
@@ -268,7 +268,7 @@ function _getTexturesStr(model: GIModel, verts_i: number[], has_texture_attrib: 
     if (has_texture_attrib) {
         for (let i = 0; i < verts_i.length; i++) {
             const vert_i  = verts_i[i];
-            const texture: TTexture = model.modeldata.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.TEXTURE, vert_i) as TTexture;
+            const texture: TTexture = model.modeldata.attribs.query.getEntAttribVal(EEntType.VERT, vert_i, EAttribNames.TEXTURE) as TTexture;
             if (texture !== undefined) {
                 vt_str += 'vt ' + texture.map( v => v.toString() ).join(' ') + '\n';
                 vert_i_obj_vt[vert_i] = i;
@@ -289,7 +289,7 @@ function _getNormalsStr(model: GIModel, verts_i: number[], has_normal_attrib: bo
     if (has_normal_attrib) {
         for (let i = 0; i < verts_i.length; i++) {
             const vert_i  = verts_i[i];
-            const  normal: TNormal = model.modeldata.attribs.query.getAttribVal(EEntType.VERT, EAttribNames.NORMAL, vert_i) as TNormal;
+            const  normal: TNormal = model.modeldata.attribs.query.getEntAttribVal(EEntType.VERT, vert_i, EAttribNames.NORMAL) as TNormal;
             if (normal !== undefined) {
                 vn_str += 'vn ' + normal.map( v => v.toString() ).join(' ') + '\n';
                 vert_i_obj_vn[vert_i] = i;
@@ -315,11 +315,11 @@ function _getGroups(model: GIModel, ent_type: EEntType, ents_i: number[]): [stri
         const set_all_colls_i: Set<number> = new Set();
         for (const coll_i of colls_i) {
             set_all_colls_i.add(coll_i);
-            for (const anc_coll_i of model.modeldata.geom.query.getCollAncestors(coll_i)) {
+            for (const anc_coll_i of model.modeldata.geom.modeldata.attribs.colls.getCollAncestors(coll_i)) {
                 set_all_colls_i.add(anc_coll_i);
             }
         }
-        const names: string[] = model.modeldata.attribs.query.getAttribVal(EEntType.COLL, 'name', Array.from(set_all_colls_i)) as string[];
+        const names: string[] = model.modeldata.attribs.query.getEntAttribVal(EEntType.COLL, Array.from(set_all_colls_i), 'name') as string[];
         let key = NOGROUPS;
         if (names.length > 0) {
             names.sort();

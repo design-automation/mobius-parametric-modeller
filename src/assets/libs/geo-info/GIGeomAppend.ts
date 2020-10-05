@@ -1,6 +1,7 @@
 import { IGeomMaps, TTri, TEdge, TWire, TFace,
-    TVert, TFaceTri, TPoint, TPline, TPgon, EEntType } from './common';
+    TVert, TFaceTri, TPoint, TPline, TPgon, EEntType, IEntSets } from './common';
 import { GIGeom } from './GIGeom';
+import { GIModelData } from './GIModelData';
 
 /**
  * Class for appending geometry from another model into this model.
@@ -23,19 +24,15 @@ export class GIGeomAppend {
      * The entities in the other model are renumbered.
      * @param other_geom_maps The geom_arrays of the other model.
      */
-    public append(other_geom_maps: IGeomMaps): Map<string, Map<number, number>> {
-        // get lengths of existing entities before we start adding stuff
-        // const num_posis: number = this._geom_maps.num_posis;
-        // const num_posis: number = this._geom_maps.up_posis_verts.size;
-        // const num_verts: number = this._geom_maps.dn_verts_posis.size;
-        // const num_tris: number = this._geom_maps.dn_tris_verts.size;
-        // const num_edges: number = this._geom_maps.dn_edges_verts.size;
-        // const num_wires: number = this._geom_maps.dn_wires_edges.size;
-        // const num_faces: number = this._geom_maps.dn_faces_wires.size;
-        // const num_points: number = this._geom_maps.dn_points_verts.size;
-        // const num_plines: number = this._geom_maps.dn_plines_wires.size;
-        // const num_pgons: number = this._geom_maps.dn_pgons_faces.size;
-        // const num_colls: number = this._geom_maps.up_colls_colls.size;
+    public append(ssid: number, ssid2: number, other_modeldata: GIModelData ): Map<string, Map<number, number>> {
+        const other_geom_maps: IGeomMaps = other_modeldata.geom._geom_maps;
+        const other_ent_sets: IEntSets = other_modeldata.geom.snapshot.getEntSets(ssid2);
+        //
+        //
+        // TODO currently this imports all ents
+        // We only want ents that are part of ssid2
+        //
+        //
         // ======================================================================
         // get maps for entities
         // positions
@@ -104,7 +101,7 @@ export class GIGeomAppend {
         // colls
         const renum_colls_map: Map<number, number> = new Map();
         let colls_count = 0;
-        other_geom_maps.up_colls_colls.forEach( (_, other_coll_i) => {
+        other_geom_maps.colls.forEach( (_, other_coll_i) => {
             renum_colls_map.set(other_coll_i, this._geom.modeldata.model.metadata.nextColl());
             colls_count += 1;
         });
@@ -169,7 +166,7 @@ export class GIGeomAppend {
                 new_point_i,
                 renum_verts_map.get(other_vert_i) as TPoint
             );
-            this._geom.time_stamp.updateEntTs(EEntType.POINT, new_point_i);
+            this._geom.modeldata.updateEntTs(EEntType.POINT, new_point_i);
         });
         // add plines to model
         other_geom_maps.dn_plines_wires.forEach( (other_wire_i, other_pline_i) => {
@@ -178,7 +175,7 @@ export class GIGeomAppend {
                 new_pline_i,
                 renum_wires_map.get(other_wire_i) as TPline
             );
-            this._geom.time_stamp.updateEntTs(EEntType.PLINE, new_pline_i);
+            this._geom.modeldata.updateEntTs(EEntType.PLINE, new_pline_i);
         });
         // add pgons to model
         other_geom_maps.dn_pgons_faces.forEach( (other_face_i, other_pgon_i) => {
@@ -187,27 +184,27 @@ export class GIGeomAppend {
                 new_pgon_i,
                 renum_faces_map.get(other_face_i) as TPgon
             );
-            this._geom.time_stamp.updateEntTs(EEntType.PGON, new_pgon_i);
+            this._geom.modeldata.updateEntTs(EEntType.PGON, new_pgon_i);
         });
         // add collections to model
-        other_geom_maps.dn_colls_points.forEach( (other_points_i, other_coll_i) => {
-            this._geom_maps.dn_colls_points.set(
-                renum_colls_map.get(other_coll_i),
-                other_points_i.map( other_point_i => renum_points_map.get(other_point_i)) as number[]
-            );
-        });
-        other_geom_maps.dn_colls_plines.forEach( (other_plines_i, other_coll_i) => {
-            this._geom_maps.dn_colls_plines.set(
-                renum_colls_map.get(other_coll_i),
-                other_plines_i.map( other_pline_i => renum_plines_map.get(other_pline_i)) as number[]
-            );
-        });
-        other_geom_maps.dn_colls_pgons.forEach( (other_pgons_i, other_coll_i) => {
-            this._geom_maps.dn_colls_pgons.set(
-                renum_colls_map.get(other_coll_i),
-                other_pgons_i.map( other_pgon_i => renum_pgons_map.get(other_pgon_i)) as number[]
-            );
-        });
+        // other_geom_maps.dn_colls_points.forEach( (other_points_i, other_coll_i) => {
+        //     this._geom.modeldata.attribs.colls.setCollPoints(
+        //         renum_colls_map.get(other_coll_i),
+        //         other_points_i.map( other_point_i => renum_points_map.get(other_point_i)) as number[]
+        //     );
+        // });
+        // other_geom_maps.dn_colls_plines.forEach( (other_plines_i, other_coll_i) => {
+        //     this._geom.modeldata.attribs.colls.setCollPlines(
+        //         renum_colls_map.get(other_coll_i),
+        //         other_plines_i.map( other_pline_i => renum_plines_map.get(other_pline_i)) as number[]
+        //     );
+        // });
+        // other_geom_maps.dn_colls_pgons.forEach( (other_pgons_i, other_coll_i) => {
+        //     this._geom.modeldata.attribs.colls.setCollPgons(
+        //         renum_colls_map.get(other_coll_i),
+        //         other_pgons_i.map( other_pgon_i => renum_pgons_map.get(other_pgon_i)) as number[]
+        //     );
+        // });
         // ======================================================================
         // update up arrays
         // update posis to verts (they can be null or [])
@@ -218,7 +215,7 @@ export class GIGeomAppend {
                 new_posi_i,
                 other_verts_i.map( other_vert_i => renum_verts_map.get(other_vert_i))
             );
-            this._geom.time_stamp.updateEntTs(EEntType.POSI, new_posi_i);
+            this._geom.modeldata.updateEntTs(EEntType.POSI, new_posi_i);
         });
         // update verts to tris
         other_geom_maps.up_verts_tris.forEach( (other_tris_i, other_vert_i) => {
@@ -276,39 +273,44 @@ export class GIGeomAppend {
                 renum_pgons_map.get(other_pgon_i)
             );
         });
-        // update points to colls
-        other_geom_maps.up_points_colls.forEach( (other_colls_i, other_point_i) => {
-            this._geom_maps.up_points_colls.set(
-                renum_points_map.get(other_point_i),
-                other_colls_i.map( other_coll_i => renum_colls_map.get(other_coll_i))
-            );
-        });
-        // update plines to colls
-        other_geom_maps.up_plines_colls.forEach( (other_colls_i, other_pline_i) => {
-            this._geom_maps.up_plines_colls.set(
-                renum_plines_map.get(other_pline_i),
-                other_colls_i.map( other_coll_i => renum_colls_map.get(other_coll_i))
-            );
-        });
-        // update pgons to colls
-        other_geom_maps.up_pgons_colls.forEach( (other_colls_i, other_pgon_i) => {
-            this._geom_maps.up_pgons_colls.set(
-                renum_pgons_map.get(other_pgon_i),
-                other_colls_i.map( other_coll_i => renum_colls_map.get(other_coll_i))
-            );
-        });
-        // update colls to colls
-        other_geom_maps.up_colls_colls.forEach( (other_parent_coll_i, other_coll_i) => {
+        // // update points to colls
+        // other_geom_maps.up_points_colls.forEach( (other_colls_i, other_point_i) => {
+        //     this._geom_maps.up_points_colls.set(
+        //         renum_points_map.get(other_point_i),
+        //         other_colls_i.map( other_coll_i => renum_colls_map.get(other_coll_i))
+        //     );
+        // });
+        // // update plines to colls
+        // other_geom_maps.up_plines_colls.forEach( (other_colls_i, other_pline_i) => {
+        //     this._geom_maps.up_plines_colls.set(
+        //         renum_plines_map.get(other_pline_i),
+        //         other_colls_i.map( other_coll_i => renum_colls_map.get(other_coll_i))
+        //     );
+        // });
+        // // update pgons to colls
+        // other_geom_maps.up_pgons_colls.forEach( (other_colls_i, other_pgon_i) => {
+        //     this._geom_maps.up_pgons_colls.set(
+        //         renum_pgons_map.get(other_pgon_i),
+        //         other_colls_i.map( other_coll_i => renum_colls_map.get(other_coll_i))
+        //     );
+        // });
+        // // update colls to colls
+        // other_geom_maps.up_colls_colls.forEach( (other_parent_coll_i, other_coll_i) => {
+        //     const new_coll_i: number = renum_colls_map.get(other_coll_i);
+        //     this._geom_maps.up_colls_colls.set(
+        //         new_coll_i,
+        //         renum_colls_map.get(other_parent_coll_i),
+        //     );
+        //     this._geom.modeldata.updateEntTs(EEntType.COLL, new_coll_i);
+        // });
+        // return the maps
+        // ======================================================================
+        // add collections
+        other_geom_maps.colls.forEach( other_coll_i => {
             const new_coll_i: number = renum_colls_map.get(other_coll_i);
-            this._geom_maps.up_colls_colls.set(
-                new_coll_i,
-                renum_colls_map.get(other_parent_coll_i),
-            );
-            this._geom.time_stamp.updateEntTs(EEntType.COLL, new_coll_i);
+            this._geom_maps.colls.add(new_coll_i);
+            this._geom.modeldata.updateEntTs(EEntType.COLL, new_coll_i);
         });
-        // Check that we have correct number of time stamps
-        // TODO this can be deleted later
-        this._geom.time_stamp.checkTimeStamps();
         // return the maps
         return renum_maps;
     }

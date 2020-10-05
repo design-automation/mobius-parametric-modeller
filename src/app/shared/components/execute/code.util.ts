@@ -616,26 +616,37 @@ export class CodeUtils {
 
 
 
-    static getInputValue(inp: IPortInput, node: INode, nodeIndices: {}): Promise<string> {
-        let input: any;
-        // const x = performance.now();
-        if (node.type === 'start' || inp.edges.length === 0) {
-            input = _parameterTypes['newFn']();
-        // } else if (inp.edges.length === 1 && inp.edges[0].source.parentNode.enabled) {
-        //     input = inp.edges[0].source.value.clone();
-        //     console.log('clone time:', performance.now() - x);
-        } else {
-            let inputs = [];
-            for (const edge of inp.edges) {
-                if (!edge.source.parentNode.enabled) {
-                    continue;
-                }
-                inputs.push([nodeIndices[edge.source.parentNode.id], edge.source.value]);
+    // static getInputValue(inp: IPortInput, node: INode, nodeIndices: {}): string {
+    //     let input: any;
+    //     // const x = performance.now();
+    //     if (node.type === 'start' || inp.edges.length === 0) {
+    //         input = _parameterTypes['newFn']();
+    //     // } else if (inp.edges.length === 1 && inp.edges[0].source.parentNode.enabled) {
+    //     //     input = inp.edges[0].source.value.clone();
+    //     //     console.log('clone time:', performance.now() - x);
+    //     } else {
+    //         let inputs = [];
+    //         for (const edge of inp.edges) {
+    //             if (!edge.source.parentNode.enabled) {
+    //                 continue;
+    //             }
+    //             inputs.push([nodeIndices[edge.source.parentNode.id], edge.source.value]);
+    //         }
+    //         inputs = inputs.sort((a, b) => a[0] - b[0]);
+    //         const mergeModels = inputs.map(i => i[1])
+    //         input = CodeUtils.mergeInputs(mergeModels);
+    //         // console.log('merge time:', performance.now() - x);
+    //     }
+    //     return input;
+    // }
+
+    static getInputValue(inp: IPortInput, node: INode, nodeIndices: {}): number[] {
+        const input = [];
+        for (const edge of inp.edges) {
+            if (!edge.source.parentNode.enabled) {
+                continue;
             }
-            inputs = inputs.sort((a, b) => a[0] - b[0]);
-            const mergeModels = inputs.map(i => i[1])
-            input = CodeUtils.mergeInputs(mergeModels);
-            // console.log('merge time:', performance.now() - x);
+            input.push(edge.source.parentNode.model);
         }
         return input;
     }
@@ -668,8 +679,7 @@ export class CodeUtils {
 
         // input initializations
         if (isMainFlowchart) {
-            const input = CodeUtils.getInputValue(node.input, node, nodeIndices);
-            node.input.value = input;
+            node.input.value = CodeUtils.getInputValue(node.input, node, nodeIndices);
         }
 
         if (node.type === 'start') {

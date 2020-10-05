@@ -48,7 +48,8 @@ export class FlowchartUtils {
             nodes: [ startNode, middleNode, endNode ],
             edges: [ startMid, midEnd ],
             functions: [],
-            ordered: true
+            ordered: true,
+            model: null
         };
 
         return flw;

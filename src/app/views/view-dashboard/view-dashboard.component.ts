@@ -35,7 +35,7 @@ export class ViewDashboardComponent implements AfterViewInit, OnDestroy {
     }
 
     viewerData() {
-        return this.dataOutputService.getViewerData(this.getNode(), this.dataService.modelMeta, true);
+        return this.dataOutputService.getViewerData(this.getNode(), this.dataService.flowchart.model, true);
     }
 
     // adjustTextArea() {

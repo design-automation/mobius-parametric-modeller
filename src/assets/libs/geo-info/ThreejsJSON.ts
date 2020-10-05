@@ -10,8 +10,6 @@ export interface IThreeJS {
     point_select_map: Map<number, number>;
     edge_indices: number[];
     edge_select_map: Map<number, number>;
-    white_edge_indices: number[]; // TODO remove
-    white_edge_select_map: Map<number, number>; // TODO remove
     tri_indices: number[];
     tri_select_map: Map<number, number>;
     pline_materials: object[];

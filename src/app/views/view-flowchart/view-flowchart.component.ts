@@ -311,7 +311,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     viewerData() {
-        return this.dataOutputService.getViewerData(this.getNode(), this.dataService.modelMeta, true);
+        return this.dataOutputService.getViewerData(this.getNode(), this.dataService.flowchart.model, true);
     }
 
     convertCoord(pt) {

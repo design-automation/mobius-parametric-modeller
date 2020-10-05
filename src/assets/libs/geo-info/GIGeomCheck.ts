@@ -307,23 +307,24 @@ export class GIGeomCheck {
                 errors.push('Point ' + point_i + ': Vertex->Point index is incorrect.');
             }
             // up from point to coll
-            const colls_i: number[] = this._geom_maps.up_points_colls.get(point_i);
-            if (colls_i === undefined) { return; } // not in coll
-            for (const coll_i of colls_i) {
-                if (coll_i === undefined) {
-                    errors.push('Point ' + point_i + ': Point->Coll undefined.');
-                }
-                if (coll_i === null) {
-                    errors.push('Point ' + point_i + ': Point->Coll null.');
-                }
-                // down from coll to points
-                const coll_points: number[] = this._geom_maps.dn_colls_points.get(coll_i);
-                if (coll_points === undefined) { errors.push('Point ' + point_i + ': Coll->Objs undefined.'); }
-                if (coll_points === null) { errors.push('Point ' + point_i + ': Coll->Objs null.'); }
-                if (coll_points.indexOf(point_i) === -1) {
-                    errors.push('Point ' + point_i + ': Coll->Point missing.');
-                }
-            }
+            // TODO check collections
+            // const colls_i: number[] = this._geom_maps.up_points_colls.get(point_i);
+            // if (colls_i === undefined) { return; } // not in coll
+            // for (const coll_i of colls_i) {
+            //     if (coll_i === undefined) {
+            //         errors.push('Point ' + point_i + ': Point->Coll undefined.');
+            //     }
+            //     if (coll_i === null) {
+            //         errors.push('Point ' + point_i + ': Point->Coll null.');
+            //     }
+            //     // down from coll to points
+            //     const coll_points: number[] = this._geom_maps.dn_colls_points.get(coll_i);
+            //     if (coll_points === undefined) { errors.push('Point ' + point_i + ': Coll->Objs undefined.'); }
+            //     if (coll_points === null) { errors.push('Point ' + point_i + ': Coll->Objs null.'); }
+            //     if (coll_points.indexOf(point_i) === -1) {
+            //         errors.push('Point ' + point_i + ': Coll->Point missing.');
+            //     }
+            // }
         });
         return errors;
     }
@@ -340,23 +341,24 @@ export class GIGeomCheck {
                 errors.push('Pline ' + pline_i + ': Wire->Pline index is incorrect.');
             }
             // up from pline to coll
-            const colls_i: number[] = this._geom_maps.up_plines_colls.get(pline_i);
-            if (colls_i === undefined) { return; } // not in coll
-            for (const coll_i of colls_i) {
-                if (coll_i === undefined) {
-                    errors.push('Pline ' + pline_i + ': Pline->Coll undefined.');
-                }
-                if (coll_i === null) {
-                    errors.push('Pline ' + pline_i + ': Pline->Coll null.');
-                }
-                // down from coll to plines
-                const coll_plines: number[] = this._geom_maps.dn_colls_plines.get(coll_i);
-                if (coll_plines === undefined) { errors.push('Pline ' + pline_i + ': Coll->Objs undefined.'); }
-                if (coll_plines === null) { errors.push('Pline ' + pline_i + ': Coll->Objs null.'); }
-                if (coll_plines.indexOf(pline_i) === -1) {
-                    errors.push('Pline ' + pline_i + ': Coll->Pline missing.');
-                }
-            }
+            // TODO check collections
+            // const colls_i: number[] = this._geom_maps.up_plines_colls.get(pline_i);
+            // if (colls_i === undefined) { return; } // not in coll
+            // for (const coll_i of colls_i) {
+            //     if (coll_i === undefined) {
+            //         errors.push('Pline ' + pline_i + ': Pline->Coll undefined.');
+            //     }
+            //     if (coll_i === null) {
+            //         errors.push('Pline ' + pline_i + ': Pline->Coll null.');
+            //     }
+            //     // down from coll to plines
+            //     const coll_plines: number[] = this._geom_maps.dn_colls_plines.get(coll_i);
+            //     if (coll_plines === undefined) { errors.push('Pline ' + pline_i + ': Coll->Objs undefined.'); }
+            //     if (coll_plines === null) { errors.push('Pline ' + pline_i + ': Coll->Objs null.'); }
+            //     if (coll_plines.indexOf(pline_i) === -1) {
+            //         errors.push('Pline ' + pline_i + ': Coll->Pline missing.');
+            //     }
+            // }
         });
         return errors;
     }
@@ -374,23 +376,24 @@ export class GIGeomCheck {
                 errors.push('Pgon ' + pgon_i + ': Face->Pgon index is incorrect.');
             }
             // up from pgon to coll
-            const colls_i: number[] = this._geom_maps.up_pgons_colls.get(pgon_i);
-            if (colls_i === undefined) { return; } // not in coll
-            for (const coll_i of colls_i) {
-                if (coll_i === undefined) {
-                    errors.push('Pgon ' + pgon_i + ': Pgon->Coll undefined.');
-                }
-                if (coll_i === null) {
-                    errors.push('Pgon ' + pgon_i + ': Pgon->Coll null.');
-                }
-                // down from coll to pgons
-                const coll_pgons: number[] = this._geom_maps.dn_colls_pgons.get(coll_i);
-                if (coll_pgons === undefined) { errors.push('Pgon ' + pgon_i + ': Coll->Objs undefined.'); }
-                if (coll_pgons === null) { errors.push('Pgon ' + pgon_i + ': Coll->Objs null.'); }
-                if (coll_pgons.indexOf(pgon_i) === -1) {
-                    errors.push('Pgon ' + pgon_i + ': Coll->Pgon missing.');
-                }
-            }
+            // TODO check collections
+            // const colls_i: number[] = this._geom_maps.up_pgons_colls.get(pgon_i);
+            // if (colls_i === undefined) { return; } // not in coll
+            // for (const coll_i of colls_i) {
+            //     if (coll_i === undefined) {
+            //         errors.push('Pgon ' + pgon_i + ': Pgon->Coll undefined.');
+            //     }
+            //     if (coll_i === null) {
+            //         errors.push('Pgon ' + pgon_i + ': Pgon->Coll null.');
+            //     }
+            //     // down from coll to pgons
+            //     const coll_pgons: number[] = this._geom_maps.dn_colls_pgons.get(coll_i);
+            //     if (coll_pgons === undefined) { errors.push('Pgon ' + pgon_i + ': Coll->Objs undefined.'); }
+            //     if (coll_pgons === null) { errors.push('Pgon ' + pgon_i + ': Coll->Objs null.'); }
+            //     if (coll_pgons.indexOf(pgon_i) === -1) {
+            //         errors.push('Pgon ' + pgon_i + ': Coll->Pgon missing.');
+            //     }
+            // }
         });
         return errors;
     }

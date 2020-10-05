@@ -34,7 +34,7 @@ export class DataThreejsBase {
     // interaction and selection
     public tri_select_map: Map<number, number>;
     public edge_select_map: Map<number, number>;
-    public white_edge_select_map: Map<number, number>;
+    // public white_edge_select_map: Map<number, number>;
     public point_select_map: Map<number, number>;
     public point_label: any[];
     public posis_map: Map<number, number>;

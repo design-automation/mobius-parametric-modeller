@@ -124,7 +124,8 @@ export function Get(__model__: GIModel, ent_type_enum: _EEntType, entities: TId|
     return idsMake(found_ents_arr) as TId[]|TId[][];
 }
 function _getAll(__model__: GIModel, ent_type: EEntType): TEntTypeIdx[] {
-    const ents_i: number[] = __model__.modeldata.geom.query.getEnts(ent_type);
+    // const ents_i: number[] = __model__.modeldata.geom.query.getEnts(ent_type);
+    const ents_i: number[] = __model__.modeldata.geom.snapshot.getEntsActive(ent_type);
     return ents_i.map(ent_i => [ent_type, ent_i]) as TEntTypeIdx[];
 }
 function _getFrom(__model__: GIModel, ent_type: EEntType, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx[]|TEntTypeIdx[][] {
@@ -137,7 +138,8 @@ function _getFrom(__model__: GIModel, ent_type: EEntType, ents_arr: TEntTypeIdx[
         const found_ents_i_set: Set<number> = new Set();
         for (const ent_arr of ents_arr) {
             if (__model__.modeldata.geom.query.entExists(ent_arr[0], ent_arr[1])) {
-                const ents_i: number[] = __model__.modeldata.geom.nav.navAnyToAny(ent_arr[0], ent_type, ent_arr[1]);
+                // snapshot
+                const ents_i: number[] = __model__.modeldata.geom.snapshot.navAnyToAnyActive(ent_arr[0], ent_type, ent_arr[1]);
                 if (ents_i) {
                     for (const ent_i of ents_i) {
                         if (ent_i !== undefined) {
@@ -301,7 +303,8 @@ export function Invert(__model__: GIModel, ent_type_enum: _EEntType, entities: T
     // --- Error Check ---
     const select_ent_types: EEntType = _getEntTypeFromStr(ent_type_enum);
     const found_ents_arr: TEntTypeIdx[] = _invert(__model__, select_ent_types, ents_arr);
-    return idsMake(found_ents_arr) as TId[];
+    throw new Error('Snapshot Not implemented');
+    // return idsMake(found_ents_arr) as TId[];
 }
 function _invert(__model__: GIModel, select_ent_type: EEntType, ents_arr: TEntTypeIdx[]): TEntTypeIdx[] {
     // get the ents to exclude
@@ -309,7 +312,7 @@ function _invert(__model__: GIModel, select_ent_type: EEntType, ents_arr: TEntTy
         .filter(ent_arr => ent_arr[0] === select_ent_type).map(ent_arr => ent_arr[1]);
     // get the list of entities
     const found_entities_i: number[] = [];
-    const ents_i: number[] = __model__.modeldata.geom.query.getEnts(select_ent_type);
+    const ents_i: number[] = __model__.modeldata.geom.snapshot.getEntsActive(select_ent_type);
     for (const ent_i of ents_i) {
         if (excl_ents_i.indexOf(ent_i) === -1) { found_entities_i.push(ent_i); }
     }
@@ -405,7 +408,8 @@ export function Perimeter(__model__: GIModel, ent_type: _EEntType, entities: TId
     // --- Error Check ---
     const select_ent_type: EEntType = _getEntTypeFromStr(ent_type);
     const found_ents_arr: TEntTypeIdx[] = _perimeter(__model__, select_ent_type, ents_arr);
-    return idsMake(found_ents_arr) as TId[];
+    throw new Error('Snapshot Not implemented');
+    // return idsMake(found_ents_arr) as TId[];
 }
 export function _perimeter(__model__: GIModel,  select_ent_type: EEntType, ents_arr: TEntTypeIdx[]): TEntTypeIdx[] {
     // get an array of all edges
@@ -451,7 +455,8 @@ export function Neighbor(__model__: GIModel, ent_type_enum: _EEntType, entities:
     // --- Error Check ---
     const select_ent_type: EEntType = _getEntTypeFromStr(ent_type_enum);
     const found_ents_arr: TEntTypeIdx[] = _neighbors(__model__, select_ent_type, ents_arr);
-    return idsMake(found_ents_arr) as TId[];
+    throw new Error('Snapshot Not implemented');
+    // return idsMake(found_ents_arr) as TId[];
 }
 export function _neighbors(__model__: GIModel,  select_ent_type: EEntType, ents_arr: TEntTypeIdx[]): TEntTypeIdx[] {
     // get an array of all vertices
@@ -504,24 +509,6 @@ export function Type(__model__: GIModel, entities: TId|TId[], type_query_enum: _
     // --- Error Check ---
     return _type(__model__, ents_arr, type_query_enum);
 }
-function _isClosed(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): boolean|boolean[] {
-    if (!Array.isArray(ents_arr[0])) {
-        const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
-        if (ent_type === EEntType.PGON) {
-            return true;
-        } else if (ent_type !== EEntType.WIRE && ent_type !== EEntType.PLINE) {
-            return false;
-        }
-        let wire_i: number = index;
-        if (ent_type === EEntType.PLINE) {
-            wire_i = __model__.modeldata.geom.nav.navPlineToWire(index);
-        }
-        return __model__.modeldata.geom.query.isWireClosed(wire_i) as boolean;
-    } else {
-        return (ents_arr as TEntTypeIdx[]).map(ents => _isClosed(__model__, ents)) as boolean[];
-    }
-}
-
 export enum _ETypeQueryEnum {
     EXISTS = 'exists',
     IS_POSI =   'is_position',

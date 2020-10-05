@@ -115,7 +115,7 @@ export enum EEntStrToGeomMaps {
     'dn_points_verts',
     'dn_plines_wires',
     'dn_pgons_faces',
-    'up_colls_colls'
+    'colls'
 }
 
 /**
@@ -146,7 +146,13 @@ export enum EAttribNames {
     NAME = 'name',
     MATERIAL = 'material',
     VISIBILITY = 'visibility',
-    LABEL = 'label'
+    LABEL = 'label',
+    TIMESTAMP = '_ts',
+    COLL_PARENT = '_coll_parent',
+    COLL_CHILDS = 'coll_childs',
+    COLL_POINTS = 'coll_points',
+    COLL_PLINES = 'coll_plines',
+    COLL_PGONS = 'coll_pgons',
 }
 
 // Wire Type
@@ -242,10 +248,9 @@ export interface IGeomMaps {
     dn_points_verts: Map<number, TPoint>;
     dn_plines_wires: Map<number, TPline>;
     dn_pgons_faces: Map<number, TPgon>;
-    // dn_colls_objs: Map<number, TColl>;
-    dn_colls_points: Map<number, number[]>;
-    dn_colls_plines: Map<number, number[]>;
-    dn_colls_pgons: Map<number, number[]>;
+    // dn_colls_points: Map<number, number[]>;
+    // dn_colls_plines: Map<number, number[]>;
+    // dn_colls_pgons: Map<number, number[]>;
     up_posis_verts: Map<number, number[]>; // one to many
     up_tris_faces: Map<number, number>;
     up_verts_edges: Map<number, number[]>; // one to two
@@ -255,15 +260,10 @@ export interface IGeomMaps {
     up_wires_faces: Map<number, number>;
     up_wires_plines: Map<number, number>;
     up_faces_pgons: Map<number, number>;
-    up_points_colls: Map<number, number[]>; // one to many
-    up_plines_colls: Map<number, number[]>; // one to many
-    up_pgons_colls: Map<number, number[]>; // one to many
-    up_colls_colls: Map<number, number>;
-    posis_ts: Map<number, number>;
-    points_ts: Map<number, number>;
-    plines_ts: Map<number, number>;
-    pgons_ts: Map<number, number>;
-    colls_ts: Map<number, number>;
+    // up_points_colls: Map<number, number[]>; // one to many
+    // up_plines_colls: Map<number, number[]>; // one to many
+    // up_pgons_colls: Map<number, number[]>; // one to many
+    colls: Set<number>;
 }
 
 // copy geometry
@@ -283,7 +283,7 @@ export interface IAttribValues {
 }
 
 export interface IMetaData {
-    time_stamp: number;
+    // time_stamp: number;
     posi_count: number;
     vert_count: number;
     tri_count: number;
@@ -296,6 +296,15 @@ export interface IMetaData {
     coll_count: number;
     attrib_values: IAttribValues;
 }
+
+export interface ISnapshotData {
+    ps: Map<number, Set<number>>;
+    pt: Map<number, Set<number>>;
+    pl: Map<number, Set<number>>;
+    pg: Map<number, Set<number>>;
+    co: Map<number, Set<number>>;
+}
+
 
 // ================================================================================================
 // JSON MODEL
@@ -329,7 +338,7 @@ export interface IAttribJSONValues {
 }
 
 export interface IMetaJSONData {
-    time_stamp: number;
+    // time_stamp: number;
     posi_count: number;
     vert_count: number;
     tri_count: number;
@@ -372,10 +381,10 @@ export interface IGeomJSONData {
     plines_i: number[];
     pgons: TPgon[];
     pgons_i: number[];
-    colls_points: number[][];
-    colls_plines: number[][];
-    colls_pgons: number[][];
-    colls_parents: number[];
+    // colls_points: number[][];
+    // colls_plines: number[][];
+    // colls_pgons: number[][];
+    // colls_parents: number[];
     colls_i: number[];
     selected: TEntTypeIdx[];
 }

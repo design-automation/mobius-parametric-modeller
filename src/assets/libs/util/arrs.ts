@@ -11,6 +11,17 @@ export function arrRem(arr: any[], item: any): number {
     arr.splice(index, 1);
     return index;
 }
+/**
+ * Remove an item from an array
+ * Treats array as set of unique items
+ * @param arr
+ * @param item
+ */
+export function arrAddToSet(arr: any[], item: any): number {
+    const index: number = arr.indexOf(item);
+    if (index !== -1) { return index; }
+    return arr.push(item) - 1;
+}
 
 /**
  * Add an item to an array in an array

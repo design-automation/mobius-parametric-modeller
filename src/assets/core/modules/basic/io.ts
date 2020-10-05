@@ -18,6 +18,7 @@ import { TId, EEntType, TEntTypeIdx, IEntSets } from '@libs/geo-info/common';
 import { idsMake, idsBreak } from '@libs/geo-info/id';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
 import JSZip from 'jszip';
+import { exception } from 'console';
 
 const requestedBytes = 1024 * 1024 * 200; // 200 MB local storage quota
 
@@ -139,84 +140,89 @@ export async function Import(__model__: GIModel, input_data: string, data_format
 }
 export function _importGI(__model__: GIModel, json_str: string): number {
     // get number of ents before merge
-    const num_ents_before: number[] = __model__.modeldata.geom.query.numEntsAll();
+    const num_ents_before: number[] = __model__.metadata.getEntCounts();
     // import
     const gi_model: GIModel = new GIModel(__model__.getMetaData());
-    gi_model.setJSONStr(json_str);
-    __model__.append(gi_model);
+    const ssid2: number = gi_model.nextSnapshot();
+    // TODO the way this is done is a bit strange
+    gi_model.setJSONStr(ssid2, json_str);
+    __model__.append(__model__.modeldata.time_stamp, ssid2, gi_model);
     // get number of ents after merge
-    const num_ents_after: number[] = __model__.modeldata.geom.query.numEntsAll();
+    const num_ents_after: number[] = __model__.metadata.getEntCounts();
     // return the result
     return _createGIColl(__model__, num_ents_before, num_ents_after);
 }
 function _importObj(__model__: GIModel, model_data: string): number {
-    // get number of ents before merge
-    const num_ents_before: number[] = __model__.modeldata.geom.query.numEntsAll();
-    // import
-    const obj_model: GIModel = importObj(model_data);
-    __model__.merge(obj_model);
-    // get number of ents after merge
-    const num_ents_after: number[] = __model__.modeldata.geom.query.numEntsAll();
-    // return the result
-    return _createColl(__model__, num_ents_before, num_ents_after);
+    throw new Error('Not mplemented');
+    // // get number of ents before merge
+    // const num_ents_before: number[] = __model__.metadata.getEntCounts();
+    // // import
+    // const obj_model: GIModel = importObj(model_data);
+    // __model__.merge(obj_model);
+    // // get number of ents after merge
+    // const num_ents_after: number[] = __model__.metadata.getEntCounts();
+    // // return the result
+    // return _createColl(__model__, num_ents_before, num_ents_after);
 }
 function _importGeojson(__model__: GIModel, model_data: string): number {
     // get number of ents before merge
-    const num_ents_before: number[] = __model__.modeldata.geom.query.numEntsAll();
+    const num_ents_before: number[] = __model__.metadata.getEntCounts();
     // import
     importGeojson(__model__, model_data, 0);
     // get number of ents after merge
-    const num_ents_after: number[] = __model__.modeldata.geom.query.numEntsAll();
+    const num_ents_after: number[] = __model__.metadata.getEntCounts();
     // return the result
     return _createColl(__model__, num_ents_before, num_ents_after);
 }
 function _createGIColl(__model__: GIModel, before: number[], after: number[]): number {
-    const points_i: number[] = [];
-    const plines_i: number[] = [];
-    const pgons_i: number[] = [];
-    for (let point_i = before[1]; point_i < after[1]; point_i++) {
-        if (__model__.modeldata.geom.query.entExists(EEntType.POINT, point_i)) {
-            points_i.push( point_i );
-        }
-    }
-    for (let pline_i = before[2]; pline_i < after[2]; pline_i++) {
-        if (__model__.modeldata.geom.query.entExists(EEntType.PLINE, pline_i)) {
-            plines_i.push( pline_i );
-        }
-    }
-    for (let pgon_i = before[3]; pgon_i < after[3]; pgon_i++) {
-        if (__model__.modeldata.geom.query.entExists(EEntType.PGON, pgon_i)) {
-            pgons_i.push( pgon_i );
-        }
-    }
-    if (points_i.length + plines_i.length + pgons_i.length === 0) { return null; }
-    const container_coll_i: number = __model__.modeldata.geom.add.addColl(null, points_i, plines_i, pgons_i);
-    for (let coll_i = before[4]; coll_i < after[4]; coll_i++) {
-        if (__model__.modeldata.geom.query.entExists(EEntType.COLL, coll_i)) {
-            __model__.modeldata.geom.modify_coll.setCollParent(coll_i, container_coll_i);
-        }
-    }
-    return container_coll_i;
+    throw new Error('Not implemented');
+    // const points_i: number[] = [];
+    // const plines_i: number[] = [];
+    // const pgons_i: number[] = [];
+    // for (let point_i = before[1]; point_i < after[1]; point_i++) {
+    //     if (__model__.modeldata.geom.query.entExists(EEntType.POINT, point_i)) {
+    //         points_i.push( point_i );
+    //     }
+    // }
+    // for (let pline_i = before[2]; pline_i < after[2]; pline_i++) {
+    //     if (__model__.modeldata.geom.query.entExists(EEntType.PLINE, pline_i)) {
+    //         plines_i.push( pline_i );
+    //     }
+    // }
+    // for (let pgon_i = before[3]; pgon_i < after[3]; pgon_i++) {
+    //     if (__model__.modeldata.geom.query.entExists(EEntType.PGON, pgon_i)) {
+    //         pgons_i.push( pgon_i );
+    //     }
+    // }
+    // if (points_i.length + plines_i.length + pgons_i.length === 0) { return null; }
+    // const container_coll_i: number = __model__.modeldata.geom.add.addColl(null, points_i, plines_i, pgons_i);
+    // for (let coll_i = before[4]; coll_i < after[4]; coll_i++) {
+    //     if (__model__.modeldata.geom.query.entExists(EEntType.COLL, coll_i)) {
+    //         __model__.modeldata.geom.modify_coll.setCollParent(coll_i, container_coll_i);
+    //     }
+    // }
+    // return container_coll_i;
 }
 function _createColl(__model__: GIModel, before: number[], after: number[]): number {
-    const points_i: number[] = [];
-    const plines_i: number[] = [];
-    const pgons_i: number[] = [];
-    for (let point_i = before[1]; point_i < after[1]; point_i++) {
-        points_i.push( point_i );
-    }
-    for (let pline_i = before[2]; pline_i < after[2]; pline_i++) {
-        plines_i.push( pline_i );
-    }
-    for (let pgon_i = before[3]; pgon_i < after[3]; pgon_i++) {
-        pgons_i.push( pgon_i );
-    }
-    if (points_i.length + plines_i.length + pgons_i.length === 0) { return null; }
-    const container_coll_i: number = __model__.modeldata.geom.add.addColl(null, points_i, plines_i, pgons_i);
-    for (let coll_i = before[4]; coll_i < after[4]; coll_i++) {
-        __model__.modeldata.geom.modify_coll.setCollParent(coll_i, container_coll_i);
-    }
-    return container_coll_i;
+    throw new Error('Not implemented');
+    // const points_i: number[] = [];
+    // const plines_i: number[] = [];
+    // const pgons_i: number[] = [];
+    // for (let point_i = before[1]; point_i < after[1]; point_i++) {
+    //     points_i.push( point_i );
+    // }
+    // for (let pline_i = before[2]; pline_i < after[2]; pline_i++) {
+    //     plines_i.push( pline_i );
+    // }
+    // for (let pgon_i = before[3]; pgon_i < after[3]; pgon_i++) {
+    //     pgons_i.push( pgon_i );
+    // }
+    // if (points_i.length + plines_i.length + pgons_i.length === 0) { return null; }
+    // const container_coll_i: number = __model__.modeldata.geom.add.addColl(null, points_i, plines_i, pgons_i);
+    // for (let coll_i = before[4]; coll_i < after[4]; coll_i++) {
+    //     __model__.modeldata.geom.modify_coll.setCollParent(coll_i, container_coll_i);
+    // }
+    // return container_coll_i;
 }
 // ================================================================================================
 export enum _EIOExportDataFormat {
@@ -271,25 +277,26 @@ async function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
     file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): Promise<boolean> {
     switch (data_format) {
         case _EIOExportDataFormat.GI:
-            // === get model data ===
-            let model_data = '';
-            // clone the model
-            const model_clone: GIModel = __model__.clone();
-            if (ents_arr !== null) {
-                // get the ents
-                const ent_sets: IEntSets = model_clone.modeldata.geom.query.getDelEntSets(ents_arr);
-                // delete the ents
-                model_clone.delete(ent_sets, true);
-            }
-            // === get meta data ===
-            model_data = model_clone.getJSONStr();
-            // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
-            model_data = model_data.replace(/\\/g, '\\\\\\'); // TODO temporary fix
-            // === save the file ===
-            if (data_target === _EIODataTarget.DEFAULT) {
-                return download(model_data , file_name);
-            }
-            return saveResource(model_data, file_name);
+            throw new Error('Not implemented.');
+            // // === get model data ===
+            // let model_data = '';
+            // // clone the model
+            // const model_clone: GIModel = __model__.clone();
+            // if (ents_arr !== null) {
+            //     // get the ents
+            //     const ent_sets: IEntSets = model_clone.modeldata.geom.query.getDelEntSets(ents_arr);
+            //     // delete the ents
+            //     model_clone.delete(ent_sets, true);
+            // }
+            // // === get meta data ===
+            // model_data = model_clone.getJSONStr();
+            // // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
+            // model_data = model_data.replace(/\\/g, '\\\\\\'); // TODO temporary fix
+            // // === save the file ===
+            // if (data_target === _EIODataTarget.DEFAULT) {
+            //     return download(model_data , file_name);
+            // }
+            // return saveResource(model_data, file_name);
         case _EIOExportDataFormat.OBJ_VERT:
             const obj_verts_data: string = exportVertBasedObj(__model__, ents_arr);
             // obj_data = obj_data.replace(/#/g, '%23'); // TODO temporary fix

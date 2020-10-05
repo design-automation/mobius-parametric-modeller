@@ -1,4 +1,4 @@
-# mobius-parametric-modeller-dev2
+# mobius-parametric-modeller-dev-0-6
 
 https://design-automation.github.io/mobius-parametric-modeller-dev-0-6
 

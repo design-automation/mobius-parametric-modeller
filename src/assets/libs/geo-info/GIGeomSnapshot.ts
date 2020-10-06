@@ -218,17 +218,11 @@ export class GIGeomSnapshot {
     /**
      *
      * @param ent_type
-     * @param ent_i
+     * @param ents_i
      */
-    public addEntsActive(ent_type: EEntType, ent_i: number|number[]): void {
+    public addEntActive(ent_type: EEntType, ents_i: number): void {
         const ent_set: Set<number> = this.ss_data[EEntTypeStr[ent_type]].get(this._geom.modeldata.time_stamp);
-        if (Array.isArray(ent_i)) {
-            for (const a_ent_i of ent_i) {
-                ent_set.add(a_ent_i);
-            }
-        } else {
-            ent_set.add(ent_i);
-        }
+        ent_set.add(ents_i);
     }
     /**
      *

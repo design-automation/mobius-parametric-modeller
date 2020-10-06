@@ -29,7 +29,7 @@ export class GIGeomAdd {
         const posi_i: number = this._geom.modeldata.model.metadata.nextPosi();
         this._geom_maps.up_posis_verts.set(posi_i, []);
         // snapshot
-        this._geom.modeldata.geom.snapshot.addEntsActive(EEntType.POSI, posi_i);
+        this._geom.modeldata.geom.snapshot.addEntActive(EEntType.POSI, posi_i);
         // return entity number
         return posi_i;
     }
@@ -48,7 +48,7 @@ export class GIGeomAdd {
         this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.POINT, point_i,
             EAttribNames.TIMESTAMP, this._geom.modeldata.time_stamp);
         // snapshot
-        this._geom.modeldata.geom.snapshot.addEntsActive(EEntType.POINT, point_i);
+        this._geom.modeldata.geom.snapshot.addEntActive(EEntType.POINT, point_i);
         // return entity number
         return point_i;
     }
@@ -75,7 +75,7 @@ export class GIGeomAdd {
         this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.PLINE, pline_i,
             EAttribNames.TIMESTAMP, this._geom.modeldata.time_stamp);
         // snapshot
-        this._geom.modeldata.geom.snapshot.addEntsActive(EEntType.PLINE, pline_i);
+        this._geom.modeldata.geom.snapshot.addEntActive(EEntType.PLINE, pline_i);
         // return entity number
         return pline_i;
     }
@@ -120,7 +120,7 @@ export class GIGeomAdd {
         this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.PGON, pgon_i,
             EAttribNames.TIMESTAMP, this._geom.modeldata.time_stamp);
         // snapshot
-        this._geom.modeldata.geom.snapshot.addEntsActive(EEntType.PGON, pgon_i);
+        this._geom.modeldata.geom.snapshot.addEntActive(EEntType.PGON, pgon_i);
         // return entity number
         return pgon_i;
     }
@@ -139,7 +139,7 @@ export class GIGeomAdd {
         this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.COLL, coll_i,
             EAttribNames.TIMESTAMP, this._geom.modeldata.time_stamp);
         // snapshot
-        this._geom.modeldata.geom.snapshot.addEntsActive(EEntType.COLL, coll_i);
+        this._geom.modeldata.geom.snapshot.addEntActive(EEntType.COLL, coll_i);
         // return entity number
         return coll_i;
     }
@@ -247,8 +247,11 @@ export class GIGeomAdd {
      * @param copy_attribs
      */
     public copyPgon(old_pgon_i: number, copy_attribs: boolean): number {
+        // const t1 = Date.now();
         const wires_i: number[] = this._geom.nav.navAnyToWire(EEntType.PGON, old_pgon_i);
         const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.WIRE, wires_i[0] as number);
+        // const t2 = Date.now();
+        // console.log( ">>>1" , t2 - t1);
         let new_pgon_i: number;
         if (wires_i.length === 1) {
             new_pgon_i = this.addPgon(posis_i);
@@ -260,12 +263,18 @@ export class GIGeomAdd {
             }
             new_pgon_i = this.addPgon(posis_i, holes_posis_i);
         }
+        // const t3 = Date.now();
+        // console.log( ">>>2" , t3 - t2);
         if (copy_attribs) {
             this._geom.modeldata.attribs.add.copyAttribs(EEntType.PGON, old_pgon_i, new_pgon_i);
         }
+        // const t4 = Date.now();
+        // console.log( ">>>3" , t4 - t3);
         // time stamp
         this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.PGON, new_pgon_i,
             EAttribNames.TIMESTAMP, this._geom.modeldata.time_stamp);
+        // const t5 = Date.now();
+        // console.log( ">>>4" , t5 - t1);
         // return the new polygon
         return new_pgon_i;
     }

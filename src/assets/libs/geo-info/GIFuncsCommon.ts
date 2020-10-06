@@ -243,22 +243,22 @@ export class GIFuncsCommon {
         ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][], copy_attributes: boolean): TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][] {
         const depth: number = getArrDepth(ents_arr);
         if (depth === 1) {
-            const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
+            const [ent_type, ent_i]: TEntTypeIdx = ents_arr as TEntTypeIdx;
             switch (ent_type) {
                 case EEntType.COLL:
-                    return [ent_type, this.modeldata.geom.add.copyColl(index, copy_attributes)];
+                    return [ent_type, this.modeldata.geom.add.copyColl(ent_i, copy_attributes)];
                     break;
                 case EEntType.PGON:
-                    return [ent_type, this.modeldata.geom.add.copyPgon(index, copy_attributes)];
+                    return [ent_type, this.modeldata.geom.add.copyPgon(ent_i, copy_attributes)];
                     break;
                 case EEntType.PLINE:
-                    return [ent_type, this.modeldata.geom.add.copyPline(index, copy_attributes)];
+                    return [ent_type, this.modeldata.geom.add.copyPline(ent_i, copy_attributes)];
                     break;
                 case EEntType.POINT:
-                    return [ent_type, this.modeldata.geom.add.copyPoint(index, copy_attributes)];
+                    return [ent_type, this.modeldata.geom.add.copyPoint(ent_i, copy_attributes)];
                     break;
                 case EEntType.POSI:
-                    return [ent_type, this.modeldata.geom.add.copyPosi(index, copy_attributes)];
+                    return [ent_type, this.modeldata.geom.add.copyPosi(ent_i, copy_attributes)];
                     break;
                 default:
                     throw new Error('Invalid entity type for copying.');

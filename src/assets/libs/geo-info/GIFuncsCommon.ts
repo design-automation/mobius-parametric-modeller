@@ -244,28 +244,29 @@ export class GIFuncsCommon {
         const depth: number = getArrDepth(ents_arr);
         if (depth === 1) {
             const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
-            if (isColl(ent_type)) {
-                const coll_i: number = this.modeldata.geom.add.copyColls(index, copy_attributes) as number;
-                return [ent_type, coll_i];
-            } else if (isPgon(ent_type)) {
-                const obj_i: number = this.modeldata.geom.add.copyPgons(index, copy_attributes) as number;
-                return [ent_type, obj_i];
-            } else if (isPline(ent_type)) {
-                const obj_i: number = this.modeldata.geom.add.copyPlines(index, copy_attributes) as number;
-                return [ent_type, obj_i];
-            } else if (isPoint(ent_type)) {
-                const obj_i: number = this.modeldata.geom.add.copyPoints(index, copy_attributes) as number;
-                return [ent_type, obj_i];
-            } else if (isPosi(ent_type)) {
-                const posi_i: number = this.modeldata.geom.add.copyPosis(index, copy_attributes) as number;
-                return [ent_type, posi_i];
+            switch (ent_type) {
+                case EEntType.COLL:
+                    return [ent_type, this.modeldata.geom.add.copyColl(index, copy_attributes)];
+                    break;
+                case EEntType.PGON:
+                    return [ent_type, this.modeldata.geom.add.copyPgon(index, copy_attributes)];
+                    break;
+                case EEntType.PLINE:
+                    return [ent_type, this.modeldata.geom.add.copyPline(index, copy_attributes)];
+                    break;
+                case EEntType.POINT:
+                    return [ent_type, this.modeldata.geom.add.copyPoint(index, copy_attributes)];
+                    break;
+                case EEntType.POSI:
+                    return [ent_type, this.modeldata.geom.add.copyPosi(index, copy_attributes)];
+                    break;
+                default:
+                    throw new Error('Invalid entity type for copying.');
+                    break;
             }
-        } else if (depth === 2) {
+        } else {
             ents_arr = ents_arr as TEntTypeIdx[];
             return ents_arr.map(ents_arr_item => this.copyGeom(ents_arr_item, copy_attributes)) as TEntTypeIdx[];
-        } else { // depth > 2
-            ents_arr = ents_arr as TEntTypeIdx[][];
-            return ents_arr.map(ents_arr_item => this.copyGeom(ents_arr_item, copy_attributes)) as TEntTypeIdx[][];
         }
     }
     // ================================================================================================
@@ -291,7 +292,7 @@ export class GIFuncsCommon {
             // something may not be right here
             // if you copy a pgon + posi, if you process the pgon first you wil make a copy of the posis
             // but the posi may already be copied by the this.copyGeom function, then we get two copies of that posi
-            if (isPosi(ent_type) && vector !== null) { // positions
+            if (isPosi(ent_type)) { // positions
                 const old_posi_i: number = index;
                 let new_posi_i: number;
                 if (!old_to_new_posis_i_map.has(old_posi_i)) {

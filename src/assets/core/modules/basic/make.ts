@@ -376,13 +376,19 @@ export function Copy(__model__: GIModel, entities: TId|TId[]|TId[][], vector: Tx
     // --- Error Check ---
     const bool_copy_attribs = true;
     // copy the list of entities
+    const t1 = Date.now();
+    console.log("Start copy operation, number of entities = ", ents_arr.length);
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = __model__.modeldata.funcs_common.copyGeom(ents_arr, bool_copy_attribs);
+    const t2 = Date.now();
+    console.log("Done copyGeom, duration = ", t2 - t1);
     // copy the positions that belong to the list of entities
     if (vector === null) {
         __model__.modeldata.funcs_common.clonePosisInEnts(new_ents_arr, bool_copy_attribs);
     } else {
         __model__.modeldata.funcs_common.clonePosisInEntsAndMove(new_ents_arr, bool_copy_attribs, vector);
     }
+    const t3 = Date.now();
+    console.log("Done clonePosis, duration = ", t3 - t2);
     // return only the new entities
     return idsMake(new_ents_arr) as TId|TId[]|TId[][];
 }

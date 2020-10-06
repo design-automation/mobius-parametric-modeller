@@ -183,7 +183,7 @@ export class GIAttribMap {
         const ents_i_values: [number[], TAttribDataTypes][] = [];
         this._map_val_i_to_ents_i.forEach( (ents_i, val_i) => {
             // const value: TAttribDataTypes = this._map_val_i_to_val.get(val_i);
-            const value: TAttribDataTypes = this.modeldata.model.metadata.getAttribValFromIdx(val_i, this._data_type);
+            const value: TAttribDataTypes = this.modeldata.model.metadata.getValFromIdx(val_i, this._data_type);
             ents_i_values.push([ents_i, value]);
         });
         return ents_i_values;
@@ -227,13 +227,13 @@ export class GIAttribMap {
         const val_k: string | number = this._valToValkey(val);
         // get the index to the value
         let val_i: number;
-        if (this.modeldata.model.metadata.hasAttribKey(val_k, this._data_type)) {
-            val_i = this.modeldata.model.metadata.getAttribIdxFromKey(val_k, this._data_type);
+        if (this.modeldata.model.metadata.hasKey(val_k, this._data_type)) {
+            val_i = this.modeldata.model.metadata.getIdxFromKey(val_k, this._data_type);
             if (!this._map_val_i_to_ents_i.has(val_i)) {
                 this._map_val_i_to_ents_i.set(val_i, []);
             }
         } else {
-            val_i = this.modeldata.model.metadata.addAttribByKeyVal(val_k, val, this._data_type);
+            val_i = this.modeldata.model.metadata.addByKeyVal(val_k, val, this._data_type);
             this._map_val_i_to_ents_i.set(val_i, []);
         }
         // an array of ents
@@ -317,9 +317,9 @@ export class GIAttribMap {
                     // TODO to be reconsidered... 
                     if (this._is_coll_data) {
                         const exist_val_i: number = this._map_ent_i_to_val_i.get(ent_i);
-                        const exist_vals: number[] = this.modeldata.model.metadata.getAttribValFromIdx(
+                        const exist_vals: number[] = this.modeldata.model.metadata.getValFromIdx(
                             exist_val_i, this._data_type) as number[];
-                        const new_vals: number[] = this.modeldata.model.metadata.getAttribValFromIdx(
+                        const new_vals: number[] = this.modeldata.model.metadata.getValFromIdx(
                             val_i, this._data_type) as number[];
                         const merged_set: Set<number> = new Set(exist_vals);
                         new_vals.forEach( new_val => merged_set.add(new_val) );
@@ -364,7 +364,7 @@ export class GIAttribMap {
                 ents2_i.forEach( ent_i => this._map_ent_i_to_val_i.set(ent_i, val_i));
                 // update the data length
                 if (this._data_type === EAttribDataTypeStrs.LIST || this._data_type === EAttribDataTypeStrs.DICT) {
-                    const val = this.modeldata.model.metadata.getAttribValFromIdx(val_i, this._data_type);
+                    const val = this.modeldata.model.metadata.getValFromIdx(val_i, this._data_type);
                     if (this._data_type === EAttribDataTypeStrs.LIST) {
                         const arr_len: number = (val as any[]).length;
                         if (arr_len > this._data_length) {
@@ -455,7 +455,7 @@ export class GIAttribMap {
             const val_i: number = this._map_ent_i_to_val_i.get(ent_i);
             if (val_i === undefined) { return undefined; }
             // return this._map_val_i_to_val.get(val_i) as TAttribDataTypes;
-            return this.modeldata.model.metadata.getAttribValFromIdx(val_i, this._data_type);
+            return this.modeldata.model.metadata.getValFromIdx(val_i, this._data_type);
         } else {
             return ents_i.map(ent_i => this.getEntVal(ent_i)) as TAttribDataTypes;
         }
@@ -505,7 +505,7 @@ export class GIAttribMap {
      */
     public getEntsFromVal(val: TAttribDataTypes): number[] {
         // const val_i: number = this._map_val_k_to_val_i.get(this._valToValkey(val));
-        const val_i: number =  this.modeldata.model.metadata.getAttribIdxFromKey(this._valToValkey(val), this._data_type);
+        const val_i: number =  this.modeldata.model.metadata.getIdxFromKey(this._valToValkey(val), this._data_type);
         if (val_i === undefined) { return []; }
         return this._map_val_i_to_ents_i.get(val_i);
     }

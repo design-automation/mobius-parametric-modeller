@@ -222,8 +222,10 @@ export class GIAttribsAdd {
         const attrib_names: string[] = Array.from(attribs.keys());
         // copy each attrib
         for (const attrib_name of attrib_names) {
+            if (attrib_name === EAttribNames.TIMESTAMP) { continue; }
+            console.log(">>> ",attrib_name)
             const attrib: TAttribMap = attribs.get(attrib_name);
-            const attrib_value: TAttribDataTypes =  attrib.getEntVal(from_ent_i) as TAttribDataTypes;
+            const attrib_value: TAttribDataTypes =  attrib.getEntVal(from_ent_i) as TAttribDataTypes; // copy
             attrib.setEntVal(to_ent_i, attrib_value);
         }
     }

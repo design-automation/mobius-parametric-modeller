@@ -168,11 +168,8 @@ export class GIGeomAdd {
         return new_posi_i;
     }
     public copyMovePosis(posis_i: number|number[], move_vector: Txyz, copy_attribs: boolean): number|number[] {
-        if (!Array.isArray(posis_i)) {
-            return this.copyMovePosi(posis_i, move_vector, copy_attribs);
-        } else {
-            return (posis_i as number[]).map(posi_i => this.copyPosis(posi_i, copy_attribs)) as number[];
-        }
+        if (!Array.isArray(posis_i))  { return this.copyMovePosi(posis_i, move_vector, copy_attribs); }
+        return (posis_i as number[]).map(posi_i => this.copyMovePosi(posi_i, move_vector, copy_attribs)) as number[];
     }
     /**
      * Copy positions.
@@ -194,11 +191,8 @@ export class GIGeomAdd {
         return new_posi_i;
     }
     public copyPosis(posis_i: number|number[], copy_attribs: boolean): number|number[] {
-        if (!Array.isArray(posis_i)) {
-            return this.copyPosi(posis_i, copy_attribs);
-        } else {
-            return (posis_i as number[]).map(posi_i => this.copyPosis(posi_i, copy_attribs)) as number[];
-        }
+        if (!Array.isArray(posis_i))  { return this.copyPosi(posis_i, copy_attribs); }
+        return (posis_i as number[]).map(posi_i => this.copyPosi(posi_i, copy_attribs)) as number[];
     }
     /**
      * Copy points.
@@ -219,11 +213,8 @@ export class GIGeomAdd {
         return new_point_i;
     }
     public copyPoints(points_i: number|number[], copy_attribs: boolean): number|number[] {
-        if (!Array.isArray(points_i)) {
-            return this.copyPoint(points_i, copy_attribs);
-        } else {
-            return (points_i as number[]).map(point_i => this.copyPoints(point_i, copy_attribs)) as number[];
-        }
+        if (!Array.isArray(points_i))  { return this.copyPoint(points_i, copy_attribs); }
+        return (points_i as number[]).map(point_i => this.copyPoint(point_i, copy_attribs)) as number[];
     }
     /**
      * Copy plines.
@@ -246,11 +237,8 @@ export class GIGeomAdd {
         return new_pline_i;
     }
     public copyPlines(plines_i: number|number[], copy_attribs: boolean): number|number[] {
-        if (!Array.isArray(plines_i)) {
-            return this.copyPline(plines_i, copy_attribs);
-        } else {
-            return (plines_i as number[]).map(pline_i => this.copyPlines(pline_i, copy_attribs)) as number[];
-        }
+        if (!Array.isArray(plines_i))  { return this.copyPline(plines_i, copy_attribs); }
+        return (plines_i as number[]).map(pline_i => this.copyPline(pline_i, copy_attribs)) as number[];
     }
     /**
      * Copy polygon.
@@ -282,11 +270,8 @@ export class GIGeomAdd {
         return new_pgon_i;
     }
     public copyPgons(pgons_i: number|number[], copy_attribs: boolean): number|number[] {
-        if (!Array.isArray(pgons_i)) {
-            return this.copyPgon(pgons_i, copy_attribs);
-        } else {
-            return (pgons_i as number[]).map(pgon_i => this.copyPgons(pgon_i, copy_attribs)) as number[];
-        }
+        if (!Array.isArray(pgons_i))  { return this.copyPgon(pgons_i, copy_attribs); }
+        return (pgons_i as number[]).map(pgon_i => this.copyPgon(pgon_i, copy_attribs)) as number[];
     }
    /**
      * Copy a collection
@@ -310,12 +295,8 @@ export class GIGeomAdd {
         return new_coll_i;
     }
     public copyColls(colls_i: number|number[], copy_attribs: boolean): number|number[] {
-        // make copies
-        if (!Array.isArray(colls_i)) {
-            return this.copyColl(colls_i, copy_attribs);
-        } else {
-            return (colls_i as number[]).map(coll_i => this.copyColls(coll_i, copy_attribs)) as number[];
-        }
+        if (!Array.isArray(colls_i))  { return this.copyColl(colls_i, copy_attribs); }
+        return (colls_i as number[]).map(coll_i => this.copyColl(coll_i, copy_attribs)) as number[];
     }
     // ============================================================================
     // Methods to create the topological entities

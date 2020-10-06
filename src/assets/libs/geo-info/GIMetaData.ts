@@ -101,44 +101,44 @@ export class GIMetaData {
         const renum_num_attrib_vals: Map<number, number>  = new Map();
         for (let other_idx = 0; other_idx < attrib_vals.number_vals.length; other_idx++) {
             const other_key: number = attrib_vals.number_vals[other_idx];
-            if (this.hasAttribKey(other_key, EAttribDataTypeStrs.NUMBER)) {
-                renum_num_attrib_vals.set(other_idx, this.getAttribIdxFromKey(other_key, EAttribDataTypeStrs.NUMBER));
+            if (this.hasKey(other_key, EAttribDataTypeStrs.NUMBER)) {
+                renum_num_attrib_vals.set(other_idx, this.getIdxFromKey(other_key, EAttribDataTypeStrs.NUMBER));
             } else {
                 const other_val: number = attrib_vals.number_vals[other_idx];
-                const new_idx: number = this.addAttribByKeyVal(other_key, other_val, EAttribDataTypeStrs.NUMBER);
+                const new_idx: number = this.addByKeyVal(other_key, other_val, EAttribDataTypeStrs.NUMBER);
                 renum_num_attrib_vals.set(other_idx, new_idx);
             }
         }
         const renum_str_attrib_vals: Map<number, number>  = new Map();
         for (let other_idx = 0; other_idx < attrib_vals.string_vals.length; other_idx++) {
             const other_key: string = attrib_vals.string_vals[other_idx];
-            if (this.hasAttribKey(other_key, EAttribDataTypeStrs.STRING)) {
-                renum_str_attrib_vals.set(other_idx, this.getAttribIdxFromKey(other_key, EAttribDataTypeStrs.STRING));
+            if (this.hasKey(other_key, EAttribDataTypeStrs.STRING)) {
+                renum_str_attrib_vals.set(other_idx, this.getIdxFromKey(other_key, EAttribDataTypeStrs.STRING));
             } else {
                 const other_val: string = attrib_vals.string_vals[other_idx];
-                const new_idx: number = this.addAttribByKeyVal(other_key, other_val, EAttribDataTypeStrs.STRING);
+                const new_idx: number = this.addByKeyVal(other_key, other_val, EAttribDataTypeStrs.STRING);
                 renum_str_attrib_vals.set(other_idx, new_idx);
             }
         }
         const renum_list_attrib_vals: Map<number, number>  = new Map();
         for (let other_idx = 0; other_idx < attrib_vals.list_vals.length; other_idx++) {
             const other_key: string = JSON.stringify(attrib_vals.list_vals[other_idx]);
-            if (this.hasAttribKey(other_key, EAttribDataTypeStrs.LIST)) {
-                renum_list_attrib_vals.set(other_idx, this.getAttribIdxFromKey(other_key, EAttribDataTypeStrs.LIST));
+            if (this.hasKey(other_key, EAttribDataTypeStrs.LIST)) {
+                renum_list_attrib_vals.set(other_idx, this.getIdxFromKey(other_key, EAttribDataTypeStrs.LIST));
             } else {
                 const other_val: any[] = attrib_vals.list_vals[other_idx];
-                const new_idx: number = this.addAttribByKeyVal(other_key, other_val, EAttribDataTypeStrs.LIST);
+                const new_idx: number = this.addByKeyVal(other_key, other_val, EAttribDataTypeStrs.LIST);
                 renum_list_attrib_vals.set(other_idx, new_idx);
             }
         }
         const renum_dict_attrib_vals: Map<number, number>  = new Map();
         for (let other_idx = 0; other_idx < attrib_vals.dict_vals.length; other_idx++) {
             const other_key: string = JSON.stringify(attrib_vals.dict_vals[other_idx]);
-            if (this.hasAttribKey(other_key, EAttribDataTypeStrs.DICT)) {
-                renum_dict_attrib_vals.set(other_idx, this.getAttribIdxFromKey(other_key, EAttribDataTypeStrs.DICT));
+            if (this.hasKey(other_key, EAttribDataTypeStrs.DICT)) {
+                renum_dict_attrib_vals.set(other_idx, this.getIdxFromKey(other_key, EAttribDataTypeStrs.DICT));
             } else {
                 const other_val: object = attrib_vals.dict_vals[other_idx];
-                const new_idx: number = this.addAttribByKeyVal(other_key, other_val, EAttribDataTypeStrs.DICT);
+                const new_idx: number = this.addByKeyVal(other_key, other_val, EAttribDataTypeStrs.DICT);
                 renum_dict_attrib_vals.set(other_idx, new_idx);
             }
         }
@@ -252,7 +252,7 @@ export class GIMetaData {
         this._data.coll_count = index;
     }
     // attribute values
-    public addAttribByKeyVal(key: string|number, val: TAttribDataTypes, data_type: EAttribDataTypeStrs): number {
+    public addByKeyVal(key: string|number, val: TAttribDataTypes, data_type: EAttribDataTypeStrs): number {
         if (this._data.attrib_values[data_type][1].has(key)) {
             return this._data.attrib_values[data_type][1].get(key);
         }
@@ -260,23 +260,34 @@ export class GIMetaData {
         this._data.attrib_values[data_type][1].set(key, index);
         return index;
     }
-    public getAttribValFromIdx(index: number, data_type: EAttribDataTypeStrs): TAttribDataTypes {
+    public getValFromIdx(index: number, data_type: EAttribDataTypeStrs): TAttribDataTypes {
         // TODO this is doing deep copy
         // This may not be a good idea
+        const val: TAttribDataTypes =  this._data.attrib_values[data_type][0][index];
         if (data_type === EAttribDataTypeStrs.LIST) {
-            return this._data.attrib_values[data_type][0][index].slice();
+            return (val as any[]).slice();
         } else if (data_type === EAttribDataTypeStrs.DICT) {
-            return this._data.attrib_values[data_type][0][index].deepCopy();
+            throw new Error('not implemented');
+           //  return (val as object).deepCopy();
         }
-        return this._data.attrib_values[data_type][0][index];
+        return val;
     }
-    public getAttribValFromKey(key: string|number, data_type: EAttribDataTypeStrs): TAttribDataTypes {
-        return this._data.attrib_values[data_type][0][this._data.attrib_values[data_type][1].get(key)];
+    public getValFromKey(key: string|number, data_type: EAttribDataTypeStrs): TAttribDataTypes {
+        // TODO this is doing deep copy
+        // This may not be a good idea
+        const val: TAttribDataTypes = this._data.attrib_values[data_type][0][this._data.attrib_values[data_type][1].get(key)];
+        if (data_type === EAttribDataTypeStrs.LIST) {
+            return (val as any[]).slice();
+        } else if (data_type === EAttribDataTypeStrs.DICT) {
+            throw new Error('not implemented');
+           //  return (val as object).deepCopy();
+        }
+        return val;
     }
-    public getAttribIdxFromKey(key: string|number, data_type: EAttribDataTypeStrs): number {
+    public getIdxFromKey(key: string|number, data_type: EAttribDataTypeStrs): number {
         return this._data.attrib_values[data_type][1].get(key);
     }
-    public hasAttribKey(key: string|number, data_type: EAttribDataTypeStrs): boolean {
+    public hasKey(key: string|number, data_type: EAttribDataTypeStrs): boolean {
         return this._data.attrib_values[data_type][1].has(key);
     }
     // create string for debugging

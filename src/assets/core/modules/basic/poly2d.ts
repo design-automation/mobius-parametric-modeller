@@ -20,7 +20,6 @@ import { distance } from '@assets/libs/geom/distance';
 import { vecFromTo, vecNorm, vecMult, vecAdd } from '@assets/libs/geom/vectors';
 import { xfromSourceTargetMatrix, multMatrix } from '@assets/libs/geom/matrix';
 import { Matrix4 } from 'three';
-import { _copyGeom, _copyGeomPosis } from './_common';
 import { distanceManhattan } from '@assets/libs/geom/distance';
 
 const SCALE = 1e9;
@@ -1035,8 +1034,8 @@ export function Stitch(__model__: GIModel, entities: TId|TId[]): TId[] {
     }
     // --- Error Check ---
     // copy the list of entities
-    const new_ents_arr: TEntTypeIdx[] = _copyGeom(__model__, ents_arr, true) as TEntTypeIdx[];
-    _copyGeomPosis(__model__, new_ents_arr, true, [0, 0, 0]);
+    const new_ents_arr: TEntTypeIdx[] = __model__.modeldata.funcs_common.copyGeom(ents_arr, true) as TEntTypeIdx[];
+    __model__.modeldata.funcs_common.clonePosisInEntsAndMove(new_ents_arr, true, [0, 0, 0]);
     // create maps for data
     const map_edge_i_to_posi_i: Map<number, [number, number]> = new Map();
     const map_edge_i_to_bbox: Map<number, [Txy, Txy]> = new Map();

@@ -722,13 +722,13 @@ export class DataThreejs extends DataThreejsLookAt {
             this.cameraBackgrounds['Top'] = texture;
             this.scene.background = this.cameraBackgrounds[this.currentCamera];
         });
-        new THREE.TextureLoader().load(path + '_l' + format, texture => {
+        new THREE.TextureLoader().load(path + 'left' + format, texture => {
             this.renderer.render(this.scene, this.camera);
             texture.format = THREE.RGBFormat;
             this.cameraBackgrounds['Left'] = texture;
             this.scene.background = this.cameraBackgrounds[this.currentCamera];
         });
-        new THREE.TextureLoader().load(path + '_f' + format, texture => {
+        new THREE.TextureLoader().load(path + 'front' + format, texture => {
             this.renderer.render(this.scene, this.camera);
             texture.format = THREE.RGBFormat;
             this.cameraBackgrounds['Front'] = texture;
@@ -806,6 +806,12 @@ export class DataThreejs extends DataThreejsLookAt {
         this.directional_light.visible = this.directional_light_settings.show;
         // this.directional_light_settings.shadowSize = 2;
         // const shadowMapSize = this.directional_light_settings.shadowSize;
+        if (this.directional_light_settings.shadowSize <= 10) {
+            this.directional_light_settings.shadowSize = this.directional_light_settings.shadowSize * 512;
+        }
+        if (this.directional_light_settings.shadowSize < 1024) {
+            this.directional_light_settings.shadowSize = 2048;
+        }
         this.directional_light.shadow.mapSize.width = this.directional_light_settings.shadowSize;  // default
         this.directional_light.shadow.mapSize.height = this.directional_light_settings.shadowSize; // default
         // this.directional_light.shadow.camera.visible = true;

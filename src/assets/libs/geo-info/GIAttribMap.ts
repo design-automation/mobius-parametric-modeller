@@ -1,8 +1,6 @@
 import { EFilterOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribJSONData, EEntType, EAttribNames } from './common';
-import { arrRem } from '../util/arrs';
 import { GIModelData } from './GIModelData';
 import * as lodash from 'lodash';
-import { cloneDeepMapArr } from './common_func';
 
 /**
  * Geo-info attribute class for one attribute.

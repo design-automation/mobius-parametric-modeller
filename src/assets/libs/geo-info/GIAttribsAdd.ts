@@ -6,6 +6,7 @@ import * as mathjs from 'mathjs';
 import { GIModelData } from './GIModelData';
 import { GIAttribMapBool } from './GIAttribMapBool';
 import { GIAttribMap } from './GIAttribMap';
+import { GIAttribMapNum } from './GIAttribMapNum';
 
 /**
  * Class for attributes.
@@ -66,6 +67,8 @@ export class GIAttribsAdd {
         if (!attribs.has(name)) {
             if (data_type === EAttribDataTypeStrs.BOOLEAN) {
                 attrib = new GIAttribMapBool(this.modeldata, name, ent_type, data_type);
+            } else if (data_type === EAttribDataTypeStrs.NUMBER) {
+                attrib = new GIAttribMapNum(this.modeldata, name, ent_type, data_type);
             } else {
                 attrib = new GIAttribMap(this.modeldata, name, ent_type, data_type);
             }

@@ -22,7 +22,7 @@ export class GIAttribMap {
     // the two data maps that store attrib pointers
     // private _map_val_k_to_val_i: Map<string|number, number>; // unique, no duplicates
     // private _map_val_i_to_val: Map<number, TAttribDataTypes>; // unique, no duplicates
-    protected _map_val_i_to_ents_i: Map<number, number[]>;
+    protected _map_val_i_to_ents_i: Map<number, Set<number>>;
     protected _map_ent_i_to_val_i: Map<number, number>;
     private _is_coll_data: boolean;
     /**
@@ -58,11 +58,13 @@ export class GIAttribMap {
      * Returns the JSON data for this attribute.
      */
     public getJSONData(): IAttribJSONData {
+        const data: Array<[number, number[]]> = [];
+        this._map_val_i_to_ents_i.forEach( (ents_i, val_i) => data.push([val_i, Array.from(ents_i)]) );
         return {
             name: this._name,
             data_type: this._data_type,
             data_length: this._data_length,
-            data: Array.from(this._map_val_i_to_ents_i)
+            data: data
         };
     }
     /**
@@ -73,13 +75,14 @@ export class GIAttribMap {
         this._name = attrib_data.name;
         this._data_type = attrib_data.data_type;
         this._data_length = attrib_data.data_length;
-        this._map_val_i_to_ents_i = new Map(attrib_data.data);
+        this._map_val_i_to_ents_i = new Map();
         this._map_ent_i_to_val_i = new Map();
-        this._map_val_i_to_ents_i.forEach( (ents_i, val_i) => {
+        for (const [val_i, ents_i] of attrib_data.data) {
+            this._map_val_i_to_ents_i.set(val_i, new Set(ents_i));
             ents_i.forEach( ent_i => {
                 this._map_ent_i_to_val_i.set(ent_i, val_i);
             });
-        });
+        }
     }
     /**
      * Gets the name of this attribute.
@@ -162,8 +165,7 @@ export class GIAttribMap {
                 // del the entity from _map_ent_i_to_val_i
                 this._map_ent_i_to_val_i.delete(ent_i);
                 // del the entity from _map_val_i_to_ents_i
-                const other_ents_i: number[] = this._map_val_i_to_ents_i.get(val_i);
-                other_ents_i.splice(other_ents_i.indexOf(ent_i), 1);
+                this._map_val_i_to_ents_i.delete(val_i);
                 // clean up just in case that was the last entity with this value
                 this._cleanUp(val_i);
                 // time stamp has already been deleted
@@ -184,7 +186,7 @@ export class GIAttribMap {
         this._map_val_i_to_ents_i.forEach( (ents_i, val_i) => {
             // const value: TAttribDataTypes = this._map_val_i_to_val.get(val_i);
             const value: TAttribDataTypes = this.modeldata.model.metadata.getValFromIdx(val_i, this._data_type);
-            ents_i_values.push([ents_i, value]);
+            ents_i_values.push([Array.from(ents_i), value]);
         });
         return ents_i_values;
     }
@@ -201,7 +203,7 @@ export class GIAttribMap {
      * @param val
      */
     public setEntVal(ents_i: number|number[], val: TAttribDataTypes, check_type = true): void {
-        // console.log("xxxx", val)
+        //console.log("xxxx", ents_i, val)
 
         // if indefined, do nothing
         if (val === undefined) { return; }
@@ -230,44 +232,29 @@ export class GIAttribMap {
         if (this.modeldata.model.metadata.hasKey(val_k, this._data_type)) {
             val_i = this.modeldata.model.metadata.getIdxFromKey(val_k, this._data_type);
             if (!this._map_val_i_to_ents_i.has(val_i)) {
-                this._map_val_i_to_ents_i.set(val_i, []);
+                this._map_val_i_to_ents_i.set(val_i, new Set());
             }
         } else {
             val_i = this.modeldata.model.metadata.addByKeyVal(val_k, val, this._data_type);
-            this._map_val_i_to_ents_i.set(val_i, []);
+            this._map_val_i_to_ents_i.set(val_i, new Set());
         }
         // an array of ents
         ents_i = (Array.isArray(ents_i)) ? ents_i : [ents_i];
         // loop through all the unique ents, and set _map_ent_i_to_val_i
-        let unique_ents_i: number[] = ents_i;
-        if (ents_i.length > 1) {
-            unique_ents_i = Array.from(new Set(ents_i));
-        }
-        // snapshot copy ents
-        // unique_ents_i = this.modeldata.geom.snapshot.copyEnts(this._ent_type, unique_ents_i) as number[];
-        // set the value
-        unique_ents_i.forEach( ent_i => {
+        ents_i.forEach( ent_i => {
             // keep the old value for later
             const old_val_i: number = this._map_ent_i_to_val_i.get(ent_i);
             // for each ent_i, set the new val_i
             this._map_ent_i_to_val_i.set(ent_i, val_i);
+            // for the value add each ent_i
+            this._map_val_i_to_ents_i.get(val_i).add(ent_i);
             // clean up the old val_i
             if (old_val_i !== undefined && old_val_i !== val_i) {
-                arrRem(this._map_val_i_to_ents_i.get(old_val_i), ent_i);
+                this._map_val_i_to_ents_i.get(old_val_i).delete(ent_i);
                 // clean up just in case that was the last entity with this value
                 this._cleanUp(old_val_i);
             }
-            // update the time stamp for this entity
-            // snapshot: new ts no longer required
-            // this.modeldata.geom.time_stamp.updateEntTs(this._ent_type, ent_i);
         });
-        // for the val_i, set it to point to all the ents that have this value
-        const exist_ents_i: number[] = this._map_val_i_to_ents_i.get(val_i);
-        const exist_new_ents_i: number[] = exist_ents_i === undefined ?
-            unique_ents_i :
-            Array.from(new Set(exist_ents_i.concat(unique_ents_i)));
-        this._map_val_i_to_ents_i.set(val_i, exist_new_ents_i);
-
         // update the _data_length for lists and objects
         if (this._data_type === EAttribDataTypeStrs.LIST) {
             const arr_len: number = (val as any[]).length;
@@ -289,13 +276,14 @@ export class GIAttribMap {
      * @param renum_map
      */
     public renumEnts(renum_map: Map<number, number>): void {
-        // private _map_val_i_to_ents_i: Map<number, number[]>;
         this._map_val_i_to_ents_i.forEach( (ents_i, val_i) => {
-            for (let i = 0; i < ents_i.length; i++) {
-                const new_ent_i: number = renum_map.get(ents_i[i]); // shift
-                ents_i[i] = new_ent_i;
+            const set_ents_i: Set<number> = new Set();
+            for (const ent_i of ents_i) {
+                const new_ent_i: number = renum_map.get(ent_i); // shift
+                set_ents_i.add(new_ent_i);
                 this._map_ent_i_to_val_i.set(new_ent_i, val_i);
             }
+            this._map_val_i_to_ents_i.set(val_i, set_ents_i);
         });
     }
     /**
@@ -304,17 +292,11 @@ export class GIAttribMap {
      */
     public merge(attrib_map: GIAttribMap): void {
         attrib_map._map_val_i_to_ents_i.forEach( (other_ents_i, val_i) => {
-            // get the ents
-            const exist_ents_i: number[] = this._map_val_i_to_ents_i.get(val_i);
-            const exist_other_ents_i: number[] = exist_ents_i === undefined ?
-                Array.from(other_ents_i) :
-                Array.from(new Set(exist_ents_i.concat(other_ents_i)));
-            // update the ent maps
-            this._map_val_i_to_ents_i.set(val_i, exist_other_ents_i);
+            // update the  maps
             other_ents_i.forEach( ent_i => {
                 if (this._map_ent_i_to_val_i.has(ent_i) && this._map_ent_i_to_val_i.get(ent_i) !== val_i) {
                     // handle merging collections - special case
-                    // TODO to be reconsidered... 
+                    // TODO to be reconsidered...
                     if (this._is_coll_data) {
                         const exist_val_i: number = this._map_ent_i_to_val_i.get(ent_i);
                         const exist_vals: number[] = this.modeldata.model.metadata.getValFromIdx(
@@ -329,6 +311,10 @@ export class GIAttribMap {
                         throw new Error('Merge conflict...');
                     }
                 } else {
+                    if (!this._map_val_i_to_ents_i.has(val_i)) {
+                        this._map_val_i_to_ents_i.set(val_i, new Set()) ;
+                    }
+                    this._map_val_i_to_ents_i.get(val_i).add(ent_i);
                     this._map_ent_i_to_val_i.set(ent_i, val_i);
                 }
             });
@@ -346,22 +332,29 @@ export class GIAttribMap {
      * @param attrib_map The attrib map to merge into this map
      */
     public dump(attrib_map: GIAttribMap): void {
-        this._map_val_i_to_ents_i = cloneDeepMapArr(attrib_map._map_val_i_to_ents_i);
+        const new_map_val_i_to_ents_i: Map<number, Set<number>> = new Map();
+        this._map_val_i_to_ents_i.forEach( (ents_i, val_i) => new_map_val_i_to_ents_i.set(val_i, new Set(ents_i)) );
+        this._map_val_i_to_ents_i = new_map_val_i_to_ents_i;
         this._map_ent_i_to_val_i = new Map(attrib_map._map_ent_i_to_val_i);
     }
     /**
      * Dumps another attrib map into this attrib map
-     * Assumes tha this map is empty
+     * Assumes tha this map is empty ???
      * @param attrib_map The attrib map to merge into this map
      */
     public dumpEnts(attrib_map: GIAttribMap, selected: Set<number>): void {
         selected.forEach(selected_ent_i => {
             if (attrib_map._map_ent_i_to_val_i.has(selected_ent_i)) {
                 const val_i: number = attrib_map._map_ent_i_to_val_i.get(selected_ent_i);
-                const ents_i: number[] = attrib_map._map_val_i_to_ents_i.get(val_i);
-                const ents2_i: number[] = ents_i.filter( ent_i => selected.has(ent_i) );
-                this._map_val_i_to_ents_i.set(val_i, ents2_i);
-                ents2_i.forEach( ent_i => this._map_ent_i_to_val_i.set(ent_i, val_i));
+                const ents_i: Set<number> = attrib_map._map_val_i_to_ents_i.get(val_i);
+                // set the values in the two maps
+                const to_ents_i: Set<number> = this._map_val_i_to_ents_i.get(val_i);
+                ents_i.forEach( ent_i => {
+                    if (!selected.has(ent_i)) {
+                        to_ents_i.add(ent_i);
+                        this._map_ent_i_to_val_i.set(ent_i, val_i);
+                    }
+                });
                 // update the data length
                 if (this._data_type === EAttribDataTypeStrs.LIST || this._data_type === EAttribDataTypeStrs.DICT) {
                     const val = this.modeldata.model.metadata.getValFromIdx(val_i, this._data_type);
@@ -446,7 +439,7 @@ export class GIAttribMap {
      * ~
      * Returns undefined if the entity does not exist in this map.
      * ~
-     * If value is a list or dict, it is passed by reference. 
+     * If value is a list or dict, it is passed by reference.
      * @param ent_i
      */
     public getEntVal(ents_i: number|number[]): TAttribDataTypes {
@@ -507,7 +500,7 @@ export class GIAttribMap {
         // const val_i: number = this._map_val_k_to_val_i.get(this._valToValkey(val));
         const val_i: number =  this.modeldata.model.metadata.getIdxFromKey(this._valToValkey(val), this._data_type);
         if (val_i === undefined) { return []; }
-        return this._map_val_i_to_ents_i.get(val_i);
+        return Array.from(this._map_val_i_to_ents_i.get(val_i));
     }
     /**
      * Returns an array of entity indices which do not have a value (undefined)
@@ -677,8 +670,8 @@ export class GIAttribMap {
     protected _cleanUp(val_i: number): void {
         if (val_i !== undefined) {
             // _map_val_i_to_ents_i: Map<number, number[]>
-            const ents_i: number[] = this._map_val_i_to_ents_i.get(val_i);
-            if (ents_i.length === 0) {
+            const ents_i: Set<number> = this._map_val_i_to_ents_i.get(val_i);
+            if (ents_i.size === 0) {
                 this._map_val_i_to_ents_i.delete(val_i);
             }
         }

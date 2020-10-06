@@ -206,9 +206,6 @@ export class GIGeomAdd {
         if (copy_attribs) {
             this._geom.modeldata.attribs.add.copyAttribs(EEntType.POINT, old_point_i, new_point_i);
         }
-        // time stamp
-        this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.POINT, new_point_i,
-            EAttribNames.TIMESTAMP, this._geom.modeldata.time_stamp);
         // return the new point
         return new_point_i;
     }
@@ -230,9 +227,6 @@ export class GIGeomAdd {
         if (copy_attribs) {
             this._geom.modeldata.attribs.add.copyAttribs(EEntType.PLINE, old_pline_i, new_pline_i);
         }
-        // time stamp
-        this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.PLINE, new_pline_i,
-            EAttribNames.TIMESTAMP, this._geom.modeldata.time_stamp);
         // return the new polyline
         return new_pline_i;
     }
@@ -247,11 +241,8 @@ export class GIGeomAdd {
      * @param copy_attribs
      */
     public copyPgon(old_pgon_i: number, copy_attribs: boolean): number {
-        // const t1 = Date.now();
         const wires_i: number[] = this._geom.nav.navAnyToWire(EEntType.PGON, old_pgon_i);
         const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.WIRE, wires_i[0] as number);
-        // const t2 = Date.now();
-        // console.log( ">>>1" , t2 - t1);
         let new_pgon_i: number;
         if (wires_i.length === 1) {
             new_pgon_i = this.addPgon(posis_i);
@@ -263,18 +254,9 @@ export class GIGeomAdd {
             }
             new_pgon_i = this.addPgon(posis_i, holes_posis_i);
         }
-        // const t3 = Date.now();
-        // console.log( ">>>2" , t3 - t2);
         if (copy_attribs) {
             this._geom.modeldata.attribs.add.copyAttribs(EEntType.PGON, old_pgon_i, new_pgon_i);
         }
-        // const t4 = Date.now();
-        // console.log( ">>>3" , t4 - t3);
-        // time stamp
-        this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.PGON, new_pgon_i,
-            EAttribNames.TIMESTAMP, this._geom.modeldata.time_stamp);
-        // const t5 = Date.now();
-        // console.log( ">>>4" , t5 - t1);
         // return the new polygon
         return new_pgon_i;
     }
@@ -297,9 +279,6 @@ export class GIGeomAdd {
         if (copy_attribs) {
             this._geom.modeldata.attribs.add.copyAttribs(EEntType.COLL, old_coll_i, new_coll_i);
         }
-        // time stamp
-        this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.COLL, new_coll_i,
-            EAttribNames.TIMESTAMP, this._geom.modeldata.time_stamp);
         // return the new collection
         return new_coll_i;
     }

@@ -139,6 +139,7 @@ export class GIGeomNav {
         return this._geom.modeldata.attribs.colls.getPgonColls(pgon_i);
     }
     public navCollToCollParent(coll_i: number): number {
+        // return undefined if no parent
         return this._geom.modeldata.attribs.colls.getCollParent(coll_i); // coll parent
     }
     // ============================================================================

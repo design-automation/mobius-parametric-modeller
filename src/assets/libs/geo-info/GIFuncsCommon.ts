@@ -239,33 +239,27 @@ export class GIFuncsCommon {
      * @param ents_arr
      * @param copy_attributes
      */
-    public copyGeom(
-        ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][], copy_attributes: boolean): TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][] {
-        const depth: number = getArrDepth(ents_arr);
-        if (depth === 1) {
+    public copyGeom(ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][],
+            copy_attributes: boolean): TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][] {
+        if (!Array.isArray(ents_arr[0])) {
             const [ent_type, ent_i]: TEntTypeIdx = ents_arr as TEntTypeIdx;
             switch (ent_type) {
                 case EEntType.COLL:
                     return [ent_type, this.modeldata.geom.add.copyColl(ent_i, copy_attributes)];
-                    break;
                 case EEntType.PGON:
                     return [ent_type, this.modeldata.geom.add.copyPgon(ent_i, copy_attributes)];
-                    break;
                 case EEntType.PLINE:
                     return [ent_type, this.modeldata.geom.add.copyPline(ent_i, copy_attributes)];
-                    break;
                 case EEntType.POINT:
                     return [ent_type, this.modeldata.geom.add.copyPoint(ent_i, copy_attributes)];
-                    break;
                 case EEntType.POSI:
                     return [ent_type, this.modeldata.geom.add.copyPosi(ent_i, copy_attributes)];
-                    break;
                 default:
                     throw new Error('Invalid entity type for copying.');
-                    break;
             }
         } else {
             ents_arr = ents_arr as TEntTypeIdx[];
+            // return this.copyGeom(ents_arr[0], copy_attributes);
             return ents_arr.map(ents_arr_item => this.copyGeom(ents_arr_item, copy_attributes)) as TEntTypeIdx[];
         }
     }

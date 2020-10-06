@@ -223,7 +223,6 @@ export class GIAttribsAdd {
         // copy each attrib
         for (const attrib_name of attrib_names) {
             if (attrib_name === EAttribNames.TIMESTAMP) { continue; }
-            console.log(">>> ",attrib_name)
             const attrib: TAttribMap = attribs.get(attrib_name);
             const attrib_value: TAttribDataTypes =  attrib.getEntVal(from_ent_i) as TAttribDataTypes; // copy
             attrib.setEntVal(to_ent_i, attrib_value);
@@ -334,7 +333,7 @@ export class GIAttribsAdd {
             let target_ents_i: number[] = null;
             if (target_coll === 'coll_parent') {
                 const parent = this.modeldata.geom.nav.navCollToCollParent(index);
-                target_ents_i = (parent === -1) ? [] : [parent];
+                target_ents_i = (parent === undefined) ? [] : [parent];
             } else if (target_coll === 'coll_children') {
                 target_ents_i = this.modeldata.geom.nav.navCollToCollChildren(index);
             } else {

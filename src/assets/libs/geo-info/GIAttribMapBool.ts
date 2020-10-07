@@ -1,6 +1,6 @@
-import { TAttribDataTypes, EEntType, EAttribDataTypeStrs } from './common';
-import { arrRem } from '../util/arrs';
-import { GIAttribMap } from './GIAttribMap';
+import { TAttribDataTypes, EEntType, EAttribDataTypeStrs, EFilterOperatorTypes } from './common';
+import { GIAttribMapStr } from './GIAttribMapStr';
+import { GIAttribMapBase } from './GIAttribMapBase';
 import { GIModelData } from './GIModelData';
 
 /**
@@ -12,7 +12,7 @@ import { GIModelData } from './GIModelData';
  * The keys would be [1,0,,0,1] (Note the undefined value in the middle.)
  *
  */
-export class GIAttribMapBool extends GIAttribMap {
+export class GIAttribMapBool extends GIAttribMapBase {
     /**
      * Creates an attribute.
      * @param attrib_data
@@ -26,14 +26,37 @@ export class GIAttribMapBool extends GIAttribMap {
      * This is the same format as used in gi-json
      * This matches the method setEntsVals()
      */
-    public getEntsVals(): [number[], TAttribDataTypes][] {
+    public getData(): [number[], TAttribDataTypes][] {
         const ents_i_values: [number[], TAttribDataTypes][] = [];
         this._map_val_i_to_ents_i.forEach( (ents_i, val_i) => {
             // val_i is either 0 or 1 (false or true)
             const val: boolean = [false, true][val_i];
-            ents_i_values.push([Array.from(ents_i), val]);
+            ents_i_values.push([this._mapValToEntsGetArr(val_i), val]);
         });
         return ents_i_values;
+    }
+    /**
+     * Gets the value for a given entity, or an array of values given an array of entities.
+     * ~
+     * Returns undefined if the entity does not exist in this map.
+     * ~
+     * @param ent_i
+     */
+    public getEntVal(ents_i: number): TAttribDataTypes {
+        const ent_i: number = ents_i as number;
+        const val_i: number = this._map_ent_i_to_val_i.get(ent_i);
+        if (val_i === undefined) { return undefined; }
+        return [false, true][val_i];
+    }
+    /**
+     * Gets all the keys that have a given value
+     * If the value does not exist an empty array is returned
+     * The value can be a list or object
+     * @param val
+     */
+    public getEntsFromVal(val: TAttribDataTypes): number[] {
+        const val_i: number = val ? 1 : 0;
+        return this._mapValToEntsGetArr(val_i);
     }
     /**
      * Sets the value for a given entity or entities.
@@ -70,63 +93,77 @@ export class GIAttribMapBool extends GIAttribMap {
             // for each ent_i, set the new val_i
             this._map_ent_i_to_val_i.set(ent_i, val_i);
             // for the value add each ent_i
-            this._map_val_i_to_ents_i.get(val_i).add(ent_i);
+            this._mapValToEntsAdd(val_i, ent_i);
             // clean up the old val_i
             if (old_val_i !== undefined && old_val_i !== val_i) {
-                this._map_val_i_to_ents_i.get(old_val_i).delete(ent_i);
-                // clean up just in case that was the last entity with this value
-                this._cleanUp(old_val_i);
+                this._mapValToEntsRem(old_val_i, ent_i);
             }
         });
     }
-    /**
-     * Dumps another attrib map into this attrib map
-     * Assumes tha this map is empty
-     * @param attrib_map The attrib map to merge into this map
+/**
+     * Executes a query.
+     * ~
+     * The value can be NUMBER, STRING, BOOLEAN, LIST or DICT
+     * ~
+     * @param ents_i
+     * @param operator The relational operator, ==, !=, <=, >=, etc
+     * @param search_val The value to search, string or number, or any[].
      */
-    public dumpEnts(attrib_map: GIAttribMapBool, selected: Set<number>): void {
-        selected.forEach(selected_ent_i => {
-            if (attrib_map._map_ent_i_to_val_i.has(selected_ent_i)) {
-                const val_i: number = attrib_map._map_ent_i_to_val_i.get(selected_ent_i);
-                const ents_i: Set<number> = attrib_map._map_val_i_to_ents_i.get(val_i);
-                // set the values in the two maps
-                const to_ents_i: Set<number> = this._map_val_i_to_ents_i.get(val_i);
-                ents_i.forEach( ent_i => {
-                    if (!selected.has(ent_i)) {
-                        to_ents_i.add(ent_i);
-                        this._map_ent_i_to_val_i.set(ent_i, val_i);
-                    }
-                });
+    public queryVal(ents_i: number[], operator: EFilterOperatorTypes, search_val: TAttribDataTypes): number[] {
+        // check the null search case
+        if (search_val === null) {
+            if (operator !== EFilterOperatorTypes.IS_EQUAL && operator !== EFilterOperatorTypes.IS_NOT_EQUAL) {
+                { throw new Error('Query operator "' + operator + '" and query "null" value are incompatible.'); }
             }
-        });
+        }
+        // search
+        if (search_val !== null && typeof search_val !== 'boolean') {
+            throw new Error('Query search value "' + search_val + '" is not a boolean.');
+        }
+        return this._searchBoolVal(ents_i, operator, search_val as boolean);
     }
     /**
-     * Gets the value for a given entity, or an array of values given an array of entities.
-     * ~
-     * Returns undefined if the entity does not exist in this map.
-     * ~
-     * @param ent_i
+     * Searches for the boolean value using the operator
      */
-    public getEntVal(ents_i: number|number[]): TAttribDataTypes {
-        if (!Array.isArray(ents_i)) {
-            const ent_i: number = ents_i as number;
-            const val_i: number = this._map_ent_i_to_val_i.get(ent_i);
-            if (val_i === undefined) { return undefined; }
-            return [false, true][val_i];
-        } else {
-            return ents_i.map(ent_i => this.getEntVal(ent_i)) as TAttribDataTypes;
+    protected _searchBoolVal(ents_i: number[], operator: EFilterOperatorTypes, search_val: boolean): number[] {
+        // first deal with null cases
+        if (search_val === null && operator === EFilterOperatorTypes.IS_EQUAL ) {
+            return this.getEntsWithoutVal(ents_i);
+        } else if (search_val === null && operator === EFilterOperatorTypes.IS_NOT_EQUAL ) {
+            return this.getEntsWithVal(ents_i);
+        }
+        // search
+        let found_keys: number[];
+        switch (operator) {
+            case EFilterOperatorTypes.IS_EQUAL:
+                found_keys = this.getEntsFromVal(search_val);
+                if (found_keys === undefined) { return []; }
+                return ents_i.filter(ent_i => found_keys.indexOf(ent_i) !== -1);
+            case EFilterOperatorTypes.IS_NOT_EQUAL:
+                found_keys = this.getEntsFromVal(search_val);
+                if (found_keys === undefined) { return []; }
+                return ents_i.filter(ent_i => found_keys.indexOf(ent_i) === -1);
+            case EFilterOperatorTypes.IS_GREATER:
+            case EFilterOperatorTypes.IS_GREATER_OR_EQUAL:
+            case EFilterOperatorTypes.IS_LESS:
+            case EFilterOperatorTypes.IS_LESS_OR_EQUAL:
+                throw new Error('Query error: Operator not allowed with boolean values.');
+            default:
+                throw new Error('Query error: Operator not found.');
         }
     }
     /**
-     * Gets all the keys that have a given value
-     * If the value does not exist an empty array is returned
-     * The value can be a list or object
-     * @param val
+     * Convert a value into a map key
      */
-    public getEntsFromVal(val: TAttribDataTypes): number[] {
-        const val_i: number = val ? 1 : 0;
-        const ents_i: Set<number> = this._map_val_i_to_ents_i.get(val_i);
-        if (ents_i === undefined) { return []; }
-        return Array.from(ents_i);
+    protected _valToValkey(val: TAttribDataTypes): string|number {
+        // if (typeof val !== 'boolean') {
+        //     throw new Error('Value must be of type "boolean".');
+        // } else {
+            if (val) {
+                return 1;
+            } else {
+                return 0;
+            }
+        // }
     }
 }

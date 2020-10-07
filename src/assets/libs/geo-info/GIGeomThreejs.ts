@@ -1,7 +1,7 @@
 import { GIGeom } from './GIGeom';
-import { IGeomMaps, TTri, TEdge, TPoint, TPline, TWire, EEntType } from './common';
-import { GIAttribMap } from './GIAttribMap';
+import { IGeomMaps, TTri, TEdge, TPoint, EEntType } from './common';
 import * as THREE from 'three';
+import { GIAttribMapBase } from './GIAttribMapBase';
 
 /**
  * Class for geometry.
@@ -48,7 +48,7 @@ export class GIGeomThreejs {
         const materials: object[] = [this._getPgonMaterial( mat_front ), this._getPgonMaterial( mat_back )];
         const material_names:  string[] = ['default_front', 'default_back'];
         // get the material attribute from polygons
-        const pgon_material_attrib: GIAttribMap = this._geom.modeldata.attribs.attribs_maps.get(ssid).pg.get('material');
+        const pgon_material_attrib: GIAttribMapBase = this._geom.modeldata.attribs.attribs_maps.get(ssid).pg.get('material');
         // loop through all tris
         // get ents from snapshot
         const tris_i: number[] = this._geom.snapshot.getEnts(ssid, EEntType.TRI);

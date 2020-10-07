@@ -276,7 +276,7 @@ export class GIFuncsEdit {
         return Math.pow(xyz1[0] - xyz2[0], 2) +  Math.pow(xyz1[1] - xyz2[1], 2) +  Math.pow(xyz1[2] - xyz2[2], 2);
     }
     // ================================================================================================
-    public ring(ents_arr: TEntTypeIdx[], method: _ERingMethod): TEntTypeIdx[] {
+    public ring(ents_arr: TEntTypeIdx[], method: _ERingMethod): void {
         for (const [ent_type, ent_i] of ents_arr) {
             // time stamp
             this.modeldata.checkObjsTs(ent_type, ent_i);
@@ -292,8 +292,6 @@ export class GIFuncsEdit {
                     break;
             }
         }
-        // TODO
-        return [];
     }
     // ================================================================================================
     /**
@@ -301,7 +299,7 @@ export class GIFuncsEdit {
      * @param ents_arr
      * @param offset
      */
-    public shift(ents_arr: TEntTypeIdx[], offset: number): TEntTypeIdx[] {
+    public shift(ents_arr: TEntTypeIdx[], offset: number): void {
         for (const [ent_type, ent_i] of ents_arr) {
             // time stamp
             this.modeldata.checkObjsTs(ent_type, ent_i);
@@ -309,15 +307,13 @@ export class GIFuncsEdit {
             const wires_i: number[] = this.modeldata.geom.nav.navAnyToWire(ent_type, ent_i);
             wires_i.forEach( wire_i => this.modeldata.geom.modify.shift(wire_i, offset) );
         }
-        // TODO
-        return [];
     }
     // ================================================================================================
     /**
      *
      * @param ents_arr
      */
-    public reverse(ents_arr: TEntTypeIdx[]): TEntTypeIdx[] {
+    public reverse(ents_arr: TEntTypeIdx[]): void {
         for (const [ent_type, ent_i] of ents_arr) {
             // time stamp
             this.modeldata.checkObjsTs(ent_type, ent_i);
@@ -325,8 +321,6 @@ export class GIFuncsEdit {
             const wires_i: number[] = this.modeldata.geom.nav.navAnyToWire(ent_type, ent_i);
             wires_i.forEach( wire_i => this.modeldata.geom.modify.reverse(wire_i) );
         }
-        // TODO
-        return [];
     }
     // ================================================================================================
     /**
@@ -336,36 +330,37 @@ export class GIFuncsEdit {
      * If topological entities are deleted, then the object may need to be cloned.
      */
     public delete(ents_arr: TEntTypeIdx|TEntTypeIdx[], invert: boolean): void {
-        if (ents_arr.length === 0) { return; }
+        // null case
+        if (ents_arr === null) { this._deleteNull(invert); return; }
         // create array
         ents_arr = (Array.isArray(ents_arr[0]) ? ents_arr : [ents_arr]) as TEntTypeIdx[];
+        // empty array
+        if (ents_arr.length === 0) { return; }
         // create sets
         const ent_sets: IEntSets = this.modeldata.geom.query.getDelEntSets(ents_arr);
         // delete
-        if (ent_sets === null) {
-            if (invert) {
-                // delete nothing
-                return;
-            } else {
-                // delete everything
-                this.modeldata.geom.snapshot.delAllEntsActive(EEntType.POSI);
-                this.modeldata.geom.snapshot.delAllEntsActive(EEntType.POINT);
-                this.modeldata.geom.snapshot.delAllEntsActive(EEntType.PLINE);
-                this.modeldata.geom.snapshot.delAllEntsActive(EEntType.PGON);
-                this.modeldata.geom.snapshot.delAllEntsActive(EEntType.COLL);
-            }
+        if (ent_sets.posis_i.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.POSI, Array.from(ent_sets.posis_i), invert); }
+        if (ent_sets.points_i.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.POINT, Array.from(ent_sets.points_i), invert); }
+        if (ent_sets.plines_i.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.PLINE, Array.from(ent_sets.plines_i), invert); }
+        if (ent_sets.pgons_i.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.PGON, Array.from(ent_sets.pgons_i), invert); }
+        if (ent_sets.colls_i.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.COLL, Array.from(ent_sets.colls_i), invert); }
+        //
+        if (ent_sets.verts_i) { throw new Error('Not implemented'); } // should never happen
+        if (ent_sets.edges_i) { throw new Error('Not implemented'); } // should never happen
+        if (ent_sets.wires_i) { throw new Error('Not implemented'); } // should never happen
+        if (ent_sets.faces_i) { throw new Error('Not implemented'); } // should never happen
+    }
+    private _deleteNull(invert: boolean): void {
+        if (invert) {
+            // delete nothing
+            return;
         } else {
-            //
-            if (ent_sets.posis_i.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.POSI, Array.from(ent_sets.posis_i), invert); }
-            if (ent_sets.points_i.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.POINT, Array.from(ent_sets.points_i), invert); }
-            if (ent_sets.plines_i.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.PLINE, Array.from(ent_sets.plines_i), invert); }
-            if (ent_sets.pgons_i.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.PGON, Array.from(ent_sets.pgons_i), invert); }
-            if (ent_sets.colls_i.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.COLL, Array.from(ent_sets.colls_i), invert); }
-            //
-            if (ent_sets.verts_i) { throw new Error('Not implemented'); } // should never happen
-            if (ent_sets.edges_i) { throw new Error('Not implemented'); } // should never happen
-            if (ent_sets.wires_i) { throw new Error('Not implemented'); } // should never happen
-            if (ent_sets.faces_i) { throw new Error('Not implemented'); } // should never happen
+            // delete everything
+            this.modeldata.geom.snapshot.delAllEntsActive(EEntType.POSI);
+            this.modeldata.geom.snapshot.delAllEntsActive(EEntType.POINT);
+            this.modeldata.geom.snapshot.delAllEntsActive(EEntType.PLINE);
+            this.modeldata.geom.snapshot.delAllEntsActive(EEntType.PGON);
+            this.modeldata.geom.snapshot.delAllEntsActive(EEntType.COLL);
         }
     }
     // ================================================================================================

@@ -1,7 +1,8 @@
 import { IAttribsJSONData, IAttribJSONData, TAttribDataTypes, EEntType,
-    IAttribsMaps, EEntTypeStr, TModelAttribValuesArr, IEntSets, TAttribMap } from './common';
+    IAttribsMaps, EEntTypeStr, TModelAttribValuesArr } from './common';
 import { GIModelData } from './GIModelData';
 import * as lodash from 'lodash';
+import { GIAttribMapBase } from './GIAttribMapBase';
 
 
 /**
@@ -206,14 +207,14 @@ export class GIAttribsIO {
      * @param attribs_maps
      */
     private _mergeAttribs(ssid: number, attribs_maps: IAttribsMaps, ent_type: EEntType) {
-        const other_attribs: Map<string, TAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
-        const this_attribs: Map<string, TAttribMap> = this.modeldata.attribs.attribs_maps.get(ssid)[EEntTypeStr[ ent_type ]];
+        const other_attribs: Map<string, GIAttribMapBase> = attribs_maps[EEntTypeStr[ ent_type ]];
+        const this_attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[EEntTypeStr[ ent_type ]];
         other_attribs.forEach( other_attrib => {
             if (other_attrib.numEnts() > 0) {
                 // get the name
                 const name: string = other_attrib.getName();
                 // get or create the attrib
-                let this_attrib: TAttribMap;
+                let this_attrib: GIAttribMapBase;
                 if (!this_attribs.has(name)) {
                     this_attrib = this.modeldata.attribs.add.addEntAttrib(ent_type, name, other_attrib.getDataType());
                 } else {
@@ -235,14 +236,14 @@ export class GIAttribsIO {
      * @param attribs_maps
      */
     private _appendAttribs(ssid: number, attribs_maps: IAttribsMaps, ent_type: EEntType, renum_map: Map<number, number>) {
-        const other_attribs: Map<string, TAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
-        const this_attribs: Map<string, TAttribMap> = this.modeldata.attribs.attribs_maps.get(ssid)[EEntTypeStr[ ent_type ]];
+        const other_attribs: Map<string, GIAttribMapBase> = attribs_maps[EEntTypeStr[ ent_type ]];
+        const this_attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[EEntTypeStr[ ent_type ]];
         other_attribs.forEach( other_attrib => {
             if (other_attrib.numEnts() > 0) {
                 // get the name
                 const name: string = other_attrib.getName();
                 // get or create the attrib
-                let this_attrib: TAttribMap;
+                let this_attrib: GIAttribMapBase;
                 if (!this_attribs.has(name)) {
                     this_attrib = this.modeldata.attribs.add.addEntAttrib(ent_type, name, other_attrib.getDataType());
                 } else {
@@ -264,10 +265,10 @@ export class GIAttribsIO {
     //  * @param attribs_maps
     //  */
     // private _dumpAttribs(ssid: number, attribs_maps: IAttribsMaps, ent_type: EEntType) {
-    //     const other_attribs: Map<string, TAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
+    //     const other_attribs: Map<string, GIAttribMapBase> = attribs_maps[EEntTypeStr[ ent_type ]];
     //     other_attribs.forEach( other_attrib => {
     //         if (other_attrib.numEnts() > 0) {
-    //             const this_attrib: TAttribMap = this.modeldata.attribs.add.addEntAttrib(
+    //             const this_attrib: GIAttribMapBase = this.modeldata.attribs.add.addEntAttrib(
     //                 ent_type,
     //                 other_attrib.getName(),
     //                 other_attrib.getDataType());
@@ -282,7 +283,7 @@ export class GIAttribsIO {
     //  * @param attribs_maps
     //  */
     // private _dumpAttribsSelect(ssid: number, attribs_maps: IAttribsMaps, ent_type: EEntType, selected: Set<number>): void {
-    //     const other_attribs: Map<string, TAttribMap> = attribs_maps[EEntTypeStr[ ent_type ]];
+    //     const other_attribs: Map<string, GIAttribMapBase> = attribs_maps[EEntTypeStr[ ent_type ]];
     //     other_attribs.forEach( other_attrib => {
     //         if (other_attrib.numEnts() > 0) {
     //             const this_attrib = this.modeldata.attribs.add.addEntAttrib(
@@ -302,7 +303,7 @@ export class GIAttribsIO {
     private _setAttribsJSONData(ssid: number, attribs_data: IAttribJSONData[], ent_type: EEntType): void {
         this.modeldata.attribs.attribs_maps.get(ssid)[EEntTypeStr[ ent_type ]] = new Map();
         attribs_data.forEach( attrib_data => {
-            const this_attrib: TAttribMap = this.modeldata.attribs.add.addEntAttrib(
+            const this_attrib: GIAttribMapBase = this.modeldata.attribs.add.addEntAttrib(
                 ent_type,
                 attrib_data.name,
                 attrib_data.data_type);

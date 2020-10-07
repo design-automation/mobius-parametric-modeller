@@ -124,7 +124,7 @@ function checkMissingProd(prodList: any[], fileVersion: string) {
                 if (dpFn.old_func.module === dpFn.new_func.module
                 && dpFn.old_func.name === dpFn.new_func.name && prod.argCount === (data.argCount + 1)
                 && !dpFn.new_func.values && !dpFn.new_func.replace) { break; }
-                console.log(prod)
+                // console.log(prod)
                 prod.meta = { module: data.module, name: data.name};
                 prod.argCount = data.argCount + 1;
                 let returnArg = {name: 'var_name', value: 'var', jsValue: 'var'};
@@ -172,7 +172,7 @@ function checkMissingProd(prodList: any[], fileVersion: string) {
                     }
                 }
                 prod.args = [ returnArg, ...data.args];
-                console.log(prod)
+                // console.log(prod)
                 break;
             }
         }

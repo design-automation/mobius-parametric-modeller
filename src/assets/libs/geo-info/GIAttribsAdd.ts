@@ -1,12 +1,14 @@
-import { GIModel } from './GIModel';
 import { TAttribDataTypes, EEntType,
-    EAttribDataTypeStrs, IAttribsMaps, EAttribNames, Txyz, EEntTypeStr, EAttribPush, TAttribMap } from './common';
+    EAttribDataTypeStrs, EAttribNames, Txyz, EEntTypeStr, EAttribPush } from './common';
 import { vecAdd } from '@libs/geom/vectors';
 import * as mathjs from 'mathjs';
 import { GIModelData } from './GIModelData';
 import { GIAttribMapBool } from './GIAttribMapBool';
-import { GIAttribMap } from './GIAttribMap';
+import { GIAttribMapStr } from './GIAttribMapStr';
 import { GIAttribMapNum } from './GIAttribMapNum';
+import { GIAttribMapList } from './GIAttribMapList';
+import { GIAttribMapDict } from './GIAttribMapDict';
+import { GIAttribMapBase } from './GIAttribMapBase';
 
 /**
  * Class for attributes.
@@ -31,11 +33,12 @@ export class GIAttribsAdd {
      * @param name The name of the attribute.
      * @param data_type The data type of the attribute.
      */
-    public addAttrib(ent_type: EEntType, name: string, data_type: EAttribDataTypeStrs): void {
+    public addAttrib(ent_type: EEntType, name: string, data_type: EAttribDataTypeStrs): GIAttribMapBase {
         if (ent_type === EEntType.MOD) {
             this.addModelAttrib(name);
+            return null;
         } else {
-            this.addEntAttrib(ent_type, name, data_type);
+            return this.addEntAttrib(ent_type, name, data_type);
         }
     }
     /**
@@ -59,18 +62,24 @@ export class GIAttribsAdd {
      * @param name The name of the attribute.
      * @param data_type The data type of the attribute.
      */
-    public addEntAttrib(ent_type: EEntType, name: string, data_type: EAttribDataTypeStrs): TAttribMap {
+    public addEntAttrib(ent_type: EEntType, name: string, data_type: EAttribDataTypeStrs): GIAttribMapBase {
         const ssid: number = this.modeldata.time_stamp;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, any> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
-        let attrib: TAttribMap;
+        let attrib: GIAttribMapBase;
         if (!attribs.has(name)) {
-            if (data_type === EAttribDataTypeStrs.BOOLEAN) {
-                attrib = new GIAttribMapBool(this.modeldata, name, ent_type, data_type);
-            } else if (data_type === EAttribDataTypeStrs.NUMBER) {
+            if (data_type === EAttribDataTypeStrs.NUMBER) {
                 attrib = new GIAttribMapNum(this.modeldata, name, ent_type, data_type);
+            } else if (data_type === EAttribDataTypeStrs.STRING) {
+                attrib = new GIAttribMapStr(this.modeldata, name, ent_type, data_type);
+            } else if (data_type === EAttribDataTypeStrs.BOOLEAN) {
+                attrib = new GIAttribMapBool(this.modeldata, name, ent_type, data_type);
+            } else if (data_type === EAttribDataTypeStrs.LIST) {
+                attrib = new GIAttribMapList(this.modeldata, name, ent_type, data_type);
+            } else if (data_type === EAttribDataTypeStrs.DICT) {
+                attrib = new GIAttribMapDict(this.modeldata, name, ent_type, data_type);
             } else {
-                attrib = new GIAttribMap(this.modeldata, name, ent_type, data_type);
+                throw new Error('Attribute datatype not recognised.');
             }
             attribs.set(name, attrib);
         } else {
@@ -133,12 +142,18 @@ export class GIAttribsAdd {
     public setEntAttribVal(ent_type: EEntType, ents_i: number|number[], name: string, value: TAttribDataTypes): void {
         const ssid: number = this.modeldata.time_stamp;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, TAttribMap> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
-        if (attribs.get(name) === undefined) {
+        const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+        // get the attrib
+        let attrib: GIAttribMapBase = attribs.get(name);
+        if (attrib === undefined) {
             const new_data_type: EAttribDataTypeStrs = this._checkDataType(value);
-            this.addAttrib(ent_type, name, new_data_type);
+            attrib = this.addAttrib(ent_type, name, new_data_type);
         }
-        attribs.get(name).setEntVal(ents_i, value);
+        // set the data
+        ents_i = Array.isArray( ents_i) ? ents_i : [ents_i];
+        for (const ent_i of ents_i) {
+            attrib.setEntVal(ent_i, value);
+        }
     }
     /**
      * Set an entity attrib indexed value.
@@ -151,13 +166,19 @@ export class GIAttribsAdd {
             idx: number, value: any): void {
         const ssid: number = this.modeldata.time_stamp;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, TAttribMap> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
-        const attrib: TAttribMap = attribs.get(name);
+        const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+        const attrib: GIAttribMapBase = attribs.get(name);
         if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
         if (attrib.getDataType() !== EAttribDataTypeStrs.LIST) {
             throw new Error('Attribute is not a list, so indexed values are not allowed.');
         }
-        attrib.setEntListIdxVal(ents_i, idx, value);
+        // replace the data
+        ents_i = Array.isArray( ents_i) ? ents_i : [ents_i];
+        for (const ent_i of ents_i) {
+            const data: any[] = attrib.getEntVal(ent_i) as any[]; // this will be a deep copy of the data
+            data[idx] = value;
+            attrib.setEntVal(ent_i, data);
+        }
     }
     /**
      * Set an entity attrib indexed value.
@@ -170,13 +191,19 @@ export class GIAttribsAdd {
             key: string, value: any): void {
         const ssid: number = this.modeldata.time_stamp;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, TAttribMap> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
-        const attrib: TAttribMap = attribs.get(name);
+        const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+        const attrib: GIAttribMapBase = attribs.get(name);
         if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
         if (attrib.getDataType() !== EAttribDataTypeStrs.DICT) {
             throw new Error('Attribute is not a dictionary, so keyed values are not allowed.');
         }
-        attrib.setEntDictKeyVal(ents_i, key, value);
+        // replace the data
+        ents_i = Array.isArray( ents_i) ? ents_i : [ents_i];
+        for (const ent_i of ents_i) {
+            const data: object = attrib.getEntVal(ent_i) as any[]; // this will be a deep copy of the data
+            data[key] = value;
+            attrib.setEntVal(ent_i, data);
+        }
     }
     /**
      * Delete the entity from an attribute
@@ -189,7 +216,7 @@ export class GIAttribsAdd {
         const ssid: number = this.modeldata.time_stamp;
         // get the attrib names
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, TAttribMap> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+        const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
         attribs.forEach( attrib => attrib.delEnt(ents_i) );
     }
     /**
@@ -221,12 +248,12 @@ export class GIAttribsAdd {
         const ssid: number = this.modeldata.time_stamp;
         // get the attrib names
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, TAttribMap> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+        const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
         const attrib_names: string[] = Array.from(attribs.keys());
         // copy each attrib
         for (const attrib_name of attrib_names) {
             if (attrib_name === EAttribNames.TIMESTAMP) { continue; }
-            const attrib: TAttribMap = attribs.get(attrib_name);
+            const attrib: GIAttribMapBase = attribs.get(attrib_name);
             const attrib_value: TAttribDataTypes =  attrib.getEntVal(from_ent_i) as TAttribDataTypes; // copy
             attrib.setEntVal(to_ent_i, attrib_value);
         }

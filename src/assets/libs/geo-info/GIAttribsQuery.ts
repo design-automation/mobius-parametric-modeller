@@ -1,6 +1,7 @@
 import { TAttribDataTypes,
     Txyz, EAttribNames, EEntType,  ESort,
-    EAttribDataTypeStrs, EEntTypeStr, EFilterOperatorTypes, TAttribMap } from './common';
+    EAttribDataTypeStrs, EEntTypeStr, EFilterOperatorTypes } from './common';
+import { GIAttribMapBase } from './GIAttribMapBase';
 import { GIModelData } from './GIModelData';
 
 /**
@@ -112,7 +113,7 @@ export class GIAttribsQuery {
     public getAttribDataType(ent_type: EEntType, name: string): EAttribDataTypeStrs {
         const ssid: number = this.modeldata.time_stamp;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, TAttribMap>|Map<string, TAttribDataTypes> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+        const attribs: Map<string, GIAttribMapBase>|Map<string, TAttribDataTypes> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
         if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
         if (ent_type === EEntType.MOD) {
             const mod_attribs: Map<string, TAttribDataTypes> = attribs as Map<string, TAttribDataTypes>;
@@ -130,7 +131,7 @@ export class GIAttribsQuery {
             }
             throw new Error('Datatype of model attribute not recognised.');
         } else {
-            const ent_attribs: Map<string, TAttribMap> = attribs as Map<string, TAttribMap>;
+            const ent_attribs: Map<string, GIAttribMapBase> = attribs as Map<string, GIAttribMapBase>;
             return ent_attribs.get(name).getDataType();
         }
     }
@@ -143,7 +144,7 @@ export class GIAttribsQuery {
     public getAttribDataLength(ent_type: EEntType, name: string): number {
         const ssid: number = this.modeldata.time_stamp;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, TAttribMap>|Map<string, TAttribDataTypes> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+        const attribs: Map<string, GIAttribMapBase>|Map<string, TAttribDataTypes> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
         if (attribs.get(name) === undefined) { throw new Error('Attribute does not exist.'); }
         if (ent_type === EEntType.MOD) {
             const mod_attribs: Map<string, TAttribDataTypes> = attribs as Map<string, TAttribDataTypes>;
@@ -157,7 +158,7 @@ export class GIAttribsQuery {
             }
             throw new Error('Datatype of model attribute not recognised.');
         } else {
-            const ent_attribs: Map<string, TAttribMap> = attribs as Map<string, TAttribMap>;
+            const ent_attribs: Map<string, GIAttribMapBase> = attribs as Map<string, GIAttribMapBase>;
             return ent_attribs.get(name).getDataLength();
         }
     }
@@ -175,7 +176,6 @@ export class GIAttribsQuery {
      */
     public getEntAttribValAny(ent_type: EEntType, ents_i: number|number[], name: string,
             idx_or_key: number|string): any {
-        const ssid: number = this.modeldata.time_stamp;
         if (idx_or_key === null) { return this.getEntAttribVal(ent_type, ents_i, name); }
         switch (typeof idx_or_key) {
             case 'number':
@@ -195,10 +195,13 @@ export class GIAttribsQuery {
     public getEntAttribVal(ent_type: EEntType, ents_i: number|number[], name: string): TAttribDataTypes|TAttribDataTypes[] {
         const ssid: number = this.modeldata.time_stamp;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, TAttribMap> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
-        const attrib: TAttribMap = attribs.get(name);
+        const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+        const attrib: GIAttribMapBase = attribs.get(name);
         if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
-        return attrib.getEntVal(ents_i);
+        if (Array.isArray(ents_i)) {
+            return ents_i.map( ent_i => attrib.getEntVal(ent_i) );
+        }
+        return attrib.getEntVal(ents_i as number);
     }
     /**
      * Get an entity attrib value in a list.
@@ -213,12 +216,15 @@ export class GIAttribsQuery {
     public getEntAttribListIdxVal(ent_type: EEntType, ents_i: number|number[], name: string, idx: number): any {
         const ssid: number = this.modeldata.time_stamp;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, TAttribMap> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
-        const attrib: TAttribMap = attribs.get(name);
+        const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+        const attrib: GIAttribMapBase = attribs.get(name);
         if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
-        return attrib.getEntListIdxVal(ents_i, idx);
+        if (Array.isArray(ents_i)) {
+            return ents_i.map( ent_i => attrib.getEntVal(ent_i)[idx] );
+        }
+        return attrib.getEntVal(ents_i as number)[idx];
     }
-        /**
+    /**
      * Get an entity attrib value in a dictionary.
      * ~
      * If the attribute does not exist, throw error
@@ -231,10 +237,13 @@ export class GIAttribsQuery {
     public getEntAttribDictKeyVal(ent_type: EEntType, ents_i: number|number[], name: string, key: string): any {
         const ssid: number = this.modeldata.time_stamp;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, TAttribMap> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
-        const attrib: TAttribMap = attribs.get(name);
+        const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+        const attrib: GIAttribMapBase = attribs.get(name);
         if (attrib === undefined) { throw new Error('Attribute does not exist.'); }
-        return attrib.getEntDictKeyVal(ents_i, key);
+        if (Array.isArray(ents_i)) {
+            return ents_i.map( ent_i => attrib.getEntVal(ent_i)[key] );
+        }
+        return attrib.getEntVal(ents_i as number)[key];
     }
     /**
      * Check if attribute exists
@@ -244,7 +253,7 @@ export class GIAttribsQuery {
     public hasAttrib(ent_type: EEntType, name: string): boolean {
         const ssid: number = this.modeldata.time_stamp;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, TAttribMap> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+        const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
         return attribs.has(name);
     }
     /**
@@ -254,7 +263,7 @@ export class GIAttribsQuery {
     public getAttribNames(ent_type: EEntType): string[] {
         const ssid: number = this.modeldata.time_stamp;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs_map: Map<string, TAttribMap> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+        const attribs_map: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
         return Array.from(attribs_map.keys());
     }
     /**
@@ -265,7 +274,7 @@ export class GIAttribsQuery {
     public getAttribNamesUser(ent_type: EEntType): string[] {
         const ssid: number = this.modeldata.time_stamp;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs_map: Map<string, TAttribMap> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+        const attribs_map: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
         let attribs: string[] = Array.from(attribs_map.keys());
         if (ent_type === EEntType.POSI) {
             attribs = attribs.filter(attrib => attrib !== 'xyz');
@@ -278,10 +287,10 @@ export class GIAttribsQuery {
      * @param ent_type
      * @param name
      */
-    public getAttrib(ent_type: EEntType, name: string): TAttribMap {
+    public getAttrib(ent_type: EEntType, name: string): GIAttribMapBase {
         const ssid: number = this.modeldata.time_stamp;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, TAttribMap> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+        const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
         return attribs.get(name);
     }
     // ============================================================================
@@ -301,10 +310,10 @@ export class GIAttribsQuery {
         const ssid: number = this.modeldata.time_stamp;
         // get the map that contains all the attributes for the ent_type
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, TAttribMap> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+        const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
         // do the query
         if (attribs && attribs.has(name)) {
-            const attrib: TAttribMap = attribs.get(name);
+            const attrib: GIAttribMapBase = attribs.get(name);
             let query_ents_i: number[];
             if (typeof idx_or_key === 'number') {
                 query_ents_i = attrib.queryListIdxVal(ents_i, idx_or_key, op_type, value);
@@ -333,10 +342,10 @@ export class GIAttribsQuery {
         const ssid: number = this.modeldata.time_stamp;
         // get the map that contains all the ettributes for the ent_type
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, TAttribMap> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+        const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
         if (!attribs)  { throw new Error('Bad sort: Entity type does not exist.'); }
         // get the attribute from the map
-        const attrib: TAttribMap = attribs.get(name);
+        const attrib: GIAttribMapBase = attribs.get(name);
         if (attrib === undefined) {
             // if the attribute does not exist then no sort is performed
             return ents_i;
@@ -457,7 +466,7 @@ export class GIAttribsQuery {
     public getEntCoords(ent_type: EEntType, ent_i: number): Txyz[] {
         const ssid: number = this.modeldata.time_stamp;
         const posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(ent_type, ent_i);
-        const coords_map: TAttribMap = this.modeldata.attribs.attribs_maps.get(ssid).ps.get(EAttribNames.COORDS);
-        return coords_map.getEntVal(posis_i) as Txyz[];
+        const coords_map: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid).ps.get(EAttribNames.COORDS);
+        return posis_i.map(posi_i => coords_map.getEntVal(posi_i) as Txyz);
     }
 }

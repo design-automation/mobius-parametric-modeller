@@ -1,5 +1,6 @@
-import { GIAttribMap } from './GIAttribMap';
+import { GIAttribMapStr } from './GIAttribMapStr';
 import { GIAttribMapBool } from './GIAttribMapBool';
+import { GIAttribMapBase } from './GIAttribMapBase';
 
 // longitude latitude in Singapore, NUS
 export const LONGLAT = [103.778329, 1.298759];
@@ -122,18 +123,16 @@ export enum EEntStrToGeomMaps {
  * Attribute maps
  */
 
-export type TAttribMap = GIAttribMap | GIAttribMapBool;
-
 export interface IAttribsMaps {
-    ps: Map<string, TAttribMap>;
-    _v: Map<string, TAttribMap>;
-    _e: Map<string, TAttribMap>;
-    _w: Map<string, TAttribMap>;
-    _f: Map<string, TAttribMap>;
-    pt: Map<string, TAttribMap>;
-    pl: Map<string, TAttribMap>;
-    pg: Map<string, TAttribMap>;
-    co: Map<string, TAttribMap>;
+    ps: Map<string, GIAttribMapBase>;
+    _v: Map<string, GIAttribMapBase>;
+    _e: Map<string, GIAttribMapBase>;
+    _w: Map<string, GIAttribMapBase>;
+    _f: Map<string, GIAttribMapBase>;
+    pt: Map<string, GIAttribMapBase>;
+    pl: Map<string, GIAttribMapBase>;
+    pg: Map<string, GIAttribMapBase>;
+    co: Map<string, GIAttribMapBase>;
     mo: Map<string, any>;
 }
 
@@ -149,10 +148,10 @@ export enum EAttribNames {
     LABEL = 'label',
     TIMESTAMP = '_ts',
     COLL_PARENT = '_coll_parent',
-    COLL_CHILDS = 'coll_childs',
-    COLL_POINTS = 'coll_points',
-    COLL_PLINES = 'coll_plines',
-    COLL_PGONS = 'coll_pgons',
+    COLL_CHILDS = '_coll_childs',
+    COLL_POINTS = '_coll_points',
+    COLL_PLINES = '_coll_plines',
+    COLL_PGONS = '_coll_pgons',
 }
 
 // Wire Type

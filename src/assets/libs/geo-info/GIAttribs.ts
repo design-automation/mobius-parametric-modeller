@@ -1,7 +1,7 @@
 import { GIAttribsAdd } from './GIAttribsAdd';
 import { GIAttribsQuery } from './GIAttribsQuery';
 import { GIModel } from './GIModel';
-import { EEntType, EAttribNames,  IAttribsJSONData, EAttribDataTypeStrs, IAttribsMaps, TAttribMap } from './common';
+import { EEntType, EAttribDataTypeStrs, IAttribsMaps } from './common';
 import { GIAttribsIO } from './GIAttribsIO';
 import { GIAttribsModify } from './GIAttribModify';
 import { GIModelData } from './GIModelData';

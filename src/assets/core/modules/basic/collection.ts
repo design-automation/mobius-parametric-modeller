@@ -133,7 +133,9 @@ function _get(__model__: GIModel, names: string|string[]): number[] {
         if (names.indexOf('*') !== -1 || names.indexOf('?') !== -1) {
             const reg_exp = new RegExp(names.replace('?', '\\w').replace('*', '\\w*'));
             const all_colls_i: number[] = __model__.modeldata.geom.snapshot.getEntsActive(EEntType.COLL);
-            const all_names: string[] = __model__.modeldata.attribs.query.getEntAttribVal(EEntType.COLL, all_colls_i, 'name') as string[];
+            const all_names: string[] = all_colls_i.map( coll_i =>
+                __model__.modeldata.attribs.query.getEntAttribVal(EEntType.COLL, coll_i, 'name') as string
+            );
             const unique_names: string[] = Array.from(new Set(all_names));
             const match_names: string[] = [];
             for (const name1 of unique_names) {

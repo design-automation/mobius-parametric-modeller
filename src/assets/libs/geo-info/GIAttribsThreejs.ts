@@ -1,7 +1,8 @@
-import { TAttribDataTypes, EEntType, IAttribsMaps, EAttribNames, EEntTypeStr, Txyz, TAttribMap} from './common';
+import { TAttribDataTypes, EEntType, EAttribNames, EEntTypeStr, Txyz } from './common';
 import { isString } from 'util';
 import { sortByKey } from '../util/maps';
 import { GIModelData } from './GIModelData';
+import { GIAttribMapBase } from './GIAttribMapBase';
 
 /**
  * Class for attributes.
@@ -26,7 +27,7 @@ export class GIAttribsThreejs {
      * @param verts An array of vertex indices pointing to the position.
      */
     public get3jsSeqPosisCoords(ssid: number): [number[], Map<number, number>] {
-        const coords_attrib: TAttribMap = this.modeldata.attribs.attribs_maps.get(ssid).ps.get(EAttribNames.COORDS);
+        const coords_attrib: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid).ps.get(EAttribNames.COORDS);
         //
         const coords: number[][] = [];
         const posi_map: Map<number, number> = new Map();
@@ -45,7 +46,7 @@ export class GIAttribsThreejs {
      * @param verts An array of vertex indices pointing to the positio.
      */
     public get3jsSeqVertsCoords(ssid: number): [number[], Map<number, number>] {
-        const coords_attrib: TAttribMap = this.modeldata.attribs.attribs_maps.get(ssid).ps.get(EAttribNames.COORDS);
+        const coords_attrib: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid).ps.get(EAttribNames.COORDS);
         //
         const coords: number[][] = [];
         const vertex_map: Map<number, number> = new Map();
@@ -66,7 +67,7 @@ export class GIAttribsThreejs {
     public get3jsSeqVertsNormals(ssid: number): number[] {
         if (!this.modeldata.attribs.attribs_maps.get(ssid)._v.has(EAttribNames.NORMAL)) { return null; }
         // create a sparse arrays of normals of all verts of polygons
-        const verts_attrib: TAttribMap = this.modeldata.attribs.attribs_maps.get(ssid)._v.get(EAttribNames.NORMAL);
+        const verts_attrib: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid)._v.get(EAttribNames.NORMAL);
         const normals: Txyz[] = [];
         const pgons_i: number[] = this.modeldata.geom.snapshot.getEnts(ssid, EEntType.PGON);
         for (const pgon_i of pgons_i) {
@@ -102,7 +103,7 @@ export class GIAttribsThreejs {
      */
     public get3jsSeqVertsColors(ssid: number): number[] {
         if (!this.modeldata.attribs.attribs_maps.get(ssid)._v.has(EAttribNames.COLOR)) { return null; }
-        const verts_attrib: TAttribMap = this.modeldata.attribs.attribs_maps.get(ssid)._v.get(EAttribNames.COLOR);
+        const verts_attrib: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid)._v.get(EAttribNames.COLOR);
         // get all the colors
         const verts_colors: TAttribDataTypes[] = [];
         const verts_i: number[] = this.modeldata.geom.snapshot.getEnts(ssid, EEntType.VERT);
@@ -140,7 +141,7 @@ export class GIAttribsThreejs {
     public getAttribsForTable(ssid: number, ent_type: EEntType): {data: any[], ents: number[]} {
         // get the attribs map for this ent type
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, TAttribMap> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+        const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
 
         // create a map of objects to store the data
         // const data_obj_map: Map< number, { '#': number, _id: string} > = new Map();
@@ -156,7 +157,7 @@ export class GIAttribsThreejs {
             data_obj_map.set(ent_i, {_id: `${attribs_maps_key}${ent_i}`} );
             if (ent_type === EEntType.COLL) {
                 const coll_parent = this.modeldata.attribs.colls.getCollParent(ent_i);
-                data_obj_map.get(ent_i)['_parent'] = coll_parent === -1 ? '' : 'co' + coll_parent;
+                data_obj_map.get(ent_i)['_parent'] = coll_parent === undefined ? '' : 'co' + coll_parent;
             }
             i++;
         }
@@ -218,7 +219,7 @@ export class GIAttribsThreejs {
      */
     public getEntsVals(ssid: number, selected_ents: Map<string, number>, ent_type: EEntType): any[] {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, TAttribMap> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+        const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
         const data_obj_map: Map< number, { _id: string} > = new Map();
         if (!selected_ents || selected_ents === undefined) {
             return [];
@@ -229,7 +230,7 @@ export class GIAttribsThreejs {
             data_obj_map.set(ent, { _id: `${attribs_maps_key}${ent}` } );
             if (ent_type === EEntType.COLL) {
                 const coll_parent = this.modeldata.attribs.colls.getCollParent(ent);
-                data_obj_map.get(ent)['_parent'] = coll_parent === -1 ? '' : coll_parent;
+                data_obj_map.get(ent)['_parent'] = coll_parent === undefined ? '' : coll_parent;
             }
             i++;
         });

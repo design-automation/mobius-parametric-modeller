@@ -3,6 +3,12 @@ import { GIModelData } from './GIModelData';
 
 /**
  * Geo-info attribute class for one attribute.
+ * This class is teh base from which other classes inherit:
+ * - GIAttribMapBool
+ * - GIAttribMapDict
+ * - GIAttribMapList
+ * - GIAttribMapNum
+ * - GIAttribMapStr
  * The attributs stores key-value pairs.
  * Multiple keys point to the same value.
  * So for example, [[1,3], "a"],[[0,4], "b"] can be converted into sequential arrays.

@@ -1,6 +1,7 @@
-import { IModelJSONData, IModelJSON, IMetaJSONData, TEntTypeIdx } from './common';
+import { IModelJSONData, IModelJSON, IMetaJSONData, TEntTypeIdx, TId } from './common';
 import { GIMetaData } from './GIMetaData';
 import { GIModelData } from './GIModelData';
+import { idsBreak } from './id';
 import { IThreeJS } from './ThreejsJSON';
 
 /**
@@ -89,6 +90,39 @@ export class GIModel {
             this.modeldata.updateEntTs(ent_type, ent_i);
         }
     }
+    /**
+     *
+     * @param gf_start_ents
+     */
+    public prepGlobalFunc(gf_start_ents: TId|TId[]): number{
+        const curr_ss = this.getTimestamp();
+        const gf_start_ss = this.nextSnapshot();
+        let idx;
+        if (!Array.isArray(gf_start_ents)) {
+            idx = [idsBreak(gf_start_ents) as TEntTypeIdx];
+        } else {
+            idx = idsBreak(gf_start_ents) as TEntTypeIdx[];
+        }
+        this.addEntsToSnapshot(gf_start_ss, idx);
+        return curr_ss;
+    }
+    /**
+     *
+     * @param ssid
+     */
+    public postGlobalFunc(curr_ss: number) {
+        const gf_end_ss = this.getTimestamp();
+        const gf_end_ents = this.getEntsFromSnapshot(gf_end_ss);
+        const gf_all_ss = [];
+        for (let i = gf_end_ss; i > curr_ss; i--) {
+            gf_all_ss.push(i);
+        }
+        this.delSnapshots(gf_all_ss);
+        this.rollbackTimestamp(curr_ss);
+        this.updateEntsTimestamp(gf_end_ents);
+        this.addEntsToSnapshot(curr_ss, gf_end_ents);
+    }
+
     /**
      * Set all data from a JSON string.
      * This includes both the meta data and the model data.

@@ -338,6 +338,7 @@ export class CodeUtils {
                 }
 
                 codeStr.push(`__params__.console.push('<div style="margin: 5px 0px 5px 10px; border: 1px solid #E6E6E6"><p><b> Global Function: ${prod.meta.name}</b></p>');`);
+                codeStr.push(`curr_ss = __params__.model.prepGlobalFunc(${argsVals[0]});`);
                 const fn = `await ${namePrefix}${prod.meta.name}(__params__${argsVals.map(val => ', ' + val).join('')})`;
                 // codeStr.push(`__params__.prevModel = __params__.model.clone();`);
                 if (args[0].name === '__none__' || !args[0].jsValue) {
@@ -353,6 +354,7 @@ export class CodeUtils {
                         existingVars.push(args[0].jsValue);
                     }
                 }
+                codeStr.push(`__params__.model.postGlobalFunc(curr_ss)`);
                 // codeStr.push(`__params__.prevModel.merge(__params__.model);`);
                 // codeStr.push(`__params__.model = __params__.prevModel;`);
                 // codeStr.push(`__params__.prevModel = null;`);
@@ -732,7 +734,8 @@ export class CodeUtils {
             numRemainingOutputs[node.id] = node.output.edges.length;
             const nodeFuncName = `${func.name}_${node.id}`;
             if (node.type === 'start') {
-                fnCode += `let result_${nodeFuncName} = __params__.model;\n`;
+                // fnCode += `let result_${nodeFuncName} = __params__.model;\n`;
+                fnCode += `let i_${nodeFuncName} = __params__.model.getTimestamp();\n`;
             } else {
                 const codeRes = CodeUtils.getNodeCode(node, false, nodeIndices, func.name, node.id)[0];
                 const nodecode = codeRes[0].join('\n').split('_-_-_+_-_-_');
@@ -740,37 +743,46 @@ export class CodeUtils {
                             `(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){` +
                             nodecode[1] + `\n}\n\n`;
 
-                if (node.input.edges.length === 1 && numRemainingOutputs[node.input.edges[0].source.parentNode.id] === 1) {
-                    fnCode += `\n__params__.model = result_${func.name}_${node.input.edges[0].source.parentNode.id};\n`;
-                } else {
-                    let activeNodes = [];
-                    for (const nodeEdge of node.input.edges) {
-                        if (!nodeEdge.source.parentNode.enabled) {
-                            continue;
-                        }
-                        numRemainingOutputs[nodeEdge.source.parentNode.id] --;
-                        activeNodes.push([nodeIndices[nodeEdge.source.parentNode.id], nodeEdge.source.parentNode.id]);
-                        // if (nodeEdge.source.parentNode.type === 'start') {
-                        //     activeNodes.unshift(nodeEdge.source.parentNode.id);
-                        // } else {
-                        //     activeNodes.push(nodeEdge.source.parentNode.id);
-                        // }
+                const activeNodes = [];
+                for (const nodeEdge of node.input.edges) {
+                    if (!nodeEdge.source.parentNode.enabled) {
+                        continue;
                     }
-                    if (activeNodes.length === 1) {
-                        fnCode += `\n__params__.model = duplicateModel(result_${func.name}_${activeNodes[0][1]});\n`;
-                    } else {
-                        activeNodes = activeNodes.sort((a, b) => a[0] - b[0]);
-                        fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) =>
-                            `result_${func.name}_${nodeId[1]}`).join(', ')}]);\n`;
-                    }
+                    activeNodes.push(`i_${func.name}_${nodeEdge.source.parentNode.id}`);
                 }
-                fnCode += `\nlet result_${nodeFuncName} = await ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_'
-                            ).join('')});\n`;
+                fnCode += `\nlet i_${nodeFuncName} = __params__.model.nextSnapshot([${activeNodes.join(',')}]);\n`;
+                if (node.type === 'end') {
+                    fnCode += `\nreturn await ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')});\n`;
+                } else {
+                    fnCode += `\nawait ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')});\n`;
+                }
+                // if (node.input.edges.length === 1 && numRemainingOutputs[node.input.edges[0].source.parentNode.id] === 1) {
+                //     fnCode += `\n__params__.model = result_${func.name}_${node.input.edges[0].source.parentNode.id};\n`;
+                // } else {
+                //     let activeNodes = [];
+                //     for (const nodeEdge of node.input.edges) {
+                //         if (!nodeEdge.source.parentNode.enabled) {
+                //             continue;
+                //         }
+                //         numRemainingOutputs[nodeEdge.source.parentNode.id] --;
+                //         activeNodes.push([nodeIndices[nodeEdge.source.parentNode.id], nodeEdge.source.parentNode.id]);
+                //         // if (nodeEdge.source.parentNode.type === 'start') {
+                //         //     activeNodes.unshift(nodeEdge.source.parentNode.id);
+                //         // } else {
+                //         //     activeNodes.push(nodeEdge.source.parentNode.id);
+                //         // }
+                //     }
+                //     if (activeNodes.length === 1) {
+                //         fnCode += `\n__params__.model = duplicateModel(result_${func.name}_${activeNodes[0][1]});\n`;
+                //     } else {
+                //         activeNodes = activeNodes.sort((a, b) => a[0] - b[0]);
+                //         fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) =>
+                //             `result_${func.name}_${nodeId[1]}`).join(', ')}]);\n`;
+                //     }
+                // }
+                // fnCode += `\nlet result_${nodeFuncName} = await ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_'
+                //             ).join('')});\n`;
 
-            }
-            if (node.type === 'end') {
-                // fnCode += `\n__params__.model.purge();`;
-                fnCode += `\nreturn result_${nodeFuncName};\n`;
             }
         }
         fnCode += '}\n\n';

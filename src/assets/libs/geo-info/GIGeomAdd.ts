@@ -135,9 +135,6 @@ export class GIGeomAdd {
         // create collection
         const coll_i: number = this._geom.modeldata.model.metadata.nextColl();
         this._geom_maps.colls.add(coll_i);
-        // time stamp
-        this._geom.modeldata.attribs.add.setEntAttribVal(EEntType.COLL, coll_i,
-            EAttribNames.TIMESTAMP, this._geom.modeldata.timestamp);
         // snapshot
         this._geom.modeldata.geom.snapshot.addEntActive(EEntType.COLL, coll_i);
         // return entity number

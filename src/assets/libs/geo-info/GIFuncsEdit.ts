@@ -47,7 +47,7 @@ export class GIFuncsEdit {
         if (getArrDepth(ents_arr) === 1) {
             const [ent_type, ent_i]: TEntTypeIdx = ents_arr as TEntTypeIdx;
             // time stamp
-            this.modeldata.checkObjsTs(ent_type, ent_i);
+            this.modeldata.getObjsCheckTs(ent_type, ent_i);
             //
             let exist_edges_i: number[];
             if (!isEdge(ent_type)) {
@@ -121,7 +121,7 @@ export class GIFuncsEdit {
         // make sure we have a pgon
         const pgon_i: number = isFace(ent_arr[0]) ? this.modeldata.geom.nav.navFaceToPgon(ent_arr[1]) : ent_arr[1];
         // time stamp
-        this.modeldata.checkObjsTs(EEntType.PGON, pgon_i);
+        this.modeldata.getObjsCheckTs(EEntType.PGON, pgon_i);
         // convert the holes to lists of posis_i
         const holes_posis_i: number[][] = [];
         for (const hole_ents_arr of holes_ents_arr as TEntTypeIdx[][]) {
@@ -172,9 +172,9 @@ export class GIFuncsEdit {
         const map: Map<number, Set<number>> = this.modeldata.geom.query.getEntSets(ents_arr,
             [EEntType.VERT, EEntType.POINT, EEntType.PLINE, EEntType.PGON] );
         // time stamp
-        map.get(EEntType.POINT).forEach( point_i => this.modeldata.checkObjsTs(EEntType.POINT, point_i) );
-        map.get(EEntType.PLINE).forEach( pline_i => this.modeldata.checkObjsTs(EEntType.PLINE, pline_i) );
-        map.get(EEntType.PGON).forEach( pgon_i => this.modeldata.checkObjsTs(EEntType.PGON, pgon_i) );
+        map.get(EEntType.POINT).forEach( point_i => this.modeldata.getObjsCheckTs(EEntType.POINT, point_i) );
+        map.get(EEntType.PLINE).forEach( pline_i => this.modeldata.getObjsCheckTs(EEntType.PLINE, pline_i) );
+        map.get(EEntType.PGON).forEach( pgon_i => this.modeldata.getObjsCheckTs(EEntType.PGON, pgon_i) );
         // process ents
         const verts_i: number[] = Array.from(map.get(EEntType.VERT));
         switch (method) {
@@ -204,9 +204,9 @@ export class GIFuncsEdit {
         const map: Map<number, Set<number>> = this.modeldata.geom.query.getEntSets(ents_arr,
             [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON] );
         // time stamp
-        map.get(EEntType.POINT).forEach( point_i => this.modeldata.checkObjsTs(EEntType.POINT, point_i) );
-        map.get(EEntType.PLINE).forEach( pline_i => this.modeldata.checkObjsTs(EEntType.PLINE, pline_i) );
-        map.get(EEntType.PGON).forEach( pgon_i => this.modeldata.checkObjsTs(EEntType.PGON, pgon_i) );
+        map.get(EEntType.POINT).forEach( point_i => this.modeldata.getObjsCheckTs(EEntType.POINT, point_i) );
+        map.get(EEntType.PLINE).forEach( pline_i => this.modeldata.getObjsCheckTs(EEntType.PLINE, pline_i) );
+        map.get(EEntType.PGON).forEach( pgon_i => this.modeldata.getObjsCheckTs(EEntType.PGON, pgon_i) );
         // get posis
         const posis_i: number[] = Array.from(map.get(EEntType.POSI));
         // find neighbour
@@ -279,7 +279,7 @@ export class GIFuncsEdit {
     public ring(ents_arr: TEntTypeIdx[], method: _ERingMethod): void {
         for (const [ent_type, ent_i] of ents_arr) {
             // time stamp
-            this.modeldata.checkObjsTs(ent_type, ent_i);
+            this.modeldata.getObjsCheckTs(ent_type, ent_i);
             //
             switch (method) {
                 case _ERingMethod.CLOSE:
@@ -302,7 +302,7 @@ export class GIFuncsEdit {
     public shift(ents_arr: TEntTypeIdx[], offset: number): void {
         for (const [ent_type, ent_i] of ents_arr) {
             // time stamp
-            this.modeldata.checkObjsTs(ent_type, ent_i);
+            this.modeldata.getObjsCheckTs(ent_type, ent_i);
             //
             const wires_i: number[] = this.modeldata.geom.nav.navAnyToWire(ent_type, ent_i);
             wires_i.forEach( wire_i => this.modeldata.geom.modify.shift(wire_i, offset) );
@@ -316,7 +316,7 @@ export class GIFuncsEdit {
     public reverse(ents_arr: TEntTypeIdx[]): void {
         for (const [ent_type, ent_i] of ents_arr) {
             // time stamp
-            this.modeldata.checkObjsTs(ent_type, ent_i);
+            this.modeldata.getObjsCheckTs(ent_type, ent_i);
             //
             const wires_i: number[] = this.modeldata.geom.nav.navAnyToWire(ent_type, ent_i);
             wires_i.forEach( wire_i => this.modeldata.geom.modify.reverse(wire_i) );

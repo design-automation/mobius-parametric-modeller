@@ -1,4 +1,4 @@
-import { IModelJSONData, IEntSets, IModelJSON, IMetaJSONData, EEntType, TEntTypeIdx } from './common';
+import { IModelJSONData, IModelJSON, IMetaJSONData, TEntTypeIdx } from './common';
 import { GIMetaData } from './GIMetaData';
 import { GIModelData } from './GIModelData';
 import { IThreeJS } from './ThreejsJSON';
@@ -84,8 +84,10 @@ export class GIModel {
      * Updates the time stamp of the entities to the current time stamp.
      * @param ents
      */
-    public updateEntsTimestamp(ent_sets: TEntTypeIdx[]) {
-        this.modeldata.updateEntsTs(ent_sets);
+    public updateEntsTimestamp(ents: TEntTypeIdx[]) {
+        for (const [ent_type, ent_i] of ents) {
+            this.modeldata.updateEntTs(ent_type, ent_i);
+        }
     }
     /**
      * Set all data from a JSON string.

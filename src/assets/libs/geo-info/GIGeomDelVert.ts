@@ -93,7 +93,7 @@ export class GIGeomDelVert {
 
             // check the object time stamp
             const pline_i: number = this._geom_maps.up_wires_plines.get(wire_i);
-            this._geom.modeldata.checkObjsTs(EEntType.PLINE, pline_i);
+            this._geom.modeldata.getObjsCheckTs(EEntType.PLINE, pline_i);
 
             // special case, open pline, delete start edge and vert
             this.__delVert__OpenPlineStart(wire_edges_i, wire_verts_i, vert_i);
@@ -103,7 +103,7 @@ export class GIGeomDelVert {
 
             // check the object time stamp
             const pline_i: number = this._geom_maps.up_wires_plines.get(wire_i);
-            this._geom.modeldata.checkObjsTs(EEntType.PLINE, pline_i);
+            this._geom.modeldata.getObjsCheckTs(EEntType.PLINE, pline_i);
 
             // special case, open pline, delete end edge and vert
             this.__delVert__OpenPlineEnd(wire_edges_i, wire_verts_i, vert_i);
@@ -114,14 +114,14 @@ export class GIGeomDelVert {
 
                 // check the object time stamp
                 const pline_i: number = this._geom_maps.up_wires_plines.get(wire_i);
-                this._geom.modeldata.checkObjsTs(EEntType.PLINE, pline_i);
+                this._geom.modeldata.getObjsCheckTs(EEntType.PLINE, pline_i);
 
 
             } else {
 
                 // check the object time stamp
                 const pgon_i: number = this._geom.nav.navFaceToPgon(face_i);
-                this._geom.modeldata.checkObjsTs(EEntType.PGON, pgon_i);
+                this._geom.modeldata.getObjsCheckTs(EEntType.PGON, pgon_i);
 
             }
 

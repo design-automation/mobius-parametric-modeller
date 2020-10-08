@@ -1,4 +1,4 @@
-import { EAttribDataTypeStrs, EAttribNames, EEntType, IAttribsMaps, TAttribDataTypes } from './common';
+import { EAttribDataTypeStrs, EAttribNames, EEntType, IAttribsMaps } from './common';
 import { GIModelData } from './GIModelData';
 
 /**
@@ -46,7 +46,6 @@ export class GIAttribsSnapshot {
         this.modeldata.attribs.add.addAttrib(EEntType.POINT, EAttribNames.TIMESTAMP, EAttribDataTypeStrs.NUMBER);
         this.modeldata.attribs.add.addAttrib(EEntType.PLINE, EAttribNames.TIMESTAMP, EAttribDataTypeStrs.NUMBER);
         this.modeldata.attribs.add.addAttrib(EEntType.PGON, EAttribNames.TIMESTAMP, EAttribDataTypeStrs.NUMBER);
-        this.modeldata.attribs.add.addAttrib(EEntType.COLL, EAttribNames.TIMESTAMP, EAttribDataTypeStrs.NUMBER);
         // add attributes for collections
         this.modeldata.attribs.add.addAttrib(EEntType.COLL, EAttribNames.COLL_NAME, EAttribDataTypeStrs.STRING);
         this.modeldata.attribs.add.addAttrib(EEntType.COLL, EAttribNames.COLL_PARENT, EAttribDataTypeStrs.NUMBER);

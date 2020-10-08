@@ -56,19 +56,19 @@ export class GIGeomIO {
         this._geom_maps.dn_points_verts = new Map();
         for (let i = 0; i < geom_data.points.length; i++) {
             this._geom_maps.dn_points_verts.set(geom_data.points_i[i], geom_data.points[i]);
-            this._geom.modeldata.updateObjsTs(EEntType.POINT, geom_data.points_i[i]); // time stamp
+            this._geom.modeldata.getObjsUpdateTs(EEntType.POINT, geom_data.points_i[i]); // time stamp
         }
         // add plines to model
         this._geom_maps.dn_plines_wires = new Map();
         for (let i = 0; i < geom_data.plines.length; i++) {
             this._geom_maps.dn_plines_wires.set(geom_data.plines_i[i], geom_data.plines[i]);
-            this._geom.modeldata.updateObjsTs(EEntType.PLINE, geom_data.plines_i[i]); // time stamp
+            this._geom.modeldata.getObjsUpdateTs(EEntType.PLINE, geom_data.plines_i[i]); // time stamp
         }
         // add pgons to model
         this._geom_maps.dn_pgons_faces = new Map();
         for (let i = 0; i < geom_data.pgons.length; i++) {
             this._geom_maps.dn_pgons_faces.set(geom_data.pgons_i[i], geom_data.pgons[i]);
-            this._geom.modeldata.updateObjsTs(EEntType.PGON, geom_data.pgons_i[i]); // time stamp
+            this._geom.modeldata.getObjsUpdateTs(EEntType.PGON, geom_data.pgons_i[i]); // time stamp
         }
         // add collections to model
         this._geom_maps.colls = new Set();
@@ -78,7 +78,7 @@ export class GIGeomIO {
             // this._geom.modeldata.attribs.colls.setCollPlines(geom_data.colls_i[i], geom_data.colls_plines[i]);
             // this._geom.modeldata.attribs.colls.setCollPgons(geom_data.colls_i[i], geom_data.colls_pgons[i]);
             // this._geom_maps.up_colls_colls.set(geom_data.colls_i[i], geom_data.colls_parents[i]);
-            this._geom.modeldata.updateObjsTs(EEntType.COLL, geom_data.colls_i[i]); // time stamp
+            this._geom.modeldata.getObjsUpdateTs(EEntType.COLL, geom_data.colls_i[i]); // time stamp
         }
         // set selected
         this._geom.selected = geom_data.selected;

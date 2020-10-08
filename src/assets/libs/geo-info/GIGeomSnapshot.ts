@@ -1,5 +1,5 @@
 import { arrMakeFlat } from '../util/arrs';
-import { EAttribNames, EEntType, EEntTypeStr, IEntSets, IGeomMaps, ISnapshotData, TEntTypeIdx } from './common';
+import { EEntType, EEntTypeStr, IEntSets, IGeomMaps, ISnapshotData, TEntTypeIdx } from './common';
 import { GIGeom } from './GIGeom';
 
 /**

@@ -1,6 +1,6 @@
 import { GIGeom } from './GIGeom';
 import { GIAttribs } from './GIAttribs';
-import { IModelJSONData, IEntSets, ISnapshotData, EEntType, EEntTypeStr, EAttribNames, TEntTypeIdx } from './common';
+import { IModelJSONData, EEntType, EAttribNames, TEntTypeIdx } from './common';
 import { GIModelComparator } from './GIModelComparator';
 import { GIModel } from './GIModel';
 import { GIModelThreejs } from './GIModelThreejs';
@@ -187,7 +187,7 @@ export class GIModelData {
      * @param ent_type
      * @param ent_i
      */
-    public updateObjsTs(ent_type: EEntType, ent_i: number): void {
+    public getObjsUpdateTs(ent_type: EEntType, ent_i: number): void {
         const ts: number = this.timestamp;
         switch (ent_type) {
             case EEntType.POINT:
@@ -213,7 +213,7 @@ export class GIModelData {
             case EEntType.VERT:
                 // get the topo object
                 const [ent2_type, ent2_i]: TEntTypeIdx = this.geom.query.getTopoObj(ent_type, ent_i);
-                this.updateObjsTs(ent2_type, ent2_i);
+                this.getObjsUpdateTs(ent2_type, ent2_i);
         }
     }
     /**
@@ -222,7 +222,7 @@ export class GIModelData {
      * @param ent_type
      * @param ent_i
      */
-    public checkObjsTs(ent_type: EEntType, ent_i: number): void {
+    public getObjsCheckTs(ent_type: EEntType, ent_i: number): void {
         const ts: number = this.timestamp;
         switch (ent_type) {
             case EEntType.POINT:
@@ -230,19 +230,20 @@ export class GIModelData {
             case EEntType.PGON:
                 if (this.attribs.query.getEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP) !== ts) {
                     const obj_ts = this.attribs.query.getEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP);
+                    // TODO improve this error message
                     throw new Error('Bad edit...' + ent_type + ', ' + ent_i + ', ' + obj_ts + ', ' + ts);
                 }
                 return;
             case EEntType.COLL:
                 // get the objects from the collection
                 this.geom.nav.navCollToPgon(ent_i).forEach( pgon_i => {
-                    this.checkObjsTs(EEntType.PGON, pgon_i);
+                    this.getObjsCheckTs(EEntType.PGON, pgon_i);
                 });
                 this.geom.nav.navCollToPline(ent_i).forEach( pline_i => {
-                    this.checkObjsTs(EEntType.PLINE, pline_i);
+                    this.getObjsCheckTs(EEntType.PLINE, pline_i);
                 });
                 this.geom.nav.navCollToPoint(ent_i).forEach( point_i => {
-                    this.checkObjsTs(EEntType.POINT, point_i);
+                    this.getObjsCheckTs(EEntType.POINT, point_i);
                 });
                 return;
             case EEntType.FACE:
@@ -251,7 +252,7 @@ export class GIModelData {
             case EEntType.VERT:
                 // get the topo object
                 const [ent2_type, ent2_i]: TEntTypeIdx = this.geom.query.getTopoObj(ent_type, ent_i);
-                this.checkObjsTs(ent2_type, ent2_i);
+                this.getObjsCheckTs(ent2_type, ent2_i);
         }
     }
     /**
@@ -260,19 +261,8 @@ export class GIModelData {
      * @param point_i
      */
     public updateEntTs(ent_type: EEntType, ent_i: number): void {
-        if (ent_type >= EEntType.POINT) {
+        if (ent_type >= EEntType.POINT || ent_type <= EEntType.PGON) {
             this.attribs.add.setEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP, this.timestamp);
-        }
-    }
-    /**
-     * Adds the ents to the snapshot.
-     * @param ent_type
-     */
-    public updateEntsTs(ents: TEntTypeIdx[]): void {
-        const ts: number = this.timestamp;
-        for (const [ent_type, ent_i] of ents) {
-            if (ent_type < EEntType.POINT) { continue; }
-            this.attribs.add.setEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP, ts);
         }
     }
     /**
@@ -280,7 +270,7 @@ export class GIModelData {
      * @param posi_i
      */
     public getEntTs(ent_type: EEntType, ent_i: number): number {
-        if (ent_type < EEntType.POINT) { throw new Error('Get time stamp: Entity type is not valid.'); }
+        if (ent_type < EEntType.POINT || ent_type > EEntType.PGON) { throw new Error('Get time stamp: Entity type is not valid.'); }
         return this.attribs.query.getEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP ) as number;
     }
     /**

@@ -339,16 +339,16 @@ export class GIFuncsEdit {
         // create sets
         const ent_sets: IEntSets = this.modeldata.geom.query.getDelEntSets(ents_arr);
         // delete
-        if (ent_sets.posis_i.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.POSI, Array.from(ent_sets.posis_i), invert); }
-        if (ent_sets.points_i.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.POINT, Array.from(ent_sets.points_i), invert); }
-        if (ent_sets.plines_i.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.PLINE, Array.from(ent_sets.plines_i), invert); }
-        if (ent_sets.pgons_i.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.PGON, Array.from(ent_sets.pgons_i), invert); }
-        if (ent_sets.colls_i.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.COLL, Array.from(ent_sets.colls_i), invert); }
+        if (ent_sets.ps.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.POSI, Array.from(ent_sets.ps), invert); }
+        if (ent_sets.pt.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.POINT, Array.from(ent_sets.pt), invert); }
+        if (ent_sets.pl.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.PLINE, Array.from(ent_sets.pl), invert); }
+        if (ent_sets.pg.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.PGON, Array.from(ent_sets.pg), invert); }
+        if (ent_sets.co.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.COLL, Array.from(ent_sets.co), invert); }
         //
-        if (ent_sets.verts_i) { throw new Error('Not implemented'); } // should never happen
-        if (ent_sets.edges_i) { throw new Error('Not implemented'); } // should never happen
-        if (ent_sets.wires_i) { throw new Error('Not implemented'); } // should never happen
-        if (ent_sets.faces_i) { throw new Error('Not implemented'); } // should never happen
+        if (ent_sets._v) { throw new Error('Not implemented'); } // should never happen
+        if (ent_sets._e) { throw new Error('Not implemented'); } // should never happen
+        if (ent_sets._w) { throw new Error('Not implemented'); } // should never happen
+        if (ent_sets._f) { throw new Error('Not implemented'); } // should never happen
     }
     private _deleteNull(invert: boolean): void {
         if (invert) {

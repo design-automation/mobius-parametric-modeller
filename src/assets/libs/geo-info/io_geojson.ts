@@ -205,10 +205,10 @@ export function importGeojson(model: GIModel, geojson_str: string, elevation: nu
     }
     // return sets
     return {
-        points_i: points_i,
-        plines_i: plines_i,
-        pgons_i: pgons_i,
-        colls_i: colls_i
+        pt: points_i,
+        pl: plines_i,
+        pg: pgons_i,
+        co: colls_i
     };
 }
 

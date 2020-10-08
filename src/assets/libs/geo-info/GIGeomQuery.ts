@@ -130,12 +130,12 @@ export class GIGeomQuery {
         });
         // if no invert, then return the result
         return {
-            posis_i: set_posis_i,
-            points_i: set_points_i,
-            plines_i: set_plines_i,
-            pgons_i: set_pgons_i,
-            colls_i: set_colls_i,
-            obj_posis_i: set_ent_posis_i
+            ps: set_posis_i,
+            pt: set_points_i,
+            pl: set_plines_i,
+            pg: set_pgons_i,
+            co: set_colls_i,
+            obj_ps: set_ent_posis_i
         };
     }
     /**

@@ -260,16 +260,8 @@ export class GIModelData {
      * @param point_i
      */
     public updateEntTs(ent_type: EEntType, ent_i: number): void {
-        const ts: number = this.timestamp;
-        switch (ent_type) {
-            case EEntType.POINT:
-            case EEntType.PLINE:
-            case EEntType.PGON:
-            case EEntType.COLL:
-                this.attribs.add.setEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP, ts);
-                break;
-            default:
-                // throw new Error('Invalid entity type for setting timestamp.')
+        if (ent_type >= EEntType.POINT) {
+            this.attribs.add.setEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP, this.timestamp);
         }
     }
     /**
@@ -288,15 +280,8 @@ export class GIModelData {
      * @param posi_i
      */
     public getEntTs(ent_type: EEntType, ent_i: number): number {
-        switch (ent_type) {
-            case EEntType.POINT:
-            case EEntType.PLINE:
-            case EEntType.PGON:
-            case EEntType.COLL:
-                return this.attribs.query.getEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP ) as number;
-            default:
-                throw new Error('Get time stamp: Entity type is not valid.');
-        }
+        if (ent_type < EEntType.POINT) { throw new Error('Get time stamp: Entity type is not valid.'); }
+        return this.attribs.query.getEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP ) as number;
     }
     /**
      *

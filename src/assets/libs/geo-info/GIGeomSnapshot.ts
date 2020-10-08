@@ -8,13 +8,8 @@ import { GIGeom } from './GIGeom';
 export class GIGeomSnapshot {
     private _geom: GIGeom;
     private _geom_maps: IGeomMaps;
-    private ss_data: ISnapshotData = {
-        ps: new Map(),
-        pt: new Map(),
-        pl: new Map(),
-        pg: new Map(),
-        co: new Map()
-    };
+    // ss_data -> ssid -> ps, pt, pl, pg, co
+    private ss_data: Map<number, ISnapshotData> = new Map();
     /**
      * Constructor
      */
@@ -32,27 +27,25 @@ export class GIGeomSnapshot {
      * @param include
      */
     public addSnapshot(ssid: number, include?: number[]): void {
-        this.ss_data.ps.set( ssid, new Set() );
-        this.ss_data.pt.set( ssid, new Set() );
-        this.ss_data.pl.set( ssid, new Set() );
-        this.ss_data.pg.set( ssid, new Set() );
-        this.ss_data.co.set( ssid, new Set() );
-        const posis_set = this.ss_data.ps.get(ssid);
-        const points_set = this.ss_data.pt.get(ssid);
-        const plines_set = this.ss_data.pl.get(ssid);
-        const pgons_set = this.ss_data.pg.get(ssid);
-        const colls_set = this.ss_data.co.get(ssid);
+        const data: ISnapshotData = {
+            ps: new Set(),
+            pt: new Set(),
+            pl: new Set(),
+            pg: new Set(),
+            co: new Set()
+        };
+        this.ss_data.set( ssid, data );
         // merge data
         if (include !== undefined) {
             for (const exist_ssid of include) {
-                if (!this.ss_data.ps.has(exist_ssid)) {
+                if (!this.ss_data.has(exist_ssid)) {
                     throw new Error('The snapshot ID ' + exist_ssid + ' does not exist.');
                 }
-                this.ss_data.ps.get(exist_ssid).forEach ( posi_i => posis_set.add(posi_i) );
-                this.ss_data.pt.get(exist_ssid).forEach ( point_i => points_set.add(point_i) );
-                this.ss_data.pl.get(exist_ssid).forEach ( pline_i => plines_set.add(pline_i) );
-                this.ss_data.pg.get(exist_ssid).forEach ( pgon_i => pgons_set.add(pgon_i) );
-                this.ss_data.co.get(exist_ssid).forEach ( coll_i => colls_set.add(coll_i) );
+                this.ss_data.get(exist_ssid).ps.forEach ( posi_i => data.ps.add(posi_i) );
+                this.ss_data.get(exist_ssid).pt.forEach ( point_i => data.pt.add(point_i) );
+                this.ss_data.get(exist_ssid).pl.forEach ( pline_i => data.pl.add(pline_i) );
+                this.ss_data.get(exist_ssid).pg.forEach ( pgon_i => data.pg.add(pgon_i) );
+                this.ss_data.get(exist_ssid).co.forEach ( coll_i => data.co.add(coll_i) );
             }
         }
     }
@@ -61,11 +54,7 @@ export class GIGeomSnapshot {
      * @param ssid Snapshot ID.
      */
     public delSnapshot(ssid: number): void {
-        this.ss_data.ps.delete( ssid );
-        this.ss_data.pt.delete( ssid );
-        this.ss_data.pl.delete( ssid );
-        this.ss_data.pg.delete( ssid );
-        this.ss_data.co.delete( ssid );
+        this.ss_data.delete( ssid );
     }
     // ============================================================================
     // Query Active
@@ -115,7 +104,7 @@ export class GIGeomSnapshot {
             case EEntType.PLINE:
             case EEntType.PGON:
             case EEntType.COLL:
-                const ent_set: Set<number> = this.ss_data[EEntTypeStr[ent_type]].get(ssid);
+                const ent_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[ent_type]];
                 return ent_set.has(ent_i);
             case EEntType.VERT:
             case EEntType.EDGE:
@@ -140,7 +129,7 @@ export class GIGeomSnapshot {
             case EEntType.PLINE:
             case EEntType.PGON:
             case EEntType.COLL:
-                const ent_set: Set<number> = this.ss_data[EEntTypeStr[ent_type]].get(ssid);
+                const ent_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[ent_type]];
                 return Array.from(ents_i.filter( ent_i => ent_set.has(ent_i) ));
             case EEntType.VERT:
             case EEntType.EDGE:
@@ -157,11 +146,11 @@ export class GIGeomSnapshot {
      */
     public getEntSets(ssid: number): IEntSets {
         const ent_sets: IEntSets = {
-            posis_i: this.ss_data[EEntTypeStr[EEntType.POSI]].get(ssid),
-            points_i: this.ss_data[EEntTypeStr[EEntType.POINT]].get(ssid),
-            plines_i: this.ss_data[EEntTypeStr[EEntType.PLINE]].get(ssid),
-            pgons_i: this.ss_data[EEntTypeStr[EEntType.PGON]].get(ssid),
-            colls_i: this.ss_data[EEntTypeStr[EEntType.COLL]].get(ssid),
+            ps: this.ss_data.get(ssid)[EEntTypeStr[EEntType.POSI]],
+            pt: this.ss_data.get(ssid)[EEntTypeStr[EEntType.POINT]],
+            pl: this.ss_data.get(ssid)[EEntTypeStr[EEntType.PLINE]],
+            pg: this.ss_data.get(ssid)[EEntTypeStr[EEntType.PGON]],
+            co: this.ss_data.get(ssid)[EEntTypeStr[EEntType.COLL]],
         };
         return ent_sets;
     }
@@ -171,20 +160,20 @@ export class GIGeomSnapshot {
      */
     public addEnts(ssid: number, ents: TEntTypeIdx[]): void {
         for (const [ent_type, ent_i] of ents) {
-            this.ss_data[EEntTypeStr[ent_type]].get(ssid).add(ent_i);
+            this.ss_data.get(ssid)[EEntTypeStr[ent_type]].add(ent_i);
         }
     }
     public getAllEnts(ssid: number): TEntTypeIdx[] {
         const ents: TEntTypeIdx[] = [];
-        const posis_set: Set<number> = this.ss_data[EEntTypeStr[EEntType.POSI]].get(ssid);
+        const posis_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[EEntType.POSI]];
         posis_set.forEach( posi_i => ents.push([EEntType.POSI, posi_i]) );
-        const points_set: Set<number> = this.ss_data[EEntTypeStr[EEntType.POINT]].get(ssid);
+        const points_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[EEntType.POINT]];
         points_set.forEach( point_i => ents.push([EEntType.POINT, point_i]) );
-        const plines_set: Set<number> = this.ss_data[EEntTypeStr[EEntType.PLINE]].get(ssid);
+        const plines_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[EEntType.PLINE]];
         plines_set.forEach( pline_i => ents.push([EEntType.PLINE, pline_i]) );
-        const pgons_set: Set<number> = this.ss_data[EEntTypeStr[EEntType.PGON]].get(ssid);
+        const pgons_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[EEntType.PGON]];
         pgons_set.forEach( pgon_i => ents.push([EEntType.PGON, pgon_i]) );
-        const colls_set: Set<number> = this.ss_data[EEntTypeStr[EEntType.COLL]].get(ssid);
+        const colls_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[EEntType.COLL]];
         colls_set.forEach( coll_i => ents.push([EEntType.COLL, coll_i]) );
         return ents;
     }
@@ -199,7 +188,7 @@ export class GIGeomSnapshot {
             case EEntType.PLINE:
             case EEntType.PGON:
             case EEntType.COLL:
-                const ent_set: Set<number> = this.ss_data[EEntTypeStr[ent_type]].get(ssid);
+                const ent_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[ent_type]];
                 return Array.from(ent_set);
             default:
                 if (ent_type === EEntType.VERT) {
@@ -240,7 +229,7 @@ export class GIGeomSnapshot {
             case EEntType.PLINE:
             case EEntType.PGON:
             case EEntType.COLL:
-                const ent_set: Set<number> = this.ss_data[EEntTypeStr[ent_type]].get(ssid);
+                const ent_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[ent_type]];
                 return ent_set.size;
             default:
                 return this.getEnts(ssid, ent_type).length;
@@ -261,7 +250,7 @@ export class GIGeomSnapshot {
             case EEntType.PLINE:
             case EEntType.PGON:
             case EEntType.COLL:
-                const ent_set: Set<number> = this.ss_data[EEntTypeStr[ent_type]].get(ssid);
+                const ent_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[ent_type]];
                 ent_set.add(ents_i);
                 break;
             default:
@@ -280,7 +269,7 @@ export class GIGeomSnapshot {
             case EEntType.PLINE:
             case EEntType.PGON:
             case EEntType.COLL:
-                const ent_set: Set<number> = this.ss_data[EEntTypeStr[ent_type]].get(this._geom.modeldata.timestamp);
+                const ent_set: Set<number> = this.ss_data.get(this._geom.modeldata.timestamp)[EEntTypeStr[ent_type]];
                 ent_set.add(ent_i);
                 break;
             default:
@@ -294,7 +283,7 @@ export class GIGeomSnapshot {
      */
     public delEntsActive(ent_type: EEntType, ents_i: number|number[], invert = false): void {
         ents_i = Array.isArray(ents_i) ? ents_i : [ents_i];
-        const ent_set: Set<number> = this.ss_data[EEntTypeStr[ent_type]].get(this._geom.modeldata.timestamp);
+        const ent_set: Set<number> = this.ss_data.get(this._geom.modeldata.timestamp)[EEntTypeStr[ent_type]];
         if (!invert) {
             // delet the ents in the list
             for (const a_ent_i of ents_i) {
@@ -318,7 +307,7 @@ export class GIGeomSnapshot {
      * @param ent_i
      */
     public delAllEntsActive(ent_type: EEntType): void {
-        const ent_set: Set<number> = this.ss_data[EEntTypeStr[ent_type]].get(this._geom.modeldata.timestamp);
+        const ent_set: Set<number> = this.ss_data.get(this._geom.modeldata.timestamp)[EEntTypeStr[ent_type]];
         ent_set.clear();
     }
     // /**
@@ -418,12 +407,12 @@ export class GIGeomSnapshot {
      */
     public del(ent_sets: IEntSets): void {
         // delete the ents
-        this.delColls(Array.from(ent_sets.colls_i));
-        this.delPgons(Array.from(ent_sets.pgons_i), true);
-        this.delPlines(Array.from(ent_sets.plines_i), true);
-        this.delPoints(Array.from(ent_sets.points_i), true);
-        this.delPosis(Array.from(ent_sets.posis_i));
-        this.delUnusedPosis(Array.from(ent_sets.obj_posis_i));
+        this.delColls(Array.from(ent_sets.co));
+        this.delPgons(Array.from(ent_sets.pg), true);
+        this.delPlines(Array.from(ent_sets.pl), true);
+        this.delPoints(Array.from(ent_sets.pt), true);
+        this.delPosis(Array.from(ent_sets.ps));
+        this.delUnusedPosis(Array.from(ent_sets.obj_ps));
     }
     /**
      * Del all unused posis in the model.
@@ -537,9 +526,7 @@ export class GIGeomSnapshot {
      */
     public navAnyToAny(ssid: number, from_ets: EEntType, to_ets: EEntType, index: number): number[] {
         const ents_i: number[] = this._geom.nav.navAnyToAny(from_ets, to_ets, index);
-        let filter = false;
-        if (from_ets === EEntType.POSI || from_ets === EEntType.COLL || to_ets === EEntType.COLL) { filter = true; }
-        if (filter) {
+        if (from_ets === EEntType.POSI || from_ets === EEntType.COLL || to_ets === EEntType.COLL) {
             return ents_i.filter( ent_i => this.hasEnt(ssid, to_ets, ent_i) );
         }
         return ents_i;

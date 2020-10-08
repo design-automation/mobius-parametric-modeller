@@ -19,17 +19,17 @@ export type TEntTypeIdx = [EEntType, number];
 
 // For each entity type, a set of entity indexes
 export interface IEntSets {
-    posis_i?: Set<number>;
-    points_i?: Set<number>;
-    plines_i?: Set<number>;
-    pgons_i?: Set<number>;
-    colls_i?: Set<number>;
-    obj_posis_i?: Set<number>;
-    verts_i?: Set<number>;
-    tris_i?: Set<number>;
-    edges_i?: Set<number>;
-    wires_i?: Set<number>;
-    faces_i?: Set<number>;
+    ps?: Set<number>;
+    pt?: Set<number>;
+    pl?: Set<number>;
+    pg?: Set<number>;
+    co?: Set<number>;
+    obj_ps?: Set<number>;
+    _v?: Set<number>;
+    _t?: Set<number>;
+    _e?: Set<number>;
+    _w?: Set<number>;
+    _f?: Set<number>;
 }
 
 // // Posis, Points, Plines, Pgons, Colls
@@ -298,11 +298,11 @@ export interface IMetaData {
 }
 
 export interface ISnapshotData {
-    ps: Map<number, Set<number>>;
-    pt: Map<number, Set<number>>;
-    pl: Map<number, Set<number>>;
-    pg: Map<number, Set<number>>;
-    co: Map<number, Set<number>>;
+    ps: Set<number>;
+    pt: Set<number>;
+    pl: Set<number>;
+    pg: Set<number>;
+    co: Set<number>;
 }
 
 

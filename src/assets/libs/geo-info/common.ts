@@ -1,5 +1,3 @@
-import { GIAttribMapStr } from './GIAttribMapStr';
-import { GIAttribMapBool } from './GIAttribMapBool';
 import { GIAttribMapBase } from './GIAttribMapBase';
 
 // longitude latitude in Singapore, NUS
@@ -32,25 +30,6 @@ export interface IEntSets {
     _f?: Set<number>;
 }
 
-// // Posis, Points, Plines, Pgons, Colls
-// export interface IGeomPack {
-//     posis_i: number[];
-//     points_i: number[];
-//     plines_i: number[];
-//     pgons_i: number[];
-//     colls_i: number[];
-//     // posis2_i?: number[];
-// }
-
-// // Object for entities
-// export interface IGeomPackTId {
-//     ps: TId[];
-//     po: TId[];
-//     pl: TId[];
-//     pg: TId[];
-//     co: TId[];
-// }
-
 // Types
 export type TRay = [Txyz, Txyz]; // an origin and a direction vector
 export type TPlane = [Txyz, Txyz, Txyz]; // an origin, an x vec and a y vec
@@ -73,21 +52,6 @@ export enum EEntType {
     PLINE,
     PGON,
     COLL,
-    MOD
-}
-export enum EEntTypeCollCP {
-    POSI,
-    TRI,
-    VERT,
-    EDGE,
-    WIRE,
-    FACE,
-    POINT,
-    PLINE,
-    PGON,
-    COLL,
-    COLLC,
-    COLLP,
     MOD
 }
 
@@ -162,9 +126,7 @@ export enum EWireType {
     PGON_HOLE =   'pgon_hole'
 }
 
-/**
- * The types of operators that can be used in a filter.
- */
+// The types of operators that can be used in a filter.
 export enum EFilterOperatorTypes {
     IS_EQUAL = '==',
     IS_NOT_EQUAL = '!=',
@@ -173,18 +135,6 @@ export enum EFilterOperatorTypes {
     IS_GREATER = '>',
     IS_LESS = '<',
     EQUAL = '='
-}
-
-/**
- * A sort component.
- * Each sort can consist of multiple components.
- * Some examples of queries
- * @name
- * @name[2]
- */
-export interface ISortComponent {
-    attrib_name: string;
-    attrib_index: number;
 }
 
 export enum ESort {
@@ -238,7 +188,7 @@ export const RE_SPACES: RegExp = /\s+/g;
  * Geom arrays
  */
 export interface IGeomMaps {
-    // num_posis: number;
+    // down
     dn_verts_posis: Map<number, TVert>;
     dn_tris_verts: Map<number, TTri>;
     dn_edges_verts: Map<number, TEdge>;
@@ -248,9 +198,7 @@ export interface IGeomMaps {
     dn_points_verts: Map<number, TPoint>;
     dn_plines_wires: Map<number, TPline>;
     dn_pgons_faces: Map<number, TPgon>;
-    // dn_colls_points: Map<number, number[]>;
-    // dn_colls_plines: Map<number, number[]>;
-    // dn_colls_pgons: Map<number, number[]>;
+    // up
     up_posis_verts: Map<number, number[]>; // one to many
     up_tris_faces: Map<number, number>;
     up_verts_edges: Map<number, number[]>; // one to two
@@ -260,9 +208,7 @@ export interface IGeomMaps {
     up_wires_faces: Map<number, number>;
     up_wires_plines: Map<number, number>;
     up_faces_pgons: Map<number, number>;
-    // up_points_colls: Map<number, number[]>; // one to many
-    // up_plines_colls: Map<number, number[]>; // one to many
-    // up_pgons_colls: Map<number, number[]>; // one to many
+    // colls
     colls: Set<number>;
 }
 
@@ -297,6 +243,7 @@ export interface IMetaData {
     attrib_values: IAttribValues;
 }
 
+// data in a snapshot
 export interface ISnapshotData {
     ps: Set<number>;
     pt: Set<number>;
@@ -321,20 +268,9 @@ export interface IModelJSON {
 
 export interface IAttribJSONValues {
     number_vals: number[];
-    // number_keys: string[];
-    // number_idxs: number[];
-
     string_vals: string[];
-    // string_keys: string[];
-    // string_idxs: number[];
-
     list_vals: any[];
-    // list_keys: string[];
-    // list_idxs: number[];
-
     dict_vals: object[];
-    // dict_keys: string[];
-    // dict_idxs: number[];
 }
 
 export interface IMetaJSONData {
@@ -363,7 +299,6 @@ export interface IModelJSONData {
 
 export interface IGeomJSONData {
     posis_i: number[];
-    // posis_ts: number[];
     verts: TVert[];
     verts_i: number[];
     tris: TTri[];
@@ -381,10 +316,6 @@ export interface IGeomJSONData {
     plines_i: number[];
     pgons: TPgon[];
     pgons_i: number[];
-    // colls_points: number[][];
-    // colls_plines: number[][];
-    // colls_pgons: number[][];
-    // colls_parents: number[];
     colls_i: number[];
     selected: TEntTypeIdx[];
 }

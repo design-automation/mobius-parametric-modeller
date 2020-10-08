@@ -356,6 +356,7 @@ export function Add(__model__: GIModel, ent_type_sel: _EEntTypeAndMod, data_type
         // convert the ent_type_str to an ent_type
         ent_type = _getEntTypeFromStr(ent_type_sel);
         // create an array of attrib names
+        if (!Array.isArray(attribs)) { attribs = [attribs]; }
         attribs = attribs as string[];
     }
 

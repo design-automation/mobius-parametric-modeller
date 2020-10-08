@@ -23,7 +23,7 @@ export class GIGeomIO {
      */
     public setJSONData(ssid: number, geom_data: IGeomJSONData): void {
         // all entities get the same time stamp
-        const ts: number = this._geom.modeldata.time_stamp;
+        const ts: number = this._geom.modeldata.timestamp;
         // update the down arrays
         // add vertices to model
         this._geom_maps.dn_verts_posis = new Map();

@@ -146,7 +146,7 @@ export function _importGI(__model__: GIModel, json_str: string): number {
     const ssid2: number = gi_model.nextSnapshot();
     // TODO the way this is done is a bit strange
     gi_model.setJSONStr(ssid2, json_str);
-    __model__.append(__model__.modeldata.time_stamp, ssid2, gi_model);
+    __model__.append(__model__.modeldata.timestamp, ssid2, gi_model);
     // get number of ents after merge
     const num_ents_after: number[] = __model__.metadata.getEntCounts();
     // return the result

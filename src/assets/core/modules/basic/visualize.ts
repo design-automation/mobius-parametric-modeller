@@ -76,7 +76,7 @@ function _color(__model__: GIModel, ents_arr: TEntTypeIdx[], color: TColor): voi
         }
     }
     // set all verts to have same color
-    __model__.modeldata.attribs.add.setEntAttribVal(EEntType.VERT, all_verts_i, EAttribNames.COLOR, color);
+    __model__.modeldata.attribs.add.setEntsAttribVal(EEntType.VERT, all_verts_i, EAttribNames.COLOR, color);
 }
 // ================================================================================================
 /**
@@ -259,7 +259,7 @@ function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: str
     values_map.forEach((col_and_verts_i) => {
         const col: TColor = col_and_verts_i[0];
         const verts_i: number[] = col_and_verts_i[1];
-        __model__.modeldata.attribs.add.setEntAttribVal(EEntType.VERT, verts_i, EAttribNames.COLOR, col);
+        __model__.modeldata.attribs.add.setEntsAttribVal(EEntType.VERT, verts_i, EAttribNames.COLOR, col);
     });
 }
 // ================================================================================================
@@ -325,7 +325,7 @@ export function Edge(__model__: GIModel, entities: TId|TId[], method: _EEdgeMeth
     }
     // Set edge visibility
     const setting: string = method === _EEdgeMethod.VISIBLE ? null : 'hidden';
-    __model__.modeldata.attribs.add.setEntAttribVal(EEntType.EDGE, edges_i, EAttribNames.VISIBILITY, setting);
+    __model__.modeldata.attribs.add.setEntsAttribVal(EEntType.EDGE, edges_i, EAttribNames.VISIBILITY, setting);
 }
 // ================================================================================================
 export enum _EMeshMethod {

@@ -210,8 +210,8 @@ export class GIGeomClone {
             if (other_ent !== undefined) {
                 this_map.set(ent_i, other_ent);
                 // TODO time stamp
-                // const other_ts: number = other_geom.time_stamp.getEntTs(ent_type, ent_i);
-                // this._geom.time_stamp.setEntTs(ent_type, ent_i, other_ts);
+                // const other_ts: number = other_geom.timestamp.getEntTs(ent_type, ent_i);
+                // this._geom.timestamp.setEntTs(ent_type, ent_i, other_ts);
             }
         });
     }
@@ -232,8 +232,8 @@ export class GIGeomClone {
         //     if (parent_coll_i !== undefined) {
         //         this_map.set(coll_i, other_colls_i.has(parent_coll_i) ? parent_coll_i : -1 );
         //         // TODO time stamp
-        //         // const other_ts: number = other_geom.time_stamp.getEntTs(EEntType.COLL, coll_i);
-        //         // this._geom.time_stamp.setEntTs(EEntType.COLL, coll_i, other_ts);
+        //         // const other_ts: number = other_geom.timestamp.getEntTs(EEntType.COLL, coll_i);
+        //         // this._geom.timestamp.setEntTs(EEntType.COLL, coll_i, other_ts);
         //     }
         // });
         throw new Error('Not implemented.');

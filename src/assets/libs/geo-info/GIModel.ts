@@ -1,4 +1,4 @@
-import { IModelJSONData, IEntSets, IModelJSON, IMetaJSONData, EEntType } from './common';
+import { IModelJSONData, IEntSets, IModelJSON, IMetaJSONData, EEntType, TEntTypeIdx } from './common';
 import { GIMetaData } from './GIMetaData';
 import { GIModelData } from './GIModelData';
 import { IThreeJS } from './ThreejsJSON';
@@ -26,21 +26,66 @@ export class GIModel {
         this.modeldata = new GIModelData(this);
     }
     /**
+     * Get the current time stamp
+     */
+    public getTimestamp(): number {
+        return this.modeldata.timestamp;
+    }
+    /**
+     * Set the current time stamp backwards to a prevous time stamp.
+     * This allows you to roll back in time after executing a global function.
+     */
+    public rollbackTimestamp(ssid: number): void {
+        this.modeldata.timestamp = ssid;
+    }
+    /**
      *
      * @param id Starts a new snapshot with the given ID.
      * @param include The other snapshots to include in the snapshot.
      */
     public nextSnapshot(include?: number[]): number {
         // increment time stamp
-        this.modeldata.time_stamp += 1;
+        this.modeldata.nextTimestamp();
         // get time stamp
-        const ssid = this.modeldata.time_stamp;
-        // geometry
-        this.modeldata.geom.snapshot.init(ssid, include);
-        // attribs
-        this.modeldata.attribs.snapshot.init(ssid, include);
+        const ssid = this.modeldata.timestamp;
+        // add snapshot
+        this.modeldata.geom.snapshot.addSnapshot(ssid, include);
+        this.modeldata.attribs.snapshot.addSnapshot(ssid, include);
         // return the new ssid
         return ssid;
+    }
+    /**
+     * Add a set of ents to a snapshot.
+     * @param ssid
+     * @param ents
+     * @param ts time stamp
+     */
+    public addEntsToSnapshot(ssid: number, ents: TEntTypeIdx[]) {
+        this.modeldata.geom.snapshot.addEnts(ssid, ents);
+    }
+    /**
+     * Gets a set of ents from a snapshot.
+     * @param ssid
+     */
+    public getEntsFromSnapshot(ssid: number): TEntTypeIdx[] {
+        return this.modeldata.geom.snapshot.getAllEnts(ssid);
+    }
+    /**
+     * Deletes a snapshot.
+     * @param ssid
+     */
+    public delSnapshots(ssids: number[]) {
+        for (const ssid of ssids) {
+            this.modeldata.geom.snapshot.delSnapshot(ssid);
+            this.modeldata.attribs.snapshot.delSnapshot(ssid);
+        }
+    }
+    /**
+     * Updates the time stamp of the entities to the current time stamp.
+     * @param ents
+     */
+    public updateEntsTimestamp(ent_sets: TEntTypeIdx[]) {
+        this.modeldata.updateEntsTs(ent_sets);
     }
     /**
      * Set all data from a JSON string.
@@ -50,7 +95,7 @@ export class GIModel {
      * @param meta
      */
     public setJSONStr(ssid: number, json_str: string): void {
-        // const ssid = this.modeldata.time_stamp;
+        // const ssid = this.modeldata.timestamp;
         const json_data: IModelJSON = JSON.parse(json_str);
         // merge the meta data
         this.metadata.mergeJSONData(json_data);
@@ -62,7 +107,7 @@ export class GIModel {
      * This includes both the meta data and the model data.
      */
     public getJSONStr(ssid: number): string {
-        // const ssid = this.modeldata.time_stamp;
+        // const ssid = this.modeldata.timestamp;
         const model_data: IModelJSONData = this.modeldata.getJSONData(ssid);
         const meta_data: IMetaJSONData = this.metadata.getJSONData(model_data);
 
@@ -78,14 +123,14 @@ export class GIModel {
      * @param model_json_data The JSON data.
      */
     public setModelData (ssid: number, model_json_data: IModelJSONData): void {
-        // const ssid = this.modeldata.time_stamp;
+        // const ssid = this.modeldata.timestamp;
         this.modeldata.setJSONData(ssid, model_json_data);
     }
     /**
      * Returns the JSON data for this model using shallow copy.
      */
     public getModelData(ssid: number): IModelJSONData {
-        // const ssid = this.modeldata.time_stamp;
+        // const ssid = this.modeldata.timestamp;
         return this.modeldata.getJSONData(ssid);
     }
     /**
@@ -93,14 +138,14 @@ export class GIModel {
      * @param meta
      */
     public setModelDataJSONStr(ssid: number, model_json_data_str: string): void {
-        // const ssid = this.modeldata.time_stamp;
+        // const ssid = this.modeldata.timestamp;
         this.modeldata.setJSONData(ssid, JSON.parse(model_json_data_str));
     }
     /**
      * Get the model data (geom and attribs) str.
      */
     public getModelDataJSONStr(ssid: number): string {
-        // const ssid = this.modeldata.time_stamp;
+        // const ssid = this.modeldata.timestamp;
         return JSON.stringify(this.modeldata.getJSONData(ssid));
     }
     /**
@@ -124,7 +169,7 @@ export class GIModel {
     //  * Entity IDs will not change.
     //  */
     // public clone(): GIModel {
-    //     const ssid = this.modeldata.time_stamp;
+    //     const ssid = this.modeldata.timestamp;
     //     // console.log("CLONE");
     //     const clone: GIModel = new GIModel();
     //     clone.metadata = this.metadata;
@@ -140,7 +185,7 @@ export class GIModel {
     //  * @param model_data The GI model.
     //  */
     // public merge(model: GIModel): void {
-    //     const ssid = this.modeldata.time_stamp;
+    //     const ssid = this.modeldata.timestamp;
     //     // console.log("MERGE");
     //     this.modeldata.merge(ssid, model.modeldata);
     // }
@@ -153,14 +198,14 @@ export class GIModel {
      * @param model_data The GI model.
      */
     public append(ssid: number, ssid2: number, model: GIModel): void {
-        // const ssid = this.modeldata.time_stamp;
+        // const ssid = this.modeldata.timestamp;
         this.modeldata.append(ssid, ssid2, model.modeldata);
     }
     // /**
     //  * Renumber entities in this model.
     //  */
     // public purge(): void {
-    //     const ssid = this.modeldata.time_stamp;
+    //     const ssid = this.modeldata.timestamp;
     //     this.modeldata = this.modeldata.purge(ssid);
     // }
     /**

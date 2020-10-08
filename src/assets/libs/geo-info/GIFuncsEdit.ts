@@ -197,7 +197,7 @@ export class GIFuncsEdit {
      * @param tolerance
      */
     public fuse(ents_arr: TEntTypeIdx[], tolerance: number): TEntTypeIdx[] {
-        // const ssid: number = this.modeldata.time_stamp;
+        // const ssid: number = this.modeldata.timestamp;
         // snapshot copy ents (no change to posis)
         // ents_arr = this.modeldata.geom.snapshot.copyObjs(ents_arr, false) as TEntTypeIdx[];
         // get unique ents

@@ -6,7 +6,7 @@ import { EAttribDataTypeStrs, TAttribDataTypes, IMetaData, IMetaJSONData, IAttri
  */
 export class GIMetaData {
     private _data: IMetaData = {
-        // time_stamp: 0,
+        // timestamp: 0,
         posi_count: 0,
         vert_count: 0,
         tri_count: 0,
@@ -65,7 +65,7 @@ export class GIMetaData {
             }
         }
         const data: IMetaJSONData = {
-            // time_stamp: this._data.time_stamp,
+            // timestamp: this._data.timestamp,
             posi_count: this._data.posi_count,
             vert_count: this._data.vert_count,
             tri_count: this._data.tri_count,

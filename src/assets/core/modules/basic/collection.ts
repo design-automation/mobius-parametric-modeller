@@ -9,7 +9,7 @@ import { checkIDs, ID } from '../_check_ids';
 import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, EEntType, TEntTypeIdx, EFilterOperatorTypes } from '@libs/geo-info/common';
+import { TId, EEntType, TEntTypeIdx, EFilterOperatorTypes, EAttribNames } from '@libs/geo-info/common';
 import { isPoint, isPline, isPgon, isColl, idsMake, getArrDepth, isEmptyArr, idsBreak } from '@libs/geo-info/id';
 // import { __merge__} from '../_model';
 // import { _model } from '..';
@@ -62,10 +62,10 @@ export function Create(__model__: GIModel, entities: TId|TId[]|TId[][], name: st
                     ': The list of collection names must be equal in length to the list of collections that get created.');
             }
             for (let i = 0; i < name.length; i++) {
-                __model__.modeldata.attribs.add.setEntAttribVal(EEntType.COLL, colls_i[i], 'name', name[i]);
+                __model__.modeldata.attribs.add.setEntAttribVal(EEntType.COLL, colls_i[i], EAttribNames.COLL_NAME, name[i]);
             }
         } else {
-            __model__.modeldata.attribs.add.setEntAttribVal(EEntType.COLL, colls_i, 'name', name);
+            __model__.modeldata.attribs.add.setEntsAttribVal(EEntType.COLL, colls_i, EAttribNames.COLL_NAME, name);
         }
     }
     // return the collection id
@@ -134,7 +134,7 @@ function _get(__model__: GIModel, names: string|string[]): number[] {
             const reg_exp = new RegExp(names.replace('?', '\\w').replace('*', '\\w*'));
             const all_colls_i: number[] = __model__.modeldata.geom.snapshot.getEntsActive(EEntType.COLL);
             const all_names: string[] = all_colls_i.map( coll_i =>
-                __model__.modeldata.attribs.query.getEntAttribVal(EEntType.COLL, coll_i, 'name') as string
+                __model__.modeldata.attribs.query.getEntAttribVal(EEntType.COLL, coll_i, EAttribNames.COLL_NAME) as string
             );
             const unique_names: string[] = Array.from(new Set(all_names));
             const match_names: string[] = [];
@@ -145,7 +145,7 @@ function _get(__model__: GIModel, names: string|string[]): number[] {
         }
         const colls_i: number[] = __model__.modeldata.geom.snapshot.getEntsActive(EEntType.COLL);
         const query_result: number[] = __model__.modeldata.attribs.query.filterByAttribs(
-            EEntType.COLL, colls_i, 'name', null, EFilterOperatorTypes.IS_EQUAL, names);
+            EEntType.COLL, colls_i, EAttribNames.COLL_NAME, null, EFilterOperatorTypes.IS_EQUAL, names);
         return query_result;
     } else {
         const all_colls_i: number[] = [];

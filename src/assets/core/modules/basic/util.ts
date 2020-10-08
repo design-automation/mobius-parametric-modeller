@@ -10,7 +10,7 @@ import { checkIDs, ID } from '../_check_ids';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { download } from '@libs/filesys/download';
-import { EEntType, IModelJSONData, TId, TEntTypeIdx } from '@libs/geo-info/common';
+import { EEntType, IModelJSONData, TId, TEntTypeIdx, EAttribNames } from '@libs/geo-info/common';
 // import { __merge__ } from '../_model';
 // import { _model } from '..';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
@@ -206,8 +206,8 @@ function _getColls(__model__: GIModel, ent_type: EEntType, ent_i: number): strin
     const colls_names = [];
     for (const coll_i of colls_i) {
         let coll_name = 'No name';
-        if (__model__.modeldata.attribs.query.hasAttrib(EEntType.COLL, 'name')) {
-            coll_name = __model__.modeldata.attribs.query.getEntAttribVal(EEntType.COLL, coll_i, 'name') as string;
+        if (__model__.modeldata.attribs.query.hasAttrib(EEntType.COLL, EAttribNames.COLL_NAME)) {
+            coll_name = __model__.modeldata.attribs.query.getEntAttribVal(EEntType.COLL, coll_i, EAttribNames.COLL_NAME) as string;
         }
         colls_names.push(coll_name);
     }
@@ -285,8 +285,8 @@ function _collInfo(__model__: GIModel, coll_i: number): string {
     let info = '';
     // get the data
     let coll_name = 'None';
-    if (__model__.modeldata.attribs.query.hasAttrib(EEntType.COLL, 'name')) {
-        coll_name = __model__.modeldata.attribs.query.getEntAttribVal(EEntType.COLL, coll_i, 'name') as string;
+    if (__model__.modeldata.attribs.query.hasAttrib(EEntType.COLL, EAttribNames.COLL_NAME)) {
+        coll_name = __model__.modeldata.attribs.query.getEntAttribVal(EEntType.COLL, coll_i, EAttribNames.COLL_NAME) as string;
     }
     const attribs: string[] = _getAttribs(__model__, EEntType.COLL, coll_i);
     const num_pgons: number = __model__.modeldata.geom.nav.navCollToPgon(coll_i).length;
@@ -366,7 +366,7 @@ export function ExportIO(__model__: GIModel, __console__: string[], __constList_
         'fileName': __fileName__,
         'params' : newConstList,
         'console': consolidatedConsole.join('\n'),
-        'model'  : __model__.getModelData(__model__.modeldata.time_stamp)
+        'model'  : __model__.getModelData(__model__.modeldata.timestamp)
     };
     if (exportParams === _EIOExportParams.NO) {
         edxAnswer['params'] = undefined;
@@ -419,7 +419,7 @@ export async function ModelCompare(__model__: GIModel, input_data: string, metho
     const gi_model = await _getFile(input_data);
     const gi_obj: IModelJSONData = JSON.parse(gi_model) as IModelJSONData;
     const other_model = new GIModel();
-    other_model.setModelData(other_model.modeldata.time_stamp, gi_obj);
+    other_model.setModelData(other_model.modeldata.timestamp, gi_obj);
     let result: {score: number, total: number, comment: string} = null;
     // compare function has three boolean args
     // normalize: boolean

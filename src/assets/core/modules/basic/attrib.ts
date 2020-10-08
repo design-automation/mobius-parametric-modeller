@@ -211,11 +211,11 @@ function _setEachEntDifferentAttribValue(__model__: GIModel, ents_arr: TEntTypeI
         }
         // --- Error Check ---
         if (typeof idx_or_key === 'number') {
-            __model__.modeldata.attribs.add.setEntAttribListIdxVal(ent_type, ents_i[i], attrib_name, idx_or_key, attrib_values[i]);
+            __model__.modeldata.attribs.add.setEntsAttribListIdxVal(ent_type, ents_i[i], attrib_name, idx_or_key, attrib_values[i]);
         } if (typeof idx_or_key === 'string') {
-            __model__.modeldata.attribs.add.setEntAttribDictKeyVal(ent_type, ents_i[i], attrib_name, idx_or_key, attrib_values[i]);
+            __model__.modeldata.attribs.add.setEntsAttribDictKeyVal(ent_type, ents_i[i], attrib_name, idx_or_key, attrib_values[i]);
         } else {
-            __model__.modeldata.attribs.add.setEntAttribVal(ent_type, ents_i[i], attrib_name, attrib_values[i]);
+            __model__.modeldata.attribs.add.setCreateEntsAttribVal(ent_type, ents_i[i], attrib_name, attrib_values[i]);
         }
     }
 }
@@ -230,11 +230,11 @@ function _setEachEntSameAttribValue(__model__: GIModel, ents_arr: TEntTypeIdx[],
     const ent_type: number = ents_arr[0][0];
     const ents_i: number[] = _getEntsIndices(__model__, ents_arr);
     if (typeof idx_or_key === 'number') {
-        __model__.modeldata.attribs.add.setEntAttribListIdxVal(ent_type, ents_i, attrib_name, idx_or_key, attrib_value);
+        __model__.modeldata.attribs.add.setEntsAttribListIdxVal(ent_type, ents_i, attrib_name, idx_or_key, attrib_value);
     } else if (typeof idx_or_key === 'string') {
-        __model__.modeldata.attribs.add.setEntAttribDictKeyVal(ent_type, ents_i, attrib_name, idx_or_key, attrib_value);
+        __model__.modeldata.attribs.add.setEntsAttribDictKeyVal(ent_type, ents_i, attrib_name, idx_or_key, attrib_value);
     } else {
-        __model__.modeldata.attribs.add.setEntAttribVal(ent_type, ents_i, attrib_name, attrib_value);
+        __model__.modeldata.attribs.add.setCreateEntsAttribVal(ent_type, ents_i, attrib_name, attrib_value);
     }
 }
 function _getEntsIndices(__model__: GIModel, ents_arr: TEntTypeIdx[]): number[] {

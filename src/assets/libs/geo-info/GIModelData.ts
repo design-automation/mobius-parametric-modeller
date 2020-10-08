@@ -13,7 +13,8 @@ import { GIFuncsModify } from './GIFuncsModify';
  * Geo-info model class.
  */
 export class GIModelData {
-    public time_stamp = 0;
+    public timestamp = 0;
+    private _max_timestamp = 0;
     public model: GIModel;
     public geom: GIGeom;
     public attribs: GIAttribs;
@@ -187,7 +188,7 @@ export class GIModelData {
      * @param ent_i
      */
     public updateObjsTs(ent_type: EEntType, ent_i: number): void {
-        const ts: number = this.time_stamp;
+        const ts: number = this.timestamp;
         switch (ent_type) {
             case EEntType.POINT:
             case EEntType.PLINE:
@@ -222,13 +223,14 @@ export class GIModelData {
      * @param ent_i
      */
     public checkObjsTs(ent_type: EEntType, ent_i: number): void {
-        const ts: number = this.time_stamp;
+        const ts: number = this.timestamp;
         switch (ent_type) {
             case EEntType.POINT:
             case EEntType.PLINE:
             case EEntType.PGON:
                 if (this.attribs.query.getEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP) !== ts) {
-                    throw new Error('Bad edit...');
+                    const obj_ts = this.attribs.query.getEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP);
+                    throw new Error('Bad edit...' + ent_type + ', ' + ent_i + ', ' + obj_ts + ', ' + ts);
                 }
                 return;
             case EEntType.COLL:
@@ -254,18 +256,31 @@ export class GIModelData {
     }
     /**
      * Update time stamp of a object, or collection
-     * Topo ents are ignored
+     * Topo ents will throw an error
      * @param point_i
      */
     public updateEntTs(ent_type: EEntType, ent_i: number): void {
-        const ts: number = this.time_stamp;
+        const ts: number = this.timestamp;
         switch (ent_type) {
             case EEntType.POINT:
             case EEntType.PLINE:
             case EEntType.PGON:
             case EEntType.COLL:
                 this.attribs.add.setEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP, ts);
-                return;
+                break;
+            default:
+                // throw new Error('Invalid entity type for setting timestamp.')
+        }
+    }
+    /**
+     * Adds the ents to the snapshot.
+     * @param ent_type
+     */
+    public updateEntsTs(ents: TEntTypeIdx[]): void {
+        const ts: number = this.timestamp;
+        for (const [ent_type, ent_i] of ents) {
+            if (ent_type < EEntType.POINT) { continue; }
+            this.attribs.add.setEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP, ts);
         }
     }
     /**
@@ -280,26 +295,14 @@ export class GIModelData {
             case EEntType.COLL:
                 return this.attribs.query.getEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP ) as number;
             default:
-                throw new Error('Get time stamp: Entity type not recognised.');
+                throw new Error('Get time stamp: Entity type is not valid.');
         }
     }
     /**
-     * Set the timestamp for an ent.
-     * This is used by merge.
-     * @param ent_type
-     * @param posi_i
-     * @param ts
+     *
      */
-    public setEntTs(ent_type: EEntType, ent_i: number, ts: number): void {
-        switch (ent_type) {
-            case EEntType.POINT:
-            case EEntType.PLINE:
-            case EEntType.PGON:
-            case EEntType.COLL:
-                this.attribs.add.setEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP, ts);
-                return;
-            default:
-                throw new Error('Get time stamp: Entity type not recognised.');
-        }
+    public nextTimestamp() {
+        this._max_timestamp += 1;
+        this.timestamp = this._max_timestamp;
     }
 }

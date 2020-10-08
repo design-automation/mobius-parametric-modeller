@@ -1,5 +1,5 @@
 import { arrMakeFlat } from '../util/arrs';
-import { EEntType, EEntTypeStr, IEntSets, IGeomMaps, ISnapshotData, TEntTypeIdx } from './common';
+import { EAttribNames, EEntType, EEntTypeStr, IEntSets, IGeomMaps, ISnapshotData, TEntTypeIdx } from './common';
 import { GIGeom } from './GIGeom';
 
 /**
@@ -31,7 +31,7 @@ export class GIGeomSnapshot {
      * @param id Starts a new snapshot with the given ID.
      * @param include
      */
-    public init(ssid: number, include?: number[]): void {
+    public addSnapshot(ssid: number, include?: number[]): void {
         this.ss_data.ps.set( ssid, new Set() );
         this.ss_data.pt.set( ssid, new Set() );
         this.ss_data.pl.set( ssid, new Set() );
@@ -56,6 +56,17 @@ export class GIGeomSnapshot {
             }
         }
     }
+    /**
+     * Delete a snapshot.
+     * @param ssid Snapshot ID.
+     */
+    public delSnapshot(ssid: number): void {
+        this.ss_data.ps.delete( ssid );
+        this.ss_data.pt.delete( ssid );
+        this.ss_data.pl.delete( ssid );
+        this.ss_data.pg.delete( ssid );
+        this.ss_data.co.delete( ssid );
+    }
     // ============================================================================
     // Query Active
     // ============================================================================
@@ -65,7 +76,7 @@ export class GIGeomSnapshot {
      * @param ent_i
      */
     public hasEntActive(ent_type: EEntType, ent_i: number): boolean {
-        return this.hasEnt(this._geom.modeldata.time_stamp, ent_type, ent_i);
+        return this.hasEnt(this._geom.modeldata.timestamp, ent_type, ent_i);
     }
     /**
      *
@@ -73,21 +84,21 @@ export class GIGeomSnapshot {
      * @param ents_i
      */
     public filterEntsActive(ent_type: EEntType, ents_i: number[]): number[] {
-        return this.filterEnts(this._geom.modeldata.time_stamp, ent_type, ents_i);
+        return this.filterEnts(this._geom.modeldata.timestamp, ent_type, ents_i);
     }
     /**
      *
      * @param ent_type
      */
     public getEntsActive(ent_type: EEntType): number[] {
-        return this.getEnts(this._geom.modeldata.time_stamp, ent_type);
+        return this.getEnts(this._geom.modeldata.timestamp, ent_type);
     }
     /**
      *
      * @param ent_type
      */
     public numEntsActive(ent_type: EEntType): number {
-        return this.numEnts(this._geom.modeldata.time_stamp, ent_type);
+        return this.numEnts(this._geom.modeldata.timestamp, ent_type);
     }
     // ============================================================================
     // Query Active
@@ -155,6 +166,29 @@ export class GIGeomSnapshot {
         return ent_sets;
     }
     /**
+     * Adds the ents to the snapshot.
+     * @param ent_type
+     */
+    public addEnts(ssid: number, ents: TEntTypeIdx[]): void {
+        for (const [ent_type, ent_i] of ents) {
+            this.ss_data[EEntTypeStr[ent_type]].get(ssid).add(ent_i);
+        }
+    }
+    public getAllEnts(ssid: number): TEntTypeIdx[] {
+        const ents: TEntTypeIdx[] = [];
+        const posis_set: Set<number> = this.ss_data[EEntTypeStr[EEntType.POSI]].get(ssid);
+        posis_set.forEach( posi_i => ents.push([EEntType.POSI, posi_i]) );
+        const points_set: Set<number> = this.ss_data[EEntTypeStr[EEntType.POINT]].get(ssid);
+        points_set.forEach( point_i => ents.push([EEntType.POINT, point_i]) );
+        const plines_set: Set<number> = this.ss_data[EEntTypeStr[EEntType.PLINE]].get(ssid);
+        plines_set.forEach( pline_i => ents.push([EEntType.PLINE, pline_i]) );
+        const pgons_set: Set<number> = this.ss_data[EEntTypeStr[EEntType.PGON]].get(ssid);
+        pgons_set.forEach( pgon_i => ents.push([EEntType.PGON, pgon_i]) );
+        const colls_set: Set<number> = this.ss_data[EEntTypeStr[EEntType.COLL]].get(ssid);
+        colls_set.forEach( coll_i => ents.push([EEntType.COLL, coll_i]) );
+        return ents;
+    }
+    /**
      *
      * @param ent_type
      */
@@ -220,9 +254,38 @@ export class GIGeomSnapshot {
      * @param ent_type
      * @param ents_i
      */
-    public addEntActive(ent_type: EEntType, ents_i: number): void {
-        const ent_set: Set<number> = this.ss_data[EEntTypeStr[ent_type]].get(this._geom.modeldata.time_stamp);
-        ent_set.add(ents_i);
+    public addEnt(ssid: number, ent_type: EEntType, ents_i: number): void {
+        switch (ent_type) {
+            case EEntType.POSI:
+            case EEntType.POINT:
+            case EEntType.PLINE:
+            case EEntType.PGON:
+            case EEntType.COLL:
+                const ent_set: Set<number> = this.ss_data[EEntTypeStr[ent_type]].get(ssid);
+                ent_set.add(ents_i);
+                break;
+            default:
+                throw new Error('Adding entity to snapshot: invalid entity type.');
+        }
+    }
+    /**
+     *
+     * @param ent_type
+     * @param ents_i
+     */
+    public addEntActive(ent_type: EEntType, ent_i: number): void {
+        switch (ent_type) {
+            case EEntType.POSI:
+            case EEntType.POINT:
+            case EEntType.PLINE:
+            case EEntType.PGON:
+            case EEntType.COLL:
+                const ent_set: Set<number> = this.ss_data[EEntTypeStr[ent_type]].get(this._geom.modeldata.timestamp);
+                ent_set.add(ent_i);
+                break;
+            default:
+                throw new Error('Adding entity to snapshot: invalid entity type.');
+        }
     }
     /**
      *
@@ -231,7 +294,7 @@ export class GIGeomSnapshot {
      */
     public delEntsActive(ent_type: EEntType, ents_i: number|number[], invert = false): void {
         ents_i = Array.isArray(ents_i) ? ents_i : [ents_i];
-        const ent_set: Set<number> = this.ss_data[EEntTypeStr[ent_type]].get(this._geom.modeldata.time_stamp);
+        const ent_set: Set<number> = this.ss_data[EEntTypeStr[ent_type]].get(this._geom.modeldata.timestamp);
         if (!invert) {
             // delet the ents in the list
             for (const a_ent_i of ents_i) {
@@ -255,7 +318,7 @@ export class GIGeomSnapshot {
      * @param ent_i
      */
     public delAllEntsActive(ent_type: EEntType): void {
-        const ent_set: Set<number> = this.ss_data[EEntTypeStr[ent_type]].get(this._geom.modeldata.time_stamp);
+        const ent_set: Set<number> = this.ss_data[EEntTypeStr[ent_type]].get(this._geom.modeldata.timestamp);
         ent_set.clear();
     }
     // /**
@@ -267,7 +330,7 @@ export class GIGeomSnapshot {
     //  * @param ent_i
     //  */
     // public copyObjs(ents_arr: TEntTypeIdx|TEntTypeIdx[], copy_posis: boolean): TEntTypeIdx|TEntTypeIdx[] {
-    //     const curr_ts: number = this._geom.modeldata.time_stamp;
+    //     const curr_ts: number = this._geom.modeldata.timestamp;
     //     if (ents_arr.length === 0) { return []; }
     //     const ents_arr2: TEntTypeIdx|TEntTypeIdx[] = this._copyObjs(ents_arr, curr_ts);
     //     if (copy_posis) {
@@ -292,21 +355,21 @@ export class GIGeomSnapshot {
     //             case EEntType.POINT:
     //                 ts = this._geom.modeldata.getEntTs(ent_type, ent_i);
     //                 if (curr_ts !== ts) {
-    //                     this.ss_data.pt.get(this._geom.modeldata.time_stamp).delete(ent_i);
+    //                     this.ss_data.pt.get(this._geom.modeldata.timestamp).delete(ent_i);
     //                     return [EEntType.POINT, this._geom.add.copyPoint(ent_i, true)];
     //                 } else { return ents_arr; }
     //                 break;
     //             case EEntType.PLINE:
     //                 ts = this._geom.modeldata.getEntTs(ent_type, ent_i);
     //                 if (curr_ts !== ts) {
-    //                     this.ss_data.pl.get(this._geom.modeldata.time_stamp).delete(ent_i);
+    //                     this.ss_data.pl.get(this._geom.modeldata.timestamp).delete(ent_i);
     //                     return [EEntType.PLINE, this._geom.add.copyPline(ent_i, true)];
     //                 } else { return ents_arr; }
     //                 break;
     //             case EEntType.PGON:
     //                 ts = this._geom.modeldata.getEntTs(ent_type, ent_i);
     //                 if (curr_ts !== ts) {
-    //                     this.ss_data.pg.get(this._geom.modeldata.time_stamp).delete(ent_i);
+    //                     this.ss_data.pg.get(this._geom.modeldata.timestamp).delete(ent_i);
     //                     return [EEntType.PGON, this._geom.add.copyPgon(ent_i, true)];
     //                 } else { return ents_arr; }
     //                 break;
@@ -463,7 +526,7 @@ export class GIGeomSnapshot {
      * @param index
      */
     public navAnyToAnyActive(from_ets: EEntType, to_ets: EEntType, index: number): number[] {
-        return this.navAnyToAny(this._geom.modeldata.time_stamp, from_ets, to_ets, index);
+        return this.navAnyToAny(this._geom.modeldata.timestamp, from_ets, to_ets, index);
     }
     /**
      *

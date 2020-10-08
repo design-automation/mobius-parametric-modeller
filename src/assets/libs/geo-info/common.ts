@@ -147,6 +147,7 @@ export enum EAttribNames {
     VISIBILITY = 'visibility',
     LABEL = 'label',
     TIMESTAMP = '_ts',
+    COLL_NAME = 'name',
     COLL_PARENT = '_coll_parent',
     COLL_CHILDS = '_coll_childs',
     COLL_POINTS = '_coll_points',
@@ -282,7 +283,7 @@ export interface IAttribValues {
 }
 
 export interface IMetaData {
-    // time_stamp: number;
+    // timestamp: number;
     posi_count: number;
     vert_count: number;
     tri_count: number;
@@ -337,7 +338,7 @@ export interface IAttribJSONValues {
 }
 
 export interface IMetaJSONData {
-    // time_stamp: number;
+    // timestamp: number;
     posi_count: number;
     vert_count: number;
     tri_count: number;

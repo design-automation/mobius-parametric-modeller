@@ -37,7 +37,7 @@ export class GIGeomDel {
     //         if ( verts_i.length === 0) { // only delete posis with no verts
     //             this._geom_maps.up_posis_verts.delete(posi_i);
     //             // del time stamp
-    //             this._geom.time_stamp.delEntTs(EEntType.POSI, posi_i);
+    //             this._geom.timestamp.delEntTs(EEntType.POSI, posi_i);
     //             // save deleted posi
     //             deleted_posis_i.push(posi_i);
     //         }
@@ -65,7 +65,7 @@ export class GIGeomDel {
     //         // delete the posi
     //         this._geom_maps.up_posis_verts.delete(posi_i);
     //         // del time stamp
-    //         this._geom.time_stamp.delEntTs(EEntType.POSI, posi_i);
+    //         this._geom.timestamp.delEntTs(EEntType.POSI, posi_i);
     //         // save deleted posi
     //         deleted_posis_i.push(posi_i);
     //         // no need to update down arrays
@@ -108,7 +108,7 @@ export class GIGeomDel {
     //             this.delUnusedPosis(posi_i);
     //         }
     //         // del time stamp
-    //         this._geom.time_stamp.delEntTs(EEntType.POINT, point_i);
+    //         this._geom.timestamp.delEntTs(EEntType.POINT, point_i);
     //     }
     // }
     // /**
@@ -164,7 +164,7 @@ export class GIGeomDel {
     //             this.delUnusedPosis(posis_i);
     //         }
     //         // del time stamp
-    //         this._geom.time_stamp.delEntTs(EEntType.PLINE, pline_i);
+    //         this._geom.timestamp.delEntTs(EEntType.PLINE, pline_i);
     //     }
     // }
     // /**
@@ -234,7 +234,7 @@ export class GIGeomDel {
     //             this.delUnusedPosis(posis_i);
     //         }
     //         // del time stamp
-    //         this._geom.time_stamp.delEntTs(EEntType.PGON, pgon_i);
+    //         this._geom.timestamp.delEntTs(EEntType.PGON, pgon_i);
     //     }
     // }
     // /**
@@ -285,7 +285,7 @@ export class GIGeomDel {
     //         this._geom_maps.dn_colls_plines.delete(coll_i);
     //         this._geom_maps.dn_colls_pgons.delete(coll_i);
     //         // del time stamp
-    //         this._geom.time_stamp.delEntTs(EEntType.COLL, coll_i);
+    //         this._geom.timestamp.delEntTs(EEntType.COLL, coll_i);
     //     }
     //     // check if the deleted coll is a parent of other colls
     //     const set_colls_i: Set<number> = new Set(colls_i);

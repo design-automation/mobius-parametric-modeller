@@ -97,7 +97,7 @@ export class GIGeom {
      * Generate a string for debugging
      */
     public toStr(): string {
-        const ssid: number = this.modeldata.time_stamp;
+        const ssid: number = this.modeldata.timestamp;
         let result = '';
         result += JSON.stringify(this.io.getJSONData(ssid));
         return result;

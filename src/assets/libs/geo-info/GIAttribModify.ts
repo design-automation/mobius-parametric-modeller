@@ -23,7 +23,7 @@ export class GIAttribsModify {
      * @return True if the attribute was created, false otherwise.
      */
     public delAttrib(ent_type: EEntType, name: string): boolean {
-        const ssid: number = this.modeldata.time_stamp;
+        const ssid: number = this.modeldata.timestamp;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
         // delete
@@ -39,7 +39,7 @@ export class GIAttribsModify {
      * @return True if the attribute was renamed, false otherwise.
      */
     public renameAttrib(ent_type: EEntType, old_name: string, new_name: string): boolean {
-        const ssid: number = this.modeldata.time_stamp;
+        const ssid: number = this.modeldata.timestamp;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
         if (!attribs.has(old_name)) { return false; }

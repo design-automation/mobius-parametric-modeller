@@ -511,7 +511,7 @@ function _addAttribsToModel(model: GIModel, ent_type: EEntType, ent_i: number, f
         if (value_type === 'object') {
             value = JSON.stringify(value);
         }
-        model.modeldata.attribs.add.setEntAttribVal(ent_type, ent_i, name, value);
+        model.modeldata.attribs.add.setCreateEntsAttribVal(ent_type, ent_i, name, value);
     }
 }
 

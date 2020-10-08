@@ -47,7 +47,7 @@ export class GIGeomEditPgon {
         this._cutFaceHoles(face_i, hole_wires_i);
         // update the time stamp
         // snapshot: new ts no longer required
-        // this._geom.time_stamp.updateObjsTs(EEntType.PGON, pgon_i);
+        // this._geom.timestamp.updateObjsTs(EEntType.PGON, pgon_i);
         // no need to change either the up or down arrays
         // return the new wires
         return hole_wires_i;
@@ -87,7 +87,7 @@ export class GIGeomEditPgon {
             this._geom_maps.dn_faces_tris.set(face_i, new_tris_i);
             // update the time stamp
             // snapshot: new ts no longer required
-            // this._geom.time_stamp.updateObjsTs(EEntType.PGON, pgons_i);
+            // this._geom.timestamp.updateObjsTs(EEntType.PGON, pgons_i);
         } else { // An array of pgons
             pgons_i.forEach(pgon_i => this.triPgons(pgon_i));
         }

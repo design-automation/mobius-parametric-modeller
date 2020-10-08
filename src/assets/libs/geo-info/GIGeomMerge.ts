@@ -25,7 +25,7 @@ export class GIGeomMerge {
     // public merge(ssid: number, other_geom: GIGeom): void {
     //     // Check that we have correct number of time stamps
     //     // TODO this can be deleted later
-    //     this._geom.time_stamp.checkTimeStamps();
+    //     this._geom.timestamp.checkTimestamps();
     //     //
     //     const geom_maps = other_geom._geom_maps;
     //     // ======================================================================
@@ -62,7 +62,7 @@ export class GIGeomMerge {
 
     //     // Check that we have correct number of time stamps
     //     // TODO this can be deleted later
-    //     this._geom.time_stamp.checkTimeStamps();
+    //     this._geom.timestamp.checkTimestamps();
     // }
     // // --------------------------------------------------------------------------------------------
     // // Private methods
@@ -79,10 +79,10 @@ export class GIGeomMerge {
     //     const other_map = other_geom._geom_maps.up_posis_verts;
     //     // merge
     //     other_map.forEach( (other_verts_i, other_posi_i) => {
-    //         const other_ts: number = other_geom.time_stamp.getEntTs(EEntType.POSI, other_posi_i);
+    //         const other_ts: number = other_geom.timestamp.getEntTs(EEntType.POSI, other_posi_i);
     //         if (this_map.has(other_posi_i)) {
     //             // check time stamp
-    //             const this_ts: number = this._geom.time_stamp.getEntTs(EEntType.POSI, other_posi_i);
+    //             const this_ts: number = this._geom.timestamp.getEntTs(EEntType.POSI, other_posi_i);
     //             if (this_ts !== other_ts) {
     //                 throw new Error('Conflict merging positions.');
     //             }
@@ -94,7 +94,7 @@ export class GIGeomMerge {
     //             this_map.set(other_posi_i, Array.from(verts_i_set));
     //         } else {
     //             this_map.set(other_posi_i, other_verts_i.slice());
-    //             this._geom.time_stamp.setEntTs(EEntType.POSI, other_posi_i, other_ts);
+    //             this._geom.timestamp.setEntTs(EEntType.POSI, other_posi_i, other_ts);
     //         }
     //     });
     // }
@@ -116,10 +116,10 @@ export class GIGeomMerge {
     //     const other_map = other_geom._geom_maps[geom_array_key];
     //     // merge
     //     other_map.forEach( (ent, ent_i) => {
-    //         const other_ts: number = other_geom.time_stamp.getEntTs(ent_type, ent_i);
+    //         const other_ts: number = other_geom.timestamp.getEntTs(ent_type, ent_i);
     //         if (this_map.has(ent_i)) {
     //             // check time stamp
-    //             const this_ts: number = this._geom.time_stamp.getEntTs(ent_type, ent_i);
+    //             const this_ts: number = this._geom.timestamp.getEntTs(ent_type, ent_i);
     //             if (this_ts !== other_ts) {
     //                 throw new Error('Conflict merging ' + getEntTypeStr(ent_type) + '.');
     //             }
@@ -127,7 +127,7 @@ export class GIGeomMerge {
     //             // ent is always a number, wither a vert_i, wire_i, face_i or coll_i
     //             // so there is no need to do a deep copy at this level
     //             this_map.set(ent_i, ent);
-    //             this._geom.time_stamp.setEntTs(ent_type, ent_i, other_ts);
+    //             this._geom.timestamp.setEntTs(ent_type, ent_i, other_ts);
     //         }
     //     });
     // }

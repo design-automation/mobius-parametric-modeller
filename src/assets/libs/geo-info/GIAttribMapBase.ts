@@ -1,4 +1,4 @@
-import { EFilterOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribJSONData, EEntType, EAttribNames } from './common';
+import { EFilterOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribJSONData, EEntType, EAttribNames, EEntTypeStr } from './common';
 import { GIModelData } from './GIModelData';
 
 /**
@@ -179,11 +179,13 @@ export class GIAttribMapBase {
      * Merges another attrib map into this attrib map
      * @param attrib_map The attrib map to merge into this map
      */
-    public merge(attrib_map: GIAttribMapBase): void {
+    public merge(attrib_map: GIAttribMapBase, ent_set?: Set<number>): void {
+        const filter: boolean = ent_set !== undefined;
         for (const val_i of attrib_map._map_val_i_to_ents_i.keys())  {
             const other_ents_i: number[] = attrib_map._mapValToEntsGetArr(val_i);
             // update the  maps
-            other_ents_i.forEach( ent_i => {
+            for (const ent_i of other_ents_i) {
+                if (filter && !ent_set.has(ent_i)) { continue; }
                 if (this._map_ent_i_to_val_i.has(ent_i) && this._map_ent_i_to_val_i.get(ent_i) !== val_i) {
                     // handle merging collections - special case
                     // TODO to be reconsidered...
@@ -198,13 +200,14 @@ export class GIAttribMapBase {
                         this.setEntVal(ent_i, Array.from(merged_set), false);
 
                     } else {
-                        throw new Error('Merge conflict...');
+                        throw new Error('Merge conflict... ' + this._name + ', ' +
+                        EEntTypeStr[this._ent_type] + ', ' + this._map_ent_i_to_val_i.get(ent_i)  + ', ' + val_i);
                     }
                 } else {
                     this._mapValToEntsAdd(val_i, ent_i);
                     this._map_ent_i_to_val_i.set(ent_i, val_i);
                 }
-            });
+            }
         }
         // update the data length
         if (this._is_length_variable) {

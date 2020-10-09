@@ -1,4 +1,4 @@
-import { EAttribDataTypeStrs, EAttribNames, EEntType, EEntTypeStr, IAttribsMaps, IEntSets, TEntTypeIdx } from './common';
+import { EAttribDataTypeStrs, EAttribNames, EEntType, EEntTypeStr, IAttribsMaps, IEntSets, TAttribDataTypes, TEntTypeIdx } from './common';
 import { GIAttribMapBase } from './GIAttribMapBase';
 import { GIAttribMapNum } from './GIAttribMapNum';
 import { GIModelData } from './GIModelData';
@@ -72,7 +72,6 @@ export class GIAttribsSnapshot {
     }
     /**
      * Add attributes from the specified snapshot to the current snapshot.
-     * The target snapshots is assumed to be an empty snapshot.
      * @param ssid ID of snapshot to copy attributes from.
      * @param ents
      */
@@ -95,7 +94,7 @@ export class GIAttribsSnapshot {
             const ent_type_str: string = EEntTypeStr[ent_type];
             from_attrib_maps[ent_type_str].forEach( (from_attrib: GIAttribMapBase, name: string) => {
                 const to_attrib: GIAttribMapBase = this.modeldata.attribs.add.addEntAttribActive(ent_type, name, from_attrib.getDataType());
-                ents_sets[ent_type_str].forEach( ent_i => to_attrib.setEntVal(ent_i, from_attrib.getEntVal(ent_i)) );
+                to_attrib.merge(from_attrib, ents_sets[ent_type_str]);
             });
         }
         // model attributes

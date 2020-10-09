@@ -136,14 +136,18 @@ export class GIGeomQuery {
         }
         ent_sets.pt.forEach( point_i => {
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.POINT, point_i);
-            posis_i.forEach( posi_i => ent_sets.obj_ps.add(posi_i) );
+            posis_i.forEach( posi_i => {
+                if ( !ent_sets.ps.has(posi_i) ) { ent_sets.obj_ps.add(posi_i); }
+            });
             if (incl_topo) {
                 ent_sets._v.add(this._geom.nav.navPointToVert(point_i) );
             }
         });
         ent_sets.pl.forEach( pline_i => {
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PLINE, pline_i);
-            posis_i.forEach( posi_i => ent_sets.obj_ps.add(posi_i) );
+            posis_i.forEach( posi_i => {
+                if ( !ent_sets.ps.has(posi_i) ) { ent_sets.obj_ps.add(posi_i); }
+            });
             if (incl_topo) {
                 const wire_i: number = this._geom.nav.navPlineToWire(pline_i);
                 const edges_i: number[] = this._geom.nav.navWireToEdge(wire_i);
@@ -155,7 +159,9 @@ export class GIGeomQuery {
         });
         ent_sets.pg.forEach( pgon_i => {
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PGON, pgon_i);
-            posis_i.forEach( posi_i => ent_sets.obj_ps.add(posi_i) );
+            posis_i.forEach( posi_i => {
+                if ( !ent_sets.ps.has(posi_i) ) { ent_sets.obj_ps.add(posi_i); }
+            });
             if (incl_topo) {
                 const face_i: number = this._geom.nav.navPgonToFace(pgon_i);
                 ent_sets._f.add(face_i);

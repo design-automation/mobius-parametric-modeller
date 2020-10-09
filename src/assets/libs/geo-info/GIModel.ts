@@ -119,8 +119,7 @@ export class GIModel {
             gf_all_ss.push(i);
         }
         this.rollbackTimestamp(curr_ss);
-        this.updateEntsTimestamp(gf_end_ents);
-        this.addEntsToSnapshot(curr_ss, gf_end_ents);
+        this.addEntsToSnapshot(gf_end_ss, gf_end_ents);
         this.delSnapshots(gf_all_ss);
     }
 

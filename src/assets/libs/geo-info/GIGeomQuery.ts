@@ -62,7 +62,22 @@ export class GIGeomQuery {
         return this._geom_maps[geom_maps_key].has(index);
     }
     /**
-     * Returns sets of unique indexes, given an array of TEntTypeIdx.
+     *
+     * @param ents
+     */
+    public getEntsTree(ents: TEntTypeIdx[]): TEntTypeIdx[] {
+        const ent_sets: IEntSets = this.getEntSetsTree(ents);
+        const ents_tree: TEntTypeIdx[] = [];
+        ent_sets.ps.forEach( posi_i => ents_tree.push([EEntType.POSI, posi_i]) );
+        ent_sets.obj_ps.forEach( posi_i => ents_tree.push([EEntType.POSI, posi_i]) );
+        ent_sets.pt.forEach( point_i => ents_tree.push([EEntType.POINT, point_i]) );
+        ent_sets.pl.forEach( pline_i => ents_tree.push([EEntType.PLINE, pline_i]) );
+        ent_sets.pg.forEach( pgon_i => ents_tree.push([EEntType.PGON, pgon_i]) );
+        ent_sets.co.forEach( coll_i => ents_tree.push([EEntType.COLL, coll_i]) );
+        return ents_tree;
+    }
+    /**
+     * Returns sets of unique entity indexes, given an array of TEntTypeIdx.
      * ~
      * Object positions are added to the geompack.
      * ~
@@ -70,15 +85,17 @@ export class GIGeomQuery {
      * ~
      * If invert=true, then the geompack will include the opposite set of entities.
      * ~
-     * Used for deleting all entities.
+     * Used for deleting all entities and for adding global function entities to a snapshot.
      */
-    public getDelEntSets(ents: TEntTypeIdx[]): IEntSets {
-        const set_posis_i: Set<number> = new Set();
-        const set_ent_posis_i: Set<number> = new Set();
-        const set_points_i: Set<number> = new Set();
-        const set_plines_i: Set<number> = new Set();
-        const set_pgons_i: Set<number> = new Set();
-        const set_colls_i: Set<number> = new Set();
+    public getEntSetsTree(ents: TEntTypeIdx[], incl_topo = false): IEntSets {
+        const ent_sets: IEntSets = {
+            ps: new Set(),
+            obj_ps: new Set(),
+            pt: new Set(),
+            pl: new Set(),
+            pg: new Set(),
+            co: new Set()
+        };
         // process all the ents, but not posis of the ents, we will do that at the end
         for (const ent_arr of ents) {
             const [ent_type, ent_i]: TEntTypeIdx = ent_arr as TEntTypeIdx;
@@ -89,54 +106,71 @@ export class GIGeomQuery {
                 // get all the objs
                 for (const one_coll_i of coll_and_desc_i) {
                     for (const point_i of this._geom.modeldata.attribs.colls.getCollPoints(one_coll_i)) {
-                        set_points_i.add(point_i);
+                        ent_sets.pt.add(point_i);
                     }
                     for (const pline_i of this._geom.modeldata.attribs.colls.getCollPlines(one_coll_i)) {
-                        set_plines_i.add(pline_i);
+                        ent_sets.pl.add(pline_i);
                     }
                     for (const pgon_i of this._geom.modeldata.attribs.colls.getCollPgons(one_coll_i)) {
-                        set_pgons_i.add(pgon_i);
+                        ent_sets.pg.add(pgon_i);
                     }
-                    set_colls_i.add(one_coll_i);
+                    ent_sets.co.add(one_coll_i);
                 }
             } else if (isPgon(ent_type)) {
-                set_pgons_i.add(ent_i);
+                ent_sets.pg.add(ent_i);
             } else if (isPline(ent_type)) {
-                set_plines_i.add(ent_i);
+                ent_sets.pl.add(ent_i);
             } else if (isPoint(ent_type)) {
-                set_points_i.add(ent_i);
+                ent_sets.pt.add(ent_i);
             } else if (isPosi(ent_type)) {
-                set_posis_i.add(ent_i);
+                ent_sets.ps.add(ent_i);
             }
         }
-        // now get all the posis of the ents and add them to the list
-        set_points_i.forEach( point_i => {
+        // now get all the posis of the objs and add them to the list
+        // also add topo in incl_topo is true
+        if (incl_topo) {
+            ent_sets._v = new Set();
+            ent_sets._e = new Set();
+            ent_sets._w = new Set();
+            ent_sets._f = new Set();
+        }
+        ent_sets.pt.forEach( point_i => {
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.POINT, point_i);
-            for (const posi_i of posis_i) {
-                set_ent_posis_i.add(posi_i);
+            posis_i.forEach( posi_i => ent_sets.obj_ps.add(posi_i) );
+            if (incl_topo) {
+                ent_sets._v.add(this._geom.nav.navPointToVert(point_i) );
             }
         });
-        set_plines_i.forEach( pline_i => {
+        ent_sets.pl.forEach( pline_i => {
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PLINE, pline_i);
-            for (const posi_i of posis_i) {
-                set_ent_posis_i.add(posi_i);
+            posis_i.forEach( posi_i => ent_sets.obj_ps.add(posi_i) );
+            if (incl_topo) {
+                const wire_i: number = this._geom.nav.navPlineToWire(pline_i);
+                const edges_i: number[] = this._geom.nav.navWireToEdge(wire_i);
+                const verts_i: number[] = this._geom.query.getWireVerts(wire_i);
+                ent_sets._w.add(wire_i);
+                edges_i.forEach( edge_i => ent_sets._e.add(edge_i) );
+                verts_i.forEach( vert_i => ent_sets._v.add(vert_i) );
             }
         });
-        set_pgons_i.forEach( pgon_i => {
+        ent_sets.pg.forEach( pgon_i => {
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PGON, pgon_i);
-            for (const posi_i of posis_i) {
-                set_ent_posis_i.add(posi_i);
+            posis_i.forEach( posi_i => ent_sets.obj_ps.add(posi_i) );
+            if (incl_topo) {
+                const face_i: number = this._geom.nav.navPgonToFace(pgon_i);
+                ent_sets._f.add(face_i);
+                const wires_i: number[] = this._geom.nav.navFaceToWire(face_i);
+                wires_i.forEach( wire_i => {
+                    ent_sets._w.add(wire_i);
+                    const edges_i: number[] = this._geom.nav.navWireToEdge(wire_i);
+                    const verts_i: number[] = this._geom.query.getWireVerts(wire_i);
+                    edges_i.forEach( edge_i => ent_sets._e.add(edge_i) );
+                    verts_i.forEach( vert_i => ent_sets._v.add(vert_i) );
+                });
             }
         });
-        // if no invert, then return the result
-        return {
-            ps: set_posis_i,
-            pt: set_points_i,
-            pl: set_plines_i,
-            pg: set_pgons_i,
-            co: set_colls_i,
-            obj_ps: set_ent_posis_i
-        };
+        // return the result
+        return ent_sets;
     }
     /**
      * Fill a map of sets of unique indexes

@@ -33,12 +33,12 @@ export class GIAttribsAdd {
      * @param name The name of the attribute.
      * @param data_type The data type of the attribute.
      */
-    public addAttrib(ent_type: EEntType, name: string, data_type: EAttribDataTypeStrs): GIAttribMapBase {
+    public addAttribActive(ent_type: EEntType, name: string, data_type: EAttribDataTypeStrs): GIAttribMapBase {
         if (ent_type === EEntType.MOD) {
-            this.addModelAttrib(name);
+            this.addModelAttribActive(name);
             return null;
         } else {
-            return this.addEntAttrib(ent_type, name, data_type);
+            return this.addEntAttribActive(ent_type, name, data_type);
         }
     }
     /**
@@ -46,7 +46,7 @@ export class GIAttribsAdd {
      *
      * @param name The name of the attribute.
      */
-    public addModelAttrib(name: string): void {
+    public addModelAttribActive(name: string): void {
         const ssid: number = this.modeldata.timestamp;
         if (!this.modeldata.attribs.attribs_maps.get(ssid).mo.has(name)) {
             this.modeldata.attribs.attribs_maps.get(ssid).mo.set(name, null);
@@ -62,8 +62,11 @@ export class GIAttribsAdd {
      * @param name The name of the attribute.
      * @param data_type The data type of the attribute.
      */
-    public addEntAttrib(ent_type: EEntType, name: string, data_type: EAttribDataTypeStrs): GIAttribMapBase {
+    public addEntAttribActive(ent_type: EEntType, name: string, data_type: EAttribDataTypeStrs): GIAttribMapBase {
         const ssid: number = this.modeldata.timestamp;
+        return this.addEntAttrib(ssid, ent_type, name, data_type);
+    }
+    public addEntAttrib(ssid: number, ent_type: EEntType, name: string, data_type: EAttribDataTypeStrs): GIAttribMapBase {
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, any> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
         let attrib: GIAttribMapBase;
@@ -96,7 +99,7 @@ export class GIAttribsAdd {
      * @param name
      * @param value
      */
-    public setModelAttribVal(name: string, value: TAttribDataTypes): void {
+    public setModelAttribValActive(name: string, value: TAttribDataTypes): void {
         const ssid: number = this.modeldata.timestamp;
         this.modeldata.attribs.attribs_maps.get(ssid).mo.set(name, value);
     }
@@ -107,7 +110,7 @@ export class GIAttribsAdd {
      * @param name
      * @param value
      */
-    public setModelAttribListIdxVal(name: string, idx: number, value: any): void {
+    public setModelAttribListIdxValActive(name: string, idx: number, value: any): void {
         const ssid: number = this.modeldata.timestamp;
         const list_value: TAttribDataTypes = this.modeldata.attribs.attribs_maps.get(ssid).mo.get(name);
         if (list_value === undefined) { throw new Error('Attribute with this name does not exist.'); }
@@ -123,7 +126,7 @@ export class GIAttribsAdd {
      * @param name
      * @param value
      */
-    public setModelAttribDictKeyVal(name: string, key: string, value: any): void {
+    public setModelAttribDictKeyValActive(name: string, key: string, value: any): void {
         const ssid: number = this.modeldata.timestamp;
         const dict_value: TAttribDataTypes = this.modeldata.attribs.attribs_maps.get(ssid).mo.get(name);
         if (dict_value === undefined) { throw new Error('Attribute with this name does not exist.'); }
@@ -139,7 +142,7 @@ export class GIAttribsAdd {
      * @param name
      * @param value
      */
-    public setCreateEntsAttribVal(ent_type: EEntType, ents_i: number|number[], name: string, value: TAttribDataTypes): void {
+    public setCreateEntsAttribValActive(ent_type: EEntType, ents_i: number|number[], name: string, value: TAttribDataTypes): void {
         const ssid: number = this.modeldata.timestamp;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
@@ -147,7 +150,7 @@ export class GIAttribsAdd {
         let attrib: GIAttribMapBase = attribs.get(name);
         if (attrib === undefined) {
             const new_data_type: EAttribDataTypeStrs = this._checkDataType(value);
-            attrib = this.addAttrib(ent_type, name, new_data_type);
+            attrib = this.addAttribActive(ent_type, name, new_data_type);
         }
         // set the data
         ents_i = Array.isArray( ents_i) ? ents_i : [ents_i];
@@ -162,8 +165,9 @@ export class GIAttribsAdd {
      * @param name
      * @param value
      */
-    public setEntAttribVal(ent_type: EEntType, ent_i: number, name: string, value: TAttribDataTypes): void {
-        const attrib: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(this.modeldata.timestamp)[EEntTypeStr[ent_type]].get(name);
+    public setEntAttribValActive(ent_type: EEntType, ent_i: number, name: string, value: TAttribDataTypes): void {
+        const ssid: number = this.modeldata.timestamp;
+        const attrib: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid)[EEntTypeStr[ent_type]].get(name);
         if (attrib === undefined) { throw new Error('Attribute does not exist:' + name); }
         attrib.setEntVal(ent_i, value);
     }
@@ -174,8 +178,9 @@ export class GIAttribsAdd {
      * @param name
      * @param value
      */
-    public setEntsAttribVal(ent_type: EEntType, ents_i: number|number[], name: string, value: TAttribDataTypes): void {
-        const attrib: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(this.modeldata.timestamp)[EEntTypeStr[ent_type]].get(name);
+    public setEntsAttribValActive(ent_type: EEntType, ents_i: number|number[], name: string, value: TAttribDataTypes): void {
+        const ssid: number = this.modeldata.timestamp;
+        const attrib: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid)[EEntTypeStr[ent_type]].get(name);
         if (attrib === undefined) { throw new Error('Attribute does not exist:' + name); }
         ents_i = Array.isArray( ents_i) ? ents_i : [ents_i];
         for (const ent_i of ents_i) {
@@ -189,7 +194,7 @@ export class GIAttribsAdd {
      * @param name
      * @param value
      */
-    public setEntsAttribListIdxVal(ent_type: EEntType, ents_i: number|number[], name: string,
+    public setEntsAttribListIdxValActive(ent_type: EEntType, ents_i: number|number[], name: string,
             idx: number, value: any): void {
         const ssid: number = this.modeldata.timestamp;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
@@ -214,7 +219,7 @@ export class GIAttribsAdd {
      * @param name
      * @param value
      */
-    public setEntsAttribDictKeyVal(ent_type: EEntType, ents_i: number|number[], name: string,
+    public setEntsAttribDictKeyValActive(ent_type: EEntType, ents_i: number|number[], name: string,
             key: string, value: any): void {
         const ssid: number = this.modeldata.timestamp;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
@@ -239,7 +244,7 @@ export class GIAttribsAdd {
      * @param ent_type
      * @param name
      */
-    public delEntFromAttribs(ent_type: EEntType, ents_i: number|number[]): void {
+    public delEntFromAttribsActive(ent_type: EEntType, ents_i: number|number[]): void {
         const ssid: number = this.modeldata.timestamp;
         // get the attrib names
         const attribs_maps_key: string = EEntTypeStr[ent_type];
@@ -251,7 +256,7 @@ export class GIAttribsAdd {
      * @param index
      * @param value
      */
-    public setPosiCoords(index: number, xyz: Txyz): void {
+    public setPosiCoordsActive(index: number, xyz: Txyz): void {
         const ssid: number = this.modeldata.timestamp;
         this.modeldata.attribs.attribs_maps.get(ssid).ps.get(EAttribNames.COORDS).setEntVal(index, xyz);
     }
@@ -260,7 +265,7 @@ export class GIAttribsAdd {
      * @param index
      * @param value
      */
-    public movePosiCoords(index: number, xyz: Txyz): void {
+    public movePosiCoordsActive(index: number, xyz: Txyz): void {
         const ssid: number = this.modeldata.timestamp;
         const old_xyz: Txyz = this.modeldata.attribs.attribs_maps.get(ssid).ps.get(EAttribNames.COORDS).getEntVal(index) as Txyz;
         const new_xyz: Txyz = vecAdd(old_xyz, xyz);
@@ -271,7 +276,7 @@ export class GIAttribsAdd {
      * @param ent_type
      * @param name
      */
-    public copyAttribs(ent_type: EEntType, from_ent_i: number, to_ent_i: number): void {
+    public copyAttribsActive(ent_type: EEntType, from_ent_i: number, to_ent_i: number): void {
         const ssid: number = this.modeldata.timestamp;
         // get the attrib names
         const attribs_maps_key: string = EEntTypeStr[ent_type];
@@ -288,9 +293,12 @@ export class GIAttribsAdd {
     /**
      * Promotes attrib values up and down the hierarchy.
      */
-    public pushAttribVals(
+    public pushAttribValsActive(
             source_ent_type: EEntType, source_attrib_name: string, source_attrib_idx_key: number|string, source_indices: number[],
             target: EEntType|string,   target_attrib_name: string, target_attrib_idx_key: number|string, method: EAttribPush): void {
+        
+        // TODO make sure only to push onto active ents
+
         const ssid: number = this.modeldata.timestamp;
         // if source and target are same, then return
         if (source_ent_type === target) { return; }
@@ -347,7 +355,7 @@ export class GIAttribsAdd {
         }
         // move attributes from entities up to the model, or form model down to entities
         if (target_ent_type === EEntType.MOD) {
-            this.addAttrib(target_ent_type, target_attrib_name, target_data_type);
+            this.addAttribActive(target_ent_type, target_attrib_name, target_data_type);
             const attrib_values: TAttribDataTypes[] = [];
             for (const index of source_indices) {
                 const value: TAttribDataTypes =
@@ -358,24 +366,24 @@ export class GIAttribsAdd {
             }
             const agg_value: TAttribDataTypes = this._aggregateVals(attrib_values, target_data_size, method);
             if (typeof target_attrib_idx_key === 'number') {
-                this.setModelAttribListIdxVal(target_attrib_name, target_attrib_idx_key, agg_value);
+                this.setModelAttribListIdxValActive(target_attrib_name, target_attrib_idx_key, agg_value);
             } else if (typeof target_attrib_idx_key === 'string') {
-                this.setModelAttribDictKeyVal(target_attrib_name, target_attrib_idx_key, agg_value);
+                this.setModelAttribDictKeyValActive(target_attrib_name, target_attrib_idx_key, agg_value);
             } else {
-                this.setModelAttribVal(target_attrib_name, agg_value);
+                this.setModelAttribValActive(target_attrib_name, agg_value);
             }
             return;
         } else if (source_ent_type === EEntType.MOD) {
             const value: TAttribDataTypes = this.modeldata.attribs.query.getModelAttribValAny(source_attrib_name, source_attrib_idx_key);
-            this.addAttrib(target_ent_type, target_attrib_name, target_data_type);
+            this.addAttribActive(target_ent_type, target_attrib_name, target_data_type);
             const target_ents_i: number[] = this.modeldata.geom.query.getEnts(target_ent_type);
             for (const target_ent_i of target_ents_i) {
                 if (typeof target_attrib_idx_key === 'number') {
-                    this.setEntsAttribListIdxVal(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
+                    this.setEntsAttribListIdxValActive(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
                 } else if (typeof target_attrib_idx_key === 'string') {
-                    this.setEntsAttribDictKeyVal(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
+                    this.setEntsAttribDictKeyValActive(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
                 } else {
-                    this.setCreateEntsAttribVal(target_ent_type, target_ent_i, target_attrib_name, value);
+                    this.setCreateEntsAttribValActive(target_ent_type, target_ent_i, target_attrib_name, value);
                 }
             }
             return;
@@ -407,7 +415,7 @@ export class GIAttribsAdd {
         // create the new target attribute if it does not already exist
         if (target_coll !== null) {
             target_ent_type =  target_ent_type as EEntType;
-            this.addAttrib(target_ent_type, target_attrib_name, target_data_type);
+            this.addAttribActive(target_ent_type, target_attrib_name, target_data_type);
         }
         // calculate the new value and set the attribute
         attrib_values_map.forEach( (attrib_values, target_ent_i) => {
@@ -416,11 +424,11 @@ export class GIAttribsAdd {
                 value = this._aggregateVals(attrib_values, target_data_size, method);
             }
             if (typeof target_attrib_idx_key === 'number') {
-                this.setEntsAttribListIdxVal(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
+                this.setEntsAttribListIdxValActive(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
             } else if (typeof target_attrib_idx_key === 'string') {
-                this.setEntsAttribDictKeyVal(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
+                this.setEntsAttribDictKeyValActive(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);
             } else {
-                this.setCreateEntsAttribVal(target_ent_type, target_ent_i, target_attrib_name, value);
+                this.setCreateEntsAttribValActive(target_ent_type, target_ent_i, target_attrib_name, value);
             }
         });
     }

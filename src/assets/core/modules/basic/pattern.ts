@@ -58,7 +58,7 @@ export function Line(__model__: GIModel, origin: Txyz|TPlane, size: number, num_
             xyz = vecAdd(xyz, origin as Txyz);
         }
         const posi_i: number = __model__.modeldata.geom.add.addPosi();
-        __model__.modeldata.attribs.add.setPosiCoords(posi_i, xyz);
+        __model__.modeldata.attribs.add.setPosiCoordsActive(posi_i, xyz);
         posis_i.push(posi_i);
     }
     // return
@@ -107,7 +107,7 @@ export function Rectangle(__model__: GIModel, origin: Txyz|TPlane, size: number|
             xyz = vecAdd(xyz, origin as Txyz);
         }
         const posi_i: number = __model__.modeldata.geom.add.addPosi();
-        __model__.modeldata.attribs.add.setPosiCoords(posi_i, xyz);
+        __model__.modeldata.attribs.add.setPosiCoordsActive(posi_i, xyz);
         posis_i.push(posi_i);
     }
     // return
@@ -170,7 +170,7 @@ export function Grid(__model__: GIModel, origin: Txyz|TPlane, size: number|[numb
                 xyz = vecAdd(xyz, origin as Txyz);
             }
             const posi_i: number = __model__.modeldata.geom.add.addPosi();
-            __model__.modeldata.attribs.add.setPosiCoords(posi_i, xyz);
+            __model__.modeldata.attribs.add.setPosiCoordsActive(posi_i, xyz);
             posis_i.push(posi_i);
         }
     }
@@ -288,7 +288,7 @@ export function Box(__model__: GIModel, origin: Txyz | TPlane,
                         xyz = vecAdd(xyz, origin as Txyz);
                     }
                     const posi_i: number = __model__.modeldata.geom.add.addPosi();
-                    __model__.modeldata.attribs.add.setPosiCoords(posi_i, xyz);
+                    __model__.modeldata.attribs.add.setPosiCoordsActive(posi_i, xyz);
                     if (create_perim_layer) {
                         if (i === 0) {
                             layer_perim_x0_posis_i.push(posi_i);
@@ -548,7 +548,7 @@ export function _polyhedron(__model__: GIModel, matrix: Matrix4, radius: number,
     for (const vert_tjs of hedron_tjs.vertices) {
         const xyz: Txyz = multMatrix(vert_tjs.toArray() as Txyz, matrix);
         const posi_i: number = __model__.modeldata.geom.add.addPosi();
-        __model__.modeldata.attribs.add.setPosiCoords(posi_i, xyz);
+        __model__.modeldata.attribs.add.setPosiCoordsActive(posi_i, xyz);
         posis_i.push(posi_i);
     }
     // if the method is flat, then we are done, return the posis
@@ -619,7 +619,7 @@ export function Arc(__model__: GIModel, origin: Txyz|TPlane, radius: number, num
             xyz = vecAdd(xyz, origin as Txyz);
         }
         const posi_i: number = __model__.modeldata.geom.add.addPosi();
-        __model__.modeldata.attribs.add.setPosiCoords(posi_i, xyz);
+        __model__.modeldata.attribs.add.setPosiCoordsActive(posi_i, xyz);
         posis_i.push(posi_i);
     }
     // return the list of posis
@@ -671,7 +671,7 @@ export function Bezier(__model__: GIModel, coords: Txyz[], num_positions: number
     const posis_i: number[] = [];
     for (let i = 0; i < num_positions; i++) {
         const posi_i: number = __model__.modeldata.geom.add.addPosi();
-        __model__.modeldata.attribs.add.setPosiCoords(posi_i, points_tjs[i].toArray() as Txyz);
+        __model__.modeldata.attribs.add.setPosiCoordsActive(posi_i, points_tjs[i].toArray() as Txyz);
         posis_i.push(posi_i);
     }
     // return the list of posis
@@ -845,7 +845,7 @@ function nurbsToPosis(__model__: GIModel, curve_verb: any, degree: number, close
         const xyz: Txyz  = curve_verb.point(u) as Txyz;
         // xyz[2] = i / 10;
         const posi_i: number = __model__.modeldata.geom.add.addPosi();
-        __model__.modeldata.attribs.add.setPosiCoords(posi_i, xyz);
+        __model__.modeldata.attribs.add.setPosiCoordsActive(posi_i, xyz);
         posis_i.push(posi_i);
         const dist =    Math.abs(start[0] - xyz[0]) +
                         Math.abs(start[1] - xyz[1]) +
@@ -916,7 +916,7 @@ export function Interpolate(__model__: GIModel, coords: Txyz[], type: _ECurveCat
     const posis_i: number[] = [];
     for (let i = 0; i < num_positions; i++) {
         const posi_i: number = __model__.modeldata.geom.add.addPosi();
-        __model__.modeldata.attribs.add.setPosiCoords(posi_i, points_tjs[i].toArray() as Txyz);
+        __model__.modeldata.attribs.add.setPosiCoordsActive(posi_i, points_tjs[i].toArray() as Txyz);
         posis_i.push(posi_i);
     }
     // return the list of posis

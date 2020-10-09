@@ -953,7 +953,7 @@ function _sunPathGenPosis(__model__: GIModel, rays_dirs_tjs: THREE.Vector3[],
         let xyz: Txyz = vecMult([direction_tjs.x, direction_tjs.y, direction_tjs.z], radius);
         xyz = multMatrix(xyz, matrix);
         const posi_i: number = __model__.modeldata.geom.add.addPosi();
-        __model__.modeldata.attribs.add.setPosiCoords(posi_i, xyz);
+        __model__.modeldata.attribs.add.setPosiCoordsActive(posi_i, xyz);
         posis_i.push(posi_i);
     }
     return idsMakeFromIndicies(EEntType.POSI, posis_i) as TId[];

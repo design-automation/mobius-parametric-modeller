@@ -74,11 +74,9 @@ export class GIAttribsThreejs {
             let pgon_normal: Txyz = null;
             for (const vert_i of this.modeldata.geom.nav.navAnyToVert(EEntType.PGON, pgon_i)) {
                 let normal: Txyz = verts_attrib.getEntVal(vert_i) as Txyz;
-                if (!Array.isArray(normal)) {
-                    if (pgon_normal === null) {
-                        const face_i: number = this.modeldata.geom.nav.navPgonToFace(pgon_i);
-                        pgon_normal = this.modeldata.geom.query.getFaceNormal(face_i);
-                    }
+                if (normal === undefined) {
+                    const face_i: number = this.modeldata.geom.nav.navPgonToFace(pgon_i);
+                    pgon_normal = this.modeldata.geom.query.getFaceNormal(face_i);
                     normal = pgon_normal;
                 }
                 normals[vert_i] = normal;

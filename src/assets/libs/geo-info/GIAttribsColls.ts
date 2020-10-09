@@ -106,7 +106,7 @@ export class GIAttribsColls {
      * @param points_i
      */
     public setCollPoints(coll_i: number, points_i: number[]): void {
-        this.modeldata.attribs.add.setEntAttribVal(EEntType.COLL, coll_i, EAttribNames.COLL_POINTS, points_i);
+        this.modeldata.attribs.add.setEntAttribValActive(EEntType.COLL, coll_i, EAttribNames.COLL_POINTS, points_i);
     }
     /**
      * Set the plines in a collection
@@ -114,7 +114,7 @@ export class GIAttribsColls {
      * @param plines_i
      */
     public setCollPlines(coll_i: number, plines_i: number[]): void {
-        this.modeldata.attribs.add.setEntAttribVal(EEntType.COLL, coll_i, EAttribNames.COLL_PLINES, plines_i);
+        this.modeldata.attribs.add.setEntAttribValActive(EEntType.COLL, coll_i, EAttribNames.COLL_PLINES, plines_i);
     }
     /**
      * Set the pgons in a collection
@@ -122,7 +122,7 @@ export class GIAttribsColls {
      * @param pgons_i
      */
     public setCollPgons(coll_i: number, pgons_i: number[]): void {
-        this.modeldata.attribs.add.setEntAttribVal(EEntType.COLL, coll_i, EAttribNames.COLL_PGONS, pgons_i);
+        this.modeldata.attribs.add.setEntAttribValActive(EEntType.COLL, coll_i, EAttribNames.COLL_PGONS, pgons_i);
     }
     /**
      * Set the child collections in a collection
@@ -130,10 +130,10 @@ export class GIAttribsColls {
      * @param parent_coll_i The indicies of teh child collections
      */
     public setCollChildren(coll_i: number, child_colls_i: number[]): void {
-        this.modeldata.attribs.add.setEntAttribVal(EEntType.COLL, coll_i, EAttribNames.COLL_CHILDS, child_colls_i);
+        this.modeldata.attribs.add.setEntAttribValActive(EEntType.COLL, coll_i, EAttribNames.COLL_CHILDS, child_colls_i);
         // set parents
         child_colls_i.forEach( child_coll_i => {
-            this.modeldata.attribs.add.setEntAttribVal(EEntType.COLL, child_coll_i, EAttribNames.COLL_PARENT, coll_i);
+            this.modeldata.attribs.add.setEntAttribValActive(EEntType.COLL, child_coll_i, EAttribNames.COLL_PARENT, coll_i);
         });
     }
     /**
@@ -142,11 +142,11 @@ export class GIAttribsColls {
      * @param parent_coll_i The index of the parent collection
      */
     public setCollParent(coll_i: number, parent_coll_i: number): void {
-        this.modeldata.attribs.add.setEntAttribVal(EEntType.COLL, coll_i, EAttribNames.COLL_PARENT, parent_coll_i);
+        this.modeldata.attribs.add.setEntAttribValActive(EEntType.COLL, coll_i, EAttribNames.COLL_PARENT, parent_coll_i);
         // set children
         const child_colls_i: number[] = this.modeldata.attribs.query.getEntAttribVal(EEntType.COLL, parent_coll_i, EAttribNames.COLL_CHILDS) as number[];
         if (child_colls_i === undefined) {
-            this.modeldata.attribs.add.setEntAttribVal(EEntType.COLL, parent_coll_i, EAttribNames.COLL_CHILDS, [coll_i]);
+            this.modeldata.attribs.add.setEntAttribValActive(EEntType.COLL, parent_coll_i, EAttribNames.COLL_CHILDS, [coll_i]);
         }
         arrAddToSet(child_colls_i, coll_i);
     }

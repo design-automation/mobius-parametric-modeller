@@ -40,7 +40,7 @@ export class GIFuncsModify {
             for (const unique_posi_i of unique_posis_i) {
                 const old_xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(unique_posi_i);
                 const new_xyz: Txyz = vecAdd(old_xyz, vec);
-                this.modeldata.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
+                this.modeldata.attribs.add.setPosiCoordsActive(unique_posi_i, new_xyz);
             }
         } else {
             if (ents_arr.length !== vectors.length) {
@@ -70,7 +70,7 @@ export class GIFuncsModify {
                 const vecs: Txyz[] = vecs_map.get(posi_i);
                 const vec: Txyz = vecDiv( vecSum( vecs ), vecs.length);
                 const new_xyz: Txyz = vecAdd(old_xyz, vec);
-                this.modeldata.attribs.add.setPosiCoords(posi_i, new_xyz);
+                this.modeldata.attribs.add.setPosiCoordsActive(posi_i, new_xyz);
             }
         }
     }
@@ -95,7 +95,7 @@ export class GIFuncsModify {
         for (const unique_posi_i of unique_posis_i) {
             const old_xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(unique_posi_i);
             const new_xyz: Txyz = multMatrix(old_xyz, matrix);
-            this.modeldata.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
+            this.modeldata.attribs.add.setPosiCoordsActive(unique_posi_i, new_xyz);
         }
     }
     // ================================================================================================
@@ -123,7 +123,7 @@ export class GIFuncsModify {
         for (const unique_posi_i of unique_posis_i) {
             const old_xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(unique_posi_i);
             const new_xyz: Txyz = multMatrix(old_xyz, matrix);
-            this.modeldata.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
+            this.modeldata.attribs.add.setPosiCoordsActive(unique_posi_i, new_xyz);
         }
     }
     // ================================================================================================
@@ -147,7 +147,7 @@ export class GIFuncsModify {
         for (const unique_posi_i of unique_posis_i) {
             const old_xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(unique_posi_i);
             const new_xyz: Txyz = multMatrix(old_xyz, matrix);
-            this.modeldata.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
+            this.modeldata.attribs.add.setPosiCoordsActive(unique_posi_i, new_xyz);
         }
     }
     // ================================================================================================
@@ -172,7 +172,7 @@ export class GIFuncsModify {
         for (const unique_posi_i of unique_posis_i) {
             const old_xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(unique_posi_i);
             const new_xyz: Txyz = multMatrix(old_xyz, matrix);
-            this.modeldata.attribs.add.setPosiCoords(unique_posi_i, new_xyz);
+            this.modeldata.attribs.add.setPosiCoordsActive(unique_posi_i, new_xyz);
         }
     }
     // ================================================================================================
@@ -272,7 +272,7 @@ export class GIFuncsModify {
             offset_vec = vecSetLen(offset_vec, vec_len);
             // move the posi
             const new_xyz: Txyz = vecAdd(old_xyz, offset_vec);
-            this.modeldata.attribs.add.setPosiCoords(posi_i, new_xyz);
+            this.modeldata.attribs.add.setPosiCoordsActive(posi_i, new_xyz);
         }
         // if this is not a closed wire we have to move first and last posis
         if (!is_closed) {
@@ -282,14 +282,14 @@ export class GIFuncsModify {
             const first_old_xyz: Txyz = pairs_xyzs[first_edge_i][0];
             const first_perp_vec: Txyz =  vecSetLen(perp_vecs[first_edge_i], dist);
             const first_new_xyz: Txyz = vecAdd(first_old_xyz, first_perp_vec);
-            this.modeldata.attribs.add.setPosiCoords(first_posi_i, first_new_xyz);
+            this.modeldata.attribs.add.setPosiCoordsActive(first_posi_i, first_new_xyz);
             // last posi
             const last_edge_i: number = edges_i[edges_i.length - 1];
             const last_posi_i: number = pairs_posis_i[last_edge_i][1];
             const last_old_xyz: Txyz = pairs_xyzs[last_edge_i][1];
             const last_perp_vec: Txyz =  vecSetLen(perp_vecs[last_edge_i], dist);
             const last_new_xyz: Txyz = vecAdd(last_old_xyz, last_perp_vec);
-            this.modeldata.attribs.add.setPosiCoords(last_posi_i, last_new_xyz);
+            this.modeldata.attribs.add.setPosiCoordsActive(last_posi_i, last_new_xyz);
         }
     }
     // ================================================================================================

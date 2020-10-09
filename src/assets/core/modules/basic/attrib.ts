@@ -187,11 +187,11 @@ function _setAttrib(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
 }
 function _setModelAttrib(__model__: GIModel, attrib_name: string, attrib_value: TAttribDataTypes, idx_or_key?: number|string): void {
     if (typeof idx_or_key === 'number') {
-        __model__.modeldata.attribs.add.setModelAttribListIdxVal(attrib_name, idx_or_key, attrib_value as number);
+        __model__.modeldata.attribs.add.setModelAttribListIdxValActive(attrib_name, idx_or_key, attrib_value as number);
     } if (typeof idx_or_key === 'string') {
-        __model__.modeldata.attribs.add.setModelAttribDictKeyVal(attrib_name, idx_or_key, attrib_value as string);
+        __model__.modeldata.attribs.add.setModelAttribDictKeyValActive(attrib_name, idx_or_key, attrib_value as string);
     } else {
-        __model__.modeldata.attribs.add.setModelAttribVal(attrib_name, attrib_value);
+        __model__.modeldata.attribs.add.setModelAttribValActive(attrib_name, attrib_value);
     }
 }
 function _setEachEntDifferentAttribValue(__model__: GIModel, ents_arr: TEntTypeIdx[],
@@ -211,11 +211,11 @@ function _setEachEntDifferentAttribValue(__model__: GIModel, ents_arr: TEntTypeI
         }
         // --- Error Check ---
         if (typeof idx_or_key === 'number') {
-            __model__.modeldata.attribs.add.setEntsAttribListIdxVal(ent_type, ents_i[i], attrib_name, idx_or_key, attrib_values[i]);
+            __model__.modeldata.attribs.add.setEntsAttribListIdxValActive(ent_type, ents_i[i], attrib_name, idx_or_key, attrib_values[i]);
         } if (typeof idx_or_key === 'string') {
-            __model__.modeldata.attribs.add.setEntsAttribDictKeyVal(ent_type, ents_i[i], attrib_name, idx_or_key, attrib_values[i]);
+            __model__.modeldata.attribs.add.setEntsAttribDictKeyValActive(ent_type, ents_i[i], attrib_name, idx_or_key, attrib_values[i]);
         } else {
-            __model__.modeldata.attribs.add.setCreateEntsAttribVal(ent_type, ents_i[i], attrib_name, attrib_values[i]);
+            __model__.modeldata.attribs.add.setCreateEntsAttribValActive(ent_type, ents_i[i], attrib_name, attrib_values[i]);
         }
     }
 }
@@ -230,11 +230,11 @@ function _setEachEntSameAttribValue(__model__: GIModel, ents_arr: TEntTypeIdx[],
     const ent_type: number = ents_arr[0][0];
     const ents_i: number[] = _getEntsIndices(__model__, ents_arr);
     if (typeof idx_or_key === 'number') {
-        __model__.modeldata.attribs.add.setEntsAttribListIdxVal(ent_type, ents_i, attrib_name, idx_or_key, attrib_value);
+        __model__.modeldata.attribs.add.setEntsAttribListIdxValActive(ent_type, ents_i, attrib_name, idx_or_key, attrib_value);
     } else if (typeof idx_or_key === 'string') {
-        __model__.modeldata.attribs.add.setEntsAttribDictKeyVal(ent_type, ents_i, attrib_name, idx_or_key, attrib_value);
+        __model__.modeldata.attribs.add.setEntsAttribDictKeyValActive(ent_type, ents_i, attrib_name, idx_or_key, attrib_value);
     } else {
-        __model__.modeldata.attribs.add.setCreateEntsAttribVal(ent_type, ents_i, attrib_name, attrib_value);
+        __model__.modeldata.attribs.add.setCreateEntsAttribValActive(ent_type, ents_i, attrib_name, attrib_value);
     }
 }
 function _getEntsIndices(__model__: GIModel, ents_arr: TEntTypeIdx[]): number[] {
@@ -385,7 +385,7 @@ export function Add(__model__: GIModel, ent_type_sel: _EEntTypeAndMod, data_type
     }
     // create the attribute
     for (const attrib of attribs) {
-        __model__.modeldata.attribs.add.addAttrib(ent_type, attrib, data_type);
+        __model__.modeldata.attribs.add.addAttribActive(ent_type, attrib, data_type);
     }
 }
 // ================================================================================================
@@ -602,7 +602,7 @@ export function Push(__model__: GIModel, entities: TId|TId[],
     // get the method
     const method: EAttribPush = _convertPushMethod(method_sel);
     // do the push
-    __model__.modeldata.attribs.add.pushAttribVals(source_ent_type, source_attrib_name, source_attrib_idx_key, indices,
+    __model__.modeldata.attribs.add.pushAttribValsActive(source_ent_type, source_attrib_name, source_attrib_idx_key, indices,
                                          target,          target_attrib_name, target_attrib_idx_key, method);
 }
 export enum _EPushMethodSel {

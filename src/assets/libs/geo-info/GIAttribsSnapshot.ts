@@ -1,4 +1,6 @@
-import { EAttribDataTypeStrs, EAttribNames, EEntType, IAttribsMaps } from './common';
+import { EAttribDataTypeStrs, EAttribNames, EEntType, EEntTypeStr, IAttribsMaps, IEntSets, TEntTypeIdx } from './common';
+import { GIAttribMapBase } from './GIAttribMapBase';
+import { GIAttribMapNum } from './GIAttribMapNum';
 import { GIModelData } from './GIModelData';
 
 /**
@@ -37,22 +39,22 @@ export class GIAttribsSnapshot {
         };
         this.modeldata.attribs.attribs_maps.set(ssid, attribs);
         // add attributes for built in types
-        this.modeldata.attribs.add.addAttrib(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.LIST);
-        this.modeldata.attribs.add.addAttrib(EEntType.VERT, EAttribNames.COLOR, EAttribDataTypeStrs.LIST);
-        this.modeldata.attribs.add.addAttrib(EEntType.VERT, EAttribNames.NORMAL, EAttribDataTypeStrs.LIST);
+        this.modeldata.attribs.add.addAttribActive(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.LIST);
+        this.modeldata.attribs.add.addAttribActive(EEntType.VERT, EAttribNames.COLOR, EAttribDataTypeStrs.LIST);
+        this.modeldata.attribs.add.addAttribActive(EEntType.VERT, EAttribNames.NORMAL, EAttribDataTypeStrs.LIST);
         // this.modeldata.attribs.add.addAttrib(EEntType.PGON, EAttribNames.MATERIAL, EAttribDataTypeStrs.LIST);
         // this.modeldata.attribs.add.addAttrib(EEntType.PLINE, EAttribNames.MATERIAL, EAttribDataTypeStrs.STRING);
         // add attributes for time stamps
-        this.modeldata.attribs.add.addAttrib(EEntType.POINT, EAttribNames.TIMESTAMP, EAttribDataTypeStrs.NUMBER);
-        this.modeldata.attribs.add.addAttrib(EEntType.PLINE, EAttribNames.TIMESTAMP, EAttribDataTypeStrs.NUMBER);
-        this.modeldata.attribs.add.addAttrib(EEntType.PGON, EAttribNames.TIMESTAMP, EAttribDataTypeStrs.NUMBER);
+        this.modeldata.attribs.add.addAttribActive(EEntType.POINT, EAttribNames.TIMESTAMP, EAttribDataTypeStrs.NUMBER);
+        this.modeldata.attribs.add.addAttribActive(EEntType.PLINE, EAttribNames.TIMESTAMP, EAttribDataTypeStrs.NUMBER);
+        this.modeldata.attribs.add.addAttribActive(EEntType.PGON, EAttribNames.TIMESTAMP, EAttribDataTypeStrs.NUMBER);
         // add attributes for collections
-        this.modeldata.attribs.add.addAttrib(EEntType.COLL, EAttribNames.COLL_NAME, EAttribDataTypeStrs.STRING);
-        this.modeldata.attribs.add.addAttrib(EEntType.COLL, EAttribNames.COLL_PARENT, EAttribDataTypeStrs.NUMBER);
-        this.modeldata.attribs.add.addAttrib(EEntType.COLL, EAttribNames.COLL_CHILDS, EAttribDataTypeStrs.LIST);
-        this.modeldata.attribs.add.addAttrib(EEntType.COLL, EAttribNames.COLL_POINTS, EAttribDataTypeStrs.LIST);
-        this.modeldata.attribs.add.addAttrib(EEntType.COLL, EAttribNames.COLL_PLINES, EAttribDataTypeStrs.LIST);
-        this.modeldata.attribs.add.addAttrib(EEntType.COLL, EAttribNames.COLL_PGONS, EAttribDataTypeStrs.LIST);
+        this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_NAME, EAttribDataTypeStrs.STRING);
+        this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_PARENT, EAttribDataTypeStrs.NUMBER);
+        this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_CHILDS, EAttribDataTypeStrs.LIST);
+        this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_POINTS, EAttribDataTypeStrs.LIST);
+        this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_PLINES, EAttribDataTypeStrs.LIST);
+        this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_PGONS, EAttribDataTypeStrs.LIST);
         // merge data
         if (include !== undefined) {
             for (const exist_ssid of include) {
@@ -67,5 +69,36 @@ export class GIAttribsSnapshot {
      */
     public delSnapshot(ssid: number): void {
         this.modeldata.attribs.attribs_maps.delete(ssid);
+    }
+    /**
+     * Add attributes from the specified snapshot to the current snapshot.
+     * The target snapshots is assumed to be an empty snapshot.
+     * @param ssid ID of snapshot to copy attributes from.
+     * @param ents
+     */
+    public addEnts(ssid: number, ents: TEntTypeIdx[]) {
+        const ents_sets: IEntSets = this.modeldata.geom.query.getEntSetsTree(ents, true);
+        const from_attrib_maps: IAttribsMaps = this.modeldata.attribs.attribs_maps.get(ssid);
+        const ent_types: EEntType[] = [
+            EEntType.POSI,
+            EEntType.VERT,
+            EEntType.EDGE,
+            EEntType.WIRE,
+            EEntType.FACE,
+            EEntType.POINT,
+            EEntType.PLINE,
+            EEntType.PGON,
+            EEntType.COLL
+        ];
+        // entitiy attributes
+        for (const ent_type of ent_types) {
+            const ent_type_str: string = EEntTypeStr[ent_type];
+            from_attrib_maps[ent_type_str].forEach( (from_attrib: GIAttribMapBase, name: string) => {
+                const to_attrib: GIAttribMapBase = this.modeldata.attribs.add.addEntAttribActive(ent_type, name, from_attrib.getDataType());
+                ents_sets[ent_type_str].forEach( ent_i => to_attrib.setEntVal(ent_i, from_attrib.getEntVal(ent_i)) );
+            });
+        }
+        // model attributes
+        from_attrib_maps.mo.forEach( (val, name) => this.modeldata.attribs.add.setModelAttribValActive(name, val) );
     }
 }

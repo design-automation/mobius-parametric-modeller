@@ -56,13 +56,13 @@ export class GIModel {
         return ssid;
     }
     /**
-     * Add a set of ents to a snapshot.
-     * @param ssid
-     * @param ents
-     * @param ts time stamp
+     * Add a set of ents from the specified snapshot to the active snapshot.
+     * @param ssid Snapshot to copy ents from
+     * @param ents The list of ents to add.
      */
     public addEntsToSnapshot(ssid: number, ents: TEntTypeIdx[]) {
-        this.modeldata.geom.snapshot.addEnts(ssid, ents);
+        this.modeldata.geom.snapshot.addEnts(ents);
+        this.modeldata.attribs.snapshot.addEnts(ssid, ents);
     }
     /**
      * Gets a set of ents from a snapshot.
@@ -85,7 +85,7 @@ export class GIModel {
      * Updates the time stamp of the entities to the current time stamp.
      * @param ents
      */
-    public updateEntsTimestamp(ents: TEntTypeIdx[]) {
+    public updateEntsTimestamp(ents: TEntTypeIdx[]): void {
         for (const [ent_type, ent_i] of ents) {
             this.modeldata.updateEntTs(ent_type, ent_i);
         }
@@ -94,16 +94,17 @@ export class GIModel {
      *
      * @param gf_start_ents
      */
-    public prepGlobalFunc(gf_start_ents: TId|TId[]): number{
-        const curr_ss = this.getTimestamp();
-        const gf_start_ss = this.nextSnapshot();
-        let idx;
+    public prepGlobalFunc(gf_start_ents: TId|TId[]): number {
+        const curr_ss: number = this.getTimestamp();
+        const gf_start_ss: number = this.nextSnapshot();
+        let ents: TEntTypeIdx[];
         if (!Array.isArray(gf_start_ents)) {
-            idx = [idsBreak(gf_start_ents) as TEntTypeIdx];
+            ents = [idsBreak(gf_start_ents) as TEntTypeIdx];
         } else {
-            idx = idsBreak(gf_start_ents) as TEntTypeIdx[];
+            ents = idsBreak(gf_start_ents) as TEntTypeIdx[];
         }
-        this.addEntsToSnapshot(gf_start_ss, idx);
+        ents = this.modeldata.geom.query.getEntsTree(ents);
+        this.addEntsToSnapshot(curr_ss, ents);
         return curr_ss;
     }
     /**
@@ -111,16 +112,16 @@ export class GIModel {
      * @param ssid
      */
     public postGlobalFunc(curr_ss: number) {
-        const gf_end_ss = this.getTimestamp();
-        const gf_end_ents = this.getEntsFromSnapshot(gf_end_ss);
-        const gf_all_ss = [];
+        const gf_end_ss: number = this.getTimestamp();
+        const gf_end_ents: TEntTypeIdx[] = this.getEntsFromSnapshot(gf_end_ss);
+        const gf_all_ss: number[] = [];
         for (let i = gf_end_ss; i > curr_ss; i--) {
             gf_all_ss.push(i);
         }
-        this.delSnapshots(gf_all_ss);
         this.rollbackTimestamp(curr_ss);
         this.updateEntsTimestamp(gf_end_ents);
         this.addEntsToSnapshot(curr_ss, gf_end_ents);
+        this.delSnapshots(gf_all_ss);
     }
 
     /**

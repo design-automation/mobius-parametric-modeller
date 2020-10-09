@@ -158,11 +158,15 @@ export class GIGeomSnapshot {
      * Adds the ents to the snapshot.
      * @param ent_type
      */
-    public addEnts(ssid: number, ents: TEntTypeIdx[]): void {
-        for (const [ent_type, ent_i] of ents) {
-            this.ss_data.get(ssid)[EEntTypeStr[ent_type]].add(ent_i);
+    public addEnts(ents: TEntTypeIdx[]): void {
+        for (const [ent_type, ent_i]  of ents) {
+            this.ss_data.get(this._geom.modeldata.timestamp)[EEntTypeStr[ent_type]].add(ent_i);
         }
     }
+    /**
+     * Get an array of all the ents in a snapshot.
+     * @param ssid
+     */
     public getAllEnts(ssid: number): TEntTypeIdx[] {
         const ents: TEntTypeIdx[] = [];
         const posis_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[EEntType.POSI]];

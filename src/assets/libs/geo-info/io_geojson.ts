@@ -298,7 +298,7 @@ function _addPointToModel(model: GIModel, point: any,
     }
     // create the posi
     const posi_i: number = model.modeldata.geom.add.addPosi();
-    model.modeldata.attribs.add.setPosiCoords(posi_i, xyz);
+    model.modeldata.attribs.add.setPosiCoordsActive(posi_i, xyz);
     // create the point
     const point_i: number = model.modeldata.geom.add.addPoint(posi_i);
     // add attribs
@@ -338,7 +338,7 @@ function _addPlineToModel(model: GIModel, linestring: any,
     const posis_i: number[] = [];
     for (const xyz of xyzs) {
         const posi_i: number = model.modeldata.geom.add.addPosi();
-        model.modeldata.attribs.add.setPosiCoords(posi_i, xyz);
+        model.modeldata.attribs.add.setPosiCoordsActive(posi_i, xyz);
         posis_i.push(posi_i);
     }
     // create the pline
@@ -379,7 +379,7 @@ function _addPgonToModel(model: GIModel, polygon: any,
         const posis_i: number[] = [];
         for (const xyz of xyzs) {
             const posi_i: number = model.modeldata.geom.add.addPosi();
-            model.modeldata.attribs.add.setPosiCoords(posi_i, xyz);
+            model.modeldata.attribs.add.setPosiCoordsActive(posi_i, xyz);
             posis_i.push(posi_i);
         }
         rings.push(posis_i);
@@ -511,7 +511,7 @@ function _addAttribsToModel(model: GIModel, ent_type: EEntType, ent_i: number, f
         if (value_type === 'object') {
             value = JSON.stringify(value);
         }
-        model.modeldata.attribs.add.setCreateEntsAttribVal(ent_type, ent_i, name, value);
+        model.modeldata.attribs.add.setCreateEntsAttribValActive(ent_type, ent_i, name, value);
     }
 }
 

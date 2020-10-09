@@ -62,10 +62,10 @@ export function Create(__model__: GIModel, entities: TId|TId[]|TId[][], name: st
                     ': The list of collection names must be equal in length to the list of collections that get created.');
             }
             for (let i = 0; i < name.length; i++) {
-                __model__.modeldata.attribs.add.setEntAttribVal(EEntType.COLL, colls_i[i], EAttribNames.COLL_NAME, name[i]);
+                __model__.modeldata.attribs.add.setEntAttribValActive(EEntType.COLL, colls_i[i], EAttribNames.COLL_NAME, name[i]);
             }
         } else {
-            __model__.modeldata.attribs.add.setEntsAttribVal(EEntType.COLL, colls_i, EAttribNames.COLL_NAME, name);
+            __model__.modeldata.attribs.add.setEntsAttribValActive(EEntType.COLL, colls_i, EAttribNames.COLL_NAME, name);
         }
     }
     // return the collection id

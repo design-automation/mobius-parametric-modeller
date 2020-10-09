@@ -67,30 +67,30 @@ export class GIGeomClone {
         //
         const geom_maps: IGeomMaps = other_geom._geom_maps;
         // ======================================================================
-        this._dumpPosisTSDeepCopy(other_geom, ent_sets.posis_i, ent_sets.verts_i);
-        this._dumpObjsTS(other_geom, EEntType.POINT, ent_sets.points_i);
-        this._dumpObjsTS(other_geom, EEntType.PLINE, ent_sets.plines_i);
-        this._dumpObjsTS(other_geom, EEntType.PGON, ent_sets.pgons_i);
-        this._dumpCollsTS(other_geom, ent_sets.colls_i);
+        this._dumpPosisTSDeepCopy(other_geom, ent_sets.ps, ent_sets._v);
+        this._dumpObjsTS(other_geom, EEntType.POINT, ent_sets.pt);
+        this._dumpObjsTS(other_geom, EEntType.PLINE, ent_sets.pl);
+        this._dumpObjsTS(other_geom, EEntType.PGON, ent_sets.pg);
+        this._dumpCollsTS(other_geom, ent_sets.co);
         // ======================================================================
-        this._dumpEnts(this._geom_maps.dn_verts_posis, geom_maps.dn_verts_posis, ent_sets.verts_i);
-        this._dumpEntsDeepCopy(this._geom_maps.dn_tris_verts, geom_maps.dn_tris_verts, ent_sets.tris_i);
-        this._dumpEntsDeepCopy(this._geom_maps.dn_edges_verts, geom_maps.dn_edges_verts, ent_sets.edges_i);
-        this._dumpEntsDeepCopy(this._geom_maps.dn_wires_edges, geom_maps.dn_wires_edges, ent_sets.wires_i);
-        this._dumpEntsDeepCopy(this._geom_maps.dn_faces_wires, geom_maps.dn_faces_wires, ent_sets.faces_i);
-        this._dumpEntsDeepCopy(this._geom_maps.dn_faces_tris, geom_maps.dn_faces_tris, ent_sets.faces_i);
+        this._dumpEnts(this._geom_maps.dn_verts_posis, geom_maps.dn_verts_posis, ent_sets._v);
+        this._dumpEntsDeepCopy(this._geom_maps.dn_tris_verts, geom_maps.dn_tris_verts, ent_sets._t);
+        this._dumpEntsDeepCopy(this._geom_maps.dn_edges_verts, geom_maps.dn_edges_verts, ent_sets._e);
+        this._dumpEntsDeepCopy(this._geom_maps.dn_wires_edges, geom_maps.dn_wires_edges, ent_sets._w);
+        this._dumpEntsDeepCopy(this._geom_maps.dn_faces_wires, geom_maps.dn_faces_wires, ent_sets._f);
+        this._dumpEntsDeepCopy(this._geom_maps.dn_faces_tris, geom_maps.dn_faces_tris, ent_sets._f);
         // this._dumpDnCollsObjsDeepCopy(this._geom_maps.dn_colls_points, geom_maps.dn_colls_points, ent_sets.colls_i, ent_sets.points_i);
         // this._dumpDnCollsObjsDeepCopy(this._geom_maps.dn_colls_plines, geom_maps.dn_colls_plines, ent_sets.colls_i, ent_sets.plines_i);
         // this._dumpDnCollsObjsDeepCopy(this._geom_maps.dn_colls_pgons, geom_maps.dn_colls_pgons, ent_sets.colls_i, ent_sets.pgons_i);
         // ======================================================================
-        this._dumpEntsDeepCopy(this._geom_maps.up_verts_tris,   geom_maps.up_verts_tris,   ent_sets.verts_i);
-        this._dumpEnts(this._geom_maps.up_tris_faces,   geom_maps.up_tris_faces,   ent_sets.tris_i);
-        this._dumpEntsDeepCopy(this._geom_maps.up_verts_edges,  geom_maps.up_verts_edges,  ent_sets.verts_i);
-        this._dumpEnts(this._geom_maps.up_edges_wires,  geom_maps.up_edges_wires,  ent_sets.edges_i);
-        this._dumpEnts(this._geom_maps.up_wires_faces,  geom_maps.up_wires_faces,  ent_sets.wires_i);
-        this._dumpEnts(this._geom_maps.up_verts_points, geom_maps.up_verts_points, ent_sets.verts_i);
-        this._dumpEnts(this._geom_maps.up_wires_plines, geom_maps.up_wires_plines, ent_sets.wires_i);
-        this._dumpEnts(this._geom_maps.up_faces_pgons,  geom_maps.up_faces_pgons,  ent_sets.faces_i);
+        this._dumpEntsDeepCopy(this._geom_maps.up_verts_tris,   geom_maps.up_verts_tris,   ent_sets._v);
+        this._dumpEnts(this._geom_maps.up_tris_faces,   geom_maps.up_tris_faces,   ent_sets._t);
+        this._dumpEntsDeepCopy(this._geom_maps.up_verts_edges,  geom_maps.up_verts_edges,  ent_sets._v);
+        this._dumpEnts(this._geom_maps.up_edges_wires,  geom_maps.up_edges_wires,  ent_sets._e);
+        this._dumpEnts(this._geom_maps.up_wires_faces,  geom_maps.up_wires_faces,  ent_sets._w);
+        this._dumpEnts(this._geom_maps.up_verts_points, geom_maps.up_verts_points, ent_sets._v);
+        this._dumpEnts(this._geom_maps.up_wires_plines, geom_maps.up_wires_plines, ent_sets._w);
+        this._dumpEnts(this._geom_maps.up_faces_pgons,  geom_maps.up_faces_pgons,  ent_sets._f);
         // this._dumpUpObjsCollsDeepCopy(this._geom_maps.up_points_colls, geom_maps.up_points_colls, ent_sets.points_i, ent_sets.colls_i);
         // this._dumpUpObjsCollsDeepCopy(this._geom_maps.up_plines_colls, geom_maps.up_plines_colls, ent_sets.plines_i, ent_sets.colls_i);
         // this._dumpUpObjsCollsDeepCopy(this._geom_maps.up_pgons_colls,  geom_maps.up_pgons_colls,  ent_sets.pgons_i, ent_sets.colls_i);

@@ -294,7 +294,7 @@ export class GIFuncsCommon {
                 } else {
                     // do not clone, just move it
                     const xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(old_posi_i);
-                    this.modeldata.attribs.add.setPosiCoords(old_posi_i, vecAdd(xyz, vector));
+                    this.modeldata.attribs.add.setPosiCoordsActive(old_posi_i, vecAdd(xyz, vector));
                     old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
                 }
             } else { // obj or coll

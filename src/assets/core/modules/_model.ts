@@ -85,9 +85,9 @@ export function __select__(__model__: GIModel, ents_id: string|string[]|string[]
         const attrib_value: string = var_name + '[' + ent_indices.join('][') + ']';
         __model__.modeldata.geom.selected.push(ent_arr);
         if (!__model__.modeldata.attribs.query.hasAttrib(ent_arr[0], attrib_name)) {
-            __model__.modeldata.attribs.add.addAttrib(ent_arr[0], attrib_name, EAttribDataTypeStrs.STRING);
+            __model__.modeldata.attribs.add.addAttribActive(ent_arr[0], attrib_name, EAttribDataTypeStrs.STRING);
         }
-        __model__.modeldata.attribs.add.setCreateEntsAttribVal(ent_arr[0], ent_arr[1], attrib_name, attrib_value);
+        __model__.modeldata.attribs.add.setCreateEntsAttribValActive(ent_arr[0], ent_arr[1], attrib_name, attrib_value);
     }
 }
 function _flatten(arrs: string|string[]|string[][]): [string[], number[][]] {

@@ -173,7 +173,7 @@ function _getPosiFromMap(__model__: GIModel, x: number, y: number, posis_map: TP
     }
     if (posi_i === undefined) {
         posi_i = __model__.modeldata.geom.add.addPosi();
-        __model__.modeldata.attribs.add.setPosiCoords(posi_i, [x, y, 0]);
+        __model__.modeldata.attribs.add.setPosiCoordsActive(posi_i, [x, y, 0]);
         map1.set(y, posi_i);
     }
     return posi_i;
@@ -593,7 +593,7 @@ function _bboxAABB(__model__: GIModel, posis_i: number[]): number {
     const box_posis_i: number[] = [];
     for (const xyz of [a, b, c, d]) {
         const box_posi_i: number = __model__.modeldata.geom.add.addPosi();
-        __model__.modeldata.attribs.add.setPosiCoords(box_posi_i, xyz);
+        __model__.modeldata.attribs.add.setPosiCoordsActive(box_posi_i, xyz);
         box_posis_i.push(box_posi_i);
     }
     const box_pgon_i: number = __model__.modeldata.geom.add.addPgon(box_posis_i);
@@ -643,7 +643,7 @@ function _bboxOBB(__model__: GIModel, posis_i: number[]): number {
     const box_posis_i: number[] = [];
     for (const xyz of [a, b, c, d]) {
         const box_posi_i: number = __model__.modeldata.geom.add.addPosi();
-        __model__.modeldata.attribs.add.setPosiCoords(box_posi_i, xyz);
+        __model__.modeldata.attribs.add.setPosiCoordsActive(box_posi_i, xyz);
         box_posis_i.push(box_posi_i);
     }
     const box_pgon_i: number = __model__.modeldata.geom.add.addPgon(box_posis_i);
@@ -1109,7 +1109,7 @@ export function Stitch(__model__: GIModel, entities: TId|TId[]): TId[] {
                     // make a new position if we have an isect,
                     if (new_posi_i === null && (a_isect || b_isect)) {
                         new_posi_i = __model__.modeldata.geom.add.addPosi();
-                        __model__.modeldata.attribs.add.setPosiCoords(new_posi_i, [new_xy[0], new_xy[1], 0]);
+                        __model__.modeldata.attribs.add.setPosiCoordsActive(new_posi_i, [new_xy[0], new_xy[1], 0]);
                     }
                     // store the isects if there are any
                     if (a_isect) {
@@ -1184,14 +1184,14 @@ function _knifeGetEdgeData(__model__: GIModel, edge_i: number,
     // save the xy value of the two posis
     if (!map_posi_i_to_xyz.has(posis_i[0])) {
         const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posis_i[0]);
-        __model__.modeldata.attribs.add.setPosiCoords(posis_i[0], [xyz[0], xyz[1], 0]);
+        __model__.modeldata.attribs.add.setPosiCoordsActive(posis_i[0], [xyz[0], xyz[1], 0]);
         // Why is this not working? It also moves the original geom...
         // if (xyz[2] !== 0) { xyz[2] = 0; } // TODO <<<<<<<<<<<<<<<<<<<<<<
         map_posi_i_to_xyz.set(posis_i[0], xyz);
     }
     if (!map_posi_i_to_xyz.has(posis_i[1])) {
         const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posis_i[1]);
-        __model__.modeldata.attribs.add.setPosiCoords(posis_i[1], [xyz[0], xyz[1], 0]);
+        __model__.modeldata.attribs.add.setPosiCoordsActive(posis_i[1], [xyz[0], xyz[1], 0]);
         // Why is this not working? It also moves the original geom...
         // if (xyz[2] !== 0) { xyz[2] = 0; } // TODO <<<<<<<<<<<<<<<<<<<<<<
         map_posi_i_to_xyz.set(posis_i[1], xyz);

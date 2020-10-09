@@ -98,7 +98,7 @@ export class GIFuncsEdit {
         let old_edge_i: number = edge_i;
         for (const new_xyz of new_xyzs) {
             const posi_i = this.modeldata.geom.add.addPosi();
-            this.modeldata.attribs.add.setPosiCoords(posi_i, new_xyz);
+            this.modeldata.attribs.add.setPosiCoordsActive(posi_i, new_xyz);
             const new_edge_i: number = this.modeldata.geom.modify.insertVertIntoWire(old_edge_i, posi_i);
             new_edges_i.push(old_edge_i);
             old_edge_i = new_edge_i;
@@ -257,7 +257,7 @@ export class GIFuncsEdit {
                 new_xyz[1] = new_xyz[1] / nn[1];
                 new_xyz[2] = new_xyz[2] / nn[1];
                 const new_posi_i: number = this.modeldata.geom.add.addPosi();
-                this.modeldata.attribs.add.setPosiCoords(new_posi_i, new_xyz);
+                this.modeldata.attribs.add.setPosiCoordsActive(new_posi_i, new_xyz);
                 for (const n_posi_i of nn[2]) {
                     const verts_i: number[] = this.modeldata.geom.nav.navPosiToVert(n_posi_i);
                     for (const vert_i of verts_i) {
@@ -337,7 +337,7 @@ export class GIFuncsEdit {
         // empty array
         if (ents_arr.length === 0) { return; }
         // create sets
-        const ent_sets: IEntSets = this.modeldata.geom.query.getDelEntSets(ents_arr);
+        const ent_sets: IEntSets = this.modeldata.geom.query.getEntSetsTree(ents_arr);
         // delete
         if (ent_sets.ps.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.POSI, Array.from(ent_sets.ps), invert); }
         if (ent_sets.pt.size) { this.modeldata.geom.snapshot.delEntsActive(EEntType.POINT, Array.from(ent_sets.pt), invert); }

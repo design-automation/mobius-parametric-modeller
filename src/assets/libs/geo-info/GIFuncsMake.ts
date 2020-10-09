@@ -56,7 +56,7 @@ export class GIFuncsMake {
         if (depth === 1) {
             const coord1: Txyz = coords as Txyz;
             const posi_i: number = this.modeldata.geom.add.addPosi();
-            this.modeldata.attribs.add.setEntAttribVal(EEntType.POSI, posi_i, EAttribNames.COORDS, coord1);
+            this.modeldata.attribs.add.setEntAttribValActive(EEntType.POSI, posi_i, EAttribNames.COORDS, coord1);
             return [EEntType.POSI, posi_i] as TEntTypeIdx;
         } else if (depth === 2) {
             const coords2: Txyz[] = coords as Txyz[];
@@ -339,7 +339,7 @@ export class GIFuncsMake {
                             for (let d = 1; d < divisions; d++) {
                                 const strip_posi_i: number = this.modeldata.geom.add.addPosi();
                                 const move_xyz = vecMult(extrude_vec_div, d);
-                                this.modeldata.attribs.add.setPosiCoords(strip_posi_i, vecAdd(xyz_a, move_xyz));
+                                this.modeldata.attribs.add.setPosiCoordsActive(strip_posi_i, vecAdd(xyz_a, move_xyz));
                                 strip_posis_i.push(strip_posi_i);
                             }
                             strip_posis_i.push(exist_posis_b_i[k]);
@@ -397,7 +397,7 @@ export class GIFuncsMake {
                     for (let k = 1; k < divisions; k++) {
                         const new_xyz: Txyz = vecAdd(xyz1, vecMult(vec, k));
                         const new_posi_i: number = this.modeldata.geom.add.addPosi();
-                        this.modeldata.attribs.add.setPosiCoords(new_posi_i, new_xyz);
+                        this.modeldata.attribs.add.setPosiCoordsActive(new_posi_i, new_xyz);
                         stringer_posis_i.push(new_posi_i);
                     }
                 }
@@ -459,7 +459,7 @@ export class GIFuncsMake {
                     for (let k = 0; k < num_posis; k++) {
                         const new_xyz: Txyz = vecAdd(xyzs1[k], vecMult(vecs[k], j));
                         const new_posi_i: number = this.modeldata.geom.add.addPosi();
-                        this.modeldata.attribs.add.setPosiCoords(new_posi_i, new_xyz);
+                        this.modeldata.attribs.add.setPosiCoordsActive(new_posi_i, new_xyz);
                         rib_posis_i.push(new_posi_i);
                     }
                     const new_rib_pline_i: number = this.modeldata.geom.add.addPline(rib_posis_i, ribs_is_closed);
@@ -503,7 +503,7 @@ export class GIFuncsMake {
                     const new_posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(lofted_ent_type, lofted_ent_i);
                     for (let k = 0; k < num_posis; k++) {
                         const new_xyz: Txyz = vecAdd(xyzs1[k], vecMult(vecs[k], j));
-                        this.modeldata.attribs.add.setPosiCoords(new_posis_i[k], new_xyz);
+                        this.modeldata.attribs.add.setPosiCoordsActive(new_posis_i[k], new_xyz);
                     }
                     copies.push(lofted_ent_arr);
                 }
@@ -600,7 +600,7 @@ export class GIFuncsMake {
         for (let i = 1; i < divisions + 1; i++) {
             const strip_posi_i: number = this.modeldata.geom.add.addPosi();
             const move_xyz = vecMult(extrude_vec_div, i);
-            this.modeldata.attribs.add.setPosiCoords(strip_posi_i, vecAdd(xyz, move_xyz));
+            this.modeldata.attribs.add.setPosiCoordsActive(strip_posi_i, vecAdd(xyz, move_xyz));
             strip_posis_i.push(strip_posi_i);
         }
         // loft between the positions and create a single polyline
@@ -623,7 +623,7 @@ export class GIFuncsMake {
                     for (let i = 1; i < divisions + 1; i++) {
                         const strip_posi_i: number = this.modeldata.geom.add.addPosi();
                         const move_xyz = vecMult(extrude_vec_div, i);
-                        this.modeldata.attribs.add.setPosiCoords(strip_posi_i, vecAdd(xyz, move_xyz));
+                        this.modeldata.attribs.add.setPosiCoordsActive(strip_posi_i, vecAdd(xyz, move_xyz));
                         strip_posis_i.push(strip_posi_i);
                     }
                     strip_posis_map.set(exist_posi_i, strip_posis_i);
@@ -665,7 +665,7 @@ export class GIFuncsMake {
                     for (let i = 1; i < divisions + 1; i++) {
                         const strip_posi_i: number = this.modeldata.geom.add.addPosi();
                         const move_xyz = vecMult(extrude_vec_div, i);
-                        this.modeldata.attribs.add.setPosiCoords(strip_posi_i, vecAdd(xyz, move_xyz));
+                        this.modeldata.attribs.add.setPosiCoordsActive(strip_posi_i, vecAdd(xyz, move_xyz));
                         strip_posis_i.push(strip_posi_i);
                     }
                     strip_posis_map.set(exist_posi_i, strip_posis_i);
@@ -696,7 +696,7 @@ export class GIFuncsMake {
                     for (let i = 1; i < divisions + 1; i++) {
                         const strip_posi_i: number = this.modeldata.geom.add.addPosi();
                         const move_xyz = vecMult(extrude_vec_div, i);
-                        this.modeldata.attribs.add.setPosiCoords(strip_posi_i, vecAdd(xyz, move_xyz));
+                        this.modeldata.attribs.add.setPosiCoordsActive(strip_posi_i, vecAdd(xyz, move_xyz));
                         strip_posis_i.push(strip_posi_i);
                     }
                     strip_posis_map.set(exist_posi_i, strip_posis_i);
@@ -917,7 +917,7 @@ export class GIFuncsMake {
             for (const xsextion_xyz of xsextion_xyzs) {
                 const new_xyz: Txyz = multMatrix(xsextion_xyz, matrix);
                 const posi_i: number = this.modeldata.geom.add.addPosi();
-                this.modeldata.attribs.add.setPosiCoords(posi_i, new_xyz);
+                this.modeldata.attribs.add.setPosiCoordsActive(posi_i, new_xyz);
                 xsection_posis_i.push(posi_i);
             }
             all_new_posis_i.push(xsection_posis_i);
@@ -1011,11 +1011,11 @@ export class GIFuncsMake {
                 const result: THREE.Vector3 = plane_tjs.intersectLine(line_tjs, isect_tjs);
                 if (result !== undefined && result !== null) {
                     const new_posi_i: number = this.modeldata.geom.add.addPosi();
-                    this.modeldata.attribs.add.setPosiCoords(new_posi_i, [isect_tjs.x, isect_tjs.y, isect_tjs.z]);
+                    this.modeldata.attribs.add.setPosiCoordsActive(new_posi_i, [isect_tjs.x, isect_tjs.y, isect_tjs.z]);
                     edge_to_isect_posis[edge_posis_i[0]][edge_posis_i[1]] = new_posi_i;
                     if (method === _ECutMethod.KEEP_BOTH) {
                         const copy_posi_i: number = this.modeldata.geom.add.addPosi();
-                        this.modeldata.attribs.add.setPosiCoords(copy_posi_i, [isect_tjs.x, isect_tjs.y, isect_tjs.z]);
+                        this.modeldata.attribs.add.setPosiCoordsActive(copy_posi_i, [isect_tjs.x, isect_tjs.y, isect_tjs.z]);
                         cut_posi_to_copies[new_posi_i] = copy_posi_i;
                     }
                 } else {

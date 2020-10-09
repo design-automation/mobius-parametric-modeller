@@ -193,18 +193,18 @@ export class GIModelData {
             case EEntType.POINT:
             case EEntType.PLINE:
             case EEntType.PGON:
-                this.attribs.add.setEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP, ts);
+                this.attribs.add.setEntAttribValActive(ent_type, ent_i, EAttribNames.TIMESTAMP, ts);
                 return;
             case EEntType.COLL:
                 // get the objects from the collection
                 this.geom.nav.navCollToPgon(ent_i).forEach( pgon_i => {
-                    this.attribs.add.setEntAttribVal(EEntType.PGON, pgon_i, EAttribNames.TIMESTAMP, ts);
+                    this.attribs.add.setEntAttribValActive(EEntType.PGON, pgon_i, EAttribNames.TIMESTAMP, ts);
                 });
                 this.geom.nav.navCollToPline(ent_i).forEach( pline_i => {
-                    this.attribs.add.setEntAttribVal(EEntType.PLINE, pline_i, EAttribNames.TIMESTAMP, ts);
+                    this.attribs.add.setEntAttribValActive(EEntType.PLINE, pline_i, EAttribNames.TIMESTAMP, ts);
                 });
                 this.geom.nav.navCollToPoint(ent_i).forEach( point_i => {
-                    this.attribs.add.setEntAttribVal(EEntType.POINT, point_i, EAttribNames.TIMESTAMP, ts);
+                    this.attribs.add.setEntAttribValActive(EEntType.POINT, point_i, EAttribNames.TIMESTAMP, ts);
                 });
                 return;
             case EEntType.FACE:
@@ -261,8 +261,8 @@ export class GIModelData {
      * @param point_i
      */
     public updateEntTs(ent_type: EEntType, ent_i: number): void {
-        if (ent_type >= EEntType.POINT || ent_type <= EEntType.PGON) {
-            this.attribs.add.setEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP, this.timestamp);
+        if (ent_type >= EEntType.POINT && ent_type <= EEntType.PGON) {
+            this.attribs.add.setEntAttribValActive(ent_type, ent_i, EAttribNames.TIMESTAMP, this.timestamp);
         }
     }
     /**

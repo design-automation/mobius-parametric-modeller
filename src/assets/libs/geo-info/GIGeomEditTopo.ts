@@ -321,7 +321,7 @@ export class GIGeomEditTopo {
         new_xyz[1] = new_xyz[1] / num_posis;
         new_xyz[2] = new_xyz[2] / num_posis;
         const new_posi_i: number = this._geom.add.addPosi() as number;
-        this._geom.modeldata.attribs.add.setPosiCoords(new_posi_i, new_xyz);
+        this._geom.modeldata.attribs.add.setPosiCoordsActive(new_posi_i, new_xyz);
         // replace the verts posi
         for (const vert_i of verts_i) {
             // update the down arrays

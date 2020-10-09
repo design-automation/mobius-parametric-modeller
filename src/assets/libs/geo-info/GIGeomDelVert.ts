@@ -172,7 +172,7 @@ export class GIGeomDelVert {
         // delete the first edge
         this._geom_maps.dn_edges_verts.delete(start_edge_i);
         this._geom_maps.up_edges_wires.delete(start_edge_i);
-        this._geom.modeldata.attribs.add.delEntFromAttribs(EEntType.EDGE, start_edge_i);
+        this._geom.modeldata.attribs.add.delEntFromAttribsActive(EEntType.EDGE, start_edge_i);
         // update the second vert
         const second_vert_i: number = wire_verts_i[1];
         arrRem(this._geom_maps.up_verts_edges.get(second_vert_i), start_edge_i);
@@ -181,7 +181,7 @@ export class GIGeomDelVert {
         // delete the vert
         this._geom_maps.dn_verts_posis.delete(vert_i);
         this._geom_maps.up_verts_edges.delete(vert_i);
-        this._geom.modeldata.attribs.add.delEntFromAttribs(EEntType.VERT, vert_i);
+        this._geom.modeldata.attribs.add.delEntFromAttribsActive(EEntType.VERT, vert_i);
         // update the posis
         arrRem(this._geom_maps.up_posis_verts.get(posi_i), vert_i);
     }
@@ -196,7 +196,7 @@ export class GIGeomDelVert {
         // delete the last edge
         this._geom_maps.dn_edges_verts.delete(end_edge_i);
         this._geom_maps.up_edges_wires.delete(end_edge_i);
-        this._geom.modeldata.attribs.add.delEntFromAttribs(EEntType.EDGE, end_edge_i);
+        this._geom.modeldata.attribs.add.delEntFromAttribsActive(EEntType.EDGE, end_edge_i);
         // update the one before last vert
         const before_last_vert_i: number = wire_verts_i[wire_verts_i.length - 2];
         arrRem(this._geom_maps.up_verts_edges.get(before_last_vert_i), end_edge_i);
@@ -205,7 +205,7 @@ export class GIGeomDelVert {
         // delete the vert
         this._geom_maps.dn_verts_posis.delete(vert_i);
         this._geom_maps.up_verts_edges.delete(vert_i);
-        this._geom.modeldata.attribs.add.delEntFromAttribs(EEntType.VERT, vert_i);
+        this._geom.modeldata.attribs.add.delEntFromAttribsActive(EEntType.VERT, vert_i);
         // update the posis
         arrRem(this._geom_maps.up_posis_verts.get(posi_i), vert_i);
     }
@@ -243,13 +243,13 @@ export class GIGeomDelVert {
         // delete the next edge
         this._geom_maps.dn_edges_verts.delete(next_edge_i);
         this._geom_maps.up_edges_wires.delete(next_edge_i);
-        this._geom.modeldata.attribs.add.delEntFromAttribs(EEntType.EDGE, next_edge_i);
+        this._geom.modeldata.attribs.add.delEntFromAttribsActive(EEntType.EDGE, next_edge_i);
         // update the wire
         arrRem(wire_edges_i, next_edge_i);
         // delete the vert
         this._geom_maps.dn_verts_posis.delete(vert_i);
         this._geom_maps.up_verts_edges.delete(vert_i);
-        this._geom.modeldata.attribs.add.delEntFromAttribs(EEntType.VERT, vert_i);
+        this._geom.modeldata.attribs.add.delEntFromAttribsActive(EEntType.VERT, vert_i);
         // update the posis
         arrRem(this._geom_maps.up_posis_verts.get(posi_i), vert_i);
     }

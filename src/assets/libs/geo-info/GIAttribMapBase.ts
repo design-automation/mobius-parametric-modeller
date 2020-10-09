@@ -427,7 +427,7 @@ export class GIAttribMapBase {
      * @param ent_i
      * @param val
      */
-    public setEntVal(ents_i: number|number[], val: TAttribDataTypes, check_type = true): void {
+    public setEntVal(ent_i: number, val: TAttribDataTypes, check_type = true): void {
         throw new Error('Method must be overridden in sub class');
     }
     /**

@@ -29,9 +29,6 @@ export class GIModelThreejs {
      * Returns arrays for visualization in Threejs.
      */
     public get3jsData(ssid: number): IThreeJS {
-
-        // TODO
-
         // get the attribs at the vertex level
         const [posis_xyz, posis_map]: [number[], Map<number, number>]  =  this.modeldata.attribs.threejs.get3jsSeqPosisCoords(ssid);
         const [vertex_xyz, vertex_map]: [number[], Map<number, number>]  =  this.modeldata.attribs.threejs.get3jsSeqVertsCoords(ssid);

@@ -460,6 +460,6 @@ export function ModelCheck(__model__: GIModel): string {
  * @returns Text that summarises what is in the model, click print to see this text.
  */
 export function SendData(__model__: GIModel, data: any): void {
-    window.parent.postMessage( data, '*');
+    window.parent.postMessage( { messageType: 'send_data', data: data }, '*');
 }
 // ================================================================================================

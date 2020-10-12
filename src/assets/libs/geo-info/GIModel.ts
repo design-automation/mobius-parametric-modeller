@@ -118,11 +118,12 @@ export class GIModel {
         for (let i = gf_end_ss; i > curr_ss; i--) {
             gf_all_ss.push(i);
         }
+
+        console.log('ents to be added to curr_ss:\n', gf_end_ents);
         this.addEntsToSnapshot(curr_ss, gf_end_ents);
-        console.log('ents to be added to curr_ss:\n', gf_end_ents)
-        console.log('curr_ss ents after adding:\n', this.getEntsFromSnapshot(curr_ss))
+        console.log('curr_ss ents after adding:\n', this.getEntsFromSnapshot(curr_ss));
+
         this.rollbackTimestamp(curr_ss);
-        // this.addEntsToSnapshot(gf_end_ss, gf_end_ents);
         this.delSnapshots(gf_all_ss);
     }
 

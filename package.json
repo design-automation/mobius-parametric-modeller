@@ -25,7 +25,7 @@
     "lint": "ng lint",
     "lint-fix": "ng lint --fix",
     "e2e": "ng e2e",
-    "postinstall": "node version.js",
+    "postinstall": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/assets/core/modules && node ./src/assets/typedoc-json/docConvert.js && node version.js",
     "typedoc": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --out docs/typedoc src/app/",
     "moduleDocs": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/assets/core/modules && node ./src/assets/typedoc-json/docConvert.js",
     "pulldev": "git pull dev master"

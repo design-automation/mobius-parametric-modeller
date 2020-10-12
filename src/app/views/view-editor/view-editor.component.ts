@@ -506,7 +506,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         if (!(event.ctrlKey && event.metaKey && event.shiftKey)) { this.disableInput = false; }
         if (document.activeElement.nodeName === 'INPUT') {return; }
         // if (!this.copyCheck) { return; }
-        if (event.key === 'Delete') {
+        if (event.key === 'Delete' || event.key === 'Backspace') {
             this.deleteSelectedProds();
         } else if (event.key.toLowerCase() === 'z' && (event.ctrlKey === true || event.metaKey === true)) {
             let actions: any;

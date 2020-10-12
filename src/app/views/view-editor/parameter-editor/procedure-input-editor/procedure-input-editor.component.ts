@@ -138,7 +138,7 @@ export class ProcedureInputEditorComponent implements OnDestroy {
 
 
     updateMin(args, event) {
-        if (event.type === 'keyup' && event.which !== 13) { return; }
+        if (event.type === 'keyup' && event.key !== 'Enter') { return; }
         const currentVal = Number(event.target.value);
         if (currentVal !== 0 && !currentVal) { return; }
         if (Number(args.max) && Number(args.max) < currentVal) {
@@ -153,7 +153,7 @@ export class ProcedureInputEditorComponent implements OnDestroy {
     }
 
     updateMax(args, event) {
-        if (event.type === 'keyup' && event.which !== 13) { return; }
+        if (event.type === 'keyup' && event.key !== 'Enter') { return; }
         const currentVal = Number(event.target.value);
         if (currentVal !== 0 && !currentVal) { return; }
         if (Number(args.min) && Number(args.min) > currentVal) {

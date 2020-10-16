@@ -158,9 +158,9 @@ export class GIGeomSnapshot {
      * Adds the ents to the snapshot.
      * @param ent_type
      */
-    public addEnts(ents: TEntTypeIdx[]): void {
+    public addEnts(ssid: number, ents: TEntTypeIdx[]): void {
         for (const [ent_type, ent_i]  of ents) {
-            this.ss_data.get(this._geom.modeldata.timestamp)[EEntTypeStr[ent_type]].add(ent_i);
+            this.ss_data.get(ssid)[EEntTypeStr[ent_type]].add(ent_i);
         }
     }
     /**
@@ -409,21 +409,21 @@ export class GIGeomSnapshot {
      * Delete ents
      * @param ent_sets
      */
-    public del(ent_sets: IEntSets): void {
+    public delActive(ent_sets: IEntSets): void {
         // delete the ents
-        this.delColls(Array.from(ent_sets.co));
-        this.delPgons(Array.from(ent_sets.pg), true);
-        this.delPlines(Array.from(ent_sets.pl), true);
-        this.delPoints(Array.from(ent_sets.pt), true);
-        this.delPosis(Array.from(ent_sets.ps));
-        this.delUnusedPosis(Array.from(ent_sets.obj_ps));
+        this.delCollsActive(Array.from(ent_sets.co));
+        this.delPgonsActive(Array.from(ent_sets.pg), true);
+        this.delPlinesActive(Array.from(ent_sets.pl), true);
+        this.delPointsActive(Array.from(ent_sets.pt), true);
+        this.delPosisActive(Array.from(ent_sets.ps));
+        this.delUnusedPosisActive(Array.from(ent_sets.obj_ps));
     }
     /**
      * Del all unused posis in the model.
      * Posi attributes will also be deleted.
      * @param posis_i
      */
-    public delUnusedPosis(posis_i: number|number[]): void {
+    public delUnusedPosisActive(posis_i: number|number[]): void {
         // create array
         posis_i = (Array.isArray(posis_i)) ? posis_i : [posis_i];
         // loop
@@ -440,7 +440,7 @@ export class GIGeomSnapshot {
      * Posi attributes will also be deleted.
      * @param posis_i
      */
-    public delPosis(posis_i: number|number[]): void {
+    public delPosisActive(posis_i: number|number[]): void {
         this.delEntsActive(EEntType.POSI, posis_i);
         // deal with vertices
         posis_i = (Array.isArray(posis_i)) ? posis_i : [posis_i];
@@ -459,7 +459,7 @@ export class GIGeomSnapshot {
      * Point attributes will also be deleted.
      * @param points_i
      */
-    public delPoints(points_i: number|number[], del_unused_posis: boolean): void {
+    public delPointsActive(points_i: number|number[], del_unused_posis: boolean): void {
         this.delEntsActive(EEntType.POINT, points_i);
         if (!del_unused_posis) { return; }
         // create array
@@ -467,7 +467,7 @@ export class GIGeomSnapshot {
         // loop
         for (const point_i of points_i) {
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.POINT, point_i);
-            this.delUnusedPosis(posis_i);
+            this.delUnusedPosisActive(posis_i);
         }
     }
     /**
@@ -475,7 +475,7 @@ export class GIGeomSnapshot {
      * Pline attributes will also be deleted.
      * @param plines_i
      */
-    public delPlines(plines_i: number|number[], del_unused_posis: boolean): void {
+    public delPlinesActive(plines_i: number|number[], del_unused_posis: boolean): void {
         this.delEntsActive(EEntType.PLINE, plines_i);
         if (!del_unused_posis) { return; }
         // create array
@@ -483,14 +483,14 @@ export class GIGeomSnapshot {
         // loop
         for (const pline_i of plines_i) {
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PLINE, pline_i);
-            this.delUnusedPosis(posis_i);
+            this.delUnusedPosisActive(posis_i);
         }
     }
     /**
      * Del pgons.
      * @param pgons_i
      */
-    public delPgons(pgons_i: number|number[], del_unused_posis: boolean): void {
+    public delPgonsActive(pgons_i: number|number[], del_unused_posis: boolean): void {
         this.delEntsActive(EEntType.PGON, pgons_i);
         if (!del_unused_posis) { return; }
         // create array
@@ -498,7 +498,7 @@ export class GIGeomSnapshot {
         // loop
         for (const pgon_i of pgons_i) {
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.PGON, pgon_i);
-            this.delUnusedPosis(posis_i);
+            this.delUnusedPosisActive(posis_i);
         }
     }
     /**
@@ -507,7 +507,7 @@ export class GIGeomSnapshot {
      * Also, does not delete any positions.
      * @param colls_i The collections to delete
      */
-    public delColls(colls_i: number|number[]): void {
+    public delCollsActive(colls_i: number|number[]): void {
         this.delEntsActive(EEntType.COLL, colls_i);
     }
     // ============================================================================

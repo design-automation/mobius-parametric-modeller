@@ -29,14 +29,14 @@ export class GIModel {
     /**
      * Get the current time stamp
      */
-    public getTimestamp(): number {
+    public getActiveSnapshot(): number {
         return this.modeldata.timestamp;
     }
     /**
      * Set the current time stamp backwards to a prevous time stamp.
      * This allows you to roll back in time after executing a global function.
      */
-    public rollbackTimestamp(ssid: number): void {
+    public setActiveSnapshot(ssid: number): void {
         this.modeldata.timestamp = ssid;
     }
     /**
@@ -61,7 +61,7 @@ export class GIModel {
      * @param ents The list of ents to add.
      */
     public addEntsToSnapshot(ssid: number, ents: TEntTypeIdx[]) {
-        this.modeldata.geom.snapshot.addEnts(ents);
+        this.modeldata.geom.snapshot.addEnts(ssid, ents);
         this.modeldata.attribs.snapshot.addEnts(ssid, ents);
     }
     /**
@@ -94,36 +94,36 @@ export class GIModel {
      *
      * @param gf_start_ents
      */
-    public prepGlobalFunc(gf_start_ents: TId|TId[]): number {
-        const curr_ss: number = this.getTimestamp();
+    public prepGlobalFunc(gf_start_ids: TId|TId[]): number {
+        gf_start_ids = Array.isArray(gf_start_ids) ? gf_start_ids : [gf_start_ids];
+        const gf_start_ents: TEntTypeIdx[] = idsBreak(gf_start_ids) as TEntTypeIdx[];
+        const curr_ss: number = this.getActiveSnapshot();
         const gf_start_ss: number = this.nextSnapshot();
-        let ents: TEntTypeIdx[];
-        if (!Array.isArray(gf_start_ents)) {
-            ents = [idsBreak(gf_start_ents) as TEntTypeIdx];
-        } else {
-            ents = idsBreak(gf_start_ents) as TEntTypeIdx[];
-        }
-        ents = this.modeldata.geom.query.getEntsTree(ents);
-        this.addEntsToSnapshot(curr_ss, ents);
+        const gf_start_ents_tree: TEntTypeIdx[] = this.modeldata.geom.query.getEntsTree( gf_start_ents );
+
+        console.log('>>> ents to be added to gf_start_ss:\n', gf_start_ents_tree);
+        this.addEntsToSnapshot(gf_start_ss, gf_start_ents_tree);
+        console.log('>>> gf_start_ss ents after adding:\n', this.getEntsFromSnapshot(gf_start_ss));
+
         return curr_ss;
     }
     /**
      *
      * @param ssid
      */
-    public postGlobalFunc(curr_ss: number) {
-        const gf_end_ss: number = this.getTimestamp();
+    public postGlobalFunc(curr_ss: number): void {
+        const gf_end_ss: number = this.getActiveSnapshot();
         const gf_end_ents: TEntTypeIdx[] = this.getEntsFromSnapshot(gf_end_ss);
         const gf_all_ss: number[] = [];
         for (let i = gf_end_ss; i > curr_ss; i--) {
             gf_all_ss.push(i);
         }
 
-        console.log('ents to be added to curr_ss:\n', gf_end_ents);
+        console.log('>>> ents to be added to curr_ss:\n', gf_end_ents);
         this.addEntsToSnapshot(curr_ss, gf_end_ents);
-        console.log('curr_ss ents after adding:\n', this.getEntsFromSnapshot(curr_ss));
+        console.log('>>> curr_ss ents after adding:\n', this.getEntsFromSnapshot(curr_ss));
 
-        this.rollbackTimestamp(curr_ss);
+        this.setActiveSnapshot(curr_ss);
         this.delSnapshots(gf_all_ss);
     }
 

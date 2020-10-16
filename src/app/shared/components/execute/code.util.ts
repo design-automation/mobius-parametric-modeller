@@ -735,7 +735,7 @@ export class CodeUtils {
             const nodeFuncName = `${func.name}_${node.id}`;
             if (node.type === 'start') {
                 // fnCode += `let result_${nodeFuncName} = __params__.model;\n`;
-                fnCode += `let i_${nodeFuncName} = __params__.model.getTimestamp();\n`;
+                fnCode += `let i_${nodeFuncName} = __params__.model.getActiveSnapshot();\n`;
             } else {
                 const codeRes = CodeUtils.getNodeCode(node, false, nodeIndices, func.name, node.id)[0];
                 const nodecode = codeRes[0].join('\n').split('_-_-_+_-_-_');

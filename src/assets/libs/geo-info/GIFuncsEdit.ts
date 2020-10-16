@@ -268,7 +268,7 @@ export class GIFuncsEdit {
             }
         }
         // delete the posis if they are unused
-        this.modeldata.geom.snapshot.delUnusedPosis(Array.from(exclude_posis_i));
+        this.modeldata.geom.snapshot.delUnusedPosisActive(Array.from(exclude_posis_i));
         // TODO
         return [];
     }

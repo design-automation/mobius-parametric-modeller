@@ -54,7 +54,7 @@ export class GIGeomDelVert {
         // check, is this a point, then delete the point and vertex
         const point_i: number = this._geom_maps.up_verts_points.get(vert_i); // this may be undefined
         if (point_i !== undefined) {
-            this._geom.snapshot.delPoints(point_i, false);
+            this._geom.snapshot.delPointsActive(point_i, false);
             return;
         }
         // get the posis, edges, and wires, and other info
@@ -143,7 +143,7 @@ export class GIGeomDelVert {
      */
     private __delVert__OpenPline1Edge(wire_i: number) {
         const pline_i: number = this._geom_maps.up_wires_plines.get(wire_i);
-        this._geom.snapshot.delPlines(pline_i, false);
+        this._geom.snapshot.delPlinesActive(pline_i, false);
     }
     /**
      * Special case, delete either the pgon
@@ -151,7 +151,7 @@ export class GIGeomDelVert {
      */
     private __delVert__PgonBoundaryWire3Edge(face_i: number) {
         const pgon_i: number = this._geom_maps.up_faces_pgons.get(face_i);
-        this._geom.snapshot.delPgons(pgon_i, false);
+        this._geom.snapshot.delPgonsActive(pgon_i, false);
     }
     /**
      * Special case, delete either the hole

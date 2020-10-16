@@ -1169,7 +1169,7 @@ export function Stitch(__model__: GIModel, entities: TId|TId[]): TId[] {
             del_posis_i.push(posis_i[0]);
         }
     }
-    __model__.modeldata.geom.snapshot.delPosis(del_posis_i);
+    __model__.modeldata.geom.snapshot.delPosisActive(del_posis_i);
     // return
     return idsMake(new_ents_arr) as TId[];
 }

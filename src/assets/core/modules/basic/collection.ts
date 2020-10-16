@@ -314,7 +314,7 @@ export function Delete(__model__: GIModel, coll: TId|TId[]): void {
     for (const [ent_type, ent_i] of colls_arrs) {
         colls_i.push(ent_i);
     }
-    __model__.modeldata.geom.snapshot.delColls(colls_i);
+    __model__.modeldata.geom.snapshot.delCollsActive(colls_i);
 }
 // ================================================================================================
 

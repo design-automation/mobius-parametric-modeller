@@ -332,7 +332,7 @@ export class GIGeomEditTopo {
             this._geom_maps.up_posis_verts.get(new_posi_i).push(vert_i);
         }
         // del the posis that are no longer used, i.e. have zero verts
-        this._geom.snapshot.delPosis(posis_to_del_i);
+        this._geom.snapshot.delPosisActive(posis_to_del_i);
         // return all the new positions
         return new_posi_i;
     }

@@ -645,7 +645,8 @@ export class ExecuteComponent {
             }
 
             params['model'] = this.dataService.flowchart.model;
-            node.model = params['model'].nextSnapshot(node.input.value);
+            const snapshotID = params['model'].nextSnapshot(node.input.value);
+            node.model = null;
 
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
 
@@ -656,6 +657,7 @@ export class ExecuteComponent {
             const fn = new Function('__modules__', '__params__', fnString);
             // execute the function
             const result = await fn(Modules, params)(Modules, params);
+            node.model = snapshotID;
             if (params['terminated']) {
                 this.terminated = node.name;
                 this.dataService.notifyMessage(`PROCESS TERMINATED IN NODE: "${this.terminated}"`);

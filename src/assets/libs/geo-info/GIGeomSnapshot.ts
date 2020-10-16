@@ -155,12 +155,12 @@ export class GIGeomSnapshot {
         return ent_sets;
     }
     /**
-     * Adds the ents to the snapshot.
+     * Adds the ents to the active snapshot.
      * @param ent_type
      */
-    public addEnts(ssid: number, ents: TEntTypeIdx[]): void {
+    public addEntsToActiveSnapshot(ents: TEntTypeIdx[]): void {
         for (const [ent_type, ent_i]  of ents) {
-            this.ss_data.get(ssid)[EEntTypeStr[ent_type]].add(ent_i);
+            this.ss_data.get(this._geom.modeldata.timestamp)[EEntTypeStr[ent_type]].add(ent_i);
         }
     }
     /**

@@ -75,7 +75,7 @@ export class GIAttribsSnapshot {
      * @param ssid ID of snapshot to copy attributes from.
      * @param ents
      */
-    public addEnts(ssid: number, ents: TEntTypeIdx[]) {
+    public addEntsToActiveSnapshot(ssid: number, ents: TEntTypeIdx[]): void {
         const ents_sets: IEntSets = this.modeldata.geom.query.getEntSetsTree(ents, true);
         const from_attrib_maps: IAttribsMaps = this.modeldata.attribs.attribs_maps.get(ssid);
         const ent_types: EEntType[] = [
@@ -93,6 +93,7 @@ export class GIAttribsSnapshot {
         for (const ent_type of ent_types) {
             const ent_type_str: string = EEntTypeStr[ent_type];
             from_attrib_maps[ent_type_str].forEach( (from_attrib: GIAttribMapBase, name: string) => {
+                // get the active attribute with the same name
                 const to_attrib: GIAttribMapBase = this.modeldata.attribs.add.addEntAttribActive(ent_type, name, from_attrib.getDataType());
                 to_attrib.merge(from_attrib, ents_sets[ent_type_str]);
             });

@@ -46,8 +46,7 @@ export class GIAttribMapDict  extends GIAttribMapBase {
      * If value is a list or dict, it is passed by reference.
      * @param ent_i
      */
-    public getEntVal(ents_i: number): TAttribDataTypes {
-        const ent_i: number = ents_i as number;
+    public getEntVal(ent_i: number): TAttribDataTypes {
         const val_i: number = this._map_ent_i_to_val_i.get(ent_i);
         if (val_i === undefined) { return undefined; }
         return this.modeldata.model.metadata.getValFromIdx(val_i, this._data_type);

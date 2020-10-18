@@ -71,9 +71,9 @@ export class GIAttribsSnapshot {
         this.modeldata.attribs.attribs_maps.delete(ssid);
     }
     /**
-     * Add attributes from the specified snapshot to the current snapshot.
+     * Add attributes of ents from the specified snapshot to the current snapshot.
      * @param ssid ID of snapshot to copy attributes from.
-     * @param ents
+     * @param ents ID of ents in both ssid and in the active snapshot
      */
     public addEntsToActiveSnapshot(ssid: number, ents: TEntTypeIdx[]): void {
         const ents_sets: IEntSets = this.modeldata.geom.query.getEntSetsTree(ents, true);
@@ -91,13 +91,28 @@ export class GIAttribsSnapshot {
         ];
         // entitiy attributes
         for (const ent_type of ent_types) {
-            const ent_type_str: string = EEntTypeStr[ent_type];
-            from_attrib_maps[ent_type_str].forEach( (from_attrib: GIAttribMapBase, name: string) => {
-                // get the active attribute with the same name
-                const to_attrib: GIAttribMapBase = this.modeldata.attribs.add.addEntAttribActive(ent_type, name, from_attrib.getDataType());
-                to_attrib.merge(from_attrib, ents_sets[ent_type_str]);
-            });
+            const attribs_maps_key: string = EEntTypeStr[ent_type];
+            if (ents_sets[attribs_maps_key].size) {
+                const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+                ents_sets[attribs_maps_key].forEach(ent_i => {
+                    attribs.forEach( (attrib: GIAttribMapBase, attrib_name: string) => {
+                        const attrib_val: TAttribDataTypes = attrib.getEntVal(ent_i);
+                        if (attrib_val !== undefined) {
+                            this.modeldata.attribs.add.setCreateEntsAttribValActive(ent_type, ent_i, attrib_name, attrib_val);
+                        }
+                    });
+                });
+            }
         }
+        // // entitiy attributes
+        // for (const ent_type of ent_types) {
+        //     const ent_type_str: string = EEntTypeStr[ent_type];
+        //     from_attrib_maps[ent_type_str].forEach( (from_attrib: GIAttribMapBase, name: string) => {
+        //         // get the active attribute with the same name
+        //         const to_attrib: GIAttribMapBase = this.modeldata.attribs.add.addEntAttribActive(ent_type, name, from_attrib.getDataType());
+        //         to_attrib.merge(from_attrib, ents_sets[ent_type_str]);
+        //     });
+        // }
         // model attributes
         from_attrib_maps.mo.forEach( (val, name) => this.modeldata.attribs.add.setModelAttribValActive(name, val) );
     }

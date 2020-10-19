@@ -27,17 +27,29 @@ export class GIGeomSnapshot {
      * @param include
      */
     public addSnapshot(ssid: number, include?: number[]): void {
-        const data: ISnapshotData = {
-            ps: new Set(),
-            pt: new Set(),
-            pl: new Set(),
-            pg: new Set(),
-            co: new Set()
-        };
+        const data: ISnapshotData = { ps: null, pt: null, pl: null, pg: null, co: null };
         this.ss_data.set( ssid, data );
         // merge data
-        if (include !== undefined) {
-            for (const exist_ssid of include) {
+        if (include === undefined || include.length === 0) {
+            // create an empty snapshot
+            data.ps = new Set();
+            data.pt = new Set();
+            data.pl = new Set();
+            data.pg = new Set();
+            data.co = new Set();
+        } else {
+            // add the first ssid to the new snapshot
+            if (!this.ss_data.has(include[0])) {
+                throw new Error('The snapshot ID ' + include[0] + ' does not exist.');
+            }
+            data.ps = new Set(this.ss_data.get(include[0]).ps);
+            data.pt = new Set(this.ss_data.get(include[0]).pt);
+            data.pl = new Set(this.ss_data.get(include[0]).pl);
+            data.pg = new Set(this.ss_data.get(include[0]).pg);
+            data.co = new Set(this.ss_data.get(include[0]).co);
+            // add subsequent ssids to teh new snapshot
+            for ( let i = 1; i < include.length; i++ ) {
+                const exist_ssid: number = include[i];
                 if (!this.ss_data.has(exist_ssid)) {
                     throw new Error('The snapshot ID ' + exist_ssid + ' does not exist.');
                 }
@@ -47,6 +59,16 @@ export class GIGeomSnapshot {
                 this.ss_data.get(exist_ssid).pg.forEach ( pgon_i => data.pg.add(pgon_i) );
                 this.ss_data.get(exist_ssid).co.forEach ( coll_i => data.co.add(coll_i) );
             }
+            // for (const exist_ssid of include[1:]) {
+            //     if (!this.ss_data.has(exist_ssid)) {
+            //         throw new Error('The snapshot ID ' + exist_ssid + ' does not exist.');
+            //     }
+            //     this.ss_data.get(exist_ssid).ps.forEach ( posi_i => data.ps.add(posi_i) );
+            //     this.ss_data.get(exist_ssid).pt.forEach ( point_i => data.pt.add(point_i) );
+            //     this.ss_data.get(exist_ssid).pl.forEach ( pline_i => data.pl.add(pline_i) );
+            //     this.ss_data.get(exist_ssid).pg.forEach ( pgon_i => data.pg.add(pgon_i) );
+            //     this.ss_data.get(exist_ssid).co.forEach ( coll_i => data.co.add(coll_i) );
+            // }
         }
     }
     /**

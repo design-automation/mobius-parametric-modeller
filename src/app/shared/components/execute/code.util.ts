@@ -750,9 +750,10 @@ export class CodeUtils {
                     }
                     activeNodes.push(`ssid_${func.name}_${nodeEdge.source.parentNode.id}`);
                 }
-                if (activeNodes.length > 1) {
-                    fnCode += `\nlet ssid_${nodeFuncName} = __params__.model.nextSnapshot([${activeNodes.join(',')}]);\n`;
-                }
+                fnCode += `\nlet ssid_${nodeFuncName} = __params__.model.nextSnapshot([${activeNodes.join(',')}]);\n`;
+                // if (activeNodes.length > 1) {
+                //     fnCode += `\nlet ssid_${nodeFuncName} = __params__.model.nextSnapshot([${activeNodes.join(',')}]);\n`;
+                // }
                 if (node.type === 'end') {
                     fnCode += `\nreturn await ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')});\n`;
                 } else {

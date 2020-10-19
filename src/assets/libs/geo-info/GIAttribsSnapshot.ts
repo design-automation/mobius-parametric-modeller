@@ -1,5 +1,8 @@
 import { EAttribDataTypeStrs, EAttribNames, EEntType, EEntTypeStr, IAttribsMaps, TAttribDataTypes, TEntTypeIdx } from './common';
 import { GIAttribMapBase } from './GIAttribMapBase';
+import { GIAttribMapList } from './GIAttribMapList';
+import { GIAttribMapNum } from './GIAttribMapNum';
+import { GIAttribMapStr } from './GIAttribMapStr';
 import { GIModelData } from './GIModelData';
 
 /**
@@ -38,22 +41,32 @@ export class GIAttribsSnapshot {
         };
         this.modeldata.attribs.attribs_maps.set(ssid, attribs);
         // add attributes for built in types
-        this.modeldata.attribs.add.addAttribActive(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.LIST);
-        this.modeldata.attribs.add.addAttribActive(EEntType.VERT, EAttribNames.COLOR, EAttribDataTypeStrs.LIST);
-        this.modeldata.attribs.add.addAttribActive(EEntType.VERT, EAttribNames.NORMAL, EAttribDataTypeStrs.LIST);
-        // this.modeldata.attribs.add.addAttrib(EEntType.PGON, EAttribNames.MATERIAL, EAttribDataTypeStrs.LIST);
-        // this.modeldata.attribs.add.addAttrib(EEntType.PLINE, EAttribNames.MATERIAL, EAttribDataTypeStrs.STRING);
+        attribs.ps.set(EAttribNames.COORDS, new GIAttribMapList(this.modeldata, EAttribNames.COORDS, EEntType.POSI, EAttribDataTypeStrs.LIST));
+        attribs._v.set(EAttribNames.COLOR, new GIAttribMapList(this.modeldata, EAttribNames.COLOR, EEntType.VERT, EAttribDataTypeStrs.LIST));
+        attribs._v.set(EAttribNames.NORMAL, new GIAttribMapList(this.modeldata, EAttribNames.NORMAL, EEntType.VERT, EAttribDataTypeStrs.LIST));
+        // this.modeldata.attribs.add.addAttribActive(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.LIST);
+        // this.modeldata.attribs.add.addAttribActive(EEntType.VERT, EAttribNames.COLOR, EAttribDataTypeStrs.LIST);
+        // this.modeldata.attribs.add.addAttribActive(EEntType.VERT, EAttribNames.NORMAL, EAttribDataTypeStrs.LIST);
         // add attributes for time stamps
-        this.modeldata.attribs.add.addAttribActive(EEntType.POINT, EAttribNames.TIMESTAMP, EAttribDataTypeStrs.NUMBER);
-        this.modeldata.attribs.add.addAttribActive(EEntType.PLINE, EAttribNames.TIMESTAMP, EAttribDataTypeStrs.NUMBER);
-        this.modeldata.attribs.add.addAttribActive(EEntType.PGON, EAttribNames.TIMESTAMP, EAttribDataTypeStrs.NUMBER);
+        attribs.pt.set(EAttribNames.TIMESTAMP, new GIAttribMapNum(this.modeldata, EAttribNames.TIMESTAMP, EEntType.POINT, EAttribDataTypeStrs.NUMBER));
+        attribs.pl.set(EAttribNames.TIMESTAMP, new GIAttribMapNum(this.modeldata, EAttribNames.TIMESTAMP, EEntType.PLINE, EAttribDataTypeStrs.NUMBER));
+        attribs.pg.set(EAttribNames.TIMESTAMP, new GIAttribMapNum(this.modeldata, EAttribNames.TIMESTAMP, EEntType.PGON, EAttribDataTypeStrs.NUMBER));
+        // this.modeldata.attribs.add.addAttribActive(EEntType.POINT, EAttribNames.TIMESTAMP, EAttribDataTypeStrs.NUMBER);
+        // this.modeldata.attribs.add.addAttribActive(EEntType.PLINE, EAttribNames.TIMESTAMP, EAttribDataTypeStrs.NUMBER);
+        // this.modeldata.attribs.add.addAttribActive(EEntType.PGON, EAttribNames.TIMESTAMP, EAttribDataTypeStrs.NUMBER);
         // add attributes for collections
-        this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_NAME, EAttribDataTypeStrs.STRING);
-        this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_PARENT, EAttribDataTypeStrs.NUMBER);
-        this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_CHILDS, EAttribDataTypeStrs.LIST);
-        this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_POINTS, EAttribDataTypeStrs.LIST);
-        this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_PLINES, EAttribDataTypeStrs.LIST);
-        this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_PGONS, EAttribDataTypeStrs.LIST);
+        attribs.co.set(EAttribNames.COLL_NAME, new GIAttribMapStr(this.modeldata, EAttribNames.COLL_NAME, EEntType.COLL, EAttribDataTypeStrs.STRING));
+        attribs.co.set(EAttribNames.COLL_PARENT, new GIAttribMapNum(this.modeldata, EAttribNames.COLL_PARENT, EEntType.COLL, EAttribDataTypeStrs.NUMBER));
+        attribs.co.set(EAttribNames.COLL_CHILDS, new GIAttribMapList(this.modeldata, EAttribNames.COLL_CHILDS, EEntType.COLL, EAttribDataTypeStrs.LIST));
+        attribs.co.set(EAttribNames.COLL_POINTS, new GIAttribMapList(this.modeldata, EAttribNames.COLL_POINTS, EEntType.COLL, EAttribDataTypeStrs.LIST));
+        attribs.co.set(EAttribNames.COLL_PLINES, new GIAttribMapList(this.modeldata, EAttribNames.COLL_PLINES, EEntType.COLL, EAttribDataTypeStrs.LIST));
+        attribs.co.set(EAttribNames.COLL_PGONS, new GIAttribMapList(this.modeldata, EAttribNames.COLL_PGONS, EEntType.COLL, EAttribDataTypeStrs.LIST));
+        // this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_NAME, EAttribDataTypeStrs.STRING);
+        // this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_PARENT, EAttribDataTypeStrs.NUMBER);
+        // this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_CHILDS, EAttribDataTypeStrs.LIST);
+        // this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_POINTS, EAttribDataTypeStrs.LIST);
+        // this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_PLINES, EAttribDataTypeStrs.LIST);
+        // this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_PGONS, EAttribDataTypeStrs.LIST);
         // merge data
         if (include !== undefined) {
             for (const exist_ssid of include) {

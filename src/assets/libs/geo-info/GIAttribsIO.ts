@@ -23,16 +23,26 @@ export class GIAttribsIO {
      * @param model_data Attribute data from the other model.
      */
     public merge(ssid: number, attribs_maps: IAttribsMaps): void {
-        if (attribs_maps.ps !== undefined) { this._mergeAttribs(ssid, attribs_maps, EEntType.POSI); }
-        if (attribs_maps._v !== undefined) { this._mergeAttribs(ssid, attribs_maps, EEntType.VERT); }
-        if (attribs_maps._e !== undefined) { this._mergeAttribs(ssid, attribs_maps, EEntType.EDGE); }
-        if (attribs_maps._w !== undefined) { this._mergeAttribs(ssid, attribs_maps, EEntType.WIRE); }
-        if (attribs_maps._f !== undefined) { this._mergeAttribs(ssid, attribs_maps, EEntType.FACE); }
-        if (attribs_maps.pt !== undefined) { this._mergeAttribs(ssid, attribs_maps, EEntType.POINT); }
-        if (attribs_maps.pl !== undefined) { this._mergeAttribs(ssid, attribs_maps, EEntType.PLINE); }
-        if (attribs_maps.pg !== undefined) { this._mergeAttribs(ssid, attribs_maps, EEntType.PGON); }
-        if (attribs_maps.co !== undefined) { this._mergeAttribs(ssid, attribs_maps, EEntType.COLL); }
-        if (attribs_maps.mo !== undefined) { this._mergeModelAttribs(ssid, attribs_maps); }
+        this._mergeAttribs(ssid, attribs_maps, EEntType.POSI);
+        this._mergeAttribs(ssid, attribs_maps, EEntType.VERT);
+        this._mergeAttribs(ssid, attribs_maps, EEntType.EDGE);
+        this._mergeAttribs(ssid, attribs_maps, EEntType.WIRE);
+        this._mergeAttribs(ssid, attribs_maps, EEntType.FACE);
+        this._mergeAttribs(ssid, attribs_maps, EEntType.POINT);
+        this._mergeAttribs(ssid, attribs_maps, EEntType.PLINE);
+        this._mergeAttribs(ssid, attribs_maps, EEntType.PGON);
+        this._mergeAttribs(ssid, attribs_maps, EEntType.COLL);
+        this._mergeModelAttribs(ssid, attribs_maps);
+        // if (attribs_maps.ps !== undefined) { this._mergeAttribs(ssid, attribs_maps, EEntType.POSI); }
+        // if (attribs_maps._v !== undefined) { this._mergeAttribs(ssid, attribs_maps, EEntType.VERT); }
+        // if (attribs_maps._e !== undefined) { this._mergeAttribs(ssid, attribs_maps, EEntType.EDGE); }
+        // if (attribs_maps._w !== undefined) { this._mergeAttribs(ssid, attribs_maps, EEntType.WIRE); }
+        // if (attribs_maps._f !== undefined) { this._mergeAttribs(ssid, attribs_maps, EEntType.FACE); }
+        // if (attribs_maps.pt !== undefined) { this._mergeAttribs(ssid, attribs_maps, EEntType.POINT); }
+        // if (attribs_maps.pl !== undefined) { this._mergeAttribs(ssid, attribs_maps, EEntType.PLINE); }
+        // if (attribs_maps.pg !== undefined) { this._mergeAttribs(ssid, attribs_maps, EEntType.PGON); }
+        // if (attribs_maps.co !== undefined) { this._mergeAttribs(ssid, attribs_maps, EEntType.COLL); }
+        // if (attribs_maps.mo !== undefined) { this._mergeModelAttribs(ssid, attribs_maps); }
     }
     // /**
     //  * Adds data to this model from another model.

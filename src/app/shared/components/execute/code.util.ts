@@ -743,51 +743,43 @@ export class CodeUtils {
                             `(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){` +
                             nodecode[1] + `\n}\n\n`;
 
-                const activeNodes = [];
-                for (const nodeEdge of node.input.edges) {
-                    if (!nodeEdge.source.parentNode.enabled) {
-                        continue;
+                // const activeNodes = [];
+                // for (const nodeEdge of node.input.edges) {
+                //     if (!nodeEdge.source.parentNode.enabled) {
+                //         continue;
+                //     }
+                //     activeNodes.push(`ssid_${func.name}_${nodeEdge.source.parentNode.id}`);
+                // }
+                // fnCode += `\nlet ssid_${nodeFuncName} = __params__.model.nextSnapshot([${activeNodes.join(',')}]);\n`;
+                // // if (activeNodes.length !== 1) {
+                // //     fnCode += `\nlet ssid_${nodeFuncName} = __params__.model.nextSnapshot([${activeNodes.join(',')}]);\n`;
+                // // } else {
+                // //     fnCode += `\nlet ssid_${nodeFuncName} = ${activeNodes[0]};\n`;
+                // // }
+
+                if (node.input.edges.length === 1 && numRemainingOutputs[node.input.edges[0].source.parentNode.id] === 1) {
+                    fnCode += `\nlet ssid_${nodeFuncName} = ssid_${func.name}_${node.input.edges[0].source.parentNode.id};\n`;
+                } else {
+                    let activeNodes = [];
+                    for (const nodeEdge of node.input.edges) {
+                        if (!nodeEdge.source.parentNode.enabled) {
+                            continue;
+                        }
+                        numRemainingOutputs[nodeEdge.source.parentNode.id] --;
+                        activeNodes.push([nodeIndices[nodeEdge.source.parentNode.id], `ssid_${func.name}_${nodeEdge.source.parentNode.id}`]);
                     }
-                    activeNodes.push(`ssid_${func.name}_${nodeEdge.source.parentNode.id}`);
-                }
-                if (activeNodes.length > 1) {
-                    fnCode += `\nlet ssid_${nodeFuncName} = __params__.model.nextSnapshot([${activeNodes.join(',')}]);\n`;
+                    activeNodes = activeNodes.sort((a, b) => a[0] - b[0]);
+                    fnCode += `\nlet ssid_${nodeFuncName} = __params__.model.nextSnapshot([${activeNodes.map(nodeId => nodeId[1]).join(', ')}]);\n`;
                 }
                 if (node.type === 'end') {
                     fnCode += `\nreturn await ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')});\n`;
                 } else {
                     fnCode += `\nawait ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')});\n`;
                 }
-                // if (node.input.edges.length === 1 && numRemainingOutputs[node.input.edges[0].source.parentNode.id] === 1) {
-                //     fnCode += `\n__params__.model = result_${func.name}_${node.input.edges[0].source.parentNode.id};\n`;
-                // } else {
-                //     let activeNodes = [];
-                //     for (const nodeEdge of node.input.edges) {
-                //         if (!nodeEdge.source.parentNode.enabled) {
-                //             continue;
-                //         }
-                //         numRemainingOutputs[nodeEdge.source.parentNode.id] --;
-                //         activeNodes.push([nodeIndices[nodeEdge.source.parentNode.id], nodeEdge.source.parentNode.id]);
-                //         // if (nodeEdge.source.parentNode.type === 'start') {
-                //         //     activeNodes.unshift(nodeEdge.source.parentNode.id);
-                //         // } else {
-                //         //     activeNodes.push(nodeEdge.source.parentNode.id);
-                //         // }
-                //     }
-                //     if (activeNodes.length === 1) {
-                //         fnCode += `\n__params__.model = duplicateModel(result_${func.name}_${activeNodes[0][1]});\n`;
-                //     } else {
-                //         activeNodes = activeNodes.sort((a, b) => a[0] - b[0]);
-                //         fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) =>
-                //             `result_${func.name}_${nodeId[1]}`).join(', ')}]);\n`;
-                //     }
-                // }
-                // fnCode += `\nlet result_${nodeFuncName} = await ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_'
-                //             ).join('')});\n`;
-
             }
         }
         fnCode += '}\n\n';
+        console.log(fnCode);
         fullCode += fnCode;
 
         return fullCode;

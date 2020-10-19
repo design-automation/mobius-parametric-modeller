@@ -159,8 +159,10 @@ export class GIGeomSnapshot {
      * @param ent_type
      */
     public addEntsToActiveSnapshot(ents: TEntTypeIdx[]): void {
-        for (const [ent_type, ent_i]  of ents) {
-            this.ss_data.get(this._geom.modeldata.timestamp)[EEntTypeStr[ent_type]].add(ent_i);
+        for (const [ent_type, ent_i] of ents) {
+            if (ent_type === EEntType.POSI || ent_type >= EEntType.POINT) {
+                this.ss_data.get(this._geom.modeldata.timestamp)[EEntTypeStr[ent_type]].add(ent_i);
+            }
         }
     }
     /**

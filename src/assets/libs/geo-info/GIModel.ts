@@ -62,8 +62,9 @@ export class GIModel {
      * @param ents The list of ents to add.
      */
     public addEntsToActiveSnapshot(ssid: number, ents: TEntTypeIdx[]) {
-        this.modeldata.geom.snapshot.addEntsToActiveSnapshot(ents);
-        this.modeldata.attribs.snapshot.addEntsToActiveSnapshot(ssid, ents);
+        const ents2: TEntTypeIdx[] = this.modeldata.geom.query.getEntsTree( ents );
+        this.modeldata.geom.snapshot.addEntsToActiveSnapshot(ents2);
+        this.modeldata.attribs.snapshot.addEntsToActiveSnapshot(ssid, ents2);
     }
     /**
      * Gets a set of ents from a snapshot.
@@ -98,13 +99,12 @@ export class GIModel {
     public prepGlobalFunc(gf_start_ids: TId|TId[]): number {
         gf_start_ids = Array.isArray(gf_start_ids) ? gf_start_ids : [gf_start_ids];
         const gf_start_ents: TEntTypeIdx[] = idsBreak(gf_start_ids) as TEntTypeIdx[];
-        const gf_start_ents_tree: TEntTypeIdx[] = this.modeldata.geom.query.getEntsTree( gf_start_ents );
         const curr_ss: number = this.getActiveSnapshot();
-        const gf_start_ss: number = this.nextSnapshot();
+        this.nextSnapshot();
 
-        console.log('>>> ents to be added to gf_start_ss:\n', gf_start_ents_tree);
-        this.addEntsToActiveSnapshot(curr_ss, gf_start_ents_tree);
-        console.log('>>> gf_start_ss ents after adding:\n', this.getEntsFromSnapshot(gf_start_ss));
+        // console.log('>>> ents to be added to gf_start_ss:\n', gf_start_ents_tree);
+        this.addEntsToActiveSnapshot(curr_ss, gf_start_ents);
+        // console.log('>>> gf_start_ss ents after adding:\n', this.getEntsFromSnapshot(gf_start_ss));
 
         return curr_ss;
     }
@@ -121,9 +121,9 @@ export class GIModel {
         }
         this.setActiveSnapshot(curr_ss);
 
-        console.log('>>> ents to be added to curr_ss:\n', gf_end_ents);
+        // console.log('>>> ents to be added to curr_ss:\n', gf_end_ents);
         this.addEntsToActiveSnapshot(gf_end_ss, gf_end_ents);
-        console.log('>>> curr_ss ents after adding:\n', this.getEntsFromSnapshot(curr_ss));
+        // console.log('>>> curr_ss ents after adding:\n', this.getEntsFromSnapshot(curr_ss));
 
         this.delSnapshots(gf_all_ss);
     }

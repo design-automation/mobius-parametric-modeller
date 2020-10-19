@@ -735,7 +735,7 @@ export class CodeUtils {
             const nodeFuncName = `${func.name}_${node.id}`;
             if (node.type === 'start') {
                 // fnCode += `let result_${nodeFuncName} = __params__.model;\n`;
-                fnCode += `let i_${nodeFuncName} = __params__.model.getActiveSnapshot();\n`;
+                fnCode += `let ssid_${nodeFuncName} = __params__.model.getActiveSnapshot();\n`;
             } else {
                 const codeRes = CodeUtils.getNodeCode(node, false, nodeIndices, func.name, node.id)[0];
                 const nodecode = codeRes[0].join('\n').split('_-_-_+_-_-_');
@@ -748,9 +748,11 @@ export class CodeUtils {
                     if (!nodeEdge.source.parentNode.enabled) {
                         continue;
                     }
-                    activeNodes.push(`i_${func.name}_${nodeEdge.source.parentNode.id}`);
+                    activeNodes.push(`ssid_${func.name}_${nodeEdge.source.parentNode.id}`);
                 }
-                fnCode += `\nlet i_${nodeFuncName} = __params__.model.nextSnapshot([${activeNodes.join(',')}]);\n`;
+                if (activeNodes.length > 1) {
+                    fnCode += `\nlet ssid_${nodeFuncName} = __params__.model.nextSnapshot([${activeNodes.join(',')}]);\n`;
+                }
                 if (node.type === 'end') {
                     fnCode += `\nreturn await ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')});\n`;
                 } else {

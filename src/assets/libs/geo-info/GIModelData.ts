@@ -285,7 +285,7 @@ export class GIModelData {
     /**
      *
      */
-    public nextTimestamp() {
+    public nextSnapshot() {
         this._max_timestamp += 1;
         this.active_snapshot = this._max_timestamp;
     }

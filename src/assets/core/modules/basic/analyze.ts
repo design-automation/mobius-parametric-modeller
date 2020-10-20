@@ -25,7 +25,7 @@ import * as THREE from 'three';
 import { TypedArrayUtils } from '@libs/TypedArrayUtils.js';
 import * as Mathjs from 'mathjs';
 import { createSingleMeshTjs } from '@assets/libs/geom/mesh';
-import { isRay, isXYZ, isPlane } from '@assets/libs/geo-info/virtual';
+import { isRay, isXYZ, isPlane } from '@assets/libs/geo-info/common_func';
 
 // ================================================================================================
 interface TRaytraceResult {

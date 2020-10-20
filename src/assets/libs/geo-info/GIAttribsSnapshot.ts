@@ -71,7 +71,7 @@ export class GIAttribsSnapshot {
         if (include !== undefined) {
             for (const exist_ssid of include) {
                 const exist_attribs: IAttribsMaps = this.modeldata.attribs.attribs_maps.get(exist_ssid);
-                this.modeldata.attribs.io.merge(ssid, exist_attribs);
+                this.modeldata.attribs.merge.merge(ssid, exist_attribs);
             }
         }
     }

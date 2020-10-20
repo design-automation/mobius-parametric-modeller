@@ -2,7 +2,7 @@ import { GIAttribsAdd } from './GIAttribsAdd';
 import { GIAttribsQuery } from './GIAttribsQuery';
 import { GIModel } from './GIModel';
 import { EEntType, EAttribDataTypeStrs, IAttribsMaps } from './common';
-import { GIAttribsIO } from './GIAttribsIO';
+import { GIAttribsMerge } from './GIAttribsMerge';
 import { GIAttribsModify } from './GIAttribModify';
 import { GIModelData } from './GIModelData';
 import { GIAttribsSnapshot } from './GIAttribsSnapshot';
@@ -42,7 +42,7 @@ export class GIAttribs {
     // maps, the key is the name, the value is the attrib map clas
     public attribs_maps: Map<number, IAttribsMaps> = new Map();
     // sub classes with methods
-    public io: GIAttribsIO;
+    public merge: GIAttribsMerge;
     public imp_exp: GIAttribsImpExp;
     public add: GIAttribsAdd;
     public modify: GIAttribsModify;
@@ -56,7 +56,7 @@ export class GIAttribs {
      */
     constructor(modeldata: GIModelData) {
         this.modeldata = modeldata;
-        this.io = new GIAttribsIO(modeldata);
+        this.merge = new GIAttribsMerge(modeldata);
         this.imp_exp = new GIAttribsImpExp(modeldata);
         this.add = new GIAttribsAdd(modeldata);
         this.modify = new GIAttribsModify(modeldata);

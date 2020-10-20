@@ -2,18 +2,14 @@ import { IGeomMaps, TEntTypeIdx } from './common';
 import { GIGeomAdd } from './GIGeomAdd';
 import { GIGeomEditTopo } from './GIGeomEditTopo';
 import { GIGeomQuery } from './GIGeomQuery';
-import { GIGeomIO } from './GIGeomIO';
 import { GIGeomDel } from './GIGeomDel';
 import { GIGeomCheck } from './GIGeomCheck';
 import { GIGeomCompare } from './GiGeomCompare';
 import { GIGeomEditPline } from './GIGeomEditPline';
 import { GIGeomEditPgon } from './GIGeomEditPgon';
-import { GIGeomModifyColl } from './GIGeomModifyColl';
 import { GIGeomNav } from './GIGeomNav';
 import { GIGeomDelVert } from './GIGeomDelVert';
-import { GIGeomDelEdge } from './GIGeomDelEdge';
 import { GIModelData } from './GIModelData';
-import { GIGeomAppend } from './GIGeomAppend';
 import { GIGeomSnapshot } from './GIGeomSnapshot';
 import { GIGeomThreejs } from './GIGeomThreejs';
 import { GIGeomImpExp } from './GIGeomImpExp';
@@ -54,17 +50,13 @@ export class GIGeom {
         colls: new Set()
     };
     // sub classes with methods
-    public io: GIGeomIO;
     public imp_exp: GIGeomImpExp;
-    public append: GIGeomAppend;
     public add: GIGeomAdd;
     public del: GIGeomDel;
     public del_vert: GIGeomDelVert;
-    public del_edge: GIGeomDelEdge;
     public modify: GIGeomEditTopo;
     public modify_pline: GIGeomEditPline;
     public modify_pgon: GIGeomEditPgon;
-    public modify_coll: GIGeomModifyColl;
     public nav: GIGeomNav;
     public query: GIGeomQuery;
     public check: GIGeomCheck;
@@ -76,17 +68,13 @@ export class GIGeom {
      */
     constructor(model: GIModelData) {
         this.modeldata = model;
-        this.io = new GIGeomIO(this, this._geom_maps);
         this.imp_exp = new GIGeomImpExp(this, this._geom_maps);
-        this.append = new GIGeomAppend(this, this._geom_maps);
         this.add = new GIGeomAdd(this, this._geom_maps);
         this.del = new GIGeomDel(this, this._geom_maps);
         this.del_vert = new GIGeomDelVert(this, this._geom_maps);
-        this.del_edge = new GIGeomDelEdge(this, this._geom_maps);
         this.modify = new GIGeomEditTopo(this, this._geom_maps);
         this.modify_pline = new GIGeomEditPline(this, this._geom_maps);
         this.modify_pgon = new GIGeomEditPgon(this, this._geom_maps);
-        this.modify_coll = new GIGeomModifyColl(this, this._geom_maps);
         this.nav = new GIGeomNav(this, this._geom_maps);
         this.query = new GIGeomQuery(this, this._geom_maps);
         this.check = new GIGeomCheck(this, this._geom_maps);

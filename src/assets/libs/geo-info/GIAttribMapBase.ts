@@ -255,23 +255,23 @@ export class GIAttribMapBase {
     //         }
     //     }
     // }
-    /**
-     * Dumps another attrib map into this attrib map
-     * Assumes tha this map is empty
-     * @param attrib_map The attrib map to merge into this map
-     */
-    public dump(attrib_map: GIAttribMapBase): void {
-        const new_map_val_i_to_ents_i: Map<number, number|Set<number>> = new Map();
-        this._map_val_i_to_ents_i.forEach( (ents_i, val_i) => {
-            if (typeof ents_i === 'number') {
-                new_map_val_i_to_ents_i.set(val_i, ents_i as number);
-            } else {
-                new_map_val_i_to_ents_i.set(val_i, new Set(ents_i));
-            }
-        });
-        this._map_val_i_to_ents_i = new_map_val_i_to_ents_i;
-        this._map_ent_i_to_val_i = new Map(attrib_map._map_ent_i_to_val_i);
-    }
+    // /**
+    //  * Dumps another attrib map into this attrib map
+    //  * Assumes tha this map is empty
+    //  * @param attrib_map The attrib map to merge into this map
+    //  */
+    // public dump(attrib_map: GIAttribMapBase): void {
+    //     const new_map_val_i_to_ents_i: Map<number, number|Set<number>> = new Map();
+    //     this._map_val_i_to_ents_i.forEach( (ents_i, val_i) => {
+    //         if (typeof ents_i === 'number') {
+    //             new_map_val_i_to_ents_i.set(val_i, ents_i as number);
+    //         } else {
+    //             new_map_val_i_to_ents_i.set(val_i, new Set(ents_i));
+    //         }
+    //     });
+    //     this._map_val_i_to_ents_i = new_map_val_i_to_ents_i;
+    //     this._map_ent_i_to_val_i = new Map(attrib_map._map_ent_i_to_val_i);
+    // }
     /**
      * Dumps another attrib map into this attrib map
      * Assumes tha this map is empty ???

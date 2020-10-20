@@ -64,6 +64,6 @@ export class GIGeomEditPline {
         // if this wire is not closed, then return
         if (start_vert_i !== end_vert_i) { return; }
         // del the end edge from the pline
-        this._geom.del_edge.delEdges(end_edge_i, true, false);
+        throw new Error('Not implemented');
     }
 }

@@ -1,6 +1,5 @@
-import { IAttribsJSONData, IAttribJSONData, EEntType, TModelAttribValuesArr, TEntTypeIdx, IEntSets } from './common';
+import { IAttribsJSONData, IAttribJSONData, EEntType, IEntSets } from './common';
 import { GIModelData } from './GIModelData';
-
 
 /**
  * Class for attributes. merge dump append

@@ -46,7 +46,7 @@ export class GIModel {
      */
     public nextSnapshot(include?: number[]): number {
         // increment time stamp
-        this.modeldata.nextTimestamp();
+        this.modeldata.nextSnapshot();
         // get time stamp
         const ssid = this.modeldata.active_snapshot;
         // add snapshot

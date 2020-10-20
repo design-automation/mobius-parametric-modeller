@@ -47,7 +47,7 @@ export class GIAttribsAdd {
      * @param name The name of the attribute.
      */
     public addModelAttribActive(name: string): void {
-        const ssid: number = this.modeldata.timestamp;
+        const ssid: number = this.modeldata.active_snapshot;
         if (!this.modeldata.attribs.attribs_maps.get(ssid).mo.has(name)) {
             this.modeldata.attribs.attribs_maps.get(ssid).mo.set(name, null);
         }
@@ -63,7 +63,7 @@ export class GIAttribsAdd {
      * @param data_type The data type of the attribute.
      */
     public addEntAttribActive(ent_type: EEntType, name: string, data_type: EAttribDataTypeStrs): GIAttribMapBase {
-        const ssid: number = this.modeldata.timestamp;
+        const ssid: number = this.modeldata.active_snapshot;
         return this.addEntAttrib(ssid, ent_type, name, data_type);
     }
     public addEntAttrib(ssid: number, ent_type: EEntType, name: string, data_type: EAttribDataTypeStrs): GIAttribMapBase {
@@ -100,7 +100,7 @@ export class GIAttribsAdd {
      * @param value
      */
     public setModelAttribValActive(name: string, value: TAttribDataTypes): void {
-        const ssid: number = this.modeldata.timestamp;
+        const ssid: number = this.modeldata.active_snapshot;
         this.modeldata.attribs.attribs_maps.get(ssid).mo.set(name, value);
     }
     /**
@@ -111,7 +111,7 @@ export class GIAttribsAdd {
      * @param value
      */
     public setModelAttribListIdxValActive(name: string, idx: number, value: any): void {
-        const ssid: number = this.modeldata.timestamp;
+        const ssid: number = this.modeldata.active_snapshot;
         const list_value: TAttribDataTypes = this.modeldata.attribs.attribs_maps.get(ssid).mo.get(name);
         if (list_value === undefined) { throw new Error('Attribute with this name does not exist.'); }
         if (!Array.isArray(list_value)) {
@@ -127,7 +127,7 @@ export class GIAttribsAdd {
      * @param value
      */
     public setModelAttribDictKeyValActive(name: string, key: string, value: any): void {
-        const ssid: number = this.modeldata.timestamp;
+        const ssid: number = this.modeldata.active_snapshot;
         const dict_value: TAttribDataTypes = this.modeldata.attribs.attribs_maps.get(ssid).mo.get(name);
         if (dict_value === undefined) { throw new Error('Attribute with this name does not exist.'); }
         if (Array.isArray(dict_value) || typeof dict_value !== 'object') {
@@ -143,7 +143,7 @@ export class GIAttribsAdd {
      * @param value
      */
     public setCreateEntsAttribValActive(ent_type: EEntType, ents_i: number|number[], name: string, value: TAttribDataTypes): void {
-        const ssid: number = this.modeldata.timestamp;
+        const ssid: number = this.modeldata.active_snapshot;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
         // get the attrib
@@ -166,7 +166,7 @@ export class GIAttribsAdd {
      * @param value
      */
     public setEntAttribValActive(ent_type: EEntType, ent_i: number, name: string, value: TAttribDataTypes): void {
-        const ssid: number = this.modeldata.timestamp;
+        const ssid: number = this.modeldata.active_snapshot;
         const attrib: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid)[EEntTypeStr[ent_type]].get(name);
         if (attrib === undefined) { throw new Error('Attribute does not exist:' + name); }
         attrib.setEntVal(ent_i, value);
@@ -179,7 +179,7 @@ export class GIAttribsAdd {
      * @param value
      */
     public setEntsAttribValActive(ent_type: EEntType, ents_i: number|number[], name: string, value: TAttribDataTypes): void {
-        const ssid: number = this.modeldata.timestamp;
+        const ssid: number = this.modeldata.active_snapshot;
         const attrib: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid)[EEntTypeStr[ent_type]].get(name);
         if (attrib === undefined) { throw new Error('Attribute does not exist:' + name); }
         ents_i = Array.isArray( ents_i) ? ents_i : [ents_i];
@@ -196,7 +196,7 @@ export class GIAttribsAdd {
      */
     public setEntsAttribListIdxValActive(ent_type: EEntType, ents_i: number|number[], name: string,
             idx: number, value: any): void {
-        const ssid: number = this.modeldata.timestamp;
+        const ssid: number = this.modeldata.active_snapshot;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
         const attrib: GIAttribMapBase = attribs.get(name);
@@ -221,7 +221,7 @@ export class GIAttribsAdd {
      */
     public setEntsAttribDictKeyValActive(ent_type: EEntType, ents_i: number|number[], name: string,
             key: string, value: any): void {
-        const ssid: number = this.modeldata.timestamp;
+        const ssid: number = this.modeldata.active_snapshot;
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
         const attrib: GIAttribMapBase = attribs.get(name);
@@ -245,7 +245,7 @@ export class GIAttribsAdd {
      * @param name
      */
     public delEntFromAttribsActive(ent_type: EEntType, ents_i: number|number[]): void {
-        const ssid: number = this.modeldata.timestamp;
+        const ssid: number = this.modeldata.active_snapshot;
         // get the attrib names
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
@@ -257,7 +257,7 @@ export class GIAttribsAdd {
      * @param value
      */
     public setPosiCoordsActive(index: number, xyz: Txyz): void {
-        const ssid: number = this.modeldata.timestamp;
+        const ssid: number = this.modeldata.active_snapshot;
         this.modeldata.attribs.attribs_maps.get(ssid).ps.get(EAttribNames.COORDS).setEntVal(index, xyz);
     }
     /**
@@ -266,7 +266,7 @@ export class GIAttribsAdd {
      * @param value
      */
     public movePosiCoordsActive(index: number, xyz: Txyz): void {
-        const ssid: number = this.modeldata.timestamp;
+        const ssid: number = this.modeldata.active_snapshot;
         const old_xyz: Txyz = this.modeldata.attribs.attribs_maps.get(ssid).ps.get(EAttribNames.COORDS).getEntVal(index) as Txyz;
         const new_xyz: Txyz = vecAdd(old_xyz, xyz);
         this.modeldata.attribs.attribs_maps.get(ssid).ps.get(EAttribNames.COORDS).setEntVal(index, new_xyz);
@@ -277,7 +277,7 @@ export class GIAttribsAdd {
      * @param name
      */
     public copyAttribsActive(ent_type: EEntType, from_ent_i: number, to_ent_i: number): void {
-        const ssid: number = this.modeldata.timestamp;
+        const ssid: number = this.modeldata.active_snapshot;
         // get the attrib names
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
@@ -299,7 +299,7 @@ export class GIAttribsAdd {
         
         // TODO make sure only to push onto active ents
 
-        const ssid: number = this.modeldata.timestamp;
+        const ssid: number = this.modeldata.active_snapshot;
         // if source and target are same, then return
         if (source_ent_type === target) { return; }
         // check that the attribute exists

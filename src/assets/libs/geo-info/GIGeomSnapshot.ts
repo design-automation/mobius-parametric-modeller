@@ -87,7 +87,7 @@ export class GIGeomSnapshot {
      * @param ent_i
      */
     public hasEntActive(ent_type: EEntType, ent_i: number): boolean {
-        return this.hasEnt(this._geom.modeldata.timestamp, ent_type, ent_i);
+        return this.hasEnt(this._geom.modeldata.active_snapshot, ent_type, ent_i);
     }
     /**
      *
@@ -95,21 +95,21 @@ export class GIGeomSnapshot {
      * @param ents_i
      */
     public filterEntsActive(ent_type: EEntType, ents_i: number[]): number[] {
-        return this.filterEnts(this._geom.modeldata.timestamp, ent_type, ents_i);
+        return this.filterEnts(this._geom.modeldata.active_snapshot, ent_type, ents_i);
     }
     /**
      *
      * @param ent_type
      */
     public getEntsActive(ent_type: EEntType): number[] {
-        return this.getEnts(this._geom.modeldata.timestamp, ent_type);
+        return this.getEnts(this._geom.modeldata.active_snapshot, ent_type);
     }
     /**
      *
      * @param ent_type
      */
     public numEntsActive(ent_type: EEntType): number {
-        return this.numEnts(this._geom.modeldata.timestamp, ent_type);
+        return this.numEnts(this._geom.modeldata.active_snapshot, ent_type);
     }
     // ============================================================================
     // Query Active
@@ -183,7 +183,7 @@ export class GIGeomSnapshot {
     public addEntsToActiveSnapshot(ents: TEntTypeIdx[]): void {
         for (const [ent_type, ent_i] of ents) {
             if (ent_type === EEntType.POSI || ent_type >= EEntType.POINT) {
-                this.ss_data.get(this._geom.modeldata.timestamp)[EEntTypeStr[ent_type]].add(ent_i);
+                this.ss_data.get(this._geom.modeldata.active_snapshot)[EEntTypeStr[ent_type]].add(ent_i);
             }
         }
     }
@@ -297,7 +297,7 @@ export class GIGeomSnapshot {
             case EEntType.PLINE:
             case EEntType.PGON:
             case EEntType.COLL:
-                const ent_set: Set<number> = this.ss_data.get(this._geom.modeldata.timestamp)[EEntTypeStr[ent_type]];
+                const ent_set: Set<number> = this.ss_data.get(this._geom.modeldata.active_snapshot)[EEntTypeStr[ent_type]];
                 ent_set.add(ent_i);
                 break;
             default:
@@ -311,7 +311,7 @@ export class GIGeomSnapshot {
      */
     public delEntsActive(ent_type: EEntType, ents_i: number|number[], invert = false): void {
         ents_i = Array.isArray(ents_i) ? ents_i : [ents_i];
-        const ent_set: Set<number> = this.ss_data.get(this._geom.modeldata.timestamp)[EEntTypeStr[ent_type]];
+        const ent_set: Set<number> = this.ss_data.get(this._geom.modeldata.active_snapshot)[EEntTypeStr[ent_type]];
         if (!invert) {
             // delet the ents in the list
             for (const a_ent_i of ents_i) {
@@ -335,7 +335,7 @@ export class GIGeomSnapshot {
      * @param ent_i
      */
     public delAllEntsActive(ent_type: EEntType): void {
-        const ent_set: Set<number> = this.ss_data.get(this._geom.modeldata.timestamp)[EEntTypeStr[ent_type]];
+        const ent_set: Set<number> = this.ss_data.get(this._geom.modeldata.active_snapshot)[EEntTypeStr[ent_type]];
         ent_set.clear();
     }
     // /**
@@ -543,7 +543,7 @@ export class GIGeomSnapshot {
      * @param index
      */
     public navAnyToAnyActive(from_ets: EEntType, to_ets: EEntType, index: number): number[] {
-        return this.navAnyToAny(this._geom.modeldata.timestamp, from_ets, to_ets, index);
+        return this.navAnyToAny(this._geom.modeldata.active_snapshot, from_ets, to_ets, index);
     }
     /**
      *

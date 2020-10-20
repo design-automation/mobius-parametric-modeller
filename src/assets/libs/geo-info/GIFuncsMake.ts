@@ -51,7 +51,7 @@ export class GIFuncsMake {
      * @param coords
      */
     public position( coords: Txyz|Txyz[]|Txyz[][]): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
-        const ssid: number = this.modeldata.timestamp;
+        const ssid: number = this.modeldata.active_snapshot;
         const depth: number = getArrDepth(coords);
         if (depth === 1) {
             const coord1: Txyz = coords as Txyz;
@@ -72,7 +72,7 @@ export class GIFuncsMake {
      * @param ents_arr
      */
     public point( ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
-        const ssid: number = this.modeldata.timestamp;
+        const ssid: number = this.modeldata.active_snapshot;
         const depth: number = getArrDepth(ents_arr);
         if (depth === 1) {
             const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx; // either a posi or something else
@@ -991,7 +991,7 @@ export class GIFuncsMake {
     // finally, the tjs points that are created are also returned, they are used later for checking "starts_above"
     private _cutEdges(edges_i: number[], plane_tjs: THREE.Plane, method: _ECutMethod):
             [number[][], number[], THREE.Vector3[]] {
-        const ssid: number = this.modeldata.timestamp;
+        const ssid: number = this.modeldata.active_snapshot;
         // create sparse arrays for storing data
         const posi_to_tjs: THREE.Vector3[] = []; // sparse array
         const edge_to_isect_posis: number[][] = []; // sparse array, map_posis[2][3] is the edge from posi 2 to posi 3 (and 3 to 2)
@@ -1029,7 +1029,7 @@ export class GIFuncsMake {
     // if necessary, a new tjs point will be created
     // creates a map from exist posi to tjs
     private _cutGetTjsPoint(posi_i: number, posi_to_tjs: THREE.Vector3[]): THREE.Vector3 {
-        const ssid: number = this.modeldata.timestamp;
+        const ssid: number = this.modeldata.active_snapshot;
         if (posi_to_tjs[posi_i] !== undefined) { return posi_to_tjs[posi_i]; }
         const xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(posi_i);
         const posi_tjs: THREE.Vector3 = new THREE.Vector3(...xyz);

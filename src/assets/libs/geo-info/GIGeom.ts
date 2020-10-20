@@ -1,4 +1,3 @@
-import { GIModel } from './GIModel';
 import { IGeomMaps, TEntTypeIdx } from './common';
 import { GIGeomAdd } from './GIGeomAdd';
 import { GIGeomEditTopo } from './GIGeomEditTopo';
@@ -17,6 +16,7 @@ import { GIModelData } from './GIModelData';
 import { GIGeomAppend } from './GIGeomAppend';
 import { GIGeomSnapshot } from './GIGeomSnapshot';
 import { GIGeomThreejs } from './GIGeomThreejs';
+import { GIGeomImpExp } from './GIGeomImpExp';
 
 /**
  * Class for geometry.
@@ -55,6 +55,7 @@ export class GIGeom {
     };
     // sub classes with methods
     public io: GIGeomIO;
+    public imp_exp: GIGeomImpExp;
     public append: GIGeomAppend;
     public add: GIGeomAdd;
     public del: GIGeomDel;
@@ -76,6 +77,7 @@ export class GIGeom {
     constructor(model: GIModelData) {
         this.modeldata = model;
         this.io = new GIGeomIO(this, this._geom_maps);
+        this.imp_exp = new GIGeomImpExp(this, this._geom_maps);
         this.append = new GIGeomAppend(this, this._geom_maps);
         this.add = new GIGeomAdd(this, this._geom_maps);
         this.del = new GIGeomDel(this, this._geom_maps);
@@ -97,9 +99,6 @@ export class GIGeom {
      * Generate a string for debugging
      */
     public toStr(): string {
-        const ssid: number = this.modeldata.timestamp;
-        let result = '';
-        result += JSON.stringify(this.io.getJSONData(ssid));
-        return result;
+        return JSON.stringify(this.imp_exp.exportGIAll());
     }
 }

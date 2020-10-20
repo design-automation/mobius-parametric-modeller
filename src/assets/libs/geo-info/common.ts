@@ -178,8 +178,6 @@ export type TPgon = number; // [face,....]
 export type TColl = [number, number[], number[], number[]]; // [parent, [point, ...], [polyline, ...], [polygon, ....]]
 export type TEntity = TTri | TVert | TEdge | TWire | TFace | TPoint | TPline | TPgon | TColl;
 export type TAttribDataTypes = string | number | boolean | any[] | object;
-export type TEntAttribValuesArr = Array<[number, number[]]>;
-export type TModelAttribValuesArr = Array<[string, TAttribDataTypes]>;
 
 
 export const RE_SPACES: RegExp = /\s+/g;
@@ -253,40 +251,40 @@ export interface ISnapshotData {
 }
 
 
-// ================================================================================================
-// JSON MODEL
-// ================================================================================================
+// // ================================================================================================
+// // JSON MODEL
+// // ================================================================================================
 
-export interface IModelJSON {
-    meta_data: IMetaJSONData;
-    model_data: IModelJSONData;
-}
+// export interface IModelJSON {
+//     meta_data: IMetaJSONData;
+//     model_data: IModelJSONData;
+// }
 
-// ================================================================================================
-// JSON META DATA
-// ================================================================================================
+// // ================================================================================================
+// // JSON META DATA
+// // ================================================================================================
 
-export interface IAttribJSONValues {
-    number_vals: number[];
-    string_vals: string[];
-    list_vals: any[];
-    dict_vals: object[];
-}
+// export interface IAttribJSONValues {
+//     number_vals: number[];
+//     string_vals: string[];
+//     list_vals: any[];
+//     dict_vals: object[];
+// }
 
-export interface IMetaJSONData {
-    // timestamp: number;
-    posi_count: number;
-    vert_count: number;
-    tri_count: number;
-    edge_count: number;
-    wire_count: number;
-    face_count: number;
-    point_count: number;
-    pline_count: number;
-    pgon_count: number;
-    coll_count: number;
-    attrib_values: IAttribJSONValues;
-}
+// export interface IMetaJSONData {
+//     // timestamp: number;
+//     posi_count: number;
+//     vert_count: number;
+//     tri_count: number;
+//     edge_count: number;
+//     wire_count: number;
+//     face_count: number;
+//     point_count: number;
+//     pline_count: number;
+//     pgon_count: number;
+//     coll_count: number;
+//     attrib_values: IAttribJSONValues;
+// }
 
 // ================================================================================================
 // JSON MODEL DATA
@@ -338,3 +336,5 @@ export interface IAttribsJSONData {
     model: TModelAttribValuesArr;
 }
 
+export type TEntAttribValuesArr = Array<[TAttribDataTypes, number[]]>;
+export type TModelAttribValuesArr = Array<[string, TAttribDataTypes]>;

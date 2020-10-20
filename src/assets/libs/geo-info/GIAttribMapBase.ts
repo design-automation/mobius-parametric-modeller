@@ -1,4 +1,4 @@
-import { EFilterOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribJSONData, EEntType, EAttribNames, EEntTypeStr } from './common';
+import { EFilterOperatorTypes, EAttribDataTypeStrs, TAttribDataTypes, IAttribJSONData, EEntType, EAttribNames, EEntTypeStr, TEntAttribValuesArr } from './common';
 import { GIModelData } from './GIModelData';
 
 /**
@@ -61,12 +61,25 @@ export class GIAttribMapBase {
     }
     /**
      * Returns the JSON data for this attribute.
+     * Returns null if there is no data.
+     * If entset is null, then all ents are included.
      */
-    public getJSONData(): IAttribJSONData {
-        const data: Array<[number, number[]]> = [];
+    public getJSONData(ent_set: Set<number>): IAttribJSONData {
+        const data: TEntAttribValuesArr = [];
         for (const val_i of this._map_val_i_to_ents_i.keys()) {
-            data.push([val_i, this._mapValToEntsGetArr(val_i)]);
+            let ents_i: number[];
+            if (ent_set === null) {
+                // all ents
+                ents_i = this._mapValToEntsGetArr(val_i);
+            } else {
+                // filter ents
+                ents_i = this._mapValToEntsGetArr(val_i).filter( ent_i => ent_set.has(ent_i) );
+            }
+            if (ents_i.length > 0) {
+                data.push([this._getVal(val_i), ents_i]);
+            }
         }
+        if (data.length === 0) { return null; }
         return {
             name: this._name,
             data_type: this._data_type,
@@ -74,23 +87,23 @@ export class GIAttribMapBase {
             data: data
         };
     }
-    /**
-     * Sets the JSON data for this attribute.
-     * Any existing data is deleted.
-     */
-    public setJSONData(attrib_data: IAttribJSONData): void {
-        this._name = attrib_data.name;
-        this._data_type = attrib_data.data_type;
-        this._data_length = attrib_data.data_length;
-        this._map_val_i_to_ents_i = new Map();
-        this._map_ent_i_to_val_i = new Map();
-        for (const [val_i, ents_i] of attrib_data.data) {
-            this._map_val_i_to_ents_i.set(val_i, new Set(ents_i));
-            ents_i.forEach( ent_i => {
-                this._map_ent_i_to_val_i.set(ent_i, val_i);
-            });
-        }
-    }
+    // /**
+    //  * Sets the JSON data for this attribute.
+    //  * Any existing data is deleted.
+    //  */
+    // public setJSONData(attrib_data: IAttribJSONData): void {
+    //     this._name = attrib_data.name;
+    //     this._data_type = attrib_data.data_type;
+    //     this._data_length = attrib_data.data_length;
+    //     this._map_val_i_to_ents_i = new Map();
+    //     this._map_ent_i_to_val_i = new Map();
+    //     for (const [val_i, ents_i] of attrib_data.data) {
+    //         this._map_val_i_to_ents_i.set(val_i, new Set(ents_i));
+    //         ents_i.forEach( ent_i => {
+    //             this._map_ent_i_to_val_i.set(ent_i, val_i);
+    //         });
+    //     }
+    // }
     /**
      * Gets the name of this attribute.
      */
@@ -216,32 +229,32 @@ export class GIAttribMapBase {
             }
         }
     }
-    /**
-     * Renumber the entity IDs.
-     * This gets called when this data is being meregd into another model.
-     * In such a case, entity IDs need to be renumbered to avoid conflicts.
-     * The new entity IDs are defined in the renum_map argument.
-     * typically called before merge, to avoid conflicts.
-     * @param renum_map
-     */
-    public renumEnts(renum_map: Map<number, number>): void {
-        for (const val_i of this._map_val_i_to_ents_i.keys())  {
-            const exist_ents_i: number|Set<number> = this._map_val_i_to_ents_i.get(val_i);
-            if (typeof exist_ents_i === 'number') {
-                const new_ent_i: number = renum_map.get(exist_ents_i as number); // shift
-                this._map_val_i_to_ents_i.set(val_i, new_ent_i);
-                this._map_ent_i_to_val_i.set(new_ent_i, val_i);
-            } else {
-                const new_set_ents_i: Set<number> = new Set();
-                for (const ent_i of exist_ents_i) {
-                    const new_ent_i: number = renum_map.get(ent_i); // shift
-                    new_set_ents_i.add(new_ent_i);
-                    this._map_ent_i_to_val_i.set(new_ent_i, val_i);
-                }
-                this._map_val_i_to_ents_i.set(val_i, new_set_ents_i);
-            }
-        }
-    }
+    // /**
+    //  * Renumber the entity IDs.
+    //  * This gets called when this data is being meregd into another model.
+    //  * In such a case, entity IDs need to be renumbered to avoid conflicts.
+    //  * The new entity IDs are defined in the renum_map argument.
+    //  * typically called before merge, to avoid conflicts.
+    //  * @param renum_map
+    //  */
+    // public renumEnts(renum_map: Map<number, number>): void {
+    //     for (const val_i of this._map_val_i_to_ents_i.keys())  {
+    //         const exist_ents_i: number|Set<number> = this._map_val_i_to_ents_i.get(val_i);
+    //         if (typeof exist_ents_i === 'number') {
+    //             const new_ent_i: number = renum_map.get(exist_ents_i as number); // shift
+    //             this._map_val_i_to_ents_i.set(val_i, new_ent_i);
+    //             this._map_ent_i_to_val_i.set(new_ent_i, val_i);
+    //         } else {
+    //             const new_set_ents_i: Set<number> = new Set();
+    //             for (const ent_i of exist_ents_i) {
+    //                 const new_ent_i: number = renum_map.get(ent_i); // shift
+    //                 new_set_ents_i.add(new_ent_i);
+    //                 this._map_ent_i_to_val_i.set(new_ent_i, val_i);
+    //             }
+    //             this._map_val_i_to_ents_i.set(val_i, new_set_ents_i);
+    //         }
+    //     }
+    // }
     /**
      * Dumps another attrib map into this attrib map
      * Assumes tha this map is empty
@@ -383,12 +396,32 @@ export class GIAttribMapBase {
     protected _mapValToEntsGetArr(val_i: number): number[] {
         const exist_ents_i: number|Set<number> = this._map_val_i_to_ents_i.get(val_i);
         if (exist_ents_i === undefined) { return []; }
+        // just one ent
         if (typeof exist_ents_i === 'number') { return [exist_ents_i as number]; }
+        // an array of ents
         return Array.from(exist_ents_i as Set<number>);
     }
     // ============================================================================================
     // Methods to be overridden
     // ============================================================================================
+    /**
+     * Gets the value for a given index.
+     * ~
+     * If the value does not exist, it throws an error.
+     * ~
+     * If value is a list or dict, it is passed by reference.
+     * @param ent_i
+     */
+    protected _getVal(val_i: number): TAttribDataTypes {
+        throw new Error('Method must be overridden in sub class');
+    }
+    /**
+     * Gets the index for a given value.
+     * @param ent_i
+     */
+    protected _getValIdx(val: TAttribDataTypes): number {
+        throw new Error('Method must be overridden in sub class');
+    }
     /**
      * Gets the value for a given entity, or an array of values given an array of entities.
      * ~

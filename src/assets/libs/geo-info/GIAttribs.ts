@@ -8,6 +8,7 @@ import { GIModelData } from './GIModelData';
 import { GIAttribsSnapshot } from './GIAttribsSnapshot';
 import { GIAttribsThreejs } from './GIAttribsThreejs';
 import { GIAttribsColls } from './GIAttribsColls';
+import { GIAttribsImpExp } from './GIAttribsImpExp';
 
 const eny_type_array: EEntType[] = [
     EEntType.POSI,
@@ -42,6 +43,7 @@ export class GIAttribs {
     public attribs_maps: Map<number, IAttribsMaps> = new Map();
     // sub classes with methods
     public io: GIAttribsIO;
+    public imp_exp: GIAttribsImpExp;
     public add: GIAttribsAdd;
     public modify: GIAttribsModify;
     public query: GIAttribsQuery;
@@ -55,6 +57,7 @@ export class GIAttribs {
     constructor(modeldata: GIModelData) {
         this.modeldata = modeldata;
         this.io = new GIAttribsIO(modeldata);
+        this.imp_exp = new GIAttribsImpExp(modeldata);
         this.add = new GIAttribsAdd(modeldata);
         this.modify = new GIAttribsModify(modeldata);
         this.query = new GIAttribsQuery(modeldata);
@@ -157,7 +160,7 @@ export class GIAttribs {
             } else {
                 const attrib_names: string[] = this.query.getAttribNames(ent_type);
                 for (const attrib_name of attrib_names) {
-                    result += JSON.stringify(this.query.getAttrib(ent_type, attrib_name).getJSONData());
+                    result += JSON.stringify(this.query.getAttrib(ent_type, attrib_name).getJSONData(null));
                     result += '\n';
                 }
             }

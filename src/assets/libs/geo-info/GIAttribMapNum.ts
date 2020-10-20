@@ -22,6 +22,20 @@ export class GIAttribMapNum extends GIAttribMapBase {
         this._data_length = 1;
     }
     /**
+     * Gets the value for a given index.
+     * @param ent_i
+     */
+    protected _getVal(val_i: number): TAttribDataTypes {
+        return val_i;
+    }
+    /**
+     * Gets the index for a given value.
+     * @param ent_i
+     */
+    protected _getValIdx(val: TAttribDataTypes): number {
+        return val as number;
+    }
+    /**
      * Returns a nested array of entities and values, like this:
      * [ [[2,4,6,8], 'hello'], [[9,10], 'world']]
      * This is the same format as used in gi-json

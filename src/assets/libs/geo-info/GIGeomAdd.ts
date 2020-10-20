@@ -46,7 +46,7 @@ export class GIGeomAdd {
         this._geom_maps.up_verts_points.set(vert_i, point_i);
         // time stamp
         this._geom.modeldata.attribs.add.setEntAttribValActive(EEntType.POINT, point_i,
-            EAttribNames.TIMESTAMP, this._geom.modeldata.timestamp);
+            EAttribNames.TIMESTAMP, this._geom.modeldata.active_snapshot);
         // snapshot
         this._geom.modeldata.geom.snapshot.addEntActive(EEntType.POINT, point_i);
         // return entity number
@@ -73,7 +73,7 @@ export class GIGeomAdd {
         this._geom_maps.up_wires_plines.set(wire_i, pline_i);
         // time stamp
         this._geom.modeldata.attribs.add.setEntAttribValActive(EEntType.PLINE, pline_i,
-            EAttribNames.TIMESTAMP, this._geom.modeldata.timestamp);
+            EAttribNames.TIMESTAMP, this._geom.modeldata.active_snapshot);
         // snapshot
         this._geom.modeldata.geom.snapshot.addEntActive(EEntType.PLINE, pline_i);
         // return entity number
@@ -118,7 +118,7 @@ export class GIGeomAdd {
         this._geom_maps.up_faces_pgons.set(face_i, pgon_i);
         // time stamp
         this._geom.modeldata.attribs.add.setEntAttribValActive(EEntType.PGON, pgon_i,
-            EAttribNames.TIMESTAMP, this._geom.modeldata.timestamp);
+            EAttribNames.TIMESTAMP, this._geom.modeldata.active_snapshot);
         // snapshot
         this._geom.modeldata.geom.snapshot.addEntActive(EEntType.PGON, pgon_i);
         // return entity number

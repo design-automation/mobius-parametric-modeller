@@ -21,6 +21,21 @@ export class GIAttribMapBool extends GIAttribMapBase {
         super(modeldata, name, ent_type, data_type);
     }
     /**
+     * Gets the value for a given index.
+     * @param ent_i
+     */
+    protected _getVal(val_i: number): boolean {
+        if (val_i === undefined) { return undefined; }
+        return [false, true][val_i];
+    }
+    /**
+     * Gets the index for a given value.
+     * @param ent_i
+     */
+    protected _getValIdx(val: boolean): number {
+        return val ? 1 : 0;
+    }
+    /**
      * Returns a nested array of entities and values, like this:
      * [ [[2,4,6,8], 'hello'], [[9,10], 'world']]
      * This is the same format as used in gi-json
@@ -30,7 +45,7 @@ export class GIAttribMapBool extends GIAttribMapBase {
         const ents_i_values: [number[], TAttribDataTypes][] = [];
         this._map_val_i_to_ents_i.forEach( (ents_i, val_i) => {
             // val_i is either 0 or 1 (false or true)
-            const val: boolean = [false, true][val_i];
+            const val: TAttribDataTypes = this._getVal(val_i);
             ents_i_values.push([this._mapValToEntsGetArr(val_i), val]);
         });
         return ents_i_values;
@@ -42,10 +57,9 @@ export class GIAttribMapBool extends GIAttribMapBase {
      * ~
      * @param ent_i
      */
-    public getEntVal(ent_i: number): TAttribDataTypes {
+    public getEntVal(ent_i: number): boolean {
         const val_i: number = this._map_ent_i_to_val_i.get(ent_i);
-        if (val_i === undefined) { return undefined; }
-        return [false, true][val_i];
+        return this._getVal(val_i);
     }
     /**
      * Gets all the keys that have a given value
@@ -53,8 +67,8 @@ export class GIAttribMapBool extends GIAttribMapBase {
      * The value can be a list or object
      * @param val
      */
-    public getEntsFromVal(val: TAttribDataTypes): number[] {
-        const val_i: number = val ? 1 : 0;
+    public getEntsFromVal(val: boolean): number[] {
+        const val_i: number = this._getValIdx(val);
         return this._mapValToEntsGetArr(val_i);
     }
     /**

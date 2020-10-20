@@ -21,7 +21,21 @@ export class GIAttribMapList  extends GIAttribMapBase {
         super(modeldata, name, ent_type, data_type);
         this._data_length = 1;
     }
-
+    /**
+     * Gets the value for a given index.
+     * @param ent_i
+     */
+    protected _getVal(val_i: number): TAttribDataTypes {
+        if (val_i === undefined) { return undefined; }
+        return this.modeldata.model.metadata.getValFromIdx(val_i, this._data_type);
+    }
+    /**
+     * Gets the index for a given value.
+     * @param ent_i
+     */
+    protected _getValIdx(val: TAttribDataTypes): number {
+        return this.modeldata.model.metadata.getIdxFromKey(this._valToValkey(val), this._data_type);
+    }
     /**
      * Returns a nested array of entities and values, like this:
      * [ [[2,4,6,8], 'hello'], [[9,10], 'world']]

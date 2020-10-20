@@ -87,7 +87,7 @@ export class GIGeomQuery {
      * ~
      * Used for deleting all entities and for adding global function entities to a snapshot.
      */
-    public getEntSetsTree(ents: TEntTypeIdx[], incl_topo = false): IEntSets {
+    public getEntSetsTree(ents: TEntTypeIdx[], incl_topo = false, incl_tris = false): IEntSets {
         const ent_sets: IEntSets = {
             ps: new Set(),
             obj_ps: new Set(),
@@ -127,12 +127,15 @@ export class GIGeomQuery {
             }
         }
         // now get all the posis of the objs and add them to the list
-        // also add topo in incl_topo is true
+        // also add topo if incl_topo is true
         if (incl_topo) {
             ent_sets._v = new Set();
             ent_sets._e = new Set();
             ent_sets._w = new Set();
             ent_sets._f = new Set();
+            if (incl_tris) {
+                ent_sets._t = new Set();
+            }
         }
         ent_sets.pt.forEach( point_i => {
             const posis_i: number[] = this._geom.nav.navAnyToPosi(EEntType.POINT, point_i);
@@ -165,6 +168,10 @@ export class GIGeomQuery {
             if (incl_topo) {
                 const face_i: number = this._geom.nav.navPgonToFace(pgon_i);
                 ent_sets._f.add(face_i);
+                if (incl_tris) {
+                    const tris_i: number[] = this._geom.nav.navFaceToTri(face_i);
+                    tris_i.forEach( tri_i => ent_sets._t.add(tri_i) );
+                }
                 const wires_i: number[] = this._geom.nav.navFaceToWire(face_i);
                 wires_i.forEach( wire_i => {
                     ent_sets._w.add(wire_i);

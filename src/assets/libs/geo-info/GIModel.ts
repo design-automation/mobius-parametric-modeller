@@ -1,4 +1,4 @@
-import { IModelJSONData, IModelJSON, IMetaJSONData, TEntTypeIdx, TId } from './common';
+import { TEntTypeIdx, TId } from './common';
 import { GIMetaData } from './GIMetaData';
 import { GIModelData } from './GIModelData';
 import { idsBreak } from './id';
@@ -30,14 +30,14 @@ export class GIModel {
      * Get the current time stamp
      */
     public getActiveSnapshot(): number {
-        return this.modeldata.timestamp;
+        return this.modeldata.active_snapshot;
     }
     /**
      * Set the current time stamp backwards to a prevous time stamp.
      * This allows you to roll back in time after executing a global function.
      */
     public setActiveSnapshot(ssid: number): void {
-        this.modeldata.timestamp = ssid;
+        this.modeldata.active_snapshot = ssid;
     }
     /**
      *
@@ -48,7 +48,7 @@ export class GIModel {
         // increment time stamp
         this.modeldata.nextTimestamp();
         // get time stamp
-        const ssid = this.modeldata.timestamp;
+        const ssid = this.modeldata.active_snapshot;
         // add snapshot
         this.modeldata.geom.snapshot.addSnapshot(ssid, include);
         this.modeldata.attribs.snapshot.addSnapshot(ssid, include);
@@ -128,66 +128,64 @@ export class GIModel {
         this.delSnapshots(gf_all_ss);
     }
 
-    /**
-     * Set all data from a JSON string.
-     * This includes both the meta data and the model data.
-     * Any existing metadata will be kept, the new data gets appended.
-     * Any existing model data wil be deleted.
-     * @param meta
-     */
-    public setJSONStr(ssid: number, json_str: string): void {
-        // const ssid = this.modeldata.timestamp;
-        const json_data: IModelJSON = JSON.parse(json_str);
-        // merge the meta data
-        this.metadata.mergeJSONData(json_data);
-        // set the model data
-        this.modeldata.setJSONData(ssid, json_data.model_data);
-    }
-    /**
-     * Gets all data as a JSON string.
-     * This includes both the meta data and the model data.
-     */
-    public getJSONStr(ssid: number): string {
-        // const ssid = this.modeldata.timestamp;
-        const model_data: IModelJSONData = this.modeldata.getJSONData(ssid);
-        const meta_data: IMetaJSONData = this.metadata.getJSONData(model_data);
+    // /**
+    //  * Set all data from a JSON string.
+    //  * This includes both the meta data and the model data.
+    //  * Any existing metadata will be kept, the new data gets appended.
+    //  * Any existing model data wil be deleted.
+    //  * @param meta
+    //  */
+    // public setJSONStr(ssid: number, json_str: string): void {
+    //     // const ssid = this.modeldata.timestamp;
+    //     const json_data: IModelJSON = JSON.parse(json_str);
+    //     // merge the meta data
+    //     this.metadata.mergeJSONData(json_data);
+    //     // set the model data
+    //     this.modeldata.importGI(ssid, json_data.model_data);
+    // }
+    // /**
+    //  * Gets all data as a JSON string.
+    //  * This includes both the meta data and the model data.
+    //  */
+    // public getJSONStr(ssid: number): string {
+    //     // const ssid = this.modeldata.timestamp;
+    //     const model_data: IModelJSONData = this.modeldata.exportGI(ssid);
+    //     const meta_data: IMetaJSONData = this.metadata.getJSONData(model_data);
 
-        const data: IModelJSON = {
-            meta_data: meta_data,
-            model_data: model_data
-        };
-        return JSON.stringify(data);
-    }
+    //     const data: IModelJSON = {
+    //         meta_data: meta_data,
+    //         model_data: model_data
+    //     };
+    //     return JSON.stringify(data);
+    // }
+    // /**
+    //  * Sets the data in this model from a JSON data object using shallow copy.
+    //  * Any existing data in the model is deleted.
+    //  * @param model_json_data The JSON data.
+    //  */
+    // public setModelData (ssid: number, model_json_data: IModelJSONData): void {
+    //     // const ssid = this.modeldata.timestamp;
+    //     this.modeldata.importGI(ssid, model_json_data);
+    // }
+    // /**
+    //  * Returns the JSON data for this model using shallow copy.
+    //  */
+    // public getModelData(ssid: number): IModelJSONData {
+    //     // const ssid = this.modeldata.timestamp;
+    //     return this.modeldata.exportGI(ssid);
+    // }
     /**
-     * Sets the data in this model from a JSON data object using shallow copy.
-     * Any existing data in the model is deleted.
-     * @param model_json_data The JSON data.
-     */
-    public setModelData (ssid: number, model_json_data: IModelJSONData): void {
-        // const ssid = this.modeldata.timestamp;
-        this.modeldata.setJSONData(ssid, model_json_data);
-    }
-    /**
-     * Returns the JSON data for this model using shallow copy.
-     */
-    public getModelData(ssid: number): IModelJSONData {
-        // const ssid = this.modeldata.timestamp;
-        return this.modeldata.getJSONData(ssid);
-    }
-    /**
-     * Set the model data (geom and attribs) str.
+     * Import a GI model.
      * @param meta
      */
-    public setModelDataJSONStr(ssid: number, model_json_data_str: string): void {
-        // const ssid = this.modeldata.timestamp;
-        this.modeldata.setJSONData(ssid, JSON.parse(model_json_data_str));
+    public importGI(model_json_data_str: string): void {
+        this.modeldata.importGI(JSON.parse(model_json_data_str));
     }
     /**
-     * Get the model data (geom and attribs) str.
+     * Export a GI model.
      */
-    public getModelDataJSONStr(ssid: number): string {
-        // const ssid = this.modeldata.timestamp;
-        return JSON.stringify(this.modeldata.getJSONData(ssid));
+    public exportGI(ents: TEntTypeIdx[]): string {
+        return JSON.stringify(this.modeldata.exportGI(ents));
     }
     /**
      * Set the meta data object.
@@ -230,18 +228,18 @@ export class GIModel {
     //     // console.log("MERGE");
     //     this.modeldata.merge(ssid, model.modeldata);
     // }
-    /**
-     * Deep copies the model data from a second model into this model.
-     * Meta data is assumed to be the same for both models.
-     * The existing model data in this model is not deleted.
-     * The Entity IDs in this model will not change.
-     * The Entity IDs in the second model will change.
-     * @param model_data The GI model.
-     */
-    public append(ssid: number, ssid2: number, model: GIModel): void {
-        // const ssid = this.modeldata.timestamp;
-        this.modeldata.append(ssid, ssid2, model.modeldata);
-    }
+    // /**
+    //  * Deep copies the model data from a second model into this model.
+    //  * Meta data is assumed to be the same for both models.
+    //  * The existing model data in this model is not deleted.
+    //  * The Entity IDs in this model will not change.
+    //  * The Entity IDs in the second model will change.
+    //  * @param model_data The GI model.
+    //  */
+    // public append(ssid: number, ssid2: number, model: GIModel): void {
+    //     // const ssid = this.modeldata.timestamp;
+    //     this.modeldata.append(ssid, ssid2, model.modeldata);
+    // }
     // /**
     //  * Renumber entities in this model.
     //  */

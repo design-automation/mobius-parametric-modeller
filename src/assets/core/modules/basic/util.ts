@@ -345,39 +345,43 @@ export enum _EIOExportContents {
  */
 export function ExportIO(__model__: GIModel, __console__: string[], __constList__: any, __fileName__: string,
                         file_name: string, exportParams: _EIOExportParams, exportContent: _EIOExportContents): boolean {
-    // let gi_data: string = JSON.stringify(__model__.getData());
-    // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
-    const consolidatedConsole = [];
-    for (const logStr of __console__) {
-        if (!logStr.match('<p style="padding: 2px 0px 2px 10px;"><b><i>')) {
-            continue;
-        }
-        const replacedStr = logStr.replace('<p style="padding: 2px 0px 2px 10px;"><b><i>', '')
-                               .replace('</i></b> ', '').replace('</p>', '').replace('<br>', '\n');
-        consolidatedConsole.push(replacedStr);
-    }
-    const newConstList = {};
-    for (const obj in __constList__) {
-        if (__constList__.hasOwnProperty(obj)) {
-            newConstList[obj] = convertString(__constList__[obj]);
-        }
-    }
-    const edxAnswer = {
-        'fileName': __fileName__,
-        'params' : newConstList,
-        'console': consolidatedConsole.join('\n'),
-        'model'  : __model__.getModelData(__model__.modeldata.timestamp)
-    };
-    if (exportParams === _EIOExportParams.NO) {
-        edxAnswer['params'] = undefined;
-    }
-    if (exportContent === _EIOExportContents.CONSOLE) {
-        edxAnswer['model'] = undefined;
-    } else if (exportContent === _EIOExportContents.MODEL) {
-        edxAnswer['console'] = undefined;
-    }
+    // TODO
+    throw new Error("Not implemented");
+    // TODO
 
-    return download(JSON.stringify(edxAnswer) , file_name);
+    // // let gi_data: string = JSON.stringify(__model__.getData());
+    // // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
+    // const consolidatedConsole = [];
+    // for (const logStr of __console__) {
+    //     if (!logStr.match('<p style="padding: 2px 0px 2px 10px;"><b><i>')) {
+    //         continue;
+    //     }
+    //     const replacedStr = logStr.replace('<p style="padding: 2px 0px 2px 10px;"><b><i>', '')
+    //                            .replace('</i></b> ', '').replace('</p>', '').replace('<br>', '\n');
+    //     consolidatedConsole.push(replacedStr);
+    // }
+    // const newConstList = {};
+    // for (const obj in __constList__) {
+    //     if (__constList__.hasOwnProperty(obj)) {
+    //         newConstList[obj] = convertString(__constList__[obj]);
+    //     }
+    // }
+    // const edxAnswer = {
+    //     'fileName': __fileName__,
+    //     'params' : newConstList,
+    //     'console': consolidatedConsole.join('\n'),
+    //     'model'  : __model__.getModelData(__model__.modeldata.active_snapshot)
+    // };
+    // if (exportParams === _EIOExportParams.NO) {
+    //     edxAnswer['params'] = undefined;
+    // }
+    // if (exportContent === _EIOExportContents.CONSOLE) {
+    //     edxAnswer['model'] = undefined;
+    // } else if (exportContent === _EIOExportContents.MODEL) {
+    //     edxAnswer['console'] = undefined;
+    // }
+
+    // return download(JSON.stringify(edxAnswer) , file_name);
 }
 function convertString(value) {
     let val;
@@ -416,29 +420,30 @@ function convertString(value) {
  * @returns Text that summarises the comparison between the two models.
  */
 export async function ModelCompare(__model__: GIModel, input_data: string, method: _ECOmpareMethod): Promise<string> {
-    const gi_model = await _getFile(input_data);
-    const gi_obj: IModelJSONData = JSON.parse(gi_model) as IModelJSONData;
-    const other_model = new GIModel();
-    other_model.setModelData(other_model.modeldata.timestamp, gi_obj);
-    let result: {score: number, total: number, comment: string} = null;
-    // compare function has three boolean args
-    // normalize: boolean
-    // check_geom_equality: boolean
-    // check_attrib_equality: boolean
-    switch (method) {
-        case _ECOmpareMethod.THIS_IS_SUBSET:
-            result = __model__.compare(other_model, true, false, false);
-            break;
-        case _ECOmpareMethod.THIS_IS_SUPERSET:
-            result = other_model.compare(__model__, true, false, false);
-            break;
-        case _ECOmpareMethod.THIS_IS_EQUAL:
-            result = __model__.compare(other_model, true, true, false);
-            break;
-        default:
-            throw new Error('Compare method not recognised');
-    }
-    return result.comment;
+    throw new Error('Not implemented');
+    // const gi_model = await _getFile(input_data);
+    // const gi_obj: IModelJSONData = JSON.parse(gi_model) as IModelJSONData;
+    // const other_model = new GIModel();
+    // other_model.setModelData(other_model.modeldata.active_snapshot, gi_obj);
+    // let result: {score: number, total: number, comment: string} = null;
+    // // compare function has three boolean args
+    // // normalize: boolean
+    // // check_geom_equality: boolean
+    // // check_attrib_equality: boolean
+    // switch (method) {
+    //     case _ECOmpareMethod.THIS_IS_SUBSET:
+    //         result = __model__.compare(other_model, true, false, false);
+    //         break;
+    //     case _ECOmpareMethod.THIS_IS_SUPERSET:
+    //         result = other_model.compare(__model__, true, false, false);
+    //         break;
+    //     case _ECOmpareMethod.THIS_IS_EQUAL:
+    //         result = __model__.compare(other_model, true, true, false);
+    //         break;
+    //     default:
+    //         throw new Error('Compare method not recognised');
+    // }
+    // return result.comment;
 }
 // ================================================================================================
 /**

@@ -1,4 +1,4 @@
-import { IAttribsJSONData, IAttribJSONData, TAttribDataTypes, EEntType,
+import { TAttribDataTypes, EEntType,
     IAttribsMaps, EEntTypeStr, TModelAttribValuesArr } from './common';
 import { GIModelData } from './GIModelData';
 import * as lodash from 'lodash';
@@ -101,81 +101,81 @@ export class GIAttribsIO {
     //     }
     //     if (attribs_maps.mo !== undefined) { this._dumpModelAttribs(ssid, attribs_maps); }
     // }
-    /**
-     * Adds data to this model from another model.
-     * The existing data in the model is not deleted.
-     * @param model_data Attribute data from the other model.
-     */
-    public append(ssid: number, ssid2: number, other_modeldata: GIModelData, renum_maps: Map<string, Map<number, number>>): void {
-        const attribs_maps: IAttribsMaps = other_modeldata.attribs.attribs_maps.get(ssid2);
-        // add the attribute data
-        if (attribs_maps.ps !== undefined) { this._appendAttribs(ssid, attribs_maps, EEntType.POSI, renum_maps.get('posis')); }
-        if (attribs_maps._v !== undefined) { this._appendAttribs(ssid, attribs_maps, EEntType.VERT, renum_maps.get('verts')); }
-        if (attribs_maps._e !== undefined) { this._appendAttribs(ssid, attribs_maps, EEntType.EDGE, renum_maps.get('edges')); }
-        if (attribs_maps._w !== undefined) { this._appendAttribs(ssid, attribs_maps, EEntType.WIRE, renum_maps.get('wires')); }
-        if (attribs_maps._f !== undefined) { this._appendAttribs(ssid, attribs_maps, EEntType.FACE, renum_maps.get('faces')); }
-        if (attribs_maps.pt !== undefined) { this._appendAttribs(ssid, attribs_maps, EEntType.POINT, renum_maps.get('points')); }
-        if (attribs_maps.pl !== undefined) { this._appendAttribs(ssid, attribs_maps, EEntType.PLINE, renum_maps.get('plines')); }
-        if (attribs_maps.pg !== undefined) { this._appendAttribs(ssid, attribs_maps, EEntType.PGON, renum_maps.get('pgons')); }
-        if (attribs_maps.co !== undefined) { this._appendAttribs(ssid, attribs_maps, EEntType.COLL, renum_maps.get('colls')); }
-        if (attribs_maps.mo !== undefined) { this._mergeModelAttribs(ssid, attribs_maps); }
-    }
-    /**
-     * Adds data to this model from JSON data.
-     * The existing data in the model is deleted.
-     * @param model_data The JSON data for the model.
-     */
-    public setJSONData(ssid: number, attribs_data: IAttribsJSONData): void {
-        // add the attribute data
-        if (attribs_data.posis !== undefined) {
-            this._setAttribsJSONData(ssid, attribs_data.posis, EEntType.POSI);
-        }
-        if (attribs_data.verts !== undefined) {
-            this._setAttribsJSONData(ssid, attribs_data.verts, EEntType.VERT);
-        }
-        if (attribs_data.edges !== undefined) {
-            this._setAttribsJSONData(ssid, attribs_data.edges, EEntType.EDGE);
-        }
-        if (attribs_data.wires !== undefined) {
-            this._setAttribsJSONData(ssid, attribs_data.wires, EEntType.WIRE);
-        }
-        if (attribs_data.faces !== undefined) {
-            this._setAttribsJSONData(ssid, attribs_data.faces, EEntType.FACE);
-        }
-        if (attribs_data.points !== undefined) {
-            this._setAttribsJSONData(ssid, attribs_data.points, EEntType.POINT);
-        }
-        if (attribs_data.plines !== undefined) {
-            this._setAttribsJSONData(ssid, attribs_data.plines, EEntType.PLINE);
-        }
-        if (attribs_data.pgons !== undefined) {
-            this._setAttribsJSONData(ssid, attribs_data.pgons, EEntType.PGON);
-        }
-        if (attribs_data.colls !== undefined) {
-            this._setAttribsJSONData(ssid, attribs_data.colls, EEntType.COLL);
-        }
-        if (attribs_data.model !== undefined) {
-            this._setModelAttribs(ssid, attribs_data.model);
-        }
-    }
-    /**
-     * Returns the JSON data for this model.
-     */
-    public getJSONData(ssid: number): IAttribsJSONData {
-        const data: IAttribsJSONData = {
-            posis: Array.from(this.modeldata.attribs.attribs_maps.get(ssid).ps.values()).map(attrib => attrib.getJSONData()),
-            verts: Array.from(this.modeldata.attribs.attribs_maps.get(ssid)._v.values()).map(attrib => attrib.getJSONData()),
-            edges: Array.from(this.modeldata.attribs.attribs_maps.get(ssid)._e.values()).map(attrib => attrib.getJSONData()),
-            wires: Array.from(this.modeldata.attribs.attribs_maps.get(ssid)._w.values()).map(attrib => attrib.getJSONData()),
-            faces: Array.from(this.modeldata.attribs.attribs_maps.get(ssid)._f.values()).map(attrib => attrib.getJSONData()),
-            points: Array.from(this.modeldata.attribs.attribs_maps.get(ssid).pt.values()).map(attrib => attrib.getJSONData()),
-            plines: Array.from(this.modeldata.attribs.attribs_maps.get(ssid).pl.values()).map(attrib => attrib.getJSONData()),
-            pgons: Array.from(this.modeldata.attribs.attribs_maps.get(ssid).pg.values()).map(attrib => attrib.getJSONData()),
-            colls: Array.from(this.modeldata.attribs.attribs_maps.get(ssid).co.values()).map(attrib => attrib.getJSONData()),
-            model: Array.from(this.modeldata.attribs.attribs_maps.get(ssid).mo)
-        };
-        return data;
-    }
+    // /**
+    //  * Adds data to this model from another model.
+    //  * The existing data in the model is not deleted.
+    //  * @param model_data Attribute data from the other model.
+    //  */
+    // public append(ssid: number, ssid2: number, other_modeldata: GIModelData, renum_maps: Map<string, Map<number, number>>): void {
+    //     const attribs_maps: IAttribsMaps = other_modeldata.attribs.attribs_maps.get(ssid2);
+    //     // add the attribute data
+    //     if (attribs_maps.ps !== undefined) { this._appendAttribs(ssid, attribs_maps, EEntType.POSI, renum_maps.get('posis')); }
+    //     if (attribs_maps._v !== undefined) { this._appendAttribs(ssid, attribs_maps, EEntType.VERT, renum_maps.get('verts')); }
+    //     if (attribs_maps._e !== undefined) { this._appendAttribs(ssid, attribs_maps, EEntType.EDGE, renum_maps.get('edges')); }
+    //     if (attribs_maps._w !== undefined) { this._appendAttribs(ssid, attribs_maps, EEntType.WIRE, renum_maps.get('wires')); }
+    //     if (attribs_maps._f !== undefined) { this._appendAttribs(ssid, attribs_maps, EEntType.FACE, renum_maps.get('faces')); }
+    //     if (attribs_maps.pt !== undefined) { this._appendAttribs(ssid, attribs_maps, EEntType.POINT, renum_maps.get('points')); }
+    //     if (attribs_maps.pl !== undefined) { this._appendAttribs(ssid, attribs_maps, EEntType.PLINE, renum_maps.get('plines')); }
+    //     if (attribs_maps.pg !== undefined) { this._appendAttribs(ssid, attribs_maps, EEntType.PGON, renum_maps.get('pgons')); }
+    //     if (attribs_maps.co !== undefined) { this._appendAttribs(ssid, attribs_maps, EEntType.COLL, renum_maps.get('colls')); }
+    //     if (attribs_maps.mo !== undefined) { this._mergeModelAttribs(ssid, attribs_maps); }
+    // }
+    // /**
+    //  * Adds data to this model from JSON data.
+    //  * The existing data in the model is deleted.
+    //  * @param model_data The JSON data for the model.
+    //  */
+    // public setJSONData(ssid: number, attribs_data: IAttribsJSONData): void {
+    //     // add the attribute data
+    //     if (attribs_data.posis !== undefined) {
+    //         this._setAttribsJSONData(ssid, attribs_data.posis, EEntType.POSI);
+    //     }
+    //     if (attribs_data.verts !== undefined) {
+    //         this._setAttribsJSONData(ssid, attribs_data.verts, EEntType.VERT);
+    //     }
+    //     if (attribs_data.edges !== undefined) {
+    //         this._setAttribsJSONData(ssid, attribs_data.edges, EEntType.EDGE);
+    //     }
+    //     if (attribs_data.wires !== undefined) {
+    //         this._setAttribsJSONData(ssid, attribs_data.wires, EEntType.WIRE);
+    //     }
+    //     if (attribs_data.faces !== undefined) {
+    //         this._setAttribsJSONData(ssid, attribs_data.faces, EEntType.FACE);
+    //     }
+    //     if (attribs_data.points !== undefined) {
+    //         this._setAttribsJSONData(ssid, attribs_data.points, EEntType.POINT);
+    //     }
+    //     if (attribs_data.plines !== undefined) {
+    //         this._setAttribsJSONData(ssid, attribs_data.plines, EEntType.PLINE);
+    //     }
+    //     if (attribs_data.pgons !== undefined) {
+    //         this._setAttribsJSONData(ssid, attribs_data.pgons, EEntType.PGON);
+    //     }
+    //     if (attribs_data.colls !== undefined) {
+    //         this._setAttribsJSONData(ssid, attribs_data.colls, EEntType.COLL);
+    //     }
+    //     if (attribs_data.model !== undefined) {
+    //         this._setModelAttribs(ssid, attribs_data.model);
+    //     }
+    // }
+    // /**
+    //  * Returns the JSON data for this model.
+    //  */
+    // public getJSONData(ssid: number): IAttribsJSONData {
+    //     const data: IAttribsJSONData = {
+    //         posis: Array.from(this.modeldata.attribs.attribs_maps.get(ssid).ps.values()).map(attrib => attrib.getJSONData()),
+    //         verts: Array.from(this.modeldata.attribs.attribs_maps.get(ssid)._v.values()).map(attrib => attrib.getJSONData()),
+    //         edges: Array.from(this.modeldata.attribs.attribs_maps.get(ssid)._e.values()).map(attrib => attrib.getJSONData()),
+    //         wires: Array.from(this.modeldata.attribs.attribs_maps.get(ssid)._w.values()).map(attrib => attrib.getJSONData()),
+    //         faces: Array.from(this.modeldata.attribs.attribs_maps.get(ssid)._f.values()).map(attrib => attrib.getJSONData()),
+    //         points: Array.from(this.modeldata.attribs.attribs_maps.get(ssid).pt.values()).map(attrib => attrib.getJSONData()),
+    //         plines: Array.from(this.modeldata.attribs.attribs_maps.get(ssid).pl.values()).map(attrib => attrib.getJSONData()),
+    //         pgons: Array.from(this.modeldata.attribs.attribs_maps.get(ssid).pg.values()).map(attrib => attrib.getJSONData()),
+    //         colls: Array.from(this.modeldata.attribs.attribs_maps.get(ssid).co.values()).map(attrib => attrib.getJSONData()),
+    //         model: Array.from(this.modeldata.attribs.attribs_maps.get(ssid).mo)
+    //     };
+    //     return data;
+    // }
     // ============================================================================
     // Private methods
     // ============================================================================
@@ -238,37 +238,37 @@ export class GIAttribsIO {
             }
         });
     }
-    /**
-     * merge attributes from another model into this model.
-     * It is assumed that a purge has been performed, so the entity IDs will have changed.
-     * The new entity IDs are defined in the renum_map argument.
-     * The existing attributes are not deleted.
-     * @param attribs_maps
-     */
-    private _appendAttribs(ssid: number, attribs_maps: IAttribsMaps, ent_type: EEntType, renum_map: Map<number, number>) {
-        const other_attribs: Map<string, GIAttribMapBase> = attribs_maps[EEntTypeStr[ ent_type ]];
-        const this_attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[EEntTypeStr[ ent_type ]];
-        other_attribs.forEach( other_attrib => {
-            if (other_attrib.numEnts() > 0) {
-                // get the name
-                const name: string = other_attrib.getName();
-                // get or create the attrib
-                let this_attrib: GIAttribMapBase;
-                if (!this_attribs.has(name)) {
-                    this_attrib = this.modeldata.attribs.add.addEntAttribActive(ent_type, name, other_attrib.getDataType());
-                } else {
-                    this_attrib = this_attribs.get(name);
-                    if (this_attrib.getDataType() !== other_attrib.getDataType()) {
-                        throw new Error('Merge Error: Cannot merge attributes with different data types.');
-                    }
-                }
-                // shift
-                other_attrib.renumEnts(renum_map);
-                // merge
-                this_attrib.merge(other_attrib);
-            }
-        });
-    }
+    // /**
+    //  * merge attributes from another model into this model.
+    //  * It is assumed that a purge has been performed, so the entity IDs will have changed.
+    //  * The new entity IDs are defined in the renum_map argument.
+    //  * The existing attributes are not deleted.
+    //  * @param attribs_maps
+    //  */
+    // private _appendAttribs(ssid: number, attribs_maps: IAttribsMaps, ent_type: EEntType, renum_map: Map<number, number>) {
+    //     const other_attribs: Map<string, GIAttribMapBase> = attribs_maps[EEntTypeStr[ ent_type ]];
+    //     const this_attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[EEntTypeStr[ ent_type ]];
+    //     other_attribs.forEach( other_attrib => {
+    //         if (other_attrib.numEnts() > 0) {
+    //             // get the name
+    //             const name: string = other_attrib.getName();
+    //             // get or create the attrib
+    //             let this_attrib: GIAttribMapBase;
+    //             if (!this_attribs.has(name)) {
+    //                 this_attrib = this.modeldata.attribs.add.addEntAttribActive(ent_type, name, other_attrib.getDataType());
+    //             } else {
+    //                 this_attrib = this_attribs.get(name);
+    //                 if (this_attrib.getDataType() !== other_attrib.getDataType()) {
+    //                     throw new Error('Merge Error: Cannot merge attributes with different data types.');
+    //                 }
+    //             }
+    //             // shift
+    //             other_attrib.renumEnts(renum_map);
+    //             // merge
+    //             this_attrib.merge(other_attrib);
+    //         }
+    //     });
+    // }
     // /**
     //  * merge attributes from another model into this model.
     //  * Assumes that the existing model is empty
@@ -305,19 +305,19 @@ export class GIAttribsIO {
     //     });
     //     throw new Error('Needs fixing');
     // }
-    /**
-     * From JSON data
-     * Existing attributes are deleted
-     * @param attribs_data
-     */
-    private _setAttribsJSONData(ssid: number, attribs_data: IAttribJSONData[], ent_type: EEntType): void {
-        this.modeldata.attribs.attribs_maps.get(ssid)[EEntTypeStr[ ent_type ]] = new Map();
-        attribs_data.forEach( attrib_data => {
-            const this_attrib: GIAttribMapBase = this.modeldata.attribs.add.addEntAttribActive(
-                ent_type,
-                attrib_data.name,
-                attrib_data.data_type);
-            this_attrib.setJSONData(attrib_data);
-        });
-    }
+    // /**
+    //  * From JSON data
+    //  * Existing attributes are deleted
+    //  * @param attribs_data
+    //  */
+    // private _setAttribsJSONData(ssid: number, attribs_data: IAttribJSONData[], ent_type: EEntType): void {
+    //     this.modeldata.attribs.attribs_maps.get(ssid)[EEntTypeStr[ ent_type ]] = new Map();
+    //     attribs_data.forEach( attrib_data => {
+    //         const this_attrib: GIAttribMapBase = this.modeldata.attribs.add.addEntAttribActive(
+    //             ent_type,
+    //             attrib_data.name,
+    //             attrib_data.data_type);
+    //         this_attrib.setJSONData(attrib_data);
+    //     });
+    // }
 }

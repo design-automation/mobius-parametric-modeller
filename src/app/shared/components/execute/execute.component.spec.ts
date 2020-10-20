@@ -83,7 +83,7 @@ describe('Execute Component test', () => {
                 const omodel = _parameterTypes.newFn();
                 // const model = JSON.parse(output.model);
                 // omodel.setModelData(model);
-                omodel.setModelDataJSONStr(output.model);
+                omodel.importGI(output.model);
                 if (test.requirements.hasOwnProperty('geometry')) {
                     if (test.requirements.geometry.hasOwnProperty('num_positions')) {
                         expect(omodel.modeldata.geom.query.numEnts(EEntType.POSI)).
@@ -251,7 +251,7 @@ describe('Execute Model Comparison test', () => {
                 const output1 = dataService.flowchart.nodes[dataService.flowchart.nodes.length - 1];
                 // const model1 = JSON.parse(output1.model);
                 // oModel1.setModelData(model1);
-                oModel1.setModelDataJSONStr(output1.model);
+                oModel1.importGI(output1.model);
             }
             loadCheck = await loadURLfixture.componentInstance.loadStartUpURL(`?file=${test.url2}`);
             expect(loadCheck).toBeTruthy(`Unable to load ${testName2}`);
@@ -260,7 +260,7 @@ describe('Execute Model Comparison test', () => {
                 const output2 = dataService.flowchart.nodes[dataService.flowchart.nodes.length - 1];
                 // const model2 = JSON.parse(output2.model);
                 // oModel2.setModelData(model2);
-                oModel1.setModelDataJSONStr(output2.model);
+                oModel1.importGI(output2.model);
             }
             const compResult = oModel1.compare(oModel2, normalize, check_geom_equality, check_attrib_equality);
             expect(compResult.percent).toEqual(test.percent, 'The two percentages do not match');

@@ -1,6 +1,6 @@
 import { GIGeom } from './GIGeom';
 import { GIAttribs } from './GIAttribs';
-import { IModelJSONData, EEntType, EAttribNames, TEntTypeIdx } from './common';
+import { IModelJSONData, EEntType, EAttribNames, TEntTypeIdx, IEntSets } from './common';
 import { GIModelComparator } from './GIModelComparator';
 import { GIModel } from './GIModel';
 import { GIModelThreejs } from './GIModelThreejs';
@@ -13,7 +13,7 @@ import { GIFuncsModify } from './GIFuncsModify';
  * Geo-info model class.
  */
 export class GIModelData {
-    public timestamp = 0;
+    public active_snapshot = 0;
     private _max_timestamp = 0;
     public model: GIModel;
     public geom: GIGeom;
@@ -43,24 +43,33 @@ export class GIModelData {
         this.funcs_modify = new GIFuncsModify(this);
     }
     /**
-     * Sets the data in this model from JSON data.
-     * Any existing data in the model is deleted.
+     * Imports JSOn data into this model.
+     * Eexisting data in the model is not affected.
      * @param model_data The JSON data.
      */
-    public setJSONData (ssid: number, model_data: IModelJSONData): void {
+    public importGI (model_data: IModelJSONData): void {
         // console.log("SET DATA");
-        this.attribs.io.setJSONData(ssid, model_data.attributes);
-        this.geom.io.setJSONData(ssid, model_data.geometry);
+        const renum_maps: Map<number, Map<number, number>> = this.geom.imp_exp.importGI(model_data.geometry);
+        this.attribs.imp_exp.importGI(model_data.attributes, renum_maps);
     }
     /**
-     * Returns the JSON data for this model.
-     * This will include any deleted entities, which will be undefined.
+     * Exports the JSON data for this model.
      */
-    public getJSONData(ssid: number): IModelJSONData {
-        // console.log("GET DATA");
+    public exportGI(ents: TEntTypeIdx[]): IModelJSONData {
+        if (ents === null) {
+            return {
+                geometry: this.geom.imp_exp.exportGIAll(),
+                attributes: this.attribs.imp_exp.exportGIAll()
+            };
+
+        }
+        const ent_sets: IEntSets = this.geom.query.getEntSetsTree( ents, true, true); // topo and tris
+        // merge the two sets of posis
+        for (const posi_i of ent_sets.obj_ps) { ent_sets.ps.add(posi_i); }
+        // return the data
         return {
-            geometry: this.geom.io.getJSONData(ssid),
-            attributes: this.attribs.io.getJSONData(ssid)
+            geometry: this.geom.imp_exp.exportGI(ent_sets),
+            attributes: this.attribs.imp_exp.exportGI(ent_sets)
         };
     }
     // /**
@@ -149,18 +158,18 @@ export class GIModelData {
     //     // clone.append(ssid, this);
     //     // return clone;
     // }
-    /**
-     * Copys the data from a second model into this model.
-     * The existing data in this model is not deleted.
-     * For the imported data, deleted entities are filtered out (i.e. not merged).
-     * @param model_data The GI model.
-     */
-    public append(ssid: number, ssid2: number, modeldata: GIModelData): void {
-        // append the geometry
-        const renum_maps: Map<string, Map<number, number>> = this.geom.append.append(ssid, ssid2, modeldata);
-        // append the attributes
-        this.attribs.io.append(ssid, ssid2, modeldata, renum_maps);
-    }
+    // /**
+    //  * Copys the data from a second model into this model.
+    //  * The existing data in this model is not deleted.
+    //  * For the imported data, deleted entities are filtered out (i.e. not merged).
+    //  * @param model_data The GI model.
+    //  */
+    // public append(ssid: number, ssid2: number, modeldata: GIModelData): void {
+    //     // append the geometry
+    //     const renum_maps: Map<string, Map<number, number>> = this.geom.append.append(ssid, ssid2, modeldata);
+    //     // append the attributes
+    //     this.attribs.io.append(ssid, ssid2, modeldata, renum_maps);
+    // }
     /**
      * Check model for internal consistency
      */
@@ -188,7 +197,7 @@ export class GIModelData {
      * @param ent_i
      */
     public getObjsUpdateTs(ent_type: EEntType, ent_i: number): void {
-        const ts: number = this.timestamp;
+        const ts: number = this.active_snapshot;
         switch (ent_type) {
             case EEntType.POINT:
             case EEntType.PLINE:
@@ -223,7 +232,7 @@ export class GIModelData {
      * @param ent_i
      */
     public getObjsCheckTs(ent_type: EEntType, ent_i: number): void {
-        const ts: number = this.timestamp;
+        const ts: number = this.active_snapshot;
         switch (ent_type) {
             case EEntType.POINT:
             case EEntType.PLINE:
@@ -262,7 +271,7 @@ export class GIModelData {
      */
     public updateEntTs(ent_type: EEntType, ent_i: number): void {
         if (ent_type >= EEntType.POINT && ent_type <= EEntType.PGON) {
-            this.attribs.add.setEntAttribValActive(ent_type, ent_i, EAttribNames.TIMESTAMP, this.timestamp);
+            this.attribs.add.setEntAttribValActive(ent_type, ent_i, EAttribNames.TIMESTAMP, this.active_snapshot);
         }
     }
     /**
@@ -278,6 +287,6 @@ export class GIModelData {
      */
     public nextTimestamp() {
         this._max_timestamp += 1;
-        this.timestamp = this._max_timestamp;
+        this.active_snapshot = this._max_timestamp;
     }
 }

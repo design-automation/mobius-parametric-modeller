@@ -6,8 +6,7 @@ const NOGROUPS = '---nogroups---';
 /**
  * Import obj
  */
-export function importObj(obj_str: string): GIModel {
-    const model: GIModel = new GIModel();
+export function importObj(model: GIModel, obj_str: string): GIModel {
     enum EObjLine {
         OBJ_COMMENT = '#',
         OBJ_COORD = 'v ',

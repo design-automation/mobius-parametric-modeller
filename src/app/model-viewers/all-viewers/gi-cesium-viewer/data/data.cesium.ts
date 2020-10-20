@@ -197,8 +197,8 @@ export class DataCesium {
                 throw new Error('Latitude attribute must be a number');
             }
             latitude = lat_value as number;
-            if (latitude < 0 || latitude > 90) {
-                throw new Error('Latitude attribute must be between 0 and 90.');
+            if (latitude < -90 || latitude > 90) {
+                throw new Error('Latitude attribute must be between -90 and 90.');
             }
             if (geoloc.elevation) {
                 const ele_value: TAttribDataTypes = geoloc.elevation;

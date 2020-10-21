@@ -56,7 +56,7 @@ export class GIFuncsCommon {
     }
     private _centroidPosis(posis_i: number[]): Txyz {
         const unique_posis_i = Array.from(new Set(posis_i));
-        const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => this.modeldata.attribs.query.getPosiCoords(posi_i));
+        const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => this.modeldata.attribs.query.getPosiCoordsActive(posi_i));
         return vecDiv(vecSum(unique_xyzs), unique_xyzs.length);
     }
     // ================================================================================================
@@ -111,7 +111,7 @@ export class GIFuncsCommon {
             for (const posi_i of posis_i) {
                 let posi_v3: THREE.Vector3 = map_posi_to_v3.get(posi_i);
                 if (posi_v3 === undefined) {
-                    const xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(posi_i);
+                    const xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(posi_i);
                     posi_v3 = new THREE.Vector3(xyz[0], xyz[1], xyz[2]);
                 }
                 posis_v3.push(posi_v3);
@@ -293,7 +293,7 @@ export class GIFuncsCommon {
                     new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
                 } else {
                     // do not clone, just move it
-                    const xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(old_posi_i);
+                    const xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(old_posi_i);
                     this.modeldata.attribs.add.setPosiCoordsActive(old_posi_i, vecAdd(xyz, vector));
                     old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
                 }

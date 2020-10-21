@@ -1042,7 +1042,7 @@ function _nearest(__model__: GIModel, source_posis_i: number[], target_posis_i: 
     typed_buff.setAttribute( 'position', new THREE.BufferAttribute( typed_positions, 4 ) );
     for (let i = 0; i < posis_i.length; i++) {
         const posi_i: number = posis_i[i];
-        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posi_i);
+        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i);
         map_posi_i_to_xyz.set(posi_i, xyz);
         typed_positions[ i * 4 + 0 ] = xyz[0];
         typed_positions[ i * 4 + 1 ] = xyz[1];
@@ -1364,8 +1364,8 @@ function _cytoscapeGetElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
             if (has_weight_attrib) {
                 weight = __model__.modeldata.attribs.query.getEntAttribVal(EEntType.EDGE, edge_i, 'weight') as number;
             } else {
-                const c0: Txyz = __model__.modeldata.attribs.query.getPosiCoords(edge_posis_i[0]);
-                const c1: Txyz = __model__.modeldata.attribs.query.getPosiCoords(edge_posis_i[1]);
+                const c0: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(edge_posis_i[0]);
+                const c1: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(edge_posis_i[1]);
                 weight = distance(c0, c1);
             }
             elements.push( {  data: { id: 'e' + edge_i,
@@ -1387,8 +1387,8 @@ function _cytoscapeGetElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
                 if (has_weight_attrib) {
                     weight = __model__.modeldata.attribs.query.getEntAttribVal(EEntType.EDGE, edge_i, 'weight') as number;
                 } else {
-                    const c0: Txyz = __model__.modeldata.attribs.query.getPosiCoords(edge_posis_i[0]);
-                    const c1: Txyz = __model__.modeldata.attribs.query.getPosiCoords(edge_posis_i[1]);
+                    const c0: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(edge_posis_i[0]);
+                    const c1: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(edge_posis_i[1]);
                     weight = distance(c0, c1);
                 }
                 const obj = {

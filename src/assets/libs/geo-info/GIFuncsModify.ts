@@ -38,7 +38,7 @@ export class GIFuncsModify {
             const unique_posis_i: number[] = Array.from(new Set(posis_i));
             // loop
             for (const unique_posi_i of unique_posis_i) {
-                const old_xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(unique_posi_i);
+                const old_xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(unique_posi_i);
                 const new_xyz: Txyz = vecAdd(old_xyz, vec);
                 this.modeldata.attribs.add.setPosiCoordsActive(unique_posi_i, new_xyz);
             }
@@ -66,7 +66,7 @@ export class GIFuncsModify {
             // TODO snapshot
 
             for (const posi_i of posis_i) {
-                const old_xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(posi_i);
+                const old_xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(posi_i);
                 const vecs: Txyz[] = vecs_map.get(posi_i);
                 const vec: Txyz = vecDiv( vecSum( vecs ), vecs.length);
                 const new_xyz: Txyz = vecAdd(old_xyz, vec);
@@ -93,7 +93,7 @@ export class GIFuncsModify {
         const unique_posis_i: number[] = Array.from(new Set(posis_i));
         const matrix: Matrix4 = rotateMatrix(ray, angle);
         for (const unique_posi_i of unique_posis_i) {
-            const old_xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(unique_posi_i);
+            const old_xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(unique_posi_i);
             const new_xyz: Txyz = multMatrix(old_xyz, matrix);
             this.modeldata.attribs.add.setPosiCoordsActive(unique_posi_i, new_xyz);
         }
@@ -121,7 +121,7 @@ export class GIFuncsModify {
         const unique_posis_i: number[] = Array.from(new Set(posis_i));
         const matrix: Matrix4 = scaleMatrix(plane, scale);
         for (const unique_posi_i of unique_posis_i) {
-            const old_xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(unique_posi_i);
+            const old_xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(unique_posi_i);
             const new_xyz: Txyz = multMatrix(old_xyz, matrix);
             this.modeldata.attribs.add.setPosiCoordsActive(unique_posi_i, new_xyz);
         }
@@ -145,7 +145,7 @@ export class GIFuncsModify {
         const unique_posis_i: number[] = Array.from(new Set(posis_i));
         const matrix: Matrix4 = mirrorMatrix(plane);
         for (const unique_posi_i of unique_posis_i) {
-            const old_xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(unique_posi_i);
+            const old_xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(unique_posi_i);
             const new_xyz: Txyz = multMatrix(old_xyz, matrix);
             this.modeldata.attribs.add.setPosiCoordsActive(unique_posi_i, new_xyz);
         }
@@ -170,7 +170,7 @@ export class GIFuncsModify {
         const unique_posis_i: number[] = Array.from(new Set(posis_i));
         const matrix: Matrix4 = xfromSourceTargetMatrix(from, to);
         for (const unique_posi_i of unique_posis_i) {
-            const old_xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(unique_posi_i);
+            const old_xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(unique_posi_i);
             const new_xyz: Txyz = multMatrix(old_xyz, matrix);
             this.modeldata.attribs.add.setPosiCoordsActive(unique_posi_i, new_xyz);
         }
@@ -222,7 +222,7 @@ export class GIFuncsModify {
         const pairs_posis_i: [number, number][] = [];   // index is edge_i
         for (const edge_i of edges_i) {
             const posis_i: [number, number] = this.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i) as [number, number];
-            const xyzs: [Txyz, Txyz] = posis_i.map(posi_i => this.modeldata.attribs.query.getPosiCoords(posi_i)) as [Txyz, Txyz];
+            const xyzs: [Txyz, Txyz] = posis_i.map(posi_i => this.modeldata.attribs.query.getPosiCoordsActive(posi_i)) as [Txyz, Txyz];
             const edge_vec: Txyz = vecFromTo(xyzs[0], xyzs[1]);
             const edge_len: number = vecLen(edge_vec);
             pairs_xyzs[edge_i] = xyzs;

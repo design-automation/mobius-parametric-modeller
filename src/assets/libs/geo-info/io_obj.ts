@@ -176,7 +176,7 @@ export function exportPosiBasedObj(model: GIModel, entities: TEntTypeIdx[]): str
     const posi_i_to_obj_v: number[] = [];
     for (let i = 0; i < posis_i.length; i++) {
         const posi_i: number =  posis_i[i];
-        const coord: Txyz = model.modeldata.attribs.query.getPosiCoords(posi_i);
+        const coord: Txyz = model.modeldata.attribs.query.getPosiCoordsActive(posi_i);
         if (has_color_attrib) {
             // get the average color from the verts
             const posi_verts_i: number[] = model.modeldata.geom.nav.navPosiToVert(posi_i);

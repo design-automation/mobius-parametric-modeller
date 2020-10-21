@@ -39,7 +39,9 @@ const ent_type_strs: Map<EEntType, string> = new Map([
  */
 export class GIAttribs {
     private modeldata: GIModelData;
-    // maps, the key is the name, the value is the attrib map clas
+    // maps, the key is the ssid, the value is the attrib map data
+    // so to get the specific attibutes for e.g. "xyz" for positions:
+    // attrib_maps.get(ssid).ps.get("xyz")
     public attribs_maps: Map<number, IAttribsMaps> = new Map();
     // sub classes with methods
     public merge: GIAttribsMerge;
@@ -150,21 +152,59 @@ export class GIAttribs {
      * Generate a string for debugging
      */
     public toStr(ssid: number): string {
-        let result = '';
-        for (const ent_type of eny_type_array) {
-            const ent_type_str: string = ent_type_strs.get(ent_type);
-            result += ent_type_str + ': ';
-            if (ent_type === EEntType.MOD) {
-                // TODO
-                throw new Error('Not implemented.');
-            } else {
-                const attrib_names: string[] = this.query.getAttribNames(ent_type);
-                for (const attrib_name of attrib_names) {
-                    result += JSON.stringify(this.query.getAttrib(ent_type, attrib_name).getJSONData(null));
-                    result += '\n';
-                }
-            }
+        const ss_attrib_maps: IAttribsMaps = this.attribs_maps.get(ssid);
+        const result: string[] = [];
+        result.push('posis');
+        ss_attrib_maps.ps.forEach( attrib => result.push(attrib.toStr()) );
+        if (ss_attrib_maps._v.size) {
+            result.push('verts');
+            ss_attrib_maps._v.forEach( attrib => result.push(attrib.toStr()) );
         }
-        return result;
+        if (ss_attrib_maps._e.size) {
+            result.push('edges');
+            ss_attrib_maps._e.forEach( attrib => result.push(attrib.toStr()) );
+        }
+        if (ss_attrib_maps._w.size) {
+            result.push('wires');
+            ss_attrib_maps._w.forEach( attrib => result.push(attrib.toStr()) );
+        }
+        if (ss_attrib_maps._f.size) {
+            result.push('faces');
+            ss_attrib_maps._f.forEach( attrib => result.push(attrib.toStr()) );
+        }
+        if (ss_attrib_maps.pt.size) {
+            result.push('points');
+            ss_attrib_maps.pt.forEach( attrib => result.push(attrib.toStr()) );
+        }
+        if (ss_attrib_maps.pl.size) {
+            result.push('plines');
+            ss_attrib_maps.pl.forEach( attrib => result.push(attrib.toStr()) );
+        }
+        if (ss_attrib_maps.pg.size) {
+            result.push('pgons');
+            ss_attrib_maps.pg.forEach( attrib => result.push(attrib.toStr()) );
+        }
+        if (ss_attrib_maps.co.size) {
+            result.push('colls');
+            ss_attrib_maps.co.forEach( attrib => result.push(attrib.toStr()) );
+        }
+        return result.join('\n');
+
+        // let result = '';
+        // for (const ent_type of eny_type_array) {
+        //     const ent_type_str: string = ent_type_strs.get(ent_type);
+        //     result += ent_type_str + ': ';
+        //     if (ent_type === EEntType.MOD) {
+        //         // TODO
+        //         throw new Error('Not implemented.');
+        //     } else {
+        //         const attrib_names: string[] = this.query.getAttribNames(ent_type);
+        //         for (const attrib_name of attrib_names) {
+        //             result += JSON.stringify(this.query.getAttrib(ent_type, attrib_name).getJSONData());
+        //             result += '\n';
+        //         }
+        //     }
+        // }
+        // return result;
     }
 }

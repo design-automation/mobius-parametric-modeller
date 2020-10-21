@@ -193,7 +193,7 @@ function _convertPgonToShape(__model__: GIModel, pgon_i: number, posis_map: TPos
         const len: number = shape_coords.push([]);
         const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
         for (const posi_i of posis_i) {
-            const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posi_i);
+            const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i);
             const coord: IClipCoord = {X: xyz[0], Y: xyz[1]};
             shape_coords[len - 1].push( coord );
             _putPosiInMap(xyz[0], xyz[1], posi_i, posis_map);
@@ -235,7 +235,7 @@ function _convertWireToShape(__model__: GIModel, wire_i: number, is_closed: bool
     shape_coords.push([]);
     const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
     for (const posi_i of posis_i) {
-        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posi_i);
+        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i);
         const coord: IClipCoord = {X: xyz[0], Y: xyz[1]};
         shape_coords[0].push( coord );
         _putPosiInMap(xyz[0], xyz[1], posi_i, posis_map);
@@ -346,7 +346,7 @@ export function Voronoi(__model__: GIModel, pgons: TId|TId[], entities: TId|TId[
     // posis
     const d3_cell_points: [number, number][] = [];
     for (const posi_i of posis_i) {
-        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posi_i);
+        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i);
         d3_cell_points.push([xyz[0], xyz[1]]);
     }
     // loop and create cells
@@ -356,7 +356,7 @@ export function Voronoi(__model__: GIModel, pgons: TId|TId[], entities: TId|TId[
         const bounds: number[] = [Infinity, Infinity, -Infinity, -Infinity]; // xmin, ymin, xmax, ymax
         // const pgon_shape_coords: IClipCoord[] = [];
         for (const posi_i of __model__.modeldata.geom.nav.navAnyToPosi(EEntType.PGON, pgon_i)) {
-            const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posi_i);
+            const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i);
             // pgon_shape_coords.push( { X: xyz[0], Y: xyz[1]} );
             if (xyz[0] < bounds[0]) { bounds[0] = xyz[0]; }
             if (xyz[1] < bounds[1]) { bounds[1] = xyz[1]; }
@@ -452,7 +452,7 @@ export function Delaunay(__model__: GIModel, entities: TId|TId[]): TId[] {
     // posis
     const d3_tri_coords: [number, number][] = [];
     for (const posi_i of posis_i) {
-        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posi_i);
+        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i);
         d3_tri_coords.push([xyz[0], xyz[1]]);
         _putPosiInMap(xyz[0], xyz[1], posi_i, posis_map);
     }
@@ -515,7 +515,7 @@ function _convexHull(__model__: GIModel, posis_i: number[]): number[] {
     const points: [number, number][] = [];
     const posis_map: TPosisMap = new Map();
     for (const posi_i of posis_i) {
-        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posi_i);
+        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i);
         points.push([xyz[0], xyz[1]]);
         _putPosiInMap(xyz[0], xyz[1], posi_i, posis_map);
     }
@@ -580,7 +580,7 @@ export function BBoxPolygon(__model__: GIModel, entities: TId|TId[], method: _EB
 function _bboxAABB(__model__: GIModel, posis_i: number[]): number {
     const bbox: [number, number, number, number] = [Infinity, Infinity, -Infinity, -Infinity];
     for (const posi_i of posis_i) {
-        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posi_i);
+        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i);
         if (xyz[0] < bbox[0]) { bbox[0] = xyz[0]; }
         if (xyz[1] < bbox[1]) { bbox[1] = xyz[1]; }
         if (xyz[0] > bbox[2]) { bbox[2] = xyz[0]; }
@@ -603,13 +603,13 @@ function _bboxOBB(__model__: GIModel, posis_i: number[]): number {
     // posis
     const hull_posis_i: number[] = _convexHull(__model__, posis_i);
     hull_posis_i.push(hull_posis_i[0]);
-    const first: Txyz = __model__.modeldata.attribs.query.getPosiCoords(hull_posis_i[0]);
+    const first: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(hull_posis_i[0]);
     const hull_xyzs: Txyz[] = [[first[0], first[1], 0]];
     let longest_len = 0;
     let origin_index = -1;
     for (let i = 1; i < hull_posis_i.length; i++) {
         // add xy to list
-        const next: Txyz = __model__.modeldata.attribs.query.getPosiCoords(hull_posis_i[i]);
+        const next: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(hull_posis_i[i]);
         hull_xyzs.push([next[0], next[1], 0]);
         // get dist
         const curr_len = distance(hull_xyzs[i - 1], hull_xyzs[i]);
@@ -1149,7 +1149,7 @@ export function Stitch(__model__: GIModel, entities: TId|TId[]): TId[] {
     const del_posis_i: number[] = [];
     for (const edge_i of all_new_edges_i) {
         const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
-        const xyzs: Txyz[] = posis_i.map(posi_i => __model__.modeldata.attribs.query.getPosiCoords(posi_i));
+        const xyzs: Txyz[] = posis_i.map(posi_i => __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i));
         const dist: number = distanceManhattan(xyzs[0], xyzs[1]);
         if (dist === 0) {
             // we are going to del this posi
@@ -1183,14 +1183,14 @@ function _knifeGetEdgeData(__model__: GIModel, edge_i: number,
     map_edge_i_to_posi_i.set(edge_i, [posis_i[0], posis_i[1]]);
     // save the xy value of the two posis
     if (!map_posi_i_to_xyz.has(posis_i[0])) {
-        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posis_i[0]);
+        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posis_i[0]);
         __model__.modeldata.attribs.add.setPosiCoordsActive(posis_i[0], [xyz[0], xyz[1], 0]);
         // Why is this not working? It also moves the original geom...
         // if (xyz[2] !== 0) { xyz[2] = 0; } // TODO <<<<<<<<<<<<<<<<<<<<<<
         map_posi_i_to_xyz.set(posis_i[0], xyz);
     }
     if (!map_posi_i_to_xyz.has(posis_i[1])) {
-        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posis_i[1]);
+        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posis_i[1]);
         __model__.modeldata.attribs.add.setPosiCoordsActive(posis_i[1], [xyz[0], xyz[1], 0]);
         // Why is this not working? It also moves the original geom...
         // if (xyz[2] !== 0) { xyz[2] = 0; } // TODO <<<<<<<<<<<<<<<<<<<<<<

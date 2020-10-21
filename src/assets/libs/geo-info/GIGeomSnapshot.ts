@@ -559,4 +559,16 @@ export class GIGeomSnapshot {
         }
         return ents_i;
     }
+    // ============================================================================
+    // Debug
+    // ============================================================================
+    public toStr(ssid: number): string {
+        return JSON.stringify([
+            'posis', Array.from(this.ss_data.get(ssid).ps),
+            'points', Array.from(this.ss_data.get(ssid).pt),
+            'plines', Array.from(this.ss_data.get(ssid).pl),
+            'pgons', Array.from(this.ss_data.get(ssid).pg),
+            'colls', Array.from(this.ss_data.get(ssid).co),
+        ]) + '\n';
+    }
 }

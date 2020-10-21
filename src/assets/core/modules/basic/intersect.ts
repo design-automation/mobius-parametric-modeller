@@ -59,7 +59,7 @@ function _intersectRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], 
         const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(ent_type, index);
         const posis_tjs: THREE.Vector3[] = [];
         for (const posi_i of posis_i) {
-            const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(posi_i);
+            const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i);
             const posi_tjs: THREE.Vector3 = new THREE.Vector3(...xyz);
             posis_tjs[posi_i] = posi_tjs;
         }
@@ -138,7 +138,7 @@ function _intersectPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]
             // create threejs posis for all posis
             const posis_tjs: THREE.Vector3[] = [];
             for (const wire_posi_i of wire_posis_i) {
-                const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(wire_posi_i);
+                const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(wire_posi_i);
                 const posi_tjs: THREE.Vector3 = new THREE.Vector3(...xyz);
                 posis_tjs.push(posi_tjs);
             }

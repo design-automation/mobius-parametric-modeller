@@ -53,7 +53,6 @@ export class GIModel {
         this.modeldata.geom.snapshot.addSnapshot(ssid, include);
         this.modeldata.attribs.snapshot.addSnapshot(ssid, include);
         // return the new ssid
-        // console.log(">>> calling nextSnapshot, active ssid = ", ssid)
         return ssid;
     }
     /**

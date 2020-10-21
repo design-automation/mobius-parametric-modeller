@@ -69,7 +69,7 @@ function _createGeojsonPolygon(model: GIModel, pgon_i: number, proj_obj: any, ro
         const coords: Txy[] = [];
         const posis_i: number[] = model.modeldata.geom.nav.navAnyToPosi(EEntType.WIRE, wires_i[i]);
         for (const posi_i of posis_i) {
-            const xyz: Txyz = model.modeldata.attribs.query.getPosiCoords(posi_i);
+            const xyz: Txyz = model.modeldata.attribs.query.getPosiCoordsActive(posi_i);
             const lat_long: [number, number] = _xformFromXYZToLongLat(xyz, proj_obj, rot_matrix, flatten) as [number, number];
             coords.push(lat_long);
         }
@@ -106,7 +106,7 @@ function _createGeojsonLineString(model: GIModel, pline_i: number, proj_obj: any
     const wire_i: number = model.modeldata.geom.nav.navPlineToWire(pline_i);
     const posis_i: number[] = model.modeldata.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
     for (const posi_i of posis_i) {
-        const xyz: Txyz = model.modeldata.attribs.query.getPosiCoords(posi_i);
+        const xyz: Txyz = model.modeldata.attribs.query.getPosiCoordsActive(posi_i);
         const lat_long: [number, number] = _xformFromXYZToLongLat(xyz, proj_obj, rot_matrix, flatten) as [number, number];
         coords.push(lat_long);
     }
@@ -389,7 +389,7 @@ function _addPgonToModel(model: GIModel, polygon: any,
     // check if it needs flipping
     // TODO there may be a faster way to do this
     const face_i: number = model.modeldata.geom.nav.navPgonToFace(pgon_i);
-    const normal: Txyz = model.modeldata.geom.query.getFaceNormal(face_i);
+    const normal: Txyz = model.modeldata.geom.query.getFaceNormalActive(face_i);
     if (vecDot(normal, [0, 0, 1]) < 0) {
         model.modeldata.geom.modify.reverse(model.modeldata.geom.nav.navFaceToWire(face_i)[0]);
     }

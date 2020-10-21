@@ -289,4 +289,12 @@ export class GIModelData {
         this._max_timestamp += 1;
         this.active_snapshot = this._max_timestamp;
     }
+    /**
+     *
+     */
+    public toStr(ssid: number): string {
+        return 'SSID = ' + ssid + '\n' +
+            'GEOMETRY\n' + this.geom.snapshot.toStr(ssid) +
+            'ATTRIBUTES\n' + this.attribs.snapshot.toStr(ssid);
+    }
 }

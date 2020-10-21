@@ -430,7 +430,7 @@ function _meshFaceted(__model__: GIModel, verts_i: number[]): void {
     // calc the normals one time
     const normals: Txyz[] = [];
     for (const pgon_i of Array.from(set_pgons_i)) {
-        const normal: Txyz = __model__.modeldata.geom.query.getFaceNormal(__model__.modeldata.geom.nav.navPgonToFace(pgon_i));
+        const normal: Txyz = __model__.modeldata.geom.query.getFaceNormalActive(__model__.modeldata.geom.nav.navPgonToFace(pgon_i));
         normals[pgon_i] = normal;
     }
     // set the normal
@@ -461,7 +461,7 @@ function _meshSmooth(__model__: GIModel, verts_i: number[]): void {
     // calc all normals one time
     const normals: Txyz[] = [];
     for (const pgon_i of Array.from(set_pgons_i)) {
-        const normal: Txyz = __model__.modeldata.geom.query.getFaceNormal(__model__.modeldata.geom.nav.navPgonToFace(pgon_i));
+        const normal: Txyz = __model__.modeldata.geom.query.getFaceNormalActive(__model__.modeldata.geom.nav.navPgonToFace(pgon_i));
         normals[pgon_i] = normal;
     }
     // set normals on all verts

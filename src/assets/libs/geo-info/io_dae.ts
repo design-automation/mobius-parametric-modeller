@@ -194,7 +194,7 @@ function processGeomMeshPgon(model: GIModel, pgon_i: number, material_id: string
     for (let i = 0; i < pgon_verts_i.length; i++) {
         const vert_i: number = pgon_verts_i[i];
         const posi_i: number = model.modeldata.geom.nav.navVertToPosi(vert_i);
-        const xyz: Txyz = model.modeldata.attribs.query.getPosiCoords(posi_i);
+        const xyz: Txyz = model.modeldata.attribs.query.getPosiCoordsActive(posi_i);
         xyz_str += ' ' + xyz.join(' ');
         vert_map.set(posi_i, i);
     }
@@ -203,7 +203,7 @@ function processGeomMeshPgon(model: GIModel, pgon_i: number, material_id: string
     let num_tris = 0;
     for (const tri_i of pgon_tris_i) {
         const tri_posis_i: number[] = model.modeldata.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
-        const corners_xyzs: Txyz[] = tri_posis_i.map(tri_posi_i => model.modeldata.attribs.query.getPosiCoords(tri_posi_i));
+        const corners_xyzs: Txyz[] = tri_posis_i.map(tri_posi_i => model.modeldata.attribs.query.getPosiCoordsActive(tri_posi_i));
         const tri_area: number = area( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2]);
         if (tri_area > 0) {
             for (const tri_posi_i of tri_posis_i) {
@@ -253,7 +253,7 @@ function processGeomMeshPline(model: GIModel, pline_i: number, material_id: stri
     for (let i = 0; i < pline_verts_i.length; i++) {
         const vert_i: number = pline_verts_i[i];
         const posi_i: number = model.modeldata.geom.nav.navVertToPosi(vert_i);
-        const xyz: Txyz = model.modeldata.attribs.query.getPosiCoords(posi_i);
+        const xyz: Txyz = model.modeldata.attribs.query.getPosiCoordsActive(posi_i);
         xyz_str += ' ' + xyz.join(' ');
         vert_map.set(posi_i, i);
     }
@@ -262,7 +262,7 @@ function processGeomMeshPline(model: GIModel, pline_i: number, material_id: stri
     let num_edges = 0;
     for (const edge_i of pline_edges_i) {
         const edge_posis_i: number[] = model.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
-        const ends_xyzs: Txyz[] = edge_posis_i.map(tri_posi_i => model.modeldata.attribs.query.getPosiCoords(tri_posi_i));
+        const ends_xyzs: Txyz[] = edge_posis_i.map(tri_posi_i => model.modeldata.attribs.query.getPosiCoordsActive(tri_posi_i));
         const edge_length: number = distance( ends_xyzs[0], ends_xyzs[1] );
         if (edge_length > 0) {
             for (const edge_posi_i of edge_posis_i) {

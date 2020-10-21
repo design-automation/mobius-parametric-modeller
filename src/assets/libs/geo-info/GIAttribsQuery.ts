@@ -445,10 +445,12 @@ export class GIAttribsQuery {
      * Shortcut for getting a coordinate from a posi_i
      * @param posi_i
      */
-    public getPosiCoords(posi_i: number): Txyz {
-        const ssid: number = this.modeldata.active_snapshot;
+    public getPosiCoords(ssid: number, posi_i: number): Txyz {
         const result = this.modeldata.attribs.attribs_maps.get(ssid).ps.get(EAttribNames.COORDS).getEntVal(posi_i) as Txyz;
         return result;
+    }
+    public getPosiCoordsActive(posi_i: number): Txyz {
+        return this.getPosiCoords(this.modeldata.active_snapshot, posi_i);
     }
     /**
      * Shortcut for getting a coordinate from a numeric vertex index (i.e. this is not an ID)

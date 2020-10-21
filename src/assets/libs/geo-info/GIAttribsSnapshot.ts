@@ -100,4 +100,10 @@ export class GIAttribsSnapshot {
         }
         from_attrib_maps.mo.forEach( (val, name) => this.modeldata.attribs.add.setModelAttribValActive(name, val) );
     }
+    // ============================================================================
+    // Debug
+    // ============================================================================
+    public toStr(ssid: number): string {
+        return this.modeldata.attribs.toStr(ssid);
+    }
 }

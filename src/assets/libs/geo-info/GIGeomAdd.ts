@@ -149,7 +149,7 @@ export class GIGeomAdd {
      * @param copy_attribs
      */
     public copyMovePosi(posi_i: number, move_vector: Txyz, copy_attribs: boolean): number {
-        const xyz: Txyz = this._geom.modeldata.attribs.query.getPosiCoords(posi_i);
+        const xyz: Txyz = this._geom.modeldata.attribs.query.getPosiCoordsActive(posi_i);
         const new_posi_i: number = this.addPosi();
         this._geom.modeldata.attribs.add.setPosiCoordsActive(new_posi_i, vecAdd(xyz, move_vector));
         if (copy_attribs) {
@@ -174,7 +174,7 @@ export class GIGeomAdd {
      * @param copy_attribs
      */
     public copyPosi(posi_i: number, copy_attribs: boolean): number {
-        const xyz: Txyz = this._geom.modeldata.attribs.query.getPosiCoords(posi_i);
+        const xyz: Txyz = this._geom.modeldata.attribs.query.getPosiCoordsActive(posi_i);
         const new_posi_i: number = this.addPosi();
         this._geom.modeldata.attribs.add.setPosiCoordsActive(new_posi_i, xyz);
         if (copy_attribs) {
@@ -424,7 +424,7 @@ export class GIGeomAdd {
         const wire_posis_i: number[] = wire_verts_i.map(
             vert_i => this._geom_maps.dn_verts_posis.get(vert_i) );
         const wire_coords: Txyz[] = wire_posis_i.map(
-            posi_i => this._geom.modeldata.attribs.query.getPosiCoords(posi_i) );
+            posi_i => this._geom.modeldata.attribs.query.getPosiCoordsActive(posi_i) );
         // get the coords of the holes
         const all_hole_coords: Txyz[][] = [];
         if (hole_wires_i !== undefined) {
@@ -434,7 +434,7 @@ export class GIGeomAdd {
                 const hole_wire_posis_i: number[] = hole_wire_verts_i.map(
                     vert_i => this._geom_maps.dn_verts_posis.get(vert_i) );
                 const hole_wire_coords: Txyz[] = hole_wire_posis_i.map(
-                    posi_i => this._geom.modeldata.attribs.query.getPosiCoords(posi_i) );
+                    posi_i => this._geom.modeldata.attribs.query.getPosiCoordsActive(posi_i) );
                 all_hole_coords.push(hole_wire_coords);
             }
         }

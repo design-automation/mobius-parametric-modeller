@@ -256,7 +256,7 @@ export class GIFuncsMake {
             const posis_i: number[] = idIndicies(ents_arr as TEntTypeIdx[]);
             const vtxs_tf: Txyz[] = [];
             for (const posi_i of posis_i) {
-                const xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(posi_i);
+                const xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(posi_i);
                 vtxs_tf.push(xyz);
             }
             // const tin = turf.triangulate(vtxs_tf);
@@ -332,8 +332,8 @@ export class GIFuncsMake {
                     // create the new posis strip if necessary
                     for (const k of [0, 1]) {
                         if (strip_posis_map.get(exist_posis_a_i[k]) === undefined) {
-                            const xyz_a: Txyz = this.modeldata.attribs.query.getPosiCoords(exist_posis_a_i[k]);
-                            const xyz_b: Txyz = this.modeldata.attribs.query.getPosiCoords(exist_posis_b_i[k]);
+                            const xyz_a: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(exist_posis_a_i[k]);
+                            const xyz_b: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(exist_posis_b_i[k]);
                             const extrude_vec_div: Txyz = vecDiv(vecFromTo(xyz_a, xyz_b), divisions);
                             const strip_posis_i: number[] = [exist_posis_a_i[k]];
                             for (let d = 1; d < divisions; d++) {
@@ -391,8 +391,8 @@ export class GIFuncsMake {
             for (let j = 0; j < posis_arrs_i.length - 1; j++) {
                 stringer_posis_i.push(posis_arrs_i[j][i]);
                 if (divisions > 0) {
-                    const xyz1: Txyz = this.modeldata.attribs.query.getPosiCoords(posis_arrs_i[j][i]);
-                    const xyz2: Txyz = this.modeldata.attribs.query.getPosiCoords(posis_arrs_i[j + 1][i]);
+                    const xyz1: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(posis_arrs_i[j][i]);
+                    const xyz2: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(posis_arrs_i[j + 1][i]);
                     const vec: Txyz = vecDiv(vecFromTo(xyz1, xyz2), divisions);
                     for (let k = 1; k < divisions; k++) {
                         const new_xyz: Txyz = vecAdd(xyz1, vecMult(vec, k));
@@ -447,8 +447,8 @@ export class GIFuncsMake {
             const pline_i: number = this.modeldata.geom.add.addPline(posis_arrs_i[i], ribs_is_closed);
             rib_plines_i.push(pline_i);
             if (divisions > 0) {
-                const xyzs1: Txyz[] = posis_arrs_i[i].map(posi_i => this.modeldata.attribs.query.getPosiCoords(posi_i));
-                const xyzs2: Txyz[] = posis_arrs_i[i + 1].map(posi_i => this.modeldata.attribs.query.getPosiCoords(posi_i));
+                const xyzs1: Txyz[] = posis_arrs_i[i].map(posi_i => this.modeldata.attribs.query.getPosiCoordsActive(posi_i));
+                const xyzs2: Txyz[] = posis_arrs_i[i + 1].map(posi_i => this.modeldata.attribs.query.getPosiCoordsActive(posi_i));
                 const vecs: Txyz[] = [];
                 for (let k = 0; k < num_posis; k++) {
                     const vec: Txyz = vecDiv(vecFromTo(xyzs1[k], xyzs2[k]), divisions);
@@ -489,8 +489,8 @@ export class GIFuncsMake {
         for (let i = 0; i < posis_arrs_i.length - 1; i++) {
             copies.push(ents_arr[i]);
             if (divisions > 0) {
-                const xyzs1: Txyz[] = posis_arrs_i[i].map(posi_i => this.modeldata.attribs.query.getPosiCoords(posi_i));
-                const xyzs2: Txyz[] = posis_arrs_i[i + 1].map(posi_i => this.modeldata.attribs.query.getPosiCoords(posi_i));
+                const xyzs1: Txyz[] = posis_arrs_i[i].map(posi_i => this.modeldata.attribs.query.getPosiCoordsActive(posi_i));
+                const xyzs2: Txyz[] = posis_arrs_i[i + 1].map(posi_i => this.modeldata.attribs.query.getPosiCoordsActive(posi_i));
                 const vecs: Txyz[] = [];
                 for (let k = 0; k < num_posis; k++) {
                     const vec: Txyz = vecDiv(vecFromTo(xyzs1[k], xyzs2[k]), divisions);
@@ -595,7 +595,7 @@ export class GIFuncsMake {
     private _extrudeDim0( ent_type: number, index: number, extrude_vec: Txyz, divisions: number): TEntTypeIdx[] {
         const extrude_vec_div: Txyz = vecDiv(extrude_vec, divisions);
         const exist_posi_i: number = this.modeldata.geom.nav.navAnyToPosi(ent_type, index)[0];
-        const xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(exist_posi_i);
+        const xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(exist_posi_i);
         const strip_posis_i: number[] = [exist_posi_i];
         for (let i = 1; i < divisions + 1; i++) {
             const strip_posi_i: number = this.modeldata.geom.add.addPosi();
@@ -618,7 +618,7 @@ export class GIFuncsMake {
             // create the new posis strip if necessary
             for (const exist_posi_i of exist_posis_i) {
                 if (strip_posis_map.get(exist_posi_i) === undefined) {
-                    const xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(exist_posi_i);
+                    const xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(exist_posi_i);
                     const strip_posis_i: number[] = [exist_posi_i];
                     for (let i = 1; i < divisions + 1; i++) {
                         const strip_posi_i: number = this.modeldata.geom.add.addPosi();
@@ -660,7 +660,7 @@ export class GIFuncsMake {
             // create the new posis strip if necessary
             for (const exist_posi_i of exist_posis_i) {
                 if (strip_posis_map.get(exist_posi_i) === undefined) {
-                    const xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(exist_posi_i);
+                    const xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(exist_posi_i);
                     const strip_posis_i: number[] = [exist_posi_i];
                     for (let i = 1; i < divisions + 1; i++) {
                         const strip_posi_i: number = this.modeldata.geom.add.addPosi();
@@ -691,7 +691,7 @@ export class GIFuncsMake {
             // create the new posis strip if necessary
             for (const exist_posi_i of exist_posis_i) {
                 if (strip_posis_map.get(exist_posi_i) === undefined) {
-                    const xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(exist_posi_i);
+                    const xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(exist_posi_i);
                     const strip_posis_i: number[] = [exist_posi_i];
                     for (let i = 1; i < divisions + 1; i++) {
                         const strip_posi_i: number = this.modeldata.geom.add.addPosi();
@@ -1031,7 +1031,7 @@ export class GIFuncsMake {
     private _cutGetTjsPoint(posi_i: number, posi_to_tjs: THREE.Vector3[]): THREE.Vector3 {
         const ssid: number = this.modeldata.active_snapshot;
         if (posi_to_tjs[posi_i] !== undefined) { return posi_to_tjs[posi_i]; }
-        const xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(posi_i);
+        const xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(posi_i);
         const posi_tjs: THREE.Vector3 = new THREE.Vector3(...xyz);
         posi_to_tjs[posi_i] = posi_tjs;
         return posi_tjs;

@@ -68,8 +68,8 @@ export class GIFuncsEdit {
     }
     private _divideEdge(edge_i: number, divisor: number, method: _EDivisorMethod): number[] {
         const posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
-        const start = this.modeldata.attribs.query.getPosiCoords(posis_i[0]);
-        const end = this.modeldata.attribs.query.getPosiCoords(posis_i[1]);
+        const start = this.modeldata.attribs.query.getPosiCoordsActive(posis_i[0]);
+        const end = this.modeldata.attribs.query.getPosiCoordsActive(posis_i[1]);
         let new_xyzs: Txyz[];
         if (method === _EDivisorMethod.BY_NUMBER) {
             new_xyzs = interpByNum(start, end, divisor - 1);
@@ -216,7 +216,7 @@ export class GIFuncsEdit {
         typed_buff.setAttribute( 'position', new THREE.BufferAttribute( typed_positions, 4 ) );
         for (let i = 0; i < posis_i.length; i++) {
             const posi_i: number = posis_i[i];
-            const xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(posi_i);
+            const xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(posi_i);
             map_posi_i_to_xyz.set(posi_i, xyz);
             typed_positions[ i * 4 + 0 ] = xyz[0];
             typed_positions[ i * 4 + 1 ] = xyz[1];

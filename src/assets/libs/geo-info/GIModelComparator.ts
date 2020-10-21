@@ -115,7 +115,7 @@ export class GIModelComparator {
         const min: Txyz = [Infinity, Infinity, Infinity];
         const max: Txyz = [-Infinity, -Infinity, -Infinity];
         for (const posi_i of this.modeldata.geom.query.getEnts(EEntType.POSI)) {
-            const xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(posi_i);
+            const xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(posi_i);
             if (xyz[0] < min[0]) { min[0] = xyz[0]; }
             if (xyz[1] < min[1]) { min[1] = xyz[1]; }
             if (xyz[2] < min[2]) { min[2] = xyz[2]; }
@@ -206,7 +206,7 @@ export class GIModelComparator {
         const fprints: string[] = [];
         const posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(ent_type, ent_i);
         for (const posi_i of posis_i) {
-            const xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(posi_i);
+            const xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(posi_i);
             const fprint: string[] = [];
             for (let i = 0; i < 3; i++) {
                 const xyz_round: number = Math.round((xyz[i] + trans_padding[0][i]) * precision);
@@ -232,7 +232,7 @@ export class GIModelComparator {
      */
     private xyzFprint(ent_type: EEntType, ent_i: number, trans_vec = [0, 0, 0]): string {
         const posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(ent_type, ent_i);
-        const xyzs: Txyz[] = posis_i.map(posi_i => this.modeldata.attribs.query.getPosiCoords(posi_i));
+        const xyzs: Txyz[] = posis_i.map(posi_i => this.modeldata.attribs.query.getPosiCoordsActive(posi_i));
         const fprints: string[] = xyzs.map(xyz => this.getAttribValFprint([
             xyz[0] + trans_vec[0],
             xyz[1] + trans_vec[1],
@@ -510,8 +510,8 @@ export class GIModelComparator {
                 for (const other_mia_ent_i of other_mia_ents_i) {
                     const other_posis_i: number[] = other_model.modeldata.geom.nav.navAnyToPosi(obj_ent_type, other_mia_ent_i);
                     if (this_posis_i.length === other_posis_i.length) {
-                        const this_xyz: Txyz = this.modeldata.attribs.query.getPosiCoords(this_posis_i[0]);
-                        const other_xyz: Txyz = other_model.modeldata.attribs.query.getPosiCoords(other_posis_i[0]);
+                        const this_xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(this_posis_i[0]);
+                        const other_xyz: Txyz = other_model.modeldata.attribs.query.getPosiCoordsActive(other_posis_i[0]);
                         const trans_vec: Txyz = [
                             other_xyz[0] - this_xyz[0],
                             other_xyz[1] - this_xyz[1],

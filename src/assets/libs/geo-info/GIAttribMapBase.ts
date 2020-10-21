@@ -64,11 +64,11 @@ export class GIAttribMapBase {
      * Returns null if there is no data.
      * If entset is null, then all ents are included.
      */
-    public getJSONData(ent_set: Set<number>): IAttribJSONData {
+    public getJSONData(ent_set?: Set<number>): IAttribJSONData {
         const data: TEntAttribValuesArr = [];
         for (const val_i of this._map_val_i_to_ents_i.keys()) {
             let ents_i: number[];
-            if (ent_set === null) {
+            if (ent_set === undefined) {
                 // all ents
                 ents_i = this._mapValToEntsGetArr(val_i);
             } else {
@@ -229,6 +229,14 @@ export class GIAttribMapBase {
             }
         }
     }
+    // ============================================================================
+    // Debug
+    // ============================================================================
+    public toStr(): string {
+        const data = this.getJSONData();
+        if (data === null) { return this._name + ' has no data.'; }
+        return JSON.stringify(data);
+    }
     // /**
     //  * Renumber the entity IDs.
     //  * This gets called when this data is being meregd into another model.
@@ -272,35 +280,35 @@ export class GIAttribMapBase {
     //     this._map_val_i_to_ents_i = new_map_val_i_to_ents_i;
     //     this._map_ent_i_to_val_i = new Map(attrib_map._map_ent_i_to_val_i);
     // }
-    /**
-     * Dumps another attrib map into this attrib map
-     * Assumes tha this map is empty ???
-     * @param attrib_map The attrib map to merge into this map
-     */
-    public dumpEnts(attrib_map: GIAttribMapBase, selected: Set<number>): void {
-        selected.forEach(selected_ent_i => {
-            if (attrib_map._map_ent_i_to_val_i.has(selected_ent_i)) {
-                const val_i: number = attrib_map._map_ent_i_to_val_i.get(selected_ent_i);
-                this._mapValToEntsAdd(val_i, selected_ent_i);
-                this._map_ent_i_to_val_i.set(selected_ent_i, val_i);
-                // update the data length
-                if (this._is_length_variable) {
-                    const val = this.modeldata.model.metadata.getValFromIdx(val_i, this._data_type);
-                    if (this._data_type === EAttribDataTypeStrs.LIST) {
-                        const arr_len: number = (val as any[]).length;
-                        if (arr_len > this._data_length) {
-                            this._data_length = arr_len;
-                        }
-                    } else if (this._data_type === EAttribDataTypeStrs.DICT) {
-                        const arr_len: number = Object.keys((val as object)).length;
-                        if (arr_len > this._data_length) {
-                            this._data_length = arr_len;
-                        }
-                    }
-                }
-            }
-        });
-    }
+    // /**
+    //  * Dumps another attrib map into this attrib map
+    //  * Assumes tha this map is empty ???
+    //  * @param attrib_map The attrib map to merge into this map
+    //  */
+    // public dumpEnts(attrib_map: GIAttribMapBase, selected: Set<number>): void {
+    //     selected.forEach(selected_ent_i => {
+    //         if (attrib_map._map_ent_i_to_val_i.has(selected_ent_i)) {
+    //             const val_i: number = attrib_map._map_ent_i_to_val_i.get(selected_ent_i);
+    //             this._mapValToEntsAdd(val_i, selected_ent_i);
+    //             this._map_ent_i_to_val_i.set(selected_ent_i, val_i);
+    //             // update the data length
+    //             if (this._is_length_variable) {
+    //                 const val = this.modeldata.model.metadata.getValFromIdx(val_i, this._data_type);
+    //                 if (this._data_type === EAttribDataTypeStrs.LIST) {
+    //                     const arr_len: number = (val as any[]).length;
+    //                     if (arr_len > this._data_length) {
+    //                         this._data_length = arr_len;
+    //                     }
+    //                 } else if (this._data_type === EAttribDataTypeStrs.DICT) {
+    //                     const arr_len: number = Object.keys((val as object)).length;
+    //                     if (arr_len > this._data_length) {
+    //                         this._data_length = arr_len;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     });
+    // }
     //  ===============================================================================================================
     //  Private methods
     //  ===============================================================================================================

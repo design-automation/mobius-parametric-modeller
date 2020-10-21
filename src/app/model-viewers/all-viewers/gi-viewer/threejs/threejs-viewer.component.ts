@@ -1152,7 +1152,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const scene = this._data_threejs;
         const posi_ent = this.dataService.selected_ents.get(ent_type_str);
         if (point !== null) {
-            const position = this.model.modeldata.attribs.query.getPosiCoords(point);
+            const position = this.model.modeldata.attribs.query.getPosiCoordsActive(point);
             const ent_id = parent_ent_id;
             posi_ent.set(ent_id, point);
             const labelText = this.indexAsLabel(ent_type_str, ent_id, point, EEntType.POSI);
@@ -1164,7 +1164,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             const children = [];
             posis.map(posi => {
                 const ent_id = `${ent_type_str}${posi}`;
-                const position = this.model.modeldata.attribs.query.getPosiCoords(posi);
+                const position = this.model.modeldata.attribs.query.getPosiCoordsActive(posi);
                 posi_ent.set(ent_id, posi);
                 const labelText = this.indexAsLabel(ent_type_str, ent_id, posi, EEntType.POSI);
                 scene.selectObjPosition(parent_ent_id, ent_id, position, this.container, labelText);
@@ -1180,7 +1180,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             const children = [];
             uniqPositions.map(posi => {
                 const ent_id = `${ent_type_str}${posi}`;
-                const position = this.model.modeldata.attribs.query.getPosiCoords(posi);
+                const position = this.model.modeldata.attribs.query.getPosiCoordsActive(posi);
                 posi_ent.set(ent_id, posi);
                 const labelText = this.indexAsLabel(ent_type_str, ent_id, posi, EEntType.POSI);
                 scene.selectObjPosition(parent_ent_id, ent_id, position, this.container, labelText);
@@ -1379,7 +1379,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             tri_indices = [],
             positions = [];
         posis_flat.map((posi, index) => {
-            positions.push(this.model.modeldata.attribs.query.getPosiCoords(posi));
+            positions.push(this.model.modeldata.attribs.query.getPosiCoordsActive(posi));
             tri_indices.push(index);
         });
         const posi_flat = [].concat(...positions),
@@ -1463,7 +1463,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const point_indices: number[] = [];
         const positions: Txyz[] = [];
         verts_flat.map((v, i) => {
-            positions.push(this.model.modeldata.attribs.query.getPosiCoords(v));
+            positions.push(this.model.modeldata.attribs.query.getPosiCoordsActive(v));
             point_indices.push(i);
         });
         const posi_flat = [].concat(...positions);
@@ -1530,7 +1530,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const indices = [];
         const positions = [];
         posis_flat.map((posi, index) => {
-            positions.push(this.model.modeldata.attribs.query.getPosiCoords(posi));
+            positions.push(this.model.modeldata.attribs.query.getPosiCoordsActive(posi));
             indices.push(index);
         });
         const posi_flat = [].concat(...positions);

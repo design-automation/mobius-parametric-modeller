@@ -299,7 +299,7 @@ export class DataCesium {
         const vert_to_normal_map: Map<number, any> = new Map();
         for (const posi_i of posis_i) {
             if (!posi_to_point_map.has(posi_i)) {
-                const xyz: Txyz = model.modeldata.attribs.query.getPosiCoords(posi_i);
+                const xyz: Txyz = model.modeldata.attribs.query.getPosiCoordsActive(posi_i);
                 const xform_pnt: any = Cesium.Cartesian3.fromArray(xyz);
                 Cesium.Matrix4.multiplyByPoint(east_north_up, xform_pnt, xform_pnt);
                 posi_to_point_map.set(posi_i, xform_pnt);

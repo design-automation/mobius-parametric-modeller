@@ -374,14 +374,13 @@ export function Copy(__model__: GIModel, entities: TId|TId[]|TId[][], vector: Tx
         ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
     }
     // --- Error Check ---
-    const bool_copy_attribs = true;
     // copy the list of entities
-    const new_ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = __model__.modeldata.funcs_common.copyGeom(ents_arr, bool_copy_attribs);
+    const new_ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = __model__.modeldata.funcs_common.copyGeom(ents_arr, true);
     // copy the positions that belong to the list of entities
     if (vector === null) {
-        __model__.modeldata.funcs_common.clonePosisInEnts(new_ents_arr, bool_copy_attribs);
+        __model__.modeldata.funcs_common.clonePosisInEnts(new_ents_arr, true);
     } else {
-        __model__.modeldata.funcs_common.clonePosisInEntsAndMove(new_ents_arr, bool_copy_attribs, vector);
+        __model__.modeldata.funcs_common.clonePosisInEntsAndMove(new_ents_arr, true, vector);
     }
     // return only the new entities
     return idsMake(new_ents_arr) as TId|TId[]|TId[][];

@@ -262,13 +262,13 @@ export class GIGeomQuery {
                 // first
                 const posi0_i: number =  this._geom_maps.dn_verts_posis.get(edge_verts_i[0]);
                 if ( posi_coords[posi0_i] === undefined) {
-                    posi_coords[posi0_i] = this._geom.modeldata.attribs.query.getPosiCoords(posi0_i);
+                    posi_coords[posi0_i] = this._geom.modeldata.attribs.query.getPosiCoordsActive(posi0_i);
                 }
                 const xyz0: Txyz = posi_coords[posi0_i];
                 // second
                 const posi1_i: number =  this._geom_maps.dn_verts_posis.get(edge_verts_i[1]);
                 if ( posi_coords[posi1_i] === undefined) {
-                    posi_coords[posi1_i] = this._geom.modeldata.attribs.query.getPosiCoords(posi1_i);
+                    posi_coords[posi1_i] = this._geom.modeldata.attribs.query.getPosiCoordsActive(posi1_i);
                 }
                 const xyz1: Txyz = posi_coords[posi1_i];
                 // check
@@ -290,13 +290,13 @@ export class GIGeomQuery {
                 // first
                 const posi0_i: number =  this._geom_maps.dn_verts_posis.get(edge_verts_i[0]);
                 if ( posi_coords[posi0_i] === undefined) {
-                    posi_coords[posi0_i] = this._geom.modeldata.attribs.query.getPosiCoords(posi0_i);
+                    posi_coords[posi0_i] = this._geom.modeldata.attribs.query.getPosiCoordsActive(posi0_i);
                 }
                 const xyz0: Txyz = posi_coords[posi0_i];
                 // second
                 const posi1_i: number =  this._geom_maps.dn_verts_posis.get(edge_verts_i[1]);
                 if ( posi_coords[posi1_i] === undefined) {
-                    posi_coords[posi1_i] = this._geom.modeldata.attribs.query.getPosiCoords(posi1_i);
+                    posi_coords[posi1_i] = this._geom.modeldata.attribs.query.getPosiCoordsActive(posi1_i);
                 }
                 const xyz1: Txyz = posi_coords[posi1_i];
                 // check
@@ -597,13 +597,13 @@ export class GIGeomQuery {
      *
      * @param face_i
      */
-    public getFaceNormal(face_i: number): Txyz {
+    public getFaceNormal(ssid: number, face_i: number): Txyz {
         const normal: Txyz = [0, 0, 0];
         const tris_i: number[] = this._geom._geom_maps.dn_faces_tris.get(face_i);
         let count = 0;
         for (const tri_i of tris_i) {
             const posis_i: number[] = this._geom_maps.dn_tris_verts.get(tri_i).map(vert_i => this._geom_maps.dn_verts_posis.get(vert_i));
-            const xyzs: Txyz[] = posis_i.map(posi_i => this._geom.modeldata.attribs.query.getPosiCoords(posi_i));
+            const xyzs: Txyz[] = posis_i.map(posi_i => this._geom.modeldata.attribs.query.getPosiCoords(ssid, posi_i));
             const vec_a: Txyz = vecFromTo(xyzs[0], xyzs[1]);
             const vec_b: Txyz = vecFromTo(xyzs[0], xyzs[2]); // CCW
             const tri_normal: Txyz = vecCross(vec_a, vec_b, true);
@@ -617,6 +617,9 @@ export class GIGeomQuery {
         if (count === 0) { return [0, 0, 0]; }
         return vecDiv(normal, count);
     }
+    public getFaceNormalActive(face_i: number): Txyz {
+        return this.getFaceNormal(this._geom.modeldata.active_snapshot, face_i);
+    }
     // ============================================================================
     // Calculate
     // ============================================================================
@@ -628,7 +631,7 @@ export class GIGeomQuery {
         const posis_i: number[] = this._geom.nav.navAnyToPosi(ent_type, ent_i);
         const centroid: Txyz = [0, 0, 0];
         for (const posi_i of posis_i) {
-            const xyz: Txyz = this._geom.modeldata.attribs.query.getPosiCoords(posi_i);
+            const xyz: Txyz = this._geom.modeldata.attribs.query.getPosiCoordsActive(posi_i);
             centroid[0] += xyz[0];
             centroid[1] += xyz[1];
             centroid[2] += xyz[2];
@@ -652,8 +655,8 @@ export class GIGeomQuery {
         if (edges_i.length === 1) {
             const posis_i: number[] = this._geom_maps.dn_edges_verts.get(edges_i[0]).map(
                 vert_i => this._geom_maps.dn_verts_posis.get(vert_i));
-            const xyz0: Txyz = this._geom.modeldata.attribs.query.getPosiCoords(posis_i[0]);
-            const xyz1: Txyz = this._geom.modeldata.attribs.query.getPosiCoords(posis_i[1]);
+            const xyz0: Txyz = this._geom.modeldata.attribs.query.getPosiCoordsActive(posis_i[0]);
+            const xyz1: Txyz = this._geom.modeldata.attribs.query.getPosiCoordsActive(posis_i[1]);
             if (xyz0[2] === xyz1[2]) { return [0, 0, 1]; }
             if (xyz0[1] === xyz1[1]) { return [0, 1, 0]; }
             if (xyz0[0] === xyz1[0]) { return [1, 0, 0]; }
@@ -667,7 +670,7 @@ export class GIGeomQuery {
         for (const edge_i of edges_i) {
             const posis_i: number[] = this._geom_maps.dn_edges_verts.get(edge_i).map(
                 vert_i => this._geom_maps.dn_verts_posis.get(vert_i));
-            const xyzs: Txyz[] = posis_i.map(posi_i => this._geom.modeldata.attribs.query.getPosiCoords(posi_i));
+            const xyzs: Txyz[] = posis_i.map(posi_i => this._geom.modeldata.attribs.query.getPosiCoordsActive(posi_i));
             const vec_a: Txyz = vecFromTo(centroid, xyzs[0]);
             const vec_b: Txyz = vecFromTo(centroid, xyzs[1]); // CCW
             const tri_normal: Txyz = vecCross(vec_a, vec_b, true);
@@ -690,7 +693,7 @@ export class GIGeomQuery {
         for (const edge_i of edges_i) {
             const posis_i: number[] = this._geom_maps.dn_edges_verts.get(edge_i).map(
                 vert_i => this._geom_maps.dn_verts_posis.get(vert_i));
-            const xyzs: Txyz[] = posis_i.map(posi_i => this._geom.modeldata.attribs.query.getPosiCoords(posi_i));
+            const xyzs: Txyz[] = posis_i.map(posi_i => this._geom.modeldata.attribs.query.getPosiCoordsActive(posi_i));
             const vec_a: Txyz = vecFromTo(centroid, xyzs[0]);
             const vec_b: Txyz = vecFromTo(centroid, xyzs[1]); // CCW
             const tri_normal: Txyz = vecCross(vec_a, vec_b, true);

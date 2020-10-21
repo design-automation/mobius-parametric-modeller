@@ -305,7 +305,7 @@ export class GIGeomEditTopo {
         const posis_to_del_i: number[] = [];
         const new_xyz: Txyz = [0, 0, 0];
         for (const [exist_posi_i, merge_verts_i] of Array.from(map_posis_to_merge_i)) {
-            const posi_xyz: Txyz = this._geom.modeldata.attribs.query.getPosiCoords(exist_posi_i);
+            const posi_xyz: Txyz = this._geom.modeldata.attribs.query.getPosiCoordsActive(exist_posi_i);
             new_xyz[0] += posi_xyz[0];
             new_xyz[1] += posi_xyz[1];
             new_xyz[2] += posi_xyz[2];

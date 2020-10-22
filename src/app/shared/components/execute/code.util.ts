@@ -19,7 +19,7 @@ export class CodeUtils {
         // mark _terminateCheck to terminate all process after this
         if (prod.type === ProcedureTypes.Terminate && prod.enabled) {
             // _terminateCheck = '';
-            return ['__params__.terminated = true;', 'return __params__.model;'];
+            return ['__params__.terminated = true;', 'return null;'];
         }
 
         prod.hasError = false;

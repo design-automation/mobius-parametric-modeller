@@ -30,7 +30,8 @@ const otherSymbols = new Set(['.', '#', ',']);
 const noSpaceBefore = new Set(['@', ',', ']', '[']);
 
 const allConstants = (<string[][]>inline_func[0][1]).map(constComp => constComp[0]);
-const specialVars = new Set(['undefined', 'null', 'Infinity', 'true', 'false', 'True', 'False', 'None'].concat(allConstants));
+const specialVars = new Set([
+    'undefined', 'null', 'Infinity', 'true', 'false', 'True', 'False', 'None'].concat(allConstants));
 const constantSet = new Set(allConstants);
 
 const reservedWords = [
@@ -77,6 +78,7 @@ export function updateGlobals(startNode: INode) {
     for (let i = startNode.procedure.length - 1; i > -1; i-- ) {
         const prod = startNode.procedure[i];
         if (prod.type !== ProcedureTypes.Constant) { return; }
+        prod.args[0].value = prod.args[0].value.toUpperCase();
         globals.push(prod.args[0].value);
         prod.args[0].jsValue = prod.args[0].value + '_';
     }
@@ -137,11 +139,11 @@ export function modifyLocalFuncVar(procedure: IProcedure, nodeProdList: IProcedu
     procedure.meta.otherInfo.num_returns = findLocalFuncNumReturns(procedure.children);
 
     const declaredVars = [];
-    let argToLower = false;
+    let argToUpper = false;
     procedure.args.forEach(arg => {
         if (!arg.value) { return; }
-        arg.value = modifyVarArg(arg, argToLower).replace(/[\@\#\?]/g, '_');
-        argToLower = true;
+        arg.value = modifyVarArg(arg, argToUpper).replace(/[\@\#\?]/g, '_');
+        argToUpper = true;
         arg.jsValue = arg.value + '_';
         if (arg.name === 'func_name') { return; }
         arg.usedVars = [arg.value];
@@ -221,7 +223,7 @@ function updateLocalFuncProperties(prodList: IProcedure[],
 }
 
 
-export function modifyVarArg(arg: IArgument, toLower = true) {
+export function modifyVarArg(arg: IArgument, toUpper = true) {
     let str = arg.value.trim();
     const repSplit = str.split(/\[/g);
     let bracketCount = -1;
@@ -231,8 +233,20 @@ export function modifyVarArg(arg: IArgument, toLower = true) {
         bracketCount -= repSplit[i].length - 1;
         if (bracketCount === 0) {
             repSplit[i][repSplit[i].length - 1] = repSplit[i][repSplit[i].length - 1].replace(/ /g, '_');
-            if (toLower) {
-                repSplit[i][repSplit[i].length - 1] = repSplit[i][repSplit[i].length - 1].toLowerCase();
+            console.log('                 ', repSplit[i][repSplit[i].length - 1], toUpper)
+            if (toUpper) {
+                const splittedVar = repSplit[i][repSplit[i].length - 1].split('@');
+                splittedVar[0] = splittedVar[0].toUpperCase();
+                repSplit[i][repSplit[i].length - 1] = splittedVar.join('@');
+            }
+            if (repSplit[i].length === 2) {
+                const allsplit = repSplit[i][0].split(',');
+                for (let j = 0; j < allsplit.length; j++) {
+                    const splittedVar = allsplit[j].split('@');
+                    splittedVar[0] = splittedVar[0].toUpperCase();
+                    allsplit[j] = splittedVar.join('@');
+                }
+                repSplit[i][0] = allsplit.join(',');
             }
         } else if (bracketCount < 0) {
             throw(new Error('Error: bracket closed before opening'));
@@ -673,9 +687,14 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
                     {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string, 'jsStr'?: string} {
     const comp = comps[i];
 
-    let newString = comp.value;
-    let jsString = comp.value;
-
+    let newString, jsString;
+    if (specialVars.has(comp.value) || mathFuncs.indexOf(comp.value) !== -1 || disallowAt) {
+        newString = comp.value;
+        jsString = comp.value;
+    } else {
+        newString = comp.value.toUpperCase();
+        jsString = comp.value.toUpperCase();
+    }
     // if (comp.value === 'and') {
     //     return {'i': i + 1, 'str': 'and', 'jsStr': '&&'};
     // } else if (comp.value === 'or') {
@@ -694,9 +713,9 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
     //     jsString = 'null';
     // }
 
-    if (constantSet.has(comp.value)) {
-        jsString = `JSON.parse(JSON.stringify(${comp.value}))`;
-    } else if (!disallowAt && !specialVars.has(comp.value)) {
+    if (constantSet.has(newString)) {
+        jsString = `JSON.parse(JSON.stringify(${newString}))`;
+    } else if (!disallowAt && !specialVars.has(newString)) {
         jsString += '_';
     }
 
@@ -704,7 +723,7 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
     // add the variable to the var list
     if (i + 1 === comps.length) {
         if (!disallowAt) {
-            addVars(vars, comp.value);
+            addVars(vars, newString);
         }
         return {'i': i, 'str': newString, 'jsStr': jsString};
     }
@@ -721,7 +740,7 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
     // add the variable to var list and check for validity of the first component inside the bracket
     } else if (comps[i + 1].value === '[' || comps[i + 1].value === '.') {
         if (!disallowAt) {
-            addVars(vars, comp.value);
+            addVars(vars, newString);
         }
 
         // let arrayName = jsString;
@@ -805,7 +824,7 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
 
     // all other cases
     } else if (!disallowAt) {
-        addVars(vars, comp.value);
+        addVars(vars, newString);
     }
 
     if (!disallowAt && i + 1 < comps.length && (comps[i + 1].value === '@' || comps[i + 1].value === '#' || comps[i + 1].value === '?')) {

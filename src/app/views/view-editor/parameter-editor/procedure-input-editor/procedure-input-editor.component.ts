@@ -68,7 +68,7 @@ export class ProcedureInputEditorComponent implements OnDestroy {
     // modify variable input: replace space " " with underscore "_"
     varMod() {
         if (!this.prod.args[0].value) { return; }
-        this.prod.args[0].value = this.prod.args[0].value.replace(/\s|\"/g, '');
+        this.prod.args[0].value = this.prod.args[0].value.replace(/\s|\"/g, '').toUpperCase();
         if (! this.prod.args[0].value.match(/^[a-zA-Z0-9_]*$/)) {
             this.prod.args[0].invalidVar = true;
         } else {

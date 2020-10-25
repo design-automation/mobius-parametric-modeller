@@ -77,6 +77,7 @@ export function updateGlobals(startNode: INode) {
     for (let i = startNode.procedure.length - 1; i > -1; i-- ) {
         const prod = startNode.procedure[i];
         if (prod.type !== ProcedureTypes.Constant) { return; }
+        prod.args[0].value = prod.args[0].value.toUpperCase();
         globals.push(prod.args[0].value);
         prod.args[0].jsValue = prod.args[0].value + '_';
     }
@@ -673,8 +674,13 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
                     {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string, 'jsStr'?: string} {
     const comp = comps[i];
 
+    if (globals.indexOf(comp.value.toUpperCase()) !== -1) {
+        comp.value = comp.value.toUpperCase();
+    }
+
     let newString = comp.value;
     let jsString = comp.value;
+
 
     // if (comp.value === 'and') {
     //     return {'i': i + 1, 'str': 'and', 'jsStr': '&&'};

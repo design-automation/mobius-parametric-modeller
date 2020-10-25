@@ -618,6 +618,10 @@ export abstract class NodeUtils {
             return false;
         }
         const newProd = NodeUtils.updateID(circularJSON.parse(circularJSON.stringify(prod)));
+        if (prod.type === ProcedureTypes.LocalFuncDef) {
+            newProd.args[0].value += '_copy';
+            newProd.args[0].jsValue += 'copy_';
+        }
         newProd.parent = undefined;
         NodeUtils.insert_procedure(node, newProd);
         NodeUtils.select_procedure(node, newProd, false, false);

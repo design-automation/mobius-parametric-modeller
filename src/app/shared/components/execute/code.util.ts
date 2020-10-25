@@ -19,7 +19,7 @@ export class CodeUtils {
         // mark _terminateCheck to terminate all process after this
         if (prod.type === ProcedureTypes.Terminate && prod.enabled) {
             // _terminateCheck = '';
-            return ['__params__.terminated = true;', 'return __params__.model;'];
+            return ['__params__.terminated = true;', 'return null;'];
         }
 
         prod.hasError = false;
@@ -718,6 +718,7 @@ export class CodeUtils {
     }
 
     static getFunctionString(func: IFunction): string {
+        func.args.forEach(arg => arg.name = arg.name.toUpperCase());
         let fullCode = `async function ${func.name}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){\n`;
 
         let fnCode = `var merged;\n`;
@@ -779,7 +780,6 @@ export class CodeUtils {
             }
         }
         fnCode += '}\n\n';
-        console.log(fnCode);
         fullCode += fnCode;
 
         return fullCode;

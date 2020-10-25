@@ -2,7 +2,6 @@ import { IGeomMaps, TEntTypeIdx } from '../common';
 import { GIGeomAdd } from './GIGeomAdd';
 import { GIGeomEditTopo } from './GIGeomEditTopo';
 import { GIGeomQuery } from './GIGeomQuery';
-import { GIGeomDel } from './GIGeomDel';
 import { GIGeomCheck } from './GIGeomCheck';
 import { GIGeomCompare } from './GIGeomCompare';
 import { GIGeomEditPline } from './GIGeomEditPline';

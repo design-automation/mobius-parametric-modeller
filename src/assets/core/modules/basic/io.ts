@@ -9,8 +9,8 @@ import { checkIDs, ID } from '../_check_ids';
 import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { importObj, exportPosiBasedObj, exportVertBasedObj } from '@libs/geo-info/io_obj';
-import { importGeojson, exportGeojson } from '@libs/geo-info/io_geojson';
+import { importObj, exportPosiBasedObj, exportVertBasedObj } from '@assets/libs/geo-info/io/io_obj';
+import { importGeojson, exportGeojson } from '@assets/libs/geo-info/io/io_geojson';
 import { download } from '@libs/filesys/download';
 import { TId, EEntType, TEntTypeIdx, IEntSets } from '@libs/geo-info/common';
 // import { __merge__ } from '../_model';

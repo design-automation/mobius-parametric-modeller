@@ -8,7 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { DataService } from '../data/data.service';
 import { EEntType, EEntTypeStr } from '@libs/geo-info/common';
-import { GIAttribsThreejs } from '@libs/geo-info/GIAttribsThreejs';
+import { GIAttribsThreejs } from '@assets/libs/geo-info/attribs/GIAttribsThreejs';
 import { ATabsComponent } from './tabs.component';
 
 enum SORT_STATE {

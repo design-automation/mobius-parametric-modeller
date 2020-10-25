@@ -1,19 +1,19 @@
-import { GIGeom } from './GIGeom';
-import { GIAttribs } from './GIAttribs';
+import { GIGeom } from './geom/GIGeom';
+import { GIAttribs } from './attribs/GIAttribs';
 import { IModelJSONData, EEntType, EAttribNames, TEntTypeIdx, IEntSets } from './common';
 import { GIModelComparator } from './GIModelComparator';
 import { GIModel } from './GIModel';
 import { GIModelThreejs } from './GIModelThreejs';
-import { GIFuncsCommon } from './GIFuncsCommon';
-import { GIFuncsMake } from './GIFuncsMake';
-import { GIFuncsEdit } from './GIFuncsEdit';
-import { GIFuncsModify } from './GIFuncsModify';
+import { GIFuncsCommon } from './funcs/GIFuncsCommon';
+import { GIFuncsMake } from './funcs/GIFuncsMake';
+import { GIFuncsEdit } from './funcs/GIFuncsEdit';
+import { GIFuncsModify } from './funcs/GIFuncsModify';
 
 /**
  * Geo-info model class.
  */
 export class GIModelData {
-    public active_snapshot = 0;
+    public active_ssid = 0;
     private _max_timestamp = 0;
     public model: GIModel;
     public geom: GIGeom;
@@ -197,23 +197,23 @@ export class GIModelData {
      * @param ent_i
      */
     public getObjsUpdateTs(ent_type: EEntType, ent_i: number): void {
-        const ts: number = this.active_snapshot;
+        const ts: number = this.active_ssid;
         switch (ent_type) {
             case EEntType.POINT:
             case EEntType.PLINE:
             case EEntType.PGON:
-                this.attribs.add.setEntAttribValActive(ent_type, ent_i, EAttribNames.TIMESTAMP, ts);
+                this.attribs.set.setEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP, ts);
                 return;
             case EEntType.COLL:
                 // get the objects from the collection
                 this.geom.nav.navCollToPgon(ent_i).forEach( pgon_i => {
-                    this.attribs.add.setEntAttribValActive(EEntType.PGON, pgon_i, EAttribNames.TIMESTAMP, ts);
+                    this.attribs.set.setEntAttribVal(EEntType.PGON, pgon_i, EAttribNames.TIMESTAMP, ts);
                 });
                 this.geom.nav.navCollToPline(ent_i).forEach( pline_i => {
-                    this.attribs.add.setEntAttribValActive(EEntType.PLINE, pline_i, EAttribNames.TIMESTAMP, ts);
+                    this.attribs.set.setEntAttribVal(EEntType.PLINE, pline_i, EAttribNames.TIMESTAMP, ts);
                 });
                 this.geom.nav.navCollToPoint(ent_i).forEach( point_i => {
-                    this.attribs.add.setEntAttribValActive(EEntType.POINT, point_i, EAttribNames.TIMESTAMP, ts);
+                    this.attribs.set.setEntAttribVal(EEntType.POINT, point_i, EAttribNames.TIMESTAMP, ts);
                 });
                 return;
             case EEntType.FACE:
@@ -232,13 +232,13 @@ export class GIModelData {
      * @param ent_i
      */
     public getObjsCheckTs(ent_type: EEntType, ent_i: number): void {
-        const ts: number = this.active_snapshot;
+        const ts: number = this.active_ssid;
         switch (ent_type) {
             case EEntType.POINT:
             case EEntType.PLINE:
             case EEntType.PGON:
-                if (this.attribs.query.getEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP) !== ts) {
-                    const obj_ts = this.attribs.query.getEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP);
+                if (this.attribs.get.getEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP) !== ts) {
+                    const obj_ts = this.attribs.get.getEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP);
                     // TODO improve this error message
                     throw new Error('Bad edit...' + ent_type + ', ' + ent_i + ', ' + obj_ts + ', ' + ts);
                 }
@@ -271,7 +271,7 @@ export class GIModelData {
      */
     public updateEntTs(ent_type: EEntType, ent_i: number): void {
         if (ent_type >= EEntType.POINT && ent_type <= EEntType.PGON) {
-            this.attribs.add.setEntAttribValActive(ent_type, ent_i, EAttribNames.TIMESTAMP, this.active_snapshot);
+            this.attribs.set.setEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP, this.active_ssid);
         }
     }
     /**
@@ -280,14 +280,14 @@ export class GIModelData {
      */
     public getEntTs(ent_type: EEntType, ent_i: number): number {
         if (ent_type < EEntType.POINT || ent_type > EEntType.PGON) { throw new Error('Get time stamp: Entity type is not valid.'); }
-        return this.attribs.query.getEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP ) as number;
+        return this.attribs.get.getEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP ) as number;
     }
     /**
      *
      */
     public nextSnapshot() {
         this._max_timestamp += 1;
-        this.active_snapshot = this._max_timestamp;
+        this.active_ssid = this._max_timestamp;
     }
     /**
      *

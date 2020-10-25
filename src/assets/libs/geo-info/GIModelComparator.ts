@@ -115,7 +115,7 @@ export class GIModelComparator {
         const min: Txyz = [Infinity, Infinity, Infinity];
         const max: Txyz = [-Infinity, -Infinity, -Infinity];
         for (const posi_i of this.modeldata.geom.query.getEnts(EEntType.POSI)) {
-            const xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(posi_i);
+            const xyz: Txyz = this.modeldata.attribs.posis.getPosiCoords(posi_i);
             if (xyz[0] < min[0]) { min[0] = xyz[0]; }
             if (xyz[1] < min[1]) { min[1] = xyz[1]; }
             if (xyz[2] < min[2]) { min[2] = xyz[2]; }
@@ -143,7 +143,7 @@ export class GIModelComparator {
                 const fprint_start: string = this.normXyzFprint(EEntType.VERT, verts_i[0], trans_padding);
                 const fprint_end: string = this.normXyzFprint(EEntType.VERT, verts_i[verts_i.length - 1], trans_padding);
                 if (fprint_start > fprint_end) {
-                    this.modeldata.geom.modify.reverse(wire_i);
+                    this.modeldata.geom.edit_topo.reverse(wire_i);
                 }
             }
         }
@@ -162,7 +162,7 @@ export class GIModelComparator {
                     fprints.push([this.normXyzFprint(EEntType.EDGE, edge_i, trans_padding), i]);
                 }
                 fprints.sort();
-                this.modeldata.geom.modify.shift(wire_i, fprints[0][1]);
+                this.modeldata.geom.edit_topo.shift(wire_i, fprints[0][1]);
                 // if polyline, the direction can be any
                 // so normalise direction
                 if (this.modeldata.geom.nav.navWireToPline(wire_i) !== undefined) {
@@ -172,7 +172,7 @@ export class GIModelComparator {
                         dot = vecDot(normal, [1, 0, 0]);
                     }
                     if (dot < 0) {
-                        this.modeldata.geom.modify.reverse(wire_i);
+                        this.modeldata.geom.edit_topo.reverse(wire_i);
                     }
                 }
             }
@@ -206,7 +206,7 @@ export class GIModelComparator {
         const fprints: string[] = [];
         const posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(ent_type, ent_i);
         for (const posi_i of posis_i) {
-            const xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(posi_i);
+            const xyz: Txyz = this.modeldata.attribs.posis.getPosiCoords(posi_i);
             const fprint: string[] = [];
             for (let i = 0; i < 3; i++) {
                 const xyz_round: number = Math.round((xyz[i] + trans_padding[0][i]) * precision);
@@ -232,7 +232,7 @@ export class GIModelComparator {
      */
     private xyzFprint(ent_type: EEntType, ent_i: number, trans_vec = [0, 0, 0]): string {
         const posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(ent_type, ent_i);
-        const xyzs: Txyz[] = posis_i.map(posi_i => this.modeldata.attribs.query.getPosiCoordsActive(posi_i));
+        const xyzs: Txyz[] = posis_i.map(posi_i => this.modeldata.attribs.posis.getPosiCoords(posi_i));
         const fprints: string[] = xyzs.map(xyz => this.getAttribValFprint([
             xyz[0] + trans_vec[0],
             xyz[1] + trans_vec[1],
@@ -256,10 +256,10 @@ export class GIModelComparator {
         // set attrib names to check when comparing objects and collections
         const attrib_names: Map<EEntType, string[]> = new Map();
         attrib_names.set(EEntType.POSI, ['xyz']);
-        if (this.modeldata.attribs.query.hasAttrib(EEntType.VERT, 'rgb')) {
+        if (this.modeldata.attribs.query.hasEntAttrib(EEntType.VERT, 'rgb')) {
             attrib_names.set(EEntType.VERT, ['rgb']);
         }
-        if (this.modeldata.attribs.query.hasAttrib(EEntType.PGON, 'material')) {
+        if (this.modeldata.attribs.query.hasEntAttrib(EEntType.PGON, 'material')) {
             attrib_names.set(EEntType.PGON, ['material']);
         }
 
@@ -411,10 +411,10 @@ export class GIModelComparator {
         const data_comments: string [] = [];
         // set attrib names to check when comparing objects and collections
         const attrib_names: string[] = [];
-        if (this.modeldata.attribs.query.hasAttrib(EEntType.PGON, 'material')) {
+        if (this.modeldata.attribs.query.hasEntAttrib(EEntType.PGON, 'material')) {
             const pgons_i: number[] = this.modeldata.geom.query.getEnts(EEntType.PGON);
             const mat_names: Set<string> =
-                new Set(this.modeldata.attribs.query.getEntAttribVal(EEntType.PGON, pgons_i, 'material') as string[]);
+                new Set(this.modeldata.attribs.get.getEntAttribVal(EEntType.PGON, pgons_i, 'material') as string[]);
             for (const mat_name of Array.from(mat_names)) {
                 if (mat_name !== undefined) {
                     attrib_names.push(mat_name);
@@ -427,8 +427,8 @@ export class GIModelComparator {
             result.total += 1;
             // check if there is a match
             if (other_model.modeldata.attribs.query.hasModelAttrib(this_mod_attrib_name)) {
-                const this_value: TAttribDataTypes = this.modeldata.attribs.query.getModelAttribVal(this_mod_attrib_name);
-                const other_value: TAttribDataTypes = other_model.modeldata.attribs.query.getModelAttribVal(this_mod_attrib_name);
+                const this_value: TAttribDataTypes = this.modeldata.attribs.get.getModelAttribVal(this_mod_attrib_name);
+                const other_value: TAttribDataTypes = other_model.modeldata.attribs.get.getModelAttribVal(this_mod_attrib_name);
                 const this_value_fp: string = this.getAttribValFprint(this_value);
                 const other_value_fp: string = this.getAttribValFprint(other_value);
                 if (this_value_fp === other_value_fp) {
@@ -510,8 +510,8 @@ export class GIModelComparator {
                 for (const other_mia_ent_i of other_mia_ents_i) {
                     const other_posis_i: number[] = other_model.modeldata.geom.nav.navAnyToPosi(obj_ent_type, other_mia_ent_i);
                     if (this_posis_i.length === other_posis_i.length) {
-                        const this_xyz: Txyz = this.modeldata.attribs.query.getPosiCoordsActive(this_posis_i[0]);
-                        const other_xyz: Txyz = other_model.modeldata.attribs.query.getPosiCoordsActive(other_posis_i[0]);
+                        const this_xyz: Txyz = this.modeldata.attribs.posis.getPosiCoords(this_posis_i[0]);
+                        const other_xyz: Txyz = other_model.modeldata.attribs.posis.getPosiCoords(other_posis_i[0]);
                         const trans_vec: Txyz = [
                             other_xyz[0] - this_xyz[0],
                             other_xyz[1] - this_xyz[1],
@@ -663,11 +663,11 @@ export class GIModelComparator {
                 const sub_ents_i: number[] = this.modeldata.geom.nav.navAnyToAny(from_ent_type, topo_ent_type, index);
                 // for each attrib, make a fingerprint
                 for (const attrib_name of attrib_names) {
-                    if (this.modeldata.attribs.query.hasAttrib(topo_ent_type, attrib_name)) {
+                    if (this.modeldata.attribs.query.hasEntAttrib(topo_ent_type, attrib_name)) {
                         const topo_fprints: string[] = [];
                         for (const sub_ent_i of sub_ents_i) {
                             const attrib_value: TAttribDataTypes =
-                                this.modeldata.attribs.query.getEntAttribVal(topo_ent_type, sub_ent_i, attrib_name);
+                                this.modeldata.attribs.get.getEntAttribVal(topo_ent_type, sub_ent_i, attrib_name);
                             if (attrib_value !== null && attrib_value !== undefined) {
                                 topo_fprints.push(this.getAttribValFprint(attrib_value));
                             }
@@ -734,7 +734,7 @@ export class GIModelComparator {
         // for each attrib, make a finderprint of the attrib value
         if (attrib_names !== undefined) {
             for (const attrib_name of attrib_names) {
-                const attrib_value: TAttribDataTypes = this.modeldata.attribs.query.getEntAttribVal(EEntType.COLL, coll_i, attrib_name);
+                const attrib_value: TAttribDataTypes = this.modeldata.attribs.get.getEntAttribVal(EEntType.COLL, coll_i, attrib_name);
                 if (attrib_value !== null && attrib_value !== undefined) {
                     attribs_vals.push(this.getAttribValFprint(attrib_value));
                 }

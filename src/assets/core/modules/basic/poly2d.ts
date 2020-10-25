@@ -173,7 +173,7 @@ function _getPosiFromMap(__model__: GIModel, x: number, y: number, posis_map: TP
     }
     if (posi_i === undefined) {
         posi_i = __model__.modeldata.geom.add.addPosi();
-        __model__.modeldata.attribs.add.setPosiCoordsActive(posi_i, [x, y, 0]);
+        __model__.modeldata.attribs.posis.setPosiCoords(posi_i, [x, y, 0]);
         map1.set(y, posi_i);
     }
     return posi_i;
@@ -193,7 +193,7 @@ function _convertPgonToShape(__model__: GIModel, pgon_i: number, posis_map: TPos
         const len: number = shape_coords.push([]);
         const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
         for (const posi_i of posis_i) {
-            const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i);
+            const xyz: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(posi_i);
             const coord: IClipCoord = {X: xyz[0], Y: xyz[1]};
             shape_coords[len - 1].push( coord );
             _putPosiInMap(xyz[0], xyz[1], posi_i, posis_map);
@@ -235,7 +235,7 @@ function _convertWireToShape(__model__: GIModel, wire_i: number, is_closed: bool
     shape_coords.push([]);
     const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
     for (const posi_i of posis_i) {
-        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i);
+        const xyz: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(posi_i);
         const coord: IClipCoord = {X: xyz[0], Y: xyz[1]};
         shape_coords[0].push( coord );
         _putPosiInMap(xyz[0], xyz[1], posi_i, posis_map);
@@ -346,7 +346,7 @@ export function Voronoi(__model__: GIModel, pgons: TId|TId[], entities: TId|TId[
     // posis
     const d3_cell_points: [number, number][] = [];
     for (const posi_i of posis_i) {
-        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i);
+        const xyz: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(posi_i);
         d3_cell_points.push([xyz[0], xyz[1]]);
     }
     // loop and create cells
@@ -356,7 +356,7 @@ export function Voronoi(__model__: GIModel, pgons: TId|TId[], entities: TId|TId[
         const bounds: number[] = [Infinity, Infinity, -Infinity, -Infinity]; // xmin, ymin, xmax, ymax
         // const pgon_shape_coords: IClipCoord[] = [];
         for (const posi_i of __model__.modeldata.geom.nav.navAnyToPosi(EEntType.PGON, pgon_i)) {
-            const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i);
+            const xyz: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(posi_i);
             // pgon_shape_coords.push( { X: xyz[0], Y: xyz[1]} );
             if (xyz[0] < bounds[0]) { bounds[0] = xyz[0]; }
             if (xyz[1] < bounds[1]) { bounds[1] = xyz[1]; }
@@ -452,7 +452,7 @@ export function Delaunay(__model__: GIModel, entities: TId|TId[]): TId[] {
     // posis
     const d3_tri_coords: [number, number][] = [];
     for (const posi_i of posis_i) {
-        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i);
+        const xyz: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(posi_i);
         d3_tri_coords.push([xyz[0], xyz[1]]);
         _putPosiInMap(xyz[0], xyz[1], posi_i, posis_map);
     }
@@ -468,7 +468,7 @@ function _delaunay(__model__: GIModel, d3_tri_coords: [number, number][], posis_
     for (const d3_tri_coord of d3_tri_coords) {
         // TODO use the posis_map!!
         // const deauny_posi_i: number = __model__.modeldata.geom.add.addPosi();
-        // __model__.modeldata.attribs.add.setPosiCoords(deauny_posi_i, [point[0], point[1], 0]);
+        // __model__.modeldata.attribs.posis.setPosiCoords(deauny_posi_i, [point[0], point[1], 0]);
         const delaunay_posi_i: number = _getPosiFromMap(__model__, d3_tri_coord[0], d3_tri_coord[1], posis_map);
         delaunay_posis_i.push(delaunay_posi_i);
     }
@@ -515,7 +515,7 @@ function _convexHull(__model__: GIModel, posis_i: number[]): number[] {
     const points: [number, number][] = [];
     const posis_map: TPosisMap = new Map();
     for (const posi_i of posis_i) {
-        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i);
+        const xyz: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(posi_i);
         points.push([xyz[0], xyz[1]]);
         _putPosiInMap(xyz[0], xyz[1], posi_i, posis_map);
     }
@@ -580,7 +580,7 @@ export function BBoxPolygon(__model__: GIModel, entities: TId|TId[], method: _EB
 function _bboxAABB(__model__: GIModel, posis_i: number[]): number {
     const bbox: [number, number, number, number] = [Infinity, Infinity, -Infinity, -Infinity];
     for (const posi_i of posis_i) {
-        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i);
+        const xyz: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(posi_i);
         if (xyz[0] < bbox[0]) { bbox[0] = xyz[0]; }
         if (xyz[1] < bbox[1]) { bbox[1] = xyz[1]; }
         if (xyz[0] > bbox[2]) { bbox[2] = xyz[0]; }
@@ -593,7 +593,7 @@ function _bboxAABB(__model__: GIModel, posis_i: number[]): number {
     const box_posis_i: number[] = [];
     for (const xyz of [a, b, c, d]) {
         const box_posi_i: number = __model__.modeldata.geom.add.addPosi();
-        __model__.modeldata.attribs.add.setPosiCoordsActive(box_posi_i, xyz);
+        __model__.modeldata.attribs.posis.setPosiCoords(box_posi_i, xyz);
         box_posis_i.push(box_posi_i);
     }
     const box_pgon_i: number = __model__.modeldata.geom.add.addPgon(box_posis_i);
@@ -603,13 +603,13 @@ function _bboxOBB(__model__: GIModel, posis_i: number[]): number {
     // posis
     const hull_posis_i: number[] = _convexHull(__model__, posis_i);
     hull_posis_i.push(hull_posis_i[0]);
-    const first: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(hull_posis_i[0]);
+    const first: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(hull_posis_i[0]);
     const hull_xyzs: Txyz[] = [[first[0], first[1], 0]];
     let longest_len = 0;
     let origin_index = -1;
     for (let i = 1; i < hull_posis_i.length; i++) {
         // add xy to list
-        const next: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(hull_posis_i[i]);
+        const next: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(hull_posis_i[i]);
         hull_xyzs.push([next[0], next[1], 0]);
         // get dist
         const curr_len = distance(hull_xyzs[i - 1], hull_xyzs[i]);
@@ -643,7 +643,7 @@ function _bboxOBB(__model__: GIModel, posis_i: number[]): number {
     const box_posis_i: number[] = [];
     for (const xyz of [a, b, c, d]) {
         const box_posi_i: number = __model__.modeldata.geom.add.addPosi();
-        __model__.modeldata.attribs.add.setPosiCoordsActive(box_posi_i, xyz);
+        __model__.modeldata.attribs.posis.setPosiCoords(box_posi_i, xyz);
         box_posis_i.push(box_posi_i);
     }
     const box_pgon_i: number = __model__.modeldata.geom.add.addPgon(box_posis_i);
@@ -1109,7 +1109,7 @@ export function Stitch(__model__: GIModel, entities: TId|TId[]): TId[] {
                     // make a new position if we have an isect,
                     if (new_posi_i === null && (a_isect || b_isect)) {
                         new_posi_i = __model__.modeldata.geom.add.addPosi();
-                        __model__.modeldata.attribs.add.setPosiCoordsActive(new_posi_i, [new_xy[0], new_xy[1], 0]);
+                        __model__.modeldata.attribs.posis.setPosiCoords(new_posi_i, [new_xy[0], new_xy[1], 0]);
                     }
                     // store the isects if there are any
                     if (a_isect) {
@@ -1140,7 +1140,7 @@ export function Stitch(__model__: GIModel, entities: TId|TId[]): TId[] {
         const isects: [number, number][] = map_edge_i_to_isects.get(edge_i);
         isects.sort( (a, b) => a[0] - b[0] );
         const posis_i: number[] = isects.map(isect => isect[1]);
-        const new_edges_i: number[] = __model__.modeldata.geom.modify.insertVertsIntoWire(edge_i, posis_i);
+        const new_edges_i: number[] = __model__.modeldata.geom.edit_topo.insertVertsIntoWire(edge_i, posis_i);
         for (const new_edge_i of new_edges_i) {
             all_new_edges_i.push(new_edge_i);
         }
@@ -1149,7 +1149,7 @@ export function Stitch(__model__: GIModel, entities: TId|TId[]): TId[] {
     const del_posis_i: number[] = [];
     for (const edge_i of all_new_edges_i) {
         const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
-        const xyzs: Txyz[] = posis_i.map(posi_i => __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i));
+        const xyzs: Txyz[] = posis_i.map(posi_i => __model__.modeldata.attribs.posis.getPosiCoords(posi_i));
         const dist: number = distanceManhattan(xyzs[0], xyzs[1]);
         if (dist === 0) {
             // we are going to del this posi
@@ -1164,12 +1164,13 @@ export function Stitch(__model__: GIModel, entities: TId|TId[]): TId[] {
             const replc_verts_i: number[] = __model__.modeldata.geom.nav.navPosiToVert(del_posi_i);
             for (const replc_vert_i of replc_verts_i) {
                 if (replc_vert_i === del_vert_i) { continue; }
-                __model__.modeldata.geom.modify.replaceVertPosi(replc_vert_i, posis_i[1], false); // false = do nothing if edge becomes invalid
+                __model__.modeldata.geom.edit_topo.replaceVertPosi(replc_vert_i, posis_i[1], false); // false = do nothing if edge becomes invalid
             }
             del_posis_i.push(posis_i[0]);
         }
     }
-    __model__.modeldata.geom.snapshot.delPosisActive(del_posis_i);
+    const ssid: number = __model__.modeldata.active_ssid;
+    __model__.modeldata.geom.snapshot.delPosis(ssid, del_posis_i);
     // return
     return idsMake(new_ents_arr) as TId[];
 }
@@ -1183,15 +1184,15 @@ function _knifeGetEdgeData(__model__: GIModel, edge_i: number,
     map_edge_i_to_posi_i.set(edge_i, [posis_i[0], posis_i[1]]);
     // save the xy value of the two posis
     if (!map_posi_i_to_xyz.has(posis_i[0])) {
-        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posis_i[0]);
-        __model__.modeldata.attribs.add.setPosiCoordsActive(posis_i[0], [xyz[0], xyz[1], 0]);
+        const xyz: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(posis_i[0]);
+        __model__.modeldata.attribs.posis.setPosiCoords(posis_i[0], [xyz[0], xyz[1], 0]);
         // Why is this not working? It also moves the original geom...
         // if (xyz[2] !== 0) { xyz[2] = 0; } // TODO <<<<<<<<<<<<<<<<<<<<<<
         map_posi_i_to_xyz.set(posis_i[0], xyz);
     }
     if (!map_posi_i_to_xyz.has(posis_i[1])) {
-        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posis_i[1]);
-        __model__.modeldata.attribs.add.setPosiCoordsActive(posis_i[1], [xyz[0], xyz[1], 0]);
+        const xyz: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(posis_i[1]);
+        __model__.modeldata.attribs.posis.setPosiCoords(posis_i[1], [xyz[0], xyz[1], 0]);
         // Why is this not working? It also moves the original geom...
         // if (xyz[2] !== 0) { xyz[2] = 0; } // TODO <<<<<<<<<<<<<<<<<<<<<<
         map_posi_i_to_xyz.set(posis_i[1], xyz);

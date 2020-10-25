@@ -30,14 +30,14 @@ export class GIModel {
      * Get the current time stamp
      */
     public getActiveSnapshot(): number {
-        return this.modeldata.active_snapshot;
+        return this.modeldata.active_ssid;
     }
     /**
      * Set the current time stamp backwards to a prevous time stamp.
      * This allows you to roll back in time after executing a global function.
      */
     public setActiveSnapshot(ssid: number): void {
-        this.modeldata.active_snapshot = ssid;
+        this.modeldata.active_ssid = ssid;
     }
     /**
      *
@@ -48,7 +48,7 @@ export class GIModel {
         // increment time stamp
         this.modeldata.nextSnapshot();
         // get time stamp
-        const ssid = this.modeldata.active_snapshot;
+        const ssid = this.modeldata.active_ssid;
         // add snapshot
         this.modeldata.geom.snapshot.addSnapshot(ssid, include);
         this.modeldata.attribs.snapshot.addSnapshot(ssid, include);

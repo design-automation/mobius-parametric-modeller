@@ -310,7 +310,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const sorted = sortByKey(unSorted);
         const arr = Array.from(sorted.values());
         const showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
-        const attr_names = this._data_threejs.model.modeldata.attribs.query.getAttribNames(ent_type);
+        const attr_names = this._data_threejs.model.modeldata.attribs.getAttribNames(ent_type);
 
         let attr_name = this.currentAttribLabel, isArr = false, key;
         if (attr_name.match(/\[.*?\]/g)) {
@@ -327,7 +327,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 for (let i = 0; i < allLabels.length; i++) {
                     const element = allLabels[i];
                     const attr = Number(element.getAttribute('data-index'));
-                    const attr_val = this._data_threejs.model.modeldata.attribs.query.getEntAttribVal(ent_type, attr, attr_name);
+                    const attr_val = this._data_threejs.model.modeldata.attribs.get.getEntAttribVal(ent_type, attr, attr_name);
                     const _attr_val = attr_val !== undefined ? attr_val : '';
                     if (isArr && _attr_val !== '') {
                         const val = String(_attr_val).split(',')[key];
@@ -1152,7 +1152,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const scene = this._data_threejs;
         const posi_ent = this.dataService.selected_ents.get(ent_type_str);
         if (point !== null) {
-            const position = this.model.modeldata.attribs.query.getPosiCoordsActive(point);
+            const position = this.model.modeldata.attribs.posis.getPosiCoords(point);
             const ent_id = parent_ent_id;
             posi_ent.set(ent_id, point);
             const labelText = this.indexAsLabel(ent_type_str, ent_id, point, EEntType.POSI);
@@ -1164,7 +1164,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             const children = [];
             posis.map(posi => {
                 const ent_id = `${ent_type_str}${posi}`;
-                const position = this.model.modeldata.attribs.query.getPosiCoordsActive(posi);
+                const position = this.model.modeldata.attribs.posis.getPosiCoords(posi);
                 posi_ent.set(ent_id, posi);
                 const labelText = this.indexAsLabel(ent_type_str, ent_id, posi, EEntType.POSI);
                 scene.selectObjPosition(parent_ent_id, ent_id, position, this.container, labelText);
@@ -1180,7 +1180,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             const children = [];
             uniqPositions.map(posi => {
                 const ent_id = `${ent_type_str}${posi}`;
-                const position = this.model.modeldata.attribs.query.getPosiCoordsActive(posi);
+                const position = this.model.modeldata.attribs.posis.getPosiCoords(posi);
                 posi_ent.set(ent_id, posi);
                 const labelText = this.indexAsLabel(ent_type_str, ent_id, posi, EEntType.POSI);
                 scene.selectObjPosition(parent_ent_id, ent_id, position, this.container, labelText);
@@ -1202,7 +1202,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const posi_ent = this.dataService.selected_ents.get(ent_type_str);
         const scene = this._data_threejs;
         if (point !== null) {
-            const position = this.model.modeldata.attribs.query.getVertCoords(point);
+            const position = this.model.modeldata.attribs.posis.getVertCoords(point);
             const ent_id = parent_ent_id;
             posi_ent.set(ent_id, point);
             const labelText = this.indexAsLabel(ent_type_str, ent_id, point, EEntType.VERT);
@@ -1213,7 +1213,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             const children = [];
             verts.map(vert => {
                 const ent_id = `${ent_type_str}${vert}`;
-                const position = this.model.modeldata.attribs.query.getVertCoords(vert);
+                const position = this.model.modeldata.attribs.posis.getVertCoords(vert);
                 posi_ent.set(ent_id, vert);
                 const labelText = this.indexAsLabel(ent_type_str, ent_id, vert, EEntType.VERT);
                 scene.selectObjvertex(parent_ent_id, ent_id, position, this.container, labelText);
@@ -1230,7 +1230,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             const children = [];
             uniqVerts.map(vert => {
                 const ent_id = `${ent_type_str}${vert}`;
-                const position = this.model.modeldata.attribs.query.getVertCoords(vert);
+                const position = this.model.modeldata.attribs.posis.getVertCoords(vert);
                 posi_ent.set(ent_id, vert);
                 const labelText = this.indexAsLabel(ent_type_str, ent_id, vert, EEntType.VERT);
                 scene.selectObjvertex(parent_ent_id, ent_id, position, this.container, labelText);
@@ -1296,7 +1296,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     private selectEdge(line: number) {
         const ent_type_str = EEntTypeStr[EEntType.EDGE],
             verts = this.model.modeldata.geom.nav.navEdgeToVert(line),
-            positions = verts.map(v => this.model.modeldata.attribs.query.getVertCoords(v)),
+            positions = verts.map(v => this.model.modeldata.attribs.posis.getVertCoords(v)),
             posi_flat = [].concat(...positions),
             ent_id = `${ent_type_str}${line}`;
         this.dataService.selected_ents.get(ent_type_str).set(ent_id, line);
@@ -1315,7 +1315,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             const position = [];
             const indices = [];
             vert.map((v, i) => {
-                position.push(this.model.modeldata.attribs.query.getVertCoords(v));
+                position.push(this.model.modeldata.attribs.posis.getVertCoords(v));
                 indices.push(i);
             });
             const posi_flat = [].concat(...position);
@@ -1334,7 +1334,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             indices = [],
             positions = [];
         verts_flat.map((v, i) => {
-            positions.push(this.model.modeldata.attribs.query.getVertCoords(v));
+            positions.push(this.model.modeldata.attribs.posis.getVertCoords(v));
             indices.push(i);
         });
         const posi_flat = [].concat(...positions),
@@ -1358,7 +1358,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 indices = [],
                 positions = [];
             verts_flat.map((v, i) => {
-                positions.push(this.model.modeldata.attribs.query.getVertCoords(v));
+                positions.push(this.model.modeldata.attribs.posis.getVertCoords(v));
                 indices.push(i);
             });
             const posi_flat = [].concat(...positions);
@@ -1379,7 +1379,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             tri_indices = [],
             positions = [];
         posis_flat.map((posi, index) => {
-            positions.push(this.model.modeldata.attribs.query.getPosiCoordsActive(posi));
+            positions.push(this.model.modeldata.attribs.posis.getPosiCoords(posi));
             tri_indices.push(index);
         });
         const posi_flat = [].concat(...positions),
@@ -1463,7 +1463,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const point_indices: number[] = [];
         const positions: Txyz[] = [];
         verts_flat.map((v, i) => {
-            positions.push(this.model.modeldata.attribs.query.getPosiCoordsActive(v));
+            positions.push(this.model.modeldata.attribs.posis.getPosiCoords(v));
             point_indices.push(i);
         });
         const posi_flat = [].concat(...positions);
@@ -1494,7 +1494,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const indices = [];
         const positions = [];
         verts_flat.map((v, i) => {
-            positions.push(this.model.modeldata.attribs.query.getVertCoords(v));
+            positions.push(this.model.modeldata.attribs.posis.getVertCoords(v));
             indices.push(i);
         });
         const posi_flat = [].concat(...positions);
@@ -1530,7 +1530,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const indices = [];
         const positions = [];
         posis_flat.map((posi, index) => {
-            positions.push(this.model.modeldata.attribs.query.getPosiCoordsActive(posi));
+            positions.push(this.model.modeldata.attribs.posis.getPosiCoords(posi));
             indices.push(index);
         });
         const posi_flat = [].concat(...positions);
@@ -1586,7 +1586,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             const pgons_indices = pgonResult.indices;
 
             if (pgons_indices.length !== 0) {
-                // const attrib_val = this.model.modeldata.attribs.query.getAttribValue(EEntType.COLL, EAttribNames.NAME, id);
+                // const attrib_val = this.model.modeldata.attribs.get.getAttribValue(EEntType.COLL, EAttribNames.NAME, id);
                 // const selecting = attrib_val ? attrib_val.toString() : `${EEntType.COLL}${id}`;
                 const pgon_id = `${EEntTypeStr[EEntType.COLL]}_pg_${id}`;
                 scene.selectObjFace(coll_id, pgons_indices, pgons_posi, this.container, labelText);
@@ -1633,7 +1633,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const posi_ent = this.dataService.selected_ents.get(ent_type_str);
         const scene = this._data_threejs;
         const date = new Date(), timestamp = date.getTime();
-        const position = this.model.modeldata.attribs.query.getVertCoords(id);
+        const position = this.model.modeldata.attribs.posis.getVertCoords(id);
         const ent_id = `${ent_type_str}${id}`;
         const labelText = this.indexAsLabel(ent_type_str, ent_id, id, EEntType.VERT);
         scene.selectObjvertex(`_single_v${timestamp}`, ent_id, position, this.container, labelText);

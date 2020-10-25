@@ -26,7 +26,7 @@ export function createMultipleMeshesTjs(__model__: GIModel, ents_arrs: TEntTypeI
     // the index to the array is the posi_i
     const posis_tjs: THREE.Vector3[] = [];
     for (const posi_i of Array.from(posis_i_set)) {
-        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i);
+        const xyz: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(posi_i);
         const posi_tjs = new THREE.Vector3(...xyz);
         posis_tjs[posi_i] = posi_tjs;
     }
@@ -79,7 +79,7 @@ export function createSingleMeshTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]
     // the index to the array is the posi_i
     const posis_tjs: THREE.Vector3[] = [];
     for (const posi_i of Array.from(posis_i_set)) {
-        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i);
+        const xyz: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(posi_i);
         const posi_tjs = new THREE.Vector3(...xyz);
         posis_tjs[posi_i] = posi_tjs;
     }
@@ -134,7 +134,7 @@ export function createSingleMeshBufTjs(__model__: GIModel, ents_arrs: TEntTypeId
     const unique_posis_i: number[] = Array.from(posis_i_set);
     for (let i = 0; i < unique_posis_i.length; i++) {
         const posi_i: number = unique_posis_i[i];
-        const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i);
+        const xyz: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(posi_i);
         xyzs_flat.push(...xyz);
         posi_i_to_xyzs_map.set(posi_i, i);
     }

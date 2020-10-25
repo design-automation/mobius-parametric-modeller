@@ -94,7 +94,7 @@ export function getCentroid(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeId
 }
 function _centroidPosis(__model__: GIModel, posis_i: number[]): Txyz {
     const unique_posis_i = Array.from(new Set(posis_i));
-    const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i));
+    const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.modeldata.attribs.posis.getPosiCoords(posi_i));
     return vecDiv(vecSum(unique_xyzs), unique_xyzs.length);
 }
 // ================================================================================================
@@ -145,7 +145,7 @@ function _centerOfMassOfFace(__model__: GIModel, face_i: number): [Txyz, number]
         for (const posi_i of posis_i) {
             let posi_v3: THREE.Vector3 = map_posi_to_v3.get(posi_i);
             if (posi_v3 === undefined) {
-                const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoordsActive(posi_i);
+                const xyz: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(posi_i);
                 posi_v3 = new THREE.Vector3(xyz[0], xyz[1], xyz[2]);
             }
             posis_v3.push(posi_v3);
@@ -326,8 +326,8 @@ export function getPlanesSeq(xyzs: Txyz[], normal: Txyz, close: boolean): TPlane
 //             if (old_to_new_posis_i_map.has(old_posi_i)) {
 //                 new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
 //             } else {
-//                 const xyz: Txyz = __model__.modeldata.attribs.query.getPosiCoords(old_posi_i);
-//                 __model__.modeldata.attribs.add.setPosiCoords(old_posi_i, vecAdd(xyz, vector));
+//                 const xyz: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(old_posi_i);
+//                 __model__.modeldata.attribs.posis.setPosiCoords(old_posi_i, vecAdd(xyz, vector));
 //                 old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
 //             }
 //         } else { // obj or coll

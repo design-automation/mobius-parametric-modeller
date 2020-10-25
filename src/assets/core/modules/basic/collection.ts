@@ -62,10 +62,10 @@ export function Create(__model__: GIModel, entities: TId|TId[]|TId[][], name: st
                     ': The list of collection names must be equal in length to the list of collections that get created.');
             }
             for (let i = 0; i < name.length; i++) {
-                __model__.modeldata.attribs.add.setEntAttribValActive(EEntType.COLL, colls_i[i], EAttribNames.COLL_NAME, name[i]);
+                __model__.modeldata.attribs.set.setEntAttribVal(EEntType.COLL, colls_i[i], EAttribNames.COLL_NAME, name[i]);
             }
         } else {
-            __model__.modeldata.attribs.add.setEntsAttribValActive(EEntType.COLL, colls_i, EAttribNames.COLL_NAME, name);
+            __model__.modeldata.attribs.set.setEntsAttribVal(EEntType.COLL, colls_i, EAttribNames.COLL_NAME, name);
         }
     }
     // return the collection id
@@ -132,9 +132,9 @@ function _get(__model__: GIModel, names: string|string[]): number[] {
         // wildcards
         if (names.indexOf('*') !== -1 || names.indexOf('?') !== -1) {
             const reg_exp = new RegExp(names.replace('?', '\\w').replace('*', '\\w*'));
-            const all_colls_i: number[] = __model__.modeldata.geom.snapshot.getEntsActive(EEntType.COLL);
+            const all_colls_i: number[] = __model__.modeldata.geom.snapshot.getEnts(__model__.modeldata.active_ssid, EEntType.COLL);
             const all_names: string[] = all_colls_i.map( coll_i =>
-                __model__.modeldata.attribs.query.getEntAttribVal(EEntType.COLL, coll_i, EAttribNames.COLL_NAME) as string
+                __model__.modeldata.attribs.get.getEntAttribVal(EEntType.COLL, coll_i, EAttribNames.COLL_NAME) as string
             );
             const unique_names: string[] = Array.from(new Set(all_names));
             const match_names: string[] = [];
@@ -143,7 +143,7 @@ function _get(__model__: GIModel, names: string|string[]): number[] {
             }
             return _get(__model__, match_names);
         }
-        const colls_i: number[] = __model__.modeldata.geom.snapshot.getEntsActive(EEntType.COLL);
+        const colls_i: number[] = __model__.modeldata.geom.snapshot.getEnts(__model__.modeldata.active_ssid, EEntType.COLL);
         const query_result: number[] = __model__.modeldata.attribs.query.filterByAttribs(
             EEntType.COLL, colls_i, EAttribNames.COLL_NAME, null, EFilterOperatorTypes.IS_EQUAL, names);
         return query_result;
@@ -314,7 +314,7 @@ export function Delete(__model__: GIModel, coll: TId|TId[]): void {
     for (const [ent_type, ent_i] of colls_arrs) {
         colls_i.push(ent_i);
     }
-    __model__.modeldata.geom.snapshot.delCollsActive(colls_i);
+    __model__.modeldata.geom.snapshot.delColls(__model__.modeldata.active_ssid, colls_i);
 }
 // ================================================================================================
 

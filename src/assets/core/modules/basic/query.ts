@@ -125,7 +125,7 @@ export function Get(__model__: GIModel, ent_type_enum: _EEntType, entities: TId|
 }
 function _getAll(__model__: GIModel, ent_type: EEntType): TEntTypeIdx[] {
     // const ents_i: number[] = __model__.modeldata.geom.query.getEnts(ent_type);
-    const ents_i: number[] = __model__.modeldata.geom.snapshot.getEntsActive(ent_type);
+    const ents_i: number[] = __model__.modeldata.geom.snapshot.getEnts(__model__.modeldata.active_ssid, ent_type);
     return ents_i.map(ent_i => [ent_type, ent_i]) as TEntTypeIdx[];
 }
 function _getFrom(__model__: GIModel, ent_type: EEntType, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx[]|TEntTypeIdx[][] {
@@ -139,7 +139,7 @@ function _getFrom(__model__: GIModel, ent_type: EEntType, ents_arr: TEntTypeIdx[
         for (const ent_arr of ents_arr) {
             if (__model__.modeldata.geom.query.entExists(ent_arr[0], ent_arr[1])) {
                 // snapshot
-                const ents_i: number[] = __model__.modeldata.geom.snapshot.navAnyToAnyActive(ent_arr[0], ent_type, ent_arr[1]);
+                const ents_i: number[] = __model__.modeldata.geom.nav.navAnyToAny(ent_arr[0], ent_type, ent_arr[1]);
                 if (ents_i) {
                     for (const ent_i of ents_i) {
                         if (ent_i !== undefined) {
@@ -312,7 +312,7 @@ function _invert(__model__: GIModel, select_ent_type: EEntType, ents_arr: TEntTy
         .filter(ent_arr => ent_arr[0] === select_ent_type).map(ent_arr => ent_arr[1]);
     // get the list of entities
     const found_entities_i: number[] = [];
-    const ents_i: number[] = __model__.modeldata.geom.snapshot.getEntsActive(select_ent_type);
+    const ents_i: number[] = __model__.modeldata.geom.snapshot.getEnts(__model__.modeldata.active_ssid, select_ent_type);
     for (const ent_i of ents_i) {
         if (excl_ents_i.indexOf(ent_i) === -1) { found_entities_i.push(ent_i); }
     }

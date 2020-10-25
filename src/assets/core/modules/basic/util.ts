@@ -48,12 +48,12 @@ export function ModelInfo(__model__: GIModel): string {
     let info = '<h4>Model Information:</h4>';
     info += '<ul>';
     // model attribs
-    const model_attribs: string[] = __model__.modeldata.attribs.query.getAttribNames(EEntType.MOD);
+    const model_attribs: string[] = __model__.modeldata.attribs.getAttribNames(EEntType.MOD);
     if (model_attribs.length !== 0) { info += '<li>Model attribs: ' + model_attribs.join(', ') + '</li>'; }
     // collections
     const num_colls: number = __model__.modeldata.geom.query.numEnts(EEntType.COLL);
     // const num_del_colls: number = __model__.modeldata.geom.query.numEnts(EEntType.COLL, true) - num_colls;
-    const coll_attribs: string[] = __model__.modeldata.attribs.query.getAttribNames(EEntType.COLL);
+    const coll_attribs: string[] = __model__.modeldata.attribs.getAttribNames(EEntType.COLL);
     info += '<li>';
     info += '<b>Collections</b>: ' + num_colls; // + ' (Deleted: ' + num_del_colls + ') ';
     if (coll_attribs.length !== 0) { info += 'Attribs: ' + coll_attribs.join(', '); }
@@ -61,7 +61,7 @@ export function ModelInfo(__model__: GIModel): string {
     // pgons
     const num_pgons: number = __model__.modeldata.geom.query.numEnts(EEntType.PGON);
     // const num_del_pgons: number = __model__.modeldata.geom.query.numEnts(EEntType.PGON, true) - num_pgons;
-    const pgon_attribs: string[] = __model__.modeldata.attribs.query.getAttribNames(EEntType.PGON);
+    const pgon_attribs: string[] = __model__.modeldata.attribs.getAttribNames(EEntType.PGON);
     info += '<li>';
     info += '<b>Polygons</b>: ' + num_pgons; // + ' (Deleted: ' + num_del_pgons + ') ';
     if (pgon_attribs.length !== 0) { info += 'Attribs: ' + pgon_attribs.join(', '); }
@@ -69,7 +69,7 @@ export function ModelInfo(__model__: GIModel): string {
     // plines
     const num_plines: number = __model__.modeldata.geom.query.numEnts(EEntType.PLINE);
     // const num_del_plines: number = __model__.modeldata.geom.query.numEnts(EEntType.PLINE, true) - num_plines;
-    const pline_attribs: string[] = __model__.modeldata.attribs.query.getAttribNames(EEntType.PLINE);
+    const pline_attribs: string[] = __model__.modeldata.attribs.getAttribNames(EEntType.PLINE);
     info += '<li>';
     info += '<b>Polylines</b>: ' + num_plines; // + ' (Deleted: ' + num_del_plines + ') ';
     if (pline_attribs.length !== 0) { info += 'Attribs: ' + pline_attribs.join(', '); }
@@ -77,7 +77,7 @@ export function ModelInfo(__model__: GIModel): string {
     // points
     const num_points: number = __model__.modeldata.geom.query.numEnts(EEntType.POINT);
     // const num_del_points: number = __model__.modeldata.geom.query.numEnts(EEntType.POINT, true) - num_points;
-    const point_attribs: string[] = __model__.modeldata.attribs.query.getAttribNames(EEntType.POINT);
+    const point_attribs: string[] = __model__.modeldata.attribs.getAttribNames(EEntType.POINT);
     info += '<li>';
     info += '<b>Points</b>: ' + num_points; // + ' (Deleted: ' + num_del_points + ') ';
     if (point_attribs.length !== 0) { info += 'Attribs: ' + point_attribs.join(', '); }
@@ -85,7 +85,7 @@ export function ModelInfo(__model__: GIModel): string {
     // faces
     const num_faces: number = __model__.modeldata.geom.query.numEnts(EEntType.FACE);
     // const num_del_faces: number = __model__.modeldata.geom.query.numEnts(EEntType.FACE, true) - num_faces;
-    const face_attribs: string[] = __model__.modeldata.attribs.query.getAttribNames(EEntType.FACE);
+    const face_attribs: string[] = __model__.modeldata.attribs.getAttribNames(EEntType.FACE);
     info += '<li>';
     info += '<b>Faces</b>: ' + num_faces; // + ' (Deleted: ' + num_del_faces + ') ';
     if (face_attribs.length !== 0) { info += 'Attribs: ' + face_attribs.join(', '); }
@@ -93,7 +93,7 @@ export function ModelInfo(__model__: GIModel): string {
     // wires
     const num_wires: number = __model__.modeldata.geom.query.numEnts(EEntType.WIRE);
     // const num_del_wires: number = __model__.modeldata.geom.query.numEnts(EEntType.WIRE, true) - num_wires;
-    const wire_attribs: string[] = __model__.modeldata.attribs.query.getAttribNames(EEntType.WIRE);
+    const wire_attribs: string[] = __model__.modeldata.attribs.getAttribNames(EEntType.WIRE);
     info += '<li>';
     info += '<b>Wires</b>: ' + num_wires; // + ' (Deleted: ' + num_del_wires + ') ';
     if (wire_attribs.length !== 0) { info += 'Attribs: ' + wire_attribs.join(', '); }
@@ -101,7 +101,7 @@ export function ModelInfo(__model__: GIModel): string {
     // edges
     const num_edges: number = __model__.modeldata.geom.query.numEnts(EEntType.EDGE);
     // const num_del_edges: number = __model__.modeldata.geom.query.numEnts(EEntType.EDGE, true) - num_edges;
-    const edge_attribs: string[] = __model__.modeldata.attribs.query.getAttribNames(EEntType.EDGE);
+    const edge_attribs: string[] = __model__.modeldata.attribs.getAttribNames(EEntType.EDGE);
     info += '<li>';
     info += '<b>Edges</b>: ' + num_edges; // + ' (Deleted: ' + num_del_edges + ') ';
     if (edge_attribs.length !== 0) { info += 'Attribs: ' + edge_attribs.join(', '); }
@@ -109,7 +109,7 @@ export function ModelInfo(__model__: GIModel): string {
     // verts
     const num_verts: number = __model__.modeldata.geom.query.numEnts(EEntType.VERT);
     // const num_del_verts: number = __model__.modeldata.geom.query.numEnts(EEntType.VERT, true) - num_verts;
-    const vert_attribs: string[] = __model__.modeldata.attribs.query.getAttribNames(EEntType.VERT);
+    const vert_attribs: string[] = __model__.modeldata.attribs.getAttribNames(EEntType.VERT);
     info += '<li>';
     info += '<b>Vertices</b>: ' + num_verts; // + ' (Deleted: ' + num_del_verts + ') ';
     if (vert_attribs.length !== 0) { info += 'Attribs: ' + vert_attribs.join(', '); }
@@ -117,7 +117,7 @@ export function ModelInfo(__model__: GIModel): string {
     // posis
     const num_posis: number = __model__.modeldata.geom.query.numEnts(EEntType.POSI);
     // const num_del_posis: number = __model__.modeldata.geom.query.numEnts(EEntType.POSI, true) - num_posis;
-    const posi_attribs: string[] = __model__.modeldata.attribs.query.getAttribNames(EEntType.POSI);
+    const posi_attribs: string[] = __model__.modeldata.attribs.getAttribNames(EEntType.POSI);
     info += '<li>';
     info += '<b>Positions</b>: ' + num_posis; // + ' (Deleted: ' + num_del_posis + ') ';
     if (posi_attribs.length !== 0) { info += 'Attribs: ' + posi_attribs.join(', '); }
@@ -185,10 +185,10 @@ export function EntityInfo(__model__: GIModel, entities: TId|TId[]): string {
     return result;
 }
 function _getAttribs(__model__: GIModel, ent_type: EEntType, ent_i: number): string[] {
-    const names: string[] = __model__.modeldata.attribs.query.getAttribNames(ent_type);
+    const names: string[] = __model__.modeldata.attribs.getAttribNames(ent_type);
     const attribs_with_vals = [];
     for (const name of names) {
-        const val = __model__.modeldata.attribs.query.getEntAttribVal(ent_type, ent_i, name);
+        const val = __model__.modeldata.attribs.get.getEntAttribVal(ent_type, ent_i, name);
         if (val !== undefined) {
             attribs_with_vals.push(name);
         }
@@ -206,8 +206,8 @@ function _getColls(__model__: GIModel, ent_type: EEntType, ent_i: number): strin
     const colls_names = [];
     for (const coll_i of colls_i) {
         let coll_name = 'No name';
-        if (__model__.modeldata.attribs.query.hasAttrib(EEntType.COLL, EAttribNames.COLL_NAME)) {
-            coll_name = __model__.modeldata.attribs.query.getEntAttribVal(EEntType.COLL, coll_i, EAttribNames.COLL_NAME) as string;
+        if (__model__.modeldata.attribs.query.hasEntAttrib(EEntType.COLL, EAttribNames.COLL_NAME)) {
+            coll_name = __model__.modeldata.attribs.get.getEntAttribVal(EEntType.COLL, coll_i, EAttribNames.COLL_NAME) as string;
         }
         colls_names.push(coll_name);
     }
@@ -285,8 +285,8 @@ function _collInfo(__model__: GIModel, coll_i: number): string {
     let info = '';
     // get the data
     let coll_name = 'None';
-    if (__model__.modeldata.attribs.query.hasAttrib(EEntType.COLL, EAttribNames.COLL_NAME)) {
-        coll_name = __model__.modeldata.attribs.query.getEntAttribVal(EEntType.COLL, coll_i, EAttribNames.COLL_NAME) as string;
+    if (__model__.modeldata.attribs.query.hasEntAttrib(EEntType.COLL, EAttribNames.COLL_NAME)) {
+        coll_name = __model__.modeldata.attribs.get.getEntAttribVal(EEntType.COLL, coll_i, EAttribNames.COLL_NAME) as string;
     }
     const attribs: string[] = _getAttribs(__model__, EEntType.COLL, coll_i);
     const num_pgons: number = __model__.modeldata.geom.nav.navCollToPgon(coll_i).length;

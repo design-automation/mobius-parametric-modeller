@@ -211,7 +211,7 @@ export class DataCesium {
         let latitude = LONGLAT[1];
         let elevation = 0;
         if (model.modeldata.attribs.query.hasModelAttrib('geolocation')) {
-            const geoloc: any = model.modeldata.attribs.query.getModelAttribVal('geolocation');
+            const geoloc: any = model.modeldata.attribs.get.getModelAttribVal('geolocation');
             const long_value: TAttribDataTypes  = geoloc.longitude;
             if (typeof long_value !== 'number') {
                 throw new Error('Longitude attribute must be a number.');
@@ -237,7 +237,7 @@ export class DataCesium {
             }
         }
         // if (model.modeldata.attribs.query.hasModelAttrib('longitude')) {
-        //     const long_value: TAttribDataTypes  = model.modeldata.attribs.query.getModelAttribVal('longitude');
+        //     const long_value: TAttribDataTypes  = model.modeldata.attribs.get.getModelAttribVal('longitude');
         //     if (typeof long_value !== 'number') {
         //         throw new Error('Longitude attribute must be a number.');
         //     }
@@ -247,7 +247,7 @@ export class DataCesium {
         //     }
         // }
         // if (model.modeldata.attribs.query.hasModelAttrib('latitude')) {
-        //     const lat_value: TAttribDataTypes = model.modeldata.attribs.query.getModelAttribVal('latitude');
+        //     const lat_value: TAttribDataTypes = model.modeldata.attribs.get.getModelAttribVal('latitude');
         //     if (typeof lat_value !== 'number') {
         //         throw new Error('Latitude attribute must be a number');
         //     }
@@ -264,7 +264,7 @@ export class DataCesium {
         if (model.modeldata.attribs.query.hasModelAttrib('north')) {
 
             // get north attribute
-            const north_dir: any = model.modeldata.attribs.query.getModelAttribVal('north');
+            const north_dir: any = model.modeldata.attribs.get.getModelAttribVal('north');
 
             if (north_dir.constructor === [].constructor && north_dir.length === 2) {
                 // make the north vector and the default north vector
@@ -292,14 +292,14 @@ export class DataCesium {
         xform_matrix[14] = 0;
         // create all positions
         const posis_i: number[] = model.modeldata.geom.query.getEnts(EEntType.POSI);
-        const vert_n = model.modeldata.attribs.query.getAttrib(EEntType.VERT, 'normal');
+        const vert_n = model.modeldata.attribs.getAttrib(EEntType.VERT, 'normal');
 
         const allPosis = [];
         const posi_to_point_map: Map<number, any> = new Map();
         const vert_to_normal_map: Map<number, any> = new Map();
         for (const posi_i of posis_i) {
             if (!posi_to_point_map.has(posi_i)) {
-                const xyz: Txyz = model.modeldata.attribs.query.getPosiCoordsActive(posi_i);
+                const xyz: Txyz = model.modeldata.attribs.posis.getPosiCoords(posi_i);
                 const xform_pnt: any = Cesium.Cartesian3.fromArray(xyz);
                 Cesium.Matrix4.multiplyByPoint(east_north_up, xform_pnt, xform_pnt);
                 posi_to_point_map.set(posi_i, xform_pnt);
@@ -337,11 +337,11 @@ export class DataCesium {
                 let pgon_colour = Cesium.Color.WHITE;
                 let transparentCheck = false;
                 let normalCheck = !!vert_n;
-                if (model.modeldata.attribs.query.hasAttrib(EEntType.VERT, 'rgb')) {
+                if (model.modeldata.attribs.query.hasEntAttrib(EEntType.VERT, 'rgb')) {
                     const verts_i: number[] = model.modeldata.geom.nav.navAnyToVert(EEntType.PGON, pgon_i);
                     const rgb_sum: Txyz = [0, 0, 0];
                     for (const vert_i of verts_i) {
-                        let vert_rgb: Txyz = model.modeldata.attribs.query.getEntAttribVal(EEntType.VERT, vert_i, 'rgb') as Txyz;
+                        let vert_rgb: Txyz = model.modeldata.attribs.get.getEntAttribVal(EEntType.VERT, vert_i, 'rgb') as Txyz;
                         if (!vert_rgb) { vert_rgb = [1, 1, 1]; }
                         rgb_sum[0] = rgb_sum[0] + vert_rgb[0];
                         rgb_sum[1] = rgb_sum[1] + vert_rgb[1];
@@ -351,11 +351,11 @@ export class DataCesium {
                     pgon_colour = new Cesium.Color(rgb_sum[0] / num_verts, rgb_sum[1] / num_verts, rgb_sum[2] / num_verts, 1.0);
                 }
 
-                if (model.modeldata.attribs.query.hasAttrib(EEntType.PGON, 'material')) {
-                    let mat_name: any = model.modeldata.attribs.query.getEntAttribVal(EEntType.PGON, pgon_i, 'material');
+                if (model.modeldata.attribs.query.hasEntAttrib(EEntType.PGON, 'material')) {
+                    let mat_name: any = model.modeldata.attribs.get.getEntAttribVal(EEntType.PGON, pgon_i, 'material');
                     if (mat_name) {
                         if (mat_name.constructor === [].constructor) { mat_name = mat_name[0]; }
-                        const pgon_mat: any = model.modeldata.attribs.query.getModelAttribVal(mat_name);
+                        const pgon_mat: any = model.modeldata.attribs.get.getModelAttribVal(mat_name);
                         if (pgon_mat.color && pgon_mat.color !== 16777215) {
                             let cString = pgon_mat.color.toString(16);
                             while (cString.length < 6) { cString = '0' + cString; }
@@ -443,11 +443,11 @@ export class DataCesium {
                 // get each pline
                 for (const edge_i of edges_i) {
                     let edge_colour = Cesium.Color.BLACK;
-                    if (model.modeldata.attribs.query.hasAttrib(EEntType.VERT, 'rgb')) {
+                    if (model.modeldata.attribs.query.hasEntAttrib(EEntType.VERT, 'rgb')) {
                         const verts_i: number[] = model.modeldata.geom.nav.navAnyToVert(EEntType.EDGE, edge_i);
                         const rgb_sum: Txyz = [0, 0, 0];
                         for (const vert_i of verts_i) {
-                            let vert_rgb: Txyz = model.modeldata.attribs.query.getEntAttribVal(EEntType.VERT, vert_i, 'rgb') as Txyz;
+                            let vert_rgb: Txyz = model.modeldata.attribs.get.getEntAttribVal(EEntType.VERT, vert_i, 'rgb') as Txyz;
                             if (!vert_rgb) { vert_rgb = [0, 0, 0]; }
                             rgb_sum[0] = rgb_sum[0] + vert_rgb[0];
                             rgb_sum[1] = rgb_sum[1] + vert_rgb[1];
@@ -481,11 +481,11 @@ export class DataCesium {
                 // get each pline
                 for (const pline_i of plines_i) {
                     let pline_colour = Cesium.Color.BLACK;
-                    if (model.modeldata.attribs.query.hasAttrib(EEntType.VERT, 'rgb')) {
+                    if (model.modeldata.attribs.query.hasEntAttrib(EEntType.VERT, 'rgb')) {
                         const verts_i: number[] = model.modeldata.geom.nav.navAnyToVert(EEntType.PLINE, pline_i);
                         const rgb_sum: Txyz = [0, 0, 0];
                         for (const vert_i of verts_i) {
-                            let vert_rgb: Txyz = model.modeldata.attribs.query.getEntAttribVal(EEntType.VERT, vert_i, 'rgb') as Txyz;
+                            let vert_rgb: Txyz = model.modeldata.attribs.get.getEntAttribVal(EEntType.VERT, vert_i, 'rgb') as Txyz;
                             if (!vert_rgb) { vert_rgb = [0, 0, 0]; }
                             rgb_sum[0] = rgb_sum[0] + vert_rgb[0];
                             rgb_sum[1] = rgb_sum[1] + vert_rgb[1];
@@ -601,8 +601,8 @@ export class DataCesium {
                 if (old) {
                     container.removeChild(old);
                 }
-                if (!model.modeldata.attribs.query.hasAttrib(EEntType.MOD, 'hud')) { return; }
-                const hud = model.modeldata.attribs.query.getModelAttribVal('hud') as string;
+                if (!model.modeldata.attribs.query.hasEntAttrib(EEntType.MOD, 'hud')) { return; }
+                const hud = model.modeldata.attribs.get.getModelAttribVal('hud') as string;
                 const element = this._createHud(hud).element;
                 container.appendChild(element);
                 old = null;

@@ -126,52 +126,52 @@ describe('Execute Component test', () => {
                     const attrb_data = model.attributes;
                     let testSet, resultSet;
                     if (test.requirements.attributes.hasOwnProperty('position_attribs')) {
-                        testSet = new Set(omodel.modeldata.attribs.query.getAttribNames(EEntType.POSI));
+                        testSet = new Set(omodel.modeldata.attribs.getAttribNames(EEntType.POSI));
                         resultSet = new Set(test.requirements.attributes['position_attribs']);
                         expect(testSet).toEqual(resultSet, 'No. position attributes do not match');
                     }
                     if (test.requirements.attributes.hasOwnProperty('vertex_attribs')) {
-                        testSet = new Set(omodel.modeldata.attribs.query.getAttribNames(EEntType.VERT));
+                        testSet = new Set(omodel.modeldata.attribs.getAttribNames(EEntType.VERT));
                         resultSet = new Set(test.requirements.attributes['vertex_attribs']);
                         expect(testSet).toEqual(resultSet, 'No. vertex attributes do not match');
                     }
                     if (test.requirements.attributes.hasOwnProperty('edge_attribs')) {
-                        testSet = new Set(omodel.modeldata.attribs.query.getAttribNames(EEntType.EDGE));
+                        testSet = new Set(omodel.modeldata.attribs.getAttribNames(EEntType.EDGE));
                         resultSet = new Set(test.requirements.attributes['edge_attribs']);
                         expect(testSet).toEqual(resultSet, 'No. edge attributes do not match');
                     }
                     if (test.requirements.attributes.hasOwnProperty('wire_attribs')) {
-                        testSet = new Set(omodel.modeldata.attribs.query.getAttribNames(EEntType.WIRE));
+                        testSet = new Set(omodel.modeldata.attribs.getAttribNames(EEntType.WIRE));
                         resultSet = new Set(test.requirements.attributes['wire_attribs']);
                         expect(testSet).toEqual(resultSet, 'No. wire attributes do not match');
                     }
                     if (test.requirements.attributes.hasOwnProperty('face_attribs')) {
-                        testSet = new Set(omodel.modeldata.attribs.query.getAttribNames(EEntType.FACE));
+                        testSet = new Set(omodel.modeldata.attribs.getAttribNames(EEntType.FACE));
                         resultSet = new Set(test.requirements.attributes['face_attribs']);
                         expect(testSet).toEqual(resultSet, 'No. face attributes do not match');
                     }
                     if (test.requirements.attributes.hasOwnProperty('point_attribs')) {
-                        testSet = new Set(omodel.modeldata.attribs.query.getAttribNames(EEntType.POINT));
+                        testSet = new Set(omodel.modeldata.attribs.getAttribNames(EEntType.POINT));
                         resultSet = new Set(test.requirements.attributes['point_attribs']);
                         expect(testSet).toEqual(resultSet, 'No. point attributes do not match');
                     }
                     if (test.requirements.attributes.hasOwnProperty('polyline_attribs')) {
-                        testSet = new Set(omodel.modeldata.attribs.query.getAttribNames(EEntType.PLINE));
+                        testSet = new Set(omodel.modeldata.attribs.getAttribNames(EEntType.PLINE));
                         resultSet = new Set(test.requirements.attributes['polyline_attribs']);
                         expect(testSet).toEqual(resultSet, 'No. polyline attributes do not match');
                     }
                     if (test.requirements.attributes.hasOwnProperty('polygon_attribs')) {
-                        testSet = new Set(omodel.modeldata.attribs.query.getAttribNames(EEntType.PGON));
+                        testSet = new Set(omodel.modeldata.attribs.getAttribNames(EEntType.PGON));
                         resultSet = new Set(test.requirements.attributes['polygon_attribs']);
                         expect(testSet).toEqual(resultSet, 'No. polygon attributes do not match');
                     }
                     if (test.requirements.attributes.hasOwnProperty('collection_attribs')) {
-                        testSet = new Set(omodel.modeldata.attribs.query.getAttribNames(EEntType.COLL));
+                        testSet = new Set(omodel.modeldata.attribs.getAttribNames(EEntType.COLL));
                         resultSet = new Set(test.requirements.attributes['collection_attribs']);
                         expect(testSet).toEqual(resultSet, 'No. collection attributes do not match');
                     }
                     if (test.requirements.attributes.hasOwnProperty('model_attribs')) {
-                        testSet = new Set(omodel.modeldata.attribs.query.getAttribNames(EEntType.MOD));
+                        testSet = new Set(omodel.modeldata.attribs.getAttribNames(EEntType.MOD));
                         resultSet = new Set(test.requirements.attributes['model_attribs']);
                         expect(testSet).toEqual(resultSet, 'No. model attributes do not match');
                     }

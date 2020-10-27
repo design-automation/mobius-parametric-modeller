@@ -85,6 +85,7 @@
     //padding-bottom: 2px;
 
     li{
+        position: relative;
         user-select: none;
         margin: 0px;
         padding: 0px;
@@ -100,6 +101,24 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+
+        .helpButton {
+            display: none;
+            position: absolute;
+            right: 1px;
+            background-color: inherit;
+            padding: 2px 0px 0px 0px;
+            margin: 0px;
+            border: 0px;
+
+            &:focus {
+                outline: 0px;
+            }
+            .icon {
+                width: 14px;
+                height: 14px;
+            }
+        }
     }
     .user--Manage{
         margin-bottom: 4px;
@@ -108,6 +127,9 @@
     :hover{
         background-color: $color4;
         transition: 0.4s;
+        .helpButton {
+            display: inline-block;
+        }
     }
 
 }

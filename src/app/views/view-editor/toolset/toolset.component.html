@@ -147,6 +147,9 @@
                                     (mousedown)='selectPrevProd()'
                                     (click)='add_main_func(fn)'> 
                                         {{fn.name}} 
+                                        <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "core", fn)'>
+                                            <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
+                                        </button>
                                     </li>
                                     <!-- <span class="tooltiptext" [innerHTML]='fn.doc'></span> -->
                                 </div>
@@ -193,6 +196,9 @@
                                     <li 
                                     (mousedown)='selectPrevProd()'
                                     (click)='add_global_func(fn)'> {{fn.name}} 
+                                        <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "global", fn)'>
+                                            <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
+                                        </button>
                                     </li>
                                     <!-- <div class = 'btn--container'>
                                         <button class='importedFunc-btn' (click)='open_update_dialog($event, fn)'>

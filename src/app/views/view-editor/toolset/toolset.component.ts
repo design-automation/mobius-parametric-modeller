@@ -626,6 +626,22 @@ export class ToolsetComponent implements OnInit {
         }, 700);
     }
 
+    emitHelpText(event, functype, func) {
+        event.stopPropagation();
+        if (functype === 'core') {
+            this.eventAction.emit({
+                'type': 'helpText',
+                'content': this.ModuleDoc[func.module][func.name]
+            });
+        } else {
+            this.eventAction.emit({
+                'type': 'helpText',
+                'content': func.doc
+            });
+        }
+    }
+
+
     turnoffTooltip() {
         clearTimeout(this.timeOut);
         let tooltip = document.getElementById('tooltiptext');

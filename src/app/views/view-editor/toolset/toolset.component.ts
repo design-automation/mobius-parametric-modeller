@@ -185,6 +185,17 @@ export class ToolsetComponent implements OnInit {
         });
     }
 
+    add_searched_func(fnData) {
+        if (fnData.type === 'localFunc') {
+            this.add_local_func_call(fnData.data);
+        } else if (fnData.type === 'globalFunc') {
+            this.add_global_func(fnData.data);
+        } else {
+            this.add_main_func(fnData.data);
+        }
+    }
+
+
     add_searched_user_func(fnData) {
         if (fnData.type === 'localFunc') {
             this.add_local_func_call(fnData.data);
@@ -467,14 +478,45 @@ export class ToolsetComponent implements OnInit {
                 if (func.name.toLowerCase().indexOf(str) !== -1) {
                     this.searchedMainFuncs.push({
                         'type': 'function',
-                        'name': func.name,
                         'module': mod.module,
+                        'name': func.name,
                         'data': func,
                     });
                 }
             }
         }
 
+        if (this.searchedMainFuncs.length >= 10) { return; }
+        console.log(this.getNode().localFunc)
+        console.log(str)
+        for (const func of this.getNode().localFunc) {
+            if (func.type !== ProcedureTypes.LocalFuncDef) { continue; }
+            if (this.searchedMainFuncs.length >= 10) { break; }
+            console.log(func.args[0].value, func.args[0].value.toLowerCase().indexOf(str))
+            if (func.args[0].value.toLowerCase().indexOf(str) !== -1) {
+                this.searchedMainFuncs.push({
+                    'type': 'localFunc',
+                    'module': 'local',
+                    'name': func.args[0].value,
+                    'data': func
+                });
+            }
+        }
+
+        if (this.searchedMainFuncs.length >= 10) { return; }
+
+        // Search User Defined Functions
+        for (const func of this.dataService.flowchart.functions) {
+            if (this.searchedMainFuncs.length >= 10) { break; }
+            if (func.name.toLowerCase().indexOf(str) !== -1) {
+                this.searchedMainFuncs.push({
+                    'type': 'globalFunc',
+                    'module': 'global',
+                    'name': func.name,
+                    'data': func
+                });
+            }
+        }
     }
 
     searchInlineFuncs(event) {
@@ -583,6 +625,22 @@ export class ToolsetComponent implements OnInit {
             tooltip = null;
         }, 700);
     }
+
+    emitHelpText(event, functype, func) {
+        event.stopPropagation();
+        if (functype === 'core') {
+            this.eventAction.emit({
+                'type': 'helpText',
+                'content': this.ModuleDoc[func.module][func.name]
+            });
+        } else {
+            this.eventAction.emit({
+                'type': 'helpText',
+                'content': func.doc
+            });
+        }
+    }
+
 
     turnoffTooltip() {
         clearTimeout(this.timeOut);

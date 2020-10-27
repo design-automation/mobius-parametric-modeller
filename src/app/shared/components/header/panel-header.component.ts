@@ -881,6 +881,15 @@ export class PanelHeaderComponent implements OnDestroy {
         this.openHeaderDialog(event, 'globalfunc');
     }
 
+    addGlobalFuncLS(event: MouseEvent) {
+        event.stopPropagation();
+        this.dataService.dialog.close();
+        this.dataService.dialogType = 'backup';
+        this.dataService.dialog = <HTMLDialogElement>document.getElementById('headerDialog');
+        this.dataService.dialog.showModal();
+        this.dataService.setbackup_updateImported(true);
+    }
+
     updateNode() {
         const nodeSelInput = <HTMLInputElement> document.getElementById('hidden_node_selection');
         const selectedNode = nodeSelInput.value;

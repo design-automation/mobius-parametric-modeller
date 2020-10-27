@@ -97,6 +97,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             case 'add_prod' :
                 this.add_prod(event.content);
                 break;
+            case 'helpText' :
+                this.updateHelpView(event.content);
+                break;
         }
     }
 

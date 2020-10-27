@@ -229,7 +229,8 @@
                 <mat-icon class='icon'>delete_outline</mat-icon>
             </button>
         </div>
-        <button id='addGlobalButton' (click)="addGlobalFunc($event)">Import File</button>
+        <button class='addGlobalButton' (click)="addGlobalFunc($event)">Import File</button>
+        <button class='addGlobalButton' (click)="addGlobalFuncLS($event)">Import LS</button>
     </div>
     <div class='saveLocalDialog' *ngIf='checkDialog("savels")'>
         <p>Save File to Local Storage as: </p>

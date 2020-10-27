@@ -41,19 +41,9 @@
         opacity: $disabled-opacity;
         .btns{
             display: inline-flex;
-            #disable-btn{
-                // display: flex;
+            .btn{
+                display: flex;
                 justify-content: center;
-                &:hover{
-                    color: $selected-color;
-                }
-            }
-        }
-        &.onhover{
-            .btns{
-                #disable-btn{
-                    order: 0;
-                }
             }
         }
     }
@@ -68,111 +58,40 @@
             background-color: $selected-color2;
         }
     }
-    &.printing:not(.disabled){
-        border-bottom: 2px solid $print-color;
-        border-left: 2px solid $print-color;
-        padding-bottom: 0px;
-        padding-left: 8px;
-        // #print-btn{
-        //     color: $print-color;
-        //     background-color: $color6;
-        // }
-        &.onhover {
-            // background-color: $print-color-lt;
-            #print-btn{
-                background-color: transparent;
-            }
-        }
-    }
 
     &.printing{
+        border-bottom: 2px solid $print-color-dk;
+        border-left: 2px solid $print-color-dk;
+        padding-bottom: 0px;
+        padding-left: 8px;
+
+        #print-btn{
+            color: $print-color-dk;
+        }
         .btns{
             display: inline-flex;
             .btn{
-                background-color: inherit;
-            }
-        }
-        &.onhover{
-            .btns{
-                #print-btn{
-                    order: 1
-                }
+                display: flex;
+                justify-content: center;
             }
         }
     }
 
-    &.selectGeom:not(.disabled){
+    &.selectGeom{
         border-bottom: 2px solid $selectGeom-color;
         border-left: 2px solid $selectGeom-color;
         padding-bottom: 0px;
         padding-left: 8px;
         #selectGeom-btn{
             color: $selectGeom-color;
-            background-color: $color6;
-        }
-        &.onhover {
-            // background-color: $selectGeom-color-lt;
-            #selectGeom-btn{
-                background-color: transparent;
-            }
-        }
-        &.printing {
-            border-left: 2px solid $print-color;
-            padding-left: 8px;
-        }
-        &.error{
-            border-bottom: 2px solid $error-color;
-            border-left: 2px solid $error-color;
-            padding-bottom: 0px;
-            padding-left: 8px;
         }
     }
 
-    &.selectGeom{
-        .btns{
-            display: inline-flex;
-            .btn{
-                background-color: inherit;
-            }
-            #selectGeom-btn{
-                display: flex;
-                justify-content: center;   
-                &:hover{
-                    color: $selected-color;
-                }
-            }
-        }
-        &.onhover{
-            .btns{
-                #selectGeom-btn{
-                    order: 1
-                }
-            }
-        }
-        // &:hover .btns{
-        //     #selectGeom-btn{
-        //         order: 1
-        //     }
-        // }
-    }
     &.error{
         border-bottom: 2px solid $error-color;
         border-left: 2px solid $error-color;
         padding-bottom: 0px;
         padding-left: 8px;
-
-    }
-    &.error:not(.disabled){
-        border-bottom: 2px solid $error-color;
-        border-left: 2px solid $error-color;
-        padding-bottom: 0px;
-        padding-left: 8px;
-        .btn{
-            background-color: inherit;
-        }
-        // &.onhover {
-        //     background-color: $error-color-lt;
-        // }
     }
 
     &.onhover{
@@ -183,8 +102,12 @@
                 background-color: $selected-color2;
             }
         }
-        .btn{
-            background-color: inherit;
+        .btns{
+            display: inline-flex;
+            .btn{
+                display: flex;
+                justify-content: center;
+            }
         }
     }
 
@@ -311,19 +234,19 @@
     //     }
     // }
 }
-#print-btn{
-    &.printing:not(.disabled){
-        color: $print-color;
-        background-color: $color6;
-    }
-    &.printing{
-        display: flex;
-        justify-content: center;   
-        &:hover{
-            color: $selected-color;
-        }
-    }
-}
+// #print-btn{
+//     &.printing:not(.disabled){
+//         color: $print-color;
+//         background-color: $color6;
+//     }
+//     &.printing{
+//         display: flex;
+//         justify-content: center;   
+//         &:hover{
+//             color: $selected-color;
+//         }
+//     }
+// }
 
 .container--item{
     position: relative;
@@ -362,16 +285,6 @@
     }
 }
 
-.container--item:hover + .btn-container{//.container--line
-    .btns{
-        display: inline-flex;
-        .btn{
-            display: flex;
-            justify-content: center;
-            background-color: inherit;
-        }
-    }
-}
 
 //.container--item .selected .btn {display: block}
 
@@ -384,18 +297,11 @@
     justify-content: flex-end;
     order: -1;
     z-index: 2;
-    &:hover .btns{
-        display: inline-flex;
-        .btn{
-            display: flex;
-            justify-content: center;
-            background-color: inherit;
-        }
-    }
 }
 
 .btns{
     position: absolute;
+    top: 2px;
 
     display: none;
     flex-flow: row-reverse nowrap;
@@ -413,7 +319,7 @@
 .btn{
     //height: 100%;
     width: $fsize1;
-    background-color: $color6;
+    background-color: inherit;
 
     border: none;
     color: $color1;
@@ -430,6 +336,9 @@
     &:hover{
         color: $selected-color;
     }
+    &:focus{
+        outline:0;
+    }
 }
 .btn{
     padding: 0px;
@@ -440,9 +349,9 @@
         vertical-align: center;
         width: $fsize1;
         height: $fsize1 + 2px;
-        margin: 1px;
+        margin: 1px transparent;
         font-size: $fsize2;
-        // border: 1px solid $color1;
+        border: none;
     }
 }
 

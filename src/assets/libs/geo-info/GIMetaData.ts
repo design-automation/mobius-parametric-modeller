@@ -1,4 +1,5 @@
 import { EAttribDataTypeStrs, TAttribDataTypes, IMetaData } from './common';
+import * as lodash from 'lodash';
 
 /**
  * Geo-info model metadata class.
@@ -263,25 +264,13 @@ export class GIMetaData {
         // TODO this is doing deep copy
         // This may not be a good idea
         const val: TAttribDataTypes =  this._data.attrib_values[data_type][0][index];
-        if (data_type === EAttribDataTypeStrs.LIST) {
-            return (val as any[]).slice();
-        } else if (data_type === EAttribDataTypeStrs.DICT) {
-            throw new Error('not implemented');
-           //  return (val as object).deepCopy();
-        }
         return val;
-    }
-    public getValFromKey(key: string|number, data_type: EAttribDataTypeStrs): TAttribDataTypes {
-        // TODO this is doing deep copy
-        // This may not be a good idea
-        const val: TAttribDataTypes = this._data.attrib_values[data_type][0][this._data.attrib_values[data_type][1].get(key)];
-        if (data_type === EAttribDataTypeStrs.LIST) {
-            return (val as any[]).slice();
-        } else if (data_type === EAttribDataTypeStrs.DICT) {
-            throw new Error('not implemented');
-           //  return (val as object).deepCopy();
-        }
-        return val;
+        // if (data_type === EAttribDataTypeStrs.LIST) {
+        //     return (val as any[]).slice();
+        // } else if (data_type === EAttribDataTypeStrs.DICT) {
+        //     return lodash.deepCopy(val as object);
+        // }
+        // return val;
     }
     public getIdxFromKey(key: string|number, data_type: EAttribDataTypeStrs): number {
         return this._data.attrib_values[data_type][1].get(key);

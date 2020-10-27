@@ -159,7 +159,7 @@ export enum EAttribDataTypeStrs {
     STRING = 'string',
     BOOLEAN = 'boolean',
     LIST = 'list', // a list of anything
-    DICT = 'dict // an object'
+    DICT = 'dict' // an object
 }
 
 // types
@@ -320,7 +320,6 @@ export interface IGeomJSONData {
 export interface IAttribJSONData {
     name: string;
     data_type: EAttribDataTypeStrs;
-    data_length: number;
     data: TEntAttribValuesArr;
 }
 export interface IAttribsJSONData {

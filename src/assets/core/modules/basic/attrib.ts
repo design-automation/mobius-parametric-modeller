@@ -17,6 +17,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, TEntTypeIdx,
     EAttribPush, TAttribDataTypes, EEntTypeStr, EAttribDataTypeStrs } from '@libs/geo-info/common';
 import { getArrDepth, idsBreak } from '@libs/geo-info/id';
+import * as lodash from 'lodash';
 // ================================================================================================
 
 export enum _EEntType {
@@ -210,12 +211,15 @@ function _setEachEntDifferentAttribValue(__model__: GIModel, ents_arr: TEntTypeI
             if (idx_or_key !== null) { checkAttribIdxKey(fn_name, idx_or_key); }
         }
         // --- Error Check ---
+        // if this is a complex type, make a deep copy
+        let val: TAttribDataTypes = attrib_values[i];
+        if (val instanceof Object) { val = lodash.cloneDeep(val); }
         if (typeof idx_or_key === 'number') {
-            __model__.modeldata.attribs.set.setEntsAttribListIdxVal(ent_type, ents_i[i], attrib_name, idx_or_key, attrib_values[i]);
+            __model__.modeldata.attribs.set.setEntsAttribListIdxVal(ent_type, ents_i[i], attrib_name, idx_or_key, val);
         } if (typeof idx_or_key === 'string') {
-            __model__.modeldata.attribs.set.setEntsAttribDictKeyVal(ent_type, ents_i[i], attrib_name, idx_or_key, attrib_values[i]);
+            __model__.modeldata.attribs.set.setEntsAttribDictKeyVal(ent_type, ents_i[i], attrib_name, idx_or_key, val);
         } else {
-            __model__.modeldata.attribs.set.setCreateEntsAttribVal(ent_type, ents_i[i], attrib_name, attrib_values[i]);
+            __model__.modeldata.attribs.set.setCreateEntsAttribVal(ent_type, ents_i[i], attrib_name, val);
         }
     }
 }
@@ -227,6 +231,8 @@ function _setEachEntSameAttribValue(__model__: GIModel, ents_arr: TEntTypeIdx[],
         checkAttribValue(fn_name , attrib_value);
     }
     // --- Error Check ---
+    // if this is a complex type, make a deep copy
+    if (attrib_value instanceof Object) { attrib_value = lodash.cloneDeep(attrib_value); }
     const ent_type: number = ents_arr[0][0];
     const ents_i: number[] = _getEntsIndices(__model__, ents_arr);
     if (typeof idx_or_key === 'number') {
@@ -307,13 +313,17 @@ function _get(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
             return EEntTypeStr[ent_type] + ent_i as TAttribDataTypes;
         }
         // get the attrib values from the ents
+        let val: TAttribDataTypes;
         if (typeof attrib_idx_key === 'number') {
-            return __model__.modeldata.attribs.get.getEntAttribListIdxVal(ent_type, ent_i, attrib_name, attrib_idx_key as number);
+            val =  __model__.modeldata.attribs.get.getEntAttribListIdxVal(ent_type, ent_i, attrib_name, attrib_idx_key as number);
         } else if (typeof attrib_idx_key === 'string') {
-            return __model__.modeldata.attribs.get.getEntAttribDictKeyVal(ent_type, ent_i, attrib_name, attrib_idx_key as string);
+            val =  __model__.modeldata.attribs.get.getEntAttribDictKeyVal(ent_type, ent_i, attrib_name, attrib_idx_key as string);
         } else {
-            return __model__.modeldata.attribs.get.getEntAttribVal(ent_type, ent_i, attrib_name);
+            val = __model__.modeldata.attribs.get.getEntAttribVal(ent_type, ent_i, attrib_name);
         }
+        // if this is a complex type, make a deep copy
+        if (val instanceof Object) { val = lodash.cloneDeep(val); }
+        return val;
     } else {
         return (ents_arr as TEntTypeIdx[]).map( ent_arr =>
             _get(__model__, ent_arr, attrib_name, attrib_idx_key) ) as TAttribDataTypes[];

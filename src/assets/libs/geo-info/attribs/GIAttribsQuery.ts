@@ -68,7 +68,7 @@ export class GIAttribsQuery {
         }
     }
     /**
-     * Get attrib data type. Also works for MOD attribs.
+     * Get attrib data length. Also works for MOD attribs.
      *
      * @param ent_type
      * @param name

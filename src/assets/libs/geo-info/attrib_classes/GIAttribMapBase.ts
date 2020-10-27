@@ -21,7 +21,6 @@ export class GIAttribMapBase {
     protected _name: string;
     protected _ent_type: EEntType;
     protected _data_type: EAttribDataTypeStrs;
-    protected _data_length: number;
     protected _is_coll_data: boolean;
     protected _is_length_variable: boolean;
     // the two data maps that store attrib data
@@ -37,13 +36,6 @@ export class GIAttribMapBase {
         this._name = name;
         this._ent_type = ent_type;
         this._data_type = data_type;
-        if (data_type === EAttribDataTypeStrs.LIST || data_type === EAttribDataTypeStrs.DICT) {
-            this._data_length = 0;
-            this._is_length_variable = true;
-        } else {
-            this._data_length = 1;
-            this._is_length_variable = false;
-        }
         // the maps
         this._map_val_i_to_ents_i = new Map();
         this._map_ent_i_to_val_i = new Map();
@@ -83,27 +75,9 @@ export class GIAttribMapBase {
         return {
             name: this._name,
             data_type: this._data_type,
-            data_length: this._data_length,
             data: data
         };
     }
-    // /**
-    //  * Sets the JSON data for this attribute.
-    //  * Any existing data is deleted.
-    //  */
-    // public setJSONData(attrib_data: IAttribJSONData): void {
-    //     this._name = attrib_data.name;
-    //     this._data_type = attrib_data.data_type;
-    //     this._data_length = attrib_data.data_length;
-    //     this._map_val_i_to_ents_i = new Map();
-    //     this._map_ent_i_to_val_i = new Map();
-    //     for (const [val_i, ents_i] of attrib_data.data) {
-    //         this._map_val_i_to_ents_i.set(val_i, new Set(ents_i));
-    //         ents_i.forEach( ent_i => {
-    //             this._map_ent_i_to_val_i.set(ent_i, val_i);
-    //         });
-    //     }
-    // }
     /**
      * Gets the name of this attribute.
      */
@@ -132,7 +106,28 @@ export class GIAttribMapBase {
      * If _data_type is OBJECT, length is the obect with the longest Object.keys, can be 0
      */
     public getDataLength(): number {
-        return this._data_length;
+        switch (this._data_type) {
+            case EAttribDataTypeStrs.NUMBER:
+            case EAttribDataTypeStrs.STRING:
+            case EAttribDataTypeStrs.BOOLEAN:
+                return 1;
+            case EAttribDataTypeStrs.LIST:
+                let max_len = 0;
+                for (const val_i of this._map_val_i_to_ents_i.keys()) {
+                    const val_len = (this._getVal(val_i) as any[]).length;
+                    if (val_len > max_len) { max_len = val_len; }
+                }
+                return max_len;
+            case EAttribDataTypeStrs.DICT:
+                let max_size = 0;
+                for (const val_i of this._map_val_i_to_ents_i.keys()) {
+                    const val_size =  Object.keys(this._getVal(val_i) as object).length;
+                    if (val_size > max_size) { max_size = val_size; }
+                }
+                return max_size;
+            default:
+                throw new Error('Attribute datatype not recognised.');
+        }
     }
     /**
      * Returns true if there is an entity that has a value (i.e. the value is not undefined).
@@ -159,6 +154,68 @@ export class GIAttribMapBase {
         return Array.from(this._map_ent_i_to_val_i.keys());
     }
     /**
+     * Gets the value for a given entity, or an array of values given an array of entities.
+     * ~
+     * Returns undefined if the entity does not exist in this map.
+     * ~
+     * If value is a list or dict, it is passed by reference.
+     * ~
+     * WARNING: The returned dict or list should not be modified, it should be treated as immutable.
+     * ~
+     * @param ent_i
+     */
+    public getEntVal(ent_i: number): TAttribDataTypes {
+        const val_i: number = this._map_ent_i_to_val_i.get(ent_i);
+        return this._getVal(val_i);
+    }
+    /**
+     * Gets all the keys that have a given value
+     * If the value does not exist an empty array is returned
+     * The value can be a list or object
+     * @param val
+     */
+    public getEntsFromVal(val: TAttribDataTypes): number[] {
+        const val_i: number = this._getValIdx(val);
+        return this._mapValToEntsGetArr(val_i);
+    }
+    /**
+     * Sets the value for a given entity or entities.
+     *
+     * If the value is undefined, no action is taken.
+     *
+     * The value can be null, in which case it is equivalent to deleting the entities from this attrib map.
+     *
+     * If the ents come from a previous snapshot, then they will be copied.
+     *
+     * @param ent_i
+     * @param val
+     */
+    public setEntVal(ents_i: number|number[], val: TAttribDataTypes, check_type = true): void {
+        // if indefined, do nothing
+        if (val === undefined) { return; }
+        // if null, delete
+        if (val === null) { this.delEnt(ents_i); return; }
+        // check the type
+        if (check_type) { this._checkValType(val); }
+        // get the val idx
+        const val_i: number = this._getAddValIdx(val);
+        // an array of ents
+        ents_i = (Array.isArray(ents_i)) ? ents_i : [ents_i];
+        // loop through all the unique ents, and set _map_ent_i_to_val_i
+        ents_i.forEach( ent_i => {
+            // keep the old value for later
+            const old_val_i: number = this._map_ent_i_to_val_i.get(ent_i);
+            // for each ent_i, set the new val_i
+            this._map_ent_i_to_val_i.set(ent_i, val_i);
+            // for the value add each ent_i
+            this._mapValToEntsAdd(val_i, ent_i);
+            // clean up the old val_i
+            if (old_val_i !== undefined && old_val_i !== val_i) {
+                this._mapValToEntsRem(old_val_i, ent_i);
+            }
+        });
+    }
+    /**
      * Delete the entities from this attribute map.
      */
     public delEnt(ents_i: number|number[]): void {
@@ -173,8 +230,6 @@ export class GIAttribMapBase {
                 this._mapValToEntsRem(val_i, ent_i);
             }
         });
-        // TODO
-        // this._data_length may need to be reduced
     }
     /**
      * Returns an array of entity indices which do not have a value (undefined)
@@ -222,12 +277,6 @@ export class GIAttribMapBase {
                 }
             }
         }
-        // update the data length
-        if (this._is_length_variable) {
-            if (attrib_map._data_length > this._data_length) {
-                this._data_length = attrib_map._data_length;
-            }
-        }
     }
     // ============================================================================
     // Debug
@@ -237,78 +286,6 @@ export class GIAttribMapBase {
         if (data === null) { return this._name + ' has no data.'; }
         return JSON.stringify(data);
     }
-    // /**
-    //  * Renumber the entity IDs.
-    //  * This gets called when this data is being meregd into another model.
-    //  * In such a case, entity IDs need to be renumbered to avoid conflicts.
-    //  * The new entity IDs are defined in the renum_map argument.
-    //  * typically called before merge, to avoid conflicts.
-    //  * @param renum_map
-    //  */
-    // public renumEnts(renum_map: Map<number, number>): void {
-    //     for (const val_i of this._map_val_i_to_ents_i.keys())  {
-    //         const exist_ents_i: number|Set<number> = this._map_val_i_to_ents_i.get(val_i);
-    //         if (typeof exist_ents_i === 'number') {
-    //             const new_ent_i: number = renum_map.get(exist_ents_i as number); // shift
-    //             this._map_val_i_to_ents_i.set(val_i, new_ent_i);
-    //             this._map_ent_i_to_val_i.set(new_ent_i, val_i);
-    //         } else {
-    //             const new_set_ents_i: Set<number> = new Set();
-    //             for (const ent_i of exist_ents_i) {
-    //                 const new_ent_i: number = renum_map.get(ent_i); // shift
-    //                 new_set_ents_i.add(new_ent_i);
-    //                 this._map_ent_i_to_val_i.set(new_ent_i, val_i);
-    //             }
-    //             this._map_val_i_to_ents_i.set(val_i, new_set_ents_i);
-    //         }
-    //     }
-    // }
-    // /**
-    //  * Dumps another attrib map into this attrib map
-    //  * Assumes tha this map is empty
-    //  * @param attrib_map The attrib map to merge into this map
-    //  */
-    // public dump(attrib_map: GIAttribMapBase): void {
-    //     const new_map_val_i_to_ents_i: Map<number, number|Set<number>> = new Map();
-    //     this._map_val_i_to_ents_i.forEach( (ents_i, val_i) => {
-    //         if (typeof ents_i === 'number') {
-    //             new_map_val_i_to_ents_i.set(val_i, ents_i as number);
-    //         } else {
-    //             new_map_val_i_to_ents_i.set(val_i, new Set(ents_i));
-    //         }
-    //     });
-    //     this._map_val_i_to_ents_i = new_map_val_i_to_ents_i;
-    //     this._map_ent_i_to_val_i = new Map(attrib_map._map_ent_i_to_val_i);
-    // }
-    // /**
-    //  * Dumps another attrib map into this attrib map
-    //  * Assumes tha this map is empty ???
-    //  * @param attrib_map The attrib map to merge into this map
-    //  */
-    // public dumpEnts(attrib_map: GIAttribMapBase, selected: Set<number>): void {
-    //     selected.forEach(selected_ent_i => {
-    //         if (attrib_map._map_ent_i_to_val_i.has(selected_ent_i)) {
-    //             const val_i: number = attrib_map._map_ent_i_to_val_i.get(selected_ent_i);
-    //             this._mapValToEntsAdd(val_i, selected_ent_i);
-    //             this._map_ent_i_to_val_i.set(selected_ent_i, val_i);
-    //             // update the data length
-    //             if (this._is_length_variable) {
-    //                 const val = this.modeldata.model.metadata.getValFromIdx(val_i, this._data_type);
-    //                 if (this._data_type === EAttribDataTypeStrs.LIST) {
-    //                     const arr_len: number = (val as any[]).length;
-    //                     if (arr_len > this._data_length) {
-    //                         this._data_length = arr_len;
-    //                     }
-    //                 } else if (this._data_type === EAttribDataTypeStrs.DICT) {
-    //                     const arr_len: number = Object.keys((val as object)).length;
-    //                     if (arr_len > this._data_length) {
-    //                         this._data_length = arr_len;
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     });
-    // }
     //  ===============================================================================================================
     //  Private methods
     //  ===============================================================================================================
@@ -410,8 +387,15 @@ export class GIAttribMapBase {
         return Array.from(exist_ents_i as Set<number>);
     }
     // ============================================================================================
-    // Methods to be overridden
+    // Private methods to be overridden
     // ============================================================================================
+    /**
+     * Check that the value is of the correct type for this attribute.
+     * @param ent_i
+     */
+    protected _checkValType(val: TAttribDataTypes): void {
+        throw new Error('Method must be overridden in sub class');
+    }
     /**
      * Gets the value for a given index.
      * ~
@@ -431,49 +415,15 @@ export class GIAttribMapBase {
         throw new Error('Method must be overridden in sub class');
     }
     /**
-     * Gets the value for a given entity, or an array of values given an array of entities.
-     * ~
-     * Returns undefined if the entity does not exist in this map.
-     * ~
-     * If value is a list or dict, it is passed by reference.
+     * Get the index for a given value, if it does not exist add it.
      * @param ent_i
      */
-    public getEntVal(ents_i: number): TAttribDataTypes {
+    protected _getAddValIdx(val: TAttribDataTypes): number {
         throw new Error('Method must be overridden in sub class');
     }
-    /**
-     * Returns a nested array of entities and values, like this:
-     * [ [[2,4,6,8], 'hello'], [[9,10], 'world']]
-     * This is the same format as used in gi-json
-     * This matches the method setEntsVals()
-     */
-    public getData(): [number[], TAttribDataTypes][] {
-        throw new Error('Method must be overridden in sub class');
-    }
-    /**
-     * Gets all the keys that have a given value
-     * If the value does not exist an empty array is returned
-     * The value can be a list or object
-     * @param val
-     */
-    public getEntsFromVal(val: TAttribDataTypes): number[] {
-        throw new Error('Method must be overridden in sub class');
-    }
-    /**
-     * Sets the value for a given entity or entities.
-     *
-     * If the value is undefined, no action is taken.
-     *
-     * The value can be null, in which case it is equivalent to deleting the entities from this attrib map.
-     *
-     * If the ents come from a previous snapshot, then they will be copied.
-     *
-     * @param ent_i
-     * @param val
-     */
-    public setEntVal(ent_i: number, val: TAttribDataTypes, check_type = true): void {
-        throw new Error('Method must be overridden in sub class');
-    }
+    // ============================================================================================
+    // Public methods to be overridden
+    // ============================================================================================
     /**
      * Executes a query.
      * ~

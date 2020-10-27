@@ -3,6 +3,7 @@ import { TAttribDataTypes, EEntType,
 import * as mathjs from 'mathjs';
 import { GIModelData } from '../GIModelData';
 import { GIAttribMapBase } from '../attrib_classes/GIAttribMapBase';
+import * as lodash from 'lodash';
 
 /**
  * Class for attributes.
@@ -136,7 +137,7 @@ export class GIAttribsSetVal {
         // replace the data
         ents_i = Array.isArray( ents_i) ? ents_i : [ents_i];
         for (const ent_i of ents_i) {
-            const data: any[] = attrib.getEntVal(ent_i) as any[]; // this will be a deep copy of the data
+            const data: any[] = lodash.cloneDeep( attrib.getEntVal(ent_i) as any[] ); // this will be a deep copy of the data
             data[idx] = value;
             attrib.setEntVal(ent_i, data);
         }
@@ -161,7 +162,7 @@ export class GIAttribsSetVal {
         // replace the data
         ents_i = Array.isArray( ents_i) ? ents_i : [ents_i];
         for (const ent_i of ents_i) {
-            const data: object = attrib.getEntVal(ent_i) as any[]; // this will be a deep copy of the data
+            const data: object = lodash.cloneDeep( attrib.getEntVal(ent_i) as object ); // this will be a deep copy of the data
             data[key] = value;
             attrib.setEntVal(ent_i, data);
         }
@@ -184,7 +185,7 @@ export class GIAttribsSetVal {
         for (const attrib_name of attrib_names) {
             if (attrib_name === EAttribNames.TIMESTAMP) { continue; }
             const attrib: GIAttribMapBase = attribs.get(attrib_name);
-            const attrib_value: TAttribDataTypes =  attrib.getEntVal(from_ent_i) as TAttribDataTypes; // copy
+            const attrib_value: TAttribDataTypes =  attrib.getEntVal(from_ent_i) as TAttribDataTypes; // deep copy
             attrib.setEntVal(to_ent_i, attrib_value);
         }
     }
@@ -409,7 +410,7 @@ export class GIAttribsSetVal {
         } else if (Array.isArray(value)) {
             return EAttribDataTypeStrs.LIST;
         } else if (typeof value === 'object') {
-            return EAttribDataTypeStrs.LIST;
+            return EAttribDataTypeStrs.DICT;
         }
         throw new Error('Data type for new attribute not recognised.');
     }

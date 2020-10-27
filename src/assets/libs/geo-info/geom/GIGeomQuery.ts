@@ -1,6 +1,6 @@
 
 import {  EEntType, IGeomMaps, EEntStrToGeomMaps, TWire, Txyz, TEntTypeIdx,
-    TFace, EWireType, TEdge, IEntSets } from '../common';
+    TFace, EWireType, TEdge, IEntSets, EAttribNames } from '../common';
 import { isPosi, isPoint, isPline, isPgon, isColl } from '../id';
 import { vecFromTo, vecCross, vecDiv, vecNorm, vecLen, vecDot } from '../../geom/vectors';
 import * as Mathjs from 'mathjs';
@@ -603,7 +603,7 @@ export class GIGeomQuery {
         let count = 0;
         for (const tri_i of tris_i) {
             const posis_i: number[] = this._geom_maps.dn_tris_verts.get(tri_i).map(vert_i => this._geom_maps.dn_verts_posis.get(vert_i));
-            const xyzs: Txyz[] = posis_i.map(posi_i => this.modeldata.attribs.snapshot.getPosiCoords(ssid, posi_i));
+            const xyzs: Txyz[] = posis_i.map(posi_i => this.modeldata.attribs.attribs_maps.get(ssid).ps.get(EAttribNames.COORDS).getEntVal(posi_i) as Txyz);
             const vec_a: Txyz = vecFromTo(xyzs[0], xyzs[1]);
             const vec_b: Txyz = vecFromTo(xyzs[0], xyzs[2]); // CCW
             const tri_normal: Txyz = vecCross(vec_a, vec_b, true);

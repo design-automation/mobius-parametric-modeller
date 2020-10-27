@@ -92,7 +92,7 @@ export class GIAttribsSnapshot {
         for (const [ent_type, ent_i] of ents) {
             const attribs: Map<string, GIAttribMapBase> = from_attrib_maps[EEntTypeStr[ent_type]];
             attribs.forEach( (attrib: GIAttribMapBase, attrib_name: string) => {
-                const attrib_val: TAttribDataTypes = attrib.getEntVal(ent_i);
+                const attrib_val: TAttribDataTypes = attrib.getEntVal(ent_i); // shallow copy
                 if (attrib_val !== undefined) {
                     this.modeldata.attribs.set.setCreateEntsAttribVal(ent_type, ent_i, attrib_name, attrib_val);
                 }
@@ -100,14 +100,14 @@ export class GIAttribsSnapshot {
         }
         from_attrib_maps.mo.forEach( (val, name) => this.modeldata.attribs.set.setModelAttribVal(name, val) );
     }
-    /**
-     * Shortcut for getting a coordinate from a posi_i
-     * @param posi_i
-     */
-    public getPosiCoords(ssid: number, posi_i: number): Txyz {
-        const result = this.modeldata.attribs.attribs_maps.get(ssid).ps.get(EAttribNames.COORDS).getEntVal(posi_i) as Txyz;
-        return result;
-    }
+    // /**
+    //  * Shortcut for getting a coordinate from a posi_i
+    //  * @param posi_i
+    //  */
+    // public getPosiCoords(ssid: number, posi_i: number): Txyz {
+    //     const result = this.modeldata.attribs.attribs_maps.get(ssid).ps.get(EAttribNames.COORDS).getEntVal(posi_i) as Txyz;
+    //     return result;
+    // }
     // ============================================================================
     // Debug
     // ============================================================================

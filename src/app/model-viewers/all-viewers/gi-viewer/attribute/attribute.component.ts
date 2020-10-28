@@ -216,7 +216,7 @@ export class AttributeComponent implements OnChanges {
                 if (settings.select !== undefined) {
                     settings.select.tab = tabIndex.toString();
                 } else {
-                    settings.select = {selector: {id: '_f', name: 'Faces'}, tab: '0'};
+                    settings.select = {selector: {id: 'pg', name: 'Polygons'}, tab: '0'};
                 }
                 localStorage.setItem('mpm_settings', JSON.stringify(settings));
             }

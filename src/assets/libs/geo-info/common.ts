@@ -27,7 +27,6 @@ export interface IEntSets {
     _t?: Set<number>;
     _e?: Set<number>;
     _w?: Set<number>;
-    _f?: Set<number>;
 }
 
 // Types
@@ -47,7 +46,6 @@ export enum EEntType {
     VERT,
     EDGE,
     WIRE,
-    FACE,
     POINT,
     PLINE,
     PGON,
@@ -62,7 +60,6 @@ export enum EEntTypeStr {
     '_v',
     '_e',
     '_w',
-    '_f',
     'pt',
     'pl',
     'pg',
@@ -76,10 +73,9 @@ export enum EEntStrToGeomMaps {
     'dn_verts_posis',
     'dn_edges_verts',
     'dn_wires_edges',
-    'dn_faces_wires',
     'dn_points_verts',
     'dn_plines_wires',
-    'dn_pgons_faces',
+    'dn_pgons_wires',
     'colls'
 }
 
@@ -92,7 +88,6 @@ export interface IAttribsMaps {
     _v: Map<string, GIAttribMapBase>;
     _e: Map<string, GIAttribMapBase>;
     _w: Map<string, GIAttribMapBase>;
-    _f: Map<string, GIAttribMapBase>;
     pt: Map<string, GIAttribMapBase>;
     pl: Map<string, GIAttribMapBase>;
     pg: Map<string, GIAttribMapBase>;
@@ -170,13 +165,12 @@ export type TTri = [number, number, number]; // [position, position, position]
 export type TVert = number; // positions
 export type TEdge = [number, number]; // [vertex, vertex]
 export type TWire = number[]; // [edge, edge,....]
-export type TFace = number[]; // [wire, ....]
-export type TFaceTri = number[]; // [triangle, ...]
-export type TPoint = number; // [vertex,....]
-export type TPline = number; // [wire,....]
-export type TPgon = number; // [face,....]
+export type TPgonTri = number[]; // [triangle, ...]
+export type TPoint = number; // vertex
+export type TPline = number; // wire
+export type TPgon = number[]; // [wire,....]
 export type TColl = [number, number[], number[], number[]]; // [parent, [point, ...], [polyline, ...], [polygon, ....]]
-export type TEntity = TTri | TVert | TEdge | TWire | TFace | TPoint | TPline | TPgon | TColl;
+export type TEntity = TTri | TVert | TEdge | TWire | TPoint | TPline | TPgon | TColl;
 export type TAttribDataTypes = string | number | boolean | any[] | object;
 
 
@@ -187,25 +181,23 @@ export const RE_SPACES: RegExp = /\s+/g;
  */
 export interface IGeomMaps {
     // down
-    dn_verts_posis: Map<number, TVert>;
-    dn_tris_verts: Map<number, TTri>;
-    dn_edges_verts: Map<number, TEdge>;
-    dn_wires_edges: Map<number, TWire>;
-    dn_faces_wires: Map<number, TFace>;
-    dn_faces_tris: Map<number, TFaceTri>;
+    dn_verts_posis: Map<number, TVert>; // one to many
+    dn_tris_verts: Map<number, TTri>; // one to three
+    dn_edges_verts: Map<number, TEdge>; // one to two
+    dn_wires_edges: Map<number, TWire>; // one to many
     dn_points_verts: Map<number, TPoint>;
     dn_plines_wires: Map<number, TPline>;
-    dn_pgons_faces: Map<number, TPgon>;
+    dn_pgons_tris: Map<number, TPgonTri>; // one to many
+    dn_pgons_wires: Map<number, TPgon>; // one to many
     // up
     up_posis_verts: Map<number, number[]>; // one to many
-    up_tris_faces: Map<number, number>;
-    up_verts_edges: Map<number, number[]>; // one to two
+    up_tris_pgons: Map<number, number>;
+    up_verts_edges: Map<number, number[]>; // one to two (or one)
     up_verts_tris: Map<number, number[]>; // one to many
-    up_verts_points: Map<number, number>;
     up_edges_wires: Map<number, number>;
-    up_wires_faces: Map<number, number>;
+    up_verts_points: Map<number, number>;
     up_wires_plines: Map<number, number>;
-    up_faces_pgons: Map<number, number>;
+    up_wires_pgons: Map<number, number>;
     // colls
     colls: Set<number>;
 }
@@ -233,7 +225,6 @@ export interface IMetaData {
     tri_count: number;
     edge_count: number;
     wire_count: number;
-    face_count: number;
     point_count: number;
     pline_count: number;
     pgon_count: number;
@@ -249,42 +240,6 @@ export interface ISnapshotData {
     pg: Set<number>;
     co: Set<number>;
 }
-
-
-// // ================================================================================================
-// // JSON MODEL
-// // ================================================================================================
-
-// export interface IModelJSON {
-//     meta_data: IMetaJSONData;
-//     model_data: IModelJSONData;
-// }
-
-// // ================================================================================================
-// // JSON META DATA
-// // ================================================================================================
-
-// export interface IAttribJSONValues {
-//     number_vals: number[];
-//     string_vals: string[];
-//     list_vals: any[];
-//     dict_vals: object[];
-// }
-
-// export interface IMetaJSONData {
-//     // timestamp: number;
-//     posi_count: number;
-//     vert_count: number;
-//     tri_count: number;
-//     edge_count: number;
-//     wire_count: number;
-//     face_count: number;
-//     point_count: number;
-//     pline_count: number;
-//     pgon_count: number;
-//     coll_count: number;
-//     attrib_values: IAttribJSONValues;
-// }
 
 // ================================================================================================
 // JSON MODEL DATA
@@ -305,14 +260,12 @@ export interface IGeomJSONData {
     edges_i: number[];
     wires: TWire[];
     wires_i: number[];
-    faces: TFace[];
-    facetris: TFaceTri[];
-    faces_i: number[];
     points: TPoint[];
     points_i: number[];
     plines: TPline[];
     plines_i: number[];
     pgons: TPgon[];
+    pgontris: TPgonTri[];
     pgons_i: number[];
     colls_i: number[];
     selected: TEntTypeIdx[];
@@ -327,7 +280,6 @@ export interface IAttribsJSONData {
     verts: IAttribJSONData[];
     edges: IAttribJSONData[];
     wires: IAttribJSONData[];
-    faces: IAttribJSONData[];
     points: IAttribJSONData[];
     plines: IAttribJSONData[];
     pgons: IAttribJSONData[];

@@ -16,7 +16,7 @@ import uscore from 'underscore';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, TEntTypeIdx,
     EAttribPush, TAttribDataTypes, EEntTypeStr, EAttribDataTypeStrs } from '@libs/geo-info/common';
-import { getArrDepth, idsBreak } from '@libs/geo-info/id';
+import { getArrDepth, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
 import * as lodash from 'lodash';
 // ================================================================================================
 
@@ -74,8 +74,6 @@ function _getEntTypeFromStr(ent_type_str: _EEntType|_EEntTypeAndMod): EEntType {
             return EEntType.EDGE;
         case _EEntTypeAndMod.WIRE:
             return EEntType.WIRE;
-        case _EEntTypeAndMod.FACE:
-            return EEntType.FACE;
         case _EEntTypeAndMod.POINT:
             return EEntType.POINT;
         case _EEntTypeAndMod.PLINE:
@@ -100,8 +98,6 @@ function _getAttribPushTarget(ent_type_str: _EAttribPushTarget): EEntType|string
             return EEntType.EDGE;
         case _EAttribPushTarget.WIRE:
             return EEntType.WIRE;
-        case _EAttribPushTarget.FACE:
-            return EEntType.FACE;
         case _EAttribPushTarget.POINT:
             return EEntType.POINT;
         case _EAttribPushTarget.PLINE:

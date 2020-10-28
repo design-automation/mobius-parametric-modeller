@@ -27,8 +27,6 @@ export function getEntTypeStr(ent_type_str: EEntType): string {
             return 'edges';
         case EEntType.WIRE:
             return 'wires';
-        case EEntType.FACE:
-            return 'faces';
         case EEntType.POINT:
             return 'points';
         case EEntType.PLINE:

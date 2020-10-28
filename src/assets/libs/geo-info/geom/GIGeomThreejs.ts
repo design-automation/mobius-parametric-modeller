@@ -57,8 +57,7 @@ export class GIGeomThreejs {
             // get the verts, face and the polygon for this tri
             const new_tri_verts_i: TTri = tri_verts_i.map(v => vertex_map.get(v)) as TTri;
             // get the materials for this tri from the polygon
-            const tri_face_i: number = this._geom_maps.up_tris_faces.get(tri_i);
-            const tri_pgon_i: number = this._geom_maps.up_faces_pgons.get(tri_face_i);
+            const tri_pgon_i: number = this._geom_maps.up_tris_pgons.get(tri_i);
             const tri_mat_indices: number[] = [];
             if (pgon_material_attrib !== undefined) {
                 const mat_attrib_val: string|string[] = pgon_material_attrib.getEntVal(tri_pgon_i) as string|string[];

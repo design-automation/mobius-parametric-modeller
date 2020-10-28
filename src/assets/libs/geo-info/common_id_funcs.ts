@@ -84,9 +84,6 @@ export function isEdge(ent_type: EEntType): boolean {
 export function isWire(ent_type: EEntType): boolean {
     return ent_type === EEntType.WIRE;
 }
-export function isFace(ent_type: EEntType): boolean {
-    return ent_type === EEntType.FACE;
-}
 export function isPoint(ent_type: EEntType): boolean {
     return ent_type === EEntType.POINT;
 }
@@ -104,7 +101,6 @@ export function isTopo(ent_type: EEntType): boolean {
     if (ent_type === EEntType.VERT) { return true; }
     if (ent_type === EEntType.EDGE) { return true; }
     if (ent_type === EEntType.WIRE) { return true; }
-    if (ent_type === EEntType.FACE) { return true; }
     return false;
 }
 export function isObj(ent_type: EEntType): boolean {
@@ -125,7 +121,6 @@ export function isDim1(ent_type: EEntType): boolean {
     return false;
 }
 export function isDim2(ent_type: EEntType): boolean {
-    if (ent_type === EEntType.FACE) { return true; }
     if (ent_type === EEntType.PGON) { return true; }
     return false;
 }

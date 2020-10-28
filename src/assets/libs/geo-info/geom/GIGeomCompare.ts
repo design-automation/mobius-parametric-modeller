@@ -1,5 +1,5 @@
 import { GIModel } from '../GIModel';
-import { IGeomMaps, EEntType, TFace } from '../common';
+import { IGeomMaps, EEntType } from '../common';
 import { GIModelData } from '../GIModelData';
 
 /**
@@ -70,17 +70,17 @@ export class GIGeomCompare {
         result.comment.push(geom_comments);
     }
     /**
-     * Set the holes in a face by specifying a list of wires.
+     * Set the holes in a pgon by specifying a list of wires.
      * ~
      * This is a low level method used by the compare function to normalize hole order.
      * For making holes in faces, it is safer to use the cutFaceHoles method.
      */
-    public setPgonHoles(face_i: number, holes_i: number[]): void {
-        const face: TFace = this._geom_maps.dn_faces_wires.get(face_i);
-        const wires_i: number[] = [face[0]];
+    public setPgonHoles(pgon_i: number, holes_i: number[]): void {
+        const old_wires_i: number[] = this._geom_maps.dn_pgons_wires.get(pgon_i);
+        const new_wires_i: number[] = [old_wires_i[0]];
         for (let i = 0; i < holes_i.length; i++) {
-            wires_i.push( holes_i[i] );
+            new_wires_i.push( holes_i[i] );
         }
-        this._geom_maps.dn_faces_wires.set(face_i, wires_i);
+        this._geom_maps.dn_pgons_wires.set(pgon_i, new_wires_i);
     }
 }

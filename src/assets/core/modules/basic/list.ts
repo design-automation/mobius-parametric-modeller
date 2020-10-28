@@ -11,7 +11,7 @@
  */
 import { checkArgs, ArgCh } from '../_check_args';
 
-import { idsBreak } from '@libs/geo-info/id';
+import { idsBreak } from '@assets/libs/geo-info/common_id_funcs';
 import { TEntTypeIdx } from '@libs/geo-info/common';
 import { getArrDepth2 } from '@assets/libs/util/arrs';
 

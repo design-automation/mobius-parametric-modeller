@@ -13,7 +13,7 @@ import { checkAttribNameIdxKey, checkAttribValue, splitAttribNameIdxKey } from '
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, ESort, TEntTypeIdx, EFilterOperatorTypes, TAttribDataTypes} from '@libs/geo-info/common';
-import { idsMake, getArrDepth, isEmptyArr, idsBreak } from '@libs/geo-info/id';
+import { idsMake, getArrDepth, isEmptyArr, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
 import { isEmptyArr2, arrMakeFlat } from '@assets/libs/util/arrs';
 // ================================================================================================
 export enum _EEntType {
@@ -49,8 +49,6 @@ function _getEntTypeFromStr(ent_type_str: _EEntType|_EEntTypeAndMod): EEntType {
             return EEntType.EDGE;
         case _EEntTypeAndMod.WIRE:
             return EEntType.WIRE;
-        case _EEntTypeAndMod.FACE:
-            return EEntType.FACE;
         case _EEntTypeAndMod.POINT:
             return EEntType.POINT;
         case _EEntTypeAndMod.PLINE:
@@ -543,7 +541,7 @@ function _isUsedPosi(__model__: GIModel, ent_arr: TEntTypeIdx): boolean {
         return false;
     }
     const verts_i: number[] = __model__.modeldata.geom.nav.navPosiToVert(index);
-    if (verts_i === undefined || verts_i === null) {
+    if (verts_i === undefined) {
         return false;
     }
     return verts_i.length > 0;
@@ -557,32 +555,32 @@ function _isObj(__model__: GIModel, ent_arr: TEntTypeIdx): boolean {
 }
 function _isTopo(__model__: GIModel, ent_arr: TEntTypeIdx): boolean {
     const [ent_type, index]: TEntTypeIdx = ent_arr;
-    if (ent_type === EEntType.VERT || ent_type === EEntType.EDGE || ent_type === EEntType.WIRE || ent_type === EEntType.FACE) {
+    if (ent_type === EEntType.VERT || ent_type === EEntType.EDGE || ent_type === EEntType.WIRE) {
         return true;
     }
     return false;
 }
 function _isPointTopo(__model__: GIModel, ent_arr: TEntTypeIdx): boolean {
     const [ent_type, index]: TEntTypeIdx = ent_arr;
-    if (ent_type === EEntType.VERT || ent_type === EEntType.EDGE || ent_type === EEntType.WIRE || ent_type === EEntType.FACE) {
+    if (ent_type === EEntType.VERT) {
         const points_i: number[] = __model__.modeldata.geom.nav.navAnyToPoint(ent_type, index);
-        if (points_i !== undefined && points_i !== null && points_i.length) { return true; }
+        if (points_i !== undefined && points_i.length) { return true; }
     }
     return false;
 }
 function _isPlineTopo(__model__: GIModel, ent_arr: TEntTypeIdx): boolean {
     const [ent_type, index]: TEntTypeIdx = ent_arr;
-    if (ent_type === EEntType.VERT || ent_type === EEntType.EDGE || ent_type === EEntType.WIRE || ent_type === EEntType.FACE) {
+    if (ent_type === EEntType.VERT || ent_type === EEntType.EDGE || ent_type === EEntType.WIRE) {
         const plines_i: number[] = __model__.modeldata.geom.nav.navAnyToPline(ent_type, index);
-        if (plines_i !== undefined && plines_i !== null && plines_i.length) { return true; }
+        if (plines_i !== undefined && plines_i.length) { return true; }
     }
     return false;
 }
 function _isPgonTopo(__model__: GIModel, ent_arr: TEntTypeIdx): boolean {
     const [ent_type, index]: TEntTypeIdx = ent_arr;
-    if (ent_type === EEntType.VERT || ent_type === EEntType.EDGE || ent_type === EEntType.WIRE || ent_type === EEntType.FACE) {
+    if (ent_type === EEntType.VERT || ent_type === EEntType.EDGE || ent_type === EEntType.WIRE) {
         const pgons_i: number[] = __model__.modeldata.geom.nav.navAnyToPgon(ent_type, index);
-        if (pgons_i !== undefined && pgons_i !== null && pgons_i.length) { return true; }
+        if (pgons_i !== undefined && pgons_i.length) { return true; }
     }
     return false;
 }
@@ -604,23 +602,19 @@ function _isHole(__model__: GIModel, ent_arr: TEntTypeIdx): boolean {
     if (ent_type !== EEntType.WIRE) {
         return false;
     }
-    const face_i: number = __model__.modeldata.geom.nav.navWireToFace(index);
-    if (face_i === undefined || face_i === null) {
+    const pgon_i: number = __model__.modeldata.geom.nav.navWireToPgon(index);
+    if (pgon_i === undefined) {
         return false;
     }
-    const wires_i: number[] = __model__.modeldata.geom.nav.navFaceToWire(face_i);
+    const wires_i: number[] = __model__.modeldata.geom.nav.navPgonToWire(pgon_i);
     return wires_i.indexOf(index) > 0;
 }
 function _hasNoHoles(__model__: GIModel, ent_arr: TEntTypeIdx): boolean {
-    const [ent_type, index]: TEntTypeIdx = ent_arr;
-    if (ent_type !== EEntType.FACE && ent_type !== EEntType.PGON) {
+    const [ent_type, ent_i]: TEntTypeIdx = ent_arr;
+    if (ent_type !== EEntType.PGON) {
         return false;
     }
-    let face_i: number = index;
-    if (ent_type === EEntType.PGON) {
-        face_i = __model__.modeldata.geom.nav.navPgonToFace(index);
-    }
-    const wires_i: number[] = __model__.modeldata.geom.nav.navFaceToWire(face_i);
+    const wires_i: number[] = __model__.modeldata.geom.nav.navPgonToWire(ent_i);
     return wires_i.length === 1;
 }
 function _type(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], query_ent_type: _ETypeQueryEnum): boolean|boolean[] {
@@ -642,8 +636,6 @@ function _type(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], query_en
                 return ent_type === EEntType.EDGE;
             case _ETypeQueryEnum.IS_WIRE:
                 return ent_type === EEntType.WIRE;
-            case _ETypeQueryEnum.IS_FACE:
-                return ent_type === EEntType.FACE;
             case _ETypeQueryEnum.IS_POINT:
                 return ent_type === EEntType.POINT;
             case _ETypeQueryEnum.IS_PLINE:

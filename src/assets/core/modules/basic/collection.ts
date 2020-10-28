@@ -10,7 +10,7 @@ import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, TEntTypeIdx, EFilterOperatorTypes, EAttribNames } from '@libs/geo-info/common';
-import { isPoint, isPline, isPgon, isColl, idsMake, getArrDepth, isEmptyArr, idsBreak } from '@libs/geo-info/id';
+import { isPoint, isPline, isPgon, isColl, idsMake, getArrDepth, isEmptyArr, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
 // import { __merge__} from '../_model';
 // import { _model } from '..';
 import { arrMakeFlat } from '@libs/util/arrs';

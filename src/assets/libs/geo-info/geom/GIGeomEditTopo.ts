@@ -1,4 +1,4 @@
-import { EEntType, TTri, TEdge, TWire, TFace, IGeomMaps, Txyz, TFaceTri } from '../common';
+import { EEntType, TTri, TEdge, TWire, IGeomMaps, Txyz, TPgonTri, TPgon } from '../common';
 import { arrRem } from '../../util/arrs';
 import { GIModelData } from '../GIModelData';
 
@@ -362,12 +362,12 @@ export class GIGeomEditTopo {
             edges_i.reverse();
         }
         // if this is the first wire in a face, reverse the triangles
-        const face_i: number = this._geom_maps.up_wires_faces.get(wire_i);
-        if (face_i !== undefined) {
-            const face: TFace = this._geom_maps.dn_faces_wires.get(face_i);
-            const facetris: TFaceTri = this._geom_maps.dn_faces_tris.get(face_i);
-            if (face[0] === wire_i) {
-                for (const tri_i of facetris) {
+        const pgon_i: number = this._geom_maps.up_wires_pgons.get(wire_i);
+        if (pgon_i !== undefined) {
+            const pgon: TPgon = this._geom_maps.dn_pgons_wires.get(pgon_i);
+            const pgon_tris: TPgonTri = this._geom_maps.dn_pgons_tris.get(pgon_i);
+            if (pgon[0] === wire_i) {
+                for (const tri_i of pgon_tris) {
                     const tri: TTri = this._geom_maps.dn_tris_verts.get(tri_i);
                     tri.reverse();
                 }

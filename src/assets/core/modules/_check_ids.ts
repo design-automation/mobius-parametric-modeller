@@ -1,6 +1,6 @@
 import { GIModel } from '@assets/libs/geo-info/GIModel';
 import { EEntType, TEntTypeIdx } from '@libs/geo-info/common';
-import { getArrDepth, idsBreak } from '@libs/geo-info/id';
+import { getArrDepth, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
 
 export const ID = {
     isID: 0,
@@ -71,7 +71,6 @@ export function checkIDs(__model__: GIModel, fn_name: string, arg_name: string, 
             EEntType.VERT,
             EEntType.EDGE,
             EEntType.WIRE,
-            EEntType.FACE,
             EEntType.POINT,
             EEntType.PLINE,
             EEntType.PGON,

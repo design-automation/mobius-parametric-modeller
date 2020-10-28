@@ -216,7 +216,6 @@ export class GIModelData {
                     this.attribs.set.setEntAttribVal(EEntType.POINT, point_i, EAttribNames.TIMESTAMP, ts);
                 });
                 return;
-            case EEntType.FACE:
             case EEntType.WIRE:
             case EEntType.EDGE:
             case EEntType.VERT:
@@ -255,7 +254,6 @@ export class GIModelData {
                     this.getObjsCheckTs(EEntType.POINT, point_i);
                 });
                 return;
-            case EEntType.FACE:
             case EEntType.WIRE:
             case EEntType.EDGE:
             case EEntType.VERT:

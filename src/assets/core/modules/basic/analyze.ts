@@ -11,7 +11,7 @@ import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, Txy, EAttribDataTypeStrs } from '@libs/geo-info/common';
-import { getArrDepth, idsMakeFromIndicies, idsMake, idsBreak } from '@libs/geo-info/id';
+import { getArrDepth, idsMakeFromIndicies, idsMake, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
 import { distance } from '@libs/geom/distance';
 import { vecAdd, vecCross, vecMult, vecNorm, vecAng2, vecSetLen, vecRot } from '@libs/geom/vectors';
 import uscore from 'underscore';
@@ -104,7 +104,7 @@ export function Raytrace(__model__: GIModel, rays: TRay|TRay[]|TRay[][],
         checkArgs(fn_name, 'rays', rays, [ArgCh.isRay, ArgCh.isRayL, ArgCh.isRayLL]);
         ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
             [ID.isID, ID.isIDL],
-            [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+            [EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         checkArgs(fn_name, 'dist', dist, [ArgCh.isNum, ArgCh.isNumL]);
         if (Array.isArray(dist)) {
             if (dist.length !== 2) { throw new Error('If "dist" is a list, it must have a length of two: [min_dist, max_dist].'); }
@@ -268,7 +268,7 @@ export function Isovist(__model__: GIModel, origins: TRay[]|TPlane[],
         checkArgs(fn_name, 'origins', origins, [ArgCh.isRayL, ArgCh.isPlnL]);
         ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
             [ID.isIDL],
-            [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+            [EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         checkArgs(fn_name, 'dist', radius, [ArgCh.isNum, ArgCh.isNumL]);
         if (Array.isArray(radius)) {
             if (radius.length !== 2) { throw new Error('If "dist" is a list, it must have a length of two: [min_dist, max_dist].'); }
@@ -463,7 +463,7 @@ export function Sky(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], detail:
         }
         ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
             [ID.isID, ID.isIDL],
-            [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+            [EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
     } else {
         ents_arrs = idsBreak(entities) as TEntTypeIdx[];
         // const geolocation = __model__.modeldata.attribs.get.getModelAttribVal('geolocation');
@@ -604,7 +604,7 @@ export function Sun(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], detail:
         }
         ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
             [ID.isID, ID.isIDL],
-            [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+            [EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         if (!__model__.modeldata.attribs.query.hasModelAttrib('geolocation')) {
             throw new Error('analyze.Solar: model attribute "geolocation" is missing, \
                 e.g. @geolocation = {"latitude":12, "longitude":34}');

@@ -61,7 +61,7 @@ export class GIGeomDelVert {
         // get the posis, edges, and wires, and other info
         const edges_i: number[] = this._geom_maps.up_verts_edges.get(vert_i); // never undefined
         const wire_i: number = this._geom_maps.up_edges_wires.get(edges_i[0]); // never undefined
-        const face_i: number = this._geom_maps.up_wires_faces.get(wire_i); // this may be undefined
+        const pgon_i: number = this._geom_maps.up_wires_pgons.get(wire_i); // this may be undefined
         const wire_edges_i: number[] = this._geom_maps.dn_wires_edges.get(wire_i);
         const wire_verts_i: number[] = this.modeldata.geom.nav.navAnyToVert(EEntType.WIRE, wire_i);
         const wire_is_closed: boolean = this.modeldata.geom.query.isWireClosed(wire_i);
@@ -74,20 +74,20 @@ export class GIGeomDelVert {
             // special case, open pline with 2 verts
             this.__delVert__OpenPline1Edge(wire_i);
 
-        } else if (face_i !== undefined && num_verts === 3) {
+        } else if (pgon_i !== undefined && num_verts === 3) {
 
             // special case, pgon with three verts
-            const wires_i: number[] = this._geom_maps.dn_faces_wires.get(face_i);
+            const wires_i: number[] = this._geom_maps.dn_pgons_wires.get(pgon_i);
             const index_face_wire: number = wires_i.indexOf(wire_i);
             if (index_face_wire === 0) {
 
                 // special case, pgon boundary with verts, delete the pgon
-                this.__delVert__PgonBoundaryWire3Edge(face_i);
+                this.__delVert__PgonBoundaryWire3Edge(pgon_i);
 
             } else {
 
                 // special case, pgon hole with verts, delete the hole
-                this.__delVert__PgonHoleWire3Edge(face_i, wire_i);
+                this.__delVert__PgonHoleWire3Edge(pgon_i, wire_i);
 
             }
         } else if (!wire_is_closed && index_vert_i === 0) {
@@ -111,7 +111,7 @@ export class GIGeomDelVert {
 
         } else {
 
-            if (face_i === undefined) {
+            if (pgon_i === undefined) {
 
                 // check the object time stamp
                 const pline_i: number = this._geom_maps.up_wires_plines.get(wire_i);
@@ -121,7 +121,6 @@ export class GIGeomDelVert {
             } else {
 
                 // check the object time stamp
-                const pgon_i: number = this.modeldata.geom.nav.navFaceToPgon(face_i);
                 this.modeldata.getObjsCheckTs(EEntType.PGON, pgon_i);
 
             }
@@ -129,10 +128,9 @@ export class GIGeomDelVert {
             // standard case, delete the prev edge and reqire the next edge
             this.__delVert__StandardCase(wire_edges_i, vert_i);
 
-            if (face_i !== undefined) {
+            if (pgon_i !== undefined) {
 
                 // for pgons, also update tris
-                const pgon_i: number = this.modeldata.geom.nav.navFaceToPgon(face_i);
                 this.modeldata.geom.edit_pgon.triPgons(pgon_i);
 
             }
@@ -151,16 +149,15 @@ export class GIGeomDelVert {
      * Special case, delete either the pgon
      * @param face_i
      */
-    private __delVert__PgonBoundaryWire3Edge(face_i: number) {
+    private __delVert__PgonBoundaryWire3Edge(pgon_i: number) {
         const ssid: number = this.modeldata.active_ssid;
-        const pgon_i: number = this._geom_maps.up_faces_pgons.get(face_i);
         this.modeldata.geom.snapshot.delPgons(ssid, pgon_i, false);
     }
     /**
      * Special case, delete either the hole
      * @param vert_i
      */
-    private __delVert__PgonHoleWire3Edge(face_i: number, wire_i: number) {
+    private __delVert__PgonHoleWire3Edge(pgon_i: number, wire_i: number) {
         // TODO
         console.log('Not implemented');
     }

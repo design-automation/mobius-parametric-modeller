@@ -182,8 +182,8 @@ export class GIModelComparator {
      * Normalises the order of holes in faces
      */
     private normHoles(trans_padding: [Txyz, number[]]): void {
-        for (const face_i of this.modeldata.geom.query.getEnts(EEntType.FACE)) {
-            const holes_i: number[] = this.modeldata.geom.query.getFaceHoles(face_i);
+        for (const pgon_i of this.modeldata.geom.query.getEnts(EEntType.PGON)) {
+            const holes_i: number[] = this.modeldata.geom.query.getPgonHoles(pgon_i);
             if (holes_i.length > 0) {
                 const fprints: Array<[string, number]> = [];
                 for (const hole_i of holes_i) {
@@ -191,7 +191,7 @@ export class GIModelComparator {
                 }
                 fprints.sort();
                 const reordered_holes_i: number[] = fprints.map( fprint => fprint[1] );
-                this.modeldata.geom.compare.setPgonHoles(face_i, reordered_holes_i);
+                this.modeldata.geom.compare.setPgonHoles(pgon_i, reordered_holes_i);
             }
         }
     }
@@ -651,7 +651,7 @@ export class GIModelComparator {
         const topo_ent_types_map: Map<EEntType, EEntType[]> = new Map();
         topo_ent_types_map.set(EEntType.POINT, [EEntType.POSI, EEntType.VERT, EEntType.POINT]);
         topo_ent_types_map.set(EEntType.PLINE, [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE, EEntType.PLINE]);
-        topo_ent_types_map.set(EEntType.PGON, [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PGON]);
+        topo_ent_types_map.set(EEntType.PGON, [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE, EEntType.PGON]);
         // create fprints of topological entities
         for (const topo_ent_type of topo_ent_types_map.get(from_ent_type)) {
             const ent_type_str: string = EEntTypeStr[topo_ent_type];

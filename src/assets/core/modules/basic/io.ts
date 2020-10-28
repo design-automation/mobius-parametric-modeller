@@ -15,7 +15,7 @@ import { download } from '@libs/filesys/download';
 import { TId, EEntType, TEntTypeIdx, IEntSets } from '@libs/geo-info/common';
 // import { __merge__ } from '../_model';
 // import { _model } from '..';
-import { idsMake, idsBreak, idsMakeFromIndicies } from '@libs/geo-info/id';
+import { idsMake, idsBreak, idsMakeFromIndicies } from '@assets/libs/geo-info/common_id_funcs';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
 import JSZip from 'jszip';
 

@@ -13,7 +13,7 @@ import { checkArgs, ArgCh } from '../_check_args';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { Txyz, TColor, EAttribNames, EAttribDataTypeStrs, EAttribPush, TRay, TPlane, TBBox } from '@libs/geo-info/common';
 import { TId, EEntType, TEntTypeIdx } from '@libs/geo-info/common';
-import { isEmptyArr, getArrDepth, idsMake, idsBreak } from '@libs/geo-info/id';
+import { isEmptyArr, getArrDepth, idsMake, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
 import { min, max } from '@assets/core/inline/_math';
 import { vecMult, vecAdd, vecSetLen, vecCross, vecNorm, vecSub, vecDot } from '@assets/libs/geom/vectors';
@@ -430,7 +430,7 @@ function _meshFaceted(__model__: GIModel, verts_i: number[]): void {
     // calc the normals one time
     const normals: Txyz[] = [];
     for (const pgon_i of Array.from(set_pgons_i)) {
-        const normal: Txyz = __model__.modeldata.geom.query.getFaceNormalActive(__model__.modeldata.geom.nav.navPgonToFace(pgon_i));
+        const normal: Txyz = __model__.modeldata.geom.query.getPgonNormalActive(pgon_i);
         normals[pgon_i] = normal;
     }
     // set the normal
@@ -461,7 +461,7 @@ function _meshSmooth(__model__: GIModel, verts_i: number[]): void {
     // calc all normals one time
     const normals: Txyz[] = [];
     for (const pgon_i of Array.from(set_pgons_i)) {
-        const normal: Txyz = __model__.modeldata.geom.query.getFaceNormalActive(__model__.modeldata.geom.nav.navPgonToFace(pgon_i));
+        const normal: Txyz = __model__.modeldata.geom.query.getPgonNormalActive(pgon_i);
         normals[pgon_i] = normal;
     }
     // set normals on all verts

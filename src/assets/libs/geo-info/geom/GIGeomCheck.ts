@@ -1,4 +1,4 @@
-import { IGeomMaps, TVert, TWire, TPline, TEdge, TFace, TPgon, TPoint } from '../common';
+import { IGeomMaps, TVert, TWire, TPline, TEdge, TPgon, TPoint } from '../common';
 import { GIModelData } from '../GIModelData';
 
 
@@ -24,7 +24,7 @@ export class GIGeomCheck {
         this._checkVerts().forEach( error => errors.push(error) );
         this._checkEdges().forEach( error => errors.push(error) );
         this._checkWires().forEach( error => errors.push(error) );
-        this._checkFaces().forEach( error => errors.push(error) );
+        // this._checkPgons2().forEach( error => errors.push(error) ); this used to be faces
         this._checkPoints().forEach( error => errors.push(error) );
         this._checkPlines().forEach( error => errors.push(error) );
         this._checkPgons().forEach( error => errors.push(error) );
@@ -188,25 +188,25 @@ export class GIGeomCheck {
                 }
             }
             // up from wire to face or pline
-            const face_i: number = this._geom_maps.up_wires_faces.get(wire_i);
+            const pgon_i: number = this._geom_maps.up_wires_pgons.get(wire_i);
             const pline_i: number = this._geom_maps.up_wires_plines.get(wire_i);
-            if (face_i !== undefined && pline_i !== undefined) {
-                // errors.push('Wire ' + wire_i + ': Both Wire->Face and Wire->Pline.');
+            if (pgon_i !== undefined && pline_i !== undefined) {
+                // errors.push('Wire ' + wire_i + ': Both Wire->Pgon and Wire->Pline.');
             }
-            if (face_i !== undefined) {
-                if (face_i === null) {
-                    errors.push('Wire ' + wire_i + ': Wire->Face null.');
+            if (pgon_i !== undefined) {
+                if (pgon_i === null) {
+                    errors.push('Wire ' + wire_i + ': Wire->Pgon null.');
                 }
-                // down from face to wires (and tris)
-                const face: TFace = this._geom_maps.dn_faces_wires.get(face_i);
-                if (face === undefined) {
-                    errors.push('Wire ' + wire_i + ': Face->Wire undefined.');
-                } else if (face === null) {
-                    errors.push('Wire ' + wire_i + ': Face->Wire null.');
+                // down from Pgon to wires (and tris)
+                const pgon: TPgon = this._geom_maps.dn_pgons_wires.get(pgon_i);
+                if (pgon === undefined) {
+                    errors.push('Wire ' + wire_i + ': Pgon->Wire undefined.');
+                } else if (pgon === null) {
+                    errors.push('Wire ' + wire_i + ': Pgon->Wire null.');
                 } else {
                     // check that this face points down to the wire
-                    if (face.indexOf(wire_i) === -1) {
-                        errors.push('Wire ' + wire_i + ': Face->Wire index is missing.');
+                    if (pgon.indexOf(wire_i) === -1) {
+                        errors.push('Wire ' + wire_i + ': Pgon->Wire index is missing.');
                     }
                 }
             } else if (pline_i !== undefined) {
@@ -231,69 +231,69 @@ export class GIGeomCheck {
         });
         return errors;
     }
-    private _checkFaces(): string[] {
-        const errors: string[] = [];
-        this._geom_maps.dn_faces_wires.forEach( (face, face_i) => {
-            // check this face itself
-            if (face === null) { errors.push('Face ' + face_i + ': null.'); return; } // deleted
-            // down from face to wires
-            const wires_i: number[] = face;
-            for (const wire_i of wires_i) {
-                // check the wire
-                if (wire_i === undefined) {
-                    errors.push('Face ' + face_i + ': Face->Wire undefined.');
-                } else if (wire_i === null) {
-                    errors.push('Face ' + face_i + ': Face->Wire null.');
-                } else {
-                    // check the wire points up to this face
-                    const wire_face_i: number = this._geom_maps.up_wires_faces.get(wire_i);
-                    if (wire_face_i !== face_i) {
-                        errors.push('Face ' + face_i + ': Wire->Face index is incorrect.');
-                    }
-                }
-            }
-            // up from face to pgon
-            const pgon_i: number = this._geom_maps.up_faces_pgons.get(face_i);
-            if (pgon_i === undefined) {
-                errors.push('Face ' + face_i + ': Face->Pgon undefined.');
-            } else if (pgon_i === null) {
-                errors.push('Face ' + face_i + ': Face->Pgon null.');
-            }
-            // down from pgon to face
-            const pgon: TPgon = this._geom_maps.dn_pgons_faces.get(pgon_i);
-            if (pgon === undefined) {
-                errors.push('Face ' + face_i + ': Pgon->Face undefined.');
-            } else if (pgon === null) {
-                errors.push('Face ' + face_i + ': Pgon->Face null.');
-            } else {
-                // check that this pgon points down to this face
-                if (pgon !== face_i) {
-                    errors.push('Face ' + face_i + ': Pgon->Face index is incorrect.');
-                }
-            }
-        });
-        this._geom_maps.dn_faces_tris.forEach( (facetris, face_i) => {
-            // check this face itself
-            if (facetris === null) { errors.push('Face ' + face_i + ': null.'); return; } // deleted
-            // down from face to triangles
-            const tris_i: number[] = facetris;
-            for (const tri_i of tris_i) {
-                // check the wire
-                if (tri_i === undefined) {
-                    errors.push('Face ' + face_i + ': Face->Tri undefined.');
-                } else if (tri_i === null) {
-                    errors.push('Face ' + face_i + ': Face->Tri null.');
-                } else {
-                    // check the tri points up to this face
-                    const tri_face_i: number = this._geom_maps.up_tris_faces.get(tri_i);
-                    if (tri_face_i !== face_i) {
-                        errors.push('Face ' + face_i + ': Tri->Face index is incorrect.');
-                    }
-                }
-            }
-        });
-        return errors;
-    }
+    // private _checkPgons2(): string[] {
+    //     const errors: string[] = [];
+    //     this._geom_maps.dn_pgons_wires.forEach( (face, face_i) => {
+    //         // check this face itself
+    //         if (face === null) { errors.push('Face ' + face_i + ': null.'); return; } // deleted
+    //         // down from face to wires
+    //         const wires_i: number[] = face;
+    //         for (const wire_i of wires_i) {
+    //             // check the wire
+    //             if (wire_i === undefined) {
+    //                 errors.push('Face ' + face_i + ': Face->Wire undefined.');
+    //             } else if (wire_i === null) {
+    //                 errors.push('Face ' + face_i + ': Face->Wire null.');
+    //             } else {
+    //                 // check the wire points up to this face
+    //                 const wire_face_i: number = this._geom_maps.up_wires_faces.get(wire_i);
+    //                 if (wire_face_i !== face_i) {
+    //                     errors.push('Face ' + face_i + ': Wire->Face index is incorrect.');
+    //                 }
+    //             }
+    //         }
+    //         // up from face to pgon
+    //         const pgon_i: number = this._geom_maps.up_faces_pgons.get(face_i);
+    //         if (pgon_i === undefined) {
+    //             errors.push('Face ' + face_i + ': Face->Pgon undefined.');
+    //         } else if (pgon_i === null) {
+    //             errors.push('Face ' + face_i + ': Face->Pgon null.');
+    //         }
+    //         // down from pgon to face
+    //         const pgon: TPgon = this._geom_maps.dn_pgons_faces.get(pgon_i);
+    //         if (pgon === undefined) {
+    //             errors.push('Face ' + face_i + ': Pgon->Face undefined.');
+    //         } else if (pgon === null) {
+    //             errors.push('Face ' + face_i + ': Pgon->Face null.');
+    //         } else {
+    //             // check that this pgon points down to this face
+    //             if (pgon !== face_i) {
+    //                 errors.push('Face ' + face_i + ': Pgon->Face index is incorrect.');
+    //             }
+    //         }
+    //     });
+    //     this._geom_maps.dn_faces_tris.forEach( (facetris, face_i) => {
+    //         // check this face itself
+    //         if (facetris === null) { errors.push('Face ' + face_i + ': null.'); return; } // deleted
+    //         // down from face to triangles
+    //         const tris_i: number[] = facetris;
+    //         for (const tri_i of tris_i) {
+    //             // check the wire
+    //             if (tri_i === undefined) {
+    //                 errors.push('Face ' + face_i + ': Face->Tri undefined.');
+    //             } else if (tri_i === null) {
+    //                 errors.push('Face ' + face_i + ': Face->Tri null.');
+    //             } else {
+    //                 // check the tri points up to this face
+    //                 const tri_face_i: number = this._geom_maps.up_tris_faces.get(tri_i);
+    //                 if (tri_face_i !== face_i) {
+    //                     errors.push('Face ' + face_i + ': Tri->Face index is incorrect.');
+    //                 }
+    //             }
+    //         }
+    //     });
+    //     return errors;
+    // }
     private _checkPoints(): string[] {
         const errors: string[] = [];
         this._geom_maps.dn_points_verts.forEach( (point, point_i) => {
@@ -363,18 +363,19 @@ export class GIGeomCheck {
         return errors;
     }
     private _checkPgons(): string[] {
+        // TODO update this, see _checkPgons2()
         const errors: string[] = [];
-        this._geom_maps.dn_pgons_faces.forEach( (pgon, pgon_i) => {
+        this._geom_maps.dn_pgons_wires.forEach( (pgon, pgon_i) => {
             // check the pgon itself
             if (pgon === undefined) { return; }
             if (pgon === null) { errors.push('Pgon ' + pgon_i + ': null.'); return; } // deleted
             // down from pgon to face
-            const face_i: number = pgon;
-            // check that the face points up to this pgon
-            const face_pgon_i: number = this._geom_maps.up_faces_pgons.get(face_i);
-            if (face_pgon_i !== pgon_i) {
-                errors.push('Pgon ' + pgon_i + ': Face->Pgon index is incorrect.');
-            }
+            // const face_i: number = pgon;
+            // // check that the face points up to this pgon
+            // const face_pgon_i: number = this._geom_maps.up_faces_pgons.get(face_i);
+            // if (face_pgon_i !== pgon_i) {
+            //     errors.push('Pgon ' + pgon_i + ': Face->Pgon index is incorrect.');
+            // }
             // up from pgon to coll
             // TODO check collections
             // const colls_i: number[] = this._geom_maps.up_pgons_colls.get(pgon_i);

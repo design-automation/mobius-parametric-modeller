@@ -1,4 +1,4 @@
-import { EEntType, TTri, TFace, Txyz, IGeomMaps, TAttribDataTypes, EAttribNames } from '../common';
+import { EEntType, TTri, Txyz, IGeomMaps, TAttribDataTypes, EAttribNames, TPgon } from '../common';
 import { triangulate } from '../../triangulate/triangulate';
 import { vecAdd } from '../../geom/vectors';
 import { GIModelData } from '../GIModelData';
@@ -97,7 +97,7 @@ export class GIGeomAdd {
         }
         edges_i_arr.push( this._addEdge(vert_i_arr[vert_i_arr.length - 1], vert_i_arr[0]));
         const wire_i: number = this._addWire(edges_i_arr, true);
-        let face_i: number;
+        let pgon_i: number;
         if (has_holes) {
         // create verts, edges, wire for holes
             const holes_wires_i: number[] = [];
@@ -111,15 +111,12 @@ export class GIGeomAdd {
                 const hole_wire_i: number = this._addWire(hole_edges_i_arr, true);
                 holes_wires_i.push(hole_wire_i);
             }
-            // create the new face with a hole
-            face_i = this._addFaceWithHoles(wire_i, holes_wires_i);
+            // create the new pgon with a hole
+            pgon_i = this._addPgonWithHoles(wire_i, holes_wires_i);
         } else {
-            face_i = this._addFace(wire_i);
+            // create the new pgon without a hole
+            pgon_i = this._addPgonWithoutHoles(wire_i);
         }
-        // create polygon
-        const pgon_i: number = this.modeldata.model.metadata.nextPgon();
-        this._geom_maps.dn_pgons_faces.set(pgon_i, face_i);
-        this._geom_maps.up_faces_pgons.set(face_i, pgon_i);
         // time stamp
         this.modeldata.attribs.set.setEntAttribVal(EEntType.PGON, pgon_i,
             EAttribNames.TIMESTAMP, this.modeldata.active_ssid);
@@ -289,6 +286,51 @@ export class GIGeomAdd {
         return (colls_i as number[]).map(coll_i => this.copyColl(coll_i, copy_attribs)) as number[];
     }
     // ============================================================================
+    // Methods to create pgons
+    // ============================================================================
+    /**
+     * Adds a pgon and updates the arrays.
+     * Wires are assumed to be closed!
+     * This also calls addTris()
+     * @param wire_i
+     */
+    public _addPgonWithoutHoles(wire_i: number): number {
+        // create the triangles
+        const tris_i: number[] = this._addTris(wire_i);
+        // create the wires
+        const wires_i: number[] = [wire_i];
+        // update down arrays
+        const pgon_i: number = this.modeldata.model.metadata.nextPgon();
+        this._geom_maps.dn_pgons_wires.set(pgon_i, wires_i);
+        this._geom_maps.dn_pgons_tris.set(pgon_i, tris_i);
+        // update up arrays
+        this._geom_maps.up_wires_pgons.set(wire_i, pgon_i);
+        tris_i.forEach( tri_i => this._geom_maps.up_tris_pgons.set(tri_i, pgon_i) );
+        // return the numeric index of the face
+        return pgon_i;
+    }
+    /**
+     * Adds a face with a hole and updates the arrays.
+     * Wires are assumed to be closed!
+     * This also calls addTris()
+     * @param wire_i
+     */
+    public _addPgonWithHoles(wire_i: number, holes_wires_i: number[]): number {
+        // create the triangles
+        const tris_i: number[] = this._addTris(wire_i, holes_wires_i);
+        // create the wires
+        const wires_i: number[] = [wire_i].concat(holes_wires_i);
+        // update down arrays
+        const pgon_i: number = this.modeldata.model.metadata.nextPgon();
+        this._geom_maps.dn_pgons_wires.set(pgon_i, wires_i);
+        this._geom_maps.dn_pgons_tris.set(pgon_i, tris_i);
+        // update up arrays
+        wires_i.forEach( pgon_wire_i => this._geom_maps.up_wires_pgons.set(pgon_wire_i, pgon_i) );
+        tris_i.forEach( pgon_tri_i => this._geom_maps.up_tris_pgons.set(pgon_tri_i, pgon_i) );
+        // return the numeric index of the face
+        return pgon_i;
+    }
+    // ============================================================================
     // Methods to create the topological entities
     // These methods have been made public for access from GIGeomModify
     // They should not be called externally, hence the underscore.
@@ -370,48 +412,6 @@ export class GIGeomAdd {
         edges_i.forEach( edge_i => this._geom_maps.up_edges_wires.set(edge_i, wire_i) );
         // return the numeric index of the wire
         return wire_i;
-    }
-    /**
-     * Adds a face and updates the arrays.
-     * Wires are assumed to be closed!
-     * This also calls addTris()
-     * @param wire_i
-     */
-    public _addFace(wire_i: number): number {
-        // create the triangles
-        const tris_i: number[] = this._addTris(wire_i);
-        // create the face
-        const face: TFace = [wire_i];
-        // update down arrays
-        const face_i: number = this.modeldata.model.metadata.nextFace();
-        this._geom_maps.dn_faces_wires.set(face_i, face);
-        this._geom_maps.dn_faces_tris.set(face_i, tris_i);
-        // update up arrays
-        this._geom_maps.up_wires_faces.set(wire_i, face_i);
-        tris_i.forEach( tri_i => this._geom_maps.up_tris_faces.set(tri_i, face_i) );
-        // return the numeric index of the face
-        return face_i;
-    }
-    /**
-     * Adds a face with a hole and updates the arrays.
-     * Wires are assumed to be closed!
-     * This also calls addTris()
-     * @param wire_i
-     */
-    public _addFaceWithHoles(wire_i: number, holes_wires_i: number[]): number {
-        // create the triangles
-        const tris_i: number[] = this._addTris(wire_i, holes_wires_i);
-        // create the face
-        const face: TFace = [wire_i].concat(holes_wires_i);
-        // update down arrays
-        const face_i: number = this.modeldata.model.metadata.nextFace();
-        this._geom_maps.dn_faces_wires.set(face_i, face);
-        this._geom_maps.dn_faces_tris.set(face_i, tris_i);
-        // update up arrays
-        face.forEach(face_wire_i => this._geom_maps.up_wires_faces.set(face_wire_i, face_i) );
-        tris_i.forEach( tri_i => this._geom_maps.up_tris_faces.set(tri_i, face_i) );
-        // return the numeric index of the face
-        return face_i;
     }
     /**
      * Adds trangles and updates the arrays.

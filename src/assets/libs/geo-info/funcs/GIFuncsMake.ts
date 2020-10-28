@@ -2,7 +2,7 @@ import { multMatrix, xfromSourceTargetMatrix } from '../../geom/matrix';
 import { vecAdd, vecCross, vecDiv, vecFromTo, vecMult } from '../../geom/vectors';
 import { EEntType, Txyz, TEntTypeIdx, TPlane, EAttribNames } from '../common';
 import * as THREE from 'three';
-import { getArrDepth, idIndicies, isColl, isDim0, isDim2, isFace, isWire } from '../id';
+import { getArrDepth, idIndicies, isColl, isDim0, isDim2, isWire } from '../common_id_funcs';
 import { GIModelData } from '../GIModelData';
 import { listZip } from '@assets/core/inline/_list';
 
@@ -153,7 +153,6 @@ export class GIFuncsMake {
                     const posis_arr: TEntTypeIdx[] = posis_i.map( posi_i => [EEntType.POSI, posi_i]) as TEntTypeIdx[];
                     posis_arrs.push( posis_arr );
                     break;
-                case EEntType.FACE:
                 case EEntType.PGON:
                     const wires_i: number[] = this.modeldata.geom.nav.navAnyToWire(ent_type, index);
                     for (let j = 0; j < wires_i.length; j++) {
@@ -229,7 +228,6 @@ export class GIFuncsMake {
                     const posis_arr: TEntTypeIdx[] = posis_i.map( posi_i => [EEntType.POSI, posi_i]) as TEntTypeIdx[];
                     posis_arrs.push(posis_arr);
                     break;
-                case EEntType.FACE:
                 case EEntType.PGON:
                     const wires_i: number[] = this.modeldata.geom.nav.navAnyToWire(ent_type, index);
                     for (let j = 0; j < wires_i.length; j++) {
@@ -429,7 +427,6 @@ export class GIFuncsMake {
         let ribs_is_closed = false;
         switch (ents_arr[0][0]) { // check if the first entity is closed
             case EEntType.PGON:
-            case EEntType.FACE:
                 ribs_is_closed = true;
                 break;
             case EEntType.PLINE:
@@ -643,8 +640,7 @@ export class GIFuncsMake {
         }
         // cap the top
         if (isDim2(ent_type)) { // create a top -> polygon
-            const face_i: number = isFace(ent_type) ? index : this.modeldata.geom.nav.navPgonToFace(index);
-            const cap_pgon_i: number = this._extrudeCap(face_i, strip_posis_map, divisions);
+            const cap_pgon_i: number = this._extrudeCap(index, strip_posis_map, divisions);
             new_pgons_i.push(cap_pgon_i);
         }
         return new_pgons_i.map(pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx);
@@ -708,7 +704,6 @@ export class GIFuncsMake {
         const ribs_posis_i: number[][] = [];
         switch (ent_type) { // check if the entity is closed
             case EEntType.PGON:
-            case EEntType.FACE:
                 ribs_is_closed = true;
                 const face_wires_i: number[] = this.modeldata.geom.nav.navAnyToWire(ent_type, index);
                 for (const face_wire_i of face_wires_i) {
@@ -743,14 +738,13 @@ export class GIFuncsMake {
         // return the ribs
         return new_plines_i.map(pline_i => [EEntType.PLINE, pline_i] as TEntTypeIdx);
     }
-    private _extrudeCap( index: number, strip_posis_map: Map<number, number[]>, divisions: number): number {
-        const face_i: number = this.modeldata.geom.nav.navPgonToFace(index);
+    private _extrudeCap( pgon_i: number, strip_posis_map: Map<number, number[]>, divisions: number): number {
         // get positions on boundary
-        const old_wire_i: number = this.modeldata.geom.query.getFaceBoundary(face_i);
+        const old_wire_i: number = this.modeldata.geom.query.getPgonBoundary(pgon_i);
         const old_posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(EEntType.WIRE, old_wire_i);
         const new_posis_i: number[] = old_posis_i.map(old_posi_i => strip_posis_map.get(old_posi_i)[divisions]);
         // get positions for holes
-        const old_holes_wires_i: number[] = this.modeldata.geom.query.getFaceHoles(face_i);
+        const old_holes_wires_i: number[] = this.modeldata.geom.query.getPgonHoles(pgon_i);
         const new_holes_posis_i: number[][] = [];
         for (const old_hole_wire_i of old_holes_wires_i) {
             const old_hole_posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(EEntType.WIRE, old_hole_wire_i);
@@ -758,8 +752,8 @@ export class GIFuncsMake {
             new_holes_posis_i.push(new_hole_posis_i);
         }
         // make new polygon
-        const pgon_i: number = this.modeldata.geom.add.addPgon( new_posis_i, new_holes_posis_i );
-        return pgon_i;
+        const new_pgon_i: number = this.modeldata.geom.add.addPgon( new_posis_i, new_holes_posis_i );
+        return new_pgon_i;
     }
     // ================================================================================================
     /**

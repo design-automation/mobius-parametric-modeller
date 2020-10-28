@@ -27,7 +27,6 @@ export class GIAttribsMerge {
         this._mergeEntAttribs(ssid, attribs_maps, EEntType.VERT);
         this._mergeEntAttribs(ssid, attribs_maps, EEntType.EDGE);
         this._mergeEntAttribs(ssid, attribs_maps, EEntType.WIRE);
-        this._mergeEntAttribs(ssid, attribs_maps, EEntType.FACE);
         this._mergeEntAttribs(ssid, attribs_maps, EEntType.POINT);
         this._mergeEntAttribs(ssid, attribs_maps, EEntType.PLINE);
         this._mergeEntAttribs(ssid, attribs_maps, EEntType.PGON);

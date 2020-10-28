@@ -11,7 +11,7 @@ import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, Txyz, TEntTypeIdx, TPlane } from '@libs/geo-info/common';
-import { idsMake, getArrDepth, isEmptyArr, idsBreak } from '@libs/geo-info/id';
+import { idsMake, getArrDepth, isEmptyArr, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
 import { arrMakeFlat } from '@libs/util/arrs';
 
 
@@ -83,7 +83,7 @@ export function Point(__model__: GIModel, entities: TId|TId[]|TId[][]): TId|TId[
         ents_arr = checkIDs(__model__, 'make.Point', 'entities', entities,
         [ID.isID, ID.isIDL, ID.isIDLL],
         [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
-        EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON])  as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
+        EEntType.POINT, EEntType.PLINE, EEntType.PGON])  as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
     }
@@ -111,7 +111,7 @@ export function Polyline(__model__: GIModel, entities: TId|TId[]|TId[][], close:
         ents_arr = checkIDs(__model__, 'make.Polyline', 'entities', entities,
         [ID.isID, ID.isIDL, ID.isIDLL],
         [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
-        EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
+        EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
     }
@@ -145,7 +145,7 @@ export function Polygon(__model__: GIModel, entities: TId|TId[]|TId[][]): TId|TI
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, 'make.Polygon', 'entities', entities,
         [ID.isID, ID.isIDL, ID.isIDLL],
-        [EEntType.POSI, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
+        [EEntType.POSI, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx[]|TEntTypeIdx[][];
     }
@@ -174,7 +174,7 @@ export function _Tin(__model__: GIModel, entities: TId[]|TId[][]): TId[] {
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, 'make.Tin', 'entities', entities,
         [ID.isIDL, ID.isIDLL],
-        [EEntType.POSI, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
+        [EEntType.POSI, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx[]|TEntTypeIdx[][];
     }
@@ -209,7 +209,7 @@ export function Loft(__model__: GIModel, entities: TId[]|TId[][], divisions: num
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, 'make.Loft', 'entities', entities,
         [ID.isIDL, ID.isIDLL],
-        [EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
+        [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx[]|TEntTypeIdx[][];
     }
@@ -250,7 +250,7 @@ export function Extrude(__model__: GIModel, entities: TId|TId[],
     if (__model__.debug) {
         ents_arr =  checkIDs(__model__, fn_name, 'entities', entities,
             [ID.isID, ID.isIDL],
-            [EEntType.VERT, EEntType.EDGE, EEntType.WIRE, EEntType.FACE,
+            [EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
             EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
         checkArgs(fn_name, 'dist', dist, [ArgCh.isNum, ArgCh.isXYZ]);
         checkArgs(fn_name, 'divisions', divisions, [ArgCh.isInt]);

@@ -12,7 +12,7 @@ import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, TEntTypeIdx, IEntSets } from '@libs/geo-info/common';
-import { idsMake, isEmptyArr, idsBreak } from '@libs/geo-info/id';
+import { idsMake, isEmptyArr, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
 import { arrMakeFlat, isEmptyArr2 } from '@libs/util/arrs';
 
 // Enums
@@ -97,10 +97,10 @@ export function Hole(__model__: GIModel, pgon: TId, entities: TId|TId[]|TId[][])
     let ent_arr: TEntTypeIdx;
     let holes_ents_arr: TEntTypeIdx[]|TEntTypeIdx[][];
     if (__model__.debug) {
-        ent_arr = checkIDs(__model__, fn_name, 'pgon', pgon, [ID.isID], [EEntType.FACE, EEntType.PGON]) as TEntTypeIdx;
+        ent_arr = checkIDs(__model__, fn_name, 'pgon', pgon, [ID.isID], [EEntType.PGON]) as TEntTypeIdx;
         holes_ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
             [ID.isID, ID.isIDL, ID.isIDLL],
-            [EEntType.POSI, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
+            [EEntType.POSI, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
     } else {
         ent_arr = idsBreak(pgon) as TEntTypeIdx;
         holes_ents_arr = idsBreak(entities) as TEntTypeIdx[]|TEntTypeIdx[][];
@@ -130,7 +130,7 @@ export function Weld(__model__: GIModel, entities: TId|TId[], method: _EWeldMeth
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL],
-            [EEntType.VERT, EEntType.EDGE, EEntType.WIRE, EEntType.FACE,
+            [EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
             EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx[];
@@ -225,7 +225,7 @@ export function Shift(__model__: GIModel, entities: TId|TId[], offset: number): 
         if (__model__.debug) {
             ents_arr = checkIDs(__model__, 'edit.Reverse', 'entities', entities,
             [ID.isID, ID.isIDL],
-            [EEntType.WIRE, EEntType.PLINE, EEntType.FACE, EEntType.PGON])  as TEntTypeIdx[];
+            [EEntType.WIRE, EEntType.PLINE, EEntType.PGON])  as TEntTypeIdx[];
         } else {
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
@@ -252,7 +252,7 @@ export function Reverse(__model__: GIModel, entities: TId|TId[]): void {
         if (__model__.debug) {
             ents_arr = checkIDs(__model__, 'edit.Reverse', 'entities', entities,
                 [ID.isID, ID.isIDL],
-                [EEntType.WIRE, EEntType.PLINE, EEntType.FACE, EEntType.PGON])  as TEntTypeIdx[];
+                [EEntType.WIRE, EEntType.PLINE, EEntType.PGON])  as TEntTypeIdx[];
         } else {
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }

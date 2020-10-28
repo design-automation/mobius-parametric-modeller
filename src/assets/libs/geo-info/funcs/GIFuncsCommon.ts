@@ -1,7 +1,7 @@
 import { vecAdd, vecCross, vecDiv, vecDot, vecFromTo, vecLen, vecNorm, vecSetLen, vecSum } from '../../geom/vectors';
 import { EEntType, Txyz, TEntTypeIdx, TPlane, TRay } from '../common';
 import * as THREE from 'three';
-import { getArrDepth, isColl, isPgon, isPline, isPoint, isPosi } from '../id';
+import { getArrDepth, isColl, isPgon, isPline, isPoint, isPosi } from '../common_id_funcs';
 import { GIModelData } from '../GIModelData';
 const EPS = 1e-8;
 
@@ -67,26 +67,26 @@ export class GIFuncsCommon {
     public getCenterOfMass(ents_arr: TEntTypeIdx|TEntTypeIdx[]): Txyz|Txyz[] {
         if (getArrDepth(ents_arr) === 1) {
             const [ent_type, ent_i]: [EEntType, number] = ents_arr as TEntTypeIdx;
-            const faces_i: number[] = this.modeldata.geom.nav.navAnyToFace(ent_type, ent_i);
-            if (faces_i.length === 0) { return null; }
-            return this._centerOfMass(faces_i);
+            const pgons_i: number[] = this.modeldata.geom.nav.navAnyToPgon(ent_type, ent_i);
+            if (pgons_i.length === 0) { return null; }
+            return this._centerOfMass(pgons_i);
         } else {
             const cents: Txyz[] = [];
             ents_arr = ents_arr as TEntTypeIdx[];
             for (const [ent_type, ent_i] of ents_arr) {
-                const faces_i: number[] = this.modeldata.geom.nav.navAnyToFace(ent_type, ent_i);
-                if (faces_i.length === 0) { cents.push(null); }
-                cents.push(this._centerOfMass(faces_i));
+                const pgons_i: number[] = this.modeldata.geom.nav.navAnyToPgon(ent_type, ent_i);
+                if (pgons_i.length === 0) { cents.push(null); }
+                cents.push(this._centerOfMass(pgons_i));
             }
             return cents;
         }
     }
-    private _centerOfMass(faces_i: number[]): Txyz {
+    private _centerOfMass(pgons_i: number[]): Txyz {
         const face_midpoints: Txyz[] = [];
         const face_areas: number[] = [];
         let total_area = 0;
-        for (const face_i of faces_i) {
-            const [midpoint_xyz, area]: [Txyz, number] = this._centerOfMassOfFace( face_i);
+        for (const pgon_i of pgons_i) {
+            const [midpoint_xyz, area]: [Txyz, number] = this._centerOfMassOfPgon( pgon_i );
             face_midpoints.push(midpoint_xyz);
             face_areas.push(area);
             total_area += area;
@@ -100,12 +100,12 @@ export class GIFuncsCommon {
         }
         return cent;
     }
-    private _centerOfMassOfFace(face_i: number): [Txyz, number] {
+    private _centerOfMassOfPgon(pgon_i: number): [Txyz, number] {
         const tri_midpoints: Txyz[] = [];
         const tri_areas: number[] = [];
         let total_area = 0;
         const map_posi_to_v3: Map< number, THREE.Vector3> = new Map();
-        for (const tri_i of this.modeldata.geom.nav.navFaceToTri(face_i)) {
+        for (const tri_i of this.modeldata.geom.nav.navPgonToTri(pgon_i)) {
             const posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
             const posis_v3: THREE.Vector3[] = [];
             for (const posi_i of posis_i) {

@@ -1,7 +1,7 @@
 import { interpByNum, interpByLen, vecCross } from '@libs/geom/vectors';
 import { EEntType, Txyz, TEntTypeIdx, TPlane, IEntSets } from '../common';
 import { distance } from '@libs/geom/distance';
-import { getArrDepth, isEdge, isFace } from '../id';
+import { getArrDepth, isEdge } from '../common_id_funcs';
 import { GIModelData } from '../GIModelData';
 import { TypedArrayUtils } from '@libs/TypedArrayUtils.js';
 import * as THREE from 'three';
@@ -119,7 +119,7 @@ export class GIFuncsEdit {
             holes_ents_arr = [holes_ents_arr] as TEntTypeIdx[][];
         }
         // make sure we have a pgon
-        const pgon_i: number = isFace(ent_arr[0]) ? this.modeldata.geom.nav.navFaceToPgon(ent_arr[1]) : ent_arr[1];
+        const pgon_i: number = ent_arr[1];
         // time stamp
         this.modeldata.getObjsCheckTs(EEntType.PGON, pgon_i);
         // convert the holes to lists of posis_i
@@ -144,7 +144,6 @@ export class GIFuncsEdit {
                         const posis_arr: TEntTypeIdx[] = posis_i.map( posi_i => [EEntType.POSI, posi_i]) as TEntTypeIdx[];
                         Array.prototype.splice.apply(ents_arr, [i, 1, posis_arr]); // TODO
                         break;
-                    case EEntType.FACE:
                     case EEntType.PGON:
                         // ignore holes, so only take the first wire
                         const wires_i: number[] = this.modeldata.geom.nav.navAnyToWire(ent_type, index);
@@ -350,7 +349,6 @@ export class GIFuncsEdit {
         if (ent_sets._v) { throw new Error('Not implemented'); } // should never happen
         if (ent_sets._e) { throw new Error('Not implemented'); } // should never happen
         if (ent_sets._w) { throw new Error('Not implemented'); } // should never happen
-        if (ent_sets._f) { throw new Error('Not implemented'); } // should never happen
     }
     private _deleteNull(invert: boolean): void {
         const ssid: number = this.modeldata.active_ssid;

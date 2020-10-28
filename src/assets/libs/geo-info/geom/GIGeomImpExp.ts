@@ -1,5 +1,5 @@
-import { IGeomMaps, TTri, TEdge, TWire, TFace,
-    TFaceTri, TPoint, TPline, TPgon, EEntType, IEntSets, IGeomJSONData } from '../common';
+import { IGeomMaps, TTri, TEdge, TWire,
+    TPgonTri, TPoint, TPline, TPgon, EEntType, IEntSets, IGeomJSONData } from '../common';
 import { GIModelData } from '../GIModelData';
 
 /**
@@ -48,11 +48,11 @@ export class GIGeomImpExp {
         for (const other_wire_i of gi_data.wires_i) {
             renum_wires_map.set(other_wire_i, this.modeldata.model.metadata.nextWire());
         }
-        // faces
-        const renum_faces_map: Map<number, number> = new Map();
-        for (const other_face_i of gi_data.faces_i) {
-            renum_faces_map.set(other_face_i, this.modeldata.model.metadata.nextFace());
-        }
+        // // faces
+        // const renum_faces_map: Map<number, number> = new Map();
+        // for (const other_face_i of gi_data.faces_i) {
+        //     renum_faces_map.set(other_face_i, this.modeldata.model.metadata.nextFace());
+        // }
         // points
         const renum_points_map: Map<number, number> = new Map();
         for (const other_point_i of gi_data.points_i) {
@@ -80,7 +80,6 @@ export class GIGeomImpExp {
         renum_maps.set(EEntType.VERT, renum_verts_map);
         renum_maps.set(EEntType.EDGE, renum_edges_map);
         renum_maps.set(EEntType.WIRE, renum_wires_map);
-        renum_maps.set(EEntType.FACE, renum_faces_map);
         renum_maps.set(EEntType.POINT, renum_points_map);
         renum_maps.set(EEntType.PLINE, renum_plines_map);
         renum_maps.set(EEntType.PGON, renum_pgons_map);
@@ -150,21 +149,21 @@ export class GIGeomImpExp {
             });
         }
         // add faces to model
-        for (let i = 0; i < gi_data.faces_i.length; i++) {
-            const other_face_i: number = renum_faces_map.get(gi_data.faces_i[i]);
-            const other_wires_i: TFaceTri = gi_data.faces[i].map( other_wire_i => renum_wires_map.get(other_wire_i) ) as TFace;
-            const other_tris_i: TFaceTri = gi_data.facetris[i].map ( other_tri_i => renum_tris_map.get(other_tri_i) ) as TFaceTri;
-            // down
-            this._geom_maps.dn_faces_wires.set(other_face_i, other_wires_i);
-            this._geom_maps.dn_faces_tris.set(other_face_i, other_tris_i);
-            // up
-            other_wires_i.forEach( wire_i => {
-                this._geom_maps.up_wires_faces.set(wire_i, other_face_i);
-            });
-            other_tris_i.forEach( tri_i => {
-                this._geom_maps.up_tris_faces.set(tri_i, other_face_i);
-            });
-        }
+        // for (let i = 0; i < gi_data.faces_i.length; i++) {
+        //     const other_face_i: number = renum_faces_map.get(gi_data.faces_i[i]);
+        //     const other_wires_i: TFaceTri = gi_data.faces[i].map( other_wire_i => renum_wires_map.get(other_wire_i) ) as TFace;
+        //     const other_tris_i: TFaceTri = gi_data.facetris[i].map ( other_tri_i => renum_tris_map.get(other_tri_i) ) as TFaceTri;
+        //     // down
+        //     this._geom_maps.dn_faces_wires.set(other_face_i, other_wires_i);
+        //     this._geom_maps.dn_faces_tris.set(other_face_i, other_tris_i);
+        //     // up
+        //     other_wires_i.forEach( wire_i => {
+        //         this._geom_maps.up_wires_faces.set(wire_i, other_face_i);
+        //     });
+        //     other_tris_i.forEach( tri_i => {
+        //         this._geom_maps.up_tris_faces.set(tri_i, other_face_i);
+        //     });
+        // }
         // add points to model
         for (let i = 0; i < gi_data.points_i.length; i++) {
             const other_point_i: number = renum_points_map.get(gi_data.points_i[i]);
@@ -192,13 +191,32 @@ export class GIGeomImpExp {
             this.modeldata.geom.snapshot.addEnt(ssid, EEntType.PLINE, other_pline_i);
         }
         // add pgons to model
+        // for (let i = 0; i < gi_data.pgons_i.length; i++) {
+        //     const other_pgon_i: number = renum_pgons_map.get(gi_data.pgons_i[i]);
+        //     const other_face_i: TPgon = renum_faces_map.get(gi_data.pgons[i]) as TPgon;
+        //     // down
+        //     this._geom_maps.dn_pgons_faces.set(other_pgon_i, other_face_i);
+        //     // up
+        //     this._geom_maps.up_faces_pgons.set(other_face_i, other_pgon_i);
+        //     // timestamp
+        //     this.modeldata.updateEntTs(EEntType.PGON, other_pgon_i);
+        //     // snapshot
+        //     this.modeldata.geom.snapshot.addEnt(ssid, EEntType.PGON, other_pgon_i);
+        // }
         for (let i = 0; i < gi_data.pgons_i.length; i++) {
             const other_pgon_i: number = renum_pgons_map.get(gi_data.pgons_i[i]);
-            const other_face_i: TPgon = renum_faces_map.get(gi_data.pgons[i]) as TPgon;
+            const other_wires_i: TPgon = gi_data.pgons[i].map( other_wire_i => renum_wires_map.get(other_wire_i) ) as TPgon;
+            const other_tris_i: TPgonTri = gi_data.pgontris[i].map ( other_tri_i => renum_tris_map.get(other_tri_i) ) as TPgonTri;
             // down
-            this._geom_maps.dn_pgons_faces.set(other_pgon_i, other_face_i);
+            this._geom_maps.dn_pgons_wires.set(other_pgon_i, other_wires_i);
+            this._geom_maps.dn_pgons_tris.set(other_pgon_i, other_tris_i);
             // up
-            this._geom_maps.up_faces_pgons.set(other_face_i, other_pgon_i);
+            other_wires_i.forEach( wire_i => {
+                this._geom_maps.up_wires_pgons.set(wire_i, other_pgon_i);
+            });
+            other_tris_i.forEach( tri_i => {
+                this._geom_maps.up_tris_pgons.set(tri_i, other_pgon_i);
+            });
             // timestamp
             this.modeldata.updateEntTs(EEntType.PGON, other_pgon_i);
             // snapshot
@@ -226,10 +244,9 @@ export class GIGeomImpExp {
             tris: [], tris_i: [],
             edges: [], edges_i: [],
             wires: [], wires_i: [],
-            faces: [], facetris: [], faces_i: [],
             points: [], points_i: [],
             plines: [], plines_i: [],
-            pgons: [], pgons_i: [],
+            pgons: [], pgontris: [], pgons_i: [],
             colls_i: [],
             selected: this.modeldata.geom.selected
         };
@@ -250,11 +267,11 @@ export class GIGeomImpExp {
             data.wires_i.push(ent_i);
             data.wires.push( this._geom_maps.dn_wires_edges.get(ent_i) );
         }
-        for (const ent_i of ent_sets._f) {
-            data.faces_i.push(ent_i);
-            data.faces.push( this._geom_maps.dn_faces_wires.get(ent_i) );
-            data.facetris.push( this._geom_maps.dn_faces_tris.get(ent_i) );
-        }
+        // for (const ent_i of ent_sets._f) {
+        //     data.faces_i.push(ent_i);
+        //     data.faces.push( this._geom_maps.dn_faces_wires.get(ent_i) );
+        //     data.facetris.push( this._geom_maps.dn_faces_tris.get(ent_i) );
+        // }
         for (const ent_i of ent_sets.pt) {
             data.points_i.push(ent_i);
             data.points.push( this._geom_maps.dn_points_verts.get(ent_i) );
@@ -265,7 +282,8 @@ export class GIGeomImpExp {
         }
         for (const ent_i of ent_sets.pg) {
             data.pgons_i.push(ent_i);
-            data.pgons.push( this._geom_maps.dn_pgons_faces.get(ent_i) );
+            data.pgons.push( this._geom_maps.dn_pgons_wires.get(ent_i) );
+            data.pgontris.push( this._geom_maps.dn_pgons_tris.get(ent_i) );
         }
         for (const ent_i of ent_sets.co) {
             data.colls_i.push(ent_i);

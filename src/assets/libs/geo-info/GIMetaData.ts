@@ -12,7 +12,6 @@ export class GIMetaData {
         tri_count: 0,
         edge_count: 0,
         wire_count: 0,
-        face_count: 0,
         point_count: 0,
         pline_count: 0,
         pgon_count: 0,
@@ -195,11 +194,6 @@ export class GIMetaData {
         this._data.wire_count += 1;
         return index;
     }
-    public nextFace(): number {
-        const index: number = this._data.face_count;
-        this._data.face_count += 1;
-        return index;
-    }
     public nextPoint(): number {
         const index: number = this._data.point_count;
         this._data.point_count += 1;
@@ -235,9 +229,6 @@ export class GIMetaData {
     }
     public setNextWire(index: number): void {
         this._data.wire_count = index;
-    }
-    public setNextFace(index: number): void {
-        this._data.face_count = index;
     }
     public setNextPoint(index: number): void {
         this._data.point_count = index;
@@ -286,7 +277,6 @@ export class GIMetaData {
             'tri_count = ' + this._data.tri_count + '\n' +
             'edge_count = ' + this._data.edge_count + '\n' +
             'wire_count = ' + this._data.wire_count + '\n' +
-            'face_count = ' + this._data.face_count + '\n' +
             'point_count = ' + this._data.point_count + '\n' +
             'pline_count = ' + this._data.pline_count + '\n' +
             'pgon_count = ' + this._data.pgon_count + '\n' +

@@ -12,7 +12,7 @@ import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, TBBox, Txy } from '@libs/geo-info/common';
-import { isPline, isWire, isEdge, isPgon, isFace, getArrDepth, isVert, isPosi, isPoint, idsBreak } from '@libs/geo-info/id';
+import { isPline, isWire, isEdge, isPgon, getArrDepth, isVert, isPosi, isPoint, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
 import { distance } from '@libs/geom/distance';
 import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm, vecSetLen } from '@libs/geom/vectors';
 import { triangulate } from '@libs/triangulate/triangulate';
@@ -275,7 +275,7 @@ export function Length(__model__: GIModel, entities: TId|TId[]): number|number[]
     let ents_arr: TEntTypeIdx|TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL],
-        [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON, EEntType.FACE, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+        [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
         // [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON, EEntType.FACE, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
@@ -346,7 +346,7 @@ export function Area(__model__: GIModel, entities: TId|TId[]): number|number[] {
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
         [ID.isID, ID.isIDL],
-        [EEntType.PGON, EEntType.FACE, EEntType.PLINE, EEntType.WIRE, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+        [EEntType.PGON, EEntType.PLINE, EEntType.WIRE, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,
         // [IDcheckObj.isID, IDcheckObj.isIDList],
@@ -358,14 +358,10 @@ export function Area(__model__: GIModel, entities: TId|TId[]): number|number[] {
 }
 function _area(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): number|number[] {
     if (getArrDepth(ents_arrs) === 1) {
-        const [ent_type, index]: [EEntType, number] = ents_arrs as TEntTypeIdx;
-        if (isPgon(ent_type) || isFace(ent_type)) {
+        const [ent_type, ent_i]: [EEntType, number] = ents_arrs as TEntTypeIdx;
+        if (isPgon(ent_type)) {
             // faces, these are already triangulated
-            let face_i: number = index;
-            if (isPgon(ent_type)) {
-                face_i = __model__.modeldata.geom.nav.navPgonToFace(index);
-            }
-            const tris_i: number[] = __model__.modeldata.geom.nav.navFaceToTri(face_i);
+            const tris_i: number[] = __model__.modeldata.geom.nav.navPgonToTri(ent_i);
             let total_area = 0;
             for (const tri_i of tris_i) {
                 const corners_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
@@ -376,14 +372,14 @@ function _area(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): number
             return total_area;
         } else if (isPline(ent_type) || isWire(ent_type)) {
             // wires, these need to be triangulated
-            let wire_i: number = index;
+            let wire_i: number = ent_i;
             if (isPline(ent_type)) {
-                wire_i = __model__.modeldata.geom.nav.navPlineToWire(index);
+                wire_i = __model__.modeldata.geom.nav.navPlineToWire(ent_i);
             }
             if (!__model__.modeldata.geom.query.isWireClosed(wire_i)) {
                 throw new Error('To calculate area, wire must be closed');
             }
-            const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.WIRE, index);
+            const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.WIRE, ent_i);
             const xyzs:  Txyz[] = posis_i.map( posi_i => __model__.modeldata.attribs.posis.getPosiCoords(posi_i) );
             const tris: number[][] = triangulate(xyzs);
             let total_area = 0;
@@ -424,7 +420,7 @@ export function Vector(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
     if (__model__.debug) {
         ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
         [ID.isID, ID.isIDL],
-        [EEntType.PGON, EEntType.FACE, EEntType.PLINE, EEntType.WIRE, EEntType.EDGE]) as TEntTypeIdx|TEntTypeIdx[];
+        [EEntType.PGON, EEntType.PLINE, EEntType.WIRE, EEntType.EDGE]) as TEntTypeIdx|TEntTypeIdx[];
     } else {
         // ents_arrs = splitIDs(fn_name, 'entities', entities,
         // [IDcheckObj.isID, IDcheckObj.isIDList],
@@ -562,10 +558,7 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
         const ent_type: EEntType = (ents_arr as TEntTypeIdx)[0];
         const index: number = (ents_arr as TEntTypeIdx)[1];
         if (isPgon(ent_type)) {
-            const norm_vec: Txyz = __model__.modeldata.geom.query.getFaceNormalActive(__model__.modeldata.geom.nav.navPgonToFace(index));
-            return vecMult(norm_vec, scale);
-        } else if (isFace(ent_type)) {
-            const norm_vec: Txyz = __model__.modeldata.geom.query.getFaceNormalActive(index);
+            const norm_vec: Txyz = __model__.modeldata.geom.query.getPgonNormalActive(index);
             return vecMult(norm_vec, scale);
         } else if (isPline(ent_type)) {
             const norm_vec: Txyz = __model__.modeldata.geom.query.getWireNormal(__model__.modeldata.geom.nav.navPlineToWire(index));
@@ -643,7 +636,7 @@ export function Eval(__model__: GIModel, entities: TId|TId[], t_param: number): 
     if (__model__.debug) {
         ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
             [ID.isID, ID.isIDL],
-            [EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+            [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
         checkArgs(fn_name, 'param', t_param, [ArgCh.isNum01]);
     } else {
         // ents_arrs = splitIDs(fn_name, 'entities', entities,
@@ -741,7 +734,7 @@ export function Ray(__model__: GIModel, entities: TId|TId[]): TRay|TRay[] {
     let ents_arr: TEntTypeIdx|TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-        [ID.isID, ID.isIDL], [EEntType.EDGE, EEntType.PLINE, EEntType.FACE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
+        [ID.isID, ID.isIDL], [EEntType.EDGE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,
         // [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.PLINE, EEntType.FACE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
@@ -755,7 +748,7 @@ function _getRayFromEdge(__model__: GIModel, ent_arr: TEntTypeIdx): TRay {
     const xyzs: Txyz[] = posis_i.map( posi_i => __model__.modeldata.attribs.posis.getPosiCoords(posi_i));
     return [xyzs[0], vecSub(xyzs[1], xyzs[0])];
 }
-function _getRayFromFace(__model__: GIModel, ent_arr: TEntTypeIdx): TRay {
+function _getRayFromPgon(__model__: GIModel, ent_arr: TEntTypeIdx): TRay {
     const plane: TPlane = _getPlane(__model__, ent_arr) as TPlane;
     return rayFromPln(plane) as TRay;
 }
@@ -770,11 +763,8 @@ function _getRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TRay|
             return _getRayFromEdge(__model__, ent_arr);
         } else if (ent_arr[0] === EEntType.PLINE) {
             return _getRayFromPline(__model__, ent_arr);
-        } else if (ent_arr[0] === EEntType.FACE) {
-            return _getRayFromFace(__model__, ent_arr);
         } else { // must be a polygon
-            const face_i: number = __model__.modeldata.geom.nav.navPgonToFace(ent_arr[1]);
-            return _getRayFromFace(__model__, [EEntType.FACE, face_i]);
+            return _getRayFromPgon(__model__, ent_arr);
         }
     } else {
         return (ents_arr as TEntTypeIdx[]).map( ent_arr => _getRay(__model__, ent_arr)) as TRay[];

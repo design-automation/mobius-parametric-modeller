@@ -1,6 +1,6 @@
 import { GIModel } from '../GIModel';
 import { Txyz, EEntType, TAttribDataTypes, LONGLAT, Txy, TEntTypeIdx, IEntSets } from '../common';
-import { getArrDepth } from '../id';
+import { getArrDepth } from '../common_id_funcs';
 import proj4 from 'proj4';
 import { vecAng2, vecDot } from '../../geom/vectors';
 import { rotateMatrix, multMatrix } from '../../geom/matrix';
@@ -388,10 +388,9 @@ function _addPgonToModel(model: GIModel, polygon: any,
     const pgon_i: number = model.modeldata.geom.add.addPgon(rings[0], rings.slice(1));
     // check if it needs flipping
     // TODO there may be a faster way to do this
-    const face_i: number = model.modeldata.geom.nav.navPgonToFace(pgon_i);
-    const normal: Txyz = model.modeldata.geom.query.getFaceNormalActive(face_i);
+    const normal: Txyz = model.modeldata.geom.query.getPgonNormalActive(pgon_i);
     if (vecDot(normal, [0, 0, 1]) < 0) {
-        model.modeldata.geom.edit_topo.reverse(model.modeldata.geom.nav.navFaceToWire(face_i)[0]);
+        model.modeldata.geom.edit_topo.reverse(model.modeldata.geom.nav.navPgonToWire(pgon_i)[0]);
     }
     // add attribs
     _addAttribsToModel(model, EEntType.PGON, pgon_i, polygon);

@@ -31,24 +31,24 @@ export function createMultipleMeshesTjs(__model__: GIModel, ents_arrs: TEntTypeI
         posis_tjs[posi_i] = posi_tjs;
     }
     // get an array of all the faces
-    const faces_i: number[] = [];
+    const pgons_i: number[] = [];
     for (const [ent_type, ent_i] of ents_arrs) {
         switch (ent_type) {
-            case EEntType.FACE:
-                faces_i.push(ent_i);
+            case EEntType.PGON:
+                pgons_i.push(ent_i);
                 break;
             default:
-                const coll_faces_i: number[] = __model__.modeldata.geom.nav.navAnyToFace(ent_type, ent_i);
-                coll_faces_i.forEach( coll_face_i => faces_i.push(coll_face_i) );
+                const coll_pgons_i: number[] = __model__.modeldata.geom.nav.navAnyToPgon(ent_type, ent_i);
+                coll_pgons_i.forEach( coll_pgon_i => pgons_i.push(coll_pgon_i) );
                 break;
         }
     }
     // create tjs meshes
     const meshes_tjs: THREE.Mesh[] = [];
-    for (const face_i of faces_i) {
+    for (const pgon_i of pgons_i) {
         // create the tjs geometry
         const geom_tjs = new THREE.Geometry();
-        const tris_i: number[] = __model__.modeldata.geom.nav.navFaceToTri(face_i);
+        const tris_i: number[] = __model__.modeldata.geom.nav.navPgonToTri(pgon_i);
         for (const tri_i of tris_i) {
             const tri_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
             // add the three vertices to the geometry
@@ -138,24 +138,24 @@ export function createSingleMeshBufTjs(__model__: GIModel, ents_arrs: TEntTypeId
         xyzs_flat.push(...xyz);
         posi_i_to_xyzs_map.set(posi_i, i);
     }
-    // get an array of all the faces
-    const faces_i: number[] = [];
+    // get an array of all the pgons
+    const pgons_i: number[] = [];
     for (const [ent_type, ent_i] of ents_arrs) {
         switch (ent_type) {
-            case EEntType.FACE:
-                faces_i.push(ent_i);
+            case EEntType.PGON:
+                pgons_i.push(ent_i);
                 break;
             default:
-                const coll_faces_i: number[] = __model__.modeldata.geom.nav.navAnyToFace(ent_type, ent_i);
-                coll_faces_i.forEach( coll_face_i => faces_i.push(coll_face_i) );
+                const coll_pgons_i: number[] = __model__.modeldata.geom.nav.navAnyToPgon(ent_type, ent_i);
+                coll_pgons_i.forEach( coll_pgon_i => pgons_i.push(coll_pgon_i) );
                 break;
         }
     }
     // create tjs meshes
     const tris_flat: number[] = [];
-    for (const face_i of faces_i) {
+    for (const pgon_i of pgons_i) {
         // create the tjs geometry
-        const tris_i: number[] = __model__.modeldata.geom.nav.navFaceToTri(face_i);
+        const tris_i: number[] = __model__.modeldata.geom.nav.navPgonToTri(pgon_i);
         for (const tri_i of tris_i) {
             const tri_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
             tris_flat.push( posi_i_to_xyzs_map.get( tri_posis_i[0]) );

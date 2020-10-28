@@ -19,7 +19,6 @@ const eny_type_array: EEntType[] = [
     EEntType.VERT,
     EEntType.EDGE,
     EEntType.WIRE,
-    EEntType.FACE,
     EEntType.POINT,
     EEntType.PLINE,
     EEntType.PGON,
@@ -31,7 +30,6 @@ const ent_type_strs: Map<EEntType, string> = new Map([
     [EEntType.VERT, 'vertices'],
     [EEntType.EDGE, 'edges'],
     [EEntType.WIRE, 'wires'],
-    [EEntType.FACE, 'faces'],
     [EEntType.POINT, 'points'],
     [EEntType.PLINE, 'polylines'],
     [EEntType.PGON, 'polygons'],
@@ -236,10 +234,6 @@ export class GIAttribs {
         if (ss_attrib_maps._w.size) {
             result.push('wires');
             ss_attrib_maps._w.forEach( attrib => result.push(attrib.toStr()) );
-        }
-        if (ss_attrib_maps._f.size) {
-            result.push('faces');
-            ss_attrib_maps._f.forEach( attrib => result.push(attrib.toStr()) );
         }
         if (ss_attrib_maps.pt.size) {
             result.push('points');

@@ -10,7 +10,7 @@ import { checkArgs, ArgCh } from '../_check_args';
 
 import { TId, Txyz, EEntType, TPlane, TRay, TEntTypeIdx } from '@libs/geo-info/common';
 import { GIModel } from '@libs/geo-info/GIModel';
-import { getArrDepth, idsBreak } from '@libs/geo-info/id';
+import { getArrDepth, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
 import { vecCross} from '@libs/geom/vectors';
 import { _normal } from './calc';
 import * as THREE from 'three';
@@ -41,7 +41,7 @@ export function RayFace(__model__: GIModel, ray: TRay, entities: TId|TId[]): Txy
         checkArgs(fn_name, 'ray', ray, [ArgCh.isRay]);
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
             [ID.isID, ID.isIDL],
-            [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+            [EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,
         //     [IDcheckObj.isID, IDcheckObj.isIDList],
@@ -114,7 +114,7 @@ export function PlaneEdge(__model__: GIModel, plane: TRay|TPlane, entities: TId|
         checkArgs(fn_name, 'plane', plane, [ArgCh.isPln]);
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
             [ID.isID, ID.isIDL],
-            [EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
+            [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,
         //     [IDcheckObj.isID, IDcheckObj.isIDList],

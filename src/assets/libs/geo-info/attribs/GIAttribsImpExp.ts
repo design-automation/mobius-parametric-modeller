@@ -34,10 +34,6 @@ export class GIAttribsImpExp {
         for (const gi_attrib_data of gi_attribs_data.wires) {
             this._importEntAttribData(gi_attrib_data, EEntType.WIRE, renum_maps);
         }
-        // faces
-        for (const gi_attrib_data of gi_attribs_data.faces) {
-            this._importEntAttribData(gi_attrib_data, EEntType.FACE, renum_maps);
-        }
         // points
         for (const gi_attrib_data of gi_attribs_data.points) {
             this._importEntAttribData(gi_attrib_data, EEntType.POINT, renum_maps);
@@ -72,7 +68,6 @@ export class GIAttribsImpExp {
             verts: [],
             edges: [],
             wires: [],
-            faces: [],
             points: [],
             plines: [],
             pgons: [],
@@ -101,12 +96,6 @@ export class GIAttribsImpExp {
             const attrib_data: IAttribJSONData = attrib.getJSONData(ent_sets._w);
             if (attrib_data !== null) {
                 data.wires.push(attrib_data);
-            }
-        });
-        this.modeldata.attribs.attribs_maps.get(ssid)._f.forEach( attrib => {
-            const attrib_data: IAttribJSONData = attrib.getJSONData(ent_sets._f);
-            if (attrib_data !== null) {
-                data.faces.push(attrib_data);
             }
         });
         this.modeldata.attribs.attribs_maps.get(ssid).pt.forEach( attrib => {

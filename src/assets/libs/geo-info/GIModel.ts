@@ -1,7 +1,7 @@
 import { TEntTypeIdx, TId } from './common';
 import { GIMetaData } from './GIMetaData';
 import { GIModelData } from './GIModelData';
-import { idsBreak } from './id';
+import { idsBreak } from './common_id_funcs';
 import { IThreeJS } from './ThreejsJSON';
 
 /**

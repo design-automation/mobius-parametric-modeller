@@ -1,7 +1,7 @@
 
 import {  EEntType, IGeomMaps } from '../common';
 import { GIModelData } from '../GIModelData';
-import { isPosi, isVert, isPoint, isEdge, isWire, isPline, isFace, isPgon, isColl, isTri } from '../id';
+import { isPosi, isVert, isPoint, isEdge, isWire, isPline, isPgon, isColl, isTri } from '../common_id_funcs';
 /**
  * Class for navigating the geometry.
  */
@@ -30,11 +30,8 @@ export class GIGeomNav {
     public navWireToEdge(wire_i: number): number[] {
         return this._geom_maps.dn_wires_edges.get(wire_i);
     }
-    public navFaceToWire(face_i: number): number[] {
-        return this._geom_maps.dn_faces_wires.get(face_i);
-    }
-    public navFaceToTri(face_i: number): number[] {
-        return this._geom_maps.dn_faces_tris.get(face_i);
+    public navPgonToTri(pgon_i: number): number[] {
+        return this._geom_maps.dn_pgons_tris.get(pgon_i);
     }
     public navPointToVert(point_i: number): number {
         return this._geom_maps.dn_points_verts.get(point_i);
@@ -42,8 +39,8 @@ export class GIGeomNav {
     public navPlineToWire(line_i: number): number {
         return this._geom_maps.dn_plines_wires.get(line_i);
     }
-    public navPgonToFace(pgon_i: number): number {
-        return this._geom_maps.dn_pgons_faces.get(pgon_i);
+    public navPgonToWire(pgon_i: number): number[] {
+        return this._geom_maps.dn_pgons_wires.get(pgon_i);
     }
     public navCollToPoint(coll_i: number): number[] {
         // get the descendants of this collection
@@ -112,14 +109,8 @@ export class GIGeomNav {
     public navVertToEdge(vert_i: number): number[] {
         return this._geom_maps.up_verts_edges.get(vert_i);
     }
-    public navTriToFace(tri_i: number): number {
-        return this._geom_maps.up_tris_faces.get(tri_i);
-    }
     public navEdgeToWire(edge_i: number): number {
         return this._geom_maps.up_edges_wires.get(edge_i);
-    }
-    public navWireToFace(wire_i: number): number {
-        return this._geom_maps.up_wires_faces.get(wire_i);
     }
     public navVertToPoint(vert_i: number): number {
         return this._geom_maps.up_verts_points.get(vert_i);
@@ -127,8 +118,11 @@ export class GIGeomNav {
     public navWireToPline(wire_i: number): number {
         return this._geom_maps.up_wires_plines.get(wire_i);
     }
-    public navFaceToPgon(face: number): number {
-        return this._geom_maps.up_faces_pgons.get(face);
+    public navTriToPgon(tri_i: number): number {
+        return this._geom_maps.up_tris_pgons.get(tri_i);
+    }
+    public navWireToPgon(wire_i: number): number {
+        return this._geom_maps.up_wires_pgons.get(wire_i);
     }
     public navPointToColl(point_i: number): number[] {
         return this.modeldata.attribs.colls.getPointColls(point_i);
@@ -161,7 +155,6 @@ export class GIGeomNav {
             for (const coll_i of point_colls_i) {
                 set_colls_i.add(coll_i);
             }
-
         }
         const plines_i: number[] = this.navAnyToPline(ent_type, index);
         for (const pline_i of plines_i) {
@@ -186,8 +179,8 @@ export class GIGeomNav {
      */
     public navAnyToPgon(ent_type: EEntType, index: number): number[] {
         if (isPgon(ent_type)) { return [index]; }
-        const faces_i: number[] = this.navAnyToFace(ent_type, index);
-        return faces_i.map( face_i => this.navFaceToPgon(face_i) ).filter(pgon_i => pgon_i !== undefined);
+        const wires_i: number[] = this.navAnyToWire(ent_type, index);
+        return wires_i.map( wire_i => this.navWireToPgon(wire_i) ).filter(pgon_i => pgon_i !== undefined);
     }
     /**
      * Navigate from any level to the plines
@@ -209,47 +202,47 @@ export class GIGeomNav {
         const verts_i: number[] = this.navAnyToVert(ent_type, index);
         return verts_i.map( vert_i => this.navVertToPoint(vert_i) ).filter(point_i => point_i !== undefined);
     }
-    /**
-     * Navigate from any level to the faces
-     * @param ent_type
-     * @param index
-     */
-    public navAnyToFace(ent_type: EEntType, index: number): number[] {
-        if (isPosi(ent_type)) {
-            const verts_i: number[] = this.navPosiToVert(index);
-            // avoid getting duplicates
-            const faces_i_set: Set<number> = new Set();
-            for (const vert_i of verts_i) {
-                const faces_i: number[] = this.navAnyToFace(EEntType.VERT, vert_i);
-                for (const face_i of faces_i) {
-                    faces_i_set.add(face_i);
-                }
-            }
-            return Array.from(new Set(faces_i_set));
-        } else if (isVert(ent_type)) {
-            const edges_i: number[] = this.navVertToEdge(index); // two edges
-            return this.navAnyToFace(EEntType.EDGE, edges_i[0]);
-        } else if (isTri(ent_type)) {
-            return [this.navTriToFace(index)];
-        } else if (isEdge(ent_type)) {
-            const wire_i: number = this.navEdgeToWire(index);
-            return this.navAnyToFace(EEntType.WIRE, wire_i);
-        } else if (isWire(ent_type)) {
-            return [this.navWireToFace(index)];
-        } else if (isFace(ent_type)) { // target
-            return [index];
-        } else if (isPoint(ent_type)) {
-            return [];
-        } else if (isPline(ent_type)) {
-            return [];
-        } else if (isPgon(ent_type)) {
-            return [this.navPgonToFace(index)];
-        } else if (isColl(ent_type)) {
-            const pgons_i: number[] = this.navCollToPgon(index);
-            return pgons_i.map(pgon_i => this.navPgonToFace(pgon_i));
-        }
-        throw new Error('Bad navigation in geometry data structure: ' + ent_type + index);
-    }
+    // /**
+    //  * Navigate from any level to the faces
+    //  * @param ent_type
+    //  * @param index
+    //  */
+    // public navAnyToFace(ent_type: EEntType, index: number): number[] {
+    //     if (isPosi(ent_type)) {
+    //         const verts_i: number[] = this.navPosiToVert(index);
+    //         // avoid getting duplicates
+    //         const faces_i_set: Set<number> = new Set();
+    //         for (const vert_i of verts_i) {
+    //             const faces_i: number[] = this.navAnyToFace(EEntType.VERT, vert_i);
+    //             for (const face_i of faces_i) {
+    //                 faces_i_set.add(face_i);
+    //             }
+    //         }
+    //         return Array.from(new Set(faces_i_set));
+    //     } else if (isVert(ent_type)) {
+    //         const edges_i: number[] = this.navVertToEdge(index); // two edges
+    //         return this.navAnyToFace(EEntType.EDGE, edges_i[0]);
+    //     } else if (isTri(ent_type)) {
+    //         return [this.navTriToFace(index)];
+    //     } else if (isEdge(ent_type)) {
+    //         const wire_i: number = this.navEdgeToWire(index);
+    //         return this.navAnyToFace(EEntType.WIRE, wire_i);
+    //     } else if (isWire(ent_type)) {
+    //         return [this.navWireToFace(index)];
+    //     } else if (isFace(ent_type)) { // target
+    //         return [index];
+    //     } else if (isPoint(ent_type)) {
+    //         return [];
+    //     } else if (isPline(ent_type)) {
+    //         return [];
+    //     } else if (isPgon(ent_type)) {
+    //         return [this.navPgonToFace(index)];
+    //     } else if (isColl(ent_type)) {
+    //         const pgons_i: number[] = this.navCollToPgon(index);
+    //         return pgons_i.map(pgon_i => this.navPgonToFace(pgon_i));
+    //     }
+    //     throw new Error('Bad navigation in geometry data structure: ' + ent_type + index);
+    // }
     /**
      * Navigate from any level to the wires
      * @param ent_type
@@ -276,15 +269,12 @@ export class GIGeomNav {
             return [this.navEdgeToWire(index)];
         } else if (isWire(ent_type)) { // target
             return [index];
-        } else if (isFace(ent_type)) {
-            return this.navFaceToWire(index);
         } else if (isPoint(ent_type)) {
             return [];
         } else if (isPline(ent_type)) {
             return [this.navPlineToWire(index)];
         } else if (isPgon(ent_type)) {
-            const face_i: number = this.navPgonToFace(index);
-            return this.navFaceToWire(face_i);
+            return this.navPgonToWire(index);
         } else if (isColl(ent_type)) {
             const all_wires_i: number[] = [];
             const plines_i: number[] = this.navCollToPline(index);
@@ -294,7 +284,7 @@ export class GIGeomNav {
             }
             const pgons_i: number[] = this.navCollToPgon(index);
             for (const pgon_i of pgons_i) {
-                const wires_i: number[] = this.navAnyToWire(EEntType.PGON, pgon_i);
+                const wires_i: number[] = this.navPgonToWire(pgon_i);
                 for (const wire_i of wires_i) {
                     all_wires_i.push(wire_i);
                 }
@@ -320,17 +310,21 @@ export class GIGeomNav {
             return [index];
         } else if (isWire(ent_type)) {
             return this.navWireToEdge(index);
-        } else if (isFace(ent_type)) {
-            const wires_i: number[] = this.navFaceToWire(index);
-            return [].concat(...wires_i.map(wire_i => this.navWireToEdge(wire_i)));
         } else if (isPoint(ent_type)) {
             return [];
         } else if (isPline(ent_type)) {
             const wire_i: number = this.navPlineToWire(index);
             return this.navAnyToEdge(EEntType.WIRE, wire_i);
         } else if (isPgon(ent_type)) {
-            const face_i: number = this.navPgonToFace(index);
-            return this.navAnyToEdge(EEntType.FACE, face_i);
+            const wires_i: number[] = this.navPgonToWire(index);
+            const all_edges_i: number[] = [];
+            for (const wire_i of wires_i) {
+                const edges_i: number[] = this.navWireToEdge(wire_i);
+                for (const edge_i of edges_i) {
+                    all_edges_i.push(edge_i);
+                }
+            }
+            return all_edges_i;
         } else if (isColl(ent_type)) {
             const all_edges_i: number[] = [];
             const plines_i: number[] = this.navCollToPline(index);
@@ -367,22 +361,19 @@ export class GIGeomNav {
             return this.navEdgeToVert(index);
         } else if (isWire(ent_type)) {
             return this.modeldata.geom.query.getWireVerts(index); // avoids duplicate verts
-        } else if (isFace(ent_type)) {
-            const wires_i: number[] = this.navFaceToWire(index);
-            const verts_i: number[] = [];
-            for (const wire_i of wires_i) {
-                const wire_verts_i: number [] = this.modeldata.geom.query.getWireVerts(wire_i); // avoids duplicate verts
-                for (const vert_i of wire_verts_i) { verts_i.push(vert_i); }
-            }
-            return verts_i;
         } else if (isPoint(ent_type)) {
             return  [this.navPointToVert(index)];
         } else if (isPline(ent_type)) {
             const wire_i: number = this.navPlineToWire(index);
             return this.navAnyToVert(EEntType.WIRE, wire_i);
         } else if (isPgon(ent_type)) {
-            const face_i: number = this.navPgonToFace(index);
-            return this.navAnyToVert(EEntType.FACE, face_i);
+            const wires_i: number[] = this.navPgonToWire(index);
+            const verts_i: number[] = [];
+            for (const wire_i of wires_i) {
+                const wire_verts_i: number [] = this.modeldata.geom.query.getWireVerts(wire_i); // avoids duplicate verts
+                for (const vert_i of wire_verts_i) { verts_i.push(vert_i); }
+            }
+            return verts_i;
         } else if (isColl(ent_type)) {
             const all_verts_i: number[] = [];
             const points_i: number[] = this.navCollToPoint(index);
@@ -425,20 +416,17 @@ export class GIGeomNav {
             return [];
         } else if (isWire(ent_type)) {
             return [];
-        } else if (isFace(ent_type)) {
-            return this.navFaceToTri(index);
         } else if (isPoint(ent_type)) {
             return [];
         } else if (isPline(ent_type)) {
             return [];
         } else if (isPgon(ent_type)) {
-            const face_i: number = this.navPgonToFace(index);
-            return this.navFaceToTri(face_i);
+            return this.navPgonToTri(index);
         } else if (isColl(ent_type)) {
             const all_tris_i: number[] = [];
             const pgons_i: number[] = this.navCollToPgon(index);
             for (const pgon_i of pgons_i) {
-                const tris_i: number[] = this.navAnyToTri(EEntType.PGON, pgon_i);
+                const tris_i: number[] = this.navPgonToTri(pgon_i);
                 for (const tri_i of tris_i) {
                     all_tris_i.push(tri_i);
                 }
@@ -483,8 +471,6 @@ export class GIGeomNav {
                 return this.navAnyToEdge(from_ets, index);
             case EEntType.WIRE:
                 return this.navAnyToWire(from_ets, index);
-            case EEntType.FACE:
-                return this.navAnyToFace(from_ets, index);
             case EEntType.POINT:
                 return this.navAnyToPoint(from_ets, index);
             case EEntType.PLINE:

@@ -13,7 +13,7 @@ import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EEntType, TEntTypeIdx, TRay, IEntSets} from '@libs/geo-info/common';
-import { isEmptyArr, idsBreak } from '@libs/geo-info/id';
+import { isEmptyArr, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
 import { arrMakeFlat, isEmptyArr2 } from '@assets/libs/util/arrs';
 import { getRay, getPlane } from './_common';
 
@@ -81,7 +81,7 @@ export function Rotate(__model__: GIModel, entities: TId|TId[], ray: Txyz|TRay|T
         if (__model__.debug) {
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL],
                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
-                EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+                EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
             checkArgs(fn_name, 'angle', angle, [ArgCh.isNum]);
         } else {
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
@@ -118,7 +118,7 @@ export function Scale(__model__: GIModel, entities: TId|TId[], plane: Txyz|TRay|
         if (__model__.debug) {
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL],
                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
-                EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+                EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
             checkArgs(fn_name, 'scale', scale, [ArgCh.isNum, ArgCh.isXYZ]);
         } else {
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
@@ -152,7 +152,7 @@ export function Mirror(__model__: GIModel, entities: TId|TId[], plane: Txyz|TRay
         if (__model__.debug) {
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL],
                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
-                EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+                EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         } else {
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
@@ -191,7 +191,7 @@ export function XForm(__model__: GIModel, entities: TId|TId[],
         if (__model__.debug) {
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL],
                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
-                EEntType.FACE, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+                EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         } else {
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
@@ -220,7 +220,7 @@ export function Offset(__model__: GIModel, entities: TId|TId[], dist: number): v
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL],
-                [EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+                [EEntType.WIRE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
             checkArgs(fn_name, 'dist', dist, [ArgCh.isNum]);
         } else {
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
@@ -251,7 +251,7 @@ export function Remesh(__model__: GIModel, entities: TId[]): void {
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
             ents_arr = checkIDs(__model__, 'modify.Remesh', 'entities', entities,
-            [ID.isID, ID.isIDL], [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+            [ID.isID, ID.isIDL], [EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         } else {
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }

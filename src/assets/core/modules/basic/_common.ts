@@ -11,7 +11,7 @@ import { checkIDs, ID } from '../_check_ids';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EEntType, TRay, TEntTypeIdx, EEntTypeStr, Txy} from '@libs/geo-info/common';
-import { getArrDepth, isColl, isPosi, isPgon, isPline, isPoint } from '@assets/libs/geo-info/id';
+import { getArrDepth, isColl, isPosi, isPgon, isPline, isPoint } from '@assets/libs/geo-info/common_id_funcs';
 import { vecDiv, vecSum, vecAvg, vecFromTo, vecLen, vecCross, vecNorm, vecAdd, vecSetLen, vecDot } from '@assets/libs/geom/vectors';
 import { isRay, isPlane, isXYZ } from '@assets/libs/geo-info/common_func';
 import { rayFromPln } from '@assets/core/inline/_ray';
@@ -53,7 +53,7 @@ export function getCentoridFromEnts(__model__: GIModel, ents: TId|TId[], fn_name
     const ents_arr: TEntTypeIdx|TEntTypeIdx[] = checkIDs(__model__, fn_name, 'ents', ents,
         [ID.isID, ID.isIDL],
         [EEntType.POSI, EEntType.VERT, EEntType.POINT, EEntType.EDGE, EEntType.WIRE,
-            EEntType.PLINE, EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx;
+            EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx;
     const centroid: Txyz|Txyz[] = getCentroid(__model__, ents_arr);
     if (Array.isArray(centroid[0])) {
         return vecAvg(centroid as Txyz[]) as Txyz;
@@ -101,26 +101,26 @@ function _centroidPosis(__model__: GIModel, posis_i: number[]): Txyz {
 export function getCenterOfMass(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): Txyz|Txyz[] {
     if (getArrDepth(ents_arr) === 1) {
         const [ent_type, ent_i]: [EEntType, number] = ents_arr as TEntTypeIdx;
-        const faces_i: number[] = __model__.modeldata.geom.nav.navAnyToFace(ent_type, ent_i);
-        if (faces_i.length === 0) { return null; }
-        return _centerOfMass(__model__, faces_i);
+        const pgons_i: number[] = __model__.modeldata.geom.nav.navAnyToPgon(ent_type, ent_i);
+        if (pgons_i.length === 0) { return null; }
+        return _centerOfMass(__model__, pgons_i);
     } else {
         const cents: Txyz[] = [];
         ents_arr = ents_arr as TEntTypeIdx[];
         for (const [ent_type, ent_i] of ents_arr) {
-            const faces_i: number[] = __model__.modeldata.geom.nav.navAnyToFace(ent_type, ent_i);
-            if (faces_i.length === 0) { cents.push(null); }
-            cents.push(_centerOfMass(__model__, faces_i));
+            const pgons_i: number[] = __model__.modeldata.geom.nav.navAnyToPgon(ent_type, ent_i);
+            if (pgons_i.length === 0) { cents.push(null); }
+            cents.push(_centerOfMass(__model__, pgons_i));
         }
         return cents;
     }
 }
-function _centerOfMass(__model__: GIModel, faces_i: number[]): Txyz {
+function _centerOfMass(__model__: GIModel, pgons_i: number[]): Txyz {
     const face_midpoints: Txyz[] = [];
     const face_areas: number[] = [];
     let total_area = 0;
-    for (const face_i of faces_i) {
-        const [midpoint_xyz, area]: [Txyz, number] = _centerOfMassOfFace(__model__, face_i);
+    for (const face_i of pgons_i) {
+        const [midpoint_xyz, area]: [Txyz, number] = _centerOfMassOfPgon(__model__, face_i);
         face_midpoints.push(midpoint_xyz);
         face_areas.push(area);
         total_area += area;
@@ -134,12 +134,12 @@ function _centerOfMass(__model__: GIModel, faces_i: number[]): Txyz {
     }
     return cent;
 }
-function _centerOfMassOfFace(__model__: GIModel, face_i: number): [Txyz, number] {
+function _centerOfMassOfPgon(__model__: GIModel, pgon_i: number): [Txyz, number] {
     const tri_midpoints: Txyz[] = [];
     const tri_areas: number[] = [];
     let total_area = 0;
     const map_posi_to_v3: Map< number, THREE.Vector3> = new Map();
-    for (const tri_i of __model__.modeldata.geom.nav.navFaceToTri(face_i)) {
+    for (const tri_i of __model__.modeldata.geom.nav.navPgonToTri(pgon_i)) {
         const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
         const posis_v3: THREE.Vector3[] = [];
         for (const posi_i of posis_i) {

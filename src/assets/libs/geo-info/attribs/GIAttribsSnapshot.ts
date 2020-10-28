@@ -32,7 +32,6 @@ export class GIAttribsSnapshot {
                 _v: new Map(),
                 _e: new Map(),
                 _w: new Map(),
-                _f: new Map(),
                 pt: new Map(),
                 pl: new Map(),
                 pg: new Map(),
@@ -44,16 +43,10 @@ export class GIAttribsSnapshot {
         attribs.ps.set(EAttribNames.COORDS, new GIAttribMapList(this.modeldata, EAttribNames.COORDS, EEntType.POSI, EAttribDataTypeStrs.LIST));
         attribs._v.set(EAttribNames.COLOR, new GIAttribMapList(this.modeldata, EAttribNames.COLOR, EEntType.VERT, EAttribDataTypeStrs.LIST));
         attribs._v.set(EAttribNames.NORMAL, new GIAttribMapList(this.modeldata, EAttribNames.NORMAL, EEntType.VERT, EAttribDataTypeStrs.LIST));
-        // this.modeldata.attribs.add.addAttribActive(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.LIST);
-        // this.modeldata.attribs.add.addAttribActive(EEntType.VERT, EAttribNames.COLOR, EAttribDataTypeStrs.LIST);
-        // this.modeldata.attribs.add.addAttribActive(EEntType.VERT, EAttribNames.NORMAL, EAttribDataTypeStrs.LIST);
         // add attributes for time stamps
         attribs.pt.set(EAttribNames.TIMESTAMP, new GIAttribMapNum(this.modeldata, EAttribNames.TIMESTAMP, EEntType.POINT, EAttribDataTypeStrs.NUMBER));
         attribs.pl.set(EAttribNames.TIMESTAMP, new GIAttribMapNum(this.modeldata, EAttribNames.TIMESTAMP, EEntType.PLINE, EAttribDataTypeStrs.NUMBER));
         attribs.pg.set(EAttribNames.TIMESTAMP, new GIAttribMapNum(this.modeldata, EAttribNames.TIMESTAMP, EEntType.PGON, EAttribDataTypeStrs.NUMBER));
-        // this.modeldata.attribs.add.addAttribActive(EEntType.POINT, EAttribNames.TIMESTAMP, EAttribDataTypeStrs.NUMBER);
-        // this.modeldata.attribs.add.addAttribActive(EEntType.PLINE, EAttribNames.TIMESTAMP, EAttribDataTypeStrs.NUMBER);
-        // this.modeldata.attribs.add.addAttribActive(EEntType.PGON, EAttribNames.TIMESTAMP, EAttribDataTypeStrs.NUMBER);
         // add attributes for collections
         attribs.co.set(EAttribNames.COLL_NAME, new GIAttribMapStr(this.modeldata, EAttribNames.COLL_NAME, EEntType.COLL, EAttribDataTypeStrs.STRING));
         attribs.co.set(EAttribNames.COLL_PARENT, new GIAttribMapNum(this.modeldata, EAttribNames.COLL_PARENT, EEntType.COLL, EAttribDataTypeStrs.NUMBER));
@@ -61,12 +54,6 @@ export class GIAttribsSnapshot {
         attribs.co.set(EAttribNames.COLL_POINTS, new GIAttribMapList(this.modeldata, EAttribNames.COLL_POINTS, EEntType.COLL, EAttribDataTypeStrs.LIST));
         attribs.co.set(EAttribNames.COLL_PLINES, new GIAttribMapList(this.modeldata, EAttribNames.COLL_PLINES, EEntType.COLL, EAttribDataTypeStrs.LIST));
         attribs.co.set(EAttribNames.COLL_PGONS, new GIAttribMapList(this.modeldata, EAttribNames.COLL_PGONS, EEntType.COLL, EAttribDataTypeStrs.LIST));
-        // this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_NAME, EAttribDataTypeStrs.STRING);
-        // this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_PARENT, EAttribDataTypeStrs.NUMBER);
-        // this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_CHILDS, EAttribDataTypeStrs.LIST);
-        // this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_POINTS, EAttribDataTypeStrs.LIST);
-        // this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_PLINES, EAttribDataTypeStrs.LIST);
-        // this.modeldata.attribs.add.addAttribActive(EEntType.COLL, EAttribNames.COLL_PGONS, EAttribDataTypeStrs.LIST);
         // merge data
         if (include !== undefined) {
             for (const exist_ssid of include) {
@@ -100,14 +87,6 @@ export class GIAttribsSnapshot {
         }
         from_attrib_maps.mo.forEach( (val, name) => this.modeldata.attribs.set.setModelAttribVal(name, val) );
     }
-    // /**
-    //  * Shortcut for getting a coordinate from a posi_i
-    //  * @param posi_i
-    //  */
-    // public getPosiCoords(ssid: number, posi_i: number): Txyz {
-    //     const result = this.modeldata.attribs.attribs_maps.get(ssid).ps.get(EAttribNames.COORDS).getEntVal(posi_i) as Txyz;
-    //     return result;
-    // }
     // ============================================================================
     // Debug
     // ============================================================================

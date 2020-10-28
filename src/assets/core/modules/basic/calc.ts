@@ -558,7 +558,7 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
         const ent_type: EEntType = (ents_arr as TEntTypeIdx)[0];
         const index: number = (ents_arr as TEntTypeIdx)[1];
         if (isPgon(ent_type)) {
-            const norm_vec: Txyz = __model__.modeldata.geom.query.getPgonNormalActive(index);
+            const norm_vec: Txyz = __model__.modeldata.geom.query.getPgonNormal(index);
             return vecMult(norm_vec, scale);
         } else if (isPline(ent_type)) {
             const norm_vec: Txyz = __model__.modeldata.geom.query.getWireNormal(__model__.modeldata.geom.nav.navPlineToWire(index));

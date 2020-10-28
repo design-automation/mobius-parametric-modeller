@@ -23,7 +23,7 @@ export class GIGeomEditPgon {
      */
     public cutPgonHoles(pgon_i: number, posis_i_arr: number[][]): number[] {
         // get the normal of the face
-        const face_normal: Txyz = this.modeldata.geom.query.getPgonNormalActive(pgon_i);
+        const face_normal: Txyz = this.modeldata.geom.query.getPgonNormal(pgon_i);
         // make the wires for the holes
         const hole_wires_i: number[] = [];
         for (const hole_posis_i of posis_i_arr) {

@@ -33,8 +33,7 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
         [
             { tab: 1, title: 'Vertices' },
             { tab: 2, title: 'Edges' },
-            { tab: 3, title: 'Wires' },
-            { tab: 4, title: 'Faces' }
+            { tab: 3, title: 'Wires' }
         ];
 
     object_dropdown;

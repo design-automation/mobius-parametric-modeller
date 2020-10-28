@@ -244,6 +244,29 @@ function _convertWireToShape(__model__: GIModel, wire_i: number, is_closed: bool
     shape.scaleUp(SCALE);
     return shape;
 }
+// mobius -> clipperjs
+function _convertPlineToShape(__model__: GIModel, pline_i: number,  posis_map: TPosisMap): Shape {
+    const wire_i: number = __model__.modeldata.geom.nav.navPlineToWire(pline_i);
+    const is_closed: boolean = __model__.modeldata.geom.query.isWireClosed(wire_i);
+    const shape_coords: TClipPaths = [];
+    shape_coords.push([]);
+    const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.PLINE, pline_i);
+    for (const posi_i of posis_i) {
+        const xyz: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(posi_i);
+        const coord: IClipCoord = {X: xyz[0], Y: xyz[1]};
+        shape_coords[0].push( coord );
+        _putPosiInMap(xyz[0], xyz[1], posi_i, posis_map);
+    }
+    if (is_closed) {
+        // close the pline by adding an extra point
+        const first: IClipCoord = shape_coords[0][0];
+        const last: IClipCoord = {X: first.X, Y: first.Y};
+        shape_coords[0].push(last);
+    }
+    const shape: Shape = new Shape(shape_coords, false); // this is always false, even if pline is closed
+    shape.scaleUp(SCALE);
+    return shape;
+}
 // clipperjs -> mobius
 function _convertShapesToPgons(__model__: GIModel, shapes: Shape|Shape[], posis_map: TPosisMap): number[] {
     shapes = Array.isArray(shapes) ? shapes : [shapes];
@@ -290,6 +313,63 @@ function _convertShapeToPlines(__model__: GIModel, shape: Shape, is_closed: bool
             plines_i.push(pgon_i);
         }
     }
+    return plines_i;
+}
+// clipperjs
+function _convertShapeToCutPlines(__model__: GIModel, shape: Shape, posis_map: TPosisMap): number[] {
+    shape.scaleDown(SCALE);
+    const sep_shapes: Shape[] = shape.separateShapes();
+    const lists_posis_i: number[][] = [];
+    for (const sep_shape of sep_shapes) {
+        const paths: TClipPaths = sep_shape.paths;
+        for (const path of paths) {
+            if (path.length === 0) { continue; }
+            const posis_i: number[] = [];
+            // make a list of posis
+            for (const coord of path) {
+                const posi_i: number = _getPosiFromMap(__model__, coord.X, coord.Y, posis_map);
+                posis_i.push(posi_i);
+            }
+            // must have at least 2 posis
+            if (posis_i.length < 2) { continue; }
+            // add the list
+            lists_posis_i.push(posis_i);
+        }
+    }
+    // see if there is a join between two lists
+    // this can occur when boolean with closed polylines
+    // for each closed polyline in the input, there can only be one merge
+    // this is the point where the end meets the start
+    const to_merge: number[][] = [];
+    for (let p = 0; p < lists_posis_i.length; p++) {
+        const posis0: number[] = lists_posis_i[p];
+        for (let q = 0; q < lists_posis_i.length; q++) {
+            const posis1: number[] = lists_posis_i[q];
+            if (p !== q && posis0[posis0.length - 1] === posis1[0]) {
+                to_merge.push([p, q]);
+            }
+        }
+    }
+    for (const [p, q] of to_merge) {
+        // copy posis from sub list q to sub list p
+        // skip the first posi
+        for (let idx = 1; idx < lists_posis_i[q].length; idx++) {
+            const posi_i: number = lists_posis_i[q][idx];
+            lists_posis_i[p].push(posi_i);
+        }
+        // set sub list q to null
+        lists_posis_i[q] = null;
+    }
+    // create plines and check closed
+    const plines_i: number[] = [];
+    for (const posis_i of lists_posis_i) {
+        if (posis_i === null) { continue; }
+        const is_closed = posis_i[0] === posis_i[posis_i.length - 1];
+        if (is_closed) { posis_i.splice(posis_i.length - 1, 1); }
+        const pline_i: number = __model__.modeldata.geom.add.addPline(posis_i, is_closed);
+        plines_i.push( pline_i );
+    }
+    // return the list of new plines
     return plines_i;
 }
 // clipperjs
@@ -468,7 +548,7 @@ function _delaunay(__model__: GIModel, d3_tri_coords: [number, number][], posis_
     for (const d3_tri_coord of d3_tri_coords) {
         // TODO use the posis_map!!
         // const deauny_posi_i: number = __model__.modeldata.geom.add.addPosi();
-        // __model__.modeldata.attribs.posis.setPosiCoords(deauny_posi_i, [point[0], point[1], 0]);
+        // __model__.modeldata.attribs.add.setPosiCoords(deauny_posi_i, [point[0], point[1], 0]);
         const delaunay_posi_i: number = _getPosiFromMap(__model__, d3_tri_coord[0], d3_tri_coord[1], posis_map);
         delaunay_posis_i.push(delaunay_posi_i);
     }
@@ -785,9 +865,10 @@ function _booleanPlines(__model__: GIModel, plines_i: number|number[], b_shape: 
         method: _EBooleanMethod, posis_map: TPosisMap): number[] {
     if (!Array.isArray(plines_i)) {
         plines_i = plines_i as number;
-        const wire_i: number = __model__.modeldata.geom.nav.navPlineToWire(plines_i);
-        const is_closed: boolean = __model__.modeldata.geom.query.isWireClosed(wire_i);
-        const a_shape: Shape = _convertWireToShape(__model__, wire_i, is_closed, posis_map);
+        // const wire_i: number = __model__.modeldata.geom.nav.navPlineToWire(plines_i);
+        // const is_closed: boolean = __model__.modeldata.geom.query.isWireClosed(wire_i);
+        // const a_shape: Shape = _convertWireToShape(__model__, wire_i, is_closed, posis_map);
+        const a_shape: Shape = _convertPlineToShape(__model__, plines_i, posis_map);
         let result_shape: Shape;
         switch (method) {
             case _EBooleanMethod.INTERSECT:
@@ -804,7 +885,7 @@ function _booleanPlines(__model__: GIModel, plines_i: number|number[], b_shape: 
             default:
                 break;
         }
-        return _convertShapeToPlines(__model__, result_shape, is_closed, posis_map);
+        return _convertShapeToCutPlines(__model__, result_shape, posis_map);
     } else {
         plines_i = plines_i as number[];
         const all_new_plines: number[] = [];

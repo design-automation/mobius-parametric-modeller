@@ -63,9 +63,13 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     public SelectingEntityType: { id: number, name: string } = { id: EEntType.PGON, name: 'Polygons' };
     public selectDropdownVisible = false;
     public selections = [
-        { id: EEntType.POSI, name: 'Positions' }, { id: EEntType.VERT, name: 'Vertex' },
-        { id: EEntType.EDGE, name: 'Edges' }, { id: EEntType.WIRE, name: 'Wires' },
-        { id: EEntType.POINT, name: 'Points' }, { id: EEntType.PLINE, name: 'Polylines' }, { id: EEntType.PGON, name: 'Polygons' },
+        { id: EEntType.POSI, name: 'Positions' },
+        { id: EEntType.VERT, name: 'Vertex' },
+        { id: EEntType.EDGE, name: 'Edges' },
+        { id: EEntType.WIRE, name: 'Wires' },
+        { id: EEntType.POINT, name: 'Points' },
+        { id: EEntType.PLINE, name: 'Polylines' },
+        { id: EEntType.PGON, name: 'Polygons' },
         { id: EEntType.COLL, name: 'Collections' }];
     public default_selections = {
         ps: { id: EEntType.POSI, name: 'Positions' },
@@ -801,7 +805,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         if (select && select.enabledselector) {
             this.selections = [];
             for (const i in select.enabledselector) {
-                if (select.enabledselector[i]) { this.selections.push( this.default_selections[i]); }
+                if (select.enabledselector[i] && this.default_selections[i]) { this.selections.push( this.default_selections[i]); }
             }
         }
         if (select !== undefined && select.selector && this.selections.indexOf(select.selector) !== -1) {

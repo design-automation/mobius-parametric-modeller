@@ -32,7 +32,6 @@ export class DataService {
         this.selected_ents.set(EEntTypeStr[EEntType.POSI], new Map());
         this.selected_ents.set(EEntTypeStr[EEntType.VERT], new Map());
         this.selected_ents.set(EEntTypeStr[EEntType.EDGE], new Map());
-        this.selected_ents.set(EEntTypeStr[EEntType.FACE], new Map());
         this.selected_ents.set(EEntTypeStr[EEntType.WIRE], new Map());
         this.selected_ents.set(EEntTypeStr[EEntType.PGON], new Map());
         this.selected_ents.set(EEntTypeStr[EEntType.PLINE], new Map());

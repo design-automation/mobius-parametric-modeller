@@ -10,8 +10,8 @@
 import { checkIDs, ID } from '../_check_ids';
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TPlane, Txyz, EEntType, TRay, TEntTypeIdx, EEntTypeStr, Txy} from '@libs/geo-info/common';
-import { getArrDepth, isColl, isPosi, isPgon, isPline, isPoint } from '@assets/libs/geo-info/common_id_funcs';
+import { TId, TPlane, Txyz, EEntType, TRay, TEntTypeIdx } from '@libs/geo-info/common';
+import { getArrDepth } from '@assets/libs/geo-info/common_id_funcs';
 import { vecDiv, vecSum, vecAvg, vecFromTo, vecLen, vecCross, vecNorm, vecAdd, vecSetLen, vecDot } from '@assets/libs/geom/vectors';
 import { isRay, isPlane, isXYZ } from '@assets/libs/geo-info/common_func';
 import { rayFromPln } from '@assets/core/inline/_ray';
@@ -279,19 +279,19 @@ export function getPlanesSeq(xyzs: Txyz[], normal: Txyz, close: boolean): TPlane
 //     const depth: number = getArrDepth(ents_arr);
 //     if (depth === 1) {
 //         const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
-//         if (isColl(ent_type)) {
+//         if (ent_type === EEntType.COLL) {
 //             const coll_i: number = __model__.modeldata.geom.add.copyColls(index, copy_attributes) as number;
 //             return [ent_type, coll_i];
-//         } else if (isPgon(ent_type)) {
+//         } else if (ent_type === EEntType.PGON) {
 //             const obj_i: number = __model__.modeldata.geom.add.copyPgons(index, copy_attributes) as number;
 //             return [ent_type, obj_i];
-//         } else if (isPline(ent_type)) {
+//         } else if (ent_type === EEntType.PLINE) {
 //             const obj_i: number = __model__.modeldata.geom.add.copyPlines(index, copy_attributes) as number;
 //             return [ent_type, obj_i];
-//         } else if (isPoint(ent_type)) {
+//         } else if (ent_type === EEntType.POINT) {
 //             const obj_i: number = __model__.modeldata.geom.add.copyPoints(index, copy_attributes) as number;
 //             return [ent_type, obj_i];
-//         } else if (isPosi(ent_type)) {
+//         } else if (ent_type === EEntType.POSI) {
 //             const posi_i: number = __model__.modeldata.geom.add.copyPosis(index, copy_attributes) as number;
 //             return [ent_type, posi_i];
 //         }
@@ -320,7 +320,7 @@ export function getPlanesSeq(xyzs: Txyz[], normal: Txyz, close: boolean): TPlane
 //         // if you copy a pgon + posi, if you process the pgon first you wil make a copy of the posis
 //         // but the posi may already be copied by the _copyGeom function, then we get two copies of that posi
 //         // I think this whole copy-move function need to to be moved to the GI library, can also make it more efficient
-//         if (isPosi(ent_type) && vector !== null) { // positions
+//         if (ent_type === EEntType.POSI && vector !== null) { // positions
 //             const old_posi_i: number = index;
 //             let new_posi_i: number;
 //             if (old_to_new_posis_i_map.has(old_posi_i)) {

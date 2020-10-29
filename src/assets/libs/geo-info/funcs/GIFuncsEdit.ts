@@ -1,7 +1,7 @@
-import { interpByNum, interpByLen, vecCross } from '@libs/geom/vectors';
-import { EEntType, Txyz, TEntTypeIdx, TPlane, IEntSets } from '../common';
+import { interpByNum, interpByLen } from '@libs/geom/vectors';
+import { EEntType, Txyz, TEntTypeIdx, IEntSets } from '../common';
 import { distance } from '@libs/geom/distance';
-import { getArrDepth, isEdge } from '../common_id_funcs';
+import { getArrDepth } from '../common_id_funcs';
 import { GIModelData } from '../GIModelData';
 import { TypedArrayUtils } from '@libs/TypedArrayUtils.js';
 import * as THREE from 'three';
@@ -50,7 +50,7 @@ export class GIFuncsEdit {
             this.modeldata.getObjsCheckTs(ent_type, ent_i);
             //
             let exist_edges_i: number[];
-            if (!isEdge(ent_type)) {
+            if (ent_type !== EEntType.EDGE) {
                 exist_edges_i = this.modeldata.geom.nav.navAnyToEdge(ent_type, ent_i).slice();
             } else {
                 exist_edges_i = [ent_i];

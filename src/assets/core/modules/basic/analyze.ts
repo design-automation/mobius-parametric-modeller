@@ -11,7 +11,7 @@ import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, Txy, EAttribDataTypeStrs } from '@libs/geo-info/common';
-import { getArrDepth, idsMakeFromIndicies, idsMake, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
+import { getArrDepth, idsMakeFromIdxs, idsMake, idsBreak, idMake } from '@assets/libs/geo-info/common_id_funcs';
 import { distance } from '@libs/geom/distance';
 import { vecAdd, vecCross, vecMult, vecNorm, vecAng2, vecSetLen, vecRot } from '@libs/geom/vectors';
 import uscore from 'underscore';
@@ -185,7 +185,7 @@ function _raytrace(origins_tjs: THREE.Vector3[], dirs_tjs: THREE.Vector3[], mesh
             hit_count += 1;
             if (method === _ERaytraceMethod.ALL || method === _ERaytraceMethod.HIT_PGONS) {
                 const face_i = mesh[1][isects[0].faceIndex];
-                result_ents.push( idsMake([EEntType.PGON, face_i]) as TId );
+                result_ents.push( idMake(EEntType.PGON, face_i) as TId );
             }
             if (method === _ERaytraceMethod.ALL || method === _ERaytraceMethod.INTERSECTIONS) {
                 const isect_tjs: THREE.Vector3 = isects[0].point;
@@ -956,7 +956,7 @@ function _sunPathGenPosis(__model__: GIModel, rays_dirs_tjs: THREE.Vector3[],
         __model__.modeldata.attribs.posis.setPosiCoords(posi_i, xyz);
         posis_i.push(posi_i);
     }
-    return idsMakeFromIndicies(EEntType.POSI, posis_i) as TId[];
+    return idsMakeFromIdxs(EEntType.POSI, posis_i) as TId[];
 }
 // ================================================================================================
 /**
@@ -1017,8 +1017,8 @@ export function Nearest(__model__: GIModel,
         _nearest(__model__, source_posis_i, target_posis_i, radius, max_neighbors);
     // return dictionary with results
     return {
-        'posis': idsMakeFromIndicies(EEntType.POSI, result[0]) as TId[],
-        'neighbors': idsMakeFromIndicies(EEntType.POSI, result[1]) as TId[][]|TId[],
+        'posis': idsMakeFromIdxs(EEntType.POSI, result[0]) as TId[],
+        'neighbors': idsMakeFromIdxs(EEntType.POSI, result[1]) as TId[][]|TId[],
         'distances': result[2] as number[]|number[][]
     };
 }
@@ -1294,18 +1294,18 @@ export function ShortestPath(__model__: GIModel, source: TId|TId[]|TId[][][], ta
     }
     const dict: TShortestPathResult = {};
     if (return_dists) {
-        dict.source_posis = idsMakeFromIndicies(EEntType.POSI, source_posis_i) as TId[];
+        dict.source_posis = idsMakeFromIdxs(EEntType.POSI, source_posis_i) as TId[];
         dict.distances = source_posis_i.length === 1 ? all_path_dists[0] : all_path_dists;
     }
     if (return_counts) {
-        dict.edges = idsMakeFromIndicies(EEntType.EDGE, Array.from(map_edges_i.keys())) as TId[];
+        dict.edges = idsMakeFromIdxs(EEntType.EDGE, Array.from(map_edges_i.keys())) as TId[];
         dict.edges_count = Array.from(map_edges_i.values());
-        dict.posis =  idsMakeFromIndicies(EEntType.POSI, Array.from(map_posis_i.keys())) as TId[];
+        dict.posis =  idsMakeFromIdxs(EEntType.POSI, Array.from(map_posis_i.keys())) as TId[];
         dict.posis_count =  Array.from(map_posis_i.values());
     }
     if (return_paths) {
-        dict.edge_paths =  idsMakeFromIndicies(EEntType.EDGE, edge_paths) as TId[][];
-        dict.posi_paths =  idsMakeFromIndicies(EEntType.POSI, posi_paths) as TId[][];
+        dict.edge_paths =  idsMakeFromIdxs(EEntType.EDGE, edge_paths) as TId[][];
+        dict.posi_paths =  idsMakeFromIdxs(EEntType.POSI, posi_paths) as TId[][];
     }
     return dict;
 }
@@ -1612,18 +1612,18 @@ export function ClosestPath(__model__: GIModel, source: TId|TId[]|TId[][][], tar
     }
     const dict: TClosestPathResult = {};
     if (return_dists) {
-        dict.source_posis = idsMakeFromIndicies(EEntType.POSI, source_posis_i) as TId[];
+        dict.source_posis = idsMakeFromIdxs(EEntType.POSI, source_posis_i) as TId[];
         dict.distances = path_dists;
     }
     if (return_counts) {
-        dict.edges = idsMakeFromIndicies(EEntType.EDGE, Array.from(map_edges_i.keys())) as TId[];
+        dict.edges = idsMakeFromIdxs(EEntType.EDGE, Array.from(map_edges_i.keys())) as TId[];
         dict.edges_count = Array.from(map_edges_i.values());
-        dict.posis =  idsMakeFromIndicies(EEntType.POSI, Array.from(map_posis_i.keys())) as TId[];
+        dict.posis =  idsMakeFromIdxs(EEntType.POSI, Array.from(map_posis_i.keys())) as TId[];
         dict.posis_count =  Array.from(map_posis_i.values());
     }
     if (return_paths) {
-        dict.edge_paths =  idsMakeFromIndicies(EEntType.EDGE, edge_paths) as TId[][];
-        dict.posi_paths =  idsMakeFromIndicies(EEntType.POSI, posi_paths) as TId[][];
+        dict.edge_paths =  idsMakeFromIdxs(EEntType.EDGE, edge_paths) as TId[][];
+        dict.posi_paths =  idsMakeFromIdxs(EEntType.POSI, posi_paths) as TId[][];
     }
     return dict;
 }
@@ -1817,7 +1817,7 @@ function _centralityDegreeDirected(posis_i: number[], cy_network: any, alpha: nu
         outdegree.push( cy_centrality.outdegree(source_elem) );
     }
     return {
-        'posis': idsMakeFromIndicies(EEntType.POSI, posis_i),
+        'posis': idsMakeFromIdxs(EEntType.POSI, posis_i),
         'indegree': indegree,
         'outdegree': outdegree
     };
@@ -1834,7 +1834,7 @@ function _centralityDegreeUndirected(posis_i: number[], cy_network: any, alpha: 
         degree.push( cy_centrality.degree(source_elem) );
     }
     return {
-        'posis': idsMakeFromIndicies(EEntType.POSI, posis_i),
+        'posis': idsMakeFromIdxs(EEntType.POSI, posis_i),
         'degree': degree
     };
 }
@@ -1971,7 +1971,7 @@ function _centralityCloseness(posis_i: number[], cy_network: cytoscape.Core,  di
         comps.push(comp);
     }
     return {
-        'posis': idsMakeFromIndicies(EEntType.POSI, result_posis_i),
+        'posis': idsMakeFromIdxs(EEntType.POSI, result_posis_i),
         'centrality': results
     };
 }
@@ -1993,7 +1993,7 @@ function _centralityHarmonic(posis_i: number[], cy_network: cytoscape.Core,  dir
         results.push( result );
     }
     return {
-        'posis': idsMakeFromIndicies(EEntType.POSI, posis_i),
+        'posis': idsMakeFromIdxs(EEntType.POSI, posis_i),
         'centrality': results
     };
 }
@@ -2012,7 +2012,7 @@ function _centralityBetweenness(posis_i: number[], cy_network: cytoscape.Core, d
         results.push( result );
     }
     return {
-        'posis': idsMakeFromIndicies(EEntType.POSI, posis_i),
+        'posis': idsMakeFromIdxs(EEntType.POSI, posis_i),
         'centrality': results
     };
 }

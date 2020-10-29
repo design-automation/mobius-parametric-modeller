@@ -15,7 +15,7 @@ import { download } from '@libs/filesys/download';
 import { TId, EEntType, TEntTypeIdx, IEntSets } from '@libs/geo-info/common';
 // import { __merge__ } from '../_model';
 // import { _model } from '..';
-import { idsMake, idsBreak, idsMakeFromIndicies } from '@assets/libs/geo-info/common_id_funcs';
+import { idsMake, idsBreak, idsMakeFromIdxs, idMake } from '@assets/libs/geo-info/common_id_funcs';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
 import JSZip from 'jszip';
 
@@ -112,13 +112,13 @@ export function _import(__model__: GIModel, model_data: string, data_format: _EI
     switch (data_format) {
         case _EIODataFormat.GI:
             const gi_colls_i: number[]  = _importGI(__model__, <string> model_data);
-            return idsMakeFromIndicies(EEntType.COLL, gi_colls_i) as TId|TId[];
+            return idsMakeFromIdxs(EEntType.COLL, gi_colls_i) as TId|TId[];
         case _EIODataFormat.OBJ:
             const obj_coll_i: number  = _importObj(__model__, <string> model_data);
-            return idsMake([EEntType.COLL, obj_coll_i]) as TId;
+            return idMake(EEntType.COLL, obj_coll_i) as TId;
         case _EIODataFormat.GEOJSON:
             const gj_coll_i: number  = _importGeojson(__model__, <string> model_data);
-            return idsMake([EEntType.COLL, gj_coll_i]) as TId;
+            return idMake(EEntType.COLL, gj_coll_i) as TId;
         default:
             throw new Error('Import type not recognised');
     }

@@ -12,7 +12,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { EEntType, TId, TEntTypeIdx, Txyz, Txy, TPlane } from '@libs/geo-info/common';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
 import Shape from '@doodle3d/clipper-js';
-import { isEmptyArr, idsMake, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
+import { isEmptyArr, idsMake, idsBreak, idsMakeFromIdxs, idMake } from '@assets/libs/geo-info/common_id_funcs';
 import * as d3del from 'd3-delaunay';
 import * as d3poly from 'd3-polygon';
 import * as d3vor from 'd3-voronoi';
@@ -453,7 +453,8 @@ export function Voronoi(__model__: GIModel, pgons: TId|TId[], entities: TId|TId[
         }
     }
     // return cell pgons
-    return idsMake(all_cells_i.map( cell_i => [EEntType.PGON, cell_i] as TEntTypeIdx )) as TId[];
+    return idsMakeFromIdxs(EEntType.PGON, all_cells_i) as TId[];
+    // return idsMake(all_cells_i.map( cell_i => [EEntType.PGON, cell_i] as TEntTypeIdx )) as TId[];
 }
 // There is a bug in d3 new voronoi, it produces wrong results...
 // function _voronoi(__model__: GIModel, pgon_shape: Shape, d3_cell_points: [number, number][],
@@ -539,7 +540,8 @@ export function Delaunay(__model__: GIModel, entities: TId|TId[]): TId[] {
     // create delaunay triangulation
     const cells_i: number[] = _delaunay(__model__, d3_tri_coords, posis_map);
     // return cell pgons
-    return idsMake(cells_i.map( cell_i => [EEntType.PGON, cell_i] as TEntTypeIdx )) as TId[];
+    return idsMakeFromIdxs(EEntType.PGON, cells_i) as TId[];
+    // return idsMake(cells_i.map( cell_i => [EEntType.PGON, cell_i] as TEntTypeIdx )) as TId[];
 }
 function _delaunay(__model__: GIModel, d3_tri_coords: [number, number][], posis_map: TPosisMap): number[] {
     const new_pgons_i: number[] = [];
@@ -589,7 +591,7 @@ export function ConvexHull(__model__: GIModel, entities: TId|TId[]): TId {
     const hull_posis_i: number[] = _convexHull(__model__, posis_i);
     // return cell pgons
     const hull_pgon_i: number = __model__.modeldata.geom.add.addPgon(hull_posis_i);
-    return idsMake([EEntType.PGON, hull_pgon_i]) as TId;
+    return idMake(EEntType.PGON, hull_pgon_i) as TId;
 }
 function _convexHull(__model__: GIModel, posis_i: number[]): number[] {
     const points: [number, number][] = [];
@@ -655,7 +657,7 @@ export function BBoxPolygon(__model__: GIModel, entities: TId|TId[], method: _EB
         default:
             break;
     }
-    return idsMake([EEntType.PGON, pgon_i]) as TId;
+    return idMake(EEntType.PGON, pgon_i) as TId;
 }
 function _bboxAABB(__model__: GIModel, posis_i: number[]): number {
     const bbox: [number, number, number, number] = [Infinity, Infinity, -Infinity, -Infinity];
@@ -763,7 +765,8 @@ export function Union(__model__: GIModel, entities: TId|TId[]): TId[] {
     const result_shape: Shape = _convertPgonsToShapeUnion(__model__, pgons_i, posis_map);
     if (result_shape === null) { return []; }
     const all_new_pgons: number[] = _convertShapesToPgons(__model__, result_shape, posis_map);
-    return idsMake(all_new_pgons.map( pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx )) as TId[];
+    return idsMakeFromIdxs(EEntType.PGON, all_new_pgons) as TId[];
+    // return idsMake(all_new_pgons.map( pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx )) as TId[];
 }
 // ================================================================================================
 /**
@@ -818,11 +821,13 @@ export function Boolean(__model__: GIModel, a_entities: TId|TId[], b_entities: T
     const new_plines_i: number[] = _booleanPlines(__model__, a_plines_i, b_shape, method, posis_map);
     // make the list of polylines and polygons
     const result_ents: TId[] = [];
-    const new_pgons: TId[] = idsMake(new_pgons_i.map( pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx )) as TId[];
+    const new_pgons: TId[] = idsMakeFromIdxs(EEntType.PGON, new_pgons_i) as TId[];
+    // const new_pgons: TId[] = idsMake(new_pgons_i.map( pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx )) as TId[];
     for (const new_pgon of new_pgons) {
         result_ents.push(new_pgon);
     }
-    const new_plines: TId[] = idsMake(new_plines_i.map( pline_i => [EEntType.PLINE, pline_i] as TEntTypeIdx )) as TId[];
+    const new_plines: TId[] = idsMakeFromIdxs(EEntType.PLINE, new_plines_i) as TId[];
+    // const new_plines: TId[] = idsMake(new_plines_i.map( pline_i => [EEntType.PLINE, pline_i] as TEntTypeIdx )) as TId[];
     for (const new_pline of new_plines) {
         result_ents.push(new_pline);
     }
@@ -1345,21 +1350,21 @@ export function Clean(__model__: GIModel, entities: TId|TId[], tolerance: number
     }
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();
-    const all_new_pgons: TEntTypeIdx[] = [];
+    const all_new_ents: TEntTypeIdx[] = [];
     const [pgons_i, plines_i]: [number[], number[]] = _getPgonsPlines(__model__, ents_arr);
     for (const pgon_i of pgons_i) {
         const new_pgons_i: number[] = _cleanPgon(__model__, pgon_i, tolerance, posis_map);
         for (const new_pgon_i of new_pgons_i) {
-            all_new_pgons.push([EEntType.PGON, new_pgon_i]);
+            all_new_ents.push([EEntType.PGON, new_pgon_i]);
         }
     }
     for (const pline_i of plines_i) {
         const new_plines_i: number[] = _cleanPline(__model__, pline_i, tolerance, posis_map);
         for (const new_pline_i of new_plines_i) {
-            all_new_pgons.push([EEntType.PLINE, new_pline_i]);
+            all_new_ents.push([EEntType.PLINE, new_pline_i]);
         }
     }
-    return idsMake(all_new_pgons) as TId[];
+    return idsMake(all_new_ents) as TId[];
 }
 function _cleanPgon(__model__: GIModel, pgon_i: number, tolerance: number, posis_map: TPosisMap): number[] {
     const shape: Shape = _convertPgonToShape(__model__, pgon_i, posis_map);

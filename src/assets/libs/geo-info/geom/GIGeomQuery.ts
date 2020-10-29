@@ -1,7 +1,6 @@
 
 import {  EEntType, IGeomMaps, EEntStrToGeomMaps, TWire, Txyz, TEntTypeIdx,
-    EWireType, TEdge, IEntSets, EAttribNames } from '../common';
-import { isPosi, isPoint, isPline, isPgon, isColl } from '../common_id_funcs';
+    EWireType, TEdge, IEntSets } from '../common';
 import { vecFromTo, vecCross, vecDiv, vecNorm, vecLen, vecDot } from '../../geom/vectors';
 import * as Mathjs from 'mathjs';
 import { GIModelData } from '../GIModelData';
@@ -99,7 +98,7 @@ export class GIGeomQuery {
         // process all the ents, but not posis of the ents, we will do that at the end
         for (const ent_arr of ents) {
             const [ent_type, ent_i]: TEntTypeIdx = ent_arr as TEntTypeIdx;
-            if (isColl(ent_type)) {
+            if (ent_type === EEntType.COLL) {
                 // get the descendants of this collection
                 const coll_and_desc_i: number[] = this.modeldata.attribs.colls.getCollDescendents(ent_i);
                 coll_and_desc_i.splice(0, 0, ent_i);
@@ -116,13 +115,13 @@ export class GIGeomQuery {
                     }
                     ent_sets.co.add(one_coll_i);
                 }
-            } else if (isPgon(ent_type)) {
+            } else if (ent_type === EEntType.PGON) {
                 ent_sets.pg.add(ent_i);
-            } else if (isPline(ent_type)) {
+            } else if (ent_type === EEntType.PLINE) {
                 ent_sets.pl.add(ent_i);
-            } else if (isPoint(ent_type)) {
+            } else if (ent_type === EEntType.POINT) {
                 ent_sets.pt.add(ent_i);
-            } else if (isPosi(ent_type)) {
+            } else if (ent_type === EEntType.POSI) {
                 ent_sets.ps.add(ent_i);
             }
         }

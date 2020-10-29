@@ -1,7 +1,6 @@
 
 import {  EEntType, IGeomMaps, EEntStrToGeomMaps, TWire, Txyz, TEntTypeIdx,
-    EWireType, TEdge, IEntSets, EAttribNames } from '../common';
-import { isPosi, isPoint, isPline, isPgon, isColl } from '../common_id_funcs';
+    EWireType, TEdge, IEntSets } from '../common';
 import { vecFromTo, vecCross, vecDiv, vecNorm, vecLen, vecDot } from '../../geom/vectors';
 import * as Mathjs from 'mathjs';
 import { GIModelData } from '../GIModelData';
@@ -99,7 +98,7 @@ export class GIGeomQuery {
         // process all the ents, but not posis of the ents, we will do that at the end
         for (const ent_arr of ents) {
             const [ent_type, ent_i]: TEntTypeIdx = ent_arr as TEntTypeIdx;
-            if (isColl(ent_type)) {
+            if (ent_type === EEntType.COLL) {
                 // get the descendants of this collection
                 const coll_and_desc_i: number[] = this.modeldata.attribs.colls.getCollDescendents(ent_i);
                 coll_and_desc_i.splice(0, 0, ent_i);
@@ -116,13 +115,13 @@ export class GIGeomQuery {
                     }
                     ent_sets.co.add(one_coll_i);
                 }
-            } else if (isPgon(ent_type)) {
+            } else if (ent_type === EEntType.PGON) {
                 ent_sets.pg.add(ent_i);
-            } else if (isPline(ent_type)) {
+            } else if (ent_type === EEntType.PLINE) {
                 ent_sets.pl.add(ent_i);
-            } else if (isPoint(ent_type)) {
+            } else if (ent_type === EEntType.POINT) {
                 ent_sets.pt.add(ent_i);
-            } else if (isPosi(ent_type)) {
+            } else if (ent_type === EEntType.POSI) {
                 ent_sets.ps.add(ent_i);
             }
         }
@@ -423,28 +422,8 @@ export class GIGeomQuery {
      *
      * @param pgon_i
      */
-    public getPgonNormal(ssid: number, pgon_i: number): Txyz {
-        const normal: Txyz = [0, 0, 0];
-        const tris_i: number[] = this.modeldata.geom._geom_maps.dn_pgons_tris.get(pgon_i);
-        let count = 0;
-        for (const tri_i of tris_i) {
-            const posis_i: number[] = this._geom_maps.dn_tris_verts.get(tri_i).map(vert_i => this._geom_maps.dn_verts_posis.get(vert_i));
-            const xyzs: Txyz[] = posis_i.map(posi_i => this.modeldata.attribs.attribs_maps.get(ssid).ps.get(EAttribNames.COORDS).getEntVal(posi_i) as Txyz);
-            const vec_a: Txyz = vecFromTo(xyzs[0], xyzs[1]);
-            const vec_b: Txyz = vecFromTo(xyzs[0], xyzs[2]); // CCW
-            const tri_normal: Txyz = vecCross(vec_a, vec_b, true);
-            if (!(tri_normal[0] === 0 && tri_normal[1] === 0 && tri_normal[2] === 0)) {
-                count += 1;
-                normal[0] += tri_normal[0];
-                normal[1] += tri_normal[1];
-                normal[2] += tri_normal[2];
-            }
-        }
-        if (count === 0) { return [0, 0, 0]; }
-        return vecDiv(normal, count);
-    }
-    public getPgonNormalActive(pgon_i: number): Txyz {
-        return this.getPgonNormal(this.modeldata.active_ssid, pgon_i);
+    public getPgonNormal(pgon_i: number): Txyz {
+        return this.modeldata.geom.snapshot.getPgonNormal(this.modeldata.active_ssid, pgon_i);
     }
     // ============================================================================
     // Calculate

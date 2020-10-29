@@ -1,7 +1,7 @@
 import { vecAdd, vecCross, vecDiv, vecDot, vecFromTo, vecLen, vecNorm, vecSetLen, vecSum } from '../../geom/vectors';
 import { EEntType, Txyz, TEntTypeIdx, TPlane, TRay } from '../common';
 import * as THREE from 'three';
-import { getArrDepth, isColl, isPgon, isPline, isPoint, isPosi } from '../common_id_funcs';
+import { getArrDepth } from '../common_id_funcs';
 import { GIModelData } from '../GIModelData';
 const EPS = 1e-8;
 
@@ -286,7 +286,7 @@ export class GIFuncsCommon {
             // something may not be right here
             // if you copy a pgon + posi, if you process the pgon first you wil make a copy of the posis
             // but the posi may already be copied by the this.copyGeom function, then we get two copies of that posi
-            if (isPosi(ent_type)) { // positions
+            if (ent_type === EEntType.POSI) { // positions
                 const old_posi_i: number = index;
                 let new_posi_i: number;
                 if (!old_to_new_posis_i_map.has(old_posi_i)) {

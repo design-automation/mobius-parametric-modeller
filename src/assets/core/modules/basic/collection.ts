@@ -10,7 +10,7 @@ import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, TEntTypeIdx, EFilterOperatorTypes, EAttribNames } from '@libs/geo-info/common';
-import { isPoint, isPline, isPgon, isColl, idsMake, getArrDepth, isEmptyArr, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
+import { idsMake, getArrDepth, isEmptyArr, idsBreak, idMake, idsMakeFromIdxs } from '@assets/libs/geo-info/common_id_funcs';
 // import { __merge__} from '../_model';
 // import { _model } from '..';
 import { arrMakeFlat } from '@libs/util/arrs';
@@ -84,10 +84,10 @@ function _create(__model__: GIModel, ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEn
     const pgons_i: number[] = [];
     const child_colls_i: number[] = [];
     for (const ent_arr of ents_arr) {
-        if (isPoint(ent_arr[0])) { points_i.push(ent_arr[1]); }
-        if (isPline(ent_arr[0])) { plines_i.push(ent_arr[1]); }
-        if (isPgon(ent_arr[0])) { pgons_i.push(ent_arr[1]); }
-        if (isColl(ent_arr[0])) { child_colls_i.push(ent_arr[1]); }
+        if (ent_arr[0] === EEntType.POSI) { points_i.push(ent_arr[1]); }
+        if (ent_arr[0] === EEntType.PLINE) { plines_i.push(ent_arr[1]); }
+        if (ent_arr[0] === EEntType.PGON) { pgons_i.push(ent_arr[1]); }
+        if (ent_arr[0] === EEntType.COLL) { child_colls_i.push(ent_arr[1]); }
     }
     // create the collection, setting tha parent to -1
     const coll_i: number = __model__.modeldata.geom.add.addColl();
@@ -123,9 +123,10 @@ export function Get(__model__: GIModel, names: string|string[]): TId|TId[] {
     if (colls_i.length === 0) {
         return []; // return an empty list
     } else if (colls_i.length === 1) {
-        return idsMake([EEntType.COLL, colls_i[0]]) as TId;
+        return idMake(EEntType.COLL, colls_i[0]) as TId;
     }
-    return idsMake(colls_i.map(coll_i => [EEntType.COLL, coll_i]) as TEntTypeIdx[]) as TId[];
+    return idsMakeFromIdxs(EEntType.COLL, colls_i) as TId[];
+    // return idsMake(colls_i.map(coll_i => [EEntType.COLL, coll_i]) as TEntTypeIdx[]) as TId[];
 }
 function _get(__model__: GIModel, names: string|string[]): number[] {
     if (!Array.isArray(names)) {

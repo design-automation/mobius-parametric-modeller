@@ -12,7 +12,7 @@ import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, TBBox, Txy } from '@libs/geo-info/common';
-import { isPline, isWire, isEdge, isPgon, getArrDepth, isVert, isPosi, isPoint, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
+import { getArrDepth, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
 import { distance } from '@libs/geom/distance';
 import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm, vecSetLen } from '@libs/geom/vectors';
 import { triangulate } from '@libs/triangulate/triangulate';
@@ -359,7 +359,7 @@ export function Area(__model__: GIModel, entities: TId|TId[]): number|number[] {
 function _area(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): number|number[] {
     if (getArrDepth(ents_arrs) === 1) {
         const [ent_type, ent_i]: [EEntType, number] = ents_arrs as TEntTypeIdx;
-        if (isPgon(ent_type)) {
+        if (ent_type === EEntType.PGON) {
             // faces, these are already triangulated
             const tris_i: number[] = __model__.modeldata.geom.nav.navPgonToTri(ent_i);
             let total_area = 0;
@@ -370,10 +370,10 @@ function _area(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): number
                 total_area += tri_area;
             }
             return total_area;
-        } else if (isPline(ent_type) || isWire(ent_type)) {
+        } else if (ent_type === EEntType.PLINE || ent_type === EEntType.WIRE) {
             // wires, these need to be triangulated
             let wire_i: number = ent_i;
-            if (isPline(ent_type)) {
+            if (ent_type === EEntType.PLINE) {
                 wire_i = __model__.modeldata.geom.nav.navPlineToWire(ent_i);
             }
             if (!__model__.modeldata.geom.query.isWireClosed(wire_i)) {
@@ -557,24 +557,24 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
     if (getArrDepth(ents_arr) === 1) {
         const ent_type: EEntType = (ents_arr as TEntTypeIdx)[0];
         const index: number = (ents_arr as TEntTypeIdx)[1];
-        if (isPgon(ent_type)) {
-            const norm_vec: Txyz = __model__.modeldata.geom.query.getPgonNormalActive(index);
+        if (ent_type === EEntType.PGON) {
+            const norm_vec: Txyz = __model__.modeldata.geom.query.getPgonNormal(index);
             return vecMult(norm_vec, scale);
-        } else if (isPline(ent_type)) {
+        } else if (ent_type === EEntType.PLINE) {
             const norm_vec: Txyz = __model__.modeldata.geom.query.getWireNormal(__model__.modeldata.geom.nav.navPlineToWire(index));
             return vecMult(norm_vec, scale);
-        } else if (isWire(ent_type)) {
+        } else if (ent_type === EEntType.WIRE) {
             const norm_vec: Txyz = __model__.modeldata.geom.query.getWireNormal(index);
             return vecMult(norm_vec, scale);
-        } else if (isEdge(ent_type)) {
+        } else if (ent_type === EEntType.EDGE) {
             const verts_i: number[] = __model__.modeldata.geom.nav.navEdgeToVert(index);
             const norm_vecs: Txyz[] = verts_i.map( vert_i => _vertNormal(__model__, vert_i) );
             const norm_vec: Txyz = vecDiv( vecSum(norm_vecs), norm_vecs.length);
             return vecMult(norm_vec, scale);
-        } else if (isVert(ent_type)) {
+        } else if (ent_type === EEntType.VERT) {
             const norm_vec: Txyz = _vertNormal(__model__, index);
             return vecMult(norm_vec, scale);
-        } else if (isPosi(ent_type)) {
+        } else if (ent_type === EEntType.POSI) {
             const verts_i: number[] = __model__.modeldata.geom.nav.navPosiToVert(index);
             if (verts_i.length > 0) {
                 const norm_vecs: Txyz[] = verts_i.map( vert_i => _vertNormal(__model__, vert_i) );
@@ -582,7 +582,7 @@ export function _normal(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
                 return vecMult(norm_vec, scale);
             }
             return [0, 0, 0];
-        }  else if (isPoint(ent_type)) {
+        }  else if (ent_type === EEntType.POINT) {
             return [0, 0, 0];
         }
     } else {

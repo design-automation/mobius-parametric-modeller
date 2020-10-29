@@ -75,7 +75,7 @@ export class GIAttribsThreejs {
             for (const vert_i of this.modeldata.geom.nav.navAnyToVert(EEntType.PGON, pgon_i)) {
                 let normal: Txyz = verts_attrib.getEntVal(vert_i) as Txyz;
                 if (normal === undefined) {
-                    pgon_normal = this.modeldata.geom.query.getPgonNormal(ssid, pgon_i);
+                    pgon_normal = this.modeldata.geom.snapshot.getPgonNormal(ssid, pgon_i);
                     normal = pgon_normal;
                 }
                 normals[vert_i] = normal;

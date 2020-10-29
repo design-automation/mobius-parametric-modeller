@@ -2,7 +2,7 @@ import { multMatrix, xfromSourceTargetMatrix } from '../../geom/matrix';
 import { vecAdd, vecCross, vecDiv, vecFromTo, vecMult } from '../../geom/vectors';
 import { EEntType, Txyz, TEntTypeIdx, TPlane, EAttribNames } from '../common';
 import * as THREE from 'three';
-import { getArrDepth, idIndicies, isColl, isDim0, isDim2, isWire } from '../common_id_funcs';
+import { getArrDepth, getEntIdxs, isDim0, isDim2 } from '../common_id_funcs';
 import { GIModelData } from '../GIModelData';
 import { listZip } from '@assets/core/inline/_list';
 
@@ -108,7 +108,7 @@ export class GIFuncsMake {
                 throw new Error('Error in make.Polyline: Polylines must have at least two positions.');
             }
             const bool_close: boolean = (close === _EClose.CLOSE);
-            const posis_i: number[] = idIndicies(posis_arr as TEntTypeIdx[]);
+            const posis_i: number[] = getEntIdxs(posis_arr as TEntTypeIdx[]);
             const pline_i: number = this.modeldata.geom.add.addPline(posis_i, bool_close);
             return [EEntType.PLINE, pline_i] as TEntTypeIdx;
         } else {
@@ -183,7 +183,7 @@ export class GIFuncsMake {
             if (posis_arr.length < 3) {
                 throw new Error('Error in make.Polygon: Polygons must have at least three positions.');
             }
-            const posis_i: number[] = idIndicies(posis_arr as TEntTypeIdx[]);
+            const posis_i: number[] = getEntIdxs(posis_arr as TEntTypeIdx[]);
             const pgon_i: number = this.modeldata.geom.add.addPgon(posis_i);
             return [EEntType.PGON, pgon_i] as TEntTypeIdx;
         } else {
@@ -251,7 +251,7 @@ export class GIFuncsMake {
     public tin( ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx|TEntTypeIdx[] {
         const depth: number = getArrDepth(ents_arr);
         if (depth === 2) {
-            const posis_i: number[] = idIndicies(ents_arr as TEntTypeIdx[]);
+            const posis_i: number[] = getEntIdxs(ents_arr as TEntTypeIdx[]);
             const vtxs_tf: Txyz[] = [];
             for (const posi_i of posis_i) {
                 const xyz: Txyz = this.modeldata.attribs.posis.getPosiCoords(posi_i);
@@ -532,7 +532,7 @@ export class GIFuncsMake {
         if (getArrDepth(ents_arr) === 1) {
             const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
             // check if this is a collection, call this function again
-            if (isColl(ent_type)) {
+            if (ent_type === EEntType.COLL) {
                 return this._extrudeColl(index, extrude_vec, divisions, method);
             }
             // check if this is a position, a vertex, or a point -> pline
@@ -768,7 +768,7 @@ export class GIFuncsMake {
         // the xsection
         const [xsection_ent_type, xsection_index]: TEntTypeIdx = xsection_ent;
         let xsection_wire_i: number = null;
-        if (isWire(xsection_ent_type)) {
+        if (xsection_ent_type === EEntType.WIRE) {
             xsection_wire_i = xsection_index;
         } else {
             const xsection_wires_i: number[] = this.modeldata.geom.nav.navAnyToWire(xsection_ent_type, xsection_index);
@@ -777,7 +777,7 @@ export class GIFuncsMake {
         // get all the wires and put them into an array
         const backbone_wires_i: number[] = [];
         for (const [ent_type, index] of backbone_ents) {
-            if (isWire(ent_type)) {
+            if (ent_type === EEntType.WIRE) {
                 backbone_wires_i.push(index);
             } else {
                 const ent_wires_i: number[] = this.modeldata.geom.nav.navAnyToWire(ent_type, index);

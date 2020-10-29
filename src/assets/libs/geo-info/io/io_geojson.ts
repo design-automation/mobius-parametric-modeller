@@ -388,7 +388,7 @@ function _addPgonToModel(model: GIModel, polygon: any,
     const pgon_i: number = model.modeldata.geom.add.addPgon(rings[0], rings.slice(1));
     // check if it needs flipping
     // TODO there may be a faster way to do this
-    const normal: Txyz = model.modeldata.geom.query.getPgonNormalActive(pgon_i);
+    const normal: Txyz = model.modeldata.geom.query.getPgonNormal(pgon_i);
     if (vecDot(normal, [0, 0, 1]) < 0) {
         model.modeldata.geom.edit_topo.reverse(model.modeldata.geom.nav.navPgonToWire(pgon_i)[0]);
     }

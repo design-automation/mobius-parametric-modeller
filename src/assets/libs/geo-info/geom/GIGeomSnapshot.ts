@@ -1,5 +1,6 @@
+import { vecCross, vecDiv, vecFromTo } from '@assets/libs/geom/vectors';
 import { arrMakeFlat } from '../../util/arrs';
-import { EEntType, EEntTypeStr, IEntSets, IGeomMaps, ISnapshotData, TEntTypeIdx } from '../common';
+import { EAttribNames, EEntType, EEntTypeStr, IEntSets, IGeomMaps, ISnapshotData, TEntTypeIdx, Txyz } from '../common';
 import { GIModelData } from '../GIModelData';
 
 /**
@@ -68,7 +69,41 @@ export class GIGeomSnapshot {
         this.ss_data.delete( ssid );
     }
     // ============================================================================
-    // Query Active
+    // Add
+    // ============================================================================
+    /**
+     * Adds the ents to the active snapshot.
+     * Called when executing a global function.
+     * @param ent_type
+     */
+    public addEntsToActiveSnapshot(ents: TEntTypeIdx[]): void {
+        for (const [ent_type, ent_i] of ents) {
+            if (ent_type === EEntType.POSI || ent_type >= EEntType.POINT) {
+                this.ss_data.get(this.modeldata.active_ssid)[EEntTypeStr[ent_type]].add(ent_i);
+            }
+        }
+    }
+    /**
+     *
+     * @param ent_type
+     * @param ents_i
+     */
+    public addEnt(ssid: number, ent_type: EEntType, ents_i: number): void {
+        switch (ent_type) {
+            case EEntType.POSI:
+            case EEntType.POINT:
+            case EEntType.PLINE:
+            case EEntType.PGON:
+            case EEntType.COLL:
+                const ent_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[ent_type]];
+                ent_set.add(ents_i);
+                break;
+            default:
+                throw new Error('Adding entity to snapshot: invalid entity type.');
+        }
+    }
+    // ============================================================================
+    // Query
     // ============================================================================
     /**
      *
@@ -116,6 +151,9 @@ export class GIGeomSnapshot {
                 throw new Error('Entity type not recognised.');
         }
     }
+    // ============================================================================
+    // Get
+    // ============================================================================
     /**
      *
      * @param ent_type
@@ -129,17 +167,6 @@ export class GIGeomSnapshot {
             co: this.ss_data.get(ssid)[EEntTypeStr[EEntType.COLL]],
         };
         return ent_sets;
-    }
-    /**
-     * Adds the ents to the active snapshot.
-     * @param ent_type
-     */
-    public addEntsToActiveSnapshot(ents: TEntTypeIdx[]): void {
-        for (const [ent_type, ent_i] of ents) {
-            if (ent_type === EEntType.POSI || ent_type >= EEntType.POINT) {
-                this.ss_data.get(this.modeldata.active_ssid)[EEntTypeStr[ent_type]].add(ent_i);
-            }
-        }
     }
     /**
      * Get an array of all the ents in a snapshot.
@@ -218,27 +245,8 @@ export class GIGeomSnapshot {
         }
     }
     // ============================================================================
-    // Add, Del, Copy
+    // Delete geometry locally
     // ============================================================================
-    /**
-     *
-     * @param ent_type
-     * @param ents_i
-     */
-    public addEnt(ssid: number, ent_type: EEntType, ents_i: number): void {
-        switch (ent_type) {
-            case EEntType.POSI:
-            case EEntType.POINT:
-            case EEntType.PLINE:
-            case EEntType.PGON:
-            case EEntType.COLL:
-                const ent_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[ent_type]];
-                ent_set.add(ents_i);
-                break;
-            default:
-                throw new Error('Adding entity to snapshot: invalid entity type.');
-        }
-    }
     /**
      *
      * @param ent_type
@@ -273,14 +281,11 @@ export class GIGeomSnapshot {
         const ent_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[ent_type]];
         ent_set.clear();
     }
-    // ============================================================================
-    // Delete geometry locally
-    // ============================================================================
      /**
      * Delete ents
      * @param ent_sets
      */
-    public del(ssid: number, ent_sets: IEntSets): void {
+    public delEntSets(ssid: number, ent_sets: IEntSets): void {
         // delete the ents
         this.delColls(ssid, Array.from(ent_sets.co));
         this.delPgons(ssid, Array.from(ent_sets.pg), true);
@@ -379,6 +384,33 @@ export class GIGeomSnapshot {
      */
     public delColls(ssid: number, colls_i: number|number[]): void {
         this.delEnts(ssid, EEntType.COLL, colls_i);
+    }
+    // ============================================================================
+    // Others
+    // ============================================================================
+    /**
+     *
+     * @param pgon_i
+     */
+    public getPgonNormal(ssid: number, pgon_i: number): Txyz {
+        const normal: Txyz = [0, 0, 0];
+        const tris_i: number[] = this.modeldata.geom._geom_maps.dn_pgons_tris.get(pgon_i);
+        let count = 0;
+        for (const tri_i of tris_i) {
+            const posis_i: number[] = this._geom_maps.dn_tris_verts.get(tri_i).map(vert_i => this._geom_maps.dn_verts_posis.get(vert_i));
+            const xyzs: Txyz[] = posis_i.map(posi_i => this.modeldata.attribs.attribs_maps.get(ssid).ps.get(EAttribNames.COORDS).getEntVal(posi_i) as Txyz);
+            const vec_a: Txyz = vecFromTo(xyzs[0], xyzs[1]);
+            const vec_b: Txyz = vecFromTo(xyzs[0], xyzs[2]); // CCW
+            const tri_normal: Txyz = vecCross(vec_a, vec_b, true);
+            if (!(tri_normal[0] === 0 && tri_normal[1] === 0 && tri_normal[2] === 0)) {
+                count += 1;
+                normal[0] += tri_normal[0];
+                normal[1] += tri_normal[1];
+                normal[2] += tri_normal[2];
+            }
+        }
+        if (count === 0) { return [0, 0, 0]; }
+        return vecDiv(normal, count);
     }
     // ============================================================================
     // Debug

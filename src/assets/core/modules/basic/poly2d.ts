@@ -12,7 +12,7 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { EEntType, TId, TEntTypeIdx, Txyz, Txy, TPlane } from '@libs/geo-info/common';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
 import Shape from '@doodle3d/clipper-js';
-import { isEmptyArr, idsMake, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
+import { isEmptyArr, idsMake, idsBreak, idsMakeFromIdxs, idMake } from '@assets/libs/geo-info/common_id_funcs';
 import * as d3del from 'd3-delaunay';
 import * as d3poly from 'd3-polygon';
 import * as d3vor from 'd3-voronoi';
@@ -244,6 +244,29 @@ function _convertWireToShape(__model__: GIModel, wire_i: number, is_closed: bool
     shape.scaleUp(SCALE);
     return shape;
 }
+// mobius -> clipperjs
+function _convertPlineToShape(__model__: GIModel, pline_i: number,  posis_map: TPosisMap): Shape {
+    const wire_i: number = __model__.modeldata.geom.nav.navPlineToWire(pline_i);
+    const is_closed: boolean = __model__.modeldata.geom.query.isWireClosed(wire_i);
+    const shape_coords: TClipPaths = [];
+    shape_coords.push([]);
+    const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.PLINE, pline_i);
+    for (const posi_i of posis_i) {
+        const xyz: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(posi_i);
+        const coord: IClipCoord = {X: xyz[0], Y: xyz[1]};
+        shape_coords[0].push( coord );
+        _putPosiInMap(xyz[0], xyz[1], posi_i, posis_map);
+    }
+    if (is_closed) {
+        // close the pline by adding an extra point
+        const first: IClipCoord = shape_coords[0][0];
+        const last: IClipCoord = {X: first.X, Y: first.Y};
+        shape_coords[0].push(last);
+    }
+    const shape: Shape = new Shape(shape_coords, false); // this is always false, even if pline is closed
+    shape.scaleUp(SCALE);
+    return shape;
+}
 // clipperjs -> mobius
 function _convertShapesToPgons(__model__: GIModel, shapes: Shape|Shape[], posis_map: TPosisMap): number[] {
     shapes = Array.isArray(shapes) ? shapes : [shapes];
@@ -290,6 +313,63 @@ function _convertShapeToPlines(__model__: GIModel, shape: Shape, is_closed: bool
             plines_i.push(pgon_i);
         }
     }
+    return plines_i;
+}
+// clipperjs
+function _convertShapeToCutPlines(__model__: GIModel, shape: Shape, posis_map: TPosisMap): number[] {
+    shape.scaleDown(SCALE);
+    const sep_shapes: Shape[] = shape.separateShapes();
+    const lists_posis_i: number[][] = [];
+    for (const sep_shape of sep_shapes) {
+        const paths: TClipPaths = sep_shape.paths;
+        for (const path of paths) {
+            if (path.length === 0) { continue; }
+            const posis_i: number[] = [];
+            // make a list of posis
+            for (const coord of path) {
+                const posi_i: number = _getPosiFromMap(__model__, coord.X, coord.Y, posis_map);
+                posis_i.push(posi_i);
+            }
+            // must have at least 2 posis
+            if (posis_i.length < 2) { continue; }
+            // add the list
+            lists_posis_i.push(posis_i);
+        }
+    }
+    // see if there is a join between two lists
+    // this can occur when boolean with closed polylines
+    // for each closed polyline in the input, there can only be one merge
+    // this is the point where the end meets the start
+    const to_merge: number[][] = [];
+    for (let p = 0; p < lists_posis_i.length; p++) {
+        const posis0: number[] = lists_posis_i[p];
+        for (let q = 0; q < lists_posis_i.length; q++) {
+            const posis1: number[] = lists_posis_i[q];
+            if (p !== q && posis0[posis0.length - 1] === posis1[0]) {
+                to_merge.push([p, q]);
+            }
+        }
+    }
+    for (const [p, q] of to_merge) {
+        // copy posis from sub list q to sub list p
+        // skip the first posi
+        for (let idx = 1; idx < lists_posis_i[q].length; idx++) {
+            const posi_i: number = lists_posis_i[q][idx];
+            lists_posis_i[p].push(posi_i);
+        }
+        // set sub list q to null
+        lists_posis_i[q] = null;
+    }
+    // create plines and check closed
+    const plines_i: number[] = [];
+    for (const posis_i of lists_posis_i) {
+        if (posis_i === null) { continue; }
+        const is_closed = posis_i[0] === posis_i[posis_i.length - 1];
+        if (is_closed) { posis_i.splice(posis_i.length - 1, 1); }
+        const pline_i: number = __model__.modeldata.geom.add.addPline(posis_i, is_closed);
+        plines_i.push( pline_i );
+    }
+    // return the list of new plines
     return plines_i;
 }
 // clipperjs
@@ -373,7 +453,8 @@ export function Voronoi(__model__: GIModel, pgons: TId|TId[], entities: TId|TId[
         }
     }
     // return cell pgons
-    return idsMake(all_cells_i.map( cell_i => [EEntType.PGON, cell_i] as TEntTypeIdx )) as TId[];
+    return idsMakeFromIdxs(EEntType.PGON, all_cells_i) as TId[];
+    // return idsMake(all_cells_i.map( cell_i => [EEntType.PGON, cell_i] as TEntTypeIdx )) as TId[];
 }
 // There is a bug in d3 new voronoi, it produces wrong results...
 // function _voronoi(__model__: GIModel, pgon_shape: Shape, d3_cell_points: [number, number][],
@@ -459,7 +540,8 @@ export function Delaunay(__model__: GIModel, entities: TId|TId[]): TId[] {
     // create delaunay triangulation
     const cells_i: number[] = _delaunay(__model__, d3_tri_coords, posis_map);
     // return cell pgons
-    return idsMake(cells_i.map( cell_i => [EEntType.PGON, cell_i] as TEntTypeIdx )) as TId[];
+    return idsMakeFromIdxs(EEntType.PGON, cells_i) as TId[];
+    // return idsMake(cells_i.map( cell_i => [EEntType.PGON, cell_i] as TEntTypeIdx )) as TId[];
 }
 function _delaunay(__model__: GIModel, d3_tri_coords: [number, number][], posis_map: TPosisMap): number[] {
     const new_pgons_i: number[] = [];
@@ -468,7 +550,7 @@ function _delaunay(__model__: GIModel, d3_tri_coords: [number, number][], posis_
     for (const d3_tri_coord of d3_tri_coords) {
         // TODO use the posis_map!!
         // const deauny_posi_i: number = __model__.modeldata.geom.add.addPosi();
-        // __model__.modeldata.attribs.posis.setPosiCoords(deauny_posi_i, [point[0], point[1], 0]);
+        // __model__.modeldata.attribs.add.setPosiCoords(deauny_posi_i, [point[0], point[1], 0]);
         const delaunay_posi_i: number = _getPosiFromMap(__model__, d3_tri_coord[0], d3_tri_coord[1], posis_map);
         delaunay_posis_i.push(delaunay_posi_i);
     }
@@ -509,7 +591,7 @@ export function ConvexHull(__model__: GIModel, entities: TId|TId[]): TId {
     const hull_posis_i: number[] = _convexHull(__model__, posis_i);
     // return cell pgons
     const hull_pgon_i: number = __model__.modeldata.geom.add.addPgon(hull_posis_i);
-    return idsMake([EEntType.PGON, hull_pgon_i]) as TId;
+    return idMake(EEntType.PGON, hull_pgon_i) as TId;
 }
 function _convexHull(__model__: GIModel, posis_i: number[]): number[] {
     const points: [number, number][] = [];
@@ -575,7 +657,7 @@ export function BBoxPolygon(__model__: GIModel, entities: TId|TId[], method: _EB
         default:
             break;
     }
-    return idsMake([EEntType.PGON, pgon_i]) as TId;
+    return idMake(EEntType.PGON, pgon_i) as TId;
 }
 function _bboxAABB(__model__: GIModel, posis_i: number[]): number {
     const bbox: [number, number, number, number] = [Infinity, Infinity, -Infinity, -Infinity];
@@ -683,7 +765,8 @@ export function Union(__model__: GIModel, entities: TId|TId[]): TId[] {
     const result_shape: Shape = _convertPgonsToShapeUnion(__model__, pgons_i, posis_map);
     if (result_shape === null) { return []; }
     const all_new_pgons: number[] = _convertShapesToPgons(__model__, result_shape, posis_map);
-    return idsMake(all_new_pgons.map( pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx )) as TId[];
+    return idsMakeFromIdxs(EEntType.PGON, all_new_pgons) as TId[];
+    // return idsMake(all_new_pgons.map( pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx )) as TId[];
 }
 // ================================================================================================
 /**
@@ -738,11 +821,13 @@ export function Boolean(__model__: GIModel, a_entities: TId|TId[], b_entities: T
     const new_plines_i: number[] = _booleanPlines(__model__, a_plines_i, b_shape, method, posis_map);
     // make the list of polylines and polygons
     const result_ents: TId[] = [];
-    const new_pgons: TId[] = idsMake(new_pgons_i.map( pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx )) as TId[];
+    const new_pgons: TId[] = idsMakeFromIdxs(EEntType.PGON, new_pgons_i) as TId[];
+    // const new_pgons: TId[] = idsMake(new_pgons_i.map( pgon_i => [EEntType.PGON, pgon_i] as TEntTypeIdx )) as TId[];
     for (const new_pgon of new_pgons) {
         result_ents.push(new_pgon);
     }
-    const new_plines: TId[] = idsMake(new_plines_i.map( pline_i => [EEntType.PLINE, pline_i] as TEntTypeIdx )) as TId[];
+    const new_plines: TId[] = idsMakeFromIdxs(EEntType.PLINE, new_plines_i) as TId[];
+    // const new_plines: TId[] = idsMake(new_plines_i.map( pline_i => [EEntType.PLINE, pline_i] as TEntTypeIdx )) as TId[];
     for (const new_pline of new_plines) {
         result_ents.push(new_pline);
     }
@@ -785,9 +870,10 @@ function _booleanPlines(__model__: GIModel, plines_i: number|number[], b_shape: 
         method: _EBooleanMethod, posis_map: TPosisMap): number[] {
     if (!Array.isArray(plines_i)) {
         plines_i = plines_i as number;
-        const wire_i: number = __model__.modeldata.geom.nav.navPlineToWire(plines_i);
-        const is_closed: boolean = __model__.modeldata.geom.query.isWireClosed(wire_i);
-        const a_shape: Shape = _convertWireToShape(__model__, wire_i, is_closed, posis_map);
+        // const wire_i: number = __model__.modeldata.geom.nav.navPlineToWire(plines_i);
+        // const is_closed: boolean = __model__.modeldata.geom.query.isWireClosed(wire_i);
+        // const a_shape: Shape = _convertWireToShape(__model__, wire_i, is_closed, posis_map);
+        const a_shape: Shape = _convertPlineToShape(__model__, plines_i, posis_map);
         let result_shape: Shape;
         switch (method) {
             case _EBooleanMethod.INTERSECT:
@@ -804,7 +890,7 @@ function _booleanPlines(__model__: GIModel, plines_i: number|number[], b_shape: 
             default:
                 break;
         }
-        return _convertShapeToPlines(__model__, result_shape, is_closed, posis_map);
+        return _convertShapeToCutPlines(__model__, result_shape, posis_map);
     } else {
         plines_i = plines_i as number[];
         const all_new_plines: number[] = [];
@@ -1264,21 +1350,21 @@ export function Clean(__model__: GIModel, entities: TId|TId[], tolerance: number
     }
     // --- Error Check ---
     const posis_map: TPosisMap = new Map();
-    const all_new_pgons: TEntTypeIdx[] = [];
+    const all_new_ents: TEntTypeIdx[] = [];
     const [pgons_i, plines_i]: [number[], number[]] = _getPgonsPlines(__model__, ents_arr);
     for (const pgon_i of pgons_i) {
         const new_pgons_i: number[] = _cleanPgon(__model__, pgon_i, tolerance, posis_map);
         for (const new_pgon_i of new_pgons_i) {
-            all_new_pgons.push([EEntType.PGON, new_pgon_i]);
+            all_new_ents.push([EEntType.PGON, new_pgon_i]);
         }
     }
     for (const pline_i of plines_i) {
         const new_plines_i: number[] = _cleanPline(__model__, pline_i, tolerance, posis_map);
         for (const new_pline_i of new_plines_i) {
-            all_new_pgons.push([EEntType.PLINE, new_pline_i]);
+            all_new_ents.push([EEntType.PLINE, new_pline_i]);
         }
     }
-    return idsMake(all_new_pgons) as TId[];
+    return idsMake(all_new_ents) as TId[];
 }
 function _cleanPgon(__model__: GIModel, pgon_i: number, tolerance: number, posis_map: TPosisMap): number[] {
     const shape: Shape = _convertPgonToShape(__model__, pgon_i, posis_map);

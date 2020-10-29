@@ -62,13 +62,9 @@ export class GIAttribsSnapshot {
             }
         }
     }
-    /**
-     *
-     * @param ssid
-     */
-    public delSnapshot(ssid: number): void {
-        this.modeldata.attribs.attribs_maps.delete(ssid);
-    }
+    // ============================================================================
+    // Add
+    // ============================================================================
     /**
      * Add attributes of ents from the specified snapshot to the current snapshot.
      * @param ssid ID of snapshot to copy attributes from.
@@ -86,6 +82,16 @@ export class GIAttribsSnapshot {
             });
         }
         from_attrib_maps.mo.forEach( (val, name) => this.modeldata.attribs.set.setModelAttribVal(name, val) );
+    }
+    // ============================================================================
+    // Del
+    // ============================================================================
+    /**
+     *
+     * @param ssid
+     */
+    public delSnapshot(ssid: number): void {
+        this.modeldata.attribs.attribs_maps.delete(ssid);
     }
     // ============================================================================
     // Debug

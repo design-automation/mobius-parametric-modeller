@@ -1,7 +1,7 @@
-import { interpByNum, interpByLen, vecCross } from '@libs/geom/vectors';
-import { EEntType, Txyz, TEntTypeIdx, TPlane, IEntSets } from '../common';
+import { interpByNum, interpByLen } from '@libs/geom/vectors';
+import { EEntType, Txyz, TEntTypeIdx, IEntSets } from '../common';
 import { distance } from '@libs/geom/distance';
-import { getArrDepth, isEdge } from '../common_id_funcs';
+import { getArrDepth } from '../common_id_funcs';
 import { GIModelData } from '../GIModelData';
 import { TypedArrayUtils } from '@libs/TypedArrayUtils.js';
 import * as THREE from 'three';
@@ -50,7 +50,7 @@ export class GIFuncsEdit {
             this.modeldata.getObjsCheckTs(ent_type, ent_i);
             //
             let exist_edges_i: number[];
-            if (!isEdge(ent_type)) {
+            if (ent_type !== EEntType.EDGE) {
                 exist_edges_i = this.modeldata.geom.nav.navAnyToEdge(ent_type, ent_i).slice();
             } else {
                 exist_edges_i = [ent_i];
@@ -112,50 +112,67 @@ export class GIFuncsEdit {
      * @param pgon_i
      * @param holes_ents_arr
      */
-    public hole(ent_arr: TEntTypeIdx, holes_ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx[] {
-        // get the posis for making holes
-        this._getHolePosisFromEnts(holes_ents_arr);
-        if (getArrDepth(holes_ents_arr) === 2) {
-            holes_ents_arr = [holes_ents_arr] as TEntTypeIdx[][];
-        }
-        // make sure we have a pgon
-        const pgon_i: number = ent_arr[1];
+    public hole(pgon: TEntTypeIdx, holes_ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx[] {
+        const pgon_i: number = pgon[1];
+        const holes_posis_i: number[][] = this._getHolePosisFromEnts(holes_ents_arr);
         // time stamp
         this.modeldata.getObjsCheckTs(EEntType.PGON, pgon_i);
-        // convert the holes to lists of posis_i
-        const holes_posis_i: number[][] = [];
-        for (const hole_ents_arr of holes_ents_arr as TEntTypeIdx[][]) {
-            holes_posis_i.push( hole_ents_arr.map( hole_ent_arr => hole_ent_arr[1] ) );
-        }
         // create the hole
         const wires_i: number[] = this.modeldata.geom.edit_pgon.cutPgonHoles(pgon_i, holes_posis_i);
         // return hole wires
         return wires_i.map(wire_i => [EEntType.WIRE, wire_i]) as TEntTypeIdx[];
     }
-    private _getHolePosisFromEnts(ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): void {
-        for (let i = 0; i < ents_arr.length; i++) {
-            const depth: number = getArrDepth(ents_arr[i]);
-            if (depth === 1) {
-                const [ent_type, index]: TEntTypeIdx = ents_arr[i] as TEntTypeIdx;
-                switch (ent_type) {
-                    case EEntType.WIRE:
-                    case EEntType.PLINE:
-                        const posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(ent_type, index);
-                        const posis_arr: TEntTypeIdx[] = posis_i.map( posi_i => [EEntType.POSI, posi_i]) as TEntTypeIdx[];
-                        Array.prototype.splice.apply(ents_arr, [i, 1, posis_arr]); // TODO
-                        break;
-                    case EEntType.PGON:
-                        // ignore holes, so only take the first wire
-                        const wires_i: number[] = this.modeldata.geom.nav.navAnyToWire(ent_type, index);
-                        const wire_i: number = wires_i[0];
-                        const wire_posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
-                        const wire_posis_arr: TEntTypeIdx[] = wire_posis_i.map( posi_i => [EEntType.POSI, posi_i]) as TEntTypeIdx[];
-                        Array.prototype.splice.apply(ents_arr, [i, 1, wire_posis_arr]); // TODO
-                        break;
-                    default:
-                        break;
+    private _getHolePosisFromEnts(ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]): number[][] {
+        const depth: number = getArrDepth(ents_arr);
+        if (depth === 1) {
+            const [ent_type, ent_i] = ents_arr as TEntTypeIdx;
+            // we have just a single entity, must be a wire, a pline, or a pgon, so get the posis and return them
+            return [this.modeldata.geom.nav.navAnyToPosi(ent_type, ent_i)];
+        } else if (depth === 2) {
+            ents_arr = ents_arr as TEntTypeIdx[];
+            // we have a list of entites, could be a list of posis or a list of wires/plines/pgons
+            // so lets check the first entity, is it a posi?
+            if (ents_arr[0][0] === EEntType.POSI) {
+                // we assume we have a list of posis
+                const posis_i: number[] = [];
+                if (ents_arr.length < 3) {
+                    // TODO improve this error message, print the list of entities
+                    throw new Error('The data for generating holes in a polygon is invalid. A list of positions must have at least three positions.');
+                }
+                for (const [ent_type, ent_i] of ents_arr) {
+                    if (ent_type !== EEntType.POSI) {
+                        // TODO improve this error message, print the list of entities
+                        throw new Error('The list of entities for generating holes is inconsistent. A list has been found that contains a mixture of positions and other entities.');
+                    }
+                    posis_i.push(ent_i);
+                }
+                return [posis_i];
+            } else {
+                // we have a list of other entities
+                const posis_arrs_i: number[][] = [];
+                for (const [ent_type, ent_i] of ents_arr) {
+                    if (ent_type === EEntType.POSI) {
+                        // TODO improve this error message, print the list of entities
+                        throw new Error('The data for generating holes in a polygon is inconsistent. A list has been found that contains a mixture of positions and other entities.');
+                    }
+                    const posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(ent_type, ent_i);
+                    if (posis_i.length > 2) {
+                        // if there are less than 3 posis, then ignore this ent (no error)
+                        posis_arrs_i.push(posis_i);
+                    }
+                }
+                return posis_arrs_i;
+            }
+        } else {
+            // we have some kind of nested list, so call this function recursivley
+            const posis_arrs_i: number[][] = [];
+            for (const a_ents_arr of ents_arr) {
+                const posis_arrs2_i: number[][] = this._getHolePosisFromEnts(a_ents_arr as TEntTypeIdx[]);
+                for (const posis_arr2_i of posis_arrs2_i) {
+                    posis_arrs_i.push(posis_arr2_i);
                 }
             }
+            return posis_arrs_i;
         }
     }
     // ================================================================================================

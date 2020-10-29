@@ -60,19 +60,19 @@
     }
 
     &.printing{
-        border-bottom: 2px solid $print-color-dk;
-        border-left: 2px solid $print-color-dk;
+        border-bottom: 2px solid $print-color;
+        border-left: 2px solid $print-color;
         padding-bottom: 0px;
         padding-left: 8px;
 
-        #print-btn{
-            color: $print-color-dk;
-        }
         .btns{
             display: inline-flex;
             .btn{
                 display: flex;
                 justify-content: center;
+            }
+            .print-btn{
+                color: $print-color;
             }
         }
     }
@@ -84,6 +84,23 @@
         padding-left: 8px;
         #selectGeom-btn{
             color: $selectGeom-color;
+        }
+    }
+
+    &.terminate{
+        border-left: 2px solid $terminate-color;
+        border-bottom: 2px solid $terminate-color;
+        padding-bottom: 0px;
+        padding-left: 8px;
+        .btns{
+            display: inline-flex;
+            .btn {
+                display: flex;
+                justify-content: center;
+            }
+            .terminate-btn{
+                color: $terminate-color;
+            }
         }
     }
 

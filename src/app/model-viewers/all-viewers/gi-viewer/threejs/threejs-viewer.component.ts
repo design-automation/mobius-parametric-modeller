@@ -500,7 +500,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     }
 
     getGISummary(model: GIModel) {
-        let colls = 0, pgons = 0, plines = 0, points = 0, faces = 0, wires = 0, edges = 0, vertices = 0, positions = 0;
+        let colls = 0, pgons = 0, plines = 0, points = 0, wires = 0, edges = 0, vertices = 0, positions = 0;
         if (this) {
             colls = model.modeldata.geom.snapshot.numEnts(this.nodeIndex, EEntType.COLL);
             pgons = model.modeldata.geom.snapshot.numEnts(this.nodeIndex, EEntType.PGON);
@@ -516,7 +516,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         {title: 'Polygons', val: pgons},
         {title: 'Polylines', val: plines},
         {title: 'Points', val: points},
-        {title: 'Faces', val: faces},
         {title: 'Wires', val: wires},
         {title: 'Edges', val: edges},
         {title: 'Vertices', val: vertices},

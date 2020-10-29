@@ -514,6 +514,7 @@ export class ExecuteComponent {
             //     continue;
             // }
             // execute valid node
+            node.model = null;
             globalVars = await this.executeNode(node, funcStrings, globalVars, constantList, nodeIndices);
         }
 
@@ -575,7 +576,7 @@ export class ExecuteComponent {
             if (this.terminated) {
                 this.dataService.notifyMessage(`PROCESS TERMINATED IN NODE: "${this.terminated}"`);
                 this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-                node.model = undefined;
+                node.model = null;
                 return;
             }
             const usedFuncs: string[] = [];
@@ -586,7 +587,7 @@ export class ExecuteComponent {
                 this.dataService.notifyMessage(`PROCESS TERMINATED IN NODE: "${codeResult[1]}"`);
                 this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
                 if (!codeResult[0]) {
-                    node.model = undefined;
+                    node.model = null;
                     return;
                 }
             }

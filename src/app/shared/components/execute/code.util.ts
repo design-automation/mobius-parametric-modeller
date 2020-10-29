@@ -371,16 +371,16 @@ export class CodeUtils {
             const repGet = this.repGetAttrib(prod.args[0].jsValue);
             codeStr.push(`printFunc(__params__.console,'${prod.args[0].value}', ${repGet});`);
         }
-        if (isMainFlowchart && prod.selectGeom && prod.args[0].jsValue) {
-            // const repGet = prod.args[0].jsValue;
-            const repGet = this.repGetAttrib(prod.args[0].value);
-            const repGetJS = this.repGetAttrib(prod.args[0].jsValue);
-            codeStr.push(`try {` +
-            `\t__modules__.${_parameterTypes.select}(__params__.model, ${repGetJS}, "${repGet}"); ` +
-            `} catch (ex) {` +
-            `\t__params__.message = 'Trying to select geometric entities in node "%node%", but no entity was found';` +
-            `}`);
-        }
+        // if (isMainFlowchart && prod.selectGeom && prod.args[0].jsValue) {
+        //     // const repGet = prod.args[0].jsValue;
+        //     const repGet = this.repGetAttrib(prod.args[0].value);
+        //     const repGetJS = this.repGetAttrib(prod.args[0].jsValue);
+        //     codeStr.push(`try {` +
+        //     `\t__modules__.${_parameterTypes.select}(__params__.model, ${repGetJS}, "${repGet}"); ` +
+        //     `} catch (ex) {` +
+        //     `\t__params__.message = 'Trying to select geometric entities in node "%node%", but no entity was found';` +
+        //     `}`);
+        // }
 
         if (prod.children) {
             codeStr = codeStr.concat(CodeUtils.getProdListCode(prod.children, existingVars, isMainFlowchart,
@@ -390,6 +390,13 @@ export class CodeUtils {
             // }
             codeStr.push(`}`);
         }
+
+        // mark _terminateCheck to terminate all process after this
+        if (prod.terminate && prod.enabled) {
+            codeStr.push('__params__.terminated = true;');
+            codeStr.push('return null;');
+        }
+
         return codeStr;
     }
 

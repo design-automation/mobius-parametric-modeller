@@ -184,7 +184,7 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
             if (this.activeView.name === 'Help') {
                 // componentRef.instance['output'] = this.dataService.helpView[1];
             } else if (this.activeView.name !== 'Console') {
-                if (!this.dataService.node.enabled) {
+                if (!this.dataService.node.enabled || !this.dataService.node.model) {
                     componentRef.instance['data'] = this.emptyModel;
                     componentRef.instance['nodeIndex'] = 1;
                 } else {

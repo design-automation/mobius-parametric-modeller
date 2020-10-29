@@ -10,18 +10,69 @@ import { checkIDs, ID } from '../_check_ids';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { download } from '@libs/filesys/download';
-import { EEntType, IModelJSONData, TId, TEntTypeIdx, EAttribNames } from '@libs/geo-info/common';
+import { EEntType, IModelJSONData, TId, TEntTypeIdx, EAttribNames, EAttribDataTypeStrs } from '@libs/geo-info/common';
 // import { __merge__ } from '../_model';
 // import { _model } from '..';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
 import { idsBreak } from '@assets/libs/geo-info/common_id_funcs';
 import { _getFile } from './io';
 
+// ================================================================================================
+/**
+ * Select entities in the GI viewer
+ *
+ * @param __model__
+ * @param ents_id
+ * @param var_name
+ * @returns void
+ */
+export function SelectGeometry(__model__: GIModel, ents_id: string|string[]|string[][], var_name: string): void {
+    // TODO
+        const start = performance.now();
+        __model__.modeldata.geom.selected = [];
+        ents_id = ((Array.isArray(ents_id)) ? ents_id : [ents_id]) as string[];
+        const [ents_id_flat, ents_indices] = _flatten(ents_id);
+        const ents_arr: TEntTypeIdx[] = idsBreak(ents_id_flat) as TEntTypeIdx[];
+        const attrib_name: string = '_' + var_name;
+        for (let i = 0; i < ents_arr.length; i++) {
+            const ent_arr: TEntTypeIdx = ents_arr[i];
+            const ent_indices: number[] = ents_indices[i];
+            const attrib_value: string = var_name + '[' + ent_indices.join('][') + ']';
+            __model__.modeldata.geom.selected.push(ent_arr);
+            if (!__model__.modeldata.attribs.query.hasEntAttrib(ent_arr[0], attrib_name)) {
+                __model__.modeldata.attribs.add.addAttrib(ent_arr[0], attrib_name, EAttribDataTypeStrs.STRING);
+            }
+            __model__.modeldata.attribs.set.setCreateEntsAttribVal(ent_arr[0], ent_arr[1], attrib_name, attrib_value);
+        }
+}
+function _flatten(arrs: string|string[]|string[][]): [string[], number[][]] {
+    const arr_flat: string[] = [];
+    const arr_indices: number[][] = [];
+    let count = 0;
+    for (const item of arrs) {
+        if (Array.isArray(item)) {
+            const [arr_flat2, arr_indices2] = _flatten(item);
+            for (let i = 0; i < arr_flat2.length; i++) {
+                if (arr_flat.indexOf(arr_flat2[i]) !== -1) { continue; }
+                arr_flat.push(arr_flat2[i]);
+                arr_indices2[i].unshift(count);
+                arr_indices.push(arr_indices2[i]);
+            }
+        } else {
+            arr_flat.push(item);
+            arr_indices.push([count]);
+        }
+        count += 1;
+    }
+    return [arr_flat, arr_indices];
+}
+
 export enum _ECOmpareMethod {
     THIS_IS_SUBSET = 'subset',
     THIS_IS_SUPERSET = 'superset',
     THIS_IS_EQUAL = 'equal'
 }
+
 // ================================================================================================
 /**
  * Removes all deleted entities from the model.

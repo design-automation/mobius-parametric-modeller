@@ -183,6 +183,10 @@ export class ProcedureItemComponent implements OnDestroy {
         return false;
     }
 
+    markTerminate(event: MouseEvent) {
+        event.stopPropagation();
+        this.data.terminate = !this.data.terminate;
+    }
 
 
     markPrint(event: MouseEvent) {

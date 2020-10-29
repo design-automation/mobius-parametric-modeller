@@ -22,14 +22,16 @@ export interface IProcedure {
         otherInfo?: any
     };
 
-    print: boolean;
     enabled: boolean;
 
     selected: boolean;
     lastSelected?: boolean;
 
-    selectGeom: boolean;
     hasError: boolean;
+
+    print: boolean;
+    terminate: boolean;
+    selectGeom?: boolean;
 
     resolvedValue?: any;
 }

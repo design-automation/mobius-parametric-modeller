@@ -361,12 +361,12 @@ function _area(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): number
         const [ent_type, ent_i]: [EEntType, number] = ents_arrs as TEntTypeIdx;
         if (ent_type === EEntType.PGON) {
             // faces, these are already triangulated
-            const tris_i: number[] = __model__.modeldata.geom.nav.navPgonToTri(ent_i);
+            const tris_i: number[] = __model__.modeldata.geom.nav_tri.navPgonToTri(ent_i);
             let total_area = 0;
             for (const tri_i of tris_i) {
-                const corners_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
+                const corners_i: number[] = __model__.modeldata.geom.nav_tri.navTriToPosi(tri_i);
                 const corners_xyzs: Txyz[] = corners_i.map(corner_i => __model__.modeldata.attribs.posis.getPosiCoords(corner_i));
-                const tri_area: number = area( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2]);
+                const tri_area: number = area( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2] );
                 total_area += tri_area;
             }
             return total_area;

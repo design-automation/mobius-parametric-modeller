@@ -67,8 +67,8 @@ export function checkIDs(__model__: GIModel, fn_name: string, arg_name: string, 
     if (ent_types === null) {
         ent_types_set = new Set([
             EEntType.POSI,
-            EEntType.TRI,
             EEntType.VERT,
+            EEntType.TRI,
             EEntType.EDGE,
             EEntType.WIRE,
             EEntType.POINT,

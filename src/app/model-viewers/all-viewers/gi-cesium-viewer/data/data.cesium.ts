@@ -368,11 +368,11 @@ export class DataCesium {
                     }
                 }
 
-                const pgon_tris_i: number[] = model.modeldata.geom.nav.navAnyToTri(EEntType.PGON, pgon_i);
+                const pgon_tris_i: number[] = model.modeldata.geom.nav_tri.navPgonToTri(pgon_i);
                 for (const pgon_tri_i of pgon_tris_i) {
                     // tris_i.push(pgon_tri_i);
-                    const vert_posis_i: number[] = model.modeldata.geom.nav.navTriToVert(pgon_tri_i);
-                    // const tri_posis_i: number[] = model.modeldata.geom.nav.navAnyToPosi(EEntType.TRI, pgon_tri_i);
+                    const vert_posis_i: number[] = model.modeldata.geom.nav_tri.navTriToVert(pgon_tri_i);
+                    // const tri_posis_i: number[] = model.modeldata.geom.nav_tri.navTriToPosi(pgon_tri_i);
                     // const tri_points = tri_posis_i.map( posi_i => posi_to_point_map.get(posi_i) );
                     // const norm_vecs = tri_posis_i.map( posi_i => posi_to_normal_map.get(posi_i) );
                     // const tri_geom = new Cesium.PolygonGeometry({

@@ -173,7 +173,7 @@ export class GIGeomQuery {
                     verts_i.forEach( vert_i => ent_sets._v.add(vert_i) );
                 });
                 if (incl_tris) {
-                    const tris_i: number[] = this.modeldata.geom.nav.navPgonToTri(pgon_i);
+                    const tris_i: number[] = this.modeldata.geom.nav_tri.navPgonToTri(pgon_i);
                     tris_i.forEach( tri_i => ent_sets._t.add(tri_i) );
                 }
             }
@@ -383,7 +383,7 @@ export class GIGeomQuery {
      * @param wire_i
      */
     public getWireVerts(wire_i: number): number[] {
-        const edges_i: number[] = this._geom_maps.dn_wires_edges.get(wire_i);
+        const edges_i: number[] = this._geom_maps.dn_wires_edges.get(wire_i); // WARNING BY REF
         const verts_i: number[] = [];
         // walk the edges chain
         let next_edge_i: number = edges_i[0];

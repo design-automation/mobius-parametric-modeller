@@ -221,7 +221,7 @@ export class GIGeomSnapshot {
                 //     return pgon_faces_i;
                 }  else if (ent_type === EEntType.TRI) {
                     const pgons_i = Array.from(this.getEnts(ssid, EEntType.PGON));
-                    const pgon_tris_i: number[] =  arrMakeFlat( pgons_i.map( pgon_i => this.modeldata.geom.nav.navAnyToTri(EEntType.PGON, pgon_i) ) );
+                    const pgon_tris_i: number[] =  arrMakeFlat( pgons_i.map( pgon_i => this.modeldata.geom.nav_tri.navPgonToTri(pgon_i) ) );
                     return pgon_tris_i;
                 }
                 throw new Error('Entity type not recognised.');

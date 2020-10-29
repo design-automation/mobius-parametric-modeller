@@ -139,8 +139,8 @@ function _centerOfMassOfPgon(__model__: GIModel, pgon_i: number): [Txyz, number]
     const tri_areas: number[] = [];
     let total_area = 0;
     const map_posi_to_v3: Map< number, THREE.Vector3> = new Map();
-    for (const tri_i of __model__.modeldata.geom.nav.navPgonToTri(pgon_i)) {
-        const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
+    for (const tri_i of __model__.modeldata.geom.nav_tri.navPgonToTri(pgon_i)) {
+        const posis_i: number[] = __model__.modeldata.geom.nav_tri.navTriToPosi(tri_i);
         const posis_v3: THREE.Vector3[] = [];
         for (const posi_i of posis_i) {
             let posi_v3: THREE.Vector3 = map_posi_to_v3.get(posi_i);

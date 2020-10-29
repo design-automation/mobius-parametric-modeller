@@ -48,9 +48,9 @@ export function createMultipleMeshesTjs(__model__: GIModel, ents_arrs: TEntTypeI
     for (const pgon_i of pgons_i) {
         // create the tjs geometry
         const geom_tjs = new THREE.Geometry();
-        const tris_i: number[] = __model__.modeldata.geom.nav.navPgonToTri(pgon_i);
+        const tris_i: number[] = __model__.modeldata.geom.nav_tri.navPgonToTri(pgon_i);
         for (const tri_i of tris_i) {
-            const tri_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
+            const tri_posis_i: number[] = __model__.modeldata.geom.nav_tri.navTriToPosi(tri_i);
             // add the three vertices to the geometry
             const a: number = geom_tjs.vertices.push(posis_tjs[tri_posis_i[0]]) - 1;
             const b: number = geom_tjs.vertices.push(posis_tjs[tri_posis_i[1]]) - 1;
@@ -101,9 +101,9 @@ export function createSingleMeshTjs(__model__: GIModel, ents_arrs: TEntTypeIdx[]
     const idx_to_pgon_i: number[] = [];
     for (const pgon_i of pgons_i) {
         // create the tjs geometry
-        const tris_i: number[] = __model__.modeldata.geom.nav.navAnyToTri(EEntType.PGON, pgon_i);
+        const tris_i: number[] = __model__.modeldata.geom.nav_tri.navPgonToTri(pgon_i);
         for (const tri_i of tris_i) {
-            const tri_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
+            const tri_posis_i: number[] = __model__.modeldata.geom.nav_tri.navTriToPosi(tri_i);
             // add the three vertices to the geometry
             const a: number = geom_tjs.vertices.push(posis_tjs[tri_posis_i[0]]) - 1;
             const b: number = geom_tjs.vertices.push(posis_tjs[tri_posis_i[1]]) - 1;
@@ -155,9 +155,9 @@ export function createSingleMeshBufTjs(__model__: GIModel, ents_arrs: TEntTypeId
     const tris_flat: number[] = [];
     for (const pgon_i of pgons_i) {
         // create the tjs geometry
-        const tris_i: number[] = __model__.modeldata.geom.nav.navPgonToTri(pgon_i);
+        const tris_i: number[] = __model__.modeldata.geom.nav_tri.navPgonToTri(pgon_i);
         for (const tri_i of tris_i) {
-            const tri_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
+            const tri_posis_i: number[] = __model__.modeldata.geom.nav_tri.navTriToPosi(tri_i);
             tris_flat.push( posi_i_to_xyzs_map.get( tri_posis_i[0]) );
             tris_flat.push( posi_i_to_xyzs_map.get( tri_posis_i[1]) );
             tris_flat.push( posi_i_to_xyzs_map.get( tri_posis_i[2]) );

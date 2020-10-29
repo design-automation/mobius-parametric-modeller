@@ -199,10 +199,10 @@ function processGeomMeshPgon(model: GIModel, pgon_i: number, material_id: string
         vert_map.set(posi_i, i);
     }
     let indices = '';
-    const pgon_tris_i: number[] = model.modeldata.geom.nav.navAnyToTri(EEntType.PGON, pgon_i);
+    const pgon_tris_i: number[] = model.modeldata.geom.nav_tri.navPgonToTri(pgon_i);
     let num_tris = 0;
     for (const tri_i of pgon_tris_i) {
-        const tri_posis_i: number[] = model.modeldata.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
+        const tri_posis_i: number[] = model.modeldata.geom.nav_tri.navTriToPosi(tri_i);
         const corners_xyzs: Txyz[] = tri_posis_i.map(tri_posi_i => model.modeldata.attribs.posis.getPosiCoords(tri_posi_i));
         const tri_area: number = area( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2]);
         if (tri_area > 0) {

@@ -12,6 +12,7 @@ import { GIModelData } from '../GIModelData';
 import { GIGeomSnapshot } from './GIGeomSnapshot';
 import { GIGeomThreejs } from './GIGeomThreejs';
 import { GIGeomImpExp } from './GIGeomImpExp';
+import { GIGeomNavTri } from './GIGeomNavTri';
 
 /**
  * Class for geometry.
@@ -54,6 +55,7 @@ export class GIGeom {
     public edit_pline: GIGeomEditPline;
     public edit_pgon: GIGeomEditPgon;
     public nav: GIGeomNav;
+    public nav_tri: GIGeomNavTri;
     public query: GIGeomQuery;
     public check: GIGeomCheck;
     public compare: GIGeomCompare;
@@ -71,6 +73,7 @@ export class GIGeom {
         this.edit_pline = new GIGeomEditPline(modeldata, this._geom_maps);
         this.edit_pgon = new GIGeomEditPgon(modeldata, this._geom_maps);
         this.nav = new GIGeomNav(modeldata, this._geom_maps);
+        this.nav_tri = new GIGeomNavTri(modeldata, this._geom_maps);
         this.query = new GIGeomQuery(modeldata, this._geom_maps);
         this.check = new GIGeomCheck(modeldata, this._geom_maps);
         this.compare = new GIGeomCompare(modeldata, this._geom_maps);

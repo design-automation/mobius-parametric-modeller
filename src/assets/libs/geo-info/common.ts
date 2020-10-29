@@ -42,8 +42,8 @@ export type TTexture = [number, number];
 // Types of entities
 export enum EEntType {
     POSI,
-    TRI,
     VERT,
+    TRI,
     EDGE,
     WIRE,
     POINT,
@@ -53,11 +53,11 @@ export enum EEntType {
     MOD
 }
 
-// Types of entities
+// Must match types of entities
 export enum EEntTypeStr {
     'ps',
-    '_t',
     '_v',
+    '_t',
     '_e',
     '_w',
     'pt',
@@ -67,10 +67,12 @@ export enum EEntTypeStr {
     'mo'
 }
 
+// Must match types of entities
+// Must also match interface IGeomMaps
 export enum EEntStrToGeomMaps {
     'up_posis_verts', // 'posis',
-    'dn_tris_verts',
     'dn_verts_posis',
+    'dn_tris_verts',
     'dn_edges_verts',
     'dn_wires_edges',
     'dn_points_verts',

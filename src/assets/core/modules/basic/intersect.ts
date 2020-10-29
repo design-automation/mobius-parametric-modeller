@@ -65,9 +65,15 @@ function _intersectRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], 
         }
         const isect_xyzs: Txyz[] = [];
         // triangles
-        const tris_i: number[] = __model__.modeldata.geom.nav.navAnyToTri(ent_type, index);
+        const pgons_i: number[] = __model__.modeldata.geom.nav.navAnyToPgon(ent_type, index);
+        const tris_i: number[] = [];
+        for (const pgon_i of pgons_i) {
+            for (const tri_i of __model__.modeldata.geom.nav_tri.navPgonToTri(pgon_i)) {
+                tris_i.push(tri_i);
+            }
+        }
         for (const tri_i of tris_i) {
-            const tri_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
+            const tri_posis_i: number[] = __model__.modeldata.geom.nav_tri.navTriToPosi(tri_i);
             const tri_posis_tjs: THREE.Vector3[] = tri_posis_i.map(tri_posi_i => posis_tjs[tri_posi_i]);
             const isect_tjs: THREE.Vector3 = new THREE.Vector3();
             const result: THREE.Vector3 = ray_tjs.intersectTriangle(tri_posis_tjs[0], tri_posis_tjs[1], tri_posis_tjs[2], false, isect_tjs);

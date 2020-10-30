@@ -84,7 +84,7 @@ export abstract class NodeUtils {
                     print: false,
                     enabled: true,
                     selected: false,
-                    selectGeom: false,
+                    terminate: false,
                     hasError: false
                 };
 

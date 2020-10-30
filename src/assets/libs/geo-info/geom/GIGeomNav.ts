@@ -439,11 +439,12 @@ export class GIGeomNav {
         // console.log("_navDnAnyToPosi");
         // if (ent_type === EEntType.POSI) { return [ent_i]; }
         if (ent_type === EEntType.VERT) { return [ this._geom_maps.dn_verts_posis.get(ent_i) ]; }
-        const posis_i: number[] = [];
+        // multiple verts can share the same vertex, so we need to check for dups
+        const set_posis_i: Set<number> = new Set();
         for (const vert_i of this._navDnAnyToVert(ent_type, ent_i)) {
-            posis_i.push(this._geom_maps.dn_verts_posis.get(vert_i));
+            set_posis_i.add(this._geom_maps.dn_verts_posis.get(vert_i));
         }
-        return posis_i;
+        return Array.from(set_posis_i);
     }
     // ============================================================================
     // Navigate any to ?

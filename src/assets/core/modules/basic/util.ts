@@ -35,7 +35,6 @@ export function SelectGeometry(__model__: GIModel, ents_id: string|string[]|stri
         const ent_arr: TEntTypeIdx = ents_arr[i];
         const ent_indices: number[] = ents_indices[i];
         const attrib_value: string = 'selected[' + ent_indices.join('][') + ']';
-        console.log('       ', attrib_value)
         __model__.modeldata.geom.selected.push(ent_arr);
         if (!__model__.modeldata.attribs.query.hasEntAttrib(ent_arr[0], attrib_name)) {
             __model__.modeldata.attribs.add.addAttrib(ent_arr[0], attrib_name, EAttribDataTypeStrs.STRING);

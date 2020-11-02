@@ -23,7 +23,7 @@
         <div class='returnProd'>
             <input class='disabled-input' value="Return" disabled>
             <ng-container *ngFor='let p of node.procedure[node.procedure.length-1].args; let i=index'>
-                <input id='ret--input' 
+                <input class='ret--input' 
                 *ngIf='p.name[0] !== "_"'
                 [(ngModel)]='p.value'
                 [class.error]='p.invalidVar'

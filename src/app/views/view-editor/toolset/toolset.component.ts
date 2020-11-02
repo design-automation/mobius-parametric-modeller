@@ -495,8 +495,6 @@ export class ToolsetComponent implements OnInit {
         }
 
         if (this.searchedMainFuncs.length >= 10) { return; }
-        console.log(this.getNode().localFunc)
-        console.log(str)
         for (const func of this.getNode().localFunc) {
             if (func.type !== ProcedureTypes.LocalFuncDef) { continue; }
             if (this.searchedMainFuncs.length >= 10) { break; }

@@ -24,7 +24,7 @@ div[class^="container--"]{
     }
 }
 
-textarea, #flowchart-name, #ret--input{
+textarea, #flowchart-name, .ret--input{
     color: $color8;
     border: 2px solid $color5;
     background-color: transparent;

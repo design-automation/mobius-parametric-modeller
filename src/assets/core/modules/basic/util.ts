@@ -31,7 +31,6 @@ export function SelectGeometry(__model__: GIModel, ents_id: string|string[]|stri
     const [ents_id_flat, ents_indices] = _flatten(ents_id);
     const ents_arr: TEntTypeIdx[] = idsBreak(ents_id_flat) as TEntTypeIdx[];
     const attrib_name = '_selected';
-    console.log('.....', attrib_name);
     for (let i = 0; i < ents_arr.length; i++) {
         const ent_arr: TEntTypeIdx = ents_arr[i];
         const ent_indices: number[] = ents_indices[i];

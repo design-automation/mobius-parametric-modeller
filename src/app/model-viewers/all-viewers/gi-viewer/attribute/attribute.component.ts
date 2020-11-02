@@ -72,11 +72,11 @@ export class AttributeComponent implements OnChanges {
         1: EEntType.VERT,
         2: EEntType.EDGE,
         3: EEntType.WIRE,
-        5: EEntType.POINT,
-        6: EEntType.PLINE,
-        7: EEntType.PGON,
-        8: EEntType.COLL,
-        9: EEntType.MOD
+        4: EEntType.POINT,
+        5: EEntType.PLINE,
+        6: EEntType.PGON,
+        7: EEntType.COLL,
+        8: EEntType.MOD
     };
 
     tab_rev_map = {
@@ -140,7 +140,7 @@ export class AttributeComponent implements OnChanges {
     generateTable(tabIndex: number) {
         if (this.model && this.nodeIndex) {
             const ThreeJSData = this.model.modeldata.attribs.threejs;
-            if (Number(tabIndex) === 9) {
+            if (Number(tabIndex) === 8) {
                 this.displayData = ThreeJSData.getModelAttribsForTable(this.nodeIndex);
             } else {
                 const ready = this.model.modeldata.attribs.threejs instanceof GIAttribsThreejs;
@@ -168,7 +168,7 @@ export class AttributeComponent implements OnChanges {
             if (this.displayData.length > 0) {
                 const columns = Object.keys(this.displayData[0]).filter(e => e !== 'selected');
                 let new_columns;
-                if (Number(tabIndex) === 9) {
+                if (Number(tabIndex) === 8) {
                     new_columns = columns;
                 } else {
                     const first = columns.shift();
@@ -261,11 +261,11 @@ export class AttributeComponent implements OnChanges {
             // sessionStorage.setItem('mpm_changetab', 'true');
             if (changeTab) {
                 if (this.model) {
-                    if (currentTab === 0 || currentTab === 8 || currentTab === 9) {
+                    if (currentTab === 0 || currentTab === 7 || currentTab === 8) {
                         this.child.selectTab(this.tab_rev_map[currentTab]);
-                    } else if (currentTab === 1 || currentTab === 2 || currentTab === 3 || currentTab === 4) {
+                    } else if (currentTab === 1 || currentTab === 2 || currentTab === 3) {
                         this.child.selectTopology(currentTab, event);
-                    } else if (currentTab === 5 || currentTab === 6 || currentTab === 7) {
+                    } else if (currentTab === 4 || currentTab === 5 || currentTab === 6) {
                         this.child.selectObject(currentTab, event);
                     }
                 }
@@ -283,7 +283,7 @@ export class AttributeComponent implements OnChanges {
 
 //   selectRow(ent_id: string, event) {
 //     const currentTab = this.getCurrentTab();
-//     if (currentTab === 9) {
+//     if (currentTab === 8) {
 //       return;
 //     }
 //     const id = Number(ent_id.substr(2));
@@ -344,12 +344,11 @@ export class AttributeComponent implements OnChanges {
 
     selectRow(ent_id: string, event) {
         const currentTab = this.getCurrentTab();
-        if (currentTab === 9) {
+        if (currentTab === 8) {
             return;
         }
         const id = Number(ent_id.substr(2));
         // Multiple row selection
-        console.log('~~~~~~~~~~~~~~',this.nodeIndex)
         const ThreeJSData = this.model.modeldata.attribs.threejs;
         const attrib_table = ThreeJSData.getAttribsForTable(this.nodeIndex, this.tab_map[currentTab]);
         this.current_selected = id;

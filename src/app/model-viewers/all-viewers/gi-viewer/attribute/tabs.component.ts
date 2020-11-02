@@ -43,9 +43,9 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
 
     object: { tab: number, title: string }[] =
         [
-            { tab: 5, title: 'Points' },
-            { tab: 6, title: 'Polylines' },
-            { tab: 7, title: 'Polygons' }
+            { tab: 4, title: 'Points' },
+            { tab: 5, title: 'Polylines' },
+            { tab: 6, title: 'Polygons' }
         ];
 
     // contentChildren are set

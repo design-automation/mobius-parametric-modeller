@@ -11,6 +11,7 @@
         <input id='hidden_node_selection' value=''>
         <input id='hidden_node_selection_button' (click)=updateNode() >
         <input id='hidden_notify_button' value='' (click)=notifyMessage($event) >
+        <input id='hidden_update_inline_func' value='' (click)="searchInlineFuncs(null)">
     </div>
 
     <!-- buttons -->
@@ -231,6 +232,20 @@
         </div>
         <button class='addGlobalButton' (click)="addGlobalFunc($event)">Import File</button>
         <button class='addGlobalButton' (click)="addGlobalFuncLS($event)">Import LS</button>
+    </div>
+    <div class='inlineFuncDialog' *ngIf='checkDialog("inlinefunc")'>
+        <p>Add Inline Functions: </p>
+        <br>
+        <input id='search_inline' class='searchBar' placeholder='Search Inline Function' value='' (keyup)="searchInlineFuncs($event)">
+        <br>
+        <div class='inlineFuncContainer'>
+            <ng-container *ngFor='let fnCategory of searchedInlineFunc'>
+                <button class='inlinefuncAccordion closed' (click)='openInlineMenu($event, fnCategory[0])'>{{fnCategory[0]}}</button>
+                <div id='inlinefunc_{{fnCategory[0]}}' class='inlinefuncDiv closed'>
+                    <button class='inlinefunc' *ngFor='let fn of fnCategory[1]' title={{fn[1]}} (click)='copyInlineFunc(fn[0])'>{{fn[0]}}</button>
+                </div>
+            </ng-container>
+        </div>
     </div>
     <div class='saveLocalDialog' *ngIf='checkDialog("savels")'>
         <p>Save File to Local Storage as: </p>

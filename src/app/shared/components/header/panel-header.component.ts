@@ -11,6 +11,12 @@ import { IArgument } from '@models/code';
 import * as Modules from '@modules';
 import { checkNodeValidity } from '@shared/parser';
 import { DownloadUtils } from '../file/download.utils';
+import { inline_func } from '@assets/core/inline/inline';
+
+const inputEvent = new Event('input', {
+    'bubbles': true,
+    'cancelable': true
+});
 
 @Component({
     selector: 'panel-header',
@@ -32,6 +38,10 @@ export class PanelHeaderComponent implements OnDestroy {
     func_categories = Object.keys(Modules).filter(cat => cat[0] !== '_');
     private ctx = document.createElement('canvas').getContext('2d');
     backupDates;
+
+    inlineFunc = inline_func;
+    searchedInlineFunc;
+
 
     constructor(private dataService: DataService, private keyboardService: KeyboardService, private router: Router) {
         SaveFileComponent.updateBackupList();
@@ -888,6 +898,104 @@ export class PanelHeaderComponent implements OnDestroy {
         this.dataService.dialog = <HTMLDialogElement>document.getElementById('headerDialog');
         this.dataService.dialog.showModal();
         this.dataService.setbackup_updateImported(true);
+    }
+
+    searchInlineFuncs() {
+        const inputElement = <HTMLInputElement> document.getElementById('search_inline');
+        let searchTerm;
+        if (inputElement) {
+            searchTerm = inputElement.value.trim().toLowerCase();
+        } else {
+            searchTerm = '';
+        }
+
+        const parameters = [];
+        for (const prod of this.flowchart.nodes[0].procedure) {
+            if (prod.type === ProcedureTypes.Constant && prod.enabled) {
+                parameters.push([prod.args[0].value, 'Global Parameter ' + prod.args[0].value]);
+            }
+        }
+        let allInlineFuncs = [['parameters', parameters]];
+        allInlineFuncs = allInlineFuncs.concat(inline_func);
+
+        if (searchTerm === '') {
+            this.searchedInlineFunc = allInlineFuncs;
+            return;
+        }
+        this.searchedInlineFunc = [];
+        for (const fnCategory of this.inlineFunc) {
+            if ((<string>fnCategory[0]).toLowerCase().indexOf(searchTerm) !== -1) {
+                this.searchedInlineFunc.push(fnCategory);
+                continue;
+            }
+            const funcs = [];
+            for (const fn of fnCategory[1]) {
+                if (fn[0].toLowerCase().indexOf(searchTerm) !== -1) {
+                    funcs.push(fn);
+                }
+            }
+            if (funcs.length > 0) {
+                this.searchedInlineFunc.push([fnCategory[0], funcs]);
+            }
+        }
+    }
+
+    openInlineMenu(event, id) {
+        const inlineDiv = document.getElementById('inlinefunc_' + id);
+        if (inlineDiv.classList.contains('opened')) {
+            event.target.classList.remove('opened');
+            inlineDiv.classList.remove('opened');
+        } else {
+            event.target.classList.add('opened');
+            inlineDiv.classList.add('opened');
+        }
+    }
+
+    copyInlineFunc(str: string) {
+        if (!this.dataService.focusedInput) {
+            return;
+        }
+        this.dataService.focusedInput.focus();
+        let selStart: number, selEnd: number;
+        if (this.dataService.focusedInput.selectionDirection === 'backward') {
+            selStart = this.dataService.focusedInput.selectionEnd;
+            selEnd = this.dataService.focusedInput.selectionStart;
+        } else {
+            selStart = this.dataService.focusedInput.selectionStart;
+            selEnd = this.dataService.focusedInput.selectionEnd;
+        }
+        const newSelStart = str.indexOf('(');
+        this.dataService.focusedInput.value =
+            this.dataService.focusedInput.value.slice(0, selStart) +
+            str +
+            this.dataService.focusedInput.value.slice(selEnd);
+        this.dataService.focusedInput.dispatchEvent(inputEvent);
+        if (newSelStart !== -1) {
+            this.dataService.focusedInput.selectionStart = selStart + newSelStart + 1;
+            this.dataService.focusedInput.selectionEnd = selStart + str.length - 1;
+        } else {
+            this.dataService.focusedInput.selectionStart = selStart + str.length;
+            this.dataService.focusedInput.selectionEnd = selStart + str.length;
+        }
+        this.dataService.dialog.close();
+        // const index = this.dataService.focusedInput.selectionDirection === 'backward' ?
+        //     this.dataService.focusedInput.selectionStart : this.dataService.focusedInput.selectionEnd;
+        // this.dataService.focusedInput.value =
+        //     this.dataService.focusedInput.value.slice(0, index) +
+        //     string +
+        //     this.dataService.focusedInput.value.slice(index);
+
+        // this.dataService.focusedInput.dispatchEvent(inputEvent);
+        // this.dataService.focusedInput.selectionStart = index + string.length;
+
+
+        // const el = document.createElement('textarea');
+        // el.value = str;
+        // document.body.appendChild(el);
+        // el.select();
+        // document.execCommand('copy');
+        // document.body.removeChild(el);
+        // this.dataService.notifyMessage('"' + str + '" copied to clipboard');
     }
 
     updateNode() {

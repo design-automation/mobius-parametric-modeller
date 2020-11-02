@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { IMobius } from '@models/mobius';
 import { IFlowchart, FlowchartUtils } from '@models/flowchart';
 import { INode } from '@models/node';
-import { IProcedure } from '@models/procedure';
+import { IProcedure, ProcedureTypes } from '@models/procedure';
 import { IEdge } from '@models/edge';
 import { Subject } from 'rxjs';
 import { VERSION } from '@env/version';
 import { GIMetaData } from '@assets/libs/geo-info/GIMetaData';
+import { inline_func } from '@assets/core/inline/inline';
 
 @Injectable()
 export class DataService {

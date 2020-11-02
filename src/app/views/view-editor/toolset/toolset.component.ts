@@ -38,12 +38,12 @@ export class ToolsetComponent implements OnInit {
     ProcedureTypes = ProcedureTypes;
     ProcedureTypesArr = keys.slice(keys.length / 2);
     searchedMainFuncs = [];
-    searchedInlineFuncs = [];
-    searchedUserFuncs = [];
+    // searchedInlineFuncs = [];
+    // searchedUserFuncs = [];
 
-    inlineQueryExpr = inline_query_expr;
-    inlineSortExpr = inline_sort_expr;
-    inlineFunc = inline_func;
+    // inlineQueryExpr = inline_query_expr;
+    // inlineSortExpr = inline_sort_expr;
+    // inlineFunc = inline_func;
 
     AllModules = {};
     Modules = [];
@@ -406,6 +406,14 @@ export class ToolsetComponent implements OnInit {
         this.dataService.dialog.showModal();
     }
 
+    open_inline_dialog(event: MouseEvent) {
+        event.stopPropagation();
+        (<HTMLInputElement>document.getElementById('hidden_update_inline_func')).click();
+        this.dataService.dialogType = 'inlinefunc';
+        this.dataService.dialog = <HTMLDialogElement>document.getElementById('headerDialog');
+        this.dataService.dialog.showModal();
+    }
+
     preventfocus(event) {
         event.preventDefault();
     }
@@ -519,71 +527,71 @@ export class ToolsetComponent implements OnInit {
         }
     }
 
-    searchInlineFuncs(event) {
-        this.updateFocusProd()
-        const str = event.target.value.toLowerCase();
-        this.searchedInlineFuncs = [];
-        if (str.length === 0) {
-            return;
-        }
-        // search Global Variables
-        for (const cnst of this.dataService.flowchart.nodes[0].procedure) {
-            if (this.searchedInlineFuncs.length >= 10) { break; }
-            if (cnst.type !== ProcedureTypes.Constant) { continue; }
-            const cnstString = cnst.args[cnst.argCount - 2].value;
-            if (cnstString.toLowerCase().indexOf(str) !== -1) {
-                this.searchedInlineFuncs.push([cnstString, `Global Variable ${cnstString}`]);
-            }
-        }
+    // searchInlineFuncs(event) {
+    //     this.updateFocusProd()
+    //     const str = event.target.value.toLowerCase();
+    //     this.searchedInlineFuncs = [];
+    //     if (str.length === 0) {
+    //         return;
+    //     }
+    //     // search Global Variables
+    //     for (const cnst of this.dataService.flowchart.nodes[0].procedure) {
+    //         if (this.searchedInlineFuncs.length >= 10) { break; }
+    //         if (cnst.type !== ProcedureTypes.Constant) { continue; }
+    //         const cnstString = cnst.args[cnst.argCount - 2].value;
+    //         if (cnstString.toLowerCase().indexOf(str) !== -1) {
+    //             this.searchedInlineFuncs.push([cnstString, `Global Variable ${cnstString}`]);
+    //         }
+    //     }
 
-        // // search inline query expressions
-        // for (const expr of this.inlineQueryExpr) {
-        //     if (this.searchedInlineFuncs.length >= 10) { break; }
-        //     if (expr[0].toLowerCase().indexOf(str) !== -1) {
-        //         this.searchedInlineFuncs.push([expr, '']);
-        //     }
-        // }
+    //     // // search inline query expressions
+    //     // for (const expr of this.inlineQueryExpr) {
+    //     //     if (this.searchedInlineFuncs.length >= 10) { break; }
+    //     //     if (expr[0].toLowerCase().indexOf(str) !== -1) {
+    //     //         this.searchedInlineFuncs.push([expr, '']);
+    //     //     }
+    //     // }
 
-        // search inline functions
-        for (const category of this.inlineFunc) {
-            for (const funcString of category[1]) {
-                if (this.searchedInlineFuncs.length >= 10) { break; }
-                if (funcString[0].toLowerCase().indexOf(str) !== -1) {
-                    this.searchedInlineFuncs.push(funcString);
-                }
-            }
-            if (this.searchedInlineFuncs.length >= 10) { break; }
-        }
-    }
+    //     // search inline functions
+    //     for (const category of this.inlineFunc) {
+    //         for (const funcString of category[1]) {
+    //             if (this.searchedInlineFuncs.length >= 10) { break; }
+    //             if (funcString[0].toLowerCase().indexOf(str) !== -1) {
+    //                 this.searchedInlineFuncs.push(funcString);
+    //             }
+    //         }
+    //         if (this.searchedInlineFuncs.length >= 10) { break; }
+    //     }
+    // }
 
-    searchUserFuncs(event) {
-        this.updateFocusProd()
-        const str = event.target.value.toLowerCase();
-        this.searchedUserFuncs = [];
-        for (const func of this.getNode().localFunc) {
-            if (func.type !== ProcedureTypes.LocalFuncDef) { continue; }
-            if (this.searchedUserFuncs.length >= 10) { break; }
-            if (func.args[0].value.toLowerCase().indexOf(str) !== -1) {
-                this.searchedUserFuncs.push({
-                    'type': 'localFunc',
-                    'name': func.args[0].value,
-                    'data': func
-                });
-            }
+    // searchUserFuncs(event) {
+    //     this.updateFocusProd()
+    //     const str = event.target.value.toLowerCase();
+    //     this.searchedUserFuncs = [];
+    //     for (const func of this.getNode().localFunc) {
+    //         if (func.type !== ProcedureTypes.LocalFuncDef) { continue; }
+    //         if (this.searchedUserFuncs.length >= 10) { break; }
+    //         if (func.args[0].value.toLowerCase().indexOf(str) !== -1) {
+    //             this.searchedUserFuncs.push({
+    //                 'type': 'localFunc',
+    //                 'name': func.args[0].value,
+    //                 'data': func
+    //             });
+    //         }
 
-        }
-        // Search User Defined Functions
-        for (const func of this.dataService.flowchart.functions) {
-            if (this.searchedUserFuncs.length >= 10) { break; }
-            if (func.name.toLowerCase().indexOf(str) !== -1) {
-                this.searchedUserFuncs.push({
-                    'type': 'globalFunc',
-                    'name': func.name,
-                    'data': func
-                });
-            }
-        }
-    }
+    //     }
+    //     // Search User Defined Functions
+    //     for (const func of this.dataService.flowchart.functions) {
+    //         if (this.searchedUserFuncs.length >= 10) { break; }
+    //         if (func.name.toLowerCase().indexOf(str) !== -1) {
+    //             this.searchedUserFuncs.push({
+    //                 'type': 'globalFunc',
+    //                 'name': func.name,
+    //                 'data': func
+    //             });
+    //         }
+    //     }
+    // }
 
     updateFocusProd() {
         if (this.dataService.focusedInputProd && this.dataService.node.state.procedure.length === 0) {

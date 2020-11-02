@@ -186,7 +186,6 @@
                             <li class = 'user--manage'>
                                 <button class = 'add-btn' (click)="open_globalFunc_dialog($event);" title="Manage Global Functions">
                                     Manage
-                                    <!--<mat-icon class='add-icon'>open_in_browser</mat-icon>-->
                                 </button>
                             </li>
                             <div class='tooltip user--def' *ngFor='let fn of getFlowchart().functions'>
@@ -200,20 +199,6 @@
                                             <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
                                         </button>
                                     </li>
-                                    <!-- <div class = 'btn--container'>
-                                        <button class='importedFunc-btn' (click)='open_update_dialog($event, fn)'>
-                                            <mat-icon class='importedFunc-btn-icon'>cached</mat-icon>
-                                        </button>
-                                        <button class='importedFunc-btn' (click)='edit_imported_function($event, fn)'>
-                                            <mat-icon class='importedFunc-btn-icon'>edit</mat-icon>
-                                        </button>
-                                        <button class='importedFunc-btn' (click)='download_imported_function($event, fn)'>
-                                            <mat-icon class='importedFunc-btn-icon'>get_app</mat-icon>
-                                        </button>
-                                        <button class='importedFunc-btn' (click)='delete_global_func(fn)'>
-                                            <mat-icon class='importedFunc-btn-icon'>close</mat-icon>
-                                        </button>
-                                    </div> -->
                                 </div>
                             </div>
                         </ul>
@@ -225,12 +210,11 @@
             <!--Divider-->
             <div class = "divider"></div>
             
-            <button id='Inline' class="accordion mainAccordion" 
+            <button id='Inline' class="accordion" 
             (mousedown)='preventfocus($event)'
-            (click)='toggleAccordionHead("Inline")'>Inline Funcs
-            </button>
+            (click)='open_inline_dialog($event)'>Inline Funcs</button>
             <!--Search Bar-->
-            <div class = 'searchbar--container'>
+            <!-- <div class = 'searchbar--container'>
                 <input id='searchbarInline' class='searchBar' placeholder='Search' (mousedown)='selectPrevProd()' (keyup)='searchInlineFuncs($event)'/>
                 <div class="panel" [class.opened] = 'true' *ngIf='searchedInlineFuncs.length > 0'>
                     <ul class='toolset__functions--subset inline_set'>
@@ -254,7 +238,6 @@
                             </li>
                         </ng-container>
                     </ul>
-                    <!--Divider-->
                     <div class = "divider--in"></div>
                 </div>
                 <ng-container *ngFor='let category of inlineFunc'>
@@ -267,11 +250,10 @@
                                 {{funcString[0]}}
                             </li>
                         </ul>
-                    <!--Divider-->
                     <div class = "divider--in"></div>
                     </div>
                 </ng-container>
-            </div>
+            </div> -->
 
             <!--Divider-->
             <div class = "divider"></div>

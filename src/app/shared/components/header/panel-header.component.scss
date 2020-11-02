@@ -446,6 +446,75 @@ button.mat-menu-item:hover{
             display: inline-block;
         }
     }
+    .inlineFuncDialog{
+        font-family: 12px sans-serif;
+        color: $color1;
+        background-color: $color6;
+        top: 30%;
+        max-width: 400px;
+        min-width: 400px;
+        padding: 5px;
+
+        .searchBar{
+            width: 100%;
+            font-size: 12px;
+            padding: 0px 8px;
+            border: 1px $color4;
+            height: $fsize1;
+            border-bottom: 5px solid $color6;
+        }
+        
+        .inlineFuncContainer{
+            max-height: 70vh;
+            overflow-y: scroll;
+        }
+
+        .inlinefuncDiv{
+            display: none;
+            &.opened{
+                display: block;
+            }
+
+            .inlinefunc{
+                height: 25px;
+                font-size: 12px;
+                cursor: pointer;
+                width: fit-content;
+                // width: 100%;
+                margin: 2px;
+                padding: 0px 5px 0px 5px;
+                background-color: $color5;
+                color: $color1;
+                display: inline-block;
+            }
+        }
+        .inlinefuncAccordion{
+            height: 25px;
+            font-size: 12px;
+            cursor: pointer;
+            width: fit-content;
+            width: 100%;
+            margin-bottom: 2px;
+            padding: 0px 5px 0px 5px;
+            background-color: $color4;
+            color: $color8;
+            display: inline-block;
+
+            &:after{
+                content: '\2bc8'; 
+                font-size: 12px;
+                font-style: normal;
+                // color: #777;
+                float: left;
+                margin-left: 5px;
+            }
+            &.opened {
+                &:after{
+                    content: '\2bc6'; 
+                }
+            }
+        }
+    }
     .settingsDialog{
         font-family: 12px sans-serif;
         color: $color1;

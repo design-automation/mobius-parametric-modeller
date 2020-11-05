@@ -602,8 +602,6 @@ export class PanelHeaderComponent implements OnDestroy {
 
     @HostListener('window:copy', ['$event'])
     onWindowCopy(event: KeyboardEvent) {
-        console.log('??????????')
-        console.log(event);
         if (this.router.url.startsWith('/editor')) {
             document.getElementById('copyProdButton').click();
         }

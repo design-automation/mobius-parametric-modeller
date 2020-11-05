@@ -133,7 +133,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
     // .............. ON INPUT FOCUS ................
     onfocus(event: Event) {
-        if ((<HTMLElement>event.target).nodeName === 'INPUT') {
+        if ((<HTMLElement>event.target).nodeName === 'TEXTAREA' || (<HTMLElement>event.target).nodeName === 'INPUT') {
             for (const prod of this.dataService.node.state.procedure) {
                 prod.selected = false;
                 prod.lastSelected = false;
@@ -191,8 +191,10 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             this.dataService.focusedInputProd = null;
         }
         if (this.dataService.node.state.procedure.length === 0) {
-            if (this.dataService.node.localFunc.length === 1) {
-                if (data.type === ProcedureTypes.LocalFuncDef || this.dataService.node.procedure.length === 1) {
+            if (data.type === ProcedureTypes.Constant) {
+            } else if (this.dataService.node.localFunc.length === 1) {
+                if (data.type === ProcedureTypes.LocalFuncDef || this.dataService.node.procedure.length === 1 ||
+                    (this.dataService.node.type === 'end' && this.dataService.node.procedure.length === 2)) {
                 } else {
                     this.dataService.notifyMessage('Error: No selected place for adding procedure!');
                     return;
@@ -259,7 +261,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         }
         NodeUtils.check_procedure_selected(this.dataService.node.state.procedure, this.dataService.node.localFunc);
         NodeUtils.check_procedure_selected(this.dataService.node.state.procedure, this.dataService.node.procedure);
-        if (!event.ctrl && document.activeElement.tagName === 'INPUT') {
+        if (!event.ctrl && (document.activeElement.tagName === 'TEXTAREA' || document.activeElement.tagName === 'INPUT')) {
             return;
         }
         NodeUtils.select_procedure(this.dataService.node, event.prod, event.ctrl || false, event.shift || false);
@@ -279,7 +281,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             }
         }
         // if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
-        if (document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
+        if (document.activeElement.nodeName === 'TEXTAREA' || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
 
         const temp = node.state.procedure.slice();
         const copiedProds = [];
@@ -327,7 +329,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             }
         }
         // if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
-        if (document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
+        if (document.activeElement.nodeName === 'TEXTAREA' || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
 
         const temp = node.state.procedure.slice();
         const copiedProds = [];
@@ -509,9 +511,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     @HostListener('window:keyup', ['$event'])
     onKeyUp(event: KeyboardEvent) {
         if (!(event.ctrlKey && event.metaKey && event.shiftKey)) { this.disableInput = false; }
-        if (document.activeElement.nodeName === 'INPUT') {return; }
+        if (document.activeElement.nodeName === 'TEXTAREA' || document.activeElement.nodeName === 'INPUT') {return; }
         // if (!this.copyCheck) { return; }
-        if (event.key === 'Delete') {
+        if (event.key === 'Delete' || event.key === 'Backspace') {
             this.deleteSelectedProds();
         } else if (event.key.toLowerCase() === 'z' && (event.ctrlKey === true || event.metaKey === true)) {
             let actions: any;

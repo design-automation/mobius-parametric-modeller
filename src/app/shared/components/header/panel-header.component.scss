@@ -450,10 +450,11 @@ button.mat-menu-item:hover{
         font-family: 12px sans-serif;
         color: $color1;
         background-color: $color6;
-        top: 30%;
-        max-width: 400px;
-        min-width: 400px;
+        top: 0%;
+        max-width: 600px;
+        min-width: 600px;
         padding: 5px;
+        display: inline-block;
 
         .searchBar{
             width: 100%;
@@ -465,8 +466,32 @@ button.mat-menu-item:hover{
         }
         
         .inlineFuncContainer{
-            max-height: 70vh;
+            display: inline-block;
+            width: 160px;
+            height: 50vh;
             overflow-y: scroll;
+        }
+        .inlineFuncHelpContainer{
+            display: inline-block;
+            width: 430px;
+            height: 50vh;
+            overflow-y: scroll;
+            padding: 5px;
+        }
+        .inlineFuncExpressionContainer{
+            font-family: Arial;
+            display: inline-block;
+            width: 560px;
+            height: 100px;
+        }
+        .inlineFuncSaveButtonContainer {
+            display: inline-block;
+            // width: 40px;
+            // height: 100px;
+            button{
+                width: 40px;
+                height: 40px;
+            }
         }
 
         .inlinefuncDiv{
@@ -487,7 +512,71 @@ button.mat-menu-item:hover{
                 color: $color1;
                 display: inline-block;
             }
+
+            .inlinefuncUL{
+                position: relative;
+                list-style-type: none;
+                margin: 0px 0px 0px 3px;
+                border-left: 2px solid $color3;
+                padding: 0px;
+                background-color: $color5;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                //padding-top: 2px;
+                //padding-bottom: 2px;
+            
+                li{
+                    position: relative;
+                    user-select: none;
+                    margin: 0px;
+                    padding: 0px;
+                    padding-left: 8px;
+                    font-style: italic;
+                    font-weight: 550;
+                    color: $function-text-color2;
+                    font-size: $fsize2;
+                    height: 18px;
+                    line-height: 18px;
+                    width: 100%;
+                    box-sizing: border-box;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+            
+                    .helpButton {
+                        display: none;
+                        position: absolute;
+                        right: 1px;
+                        width: 18px;
+                        height: 18px;
+                        background-color: inherit;
+                        padding: 2px 0px 0px 0px;
+                        margin: 0px;
+                        border: 0px;
+            
+                        &:focus {
+                            outline: 0px;
+                        }
+                        .icon {
+                            width: 14px;
+                            height: 14px;
+                        }
+                    }
+                }
+                .user--Manage{
+                    margin-bottom: 4px;
+                    border-bottom: 1px solid $color3;
+                }
+                :hover{
+                    background-color: $color4;
+                    transition: 0.4s;
+                    .helpButton {
+                        display: inline-block;
+                    }
+                }
+            }
         }
+
         .inlinefuncAccordion{
             height: 25px;
             font-size: 12px;
@@ -500,19 +589,33 @@ button.mat-menu-item:hover{
             color: $color8;
             display: inline-block;
 
-            &:after{
-                content: '\2bc8'; 
-                font-size: 12px;
-                font-style: normal;
-                // color: #777;
-                float: left;
-                margin-left: 5px;
-            }
-            &.opened {
-                &:after{
-                    content: '\2bc6'; 
-                }
-            }
+            font-weight: 550;
+            color: #00006d;
+            font-style: italic;
+            white-space: nowrap;
+            // &:after{
+            //     content: '\2bc8'; 
+            //     font-size: 12px;
+            //     font-style: normal;
+            //     color: #777;
+            //     float: left;
+            //     margin-left: 5px;
+            // }
+            // &.opened {
+            //     &:after{
+            //         content: '\2bc6'; 
+            //     }
+            // }
+            
+        }
+
+        .inlineFuncExpression {
+            font-family: Arial;
+            display: block;
+            width: 550px;
+            height: 100%;
+            resize: none;
+            padding: 5px;
         }
     }
     .settingsDialog{

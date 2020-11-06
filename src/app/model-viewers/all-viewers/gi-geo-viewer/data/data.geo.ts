@@ -47,7 +47,7 @@ export class DataGeo {
     public viewColorLayers = [];
     public viewElevationLayers = [];
 
-    private viewControl;
+    private lightingCamera;
 
     /**
      * Constructs a new data subscriber.
@@ -72,13 +72,12 @@ export class DataGeo {
             tilt: 50
         };
 
-
+        this.lightingCamera = new THREE.Camera();
 
         this.container = document.getElementById('threejs-geo-container');
         this.view = new itowns.GlobeView(this.container, placement);
         this.view.mainLoop.gfxEngine.renderer.shadowMap.enabled = true;
         this.view.mainLoop.gfxEngine.renderer.shadowMap.type = itowns.THREE.PCFShadowMap;
-
 
         this.camTarget = this.view.controls.getLookAtCoordinate();
         // this.viewControl = new itowns.GlobeControls(this.view, this.camTarget, 200);
@@ -320,8 +319,9 @@ export class DataGeo {
         lightTarget.updateMatrixWorld();
         this.view.scene.add(lightTarget);
 
-        const lighting = new itowns.THREE.DirectionalLight(0xFFFFFF, 1);
-        lighting.name = 'mobius_lighting';
+        const lighting = this.view.scene.children[0].children[0]
+        // const lighting = new itowns.THREE.DirectionalLight(0xFFFFFF, 1);
+        // lighting.name = 'mobius_lighting';
         // this.getDLPosition(distance);
         lighting.castShadow = true;
         lighting.visible = true;
@@ -331,9 +331,20 @@ export class DataGeo {
         lighting.shadow.camera.far = scale * 20;
         lighting.shadow.bias = -0.0003;
 
-        camTarget.altitude = scale * 1.5;
-        lighting.position.copy(camTarget.as(this.view.referenceCrs));
         const cam = <THREE.OrthographicCamera> lighting.shadow.camera;
+        itowns.CameraUtils.transformCameraToLookAtTarget(this.view, cam, {
+            coord: this.camTarget,
+            tilt: 70,
+            heading: -90,
+            range: scale
+        });
+
+        // lighting.matrix.copy(this.lightingCamera.matrix);
+        // lighting.matrixWorld.copy(this.lightingCamera.matrixWorld);
+        lighting.position.copy(cam.position);
+        lighting.target = lightTarget;
+        // camTarget.altitude = scale * 1.5;
+        // lighting.position.copy(camTarget.as(this.view.referenceCrs));
         cam.up.set(0, 0, 1);
         cam.left = -scale;
         cam.right = scale;
@@ -342,7 +353,7 @@ export class DataGeo {
 
         lighting.updateMatrixWorld();
 
-        this.view.scene.add(lighting);
+        // this.view.scene.add(lighting);
         this.lookAtObj(threejsScene);
     }
 

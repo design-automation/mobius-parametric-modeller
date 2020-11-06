@@ -76,7 +76,7 @@ export function updateGlobals(startNode: INode) {
     globals = [];
     for (let i = startNode.procedure.length - 1; i > -1; i-- ) {
         const prod = startNode.procedure[i];
-        if (prod.type !== ProcedureTypes.Constant) { return; }
+        if (prod.type !== ProcedureTypes.Constant || !prod.args[0].value) { return; }
         prod.args[0].value = prod.args[0].value.toUpperCase();
         globals.push(prod.args[0].value);
         prod.args[0].jsValue = prod.args[0].value + '_';

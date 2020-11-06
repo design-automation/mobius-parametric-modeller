@@ -943,60 +943,59 @@ export class PanelHeaderComponent implements OnDestroy {
     openInlineMenu(event, id) {
         const inlineDiv = document.getElementById('inlinefunc_' + id);
         if (inlineDiv.classList.contains('opened')) {
-            event.target.classList.remove('opened');
+            // event.target.classList.remove('opened');
             inlineDiv.classList.remove('opened');
         } else {
-            event.target.classList.add('opened');
+            // event.target.classList.add('opened');
             inlineDiv.classList.add('opened');
         }
     }
 
-    copyInlineFunc(str: string) {
-        if (!this.dataService.focusedInput) {
-            return;
-        }
-        this.dataService.focusedInput.focus();
+    disableFocus(event) {
+        event.preventDefault();
+    }
+
+    addInlineFunc(str: string) {
+        let expressionElement = <HTMLTextAreaElement> document.activeElement;
         let selStart: number, selEnd: number;
-        if (this.dataService.focusedInput.selectionDirection === 'backward') {
-            selStart = this.dataService.focusedInput.selectionEnd;
-            selEnd = this.dataService.focusedInput.selectionStart;
+        if (expressionElement && expressionElement.id === 'inlineExpression') {
+            selStart = expressionElement.selectionStart;
+            selEnd = expressionElement.selectionEnd;
         } else {
-            selStart = this.dataService.focusedInput.selectionStart;
-            selEnd = this.dataService.focusedInput.selectionEnd;
+            expressionElement = <HTMLTextAreaElement> document.getElementById('inlineExpression');
+            selStart = expressionElement.value.length;
+            selEnd = expressionElement.value.length;
+            expressionElement.focus();
         }
         const newSelStart = str.indexOf('(');
-        this.dataService.focusedInput.value =
-            this.dataService.focusedInput.value.slice(0, selStart) +
+        expressionElement.value =
+            expressionElement.value.slice(0, selStart) +
             str +
-            this.dataService.focusedInput.value.slice(selEnd);
-        this.dataService.focusedInput.dispatchEvent(inputEvent);
+            expressionElement.value.slice(selEnd);
+        expressionElement.dispatchEvent(inputEvent);
         if (newSelStart !== -1) {
-            this.dataService.focusedInput.selectionStart = selStart + newSelStart + 1;
-            this.dataService.focusedInput.selectionEnd = selStart + str.length - 1;
+            expressionElement.setSelectionRange(selStart + newSelStart + 1, selStart + str.length - 1);
         } else {
-            this.dataService.focusedInput.selectionStart = selStart + str.length;
-            this.dataService.focusedInput.selectionEnd = selStart + str.length;
+            expressionElement.setSelectionRange(selStart + str.length, selStart + str.length);
         }
-        this.dataService.dialog.close();
-        // const index = this.dataService.focusedInput.selectionDirection === 'backward' ?
-        //     this.dataService.focusedInput.selectionStart : this.dataService.focusedInput.selectionEnd;
-        // this.dataService.focusedInput.value =
-        //     this.dataService.focusedInput.value.slice(0, index) +
-        //     string +
-        //     this.dataService.focusedInput.value.slice(index);
-
-        // this.dataService.focusedInput.dispatchEvent(inputEvent);
-        // this.dataService.focusedInput.selectionStart = index + string.length;
-
-
-        // const el = document.createElement('textarea');
-        // el.value = str;
-        // document.body.appendChild(el);
-        // el.select();
-        // document.execCommand('copy');
-        // document.body.removeChild(el);
-        // this.dataService.notifyMessage('"' + str + '" copied to clipboard');
     }
+
+    async copyInlineFunc() {
+        const expressionElement = <HTMLTextAreaElement> document.getElementById('inlineExpression');
+        // expressionElement.focus();
+        // expressionElement.setSelectionRange(0, expressionElement.value.length);
+        // document.execCommand('copy', true);
+        await navigator.clipboard.writeText(expressionElement.value);
+        this.dataService.notifyMessage('Copied "' + expressionElement.value + '" to clipboard');
+        document.getElementById('hidden_node_selection').click();
+    }
+
+    updateInlineHelpText(event: MouseEvent, funcStr, helpString: string) {
+        event.stopPropagation();
+        const inlineHelp = <HTMLTextAreaElement> document.getElementById('inlineHelp');
+        inlineHelp.innerHTML = `<h4>${funcStr}</h4><div>` + helpString + '</div>';
+    }
+
 
     updateNode() {
         const nodeSelInput = <HTMLInputElement> document.getElementById('hidden_node_selection');

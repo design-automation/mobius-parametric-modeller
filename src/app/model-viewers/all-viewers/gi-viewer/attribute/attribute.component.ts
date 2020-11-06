@@ -224,6 +224,8 @@ export class AttributeComponent implements OnChanges {
                 this.displayedColumns = [];
                 this.dataSource = new MatTableDataSource<object>();
                 this.dataSource.sortingDataAccessor = this._sortingDataAccessor;
+            } else if (tabIndex === 9) {
+            } else if (tabIndex === 10) {
             } else {
                 this.generateTable(tabIndex);
             }

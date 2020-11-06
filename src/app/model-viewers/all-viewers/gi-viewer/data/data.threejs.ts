@@ -101,6 +101,7 @@ export class DataThreejs extends DataThreejsLookAt {
         // add the axes, ground, lights, etc
         this._addEnv();
 
+        if (!container) { return; }
         setTimeout(() => {
             // this.exportGLTF(this.scene);
             let old = document.getElementById('hud');
@@ -118,7 +119,7 @@ export class DataThreejs extends DataThreejsLookAt {
 
     private _addGeom(model: GIModel): void {
         // Add geometry
-        const threejs_data: IThreeJS = model.get3jsData(model.outputSnapshot);
+        const threejs_data: IThreeJS = model.get3jsData(this.nodeIndex);
         this.tri_select_map = threejs_data.tri_select_map;
         this.edge_select_map = threejs_data.edge_select_map;
         this.point_select_map = threejs_data.point_select_map;

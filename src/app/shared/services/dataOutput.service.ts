@@ -13,7 +13,7 @@ export class DataOutputService {
     getViewerData(node: INode, model: GIModel, getViewOutput: boolean) {
         if (!model || !node || !node.enabled || !node.model) {
             return null; }
-        model.outputSnapshot = node.model;
+        // model.outputSnapshot = node.model;
         return model;
         // const webWorker = new WebWorkerService();
         // if (!node || !node.enabled || !node.model) {

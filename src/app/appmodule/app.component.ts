@@ -26,6 +26,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.matIconRegistry.addSvgIcon('terminate', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Terminate.svg'));
         this.matIconRegistry.addSvgIcon('c3D Viewer', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/3D2.svg'));
         this.matIconRegistry.addSvgIcon('cGeo Viewer', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Geo.svg'));
+        this.matIconRegistry.addSvgIcon('cThree Geo Viewer', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Geo.svg'));
         this.matIconRegistry.addSvgIcon('cCytoscape Viewer', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/cyto.svg'));
         this.matIconRegistry.addSvgIcon('cMobius Cesium', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Geo2.svg'));
         this.matIconRegistry.addSvgIcon('cConsole', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Console.svg'));

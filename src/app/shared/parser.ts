@@ -305,7 +305,6 @@ export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProd
         procedure.args[argIndex].invalidVar = varResult.error;
         return;
     }
-
     procedure.args[argIndex].value = varResult.str;
     procedure.args[argIndex].jsValue = varResult.jsStr;
     varResult = checkValidVar(varResult.vars, procedure, nodeProdList);
@@ -1095,11 +1094,16 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
             }
             i = nComp.i;
 
-            newString += `?@${result.str}${operator}${nComp.str} `;
-            // jsString = ` __modules__.${_parameterTypes.queryFilter}(__params__.model, ${entity}, '${att_name}'` +
-            //            `, ${att_index}, '${operator}', ${nComp.jsStr})`; //////////
-            jsString = ` __modules__.${_parameterTypes.queryFilter}(__params__.model, ${entity}, ['${att_name}'` +
-                       `, ${att_index}], '${operator}', ${nComp.jsStr})`; //////////
+            bracketIndex = nComp.jsStr.indexOf('[pythonList(');
+            if (bracketIndex !== -1) {
+                newString += `?@${result.str}${operator}${nComp.str} `;
+                jsString = ` __modules__.${_parameterTypes.queryFilter}(__params__.model, ${entity}, ['${att_name}'` +
+                           `, ${att_index}], '${operator}', ${nComp.jsStr.slice(0, bracketIndex)})${nComp.jsStr.slice(bracketIndex)}`;
+            } else {
+                newString += `?@${result.str}${operator}${nComp.str} `;
+                jsString = ` __modules__.${_parameterTypes.queryFilter}(__params__.model, ${entity}, ['${att_name}'` +
+                           `, ${att_index}], '${operator}', ${nComp.jsStr})`;
+            }
 
             if (i === comps.length - 1 || (comps[i + 1].value !== '@' && comps[i + 1].value !== '#' && comps[i + 1].value !== '?')) {
                 return {'i': i, 'str': newString, 'jsStr': jsString};

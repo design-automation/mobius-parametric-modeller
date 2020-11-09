@@ -18,6 +18,12 @@
             </li>
         </ul>
         <div class = "divider"></div>
+
+        <button id='Inline' class="accordion" 
+        (mousedown)='preventfocus($event)'
+        (click)='open_inline_dialog($event)'>Expression</button>
+        <!--Divider-->
+        <div class = "divider"></div>
     </div>
 
 
@@ -39,11 +45,6 @@
                         Comment
                 </li>
             </ul> -->
-            <button id='Inline' class="accordion" 
-            (mousedown)='preventfocus($event)'
-            (click)='open_inline_dialog($event)'>Expression</button>
-            <!--Divider-->
-            <div class = "divider"></div>
             <!--Divider-->
             <!-- <div class = "divider"></div> -->
             <button id='basic-funcs' class="accordion mainAccordion" 

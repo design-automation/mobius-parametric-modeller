@@ -12,7 +12,7 @@ export class GIModel {
     public metadata: GIMetaData;
     public modeldata: GIModelData;
     public debug = true;
-    public outputSnapshot: number;
+    // public outputSnapshot: number;
 
     /**
      * Constructor

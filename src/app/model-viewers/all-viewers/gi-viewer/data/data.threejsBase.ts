@@ -71,6 +71,7 @@ export class DataThreejsBase {
 
     // the model to display
     public model: GIModel;
+    public nodeIndex: number;
     public scene_objs: THREE.Object3D[] = [];
     public scene_objs_selected: Map<string, THREE.Object3D> = new Map();
     public positions: THREE.Object3D[] = [];

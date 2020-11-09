@@ -238,7 +238,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 //     this.dataService.switch_page = false;
                 //     return;
                 // }
-                this.model.outputSnapshot = this.nodeIndex;
                 if (!this.container) { return; }
                 this.updateModel(this.model);
             }
@@ -534,6 +533,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             return;
         } else {
             this._data_threejs.model = model;
+            this._data_threejs.nodeIndex = this.nodeIndex;
             try {
                 // add geometry to the scene
                 this._data_threejs.populateScene(model, this.container);

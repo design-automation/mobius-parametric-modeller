@@ -1,0 +1,27 @@
+<div id="gi-viewer-container">
+    <three-geo-viewer [model]="data" [nodeIndex]="nodeIndex"></three-geo-viewer>
+    <button class='btn' id="settings_button" mat-icon-button (click)="openModal('geo_settings_modal')" title="Settings"><mat-icon svgIcon="settings"></mat-icon></button>
+    <button id="zoomingfit" mat-icon-button (click)="zoomfit()" title='Zoom to Fit Model'>
+        <mat-icon svgIcon="cZoom"></mat-icon>
+    </button>
+    <modal-window id="geo_settings_modal" (closeModal) = 'onCloseModal()'>
+        <h1>Geo Viewer Settings</h1>
+        <tabs id="settingsTab">
+            <tab tabTitle="Scene">
+                <div class="mat-elevation-z1">
+                    <dl>
+                        <dd>
+                            <div class="label">Imagery tile:</div>
+                            <select [(ngModel)]='settings.imagery.layer'>
+                                <option *ngFor="let item of colorLayerList" value ={{item}}>{{item}}</option>
+                            </select>
+                        </dd>
+                    </dl>
+                </div>
+            </tab>
+        </tabs>
+        <button (click)="closeModal('geo_settings_modal', true);" class="filebtn closebtn setting">Apply</button>
+        <button (click)="closeModal('geo_settings_modal');" class='filebtn closebtn setting'>Cancel</button>
+    </modal-window>
+    <div id='geo-attribution'></div>
+</div>

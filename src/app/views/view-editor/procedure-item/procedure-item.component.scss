@@ -182,6 +182,10 @@
         &.disabled{
             pointer-events: none;
         }
+        &.input--funcName{
+            font-weight: bold;
+            margin-right: 4px;
+        }
     }
     .input--comment{
         font-size: $fsize2;

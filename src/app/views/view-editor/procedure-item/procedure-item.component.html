@@ -692,7 +692,7 @@
             <div class='container--item' >
                 <div class='line--item'>
                     <div class='basic-function-text'>Def  </div>
-                    <input class='input--arg' 
+                    <input class='input--arg input--funcName' 
                     *ngIf="data.args[0].name[0] !== '_'" 
                     [(ngModel)]='data.args[0].value'
                     [class.error]='data.args[0].invalidVar'

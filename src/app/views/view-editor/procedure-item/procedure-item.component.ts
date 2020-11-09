@@ -26,12 +26,14 @@ export class ProcedureItemComponent implements OnDestroy {
 
     private keys = Object.keys(ProcedureTypes);
     private ctx = document.createElement('canvas').getContext('2d');
+    private ctxB = document.createElement('canvas').getContext('2d');
 
     ProcedureTypesArr = this.keys.slice(this.keys.length / 2);
     ModuleDoc = ModuleDocList;
 
     constructor(private dataService: DataService) {
         this.ctx.font = '12px Arial';
+        this.ctxB.font = 'bold 12px Arial';
     }
 
     ngOnDestroy() {
@@ -401,7 +403,11 @@ export class ProcedureItemComponent implements OnDestroy {
     // }
 
     inputSize(val) {
-        return this.ctx.measureText(val).width + 7;
+        return this.ctx.measureText(val).width * 1.05 + 4;
+    }
+
+    inputSizeBold(val) {
+        return this.ctxB.measureText(val).width * 1.05 + 4;
     }
 
 

@@ -18,8 +18,9 @@
             </li>
         </ul>
         <div class = "divider"></div>
-
     </div>
+
+
     <div class = "toolset--commands">
         <!-- <div [hidden]="getNode().type == 'start' && !getNode().state.show_code"> -->
         <div [hidden]="!getNode().state.show_code">
@@ -38,6 +39,11 @@
                         Comment
                 </li>
             </ul> -->
+            <button id='Inline' class="accordion" 
+            (mousedown)='preventfocus($event)'
+            (click)='open_inline_dialog($event)'>Expression</button>
+            <!--Divider-->
+            <div class = "divider"></div>
             <!--Divider-->
             <!-- <div class = "divider"></div> -->
             <button id='basic-funcs' class="accordion mainAccordion" 
@@ -112,7 +118,7 @@
             <div class = "divider"></div>
             <button id='Functions' class="accordion mainAccordion"  
             (mousedown)='preventfocus($event)'
-            (click)='toggleAccordionHead("Functions")'>Main Funcs
+            (click)='toggleAccordionHead("Functions")'>Functions
             </button>
             <!--Search Bar-->
             <div class = 'searchbar--container'>
@@ -207,12 +213,6 @@
                 </ng-container>
             </div>
             
-            <!--Divider-->
-            <div class = "divider"></div>
-            
-            <button id='Inline' class="accordion" 
-            (mousedown)='preventfocus($event)'
-            (click)='open_inline_dialog($event)'>Expression</button>
             <!--Search Bar-->
             <!-- <div class = 'searchbar--container'>
                 <input id='searchbarInline' class='searchBar' placeholder='Search' (mousedown)='selectPrevProd()' (keyup)='searchInlineFuncs($event)'/>

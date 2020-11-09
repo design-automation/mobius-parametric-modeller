@@ -29,6 +29,7 @@ export class PanelHeaderComponent implements OnDestroy {
     executeCheck: boolean;
     nodeListCheck: boolean;
     selectedBackups: string[] = [];
+    textareaMousedown = false;
 
     urlSet = ['', 'publish', '', '', '', ''];
     urlValid: boolean;
@@ -583,6 +584,10 @@ export class PanelHeaderComponent implements OnDestroy {
             helpMenu.style.display = 'none';
         }
         if (this.dataService.dialog) {
+            if (this.textareaMousedown) {
+                this.textareaMousedown = false;
+                return;
+            }
             if ((<HTMLElement>event.target).tagName === 'SELECT') { return; }
 
             const rect = this.dataService.dialog.getBoundingClientRect();
@@ -990,10 +995,14 @@ export class PanelHeaderComponent implements OnDestroy {
         document.getElementById('hidden_node_selection').click();
     }
 
-    updateInlineHelpText(event: MouseEvent, funcStr, helpString: string) {
+    updateInlineHelpText(event: MouseEvent, inlineFunc: string[]) {
         event.stopPropagation();
         const inlineHelp = <HTMLTextAreaElement> document.getElementById('inlineHelp');
-        inlineHelp.innerHTML = `<h4>${funcStr}</h4><div>` + helpString + '</div>';
+        if (inlineFunc.length === 2) {
+            inlineHelp.innerHTML = `<h3>${inlineFunc[0]}</h3><br><div>` + inlineFunc[1] + '</div>';
+        } else if (inlineFunc.length > 2) {
+            inlineHelp.innerHTML = `<h3>${inlineFunc[0]}</h3><br><div>` + inlineFunc[2] + '</div>';
+        }
     }
 
 

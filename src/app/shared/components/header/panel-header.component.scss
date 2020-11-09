@@ -230,7 +230,15 @@ button.mat-menu-item:hover{
 
 #headerDialog{
     position: relative;
+    background-color: $color6;
     top: 10%;
+
+    .closebutton {
+        position:absolute;
+        z-index: 1;
+        top: 5px;
+        right: 5px;
+    }
 
     .genUrlDialog{
         font-family: 12px sans-serif;
@@ -456,38 +464,45 @@ button.mat-menu-item:hover{
         padding: 5px;
         display: inline-block;
 
-        .searchBar{
-            width: 100%;
-            font-size: 12px;
-            padding: 0px 8px;
-            border: 1px $color4;
-            height: $fsize1;
-            border-bottom: 5px solid $color6;
-        }
-        
         .inlineFuncContainer{
             display: inline-block;
-            width: 160px;
-            height: 50vh;
+            width: 180px;
+            height: calc(50vh + 30px);
             overflow-y: scroll;
+            .searchBar{
+                width: 90%;
+                font-size: 12px;
+                padding: 2px 0px 2px 8px;
+                // border: 1px solid $color4;
+                height: $fsize1;
+                // border-bottom: 5px solid $color6;
+                border: 1px solid $color5;
+            }
+            hr {
+                border: 1px solid $color4;
+                background-color: $color4;
+            }
         }
         .inlineFuncHelpContainer{
             display: inline-block;
-            width: 430px;
+            width: 380px;
             height: 50vh;
             overflow-y: scroll;
-            padding: 5px;
+            padding: 15px;
+            margin-left: 10px;
+            color: $color1;
         }
         .inlineFuncExpressionContainer{
             font-family: Arial;
             display: inline-block;
-            width: 560px;
-            height: 100px;
+            width: 580px;
+            height: 80px;
         }
         .inlineFuncSaveButtonContainer {
             display: inline-block;
             // width: 40px;
             // height: 100px;
+            padding-left: 560px;
             button{
                 width: 40px;
                 height: 40px;
@@ -583,7 +598,6 @@ button.mat-menu-item:hover{
             cursor: pointer;
             width: fit-content;
             width: 100%;
-            margin-bottom: 2px;
             padding: 0px 5px 0px 5px;
             background-color: $color4;
             color: $color8;
@@ -611,11 +625,13 @@ button.mat-menu-item:hover{
 
         .inlineFuncExpression {
             font-family: Arial;
-            display: block;
-            width: 550px;
+            // display: block;
+            width: 585px;
             height: 100%;
             resize: none;
             padding: 5px;
+            border: 1px solid $color5;
+            color: $color8;
         }
     }
     .settingsDialog{

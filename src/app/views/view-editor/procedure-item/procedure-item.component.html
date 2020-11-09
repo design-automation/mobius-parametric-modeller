@@ -700,7 +700,7 @@
                     [class.disabled]='disableInput'
                     (blur)='varMod(0)'
                     placeholder={{data.args[0].name}}
-                    [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
+                    [style.width.px]='inputSizeBold(data.args[0].value||data.args[0].name)'
                     >
                     <span class='function-text'>  Function</span>
                     <ng-container *ngFor='let p of data.args;let i=index'>

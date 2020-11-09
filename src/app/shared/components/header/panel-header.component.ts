@@ -56,7 +56,7 @@ export class PanelHeaderComponent implements OnDestroy {
             this.executeCheck = true;
             this.nodeListCheck = true;
         }
-        this.ctx.font = '12px sans-serif';
+        this.ctx.font = '400 12px arial';
 
         this.settings = this.dataService.mobiusSettings;
 

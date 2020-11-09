@@ -117,6 +117,7 @@
 </div>
 
 <dialog id='headerDialog'>
+    <button class='closebutton' (click)='closeDialog(false)'><mat-icon class='icon'>close</mat-icon></button>
     <div class='genUrlDialog' *ngIf='checkDialog("url")'>
         <p>To publish your model, please upload your Möbius (.mob) file to an online file server to allows
         you to share the URL. (For example, you can upload your file to platforms such Github or Dropbox.) 
@@ -236,16 +237,17 @@
     <div class='inlineFuncDialog' *ngIf='checkDialog("inlinefunc")'>
         <p>Create Expression: </p>
         <br>
-        <input id='search_inline' class='searchBar' placeholder='Search Inline Function' value='' (keyup)="searchInlineFuncs($event)">
-        <br>
         <div class='inlineFuncContainer'>
+            <input id='search_inline' class='searchBar' placeholder='Search Inline Function' value='' (keyup)="searchInlineFuncs($event)">
+            <br>
+            <br>
             <ng-container *ngFor='let fnCategory of searchedInlineFunc'>
                 <button class='inlinefuncAccordion closed' (mousedown)='disableFocus($event)' (click)='openInlineMenu($event, fnCategory[0])'>{{fnCategory[0]}}</button>
                 <div id='inlinefunc_{{fnCategory[0]}}' class='inlinefuncDiv closed'>
                     <ul class='inlinefuncUL'>
                         <li *ngFor='let fn of fnCategory[1]' (mousedown)='disableFocus($event)' (click)='addInlineFunc(fn[0])' title='{{fn[1]}}'>
                             {{fn[0]}}
-                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='updateInlineHelpText($event, fn[0], fn[1])'>
+                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='updateInlineHelpText($event, fn)'>
                                 <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
                             </button>
                         </li>
@@ -257,10 +259,10 @@
             <p>Inline Function Help</p>
         </div>
         <div class='inlineFuncExpressionContainer'>
-            <textarea id='inlineExpression' class='inlineFuncExpression' placeholder='Expression'></textarea>
+            <textarea id='inlineExpression' class='inlineFuncExpression' placeholder='Expression' (mousedown)='textareaMousedown = true'></textarea>
         </div>
         <div class='inlineFuncSaveButtonContainer'>
-            <button  (click)='copyInlineFunc()'><mat-icon>content_copy</mat-icon></button>
+            <button (click)='copyInlineFunc()'><mat-icon>content_copy</mat-icon></button>
         </div>
     </div>
     <div class='saveLocalDialog' *ngIf='checkDialog("savels")'>

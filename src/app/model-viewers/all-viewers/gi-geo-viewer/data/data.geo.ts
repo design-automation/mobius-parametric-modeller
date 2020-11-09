@@ -109,8 +109,17 @@ export class DataGeo {
         const attribution_div = document.getElementById('geo-attribution');
         attribution_div.innerHTML = this.viewColorLayers[layerIndex].source.attribution.html;
 
-        if (this.viewElevationLayers[0]) {
-            this.view.addLayer(this.viewElevationLayers[0]);
+        let terrainIndex = 0;
+        if ( this.settings && this.settings.imagery && this.settings.imagery.terrain ) {
+            for (let i = 0; i < this.viewElevationLayers.length; i++) {
+                if (this.viewElevationLayers[i].source.attribution.name === this.settings.imagery.terrain) {
+                    terrainIndex = i;
+                    break;
+                }
+            }
+        }
+        if (this.viewElevationLayers[terrainIndex]) {
+            this.view.addLayer(this.viewElevationLayers[terrainIndex]);
         }
         // const atmosphere = this.view.getLayerById('atmosphere');
         // atmosphere.setRealisticOn(true);
@@ -619,13 +628,16 @@ export class DataGeo {
     private _getTerrains() {
         this.viewElevationLayers = [];
         this.viewElevationLayers.push(null);
-        this.viewElevationLayers.push(new itowns.ElevationLayer('elevation', {
+        this.viewElevationLayers.push(new itowns.ElevationLayer('ElevationLayer', {
             source: new itowns.WMTSSource({
                 projection: 'EPSG:3857',
                 url: 'http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wmts',
-                name: 'ELEVATION.ELEVATIONGRIDCOVERAGE',
+                name: 'Elevation',
                 tileMatrixSet: 'WGS84G',
-                format: 'image/x-bil;bits=32'
+                format: 'image/x-bil;bits=32',
+                attribution: {
+                    name: 'Elevation'
+                }
             })
         }));
     }

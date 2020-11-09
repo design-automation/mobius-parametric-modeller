@@ -61,7 +61,7 @@ input, select {
     vertical-align: bottom;
     padding: 0px 0px 0px 6px;
 
-    font-family: sans-serif;
+    font-family: Arial;
     font-size: $fsize2;
     &:hover, &:focus{
         background-color: $color7;
@@ -222,7 +222,7 @@ select{
         background-color: transparent;
 
         padding-left: 5px;
-        font-family: sans-serif;
+        font-family: arial;
         font-size: $fsize2;
         min-width: 100%;
         resize: none;

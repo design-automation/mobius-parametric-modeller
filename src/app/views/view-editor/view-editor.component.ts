@@ -43,7 +43,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         this.keyboardSub = this.keyboardService.shiftKeyPushed$.subscribe(() => {
             this.disableInput = true;
         });
-        this.ctx.font = 'bold 12px arial';
+        this.ctx.font = '700 12px arial';
     }
 
     ngAfterViewInit() {

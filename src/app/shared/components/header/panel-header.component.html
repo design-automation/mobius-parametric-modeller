@@ -237,13 +237,13 @@
     <div class='inlineFuncDialog' *ngIf='checkDialog("inlinefunc")'>
         <p>Create Expression: </p>
         <br>
+        <input id='search_inline' class='searchBar' placeholder='Search Inline Function' value='' (keyup)="searchInlineFuncs($event)">
+        <br>
+        <br>
         <div class='inlineFuncContainer'>
-            <input id='search_inline' class='searchBar' placeholder='Search Inline Function' value='' (keyup)="searchInlineFuncs($event)">
-            <br>
-            <br>
             <ng-container *ngFor='let fnCategory of searchedInlineFunc'>
-                <button class='inlinefuncAccordion closed' (mousedown)='disableFocus($event)' (click)='openInlineMenu($event, fnCategory[0])'>{{fnCategory[0]}}</button>
-                <div id='inlinefunc_{{fnCategory[0]}}' class='inlinefuncDiv closed'>
+                <button  id='inlineAcc_{{fnCategory[0]}}' class='inlinefuncAccordion' (mousedown)='disableFocus($event)' (click)='openInlineMenu($event, fnCategory[0])'>{{fnCategory[0]}}</button>
+                <div id='inlinefunc_{{fnCategory[0]}}' class='inlinefuncDiv'>
                     <ul class='inlinefuncUL'>
                         <li *ngFor='let fn of fnCategory[1]' (mousedown)='disableFocus($event)' (click)='addInlineFunc(fn[0])' title='{{fn[1]}}'>
                             {{fn[0]}}

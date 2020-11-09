@@ -954,13 +954,16 @@ export class PanelHeaderComponent implements OnDestroy {
     }
 
     openInlineMenu(event, id) {
+        const inlineAcc = document.getElementById('inlineAcc_' + id);
         const inlineDiv = document.getElementById('inlinefunc_' + id);
         if (inlineDiv.classList.contains('opened')) {
             // event.target.classList.remove('opened');
             inlineDiv.classList.remove('opened');
+            inlineAcc.classList.remove('opened');
         } else {
             // event.target.classList.add('opened');
             inlineDiv.classList.add('opened');
+            inlineAcc.classList.add('opened');
         }
     }
 

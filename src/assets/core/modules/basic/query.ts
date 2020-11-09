@@ -92,16 +92,12 @@ export function Get(__model__: GIModel, ent_type_enum: _EEntType, entities: TId|
     if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'query.Get';
-    let ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = null;
+    let ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
     if (__model__.debug) {
-        if (entities !== null && entities !== undefined) {
-            ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-                [ID.isID, ID.isIDL, ID.isIDLL], null, false) as TEntTypeIdx|TEntTypeIdx[];
-        }
+        ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
+            [ID.isNull, ID.isID, ID.isIDL, ID.isIDLL], null, false) as TEntTypeIdx|TEntTypeIdx[];
     } else {
-        if (entities !== null && entities !== undefined) {
-            ents_arr = idsBreak(entities) as TEntTypeIdx[];
-        }
+        ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
     // get the entity type // TODO deal with multiple ent types

@@ -998,11 +998,14 @@ export class PanelHeaderComponent implements OnDestroy {
     updateInlineHelpText(event: MouseEvent, inlineFunc: string[]) {
         event.stopPropagation();
         const inlineHelp = <HTMLTextAreaElement> document.getElementById('inlineHelp');
-        if (inlineFunc.length === 2) {
-            inlineHelp.innerHTML = `<h3>${inlineFunc[0]}</h3><br><div>` + inlineFunc[1] + '</div>';
-        } else if (inlineFunc.length > 2) {
-            inlineHelp.innerHTML = `<h3>${inlineFunc[0]}</h3><br><div>` + inlineFunc[2] + '</div>';
+        let inlineString = '';
+        if (inlineFunc.length >= 2) {
+            inlineString = `<h3>${inlineFunc[0]}</h3><br><div>` + inlineFunc[1] + '</div>';
+            for (let i = 2; i < inlineFunc.length; i++) {
+                inlineString = inlineString + '<div>' + inlineFunc[i] + '</div>';
+            }
         }
+        inlineHelp.innerHTML = inlineString;
     }
 
 

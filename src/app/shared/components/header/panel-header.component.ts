@@ -943,6 +943,14 @@ export class PanelHeaderComponent implements OnDestroy {
                 this.searchedInlineFunc.push([fnCategory[0], funcs]);
             }
         }
+        setTimeout(() => {
+            for (const cat of this.searchedInlineFunc) {
+                const accordion = <HTMLInputElement> document.getElementById('inlinefunc_' + cat[0]);
+                if (!accordion.classList.contains('opened')) {
+                    accordion.classList.add('opened');
+                }
+            }
+        }, 10);
     }
 
     openInlineMenu(event, id) {

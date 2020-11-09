@@ -110,14 +110,14 @@ export class DataGeo {
         attribution_div.innerHTML = this.viewColorLayers[layerIndex].source.attribution.html;
 
         let terrainIndex = 0;
-        if ( this.settings && this.settings.imagery && this.settings.imagery.terrain ) {
-            for (let i = 0; i < this.viewElevationLayers.length; i++) {
-                if (this.viewElevationLayers[i].source.attribution.name === this.settings.imagery.terrain) {
-                    terrainIndex = i;
-                    break;
-                }
-            }
-        }
+        // if ( this.settings && this.settings.imagery && this.settings.imagery.terrain ) {
+        //     for (let i = 0; i < this.viewElevationLayers.length; i++) {
+        //         if (this.viewElevationLayers[i].source.attribution.name === this.settings.imagery.terrain) {
+        //             terrainIndex = i;
+        //             break;
+        //         }
+        //     }
+        // }
         if (this.viewElevationLayers[terrainIndex]) {
             this.view.addLayer(this.viewElevationLayers[terrainIndex]);
         }

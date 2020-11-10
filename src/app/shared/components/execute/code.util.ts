@@ -159,7 +159,7 @@ export class CodeUtils {
                 break;
 
 
-            case ProcedureTypes.Return:
+            case ProcedureTypes.EndReturn:
                 let check = true;
                 const returnArgVals = [];
                 for (const arg of args) {
@@ -273,8 +273,12 @@ export class CodeUtils {
                 codeStr.push(`\nasync function ${funcDef_prefix}${prod.args[0].jsValue}` +
                              `(__params__, ${prod.args.slice(1).map(arg => arg.jsValue).join(', ')}) {`);
                 break;
-            case ProcedureTypes.LocalFuncReturn:
-                codeStr.push(`return ${prod.args[0].jsValue};`);
+            case ProcedureTypes.Return:
+                if (prod.args.length > 0) {
+                    codeStr.push(`return ${prod.args[0].jsValue};`);
+                    break;
+                }
+                codeStr.push(`return;`);
                 break;
             case ProcedureTypes.LocalFuncCall:
                 const lArgsVals: any = [];
@@ -697,7 +701,7 @@ export class CodeUtils {
 
 
         codeStr.push('_-_-_+_-_-_');
-        codeStr.push('while (true) {');
+        // codeStr.push('while (true) {');
         codeStr.push(`__modules__.${_parameterTypes.preprocess}( __params__.model);`);
         varsDefined = [];
 
@@ -708,13 +712,14 @@ export class CodeUtils {
         //     codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName, usedFunctions));
         // }
         if (node.type === 'end' && node.procedure.length > 0) {
-            codeStr.push('break; }');
+            // codeStr.push('break; }');
+
             // codeStr.splice(codeStr.length - 2, 0, 'break; }');
             // return [[codeStr, varsDefined], _terminateCheck];
         } else {
             codeStr.push(`__modules__.${_parameterTypes.postprocess}( __params__.model);`);
-            codeStr.push('break; }');
-            codeStr.push('return __params__.model;');
+            // codeStr.push('break; }');
+            // codeStr.push('return __params__.model;');
         }
 
         if (_terminateCheck === '') {

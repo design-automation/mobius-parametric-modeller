@@ -312,7 +312,7 @@ export class ExecuteComponent {
         let EmptyECheck = false;
         for (const prod of prodList) {
             // ignore the return, comment and disabled procedures
-            if (prod.type === ProcedureTypes.Return || prod.type === ProcedureTypes.Comment || !prod.enabled) { continue; }
+            if (prod.type === ProcedureTypes.EndReturn || prod.type === ProcedureTypes.Comment || !prod.enabled) { continue; }
             // if there's any invalid argument, flag as having error
             for (const arg of prod.args) {
                 if (arg.invalidVar) {

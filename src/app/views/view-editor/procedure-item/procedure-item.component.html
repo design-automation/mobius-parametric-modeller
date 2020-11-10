@@ -762,11 +762,11 @@
     (mousedown)='disableShift($event)'
     (mouseenter)='onenter($event)'
     (mouseleave)='onleave($event)'
-    *ngSwitchCase="ProcedureTypes.LocalFuncReturn">
+    *ngSwitchCase="ProcedureTypes.Return">
         <div class='container--item' >
             <div class='line--item'>
                 <div class='basic-function-text'>Return </div>
-                <div style='position:relative; display:inline-block;'>
+                <div style='position:relative; display:inline-block;' *ngIf="data?.args[0]">
                     <input class='input--arg'
                     [(ngModel)]='data.args[0].value'
                     [class.error]='data.args[0].invalidVar'

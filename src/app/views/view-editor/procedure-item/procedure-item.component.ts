@@ -216,7 +216,7 @@ export class ProcedureItemComponent implements OnDestroy {
     markDisabled(event: MouseEvent) {
         event.stopPropagation();
         if (!this.data.selected) {
-            if (this.data.type === ProcedureTypes.LocalFuncReturn) {
+            if (this.data.type === ProcedureTypes.Return) {
                 this.updateNumReturn(this.data, !this.data.enabled);
                 return;
             }
@@ -231,7 +231,7 @@ export class ProcedureItemComponent implements OnDestroy {
             prod.type === ProcedureTypes.LocalFuncDef) {
                 continue;
             // for local func return, update the local func def if
-            } else if (prod.type === ProcedureTypes.LocalFuncReturn) {
+            } else if (prod.type === ProcedureTypes.Return) {
                 this.updateNumReturn(prod, newEnabled);
                 continue;
             }

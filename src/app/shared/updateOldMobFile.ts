@@ -8,6 +8,7 @@ import { _parameterTypes } from '@assets/core/_parameterTypes';
 import { fn } from '@angular/compiler/src/output/output_ast';
 import { VERSION } from '@env/version';
 import { IMobius } from '@models/mobius';
+import { INode } from '@models/node';
 
 
 export function checkMobFile(file: IMobius) {
@@ -20,11 +21,11 @@ export function checkMobFile(file: IMobius) {
     // check if there's any missing procedure in each node
     let hasError = false;
     for (const node of file.flowchart.nodes) {
-        if (!checkMissingProd(node.procedure, file.version)) {
+        if (!checkMissingProd(node.procedure, file.version, node)) {
             node.hasError = true;
             hasError = true;
         }
-        if (node.localFunc && !checkMissingProd(node.localFunc, file.version)) {
+        if (node.localFunc && !checkMissingProd(node.localFunc, file.version, node)) {
             node.hasError = true;
             hasError = true;
         }
@@ -42,7 +43,7 @@ export function checkMobFile(file: IMobius) {
     for (const userDefFunc of file.flowchart.functions) {
         if (!userDefFunc.flowchart) { continue; }
         for (const node of userDefFunc.flowchart.nodes) {
-            if (!checkMissingProd(node.procedure, file.version)) {
+            if (!checkMissingProd(node.procedure, file.version, node)) {
                 alert('User Defined Function ' + userDefFunc.name +
                       ' contains functions that do not exist in the current version of Mobius');
             }
@@ -52,7 +53,7 @@ export function checkMobFile(file: IMobius) {
         for (const userDefFunc of file.flowchart.subFunctions) {
             if (!userDefFunc.flowchart) { continue; }
             for (const node of userDefFunc.flowchart.nodes) {
-                if (!checkMissingProd(node.procedure, file.version)) {
+                if (!checkMissingProd(node.procedure, file.version, node)) {
                     alert('User Defined Function ' + userDefFunc.name +
                           ' contains functions that do not exist in the current version of Mobius');
                 }
@@ -88,18 +89,43 @@ function updateNode(flowchart) {
     }
 }
 
-function checkMissingProd(prodList: any[], fileVersion: string) {
+function checkMissingProd(prodList: any[], fileVersion: string, node: INode) {
     let check = true;
     for (const prod of prodList) {
 
         // check the children procedures if the procedure has any
         if (prod.children) {
-            if (!checkMissingProd(prod.children, fileVersion)) {
+            if (!checkMissingProd(prod.children, fileVersion, node)) {
                 check = false;
             }
         }
 
         prod.hasError = false;
+
+        if (prod.type === ProcedureTypes.Break) {
+            let topProd = prod;
+            let switchCheck = true;
+            while (topProd.parent) {
+                if (topProd.parent.type === ProcedureTypes.Foreach || topProd.parent.type === ProcedureTypes.While) {
+                    switchCheck = false;
+                    break;
+                }
+                topProd = topProd.parent;
+            }
+            if (switchCheck) {
+                prod.type = ProcedureTypes.Return;
+                if (node.type === 'end') {
+                    prod.argCount = 1;
+                    prod.args = [{name: 'Value', value: undefined}];
+                    const endreturn = node.procedure[node.procedure.length - 1];
+                    prod.args[0].value = endreturn.args[0].value;
+                    prod.args[0].jsValue = endreturn.args[0].jsValue;
+                } else {
+                    prod.argCount = 0;
+                    prod.args = [];
+                }
+            }
+        }
 
         // the part below is only for function procedures, skip everything else
         if (prod.type !== ProcedureTypes.MainFunction) { continue; }

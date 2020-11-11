@@ -43,9 +43,19 @@ export class ProcedureItemComponent implements OnDestroy {
 
     onenter(e) {
         e.target.classList.add('onhover');
+        for (const child of e.target.children) {
+            if (child.classList.contains('btn-container') && !child.classList.contains('onhover')) {
+                child.classList.add('onhover');
+            }
+        }
         const highlighted = this.dataService.getHighlightedProd();
         if (highlighted) {
             highlighted.classList.remove('onhover');
+            for (const child of highlighted.children) {
+                if (child.classList.contains('btn-container') && child.classList.contains('onhover')) {
+                    child.classList.remove('onhover');
+                }
+            }
         }
         this.dataService.addHighlightedProd(e.target);
         e.stopPropagation();
@@ -55,10 +65,20 @@ export class ProcedureItemComponent implements OnDestroy {
         let highlighted = this.dataService.removeHighlightedProd();
         if (highlighted) {
             highlighted.classList.remove('onhover');
+            for (const child of highlighted.children) {
+                if (child.classList.contains('btn-container') && child.classList.contains('onhover')) {
+                    child.classList.remove('onhover');
+                }
+            }
         }
         highlighted = this.dataService.getHighlightedProd();
         if (highlighted) {
             highlighted.classList.add('onhover');
+            for (const child of highlighted.children) {
+                if (child.classList.contains('btn-container') && !child.classList.contains('onhover')) {
+                    child.classList.add('onhover');
+                }
+            }
         }
         e.stopPropagation();
     }

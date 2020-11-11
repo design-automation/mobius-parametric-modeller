@@ -18,6 +18,10 @@ export class GIGeomThreejs {
     }
     /**
      * Returns that data required for threejs triangles.
+     * Arguments:
+     * 1) ssid: the ssid to return data for
+     * 2) vertex_map: a map that maps from gi vertex indicies to threejs vertex indicies
+     * Returns:
      * 0) the vertices, as a flat array
      * 1) the select map, that maps from the threejs tri indices to the gi model tri indices
      * 2) the materials array, which is an array of objects

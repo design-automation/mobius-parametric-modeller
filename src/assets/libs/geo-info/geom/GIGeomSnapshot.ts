@@ -201,28 +201,53 @@ export class GIGeomSnapshot {
                 return Array.from(ent_set);
             default:
                 if (ent_type === EEntType.VERT) {
-                    const posis_i: number[] = Array.from(this.getEnts(ssid, EEntType.POSI));
-                    return arrMakeFlat( posis_i.map( posi_i => this.modeldata.geom.nav.navPosiToVert(posi_i) ) );
+                    const verts_i: number[] = [];
+                    for (const point_i of this.ss_data.get(ssid).pt) {
+                        verts_i.push(this.modeldata.geom.nav.navPointToVert(point_i));
+                    }
+                    for (const pline_i of this.ss_data.get(ssid).pl) {
+                        for (const vert_i of this.modeldata.geom.nav.navAnyToVert(EEntType.PLINE, pline_i)) {
+                            verts_i.push(vert_i);
+                        }
+                    }
+                    for (const pgon_i of this.ss_data.get(ssid).pg) {
+                        for (const vert_i of this.modeldata.geom.nav.navAnyToVert(EEntType.PGON, pgon_i)) {
+                            verts_i.push(vert_i);
+                        }
+                    }
+                    return verts_i;
                 } else if (ent_type === EEntType.EDGE) {
-                    const plines_i = Array.from(this.getEnts(ssid, EEntType.PLINE));
-                    const pgons_i = Array.from(this.getEnts(ssid, EEntType.PGON));
-                    const pline_edges_i: number[] =  arrMakeFlat( plines_i.map( pline_i => this.modeldata.geom.nav.navAnyToEdge(EEntType.PLINE, pline_i) ) );
-                    const pgon_edges_i: number[] =  arrMakeFlat( pgons_i.map( pgon_i => this.modeldata.geom.nav.navAnyToEdge(EEntType.PGON, pgon_i) ) );
-                    return pline_edges_i.concat(pgon_edges_i);
+                    const edges_i: number[] = [];
+                    for (const pline_i of this.ss_data.get(ssid).pl) {
+                        for (const edge_i of this.modeldata.geom.nav.navAnyToEdge(EEntType.PLINE, pline_i)) {
+                            edges_i.push(edge_i);
+                        }
+                    }
+                    for (const pgon_i of this.ss_data.get(ssid).pg) {
+                        for (const edge_i of this.modeldata.geom.nav.navAnyToEdge(EEntType.PGON, pgon_i)) {
+                            edges_i.push(edge_i);
+                        }
+                    }
+                    return edges_i;
                 } else if (ent_type === EEntType.WIRE) {
-                    const plines_i = Array.from(this.getEnts(ssid, EEntType.PLINE));
-                    const pgons_i = Array.from(this.getEnts(ssid, EEntType.PGON));
-                    const pline_wires_i: number[] =  arrMakeFlat( plines_i.map( pline_i => this.modeldata.geom.nav.navAnyToWire(EEntType.PLINE, pline_i) ) );
-                    const pgon_wires_i: number[] =  arrMakeFlat( pgons_i.map( pgon_i => this.modeldata.geom.nav.navAnyToWire(EEntType.PGON, pgon_i) ) );
-                    return pline_wires_i.concat(pgon_wires_i);
-                // }  else if (ent_type === EEntType.FACE) {
-                //     const pgons_i = Array.from(this.getEnts(ssid, EEntType.PGON));
-                //     const pgon_faces_i: number[] =  arrMakeFlat( pgons_i.map( pgon_i => this.modeldata.geom.nav.navAnyToFace(EEntType.PGON, pgon_i) ) );
-                //     return pgon_faces_i;
+                    const wires_i: number[] = [];
+                    for (const pline_i of this.ss_data.get(ssid).pl) {
+                        wires_i.push(this.modeldata.geom.nav.navPlineToWire(pline_i));
+                    }
+                    for (const pgon_i of this.ss_data.get(ssid).pg) {
+                        for (const wire_i of this.modeldata.geom.nav.navAnyToWire(EEntType.PGON, pgon_i)) {
+                            wires_i.push(wire_i);
+                        }
+                    }
+                    return wires_i;
                 }  else if (ent_type === EEntType.TRI) {
-                    const pgons_i = Array.from(this.getEnts(ssid, EEntType.PGON));
-                    const pgon_tris_i: number[] =  arrMakeFlat( pgons_i.map( pgon_i => this.modeldata.geom.nav_tri.navPgonToTri(pgon_i) ) );
-                    return pgon_tris_i;
+                    const tris_i: number[] = [];
+                    for (const pgon_i of this.ss_data.get(ssid).pg) {
+                        for (const tri_i of this.modeldata.geom.nav_tri.navPgonToTri(pgon_i)) {
+                            tris_i.push(tri_i);
+                        }
+                    }
+                    return tris_i;
                 }
                 throw new Error('Entity type not recognised.');
         }

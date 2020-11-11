@@ -10,7 +10,7 @@ div[class^="container--"]{
 .flowchart-info{
     display: flex;
     flex-flow: column nowrap;
-    padding-left: 8px;
+    padding-left: 0px;
     padding-right: 5px;
     width: 100%;
     box-sizing: border-box;
@@ -74,7 +74,7 @@ hr{
     font-weight: 550;
     font-style: italic;
     background-color: $color6;
-    color: $function-text-color;
+    color: $basic-function-text-color;
 }
 
 .input{

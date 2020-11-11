@@ -272,7 +272,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         const node = this.dataService.node;
         let i = 0;
         while (i < node.state.procedure.length) {
-            if (node.state.procedure[i].type === ProcedureTypes.Blank || node.state.procedure[i].type === ProcedureTypes.Return) {
+            if (node.state.procedure[i].type === ProcedureTypes.Blank || node.state.procedure[i].type === ProcedureTypes.EndReturn) {
                 node.state.procedure[i].selected = false;
                 node.state.procedure[i].lastSelected = false;
                 node.state.procedure.splice(i, 1);
@@ -320,7 +320,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         }
         let i = 0;
         while (i < node.state.procedure.length) {
-            if (node.state.procedure[i].type === ProcedureTypes.Blank || node.state.procedure[i].type === ProcedureTypes.Return) {
+            if (node.state.procedure[i].type === ProcedureTypes.Blank || node.state.procedure[i].type === ProcedureTypes.EndReturn) {
                 node.state.procedure[i].selected = false;
                 node.state.procedure[i].lastSelected = false;
                 node.state.procedure.splice(i, 1);
@@ -390,7 +390,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 }
                 for (let i = 0; i < toBePasted.length; i++) {
                     if (toBePasted[i].type === ProcedureTypes.Blank ||
-                        toBePasted[i].type === ProcedureTypes.Return) { continue; }
+                        toBePasted[i].type === ProcedureTypes.EndReturn) { continue; }
                     const check = NodeUtils.paste_procedure(node, toBePasted[i]);
                     if (!check) {
                         this.dataService.notifyMessage('Error: Unable to paste procedure');
@@ -405,7 +405,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             } else {
                 for (let i = 0; i < toBePasted.length; i++) {
                     if (toBePasted[i].type === ProcedureTypes.Blank ||
-                        toBePasted[i].type === ProcedureTypes.Return) { continue; }
+                        toBePasted[i].type === ProcedureTypes.EndReturn) { continue; }
                     const check = NodeUtils.paste_procedure(node, toBePasted[i]);
                     if (!check) {
                         this.dataService.notifyMessage('Error: Unable to paste procedure');

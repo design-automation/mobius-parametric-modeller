@@ -119,13 +119,13 @@
                 background-color: $selected-color2;
             }
         }
-        .btns{
-            display: inline-flex;
-            .btn{
-                display: flex;
-                justify-content: center;
-            }
-        }
+        // .btns{
+        //     display: inline-flex;
+        //     .btn{
+        //         display: flex;
+        //         justify-content: center;
+        //     }
+        // }
     }
 
     .input--var{
@@ -318,6 +318,16 @@
     justify-content: flex-end;
     order: -1;
     z-index: 2;
+
+    &.onhover{
+        .btns{
+            display: inline-flex;
+            .btn{
+                display: flex;
+                justify-content: center;
+            }
+        }
+    }
 }
 
 .btns{

@@ -4,6 +4,7 @@ import { EEntType, Txyz, TAttribDataTypes, LONGLAT } from '@libs/geo-info/common
 import * as itowns from 'itowns/dist/itowns';
 import { DataService } from '../../gi-viewer/data/data.service';
 import * as THREE from 'three';
+import { AmbientLight } from 'three';
 
 
 export const API_MAPS = [
@@ -123,6 +124,10 @@ export class DataGeo {
         }
         // const atmosphere = this.view.getLayerById('atmosphere');
         // atmosphere.setRealisticOn(true);
+        const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.15);
+        this.view.scene.add(ambientLight);
+        const hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0xFFFFFF, 0.15);
+        this.view.scene.add(hemiLight);
 
         if (this.model && threejsScene.model && threejsScene.model === this.model) {
             this.refreshModel(threejsScene);
@@ -338,12 +343,12 @@ export class DataGeo {
         lighting.shadow.mapSize.height = 2048; // default
         lighting.shadow.camera.near = 0.5;
         lighting.shadow.camera.far = scale * 20;
-        lighting.shadow.bias = -0.0003;
+        lighting.shadow.bias = -0.0004;
 
         const cam = <THREE.OrthographicCamera> lighting.shadow.camera;
         itowns.CameraUtils.transformCameraToLookAtTarget(this.view, cam, {
             coord: this.camTarget,
-            tilt: 70,
+            tilt: 45,
             heading: -90,
             range: scale
         });

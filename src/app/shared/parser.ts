@@ -171,7 +171,7 @@ export function modifyLocalFuncVar(procedure: IProcedure, nodeProdList: IProcedu
 function findLocalFuncNumReturns(procedureList: IProcedure[]): number {
     let num_returns = 0;
     for (const prod of procedureList) {
-        if (prod.type === ProcedureTypes.LocalFuncReturn && prod.enabled) {
+        if (prod.type === ProcedureTypes.Return && prod.enabled) {
             num_returns ++;
         }
         if (prod.children) {
@@ -1498,15 +1498,17 @@ function checkProdListValidity(prodList: IProcedure[], nodeProdList: IProcedure[
             case ProcedureTypes.If:
             case ProcedureTypes.Elseif:
             case ProcedureTypes.While:
-            case ProcedureTypes.LocalFuncReturn:
-                modifyArgument(prod, 0, nodeProdList);
+            case ProcedureTypes.Return:
+                if (prod.args.length > 0) {
+                    modifyArgument(prod, 0, nodeProdList);
+                }
                 break;
             case ProcedureTypes.Constant:
                 if (prod.meta.inputMode === InputType.Constant || prod.meta.inputMode === InputType.SimpleInput) {
                     modifyArgument(prod, 1, nodeProdList);
                 }
                 break;
-            case ProcedureTypes.Return:
+            case ProcedureTypes.EndReturn:
                 modifyArgument(prod, 1, nodeProdList);
                 break;
             case ProcedureTypes.LocalFuncDef:

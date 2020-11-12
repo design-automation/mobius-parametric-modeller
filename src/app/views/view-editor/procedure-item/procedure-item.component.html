@@ -44,20 +44,20 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
-                </button>
-                <!-- Terminate button -->
-                <button class='btn terminate-btn' mat-icon-button title="Terminate process" (click)="markTerminate($event)" tabindex="-1">
-                    <mat-icon class='icon' svgIcon='terminate'></mat-icon>
                 </button>
                 <!-- Select button -->
                 <!-- <button id = 'selectGeom-btn' *ngIf='canSelectGeom()' class='btn' mat-icon-button title="Show Geometric Entities" (click)="markSelectGeom($event)" tabindex="-1">
                     <mat-icon class='icon' svgIcon='select'></mat-icon>
                 </button> -->
                 <!-- Print button-->
-                <button [class.disabled]='!data.enabled' class='btn print-btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                <button [class.disabled]='!data.enabled' [class.printingOn]='data.print' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                     <mat-icon class="icon" svgIcon='print'></mat-icon>
+                </button>
+                <!-- Terminate button -->
+                <button class='btn' [class.terminateOn]='data.terminate' mat-icon-button title="Terminate process" (click)="markTerminate($event)" tabindex="-1">
+                    <mat-icon class='icon' svgIcon='terminate'></mat-icon>
                 </button>
             </div>
         </div>
@@ -106,11 +106,11 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
                 <!-- Print button-->
-                <button class='btn print-btn'  [class.disabled]='!data.enabled' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                <button class='btn'  [class.disabled]='!data.enabled' [class.printingOn]='data.print' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                     <mat-icon class="icon" svgIcon='print'></mat-icon>
                 </button>
             </div>
@@ -161,11 +161,11 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
                 <!-- Print button-->
-                <button class='btn print-btn' [class.disabled]='!data.enabled' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                <button class='btn' [class.disabled]='!data.enabled' [class.printingOn]='data.print' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                     <mat-icon class="icon" svgIcon='print'></mat-icon>
                 </button>
             </div>
@@ -205,11 +205,11 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
                 <!-- Print button-->
-                <button class='btn print-btn' [class.disabled]='!data.enabled' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                <button class='btn' [class.disabled]='!data.enabled' [class.printingOn]='data.print' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                     <mat-icon class="icon" svgIcon='print'></mat-icon>
                 </button>
             </div>
@@ -274,15 +274,11 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
-                <!-- Terminate button -->
-                <!-- <button class='btn terminate-btn' mat-icon-button title="Terminate process" (click)="markTerminate($event)" tabindex="-1">
-                    <mat-icon class='icon' svgIcon='terminate'></mat-icon>
-                </button> -->
                 <!-- Print button-->
-                <button class='btn print-btn' [class.disabled]='!data.enabled' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                <button class='btn' [class.disabled]='!data.enabled' [class.printingOn]='data.print' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                     <mat-icon class="icon" svgIcon='print'></mat-icon>
                 </button>
             </div>
@@ -333,15 +329,11 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
-                <!-- Terminate button -->
-                <!-- <button class='btn terminate-btn' mat-icon-button title="Terminate process" (click)="markTerminate($event)" tabindex="-1">
-                    <mat-icon class='icon' svgIcon='terminate'></mat-icon>
-                </button> -->
                 <!-- Print button-->
-                <button [class.disabled]='!data.enabled' class='btn print-btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                <button [class.disabled]='!data.enabled' [class.printingOn]='data.print' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                     <mat-icon class="icon" svgIcon='print'></mat-icon>
                 </button>
 
@@ -373,7 +365,7 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
             </div>
@@ -404,7 +396,7 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
             </div>
@@ -476,7 +468,7 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
             </div>
@@ -513,7 +505,7 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
             </div>
@@ -581,20 +573,20 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
-                </button>
-                <!-- Terminate button -->
-                <button class='btn terminate-btn' mat-icon-button title="Terminate process" (click)="markTerminate($event)" tabindex="-1">
-                    <mat-icon class='icon' svgIcon='terminate'></mat-icon>
                 </button>
                 <!-- Select button -->
                 <!-- <button id = 'selectGeom-btn' *ngIf='canSelectGeom()' class='btn' mat-icon-button title="Show Geometric Entities" (click)="markSelectGeom($event)" tabindex="-1">
                     <mat-icon class='icon' svgIcon='select'></mat-icon>
                 </button> -->
                 <!-- Print button-->
-                <button *ngIf='canBePrinted()' [class.disabled]='!data.enabled' class='btn print-btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                <button *ngIf='canBePrinted()' [class.disabled]='!data.enabled' [class.printingOn]='data.print' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                     <mat-icon class="icon" svgIcon='print'></mat-icon>
+                </button>
+                <!-- Terminate button -->
+                <button class='btn' [class.terminateOn]='data.terminate' mat-icon-button title="Terminate process" (click)="markTerminate($event)" tabindex="-1">
+                    <mat-icon class='icon' svgIcon='terminate'></mat-icon>
                 </button>
                 <!-- help button-->
                 <!-- <button class='btn' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText(undefined)'>
@@ -651,20 +643,20 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
-                </button>
-                <!-- Terminate button -->
-                <button class='btn terminate-btn' mat-icon-button title="Terminate process" (click)="markTerminate($event)" tabindex="-1">
-                    <mat-icon class='icon' svgIcon='terminate'></mat-icon>
                 </button>
                 <!-- Select button -->
                 <!-- <button id = 'selectGeom-btn' *ngIf='canSelectGeom()' class='btn' mat-icon-button title="Show Geometric Entities" (click)="markSelectGeom($event)" tabindex="-1">
                     <mat-icon class='icon' svgIcon='select'></mat-icon>
                 </button> -->
                 <!-- Print button-->
-                <button *ngIf='canBePrinted()' [class.disabled]='!data.enabled' class='btn print-btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                <button *ngIf='canBePrinted()' [class.disabled]='!data.enabled' [class.printingOn]='data.print' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                     <mat-icon class="icon" svgIcon='print'></mat-icon>
+                </button>
+                <!-- Terminate button -->
+                <button class='btn' [class.terminateOn]='data.terminate' mat-icon-button title="Terminate process" (click)="markTerminate($event)" tabindex="-1">
+                    <mat-icon class='icon' svgIcon='terminate'></mat-icon>
                 </button>
                 <!-- help button-->
                 <!-- <button class='btn' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText(undefined)'>
@@ -782,11 +774,11 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
                 <!-- Print button-->
-                <button [class.disabled]='!data.enabled' class='btn print-btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                <button [class.disabled]='!data.enabled' [class.printingOn]='data.print' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                     <mat-icon class="icon" svgIcon='print'></mat-icon>
                 </button>
 
@@ -845,20 +837,20 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
-                </button>
-                <!-- Terminate button -->
-                <button class='btn terminate-btn' mat-icon-button title="Terminate process" (click)="markTerminate($event)" tabindex="-1">
-                    <mat-icon class='icon' svgIcon='terminate'></mat-icon>
                 </button>
                 <!-- Select button -->
                 <!-- <button id = 'selectGeom-btn' *ngIf='canSelectGeom()' class='btn' mat-icon-button title="Show Geometric Entities" (click)="markSelectGeom($event)" tabindex="-1">
                     <mat-icon class='icon' svgIcon='select'></mat-icon>
                 </button> -->
                 <!-- Print button-->
-                <button *ngIf='canBePrinted()' [class.disabled]='!data.enabled' class='btn print-btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                <button *ngIf='canBePrinted()' [class.disabled]='!data.enabled' [class.printingOn]='data.print' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                     <mat-icon class="icon" svgIcon='print'></mat-icon>
+                </button>
+                <!-- Terminate button -->
+                <button class='btn' [class.terminateOn]='data.terminate' mat-icon-button title="Terminate process" (click)="markTerminate($event)" tabindex="-1">
+                    <mat-icon class='icon' svgIcon='terminate'></mat-icon>
                 </button>
 
             </div>

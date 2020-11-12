@@ -39,13 +39,6 @@
 
     &.disabled{
         opacity: $disabled-opacity;
-        .btns{
-            display: inline-flex;
-            .btn{
-                display: flex;
-                justify-content: center;
-            }
-        }
     }
 
     // &.disabled .input--var, &.disabled .input--arg{
@@ -64,17 +57,6 @@
         border-left: 2px solid $print-color;
         padding-bottom: 0px;
         padding-left: 8px;
-
-        .btns{
-            display: inline-flex;
-            .btn{
-                display: flex;
-                justify-content: center;
-            }
-            .print-btn{
-                color: $print-color;
-            }
-        }
     }
 
     &.selectGeom{
@@ -82,9 +64,6 @@
         border-left: 2px solid $selectGeom-color;
         padding-bottom: 0px;
         padding-left: 8px;
-        #selectGeom-btn{
-            color: $selectGeom-color;
-        }
     }
 
     &.terminate{
@@ -92,16 +71,6 @@
         border-bottom: 2px solid $terminate-color;
         padding-bottom: 0px;
         padding-left: 8px;
-        .btns{
-            display: inline-flex;
-            .btn {
-                display: flex;
-                justify-content: center;
-            }
-            .terminate-btn{
-                color: $terminate-color;
-            }
-        }
     }
 
     &.error{
@@ -117,6 +86,11 @@
             background-color: $selected-color1;
             &.lastSelected{
                 background-color: $selected-color2;
+            }
+        }
+        .btns {
+            .btn{
+                background-color: $color5;
             }
         }
         // .btns{
@@ -334,7 +308,7 @@
     position: absolute;
     top: 2px;
 
-    display: none;
+    display: inline-flex;
     flex-flow: row-reverse nowrap;
     justify-content: flex-end;
 
@@ -350,7 +324,7 @@
 .btn{
     //height: 100%;
     width: $fsize1;
-    background-color: inherit;
+    background-color: $color6;
 
     border: none;
     color: $color1;
@@ -369,6 +343,21 @@
     }
     &:focus{
         outline:0;
+    }
+    &.disableOn {
+        display: flex;
+        justify-content: center;
+        color: $selectGeom-color-dk;
+    }
+    &.printingOn {
+        display: flex;
+        justify-content: center;
+        color: $print-color;
+    }
+    &.terminateOn {
+        display: flex;
+        justify-content: center;
+        color: $terminate-color;
     }
 }
 .btn{

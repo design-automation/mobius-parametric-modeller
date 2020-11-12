@@ -196,7 +196,7 @@ function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: str
     const ents_i: number[] = ents_arr.map( ent_arr => ent_arr[1] );
     // push the attrib down from the ent to its verts
     if (first_ent_type !== EEntType.VERT) {
-        __model__.modeldata.attribs.set.pushAttribVals(first_ent_type, attrib_name, idx_or_key, ents_i,
+        __model__.modeldata.attribs.push.pushAttribVals(first_ent_type, attrib_name, idx_or_key, ents_i,
             EEntType.VERT, attrib_name, null, EAttribPush.AVERAGE);
     }
     // make a list of all the verts

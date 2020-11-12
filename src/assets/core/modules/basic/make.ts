@@ -408,9 +408,8 @@ export function Clone(__model__: GIModel, entities: TId|TId[]|TId[][]): TId|TId[
         ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
     }
     // --- Error Check ---
-    const bool_copy_attribs = true;
     // copy the list of entities
-    const new_ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = __model__.modeldata.funcs_common.copyGeom(ents_arr, bool_copy_attribs);
+    const new_ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = __model__.modeldata.funcs_common.copyGeom(ents_arr, true);
     // delete the existing entities
     __model__.modeldata.funcs_edit.delete(ents_arr, false);
     // return the new entities

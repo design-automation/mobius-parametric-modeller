@@ -608,7 +608,7 @@ export function Push(__model__: GIModel, entities: TId|TId[],
     // get the method
     const method: EAttribPush = _convertPushMethod(method_sel);
     // do the push
-    __model__.modeldata.attribs.set.pushAttribVals(source_ent_type, source_attrib_name, source_attrib_idx_key, indices,
+    __model__.modeldata.attribs.push.pushAttribVals(source_ent_type, source_attrib_name, source_attrib_idx_key, indices,
                                          target,          target_attrib_name, target_attrib_idx_key, method);
 }
 export enum _EPushMethodSel {

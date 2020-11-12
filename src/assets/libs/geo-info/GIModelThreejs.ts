@@ -67,7 +67,7 @@ export class GIModelThreejs {
             pgon_materials: pgon_materials,
             pgon_material_groups: pgon_material_groups
         };
-        console.log("THREEJS DATA: ", data);
+        // console.log("THREEJS DATA: ", data);
         return data;
     }
 }

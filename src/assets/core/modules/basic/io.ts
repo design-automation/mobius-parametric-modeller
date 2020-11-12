@@ -205,10 +205,10 @@ function _createColl(__model__: GIModel, before: number[], after: number[]): num
     }
     if (points_i.length + plines_i.length + pgons_i.length === 0) { return null; }
     const container_coll_i: number = __model__.modeldata.geom.add.addColl();
-    __model__.modeldata.attribs.colls.setCollPoints(container_coll_i, points_i);
-    __model__.modeldata.attribs.colls.setCollPlines(container_coll_i, plines_i);
-    __model__.modeldata.attribs.colls.setCollPgons(container_coll_i, pgons_i);
-    __model__.modeldata.attribs.colls.setCollChildren(container_coll_i, colls_i);
+    __model__.modeldata.attribs.colls.addCollPoints(container_coll_i, points_i);
+    __model__.modeldata.attribs.colls.addCollPlines(container_coll_i, plines_i);
+    __model__.modeldata.attribs.colls.addCollPgons(container_coll_i, pgons_i);
+    __model__.modeldata.attribs.colls.addCollChildren(container_coll_i, colls_i);
     return container_coll_i;
 }
 // ================================================================================================

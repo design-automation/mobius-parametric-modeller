@@ -107,13 +107,14 @@ export enum EAttribNames {
     MATERIAL = 'material',
     VISIBILITY = 'visibility',
     LABEL = 'label',
-    TIMESTAMP = '_ts',
     COLL_NAME = 'name',
+    TIMESTAMP = '_ts',
     COLL_PARENT = '_coll_parent',
     COLL_CHILDS = '_coll_childs',
     COLL_POINTS = '_coll_points',
     COLL_PLINES = '_coll_plines',
     COLL_PGONS = '_coll_pgons',
+    COLLS = '_colls'
 }
 
 // Wire Type

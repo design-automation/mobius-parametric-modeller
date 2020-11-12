@@ -91,7 +91,10 @@ function _create(__model__: GIModel, ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEn
     }
     // create the collection, setting tha parent to -1
     const coll_i: number = __model__.modeldata.geom.add.addColl();
-    __model__.modeldata.attribs.colls.collAddEnts(coll_i, points_i, plines_i, pgons_i, child_colls_i);
+    __model__.modeldata.attribs.colls.addCollPoints(coll_i, points_i);
+    __model__.modeldata.attribs.colls.addCollPlines(coll_i, plines_i);
+    __model__.modeldata.attribs.colls.addCollPgons(coll_i, pgons_i);
+    __model__.modeldata.attribs.colls.addCollChildren(coll_i, child_colls_i);
     // return the new collection
     return [EEntType.COLL, coll_i];
 }
@@ -216,7 +219,10 @@ function _collectionAdd(__model__: GIModel, coll_i: number, ents_arr: TEntTypeId
                 A collection can only contain points, polylines, polygons, and other collections.');
         }
     }
-    __model__.modeldata.attribs.colls.collAddEnts(coll_i, points_i, plines_i, pgons_i, colls_i);
+    __model__.modeldata.attribs.colls.addCollPoints(coll_i, points_i);
+    __model__.modeldata.attribs.colls.addCollPlines(coll_i, plines_i);
+    __model__.modeldata.attribs.colls.addCollPgons(coll_i, pgons_i);
+    __model__.modeldata.attribs.colls.addCollChildren(coll_i, colls_i);
 }
 // ================================================================================================
 /**
@@ -282,14 +288,20 @@ function _collectionRemove(__model__: GIModel, coll_i: number, ents_arr: TEntTyp
                 A collection can only contain points, polylines, polygons, and other collections.');
         }
     }
-    __model__.modeldata.attribs.colls.collRemoveEnts(coll_i, points_i, plines_i, pgons_i, colls_i);
+    __model__.modeldata.attribs.colls.remCollPoints(coll_i, points_i);
+    __model__.modeldata.attribs.colls.remCollPlines(coll_i, plines_i);
+    __model__.modeldata.attribs.colls.remCollPgons(coll_i, pgons_i);
+    __model__.modeldata.attribs.colls.remCollChildren(coll_i, colls_i);
 }
 function _collectionEmpty(__model__: GIModel, coll_i: number): void {
     const points_i: number[] = __model__.modeldata.geom.nav.navCollToPoint(coll_i);
     const plines_i: number[] = __model__.modeldata.geom.nav.navCollToPline(coll_i);
     const pgons_i: number[] = __model__.modeldata.geom.nav.navCollToPgon(coll_i);
     const colls_i: number[] = __model__.modeldata.geom.nav.navCollToCollChildren(coll_i);
-    __model__.modeldata.attribs.colls.collRemoveEnts(coll_i, points_i, plines_i, pgons_i, colls_i);
+    __model__.modeldata.attribs.colls.remCollPoints(coll_i, points_i);
+    __model__.modeldata.attribs.colls.remCollPlines(coll_i, plines_i);
+    __model__.modeldata.attribs.colls.remCollPgons(coll_i, pgons_i);
+    __model__.modeldata.attribs.colls.remCollChildren(coll_i, colls_i);
 }
 // ================================================================================================
 /**

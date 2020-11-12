@@ -108,13 +108,7 @@ export enum EAttribNames {
     VISIBILITY = 'visibility',
     LABEL = 'label',
     COLL_NAME = 'name',
-    TIMESTAMP = '_ts',
-    COLL_PARENT = '_coll_parent',
-    COLL_CHILDS = '_coll_childs',
-    COLL_POINTS = '_coll_points',
-    COLL_PLINES = '_coll_plines',
-    COLL_PGONS = '_coll_pgons',
-    COLLS = '_colls'
+    TIMESTAMP = '_ts'
 }
 
 // Wire Type
@@ -242,6 +236,14 @@ export interface ISnapshotData {
     pl: Set<number>;
     pg: Set<number>;
     co: Set<number>;
+    pt_co: Map<number, Set<number>>;
+    pl_co: Map<number, Set<number>>;
+    pg_co: Map<number, Set<number>>;
+    co_pt: Map<number, Set<number>>;
+    co_pl: Map<number, Set<number>>;
+    co_pg: Map<number, Set<number>>;
+    co_ch: Map<number, Set<number>>;
+    co_pa: Map<number, number>;
 }
 
 // ================================================================================================

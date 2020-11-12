@@ -21,7 +21,6 @@ export class GIAttribMapBase {
     protected _name: string;
     protected _ent_type: EEntType;
     protected _data_type: EAttribDataTypeStrs;
-    protected _is_coll_data: boolean;
     protected _is_length_variable: boolean;
     // the two data maps that store attrib data
     protected _map_val_i_to_ents_i: Map<number, number|Set<number>>;
@@ -39,17 +38,6 @@ export class GIAttribMapBase {
         // the maps
         this._map_val_i_to_ents_i = new Map();
         this._map_ent_i_to_val_i = new Map();
-        // flag for collections
-        if (ent_type === EEntType.COLL && (
-            name === EAttribNames.COLL_CHILDS ||
-            name === EAttribNames.COLL_POINTS ||
-            name === EAttribNames.COLL_PLINES ||
-            name === EAttribNames.COLL_PGONS
-        )) {
-            this._is_coll_data = true;
-        } else {
-            this._is_coll_data = false;
-        }
     }
     /**
      * Returns the JSON data for this attribute.
@@ -255,22 +243,9 @@ export class GIAttribMapBase {
             for (const ent_i of other_ents_i) {
                 if (filter && !ent_set.has(ent_i)) { continue; }
                 if (this._map_ent_i_to_val_i.has(ent_i) && this._map_ent_i_to_val_i.get(ent_i) !== val_i) {
-                    // handle merging collections - special case
-                    // TODO to be reconsidered...
-                    if (this._is_coll_data) {
-                        const exist_val_i: number = this._map_ent_i_to_val_i.get(ent_i);
-                        const exist_vals: number[] = this.modeldata.model.metadata.getValFromIdx(
-                            exist_val_i, this._data_type) as number[];
-                        const new_vals: number[] = this.modeldata.model.metadata.getValFromIdx(
-                            val_i, this._data_type) as number[];
-                        const merged_set: Set<number> = new Set(exist_vals);
-                        new_vals.forEach( new_val => merged_set.add(new_val) );
-                        this.setEntVal(ent_i, Array.from(merged_set), false);
-
-                    } else {
-                        throw new Error('Merge conflict... ' + this._name + ', ' +
+                    // TODO improve error message
+                    throw new Error('Merge conflict... ' + this._name + ', ' +
                         EEntTypeStr[this._ent_type] + ', ' + this._map_ent_i_to_val_i.get(ent_i)  + ', ' + val_i);
-                    }
                 } else {
                     this._mapValToEntsAdd(val_i, ent_i);
                     this._map_ent_i_to_val_i.set(ent_i, val_i);

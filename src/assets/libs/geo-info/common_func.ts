@@ -74,3 +74,15 @@ export function isBBox(data: any): boolean {
     }
     return true;
 }
+
+
+export function mapSetMerge(source: Map<number, Set<number>>, target: Map<number, Set<number>>): void {
+    source.forEach ( (source_set, source_key) => {
+        if (target.has(source_key)) {
+            const target_set: Set<number> = target.get(source_key);
+            source_set.forEach( num => target_set.add(num) );
+        } else {
+            target.set(source_key, new Set(source_set));
+        }
+    });
+}

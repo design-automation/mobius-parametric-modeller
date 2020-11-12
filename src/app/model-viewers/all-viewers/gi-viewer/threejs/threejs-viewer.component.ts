@@ -469,7 +469,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                         //     });
                         // }
                         this.chooseColl(attrib.id);
-                        // const parent_coll_i: number = this.model.modeldata.attribs.colls.getCollParent(attrib.id);
+                        // const parent_coll_i: number = this.model.modeldata.geom.snapshot.getCollParent(attrib.id);
                         // if (parent_coll_i === -1) { // no parent
                         //     this.chooseColl(attrib.id);
                         // }

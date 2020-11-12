@@ -49,14 +49,6 @@ export class GIAttribsSnapshot {
         attribs.pg.set(EAttribNames.TIMESTAMP, new GIAttribMapNum(this.modeldata, EAttribNames.TIMESTAMP, EEntType.PGON, EAttribDataTypeStrs.NUMBER));
         // add attributes for collections
         attribs.co.set(EAttribNames.COLL_NAME, new GIAttribMapStr(this.modeldata, EAttribNames.COLL_NAME, EEntType.COLL, EAttribDataTypeStrs.STRING));
-        attribs.co.set(EAttribNames.COLL_PARENT, new GIAttribMapNum(this.modeldata, EAttribNames.COLL_PARENT, EEntType.COLL, EAttribDataTypeStrs.NUMBER));
-        attribs.co.set(EAttribNames.COLL_CHILDS, new GIAttribMapList(this.modeldata, EAttribNames.COLL_CHILDS, EEntType.COLL, EAttribDataTypeStrs.LIST));
-        attribs.co.set(EAttribNames.COLL_POINTS, new GIAttribMapList(this.modeldata, EAttribNames.COLL_POINTS, EEntType.COLL, EAttribDataTypeStrs.LIST));
-        attribs.co.set(EAttribNames.COLL_PLINES, new GIAttribMapList(this.modeldata, EAttribNames.COLL_PLINES, EEntType.COLL, EAttribDataTypeStrs.LIST));
-        attribs.co.set(EAttribNames.COLL_PGONS, new GIAttribMapList(this.modeldata, EAttribNames.COLL_PGONS, EEntType.COLL, EAttribDataTypeStrs.LIST));
-        attribs.pt.set(EAttribNames.COLLS, new GIAttribMapList(this.modeldata, EAttribNames.COLLS, EEntType.POINT, EAttribDataTypeStrs.LIST));
-        attribs.pl.set(EAttribNames.COLLS, new GIAttribMapList(this.modeldata, EAttribNames.COLLS, EEntType.PLINE, EAttribDataTypeStrs.LIST));
-        attribs.pg.set(EAttribNames.COLLS, new GIAttribMapList(this.modeldata, EAttribNames.COLLS, EEntType.PGON, EAttribDataTypeStrs.LIST));
         // merge data
         if (include !== undefined) {
             for (const exist_ssid of include) {

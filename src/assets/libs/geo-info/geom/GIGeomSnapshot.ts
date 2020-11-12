@@ -1,7 +1,6 @@
 import { vecCross, vecDiv, vecFromTo } from '@assets/libs/geom/vectors';
-import { arrRem } from '@assets/libs/util/arrs';
-import { GIAttribMapBase } from '../attrib_classes/GIAttribMapBase';
 import { EAttribNames, EEntType, EEntTypeStr, IEntSets, IGeomMaps, ISnapshotData, TEntTypeIdx, Txyz } from '../common';
+import { mapSetMerge } from '../common_func';
 import { GIModelData } from '../GIModelData';
 
 /**
@@ -10,7 +9,7 @@ import { GIModelData } from '../GIModelData';
 export class GIGeomSnapshot {
     private modeldata: GIModelData;
     private _geom_maps: IGeomMaps;
-    // ss_data -> ssid -> ps, pt, pl, pg, co
+    // ss_data -> ssid -> data for one snapshot
     private ss_data: Map<number, ISnapshotData> = new Map();
     /**
      * Constructor
@@ -28,38 +27,65 @@ export class GIGeomSnapshot {
      * @param include
      */
     public addSnapshot(ssid: number, include?: number[]): void {
-        const data: ISnapshotData = { ps: null, pt: null, pl: null, pg: null, co: null };
+        const data: ISnapshotData = {
+            ps: null, pt: null, pl: null, pg: null, co: null,
+            pt_co: null, pl_co: null, pg_co: null,
+            co_pt: null, co_pl: null, co_pg: null, co_ch: null, co_pa: null
+        };
+        // set the data
         this.ss_data.set( ssid, data );
-        // merge data
-        if (include === undefined || include.length === 0) {
-            // create an empty snapshot
-            data.ps = new Set();
-            data.pt = new Set();
-            data.pl = new Set();
-            data.pg = new Set();
-            data.co = new Set();
-        } else {
-            // add the first ssid to the new snapshot
-            if (!this.ss_data.has(include[0])) {
-                throw new Error('The snapshot ID ' + include[0] + ' does not exist.');
+        // create an empty snapshot
+        data.ps = new Set();
+        data.pt = new Set();
+        data.pl = new Set();
+        data.pg = new Set();
+        data.co = new Set();
+        // obj -> coll
+        data.pt_co = new Map();
+        data.pl_co = new Map();
+        data.pg_co = new Map();
+        // coll -> obj
+        data.co_pt = new Map();
+        data.co_pl = new Map();
+        data.co_pg = new Map();
+        // coll data
+        data.co_ch = new Map();
+        data.co_pa = new Map();
+        // add subsequent ssids to the new snapshot
+        if (include === undefined) { return; }
+        for ( const exist_ssid of include ) {
+            if (!this.ss_data.has(exist_ssid)) {
+                throw new Error('The snapshot ID ' + exist_ssid + ' does not exist.');
             }
-            data.ps = new Set(this.ss_data.get(include[0]).ps);
-            data.pt = new Set(this.ss_data.get(include[0]).pt);
-            data.pl = new Set(this.ss_data.get(include[0]).pl);
-            data.pg = new Set(this.ss_data.get(include[0]).pg);
-            data.co = new Set(this.ss_data.get(include[0]).co);
-            // add subsequent ssids to teh new snapshot
-            for ( let i = 1; i < include.length; i++ ) {
-                const exist_ssid: number = include[i];
-                if (!this.ss_data.has(exist_ssid)) {
-                    throw new Error('The snapshot ID ' + exist_ssid + ' does not exist.');
+            this.ss_data.get(exist_ssid).ps.forEach ( posi_i => data.ps.add(posi_i) );
+            this.ss_data.get(exist_ssid).pt.forEach ( point_i => data.pt.add(point_i) );
+            this.ss_data.get(exist_ssid).pl.forEach ( pline_i => data.pl.add(pline_i) );
+            this.ss_data.get(exist_ssid).pg.forEach ( pgon_i => data.pg.add(pgon_i) );
+            this.ss_data.get(exist_ssid).co.forEach ( coll_i => data.co.add(coll_i) );
+            // point colls
+            mapSetMerge(this.ss_data.get(exist_ssid).pt_co, data.pt_co);
+            // pline colls
+            mapSetMerge(this.ss_data.get(exist_ssid).pl_co, data.pl_co);
+            // pgon colls
+            mapSetMerge(this.ss_data.get(exist_ssid).pg_co, data.pg_co);
+            // coll points
+            mapSetMerge(this.ss_data.get(exist_ssid).co_pt, data.co_pt);
+            // coll plines
+            mapSetMerge(this.ss_data.get(exist_ssid).co_pl, data.co_pl);
+            // coll pgons
+            mapSetMerge(this.ss_data.get(exist_ssid).co_pg, data.co_pg);
+            // coll children
+            mapSetMerge(this.ss_data.get(exist_ssid).co_ch, data.co_ch);
+            // coll parent
+            this.ss_data.get(exist_ssid).co_pa.forEach ( (parent_i, coll_i) => {
+                if (data.co_pa.has(coll_i)) {
+                    if (data.co_pa.get(coll_i) !== parent_i) {
+                        throw new Error('Error merging collection data');
+                    }
+                } else {
+                    data.co_pa.set(coll_i, parent_i);
                 }
-                this.ss_data.get(exist_ssid).ps.forEach ( posi_i => data.ps.add(posi_i) );
-                this.ss_data.get(exist_ssid).pt.forEach ( point_i => data.pt.add(point_i) );
-                this.ss_data.get(exist_ssid).pl.forEach ( pline_i => data.pl.add(pline_i) );
-                this.ss_data.get(exist_ssid).pg.forEach ( pgon_i => data.pg.add(pgon_i) );
-                this.ss_data.get(exist_ssid).co.forEach ( coll_i => data.co.add(coll_i) );
-            }
+            });
         }
     }
     /**
@@ -284,8 +310,11 @@ export class GIGeomSnapshot {
         this.ss_data.get(ssid).pl.clear();
         this.ss_data.get(ssid).pg.clear();
         this.ss_data.get(ssid).co.clear();
-        // no need to worry about clearing the deleted ents from collections
-        // since the collections are also deleted
+        this.ss_data.get(ssid).co_pt.clear();
+        this.ss_data.get(ssid).co_pl.clear();
+        this.ss_data.get(ssid).co_pg.clear();
+        this.ss_data.get(ssid).co_ch.clear();
+        this.ss_data.get(ssid).co_pa.clear();
     }
      /**
      * Delete ents
@@ -380,18 +409,13 @@ export class GIGeomSnapshot {
         points_i = (Array.isArray(points_i)) ? points_i : [points_i];
         if (invert) { points_i = this._invert(this.ss_data.get(ssid).pt, points_i); }
         if (points_i.length === 0) { return; }
-        // get colls attrib map
-        const colls_attrib_map: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid).pt.get(EAttribNames.COLLS);
-        const colls_to_points_am: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid).co.get(EAttribNames.COLL_POINTS);
         // delete the points
         for (const point_i of points_i) {
             this.ss_data.get(ssid).pt.delete(point_i);
             // remove the points from any collections
-            const colls_i: number[] = colls_attrib_map.getEntVal(point_i) as number[];
-            if (colls_i !== undefined) {
-                for (const coll_i of this.modeldata.attribs.colls.getPointColls(point_i)) {
-                    arrRem(colls_to_points_am.getEntVal(coll_i) as number[], point_i);
-                }
+            const set_colls_i: Set<number> = this.ss_data.get(ssid).pt_co.get(point_i);
+            if (set_colls_i !== undefined) {
+                set_colls_i.forEach( coll_i => this.ss_data.get(ssid).co_pt.get(coll_i).delete(point_i) );
             }
         }
         // get posis and del unused
@@ -412,18 +436,13 @@ export class GIGeomSnapshot {
         plines_i = (Array.isArray(plines_i)) ? plines_i : [plines_i];
         if (invert) { plines_i = this._invert(this.ss_data.get(ssid).pl, plines_i); }
         if (plines_i.length === 0) { return; }
-        // get colls attrib map
-        const plines_to_colls_am: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid).pl.get(EAttribNames.COLLS);
-        const colls_to_plines_am: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid).co.get(EAttribNames.COLL_PLINES);
         // delete the plines
         for (const pline_i of plines_i) {
             this.ss_data.get(ssid).pl.delete(pline_i);
             // remove the plines from any collections
-            const colls_i: number[] = plines_to_colls_am.getEntVal(pline_i) as number[];
-            if (colls_i !== undefined) {
-                for (const coll_i of colls_i) {
-                    arrRem(colls_to_plines_am.getEntVal(coll_i) as number[], pline_i);
-                }
+            const set_colls_i: Set<number> = this.ss_data.get(ssid).pl_co.get(pline_i);
+            if (set_colls_i !== undefined) {
+                set_colls_i.forEach( coll_i => this.ss_data.get(ssid).co_pl.get(coll_i).delete(pline_i) );
             }
         }
         // get posis and del unused
@@ -443,18 +462,13 @@ export class GIGeomSnapshot {
         pgons_i = (Array.isArray(pgons_i)) ? pgons_i : [pgons_i];
         if (invert) { pgons_i = this._invert(this.ss_data.get(ssid).pg, pgons_i); }
         if (pgons_i.length === 0) { return; }
-        // get colls attrib map
-        const pgon_to_colls_am: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid).pg.get(EAttribNames.COLLS);
-        const colls_to_pgons_am: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid).co.get(EAttribNames.COLL_PGONS);
         // delete the pgons
         for (const pgon_i of pgons_i) {
             this.ss_data.get(ssid).pg.delete(pgon_i);
             // remove the pgons from any collections
-            const colls_i: number[] = pgon_to_colls_am.getEntVal(pgon_i) as number[];
-            if (colls_i !== undefined) {
-                for (const coll_i of this.modeldata.attribs.colls.getPointColls(pgon_i)) {
-                    arrRem(colls_to_pgons_am.getEntVal(coll_i) as number[], pgon_i);
-                }
+            const set_colls_i: Set<number> = this.ss_data.get(ssid).pg_co.get(pgon_i);
+            if (set_colls_i !== undefined) {
+                set_colls_i.forEach( coll_i => this.ss_data.get(ssid).co_pg.get(coll_i).delete(pgon_i) );
             }
         }
         // get posis and del unused
@@ -476,36 +490,317 @@ export class GIGeomSnapshot {
         colls_i = (Array.isArray(colls_i)) ? colls_i : [colls_i];
         if (invert) { colls_i = this._invert(this.ss_data.get(ssid).co, colls_i); }
         if (colls_i.length === 0) { return; }
-        // get attrib map
-        const colls_to_points_am: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid).co.get(EAttribNames.COLL_POINTS);
-        const colls_to_plines_am: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid).co.get(EAttribNames.COLL_PLINES);
-        const colls_to_pgons_am: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid).co.get(EAttribNames.COLL_PGONS);
-        const points_to_colls_am: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid).pt.get(EAttribNames.COLLS);
-        const plines_to_colls_am: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid).pl.get(EAttribNames.COLLS);
-        const pgons_to_colls_am: GIAttribMapBase = this.modeldata.attribs.attribs_maps.get(ssid).pg.get(EAttribNames.COLLS);
         // delete the colls
         for (const coll_i of colls_i) {
+            // delete the coll
             this.ss_data.get(ssid).co.delete(coll_i);
             // remove the coll from points
-            const coll_points_i: number[] = colls_to_points_am.getEntVal(coll_i) as number[];
-            if (coll_points_i !== undefined) {
-                for (const point_i of coll_points_i) {
-                    arrRem(points_to_colls_am.getEntVal(point_i) as number[], coll_i);
-                }
+            const set_points_i: Set<number> = this.ss_data.get(ssid).co_pt.get(coll_i);
+            if (set_points_i !== undefined) {
+                set_points_i.forEach( point_i => this.ss_data.get(ssid).pt_co.get(coll_i).delete(point_i) );
             }
             // remove the coll from plines
-            const coll_plines_i: number[] = colls_to_plines_am.getEntVal(coll_i) as number[];
-            if (coll_points_i !== undefined) {
-                for (const pline_i of coll_plines_i) {
-                    arrRem(plines_to_colls_am.getEntVal(pline_i) as number[], coll_i);
-                }
+            const set_plines_i: Set<number> = this.ss_data.get(ssid).co_pl.get(coll_i);
+            if (set_plines_i !== undefined) {
+                set_plines_i.forEach( pline_i => this.ss_data.get(ssid).pl_co.get(coll_i).delete(pline_i) );
             }
             // remove the coll from pgons
-            const coll_pgons_i: number[] = colls_to_pgons_am.getEntVal(coll_i) as number[];
-            if (coll_points_i !== undefined) {
-                for (const pgon_i of coll_pgons_i) {
-                    arrRem(pgons_to_colls_am.getEntVal(pgon_i) as number[], coll_i);
+            const set_pgons_i: Set<number> = this.ss_data.get(ssid).co_pg.get(coll_i);
+            if (set_pgons_i !== undefined) {
+                set_pgons_i.forEach( pgon_i => this.ss_data.get(ssid).pg_co.get(coll_i).delete(pgon_i) );
+            }
+            // remove the coll from children (the children no longer have this coll as a parent)
+            const set_childs_i: Set<number> = this.ss_data.get(ssid).co_ch.get(coll_i);
+            if (set_childs_i !== undefined) {
+                set_childs_i.forEach( child_i => this.ss_data.get(ssid).co_pa.delete(child_i) );
+            }
+            // delete the other coll data
+            this.ss_data.get(ssid).co_pt.delete(coll_i);
+            this.ss_data.get(ssid).co_pl.delete(coll_i);
+            this.ss_data.get(ssid).co_pg.delete(coll_i);
+            this.ss_data.get(ssid).co_ch.delete(coll_i);
+            this.ss_data.get(ssid).co_pa.delete(coll_i);
+        }
+    }
+    // ============================================================================================
+    // Get colls from entities
+    // ============================================================================================
+    /**
+     * Get the collections of a point.
+     * @param point_i
+     */
+    public getPointColls(ssid: number, point_i: number): number[] {
+        if (this.ss_data.get(ssid).pt_co.has(point_i)) {
+            return Array.from(this.ss_data.get(ssid).pt_co.get(point_i));
+        }
+        return [];
+    }
+    /**
+     * Get the collections of a pline.
+     * @param pline_i
+     */
+    public getPlineColls(ssid: number, pline_i: number): number[] {
+        if (this.ss_data.get(ssid).pl_co.has(pline_i)) {
+            return Array.from(this.ss_data.get(ssid).pl_co.get(pline_i));
+        }
+        return [];
+    }
+    /**
+     * Get the collections of a pgon
+     * @param pgon_i
+     */
+    public getPgonColls(ssid: number, pgon_i: number): number[] {
+        if (this.ss_data.get(ssid).pg_co.has(pgon_i)) {
+            return Array.from(this.ss_data.get(ssid).pg_co.get(pgon_i));
+        }
+        return [];
+    }
+    // ============================================================================================
+    // Get entities from colls
+    // ============================================================================================
+    /**
+     * Get the points of a collection.
+     * Array is passed as copy.
+     * @param coll_i
+     */
+    public getCollPoints(ssid: number, coll_i: number): number[] {
+        if (this.ss_data.get(ssid).co_pt.has(coll_i)) {
+            return Array.from(this.ss_data.get(ssid).co_pt.get(coll_i));
+        }
+        return [];
+    }
+    /**
+     * Get the plines of a collection.
+     * Array is passed as copy.
+     * @param coll_i
+     */
+    public getCollPlines(ssid: number, coll_i: number): number[] {
+        if ( this.ss_data.get(ssid).co_pl.has(coll_i)) {
+            return Array.from( this.ss_data.get(ssid).co_pl.get(coll_i));
+        }
+        return [];
+    }
+    /**
+     * Get the pgons of a collection.
+     * Array is passed as copy.
+     * @param coll_i
+     */
+    public getCollPgons(ssid: number, coll_i: number): number[] {
+        if (this.ss_data.get(ssid).co_pg.has(coll_i)) {
+            return Array.from(this.ss_data.get(ssid).co_pg.get(coll_i));
+        }
+        return [];
+    }
+    /**
+     * Get the children collections of a collection.
+     * Array is passed as copy.
+     * @param coll_i
+     */
+    public getCollChildren(ssid: number, coll_i: number): number[] {
+        if (this.ss_data.get(ssid).co_ch.has(coll_i)) {
+            return Array.from(this.ss_data.get(ssid).co_ch.get(coll_i));
+        }
+        return [];
+    }
+    /**
+     * Get the parent.
+     * Undefined if there is no parent.
+     * @param coll_i
+     */
+    public getCollParent(ssid: number, coll_i: number): number {
+        return this.ss_data.get(ssid).co_pa.get(coll_i);
+    }
+    // ============================================================================================
+    // Set parent
+    // ============================================================================================
+    /**
+     * Set the parent for a collection
+     * @param coll_i The index of the collection
+     * @param parent_coll_i The index of the parent collection
+     */
+    public setCollParent(ssid: number, coll_i: number, parent_coll_i: number): void {
+        // child -> parent
+        this.ss_data.get(ssid).co_pa.set(coll_i, parent_coll_i);
+        // parent -> child
+        if (this.ss_data.get(ssid).co_ch.has(coll_i)) {
+            this.ss_data.get(ssid).co_ch.get(parent_coll_i).add(coll_i);
+        } else {
+            this.ss_data.get(ssid).co_ch.set(parent_coll_i, new Set( [coll_i] ) );
+        }
+    }
+    // ============================================================================================
+    // Add entities in colls
+    // ============================================================================================
+    /**
+     * Set the points in a collection
+     * @param coll_i The index of the collection
+     * @param points_i
+     */
+    public addCollPoints(ssid: number, coll_i: number, points_i: number|number[]): void {
+        points_i = Array.isArray(points_i) ? points_i : [points_i];
+        // coll down to obj
+        if (this.ss_data.get(ssid).co_pt.has(coll_i)) {
+            const set_points_i: Set<number> = this.ss_data.get(ssid).co_pt.get(coll_i);
+            points_i.forEach( point_i => set_points_i.add(point_i) );
+        } else {
+            this.ss_data.get(ssid).co_pt.set(coll_i, new Set(points_i));
+        }
+        // obj up to coll
+        for (const point_i of points_i) {
+            if (this.ss_data.get(ssid).pt_co.has(point_i)) {
+                this.ss_data.get(ssid).pt_co.get(point_i).add(coll_i);
+            } else {
+                this.ss_data.get(ssid).pt_co.set(point_i, new Set([coll_i]));
+            }
+        }
+    }
+    /**
+     * Set the plines in a collection
+     * @param coll_i The index of the collection
+     * @param plines_i
+     */
+    public addCollPlines(ssid: number, coll_i: number, plines_i: number|number[]): void {
+        plines_i = Array.isArray(plines_i) ? plines_i : [plines_i];
+        // coll down to obj
+        if (this.ss_data.get(ssid).co_pl.has(coll_i)) {
+            const set_plines_i: Set<number> = this.ss_data.get(ssid).co_pl.get(coll_i);
+            plines_i.forEach( pline_i => set_plines_i.add(pline_i) );
+        } else {
+            this.ss_data.get(ssid).co_pl.set(coll_i, new Set(plines_i));
+        }
+        // obj up to coll
+        for (const pline_i of plines_i) {
+            if (this.ss_data.get(ssid).pl_co.has(pline_i)) {
+                this.ss_data.get(ssid).pl_co.get(pline_i).add(coll_i);
+            } else {
+                this.ss_data.get(ssid).pl_co.set(pline_i, new Set([coll_i]));
+            }
+        }
+    }
+    /**
+     * Set the pgons in a collection
+     * @param coll_i The index of the collection
+     * @param pgons_i
+     */
+    public addCollPgons(ssid: number, coll_i: number, pgons_i: number|number[]): void {
+        pgons_i = Array.isArray(pgons_i) ? pgons_i : [pgons_i];
+        // coll down to obj
+        if (this.ss_data.get(ssid).co_pg.has(coll_i)) {
+            const set_pgons_i: Set<number> = this.ss_data.get(ssid).co_pg.get(coll_i);
+            pgons_i.forEach( pgon_i => set_pgons_i.add(pgon_i) );
+        } else {
+            this.ss_data.get(ssid).co_pg.set(coll_i, new Set(pgons_i));
+        }
+        // obj up to coll
+        for (const pgon_i of pgons_i) {
+            if (this.ss_data.get(ssid).pg_co.has(pgon_i)) {
+                this.ss_data.get(ssid).pg_co.get(pgon_i).add(coll_i);
+            } else {
+                this.ss_data.get(ssid).pg_co.set(pgon_i, new Set([coll_i]));
+            }
+        }
+    }
+    /**
+     * Set the child collections in a collection
+     * @param coll_i The index of the collection
+     * @param parent_coll_i The indicies of the child collections
+     */
+    public addCollChildren(ssid: number, coll_i: number, childs_i: number|number[]): void {
+        childs_i = Array.isArray(childs_i) ? childs_i : [childs_i];
+        // coll down to children
+        if (this.ss_data.get(ssid).co_ch.has(coll_i)) {
+            const set_childs_i: Set<number> = this.ss_data.get(ssid).co_ch.get(coll_i);
+            childs_i.forEach( child_i => set_childs_i.add(child_i) );
+        } else {
+            this.ss_data.get(ssid).co_ch.set(coll_i, new Set(childs_i));
+        }
+        // children up to coll
+        for (const child_i of childs_i) {
+            if (this.ss_data.get(ssid).co_pa.has(child_i)) {
+                if (this.ss_data.get(ssid).co_pa.get(child_i) !== coll_i) {
+                    throw new Error('Error merging collections.');
                 }
+            } else {
+                this.ss_data.get(ssid).co_pa.set(child_i, coll_i);
+            }
+        }
+    }
+    // ============================================================================================
+    // Remove entities in colls
+    // ============================================================================================
+    /**
+     * Remove objects from a collection.
+     * If the objects are not in the collection, then no error is thrown.
+     * Time stamp is not updated.
+     * @param coll_i
+     * @param points_i
+     */
+    public remCollPoints(ssid: number, coll_i: number, points_i: number|number[]): void {
+        points_i = Array.isArray(points_i) ? points_i : [points_i];
+        // coll down to obj
+        if (this.ss_data.get(ssid).co_pt.has(coll_i)) {
+            const set_points_i: Set<number> = this.ss_data.get(ssid).co_pt.get(coll_i);
+            for (const point_i of points_i) {
+                set_points_i.delete(point_i);
+                // obj up to coll
+                this.ss_data.get(ssid).pg_co.get(point_i).delete(coll_i);
+            }
+        }
+    }
+    /**
+     * Remove objects from a collection.
+     * If the objects are not in the collection, then no error is thrown.
+     * Time stamp is not updated.
+     * @param coll_i
+     * @param plines_i
+     */
+    public remCollPlines(ssid: number, coll_i: number, plines_i: number[]): void {
+        plines_i = Array.isArray(plines_i) ? plines_i : [plines_i];
+        // coll down to obj
+        if (this.ss_data.get(ssid).co_pl.has(coll_i)) {
+            const set_plines_i: Set<number> = this.ss_data.get(ssid).co_pl.get(coll_i);
+            for (const pline_i of plines_i) {
+                set_plines_i.delete(pline_i);
+                // obj up to coll
+                this.ss_data.get(ssid).pl_co.get(pline_i).delete(coll_i);
+            }
+        }
+    }
+    /**
+     * Remove objects from a collection.
+     * If the objects are not in the collection, then no error is thrown.
+     * Time stamp is not updated.
+     * @param coll_i
+     * @param pgons_i
+     */
+    public remCollPgons(ssid: number, coll_i: number, pgons_i: number[]): void {
+        pgons_i = Array.isArray(pgons_i) ? pgons_i : [pgons_i];
+        // coll down to obj
+        if (this.ss_data.get(ssid).co_pg.has(coll_i)) {
+            const set_pgons_i: Set<number> = this.ss_data.get(ssid).co_pg.get(coll_i);
+            for (const pgon_i of pgons_i) {
+                set_pgons_i.delete(pgon_i);
+                // obj up to coll
+                this.ss_data.get(ssid).pg_co.get(pgon_i).delete(coll_i);
+            }
+        }
+    }
+    /**
+     * Remove objects from a collection.
+     * If the objects are not in the collection, then no error is thrown.
+     * Time stamp is not updated.
+     * @param coll_i
+     * @param child_colls_i
+     */
+    public remCollChildren(ssid: number, coll_i: number, childs_i: number[]): void {
+        childs_i = Array.isArray(childs_i) ? childs_i : [childs_i];
+        // coll down to obj
+        if (this.ss_data.get(ssid).co_ch.has(coll_i)) {
+            const set_childs_i: Set<number> = this.ss_data.get(ssid).co_ch.get(coll_i);
+            for (const child_i of childs_i) {
+                set_childs_i.delete(child_i);
+                // obj up to coll
+                this.ss_data.get(ssid).co_pa.delete(child_i);
             }
         }
     }

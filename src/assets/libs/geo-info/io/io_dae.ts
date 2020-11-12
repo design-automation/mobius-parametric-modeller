@@ -136,11 +136,12 @@ function getNodesWithInstGeoms(id: string, inst_geoms: string): string {
  * Process polygons
  */
 function processColls(model: GIModel): void {
+    const ssid: number = this.modeldata.active_ssid;
     const colls_map: Map<number, number[]> = new Map();
     // go through the collections
     const colls_i: number[] = model.modeldata.geom.query.getEnts(EEntType.COLL);
     for (const coll_i of colls_i) {
-        const parent: number = model.modeldata.attribs.colls.getCollParent(coll_i);
+        const parent: number = model.modeldata.geom.snapshot.getCollParent(ssid, coll_i);
         // const pgons_i: number[] = model.modeldata.geom.nav.navCollToPgon(coll_i);
         // const plines_i: number[] = model.modeldata.geom.nav.navCollToPline(coll_i);
         if ( !colls_map.has(parent) ) {

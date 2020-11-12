@@ -72,6 +72,7 @@ export function Create(__model__: GIModel, entities: TId|TId[]|TId[][], name: st
     return idsMake(new_ent_arrs) as TId|TId[];
 }
 function _create(__model__: GIModel, ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][]): TEntTypeIdx | TEntTypeIdx[] {
+    const ssid: number = __model__.modeldata.active_ssid;
     const depth: number = getArrDepth(ents_arr);
     if (depth === 1) {
         ents_arr = [ents_arr] as TEntTypeIdx[];
@@ -91,10 +92,10 @@ function _create(__model__: GIModel, ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEn
     }
     // create the collection, setting tha parent to -1
     const coll_i: number = __model__.modeldata.geom.add.addColl();
-    __model__.modeldata.attribs.colls.addCollPoints(coll_i, points_i);
-    __model__.modeldata.attribs.colls.addCollPlines(coll_i, plines_i);
-    __model__.modeldata.attribs.colls.addCollPgons(coll_i, pgons_i);
-    __model__.modeldata.attribs.colls.addCollChildren(coll_i, child_colls_i);
+    __model__.modeldata.geom.snapshot.addCollPoints(ssid, coll_i, points_i);
+    __model__.modeldata.geom.snapshot.addCollPlines(ssid, coll_i, plines_i);
+    __model__.modeldata.geom.snapshot.addCollPgons(ssid, coll_i, pgons_i);
+    __model__.modeldata.geom.snapshot.addCollChildren(ssid, coll_i, child_colls_i);
     // return the new collection
     return [EEntType.COLL, coll_i];
 }
@@ -196,6 +197,7 @@ export function Add(__model__: GIModel, coll: TId, entities: TId|TId[]): void {
 }
 
 function _collectionAdd(__model__: GIModel, coll_i: number, ents_arr: TEntTypeIdx[]): void {
+    const ssid: number = __model__.modeldata.active_ssid;
     const points_i: number[] = [];
     const plines_i: number[] = [];
     const pgons_i: number[] = [];
@@ -219,10 +221,10 @@ function _collectionAdd(__model__: GIModel, coll_i: number, ents_arr: TEntTypeId
                 A collection can only contain points, polylines, polygons, and other collections.');
         }
     }
-    __model__.modeldata.attribs.colls.addCollPoints(coll_i, points_i);
-    __model__.modeldata.attribs.colls.addCollPlines(coll_i, plines_i);
-    __model__.modeldata.attribs.colls.addCollPgons(coll_i, pgons_i);
-    __model__.modeldata.attribs.colls.addCollChildren(coll_i, colls_i);
+    __model__.modeldata.geom.snapshot.addCollPoints(ssid, coll_i, points_i);
+    __model__.modeldata.geom.snapshot.addCollPlines(ssid, coll_i, plines_i);
+    __model__.modeldata.geom.snapshot.addCollPgons(ssid, coll_i, pgons_i);
+    __model__.modeldata.geom.snapshot.addCollChildren(ssid, coll_i, colls_i);
 }
 // ================================================================================================
 /**
@@ -265,6 +267,7 @@ export function Remove(__model__: GIModel, coll: TId, entities: TId|TId[]): void
     }
 }
 function _collectionRemove(__model__: GIModel, coll_i: number, ents_arr: TEntTypeIdx[]): void {
+    const ssid: number = __model__.modeldata.active_ssid;
     const points_i: number[] = [];
     const plines_i: number[] = [];
     const pgons_i: number[] = [];
@@ -288,20 +291,21 @@ function _collectionRemove(__model__: GIModel, coll_i: number, ents_arr: TEntTyp
                 A collection can only contain points, polylines, polygons, and other collections.');
         }
     }
-    __model__.modeldata.attribs.colls.remCollPoints(coll_i, points_i);
-    __model__.modeldata.attribs.colls.remCollPlines(coll_i, plines_i);
-    __model__.modeldata.attribs.colls.remCollPgons(coll_i, pgons_i);
-    __model__.modeldata.attribs.colls.remCollChildren(coll_i, colls_i);
+    __model__.modeldata.geom.snapshot.remCollPoints(ssid, coll_i, points_i);
+    __model__.modeldata.geom.snapshot.remCollPlines(ssid, coll_i, plines_i);
+    __model__.modeldata.geom.snapshot.remCollPgons(ssid, coll_i, pgons_i);
+    __model__.modeldata.geom.snapshot.remCollChildren(ssid, coll_i, colls_i);
 }
 function _collectionEmpty(__model__: GIModel, coll_i: number): void {
+    const ssid: number = this.modeldata.active_ssid;
     const points_i: number[] = __model__.modeldata.geom.nav.navCollToPoint(coll_i);
     const plines_i: number[] = __model__.modeldata.geom.nav.navCollToPline(coll_i);
     const pgons_i: number[] = __model__.modeldata.geom.nav.navCollToPgon(coll_i);
     const colls_i: number[] = __model__.modeldata.geom.nav.navCollToCollChildren(coll_i);
-    __model__.modeldata.attribs.colls.remCollPoints(coll_i, points_i);
-    __model__.modeldata.attribs.colls.remCollPlines(coll_i, plines_i);
-    __model__.modeldata.attribs.colls.remCollPgons(coll_i, pgons_i);
-    __model__.modeldata.attribs.colls.remCollChildren(coll_i, colls_i);
+    __model__.modeldata.geom.snapshot.remCollPoints(ssid, coll_i, points_i);
+    __model__.modeldata.geom.snapshot.remCollPlines(ssid, coll_i, plines_i);
+    __model__.modeldata.geom.snapshot.remCollPgons(ssid, coll_i, pgons_i);
+    __model__.modeldata.geom.snapshot.remCollChildren(ssid, coll_i, colls_i);
 }
 // ================================================================================================
 /**

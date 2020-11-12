@@ -228,9 +228,10 @@ function _getAttribs(__model__: GIModel, ent_type: EEntType, ent_i: number): str
     return attribs_with_vals;
 }
 function _getColls(__model__: GIModel, ent_type: EEntType, ent_i: number): string[] {
+    const ssid: number = __model__.modeldata.active_ssid;
     let colls_i: number[] = [];
     if (ent_type === EEntType.COLL) {
-        const parent: number = __model__.modeldata.attribs.colls.getCollParent(ent_i);
+        const parent: number = __model__.modeldata.geom.snapshot.getCollParent(ssid, ent_i);
         if (parent !== -1) { colls_i = [parent]; }
     } else {
         colls_i = __model__.modeldata.geom.nav.navAnyToColl(ent_type, ent_i);
@@ -314,6 +315,7 @@ function _pgonInfo(__model__: GIModel, pgon_i: number): string {
     return info;
 }
 function _collInfo(__model__: GIModel, coll_i: number): string {
+    const ssid: number = this.modeldata.active_ssid;
     let info = '';
     // get the data
     let coll_name = 'None';
@@ -339,7 +341,7 @@ function _collInfo(__model__: GIModel, coll_i: number): string {
     } else if (colls_names.length > 1) {
         info += '<li>In ' + colls_names.length + ' collections: ' + colls_names.join(', ') + '</li>';
     }
-    const children: number[] = __model__.modeldata.attribs.colls.getCollChildren(coll_i);
+    const children: number[] = __model__.modeldata.geom.snapshot.getCollChildren(ssid, coll_i);
     if (children.length > 0) {
         info += '<li>Child collections: </li>';
         for (const child of children) {

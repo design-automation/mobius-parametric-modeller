@@ -54,6 +54,9 @@ export class GIAttribsSnapshot {
         attribs.co.set(EAttribNames.COLL_POINTS, new GIAttribMapList(this.modeldata, EAttribNames.COLL_POINTS, EEntType.COLL, EAttribDataTypeStrs.LIST));
         attribs.co.set(EAttribNames.COLL_PLINES, new GIAttribMapList(this.modeldata, EAttribNames.COLL_PLINES, EEntType.COLL, EAttribDataTypeStrs.LIST));
         attribs.co.set(EAttribNames.COLL_PGONS, new GIAttribMapList(this.modeldata, EAttribNames.COLL_PGONS, EEntType.COLL, EAttribDataTypeStrs.LIST));
+        attribs.pt.set(EAttribNames.COLLS, new GIAttribMapList(this.modeldata, EAttribNames.COLLS, EEntType.POINT, EAttribDataTypeStrs.LIST));
+        attribs.pl.set(EAttribNames.COLLS, new GIAttribMapList(this.modeldata, EAttribNames.COLLS, EEntType.PLINE, EAttribDataTypeStrs.LIST));
+        attribs.pg.set(EAttribNames.COLLS, new GIAttribMapList(this.modeldata, EAttribNames.COLLS, EEntType.PGON, EAttribDataTypeStrs.LIST));
         // merge data
         if (include !== undefined) {
             for (const exist_ssid of include) {

@@ -357,11 +357,11 @@ export class GIFuncsEdit {
         // create sets
         const ent_sets: IEntSets = this.modeldata.geom.query.getEntSetsTree(ents_arr);
         // delete
-        if (ent_sets.ps.size) { this.modeldata.geom.snapshot.delEnts(ssid, EEntType.POSI, Array.from(ent_sets.ps), invert); }
-        if (ent_sets.pt.size) { this.modeldata.geom.snapshot.delEnts(ssid, EEntType.POINT, Array.from(ent_sets.pt), invert); }
-        if (ent_sets.pl.size) { this.modeldata.geom.snapshot.delEnts(ssid, EEntType.PLINE, Array.from(ent_sets.pl), invert); }
-        if (ent_sets.pg.size) { this.modeldata.geom.snapshot.delEnts(ssid, EEntType.PGON, Array.from(ent_sets.pg), invert); }
-        if (ent_sets.co.size) { this.modeldata.geom.snapshot.delEnts(ssid, EEntType.COLL, Array.from(ent_sets.co), invert); }
+        if (ent_sets.ps.size) { this.modeldata.geom.snapshot.delPosis(ssid, Array.from(ent_sets.ps), invert); }
+        if (ent_sets.pt.size) { this.modeldata.geom.snapshot.delPoints(ssid, Array.from(ent_sets.pt), invert); }
+        if (ent_sets.pl.size) { this.modeldata.geom.snapshot.delPlines(ssid, Array.from(ent_sets.pl), invert); }
+        if (ent_sets.pg.size) { this.modeldata.geom.snapshot.delPgons(ssid, Array.from(ent_sets.pg), invert); }
+        if (ent_sets.co.size) { this.modeldata.geom.snapshot.delColls(ssid, Array.from(ent_sets.co), invert); }
         //
         if (ent_sets._v) { throw new Error('Not implemented'); } // should never happen
         if (ent_sets._e) { throw new Error('Not implemented'); } // should never happen
@@ -374,11 +374,7 @@ export class GIFuncsEdit {
             return;
         } else {
             // delete everything
-            this.modeldata.geom.snapshot.delAllEnts(ssid, EEntType.POSI);
-            this.modeldata.geom.snapshot.delAllEnts(ssid, EEntType.POINT);
-            this.modeldata.geom.snapshot.delAllEnts(ssid, EEntType.PLINE);
-            this.modeldata.geom.snapshot.delAllEnts(ssid, EEntType.PGON);
-            this.modeldata.geom.snapshot.delAllEnts(ssid, EEntType.COLL);
+            this.modeldata.geom.snapshot.delAllEnts(ssid);
         }
     }
     // ================================================================================================

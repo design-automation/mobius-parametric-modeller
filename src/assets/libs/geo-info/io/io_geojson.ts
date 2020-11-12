@@ -423,7 +423,7 @@ function _addPointCollToModel(model: GIModel, multipoint: any,
     }
     // create the collection
     const coll_i: number = model.modeldata.geom.add.addColl();
-    model.modeldata.attribs.colls.setCollPoints(coll_i, points_i);
+    model.modeldata.attribs.colls.addCollPoints(coll_i, points_i);
     // add attribs
     _addAttribsToModel(model, EEntType.COLL, coll_i, multipoint);
     // return the indices of the plines and the index of the collection
@@ -454,7 +454,7 @@ function _addPlineCollToModel(model: GIModel, multilinestring: any,
     }
     // create the collection
     const coll_i: number = model.modeldata.geom.add.addColl();
-    model.modeldata.attribs.colls.setCollPlines(coll_i, plines_i);
+    model.modeldata.attribs.colls.addCollPlines(coll_i, plines_i);
     // add attribs
     _addAttribsToModel(model, EEntType.COLL, coll_i, multilinestring);
     // return the indices of the plines and the index of the collection
@@ -490,7 +490,7 @@ function _addPgonCollToModel(model: GIModel, multipolygon: any,
     }
     // create the collection
     const coll_i: number = model.modeldata.geom.add.addColl();
-    model.modeldata.attribs.colls.setCollPgons(coll_i, pgons_i);
+    model.modeldata.attribs.colls.addCollPgons(coll_i, pgons_i);
     // add attribs
     _addAttribsToModel(model, EEntType.COLL, coll_i, multipolygon);
     // return the indices of the plines and the index of the collection

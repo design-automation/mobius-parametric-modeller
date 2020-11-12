@@ -13,6 +13,7 @@ import { GIAttribsDel } from './GIAttribsDel';
 import { GIAttribsGetVal } from './GIAttribsGetVal';
 import { GIAttribsSetVal } from './GIAttribsSetVal';
 import { GIAttribsPosis } from './GIAttribsPosis';
+import { GIAttribsPush } from './GIAttribsPush';
 
 const eny_type_array: EEntType[] = [
     EEntType.POSI,
@@ -52,6 +53,7 @@ export class GIAttribs {
     public del: GIAttribsDel;
     public get: GIAttribsGetVal;
     public set: GIAttribsSetVal;
+    public push: GIAttribsPush;
     public posis: GIAttribsPosis;
     public colls: GIAttribsColls;
     public query: GIAttribsQuery;
@@ -69,6 +71,7 @@ export class GIAttribs {
         this.del = new GIAttribsDel(modeldata);
         this.get = new GIAttribsGetVal(modeldata);
         this.set = new GIAttribsSetVal(modeldata);
+        this.push = new GIAttribsPush(modeldata);
         this.posis = new GIAttribsPosis(modeldata);
         this.colls = new GIAttribsColls(modeldata);
         this.query = new GIAttribsQuery(modeldata);
@@ -252,22 +255,5 @@ export class GIAttribs {
             ss_attrib_maps.co.forEach( attrib => result.push(attrib.toStr()) );
         }
         return result.join('\n');
-
-        // let result = '';
-        // for (const ent_type of eny_type_array) {
-        //     const ent_type_str: string = ent_type_strs.get(ent_type);
-        //     result += ent_type_str + ': ';
-        //     if (ent_type === EEntType.MOD) {
-        //         // TODO
-        //         throw new Error('Not implemented.');
-        //     } else {
-        //         const attrib_names: string[] = this.query.getAttribNames(ent_type);
-        //         for (const attrib_name of attrib_names) {
-        //             result += JSON.stringify(this.query.getAttrib(ent_type, attrib_name).getJSONData());
-        //             result += '\n';
-        //         }
-        //     }
-        // }
-        // return result;
     }
 }

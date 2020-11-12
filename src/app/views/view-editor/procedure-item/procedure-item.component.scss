@@ -47,8 +47,18 @@
 
     &.selected{
         background-color: $selected-color1;
+        .btns {
+            .btn{
+                background-color: $selected-color1;
+            }
+        }
         &.lastSelected{
             background-color: $selected-color2;
+            .btns {
+                .btn{
+                    background-color: $selected-color2;
+                }
+            }
         }
     }
 
@@ -82,10 +92,25 @@
 
     &.onhover{
         background-color: $color5;
+        .btns {
+            .btn{
+                background-color: $color5;
+            }
+        }
         &.selected{
             background-color: $selected-color1;
+            .btns {
+                .btn{
+                    background-color: $selected-color1;
+                }
+            }
             &.lastSelected{
                 background-color: $selected-color2;
+                .btns {
+                    .btn{
+                        background-color: $selected-color2;
+                    }
+                }
             }
         }
         .btns {

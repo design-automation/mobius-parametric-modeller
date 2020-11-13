@@ -298,6 +298,7 @@ export class PanelHeaderComponent implements OnDestroy {
                     name: v,
                     value: prod.args[prod.argCount - 1].value,
                     type: prod.meta.inputMode,
+                    isEntity: prod.selectGeom
                 });
             }
             func.argCount = func.args.length;

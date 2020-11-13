@@ -4,12 +4,16 @@
 [class.selected]='prod.selected'
 [class.lastSelected]="prod.lastSelected"
 [class.inputDisabled]='!prod.enabled' 
+[class.inputEntity]='prod.selectGeom' 
 (mousedown)='disableShift($event)'
 (click)='selectInput($event)'>
     <div class = "btn-container">
         <div class = "btns">
-            <button class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled()' tabindex="-1">
-                <mat-icon class='icon'>tv_off</mat-icon>
+            <button class='btn disable-btn' mat-icon-button title="Disable Procedure" (click)='markDisabled()' tabindex="-1">
+                <mat-icon class='icon' svgIcon='disabled'></mat-icon>
+            </button>
+            <button class='btn entity-btn' mat-icon-button title="Input entities for global function" (click)='markEntity()' tabindex="-1">
+                <mat-icon class='icon' svgIcon='select'></mat-icon>
             </button>
         </div>
     </div>

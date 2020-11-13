@@ -174,10 +174,10 @@ export class ToolsetComponent implements OnInit {
     // add selected imported function as a new procedure
     add_global_func(fnData) {
         fnData.args = fnData.args.map( (arg) => {
-            if (arg.type === InputType.Constant) {
-                return {name: arg.name, value: arg.value, jsValue: arg.value, type: arg.type};
-            }
-            return {name: arg.name, value: arg.value, jsValue: arg.value, type: arg.type};
+            // if (arg.type === InputType.Constant) {
+            //     return {name: arg.name, value: arg.value, jsValue: arg.value, type: arg.type, isEntity: arg.isEntity};
+            // }
+            return {name: arg.name, value: arg.value, jsValue: arg.value, type: arg.type, isEntity: arg.isEntity};
         });
         this.eventAction.emit({
             'type': 'add_prod',
@@ -306,6 +306,7 @@ export class ToolsetComponent implements OnInit {
                             name: v,
                             value: prod.args[prod.argCount - 1].value,
                             type: prod.meta.inputMode,
+                            isEntity: prod.selectGeom
                         });
                     }
                     func.argCount = func.args.length;

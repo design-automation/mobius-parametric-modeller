@@ -97,6 +97,8 @@ export class GIModel {
      */
     public prepGlobalFunc(gf_start_ids: TId|TId[]): number {
         gf_start_ids = Array.isArray(gf_start_ids) ? gf_start_ids : [gf_start_ids];
+        // @ts-ignore
+        gf_start_ids = gf_start_ids.flat();
         const gf_start_ents: TEntTypeIdx[] = idsBreak(gf_start_ids) as TEntTypeIdx[];
         const curr_ss: number = this.getActiveSnapshot();
         this.nextSnapshot();

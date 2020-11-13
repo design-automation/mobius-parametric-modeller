@@ -615,6 +615,20 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
         newString += `{${result.str}}`; //////////
         jsString += `{${result.jsStr}}`; //////////
 
+        while (i + 1 < comps.length && comps[i + 1].value === '[') {
+            const result2 = analyzeComp(comps, i + 2, vars);
+            // const result2 = analyzePythonSlicing(comps, i + 1, vars, jsString, false);
+            if (result2.error) { return result2; }
+            newString += '[' + result2.str + ']';
+            jsString += '[' + result2.jsStr + ']';
+            // arrayName = result2.arrayName;
+            i = result2.i + 1;
+            if (i >= comps.length || comps[i].value !== ']') {
+                return {'error': 'Error: Closing Square Bracket "]" expected\n' +
+                `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+            }
+        }
+
     // if "@"/"#"/"?" ==> query
     } else if (comps[i].value === '@' || comps[i].value === '#' || comps[i].value === '?') {
         const result = analyzeQuery(comps, i, vars, '', '');

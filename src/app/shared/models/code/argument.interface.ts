@@ -9,4 +9,5 @@ export interface IArgument {
     usedVars?: string[];
     linked?: boolean;
     jsValue?: any;
+    isEntity?: boolean;
 }

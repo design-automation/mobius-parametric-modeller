@@ -65,6 +65,10 @@ export class ProcedureInputEditorComponent implements OnDestroy {
         }
     }
 
+    markEntity() {
+        this.prod.selectGeom = !this.prod.selectGeom;
+    }
+
     // modify variable input: replace space " " with underscore "_"
     varMod() {
         if (!this.prod.args[0].value) { return; }

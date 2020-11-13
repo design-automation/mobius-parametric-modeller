@@ -327,22 +327,27 @@ export class CodeUtils {
                 //         }
                 //     }
                 }
+                const prepArgs = [];
                 for (let i = 1; i < args.length; i++) {
                     const arg = args[i];
-                    // if (urlCheck && arg.jsValue.indexOf('://') !== -1) {
-                    //     argsVals.push(prod.resolvedValue);
-                    //     prod.resolvedValue = null;
-                    // }
                     if (arg.type.toString() !== InputType.URL.toString()) {
                         argsVals.push(arg.jsValue);
                         // argsVals.push(this.repGetAttrib(arg.jsValue));
                     } else {
                         argsVals.push(prod.resolvedValue);
                     }
+                    console.log(arg)
+                    if (arg.isEntity) {
+                        prepArgs.push(argsVals[argsVals.length - 1]);
+                    }
                 }
 
                 codeStr.push(`__params__.console.push('<div style="margin: 5px 0px 5px 10px; border: 1px solid #E6E6E6"><p><b> Global Function: ${prod.meta.name}</b></p>');`);
-                codeStr.push(`curr_ss = __params__.model.prepGlobalFunc(${argsVals[0]});`);
+                if (prepArgs.length === 0) {
+                    codeStr.push(`curr_ss = __params__.model.prepGlobalFunc([${argsVals[0]}]);`);
+                } else {
+                    codeStr.push(`curr_ss = __params__.model.prepGlobalFunc([${prepArgs.join(', ')}]);`);
+                }
                 const fn = `await ${namePrefix}${prod.meta.name}(__params__${argsVals.map(val => ', ' + val).join('')})`;
                 // codeStr.push(`__params__.prevModel = __params__.model.clone();`);
                 if (args[0].name === '__none__' || !args[0].jsValue) {

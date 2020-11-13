@@ -16,6 +16,8 @@
     // border-left: 1px solid red;
     border-bottom: 1px solid $color5;
     border-left: 1px solid $color5;
+    padding: 0px 0px 1px 1px;
+
     overflow: hidden;
     // width: calc(100% - 20px);
     width: 100%;
@@ -23,10 +25,18 @@
     box-shadow: inset 1px -1px 0px 0px white;
 
     &.inputDisabled{
-        opacity: 0.4;
-        .btn {
-            color: $color1;
-            // color: $selectGeom-color-dk;
+        opacity: $disabled-opacity;
+        .disable-btn {
+            // color: $color1;
+            color: $selectGeom-color-dk !important;
+        }
+    }
+    &.inputEntity{
+        border-bottom: 2px solid $print-color-dk;
+        border-left: 2px solid $print-color-dk;
+        padding: 0px;
+        .entity-btn {
+            color: $print-color-dk !important;
         }
     }
     &:hover .btn{

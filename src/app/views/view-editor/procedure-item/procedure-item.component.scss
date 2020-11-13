@@ -47,17 +47,13 @@
 
     &.selected{
         background-color: $selected-color1;
-        .btns {
-            .btn{
-                background-color: $selected-color1;
-            }
+        .disableOn, .printingOn, .terminateOn {
+            background-color: $selected-color1;
         }
         &.lastSelected{
             background-color: $selected-color2;
-            .btns {
-                .btn{
-                    background-color: $selected-color2;
-                }
+            .disableOn, .printingOn, .terminateOn {
+                background-color: $selected-color2;
             }
         }
     }
@@ -92,30 +88,25 @@
 
     &.onhover{
         background-color: $color5;
-        .btns {
-            .btn{
-                background-color: $color5;
-            }
-        }
         &.selected{
-            background-color: $selected-color1;
-            .btns {
-                .btn{
-                    background-color: $selected-color1;
-                }
-            }
-            &.lastSelected{
-                background-color: $selected-color2;
-                .btns {
+            // .btn-container &.onhover .btn{
+            //     background-color: $selected-color1;
+            // }
+            .btn-container {
+                &.onhover {
                     .btn{
-                        background-color: $selected-color2;
+                        background-color: $selected-color1;
                     }
                 }
             }
-        }
-        .btns {
-            .btn{
-                background-color: $color5;
+            &.lastSelected{
+                .btn-container {
+                    &.onhover {
+                        .btn{
+                            background-color: $selected-color2;
+                        }
+                    }
+                }
             }
         }
         // .btns{
@@ -313,17 +304,18 @@
     width: 100%;
     display: flex;
     flex-flow: row nowrap;
-    background-color: inherit;
     justify-content: flex-end;
     order: -1;
     z-index: 2;
 
     &.onhover{
         .btns{
-            display: inline-flex;
+            // display: inline-flex;
             .btn{
-                display: flex;
-                justify-content: center;
+                color: $color1;
+                background-color: $color5;
+                // display: flex;
+                // justify-content: center;
             }
         }
     }
@@ -337,8 +329,6 @@
     flex-flow: row-reverse nowrap;
     justify-content: flex-end;
 
-    background-color: inherit;
-
     // border-left: 1px solid $color1;
     // border-bottom: 1px solid $color1;
     &:hover{
@@ -349,40 +339,38 @@
 .btn{
     //height: 100%;
     width: $fsize1;
-    background-color: $color6;
+    // background-color: $color6;
+    // color: $color1;
+    background-color: transparent;
+    color: transparent;
 
     border: none;
-    color: $color1;
 
-    display: none;
+    display: flex;
+    justify-content: center;
 
     overflow: hidden;
     vertical-align: center;
-    
+    outline: none;
+
     order: 4;
     // &.highlighted{
     //     background-color: red;
     // }
     &:hover{
-        color: $selected-color;
-    }
-    &:focus{
-        outline:0;
+        color: $selected-color !important;
     }
     &.disableOn {
-        display: flex;
-        justify-content: center;
-        color: $selectGeom-color-dk;
+        color: $selectGeom-color-dk !important;
+        background-color: $color6;
     }
     &.printingOn {
-        display: flex;
-        justify-content: center;
-        color: $print-color;
+        color: $print-color !important;
+        background-color: $color6;
     }
     &.terminateOn {
-        display: flex;
-        justify-content: center;
-        color: $terminate-color;
+        color: $terminate-color !important;
+        background-color: $color6;
     }
 }
 .btn{

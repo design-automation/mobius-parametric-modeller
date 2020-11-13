@@ -24,10 +24,16 @@
 
     &.inputDisabled{
         opacity: 0.4;
+        .btn {
+            color: $color1;
+            // color: $selectGeom-color-dk;
+        }
     }
-    &:hover .btns{
-        display: inline-flex;
-        background-color: transparent;
+    &:hover .btn{
+        color: $color1;
+        background-color: $color6;
+        // display: inline-flex;
+        // background-color: transparent;
     }
 
     &.error {
@@ -35,8 +41,14 @@
     }
     &.selected{
         background-color: $selected-color1;
+        &:hover .btn {
+            background-color: $selected-color1;
+        }
         &.lastSelected{
             background-color: $selected-color2;
+            &:hover .btn {
+                background-color: $selected-color2;
+            }
         }
     }
 }
@@ -97,12 +109,12 @@ select{
 }
 
 .btns{
-    display: none;
+    display: inline-flex;
     flex-flow: row-reverse nowrap;
     justify-content: flex-end;
     padding-right: 8px;
     
-    background-color: $color6;
+    // background-color: $color6;
     // border-left: 1px solid $color1;
     // border-bottom: 1px solid $color1;
 
@@ -119,11 +131,12 @@ select{
     height: $fsize1;
     width: $fsize1;
     padding: 0px;
+    outline: none;
 
     background-color: transparent;
+    color: transparent;
     border: none;
     float: right;
-    color: $color1;
 
     :hover{
         color: $selected-color;

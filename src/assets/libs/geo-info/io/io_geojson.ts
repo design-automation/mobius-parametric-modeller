@@ -415,6 +415,7 @@ function _addPgonToModel(model: GIModel, polygon: any,
  */
 function _addPointCollToModel(model: GIModel, multipoint: any,
         proj_obj: proj4.Converter, rot_matrix: Matrix4, elevation: number): [number[], number] {
+    const ssid: number = this.modeldata.active_ssid;
     // add features
     const points_i: number[] = [];
     for (const coordinates of multipoint.geometry.coordinates) {
@@ -423,7 +424,7 @@ function _addPointCollToModel(model: GIModel, multipoint: any,
     }
     // create the collection
     const coll_i: number = model.modeldata.geom.add.addColl();
-    model.modeldata.attribs.colls.addCollPoints(coll_i, points_i);
+    model.modeldata.geom.snapshot.addCollPoints(ssid, coll_i, points_i);
     // add attribs
     _addAttribsToModel(model, EEntType.COLL, coll_i, multipoint);
     // return the indices of the plines and the index of the collection
@@ -446,6 +447,7 @@ function _addPointCollToModel(model: GIModel, multipoint: any,
  */
 function _addPlineCollToModel(model: GIModel, multilinestring: any,
         proj_obj: proj4.Converter, rot_matrix: Matrix4, elevation: number): [number[], number] {
+    const ssid: number = this.modeldata.active_ssid;
     // add features
     const plines_i: number[] = [];
     for (const coordinates of multilinestring.geometry.coordinates) {
@@ -454,7 +456,7 @@ function _addPlineCollToModel(model: GIModel, multilinestring: any,
     }
     // create the collection
     const coll_i: number = model.modeldata.geom.add.addColl();
-    model.modeldata.attribs.colls.addCollPlines(coll_i, plines_i);
+    model.modeldata.geom.snapshot.addCollPlines(ssid, coll_i, plines_i);
     // add attribs
     _addAttribsToModel(model, EEntType.COLL, coll_i, multilinestring);
     // return the indices of the plines and the index of the collection
@@ -482,6 +484,7 @@ function _addPlineCollToModel(model: GIModel, multilinestring: any,
  */
 function _addPgonCollToModel(model: GIModel, multipolygon: any,
         proj_obj: proj4.Converter, rot_matrix: Matrix4, elevation: number): [number[], number] {
+    const ssid: number = this.modeldata.active_ssid;
     // add features
     const pgons_i: number[] = [];
     for (const coordinates of multipolygon.geometry.coordinates) {
@@ -490,7 +493,7 @@ function _addPgonCollToModel(model: GIModel, multipolygon: any,
     }
     // create the collection
     const coll_i: number = model.modeldata.geom.add.addColl();
-    model.modeldata.attribs.colls.addCollPgons(coll_i, pgons_i);
+    model.modeldata.geom.snapshot.addCollPgons(ssid, coll_i, pgons_i);
     // add attribs
     _addAttribsToModel(model, EEntType.COLL, coll_i, multipolygon);
     // return the indices of the plines and the index of the collection

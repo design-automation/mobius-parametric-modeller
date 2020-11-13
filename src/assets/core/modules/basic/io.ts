@@ -187,6 +187,7 @@ function _importGeojson(__model__: GIModel, model_data: string): number {
 //     // return container_coll_i;
 // }
 function _createColl(__model__: GIModel, before: number[], after: number[]): number {
+    const ssid: number = __model__.modeldata.active_ssid;
     const points_i: number[] = [];
     const plines_i: number[] = [];
     const pgons_i: number[] = [];
@@ -205,10 +206,10 @@ function _createColl(__model__: GIModel, before: number[], after: number[]): num
     }
     if (points_i.length + plines_i.length + pgons_i.length === 0) { return null; }
     const container_coll_i: number = __model__.modeldata.geom.add.addColl();
-    __model__.modeldata.attribs.colls.addCollPoints(container_coll_i, points_i);
-    __model__.modeldata.attribs.colls.addCollPlines(container_coll_i, plines_i);
-    __model__.modeldata.attribs.colls.addCollPgons(container_coll_i, pgons_i);
-    __model__.modeldata.attribs.colls.addCollChildren(container_coll_i, colls_i);
+    __model__.modeldata.geom.snapshot.addCollPoints(ssid, container_coll_i, points_i);
+    __model__.modeldata.geom.snapshot.addCollPlines(ssid, container_coll_i, plines_i);
+    __model__.modeldata.geom.snapshot.addCollPgons(ssid, container_coll_i, pgons_i);
+    __model__.modeldata.geom.snapshot.addCollChildren(ssid, container_coll_i, colls_i);
     return container_coll_i;
 }
 // ================================================================================================

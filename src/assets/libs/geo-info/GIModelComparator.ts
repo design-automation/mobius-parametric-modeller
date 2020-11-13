@@ -685,6 +685,9 @@ export class GIModelComparator {
      * Get one fprint for all collections
      */
     private getCollFprints(idx_maps: Map<EEntType, Map<number, number>>, attrib_names: string[]): string[] {
+
+        const ssid: number = this.modeldata.active_ssid;
+
         const fprints: string[]  = [];
         // create the fprints for each collection
         const colls_i: number[] = this.modeldata.geom.query.getEnts(EEntType.COLL);
@@ -710,7 +713,7 @@ export class GIModelComparator {
         for (let i = 0; i < fprints.length; i++) {
             const idx: number = fprint_to_old_i_map.get(fprints[i]);
             const coll_old_i: number = colls_i[idx];
-            const coll_parent_old_i: number = this.modeldata.attribs.colls.getCollParent(coll_old_i);
+            const coll_parent_old_i: number = this.modeldata.geom.snapshot.getCollParent(ssid, coll_old_i);
             let parent_str = '';
             if (coll_parent_old_i === -1) {
                 parent_str = '.^';

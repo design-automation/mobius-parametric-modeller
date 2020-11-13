@@ -153,7 +153,7 @@ export class GIAttribsThreejs {
             // data_obj_map.set(ent_i, { '#': i, _id: `${attribs_maps_key}${ent_i}`} );
             data_obj_map.set(ent_i, {_id: `${attribs_maps_key}${ent_i}`} );
             if (ent_type === EEntType.COLL) {
-                const coll_parent = this.modeldata.attribs.colls.getCollParent(ent_i);
+                const coll_parent = this.modeldata.geom.snapshot.getCollParent(ssid, ent_i);
                 data_obj_map.get(ent_i)['_parent'] = coll_parent === undefined ? '' : 'co' + coll_parent;
             }
             i++;
@@ -226,7 +226,7 @@ export class GIAttribsThreejs {
         selected_ents_sorted.forEach(ent => {
             data_obj_map.set(ent, { _id: `${attribs_maps_key}${ent}` } );
             if (ent_type === EEntType.COLL) {
-                const coll_parent = this.modeldata.attribs.colls.getCollParent(ent);
+                const coll_parent = this.modeldata.geom.snapshot.getCollParent(ssid, ent);
                 data_obj_map.get(ent)['_parent'] = coll_parent === undefined ? '' : coll_parent;
             }
             i++;

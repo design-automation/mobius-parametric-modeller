@@ -13,6 +13,7 @@ import { GIGeomSnapshot } from './GIGeomSnapshot';
 import { GIGeomThreejs } from './GIGeomThreejs';
 import { GIGeomImpExp } from './GIGeomImpExp';
 import { GIGeomNavTri } from './GIGeomNavTri';
+import { GIGeomColls } from './GIGeomColls';
 
 /**
  * Class for geometry.
@@ -50,6 +51,7 @@ export class GIGeom {
     // sub classes with methods
     public imp_exp: GIGeomImpExp;
     public add: GIGeomAdd;
+    public colls: GIGeomColls;
     public del_vert: GIGeomDelVert;
     public edit_topo: GIGeomEditTopo;
     public edit_pline: GIGeomEditPline;
@@ -68,6 +70,7 @@ export class GIGeom {
         this.modeldata = modeldata;
         this.imp_exp = new GIGeomImpExp(modeldata, this._geom_maps);
         this.add = new GIGeomAdd(modeldata, this._geom_maps);
+        this.colls = new GIGeomColls(modeldata, this._geom_maps);
         this.del_vert = new GIGeomDelVert(modeldata, this._geom_maps);
         this.edit_topo = new GIGeomEditTopo(modeldata, this._geom_maps);
         this.edit_pline = new GIGeomEditPline(modeldata, this._geom_maps);

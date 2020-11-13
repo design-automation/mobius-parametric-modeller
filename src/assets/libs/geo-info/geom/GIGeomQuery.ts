@@ -87,6 +87,7 @@ export class GIGeomQuery {
      * Used for deleting all entities and for adding global function entities to a snapshot.
      */
     public getEntSetsTree(ents: TEntTypeIdx[], incl_topo = false, incl_tris = false): IEntSets {
+        const ssid: number = this.modeldata.active_ssid;
         const ent_sets: IEntSets = {
             ps: new Set(),
             obj_ps: new Set(),
@@ -100,17 +101,17 @@ export class GIGeomQuery {
             const [ent_type, ent_i]: TEntTypeIdx = ent_arr as TEntTypeIdx;
             if (ent_type === EEntType.COLL) {
                 // get the descendants of this collection
-                const coll_and_desc_i: number[] = this.modeldata.attribs.colls.getCollDescendents(ent_i);
+                const coll_and_desc_i: number[] = this.modeldata.geom.colls.getCollDescendents(ent_i);
                 coll_and_desc_i.splice(0, 0, ent_i);
                 // get all the objs
                 for (const one_coll_i of coll_and_desc_i) {
-                    for (const point_i of this.modeldata.attribs.colls.getCollPoints(one_coll_i)) {
+                    for (const point_i of this.modeldata.geom.snapshot.getCollPoints(ssid, one_coll_i)) {
                         ent_sets.pt.add(point_i);
                     }
-                    for (const pline_i of this.modeldata.attribs.colls.getCollPlines(one_coll_i)) {
+                    for (const pline_i of this.modeldata.geom.snapshot.getCollPlines(ssid, one_coll_i)) {
                         ent_sets.pl.add(pline_i);
                     }
-                    for (const pgon_i of this.modeldata.attribs.colls.getCollPgons(one_coll_i)) {
+                    for (const pgon_i of this.modeldata.geom.snapshot.getCollPgons(ssid, one_coll_i)) {
                         ent_sets.pg.add(pgon_i);
                     }
                     ent_sets.co.add(one_coll_i);

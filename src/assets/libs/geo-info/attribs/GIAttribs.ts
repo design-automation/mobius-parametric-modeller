@@ -6,7 +6,6 @@ import { GIAttribsMerge } from './GIAttribsMerge';
 import { GIModelData } from '../GIModelData';
 import { GIAttribsSnapshot } from './GIAttribsSnapshot';
 import { GIAttribsThreejs } from './GIAttribsThreejs';
-import { GIAttribsColls } from './GIAttribsColls';
 import { GIAttribsImpExp } from './GIAttribsImpExp';
 import { GIAttribMapBase } from '../attrib_classes/GIAttribMapBase';
 import { GIAttribsDel } from './GIAttribsDel';
@@ -55,7 +54,6 @@ export class GIAttribs {
     public set: GIAttribsSetVal;
     public push: GIAttribsPush;
     public posis: GIAttribsPosis;
-    public colls: GIAttribsColls;
     public query: GIAttribsQuery;
     public snapshot: GIAttribsSnapshot;
     public threejs: GIAttribsThreejs;
@@ -73,7 +71,6 @@ export class GIAttribs {
         this.set = new GIAttribsSetVal(modeldata);
         this.push = new GIAttribsPush(modeldata);
         this.posis = new GIAttribsPosis(modeldata);
-        this.colls = new GIAttribsColls(modeldata);
         this.query = new GIAttribsQuery(modeldata);
         this.snapshot = new GIAttribsSnapshot(modeldata);
         this.threejs = new GIAttribsThreejs(modeldata);

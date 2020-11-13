@@ -63,17 +63,18 @@ export class GIGeomNav {
      * @param coll_i
      */
     public navCollToPoint(coll_i: number): number[] {
+        const ssid: number = this.modeldata.active_ssid;
         // get the descendants of this collection
-        const coll_and_desc_i: number[] = this.modeldata.attribs.colls.getCollDescendents(coll_i);
+        const coll_and_desc_i: number[] = this.modeldata.geom.colls.getCollDescendents(coll_i);
         // if no descendants, just return the the ents in this coll
         if (coll_and_desc_i.length === 0) {
-            return this.modeldata.attribs.colls.getCollPoints(coll_i); // coll points
+            return this.modeldata.geom.snapshot.getCollPoints(ssid, coll_i); // coll points
         }
         // we have descendants, so get all points
         coll_and_desc_i.splice(0, 0, coll_i);
         const points_i_set: Set<number> = new Set();
         for (const one_coll_i of coll_and_desc_i) {
-            for (const point_i of this.modeldata.attribs.colls.getCollPoints(one_coll_i)) {
+            for (const point_i of this.modeldata.geom.snapshot.getCollPoints(ssid, one_coll_i)) {
                 points_i_set.add(point_i);
             }
         }
@@ -84,17 +85,18 @@ export class GIGeomNav {
      * @param coll_i
      */
     public navCollToPline(coll_i: number): number[] {
+        const ssid: number = this.modeldata.active_ssid;
         // get the descendants of this collection
-        const coll_and_desc_i: number[] = this.modeldata.attribs.colls.getCollDescendents(coll_i);
+        const coll_and_desc_i: number[] = this.modeldata.geom.colls.getCollDescendents(coll_i);
         // if no descendants, just return the the ents in this coll
         if (coll_and_desc_i.length === 0) {
-            return this.modeldata.attribs.colls.getCollPlines(coll_i); // coll lines
+            return this.modeldata.geom.snapshot.getCollPlines(ssid, coll_i); // coll lines
         }
         // we have descendants, so get all plines
         coll_and_desc_i.splice(0, 0, coll_i);
         const plines_i_set: Set<number> = new Set();
         for (const one_coll_i of coll_and_desc_i) {
-            for (const pline_i of this.modeldata.attribs.colls.getCollPlines(one_coll_i)) {
+            for (const pline_i of this.modeldata.geom.snapshot.getCollPlines(ssid, one_coll_i)) {
                 plines_i_set.add(pline_i);
             }
         }
@@ -105,17 +107,18 @@ export class GIGeomNav {
      * @param coll_i
      */
     public navCollToPgon(coll_i: number): number[] {
+        const ssid: number = this.modeldata.active_ssid;
         // get the descendants of this collection
-        const coll_and_desc_i: number[] = this.modeldata.attribs.colls.getCollDescendents(coll_i);
+        const coll_and_desc_i: number[] = this.modeldata.geom.colls.getCollDescendents(coll_i);
         // if no descendants, just return the the ents in this coll
         if (coll_and_desc_i.length === 0) {
-            return this.modeldata.attribs.colls.getCollPgons(coll_i); // coll pgons
+            return this.modeldata.geom.snapshot.getCollPgons(ssid, coll_i); // coll pgons
         }
         // we have descendants, so get all pgons
         coll_and_desc_i.splice(0, 0, coll_i);
         const pgons_i_set: Set<number> = new Set();
         for (const one_coll_i of coll_and_desc_i) {
-            for (const pgon_i of this.modeldata.attribs.colls.getCollPgons(one_coll_i)) {
+            for (const pgon_i of this.modeldata.geom.snapshot.getCollPgons(ssid, one_coll_i)) {
                 pgons_i_set.add(pgon_i);
             }
         }
@@ -126,7 +129,8 @@ export class GIGeomNav {
      * @param coll_i
      */
     public navCollToCollChildren(coll_i: number): number[] {
-        return this.modeldata.attribs.colls.getCollChildren(coll_i); // coll children
+        const ssid: number = this.modeldata.active_ssid;
+        return this.modeldata.geom.snapshot.getCollChildren(ssid, coll_i); // coll children
     }
     // ============================================================================
     // Navigate up the hierarchy
@@ -188,28 +192,32 @@ export class GIGeomNav {
      * @param point_i
      */
     public navPointToColl(point_i: number): number[] {
-        return this.modeldata.attribs.colls.getPointColls(point_i);
+        const ssid: number = this.modeldata.active_ssid;
+        return this.modeldata.geom.snapshot.getPointColls(ssid, point_i);
     }
     /**
      * Returns [] if none
      * @param pline_i
      */
     public navPlineToColl(pline_i: number): number[] {
-        return this.modeldata.attribs.colls.getPlineColls(pline_i);
+        const ssid: number = this.modeldata.active_ssid;
+        return this.modeldata.geom.snapshot.getPlineColls(ssid, pline_i);
     }
     /**
      * Returns [] if none
      * @param pgon_i
      */
     public navPgonToColl(pgon_i: number): number[] {
-        return this.modeldata.attribs.colls.getPgonColls(pgon_i);
+        const ssid: number = this.modeldata.active_ssid;
+        return this.modeldata.geom.snapshot.getPgonColls(ssid, pgon_i);
     }
     /**
      * Returns undefined if none
      * @param coll_i
      */
     public navCollToCollParent(coll_i: number): number {
-        return this.modeldata.attribs.colls.getCollParent(coll_i); // coll parent
+        const ssid: number = this.modeldata.active_ssid;
+        return this.modeldata.geom.snapshot.getCollParent(ssid, coll_i); // coll parent
     }
     // ============================================================================
     // Private, Navigate up from any to ?
@@ -600,16 +608,16 @@ export class GIGeomNav {
 //     }
 //     public navCollToPoint(coll_i: number): number[] {
 //         // get the descendants of this collection
-//         const coll_and_desc_i: number[] = this.modeldata.attribs.colls.getCollDescendents(coll_i);
+//         const coll_and_desc_i: number[] = this.modeldata.geom.snapshot.getCollDescendents(coll_i);
 //         // if no descendants, just return the the ents in this coll
 //         if (coll_and_desc_i.length === 0) {
-//             return this.modeldata.attribs.colls.getCollPoints(coll_i); // coll points
+//             return this.modeldata.geom.snapshot.getCollPoints(coll_i); // coll points
 //         }
 //         // we have descendants, so get all points
 //         coll_and_desc_i.splice(0, 0, coll_i);
 //         const points_i_set: Set<number> = new Set();
 //         for (const one_coll_i of coll_and_desc_i) {
-//             for (const point_i of this.modeldata.attribs.colls.getCollPoints(one_coll_i)) {
+//             for (const point_i of this.modeldata.geom.snapshot.getCollPoints(one_coll_i)) {
 //                 points_i_set.add(point_i);
 //             }
 //         }
@@ -617,16 +625,16 @@ export class GIGeomNav {
 //     }
 //     public navCollToPline(coll_i: number): number[] {
 //         // get the descendants of this collection
-//         const coll_and_desc_i: number[] = this.modeldata.attribs.colls.getCollDescendents(coll_i);
+//         const coll_and_desc_i: number[] = this.modeldata.geom.snapshot.getCollDescendents(coll_i);
 //         // if no descendants, just return the the ents in this coll
 //         if (coll_and_desc_i.length === 0) {
-//             return this.modeldata.attribs.colls.getCollPlines(coll_i); // coll lines
+//             return this.modeldata.geom.snapshot.getCollPlines(coll_i); // coll lines
 //         }
 //         // we have descendants, so get all plines
 //         coll_and_desc_i.splice(0, 0, coll_i);
 //         const plines_i_set: Set<number> = new Set();
 //         for (const one_coll_i of coll_and_desc_i) {
-//             for (const pline_i of this.modeldata.attribs.colls.getCollPlines(one_coll_i)) {
+//             for (const pline_i of this.modeldata.geom.snapshot.getCollPlines(one_coll_i)) {
 //                 plines_i_set.add(pline_i);
 //             }
 //         }
@@ -634,23 +642,23 @@ export class GIGeomNav {
 //     }
 //     public navCollToPgon(coll_i: number): number[] {
 //         // get the descendants of this collection
-//         const coll_and_desc_i: number[] = this.modeldata.attribs.colls.getCollDescendents(coll_i);
+//         const coll_and_desc_i: number[] = this.modeldata.geom.snapshot.getCollDescendents(coll_i);
 //         // if no descendants, just return the the ents in this coll
 //         if (coll_and_desc_i.length === 0) {
-//             return this.modeldata.attribs.colls.getCollPgons(coll_i); // coll pgons
+//             return this.modeldata.geom.snapshot.getCollPgons(coll_i); // coll pgons
 //         }
 //         // we have descendants, so get all pgons
 //         coll_and_desc_i.splice(0, 0, coll_i);
 //         const pgons_i_set: Set<number> = new Set();
 //         for (const one_coll_i of coll_and_desc_i) {
-//             for (const pgon_i of this.modeldata.attribs.colls.getCollPgons(one_coll_i)) {
+//             for (const pgon_i of this.modeldata.geom.snapshot.getCollPgons(one_coll_i)) {
 //                 pgons_i_set.add(pgon_i);
 //             }
 //         }
 //         return Array.from(pgons_i_set);
 //     }
 //     public navCollToCollChildren(coll_i: number): number[] {
-//         return this.modeldata.attribs.colls.getCollChildren(coll_i); // coll children
+//         return this.modeldata.geom.snapshot.getCollChildren(coll_i); // coll children
 //     }
 //     // ============================================================================
 //     // Navigate up the hierarchy
@@ -675,17 +683,17 @@ export class GIGeomNav {
 //         return this._geom_maps.up_wires_pgons.get(wire_i);
 //     }
 //     public navPointToColl(point_i: number): number[] {
-//         return this.modeldata.attribs.colls.getPointColls(point_i);
+//         return this.modeldata.geom.snapshot.getPointColls(point_i);
 //     }
 //     public navPlineToColl(pline_i: number): number[] {
-//         return this.modeldata.attribs.colls.getPlineColls(pline_i);
+//         return this.modeldata.geom.snapshot.getPlineColls(pline_i);
 //     }
 //     public navPgonToColl(pgon_i: number): number[] {
-//         return this.modeldata.attribs.colls.getPgonColls(pgon_i);
+//         return this.modeldata.geom.snapshot.getPgonColls(pgon_i);
 //     }
 //     public navCollToCollParent(coll_i: number): number {
 //         // return undefined if no parent
-//         return this.modeldata.attribs.colls.getCollParent(coll_i); // coll parent
+//         return this.modeldata.geom.snapshot.getCollParent(coll_i); // coll parent
 //     }
 //     // ============================================================================
 //     // Navigate from any level to ? (up or down)

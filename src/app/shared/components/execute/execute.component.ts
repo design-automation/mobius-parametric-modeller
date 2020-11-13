@@ -16,6 +16,8 @@ import { _parameterTypes, _varString } from '@assets/core/_parameterTypes';
 import { isArray } from 'util';
 import JSZip from 'jszip';
 import { GIModel } from '@assets/libs/geo-info/GIModel';
+import { WindowMessageComponent } from '@shared/components/window-message/window-message.component';
+import { EEntType } from '@assets/libs/geo-info/common';
 
 // function pythonList(x, l) {
 //     if (x < 0) {
@@ -300,6 +302,13 @@ export class ExecuteComponent {
                     await this.executeFlowchart();
                     this.dataService.finalizeLog();
                     this.dataService.log('<br>');
+                    const hudData = this.dataService.flowchart.model.modeldata.attribs.getAttrib(EEntType.MOD, 'hud') || null;
+                    WindowMessageComponent.SendData({
+                        messageType: 'execute_end',
+                        data: {
+                          hud: hudData
+                        }
+                    });
                 }, 20);
             }
         } catch (ex) {

@@ -96,7 +96,6 @@ export class GIModel {
      * @param gf_start_ents
      */
     public prepGlobalFunc(gf_start_ids: TId|TId[]): number {
-        console.log("prepGlobalFunc", gf_start_ids)
         gf_start_ids = Array.isArray(gf_start_ids) ? gf_start_ids : [gf_start_ids];
         // @ts-ignore
         gf_start_ids = gf_start_ids.flat();

@@ -642,4 +642,62 @@ export class GIGeomQuery {
             this.modeldata.geom.nav.navAnyToWire(ent_type, ent_i)
         ];
     }
+    /**
+     * Get the entities under a collection or object.
+     * Returns a list of entities in hierarchical order.
+     * For polygons and polylines, the list is ordered like this:
+     * wire, vert, posi, edge, vert, posi, edge, vert, posi
+     * @param ent_type
+     * @param ent_i
+     */
+    public getEntSubEnts(ent_type: EEntType, ent_i: number): TEntTypeIdx[] {
+        const tree: TEntTypeIdx[] = [];
+        switch (ent_type) {
+            case EEntType.COLL:
+                {
+                    for (const coll_i of this.modeldata.geom.nav.navCollToCollChildren(ent_i)) {
+                        tree.push([EEntType.COLL, coll_i]);
+                    }
+                }
+                return tree;
+            case EEntType.PGON:
+                {
+                    for (const wire_i of this.modeldata.geom.nav.navPgonToWire(ent_i)) {
+                        this._addtWireSubEnts(wire_i, tree);
+                    }
+                }
+                return tree;
+            case EEntType.PLINE:
+                {
+                    const wire_i: number = this.modeldata.geom.nav.navPlineToWire(ent_i);
+                    this._addtWireSubEnts(wire_i, tree);
+                }
+                return tree;
+            case EEntType.POINT:
+                {
+                    const vert_i: number = this.modeldata.geom.nav.navPointToVert(ent_i);
+                    tree.push([EEntType.VERT, vert_i]);
+                    tree.push([EEntType.POSI, this.modeldata.geom.nav.navVertToPosi(vert_i)]);
+                }
+                return tree;
+            default:
+                break;
+        }
+    }
+    private _addtWireSubEnts(wire_i: number, tree: TEntTypeIdx[]): void {
+        tree.push([EEntType.WIRE, wire_i]);
+        const edges_i: number[] = this.modeldata.geom.nav.navWireToEdge(wire_i);
+        for (const edge_i of edges_i) {
+            const [vert0_i, vert1_i]: number[] = this.modeldata.geom.nav.navEdgeToVert(edge_i);
+            const posi0_i: number = this.modeldata.geom.nav.navVertToPosi(vert0_i);
+            tree.push([EEntType.VERT, vert0_i]);
+            tree.push([EEntType.POSI, posi0_i]);
+            tree.push([EEntType.EDGE, edge_i]);
+            if (edge_i === edges_i[edges_i.length - 1]) {
+                const posi1_i: number = this.modeldata.geom.nav.navVertToPosi(vert1_i);
+                tree.push([EEntType.VERT, vert1_i]);
+                tree.push([EEntType.POSI, posi1_i]);
+            }
+        }
+    }
 }

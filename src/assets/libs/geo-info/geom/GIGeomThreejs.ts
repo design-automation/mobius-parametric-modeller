@@ -1,4 +1,4 @@
-import { IGeomMaps, TTri, TEdge, TPoint, EEntType } from '../common';
+import { IGeomMaps, TTri, TEdge, TPoint, EEntType, TEntTypeIdx } from '../common';
 import * as THREE from 'three';
 import { GIAttribMapBase } from '../attrib_classes/GIAttribMapBase';
 import { GIModelData } from '../GIModelData';
@@ -260,7 +260,7 @@ export class GIGeomThreejs {
         }
         return [points_verts_i_filt, point_select_map];
     }
-        /**
+    /**
      * Create a threejs material
      * @param settings
      */

@@ -336,15 +336,12 @@ export class CodeUtils {
                     } else {
                         argsVals.push(prod.resolvedValue);
                     }
-                    console.log(arg)
                     if (arg.isEntity) {
                         prepArgs.push(argsVals[argsVals.length - 1]);
                     }
                 }
 
                 codeStr.push(`__params__.console.push('<div style="margin: 5px 0px 5px 10px; border: 1px solid #E6E6E6"><p><b> Global Function: ${prod.meta.name}</b></p>');`);
-                console.log('..........', prepArgs)
-                console.log('~~~~~~~~~~', argsVals)
                 if (prepArgs.length === 0) {
                     codeStr.push(`curr_ss = __params__.model.prepGlobalFunc([${argsVals[0]}]);`);
                 } else {

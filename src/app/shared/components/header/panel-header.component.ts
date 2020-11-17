@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { DataService, KeyboardService } from '@shared/services';
 import * as circularJSON from 'circular-json';
 import { IFlowchart } from '@models/flowchart';
-import { ProcedureTypes, IFunction } from '@models/procedure';
+import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
 import { SaveFileComponent } from '../file';
 import { IdGenerator } from '@utils';
 import { InputType } from '@models/port';
@@ -332,6 +332,9 @@ export class PanelHeaderComponent implements OnDestroy {
                 this.dataService.flowchart.subFunctions.push(subfunc);
             }
 
+            for (const node of this.dataService.flowchart.nodes) {
+                this.updateGlobalFuncProds(node.procedure, func);
+            }
             this.dataService.notifyMessage(`Successfully import global function ${funcName} from local storage`);
             this.closeDialog();
 
@@ -850,8 +853,29 @@ export class PanelHeaderComponent implements OnDestroy {
         } else {
             func.hasReturn = false;
         }
+        for (const node of this.dataService.flowchart.nodes) {
+            this.updateGlobalFuncProds(node.procedure, func);
+        }
         document.getElementById('tooltiptext').click();
         this.dataService.notifyMessage(`Updated Global Function ${func.name}`);
+    }
+
+    updateGlobalFuncProds(prodList: IProcedure[], globalFunc: IFunction) {
+        for (const prod of prodList) {
+            if (prod.type === ProcedureTypes.globalFuncCall && prod.meta.name === globalFunc.name && prod.argCount === globalFunc.argCount + 1) {
+                for (const globalFuncArg of globalFunc.args) {
+                    for (const prodArg of prod.args) {
+                        if (globalFuncArg.name.toLowerCase() === prodArg.name) {
+                            prodArg.isEntity = globalFuncArg.isEntity;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (prod.children) {
+                this.updateGlobalFuncProds(prod.children, globalFunc);
+            }
+        }
     }
 
     download_global_func(event: MouseEvent, fnData) {

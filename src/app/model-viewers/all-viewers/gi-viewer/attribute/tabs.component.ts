@@ -111,7 +111,7 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
         // this.topo_open = false;
     }
 
-    selectTopology(tab: number, event: Event) {
+    selectTopology(tab: number, event?: Event) {
         this.tabs.toArray().forEach(_tab => _tab.active = false);
         this.tab_active = 1;
         const option = this.topology.find(item => item.tab === tab);
@@ -128,7 +128,7 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
         this.topology_open = false;
     }
 
-    selectObject(tab: number, event: Event) {
+    selectObject(tab: number, event?: Event) {
         this.tabs.toArray().forEach(_tab => _tab.active = false);
         this.tab_active = 2;
         const option = this.object.find(item => item.tab === tab);

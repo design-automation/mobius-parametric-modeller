@@ -37,7 +37,7 @@ export class AttributeComponent implements OnChanges {
     currentShowingCol = '';
     shiftKeyPressed = false;
 
-    tabs: { type: number, title: string }[] = [
+    tabs: { type?: number, title: string }[] = [
         { type: EEntType.POSI, title: 'Positions' },
         { type: EEntType.VERT, title: 'Vertices' },
         { type: EEntType.EDGE, title: 'Edges' },
@@ -46,7 +46,9 @@ export class AttributeComponent implements OnChanges {
         { type: EEntType.PLINE, title: 'Polylines' },
         { type: EEntType.PGON, title: 'Polygons' },
         { type: EEntType.COLL, title: 'Collections' },
-        { type: EEntType.MOD, title: 'Model' }
+        { type: EEntType.MOD, title: 'Model' },
+        { title: 'Obj Topo' },
+        { title: 'Col Topo' }
     ];
     displayedColumns: string[] = [];
     displayData: {}[] = [];
@@ -64,6 +66,7 @@ export class AttributeComponent implements OnChanges {
     @ViewChildren(MatSort) sort = new QueryList<MatSort>();
 
     dataSource: MatTableDataSource<object>;
+    dataSourceTopo: MatTableDataSource<object>;
 
     protected dataService: DataService;
 
@@ -138,6 +141,9 @@ export class AttributeComponent implements OnChanges {
     }
 
     generateTable(tabIndex: number) {
+        if (tabIndex > 8) {
+            return;
+        }
         if (this.model && this.nodeIndex) {
             const ThreeJSData = this.model.modeldata.attribs.threejs;
             if (Number(tabIndex) === 8) {
@@ -179,6 +185,11 @@ export class AttributeComponent implements OnChanges {
                     // : [first, second, ...rest_of_columns, ' '];
                     new_columns = selected ? [first, selected, ...rest_of_columns, ' '] : [first, ...rest_of_columns, ' '];
                 }
+                if (this.tab_map[tabIndex] === EEntType.POINT || this.tab_map[tabIndex] === EEntType.PLINE || this.tab_map[tabIndex] === EEntType.PGON) {
+                    this.displayData.forEach(row => row['_topo'] = '<button>></button>')
+                    // new_columns.splice(new_columns.length - 1, 0, '_topo')
+                } else if (this.tab_map[tabIndex] === EEntType.COLL) {
+                }
                 this.displayedColumns = new_columns;
                 this.dataSource = new MatTableDataSource<object>(this.displayData);
             } else {
@@ -196,6 +207,10 @@ export class AttributeComponent implements OnChanges {
             }
         }
         return tabIndex;
+    }
+
+    generateTopoTable() {
+
     }
 
     _sortingDataAccessor(data: object, headerID: string): string|number {
@@ -266,9 +281,9 @@ export class AttributeComponent implements OnChanges {
                     if (currentTab === 0 || currentTab === 7 || currentTab === 8) {
                         this.child.selectTab(this.tab_rev_map[currentTab]);
                     } else if (currentTab === 1 || currentTab === 2 || currentTab === 3) {
-                        this.child.selectTopology(currentTab, event);
+                        this.child.selectTopology(currentTab);
                     } else if (currentTab === 4 || currentTab === 5 || currentTab === 6) {
-                        this.child.selectObject(currentTab, event);
+                        this.child.selectObject(currentTab);
                     }
                 }
             }

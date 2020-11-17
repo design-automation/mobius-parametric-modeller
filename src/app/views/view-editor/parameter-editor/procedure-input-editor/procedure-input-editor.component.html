@@ -12,9 +12,9 @@
             <button class='btn disable-btn' mat-icon-button title="Disable Procedure" (click)='markDisabled()' tabindex="-1">
                 <mat-icon class='icon' svgIcon='disabled'></mat-icon>
             </button>
-            <button class='btn entity-btn' mat-icon-button title="Input entities for global function" (click)='markEntity()' tabindex="-1">
+            <!-- <button class='btn entity-btn' mat-icon-button title="Input entities for global function" (click)='markEntity()' tabindex="-1">
                 <mat-icon class='icon' svgIcon='select'></mat-icon>
-            </button>
+            </button> -->
         </div>
     </div>
     <div class = 'inp--type--container'>
@@ -125,6 +125,16 @@
         
     </div>
     <ng-container [ngSwitch]="prod.meta.inputMode" >
+        <div class='inputEntity' *ngSwitchCase="PortTypes.SimpleInput">
+            <div class='div--chbox div--globalEnt' >
+                <input class='chkbox' id='globalEntity_{{prod.ID}}'
+                    [(ngModel)]='prod.selectGeom' 
+                    [class.disablePointer]='disableInput'
+                    type="checkbox">
+                <label for='globalEntity_{{prod.ID}}'></label>
+            </div> 
+            <input class = 'entityDesc' value='Input entities for global function' disabled>
+        </div>
         <div class='div--slider' *ngSwitchCase="PortTypes.Slider">
             <div class = 'slider--container'>
                 <input class = 'slider-input' [(ngModel)]='prod.args[prod.argCount-1].value'

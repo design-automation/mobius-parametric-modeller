@@ -336,7 +336,6 @@ export class CodeUtils {
                     } else {
                         argsVals.push(prod.resolvedValue);
                     }
-                    console.log(arg)
                     if (arg.isEntity) {
                         prepArgs.push(argsVals[argsVals.length - 1]);
                     }

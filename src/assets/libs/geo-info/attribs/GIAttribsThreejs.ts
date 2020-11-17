@@ -1,4 +1,4 @@
-import { TAttribDataTypes, EEntType, EAttribNames, EEntTypeStr, Txyz } from '../common';
+import { TAttribDataTypes, EEntType, EAttribNames, EEntTypeStr, Txyz, TEntTypeIdx } from '../common';
 import { isString } from 'util';
 import { sortByKey } from '../../util/maps';
 import { GIModelData } from '../GIModelData';
@@ -209,7 +209,113 @@ export class GIAttribsThreejs {
         });
         return { data: Array.from(data_obj_map.values()), ents: ents_i};
     }
+    /**
+     * Gets the sub ents and attibs of an object or collection..
+     * Returns an array of maps, each map is: attribname -> attrib_value
+     * @param ent_type
+     */
+    public getEntSubAttribsForTable(ssid: number, ent_type: EEntType, ent_i: number, level: EEntType): Array<Map< string, TAttribDataTypes >> {
+        const data: Array<Map< string, TAttribDataTypes >> = [];
+        data.push(this._addEntSubAttribs(ssid, ent_type, ent_i, level));
+        switch (ent_type) {
+            case EEntType.COLL:
+                {
+                    for (const coll_i of this.modeldata.geom.nav.navCollToCollChildren(ent_i)) {
+                        data.push(this._addEntSubAttribs(ssid, EEntType.COLL, coll_i, level));
+                    }
+                }
+                return data;
+            case EEntType.PGON:
+                {
+                    for (const wire_i of this.modeldata.geom.nav.navPgonToWire(ent_i)) {
+                        this._addEntSubWire(ssid, wire_i, data, level);
+                    }
+                }
+                return data;
+            case EEntType.PLINE:
+                {
+                    const wire_i: number = this.modeldata.geom.nav.navPlineToWire(ent_i);
+                    this._addEntSubWire(ssid, wire_i, data, level);
+                }
+                return data;
+            case EEntType.POINT:
+                {
+                    const vert_i: number = this.modeldata.geom.nav.navPointToVert(ent_i);
+                    data.push(this._addEntSubAttribs(ssid, EEntType.VERT, vert_i, level));
+                    data.push(this._addEntSubAttribs(ssid, EEntType.POSI, this.modeldata.geom.nav.navVertToPosi(vert_i), level));
+                }
+                return data;
+            default:
+                break;
+        }
+    }
+    private _addEntSubWire(ssid: number, wire_i: number, data: Array<Map< string, TAttribDataTypes >>, level: number): void {
+        data.push(this._addEntSubAttribs(ssid, EEntType.WIRE, wire_i, level));
+        const edges_i: number[] = this.modeldata.geom.nav.navWireToEdge(wire_i);
+        for (const edge_i of edges_i) {
+            const [vert0_i, vert1_i]: number[] = this.modeldata.geom.nav.navEdgeToVert(edge_i);
+            const posi0_i: number = this.modeldata.geom.nav.navVertToPosi(vert0_i);
+            data.push(this._addEntSubAttribs(ssid, EEntType.VERT, vert0_i, level));
+            data.push(this._addEntSubAttribs(ssid, EEntType.POSI, posi0_i, level));
+            data.push(this._addEntSubAttribs(ssid, EEntType.EDGE, edge_i, level));
+            if (edge_i === edges_i[edges_i.length - 1]) {
+                const posi1_i: number = this.modeldata.geom.nav.navVertToPosi(vert1_i);
+                data.push(this._addEntSubAttribs(ssid, EEntType.VERT, vert1_i, level));
+                data.push(this._addEntSubAttribs(ssid, EEntType.POSI, posi1_i, level));
+            }
+        }
+    }
+    private _addEntSubAttribs(ssid: number, ent_type: number, ent_i: number, level: number): Map<string, TAttribDataTypes> {
+        const attribs_maps_key: string = EEntTypeStr[ent_type];
+        const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+        const data_map: Map< string, TAttribDataTypes> = new Map();
+        data_map.set('_id', `${attribs_maps_key}${ent_i}` );
+        if (ent_type !== level) { return data_map; }
+        // loop through all the attributes
+        attribs.forEach( (attrib, attrib_name) => {
+            const data_size: number = attrib.getDataLength();
+            if (attrib.numVals() === 0) { return; }
 
+            const attrib_value = attrib.getEntVal(ent_i);
+            if (attrib_value && attrib_value.constructor === {}.constructor) {
+                data_map.set(`${attrib_name}`, JSON.stringify(attrib_value));
+            } else if ( data_size > 1 ) {
+                // if (attrib_value === undefined) {
+                //     for (let idx = 0; idx < data_size; idx++) {
+                //         data_map.set(`${attrib_name}[${idx}]`] = undefined;
+                //     }
+                // } else {
+                    (attrib_value as TAttribDataTypes[]).forEach( (v, idx) => {
+                        const _v =  v;
+                        data_map.set(`${attrib_name}[${idx}]`,  _v);
+                    });
+                // }
+            } else {
+                if (ent_type === EEntType.POSI && Array.isArray(attrib_value)) {
+                    if (attrib_name === 'xyz') {
+                        for (let index = 0; index < attrib_value.length; index++) {
+                            const _v = Array.isArray(attrib_value[index]) ?
+                            JSON.stringify(attrib_value[index]) : attrib_value[index];
+                            data_map.set(`${attrib_name}[${index}]`, _v);
+                        }
+                    // if (attrib_value.length < 4) {
+                    //     console.log(attrib_value)
+                    //     for (let index = 0; index < attrib_value.length; index++) {
+                    //         const _v = Array.isArray(attrib_value[index]) ?
+                    //         JSON.stringify(attrib_value[index]) : attrib_value[index];
+                    //         data_obj_map.get(ent_i)[`${attrib_name}[${index}]`] = _v;
+                    //     }
+                    } else {
+                        data_map.set(attrib_name, JSON.stringify(attrib_value));
+                    }
+                } else {
+                    const _attrib_value = isString(attrib_value) ? `'${attrib_value}'` : attrib_value;
+                    data_map.set(`${attrib_name}`, _attrib_value);
+                }
+            }
+        });
+        return data_map;
+    }
     /**
      * @param ent_type
      * @param ents_i

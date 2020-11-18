@@ -5,7 +5,7 @@
 <hr>
 
 <ng-container *ngFor="let prod of startNode.procedure">
-    <div class='prod--container' *ngIf="prod.enabled && prod.type === 10 && prod.meta.inputMode != 5">
+    <div class='prod--container' *ngIf="prod.enabled && prod.type === 10 && prod.meta.inputMode != 5 && !prod.selectGeom">
         <!-- input description -->
         <div class='desc'
             id='{{prod.ID}}_desc'

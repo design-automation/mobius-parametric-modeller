@@ -25,7 +25,9 @@ export class CodeUtils {
         prod.hasError = false;
         let specialPrint = false;
         let loopVarIndex = null;
-
+        if (prod.children) {
+            loopVarIndex = existingVars.length;
+        }
         let codeStr: string[] = [];
         const args = prod.args;
         let prefix = '';
@@ -68,7 +70,6 @@ export class CodeUtils {
                 if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,'Executing If', '__null__');`);
                 }
-                loopVarIndex = existingVars.length;
                 break;
 
             case ProcedureTypes.Else:
@@ -78,7 +79,6 @@ export class CodeUtils {
                 if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,'Executing Else', '__null__');`);
                 }
-                loopVarIndex = existingVars.length;
                 break;
 
             case ProcedureTypes.Elseif:
@@ -100,7 +100,6 @@ export class CodeUtils {
                 if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,'Executing Else-if', '__null__');`);
                 }
-                loopVarIndex = existingVars.length;
                 break;
 
             case ProcedureTypes.Foreach:
@@ -111,7 +110,6 @@ export class CodeUtils {
                     codeStr.push(`printFunc(__params__.console,` +
                     `'Executing For-each: ${args[0].value} = ' + (${args[0].jsValue}), '__null__');`);
                 }
-                loopVarIndex = existingVars.length;
                 existingVars.push(args[0].jsValue);
                 break;
 
@@ -123,7 +121,6 @@ export class CodeUtils {
                     codeStr.push(`printFunc(__params__.console,` +
                     `'Executing While: (${args[0].value}) = ' + (${args[0].jsValue}), '__null__');`);
                 }
-                loopVarIndex = existingVars.length;
                 break;
 
             case ProcedureTypes.Break:

@@ -740,7 +740,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }
         this.shiftKeyPressed = false;
 
-        this.refreshTable();
+        this.refreshTable(); // TO BE REVISED
     }
 
     private refreshTable() {
@@ -768,7 +768,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this.dataService.selected_ents.forEach(map => {
             map.clear();
         });
-        this.refreshTable();
         scene.scene_objs_selected.clear();
         // if (this.SelectingEntityType.id === EEntTypeStr[EEntType.COLL]) {
         //     document.getElementById('executeButton').click();
@@ -1263,7 +1262,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             this.dataService.selected_ents.get(ent_type_str).delete(ent_id);
             this.unselectLabel(ent_id, ent_type_str);
         }
-        this.refreshTable();
+        this.refreshTable(); // TO BE REVISED
     }
 
     private unselectLabel(ent_id, ent_type_str) {
@@ -1628,7 +1627,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         scene.selectObjvertex(`_single_v${timestamp}`, ent_id, position, this.container, labelText);
         posi_ent.set(ent_id, id);
         this.dataService.selected_vertex.set(`_single_v${timestamp}`, [ent_id]);
-        this.refreshTable();
+        this.refreshTable(); // TO BE REVISED
     }
 
     public zoomfit() {

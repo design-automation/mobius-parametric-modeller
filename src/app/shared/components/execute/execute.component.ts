@@ -207,6 +207,8 @@ function printFunc(_console, name, value){
     return val;
 }
 `;
+const inlineVarNames = _varString.split(';').map(v => v.split('=')[0].trim());
+
 const DEBUG = false;
 
 const AsyncFunction = Object.getPrototypeOf(async function() {}).constructor;
@@ -603,7 +605,7 @@ export class ExecuteComponent {
 
             const codeRes = codeResult[0];
             const nodeCode = codeRes[0].join('\n').split('_-_-_+_-_-_');
-            const varsDefined = codeRes[1];
+            // const varsDefined = codeRes[1];
 
             // Create function string:
             // start with asembling the node's code
@@ -648,7 +650,7 @@ export class ExecuteComponent {
             }
 
             const prevWindowVar = {};
-            for (const v of varsDefined) {
+            for (const v of inlineVarNames) {
                 if (window.hasOwnProperty(v)) {
                     prevWindowVar[v] = window[v];
                 }
@@ -679,7 +681,7 @@ export class ExecuteComponent {
                 this.dataService.notifyMessage(params.message.replace('%node%', node.name));
             }
 
-            for (const v of varsDefined) {
+            for (const v of inlineVarNames) {
                 if (window.hasOwnProperty(v)) {
                     delete window[v];
                     if (prevWindowVar[v]) {
@@ -688,6 +690,7 @@ export class ExecuteComponent {
                 }
             }
             for (const i in window) {
+                if (i === 'webpackJsonp_name_') { continue; }
                 if (i[i.length - 1] === '_' && i[i.length - 2] !== '_' && i[0] !== '_') {
                     delete window[i];
                 }

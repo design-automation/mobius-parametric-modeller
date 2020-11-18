@@ -24,7 +24,10 @@ export class CodeUtils {
 
         prod.hasError = false;
         let specialPrint = false;
-
+        let loopVarIndex = null;
+        if (prod.children) {
+            loopVarIndex = existingVars.length;
+        }
         let codeStr: string[] = [];
         const args = prod.args;
         let prefix = '';
@@ -393,10 +396,10 @@ export class CodeUtils {
         if (prod.children) {
             codeStr = codeStr.concat(CodeUtils.getProdListCode(prod.children, existingVars, isMainFlowchart,
                                                                functionName, nodeId, usedFunctions));
-            // for (const p of prod.children) {
-            //     codeStr = codeStr.concat(CodeUtils.getProcedureCode(p, existingVars, isMainFlowchart, functionName, usedFunctions));
-            // }
             codeStr.push(`}`);
+            if (loopVarIndex) {
+                existingVars.splice(loopVarIndex);
+            }
         }
 
         // mark _terminateCheck to terminate all process after this
@@ -711,10 +714,6 @@ export class CodeUtils {
 
         codeStr = codeStr.concat(CodeUtils.getProdListCode(node.procedure, varsDefined, isMainFlowchart, functionName,
                                                            nodeId, usedFunctions));
-        // for (const prod of node.procedure) {
-        //     // if (node.type === 'start' && !isMainFlowchart) { break; }
-        //     codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName, usedFunctions));
-        // }
         if (node.type === 'end' && node.procedure.length > 0) {
             // codeStr.push('break; }');
 

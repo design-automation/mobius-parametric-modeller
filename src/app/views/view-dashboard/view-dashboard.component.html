@@ -1,0 +1,23 @@
+<div class='container'>
+    <as-split #dashboardSplit direction="horizontal" (dragEnd)='setSplit($event)'>
+        
+        <as-split-area [size]="100 - getSplit()">
+            <panel-header [flowchart]='getFlowchart()'></panel-header>
+            <!-- viewchild content -->
+            <div class='content__panel'>
+                <h3>{{getFlowchart().name}}</h3>
+                <parameter-viewer [flowchart]='getFlowchart()' [startNode]='getFlowchart().nodes[0]' [endNode]='getEndNode()'></parameter-viewer>
+            </div>
+        </as-split-area>
+
+        <as-split-area [size]="getSplit()">
+            <!-- data viewers panel -->
+            <div class='content__viewer' >
+                <model-viewers-container></model-viewers-container>
+            </div>
+        </as-split-area>
+        
+    </as-split>
+</div>
+<spinner></spinner>
+<chrome></chrome>

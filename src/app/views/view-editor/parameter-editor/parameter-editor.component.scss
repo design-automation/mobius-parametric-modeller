@@ -1,0 +1,98 @@
+@import '~scss/colors';
+@import '~scss/variables';
+
+div[class^="container--"]{
+    display: flex; 
+    flex-direction: column;
+    margin: 0px 0px;
+}
+
+.flowchart-info{
+    display: flex;
+    flex-flow: column nowrap;
+    padding-left: 0px;
+    padding-right: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    #ret-container{
+        display: flex;
+        flex-flow: column nowrap;
+        padding-left: 2px;
+        padding-bottom: 2px;
+        border-left: 1px solid $color2;
+        border-bottom: 1px solid $color2;
+    }
+}
+
+textarea, #flowchart-name, .ret--input{
+    color: $color8;
+    border: 2px solid $color5;
+    background-color: transparent;
+    height: $fsize1;
+    margin-bottom: 1px;
+
+    padding-left: 6px;
+    font-family: arial;
+    font-size: $fsize2;
+    max-width: 100%;
+    resize: none; 
+    overflow: auto;
+    &:hover, &:focus{
+        border-color: $selected-color;
+        background-color: $color7;
+    }
+    &.error{
+        border: 2px solid $error-color;
+    }
+
+}
+
+.input-container{
+    padding: 0px;
+    max-width: 100%;
+    padding-right: 9px;
+    box-sizing: border-box;
+}
+
+#flowchart-name{
+    margin-bottom: 8px;
+    max-width: 100%;
+    height: $fsize1;
+}
+
+hr{
+    width: inherit;
+    border-top: 2px solid $color1;
+}
+
+.disabled-input{
+    border: 0px;
+    margin: 0px;
+    width: 50px;
+    font-family: sans-serif;
+    font-size: $fsize2;
+    font-weight: 550;
+    font-style: italic;
+    background-color: $color6;
+    color: $basic-function-text-color;
+}
+
+.input{
+    font-size: $fsize2;
+    resize: horizontal;
+    min-width: 10px;
+    background-color: $color6; 
+    margin-left: 6px;
+    border: 2px solid $color5;
+    padding-left: 2px;
+}
+
+.returnProd{
+    display: inline-block;
+}
+
+.divider{
+    width: 100%;
+    // background-color: $color5-5;
+    height: 20px;
+}

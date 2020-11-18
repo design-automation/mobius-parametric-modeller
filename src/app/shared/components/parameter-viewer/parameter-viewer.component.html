@@ -1,0 +1,17 @@
+<!-- <h2>{{displayName()}}</h2> -->
+
+<div id='display-flowchart-desc' [innerHTML]='getDesc(flowchart.description)' placeholder="Model Description" disabled></div>
+
+<hr>
+
+<ng-container *ngFor="let prod of startNode.procedure">
+    <div class='prod--container' *ngIf="prod.enabled && prod.type === 10 && prod.meta.inputMode != 5 && !prod.selectGeom">
+        <!-- input description -->
+        <div class='desc'
+            id='{{prod.ID}}_desc'
+            [innerHTML]='getDesc(prod.meta.description)'
+            placeholder="Parameter Description">
+        </div>
+        <procedure-input-viewer [prod]="prod" (eventAction)='performAction($event, i)' ></procedure-input-viewer>
+    </div>
+</ng-container>

@@ -1,0 +1,111 @@
+<div class='container' id='view-editor-container'>
+    <as-split #editorSplit direction="horizontal" (dragEnd)='setSplit($event)'>
+        <as-split-area [size]="100 - getSplit()">
+            <panel-header [flowchart]='getFlowchart()'></panel-header>
+            <!-- viewchild content -->
+            <div class='content__panel'>
+            <!-- <div class='content__panel' (mouseenter)='activateCopyPaste()'  (mouseleave)='deactivateCopyPaste()'> -->
+                <div class='container--editor'>
+                    <div class='container__content'>
+                        <!-- toolset on the left side -->
+                        <div class="container--toolset">
+                            <toolset (eventAction)='performAction_toolset($event)'></toolset>
+                        </div>
+                        <!-- procedure editor on the right side -->
+                        <div id='procedure' class="container--procedure" (click)='unselectAll($event)'>
+                            <!-- parameter-editor only for start/end node -->
+                            <parameter-editor *ngIf="getNode().type == 'start'" 
+                            [flowchart]='getFlowchart()' 
+                            [node]='getNode()'
+                            [prodCheck]='false'
+                            [disableInput]='disableInput'></parameter-editor>
+                            <!-- <ng-container *ngIf='getNode().enabled; else disabled_node'>
+                                <div id='modelViewButton--container' *ngIf="getNode().type !== 'start'">
+                                    <button (click)='setViewOutput()'>Viewing 
+                                        <span *ngIf='!getViewOutput()'>Input Model</span>
+                                        <span *ngIf='getViewOutput()'>Output Model</span></button>
+                                </div>
+
+                                <div id='modelViewButton--container' *ngIf="getNode().type == 'start'">
+                                    <button (click)='setViewOutput()'>
+                                        <span *ngIf='getViewOutput()'>Viewing</span>
+                                        <span *ngIf='!getViewOutput()'>Hiding</span>
+                                    Test Model</button>
+                                </div>
+                            </ng-container>
+                            <ng-template #disabled_node>
+                                <div id='modelViewButton--container' *ngIf="getNode().type !== 'start'">
+                                    <button disabled> Node Disabled </button>
+                                </div>
+                            </ng-template> -->
+                            
+                            <div class = 'procedureln--container'  [ngClass]="{'procedureln--container-start': getNode().type == 'start'}">
+                                <!-- list of procedure items for all nodes -->
+                                <div id='modelViewButton--container' *ngIf='getNode().type != "start"'>
+                                    <li (click)='toggleShowFunc()'>
+                                        <span *ngIf='getNode().state.show_func'>Local Function</span>
+                                        <span *ngIf='!getNode().state.show_func'>Local Function - Hidden</span>
+                                    </li>
+                                </div>
+                                <div class = 'pro-container' *ngIf='getNode().state.show_func' [hidden]="getNode().type == 'start' && !getViewOutput()">
+                                    <procedure-item 
+                                    *ngFor="let line of getNode()?.localFunc; let idx=index" 
+                                    [data]="line"
+                                    [disableInput]='disableInput'
+                                    (eventAction)='performAction_procedure_item($event, idx)'
+                                    ></procedure-item>
+                                    <br>
+                                </div>
+                                <div id='modelViewButton--container'>
+                                    <li (click)='toggleShowCode()'> 
+                                        <span *ngIf='getNode().state.show_code'>Main Code</span>
+                                        <span *ngIf='!getNode().state.show_code'>Main Code - Hidden</span>
+                                    </li>
+                                </div>
+                                <div class = 'pro-container' *ngIf='getNode().state.show_code' [hidden]="getNode().type == 'start' && !getViewOutput()">
+                                    <procedure-item 
+                                    *ngFor="let line of getNode()?.procedure; let idx=index" 
+                                    [data]="line"
+                                    [disableInput]='disableInput'
+                                    (eventAction)='performAction_procedure_item($event, idx)'
+                                    ></procedure-item>
+                                    <br>
+                                </div>
+                                <div class = 'divider--container' *ngIf="getNode().type !== ''">
+                                    <div class = 'divider' *ngIf="getNode().type == 'start'"><span>Parameters</span></div>
+                                    <div class = 'divider' *ngIf="getNode().type == 'end'"></div>
+                                </div>
+                                <parameter-editor *ngIf="getNode().type !== ''" 
+                                [flowchart]='getFlowchart()' 
+                                [node]='getNode()'
+                                [prodCheck]='true'
+                                [disableInput]='disableInput'
+                                (eventAction)='performAction_param_editor($event)'
+                                ></parameter-editor>
+                                <div id = 'spacer'></div>
+                            </div>
+                            <!-- <button class='modelViewButton' (click)='setViewOutput(true)'>View Output</button> -->
+                            <p class='offsetbreak'></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </as-split-area>
+
+        <as-split-area [size]="getSplit()">
+            <!-- data viewers panel -->
+            <div class='content__viewer' >
+                <model-viewers-container></model-viewers-container>
+            </div>
+        </as-split-area>
+        
+    </as-split>
+
+<!-- <notification [message]='notificationMessage' [dummyTrigger]='notificationTrigger'></notification> -->
+
+</div>
+<spinner></spinner>
+<chrome></chrome>
+<button class='hidden-button' id='copyProdButton' (click) = 'copyProd()'></button>
+<button class='hidden-button' id='cutProdButton' (click) = 'cutProd()'></button>
+<button class='hidden-button' id='pasteProdButton' (click) = 'pasteProd()'></button>

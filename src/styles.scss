@@ -1,0 +1,324 @@
+@import './scss/colors';
+@import './scss/variables';
+@import './scss/header-button';
+
+// This imports a lot of annoying angular stuff
+@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+html{
+    position: relative;
+    height: 100%; 
+    width: 100%; 
+
+    padding: 0px;
+    margin: 0px;
+
+    font-family: sans-serif !important;
+    font-size: $fsize2;
+    line-height: 14px; 
+}
+
+body{
+    position: relative;
+
+    width: auto;
+    height: 100%;
+    overflow: hidden;
+
+    padding: 0px;
+    margin: 0px; 
+}
+
+// splitted
+
+as-split-area{
+    background-color: $color6;
+    overflow: hidden !important;
+    flex-grow: 1 !important;
+}
+
+
+
+.as-split-gutter{
+    // background-image: none !important;
+    background-color:$color6 !important;
+    // border-right: 1px solid $color4;
+}
+
+#gi-viewer-container{
+    as-split-gutter{
+        border-top: 1px solid $color4 !important;
+    }
+}
+
+#published {
+    as-split-area:first-of-type{
+        border-right: 1px solid $color4;  
+    }
+    as-split-gutter{
+        flex-basis: unset !important;
+        height: 5px !important;
+        border: unset;
+    }
+    #three-js{
+        flex-grow: unset;
+    }
+    #published_right{
+        &.flowchartclosed{
+            flex: 0 0 calc(100% - 0px) !important;
+        }
+        &.attribclosed{
+            
+            #three-js{
+                flex: 0 0 calc(100% - 0px) !important;
+            }
+        }
+    }
+}
+
+#minimal {
+    as-split-gutter{
+        flex-basis: unset !important;
+        height: 1px !important;
+        border: unset;
+    }
+    #attrib{
+        display: none !important;
+    }
+}
+
+// for teh 4 views
+
+.container{
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    // left side of the split
+
+    panel-header {
+        overflow: hidden;
+        background-color: transparent;
+        height: $header-height;
+        box-sizing: border-box;
+        border: 0px;
+        width: 100%;
+    }
+
+    .content__panel{
+        // margin-top: 10px;
+        height: 100%;
+        width: 100%;
+        background-color: transparent;
+        box-sizing: border-box;
+        border: 0px;
+        overflow: hidden;
+    }
+
+    // right side of the split
+
+    .content__viewer{
+        background-color: transparent;
+        height: 100%; 
+        overflow: hidden;
+    }
+}
+
+// general styles
+
+h1, h2, h3, h4, h5, h6, p{
+    margin: 0px;
+    padding: 0px;
+}
+
+input, textarea, select, a { 
+    outline: none; 
+}
+
+// scroll bar
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    margin-left: 2px;
+}
+
+::-webkit-scrollbar-track {
+    background: $color6; 
+}
+
+::-webkit-scrollbar-thumb {
+    background: $color5; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: $color3; 
+}
+
+// slider
+
+.mat-slider-wrapper{
+    position: relative !important;
+    top: 9px !important;
+    margin-right: $padding;
+    height: $fsize1 !important;
+}
+
+.mat-slider-track-fill{
+    background-color: $color5 !important;
+
+    height: $fsize1 !important;
+}
+
+
+.mat-slider-track-wrapper{
+    height: $fsize1 !important;
+    box-sizing: border-box !important;
+}
+
+.mat-slider-track-background{
+    background-color: $color5-5 !important;
+    
+    border: 2px solid $color5 !important;
+    box-sizing: border-box;
+    height: $fsize1 !important;
+}
+
+.mat-slider-thumb-label-text {
+    color: $selected-color !important;
+    //background-color: $color7 !important;
+    font-size: $fsize2!important;
+    position: relative;
+    // right: 5px;
+    // bottom: 5px;
+    left: 2px !important;
+    bottom: 2px !important;
+}
+
+.mat-slider-thumb{
+	border-radius: 0 !important;
+	background-color: $color5 !important;
+	border: 1px solid $color1 !important;
+	width: 5px !important;
+    right: -5px !important;
+    bottom: -7px !important;
+    
+    transform: scale(1) !important;
+
+    height: $fsize1 !important;
+}
+
+.mat-slider-thumb-label{
+    height: 0px !important;
+    width: 0px !important;
+    top: 0px !important;
+
+    background-color: $color5!important;
+}
+
+.cdk-mouse-focused{
+    // .mat-slider-track-fill{
+    //     background-color: $selected-color !important;
+    // }
+    // .mat-slider-track-background{
+    //     background-color: $color7 !important;
+    //     border-bottom: 1px solid $color4;
+    // }
+    .mat-slider-thumb{
+        transform: scale(1) !important;
+        background-color: $selected-color !important;
+    }
+}
+
+// checkbox
+
+.div--chbox{
+    height: $fsize1;
+    width: $fsize1;
+    position: relative;
+    input{
+        visibility: hidden;
+    }
+    label{
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: $fsize1;
+        height: $fsize1;
+        
+        // background-color: $color6;
+        border:2px solid $color5;
+        margin-left: 2px;
+
+        &:after { // check
+            position: absolute;
+            top: 5px;
+            left: 4px;
+
+            opacity: 0;
+            content: '';
+            
+            width: 4px;
+            height: 2px;
+            background-color: transparent;
+            
+            color: $selected-color;
+            border: 2px solid $color8;
+            border-top: none;
+            border-right: none;      
+            transform: rotate(-45deg);
+        }
+        &:hover{
+            background-color: $color7;
+            border:2px solid $selected-color;
+            // margin: 0px;
+        }
+        &:hover:after {
+            border-color: selected-color;
+        }
+    }
+    input[type=checkbox]:checked + label:after {
+        opacity: 1;
+        border-color: $color8;
+    }
+}
+
+// import file button
+
+.filebtn{
+    height: 16px;
+    width: 75px;
+    margin: 0px;
+    padding: 0px;
+    border: 1px solid $color5;
+
+    background-color: $color5;
+    color: $color1;
+
+    text-align: center;
+    text-decoration: none;
+
+    font-size: $fsize2;
+    transition: 0.4s;
+    max-width: 300px - $padding;
+    &:hover, &:active {
+        // border-color: $selected-color;
+        background-color: $color4;
+        color: $color8;
+    }
+}
+
+.hidden-button {
+    display: none;
+}
+// angular overwrite
+// .mat-tab-label{
+//     font-family: sans-serif !important;
+// }

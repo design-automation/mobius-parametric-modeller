@@ -1,0 +1,16 @@
+<div class='container'>
+    <div style="display: none;" id='published'>
+        <load-url></load-url>
+        <window-message></window-message>
+        <execute></execute>
+        <input id='hidden_node_selection' value=''>
+        <input id='hidden_node_selection_button' (click)=updateNode() >
+        <input id='hidden_notify_button' value='' (click)=notifyMessage($event) >
+        <!-- <publish-header [title]='getFlowchart().name'></publish-header> -->
+    </div>
+    <div class='content__viewer' id='minimal'>
+        <model-viewers-container></model-viewers-container>
+    </div>
+</div>
+<spinner></spinner>
+<chrome></chrome>

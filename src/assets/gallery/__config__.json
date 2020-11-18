@@ -1,0 +1,103 @@
+{
+    "data": [
+        {
+            "name": "Generative Examples",
+            "files": [
+                "Floor_area_constraint.mob",
+                "Form_Finding_Solver.mob",
+                "Minimise_Detours_Solver.mob",
+                "Rectangle_Solver.mob",
+                "Urban_plot_subdivision.mob",
+                "Podium_tower_options_part1.mob",
+                "Podium_tower_options_part2.mob",
+                "Podium_tower_options_part3.mob"
+            ],
+            "link": "/assets/gallery/generative_modelling_examples/"
+        },
+        {
+            "name": "Analysis Examples",
+            "files": [
+                "Centrality_Analysis.mob",
+                "Sky_and_Sun_dome.mob",
+                "Facade_sky_and_sun_analysis.mob",
+                "Isovist.mob",
+                "Isovist_T_shapes.mob",
+                "Proximity_Analysis.mob",
+                "Ray_casting.mob",
+                "Sky_and_sun_exposure.mob",
+                "View_tower_block_options_part_1.mob",
+                "View_tower_block_options_part_2.mob",
+                "Multiple_criteria_part_1.mob",
+                "Multiple_criteria_part_2.mob",
+                "Wind_paths.mob"
+            ],
+            "link": "/assets/gallery/analysis_examples/"
+        },
+        {
+            "name": "Global Function Examples",
+            "files": [
+                "pyramids_from_pgons_example.mob&node=1",
+                "pyramids_from_pgons_func.mob&node=0",
+                "div_pgons_example1.mob&node=1",
+                "div_pgons_example2.mob&node=1",
+                "div_pgons_func.mob&node=0",
+                "offset_floors_and_windows_example.mob&node=1",
+                "offset_pgons_func.mob&node=0",
+                "hello_example.mob&node=1",
+                "hello_func.mob&node=0"
+            ],
+            "link": "/assets/gallery/user_functions_examples/"
+        },
+        {
+            "name": "Import Examples",
+            "files": [
+                "Import_geojson_map.mob&node=3",
+                "Import_geojson_data.mob&node=7"
+            ],
+            "link": "/assets/gallery/import_examples/"
+        },
+        {
+            "name": "Material Examples",
+            "files": [
+                "glass_materials.mob&node=2",
+                "front_and_back_materials.mob&node=1",
+                "Visualising_materials.mob&node=10"
+            ],
+            "link": "/assets/gallery/rendering_examples/"
+        },
+        {
+            "name": "Shapes Examples",
+            "files": [
+                "Cubes.mob&node=2",
+                "Spiral_Staircase.mob&node=2",
+                "torus.mob&node=2",
+                "Undulating_pavillion.mob&node=8",
+                "Wrapping_hexagons.mob&node=2"
+            ],
+            "link": "/assets/gallery/shapes_examples/"
+        },
+        {
+            "name": "Basic Examples",
+            "files": [
+                "basic_variable.mob&node=1",
+                "basic_ifelse.mob&node=1",
+                "basic_foreach.mob&node=1",
+                "basic_while.mob&node=1",
+                "podium_with_towers.mob",
+                "block_patterns.mob"
+            ],
+            "link": "/assets/gallery/basic_examples/"
+        },
+        {
+            "name": "Function Examples",
+            "files": [
+                "make.Position.mob&node=1",
+                "make.Point.mob&node=1",
+                "make.Polyline.mob&node=1",
+                "make.Polygon.mob&node=1",
+                "make.Collection.mob&node=1"
+            ],
+            "link": "/assets/gallery/function_examples/"
+        }
+    ]
+}

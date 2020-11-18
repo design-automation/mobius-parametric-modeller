@@ -1,0 +1,12 @@
+@import './colors';
+
+mat-dialog-container{
+    color: $color1 !important;
+    h2{
+        border-bottom: 1px solid $color3;
+        padding-bottom: 5px;
+    }
+    mat-form-field{
+        width: 100%;
+    }
+}

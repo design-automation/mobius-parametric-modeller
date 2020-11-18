@@ -1,0 +1,141 @@
+<div
+    id="threejs-container"
+    (window:mousedown)="onMouseDown($event)"
+    (window:mouseup)="onMouseUp($event)"
+>
+    <div
+        *ngIf="_model_error"
+        style="position:absolute;color:red;margin-top: 50px;left:40%;text-align: center;font-family:sans-serif;font-size: 14px;background-color: white;"
+    >
+        Error displaying model:{{text}}
+    </div>
+    <div
+        *ngIf="_no_model"
+        style="position:absolute;color:red;margin-top: 50px;left:40%;text-align: center;font-family:sans-serif;font-size: 14px;background-color: white;"
+    >
+        Model or Scene not defined.
+    </div>
+    <div class = "messages"
+        *ngIf="messageVisible"
+    >
+        {{message}}
+    </div>
+
+    <button
+        id="zoomingfit"
+        mat-icon-button
+        (click)="zoomfit()"
+        title='Zoom to Fit Model'
+    >
+        <mat-icon svgIcon="cZoom"></mat-icon>
+    </button>
+
+    <span
+        class="switchCameraButton"
+        mat-icon-button
+        (click)="switchCamera()"
+        title='Switch Camera'
+    >
+        <mat-icon svgIcon="cControlCam"></mat-icon>
+        <p>{{_data_threejs.currentCamera}}</p>
+    </span>
+    <ng-container *ngIf="enableSelect()">
+        <button
+            id="EntitySelection"
+            mat-icon-button
+            (click)="selectDropdownVisible = !selectDropdownVisible"
+            title='Selection Type'
+        >
+            <mat-icon svgIcon="select"></mat-icon>
+        </button>
+        <span
+            *ngIf="!selectDropdownVisible"
+            id="SelectingEntityType"
+            matTooltip="Selecting {{SelectingEntityType.name}}"
+            (click)="selectDropdownVisible = !selectDropdownVisible; needSelect=false"
+        >
+            {{EntTypeToStr(SelectingEntityType.id)}}
+        </span>
+        <div id="selectDropdown" *ngIf="selectDropdownVisible == true" >
+            <button
+                *ngFor="let selection of selections"
+                (click)="selectEntityType(selection); needSelect=false"
+                [class.active]="SelectingEntityType.id === selection.id"
+            >
+                <span matTooltip="Select {{selection.name}}">{{EntTypeToStr(selection.id)}}</span>
+            </button>
+        </div>
+    </ng-container>
+
+    <div id="giSummary" [hidden]='!this._data_threejs.settings.gi_summary.show'>
+        <tbody>
+            <tr *ngFor="let item of giSummary">
+                <td style="width: 80px;">{{item.title}}</td><td>{{item.val}}</td>
+            </tr>
+        </tbody>
+    </div>
+    <div id="tjsSummary" [hidden]='!this._data_threejs.settings.tjs_summary.show'>
+        <tbody>
+            <tr>
+                <td
+                    align=left
+                    style="width: 80px;"
+                >
+                    3js Triangles:
+                </td>
+                <td
+                    align=left
+                    style="width: 20px;"
+                >
+                    {{_threejs_nums[2]}}
+                </td>
+            </tr>
+            <tr>
+                <td
+                    align=left
+                    style="width: 80px;"
+                >
+                    3js Edges:
+                </td>
+                <td
+                    align=left
+                    style="width: 20px;"
+                >
+                    {{_threejs_nums[1]}}
+                </td>
+            </tr>
+            <tr>
+                <td
+                    align=left
+                    style="width: 80px;"
+                >
+                    3js Points:
+                </td>
+                <td
+                    align=left
+                    style="width: 20px;"
+                >
+                    {{_threejs_nums[0]}}
+                </td>
+            </tr>
+        </tbody>
+    </div>
+
+    <div id="nodeSelect_slider" *ngIf='this._data_threejs.timelineEnabled == 1'>
+        <input type="range" id="nodeSelect_slider_input"
+            min="0" [max]=getMaxNodeSelect() step="1"
+            [style.width]=getSliderWidth()
+            [value]=_data_threejs.timelineIndex (change)='changeNodeSlider($event)'
+            list="nodeSelect_datalist">
+        <datalist id="nodeSelect_datalist">
+            <option *ngFor='let time_point of _data_threejs.timeline_groups' value={{time_point}} label={{time_point}}></option>
+        </datalist>
+    </div>
+    <div id="nodeSelect_dropdown" *ngIf='this._data_threejs.timelineEnabled == 2'>
+        <select  type="range" id="nodeSelect_dropdown_input" [value]=_data_threejs.timelineValue (change)='changeNodeDropdown($event)'>
+            <option *ngFor='let time_point of _data_threejs.timeline_groups' value={{time_point}} label={{time_point}}></option>
+        </select>
+    </div>
+
+    <dropdown-menu (selected)='selectEntity($event)'></dropdown-menu>
+</div>

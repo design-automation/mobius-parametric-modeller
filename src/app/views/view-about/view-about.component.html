@@ -1,0 +1,146 @@
+<div class='container'>
+    <panel-header [flowchart]='getFlowchart()'></panel-header>
+    <!-- viewchild content -->
+    <div class='content__panel'>
+        <div class='logo'>
+            <p><img  src="assets/logo/logo-120high.png" alt="Möbius  Modeller"></p>
+            <p><img  src="assets/logo/logo-120high.png" alt="Möbius  Modeller"></p>
+            <p><img  src="assets/logo/logo-120high.png" alt="Möbius  Modeller"></p>
+            <p>Version: {{version.version}}</p>
+            <p>
+                <a class='link-share' href="http://expando.github.io/add/?u=https%3A%2F%2Fmobius.design-automation.net%2F&t=Möbius%20Modeller" target="_blank">
+                    Share this Site</a>
+            </p>
+            <p>The latest version has made some changes to the modelling functions. </p>
+            <p>Previous versions: </p>
+            <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-5-48' target='_blank'>Version 0.5.48</a></li>
+            <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-5-6' target='_blank'>Version 0.5.6</a></li>
+            <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-4-34' target='_blank'>Version 0.4.34</a></li>
+            <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-4-30' target='_blank'>Version 0.4.30</a></li>
+            <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-4-26' target='_blank'>Version 0.4.26</a></li>
+            <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-4-18' target='_blank'>Version 0.4.18</a></li>
+            <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-4-11' target='_blank'>Version 0.4.11</a></li>
+        </div>
+        <div class='text'>
+            <h3>What is Möbius  Modeller?</h3>
+            <p>Möbius Modeller is an open-source web application for 3D parametric modelling. 
+                The app allows users to create modelling procedures using the Öbi visual programming language.
+                In the Öbi language, you write computer programs by drawing flowcharts and by defining procedures
+                using 'click and fill-in-the-blanks' coding. </p>
+            <p>Since Möbius Modeller is a web app, you can just go ahead an use it.</p>
+            <ul>
+                <li>The software is free, so there is no need to pay!</li>
+                <li>The software is online, so there is no need to install anything on your computer.</li>
+                <li>The software does not require authentication, so there is no need to create an account or to log in.</li>
+                <li>Code is executed in your browser, so there is no need to worry about network speed.</li>
+                <li>Your data never leaves your browser, so there is no need to worry about data privacy and security.</li>
+            </ul>
+            <p>The Möbius models that you create can be 
+                published as interactive web pages, allowing visitors on the web to explore the models.</p>
+    
+    
+            <h3>Getting Started</h3>
+            <p>The best way to start using Möbius Modeller is to explore some of the models in the gallery.
+                After that you can dive in and start creating your own flowcharts and procedures. </p>
+            <p>The icons at the top of the page allow you to navigate into your model, from the top level 
+                dashboard down the procedures at the bottom level.</p>
+
+            <table class='key'>
+
+                <tr>
+                    <td><b>Gallery</b></td> 
+                    <td>The gallery contains a selection of example models for you to explore. 
+                    To access the gallery, click</td>
+                    <td><mat-icon (click)='routeTo("/gallery")'>view_comfy</mat-icon></td> 
+                </tr>
+
+                <tr>
+                    <td><b>Dashboard</b></td> 
+                    <td>Each model has its own dashboard that exposes a set of parameters, that can be set using sliders and UI components.
+                    To access the dashboard, click</td>
+                    <td><mat-icon svgIcon="cDashboard" (click)='routeTo("/dashboard")'></mat-icon></td> 
+                </tr>
+
+                <tr>
+                    <td><b>Flowchart</b></td> 
+                    <td>Each model is has an Öbi flowchart that defines a set of nodes connected with edges. 
+                        To access the flowchart, click</td>
+                    <td><mat-icon svgIcon="cFlowchart" (click)='routeTo("/flowchart")'></mat-icon></td> 
+                </tr>
+
+                <tr>
+                    <td><b>Procedure</b></td> 
+                    <td>Each node in the model has its own procedure, defined using the Öbi language.
+                        To access the procedure, click</td>
+                    <td><mat-icon svgIcon="cEditor" (click)='routeTo("/editor")'></mat-icon></td> 
+                </tr>
+
+                <tr>
+                    <td><b>Execute</b></td> 
+                    <td>To execute the Öbi flowchart, click the execute button. This will transpile your Öbi code 
+                        into Javascript an execute it in your browser. </td>
+                    <td><mat-icon>play_circle_outline</mat-icon></td> 
+                </tr>
+
+                <tr>
+                    <td><b>View</b></td> 
+                    <td>To view the results, look at the model in the 3D viewer on the right. Also, you can check
+                        the console in case there were any errors.  </td>
+                    <td></td> 
+                </tr>
+
+            </table>
+    
+            <h3>Links</h3>
+            <!-- <p>To understand more about Möbius Modeller and the Öbi language, read the online book.</p>
+            <ul>
+                <li><a href='https://mobius-book.design-automation.net'>Möbius Modeller Book</a></li>
+            </ul> -->
+            <!-- <p>For questions about how to use Möbius Modeller, please head over to the forum.</p>
+            <ul>
+                <li><a href='https://mobius-forum.design-automation.net'>Möbius Modeller Forum</a></li>
+            </ul> -->
+            <p>Möbius Modeller is open-source, under MIT license. The source-code is on GitHub.</p>
+            <ul>
+                <li><a href='https://github.com/design-automation/mobius-parametric-modeller'>Möbius Modeller source code</a></li>
+            </ul>
+            <p>If you like what we are doing, then do let us know on the forum.</p>
+            <p>If you would like to get involved, please contact us. We need your help!</p>
+    
+            <h3>Contact Us</h3>
+            <p>Möbius Modeller is being developed by the Design Automation Lab at the 
+                National University of Singapore. .</p>
+            <ul>
+                <li><a href='http://design-automation.net'>Design Automation Lab</a></li>
+            </ul>
+
+            <h3>Credits</h3>
+            <p>Skybox backgrounds:</p>
+            <ul>
+                <li>"stars" by Quinton Reeves.</li>
+                <li>"sunsetflat" by LedIris (07/08/2009).</li>
+                <li>"skyhigh" by Pieter Verhoeven.</li>
+                <li>"interstellar", "miramar", and "stormydays" by Jockum "hipshot" Skoglund (hipshot@zfight.com / www.zfight.com).</li>
+            </ul>
+            <p>Used Libraries:</p>
+            <ul>
+                <li>three.js</li>
+                <li>CesiumJS</li>
+                <li>cytoscape.js</li>
+                <li>chroma.js</li>
+                <li>d3-delaunay</li>
+                <li>d3-polygon</li>
+                <li>d3-voronoi</li>
+                <li>math.js</li>
+                <li>clipper.js</li>
+                <li>jszip</li>
+                <li>proj4</li>
+                <li>underscore</li>
+                <li>verbs</li>
+            </ul>
+        
+        </div>
+    </div>
+</div>
+<spinner></spinner>
+<chrome></chrome>

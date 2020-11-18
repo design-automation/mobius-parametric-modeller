@@ -1,0 +1,45 @@
+<div class='container'>
+    <as-split #gallerySplit direction="horizontal" (dragEnd)='setSplit($event)'>
+        <as-split-area [size]="100 - getSplit()">
+            <panel-header [flowchart]='getFlowchart()'></panel-header>
+            <!-- viewchild content -->
+            <div id='gallery_content_panel' class='content__panel' (scroll)='onGalleryScroll($event)'>
+                <div id="galleryMenu">
+                    <div *ngFor='let galleryName of allGalleries;'>
+                        <li (click)="switchGallery(galleryName)">
+                            {{galleryName}}
+                        </li>
+                    </div>
+                </div>
+                <ng-container *ngFor='let galleryData of allGalleriesData;'>
+                    <h3 id = '{{"gallery-tab_"+galleryData.name}}' (click)='openGalleryMenu($event)'>{{galleryData.name}}<span>▾</span></h3>
+                    <div class = 'content--container'>
+                        <div class="container__element container__element--project-container">
+                            <div class="project-container__project" *ngFor="let f of galleryData.files">
+                                <div class="tile--contents" (click)='loadFile(galleryData.link + f)'>
+                                    <img src='{{getImgURL(galleryData.link,f)}}' alt = 'project image'>
+                                </div>
+                                <span class = 'project__title'>{{ f | simplename }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="galleryFiller1">
+                    </div>
+                </ng-container>
+                <div id="galleryFiller2">
+                </div>
+            </div>
+        </as-split-area>
+
+        <as-split-area [size]="getSplit()">
+            <!-- data viewers panel -->
+            <div class='content__viewer' >
+                <model-viewers-container></model-viewers-container>
+            </div>
+        </as-split-area>
+        
+    </as-split>
+
+</div>
+<spinner></spinner>
+<chrome></chrome>

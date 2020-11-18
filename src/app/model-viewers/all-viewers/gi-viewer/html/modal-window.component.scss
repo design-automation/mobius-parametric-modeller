@@ -1,0 +1,47 @@
+.modal-window {
+    border-right: 1px solid #bdbdbd;
+    max-width: 777px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    // left: 0;
+    z-index: 1000;
+    overflow: auto;
+    -webkit-transition: transform 1s ease;
+    &.open{
+        -webkit-animation: slide 0.5s forwards;
+        animation: slide 0.5s forwards;
+    }
+
+    .modal-body {
+        padding: 20px;
+        background: #fff;
+        margin: 0;
+        min-height: calc(100% - 40px);
+        // width: 50%;
+        // margin-left: 50%;
+        // left: -25%;
+        position: relative;
+    }
+}
+
+
+@-webkit-keyframes slide {
+    100% { left: 0; }
+}
+
+@keyframes slide {
+    100% { left: 0; }
+}
+
+.modal-background {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: transparent;
+    opacity: 0.5;
+    z-index: 900;
+}

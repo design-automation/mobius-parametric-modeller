@@ -1,0 +1,28 @@
+@import '~scss/colors';
+@import '~scss/variables';
+
+.edge{
+    fill: none;
+    stroke: $color8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2px;
+    opacity: 1;
+    pointer-events: stroke;
+    marker-mid: url(#arrow);
+    &.selected{
+        stroke: $selected-color;
+        opacity: 1;
+        marker-mid: url(#arrow_selected);
+    }
+    &.disabled{
+        opacity: $disabled-opacity;
+    }
+}
+.inviEdge{
+    fill: none;
+    stroke: $color2;
+    stroke-width: 30px;
+    opacity: 0;
+    pointer-events: stroke;
+}

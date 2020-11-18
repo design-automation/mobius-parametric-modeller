@@ -1,0 +1,20 @@
+<div class='container__header'>
+    <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->
+    <div style="display: none;">
+        <load-url></load-url>
+        <window-message></window-message>
+        <input id='hidden_node_selection' value=''>
+        <input id='hidden_node_selection_button' (click)=updateNode() >
+        <input id='hidden_notify_button' value='' (click)=notifyMessage($event) >
+    </div>
+
+    <div class='filename-container'>
+        <h1 id='filename'>{{getTitle()}}</h1>
+    </div>
+        
+    <!-- buttons -->
+    <div class='header-btn-group'>
+        <execute></execute>
+    </div>
+
+</div>

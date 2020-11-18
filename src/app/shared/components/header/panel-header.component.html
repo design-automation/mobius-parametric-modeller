@@ -1,0 +1,340 @@
+<div class='container__header'>
+
+    <!-- hidden components (new file, save file, loaf file) for the dropdown menu-->
+    <div style="display: none;">
+        <file-new></file-new>
+        <file-save></file-save>
+        <file-load></file-load>
+        <load-url></load-url>
+        <window-message></window-message>
+        <javascript-save></javascript-save>
+        <input id='hidden_node_selection' value=''>
+        <input id='hidden_node_selection_button' (click)=updateNode() >
+        <input id='hidden_notify_button' value='' (click)=notifyMessage($event) >
+        <input id='hidden_update_inline_func' value='' (click)="searchInlineFuncs(null)">
+    </div>
+
+    <!-- buttons -->
+    <div class='header-btn-group'>
+
+        <!-- buttons to navigate to the 4 pages -->
+        <button class='btn' [class.active]='getUrl()=="/about"' [routerLink]="'/about'" title='About'>
+            <mat-icon svgIcon="cGallery"></mat-icon>
+        </button>
+        <button class='btn' [class.active]='getUrl()=="/gallery"' [routerLink]="'/gallery'" title='Gallery'>
+            <mat-icon>view_comfy</mat-icon>
+        </button>
+        <button class='btn' [class.active]='getUrl()=="/dashboard"' [routerLink]="'/dashboard'" title='Dashboard'>
+            <mat-icon svgIcon="cDashboard"></mat-icon>
+        </button>
+        <button class='btn' [class.active]='getUrl()=="/flowchart"' [routerLink]="'/flowchart'" title='Flowchart'>
+            <mat-icon svgIcon="cFlowchart"></mat-icon>
+        </button>
+        <button class='btn' [class.active]='getUrl()=="/editor"' [routerLink]="'/editor'" title='Procedure'>
+            <mat-icon svgIcon="cEditor"></mat-icon>
+        </button>
+                
+        <!-- execute button -->
+        <div class='executeCls' [class.disabled]='!executeCheck'>
+            <execute ></execute>
+        </div>
+    </div>
+
+    <div class='nodename-container' *ngIf='nodeListCheck'>
+        <div id = 'node-name' (click)='openNodeMenu($event)'><span id='node--name' title='{{getNode().name}}'>{{flowchart.meta.selected_nodes[0]}}. {{getNode().name}}</span><span id='node--arr'>▾</span></div>
+        <div id="nodeMenu">
+            <li *ngFor='let nd of flowchart.nodes; let i = index;' (click)="changeNode(i)"> 
+                {{i}}. {{nd.name}}
+            </li>
+        </div>
+    </div>
+
+    <div class='filename-container' *ngIf='executeCheck'>
+        <!-- <div class = "divider"></div> -->
+
+        <!-- <div id='filename' (click)='openDropdownMenu($event)'>{{getTitle()}}</div> -->
+        <button id='dropdownMenuButton' class='menu-btn' (click)='openDropdownMenu($event)' title='Menu'>
+            <mat-icon>menu</mat-icon>
+        </button>
+        <div class='dropdownContainer'>
+            <div id="dropdownMenu">
+                <button onclick="document.getElementById('newfile').click();"
+                title="Create New Flowchart"> 
+                    <mat-icon>rotate_left</mat-icon> 
+                    New File
+                </button>
+                <br>
+                <button (click)="loadFile()"
+                title="Load Flowchart File from Computer">
+                    <mat-icon>launch</mat-icon>
+                    Load File 
+                </button>
+                <br>
+                <button onclick="document.getElementById('savefile').click();"
+                title="Save Flowchart File to Computer">
+                    <mat-icon>save_alt</mat-icon>
+                    Save File
+                </button>
+                <br>
+                <button (click)="openHeaderDialog($event, 'savels')"
+                title="Save Flowchart File to The local Storage">
+                    <mat-icon>input</mat-icon>
+                    Save to LS
+                </button>
+                <br>
+                <button onclick="document.getElementById('savejavascript').click();"
+                title="Save Javascript Execution code to Computer">
+                    <mat-icon>save</mat-icon>
+                    Save JS
+                </button>
+                <br>
+                <button onclick="document.getElementById('savedata').click();"
+                title="Save Javascript Execution code to Computer">
+                    <mat-icon>play_for_work</mat-icon>
+                    Save Data
+                </button>
+                <br>
+                <button (click)="openHeaderDialog($event, 'backup')"
+                title="Load Flowchart Backup from Local Storage">
+                    <mat-icon>autorenew</mat-icon>
+                    Local Storage 
+                </button>
+                <br>
+                <button (click)="openHeaderDialog($event, 'url')"
+                title="Generate Möbius view url from url of .mob file">
+                    <mat-icon>link</mat-icon>
+                    Publish
+                </button>
+                <br>
+                <button (click)="openHeaderDialog($event, 'settings')"
+                title="Generate Möbius view url from url of .mob file">
+                    <mat-icon class='mat-icon-svg' svgIcon="settings"></mat-icon>
+                    Settings
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<dialog id='headerDialog'>
+    <button class='closebutton' (click)='closeDialog(false)'><mat-icon class='icon'>close</mat-icon></button>
+    <div class='genUrlDialog' *ngIf='checkDialog("url")'>
+        <p>To publish your model, please upload your Möbius (.mob) file to an online file server to allows
+        you to share the URL. (For example, you can upload your file to platforms such Github or Dropbox.) 
+        Then paste the URL for file below, and click 'Validate Url'. </p>
+        <br>
+        <br>
+        MOB file URL: <br>
+        <textarea [(ngModel)]='urlSet[0]' 
+                [class.valid]='urlValid === true' 
+                [class.invalid]='urlValid === false'
+                (keyup)='urlValid = undefined'></textarea><br>
+        <button (click)='validateUrl()'>Validate Url</button>
+    
+        <ng-container *ngIf='urlValid === true'>
+        
+            <hr>
+            <input id='radio1' type='radio' name='showPage' value='publish' [(ngModel)]='urlSet[1]'/> <label for='radio1'>Uneditable</label> <br>
+            <input id='radio2' type='radio' name='showPage' value='dashboard' [(ngModel)]='urlSet[1]'/> <label for='radio2'>Editable</label>
+            <hr>
+        
+            <ng-container *ngIf='urlSet[1] == "dashboard"; else publish_template'>
+                <input id='radio3' type='radio' name='displayType' value='&node=' [(ngModel)]='urlSet[2]'/> <label for='radio3'>Show Specific Node</label> <br>
+                <input id='radio4' type='radio' name='displayType' value='' [(ngModel)]='urlSet[2]'/> <label for='radio4'>Show Dashboard</label> 
+                <hr>
+                <ng-container *ngIf='urlSet[2] == "&node="'>
+                    Node Shown: <select [(ngModel)]='urlSet[3]'>
+                        <option *ngFor='let node of urlNodes; let i = index' value={{i}}>{{i}}. {{node.name}}</option>
+                    </select>
+                    <hr>
+                </ng-container>
+            </ng-container>
+            <ng-template #publish_template>
+                <label>3D Viewer Available</label><br>
+                <input id='radio3D' type='radio' name='showViewer' value='&showViewer=1' [(ngModel)]='urlSet[4]'/> <label for='radio3D'>3D Viewer</label> <br>
+                <input id='radioGeo' type='radio' name='showViewer' value='&showViewer=2' [(ngModel)]='urlSet[4]'/> <label for='radioGeo'>Geo Viewer</label> <br>
+                <input id='radioBothV' type='radio' name='showViewer' value='' [(ngModel)]='urlSet[4]'/> <label for='radioBothV'>Both</label><br>
+                <input id='radioNoneV' type='radio' name='showViewer' value='&showViewer=0' [(ngModel)]='urlSet[4]'/> <label for='radioNoneV'>None</label>
+                <hr>
+            </ng-template>
+            <label>Default Viewer</label><br>
+            <input id='radioDefault3D' type='radio' name='defaultViewer' value='' [(ngModel)]='urlSet[5]'/>
+            <label for='radioDefault3D'>3D Viewer</label> <br>
+            <input id='radioDefaultGeo' type='radio' name='defaultViewer' value='&defaultViewer=2' [(ngModel)]='urlSet[5]'/>
+            <label for='radioDefaultGeo'>Geo Viewer</label> <br>
+            <input id='radioDefaultConsole' type='radio' name='defaultViewer' value='defaultViewer=0' [(ngModel)]='urlSet[5]'/>
+            <label for='radioDefaultConsole'>Console Viewer</label>
+            <hr>
+
+            <button (click)='generateUrl()'>Create Link</button>
+            <button (click)='generateEmbed()'>Create Embed Code</button>
+    
+            <div>
+                <hr>
+                Möbius Link:<br>
+                <textarea [class.disabled]='true' id='generatedLink' disabled></textarea>
+            </div>
+        </ng-container>
+    </div>
+    <div class='loadBackupDialog' *ngIf='checkDialog("backup")'>
+        <p>Select File from Local Storage: </p>
+        <br>
+        <div class="tab">
+            <button class="tabLinks active" (click)="openTab($event, 'mobFilesContainer')">Mob Files</button>
+            <button class="tabLinks" (click)="openTab($event, 'otherFilesContainer')">Others</button>
+        </div>
+        <div id="mobFilesContainer" class='tabContent active'>
+            <div *ngFor='let backup of getBackupFiles()'>
+                <div class='div--chbox'>
+                    <input class="selectedBackup" type="checkbox" name={{backup}} [checked]='selectedBackup(backup)'>
+                    <label for={{backup}} (click)="selectBackup(backup, $event)" (mousedown)="prevDef($event)"></label>
+                </div>
+                <button class='loadBackupButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backup}}</button>
+                <button class='backupDateButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backupDates[backup]}}</button>
+            </div>
+        </div>
+        <div id="otherFilesContainer" class='tabContent'>
+            <div *ngFor='let backup of getBackupFiles(false)'>
+                <div class='div--chbox'>
+                    <input class="selectedBackup" type="checkbox" name={{backup}} [checked]='selectedBackup(backup)'>
+                    <label for={{backup}} (click)="selectBackup(backup, $event)" (mousedown)="prevDef($event)"></label>
+                </div>
+                <button class='loadBackupButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backup}}</button>
+                <button class='backupDateButton' (click)="loadBackup($event, backup)" [disabled]="checkMobBackup(backup)">{{backupDates[backup]}}</button>
+            </div>
+        </div>
+        <br>
+        <button id='addBackupButton' onclick="document.getElementById('addBackup').click();">+</button>
+        <input id='addBackup' type="file" (change)="addBackup()" style=" display: none;"/>
+        <button class='downloadBackupButton' (click)="downloadBackup($event)"><mat-icon class='icon'>cloud_download_outline</mat-icon></button>
+        <button class='deleteBackupButton' (click)="deleteBackup($event)"><mat-icon class='icon'>delete_outline</mat-icon></button>
+    </div>
+    <div class='globalFuncDialog' *ngIf='checkDialog("globalfunc")'>
+        <p>Manage Global Functions: </p>
+        <br>
+        <div *ngFor='let fn of flowchart.functions'>
+            <button class='globalFuncName' disabled>{{fn.name}}</button>
+            <button class='manageGlobalButton' (click)='refresh_global_func($event, fn)'
+            title='Refresh the function with mob file with the same name in the local storage'>
+                <mat-icon class='icon'>cached</mat-icon>
+            </button>
+            <button class='manageGlobalButton' (click)='edit_global_func($event, fn)'
+            title='Edit the global function'>
+                <mat-icon class='icon'>edit</mat-icon>
+            </button>
+            <button class='manageGlobalButton' (click)='download_global_func($event, fn)'
+            title='Download the global function'>
+                <mat-icon class='icon'>get_app</mat-icon>
+            </button>
+            <button class='manageGlobalButton' (click)='delete_global_func($event, fn)'
+            title='Delete the global function'>
+                <mat-icon class='icon'>delete_outline</mat-icon>
+            </button>
+        </div>
+        <button class='addGlobalButton' (click)="addGlobalFunc($event)">Import File</button>
+        <button class='addGlobalButton' (click)="addGlobalFuncLS($event)">Import LS</button>
+    </div>
+    <div class='inlineFuncDialog' *ngIf='checkDialog("inlinefunc")'>
+        <p>Create Expression: </p>
+        <br>
+        <div class='inlineFuncContainer'>
+            <input id='search_inline' class='searchBar' placeholder='Search Inline Function' value='' (keyup)="searchInlineFuncs($event)">
+            <br>
+            <br>
+            <ng-container *ngFor='let fnCategory of searchedInlineFunc'>
+                <button  id='inlineAcc_{{fnCategory[0]}}' class='inlinefuncAccordion' (mousedown)='disableFocus($event)' (click)='openInlineMenu($event, fnCategory[0])'>{{fnCategory[0]}}</button>
+                <div id='inlinefunc_{{fnCategory[0]}}' class='inlinefuncDiv'>
+                    <ul class='inlinefuncUL'>
+                        <li *ngFor='let fn of fnCategory[1]' (mousedown)='disableFocus($event)' (click)='addInlineFunc(fn[0])' title='{{fn[1]}}'>
+                            {{fn[0]}}
+                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='updateInlineHelpText($event, fn)'>
+                                <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
+                            </button>
+                        </li>
+                    </ul>
+            </div>
+            </ng-container>
+        </div>
+        <div class='inlineFuncHelpContainer' id='inlineHelp'>
+            <p>Inline Function Help</p>
+        </div>
+        <div class='inlineFuncExpressionContainer'>
+            <textarea id='inlineExpression' class='inlineFuncExpression' placeholder='Expression' (mousedown)='textareaMousedown = true'></textarea>
+        </div>
+        <div class='inlineFuncSaveButtonContainer'>
+            <button (click)='copyInlineFunc()'><mat-icon>content_copy</mat-icon></button>
+        </div>
+    </div>
+    <div class='saveLocalDialog' *ngIf='checkDialog("savels")'>
+        <p>Save File to Local Storage as: </p>
+        <br>
+        <input id='savels-name' class='fileNameInput' name='savels-name' value={{flowchart.name}}>.mob
+        <br>
+        <br>
+        <button class='saveButtons' (click)="saveBackup(true)">Apply</button>
+        <button class='saveButtons' (click)="closeDialog(true)">Cancel</button>
+    </div>
+    <div class='settingsDialog' *ngIf='checkDialog("settings")'>
+        <p>Mobius Settings:</p>
+        <br>
+        <div class='settingLine'>
+            <div class='div--chbox'>
+                <input id='settings-execute' 
+                name='settings-execute' 
+                type="checkbox" 
+                [checked]='checkSetting("execute", true)'>
+                <label for='settings-execute'></label>
+            </div>
+
+            <div class='textdiv'>Execute on file load</div>
+            
+        </div>
+        <br>
+        <div class='settingLine'>
+            <div class='div--chbox'>
+                <input id='settings-autosave' 
+                name='settings-autosave' 
+                type="checkbox" 
+                [checked]='checkSetting("autosave", true)'>
+                <label for='settings-autosave'></label>
+            </div>
+            <div class='textdiv'>Auto-saving file (5-min interval)</div>
+        </div>
+        <br>
+        <div class='settingLine'>
+            <div class='div--chbox'>
+                <input id='settings-debug' 
+                name='settings-debug' 
+                type="checkbox" 
+                [checked]='checkSetting("debug", true)'>
+                <label for='settings-debug'></label>
+            </div>
+            <div class='textdiv'>Debug Mode</div>
+        </div>
+        <br>
+        <br>
+        <div class='settingLine'>
+            <div class='textdiv'>Display Mobius Functions</div>
+        </div>
+        <br>
+        <ng-container *ngFor='let category of func_categories'>
+            <div class='settingLine subsetting'>
+                <div class='div--chbox'>
+                    <input id='_func_{{category}}' 
+                    name='_func_{{category}}' 
+                    type="checkbox" 
+                    [checked]='checkSetting("_func_" + category, true)'>
+                    <label for='_func_{{category}}'></label>
+                </div>
+                <div class='textdiv'>{{category}}</div>
+            </div>
+            <br>
+        </ng-container>
+
+        <br>
+        <br>
+        <br>
+        <button class='settingsButton' (click)="updateSettings($event, backup)">Apply</button>
+        <button class='settingsButton' (click)="closeDialog()">Cancel</button>
+    </div>
+</dialog>

@@ -1,0 +1,41 @@
+<div class='flowchart-info' *ngIf="node.type=='start'">
+    <!-- <div class = 'divider'></div> -->
+    <ng-container *ngIf='!prodCheck'>
+        <div class = 'input-container'>
+            <input id='flowchart-name' autocomplete='off' [(ngModel)]='flowchart.name' placeholder="flowchart name" [style.width.px]='inputSize(flowchart.name||"flowchart name")'>
+        </div>
+        <textarea autogrow
+        id='flowchart-desc' [(ngModel)]='flowchart.description' placeholder="Model Description"></textarea>
+    </ng-container>
+
+    <div class='container--input' *ngIf='prodCheck'>
+        <procedure-input-editor 
+            *ngFor="let prod of node.procedure; let i = index;" 
+            [prod]="prod" 
+            [disableInput]='disableInput'
+            (eventAction)='performAction($event, i)' 
+            ></procedure-input-editor>
+    </div>
+</div>
+<div class='flowchart-info' *ngIf="node.type=='end'">
+    <!-- <div class = 'divider'></div> -->
+    <div id='ret-container'>
+        <div class='returnProd'>
+            <input class='disabled-input' value="Return" disabled>
+            <ng-container *ngFor='let p of node.procedure[node.procedure.length-1].args; let i=index'>
+                <input class='ret--input' 
+                *ngIf='p.name[0] !== "_"'
+                [(ngModel)]='p.value'
+                [class.error]='p.invalidVar'
+                (blur)='argMod(node.procedure[node.procedure.length-1])'
+                placeholder={{p.name}}
+                [style.width.px]='inputSize(p.value||p.name)'
+                autocomplete='off'
+                >  
+            </ng-container>
+            </div>
+        <textarea autogrow
+        id='flowchart-return' [(ngModel)]='flowchart.returnDescription' placeholder="Return Description"></textarea>
+    </div>
+</div>
+

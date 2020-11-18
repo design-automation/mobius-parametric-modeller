@@ -1,0 +1,860 @@
+<ng-container [ngSwitch]="data.type">
+
+    <!-- Variable Assignment Template -->
+    <div class='container--line' 
+    [class.selected]="data.selected"
+    [class.lastSelected]="data.lastSelected"
+    [class.error]="data.hasError"
+    [class.disabled]="!data.enabled"
+    [class.printing]='data.print'
+    [class.terminate]='data.terminate'
+    [ngSwitch]="data.type"
+    (click)='emitSelect($event, data)'
+    (mousedown)='disableShift($event)'
+    (mouseenter)='onenter($event)'
+    (mouseleave)='onleave($event)'
+    *ngSwitchCase="ProcedureTypes.Variable">
+        <div class='container--item'>
+            <div class='line--item'>
+                <input class='input--var'
+                    id='argVar_{{data.ID}}'
+                    [(ngModel)]='data.args[0].value'
+                    [class.error]='data.args[0].invalidVar'
+                    [class.linked]='data.args[0].linked'
+                    [class.disabled]='disableInput'
+                    (focus)='onInputFocus(0, true)'
+                    (blur)='varMod()'
+                    placeholder={{data.args[0].name}}
+                    [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>  
+                = 
+                <div style='position:relative; display:inline-block;'>
+                    <input class='input--arg'
+                    [(ngModel)]='data.args[1].value'
+                    [class.error]='data.args[1].invalidVar'
+                    [class.linked]='data.args[1].linked'
+                    [class.disabled]='disableInput'
+                    (focus)='onInputFocus(1)'
+                    (blur)='argMod($event, 1)'
+                    placeholder={{data.args[1].name}}
+                    [style.width.px]='inputSize(data.args[1].value||data.args[1].name)'>
+                    <!-- <p class='input--arg input--arg--p' [innerHTML]='argHighlight(data.args[1].value)'></p> -->
+                </div>
+            </div>
+        </div>
+        <div class = "btn-container">
+            <div class = "btns">
+                <!-- Disable button-->
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                    <mat-icon class='icon' svgIcon='disabled'></mat-icon>
+                </button>
+                <!-- Select button -->
+                <!-- <button id = 'selectGeom-btn' *ngIf='canSelectGeom()' class='btn' mat-icon-button title="Show Geometric Entities" (click)="markSelectGeom($event)" tabindex="-1">
+                    <mat-icon class='icon' svgIcon='select'></mat-icon>
+                </button> -->
+                <!-- Print button-->
+                <button [class.disabled]='!data.enabled' [class.printingOn]='data.print' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                    <mat-icon class="icon" svgIcon='print'></mat-icon>
+                </button>
+                <!-- Terminate button -->
+                <button class='btn' [class.terminateOn]='data.terminate' mat-icon-button title="Terminate process" (click)="markTerminate($event)" tabindex="-1">
+                    <mat-icon class='icon' svgIcon='terminate'></mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- IF Template -->
+    <div class='container--line' 
+    [class.strong]="true"
+    [class.selected]="data.selected"
+    [class.lastSelected]="data.lastSelected"
+    [class.error]="data.hasError"
+    [class.disabled]="!data.enabled"
+    [class.printing]='data.print'
+    [ngSwitch]="data.type"
+    (click)='emitSelect($event, data)'
+    (mousedown)='disableShift($event)'
+    (mouseenter)='onenter($event)'
+    (mouseleave)='onleave($event)'
+    *ngSwitchCase="ProcedureTypes.If">
+        <div class='container--item' >
+            <div class='line--item' >
+                <div class='basic-function-text'>
+                    If
+                </div>
+                <input class='input--arg'
+                        [(ngModel)]='data.args[0].value'
+                        [class.error]='data.args[0].invalidVar'
+                        [class.linked]='data.args[0].linked'
+                        [class.disabled]='disableInput'
+                        (focus)='onInputFocus(0)'
+                        (blur)='argMod($event, 0)'
+                        placeholder={{data.args[0].name}}
+                        [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
+                        >
+
+            </div>
+            <div class='container--nested'>
+                <procedure-item 
+                    *ngFor="let line of data?.children; let idx=index" 
+                    [data]="line"
+                    [disableInput]="disableInput"
+                    (eventAction)='performAction($event, idx)'
+                    ></procedure-item>
+            </div>
+        </div>
+        <div class = "btn-container">
+            <div class = "btns">
+                <!-- Disable button-->
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                    <mat-icon class='icon' svgIcon='disabled'></mat-icon>
+                </button>
+                <!-- Print button-->
+                <button class='btn'  [class.disabled]='!data.enabled' [class.printingOn]='data.print' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                    <mat-icon class="icon" svgIcon='print'></mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ELSEIF Template -->
+    <div class='container--line' 
+    [class.strong]="true"
+    [class.selected]="data.selected"
+    [class.lastSelected]="data.lastSelected"
+    [class.error]="data.hasError"
+    [class.disabled]="!data.enabled"
+    [class.printing]='data.print'
+    [ngSwitch]="data.type"
+    (click)='emitSelect($event, data)'
+    (mousedown)='disableShift($event)'
+    (mouseenter)='onenter($event)'
+    (mouseleave)='onleave($event)'
+    *ngSwitchCase="ProcedureTypes.Elseif">
+        <div class='container--item' >
+            <div class='line--item'>
+                <div class='basic-function-text'>
+                    Else-if
+                </div>
+            
+                <input class='input--arg'
+                        [(ngModel)]='data.args[0].value'
+                        [class.error]='data.args[0].invalidVar'
+                        [class.linked]='data.args[0].linked'
+                        [class.disabled]='disableInput'
+                        (focus)='onInputFocus(0)'
+                        (blur)='argMod($event, 0)'
+                        placeholder={{data.args[0].name}}
+                        [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
+                        >
+            </div>
+            <div class='container--nested'>
+                <procedure-item 
+                    *ngFor="let line of data?.children; let idx=index" 
+                    [data]="line"
+                    [disableInput]="disableInput"
+                    (eventAction)='performAction($event, idx)'
+                    ></procedure-item>
+            </div>
+        </div>
+        <div class = "btn-container">
+            <div class = "btns">
+                <!-- Disable button-->
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                    <mat-icon class='icon' svgIcon='disabled'></mat-icon>
+                </button>
+                <!-- Print button-->
+                <button class='btn' [class.disabled]='!data.enabled' [class.printingOn]='data.print' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                    <mat-icon class="icon" svgIcon='print'></mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ELSE Template -->
+    <div class='container--line' 
+    [class.strong]="true"
+    [class.selected]="data.selected"
+    [class.lastSelected]="data.lastSelected"
+    [class.error]="data.hasError"
+    [class.disabled]="!data.enabled"
+    [class.printing]='data.print'
+    [ngSwitch]="data.type"
+    (click)='emitSelect($event, data)'
+    (mousedown)='disableShift($event)'
+    (mouseenter)='onenter($event)'
+    (mouseleave)='onleave($event)'
+    *ngSwitchCase="ProcedureTypes.Else">
+        <div class='container--item' >
+            <div class='line--item'>
+                <div class='basic-function-text'>
+                    Else
+                </div>
+            </div>
+                        
+            <div class='container--nested'>
+                <procedure-item 
+                    *ngFor="let line of data?.children; let idx=index" 
+                    [data]="line"
+                    [disableInput]="disableInput"
+                    (eventAction)='performAction($event, idx)'
+                    ></procedure-item>
+            </div>
+        </div>
+        <div class = "btn-container">
+            <div class = "btns">
+                <!-- Disable button-->
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                    <mat-icon class='icon' svgIcon='disabled'></mat-icon>
+                </button>
+                <!-- Print button-->
+                <button class='btn' [class.disabled]='!data.enabled' [class.printingOn]='data.print' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                    <mat-icon class="icon" svgIcon='print'></mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOREACH Template -->
+    <div class='container--line' 
+    [class.strong]="true"
+    [class.selected]="data.selected"
+    [class.lastSelected]="data.lastSelected"
+    [class.error]="data.hasError"
+    [class.disabled]="!data.enabled"
+    [class.printing]='data.print'
+    [ngSwitch]="data.type"
+    (click)='emitSelect($event, data)'
+    (mousedown)='disableShift($event)'
+    (mouseenter)='onenter($event)'
+    (mouseleave)='onleave($event)'
+    *ngSwitchCase="ProcedureTypes.Foreach">
+        <div class='container--item' >
+            <div class='line--item'>
+                <div class='basic-function-text'>
+                    For-each
+                </div>
+                <input class='input--arg'
+                    [(ngModel)]='data.args[0].value'
+                    [class.error]='data.args[0].invalidVar'
+                    [class.linked]='data.args[0].linked'
+                    [class.disabled]='disableInput'
+                    (focus)='onInputFocus(0, true)'
+                    (blur)='varMod()'
+                    placeholder={{data.args[0].name}}
+                    [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
+                    >  
+                <div class='basic-function-text'>
+                    in
+                </div>
+                <input class='input--arg'
+                    [(ngModel)]='data.args[1].value'
+                    [class.error]='data.args[1].invalidVar'
+                    [class.linked]='data.args[1].linked'
+                    [class.disabled]='disableInput'
+                    (focus)='onInputFocus(1)'
+                    (blur)='argMod($event, 1)'
+                    placeholder={{data.args[1].name}}
+                    [style.width.px]='inputSize(data.args[1].value||data.args[1].name)'
+                        >  
+
+            </div>
+                                
+            <div class='container--nested'>
+                <procedure-item 
+                    *ngFor="let line of data?.children; let idx=index" 
+                    [data]="line"
+                    [disableInput]="disableInput"
+                    (eventAction)='performAction($event, idx)'
+                    ></procedure-item>
+            </div>
+    
+        </div>
+        <div class = "btn-container">
+            <div class = "btns">
+                <!-- Disable button-->
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                    <mat-icon class='icon' svgIcon='disabled'></mat-icon>
+                </button>
+                <!-- Print button-->
+                <button class='btn' [class.disabled]='!data.enabled' [class.printingOn]='data.print' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                    <mat-icon class="icon" svgIcon='print'></mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- WHILE Template -->
+    <div class='container--line' 
+    [class.strong]="true"
+    [class.selected]="data.selected"
+    [class.lastSelected]="data.lastSelected"
+    [class.error]="data.hasError"
+    [class.disabled]="!data.enabled"
+    [class.printing]='data.print'
+    [ngSwitch]="data.type"
+    (click)='emitSelect($event, data)'
+    (mousedown)='disableShift($event)'
+    (mouseenter)='onenter($event)'
+    (mouseleave)='onleave($event)'
+    *ngSwitchCase="ProcedureTypes.While">
+        <div class='container--item' >
+            <div class='line--item'>
+                <div class='basic-function-text'>
+                    While
+                </div>
+                <input class='input--arg' 
+                        [(ngModel)]='data.args[0].value'
+                        [class.error]='data.args[0].invalidVar'
+                        [class.linked]='data.args[0].linked'
+                        [class.disabled]='disableInput'
+                        (focus)='onInputFocus(0)'
+                        (blur)='argMod($event, 0)'
+                        placeholder={{data.args[0].name}}
+                        [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
+                        >  
+            </div>
+                                    
+            <div class='container--nested'>
+                <procedure-item 
+                    *ngFor="let line of data?.children; let idx=index" 
+                    [data]="line"
+                    [disableInput]="disableInput"
+                    (eventAction)='performAction($event, idx)'
+                    ></procedure-item>
+            </div>
+        </div>
+        <div class = "btn-container">
+            <div class = "btns">
+                <!-- Disable button-->
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                    <mat-icon class='icon' svgIcon='disabled'></mat-icon>
+                </button>
+                <!-- Print button-->
+                <button [class.disabled]='!data.enabled' [class.printingOn]='data.print' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                    <mat-icon class="icon" svgIcon='print'></mat-icon>
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- BREAK Template -->
+    <div class='container--line' 
+    [class.selected]="data.selected"
+    [class.lastSelected]="data.lastSelected"
+    [class.error]="data.hasError"
+    [class.disabled]="!data.enabled"
+    [class.printing]='data.print'
+    [ngSwitch]="data.type"
+    (click)='emitSelect($event, data)'
+    (mousedown)='disableShift($event)'
+    (mouseenter)='onenter($event)'
+    (mouseleave)='onleave($event)'
+    *ngSwitchCase="ProcedureTypes.Break">
+        <div class='container--item' >
+            <div class='line--item'>
+                <div class='basic-function-text'>
+                    Break
+                </div>
+            </div>
+        </div>
+        <div class = "btn-container">
+            <div class = "btns">
+                <!-- Disable button-->
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                    <mat-icon class='icon' svgIcon='disabled'></mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- CONTINUE Template -->
+    <div class='container--line' 
+    [class.selected]="data.selected"
+    [class.lastSelected]="data.lastSelected"
+    [class.error]="data.hasError"
+    [class.disabled]="!data.enabled"
+    [class.printing]='data.print'
+    [ngSwitch]="data.type"
+    (click)='emitSelect($event, data)'
+    (mousedown)='disableShift($event)'
+    (mouseenter)='onenter($event)'
+    (mouseleave)='onleave($event)'
+    *ngSwitchCase="ProcedureTypes.Continue">
+        <div class='container--item' >
+            <div class='line--item'>
+                <div class='basic-function-text'>
+                    Continue
+                </div>
+            </div>
+        </div>
+        <div class = "btn-container">
+            <div class = "btns">
+                <!-- Disable button-->
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                    <mat-icon class='icon' svgIcon='disabled'></mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blank (always the first procedure of if/else/else-if/for/while) -->
+    <div class='container--line' 
+    [class.selected]="data.selected"
+    [class.lastSelected]="data.lastSelected"
+    [ngSwitch]="data.type"
+    (click)='emitSelect($event, data)'
+    (mousedown)='disableShift($event)'
+    (mouseenter)='onenter($event)'
+    (mouseleave)='onleave($event)'
+    *ngSwitchCase="ProcedureTypes.Blank">
+        <div class='container--item' >
+            <div class='line--blank'>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Comment -->
+    <div class='container--line' 
+    [class.selected]="data.selected"
+    [class.lastSelected]="data.lastSelected"
+    [class.error]="data.hasError"
+    [class.disabled]="!data.enabled"
+    [ngSwitch]="data.type"
+    (click)='emitSelect($event, data)'
+    (mousedown)='disableShift($event)'
+    (mouseenter)='onenter($event)'
+    (mouseleave)='onleave($event)'
+    *ngSwitchCase="ProcedureTypes.Comment">
+        <div class='container--item' >
+            <div class='line--item'>
+                <input class='input--comment' 
+                [(ngModel)]='data.args[0].value'
+                (blur)='assignFocusInputProd()'
+                (focus)='onInputFocus(-1)'
+                [class.disabled]='disableInput'
+                placeholder='Comment'
+                [style.width.px]='inputSize(data.args[0].value||"Comment")'
+                >
+            </div>
+        </div>
+    </div>
+
+    <!-- Terminate -->
+    <div class='container--line' 
+    [class.selected]="data.selected"
+    [class.lastSelected]="data.lastSelected"
+    [class.error]="data.hasError"
+    [class.disabled]="!data.enabled"
+    [ngSwitch]="data.type"
+    (click)='emitSelect($event, data)'
+    (mousedown)='disableShift($event)'
+    (mouseenter)='onenter($event)'
+    (mouseleave)='onleave($event)'
+    *ngSwitchCase="ProcedureTypes.Terminate">
+        <div class='container--item' >
+            <div class='line--item'>
+                <input class='input--terminate' 
+                value='TERMINATE'
+                disabled>
+            </div>
+        </div>
+        <div class = "btn-container">
+            <div class = "btns">
+                <!-- Disable button-->
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                    <mat-icon class='icon' svgIcon='disabled'></mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error -->
+    <div class='container--line' 
+    [class.selected]="data.selected"
+    [class.lastSelected]="data.lastSelected"
+    [class.disabled]="!data.enabled"
+    [ngSwitch]="data.type"
+    (click)='emitSelect($event, data)'
+    (mousedown)='disableShift($event)'
+    (mouseenter)='onenter($event)'
+    (mouseleave)='onleave($event)'
+    *ngSwitchCase="ProcedureTypes.Error">
+        <div class='container--item' >
+            <div class='line--item'>
+                <input class='input--error'
+                value='ERROR'
+                disabled>
+                <input class='input--error'
+                [(ngModel)]='data.args[0].value'
+                [class.error]='data.args[0].invalidVar'
+                [class.disabled]='disableInput'
+                (focus)='onInputFocus(0, true)'
+                (blur)='argMod($event, 0)'
+                placeholder='error message'
+                [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>
+                <!-- <p class='input--arg input--arg--p' [innerHTML]='argHighlight(data.args[1].value)'></p> -->
+            </div>
+        </div>
+        <div class = "btn-container">
+            <div class = "btns">
+                <!-- Disable button-->
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                    <mat-icon class='icon' svgIcon='disabled'></mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MainFunction -->
+    <div class='container--line' 
+    [class.selected]="data.selected"
+    [class.lastSelected]="data.lastSelected"
+    [class.error]="data.hasError"
+    [class.disabled]="!data.enabled"
+    [class.printing]='data.print'
+    [class.terminate]='data.terminate'
+    [ngSwitch]="data.type"
+    (click)='emitSelect($event, data)'
+    (mousedown)='disableShift($event)'
+    (mouseenter)='onenter($event)'
+    (mouseleave)='onleave($event)'
+    *ngSwitchCase="ProcedureTypes.MainFunction">
+        <div class='container--item' >
+            <div class='line--item'>
+                <ng-container *ngIf="data.args[0].name !=='__none__'">
+                    <input class='input--var'
+                    [(ngModel)]='data.args[0].value'
+                    [class.error]='data.args[0].invalidVar'
+                    [class.linked]='data.args[0].linked'
+                    [class.disabled]='disableInput'
+                    (focus)='onInputFocus(0, true)'
+                    (blur)='varMod()'
+                    placeholder={{data.args[0].name}}
+                    [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>
+                    = 
+    
+                </ng-container>
+                <div class='function-text'><span class='module-name'>{{data.meta.module}}.</span>{{data.meta.name}} </div>
+    
+                <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
+                    <select class='input--arg' [(ngModel)]='p.value' (change)='updateJsVal(p)' *ngIf="checkEnum(p, i); else default_template" >
+                        <option *ngFor='let opt of getEnum(i)' value="'{{opt}}'">{{opt}}</option>
+                        <!--
+                            <option *ngFor='let opt of Modules[data.meta.module][ModuleDoc[data.meta.module][data.meta.name].parameters[i].type]' value={{opt}}>{{opt}}</option>
+                        -->
+                    </select>    
+                    
+                    <ng-template #default_template>
+                        <input class='input--arg' 
+                        *ngIf="p.name[0] !== '_'" 
+                        [(ngModel)]='p.value'
+                        [class.error]='p.invalidVar'
+                        [class.linked]='p.linked'
+                        [class.disabled]='disableInput'
+                        (focus)='onInputFocus(i+1)'
+                        (blur)='argMod($event, i+1)'
+                        placeholder={{p.name}}
+                        [style.width.px]='inputSize(p.value||p.name)'
+                        >
+                    </ng-template>
+    
+                </ng-container>
+    
+            </div>
+    
+        </div>
+        <div class = "btn-container">
+            <div class = "btns">
+                <!-- Disable button-->
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                    <mat-icon class='icon' svgIcon='disabled'></mat-icon>
+                </button>
+                <!-- Select button -->
+                <!-- <button id = 'selectGeom-btn' *ngIf='canSelectGeom()' class='btn' mat-icon-button title="Show Geometric Entities" (click)="markSelectGeom($event)" tabindex="-1">
+                    <mat-icon class='icon' svgIcon='select'></mat-icon>
+                </button> -->
+                <!-- Print button-->
+                <button *ngIf='canBePrinted()' [class.disabled]='!data.enabled' [class.printingOn]='data.print' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                    <mat-icon class="icon" svgIcon='print'></mat-icon>
+                </button>
+                <!-- Terminate button -->
+                <button class='btn' [class.terminateOn]='data.terminate' mat-icon-button title="Terminate process" (click)="markTerminate($event)" tabindex="-1">
+                    <mat-icon class='icon' svgIcon='terminate'></mat-icon>
+                </button>
+                <!-- help button-->
+                <!-- <button class='btn' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText(undefined)'>
+                    <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
+                </button> -->
+
+            </div>
+        </div>
+    </div>
+
+    <!-- globalFuncCall -->
+    <div class='container--line' 
+    [class.selected]="data.selected"
+    [class.lastSelected]="data.lastSelected"
+    [class.error]="data.hasError"
+    [class.disabled]="!data.enabled"
+    [class.printing]='data.print'
+    [class.terminate]='data.terminate'
+    [ngSwitch]="data.type"
+    (click)='emitSelect($event, data)'
+    (mousedown)='disableShift($event)'
+    (mouseenter)='onenter($event)'
+    (mouseleave)='onleave($event)'
+    *ngSwitchCase="ProcedureTypes.globalFuncCall">
+        <div class='container--item' >
+            <div class='line--item'>
+                <ng-container *ngIf="data.args[0].name !=='__none__'">
+                    <input class='input--var'
+                        [(ngModel)]='data.args[0].value'
+                        [class.error]='data.args[0].invalidVar'
+                        [class.linked]='data.args[0].linked'
+                        [class.disabled]='disableInput'
+                        (focus)='onInputFocus(0, true)'
+                        (blur)='varMod()'
+                        placeholder={{data.args[0].name}}
+                        [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>
+                    = 
+                </ng-container>
+                <div class='function-text'><span class='module-name'>global.</span>{{data.meta.name}}</div> 
+                <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
+                    <input class='input--arg' 
+                        *ngIf='p.type !== 5'
+                        [(ngModel)]='p.value'
+                        [class.error]='p.invalidVar'
+                        [class.linked]='p.linked'
+                        [class.disabled]='disableInput'
+                        (focus)='onInputFocus(i+1)'
+                        (blur)='argMod($event, i+1)'
+                        placeholder={{p.name}}
+                        [style.width.px]='inputSize(p.value||p.name)'>    
+                </ng-container>
+            </div>    
+        </div>
+        <div class = "btn-container">
+            <div class = "btns">
+                <!-- Disable button-->
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                    <mat-icon class='icon' svgIcon='disabled'></mat-icon>
+                </button>
+                <!-- Select button -->
+                <!-- <button id = 'selectGeom-btn' *ngIf='canSelectGeom()' class='btn' mat-icon-button title="Show Geometric Entities" (click)="markSelectGeom($event)" tabindex="-1">
+                    <mat-icon class='icon' svgIcon='select'></mat-icon>
+                </button> -->
+                <!-- Print button-->
+                <button *ngIf='canBePrinted()' [class.disabled]='!data.enabled' [class.printingOn]='data.print' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                    <mat-icon class="icon" svgIcon='print'></mat-icon>
+                </button>
+                <!-- Terminate button -->
+                <button class='btn' [class.terminateOn]='data.terminate' mat-icon-button title="Terminate process" (click)="markTerminate($event)" tabindex="-1">
+                    <mat-icon class='icon' svgIcon='terminate'></mat-icon>
+                </button>
+                <!-- help button-->
+                <!-- <button class='btn' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText(undefined)'>
+                    <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
+                </button> -->
+            </div>
+        </div>
+    </div>
+
+    <!-- LocalFuncDef -->
+    <ng-container *ngSwitchCase="ProcedureTypes.LocalFuncDef">
+        <div class='container--line' 
+        [class.strong]="true"
+        [class.selected]="data.selected"
+        [class.lastSelected]="data.lastSelected"
+        [class.error]="data.hasError"
+        [class.disabled]="!data.enabled"
+        [class.printing]='data.print'
+        [class.terminate]='data.terminate'
+        [ngSwitch]="data.type"
+        (click)='emitSelect($event, data)'
+        (mousedown)='disableShift($event)'
+        (mouseenter)='onenter($event)'
+        (mouseleave)='onleave($event)'>
+            <div class='container--item' >
+                <div class='line--item'>
+                    <div class='basic-function-text'>Def  </div>
+                    <input class='input--arg input--funcName' 
+                    *ngIf="data.args[0].name[0] !== '_'" 
+                    [(ngModel)]='data.args[0].value'
+                    [class.error]='data.args[0].invalidVar'
+                    [class.linked]='data.args[0].linked'
+                    [class.disabled]='disableInput'
+                    (blur)='varMod(0)'
+                    placeholder={{data.args[0].name}}
+                    [style.width.px]='inputSizeBold(data.args[0].value||data.args[0].name)'
+                    >
+                    <span class='function-text'>  Function</span>
+                    <ng-container *ngFor='let p of data.args;let i=index'>
+                        <input class='input--var' 
+                        *ngIf="p.name[0] !== '_' && i > 0" 
+                        [(ngModel)]='p.value'
+                        [class.error]='p.invalidVar'
+                        [class.linked]='p.linked'
+                        [class.disabled]='disableInput'
+                        (focus)='onInputFocus(i, true)'
+                        (blur)='varMod(i)'
+                        placeholder={{p.name}}
+                        [style.width.px]='inputSize(p.value||p.name)'
+                        >
+                    </ng-container>
+                </div>
+                                    
+                <div class='container--nested' *ngIf='checkCollapse()'>
+                    <procedure-item 
+                        *ngFor="let line of data?.children; let idx=index" 
+                        [data]="line"
+                        [disableInput]="disableInput"
+                        (eventAction)='performAction($event, idx)'
+                        ></procedure-item>
+                </div>
+        
+            </div>
+            <div class = "btn-container">
+                <div class = "btns">
+                    <!-- collapse/expand local function button-->
+                    <button class='btn' mat-icon-button title="collapse/expand function" (click)='toggleCollapse($event)'>
+                        <mat-icon class='icon' svgIcon='cDnArrow' *ngIf='data.meta.otherInfo["collapsed"]'></mat-icon>
+                        <mat-icon class='icon' svgIcon='cUpArrow' *ngIf='!data.meta.otherInfo["collapsed"]'></mat-icon>
+                    </button>
+                    <!-- add arg button-->
+                    <button class='btn' mat-icon-button title="Add Argument" (click)='addArg($event)'>
+                        <mat-icon class='icon' svgIcon='cAdd'></mat-icon>
+                    </button>
+                    <!-- remove arg button-->
+                    <button *ngIf='data.argCount > 1' class='btn' mat-icon-button title="Remove Argument" (click)='rmArg($event)'>
+                        <mat-icon class='icon' svgIcon='cRemove'></mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <hr>
+    </ng-container>
+
+    <!-- LocalFuncReturn -->
+    <div class='container--line' 
+    [class.selected]="data.selected"
+    [class.lastSelected]="data.lastSelected"
+    [class.error]="data.hasError"
+    [class.disabled]="!data.enabled"
+    [class.printing]='data.print'
+    [class.terminate]='data.terminate'
+    [ngSwitch]="data.type"
+    (click)='emitSelect($event, data)'
+    (mousedown)='disableShift($event)'
+    (mouseenter)='onenter($event)'
+    (mouseleave)='onleave($event)'
+    *ngSwitchCase="ProcedureTypes.Return">
+        <div class='container--item' >
+            <div class='line--item'>
+                <div class='basic-function-text'>Return </div>
+                <div style='position:relative; display:inline-block;' *ngIf="data?.args[0]">
+                    <input class='input--arg'
+                    [(ngModel)]='data.args[0].value'
+                    [class.error]='data.args[0].invalidVar'
+                    [class.linked]='data.args[0].linked'
+                    [class.disabled]='disableInput'
+                    (focus)='onInputFocus(0)'
+                    (blur)='argMod($event, 0)'
+                    placeholder={{data.args[0].name}}
+                    [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>
+                </div>
+            </div>
+        </div>
+        <div class = "btn-container">
+            <div class = "btns">
+                <!-- Disable button-->
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                    <mat-icon class='icon' svgIcon='disabled'></mat-icon>
+                </button>
+                <!-- Print button-->
+                <button [class.disabled]='!data.enabled' [class.printingOn]='data.print' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                    <mat-icon class="icon" svgIcon='print'></mat-icon>
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- LocalFuncCall -->
+    <div class='container--line' 
+    [class.selected]="data.selected"
+    [class.lastSelected]="data.lastSelected"
+    [class.error]="data.hasError"
+    [class.disabled]="!data.enabled"
+    [class.printing]='data.print'
+    [class.terminate]='data.terminate'
+    [ngSwitch]="data.type"
+    (click)='emitSelect($event, data)'
+    (mousedown)='disableShift($event)'
+    (mouseenter)='onenter($event)'
+    (mouseleave)='onleave($event)'
+    *ngSwitchCase="ProcedureTypes.LocalFuncCall">
+        <div class='container--item' >
+            <div class='line--item'>
+                <ng-container *ngIf="data.args[0].name !=='__none__'">
+                    <input class='input--var'
+                        [(ngModel)]='data.args[0].value'
+                        [class.error]='data.args[0].invalidVar'
+                        [class.linked]='data.args[0].linked'
+                        [class.disabled]='disableInput'
+                        (focus)='onInputFocus(0, true)'
+                        (blur)='varMod()'
+                        placeholder={{data.args[0].name}}
+                        [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>
+                    = 
+                </ng-container>
+
+                <div class='function-text'><span class='module-name'>local.</span>{{data.meta.name}} </div> 
+                
+                <ng-container *ngFor='let p of data.args.slice(1);let i=index'>
+                    <input class='input--arg' 
+                        *ngIf='p.type !== 5'
+                        [(ngModel)]='p.value'
+                        [class.error]='p.invalidVar'
+                        [class.linked]='p.linked'
+                        [class.disabled]='disableInput'
+                        (focus)='onInputFocus(i+1)'
+                        (blur)='argMod($event, i+1)'
+                        placeholder={{p.name}}
+                        [style.width.px]='inputSize(p.value||p.name)'>
+                </ng-container>
+        
+            </div>
+        </div>
+        <div class = "btn-container">
+            <div class = "btns">
+                <!-- Disable button-->
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                    <mat-icon class='icon' svgIcon='disabled'></mat-icon>
+                </button>
+                <!-- Select button -->
+                <!-- <button id = 'selectGeom-btn' *ngIf='canSelectGeom()' class='btn' mat-icon-button title="Show Geometric Entities" (click)="markSelectGeom($event)" tabindex="-1">
+                    <mat-icon class='icon' svgIcon='select'></mat-icon>
+                </button> -->
+                <!-- Print button-->
+                <button *ngIf='canBePrinted()' [class.disabled]='!data.enabled' [class.printingOn]='data.print' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                    <mat-icon class="icon" svgIcon='print'></mat-icon>
+                </button>
+                <!-- Terminate button -->
+                <button class='btn' [class.terminateOn]='data.terminate' mat-icon-button title="Terminate process" (click)="markTerminate($event)" tabindex="-1">
+                    <mat-icon class='icon' svgIcon='terminate'></mat-icon>
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+</ng-container>

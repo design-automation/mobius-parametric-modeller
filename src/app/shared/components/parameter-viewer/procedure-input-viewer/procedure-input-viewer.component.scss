@@ -1,0 +1,100 @@
+@import '~scss/colors';
+@import '~scss/variables';
+
+.container{
+    display: block; 
+    height: auto;
+    // margin: 5px 0px 0px 5px;
+    width: 100%;
+}
+
+.container--parameter{
+    padding: 10px 0px 5px 0px;
+
+    display: block;
+    flex-flow: row nowrap;
+    // padding-left: $small-padding;
+
+    color: $color8;
+
+    //border-bottom: 1px solid $color5;
+
+    overflow: hidden;
+    width: 100%;
+    // height: $fsize1 + 2px;
+
+    &.inputDisabled{
+        opacity: 0.4;
+    }
+
+    &:hover .btns{
+        display: inline-flex;
+    }
+}
+
+.FFA{
+    display: flex;
+    flex-flow: row nowrap;
+    flex-grow: 1;
+    width: 100%;
+    mat-slider{
+        width: 100%;
+        height: $fsize3;
+        padding: 0px;
+        position: relative;
+        bottom: 7px;
+    }
+    .input-const-name{
+        width: 100px;
+        text-overflow: ellipsis;
+        // padding-left: 10px;
+    }
+    .input-const-colon{
+        width: 3px;
+    }
+}
+
+input{
+    color: $color8;
+    background-color: transparent;
+    border:none;
+    border: 2px solid $color5;
+    margin: 0px 2px;
+    
+    // margin-left: 5px;
+    max-width: 95%;
+    height: $fsize1;
+    vertical-align: bottom;
+    padding: 0px 0px 0px 6px;
+
+    font-family: Arial;
+    font-size: $fsize2;
+    &:hover, &:focus{
+        background-color: $color7;
+        color: $color8;
+    }
+
+    // &:focus{
+    //     border-bottom: 2px solid $selected-color;
+    // }
+
+    &.disabled-input{
+        padding: 0px;
+        //border-bottom: 0px; //2px solid transparent;
+        border: 2px solid transparent;
+        &:hover{ // no change
+            background-color: transparent;
+            color: $color8;
+        }
+    }
+
+    &.error{
+        border: 2px solid $error-color;
+    }
+}
+
+select{
+    background-color: transparent;
+    color: $color8;
+    height: 17px;
+}

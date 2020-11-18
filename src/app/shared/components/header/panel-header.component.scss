@@ -1,0 +1,701 @@
+@import '~scss/colors';
+@import '~scss/variables';
+@import '~scss/header-button';
+
+
+.container__header{
+    display: inline-flex;
+    float: left;
+    width: 100%;
+    height: $header-height + 1;
+    padding: 0px;
+    margin: 0px;
+
+    .header-btn-group {
+        flex-shrink: 0;
+        display: inline-flex;
+        flex-flow: row nowrap;
+        height: $header-height + 1;
+        padding: 0px;
+        margin: 0px;
+        overflow: hidden;
+        // background-color: transparent;
+        z-index: 1;
+        .mat-icon-button{
+            height: $header-height !important;
+            width: $header-height !important;
+        }
+        .active{
+            background-color: transparent;
+        }
+    }
+    .nodename-container{
+        z-index: 1;
+    }
+    .filename-container{
+        z-index: 5;
+        width: calc(100% - 170px - 37px);//width of btn-container width of zoom fit in flowchart;
+
+        .menu-btn{
+            float: right;
+        }
+        .dropdownContainer{
+            width: 1px;
+            float: right;
+            position: relative;
+        }
+    }
+    #filename{
+        //display: inline-block;
+        cursor: pointer;
+        height: $header-height;
+        font-size: $fsize1;
+        color: $color8;
+        width: 100%;
+        // background-color: transparent;
+        padding-top: 0px;
+        text-align: left;
+        vertical-align: middle;
+        line-height: $header-height - 5px;
+        z-index: 5;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        &:hover{
+            color: $selected-color;
+        }
+    }
+}
+
+// .cdk-overlay-pane { // overlay menu
+//     background-color: $color4;
+//     top: $header-height !important;
+//     .mat-menu-panel{
+//         background-color: $color4;
+//         position: absolute;
+//         border-radius: 0px;
+//         // box-shadow: none;
+//         padding: 0px;
+//         left: 0px;
+//         .mat-menu-content{
+//             padding: 0px;
+//         }
+//         .mat-menu-item{
+//             padding: 0px;
+//         }
+//     }
+// }
+
+/*
+button.mat-menu-item{ // drop-down (top-bar) menu buttons
+    background-color: $color5;
+    color: $color2;
+    mat-icon{
+        color: $color2;
+    }
+
+    height: $header-height;
+    line-height: $header-height;
+    font-size: $fsize2;
+    text-align: center;
+}
+
+button.mat-menu-item:hover{
+    background-color: $color5;
+    color: $color5;
+    // mat-icon{
+    //     color: $color5;
+    // }
+}
+*/
+#dropdownMenu {
+    display: none;
+    position: fixed;
+    top: 40px;
+    transition: display 0.4s;
+
+    z-index: 1;
+    background-color: $color6;
+    border: 1px solid $color2;
+    // border-left: 1px solid $color2;
+    // border-right: 1px solid $color2;
+    // border-bottom: 1px solid $color2;
+    
+    button{
+        display: inline-block;
+        width: 110px;
+        line-height: $fsize3;
+        height: $fsize3;
+        font-size: $fsize2;
+        vertical-align: middle;
+        text-align: left;
+        padding: 0px 5px 0px 5px;
+        color: $color8;
+        mat-icon{
+            color: inherit;
+            vertical-align: middle;
+            font-size: 20px;
+            height: 20px;
+            width: 20px;
+        }
+        .mat-icon-svg{
+            vertical-align: top;
+            padding-top: 3px;
+        }
+        &:hover{
+            color: $selected-color;
+            background-color: $color5;
+        }
+    }
+}
+
+#node-name{
+    min-height: $fsize3;
+    color: $color8;
+    padding-left: 8px;
+    margin: 0px;
+    width: fit-content;
+    font-family: sans-serif;
+    line-height: $fsize3;
+    font-size: $fsize2;
+    font-weight: 550;
+    display: flex;
+    flex-flow: row nowrap;
+    cursor: pointer;
+    #node--name{
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+}
+#nodeMenu {
+    display: none;
+    position: fixed;
+    transition: display 0.4s;
+    top: 40px;
+    width: 125px;
+    max-height: 80%;
+    z-index: 1;
+    background-color: $color6;
+    border: 1px solid $color2;
+    overflow: auto;
+    // border-right: 1px solid $color2;
+    // border-bottom: 1px solid $color2;
+    // border-top: 1px solid $color2;
+    cursor: pointer;
+
+    button{
+        display: block;
+        background-color: $color6;
+        border: 0px;
+        margin: 0px;
+        padding: 0px;
+        padding-left: 0px;
+        line-height: $fsize3;
+        height: $fsize3;
+        font-size: $fsize2;
+    }
+
+    li{
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        line-height: 20px;
+        background-color: $color6;
+        font-weight: 550;
+        border: 0px;
+        margin: 0px;
+        padding: 0px 10px 0px 10px;
+        line-height: $fsize3;
+        height: $fsize3;
+        font-size: $fsize2;
+        
+        color: $color8;
+        &:hover{
+            color: $selected-color;
+            background-color: $color5;
+        }
+    }
+
+}
+
+
+
+.executeCls{
+    &.disabled{
+        display: none;
+    }
+}
+
+#headerDialog{
+    position: relative;
+    background-color: $color6;
+    top: 10%;
+
+    .closebutton {
+        position:absolute;
+        z-index: 1;
+        top: 5px;
+        right: 5px;
+    }
+
+    .genUrlDialog{
+        font-family: 12px sans-serif;
+        color: $color1;
+        background-color: $color6;
+        top: 10%;
+        max-width: 605px;
+        padding: 5px;
+    
+    
+        textarea{
+            width: 600px;
+            max-width: 600px;
+            min-height: 80px;
+            background-color: $color6;
+    
+            &.disabled{
+                background-color: $color5;
+            }
+    
+            &.valid{
+                border: 2px solid $print-color;
+            }
+    
+            &.invalid{
+                border: 2px solid $error-color;
+            }
+        }
+    
+        select{
+            color: $color1;
+        }
+    
+        button{
+            width: fit-content;
+            padding: 0px 5px 0px 5px;
+            margin-right: 10px;
+            background-color: $color5;
+            color: $color1;
+        }
+    }
+
+    .loadBackupDialog{
+        font-family: 12px sans-serif;
+        color: $color1;
+        background-color: $color6;
+        top: 20%;
+        max-height: 75vh;
+        max-width: 805px;
+        min-width: 588px;
+        padding: 5px;
+        overflow: scroll;
+    
+        .loadBackupButton{
+            height: 25px;
+            font-size: 12px;
+            width: fit-content;
+            min-width: 400px;
+            margin-bottom: 2px;
+            margin-left: 20px;
+            padding: 0px 5px 0px 12px;
+            background-color: $color5;
+            // color: $color1;
+            color: black;
+            display: inline-block;
+            text-align: left;
+
+            &:disabled {
+                background-color: $color5-5;
+                // color: $color3;
+            }
+        }
+        .backupDateButton{
+            height: 25px;
+            font-size: 12px;
+            width: fit-content;
+            min-width: 150px;
+            margin-bottom: 2px;
+            padding: 0px 5px 0px 5px;
+            background-color: $color5;
+            // color: $color1;
+            color: black;
+            display: inline-block;
+
+            &:disabled {
+                background-color: $color5-5;
+                // color: $color3;
+            }
+        }
+        .downloadBackupButton{
+            width: 34px;
+            width: fit-content;
+            margin-bottom: 2px;
+            margin-left: 2px;
+            padding: 0px 2px 0px 8px;
+            background-color: $color5;
+            color: $color1;
+            display: inline-block;
+
+            .icon{
+                font-size: 18px;
+                padding-top: 5px;
+                height: 18px;
+            }
+        }
+        .deleteBackupButton{
+            width: 34px;
+            width: fit-content;
+            margin-bottom: 2px;
+            margin-left: 2px;
+            padding: 0px 5px 0px 5px;
+            background-color: $color5;
+            color: $color1;
+            display: inline-block;
+
+            .icon{
+                font-size: 18px;
+                padding-top: 5px;
+                height: 18px;
+            }
+        }
+        #addBackupButton{
+            width: 34px;
+            margin-bottom: 2px;
+            padding: 0px 5px 0px 5px;
+            background-color: $color5;
+            color: $color1;
+            display: inline-block;
+        }
+        .div--chbox{
+            height: 0px;
+            label {
+                top: 3px;
+            }
+        }
+        .tab{
+            overflow: hidden;
+            border: none;
+            background-color: $color5;
+            margin-bottom: 5px;
+
+            .tabLinks {
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 2px;
+                font-size: 14px;
+                width: 100px;
+
+                :hover {
+                    background-color: $color4;
+                }
+
+                &.active {
+                    background-color: $color3;
+                }
+            }
+        }
+        .tabContent {
+            display: none;
+
+            &.active {
+                display: block;
+            }
+        }
+    }
+    .globalFuncDialog{
+        font-family: 12px sans-serif;
+        color: $color1;
+        background-color: $color6;
+        top: 30%;
+        max-width: 805px;
+        min-width: 605px;
+        padding: 5px;
+
+        .globalFuncName{
+            height: 25px;
+            font-size: 12px;
+            width: fit-content;
+            min-width: 500px;
+            margin-bottom: 2px;
+            padding: 0px 5px 0px 5px;
+            background-color: $color5;
+            color: $color1;
+            display: inline-block;
+            pointer-events: none;
+        }
+        .manageGlobalButton{
+            height: 25px;
+            width: fit-content;
+            margin-bottom: 2px;
+            margin-left: 2px;
+            padding: 0px 5px 0px 5px;
+            background-color: $color5;
+            color: $color1;
+            display: inline-block;
+
+            .icon{
+                font-size: 18px;
+                padding-top: 5px;
+                height: 18px;
+            }
+        }
+        .addGlobalButton{
+            width: 70px;
+            font-size: 12px;
+            margin: 0px 5px 2px 0px;
+            padding: 0px 5px 0px 5px;
+            background-color: $color5;
+            color: $color1;
+            display: inline-block;
+        }
+    }
+    .inlineFuncDialog{
+        font-family: 12px sans-serif;
+        color: $color1;
+        background-color: $color6;
+        top: 0%;
+        max-width: 600px;
+        min-width: 600px;
+        padding: 5px;
+        display: inline-block;
+
+        .inlineFuncContainer{
+            display: inline-block;
+            width: 180px;
+            height: calc(50vh + 30px);
+            overflow-y: scroll;
+            .searchBar{
+                width: 162px;
+                font-size: 12px;
+                padding: 2px 0px 2px 8px;
+                // border: 1px solid $color4;
+                height: $fsize1;
+                // border-bottom: 5px solid $color6;
+                border: 1px solid $color5;
+            }
+        }
+        .inlineFuncHelpContainer{
+            display: inline-block;
+            width: 380px;
+            height: 50vh;
+            overflow-y: scroll;
+            padding: 15px;
+            margin-left: 10px;
+            color: $color8;
+        }
+        .inlineFuncExpressionContainer{
+            font-family: Arial;
+            display: inline-block;
+            margin-top: 7px;
+            width: 580px;
+            height: 80px;
+        }
+        .inlineFuncSaveButtonContainer {
+            display: inline-block;
+            // width: 40px;
+            // height: 100px;
+            padding-left: 560px;
+            button{
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        .inlinefuncDiv{
+            display: none;
+            &.opened{
+                display: block;
+                border-left: 2px solid $color3;
+            }
+
+            .inlinefunc{
+                height: 25px;
+                font-size: 12px;
+                cursor: pointer;
+                width: fit-content;
+                // width: 100%;
+                margin: 2px;
+                padding: 0px 5px 0px 5px;
+                background-color: $color5;
+                color: $color1;
+                display: inline-block;
+            }
+
+            .inlinefuncUL{
+                position: relative;
+                list-style-type: none;
+                margin: 0px 0px 0px 3px;
+                border-left: 2px solid $color3;
+                padding: 0px;
+                background-color: $color5;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                //padding-top: 2px;
+                //padding-bottom: 2px;
+            
+                li{
+                    position: relative;
+                    user-select: none;
+                    margin: 0px;
+                    padding: 0px;
+                    padding-left: 8px;
+                    font-style: italic;
+                    font-weight: 550;
+                    color: $function-text-color2;
+                    font-size: $fsize2;
+                    height: 18px;
+                    line-height: 18px;
+                    width: 100%;
+                    box-sizing: border-box;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+            
+                    .helpButton {
+                        display: none;
+                        position: absolute;
+                        right: 1px;
+                        width: 18px;
+                        height: 18px;
+                        background-color: inherit;
+                        padding: 2px 0px 0px 0px;
+                        margin: 0px;
+                        border: 0px;
+            
+                        &:focus {
+                            outline: 0px;
+                        }
+                        .icon {
+                            width: 14px;
+                            height: 14px;
+                        }
+                    }
+                }
+                .user--Manage{
+                    margin-bottom: 4px;
+                    border-bottom: 2px solid $color3;
+                }
+                :hover{
+                    background-color: $color4;
+                    transition: 0.4s;
+                    .helpButton {
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+
+        .inlinefuncAccordion{
+            height: 25px;
+            font-size: 12px;
+            cursor: pointer;
+            width: fit-content;
+            width: 100%;
+            padding: 0px 5px 0px 5px;
+            border-left: 1px solid $color3;
+            background-color: $color4;
+            color: $color8;
+            display: inline-block;
+            text-align: left;
+
+            font-weight: 550;
+            color: #00006d;
+            font-style: italic;
+            white-space: nowrap;
+
+
+            &.opened {
+                background-color: $color3;
+            }
+            // &:after{
+            //     content: '\2bc8'; 
+            //     font-size: 12px;
+            //     font-style: normal;
+            //     color: #777;
+            //     float: left;
+            //     margin-left: 5px;
+            // }
+            // &.opened {
+            //     &:after{
+            //         content: '\2bc6'; 
+            //     }
+            // }
+            
+        }
+
+        .inlineFuncExpression {
+            font-family: Arial;
+            // display: block;
+            width: 585px;
+            height: 100%;
+            resize: none;
+            padding: 5px;
+            border: 1px solid $color5;
+            color: $color8;
+        }
+    }
+    .settingsDialog{
+        font-family: 12px sans-serif;
+        color: $color1;
+        background-color: $color6;
+        top: 30%;
+        max-width: 605px;
+        min-width: 405px;
+        padding: 5px;
+    
+        .settingsButton{
+            width: 80px;
+            margin: 0px 20px 2px 20px;
+            padding: 0px 5px 0px 5px;
+            background-color: $color5;
+            color: $color1;
+            display: inline-block;
+        }
+
+        .textdiv{
+            padding: 0px 5px 0px 5px;
+            height: 20px;
+            display: inline-block;
+        }
+
+        .settingLine {
+            display: inline-flex;
+            height: 20px;
+            line-height: 20px;
+            padding-left: 10px;
+        }
+
+        .subsetting {
+            padding-left: 20px;
+        }
+    }
+    .saveLocalDialog{
+        font-family: 12px sans-serif;
+        color: $color1;
+        background-color: $color6;
+        top: 30%;
+        max-width: 605px;
+        min-width: 205px;
+        padding: 5px;
+    
+        .saveButtons{
+            width: 80px;
+            margin: 0px 20px 2px 20px;
+            padding: 0px 5px 0px 5px;
+            background-color: $color5;
+            color: $color1;
+            display: inline-block;
+        }
+        .fileNameInput{
+            width: 200px;
+            border: 1px solid $color1;
+            background-color: $color6;
+        }
+    }
+}
+

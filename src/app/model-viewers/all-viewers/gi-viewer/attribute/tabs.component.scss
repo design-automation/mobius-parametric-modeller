@@ -1,0 +1,125 @@
+@import '~scss/colors';
+@import '~scss/variables';
+
+/* Style The Dropdown Button */
+.dropbtn {
+    background-color: transparent;
+    color: #808080;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-family: sans-serif;
+    font-weight: 550;
+    font-size: 12px;
+    line-height: 15px;
+    outline: none;
+    text-align: center;
+    width: 100%;
+    height: 21px;
+    margin-top: -1px;
+    padding-right: 10px;
+    border-bottom: 2px solid transparent;
+}
+
+.dropbtn::after{
+    content: '';
+    width: 0; 
+    height: 0; 
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #505050;
+    border-bottom: none;
+    position: absolute;
+    top: 7px;
+    right: 6px;
+}
+  
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: absolute;
+    display: inline-block;
+    left: 0px;
+    width: 100%;
+  }
+  
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #ececec;
+    min-width: 85px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 500;
+    top: 19px;
+  }
+  
+  /* Links inside the dropdown */
+  .dropdown-content div {
+    color: black;
+    padding: 6px 8px;
+    text-decoration: none;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .dropdown-content div:hover {background-color: #fefefe}
+  
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .dropdown-content {
+    // display: block;
+  }
+  
+  /* Change the background color of the dropdown button when the dropdown content is shown */
+  .dropdown:hover .dropbtn {
+    color: #00006d
+}
+
+.nav-tabs{
+    li.active{
+        .dropbtn{
+            color: #00006d;
+            background-color: whitesmoke;
+            border: 1px solid #B3B3B3;
+            border-bottom: 2px solid whitesmoke;
+        }
+    }
+    li.open{
+        .dropbtn::after{
+            content: '';
+            border-top: none;
+            border-bottom: 4px solid #505050;
+        }
+    }
+}
+
+#topology_dropdown, #object_dropdown, #topo_dropdown {
+    display: none;
+    position: absolute;
+    width: fit-content;
+    transition: display 0.4s;
+
+    z-index: 99999999;
+    background-color: $color6;
+    border: 1px solid $color1;
+    box-shadow: none;
+
+    div{
+        cursor: pointer;
+        display: block;
+        min-width: 100px;
+        max-width: 300px;
+        overflow: hidden;
+        line-height: 20px;
+        background-color: $color6;
+        border: 0px;
+        margin: 0px;
+        padding: 0px 10px 0px 10px;
+        line-height: $fsize3;
+        height: $fsize3;
+        font-size: $fsize2;
+        color: $color8;
+        &:hover{
+            color: $selected-color;
+            background-color: $color5;
+        }
+    }
+
+}

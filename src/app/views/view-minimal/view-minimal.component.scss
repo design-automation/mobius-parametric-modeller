@@ -1,0 +1,96 @@
+@import '~scss/colors';
+@import '~scss/variables';
+
+.content__panel{
+    margin-top: $header-height;
+    padding-left: 11px; //split bar width
+
+    height: calc(100% - 70px); //header height;
+    overflow-y: auto;
+}
+
+.content__viewer{
+    position: relative;
+
+    .sliderBtn{
+        position: absolute;
+        top: 80px;
+        height: 34px;
+        background-color: $color6;
+        z-index: 2;
+        color: $color1;
+        border: unset;
+        margin: 0px;
+        padding: 5px 0;
+        outline:none;
+        width: 20px;
+        left: -5px;
+        cursor: pointer;
+        box-shadow: 1px 1px 2px #808080;
+    }
+
+    .attribBtn{
+        position: absolute;
+        // bottom: 250px;
+        right: 20px;
+        height: 18px;
+        width: 36px;
+        background-color: $color6;
+        z-index: 2;
+        color: $color1;
+        margin: 0px;
+        padding: 0 4px;
+        outline:none;
+        cursor: pointer;
+        border: 1px solid #cccccc;
+        border-bottom: 0px;
+        .mat-icon{
+            margin-top: -3px;
+        }
+        &.closed{
+            bottom: 0px;
+        }
+    }
+    .shareLink{
+        position: absolute;
+        top: 0px;
+        right: 34px;
+        z-index: 2;
+
+        .shareBtn{
+            background-color: transparent;
+            z-index: 2;
+            color: $color1;
+            border: none;
+            outline:none;
+        }
+    }
+}
+
+h3 {
+    line-height: 30px;
+    height: 30px;
+    color: $color8;
+}
+
+
+.footer{
+    height: 10px;
+
+    border-top: 1px solid $color5;
+    padding-top: 5px;
+    color: $color1;
+
+    a:link, a:visited { 
+        color: $color1;
+        text-decoration: underline;
+    }
+    
+    a:link:active, a:visited:active { 
+        color: $color1;
+    }
+
+    .footer-p {
+        padding-left: 10px;
+    }
+}

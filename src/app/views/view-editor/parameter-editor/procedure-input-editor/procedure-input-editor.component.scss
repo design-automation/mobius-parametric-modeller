@@ -1,0 +1,347 @@
+@import '~scss/colors';
+@import '~scss/variables';
+
+.container{
+    margin: 5px 0px;
+}
+
+.container--parameter{
+    margin: 0px 0px 2px 0px;
+
+    display: flex;
+    flex-flow: column nowrap;
+
+    color: $color1;
+    vertical-align: bottom;
+    // border-left: 1px solid red;
+    border-bottom: 1px solid $color5;
+    border-left: 1px solid $color5;
+    padding: 0px 0px 1px 1px;
+
+    overflow: hidden;
+    // width: calc(100% - 20px);
+    width: 100%;
+
+    box-shadow: inset 1px -1px 0px 0px white;
+
+    &.inputDisabled{
+        opacity: $disabled-opacity;
+        .disable-btn {
+            // color: $color1;
+            color: $selectGeom-color-dk !important;
+        }
+    }
+    &.inputEntity{
+        border-bottom: 2px solid $print-color-dk;
+        border-left: 2px solid $print-color-dk;
+        padding: 0px;
+        .entity-btn {
+            color: $print-color-dk !important;
+        }
+    }
+    &:hover .btn{
+        color: $color1;
+        background-color: $color6;
+        // display: inline-flex;
+        // background-color: transparent;
+    }
+
+    &.error {
+        border: 2px solid $error-color;
+    }
+    &.selected{
+        background-color: $selected-color1;
+        &:hover .btn {
+            background-color: $selected-color1;
+        }
+        &.lastSelected{
+            background-color: $selected-color2;
+            &:hover .btn {
+                background-color: $selected-color2;
+            }
+        }
+    }
+}
+
+.inline-div{
+    box-sizing: border-box;
+    display: inline-block;
+    height: $fsize1+3px;
+    padding-bottom: 3px;
+    white-space: nowrap;
+}
+
+input, select {
+    color: $color8;
+    background-color: transparent;
+    border: 2px solid $color5;
+    margin: 0px 2px;
+    height: $fsize1;
+
+    // margin-left: 5px;
+    max-width: 95%;
+    vertical-align: bottom;
+    padding: 0px 0px 0px 6px;
+
+    font-family: Arial;
+    font-size: $fsize2;
+    &:hover, &:focus{
+        background-color: $color7;
+        color: $color8;
+        border-color: $selected-color;
+    }
+    &.disabled-input{
+        padding: 0px;
+        border: none;
+        &:hover{ // no change
+            background-color: transparent;
+            color: $color1;
+        }
+    }
+    &.error{
+        border: 2px solid $error-color;
+    }
+    &.disablePointer{
+        pointer-events: none;
+    }
+}
+
+select{
+    height: 19px;
+}
+
+.btn-container{
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+    position: relative;
+}
+
+.btns{
+    display: inline-flex;
+    flex-flow: row-reverse nowrap;
+    justify-content: flex-end;
+    padding-right: 8px;
+    
+    // background-color: $color6;
+    // border-left: 1px solid $color1;
+    // border-bottom: 1px solid $color1;
+
+    position: absolute;
+    &:hover{
+        display: inline-flex;
+    }
+    // .deletebtn:hover{
+    //     color: red !important;
+    // }
+}
+
+.btn{
+    height: $fsize1;
+    width: $fsize1;
+    padding: 0px;
+    outline: none;
+
+    background-color: transparent;
+    color: transparent;
+    border: none;
+    float: right;
+
+    :hover{
+        color: $selected-color;
+    }
+}
+
+.icon{
+    vertical-align: top;
+    font-size: $fsize1;
+    height: $fsize1;
+    width: $fsize1;
+}
+
+.inp--type--container{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    margin-top: 1px;
+    box-sizing: border-box;
+    line-height: $fsize1;
+    min-width: fit-content;
+    margin-bottom: 2px;
+    .input--type{
+        color: $function-text-color;
+        font-weight: 550;
+        font-style: italic;
+        width: 90px;
+    }
+    .filebtn{
+        width: 75px;
+        height: $fsize1 + 3px;
+        border: none;
+        margin-left: 2px;
+        &.disablePointer{
+            pointer-events: none;
+        }
+    }
+}
+
+// slider
+
+.div--slider{
+    display: flex;
+    flex-flow: column nowrap;
+
+    .input--container{
+        display:inline-flex;
+        width: 100%;
+        // max-width: 300px;
+        vertical-align: middle;
+        .min-max{
+            white-space: nowrap;
+            span{
+                padding: 0px 2px;
+            }
+        }
+    }
+
+    .slider--container{
+        width: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+        padding-right: 50px;
+        margin-left: 1px;
+        .slider-input{
+            height: $fsize1;
+            line-height:$fsize1;
+            // position: relative;
+            top: 7px;
+        }
+        mat-slider{
+            width: 100%;
+            height: $fsize3;
+            // max-width: 300px;
+            padding: 0px;
+        }
+
+        .dropdown-input{
+            height: $fsize1;
+            line-height:$fsize1;
+            width: 100%;
+        }
+    }
+}
+.inputEntity {
+    min-width: 200px;
+    .div--globalEnt{
+        padding-left: 3px;
+        height: 22px;
+        width: 22px;
+        display: inline-block;
+    }
+    .entityDesc{
+        color: $color1;
+        height: 22px;
+        width: 170px;
+        padding: 0px;
+        vertical-align: top;
+        border: none;
+        background-color: transparent;
+    }
+}
+// parameter description
+.desc--container{
+    margin-top: 1px;
+    padding-right: $fsize1;
+    box-sizing: border-box;
+    height: fit-content;
+    .inp--desc{
+        margin-left: 3px;
+        color: $color8;
+        border: 2px solid $color5;
+        background-color: transparent;
+
+        padding-left: 5px;
+        font-family: arial;
+        font-size: $fsize2;
+        min-width: 100%;
+        resize: none;
+
+        height: $fsize1;
+        // max-height: 32px;
+        // overflow-y: auto;
+        &:hover, &:focus{
+            color: $color8;
+            border-color: $selected-color;
+            background-color: $color7;
+        }
+        &.disablePointer{
+            pointer-events: none;
+        }
+    }
+}
+
+.chkbox{
+    display: none;
+}
+
+
+.slider {
+    -webkit-appearance: none;
+    min-width: 10px;
+    padding: 0px;
+    box-sizing: content-box;
+    width: 100%;
+    overflow: hidden;
+    // width: calc(100% - 110px);
+    background-color: $color6 !important;
+    height: 12px;
+    border: 2px solid $color5 !important;
+    margin-top: 2px;
+    // right: 50px;
+    // position: absolute;
+    // outline: none;
+    // opacity: 0.7;
+    // -webkit-transition: .2s;
+    // transition: opacity .2s;
+}
+// .slider:hover {
+//     border: 2px solid $color5;
+//     background-color: $color6;
+// }
+// .slider:focus {
+//     border: 2px solid $color5;
+//     background-color: $color5-5;
+// }
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    overflow: hidden;
+
+	border-radius: 0 !important;
+	background-color: $color3;
+	// border: 1px solid $color1 !important;
+	width: 5px !important;
+    right: -5px !important;
+    bottom: -7px !important;
+    
+    transform: scale(1) !important;
+
+    height: $fsize1 !important;
+    box-shadow: -1000px 0 0 1000px $color5;
+
+    // width: 25px;
+    // height: 25px;
+    // background: #4CAF50;
+    // cursor: pointer;
+}
+.slider::-moz-range-thumb {
+	border-radius: 0 !important;
+	background-color: $color5 !important;
+	border: 1px solid $color1 !important;
+	width: 5px !important;
+    right: -5px !important;
+    bottom: -7px !important;
+    transform: scale(1) !important;
+    height: $fsize1 !important;
+}

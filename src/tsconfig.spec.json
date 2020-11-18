@@ -1,0 +1,34 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../out-tsc/spec",
+        "baseUrl": "./",
+        "types": [
+            "jasmine",
+            "node"
+        ],
+        "paths": {
+            "@assets/*" : ["assets/*"],
+            "@env/*" : ["environments/*"],
+            "@libs/*" : ["assets/libs/*"],
+            "@store" : ["app/core/store"],
+            "@models/*" : ["app/shared/models/*"],
+            "@utils" : ["app/shared/utils"],
+            "@shared/*" : ["app/shared/*"],
+            "@views" : ["app/views"],
+            "@services" : ["app/shared/services"],
+            "@modules" : ["assets/core/modules"],
+            "@libs": ["assets/libs"],
+            "@test" : ["app/views"]
+        }
+
+    },
+    "files": [
+        "test.ts",
+        "polyfills.ts"
+    ],
+    "include": [
+        "**/*.spec.ts",
+        "**/*.d.ts"
+    ]
+}

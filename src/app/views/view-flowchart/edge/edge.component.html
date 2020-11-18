@@ -1,0 +1,31 @@
+<!--the main line-->
+<svg:polyline 
+id="main-edge" 
+class = "edge" 
+[class.selected] = "edge.selected"
+[class.disabled] = "!edge.source.parentNode.enabled"
+[attr.points] = "   (edge.source.parentNode.position.x + 50) + ',' +
+                    (edge.source.parentNode.position.y + 40) + ' ' +
+
+                    ((edge.target.parentNode.position.x + edge.source.parentNode.position.x) / 2 + 50) + ',' +
+                    ((edge.target.parentNode.position.y + edge.source.parentNode.position.y) / 2 + 40) + ' ' +
+
+                    (edge.target.parentNode.position.x + 50) + ',' +
+                    (edge.target.parentNode.position.y + 40)" 
+/>
+
+<!--a wider invisible line to make the wire easier to click-->
+<svg:polyline 
+id="invisible-edge" 
+class = "inviEdge" 
+[attr.points] = "   (edge.source.parentNode.position.x + 50) + ',' +
+                    (edge.source.parentNode.position.y + 40) + ' ' +
+
+                    ((edge.target.parentNode.position.x + edge.source.parentNode.position.x) / 2 + 50) + ',' +
+                    ((edge.target.parentNode.position.y + edge.source.parentNode.position.y) / 2 + 40) + ' ' +
+
+                    (edge.target.parentNode.position.x + 50) + ',' +
+                    (edge.target.parentNode.position.y + 40)" 
+(click)='select($event)'/>
+    
+

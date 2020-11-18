@@ -106,11 +106,13 @@ export class GIGeomSnapshot {
     public copyEntsToActiveSnapshot(from_ssid: number, ents: TEntTypeIdx[]): void {
         const from_data: ISnapshotData = this.ss_data.get(from_ssid);
         const to_data: ISnapshotData = this.ss_data.get(this.modeldata.active_ssid);
+        const set_colls_i: Set<number> =  new Set();
         for (const [ent_type, ent_i] of ents) {
             if (ent_type === EEntType.POSI || ent_type >= EEntType.POINT) {
                 to_data[EEntTypeStr[ent_type]].add(ent_i);
                 // handle collections
                 if (ent_type === EEntType.COLL) {
+                    set_colls_i.add(ent_i);
                     // point -> colls
                     mapSetMerge(from_data.pt_co, to_data.pt_co, from_data.co_pt.get(ent_i));
                     // pline -> colls
@@ -125,13 +127,23 @@ export class GIGeomSnapshot {
                     mapSetMerge(from_data.co_pg, to_data.co_pg, [ent_i]);
                     // coll -> children
                     mapSetMerge(from_data.co_ch, to_data.co_ch, [ent_i]);
-                    // coll -> parent
-                    to_data.co_pa.set(ent_i, from_data.co_pa.get(ent_i)); // TODO check if parent exists
                 }
             } else {
                 throw new Error('Adding entity to snapshot: invalid entity type.');
             }
         }
+        // hadle collection parents
+        // make sure only to allow parent collections that actually exist
+        set_colls_i.forEach( coll_i => {
+            // check if the collection has a parent
+            if (from_data.co_pa.has(coll_i)) {
+                const parent_coll_i: number = from_data.co_pa.get(coll_i);
+                // check if parent exists
+                if (set_colls_i.has(parent_coll_i)) {
+                    to_data.co_pa.set(coll_i, parent_coll_i);
+                }
+            }
+        });
     }
     /**
      * Add a new ent.

@@ -564,6 +564,7 @@ export class ExecuteComponent {
             'console': this.dataService.getLog(),
             'constants': constantList,
             'fileName': this.dataService.flowchart.name,
+            'curr_ss': {},
             'message': null,
             'terminated': false
         };

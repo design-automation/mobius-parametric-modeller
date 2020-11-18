@@ -76,13 +76,28 @@ export function isBBox(data: any): boolean {
 }
 
 
-export function mapSetMerge(source: Map<number, Set<number>>, target: Map<number, Set<number>>): void {
-    source.forEach ( (source_set, source_key) => {
-        if (target.has(source_key)) {
-            const target_set: Set<number> = target.get(source_key);
-            source_set.forEach( num => target_set.add(num) );
-        } else {
-            target.set(source_key, new Set(source_set));
+export function mapSetMerge(source: Map<number, Set<number>>, target: Map<number, Set<number>>, source_keys?: number[]|Set<number>): void {
+    if (source_keys !== undefined) {
+        for (const source_key of source_keys) {
+            const source_set = source.get(source_key);
+            if (source_set === undefined) {
+                throw new Error('Merging map sets failed.');
+            }
+            if (target.has(source_key)) {
+                const target_set: Set<number> = target.get(source_key);
+                source_set.forEach( num => target_set.add(num) );
+            } else {
+                target.set(source_key, new Set(source_set));
+            }
         }
-    });
+    } else {
+        source.forEach ( (source_set, source_key) => {
+            if (target.has(source_key)) {
+                const target_set: Set<number> = target.get(source_key);
+                source_set.forEach( num => target_set.add(num) );
+            } else {
+                target.set(source_key, new Set(source_set)); // deep copy
+            }
+        });
+    }
 }

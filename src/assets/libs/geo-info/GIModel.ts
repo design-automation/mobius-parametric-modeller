@@ -17,7 +17,6 @@ export class GIModel {
     /**
      * Constructor
      */
-    // constructor(model_data?: IModelData) {
     constructor(meta_data?: GIMetaData) {
         if (meta_data === undefined) {
             this.metadata = new GIMetaData();
@@ -57,13 +56,13 @@ export class GIModel {
     }
     /**
      * Add a set of ents from the specified snapshot to the active snapshot.
-     * @param ssid Snapshot to copy ents from
+     * @param from_ssid Snapshot to copy ents from
      * @param ents The list of ents to add.
      */
-    public addEntsToActiveSnapshot(ssid: number, ents: TEntTypeIdx[]) {
-        const ents2: TEntTypeIdx[] = this.modeldata.geom.query.getEntsTree( ents );
-        this.modeldata.geom.snapshot.addEntsToActiveSnapshot(ents2);
-        this.modeldata.attribs.snapshot.addEntsToActiveSnapshot(ssid, ents2);
+    public addEntsToActiveSnapshot(from_ssid: number, ents: TEntTypeIdx[]) {
+        const ents2: TEntTypeIdx[] = this.modeldata.geom.snapshot.getSubEnts( from_ssid, ents );
+        this.modeldata.geom.snapshot.copyEntsToActiveSnapshot(from_ssid, ents2);
+        this.modeldata.attribs.snapshot.copyEntsToActiveSnapshot(from_ssid, ents2);
     }
     /**
      * Gets a set of ents from a snapshot.

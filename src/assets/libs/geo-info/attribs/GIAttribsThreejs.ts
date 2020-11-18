@@ -3,7 +3,6 @@ import { isString } from 'util';
 import { sortByKey } from '../../util/maps';
 import { GIModelData } from '../GIModelData';
 import { GIAttribMapBase } from '../attrib_classes/GIAttribMapBase';
-import { map } from 'rxjs-compat/operator/map';
 
 /**
  * Class for attributes.

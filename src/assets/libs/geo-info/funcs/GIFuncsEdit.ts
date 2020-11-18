@@ -185,7 +185,7 @@ export class GIFuncsEdit {
         // snapshot copy ents (no change to posis)
         // ents_arr = this.modeldata.geom.snapshot.copyObjs(ents_arr, false) as TEntTypeIdx[];
         // get unique verts
-        const map: Map<number, Set<number>> = this.modeldata.geom.query.getEntSets(ents_arr,
+        const map: Map<number, Set<number>> = this.modeldata.geom.query.getEntsMap(ents_arr,
             [EEntType.VERT, EEntType.POINT, EEntType.PLINE, EEntType.PGON] );
         // time stamp
         map.get(EEntType.POINT).forEach( point_i => this.modeldata.getObjsCheckTs(EEntType.POINT, point_i) );
@@ -217,7 +217,7 @@ export class GIFuncsEdit {
         // snapshot copy ents (no change to posis)
         // ents_arr = this.modeldata.geom.snapshot.copyObjs(ents_arr, false) as TEntTypeIdx[];
         // get unique ents
-        const map: Map<number, Set<number>> = this.modeldata.geom.query.getEntSets(ents_arr,
+        const map: Map<number, Set<number>> = this.modeldata.geom.query.getEntsMap(ents_arr,
             [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON] );
         // time stamp
         map.get(EEntType.POINT).forEach( point_i => this.modeldata.getObjsCheckTs(EEntType.POINT, point_i) );
@@ -355,7 +355,7 @@ export class GIFuncsEdit {
         // empty array
         if (ents_arr.length === 0) { return; }
         // create sets
-        const ent_sets: IEntSets = this.modeldata.geom.query.getEntSetsTree(ents_arr);
+        const ent_sets: IEntSets = this.modeldata.geom.snapshot.getSubEntsSets(ssid, ents_arr);
         // delete
         if (ent_sets.ps.size) { this.modeldata.geom.snapshot.delPosis(ssid, Array.from(ent_sets.ps), invert); }
         if (ent_sets.pt.size) { this.modeldata.geom.snapshot.delPoints(ssid, Array.from(ent_sets.pt), true, invert); }

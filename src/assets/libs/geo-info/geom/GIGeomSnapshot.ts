@@ -62,21 +62,21 @@ export class GIGeomSnapshot {
             this.ss_data.get(exist_ssid).pl.forEach ( pline_i => data.pl.add(pline_i) );
             this.ss_data.get(exist_ssid).pg.forEach ( pgon_i => data.pg.add(pgon_i) );
             this.ss_data.get(exist_ssid).co.forEach ( coll_i => data.co.add(coll_i) );
-            // point colls
+            // point -> colls
             mapSetMerge(this.ss_data.get(exist_ssid).pt_co, data.pt_co);
-            // pline colls
+            // pline -> colls
             mapSetMerge(this.ss_data.get(exist_ssid).pl_co, data.pl_co);
-            // pgon colls
+            // pgon -> colls
             mapSetMerge(this.ss_data.get(exist_ssid).pg_co, data.pg_co);
-            // coll points
+            // coll -> points
             mapSetMerge(this.ss_data.get(exist_ssid).co_pt, data.co_pt);
-            // coll plines
+            // coll -> plines
             mapSetMerge(this.ss_data.get(exist_ssid).co_pl, data.co_pl);
-            // coll pgons
+            // coll -> pgons
             mapSetMerge(this.ss_data.get(exist_ssid).co_pg, data.co_pg);
-            // coll children
+            // coll -> children
             mapSetMerge(this.ss_data.get(exist_ssid).co_ch, data.co_ch);
-            // coll parent
+            // coll -> parent (check for conflict)
             this.ss_data.get(exist_ssid).co_pa.forEach ( (parent_i, coll_i) => {
                 if (data.co_pa.has(coll_i)) {
                     if (data.co_pa.get(coll_i) !== parent_i) {
@@ -103,30 +103,56 @@ export class GIGeomSnapshot {
      * Called when executing a global function.
      * @param ent_type
      */
-    public addEntsToActiveSnapshot(ents: TEntTypeIdx[]): void {
+    public copyEntsToActiveSnapshot(from_ssid: number, ents: TEntTypeIdx[]): void {
+        const from_data: ISnapshotData = this.ss_data.get(from_ssid);
+        const to_data: ISnapshotData = this.ss_data.get(this.modeldata.active_ssid);
         for (const [ent_type, ent_i] of ents) {
             if (ent_type === EEntType.POSI || ent_type >= EEntType.POINT) {
-                this.ss_data.get(this.modeldata.active_ssid)[EEntTypeStr[ent_type]].add(ent_i);
+                to_data[EEntTypeStr[ent_type]].add(ent_i);
+                // handle collections
+                if (ent_type === EEntType.COLL) {
+                    // point -> colls
+                    mapSetMerge(from_data.pt_co, to_data.pt_co, from_data.co_pt.get(ent_i));
+                    // pline -> colls
+                    mapSetMerge(from_data.pl_co, to_data.pl_co, from_data.co_pl.get(ent_i));
+                    // pgon -> colls
+                    mapSetMerge(from_data.pg_co, to_data.pg_co, from_data.co_pg.get(ent_i));
+                    // coll -> points
+                    mapSetMerge(from_data.co_pt, to_data.co_pt, [ent_i]);
+                    // coll -> plines
+                    mapSetMerge(from_data.co_pl, to_data.co_pl, [ent_i]);
+                    // coll -> pgons
+                    mapSetMerge(from_data.co_pg, to_data.co_pg, [ent_i]);
+                    // coll -> children
+                    mapSetMerge(from_data.co_ch, to_data.co_ch, [ent_i]);
+                    // coll -> parent
+                    to_data.co_pa.set(ent_i, from_data.co_pa.get(ent_i)); // TODO check if parent exists
+                }
+            } else {
+                throw new Error('Adding entity to snapshot: invalid entity type.');
             }
         }
     }
     /**
-     *
+     * Add a new ent.
+     * If the ent is a collection, then it is assumed that this is a new empty collection.
      * @param ent_type
-     * @param ents_i
+     * @param ent_i
      */
-    public addEnt(ssid: number, ent_type: EEntType, ents_i: number): void {
-        switch (ent_type) {
-            case EEntType.POSI:
-            case EEntType.POINT:
-            case EEntType.PLINE:
-            case EEntType.PGON:
-            case EEntType.COLL:
-                const ent_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[ent_type]];
-                ent_set.add(ents_i);
-                break;
-            default:
-                throw new Error('Adding entity to snapshot: invalid entity type.');
+    public addNewEnt(ssid: number, ent_type: EEntType, ent_i: number): void {
+        const to_data: ISnapshotData = this.ss_data.get(ssid);
+        if (ent_type === EEntType.POSI || ent_type >= EEntType.POINT) {
+            to_data[EEntTypeStr[ent_type]].add(ent_i);
+            // handle collections
+            if (ent_type === EEntType.COLL) {
+                // coll -> obj and children
+                to_data.co_pt.set(ent_i, new Set());
+                to_data.co_pl.set(ent_i, new Set());
+                to_data.co_pg.set(ent_i, new Set());
+                to_data.co_ch.set(ent_i, new Set());
+            }
+        } else {
+            throw new Error('Adding new entity to snapshot: invalid entity type.');
         }
     }
     // ============================================================================
@@ -185,7 +211,24 @@ export class GIGeomSnapshot {
      *
      * @param ent_type
      */
-    public getEntSets(ssid: number): IEntSets {
+    public numEnts(ssid: number, ent_type: EEntType): number {
+        switch (ent_type) {
+            case EEntType.POSI:
+            case EEntType.POINT:
+            case EEntType.PLINE:
+            case EEntType.PGON:
+            case EEntType.COLL:
+                const ent_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[ent_type]];
+                return ent_set.size;
+            default:
+                return this.getEnts(ssid, ent_type).length;
+        }
+    }
+    /**
+     *
+     * @param ent_type
+     */
+    public getAllEntSets(ssid: number): IEntSets {
         const ent_sets: IEntSets = {
             ps: this.ss_data.get(ssid)[EEntTypeStr[EEntType.POSI]],
             pt: this.ss_data.get(ssid)[EEntTypeStr[EEntType.POINT]],
@@ -280,21 +323,119 @@ export class GIGeomSnapshot {
         }
     }
     /**
-     *
-     * @param ent_type
+     * Get the sub ents as a list
+     * @param ents
      */
-    public numEnts(ssid: number, ent_type: EEntType): number {
-        switch (ent_type) {
-            case EEntType.POSI:
-            case EEntType.POINT:
-            case EEntType.PLINE:
-            case EEntType.PGON:
-            case EEntType.COLL:
-                const ent_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[ent_type]];
-                return ent_set.size;
-            default:
-                return this.getEnts(ssid, ent_type).length;
+    public getSubEnts(ssid: number, ents: TEntTypeIdx[]): TEntTypeIdx[] {
+        const ent_sets: IEntSets = this.getSubEntsSets(ssid, ents);
+        const ents_tree: TEntTypeIdx[] = [];
+        ent_sets.ps.forEach( posi_i => ents_tree.push([EEntType.POSI, posi_i]) );
+        ent_sets.obj_ps.forEach( posi_i => ents_tree.push([EEntType.POSI, posi_i]) );
+        ent_sets.pt.forEach( point_i => ents_tree.push([EEntType.POINT, point_i]) );
+        ent_sets.pl.forEach( pline_i => ents_tree.push([EEntType.PLINE, pline_i]) );
+        ent_sets.pg.forEach( pgon_i => ents_tree.push([EEntType.PGON, pgon_i]) );
+        ent_sets.co.forEach( coll_i => ents_tree.push([EEntType.COLL, coll_i]) );
+        return ents_tree;
+    }
+    /**
+     * Returns sets of unique entity indexes, given an array of TEntTypeIdx.
+     * ~
+     * Used for deleting all entities and for adding global function entities to a snapshot.
+     */
+    public getSubEntsSets(ssid: number, ents: TEntTypeIdx[], incl_topo = false, incl_tris = false): IEntSets {
+        const ent_sets: IEntSets = {
+            ps: new Set(),
+            obj_ps: new Set(),
+            pt: new Set(),
+            pl: new Set(),
+            pg: new Set(),
+            co: new Set()
+        };
+        // process all the ents, but not posis of the ents, we will do that at the end
+        for (const ent_arr of ents) {
+            const [ent_type, ent_i]: TEntTypeIdx = ent_arr as TEntTypeIdx;
+            if (ent_type === EEntType.COLL) {
+                // get the descendants of this collection
+                const coll_and_desc_i: number[] = this.modeldata.geom.colls.getCollDescendents(ent_i);
+                coll_and_desc_i.splice(0, 0, ent_i); //  add parent coll to start of list
+                // get all the objs
+                for (const one_coll_i of coll_and_desc_i) {
+                    for (const point_i of this.modeldata.geom.snapshot.getCollPoints(ssid, one_coll_i)) {
+                        ent_sets.pt.add(point_i);
+                    }
+                    for (const pline_i of this.modeldata.geom.snapshot.getCollPlines(ssid, one_coll_i)) {
+                        ent_sets.pl.add(pline_i);
+                    }
+                    for (const pgon_i of this.modeldata.geom.snapshot.getCollPgons(ssid, one_coll_i)) {
+                        ent_sets.pg.add(pgon_i);
+                    }
+                    ent_sets.co.add(one_coll_i);
+                }
+            } else if (ent_type === EEntType.PGON) {
+                ent_sets.pg.add(ent_i);
+            } else if (ent_type === EEntType.PLINE) {
+                ent_sets.pl.add(ent_i);
+            } else if (ent_type === EEntType.POINT) {
+                ent_sets.pt.add(ent_i);
+            } else if (ent_type === EEntType.POSI) {
+                ent_sets.ps.add(ent_i);
+            }
         }
+        // now get all the posis of the objs and add them to the list
+        // also add topo if incl_topo is true
+        if (incl_topo) {
+            ent_sets._v = new Set();
+            ent_sets._e = new Set();
+            ent_sets._w = new Set();
+            if (incl_tris) {
+                ent_sets._t = new Set();
+            }
+        }
+        ent_sets.pt.forEach( point_i => {
+            const posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(EEntType.POINT, point_i);
+            posis_i.forEach( posi_i => {
+                if ( !ent_sets.ps.has(posi_i) ) { ent_sets.obj_ps.add(posi_i); }
+            });
+            if (incl_topo) {
+                ent_sets._v.add(this.modeldata.geom.nav.navPointToVert(point_i) );
+            }
+        });
+        ent_sets.pl.forEach( pline_i => {
+            const posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(EEntType.PLINE, pline_i);
+            posis_i.forEach( posi_i => {
+                if ( !ent_sets.ps.has(posi_i) ) { ent_sets.obj_ps.add(posi_i); }
+            });
+            if (incl_topo) {
+                const wire_i: number = this.modeldata.geom.nav.navPlineToWire(pline_i);
+                const edges_i: number[] = this.modeldata.geom.nav.navWireToEdge(wire_i);
+                const verts_i: number[] = this.modeldata.geom.query.getWireVerts(wire_i);
+                ent_sets._w.add(wire_i);
+                edges_i.forEach( edge_i => ent_sets._e.add(edge_i) );
+                verts_i.forEach( vert_i => ent_sets._v.add(vert_i) );
+            }
+        });
+        ent_sets.pg.forEach( pgon_i => {
+            const posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(EEntType.PGON, pgon_i);
+            posis_i.forEach( posi_i => {
+                if ( !ent_sets.ps.has(posi_i) ) { ent_sets.obj_ps.add(posi_i); }
+            });
+            if (incl_topo) {
+                const wires_i: number[] = this.modeldata.geom.nav.navPgonToWire(pgon_i);
+                wires_i.forEach( wire_i => {
+                    ent_sets._w.add(wire_i);
+                    const edges_i: number[] = this.modeldata.geom.nav.navWireToEdge(wire_i);
+                    const verts_i: number[] = this.modeldata.geom.query.getWireVerts(wire_i);
+                    edges_i.forEach( edge_i => ent_sets._e.add(edge_i) );
+                    verts_i.forEach( vert_i => ent_sets._v.add(vert_i) );
+                });
+                if (incl_tris) {
+                    const tris_i: number[] = this.modeldata.geom.nav_tri.navPgonToTri(pgon_i);
+                    tris_i.forEach( tri_i => ent_sets._t.add(tri_i) );
+                }
+            }
+        });
+        // return the result
+        return ent_sets;
     }
     // ============================================================================
     // Delete geometry locally

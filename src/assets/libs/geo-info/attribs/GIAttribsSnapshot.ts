@@ -65,7 +65,7 @@ export class GIAttribsSnapshot {
      * @param ssid ID of snapshot to copy attributes from.
      * @param ents ID of ents in both ssid and in the active snapshot
      */
-    public addEntsToActiveSnapshot(from_ssid: number, ents: TEntTypeIdx[]): void {
+    public copyEntsToActiveSnapshot(from_ssid: number, ents: TEntTypeIdx[]): void {
         const from_attrib_maps: IAttribsMaps = this.modeldata.attribs.attribs_maps.get(from_ssid);
         for (const [ent_type, ent_i] of ents) {
             const attribs: Map<string, GIAttribMapBase> = from_attrib_maps[EEntTypeStr[ent_type]];

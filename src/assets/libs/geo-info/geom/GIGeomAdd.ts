@@ -30,7 +30,7 @@ export class GIGeomAdd {
         const posi_i: number = this.modeldata.model.metadata.nextPosi();
         this._geom_maps.up_posis_verts.set(posi_i, []);
         // snapshot
-        this.modeldata.geom.snapshot.addEnt(ssid, EEntType.POSI, posi_i);
+        this.modeldata.geom.snapshot.addNewEnt(ssid, EEntType.POSI, posi_i);
         // return entity number
         return posi_i;
     }
@@ -50,7 +50,7 @@ export class GIGeomAdd {
         this.modeldata.attribs.set.setEntAttribVal(EEntType.POINT, point_i,
             EAttribNames.TIMESTAMP, this.modeldata.active_ssid);
         // snapshot
-        this.modeldata.geom.snapshot.addEnt(ssid, EEntType.POINT, point_i);
+        this.modeldata.geom.snapshot.addNewEnt(ssid, EEntType.POINT, point_i);
         // return entity number
         return point_i;
     }
@@ -78,7 +78,7 @@ export class GIGeomAdd {
         this.modeldata.attribs.set.setEntAttribVal(EEntType.PLINE, pline_i,
             EAttribNames.TIMESTAMP, this.modeldata.active_ssid);
         // snapshot
-        this.modeldata.geom.snapshot.addEnt(ssid, EEntType.PLINE, pline_i);
+        this.modeldata.geom.snapshot.addNewEnt(ssid, EEntType.PLINE, pline_i);
         // return entity number
         return pline_i;
     }
@@ -121,7 +121,7 @@ export class GIGeomAdd {
         this.modeldata.attribs.set.setEntAttribVal(EEntType.PGON, pgon_i,
             EAttribNames.TIMESTAMP, this.modeldata.active_ssid);
         // snapshot
-        this.modeldata.geom.snapshot.addEnt(ssid, EEntType.PGON, pgon_i);
+        this.modeldata.geom.snapshot.addNewEnt(ssid, EEntType.PGON, pgon_i);
         // return entity number
         return pgon_i;
     }
@@ -138,7 +138,7 @@ export class GIGeomAdd {
         const coll_i: number = this.modeldata.model.metadata.nextColl();
         this._geom_maps.colls.add(coll_i);
         // snapshot
-        this.modeldata.geom.snapshot.addEnt(ssid, EEntType.COLL, coll_i);
+        this.modeldata.geom.snapshot.addNewEnt(ssid, EEntType.COLL, coll_i);
         // return entity number
         return coll_i;
     }

@@ -91,7 +91,7 @@ export class GIGeomImpExp {
             const other_posi_i: number = renum_posis_map.get(gi_data.posis_i[i]);
             this._geom_maps.up_posis_verts.set(other_posi_i, []);
             // snapshot
-            this.modeldata.geom.snapshot.addEnt(ssid, EEntType.POSI, other_posi_i);
+            this.modeldata.geom.snapshot.addNewEnt(ssid, EEntType.POSI, other_posi_i);
         }
         // add vertices to model
         for (let i = 0; i < gi_data.verts_i.length; i++) {
@@ -175,7 +175,7 @@ export class GIGeomImpExp {
             // timestamp
             this.modeldata.updateEntTs(EEntType.POINT, other_point_i);
             // snapshot
-            this.modeldata.geom.snapshot.addEnt(ssid, EEntType.POINT, other_point_i);
+            this.modeldata.geom.snapshot.addNewEnt(ssid, EEntType.POINT, other_point_i);
         }
         // add plines to model
         for (let i = 0; i < gi_data.plines_i.length; i++) {
@@ -188,7 +188,7 @@ export class GIGeomImpExp {
             // timestamp
             this.modeldata.updateEntTs(EEntType.PLINE, other_pline_i);
             // snapshot
-            this.modeldata.geom.snapshot.addEnt(ssid, EEntType.PLINE, other_pline_i);
+            this.modeldata.geom.snapshot.addNewEnt(ssid, EEntType.PLINE, other_pline_i);
         }
         // add pgons to model
         // for (let i = 0; i < gi_data.pgons_i.length; i++) {
@@ -220,7 +220,7 @@ export class GIGeomImpExp {
             // timestamp
             this.modeldata.updateEntTs(EEntType.PGON, other_pgon_i);
             // snapshot
-            this.modeldata.geom.snapshot.addEnt(ssid, EEntType.PGON, other_pgon_i);
+            this.modeldata.geom.snapshot.addNewEnt(ssid, EEntType.PGON, other_pgon_i);
         }
         // add colls to model
         for (let i = 0; i < gi_data.colls_i.length; i++) {
@@ -228,7 +228,7 @@ export class GIGeomImpExp {
             // set
             this._geom_maps.colls.add( renum_colls_map.get(other_coll_i) );
             // snapshot
-            this.modeldata.geom.snapshot.addEnt(ssid, EEntType.COLL, other_coll_i);
+            this.modeldata.geom.snapshot.addNewEnt(ssid, EEntType.COLL, other_coll_i);
         }
         // ========================================================================================
         // return the maps

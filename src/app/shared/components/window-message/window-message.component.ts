@@ -58,7 +58,11 @@ export class WindowMessageComponent {
                 if (event.data.url) {
                     const LoadUrlComp = new LoadUrlComponent(this.dataService, this.router);
                     const url = LoadUrlComp.extractUrl('file=' + event.data.url);
-                    LoadUrlComp.loadURL(url, null, event.data.keepSettings, event.data.params);
+                    const loadURLSettings = {
+                        keepSettings: event.data.keepSettings,
+                        keepCamera: event.data.keepCamera
+                    };
+                    LoadUrlComp.loadURL(url, null, loadURLSettings, event.data.params);
                 } else if (event.data.params) {
                     if (!event.data.params) {
                         return;

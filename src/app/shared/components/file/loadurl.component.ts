@@ -77,7 +77,7 @@ export class LoadUrlComponent {
         return url;
     }
 
-    async loadURL(url: string, nodeID?: number, keepSettings?: boolean, newParams?: any): Promise<boolean> {
+    async loadURL(url: string, nodeID?: number, loadURLSettings?: any, newParams?: any): Promise<boolean> {
         const p = new Promise((resolve) => {
             const request = new XMLHttpRequest();
 
@@ -125,7 +125,7 @@ export class LoadUrlComponent {
         SaveFileComponent.clearModelData(this.dataService.flowchart, null);
         delete this.dataService.file.flowchart;
         this.dataService.file = loadeddata;
-        if (!keepSettings) {
+        if (loadURLSettings && !loadURLSettings.keepSettings) {
             if (updateLocalViewerSettings(loadeddata.settings)) {
                 this.dataService.viewerSettingsUpdated = true;
             }
@@ -174,7 +174,7 @@ export class LoadUrlComponent {
         }
         setTimeout(() => {
             const zoomFlowchart = document.getElementById('zoomToFit');
-            if (zoomFlowchart) { zoomFlowchart.click(); }
+            if (zoomFlowchart && (!loadURLSettings || !loadURLSettings.keepCamera)) { zoomFlowchart.click(); }
             let executeB = document.getElementById('executeButton');
             if (executeB && this.dataService.mobiusSettings.execute) { executeB.click(); }
             executeB = null;

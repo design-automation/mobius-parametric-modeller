@@ -36,6 +36,8 @@ export class AttributeComponent implements OnChanges {
     showSelected = false;
     currentShowingCol = '';
     shiftKeyPressed = false;
+    preventSimpleClick;
+    timer;
 
     tabs: { type?: number, title: string }[] = [
         { type: EEntType.POSI, title: 'Positions' },
@@ -190,6 +192,7 @@ export class AttributeComponent implements OnChanges {
                     // new_columns.splice(new_columns.length - 1, 0, '_topo')
                 } else if (this.tab_map[tabIndex] === EEntType.COLL) {
                 }
+                this.displayData = this.displayData.sort((a, b) => Number(a['_id'].slice(2)) - Number(b['_id'].slice(2)));
                 this.displayedColumns = new_columns;
                 this.dataSource = new MatTableDataSource<object>(this.displayData);
             } else {
@@ -358,6 +361,23 @@ export class AttributeComponent implements OnChanges {
 //       });
 //     }
 //   }
+    singleClick(ent_id: string, event): void{
+        this.timer = 0;
+        this.preventSimpleClick = false;
+
+        this.timer = setTimeout(() => {
+            if (!this.preventSimpleClick) {
+                this.selectRow(ent_id, event);
+            }
+        }, 200);
+
+    }
+
+    doubleClick(ent_id: string, tabIndex): void {
+        this.preventSimpleClick = true;
+        clearTimeout(this.timer);
+        this.showTopo(ent_id, tabIndex);
+    }
 
     selectRow(ent_id: string, event) {
         const currentTab = this.getCurrentTab();
@@ -475,18 +495,38 @@ export class AttributeComponent implements OnChanges {
         }
 
         const ent_type = ent_id.substr(0, 2);
-        const target = event.target;
         this.selected_ents.clear();
         if (s.size === 1) {
             this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: id });
             this.selected_ents.set(ent_id, id);
-            target.parentNode.classList.add('selected-row');
         } else {
             this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: s });
             s.forEach(_id => {
                 this.selected_ents.set(ent_id, id);
             });
         }
+        for (const row of this.dataSource.data) {
+            row['selected'] = false;
+        }
+        for (const selNumID of s) {
+            const selID = ent_type + selNumID[1];
+            for (const row of this.dataSource.data) {
+                if (row['_id'] === selID) {
+                    row['selected'] = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    showTopo(ent_id: string, tabIndex) {
+        const ThreeJSData = this.model.modeldata.attribs.threejs;
+        const id = Number(ent_id.substr(2));
+        console.log(this.tab_map[tabIndex], id)
+        const topoData = ThreeJSData.getEntSubAttribsForTable(this.nodeIndex, this.tab_map[tabIndex], id, EEntType.POSI);
+        console.log(topoData);
+
+        // this.dataSourceTopo
     }
 
     add_remove_selected(ent_id, event) {

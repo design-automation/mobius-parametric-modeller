@@ -4,6 +4,7 @@ import { DataThreejs } from './data.threejs';
 // import @angular stuff
 import { Injectable } from '@angular/core';
 import { DataService as DS } from '@services';
+import { MatTableDataSource } from '@angular/material';
 /**
  * DataService
  * The data service for the Goe-Info viewer.
@@ -12,6 +13,8 @@ import { DataService as DS } from '@services';
 export class DataService {
     // GI Model
     // private _model: GIModel;
+    private static _tableDataSource: MatTableDataSource<object>;
+
     private _data_threejs: DataThreejs;
 
     selecting: any = [];
@@ -72,4 +75,8 @@ export class DataService {
     clearAll() {
         this.selected_ents.forEach(selected_ents => selected_ents.clear());
     }
+
+    get tableDataSource() {return DataService._tableDataSource; }
+    set tableDataSource(dataSource: any) {DataService._tableDataSource = dataSource; }
+
 }

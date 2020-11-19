@@ -48,11 +48,6 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
             { tab: 6, title: 'Polygons' }
         ];
 
-    // topo_dropdown;
-    // topo_text = 'Topo';
-    // topoActive = false;
-    // topo_open = false;
-
     // contentChildren are set
     ngAfterContentInit() {
         setTimeout(() => {// get all active tabs
@@ -71,14 +66,11 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
         this.object_dropdown = document.getElementById('object_dropdown');
         this.object_dropdown.style.display = 'none';
 
-        // this.topo_dropdown = document.getElementById('topo_dropdown');
-        // this.topo_dropdown.style.display = 'none';
     }
 
     ngOnDestroy() {
         this.topology_dropdown = null;
         this.object_dropdown = null;
-        // this.topo_dropdown = null;
     }
 
     selectTab(tab: number) {
@@ -103,12 +95,6 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
         }
         this.object_text = 'Objects';
         this.object_open = false;
-
-        // if (this.topo_dropdown) {
-        //     this.topo_dropdown.style.display = 'none';
-        // }
-        // this.topo_text = 'Topo';
-        // this.topo_open = false;
     }
 
     selectTopology(tab: number, event?: Event) {
@@ -145,24 +131,11 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
         this.object_open = false;
     }
 
-    // selectTopo(tab: string, event: Event) {
-    //     this.tab_active = 9;
-    //     this.topo_text = tab;
-    //     this.topo_open = false;
-    //     if (event !== undefined) {
-    //         // @ts-ignore
-    //         event.target.parentElement.style.display = 'none';
-    //     }
-    // }
-
     showTDropdown() {
         this.object_text = 'Objects';
         this.object_open = false;
-        // this.topo_text = 'Topo';
-        // this.topo_open = false;
         if (!this.topology_dropdown) { return; }
         this.object_dropdown.style.display = 'none';
-        // this.topo_dropdown.style.display = 'none';
         if (this.topology_dropdown.style.display === 'none') {
             this.topology_dropdown.style.display = 'block';
             this.topology_open = true;
@@ -175,12 +148,8 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
     showODropdown() {
         this.topology_text = 'Topology';
         this.topology_open = false;
-        // this.topo_text = 'Topo';
-        // this.topo_open = false;
-        // this.tabs.toArray().forEach(_tab => _tab.active = false);
         if (!this.object_dropdown) { return; }
         this.topology_dropdown.style.display = 'none';
-        // this.topo_dropdown.style.display = 'none';
         if (this.object_dropdown.style.display === 'none') {
             this.object_dropdown.style.display = 'block';
             this.object_open = true;
@@ -189,23 +158,5 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
             this.object_open = false;
         }
     }
-
-    // showTPDropdown() {
-    //     this.topology_text = 'Topology';
-    //     this.topology_open = false;
-    //     this.object_text = 'Objects';
-    //     this.object_open = false;
-    //     // this.tabs.toArray().forEach(_tab => _tab.active = false);
-    //     if (!this.topo_dropdown) { return; }
-    //     this.object_dropdown.style.display = 'none';
-    //     this.topology_dropdown.style.display = 'none';
-    //     if (this.topo_dropdown.style.display === 'none') {
-    //         this.topo_dropdown.style.display = 'block';
-    //         this.topo_open = true;
-    //     } else {
-    //         this.topo_dropdown.style.display = 'none';
-    //         this.topo_open = false;
-    //     }
-    // }
 
 }

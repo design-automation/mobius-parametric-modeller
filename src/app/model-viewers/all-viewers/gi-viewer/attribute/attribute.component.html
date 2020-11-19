@@ -9,7 +9,7 @@
                       <span [class]='label'></span>
                     </dd>
                 </dl> -->
-                <table mat-table [dataSource]="dataSource" matSort [class] = 'columnItalic' id = 'attribTable'>
+                <table mat-table [dataSource]="dataSource" matSort class='c2' id = 'attribTable'>
                     <ng-container *ngFor="let column of displayedColumns;" [matColumnDef]="column" [sticky] = 'column === "_id"'>
                         <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="updateSortHeader($event, column)"> {{column}} 
                             <i class="material-icons" (click)="showAttribLabel($event, column)" [class.active]="currentShowingCol === column">visibility</i>
@@ -17,20 +17,28 @@
                         <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
                     </ng-container>
                     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.selected-row]='row.selected' (click)="singleClick(row._id, $event)" (dblclick)="doubleClick(row._id, i)"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.selected-row]='row.selected' (click)="selectRow(row._id, $event)" (dblclick)="showTopo(row._id, i)"></tr>
                 </table>
-                <div *ngIf="dataSource && dataSource.data.length === 0" class="emptyMessage">
+                <div *ngIf="dataSource.data.length === 0" class="emptyMessage">
                   No Data
                 </div>
                  
               </div>
         </ng-container>
         <ng-template #topoTemplate>
-            <div class = "table--container" >
-                <button class='topoUtilButton'><mat-icon>keyboard_arrow_left</mat-icon></button>
+            <div id='topotable--container' class = "table--container" >
+                <table mat-table [dataSource]="dataSourceTopo" matSort class='c3' id = 'attribTable'>
+                    <ng-container *ngFor="let column of displayedTopoColumns;" [matColumnDef]="column" [sticky] = 'column === "_id"'>
+                        <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+                        <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedTopoColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedTopoColumns;" (click)='generateTopoTable(topoID, topoTabIndex, row.__id__)' [class.selected-row]='row.selected'></tr>
+                </table>
+                <!-- <button class='topoUtilButton'><mat-icon>keyboard_arrow_left</mat-icon></button>
                 <button class='topoUtilButton center'><mat-icon>keyboard_arrow_up</mat-icon></button>
-                <button class='topoUtilButton'><mat-icon>keyboard_arrow_right</mat-icon></button>
-                <div class="emptyTopoMessage">
+                <button class='topoUtilButton'><mat-icon>keyboard_arrow_right</mat-icon></button> -->
+                <div *ngIf="dataSourceTopo.data.length === 0" class="emptyTopoMessage">
                     No Topo Data
                 </div>
             </div>

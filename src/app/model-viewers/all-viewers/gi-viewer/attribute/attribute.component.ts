@@ -10,6 +10,7 @@ import { DataService } from '../data/data.service';
 import { EEntType, EEntTypeStr } from '@libs/geo-info/common';
 import { GIAttribsThreejs } from '@assets/libs/geo-info/attribs/GIAttribsThreejs';
 import { ATabsComponent } from './tabs.component';
+import { _EEntType } from '@assets/core/modules/basic/attrib';
 
 enum SORT_STATE {
     DEFAULT,
@@ -52,8 +53,6 @@ export class AttributeComponent implements OnChanges {
         { title: 'Obj Topo' },
         { title: 'Col Topo' }
     ];
-    displayedColumns: string[] = [];
-    displayData: {}[] = [];
     selected_ents = new Map();
     multi_selection = new Map();
     last_selected;
@@ -68,7 +67,14 @@ export class AttributeComponent implements OnChanges {
     @ViewChildren(MatSort) sort = new QueryList<MatSort>();
 
     dataSource: MatTableDataSource<object>;
+    displayedColumns: string[] = [];
+    displayData: {}[] = [];
+
+
     dataSourceTopo: MatTableDataSource<object>;
+    displayedTopoColumns: string[] = [];
+    topoID: string;
+    topoTabIndex: number;
 
     protected dataService: DataService;
 
@@ -97,6 +103,28 @@ export class AttributeComponent implements OnChanges {
         10: 9
     };
 
+    indent_map = {
+        'ps': 0,
+        '_v': 1,
+        '_e': 2,
+        '_w': 3,
+        'pt': 4,
+        'pl': 4,
+        'pg': 4,
+        'co': 5,
+    };
+
+    string_map = {
+        'ps': EEntType.POSI,
+        '_v': EEntType.VERT,
+        '_e': EEntType.EDGE,
+        '_w': EEntType.WIRE,
+        'pt': EEntType.POINT,
+        'pl': EEntType.PLINE,
+        'pg': EEntType.PGON,
+        'co': EEntType.COLL,
+    };
+
     columnItalic = 'c2';
 
     constructor(injector: Injector) {
@@ -104,6 +132,10 @@ export class AttributeComponent implements OnChanges {
         if (localStorage.getItem('mpm_attrib_current_tab') === null) {
             localStorage.setItem('mpm_attrib_current_tab', '0');
         }
+        this.dataSource = new MatTableDataSource();
+        this.dataSource.sortingDataAccessor = this._sortingDataAccessor;
+        this.dataSourceTopo = new MatTableDataSource();
+        this.dataSourceTopo.sortingDataAccessor = this._sortingDataAccessor;
     }
 
     // ngDoCheck() {
@@ -162,7 +194,7 @@ export class AttributeComponent implements OnChanges {
                             return row.selected = true;
                         }
                     });
-                    this.displayData = SelectedAttribData;
+                    this.displayData = SelectedAttribData.sort((a, b) => Number(a['_id'].slice(2)) - Number(b['_id'].slice(2)));
                 } else {
                     const AllAttribData = ThreeJSData.getAttribsForTable(this.nodeIndex, this.tab_map[tabIndex]).data;
                     AllAttribData.map(row => {
@@ -170,7 +202,7 @@ export class AttributeComponent implements OnChanges {
                             return row.selected = true;
                         }
                     });
-                    this.displayData = AllAttribData;
+                    this.displayData = AllAttribData.sort((a, b) => Number(a['_id'].slice(2)) - Number(b['_id'].slice(2)));
                 }
             }
             if (this.displayData.length > 0) {
@@ -187,19 +219,13 @@ export class AttributeComponent implements OnChanges {
                     // : [first, second, ...rest_of_columns, ' '];
                     new_columns = selected ? [first, selected, ...rest_of_columns, ' '] : [first, ...rest_of_columns, ' '];
                 }
-                if (this.tab_map[tabIndex] === EEntType.POINT || this.tab_map[tabIndex] === EEntType.PLINE || this.tab_map[tabIndex] === EEntType.PGON) {
-                    this.displayData.forEach(row => row['_topo'] = '<button>></button>')
-                    // new_columns.splice(new_columns.length - 1, 0, '_topo')
-                } else if (this.tab_map[tabIndex] === EEntType.COLL) {
-                }
-                this.displayData = this.displayData.sort((a, b) => Number(a['_id'].slice(2)) - Number(b['_id'].slice(2)));
                 this.displayedColumns = new_columns;
-                this.dataSource = new MatTableDataSource<object>(this.displayData);
+                this.dataSource.data = this.displayData;
+                // this.dataSource = new MatTableDataSource<object>(this.displayData);
             } else {
                 this.displayedColumns = [];
-                this.dataSource = new MatTableDataSource<object>();
+                this.dataSource.data = [];
             }
-            this.dataSource.sortingDataAccessor = this._sortingDataAccessor;
             this.dataSource.paginator = this.paginator.toArray()[tabIndex];
             this.dataSource.sort = this.sort.toArray()[tabIndex];
             if (this.table_scroll) {
@@ -212,8 +238,52 @@ export class AttributeComponent implements OnChanges {
         return tabIndex;
     }
 
-    generateTopoTable() {
+    generateTopoTable(ent_id: string, tabIndex: number, selected_type: string): boolean {
+        const currentScroll = document.getElementById('topotable--container').scrollTop;
+        const ThreeJSData = this.model.modeldata.attribs.threejs;
+        const id = Number(ent_id.substr(2));
+        const selected_type_str = selected_type.slice(0, 2);
+        console.log(selected_type, selected_type_str, this.string_map[selected_type_str])
+        const topoData = ThreeJSData.getEntSubAttribsForTable(this.nodeIndex, this.tab_map[tabIndex], id, this.string_map[selected_type_str]);
+        const baseIndent = this.indent_map[ent_id.slice(0, 2)];
+        if (!topoData) {
+            return false;
+        }
+        const topoDataSource = [];
+        const topoHeader = [];
+        for (const topoRow of topoData) {
+            // @ts-ignore
+            const tableRow = Object.fromEntries(topoRow);
+            if ((<string> topoRow.get('_id')).slice(0, 2) === selected_type_str) {
+                if (topoHeader.length === 0) {
+                    for (const attr of topoRow) {
+                        topoHeader.push(attr[0]);
+                    }
+                }
+                tableRow.selected = true;
+            }
+            const indentation = baseIndent - this.indent_map[tableRow._id.slice(0, 2)];
+            tableRow.__id__ = tableRow._id;
+            tableRow._id = '  '.repeat(indentation) + '| ' + tableRow._id;
+            topoDataSource.push(tableRow);
+        }
+        topoDataSource[0].selected = true;
 
+        if (topoHeader.length === 0) { topoHeader.push('_id'); }
+        topoHeader.push(' ');
+
+        this.displayedTopoColumns = topoHeader;
+        this.dataSourceTopo.data = topoDataSource;
+        if (this.topoTabIndex === tabIndex && this.topoID === ent_id) {
+            setTimeout(() => {
+                document.getElementById('topotable--container').scrollTop = currentScroll;
+            }, 0);
+
+        } else {
+            this.topoTabIndex = tabIndex;
+            this.topoID = ent_id;
+        }
+        return true;
     }
 
     _sortingDataAccessor(data: object, headerID: string): string|number {
@@ -240,8 +310,9 @@ export class AttributeComponent implements OnChanges {
             }
             if (tabIndex === 999) {
                 this.displayedColumns = [];
-                this.dataSource = new MatTableDataSource<object>();
-                this.dataSource.sortingDataAccessor = this._sortingDataAccessor;
+                // this.dataSource = new MatTableDataSource<object>();
+                this.dataSource.data = [];
+                // this.dataSource.sortingDataAccessor = this._sortingDataAccessor;
             } else if (tabIndex === 9) {
             } else if (tabIndex === 10) {
             } else {
@@ -520,13 +591,11 @@ export class AttributeComponent implements OnChanges {
     }
 
     showTopo(ent_id: string, tabIndex) {
-        const ThreeJSData = this.model.modeldata.attribs.threejs;
-        const id = Number(ent_id.substr(2));
-        console.log(this.tab_map[tabIndex], id)
-        const topoData = ThreeJSData.getEntSubAttribsForTable(this.nodeIndex, this.tab_map[tabIndex], id, EEntType.POSI);
-        console.log(topoData);
-
-        // this.dataSourceTopo
+        if (!this.generateTopoTable(ent_id, tabIndex, 'ps')) {
+            return;
+        }
+        const switchTabButton = document.getElementById('ObjTopoTab');
+        if (switchTabButton) { switchTabButton.click(); }
     }
 
     add_remove_selected(ent_id, event) {

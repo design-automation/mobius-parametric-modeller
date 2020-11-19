@@ -34,6 +34,8 @@ table {
   width: 100%;
   font-family: sans-serif;
   background-color: transparent;
+  border-spacing: 0px;
+  border-collapse: collapse;
   th{
     i {
       color: rgba(117,117,117,0.5);
@@ -133,6 +135,9 @@ table {
 table{
   &.c2{
     tr.mat-row .mat-cell:nth-child(2), th:nth-child(2){font-style: italic}
+  }
+  &.c3{
+    white-space: pre;
   }
 }
 

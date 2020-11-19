@@ -216,11 +216,11 @@ export class GIAttribsThreejs {
      */
     public getEntSubAttribsForTable(ssid: number, ent_type: EEntType, ent_i: number, level: EEntType): Array<Map< string, TAttribDataTypes >> {
         const data: Array<Map< string, TAttribDataTypes >> = [];
-        const attribs_maps_key: string = EEntTypeStr[ent_type];
-        const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
-        const data_headers: Map< string, TAttribDataTypes > = new Map();
-        attribs.forEach( (attrib, attrib_name) => data_headers.set(attrib_name, attrib.getDataType()) );
-        data.push(data_headers);
+        // const attribs_maps_key: string = EEntTypeStr[level];
+        // const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
+        // const data_headers: Map< string, TAttribDataTypes > = new Map();
+        // attribs.forEach( (attrib, attrib_name) => data_headers.set(attrib_name, attrib.getDataType()) );
+        // data.push(data_headers);
         data.push(this._addEntSubAttribs(ssid, ent_type, ent_i, level));
         switch (ent_type) {
             case EEntType.COLL:

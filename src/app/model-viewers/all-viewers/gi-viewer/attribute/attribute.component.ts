@@ -365,8 +365,9 @@ export class AttributeComponent implements OnChanges {
     }
 
     resetTable() {
-        const rows = document.querySelectorAll('.selected-row');
-        rows.forEach(row => row.classList.remove('selected-row'));
+        for (const row of this.dataSource.data) {
+            row['selected'] = false;
+        }
         this.selected_ents.clear();
         this.multi_selection.clear();
     }

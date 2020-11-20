@@ -104,8 +104,8 @@ export class AttributeComponent implements OnChanges {
     };
 
     indent_map = {
-        'ps': 0,
-        '_v': 1,
+        'ps': 1,
+        '_v': 2,
         '_e': 2,
         '_w': 3,
         'pt': 4,
@@ -263,7 +263,7 @@ export class AttributeComponent implements OnChanges {
             }
             const indentation = baseIndent - this.indent_map[tableRow._id.slice(0, 2)];
             tableRow.__id__ = tableRow._id;
-            tableRow._id = '  '.repeat(indentation) + '| ' + tableRow._id;
+            tableRow._id = '    '.repeat(indentation) + tableRow._id;
             topoDataSource.push(tableRow);
         }
         topoDataSource[0].selected = true;
@@ -365,8 +365,9 @@ export class AttributeComponent implements OnChanges {
     }
 
     resetTable() {
-        const rows = document.querySelectorAll('.selected-row');
-        rows.forEach(row => row.classList.remove('selected-row'));
+        for (const row of this.dataSource.data) {
+            row['selected'] = false;
+        }
         this.selected_ents.clear();
         this.multi_selection.clear();
     }

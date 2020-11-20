@@ -285,16 +285,16 @@ export class GIAttribsThreejs {
             if (attrib_value && attrib_value.constructor === {}.constructor) {
                 data_map.set(`${attrib_name}`, JSON.stringify(attrib_value));
             } else if ( data_size > 1 ) {
-                // if (attrib_value === undefined) {
-                //     for (let idx = 0; idx < data_size; idx++) {
-                //         data_map.set(`${attrib_name}[${idx}]`] = undefined;
-                //     }
-                // } else {
+                if (attrib_value === undefined) {
+                    for (let idx = 0; idx < data_size; idx++) {
+                        data_map.set(`${attrib_name}[${idx}]`, undefined);
+                    }
+                } else {
                     (attrib_value as TAttribDataTypes[]).forEach( (v, idx) => {
                         const _v =  v;
                         data_map.set(`${attrib_name}[${idx}]`,  _v);
                     });
-                // }
+                }
             } else {
                 if (ent_type === EEntType.POSI && Array.isArray(attrib_value)) {
                     if (attrib_name === 'xyz') {

@@ -242,7 +242,8 @@ export class AttributeComponent implements OnChanges {
         const currentScroll = document.getElementById('topotable--container').scrollTop;
         const ThreeJSData = this.model.modeldata.attribs.threejs;
         const id = Number(ent_id.substr(2));
-        const selected_type_str = selected_type.slice(0, 2);
+        let selected_type_str = selected_type.slice(0, 2);
+        if (ent_id.slice(0, 2) === 'co' && selected_type_str === 'ps') { selected_type_str = 'co'; }
         const topoData = ThreeJSData.getEntSubAttribsForTable(this.nodeIndex, this.tab_map[tabIndex], id, this.string_map[selected_type_str]);
         const baseIndent = this.indent_map[ent_id.slice(0, 2)];
         if (!topoData) {
@@ -265,10 +266,14 @@ export class AttributeComponent implements OnChanges {
             tableRow.__id__ = tableRow._id;
             tableRow._id = '    '.repeat(indentation) + tableRow._id;
             topoDataSource.push(tableRow);
+            if (selected_type_str === 'co') {
+                tableRow._id = '    ' + tableRow._id;
+            }
         }
+        topoDataSource[0]._id = topoDataSource[0]._id.trim();
         topoDataSource[0].selected = true;
 
-        if (topoHeader.length === 0) { topoHeader.push('_id'); }
+        // if (topoHeader.length === 0) { topoHeader.push('_id'); }
         topoHeader.push(' ');
 
         this.displayedTopoColumns = topoHeader;

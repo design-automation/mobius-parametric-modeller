@@ -311,6 +311,17 @@ export class ExecuteComponent {
                           hud: hudData
                         }
                     });
+
+                    const mainPanelCheck = document.getElementById('headerDialog')
+                    const mobius_settings = this.dataService.mobiusSettings;
+                    if (mobius_settings['autosave'] && mainPanelCheck) { 
+                        let fileName = this.dataService.flowchart.name.replace(/\s/g, '_');
+                        if (fileName.length < 4 || fileName.slice(-4) !== '.mob') {
+                            fileName += '.mob';
+                        }
+                        SaveFileComponent.saveFileToLocal(fileName, this.dataService.file);
+                        this.dataService.notifyMessage(`Auto-saving Flowchart as ${fileName}`);
+                    }
                 }, 20);
             }
         } catch (ex) {

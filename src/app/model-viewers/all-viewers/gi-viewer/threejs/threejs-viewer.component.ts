@@ -60,7 +60,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     // right selection dropdown
     // public needSelect = false;
     // current entity type enabled for selection
-    public SelectingEntityType: { id: number, name: string } = { id: EEntType.PGON, name: 'Polygons' };
+    public SelectingEntityType: { id: number, name: string };
     public selectDropdownVisible = false;
     public selections = [
         { id: EEntType.POSI, name: 'Positions' },
@@ -128,6 +128,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this._elem = elem;
         this.dataService = injector.get(DataService);
         this.modalWindow = injector.get(ModalService);
+        this.SelectingEntityType = this.dataService.selectingEntityType;
         // this.keyboardService = injector.get(KeyboardService);
         // this.keyboardServiceSub = this.keyboardService.viewerControl$.subscribe(event => {
         //     this._data_threejs.onWindowKeyPress(event);
@@ -172,7 +173,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             });
         }
 
-        this.getSelectingEntityType();
+        // this.getSelectingEntityType();
 
         this._data_threejs.switchCamera(false);
 
@@ -302,7 +303,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
 
     refreshLabels(ent_type): void {
-        if (!this.SelectingEntityType.id && this.SelectingEntityType.id !== 0) { return; }
+        if (!this.dataService.selectingEntityType.id && this.dataService.selectingEntityType.id !== 0) { return; }
         const allLabels = document.getElementsByClassName(`text-label${EEntTypeStr[ent_type]}`);
         const unSorted = this.dataService.selected_ents.get(EEntTypeStr[ent_type]);
         if (unSorted === undefined) {
@@ -371,7 +372,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 element.innerHTML = String(index);
             }
         } else {
-            const ent_arr = this.model.modeldata.geom.query.getEnts(this.SelectingEntityType.id);
+            const ent_arr = this.model.modeldata.geom.query.getEnts(this.dataService.selectingEntityType.id);
             for (let i = 0; i < allLabels.length; i++) {
                 const element = allLabels[i];
                 const val = Number(element.getAttribute('data-index'));
@@ -582,7 +583,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     sessionStorage.setItem('mpm_showSelected', 'false');
                     sessionStorage.setItem('mpm_changetab', 'false');
                 }
-                this.getSelectingEntityType();
+                // this.getSelectingEntityType();
                 this.refreshTable();
 
             } catch (ex) {
@@ -698,7 +699,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     this.dropdownPosition = { x: pos_x, y: pos_y };
                 }
                 let intsType = '';
-                switch (this.SelectingEntityType.id) {
+                switch (this.dataService.selectingEntityType.id) {
                     case EEntType.POSI:
                     case EEntType.POINT:
                     case EEntType.VERT:
@@ -769,7 +770,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             map.clear();
         });
         scene.scene_objs_selected.clear();
-        // if (this.SelectingEntityType.id === EEntTypeStr[EEntType.COLL]) {
+        // if (this.dataService.selectingEntityType.id === EEntTypeStr[EEntType.COLL]) {
         //     document.getElementById('executeButton').click();
         // }
         const positions = Array.from(scene.selected_positions.keys());
@@ -797,33 +798,30 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }, 0);
     }
 
-    private getSelectingEntityType() {
-        const select = JSON.parse(localStorage.getItem('mpm_settings'))['select'];
-        const default_selector = { id: EEntType.PGON, name: 'Polygons' };
-        if (select && select.enabledselector) {
-            this.selections = [];
-            for (const i in select.enabledselector) {
-                if (select.enabledselector[i] && this.default_selections[i]) { this.selections.push( this.default_selections[i]); }
-            }
-        }
-        if (select !== undefined && select.selector && this.selections.indexOf(select.selector) !== -1) {
-            this.SelectingEntityType = select.selector;
-        } else if (this.selections.indexOf(default_selector) !== -1) {
-            this.SelectingEntityType = default_selector;
-        } else if (this.selections.length > 0) {
-            this.SelectingEntityType = this.selections[0];
-        } else {
-            this.SelectingEntityType =  {id: null, name: null};
-        }
-        // if (localStorage.getItem('mpm_selecting_entity_type') != null) {
-        //     this.SelectingEntityType = JSON.parse(localStorage.getItem('mpm_selecting_entity_type'));
-        // }
-    }
+    // private getSelectingEntityType() {
+    //     const select = JSON.parse(localStorage.getItem('mpm_settings'))['select'];
+    //     const default_selector = { id: EEntType.PGON, name: 'Polygons' };
+    //     if (select && select.enabledselector) {
+    //         this.selections = [];
+    //         for (const i in select.enabledselector) {
+    //             if (select.enabledselector[i] && this.default_selections[i]) { this.selections.push( this.default_selections[i]); }
+    //         }
+    //     }
+    //     if (select !== undefined && select.selector && this.selections.indexOf(select.selector) !== -1) {
+    //         this.dataService.selectingEntityType = select.selector;
+    //     } else if (this.selections.indexOf(default_selector) !== -1) {
+    //         this.dataService.selectingEntityType = default_selector;
+    //     } else if (this.selections.length > 0) {
+    //         this.dataService.selectingEntityType = this.selections[0];
+    //     } else {
+    //         this.dataService.selectingEntityType =  {id: null, name: null};
+    //     }
+    // }
 
     private selectObj(intersect0: THREE.Intersection) {
         const scene = this._data_threejs;
         // this.getSelectingEntityType();
-        switch (this.SelectingEntityType.id) {
+        switch (this.dataService.selectingEntityType.id) {
             case EEntType.POSI:
 
                 if (intersect0.object.type === 'Points') {
@@ -1650,9 +1648,8 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     }
 
     private selectEntityType(selection: { id: number, name: string }) {
+        this.dataService.updateSelectingEntityType(selection);
         this.SelectingEntityType = selection;
-        localStorage.setItem('mpm_selecting_entity_type', JSON.stringify(selection));
-
         const settings = JSON.parse(localStorage.getItem('mpm_settings'));
         if (settings !== undefined && selection) {
             settings.select.selector = selection;
@@ -1677,9 +1674,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     }
 
     selectEntity(id: number) {
-        if (this.SelectingEntityType.id === EEntType.COLL) {
+        if (this.dataService.selectingEntityType.id === EEntType.COLL) {
             this.chooseColl(id);
-        } else if (this.SelectingEntityType.id === EEntType.VERT) {
+        } else if (this.dataService.selectingEntityType.id === EEntType.VERT) {
             this.chooseVertex(id);
         }
         // not sure why but this has to be done

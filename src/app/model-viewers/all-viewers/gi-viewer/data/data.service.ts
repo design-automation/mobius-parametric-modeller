@@ -27,6 +27,8 @@ export class DataService {
     selected_face_wires: Map<string, string[]>;
     selected_coll: Map<string, string[]>;
 
+    selectingEntityType: { id: number, name: string } ;
+
     switch_page: boolean;
     /**
      * Create a data service.
@@ -45,6 +47,7 @@ export class DataService {
         this.selected_face_edges = new Map();
         this.selected_face_wires = new Map();
         this.selected_coll = new Map();
+        this.selectingEntityType = { id: EEntType.PGON, name: 'Polygons' };
     }
 
     /**
@@ -75,6 +78,8 @@ export class DataService {
     clearAll() {
         this.selected_ents.forEach(selected_ents => selected_ents.clear());
     }
+
+    updateSelectingEntityType(selEntType: { id: number, name: string }) { this.selectingEntityType = selEntType; }
 
     get tableDataSource() {return DataService._tableDataSource; }
     set tableDataSource(dataSource: any) {DataService._tableDataSource = dataSource; }

@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs">
     <li (click)="selectTab(0)" [class.active]="tab_active===0"><span>Positions</span></li>
-    <li
+    <!-- <li
         [class.active]="tab_active===1"
         [class.open]='topology_open'
     >
@@ -10,7 +10,7 @@
                 <div *ngFor="let option of topology;" (click)="selectTopology(option.tab, $event);">{{option.title}}</div>
             </div>
         </div>
-    </li>
+    </li> -->
     <li
         [class.active]="tab_active===2"
         [class.open]='object_open'

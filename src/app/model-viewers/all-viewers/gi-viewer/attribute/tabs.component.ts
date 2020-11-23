@@ -60,8 +60,8 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
     }
 
     ngAfterViewInit(): void {
-        this.topology_dropdown = document.getElementById('topology_dropdown');
-        this.topology_dropdown.style.display = 'none';
+        // this.topology_dropdown = document.getElementById('topology_dropdown');
+        // this.topology_dropdown.style.display = 'none';
 
         this.object_dropdown = document.getElementById('object_dropdown');
         this.object_dropdown.style.display = 'none';
@@ -69,7 +69,7 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
     }
 
     ngOnDestroy() {
-        this.topology_dropdown = null;
+        // this.topology_dropdown = null;
         this.object_dropdown = null;
     }
 
@@ -84,15 +84,15 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
         }
 
         this.selectedTab.emit(tab);
-        if (this.topology_dropdown) {
-            this.topology_dropdown.style.display = 'none';
-        }
-        this.topology_text = 'Topology';
-        this.topology_open = false;
+        // if (this.topology_dropdown) {
+        //     this.topology_dropdown.style.display = 'none';
+        // }
+        // this.topology_text = 'Topology';
+        // this.topology_open = false;
 
-        if (this.object_dropdown) {
-            this.topology_dropdown.style.display = 'none';
-        }
+        // if (this.object_dropdown) {
+        //     this.topology_dropdown.style.display = 'none';
+        // }
         this.object_text = 'Objects';
         this.object_open = false;
     }
@@ -149,7 +149,7 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
         this.topology_text = 'Topology';
         this.topology_open = false;
         if (!this.object_dropdown) { return; }
-        this.topology_dropdown.style.display = 'none';
+        // this.topology_dropdown.style.display = 'none';
         if (this.object_dropdown.style.display === 'none') {
             this.object_dropdown.style.display = 'block';
             this.object_open = true;

@@ -570,23 +570,7 @@
             <tab tabTitle="Entity selection">
                 <div class="mat-elevation-z1">
                     <dl>
-                        <dd>
-                            <div class="label">Positions (ps)</div>
-                            <div class="onoffswitch">
-                                <input type="checkbox"
-                                name="onoffswitch"
-                                class="onoffswitch-checkbox"
-                                id="psOnOff"
-                                [checked]='settings.select.enabledselector.ps'
-                                (change)="settingOnChange('select.ps')"
-                                >
-                                <label class="onoffswitch-label" for="psOnOff">
-                                    <span class="onoffswitch-inner"></span>
-                                    <span class="onoffswitch-switch"></span>
-                                </label>
-                            </div>
-                        </dd>
-                        <dd>
+                        <!-- <dd>
                             <div class="label">Vertices (_v)</div>
                             <div class="onoffswitch">
                                 <input type="checkbox"
@@ -633,7 +617,7 @@
                                     <span class="onoffswitch-switch"></span>
                                 </label>
                             </div>
-                        </dd>
+                        </dd> -->
                         <!-- <dd>
                             <div class="label">Faces (_f)</div>
                             <div class="onoffswitch">
@@ -650,6 +634,22 @@
                                 </label>
                             </div>
                         </dd> -->
+                        <dd>
+                            <div class="label">Collections (co)</div>
+                            <div class="onoffswitch">
+                                <input type="checkbox"
+                                name="onoffswitch"
+                                class="onoffswitch-checkbox"
+                                id="coOnOff"
+                                [checked]='settings.select.enabledselector.co'
+                                (change)="settingOnChange('select.co')"
+                                >
+                                <label class="onoffswitch-label" for="coOnOff">
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                            </div>
+                        </dd>
                         <dd>
                             <div class="label">Points (pt)</div>
                             <div class="onoffswitch">
@@ -699,23 +699,22 @@
                             </div>
                         </dd>
                         <dd>
-                            <div class="label">Collections (co)</div>
+                            <div class="label">Positions (ps)</div>
                             <div class="onoffswitch">
                                 <input type="checkbox"
                                 name="onoffswitch"
                                 class="onoffswitch-checkbox"
-                                id="coOnOff"
-                                [checked]='settings.select.enabledselector.co'
-                                (change)="settingOnChange('select.co')"
+                                id="psOnOff"
+                                [checked]='settings.select.enabledselector.ps'
+                                (change)="settingOnChange('select.ps')"
                                 >
-                                <label class="onoffswitch-label" for="coOnOff">
+                                <label class="onoffswitch-label" for="psOnOff">
                                     <span class="onoffswitch-inner"></span>
                                     <span class="onoffswitch-switch"></span>
                                 </label>
                             </div>
                         </dd>
                     </dl>
-                    
                 </div>
             </tab>
         </tabs>

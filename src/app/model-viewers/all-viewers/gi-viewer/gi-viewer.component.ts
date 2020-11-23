@@ -25,7 +25,6 @@ import { ISettings } from './data/data.threejsSettings';
     styleUrls: ['./gi-viewer.component.scss'],
 })
 export class GIViewerComponent implements OnInit {
-    dataservice: DataService;
     // model data passed to the viewer
     @Input() data: GIModel;
     @Input() nodeIndex: number;
@@ -168,7 +167,7 @@ export class GIViewerComponent implements OnInit {
         if (save) {
             const _tab = Number(JSON.parse(localStorage.getItem('mpm_attrib_current_tab')));
             // this.settings.select = {selector: _selector, tab: _tab, };
-            this.settings.select.selector = this.dataservice.selectingEntityType;
+            this.settings.select.selector = this.dataService.selectingEntityType;
             this.settings.select.tab = _tab;
             this.settings.camera = {
                 pos: this.temp_camera_pos,

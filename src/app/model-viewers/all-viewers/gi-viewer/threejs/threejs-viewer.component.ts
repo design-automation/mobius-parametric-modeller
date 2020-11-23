@@ -63,23 +63,24 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     public SelectingEntityType: { id: number, name: string };
     public selectDropdownVisible = false;
     public selections = [
-        { id: EEntType.POSI, name: 'Positions' },
-        { id: EEntType.VERT, name: 'Vertex' },
-        { id: EEntType.EDGE, name: 'Edges' },
-        { id: EEntType.WIRE, name: 'Wires' },
+        // { id: EEntType.VERT, name: 'Vertex' },
+        // { id: EEntType.EDGE, name: 'Edges' },
+        // { id: EEntType.WIRE, name: 'Wires' },
+        { id: EEntType.COLL, name: 'Collections' },
         { id: EEntType.POINT, name: 'Points' },
         { id: EEntType.PLINE, name: 'Polylines' },
         { id: EEntType.PGON, name: 'Polygons' },
-        { id: EEntType.COLL, name: 'Collections' }];
+        { id: EEntType.POSI, name: 'Positions' },
+    ];
     public default_selections = {
-        ps: { id: EEntType.POSI, name: 'Positions' },
-        _v: { id: EEntType.VERT, name: 'Vertex' },
-        _e: { id: EEntType.EDGE, name: 'Edges' },
-        _w: { id: EEntType.WIRE, name: 'Wires' },
+        // _v: { id: EEntType.VERT, name: 'Vertex' },
+        // _e: { id: EEntType.EDGE, name: 'Edges' },
+        // _w: { id: EEntType.WIRE, name: 'Wires' },
+        co: { id: EEntType.COLL, name: 'Collections' },
         pt: { id: EEntType.POINT, name: 'Points' },
         pl: { id: EEntType.PLINE, name: 'Polylines' },
         pg: { id: EEntType.PGON, name: 'Polygons' },
-        co: { id: EEntType.COLL, name: 'Collections' }
+        ps: { id: EEntType.POSI, name: 'Positions' },
     };
 
     public dropdownPosition = { x: 0, y: 0 };
@@ -173,7 +174,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             });
         }
 
-        // this.getSelectingEntityType();
+        this.getSelectingEntityType();
 
         this._data_threejs.switchCamera(false);
 
@@ -583,7 +584,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     sessionStorage.setItem('mpm_showSelected', 'false');
                     sessionStorage.setItem('mpm_changetab', 'false');
                 }
-                // this.getSelectingEntityType();
+                this.getSelectingEntityType();
                 this.refreshTable();
 
             } catch (ex) {
@@ -798,29 +799,35 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }, 0);
     }
 
-    // private getSelectingEntityType() {
-    //     const select = JSON.parse(localStorage.getItem('mpm_settings'))['select'];
-    //     const default_selector = { id: EEntType.PGON, name: 'Polygons' };
-    //     if (select && select.enabledselector) {
-    //         this.selections = [];
-    //         for (const i in select.enabledselector) {
-    //             if (select.enabledselector[i] && this.default_selections[i]) { this.selections.push( this.default_selections[i]); }
-    //         }
-    //     }
-    //     if (select !== undefined && select.selector && this.selections.indexOf(select.selector) !== -1) {
-    //         this.dataService.selectingEntityType = select.selector;
-    //     } else if (this.selections.indexOf(default_selector) !== -1) {
-    //         this.dataService.selectingEntityType = default_selector;
-    //     } else if (this.selections.length > 0) {
-    //         this.dataService.selectingEntityType = this.selections[0];
-    //     } else {
-    //         this.dataService.selectingEntityType =  {id: null, name: null};
-    //     }
-    // }
+    openEntitySelectType() {
+        this.selectDropdownVisible = !this.selectDropdownVisible;
+    }
+
+    private getSelectingEntityType() {
+        const select = JSON.parse(localStorage.getItem('mpm_settings'))['select'];
+        const default_selector = { id: EEntType.PGON, name: 'Polygons' };
+        if (select && select.enabledselector) {
+            this.selections = [];
+            for (const i in this.default_selections) {
+                if (select.enabledselector[i] && this.default_selections[i]) { this.selections.push( this.default_selections[i]); }
+            }
+        }
+        if (this.selections.indexOf(this.dataService.selectingEntityType) !== -1) { return; }
+
+        if (select !== undefined && select.selector && this.selections.indexOf(select.selector) !== -1) {
+            this.dataService.selectingEntityType = select.selector;
+        } else if (this.selections.indexOf(default_selector) !== -1) {
+            this.dataService.selectingEntityType = default_selector;
+        } else if (this.selections.length > 0) {
+            this.dataService.selectingEntityType = this.selections[0];
+        } else {
+            this.dataService.selectingEntityType =  {id: null, name: null};
+        }
+    }
 
     private selectObj(intersect0: THREE.Intersection) {
         const scene = this._data_threejs;
-        // this.getSelectingEntityType();
+        this.getSelectingEntityType();
         switch (this.dataService.selectingEntityType.id) {
             case EEntType.POSI:
 

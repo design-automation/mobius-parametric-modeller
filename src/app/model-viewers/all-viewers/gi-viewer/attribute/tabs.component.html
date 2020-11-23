@@ -1,4 +1,18 @@
 <ul class="nav nav-tabs">
+    <li (click)="selectTab(8)" [class.active]="tab_active===8"><span>Model</span></li>
+    <li (click)="selectTab(7)" [class.active]="tab_active===7"><span>Collections</span></li>
+    <li
+        [class.active]="tab_active===2"
+        [class.open]='object_open'
+    >
+        <div class="dropdown">
+            <button class="dropbtn" (click) = 'showODropdown()' title="Objects: Point, Polyline, Polygon">{{object_text}}</button>
+            <div class="dropdown-content" id='object_dropdown'>
+                <div *ngFor="let option of object;" (click)="selectObject(option.tab, $event);">{{option.title}}</div>
+            </div>
+        </div>
+    </li>
+    <li id='ObjTopoTab' (click)="selectTab(9)" [class.active]="tab_active===9"><span>Sub-entities</span></li>
     <li (click)="selectTab(0)" [class.active]="tab_active===0"><span>Positions</span></li>
     <!-- <li
         [class.active]="tab_active===1"
@@ -11,19 +25,6 @@
             </div>
         </div>
     </li> -->
-    <li
-        [class.active]="tab_active===2"
-        [class.open]='object_open'
-    >
-        <div class="dropdown">
-            <button class="dropbtn" (click) = 'showODropdown()' title="Objects: Point, Polyline, Polygon">{{object_text}}</button>
-            <div class="dropdown-content" id='object_dropdown'>
-                <div *ngFor="let option of object;" (click)="selectObject(option.tab, $event);">{{option.title}}</div>
-            </div>
-        </div>
-    </li>
-    <li (click)="selectTab(7)" [class.active]="tab_active===7"><span>Collections</span></li>
-    <li (click)="selectTab(8)" [class.active]="tab_active===8"><span>Model</span></li>
     <!-- <li
         [class.active]="tab_active===9"
         [class.open]='topo_open'
@@ -36,7 +37,6 @@
             </div>
         </div>
     </li> -->
-    <li id='ObjTopoTab' (click)="selectTab(9)" [class.active]="tab_active===9"><span>Obj Topo</span></li>
     <!-- <li (click)="selectTab(10)" [class.active]="tab_active===10"><span>Col Topo</span></li> -->
 
 </ul>

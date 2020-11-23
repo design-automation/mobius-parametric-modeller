@@ -43,16 +43,16 @@
         <button
             id="EntitySelection"
             mat-icon-button
-            (click)="selectDropdownVisible = !selectDropdownVisible"
-            title='Selection Type'
+            (click)="openEntitySelectType()"
+            title='Selecting {{SelectingEntityType.name}}'
         >
             <mat-icon svgIcon="select"></mat-icon>
         </button>
         <span
             *ngIf="!selectDropdownVisible"
             id="SelectingEntityType"
-            matTooltip="Selecting {{SelectingEntityType.name}}"
-            (click)="selectDropdownVisible = !selectDropdownVisible; needSelect=false"
+            title = 'Selecting {{SelectingEntityType.name}}'
+            (click)="openEntitySelectType(); needSelect=false"
         >
             {{EntTypeToStr(SelectingEntityType.id)}}
         </span>
@@ -60,9 +60,10 @@
             <button
                 *ngFor="let selection of selections"
                 (click)="selectEntityType(selection); needSelect=false"
+                title='Selecting {{selection.name}}'
                 [class.active]="SelectingEntityType.id === selection.id"
             >
-                <span matTooltip="Select {{selection.name}}">{{EntTypeToStr(selection.id)}}</span>
+                <span >{{EntTypeToStr(selection.id)}}</span>
             </button>
         </div>
     </ng-container>

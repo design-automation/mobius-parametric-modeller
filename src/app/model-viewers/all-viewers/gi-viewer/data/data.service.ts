@@ -27,7 +27,7 @@ export class DataService {
     selected_face_wires: Map<string, string[]>;
     selected_coll: Map<string, string[]>;
 
-    selectingEntityType: { id: number, name: string } ;
+    selectingEntityType: { id: EEntType, name: string } ;
 
     switch_page: boolean;
     /**

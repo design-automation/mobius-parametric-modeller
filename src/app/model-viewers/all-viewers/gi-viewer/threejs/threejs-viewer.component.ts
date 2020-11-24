@@ -809,14 +809,22 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         if (select && select.enabledselector) {
             this.selections = [];
             for (const i in this.default_selections) {
-                if (select.enabledselector[i] && this.default_selections[i]) { this.selections.push( this.default_selections[i]); }
+                if (select.enabledselector[i] && this.default_selections[i]) { this.selections.push(this.default_selections[i]); }
             }
         }
-        if (this.selections.indexOf(this.dataService.selectingEntityType) !== -1) { return; }
+        for (const i of this.selections) {
+            if (i.id === this.dataService.selectingEntityType.id) {
+                return;
+            }
+        }
+        // if (this.selections.indexOf(this.dataService.selectingEntityType) !== -1) { return; }
 
-        if (select !== undefined && select.selector && this.selections.indexOf(select.selector) !== -1) {
-            this.dataService.selectingEntityType = select.selector;
-        } else if (this.selections.indexOf(default_selector) !== -1) {
+        // if (select !== undefined && select.selector && this.selections.indexOf(select.selector) !== -1) {
+        //     this.dataService.selectingEntityType = select.selector;
+        //     select.selector = null;
+        //     localStorage.setItem('mpm_settings', JSON.stringify(select));
+        // } else if (this.selections.indexOf(default_selector) !== -1) {
+        if (this.selections.indexOf(default_selector) !== -1) {
             this.dataService.selectingEntityType = default_selector;
         } else if (this.selections.length > 0) {
             this.dataService.selectingEntityType = this.selections[0];

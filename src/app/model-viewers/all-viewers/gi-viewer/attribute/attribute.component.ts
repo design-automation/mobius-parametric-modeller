@@ -176,17 +176,21 @@ export class AttributeComponent implements OnChanges {
 
     generateTable(tabIndex: number) {
         if (tabIndex > 8) {
-            console.log('+++++++++++++', this.dataService.selected_ents)
             const entityTypes = ['pg', 'pl', 'pt'];
             let entity = null;
+            let entType = null;
             for ( const entityType of entityTypes ) {
-                const selectedEnts = this.dataService.selected_ents[entityType]
-                if (selectedEnts.length > 0) {
-                    entity = selectedEnts[selectedEnts.length - 1];
+                const selectedEnts = this.dataService.selected_ents.get(entityType);
+                if (selectedEnts && selectedEnts.size > 0) {
+                    for (const entSet of selectedEnts) {
+                        entity = entSet;
+                        entType = entityType;
+                    }
                     break;
                 }
             }
             if (!entity) { return; }
+            this.generateTopoTable(entity[0], this.tab_rev_map[this.string_map[entType]], 'ps');
             return;
         }
         if (this.model && this.nodeIndex) {
@@ -282,7 +286,7 @@ export class AttributeComponent implements OnChanges {
             }
         }
         topoDataSource[0]._id = topoDataSource[0]._id.trim();
-        topoDataSource[0].selected = true;
+        // topoDataSource[0].selected = true;
 
         // if (topoHeader.length === 0) { topoHeader.push('_id'); }
         topoHeader.push(' ');

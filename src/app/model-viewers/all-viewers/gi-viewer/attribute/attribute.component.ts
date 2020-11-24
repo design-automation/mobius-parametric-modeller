@@ -175,7 +175,25 @@ export class AttributeComponent implements OnChanges {
     }
 
     generateTable(tabIndex: number) {
-        if (tabIndex > 8) {
+        // if (tabIndex > 8) {
+        //     const entityTypes = ['pg', 'pl', 'pt'];
+        //     let entity = null;
+        //     let entType = null;
+        //     for ( const entityType of entityTypes ) {
+        //         const selectedEnts = this.dataService.selected_ents.get(entityType);
+        //         if (selectedEnts && selectedEnts.size > 0) {
+        //             for (const entSet of selectedEnts) {
+        //                 entity = entSet;
+        //                 entType = entityType;
+        //             }
+        //             break;
+        //         }
+        //     }
+        //     if (!entity) { return; }
+        //     this.generateTopoTable(entity[0], this.tab_rev_map[this.string_map[entType]], 'ps');
+        //     return;
+        // }
+        if (this.model && this.nodeIndex) {
             const entityTypes = ['pg', 'pl', 'pt'];
             let entity = null;
             let entType = null;
@@ -189,11 +207,10 @@ export class AttributeComponent implements OnChanges {
                     break;
                 }
             }
-            if (!entity) { return; }
-            this.generateTopoTable(entity[0], this.tab_rev_map[this.string_map[entType]], 'ps');
-            return;
-        }
-        if (this.model && this.nodeIndex) {
+            if (entity) {
+                this.generateTopoTable(entity[0], this.tab_rev_map[this.string_map[entType]], 'ps');
+            }
+
             const ThreeJSData = this.model.modeldata.attribs.threejs;
             if (Number(tabIndex) === 8) {
                 this.displayData = ThreeJSData.getModelAttribsForTable(this.nodeIndex);

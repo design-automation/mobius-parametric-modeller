@@ -853,14 +853,23 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     // const posi = scene.posis_map.get(intersect0.index);
                     // const posi = scene.posis_idx_to_i[intersect0.index];
                     const ent_id = `${EEntTypeStr[EEntType.POSI]}${posi}`;
-                    if (scene.selected_geoms.has(ent_id)) {
+                    if (!this.shiftKeyPressed) {
+                        this.unselectAll();
+                    }
+                    if (this.shiftKeyPressed && scene.selected_geoms.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.POSI], true);
                     } else {
-                        if (!this.shiftKeyPressed) {
-                            this.unselectAll();
-                        }
                         this.selectPositions(posi, null, null, ent_id);
                     }
+
+                    // if (scene.selected_geoms.has(ent_id)) {
+                    //     this.unselectGeom(ent_id, EEntTypeStr[EEntType.POSI], true);
+                    // } else {
+                    //     if (!this.shiftKeyPressed) {
+                    //         this.unselectAll();
+                    //     }
+                    //     this.selectPositions(posi, null, null, ent_id);
+                    // }
                 } else if (intersect0.object.type === 'LineSegments') {
                     // let edge;
                     // const edge_color = (<THREE.LineDashedMaterial>(<THREE.LineSegments> intersect0.object).material).color;
@@ -885,14 +894,23 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     const tri = scene.tri_select_map.get(intersect0.faceIndex);
                     const face = this.model.modeldata.geom.nav_tri.navTriToPgon(tri);
                     const ent_id = `pg_posi${face}`;
-                    if (scene.selected_positions.has(ent_id)) {
+                    if (!this.shiftKeyPressed) {
+                        this.unselectAll();
+                    }
+                    if (this.shiftKeyPressed && scene.selected_geoms.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.POSI]);
                     } else {
-                        if (!this.shiftKeyPressed) {
-                            this.unselectAll();
-                        }
                         this.selectPositions(null, null, face, ent_id);
                     }
+
+                    // if (scene.selected_positions.has(ent_id)) {
+                    //     this.unselectGeom(ent_id, EEntTypeStr[EEntType.POSI]);
+                    // } else {
+                    //     if (!this.shiftKeyPressed) {
+                    //         this.unselectAll();
+                    //     }
+                    //     this.selectPositions(null, null, face, ent_id);
+                    // }
                 }
                 break;
             case EEntType.VERT:
@@ -923,14 +941,23 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                         point = vert;
                     }
                     const ent_id = `${EEntTypeStr[EEntType.VERT]}${point}`;
-                    if (scene.selected_geoms.has(ent_id)) {
+                    if (!this.shiftKeyPressed) {
+                        this.unselectAll();
+                    }
+                    if (this.shiftKeyPressed && scene.selected_geoms.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.VERT], true);
                     } else {
-                        if (!this.shiftKeyPressed) {
-                            this.unselectAll();
-                        }
                         this.selectVertex(point, null, null, ent_id);
                     }
+
+                    // if (scene.selected_geoms.has(ent_id)) {
+                    //     this.unselectGeom(ent_id, EEntTypeStr[EEntType.VERT], true);
+                    // } else {
+                    //     if (!this.shiftKeyPressed) {
+                    //         this.unselectAll();
+                    //     }
+                    //     this.selectVertex(point, null, null, ent_id);
+                    // }
                 } else if (intersect0.object.type === 'LineSegments') {
                     // let edge;
                     // const edge_color = (<THREE.LineDashedMaterial>(<THREE.LineSegments> intersect0.object).material).color;
@@ -941,28 +968,46 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     // }
                     const edge = scene.edge_select_map.get(intersect0.index / 2);
                     const ent_id = `_e_v${edge}`;
-                    if (scene.selected_vertex.has(ent_id)) {
+                    if (!this.shiftKeyPressed) {
+                        this.unselectAll();
+                    }
+                    if (this.shiftKeyPressed && scene.selected_geoms.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.VERT]);
                     } else {
-                        if (!this.shiftKeyPressed) {
-                            this.unselectAll();
-                        }
                         this.selectVertex(null, edge, null, ent_id);
                     }
+
+                    // if (scene.selected_vertex.has(ent_id)) {
+                    //     this.unselectGeom(ent_id, EEntTypeStr[EEntType.VERT]);
+                    // } else {
+                    //     if (!this.shiftKeyPressed) {
+                    //         this.unselectAll();
+                    //     }
+                    //     this.selectVertex(null, edge, null, ent_id);
+                    // }
                 } else if (intersect0.object.type === 'Mesh') {
                     const tri = scene.tri_select_map.get(intersect0.faceIndex);
                     const face = this.model.modeldata.geom.nav_tri.navTriToPgon(tri);
                     // // const tri = scene.tri_select_map.get(intersect0.faceIndex);
                     // const tri = scene.tris_select_idx_to_i[intersect0.faceIndex];
                     const ent_id = `pg_v${face}`;
-                    if (scene.selected_vertex.has(ent_id)) {
+                    if (!this.shiftKeyPressed) {
+                        this.unselectAll();
+                    }
+                    if (this.shiftKeyPressed && scene.selected_geoms.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.VERT]);
                     } else {
-                        if (!this.shiftKeyPressed) {
-                            this.unselectAll();
-                        }
                         this.selectVertex(null, null, face, ent_id);
                     }
+
+                    // if (scene.selected_vertex.has(ent_id)) {
+                    //     this.unselectGeom(ent_id, EEntTypeStr[EEntType.VERT]);
+                    // } else {
+                    //     if (!this.shiftKeyPressed) {
+                    //         this.unselectAll();
+                    //     }
+                    //     this.selectVertex(null, null, face, ent_id);
+                    // }
                 }
                 break;
             case EEntType.COLL:
@@ -977,14 +1022,22 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     const pgon = this.model.modeldata.geom.nav_tri.navTriToPgon(tri);
                     // const tri = scene.tris_select_idx_to_i[intersect0.faceIndex];
                     const ent_id = `${EEntTypeStr[EEntType.PGON]}${pgon}`;
-                    if (scene.selected_geoms.has(ent_id)) {
+                    if (!this.shiftKeyPressed) {
+                        this.unselectAll();
+                    }
+                    if (this.shiftKeyPressed && scene.selected_geoms.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.PGON], true);
                     } else {
-                        if (!this.shiftKeyPressed) {
-                            this.unselectAll();
-                        }
                         this.selectPGon(pgon);
                     }
+                    // if (scene.selected_geoms.has(ent_id)) {
+                    //     this.unselectGeom(ent_id, EEntTypeStr[EEntType.PGON], true);
+                    // } else {
+                    //     if (!this.shiftKeyPressed) {
+                    //         this.unselectAll();
+                    //     }
+                    //     this.selectPGon(pgon);
+                    // }
                 } else {
                     this.showMessages('Polygons');
                 }
@@ -1000,27 +1053,45 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     // }
                     const edge = scene.edge_select_map.get(intersect0.index / 2);
                     const ent_id = `${EEntTypeStr[EEntType.EDGE]}${edge}`;
-                    if (scene.selected_geoms.has(ent_id)) {
+                    if (!this.shiftKeyPressed) {
+                        this.unselectAll();
+                    }
+                    if (this.shiftKeyPressed && scene.selected_geoms.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.EDGE], true);
                     } else {
-                        if (!this.shiftKeyPressed) {
-                            this.unselectAll();
-                        }
                         this.selectEdge(edge);
                     }
+
+                    // if (scene.selected_geoms.has(ent_id)) {
+                    //     this.unselectGeom(ent_id, EEntTypeStr[EEntType.EDGE], true);
+                    // } else {
+                    //     if (!this.shiftKeyPressed) {
+                    //         this.unselectAll();
+                    //     }
+                    //     this.selectEdge(edge);
+                    // }
                 } else if (intersect0.object.type === 'Mesh') {
                     const tri = scene.tri_select_map.get(intersect0.faceIndex);
                     const face = this.model.modeldata.geom.nav_tri.navTriToPgon(tri);
                     // const tri = scene.tris_select_idx_to_i[intersect0.faceIndex];
                     const ent_id = `${EEntTypeStr[EEntType.PGON]}${face}`;
-                    if (scene.selected_face_edges.has(ent_id)) {
+                    if (!this.shiftKeyPressed) {
+                        this.unselectAll();
+                    }
+                    if (this.shiftKeyPressed && scene.selected_geoms.has(ent_id)) {
                         this.unselectGeom(ent_id, 'face_edges');
                     } else {
-                        if (!this.shiftKeyPressed) {
-                            this.unselectAll();
-                        }
                         this.selectEdgeByFace(face, ent_id);
                     }
+
+                    // if (scene.selected_face_edges.has(ent_id)) {
+                    //     this.unselectGeom(ent_id, 'face_edges');
+                    // } else {
+                    //     if (!this.shiftKeyPressed) {
+                    //         this.unselectAll();
+                    //     }
+                    //     this.selectEdgeByFace(face, ent_id);
+                    // }
                 } else {
                     this.showMessages('Edges');
                 }
@@ -1039,27 +1110,45 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     // const edge = scene.edge_select_map.get(intersect0.index / 2)
                     // const edge = scene.edges_select_idx_to_i[intersect0.index / 2],
                     const ent_id = `${EEntTypeStr[EEntType.WIRE]}${edge}`;
-                    if (scene.selected_geoms.has(ent_id)) {
+                    if (!this.shiftKeyPressed) {
+                        this.unselectAll();
+                    }
+                    if (this.shiftKeyPressed && scene.selected_geoms.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.WIRE], true);
                     } else {
-                        if (!this.shiftKeyPressed) {
-                            this.unselectAll();
-                        }
                         this.selectWire(wire);
                     }
+
+                    // if (scene.selected_geoms.has(ent_id)) {
+                    //     this.unselectGeom(ent_id, EEntTypeStr[EEntType.WIRE], true);
+                    // } else {
+                    //     if (!this.shiftKeyPressed) {
+                    //         this.unselectAll();
+                    //     }
+                    //     this.selectWire(wire);
+                    // }
                 } else if (intersect0.object.type === 'Mesh') {
                     const tri = scene.tri_select_map.get(intersect0.faceIndex);
                     const face = this.model.modeldata.geom.nav_tri.navTriToPgon(tri);
                     // const tri = scene.tris_select_idx_to_i[intersect0.faceIndex];
                     const ent_id = `${EEntTypeStr[EEntType.PGON]}${face}`;
-                    if (scene.selected_face_wires.has(ent_id)) {
+                    if (!this.shiftKeyPressed) {
+                        this.unselectAll();
+                    }
+                    if (this.shiftKeyPressed && scene.selected_geoms.has(ent_id)) {
                         this.unselectGeom(ent_id, 'face_wires');
                     } else {
-                        if (!this.shiftKeyPressed) {
-                            this.unselectAll();
-                        }
                         this.selectWireByFace(face, ent_id);
                     }
+
+                    // if (scene.selected_face_wires.has(ent_id)) {
+                    //     this.unselectGeom(ent_id, 'face_wires');
+                    // } else {
+                    //     if (!this.shiftKeyPressed) {
+                    //         this.unselectAll();
+                    //     }
+                    //     this.selectWireByFace(face, ent_id);
+                    // }
                 } else {
                     this.showMessages('Wires');
                 }
@@ -1078,18 +1167,31 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     const pline = this.model.modeldata.geom.nav.navWireToPline(wire);
                     // const edge = scene.edges_select_idx_to_i[intersect0.index / 2];
                     const ent_id = `${EEntTypeStr[EEntType.PLINE]}${pline}`;
-                    if (scene.selected_geoms.has(ent_id)) {
+                    if (!this.shiftKeyPressed) {
+                        this.unselectAll();
+                    }
+                    if (this.shiftKeyPressed && scene.selected_geoms.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.PLINE], true);
                     } else {
-                        if (!this.shiftKeyPressed) {
-                            this.unselectAll();
-                        }
                         if (pline !== undefined && pline !== null) {
                             this.selectPLine(pline);
                         } else {
                             this.showMessages('Selection is not a Polyline', 'custom');
                         }
                     }
+
+                    // if (scene.selected_geoms.has(ent_id)) {
+                    //     this.unselectGeom(ent_id, EEntTypeStr[EEntType.PLINE], true);
+                    // } else {
+                    //     if (!this.shiftKeyPressed) {
+                    //         this.unselectAll();
+                    //     }
+                    //     if (pline !== undefined && pline !== null) {
+                    //         this.selectPLine(pline);
+                    //     } else {
+                    //         this.showMessages('Selection is not a Polyline', 'custom');
+                    //     }
+                    // }
                 } else {
                     this.showMessages('Polylines');
                 }
@@ -1101,18 +1203,31 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                     const point = scene.point_select_map.get(_point);
                     // const point = scene.points_select_idx_to_i[_point];
                     const ent_id = `${EEntTypeStr[EEntType.POINT]}${point}`;
-                    if (scene.selected_geoms.has(ent_id)) {
+                    if (!this.shiftKeyPressed) {
+                        this.unselectAll();
+                    }
+                    if (this.shiftKeyPressed && scene.selected_geoms.has(ent_id)) {
                         this.unselectGeom(ent_id, EEntTypeStr[EEntType.POINT], true);
                     } else {
-                        if (!this.shiftKeyPressed) {
-                            this.unselectAll();
-                        }
                         if (point !== undefined && point !== null) {
                             this.selectPoint(point);
                         } else {
                             this.showMessages('Selection is not a Point', 'custom');
                         }
                     }
+
+                    // if (scene.selected_geoms.has(ent_id)) {
+                    //     this.unselectGeom(ent_id, EEntTypeStr[EEntType.POINT], true);
+                    // } else {
+                    //     if (!this.shiftKeyPressed) {
+                    //         this.unselectAll();
+                    //     }
+                    //     if (point !== undefined && point !== null) {
+                    //         this.selectPoint(point);
+                    //     } else {
+                    //         this.showMessages('Selection is not a Point', 'custom');
+                    //     }
+                    // }
                 } else {
                     this.showMessages('Points');
                 }

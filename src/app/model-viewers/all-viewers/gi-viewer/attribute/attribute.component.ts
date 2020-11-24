@@ -176,6 +176,17 @@ export class AttributeComponent implements OnChanges {
 
     generateTable(tabIndex: number) {
         if (tabIndex > 8) {
+            console.log('+++++++++++++', this.dataService.selected_ents)
+            const entityTypes = ['pg', 'pl', 'pt'];
+            let entity = null;
+            for ( const entityType of entityTypes ) {
+                const selectedEnts = this.dataService.selected_ents[entityType]
+                if (selectedEnts.length > 0) {
+                    entity = selectedEnts[selectedEnts.length - 1];
+                    break;
+                }
+            }
+            if (!entity) { return; }
             return;
         }
         if (this.model && this.nodeIndex) {

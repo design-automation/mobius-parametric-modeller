@@ -639,7 +639,11 @@ export class AttributeComponent implements OnChanges {
     }
 
     selectTopo(row: any) {
-        this.generateTopoTable(this.topoID, this.topoTabIndex, row._id.trim());
+        const ent_id = row._id.trim();
+        const ent_type = ent_id.substr(0, 2);
+        const id = Number(ent_id.substr(2));
+        this.generateTopoTable(this.topoID, this.topoTabIndex, ent_id);
+        this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: id });
     }
 
     prevTopo() {

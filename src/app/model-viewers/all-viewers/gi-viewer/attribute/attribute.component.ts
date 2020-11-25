@@ -74,6 +74,7 @@ export class AttributeComponent implements OnChanges {
     dataSourceTopo: MatTableDataSource<object>;
     displayedTopoColumns: string[] = [];
     topoID: string;
+    topoSelectedType: string;
     topoTabIndex: number;
 
     protected dataService: DataService;
@@ -195,21 +196,21 @@ export class AttributeComponent implements OnChanges {
         // }
         if (this.model && this.nodeIndex) {
             const entityTypes = ['pg', 'pl', 'pt'];
-            let entity = null;
-            let entType = null;
             for ( const entityType of entityTypes ) {
                 const selectedEnts = this.dataService.selected_ents.get(entityType);
                 if (selectedEnts && selectedEnts.size > 0) {
+                    let entity = null;
+                    let entType = null;
                     for (const entSet of selectedEnts) {
                         entity = entSet;
                         entType = entityType;
                     }
+                    if (!this.topoSelectedType) { this.topoSelectedType = 'ps'; }
+                    this.generateTopoTable(entity[0], this.tab_rev_map[this.string_map[entType]], this.topoSelectedType);
                     break;
                 }
             }
-            if (entity) {
-                this.generateTopoTable(entity[0], this.tab_rev_map[this.string_map[entType]], 'ps');
-            }
+            if (tabIndex > 8) { return; }
 
             const ThreeJSData = this.model.modeldata.attribs.threejs;
             if (Number(tabIndex) === 8) {
@@ -310,6 +311,7 @@ export class AttributeComponent implements OnChanges {
 
         this.displayedTopoColumns = topoHeader;
         this.dataSourceTopo.data = topoDataSource;
+        this.topoSelectedType = selected_type;
         if (this.topoTabIndex === tabIndex && this.topoID === ent_id) {
             setTimeout(() => {
                 document.getElementById('topotable--container').scrollTop = currentScroll;

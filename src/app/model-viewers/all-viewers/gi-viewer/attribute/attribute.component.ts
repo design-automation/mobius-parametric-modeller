@@ -336,6 +336,7 @@ export class AttributeComponent implements OnChanges {
     }
 
     _setDataSource(tabIndex: number) {
+        this.multi_selection.clear();
         setTimeout(() => {
             localStorage.setItem('mpm_attrib_current_tab', tabIndex.toString());
             const settings = JSON.parse(localStorage.getItem('mpm_settings'));
@@ -638,12 +639,24 @@ export class AttributeComponent implements OnChanges {
         if (switchTabButton) { switchTabButton.click(); }
     }
 
-    selectTopo(row: any) {
+    selectTopo(event: MouseEvent, row: any) {
         const ent_id = row._id.trim();
         const ent_type = ent_id.substr(0, 2);
         const id = Number(ent_id.substr(2));
+        const s = this.multi_selection;
+        this.current_selected = id;
         this.generateTopoTable(this.topoID, this.topoTabIndex, ent_id);
-        this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: id });
+        if (event.shiftKey || event.ctrlKey || event.metaKey) {
+            if (s.has(this.current_selected)) {
+                s.delete(this.current_selected);
+            } else {
+                this.last_selected = this.current_selected;
+                s.set(this.current_selected, this.current_selected);
+            }
+            this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: s});
+        } else {
+            this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: id });
+        }
     }
 
     prevTopo() {

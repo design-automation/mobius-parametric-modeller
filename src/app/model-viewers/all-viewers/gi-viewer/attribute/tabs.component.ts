@@ -18,7 +18,6 @@ import { ATabComponent } from './tab.component';
 })
 export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestroy {
     @Output() selectedTab = new EventEmitter<number>();
-    @Output() selectedTopology = new EventEmitter<number>();
 
     @ContentChildren(ATabComponent) tabs: QueryList<ATabComponent>;
 
@@ -104,7 +103,7 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
         if (!option) {
             return;
         }
-        this.selectedTopology.emit(Number(tab));
+        this.selectedTab.emit(Number(tab));
         this.topology_text = option.title;
         this.tabs.toArray()[option.tab].active = true;
         if (event !== undefined) {
@@ -121,7 +120,7 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
         if (!option) {
             return;
         }
-        this.selectedTopology.emit(Number(tab));
+        this.selectedTab.emit(Number(tab));
         this.object_text = option.title;
         this.tabs.toArray()[option.tab].active = true;
         if (event !== undefined) {

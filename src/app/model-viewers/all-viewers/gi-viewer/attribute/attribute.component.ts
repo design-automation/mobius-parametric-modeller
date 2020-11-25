@@ -287,9 +287,13 @@ export class AttributeComponent implements OnChanges {
         for (const topoRow of topoData) {
             // @ts-ignore
             const tableRow = Object.fromEntries(topoRow);
-            if (topoRow.get('_id') === selected_type) {
-                tableRow.selected = true;
-            } else if ((<string> topoRow.get('_id')).slice(0, 2) === selected_type_str) {
+            for (const selectedRow of this.multi_selection) {
+                if (topoRow.get('_id') === selectedRow[0]) {
+                    tableRow.selected = true;
+                    break;
+                }
+            }
+            if ((<string> topoRow.get('_id')).slice(0, 2) === selected_type_str) {
                 if (topoHeader.length === 0) {
                     for (const attr of topoRow) {
                         topoHeader.push(attr[0]);
@@ -307,7 +311,7 @@ export class AttributeComponent implements OnChanges {
         topoDataSource[0]._id = topoDataSource[0]._id.trim();
         // topoDataSource[0].selected = true;
 
-        // if (topoHeader.length === 0) { topoHeader.push('_id'); }
+        if (topoHeader.length === 0) { topoHeader.push('_id'); }
         topoHeader.push(' ');
 
         this.displayedTopoColumns = topoHeader;
@@ -635,6 +639,7 @@ export class AttributeComponent implements OnChanges {
         if (!this.generateTopoTable(ent_id, tabIndex, 'ps')) {
             return;
         }
+        this.multi_selection.clear();
         const switchTabButton = document.getElementById('ObjTopoTab');
         if (switchTabButton) { switchTabButton.click(); }
     }
@@ -645,18 +650,20 @@ export class AttributeComponent implements OnChanges {
         const id = Number(ent_id.substr(2));
         const s = this.multi_selection;
         this.current_selected = id;
-        this.generateTopoTable(this.topoID, this.topoTabIndex, ent_id);
         if (event.shiftKey || event.ctrlKey || event.metaKey) {
-            if (s.has(this.current_selected)) {
-                s.delete(this.current_selected);
+            if (s.has(ent_id)) {
+                s.delete(ent_id);
             } else {
                 this.last_selected = this.current_selected;
-                s.set(this.current_selected, this.current_selected);
+                s.set(ent_id, this.current_selected);
             }
-            this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: s});
+            this.attrTableSelect.emit({ action: 'select', ent_type: 'multiple', id: s});
         } else {
+            s.clear();
+            s.set(ent_id, this.current_selected);
             this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: id });
         }
+        this.generateTopoTable(this.topoID, this.topoTabIndex, ent_id);
     }
 
     prevTopo() {

@@ -12,6 +12,7 @@ import { DropdownMenuComponent } from '../html/dropdown-menu.component';
 import { ModalService } from '../html/modal-window.service';
 import { ThreeJSViewerService } from './threejs-viewer.service';
 import { sortByKey } from '@libs/util/maps';
+import { number } from 'dist/assets/core/inline/_mathjs';
 
 let renderCheck = true;
 
@@ -386,7 +387,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }
     }
 
-    attrTableSelect(attrib: { action: string, ent_type: string, id: number | number[] }, flowchart = false) {
+    attrTableSelect(attrib: { action: string, ent_type: any, id: number | number[] }, flowchart = false) {
         sessionStorage.setItem('mpm_changetab', 'false');
         if (attrib.action === 'select') {
             if (!flowchart) {this.unselectAll(); } // If select from Flowchart, don't unselect all.
@@ -484,9 +485,47 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                         });
                     }
                     break;
+                case 'multiple':
+                    if (typeof attrib.id !== 'object') { break; }
+                    for (const object of attrib.id) {
+                        const _ent = object[0];
+                        const _id = object[1];
+                        const objEntType = _ent.slice(0, 2);
+                        console.log(_ent, _id, objEntType)
+                        switch (objEntType) {
+                            case EEntTypeStr[EEntType.POSI]:
+                                this.selectPositions(_id, null, null, _ent);
+                                break;
+                            case EEntTypeStr[EEntType.VERT]:
+                                this.selectVertex(_id, null, null, _ent);
+                                break;
+                            case EEntTypeStr[EEntType.EDGE]:
+                                this.selectEdge(_id);
+                                break;
+                            case EEntTypeStr[EEntType.WIRE]:
+                                this.selectWire(_id);
+                                break;
+                            case EEntTypeStr[EEntType.PGON]:
+                                this.selectPGon(_id);
+                                break;
+                            case EEntTypeStr[EEntType.PLINE]:
+                                this.selectPLine(_id);
+                                break;
+                            case EEntTypeStr[EEntType.POINT]:
+                                this.selectPoint(_id);
+                                break;
+                            case EEntTypeStr[EEntType.COLL]:
+                                this.chooseColl(_id);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    break;
                 default:
                     break;
             }
+        } else if (attrib.action === 'multipleSelect') {
         } else if (attrib.action === 'unselect') {
             if (attrib.ent_type === EEntTypeStr[EEntType.COLL]) {
                 const coll_children = this.dataService.selected_coll.get(attrib.ent_type + attrib.id);

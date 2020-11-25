@@ -144,12 +144,17 @@ table{
         white-space: pre;
         .inactive-row {
             .mat-cell{
-                background-color: $color5;
+                background-color: $color5-5;
             }
         }
         .active-row {
             .mat-cell{
                 background-color: $color6;
+            }
+        }
+        .selected-row {
+            .mat-cell{
+                background-color: $color5;
             }
         }
     }

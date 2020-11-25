@@ -287,16 +287,17 @@ export class AttributeComponent implements OnChanges {
         for (const topoRow of topoData) {
             // @ts-ignore
             const tableRow = Object.fromEntries(topoRow);
-            if ((<string> topoRow.get('_id')).slice(0, 2) === selected_type_str) {
+            if (topoRow.get('_id') === selected_type) {
+                tableRow.selected = true;
+            } else if ((<string> topoRow.get('_id')).slice(0, 2) === selected_type_str) {
                 if (topoHeader.length === 0) {
                     for (const attr of topoRow) {
                         topoHeader.push(attr[0]);
                     }
                 }
-                tableRow.selected = true;
+                tableRow.active = true;
             }
             const indentation = baseIndent - this.indent_map[tableRow._id.slice(0, 2)];
-            tableRow.__id__ = tableRow._id;
             tableRow._id = '    '.repeat(indentation) + tableRow._id;
             topoDataSource.push(tableRow);
             if (selected_type_str === 'co') {
@@ -635,6 +636,10 @@ export class AttributeComponent implements OnChanges {
         }
         const switchTabButton = document.getElementById('ObjTopoTab');
         if (switchTabButton) { switchTabButton.click(); }
+    }
+
+    selectTopo(row: any) {
+        this.generateTopoTable(this.topoID, this.topoTabIndex, row._id.trim());
     }
 
     prevTopo() {

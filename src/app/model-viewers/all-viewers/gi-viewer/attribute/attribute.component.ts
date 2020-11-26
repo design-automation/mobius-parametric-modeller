@@ -641,6 +641,7 @@ export class AttributeComponent implements OnChanges {
         }
         this.multi_selection.clear();
         const switchTabButton = document.getElementById('ObjTopoTab');
+        localStorage.setItem('mpm_attrib_current_topo_obj', this.string_map['ps'].toString());
         if (switchTabButton) { switchTabButton.click(); }
     }
 
@@ -649,6 +650,9 @@ export class AttributeComponent implements OnChanges {
         const ent_type = ent_id.substr(0, 2);
         const id = Number(ent_id.substr(2));
         const s = this.multi_selection;
+        if (this.current_selected !== id) {
+            this.currentShowingCol = '';
+        }
         this.current_selected = id;
         if (event.shiftKey || event.ctrlKey || event.metaKey) {
             if (s.has(ent_id)) {
@@ -664,6 +668,7 @@ export class AttributeComponent implements OnChanges {
             this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: id });
         }
         this.generateTopoTable(this.topoID, this.topoTabIndex, ent_id);
+        localStorage.setItem('mpm_attrib_current_topo_obj', this.string_map[ent_type].toString());
     }
 
     prevTopo() {

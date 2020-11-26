@@ -251,13 +251,25 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }
         if (changes['selectSwitch']) {
             if (this.selectSwitch !== undefined) {
-                const ent_type = this.tab_map[this.getCurrentTab()];
+                let ent_type = this.tab_map[this.getCurrentTab()];
+                if (ent_type === undefined) {
+                    const curr_topo = localStorage.getItem('mpm_attrib_current_topo_obj')
+                    if (curr_topo) {
+                        ent_type = Number(curr_topo);
+                    }
+                }
                 this.refreshLabels(ent_type);
             }
         }
         if (changes['attribLabel']) {
             if (this.attribLabel !== undefined) {
-                const ent_type = this.tab_map[this.getCurrentTab()];
+                let ent_type = this.tab_map[this.getCurrentTab()];
+                if (ent_type === undefined) {
+                    const curr_topo = localStorage.getItem('mpm_attrib_current_topo_obj')
+                    if (curr_topo) {
+                        ent_type = Number(curr_topo);
+                    }
+                }
                 this.currentAttribLabel = this.attribLabel;
                 this.refreshLabels(ent_type);
             }
@@ -538,7 +550,14 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 this.unselectGeom(attrib.ent_type + attrib.id, attrib.ent_type, true);
             }
         }
-        this.refreshLabels(this.tab_map[this.getCurrentTab()]);
+        let ent_type = this.tab_map[this.getCurrentTab()];
+        if (ent_type === undefined) {
+            const curr_topo = localStorage.getItem('mpm_attrib_current_topo_obj');
+            if (curr_topo) {
+                ent_type = Number(curr_topo);
+            }
+        }
+        this.refreshLabels(ent_type);
     }
 
     getGISummary(model: GIModel) {

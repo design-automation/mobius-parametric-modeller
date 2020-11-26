@@ -142,6 +142,15 @@ table{
     }
     &.c3{
         white-space: pre;
+        th {
+            vertical-align: middle;
+            cursor: default;
+            &:last-child {
+                .material-icons {
+                    display: none;
+                }
+            }
+        }
         .inactive-row {
             .mat-cell{
                 background-color: $color5-5;
@@ -157,6 +166,11 @@ table{
                 background-color: $color5;
             }
         }
+        .material-icons{
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
     }
 }
 

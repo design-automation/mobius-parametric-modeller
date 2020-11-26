@@ -12,7 +12,6 @@ import { DropdownMenuComponent } from '../html/dropdown-menu.component';
 import { ModalService } from '../html/modal-window.service';
 import { ThreeJSViewerService } from './threejs-viewer.service';
 import { sortByKey } from '@libs/util/maps';
-import { number } from 'dist/assets/core/inline/_mathjs';
 
 let renderCheck = true;
 

@@ -278,9 +278,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
 
     public activateRender() {
         renderCheck = true;
-        setTimeout(() => {
-            renderCheck = true;
-        }, 30);
+        // setTimeout(() => {
+        //     renderCheck = true;
+        // }, 20);
     }
 
     /**

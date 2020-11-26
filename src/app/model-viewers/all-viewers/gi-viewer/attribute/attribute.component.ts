@@ -125,6 +125,8 @@ export class AttributeComponent implements OnChanges {
         'pg': EEntType.PGON,
         'co': EEntType.COLL,
     };
+    topoTypes = ['pg', 'pl', 'pt'];
+
 
     columnItalic = 'c2';
 
@@ -497,10 +499,18 @@ export class AttributeComponent implements OnChanges {
 
     selectRow(ent_id: string, event) {
         const currentTab = this.getCurrentTab();
+
         if (currentTab === 8) {
             return;
         }
+
         const id = Number(ent_id.substr(2));
+        const ent_type = ent_id.substr(0, 2);
+
+        if (this.topoTypes.indexOf(ent_type) !== -1) {
+            this.generateTopoTable(ent_id, this.tab_rev_map[this.string_map[ent_type]], 'ps');
+        }
+
         // Multiple row selection
         const ThreeJSData = this.model.modeldata.attribs.threejs;
         const attrib_table = ThreeJSData.getAttribsForTable(this.nodeIndex, this.tab_map[currentTab]);
@@ -610,7 +620,6 @@ export class AttributeComponent implements OnChanges {
             s.set(this.current_selected, this.current_selected);
         }
 
-        const ent_type = ent_id.substr(0, 2);
         this.selected_ents.clear();
         if (s.size === 1) {
             this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: id });

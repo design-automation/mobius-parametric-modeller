@@ -328,6 +328,7 @@ export class AttributeComponent implements OnChanges {
             this.topoTabIndex = tabIndex;
             this.topoID = ent_id;
         }
+        localStorage.setItem('mpm_attrib_current_topo_obj', null);
         return true;
     }
 
@@ -650,6 +651,7 @@ export class AttributeComponent implements OnChanges {
         }
         this.multi_selection.clear();
         const switchTabButton = document.getElementById('ObjTopoTab');
+        console.log('.....', this.currentShowingCol, this.string_map['ps'].toString());
         localStorage.setItem('mpm_attrib_current_topo_obj', this.string_map['ps'].toString());
         if (switchTabButton) { switchTabButton.click(); }
     }
@@ -677,6 +679,7 @@ export class AttributeComponent implements OnChanges {
             this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: id });
         }
         this.generateTopoTable(this.topoID, this.topoTabIndex, ent_id);
+        console.log('=====', this.currentShowingCol, this.string_map[ent_type].toString())
         localStorage.setItem('mpm_attrib_current_topo_obj', this.string_map[ent_type].toString());
     }
 

@@ -328,6 +328,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const sorted = sortByKey(unSorted);
         const arr = Array.from(sorted.values());
         const showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
+        console.log('    currentAttribLabel', this.currentAttribLabel)
         const attr_names = this._data_threejs.model.modeldata.attribs.getAttribNames(ent_type);
 
         let attr_name = this.currentAttribLabel, isArr = false, key;
@@ -555,6 +556,9 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             const curr_topo = localStorage.getItem('mpm_attrib_current_topo_obj');
             if (curr_topo) {
                 ent_type = Number(curr_topo);
+            }
+            if (this.currentAttribLabel === '') {
+                this.currentAttribLabel = '_id';
             }
         }
         this.refreshLabels(ent_type);

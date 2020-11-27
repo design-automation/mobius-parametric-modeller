@@ -10,7 +10,7 @@
     background-color: transparent;
     font-size: $fsize2;
     margin: 0px 0px 1px 0px;
-    padding: 0px 0px 1px 9px;
+    padding: 0px 0px 1px 12px;
     // padding-bottom: 1px;
     // padding-left: 2px;
     //border-bottom: 1px solid red;
@@ -29,7 +29,7 @@
     flex-shrink: 0;
 
     overflow-x: hidden;
-    width: calc(100% - 10px);
+    width: calc(100% - 13px);
     // min-width: fit-content; // for global side scroll
 
     &.strong{
@@ -125,16 +125,16 @@
         //border-bottom: 1px solid $color1;
         margin-right: 5px;
         border: 1px solid $color5;
-        padding: 1px 1px 1px 6px;
+        padding: 1px 1px 1px 2px;
         // padding-left: 6px;
 
         &.linked{
             border: 2px solid $selectGeom-color;
-            padding: 0px 0px 0px 5px;
+            padding: 0px 0px 0px 1px;
             // border: 2px solid $print-color-dk;
         }
         &.error{
-            padding: 0px 0px 0px 5px;
+            padding: 0px 0px 0px 1px;
             border: 2px solid $error-color;
         }
         &:focus, &:hover{
@@ -155,15 +155,15 @@
         //border-bottom: 1px solid $color1;
         margin-left: 5px;
         border: 1px solid $color5;
-        padding: 1px 1px 1px 6px;
+        padding: 1px 1px 1px 2px;
 
         &.linked{
             border: 2px solid $selectGeom-color;
-            padding: 0px 0px 0px 5px;
+            padding: 0px 0px 0px 1px;
         }
         &.error{
             border: 2px solid $error-color;
-            padding: 0px 0px 0px 5px;
+            padding: 0px 0px 0px 1px;
         }
         &:focus, &:hover{
             border-color: $selected-color;
@@ -430,6 +430,7 @@
     font-weight: 550;
     text-align: center;
     min-height: 17px;
+    margin-left: 2px;
 
     .module-name{
         color: $selected-color;

@@ -5,6 +5,7 @@ import * as itowns from 'itowns/dist/itowns';
 import { DataService } from '../../gi-viewer/data/data.service';
 import * as THREE from 'three';
 import { AmbientLight } from 'three';
+import * as suncalc from 'suncalc';
 
 
 export const API_MAPS = [
@@ -47,6 +48,11 @@ export class DataGeo {
     public camTarget;
     public viewColorLayers = [];
     public viewElevationLayers = [];
+
+    private latitude;
+    private longitude;
+    private elevation;
+    private scale;
 
     private lightingCamera;
 
@@ -209,23 +215,24 @@ export class DataGeo {
         //         this.settings.camera.right.z = newSetting.camera.right.z;
         //     }
         // }
-        // if (newSetting.time) {
-        //     if (newSetting.time.date) {
-        //         this.settings.time.date = newSetting.time.date;
-        //         if (this.settings.time.date.indexOf('T') === -1) {
-        //             Cesium.JulianDate.fromIso8601(this.settings.time.date, this.viewer.clock.currentTime);
-        //             Cesium.JulianDate.addDays(this.viewer.clock.currentTime, -1, this.viewer.clock.startTime);
-        //             Cesium.JulianDate.addDays(this.viewer.clock.currentTime, 1, this.viewer.clock.stopTime);
-        //             this.viewer.timeline.zoomTo(this.viewer.clock.startTime, this.viewer.clock.stopTime);
-        //         } else {
-        //             Cesium.JulianDate.fromIso8601(this.settings.time.date.split('T')[0], this.viewer.clock.currentTime);
-        //             Cesium.JulianDate.addDays(this.viewer.clock.currentTime, -1, this.viewer.clock.startTime);
-        //             Cesium.JulianDate.addDays(this.viewer.clock.currentTime, 1, this.viewer.clock.stopTime);
-        //             Cesium.JulianDate.fromIso8601(this.settings.time.date + ':00Z', this.viewer.clock.currentTime);
-        //             this.viewer.timeline.zoomTo(this.viewer.clock.startTime, this.viewer.clock.stopTime);
-        //         }
-        //     }
-        // }
+        if (newSetting.time) {
+            if (newSetting.time.date) {
+                this.settings.time.date = newSetting.time.date;
+                this._updateLightPos();
+                // if (this.settings.time.date.indexOf('T') === -1) {
+                //     Cesium.JulianDate.fromIso8601(this.settings.time.date, this.viewer.clock.currentTime);
+                //     Cesium.JulianDate.addDays(this.viewer.clock.currentTime, -1, this.viewer.clock.startTime);
+                //     Cesium.JulianDate.addDays(this.viewer.clock.currentTime, 1, this.viewer.clock.stopTime);
+                //     this.viewer.timeline.zoomTo(this.viewer.clock.startTime, this.viewer.clock.stopTime);
+                // } else {
+                //     Cesium.JulianDate.fromIso8601(this.settings.time.date.split('T')[0], this.viewer.clock.currentTime);
+                //     Cesium.JulianDate.addDays(this.viewer.clock.currentTime, -1, this.viewer.clock.startTime);
+                //     Cesium.JulianDate.addDays(this.viewer.clock.currentTime, 1, this.viewer.clock.stopTime);
+                //     Cesium.JulianDate.fromIso8601(this.settings.time.date + ':00Z', this.viewer.clock.currentTime);
+                //     this.viewer.timeline.zoomTo(this.viewer.clock.startTime, this.viewer.clock.stopTime);
+                // }
+            }
+        }
         // if (newSetting.model) {
         //     if (newSetting.model.polygonEdge !== this.settings.model.polygonEdge) {
         //         this.settings.model.polygonEdge = newSetting.model.polygonEdge;
@@ -264,25 +271,25 @@ export class DataGeo {
             }
         }
 
-        let longitude = LONGLAT[0];
-        let latitude = LONGLAT[1];
-        let elevation = 0;
+        this.longitude = LONGLAT[0];
+        this.latitude = LONGLAT[1];
+        this.elevation = 0;
         if (this.model.modeldata.attribs.query.hasModelAttrib('geolocation')) {
             const geoloc: any = this.model.modeldata.attribs.get.getModelAttribVal('geolocation');
             const long_value: TAttribDataTypes  = geoloc.longitude;
             if (typeof long_value !== 'number') {
                 throw new Error('Longitude attribute must be a number.');
             }
-            longitude = long_value as number;
-            if (longitude < -180 || longitude > 180) {
+            this.longitude = long_value as number;
+            if (this.longitude < -180 || this.longitude > 180) {
                 throw new Error('Longitude attribute must be between -180 and 180.');
             }
             const lat_value: TAttribDataTypes = geoloc.latitude;
             if (typeof lat_value !== 'number') {
                 throw new Error('Latitude attribute must be a number');
             }
-            latitude = lat_value as number;
-            if (latitude < 0 || latitude > 90) {
+            this.latitude = lat_value as number;
+            if (this.latitude < 0 || this.latitude > 90) {
                 throw new Error('Latitude attribute must be between 0 and 90.');
             }
             if (geoloc.elevation) {
@@ -290,10 +297,10 @@ export class DataGeo {
                 if (typeof ele_value !== 'number') {
                     throw new Error('Elevation attribute must be a number');
                 }
-                elevation = ele_value as number;
+                this.elevation = ele_value as number;
             }
         }
-        this.camTarget = new itowns.Coordinates('EPSG:4326', longitude, latitude, elevation);
+        this.camTarget = new itowns.Coordinates('EPSG:4326', this.longitude, this.latitude, this.elevation);
 
         const camTarget = this.camTarget.clone();
         camTarget.altitude += 2;
@@ -322,16 +329,32 @@ export class DataGeo {
         threeJSGroup.updateMatrixWorld();
         this.view.scene.add(threeJSGroup);
 
-        const scale = threejsScene._all_objs_sphere.radius;
-        const azimuth = 50;
-        const altitude = 90;
+        this.scale = threejsScene._all_objs_sphere.radius;
 
         const lightTarget = new THREE.Object3D();
         lightTarget.name = 'mobius_lightTarget';
         lightTarget.position.copy(cameraTargetPosition);
-        lightTarget.name = 'lightTarget';
         lightTarget.updateMatrixWorld();
         this.view.scene.add(lightTarget);
+
+        this._updateLightPos(lightTarget);
+
+        // this.view.scene.add(lighting);
+        this.lookAtObj(threejsScene);
+    }
+
+    private _updateLightPos(lightTarget?) {
+        if (!lightTarget) {
+            for (const childObj of this.view.scene.children) {
+                if (childObj.name === 'mobius_lightTarget') {
+                    lightTarget = childObj;
+                    break;
+                }
+            }
+        }
+        const lightingTime = new Date(this.settings.time.date);
+        const lightingPos = suncalc.getPosition(lightingTime, this.latitude, this.longitude);
+        // console.log(lightPos);
 
         const lighting = this.view.scene.children[0].children[0]
         // const lighting = new itowns.THREE.DirectionalLight(0xFFFFFF, 1);
@@ -342,16 +365,19 @@ export class DataGeo {
         lighting.shadow.mapSize.width = 2048;  // default
         lighting.shadow.mapSize.height = 2048; // default
         lighting.shadow.camera.near = 0.5;
-        lighting.shadow.camera.far = scale * 20;
+        lighting.shadow.camera.far = this.scale * 20;
         lighting.shadow.bias = -0.0004;
 
         const cam = <THREE.OrthographicCamera> lighting.shadow.camera;
         itowns.CameraUtils.transformCameraToLookAtTarget(this.view, cam, {
             coord: this.camTarget,
-            tilt: 45,
-            heading: -90,
-            range: scale
+            tilt: lightingPos.altitude * 180 / Math.PI,
+            heading: lightingPos.azimuth * 180 / Math.PI,
+            // tilt: 45,
+            // heading: -90,
+            range: this.scale
         });
+        console.log('tilt:', lightingPos.altitude * 180 / Math.PI, 'heading:', lightingPos.azimuth * 180 / Math.PI )
 
         // lighting.matrix.copy(this.lightingCamera.matrix);
         // lighting.matrixWorld.copy(this.lightingCamera.matrixWorld);
@@ -360,15 +386,13 @@ export class DataGeo {
         // camTarget.altitude = scale * 1.5;
         // lighting.position.copy(camTarget.as(this.view.referenceCrs));
         cam.up.set(0, 0, 1);
-        cam.left = -scale;
-        cam.right = scale;
-        cam.top = scale;
-        cam.bottom = -scale;
+        cam.left = -this.scale;
+        cam.right = this.scale;
+        cam.top = this.scale;
+        cam.bottom = -this.scale;
 
         lighting.updateMatrixWorld();
 
-        // this.view.scene.add(lighting);
-        this.lookAtObj(threejsScene);
     }
 
 

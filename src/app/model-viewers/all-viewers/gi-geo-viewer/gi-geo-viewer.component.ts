@@ -52,8 +52,8 @@ export class GIGeoViewerComponent {
      * @param value
      */
     public settingOnChange(setting: string, value?: number) {
-        // const scene = this.dataService.getThreejsScene();
-        // switch (setting) {
+        const scene = this.threeJSDataService.getThreejsScene();
+        switch (setting) {
         //     case 'camera.pos':
         //         const camera_pos = this.dataService.getThreejsScene()._camera[1].position;
         //         this.settings.camera.pos.x = camera_pos.x;
@@ -72,15 +72,16 @@ export class GIGeoViewerComponent {
         //         this.settings.camera.right.y = camera_right.y;
         //         this.settings.camera.right.z = camera_right.z;
         //         break;
-        //     case 'time.date':
-        //         const current_time = Cesium.JulianDate.toIso8601(this.dataService.getCesiumScene()._viewer.clock.currentTime).split(':');
-        //         this.settings.time.date = current_time[0] + ':' + current_time[1];
-        //         break;
-        //     case 'time.current':
-        //         const reset_time = (new Date()).toISOString().split(':');
-        //         this.settings.time.date = reset_time[0] + ':' + reset_time[1];
-        //         break;
-        // }
+            case 'time.date':
+                const current_time = (new Date()).toISOString().split(':');
+                // const current_time = Cesium.JulianDate.toIso8601(this.dataService.getCesiumScene()._viewer.clock.currentTime).split(':');
+                this.settings.time.date = current_time[0] + ':' + current_time[1];
+                break;
+            case 'time.current':
+                const reset_time = (new Date()).toISOString().split(':');
+                this.settings.time.date = reset_time[0] + ':' + reset_time[1];
+                break;
+        }
     }
     /**
      *
@@ -95,7 +96,6 @@ export class GIGeoViewerComponent {
         } else {
             this.backup_settings = <GeoSettings> JSON.parse(JSON.stringify(this.settings));
             const scene = this.dataService.getGeoScene();
-            console.log(scene.viewColorLayers)
             this.colorLayerList = scene.viewColorLayers.map(layer => layer.source.attribution.name);
             // this.elevLayerList = scene.viewElevationLayers.map(provider => provider.name);
             this.modalService.open(id);

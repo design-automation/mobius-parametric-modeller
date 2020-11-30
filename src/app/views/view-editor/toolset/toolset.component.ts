@@ -413,6 +413,8 @@ export class ToolsetComponent implements OnInit {
         this.dataService.dialogType = 'inlinefunc';
         this.dataService.dialog = <HTMLDialogElement>document.getElementById('headerDialog');
         this.dataService.dialog.showModal();
+        this.dataService.dialog.style.right = '-300px';
+
     }
 
     preventfocus(event) {

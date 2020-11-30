@@ -63,6 +63,7 @@
     "proj4": "^2.5.0",
     "rxjs": "^6.5.1",
     "rxjs-compat": "^6.5.1",
+    "suncalc": "^1.8.0",
     "three": "^0.110.0",
     "three-geo": "^1.4.2",
     "three-orbit-controls": "^82.1.0",

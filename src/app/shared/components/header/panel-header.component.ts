@@ -182,6 +182,14 @@ export class PanelHeaderComponent implements OnDestroy {
         }
     }
 
+    closeDialog(closeLS = false) {
+        if (closeLS) {
+            (<HTMLInputElement>document.getElementById('savels-name')).value = this.flowchart.name;
+        }
+        this.dataService.dialog.close();
+        this.dataService.dialog.style.right = '0px';
+    }
+
     checkDialog(type) {
         return this.dataService.dialogType === type;
     }
@@ -196,6 +204,7 @@ export class PanelHeaderComponent implements OnDestroy {
             this.settings['_func_' + this.func_categories[cat]] = (<HTMLInputElement>document.getElementById(`_func_${this.func_categories[cat]}`)).checked;
         }
         this.dataService.dialog.close();
+        this.dataService.dialog.style.right = '0px';
         this.dataService.triggerToolsetUpdate();
         localStorage.setItem('mobius_settings', JSON.stringify(this.settings));
 
@@ -205,12 +214,6 @@ export class PanelHeaderComponent implements OnDestroy {
         return this.settings[settingName] === value;
     }
 
-    closeDialog(closeLS = false) {
-        if (closeLS) {
-            (<HTMLInputElement>document.getElementById('savels-name')).value = this.flowchart.name;
-        }
-        this.dataService.dialog.close();
-    }
 
     async loadBackup(event: MouseEvent, filecode: string) {
         event.stopPropagation();
@@ -600,6 +603,7 @@ export class PanelHeaderComponent implements OnDestroy {
                 && rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
             if (!isInDialog) {
                 this.dataService.dialog.close();
+                this.dataService.dialog.style.right = '0px';
                 this.dataService.dialog = null;
             }
         }
@@ -925,6 +929,7 @@ export class PanelHeaderComponent implements OnDestroy {
     addGlobalFuncLS(event: MouseEvent) {
         event.stopPropagation();
         this.dataService.dialog.close();
+        this.dataService.dialog.style.right = '0px';
         this.dataService.dialogType = 'backup';
         this.dataService.dialog = <HTMLDialogElement>document.getElementById('headerDialog');
         this.dataService.dialog.showModal();

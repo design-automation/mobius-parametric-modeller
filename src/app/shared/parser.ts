@@ -87,11 +87,11 @@ export function modifyVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
     procedure.variable = null;
     if (!procedure.args[0].value) { return; }
 
-    procedure.args[0].value = modifyVarArg(procedure.args[0]);
+    procedure.args[0].value = modifyVarArg(procedure.args[0]).trim();
     const modifiedVar = parseVariable(procedure.args[0].value);
     procedure.args[0].jsValue = modifiedVar.jsStr;
     if (modifiedVar.valueStr) {
-        procedure.args[0].value = modifiedVar.valueStr;
+        procedure.args[0].value = modifiedVar.valueStr.trim();
     }
 
     if (modifiedVar.error) {

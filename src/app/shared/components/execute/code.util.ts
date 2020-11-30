@@ -63,7 +63,7 @@ export class CodeUtils {
                 // if (isMainFlowchart && prod.print) {
                 if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,` +
-                    `'Evaluating If: (${args[0].value}) is ' + (${args[0].jsValue}), '__null__');`);
+                    `\`Evaluating If: (${args[0].value}) is \` + (${args[0].jsValue}), '__null__');`);
                 }
                 codeStr.push(`if (${args[0].jsValue}){`);
                 // if (isMainFlowchart && prod.print) {
@@ -93,7 +93,7 @@ export class CodeUtils {
                 }
                 if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,` +
-                    `'Evaluating Else-if: (${args[0].value}) is ' + (${args[0].jsValue}), '__null__');`);
+                    `\`Evaluating Else-if: (${args[0].value}) is \` + (${args[0].jsValue}), '__null__');`);
                 }
                 codeStr.push(`if(${args[0].jsValue}){`);
                 // if (isMainFlowchart && prod.print) {
@@ -380,7 +380,7 @@ export class CodeUtils {
         if (prod.print && !specialPrint && prod.args[0].name !== '__none__' && prod.args[0].jsValue) {
                 // const repGet = prod.args[0].jsValue;
             const repGet = this.repGetAttrib(prod.args[0].jsValue);
-            codeStr.push(`printFunc(__params__.console,'${prod.args[0].value}', ${repGet});`);
+            codeStr.push(`printFunc(__params__.console,\`${prod.args[0].value}\`, ${repGet});`);
         }
         // if (isMainFlowchart && prod.selectGeom && prod.args[0].jsValue) {
         //     // const repGet = prod.args[0].jsValue;

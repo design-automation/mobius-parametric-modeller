@@ -66,13 +66,15 @@
 .inline-div{
     box-sizing: border-box;
     display: inline-block;
-    height: $fsize1+3px;
-    padding-bottom: 3px;
+    // height: $fsize1+3px;
+    // padding-bottom: 3px;
     white-space: nowrap;
 }
 
 input, select {
+    font-family: $inputFontFam;
     color: $color8;
+    font-weight: 400;
     background-color: transparent;
     border: 2px solid $color5;
     margin: 0px 2px;
@@ -83,7 +85,6 @@ input, select {
     vertical-align: bottom;
     padding: 0px 0px 0px 6px;
 
-    font-family: Arial;
     font-size: $fsize2;
     &:hover, &:focus{
         background-color: $color7;
@@ -163,6 +164,7 @@ select{
 .inp--type--container{
     display: flex;
     flex-flow: row nowrap;
+    align-items: center;
     justify-content: flex-start;
     margin-top: 1px;
     box-sizing: border-box;
@@ -170,8 +172,9 @@ select{
     min-width: fit-content;
     margin-bottom: 2px;
     .input--type{
+        font-family: $inputTextFontFam;
         color: $function-text-color;
-        font-weight: 550;
+        font-weight: 700;
         font-style: italic;
         width: 90px;
     }

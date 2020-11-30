@@ -1,7 +1,6 @@
 @import '~scss/colors';
 @import '~scss/variables';
 
-
 .container--nested{
     padding-left: 0px;
 }
@@ -40,10 +39,6 @@
     &.disabled{
         opacity: $disabled-opacity;
     }
-
-    // &.disabled .input--var, &.disabled .input--arg{
-    //     border: 2px solid $color5 !important;
-    // }
 
     &.selected{
         background-color: $selected-color1;
@@ -119,7 +114,9 @@
     }
 
     .input--var{
+        font-family: $inputFontFam;
         font-size: $fsize2;
+        font-weight: 400;
         min-width: 10px;
         background-color: $color6; 
         //border-bottom: 1px solid $color1;
@@ -147,7 +144,9 @@
     }
     
     .input--arg{
+        font-family: $inputFontFam;
         font-size: $fsize2;
+        font-weight: 400;
         resize: horizontal;
         min-width: 10px;
         //max-width: 300px;
@@ -178,7 +177,9 @@
         }
     }
     .input--comment{
+        font-family: $inputFontFam;
         font-size: $fsize2;
+        font-weight: 600;
         resize: horizontal;
         min-width: 200px;
         color: $comment-color;
@@ -423,11 +424,12 @@
 
 
 .function-text{
+    font-family: $inputTextFontFam;
     display: inline-block;
     white-space: nowrap;
     font-style: italic;
     color: $function-text-color;
-    font-weight: 550;
+    font-weight: 700;
     text-align: center;
     min-height: 17px;
     margin-left: 2px;
@@ -438,11 +440,12 @@
 }
 
 .basic-function-text{
+    font-family: $inputTextFontFam;
     display: inline-block;
     white-space: nowrap;
     font-style: italic;
     color: $basic-function-text-color;
-    font-weight: 550;
+    font-weight: 700;
     text-align: center;
     min-height: 17px;
 

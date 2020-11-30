@@ -32,8 +32,8 @@ export class ProcedureItemComponent implements OnDestroy {
     ModuleDoc = ModuleDocList;
 
     constructor(private dataService: DataService) {
-        this.ctx.font = '400 12px Arial';
-        this.ctxB.font = '700 12px Arial';
+        this.ctx.font = '400 12px Inconsolata';
+        this.ctxB.font = '700 12px Inconsolata';
     }
 
     ngOnDestroy() {

@@ -19,7 +19,7 @@ export class ProcedureInputEditorComponent implements OnDestroy {
     private ctx = document.createElement('canvas').getContext('2d');
 
     constructor() {
-        this.ctx.font = '400 12px arial';
+        this.ctx.font = '400 12px \'inconsolata\'';
     }
 
     ngOnDestroy() {

@@ -251,8 +251,8 @@ export class AttributeComponent implements OnChanges {
                     const selected = columns.find(column => column.substr(0, 1) === '_');
                     const rest_of_columns = columns.filter(column => column.substr(0, 1) !== '_');
                     // new_columns = selected ? [first, second, selected, ...rest_of_columns, ' ']
-                    // : [first, second, ...rest_of_columns, ' '];
-                    new_columns = selected ? [first, selected, ...rest_of_columns, ' '] : [first, ...rest_of_columns, ' '];
+                    // new_columns = selected ? [first, selected, ...rest_of_columns, ' '] : [first, ...rest_of_columns, ' '];
+                    new_columns = [first, ...rest_of_columns, ' '];
                 }
                 this.displayedColumns = new_columns;
                 this.dataSource.data = this.displayData;
@@ -298,7 +298,9 @@ export class AttributeComponent implements OnChanges {
             if ((<string> topoRow.get('_id')).slice(0, 2) === selected_type_str) {
                 if (topoHeader.length === 0) {
                     for (const attr of topoRow) {
-                        topoHeader.push(attr[0]);
+                        if (attr[0][0] !== '_') {
+                            topoHeader.push(attr[0]);
+                        }
                     }
                 }
                 tableRow.active = true;
@@ -313,7 +315,7 @@ export class AttributeComponent implements OnChanges {
         topoDataSource[0]._id = topoDataSource[0]._id.trim();
         // topoDataSource[0].selected = true;
 
-        if (topoHeader.length === 0) { topoHeader.push('_id'); }
+        topoHeader.unshift('_id');
         topoHeader.push(' ');
 
         this.displayedTopoColumns = topoHeader;

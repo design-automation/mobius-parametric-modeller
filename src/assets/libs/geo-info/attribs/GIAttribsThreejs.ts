@@ -227,6 +227,18 @@ export class GIAttribsThreejs {
                 {
                     for (const coll_i of this.modeldata.geom.nav.navCollToCollChildren(ent_i)) {
                         data.push(this._addEntSubAttribs(ssid, EEntType.COLL, coll_i, level));
+                        this.modeldata.geom.snapshot.getCollChildren(ssid, coll_i).forEach( child_coll_i =>
+                            data.push(this._addEntSubAttribs(ssid, EEntType.COLL, child_coll_i, level))
+                        );
+                        this.modeldata.geom.snapshot.getCollPgons(ssid, coll_i).forEach( pgon_i =>
+                            data.push(this._addEntSubAttribs(ssid, EEntType.PGON, pgon_i, level))
+                        );
+                        this.modeldata.geom.snapshot.getCollPlines(ssid, coll_i).forEach( pline_i =>
+                            data.push(this._addEntSubAttribs(ssid, EEntType.PLINE, pline_i, level))
+                        );
+                        this.modeldata.geom.snapshot.getCollPoints(ssid, coll_i).forEach( point_i =>
+                            data.push(this._addEntSubAttribs(ssid, EEntType.POINT, point_i, level))
+                        );
                     }
                 }
                 return data;

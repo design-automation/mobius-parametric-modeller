@@ -225,9 +225,6 @@ export class GIAttribsThreejs {
         switch (ent_type) {
             case EEntType.COLL:
                 {
-                    this.modeldata.geom.snapshot.getCollChildren(ssid, ent_i).forEach( child_coll_i =>
-                        data.push(this._addEntSubAttribs(ssid, EEntType.COLL, child_coll_i, level))
-                    );
                     this.modeldata.geom.snapshot.getCollPgons(ssid, ent_i).forEach( pgon_i =>
                         data.push(this._addEntSubAttribs(ssid, EEntType.PGON, pgon_i, level))
                     );
@@ -236,6 +233,9 @@ export class GIAttribsThreejs {
                     );
                     this.modeldata.geom.snapshot.getCollPoints(ssid, ent_i).forEach( point_i =>
                         data.push(this._addEntSubAttribs(ssid, EEntType.POINT, point_i, level))
+                    );
+                    this.modeldata.geom.snapshot.getCollChildren(ssid, ent_i).forEach( child_coll_i =>
+                        data.push(this._addEntSubAttribs(ssid, EEntType.COLL, child_coll_i, level))
                     );
                 }
                 return data;

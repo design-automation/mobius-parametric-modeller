@@ -130,6 +130,11 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         this.dataService = injector.get(DataService);
         this.modalWindow = injector.get(ModalService);
         this.SelectingEntityType = this.dataService.selectingEntityType;
+        if (this.dataService.switch_page) {
+            if (localStorage.getItem('gi_summary')) {
+                this.giSummary = JSON.parse(localStorage.getItem('gi_summary'));
+            }
+        }
         // this.keyboardService = injector.get(KeyboardService);
         // this.keyboardServiceSub = this.keyboardService.viewerControl$.subscribe(event => {
         //     this._data_threejs.onWindowKeyPress(event);

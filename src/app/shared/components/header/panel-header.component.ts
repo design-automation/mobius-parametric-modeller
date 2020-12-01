@@ -723,7 +723,7 @@ export class PanelHeaderComponent implements OnDestroy {
         let txtArea = document.getElementById('generatedLink');
         let baseLink = window.location.origin;
         if (baseLink.indexOf('design-automation.github.io') !== -1) {
-            baseLink += '/mobius-parametric-modeller-dev2';
+            baseLink += '/mobius-parametric-modeller-dev-0-7';
         }
         txtArea.innerHTML = `${baseLink}/${this.urlSet[1]}` +
             `?file=${url}${this.urlSet[2]}${this.urlSet[3]}${this.urlSet[4]}${this.urlSet[5]}`;
@@ -898,7 +898,11 @@ export class PanelHeaderComponent implements OnDestroy {
         SaveFileComponent.saveToLocalStorage('___TEMP___.mob', fileString);
         // localStorage.setItem('temp_file', fileString);
         setTimeout(() => {
-            window.open(`${window.location.origin}/editor?file=temp`, '_blank');
+            let baseLink = window.location.origin;
+            if (baseLink.indexOf('design-automation.github.io') !== -1) {
+                baseLink += '/mobius-parametric-modeller-dev-0-7';
+            }
+            window.open(`${baseLink}/editor?file=temp`, '_blank');
         }, 200);
         this.closeDialog();
     }

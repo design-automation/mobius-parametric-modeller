@@ -277,10 +277,11 @@ export class AttributeComponent implements OnChanges {
         const currentScroll = document.getElementById('topotable--container').scrollTop;
         const ThreeJSData = this.model.modeldata.attribs.threejs;
         const id = Number(ent_id.substr(2));
+        const ent_str = ent_id.slice(0, 2);
         let selected_type_str = selected_type.slice(0, 2);
-        if (ent_id.slice(0, 2) === 'co' && selected_type_str === 'ps') { selected_type_str = 'co'; }
+        if (ent_str === 'co' && selected_type_str === 'ps') { selected_type_str = 'co'; }
         const topoData = ThreeJSData.getEntSubAttribsForTable(this.nodeIndex, this.tab_map[tabIndex], id, this.string_map[selected_type_str]);
-        const baseIndent = this.indent_map[ent_id.slice(0, 2)];
+        const baseIndent = this.indent_map[ent_str];
         if (!topoData) {
             return false;
         }
@@ -307,10 +308,10 @@ export class AttributeComponent implements OnChanges {
             }
             const indentation = baseIndent - this.indent_map[tableRow._id.slice(0, 2)];
             tableRow._id = '    '.repeat(indentation) + tableRow._id;
-            topoDataSource.push(tableRow);
-            if (selected_type_str === 'co') {
-                tableRow._id = '    ' + tableRow._id;
+            if (ent_str === 'co') {
+                tableRow._id = '    ' + tableRow._id.trim();
             }
+            topoDataSource.push(tableRow);
         }
         topoDataSource[0]._id = topoDataSource[0]._id.trim();
         // topoDataSource[0].selected = true;
@@ -426,24 +427,6 @@ export class AttributeComponent implements OnChanges {
         }
         this.selected_ents.clear();
         this.multi_selection.clear();
-    }
-
-    singleClick(ent_id: string, event): void{
-        this.timer = 0;
-        this.preventSimpleClick = false;
-
-        this.timer = setTimeout(() => {
-            if (!this.preventSimpleClick) {
-                this.selectRow(ent_id, event);
-            }
-        }, 200);
-
-    }
-
-    doubleClick(ent_id: string, tabIndex): void {
-        this.preventSimpleClick = true;
-        clearTimeout(this.timer);
-        this.showTopo(ent_id, tabIndex);
     }
 
     selectRow(ent_id: string, event) {
@@ -594,7 +577,30 @@ export class AttributeComponent implements OnChanges {
         }
     }
 
+    singleClick(event, row): void{
+        this.timer = 0;
+        this.preventSimpleClick = false;
+
+        this.timer = setTimeout(() => {
+            if (!this.preventSimpleClick) {
+                this.selectTopo(event, row);
+            }
+        }, 200);
+
+    }
+
+    doubleClick(row): void {
+        this.preventSimpleClick = true;
+        clearTimeout(this.timer);
+        const ent_id = row._id.trim();
+        const ent_str = ent_id.substr(0, 2);
+        console.log(row._id.trim(), this.tab_rev_map[this.string_map[ent_str]])
+        this.showTopo(row._id.trim(), this.tab_rev_map[this.string_map[ent_str]]);
+    }
+
+
     showTopo(ent_id: string, tabIndex) {
+        console.log(ent_id, tabIndex);
         if (!this.generateTopoTable(ent_id, tabIndex, 'ps')) {
             return;
         }

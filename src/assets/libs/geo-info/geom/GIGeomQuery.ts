@@ -95,6 +95,32 @@ export class GIGeomQuery {
         }
         return map;
     }
+    /**
+     * Returns true if the first coll is a descendent of the second coll.
+     * @param coll_i
+     */
+    public isCollDescendent(coll1_i: number, coll2_i: number): boolean {
+        const ssid: number = this.modeldata.active_ssid;
+        let parent_coll_i: number = this.modeldata.geom.snapshot.getCollParent(ssid, coll1_i);
+        while (parent_coll_i !== undefined) {
+            if (parent_coll_i === coll2_i) { return true; }
+            parent_coll_i = this.modeldata.geom.snapshot.getCollParent(ssid, parent_coll_i);
+        }
+        return false;
+    }
+    /**
+     * Returns true if the first coll is an ancestor of the second coll.
+     * @param coll_i
+     */
+    public isCollAncestor(coll1_i: number, coll2_i: number): boolean {
+        const ssid: number = this.modeldata.active_ssid;
+        let parent_coll_i: number = this.modeldata.geom.snapshot.getCollParent(ssid, coll2_i);
+        while (parent_coll_i !== undefined) {
+            if (parent_coll_i === coll1_i) { return true; }
+            parent_coll_i = this.modeldata.geom.snapshot.getCollParent(ssid, parent_coll_i);
+        }
+        return false;
+    }
     // ============================================================================
     // Posis
     // ============================================================================

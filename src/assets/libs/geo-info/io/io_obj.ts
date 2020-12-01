@@ -314,7 +314,7 @@ function _getGroups(model: GIModel, ent_type: EEntType, ents_i: number[]): [stri
         const set_all_colls_i: Set<number> = new Set();
         for (const coll_i of colls_i) {
             set_all_colls_i.add(coll_i);
-            for (const anc_coll_i of model.modeldata.geom.modeldata.geom.colls.getCollAncestors(coll_i)) {
+            for (const anc_coll_i of model.modeldata.geom.modeldata.geom.nav.navCollToCollAncestors(coll_i)) {
                 set_all_colls_i.add(anc_coll_i);
             }
         }

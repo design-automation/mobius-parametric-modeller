@@ -368,7 +368,7 @@ export class GIGeomSnapshot {
             const [ent_type, ent_i]: TEntTypeIdx = ent_arr as TEntTypeIdx;
             if (ent_type === EEntType.COLL) {
                 // get the descendants of this collection
-                const coll_and_desc_i: number[] = this.modeldata.geom.colls.getCollDescendents(ent_i);
+                const coll_and_desc_i: number[] = this.modeldata.geom.nav_snapshot.navCollToCollDescendents(ssid, ent_i);
                 coll_and_desc_i.splice(0, 0, ent_i); //  add parent coll to start of list
                 // get all the objs
                 for (const one_coll_i of coll_and_desc_i) {

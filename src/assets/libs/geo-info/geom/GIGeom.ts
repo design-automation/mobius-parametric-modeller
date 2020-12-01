@@ -13,7 +13,7 @@ import { GIGeomSnapshot } from './GIGeomSnapshot';
 import { GIGeomThreejs } from './GIGeomThreejs';
 import { GIGeomImpExp } from './GIGeomImpExp';
 import { GIGeomNavTri } from './GIGeomNavTri';
-import { GIGeomColls } from './GIGeomColls';
+import { GIGeomNavSnapshot } from './GIGeomNavSnapshot';
 
 /**
  * Class for geometry.
@@ -23,7 +23,6 @@ export class GIGeom {
     public selected: TEntTypeIdx[]; // entities that should become selected
     //  all arrays
     public _geom_maps: IGeomMaps = {  // TODO this should not be public
-        // num_posis: 0,
         dn_verts_posis: new Map(),
         dn_tris_verts: new Map(),
         dn_edges_verts: new Map(),
@@ -32,9 +31,6 @@ export class GIGeom {
         dn_points_verts: new Map(),
         dn_plines_wires: new Map(),
         dn_pgons_wires: new Map(),
-        // dn_colls_points: new Map(),
-        // dn_colls_plines: new Map(),
-        // dn_colls_pgons: new Map(),
         up_posis_verts: new Map(),
         up_tris_pgons: new Map(),
         up_verts_edges: new Map(),
@@ -43,15 +39,11 @@ export class GIGeom {
         up_verts_points: new Map(),
         up_wires_plines: new Map(),
         up_wires_pgons: new Map(),
-        // up_points_colls: new Map(),
-        // up_plines_colls: new Map(),
-        // up_pgons_colls: new Map(),
         colls: new Set()
     };
     // sub classes with methods
     public imp_exp: GIGeomImpExp;
     public add: GIGeomAdd;
-    public colls: GIGeomColls;
     public del_vert: GIGeomDelVert;
     public edit_topo: GIGeomEditTopo;
     public edit_pline: GIGeomEditPline;
@@ -63,6 +55,7 @@ export class GIGeom {
     public compare: GIGeomCompare;
     public threejs: GIGeomThreejs;
     public snapshot: GIGeomSnapshot;
+    public nav_snapshot: GIGeomNavSnapshot;
     /**
      * Constructor
      */
@@ -70,7 +63,6 @@ export class GIGeom {
         this.modeldata = modeldata;
         this.imp_exp = new GIGeomImpExp(modeldata, this._geom_maps);
         this.add = new GIGeomAdd(modeldata, this._geom_maps);
-        this.colls = new GIGeomColls(modeldata, this._geom_maps);
         this.del_vert = new GIGeomDelVert(modeldata, this._geom_maps);
         this.edit_topo = new GIGeomEditTopo(modeldata, this._geom_maps);
         this.edit_pline = new GIGeomEditPline(modeldata, this._geom_maps);
@@ -82,6 +74,7 @@ export class GIGeom {
         this.compare = new GIGeomCompare(modeldata, this._geom_maps);
         this.threejs = new GIGeomThreejs(modeldata, this._geom_maps);
         this.snapshot = new GIGeomSnapshot(modeldata, this._geom_maps);
+        this.nav_snapshot = new GIGeomNavSnapshot(modeldata, this._geom_maps);
         this.selected = [];
     }
     /**

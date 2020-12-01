@@ -410,6 +410,7 @@ export function Clone(__model__: GIModel, entities: TId|TId[]|TId[][]): TId|TId[
     // --- Error Check ---
     // copy the list of entities
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = __model__.modeldata.funcs_common.copyGeom(ents_arr, true);
+    __model__.modeldata.funcs_common.clonePosisInEnts(new_ents_arr, true);
     // delete the existing entities
     __model__.modeldata.funcs_edit.delete(ents_arr, false);
     // return the new entities

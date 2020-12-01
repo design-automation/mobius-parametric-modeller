@@ -332,6 +332,12 @@ export class AttributeComponent implements OnChanges {
         return true;
     }
 
+    _clearSelectedTopo() {
+        for (const row of this.dataSourceTopo.data) {
+            row['selected'] = false;
+        }
+    }
+
     _sortingDataAccessor(data: object, headerID: string): string|number {
         if (headerID === '_id') {
             return Number(data[headerID].slice(2));
@@ -420,66 +426,6 @@ export class AttributeComponent implements OnChanges {
         this.multi_selection.clear();
     }
 
-//   selectRow(ent_id: string, event) {
-//     const currentTab = this.getCurrentTab();
-//     if (currentTab === 8) {
-//       return;
-//     }
-//     const id = Number(ent_id.substr(2));
-//     // Multiple row selection
-//     const ThreeJSData = this.data.attribs.threejs;
-//     const attrib_table_ents = ThreeJSData.getAttribsForTable(this.tab_map[currentTab]).ents;
-//     this.current_selected = id;
-//     const s = this.multi_selection;
-
-//     if (event.ctrlKey) {
-//       this.last_selected = this.current_selected;
-//       s.set(this.current_selected, this.current_selected);
-//     } else {
-//       if (!event.shiftKey) {
-//         s.clear();
-//         s.set(this.current_selected, this.current_selected);
-//         this.last_selected = this.current_selected;
-//       } else {
-//         if (this.last_selected === undefined) {
-//           this.last_selected = ThreeJSData.getAttribsForTable(this.tab_map[currentTab]).ents[0];
-//         }
-//         s.clear();
-//         if (this.current_selected < this.last_selected) { // select upper row
-//           attrib_table_ents.filter(ents => ents > this.current_selected && ents < this.last_selected).forEach(item => {
-//             s.set(item, item);
-//           });
-//           s.set(this.current_selected, this.current_selected);
-//           s.set(this.last_selected, this.last_selected);
-//         } else if (this.current_selected > this.last_selected) { // select lower row
-//           attrib_table_ents.filter(ents => ents < this.current_selected && ents > this.last_selected).forEach(item => {
-//             s.set(item, item);
-//           });
-//           s.set(this.current_selected, this.current_selected);
-//           s.set(this.last_selected, this.last_selected);
-//         }
-//       }
-//     }
-
-//     const ent_type = ent_id.substr(0, 2);
-//     const target = event.target;
-//     if (s.size === 1) {
-//       if (this.selected_ents.has(ent_id)) {
-//         this.attrTableSelect.emit({ action: 'unselect', ent_type: ent_type, id: id });
-//         this.selected_ents.delete(ent_id);
-//         target.parentNode.classList.remove('selected-row');
-//       } else {
-//         this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: id });
-//         this.selected_ents.set(ent_id, id);
-//         target.parentNode.classList.add('selected-row');
-//       }
-//     } else {
-//       this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: s });
-//       s.forEach(_id => {
-//         this.selected_ents.set(ent_id, id);
-//       });
-//     }
-//   }
     singleClick(ent_id: string, event): void{
         this.timer = 0;
         this.preventSimpleClick = false;
@@ -504,6 +450,7 @@ export class AttributeComponent implements OnChanges {
         if (currentTab === 8) {
             return;
         }
+        this._clearSelectedTopo();
 
         const id = Number(ent_id.substr(2));
         const ent_type = ent_id.substr(0, 2);
@@ -651,7 +598,6 @@ export class AttributeComponent implements OnChanges {
         }
         this.multi_selection.clear();
         const switchTabButton = document.getElementById('ObjTopoTab');
-        console.log('.....', this.currentShowingCol, this.string_map['ps'].toString());
         localStorage.setItem('mpm_attrib_current_topo_obj', this.string_map['ps'].toString());
         if (switchTabButton) { switchTabButton.click(); }
     }
@@ -661,25 +607,38 @@ export class AttributeComponent implements OnChanges {
         const ent_type = ent_id.substr(0, 2);
         const id = Number(ent_id.substr(2));
         const s = this.multi_selection;
-        if (this.current_selected !== id) {
-            this.currentShowingCol = '';
-        }
-        this.current_selected = id;
-        if (event.shiftKey || event.ctrlKey || event.metaKey) {
-            if (s.has(ent_id)) {
-                s.delete(ent_id);
-            } else {
-                this.last_selected = this.current_selected;
-                s.set(ent_id, this.current_selected);
+        if ((s.size === 0 || this.current_selected.substr(0, 2) !== ent_type) && !(event.shiftKey || event.ctrlKey || event.metaKey)) {
+            s.clear();
+            this.current_selected = ent_id;
+            for (const datarow of this.dataSourceTopo.data) {
+                console.log(datarow);
+                const row_ent_id = datarow['_id'].trim();
+                console.log(row_ent_id.substr(0, 2), ent_type, row_ent_id.substr(0, 2) === ent_type)
+                if (row_ent_id.substr(0, 2) === ent_type) {
+                    s.set(row_ent_id, Number(row_ent_id.substr(2)));
+                }
             }
             this.attrTableSelect.emit({ action: 'select', ent_type: 'multiple', id: s});
         } else {
-            s.clear();
-            s.set(ent_id, this.current_selected);
-            this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: id });
+            if (this.current_selected !== ent_id) {
+                this.currentShowingCol = '';
+            }
+            this.current_selected = ent_id;
+            if (event.shiftKey || event.ctrlKey || event.metaKey) {
+                if (s.has(ent_id)) {
+                    s.delete(ent_id);
+                } else {
+                    this.last_selected = this.current_selected;
+                    s.set(ent_id, this.current_selected);
+                }
+                this.attrTableSelect.emit({ action: 'select', ent_type: 'multiple', id: s});
+            } else {
+                s.clear();
+                s.set(ent_id, this.current_selected);
+                this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: id });
+            }
         }
         this.generateTopoTable(this.topoID, this.topoTabIndex, ent_id);
-        console.log('=====', this.currentShowingCol, this.string_map[ent_type].toString())
         localStorage.setItem('mpm_attrib_current_topo_obj', this.string_map[ent_type].toString());
     }
 

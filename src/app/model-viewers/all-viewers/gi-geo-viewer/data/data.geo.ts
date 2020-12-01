@@ -354,7 +354,6 @@ export class DataGeo {
         }
         const lightingTime = new Date(this.settings.time.date);
         const lightingPos = suncalc.getPosition(lightingTime, this.latitude, this.longitude);
-        // console.log(lightPos);
 
         const lighting = this.view.scene.children[0].children[0]
         // const lighting = new itowns.THREE.DirectionalLight(0xFFFFFF, 1);
@@ -368,15 +367,22 @@ export class DataGeo {
         lighting.shadow.camera.far = this.scale * 20;
         lighting.shadow.bias = -0.0004;
 
+        const tilt = lightingPos.altitude * 180 / Math.PI;
+
         const cam = <THREE.OrthographicCamera> lighting.shadow.camera;
         itowns.CameraUtils.transformCameraToLookAtTarget(this.view, cam, {
             coord: this.camTarget,
-            tilt: lightingPos.altitude * 180 / Math.PI,
+            tilt: tilt,
             heading: lightingPos.azimuth * 180 / Math.PI,
             // tilt: 45,
             // heading: -90,
             range: this.scale
         });
+        if (tilt < 0) {
+            lighting.intensity = 0;
+        } else {
+            lighting.intensity = 1;
+        }
         console.log('tilt:', lightingPos.altitude * 180 / Math.PI, 'heading:', lightingPos.azimuth * 180 / Math.PI )
 
         // lighting.matrix.copy(this.lightingCamera.matrix);
@@ -393,6 +399,10 @@ export class DataGeo {
 
         lighting.updateMatrixWorld();
 
+    }
+    private _addGround(threejsScene) {
+        console.log(threejsScene._all_objs_sphere)
+        
     }
 
 

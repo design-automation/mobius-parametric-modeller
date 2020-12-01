@@ -1756,7 +1756,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const scene = this._data_threejs;
         const coll_id = `${EEntTypeStr[EEntType.COLL]}${id}`;
         const children = [];
-        const pgons = this.model.modeldata.geom.nav.navCollToPgon(id);
+        const pgons = this.model.modeldata.geom.nav_snapshot.navCollToPgon(this.nodeIndex, id);
         const pgons_flat = [].concat(...pgons);
         let labelText = this.indexAsLabel(EEntTypeStr[EEntType.COLL], coll_id, id, EEntType.COLL);
 

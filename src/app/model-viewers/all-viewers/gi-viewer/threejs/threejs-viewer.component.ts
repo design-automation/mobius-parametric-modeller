@@ -333,7 +333,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const sorted = sortByKey(unSorted);
         const arr = Array.from(sorted.values());
         const showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
-        console.log('    currentAttribLabel', this.currentAttribLabel)
         const attr_names = this._data_threejs.model.modeldata.attribs.getAttribNames(ent_type);
 
         let attr_name = this.currentAttribLabel, isArr = false, key;

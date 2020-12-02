@@ -262,7 +262,8 @@
             <textarea id='inlineExpression' class='inlineFuncExpression' placeholder='Expression' (mousedown)='textareaMousedown = true'></textarea>
         </div>
         <div class='inlineFuncSaveButtonContainer'>
-            <button (click)='copyInlineFunc()'><mat-icon>content_copy</mat-icon></button>
+            <button id='insertInlineExpression' class='disabled' (click)='insertInlineFunc()'>Insert</button>
+            <button (click)='copyInlineFunc()'>Copy</button>
         </div>
     </div>
     <div class='saveLocalDialog' *ngIf='checkDialog("savels")'>

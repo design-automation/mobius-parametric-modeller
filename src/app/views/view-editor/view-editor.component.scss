@@ -182,6 +182,8 @@ procedure-item.ng-star-inserted{
 
 
 .divider--container{
+    font-family: $inputTextFontFam;
+    font-weight: 700;
     height: 20px;
     display: flex;
     flex-flow: column nowrap;
@@ -197,7 +199,6 @@ procedure-item.ng-star-inserted{
         border-bottom: 3px solid $color2;
         span{
             font-size: $fsize2;
-            font-weight: 550;
             color: $selected-color;
         }
     }
@@ -246,11 +247,14 @@ procedure-item.ng-star-inserted{
         transition: 0.4s;
         border: 2px solid transparent;
         list-style: none;
+
+        font-family: $inputTextFontFam;
+        font-weight: 700;
     
         span{
             padding-left: 6px;
             color: $selected-color;
-            font-weight: 550;
+            // font-weight: 550;
         }
         &:hover, &:active {
             // border-color: $selected-color;

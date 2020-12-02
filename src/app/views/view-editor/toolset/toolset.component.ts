@@ -409,12 +409,31 @@ export class ToolsetComponent implements OnInit {
 
     open_inline_dialog(event: MouseEvent) {
         event.stopPropagation();
+        const activeElm = <HTMLInputElement> document.activeElement;
+        console.log('~~~~', activeElm, activeElm.nodeName)
+        let insertInlineExpr = <HTMLButtonElement> document.getElementById('insertInlineExpression');
+        if (insertInlineExpr && !insertInlineExpr.classList.contains('disabled')) {
+            insertInlineExpr.classList.add('disabled');
+        }
         (<HTMLInputElement>document.getElementById('hidden_update_inline_func')).click();
         this.dataService.dialogType = 'inlinefunc';
         this.dataService.dialog = <HTMLDialogElement>document.getElementById('headerDialog');
         this.dataService.dialog.showModal();
         this.dataService.dialog.style.right = '-300px';
 
+        setTimeout(() => {
+            const expressionInput = <HTMLTextAreaElement> document.getElementById('inlineExpression');
+            insertInlineExpr = <HTMLButtonElement> document.getElementById('insertInlineExpression');
+            if (!expressionInput) { return; }
+            if (activeElm && activeElm.nodeName === 'INPUT') {
+                expressionInput.value = activeElm.value;
+                if (insertInlineExpr && insertInlineExpr.classList.contains('disabled')) {
+                    insertInlineExpr.classList.remove('disabled');
+                }
+            } else {
+                expressionInput.value = '';
+            }
+        }, 0);
     }
 
     preventfocus(event) {

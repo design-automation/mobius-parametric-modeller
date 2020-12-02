@@ -91,7 +91,8 @@
         padding: 0px;
         padding-left: 8px;
         font-style: italic;
-        font-weight: 550;
+        font-family: $inputTextFontFam;
+        font-weight: 700;
         // color: $function-text-color;
         font-size: $fsize2;
         height: 18px;
@@ -183,6 +184,8 @@
     font-weight: 550;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-family: $inputTextFontFam;
+    font-weight: 700;
 
     &.mainAccordion{
         &.active {
@@ -220,7 +223,8 @@
     // background-color: $color5;
     overflow: hidden;
     button{
-        font-weight: 550;
+        font-family: $inputTextFontFam;
+        font-weight: 700;
         color: $selected-color;
         font-style: italic;
         white-space: nowrap;
@@ -234,6 +238,7 @@
 .tooltip-variable{
     display: block;
     color: $color8;
+    font-family: $inputTextFontFam;
 
     &.invalid{
         opacity: $disabled-opacity;
@@ -244,6 +249,7 @@
 .tooltip-basic{
     display: block;
     color: $basic-function-text-color;
+    font-family: $inputTextFontFam;
 
     &.invalid{
         opacity: $disabled-opacity;
@@ -254,6 +260,8 @@
 .tooltip{
     display: block;
     color: $function-text-color;
+    font-family: $inputTextFontFam;
+    font-weight: 700;
 }
 
 

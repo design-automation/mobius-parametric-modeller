@@ -1031,6 +1031,14 @@ export class PanelHeaderComponent implements OnDestroy {
         }
     }
 
+    async insertInlineFunc() {
+        const expressionElement = <HTMLTextAreaElement> document.getElementById('inlineExpression');
+        this.dataService.focusedInput.value = expressionElement.value;
+        this.dataService.focusedInput.dispatchEvent(inputEvent);
+        document.getElementById('hidden_node_selection').click();
+        this.dataService.focusedInput.focus();
+    }
+
     async copyInlineFunc() {
         const expressionElement = <HTMLTextAreaElement> document.getElementById('inlineExpression');
         // expressionElement.focus();

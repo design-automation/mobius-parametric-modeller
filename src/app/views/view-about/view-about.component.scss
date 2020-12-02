@@ -9,8 +9,9 @@
     margin-top: 1px;
     margin-left: 11px; //split bar width
     // max-width: 600px;
+    width: calc(100% - 10px);
     height: calc(100% - 41px);
-    overflow: auto;
+    overflow: scroll;
 
     .logo{
         float: right;

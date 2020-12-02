@@ -53,6 +53,8 @@ mat-icon{
 .embedded-vid {
     width: calc(100vw - 700px);
     height: calc((100vw - 700px) * 315 / 560);
-    max-width: 560px;
-    max-height: 315px;
+    max-width: 562px;
+    max-height: 317px;
+    border: 1px solid $color1;
+    padding: 1px;
 }

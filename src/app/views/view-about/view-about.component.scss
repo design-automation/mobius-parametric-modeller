@@ -48,3 +48,10 @@ mat-icon{
     padding: 0px;
     cursor: pointer;
 }
+
+.embedded-vid {
+    width: calc(100vw - 700px);
+    height: calc((100vw - 700px) * 315 / 560);
+    max-width: 560px;
+    max-height: 315px;
+}

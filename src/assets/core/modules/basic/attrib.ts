@@ -142,15 +142,11 @@ export function Set(__model__: GIModel, entities: TId|TId[]|TId[][],
         if (value === undefined) {
             throw new Error(fn_name + ': value is undefined');
         }
-        if (entities !== null && entities !== undefined) {
-            ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL], null) as TEntTypeIdx|TEntTypeIdx[];
-        }
+        ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isNull, ID.isID, ID.isIDL], null) as TEntTypeIdx|TEntTypeIdx[];
         [attrib_name, attrib_idx_key] = checkAttribNameIdxKey(fn_name, attrib);
         checkAttribName(fn_name , attrib_name);
     } else {
-        if (entities !== null && entities !== undefined) {
-            // ents_arr = splitIDs(fn_name, 'entities', entities,
-            // [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+        if (entities !== null) {
             ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
         }
         [attrib_name, attrib_idx_key] = splitAttribNameIdxKey(fn_name, attrib);

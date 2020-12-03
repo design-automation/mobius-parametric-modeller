@@ -37,7 +37,12 @@ export class ThreeGeoComponent implements OnInit, OnChanges {
 
     ngOnInit() {
         if (!this.dataService.getGeoScene()) {
-            this.dataService.setGeoScene(geo_default_settings);
+            const savedSettings = localStorage.getItem('geo_settings');
+            if (!savedSettings) {
+                this.dataService.setGeoScene(geo_default_settings);
+            } else {
+                this.dataService.setGeoScene(JSON.parse(savedSettings));
+            }
         }
         const data = this.dataService.getGeoScene();
         data.model = this.model;

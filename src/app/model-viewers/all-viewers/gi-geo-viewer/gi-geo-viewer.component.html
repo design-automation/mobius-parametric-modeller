@@ -4,6 +4,9 @@
     <button id="zoomingfit" mat-icon-button (click)="zoomfit()" title='Zoom to Fit Model'>
         <mat-icon svgIcon="cZoom"></mat-icon>
     </button>
+    <div class='date-picker-div'>
+        <input class='viewer-date-picker' type="datetime-local" [ngModel]="settings.time.date" (ngModelChange)="updateLighting($event)">
+    </div>
     <modal-window id="geo_settings_modal" (closeModal) = 'onCloseModal()'>
         <h1>Geo Viewer Settings</h1>
         <tabs id="settingsTab">
@@ -18,7 +21,7 @@
                         </dd>
                         <dd id='cesium_date'>
                             <div class="label">Date:</div><br><br>
-                            <input class='date-picker' type="datetime-local" [(ngModel)]='settings.time.date'>
+                            <input class='date-picker' type="datetime-local" [ngModel]="settings.time.date" (ngModelChange)="updateLighting($event)">
                             <!-- <button (click)="settingOnChange('time.date')" class="filebtn getbtn">Get</button> -->
                             <button (click)="settingOnChange('time.current')" class="filebtn getbtn">Reset</button>
                         </dd>

@@ -83,8 +83,9 @@ export class DataGeo {
 
         this.container = document.getElementById('threejs-geo-container');
         this.view = new itowns.GlobeView(this.container, placement);
+        this.view.mainLoop.gfxEngine.renderer.setPixelRatio( window.devicePixelRatio );
         this.view.mainLoop.gfxEngine.renderer.shadowMap.enabled = true;
-        this.view.mainLoop.gfxEngine.renderer.shadowMap.type = itowns.THREE.PCFShadowMap;
+        this.view.mainLoop.gfxEngine.renderer.shadowMap.type = itowns.THREE.PCFSoftShadowMap;
 
         this.camTarget = this.view.controls.getLookAtCoordinate();
         // this.viewControl = new itowns.GlobeControls(this.view, this.camTarget, 200);
@@ -162,7 +163,7 @@ export class DataGeo {
         if (settings !== null) {
             newSetting = <GeoSettings> JSON.parse(JSON.stringify(settings));
         } else {
-            newSetting = <GeoSettings> JSON.parse(localStorage.getItem('cesium_settings'));
+            newSetting = <GeoSettings> JSON.parse(localStorage.getItem('geo_settings'));
         }
         if (!newSetting) { return; }
         if (newSetting.imagery) {
@@ -218,7 +219,7 @@ export class DataGeo {
         if (newSetting.time) {
             if (newSetting.time.date) {
                 this.settings.time.date = newSetting.time.date;
-                this._updateLightPos();
+                this.updateLightPos(newSetting.time.date);
                 // if (this.settings.time.date.indexOf('T') === -1) {
                 //     Cesium.JulianDate.fromIso8601(this.settings.time.date, this.viewer.clock.currentTime);
                 //     Cesium.JulianDate.addDays(this.viewer.clock.currentTime, -1, this.viewer.clock.startTime);
@@ -300,12 +301,15 @@ export class DataGeo {
                 this.elevation = ele_value as number;
             }
         }
+
         this.camTarget = new itowns.Coordinates('EPSG:4326', this.longitude, this.latitude, this.elevation);
 
         const camTarget = this.camTarget.clone();
         camTarget.altitude += 2;
         const cameraTargetPosition = camTarget.as(this.view.referenceCrs);
-        threeJSGroup.position.copy(cameraTargetPosition)
+
+        threeJSGroup.position.copy(cameraTargetPosition);
+        threeJSGroup.position.z += 0.1;
         threeJSGroup.lookAt(new THREE.Vector3(0, 0, 0));
         threeJSGroup.rotateY(Math.PI);
 
@@ -329,6 +333,8 @@ export class DataGeo {
         threeJSGroup.updateMatrixWorld();
         this.view.scene.add(threeJSGroup);
 
+        // this._addGround(threejsScene, cameraTargetPosition);
+
         this.scale = threejsScene._all_objs_sphere.radius;
 
         const lightTarget = new THREE.Object3D();
@@ -337,13 +343,13 @@ export class DataGeo {
         lightTarget.updateMatrixWorld();
         this.view.scene.add(lightTarget);
 
-        this._updateLightPos(lightTarget);
+        this.updateLightPos(this.settings.time.date, lightTarget);
 
         // this.view.scene.add(lighting);
         this.lookAtObj(threejsScene);
     }
 
-    private _updateLightPos(lightTarget?) {
+    public updateLightPos(time, lightTarget?) {
         if (!lightTarget) {
             for (const childObj of this.view.scene.children) {
                 if (childObj.name === 'mobius_lightTarget') {
@@ -352,7 +358,7 @@ export class DataGeo {
                 }
             }
         }
-        const lightingTime = new Date(this.settings.time.date);
+        const lightingTime = new Date(time);
         const lightingPos = suncalc.getPosition(lightingTime, this.latitude, this.longitude);
 
         const lighting = this.view.scene.children[0].children[0]
@@ -400,9 +406,30 @@ export class DataGeo {
         lighting.updateMatrixWorld();
 
     }
-    private _addGround(threejsScene) {
+    private _addGround(threejsScene, groundPos) {
         console.log(threejsScene._all_objs_sphere)
-        
+        const geometry = new THREE.PlaneBufferGeometry( threejsScene._all_objs_sphere.radius * 5, threejsScene._all_objs_sphere.radius * 5, 32, 32);
+
+        const material = new THREE.ShadowMaterial({
+            opacity: 1
+        });
+        // const material = new THREE.MeshPhongMaterial({
+        //     color: new THREE.Color(0xffffff),
+        //     transparent: true,
+        //     shininess: 0
+        // });
+        // material.opacity = 0.3;
+
+        const plane = new THREE.Mesh( geometry, material );
+        plane.name = 'mobius_ground';
+        plane.position.copy(groundPos);
+        plane.position.z += 0.1;
+        plane.receiveShadow = true;
+        plane.lookAt(new THREE.Vector3(0, 0, 0));
+        plane.rotateY(Math.PI);
+
+        plane.updateMatrixWorld();
+        this.view.scene.add(plane);
     }
 
 

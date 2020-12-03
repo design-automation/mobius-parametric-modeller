@@ -56,6 +56,14 @@ as-split-area{
     }
 }
 
+.date-picker-div{
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    z-index: 2;
+}
+
+
 #attrib{
     overflow: hidden !important;
     attribute{

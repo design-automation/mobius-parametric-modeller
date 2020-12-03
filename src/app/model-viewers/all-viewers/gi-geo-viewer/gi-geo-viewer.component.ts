@@ -38,6 +38,9 @@ export class GIGeoViewerComponent {
      */
     constructor(private dataService: DataGeoService, private modalService: ModalService, private threeJSDataService: ThreeJSDataService) {
         this.settings = JSON.parse(JSON.stringify(geo_default_settings));
+        setTimeout(() => {
+            this.settings = JSON.parse(JSON.stringify(this.dataService.getGeoScene().settings));
+        }, 0);
     }
 
     zoomfit() {
@@ -80,6 +83,7 @@ export class GIGeoViewerComponent {
             case 'time.current':
                 const reset_time = (new Date()).toISOString().split(':');
                 this.settings.time.date = reset_time[0] + ':' + reset_time[1];
+                this.dataService.getGeoScene().updateLightPos(this.settings.time.date);
                 break;
         }
     }
@@ -146,6 +150,11 @@ export class GIGeoViewerComponent {
                 }
             }
         }
+    }
+
+    public updateLighting(event) {
+        this.dataService.getGeoScene().updateLightPos(event);
+        this.settings.time.date = event;
     }
 
 }

@@ -2,7 +2,7 @@ import { Component, Input, DoCheck, OnDestroy } from '@angular/core';
 import { ModuleList, ModuleDocList } from '@shared/decorators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from '@shared/services';
-
+import * as showdown from 'showdown';
 /**
  * HelpViewerComponent
  */
@@ -13,9 +13,11 @@ import { DataService } from '@shared/services';
 })
 export class HelpViewerComponent implements DoCheck, OnDestroy {
     output: any;
+    description = '';
     ModuleDoc = ModuleDocList;
     Modules = [];
     activeModIndex: string;
+    mdConverter = new showdown.Converter({literalMidWordUnderscores: true});
 
     // TODO: update mobius url
     urlString: string;
@@ -41,6 +43,12 @@ export class HelpViewerComponent implements DoCheck, OnDestroy {
         }
         this.output = this.mainDataService.helpViewData[0];
         this.activeModIndex = this.mainDataService.helpViewData[1];
+        if (this.output) {
+            this.description = this.mdConverter.makeHtml(this.output.description.replace(/~/g, '<br/>'));
+            console.log(this.description);
+        } else {
+            this.description = '';
+        }
     }
 
     ngOnDestroy() {
@@ -51,6 +59,12 @@ export class HelpViewerComponent implements DoCheck, OnDestroy {
         if (this.mainDataService.helpView[1] === true) {
             this.output = this.mainDataService.helpView[2];
             this.mainDataService.togglePageHelp(false);
+            if (this.output) {
+                this.description = this.mdConverter.makeHtml(this.output.description.replace(/~/g, '<br/>'));
+                console.log(this.description)
+            } else {
+                this.description = '';
+            }
         }
     }
 

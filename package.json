@@ -62,6 +62,7 @@
     "proj4": "^2.5.0",
     "rxjs": "^6.5.1",
     "rxjs-compat": "^6.5.1",
+    "showdown": "^1.9.1",
     "suncalc": "^1.8.0",
     "three": "^0.110.0",
     "three-geo": "^1.4.2",

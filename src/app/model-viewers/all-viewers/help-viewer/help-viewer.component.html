@@ -12,11 +12,13 @@
         <h2><span>{{output.module}}</span>.{{output.name}}</h2>
         <!--<h4>Module: <span>{{output.module}}</span></h4>-->
         <div class = 'body--container'>
-            <div class = 'descr--container'>
-                <h5>Description:</h5>
-                <p *ngFor='let desc of output.description.split("~")'>{{desc}}</p>
+            <h5>Description:</h5>
+            <div class = 'descr--container' [innerHTML]="description">
             </div>
-    
+            <!-- <div class = 'descr--container'>
+                <p *ngFor='let desc of output.description.split("~")'>{{desc}}</p>
+            </div> -->
+
             <div class = 'param--container'>
                 <h5 *ngIf='output.parameters?.length > 0'>Parameters:</h5>
                 <ul class='params'>

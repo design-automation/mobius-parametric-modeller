@@ -162,7 +162,7 @@ select{
 }
 
 .inp--type--container{
-    display: flex;
+    display: block;
     flex-flow: row nowrap;
     align-items: center;
     justify-content: flex-start;
@@ -245,7 +245,7 @@ select{
     .entityDesc{
         color: $color1;
         height: 22px;
-        width: 170px;
+        width: 220px;
         padding: 0px;
         vertical-align: top;
         border: none;
@@ -287,7 +287,9 @@ select{
 .chkbox{
     display: none;
 }
-
+.chbox-inp{
+    display: inline-block;
+}
 
 .slider {
     -webkit-appearance: none;

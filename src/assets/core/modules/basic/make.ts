@@ -44,7 +44,13 @@ export enum _ECutMethod {
 // ================================================================================================
 /**
  * Adds one or more new position to the model.
- *
+ * ~
+ *   * 1
+ * ~
+ *   * xxxxaaa
+ * ~
+ *   * xxxxxz
+ * 
  * @param __model__
  * @param coords A list of three numbers, or a list of lists of three numbers.
  * @returns A new position, or nested list of new positions.

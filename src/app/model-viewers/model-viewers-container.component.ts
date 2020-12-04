@@ -37,23 +37,6 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
         this.emptyModel.nextSnapshot([]);
 
         const page = this.router.url.split('?')[0]
-        // if (page === '/publish' || page === '/minimal') {
-        //     this.Viewers = [];
-        //     viewCheck = this.router.url.split('showViewer=');
-        //     if (viewCheck.length === 1) { viewCheck = '';
-        //     } else { viewCheck = viewCheck[1].split('&')[0]; }
-        //     for (const view of Viewers) {
-        //         if (view.component.name === 'HelpViewerComponent') { continue; }
-        //         if (view.component.name === 'ConsoleViewer') {
-        //             this.Viewers.push(view);
-        //             continue;
-        //         }
-        //         if (viewCheck === '0') { continue; }
-        //         if (viewCheck === '1' && view.component.name === 'GICesiumViewerComponent') { continue; }
-        //         if (viewCheck === '2' && view.component.name === 'GIViewerComponent') { continue; }
-        //         this.Viewers.push(view);
-        //     }
-        // }
         viewCheck = this.router.url.split('showViewer=');
         this.Viewers = [];
         if (viewCheck.length === 1) { viewCheck = '';
@@ -63,7 +46,7 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
             for (const v of viewCheck) {
                 for (const view of Viewers) {
                     if (v === 1 && view.component.name === 'GIViewerComponent') { this.Viewers.push(view); }
-                    if (v === 2 && view.component.name === 'GICesiumViewerComponent') { this.Viewers.push(view); }
+                    // if (v === 2 && view.component.name === 'GICesiumViewerComponent') { this.Viewers.push(view); }
                     if (v === 3 && view.component.name === 'ConsoleViewerComponent') { this.Viewers.push(view); }
                     if (v === 4 && view.component.name === 'HelpViewerComponent') { this.Viewers.push(view); }
                 }
@@ -80,7 +63,7 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
                     continue;
                 }
                 if (viewCheck === '0') { continue; }
-                if (viewCheck === '1' && view.component.name === 'GICesiumViewerComponent') { continue; }
+                // if (viewCheck === '1' && view.component.name === 'GICesiumViewerComponent') { continue; }
                 if (viewCheck === '2' && view.component.name === 'GIViewerComponent') { continue; }
                 this.Viewers.push(view);
             }

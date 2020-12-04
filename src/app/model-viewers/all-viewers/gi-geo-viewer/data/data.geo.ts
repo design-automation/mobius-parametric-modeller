@@ -220,18 +220,6 @@ export class DataGeo {
             if (newSetting.time.date) {
                 this.settings.time.date = newSetting.time.date;
                 this.updateLightPos(newSetting.time.date);
-                // if (this.settings.time.date.indexOf('T') === -1) {
-                //     Cesium.JulianDate.fromIso8601(this.settings.time.date, this.viewer.clock.currentTime);
-                //     Cesium.JulianDate.addDays(this.viewer.clock.currentTime, -1, this.viewer.clock.startTime);
-                //     Cesium.JulianDate.addDays(this.viewer.clock.currentTime, 1, this.viewer.clock.stopTime);
-                //     this.viewer.timeline.zoomTo(this.viewer.clock.startTime, this.viewer.clock.stopTime);
-                // } else {
-                //     Cesium.JulianDate.fromIso8601(this.settings.time.date.split('T')[0], this.viewer.clock.currentTime);
-                //     Cesium.JulianDate.addDays(this.viewer.clock.currentTime, -1, this.viewer.clock.startTime);
-                //     Cesium.JulianDate.addDays(this.viewer.clock.currentTime, 1, this.viewer.clock.stopTime);
-                //     Cesium.JulianDate.fromIso8601(this.settings.time.date + ':00Z', this.viewer.clock.currentTime);
-                //     this.viewer.timeline.zoomTo(this.viewer.clock.startTime, this.viewer.clock.stopTime);
-                // }
             }
         }
         // if (newSetting.model) {
@@ -436,16 +424,6 @@ export class DataGeo {
     // PRIVATE METHODS
     private _getLayers() {
         this.viewColorLayers = [];
-        // this.viewColorLayers.push(new Cesium.ProviderViewModel({
-        //     name: 'Terrain(Background)',
-        //     iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
-        //     tooltip: 'Stamen World terrain (Background).\nhttp://www.maps.stamen.com/',
-        //     creationFunction: function () {
-        //         return new Cesium.OpenStreetMapImageryProvider({
-        //             url: 'https://stamen-tiles.a.ssl.fastly.net/terrain-background/',
-        //         });
-        //     },
-        // }));
         this.viewColorLayers.push(new itowns.ColorLayer('ColorLayer', {
             source: new itowns.TMSSource({
                 name: 'OpenStreetMap',
@@ -602,93 +580,6 @@ export class DataGeo {
         const here3 = '/{z}/{x}/{y}/{width}/png8?apiKey=';
 
 
-        // this.viewColorLayers.push(new Cesium.ProviderViewModel({
-        //     name: 'Here map normal',
-        //     iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
-        //     tooltip: 'Here',
-        //     creationFunction: function (apiKey) {
-        //         return new Cesium.UrlTemplateImageryProvider({
-        //             url: here1 + 'base' + here2 + 'normal.day' + here3 + apiKey,
-        //         });
-        //     },
-        // }));
-
-        // this.viewColorLayers.push(new Cesium.ProviderViewModel({
-        //     name: 'Here map normal grey',
-        //     iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
-        //     tooltip: 'Here',
-        //     creationFunction: function (apiKey) {
-        //         return new Cesium.UrlTemplateImageryProvider({
-        //             url: here1 + 'base' + here2 + 'normal.day.grey' + here3 + apiKey,
-        //         });
-        //     },
-        // }));
-
-        // this.viewColorLayers.push(new Cesium.ProviderViewModel({
-        //     name: 'Here map normal traffic',
-        //     iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
-        //     tooltip: 'Here',
-        //     creationFunction: function (apiKey) {
-        //         return new Cesium.UrlTemplateImageryProvider({
-        //             url: here1 + 'base' + here2 + 'normal.day.transit' + here3 + apiKey,
-        //         });
-        //     },
-        // }));
-
-        // this.viewColorLayers.push(new Cesium.ProviderViewModel({
-        //     name: 'Here map normal reduced',
-        //     iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
-        //     tooltip: 'Here',
-        //     creationFunction: function (apiKey) {
-        //         return new Cesium.UrlTemplateImageryProvider({
-        //             url: here1 + 'base' + here2 + 'reduced.day' + here3 + apiKey,
-        //         });
-        //     },
-        // }));
-
-        // this.viewColorLayers.push(new Cesium.ProviderViewModel({
-        //     name: 'Here map normal pedestrian',
-        //     iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
-        //     tooltip: 'Here',
-        //     creationFunction: function (apiKey) {
-        //         return new Cesium.UrlTemplateImageryProvider({
-        //             url: here1 + 'base' + here2 + 'pedestrian.day' + here3 + apiKey,
-        //         });
-        //     },
-        // }));
-
-        // this.viewColorLayers.push(new Cesium.ProviderViewModel({
-        //     name: 'Here map aerial terrain',
-        //     iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
-        //     tooltip: 'Here',
-        //     creationFunction: function (apiKey) {
-        //         return new Cesium.UrlTemplateImageryProvider({
-        //             url: here1 + 'aerial' + here2 + 'terrain.day' + here3 + apiKey,
-        //         });
-        //     },
-        // }));
-
-        // this.viewColorLayers.push(new Cesium.ProviderViewModel({
-        //     name: 'Here map aerial satellite',
-        //     iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
-        //     tooltip: 'Here',
-        //     creationFunction: function (apiKey) {
-        //         return new Cesium.UrlTemplateImageryProvider({
-        //             url: here1 + 'aerial' + here2 + 'satellite.day' + here3 + apiKey,
-        //         });
-        //     },
-        // }));
-
-        // this.viewColorLayers.push(new Cesium.ProviderViewModel({
-        //     name: 'Here map aerial hybrid',
-        //     iconUrl: Cesium.buildModuleUrl('Widgets/Images/TerrainProviders/CesiumWorldTerrain.png'),
-        //     tooltip: 'Here',
-        //     creationFunction: function (apiKey) {
-        //         return new Cesium.UrlTemplateImageryProvider({
-        //             url: here1 + 'aerial' + here2 + 'hybrid.day' + here3 + apiKey,
-        //         });
-        //     },
-        // }));
     }
 
     private _getTerrains() {

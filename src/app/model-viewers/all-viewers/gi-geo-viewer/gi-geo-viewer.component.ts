@@ -77,7 +77,6 @@ export class GIGeoViewerComponent {
         //         break;
             case 'time.date':
                 const current_time = (new Date()).toISOString().split(':');
-                // const current_time = Cesium.JulianDate.toIso8601(this.dataService.getCesiumScene()._viewer.clock.currentTime).split(':');
                 this.settings.time.date = current_time[0] + ':' + current_time[1];
                 break;
             case 'time.current':

@@ -19,18 +19,11 @@
             "assets": [
               "src/assets",
               "src/mobius.ico",
-              {
-                "glob": "**/*",
-                "input": "./node_modules/cesium/Build/Cesium",
-                "output": "/assets/cesium"
-              }
             ],
             "styles": [
-              "src/styles.scss",
-              "./node_modules/cesium/Build/Cesium/Widgets/widgets.css"
+              "src/styles.scss"
             ],
             "scripts": [
-              "./node_modules/cesium/Build/Cesium/Cesium.js"
             ]
           },
           "configurations": {

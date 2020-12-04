@@ -19,7 +19,6 @@ import {ViewEditorModule, ViewDashboardModule, ViewGalleryModule,
     ViewAboutComponent, ViewAboutModule, ViewPublishModule, ViewPublishComponent, ViewMinimalModule, ViewMinimalComponent} from '@views';
 import { AppRoutingModule } from './app-routing.module';
 import { GoogleAnalyticsService } from '@shared/services/google.analytics';
-import { DataCesiumService } from '../model-viewers/all-viewers/gi-cesium-viewer/data/data.cesium.service';
 import { DataOutputService } from '@shared/services/dataOutput.service';
 import { CytoscapeService } from '../model-viewers/all-viewers/cytoscape-viewer/service/cytoscape.service';
 // import { WebWorkerService } from 'ngx-web-worker';
@@ -58,7 +57,7 @@ import { CytoscapeService } from '../model-viewers/all-viewers/cytoscape-viewer/
         ViewAboutComponent,
     ],
     providers: [ DataService, DataOutputService, KeyboardService,
-                 GiViewerDataService, DataCesiumService, CytoscapeService,
+                 GiViewerDataService, CytoscapeService,
                  GoogleAnalyticsService,
                  {
                     provide: HTTP_INTERCEPTORS,

@@ -197,9 +197,9 @@ function _raytrace(origins_tjs: THREE.Vector3[], dirs_tjs: THREE.Vector3[], mesh
         result.hit_count = hit_count;
         result.miss_count = miss_count;
         result.total_dist = Mathjs.sum(result_dists);
-        result.min_dist = min(result_dists);
+        result.min_dist = Mathjs.min(result_dists);
         result.avg_dist = result.total_dist / result_dists.length;
-        result.max_dist = max(result_dists);
+        result.max_dist = Mathjs.max(result_dists);
         result.dist_ratio = result.total_dist / (result_dists.length * limits[1]);
     }
     if (method === _ERaytraceMethod.ALL || method === _ERaytraceMethod.DISTANCES) {
@@ -344,8 +344,8 @@ export function Isovist(__model__: GIModel, origins: TRay[]|TPlane[],
         }
         const total_dist = Mathjs.sum(result_dists);
         const avg_dist = total_dist / result_dists.length;
-        const min_dist = min(result_dists);
-        const max_dist = max(result_dists);
+        const min_dist = Mathjs.min(result_dists);
+        const max_dist = Mathjs.max(result_dists);
         // save the data
         result.avg_dist.push( avg_dist );
         result.min_dist.push( min_dist );
@@ -730,10 +730,10 @@ function _solarRaysDirectTjs(latitude: number, north: Txy, detail: number): THRE
     // const hour_step = [0.25 * 6, 0.25 * 5, 0.25 * 4, 0.25 * 3, 0.25 * 2, 0.25 * 1, 0.25 * 0.5][detail];
     const hour_step = [0.25 * 6, 0.25 * 4, 0.25 * 1, 0.25 * 0.5][detail];
     // get the angles in radians
-    const day_ang_rad: number = degToRad(47) as number / 182;
+    const day_ang_rad: number = degToRad(false, 47) as number / 182;
     const hour_ang_rad: number = (2 * Math.PI) / 24;
     // get the atitude angle in radians
-    const latitude_rad: number = degToRad(latitude) as number;
+    const latitude_rad: number = degToRad(false, latitude) as number;
     // get the angle from y-axis to north vector in radians
     const north_rad = vecAng2([north[0], north[1], 0], [0, 1, 0], [0, 0, 1]);
     // create the vectors
@@ -781,9 +781,9 @@ function _solarRaysDirectTjs(latitude: number, north: Txy, detail: number): THRE
 }
 function _solarRaysIndirectTjs(latitude: number, north: Txy, detail: number): THREE.Vector3[] {
     const hedron_tjs: THREE.IcosahedronGeometry = new THREE.IcosahedronGeometry(1, detail + 2);
-    const solar_offset = Math.cos(degToRad(66.5) as number);
+    const solar_offset = Math.cos(degToRad(false, 66.5) as number);
     // get the atitude angle in radians
-    const latitude_rad: number = degToRad(latitude) as number;
+    const latitude_rad: number = degToRad(false, latitude) as number;
     // get the angle from y-axis to north vector in radians
     const north_rad = vecAng2([north[0], north[1], 0], [0, 1, 0], [0, 0, 1]);
     // calc vectors

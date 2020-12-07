@@ -18,6 +18,7 @@ import { arrMakeFlat } from '@assets/libs/util/arrs';
 import { min, max } from '@assets/core/inline/_math';
 import { vecMult, vecAdd, vecSetLen, vecCross, vecNorm, vecSub, vecDot } from '@assets/libs/geom/vectors';
 import * as ch from 'chroma-js';
+import * as Mathjs from 'mathjs';
 // ================================================================================================
 export enum _ESide {
     FRONT =   'front',
@@ -216,11 +217,11 @@ function _gradient(__model__: GIModel, ents_arr: TEntTypeIdx[], attrib_name: str
     const vert_values: number[] = __model__.modeldata.attribs.get.getEntAttribVal(EEntType.VERT, all_verts_i, attrib_name) as number[];
     // if range[0] is null, get min value
     if (range[0] === null) {
-        range[0] = min(vert_values);
+        range[0] = Mathjs.min(vert_values);
     }
     // if range[1] is null. get max value
     if (range[1] === null) {
-        range[1] = max(vert_values);
+        range[1] = Mathjs.max(vert_values);
     }
     // create color scale
     const scales = {

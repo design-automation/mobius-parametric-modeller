@@ -177,7 +177,6 @@ const arithmetic = [
     ['sigFig(n, f)', 'Returns the value of the number converted to the specified number of significant figures.'],
     ['ceil(n)', 'Returns the value of the number rounded up to its nearest integer'],
     ['floor(n)', 'Returns the value of the number rounded down to its nearest integer'],
-    ['mod(n1, n2)', 'Returns the remainder after division of num1 by num2'],
     ['remap(n, d1, d2)', 'Maps a number from the d1 domain to the d2 domain.'],
     ['sum(list)', 'Returns the sum of all values in a list'],
     ['prod(list)', 'Returns the product of all values in a list'],

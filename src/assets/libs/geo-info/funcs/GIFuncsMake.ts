@@ -846,7 +846,7 @@ export class GIFuncsMake {
     private _sweepStringers( backbone_wire_i: number, xsection_wire_i: number, divisions: number): TEntTypeIdx[] {
         const backbone_is_closed: boolean = this.modeldata.geom.query.isWireClosed(backbone_wire_i);
         const ribs_posis_i: number[][] = this. _sweepPosis(backbone_wire_i, xsection_wire_i, divisions);
-        const stringers_posis_i: number[][] = listZip(ribs_posis_i);
+        const stringers_posis_i: number[][] = listZip(false, ribs_posis_i);
         const plines: TEntTypeIdx[] = [];
         for (const stringer_posis_i of stringers_posis_i) {
             const pline_i: number = this.modeldata.geom.add.addPline(stringer_posis_i, backbone_is_closed);

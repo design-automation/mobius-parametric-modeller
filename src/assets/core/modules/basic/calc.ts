@@ -750,7 +750,7 @@ function _getRayFromEdge(__model__: GIModel, ent_arr: TEntTypeIdx): TRay {
 }
 function _getRayFromPgon(__model__: GIModel, ent_arr: TEntTypeIdx): TRay {
     const plane: TPlane = _getPlane(__model__, ent_arr) as TPlane;
-    return rayFromPln(plane) as TRay;
+    return rayFromPln(false, plane) as TRay;
 }
 function _getRayFromPline(__model__: GIModel, ent_arr: TEntTypeIdx): TRay[] {
     const edges_i: number[] = __model__.modeldata.geom.nav.navAnyToEdge(ent_arr[0], ent_arr[1]);

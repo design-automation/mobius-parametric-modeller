@@ -1,11 +1,29 @@
-export function isApprox(n1: number, n2: number, t: number) {
+/**
+ * Returns true if the absolute difference between the two numbers is less than the tolerance, t
+ * @param n1 
+ * @param n2 
+ * @param t 
+ */
+export function isApprox(debug: boolean, n1: number, n2: number, t: number) {
     return Math.abs(n1 - n2) < t;
 }
-export function isIn(v1: any, v2: any, v3: any): boolean {
+/**
+ * Returns v1 < v2 < v3.
+ * @param v1 
+ * @param v2 
+ * @param v3 
+ */
+export function isIn(debug: boolean, v1: any, v2: any, v3: any): boolean {
     return typeof v1 === 'number' && typeof v2 === 'number' && typeof v3 === 'number' &&
     v1 < v2 && v2 < v3;
 }
-export function isWithin(v1: any, v2: any, v3: any): boolean {
+/**
+ * Returns v1 <= v2 <= v3.
+ * @param v1 
+ * @param v2 
+ * @param v3 
+ */
+export function isWithin(debug: boolean, v1: any, v2: any, v3: any): boolean {
     return typeof v1 === 'number' && typeof v2 === 'number' && typeof v3 === 'number' &&
     v1 <= v2 && v2 <= v3;
 }

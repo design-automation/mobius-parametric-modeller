@@ -1,14 +1,31 @@
-import { getArrDepth2 } from '@assets/libs/util/arrs';
-
-export function radToDeg(rad: number|number[]): number|number[] {
-    if (Array.isArray(rad)) { return rad.map(a_rad => radToDeg(a_rad)) as number[]; }
+/**
+ * Converts radians to degrees.
+ *
+ * @param rad
+ */
+export function radToDeg(debug: boolean, rad: number|number[]): number|number[] {
+    if (Array.isArray(rad)) { return rad.map(a_rad => radToDeg(debug, a_rad)) as number[]; }
     return rad * (180 / Math.PI);
 }
-export function degToRad(deg: number|number[]): number|number[] {
-    if (Array.isArray(deg)) { return deg.map(a_deg => degToRad(a_deg)) as number[]; }
+/**
+ * Converts degrees to radians.
+ *
+ * @param deg
+ */
+export function degToRad(debug: boolean, deg: number|number[]): number|number[] {
+    if (Array.isArray(deg)) { return deg.map(a_deg => degToRad(debug, a_deg)) as number[]; }
     return deg * (Math.PI / 180);
 }
-export function numToStr(num: number|number[], frac_digits?: number, locale?: string): string|string[] {
+/**
+ * Converts the number to a string, with commas, e.g. 1,234,567
+ * Converts the number to a string, with commas, where "d" specifies the number of fraction digits, e.g. 1,234.00.
+ * Converts the number to a string, where "d" specifies the number of fraction digits, and "l" specifies the locale, e.g. "en-GB", "fi-FI", "in-IN", "pt-BR", etc'
+ *
+ * @param num
+ * @param frac_digits
+ * @param locale
+ */
+export function numToStr(debug: boolean, num: number|number[], frac_digits?: number, locale?: string): string|string[] {
     if (Array.isArray(num)) {
         for (let i = 0; i < num.length; i++) {
             num[i] = typeof num === 'number' ? num : Number(num);
@@ -22,7 +39,14 @@ export function numToStr(num: number|number[], frac_digits?: number, locale?: st
     if (Array.isArray(num)) { return num.map(a_num => a_num.toLocaleString(locale, options)) as string[]; }
     return num.toLocaleString(locale, options) as string;
 }
-export function numToCurr(num: number|number[], currency: string, locale?: string): string|string[] {
+/**
+ * Converts the number to a string representing currency.
+ *
+ * @param num
+ * @param currency
+ * @param locale
+ */
+export function numToCurr(debug: boolean, num: number|number[], currency: string, locale?: string): string|string[] {
     if (Array.isArray(num)) {
         for (let i = 0; i < num.length; i++) {
             num[i] = typeof num === 'number' ? num : Number(num);

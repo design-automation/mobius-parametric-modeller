@@ -3,19 +3,34 @@
  */
 
 import * as Mathjs from 'mathjs';
-
-export function setMake(list: any[]): any[] {
+/**
+ * Generates a list of unique items.
+ * @param list 
+ */
+export function setMake(debug: boolean, list: any[]): any[] {
     return Array.from(new Set(list));
 }
-
-export function setUni(list1: any[], list2: any[]): any[] {
+/**
+ * Generates a list of unique items from the union of the two input lists.
+ * @param list1 
+ * @param list2 
+ */
+export function setUni(debug: boolean, list1: any[], list2: any[]): any[] {
     return Mathjs.setUnion(list1, list2);
 }
-
-export function setInt(list1: any[], list2: any[]): any[] {
+/**
+ * Generates a list of unique items from the intersection of the two input lists.
+ * @param list1 
+ * @param list2 
+ */
+export function setInt(debug: boolean, list1: any[], list2: any[]): any[] {
     return Mathjs.setIntersect(list1, list2);
 }
-
-export function setDif(list1: any[], list2: any[]): any[] {
+/**
+ * Generates a list of unique items from the difference of the two input lists.
+ * @param list1 
+ * @param list2 
+ */
+export function setDif(debug: boolean, list1: any[], list2: any[]): any[] {
     return Mathjs.setDifference(list1, list2);
 }

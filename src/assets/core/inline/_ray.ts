@@ -4,27 +4,29 @@ import { getArrDepth2 } from '@assets/libs/util/arrs';
 import { multMatrix, xformMatrix } from '@assets/libs/geom/matrix';
 
 /**
- * Ray functions that modify rays. These functions do not modify input ray.
- *
- * The function is overloaded.
+ * Creates a ray from an origin "o" and a direction vector "d".
+ * Creates a ray from an origin "o", a direction vector "d", and length "l".
+ * @param origin 
+ * @param dir 
+ * @param len 
  */
-export function rayMake(origin: Txyz|Txyz[], dir: Txyz|Txyz[], len?: number): TRay|TRay[] {
+export function rayMake(debug: boolean, origin: Txyz|Txyz[], dir: Txyz|Txyz[], len?: number): TRay|TRay[] {
     // overloaded case
     const origin_dep: number = getArrDepth2(origin);
     const dir_dep: number = getArrDepth2(dir);
     if (origin_dep === 2 || dir_dep === 2) {
         if (dir_dep === 1) {
             // only origin is Txyz[]
-            return (origin as Txyz[]).map( origin_val => rayMake(origin_val as Txyz, dir as Txyz, len) as TRay);
+            return (origin as Txyz[]).map( origin_val => rayMake(debug, origin_val as Txyz, dir as Txyz, len) as TRay);
         } else if (origin_dep === 1) {
             // only dir is Txyz[]
-            return (dir as Txyz[]).map( dir_val => rayMake(origin as Txyz, dir_val as Txyz, len) as TRay);
+            return (dir as Txyz[]).map( dir_val => rayMake(debug, origin as Txyz, dir_val as Txyz, len) as TRay);
         } else {
             // both origin and dir are Txyz[], they must be equal length
             if (origin.length === dir.length) {
                 const vecs: TRay[] = [];
                 for (let i = 0; i < origin.length; i++) {
-                    vecs.push( rayMake(origin[i] as Txyz, dir[i] as Txyz, len) as TRay );
+                    vecs.push( rayMake(debug, origin[i] as Txyz, dir[i] as Txyz, len) as TRay );
                 }
                 return vecs;
             } else {
@@ -36,16 +38,23 @@ export function rayMake(origin: Txyz|Txyz[], dir: Txyz|Txyz[], len?: number): TR
     const ray_vec: Txyz = len ? vecSetLen(dir as Txyz, len) : dir as Txyz;
     return [origin.slice() as Txyz, ray_vec];
 }
-
-export function rayCopy(ray: TRay|TRay[]): TRay|TRay[] {
+/**
+ * Make a copy of the ray "r"
+ * @param ray 
+ */
+export function rayCopy(debug: boolean, ray: TRay|TRay[]): TRay|TRay[] {
     // overloaded case
     const ray_dep: number = getArrDepth2(ray);
-    if (ray_dep === 3) { return (ray as TRay[]).map(ray_one => rayCopy(ray_one)) as TRay[]; }
+    if (ray_dep === 3) { return (ray as TRay[]).map(ray_one => rayCopy(debug, ray_one)) as TRay[]; }
     // normal case
     return [ray[0].slice() as Txyz, ray[1].slice() as Txyz];
 }
-
-export function rayMove(ray: TRay|TRay[], vec: Txyz|Txyz[]): TRay|TRay[] {
+/**
+ * Move the ray "r" relative to the global X, Y, and Z axes, by vector "v".
+ * @param ray 
+ * @param vec 
+ */
+export function rayMove(debug: boolean, ray: TRay|TRay[], vec: Txyz|Txyz[]): TRay|TRay[] {
     // overloaded case
     const ray_dep: number = getArrDepth2(ray);
     const vec_dep: number = getArrDepth2(vec);
@@ -53,12 +62,12 @@ export function rayMove(ray: TRay|TRay[], vec: Txyz|Txyz[]): TRay|TRay[] {
         ray = ray as TRay[];
         if (vec_dep === 1) {
             vec = vec as Txyz;
-            return ray.map(ray_one => rayMove(ray_one, vec)) as TRay[];
+            return ray.map(ray_one => rayMove(debug, ray_one, vec)) as TRay[];
         } else if (vec_dep === 2 && ray.length === vec.length) {
             vec = vec as Txyz[];
             const rays: TRay[] = [];
             for (let i = 0; i < ray.length; i++) {
-                rays.push( rayMove(ray[i], vec[i]) as TRay );
+                rays.push( rayMove(debug, ray[i], vec[i]) as TRay );
             }
         } else {
             throw new Error('Error moving a list rays with a list of vectors: The two lists must be of equal length.');
@@ -69,8 +78,13 @@ export function rayMove(ray: TRay|TRay[], vec: Txyz|Txyz[]): TRay|TRay[] {
     vec = vec as Txyz;
     return [vecAdd(ray[0], vec), ray[1].slice() as Txyz];
 }
-
-export function rayRot(ray1: TRay|TRay[], ray2: TRay|TRay[], ang: number|number[]): TRay|TRay[] {
+/**
+ * Rotate the ray "r1" around the ray "r2", by angle "a" (in radians).
+ * @param ray1 
+ * @param ray2 
+ * @param ang 
+ */
+export function rayRot(debug: boolean, ray1: TRay|TRay[], ray2: TRay|TRay[], ang: number|number[]): TRay|TRay[] {
     // overloaded case
     const ray1_dep: number = getArrDepth2(ray1);
     const ray2_dep: number = getArrDepth2(ray2);
@@ -80,13 +94,13 @@ export function rayRot(ray1: TRay|TRay[], ray2: TRay|TRay[], ang: number|number[
         if (ray2_dep === 2 && ang_dep === 0) {
             ray2 = ray2 as TRay;
             ang = ang as number;
-            return ray1.map(ray1_one => rayRot(ray1_one, ray2, ang)) as TRay[];
+            return ray1.map(ray1_one => rayRot(debug, ray1_one, ray2, ang)) as TRay[];
         } else if (ray2_dep === 3 && ang_dep === 1 && ray1.length === ray2.length && ray1.length === (ang as number[]).length) {
             ray2 = ray2 as TRay[];
             ang = ang as number[];
             const rays: TRay[] = [];
             for (let i = 0; i < ray1.length; i++) {
-                rays.push( rayRot(ray1[i], ray2[i], ang[i]) as TRay );
+                rays.push( rayRot(debug, ray1[i], ray2[i], ang[i]) as TRay );
             }
             return rays as TRay[];
         } else {
@@ -101,8 +115,12 @@ export function rayRot(ray1: TRay|TRay[], ray2: TRay|TRay[], ang: number|number[
     const rot_ray1_origin: Txyz = vecAdd(ray2[0], vecRot(from_ray2_o_to_ray1_o, ray2[1], ang));
     return [rot_ray1_origin, vecRot(ray1[1], ray2[1], ang)];
 }
-
-export function rayLMove(ray: TRay|TRay[], dist: number|number[]): TRay|TRay[] {
+/**
+ * Move the ray "r" relative to the ray direction vector, by distance "d".
+ * @param ray 
+ * @param dist 
+ */
+export function rayLMove(debug: boolean, ray: TRay|TRay[], dist: number|number[]): TRay|TRay[] {
     // overloaded case
     const ray_dep: number = getArrDepth2(ray);
     const dist_dep: number = getArrDepth2(dist);
@@ -110,12 +128,12 @@ export function rayLMove(ray: TRay|TRay[], dist: number|number[]): TRay|TRay[] {
         ray = ray as TRay[];
         if (dist_dep === 0) {
             dist = dist as number;
-            return ray.map(ray_one => rayLMove(ray_one, dist)) as TRay[];
+            return ray.map(ray_one => rayLMove(debug, ray_one, dist)) as TRay[];
         } else if (dist_dep === 1 && ray.length === (dist as number[]).length) {
             dist = dist as number[];
             const rays: TRay[] = [];
             for (let i = 0; i < ray.length; i++) {
-                rays.push( rayLMove(ray[i], dist[i]) as TRay );
+                rays.push( rayLMove(debug, ray[i], dist[i]) as TRay );
             }
         } else {
             throw new Error('Error moving a list rays with a list of distances: The two lists must be of equal length.');
@@ -127,23 +145,35 @@ export function rayLMove(ray: TRay|TRay[], dist: number|number[]): TRay|TRay[] {
     const vec: Txyz = vecMult(vecNorm(ray[1]), dist);
     return [vecAdd(ray[0], vec), ray[1].slice() as Txyz];
 }
-
-export function rayFromPln(pln: TPlane|TPlane[]): TRay|TRay[] {
+/**
+ * Create a ray from a plane "p", with the same origin and with a direction along the plane z axis.
+ * @param pln 
+ */
+export function rayFromPln(debug: boolean, pln: TPlane|TPlane[]): TRay|TRay[] {
     // overloaded case
     const pln_dep: number = getArrDepth2(pln);
-    if (pln_dep === 3) { return (pln as TPlane[]).map( pln_one => rayFromPln(pln_one) ) as TRay[]; }
+    if (pln_dep === 3) { return (pln as TPlane[]).map( pln_one => rayFromPln(debug, pln_one) ) as TRay[]; }
     // normal case
     pln = pln as TPlane;
     return [pln[0].slice() as Txyz, vecCross(pln[1], pln[2])];
 }
-// ================================================================================================
-export function rayLtoG(r: TRay|TRay[], p: TPlane|TPlane[]): TRay|TRay[] {
-    return rayXForm(r, p, true);
+/**
+ * Transforms a ray from a local coordinate system define by plane "p" to the global coordinate system.
+ * @param r
+ * @param p
+ */
+export function rayLtoG(debug: boolean, r: TRay|TRay[], p: TPlane|TPlane[]): TRay|TRay[] {
+    return _rayXForm(debug, r, p, true);
 }
-export function rayGtoL(r: TRay|TRay[], p: TPlane|TPlane[]): TRay|TRay[] {
-    return rayXForm(r, p, false);
+/**
+ * Transforms a ray from the global coordinate system to a local coordinate system define by plane "p".
+ * @param r
+ * @param p
+ */
+export function rayGtoL(debug: boolean, r: TRay|TRay[], p: TPlane|TPlane[]): TRay|TRay[] {
+    return _rayXForm(debug, r, p, false);
 }
-function rayXForm(r: TRay|TRay[], p: TPlane|TPlane[], to_global: boolean): TRay|TRay[] {
+function _rayXForm(debug: boolean, r: TRay|TRay[], p: TPlane|TPlane[], to_global: boolean): TRay|TRay[] {
     // overloaded case
     const depth1: number = getArrDepth2(r);
     const depth2: number = getArrDepth2(p);

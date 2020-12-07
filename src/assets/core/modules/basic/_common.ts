@@ -32,7 +32,7 @@ export function getOrigin(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], 
 export function getRay(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], fn_name: string): TRay {
     if (isXYZ(data)) { return [data, [0, 0, 1]] as TRay; }
     if (isRay(data)) { return data as TRay; }
-    if (isPlane(data)) { return rayFromPln(data as TPlane) as TRay; }
+    if (isPlane(data)) { return rayFromPln(false, data as TPlane) as TRay; }
     const ents: TId|TId[] = data as TId|TId[];
     const origin: Txyz = getCentoridFromEnts(__model__, ents, fn_name);
     return [origin, [0, 0, 1]] as TRay;
@@ -40,7 +40,7 @@ export function getRay(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], fn_
 // ================================================================================================
 export function getPlane(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], fn_name: string): TPlane {
     if (isXYZ(data)) { return [data, [1, 0, 0], [0, 1, 0]] as TPlane; }
-    if (isRay(data)) { return plnFromRay(data as TRay) as TPlane; }
+    if (isRay(data)) { return plnFromRay(false, data as TRay) as TPlane; }
     if (isPlane(data)) { return data as TPlane; }
     const ents: TId|TId[] = data as TId|TId[];
     const origin: Txyz = getCentoridFromEnts(__model__, ents, fn_name);

@@ -24,7 +24,7 @@
     "e2e": "ng e2e",
     "postinstall": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/assets/core/modules && node ./src/assets/typedoc-json/docConvert.js && node version.js",
     "typedoc": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --out docs/typedoc src/app/",
-    "moduleDocs": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/assets/core/modules && node ./src/assets/typedoc-json/docConvert.js"
+    "moduleDocs": "typedoc --mode modules -module commonjs --exclude **/*.spec.ts --json src/assets/typedoc-json/doc.json src/assets/core && node ./src/assets/typedoc-json/docConvert.js"
   },
   "private": true,
   "dependencies": {

@@ -779,7 +779,7 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
         if (comps[i + 2].value === ')') {
             i++;
             newString += '()';
-            jsString += '()';
+            jsString += '(true)';
         } else {
             const result = analyzeArray(comps, i + 2, vars, true);
             if (result.error) { return result; }
@@ -787,7 +787,7 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
                 return { 'error': `Error: ")" expected \nat: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`}; }
             i = result.i + 1;
             newString += `(${result.str})`;
-            jsString += `(${result.jsStr})`;
+            jsString += `(true, ${result.jsStr})`;
 
             if (i + 1 < comps.length && comps[i + 1].value === '[') {
                 // look for all subsequent "." or "[]" for the variable

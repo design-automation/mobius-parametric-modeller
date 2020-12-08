@@ -37,7 +37,7 @@ export const _parameterTypes = {
 };
 
 export const _varString = `
-PI = Math.PI;
+PI = __modules__._constants.PI;
 XY = __modules__._constants.XY;
 YZ = __modules__._constants.YZ;
 ZX = __modules__._constants.ZX;

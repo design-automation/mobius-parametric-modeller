@@ -92,6 +92,10 @@ function addDoc(mod, modName, docs) {
         const fn = {};
         fn['name'] = func.name;
         fn['module'] = modName;
+        if (modName === '_constants') {
+            fn['description'] = func['comment'].shortText;
+            moduleDoc[func.name] = fn;
+        }
         if (!func['signatures']) { continue; }
         if (func['signatures'][0].comment) {
             const cmmt = func['signatures'][0].comment;

@@ -1,4 +1,4 @@
-import { Component, Input, HostListener, OnDestroy } from '@angular/core';
+import { Component, Input, HostListener, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataService, KeyboardService } from '@shared/services';
 import * as circularJSON from 'circular-json';
@@ -22,7 +22,8 @@ const inputEvent = new Event('input', {
 @Component({
     selector: 'panel-header',
     templateUrl: 'panel-header.component.html',
-    styleUrls: ['panel-header.component.scss']
+    styleUrls: ['panel-header.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class PanelHeaderComponent implements OnDestroy {
 
@@ -97,13 +98,12 @@ export class PanelHeaderComponent implements OnDestroy {
                         j += 1;
                     }
                 }
-                console.log(this.inlineDocs[funcName])
             } else {
+                console.log('~~~', funcName, '=', funcModule + '.' + funcDir)
                 this.inlineDocs[funcName] = null;
             }
             i++;
         }
-        
     }
 
     ngOnDestroy() {
@@ -1089,18 +1089,17 @@ export class PanelHeaderComponent implements OnDestroy {
         event.stopPropagation();
         const inlineHelp = <HTMLTextAreaElement> document.getElementById('inlineHelp');
         const fnDoc = this.inlineDocs[inlineFunc[0].split('(')[0]];
-        console.log(fnDoc)
         if (!fnDoc) {
             inlineHelp.innerHTML = `<h3>${inlineFunc[0]}</h3><br><div>` + inlineFunc[1] + '</div>';
             return;
         } else {
             let fnDocHtml = `<h3>${inlineFunc[0]}</h3><br><div class='inlineHelpDiv'>`;
             if (fnDoc.summary) {
-                fnDocHtml += `<p class="funcDesc">${fnDoc.summary}</p>`;
+                fnDocHtml += `<p>${fnDoc.summary}</p>`;
             } else if (fnDoc.description) {
-                fnDocHtml += `<p class="funcDesc">${fnDoc.description.split('~').join('<br>')}</p>`;
+                fnDocHtml += `<p>${fnDoc.description.split('~').join('<br>')}</p>`;
             } else {
-                fnDocHtml += `<p class="funcDesc"></p>`;
+                fnDocHtml += `<p></p>`;
             }
             if (fnDoc.parameters && fnDoc.parameters.length > 0) {
                 fnDocHtml += `<br><p><span>Parameters: </span></p>`;

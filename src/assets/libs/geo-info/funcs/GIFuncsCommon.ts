@@ -288,14 +288,12 @@ export class GIFuncsCommon {
             // but the posi may already be copied by the this.copyGeom function, then we get two copies of that posi
             if (ent_type === EEntType.POSI) { // positions
                 const old_posi_i: number = index;
-                let new_posi_i: number;
                 if (!old_to_new_posis_i_map.has(old_posi_i)) {
-                    new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
-                } else {
                     // do not clone, just move it
                     const xyz: Txyz = this.modeldata.attribs.posis.getPosiCoords(old_posi_i);
                     this.modeldata.attribs.posis.setPosiCoords(old_posi_i, vecAdd(xyz, vector));
-                    old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
+                    // in this case, the old posi and the new posi are the same
+                    old_to_new_posis_i_map.set(old_posi_i, old_posi_i);
                 }
             } else { // obj or coll
                 const old_posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(ent_type, index);

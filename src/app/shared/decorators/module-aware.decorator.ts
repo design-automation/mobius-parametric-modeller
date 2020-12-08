@@ -82,25 +82,12 @@ function analyzeParamType(fn, paramType) {
 
 }
 
-const docs = {};
-for (const mod of doc.children) {
-    let modName: any = mod.name.replace(/"/g, '').replace(/'/g, '').split('/');
-    const coreIndex = modName.indexOf('core');
-    if (modName.length < 3 || coreIndex === -1  || modName[coreIndex + 1] !== 'modules') { continue; }
-    modName = modName[modName.length - 1];
-    // if (modName.substr(0, 1) === '"' || modName.substr(0, 1) === '\'') {
-    //     modName = modName.substr(1, modName.length - 2);
-    // } else {
-    //     modName = modName.substr(0, modName.length - 1);
-    // }
-    if (modName.substr(0, 1) === '_' || modName === 'index' || modName === 'categorization') {
-        continue;
-    }
+function addDoc(mod, modName, docs) {
     const moduleDoc = {};
     if (mod.comment && mod.comment.shortText) {
         moduleDoc['description'] = mod.comment.shortText;
     }
-    if (!mod.children) { continue; }
+    if (!mod.children) { return; }
     for (const func of mod.children) {
         const fn = {};
         fn['name'] = func.name;
@@ -157,5 +144,129 @@ for (const mod of doc.children) {
     docs[modName] = moduleDoc;
 }
 
+
+const moduleDocs = {};
+const inlineDocs = {};
+for (const mod of doc.children) {
+    let modName: any = mod.name.replace(/"/g, '').replace(/'/g, '').split('/');
+    const coreIndex = modName.indexOf('core');
+    if (modName.length < 3 || coreIndex === -1) {
+        continue;
+    }
+    if (modName[coreIndex + 1] === 'inline') {
+        modName = modName[modName.length - 1];
+        addDoc(mod, modName, inlineDocs);
+
+    } else if (modName[coreIndex + 1] === 'modules') {
+        modName = modName[modName.length - 1];
+        if (modName.substr(0, 1) === '_' || modName === 'index' || modName === 'categorization') {
+            continue;
+        }
+        addDoc(mod, modName, moduleDocs);
+    }
+
+    // if (modName.length < 3 || coreIndex === -1  || modName[coreIndex + 1] !== 'modules') { continue; }
+    // modName = modName[modName.length - 1];
+    // // if (modName.substr(0, 1) === '"' || modName.substr(0, 1) === '\'') {
+    // //     modName = modName.substr(1, modName.length - 2);
+    // // } else {
+    // //     modName = modName.substr(0, modName.length - 1);
+    // // }
+    // if (modName.substr(0, 1) === '_' || modName === 'index' || modName === 'categorization') {
+    //     continue;
+    // }
+    // const moduleDoc = {};
+    // if (mod.comment && mod.comment.shortText) {
+    //     moduleDoc['description'] = mod.comment.shortText;
+    // }
+    // if (!mod.children) { continue; }
+    // for (const func of mod.children) {
+    //     const fn = {};
+    //     fn['name'] = func.name;
+    //     fn['module'] = modName;
+    //     if (!func['signatures']) { continue; }
+    //     if (func['signatures'][0].comment) {
+    //         const cmmt = func['signatures'][0].comment;
+    //         fn['description'] = cmmt.shortText;
+    //         if (cmmt.text) {
+    //             fn['description'] = fn['description'] + cmmt.text;
+    //         }
+    //         if (cmmt.tags) {
+    //             for (const fnTag of cmmt.tags) {
+    //                 if (fnTag.tag === 'summary') { fn['summary'] = fnTag.text;
+    //                 } else {
+    //                     if (fn[fnTag.tag]) {
+    //                         fn[fnTag.tag].push(fnTag.text);
+    //                     } else {
+    //                         fn[fnTag.tag] = [fnTag.text];
+    //                     }
+
+    //                 }
+    //             }
+    //         }
+    //         fn['returns'] = cmmt.returns;
+    //         if (fn['returns']) { fn['returns'] = fn['returns'].trim(); }
+    //     }
+    //     fn['parameters'] = [];
+    //     if (func['signatures'][0].parameters) {
+    //         for (const param of func['signatures'][0].parameters) {
+    //             let namecheck = true;
+    //             for (const systemVarName in Modules._parameterTypes) {
+    //                 if (param.name === Modules._parameterTypes[systemVarName]) {
+    //                     namecheck = false;
+    //                     break;
+    //                 }
+    //             }
+    //             if (!namecheck) {
+    //                 fn['parameters'].push(undefined);
+    //                 continue;
+    //             }
+    //             const pr = {};
+
+    //             pr['name'] = param.name;
+    //             if (param.comment) {
+    //                 pr['description'] = param.comment.shortText || param.comment.text;
+    //             }
+    //             pr['type'] = analyzeParamType(fn, param.type);
+    //             fn['parameters'].push(pr);
+    //         }
+    //     }
+    //     moduleDoc[func.name] = fn;
+    // }
+    // docs[modName] = moduleDoc;
+}
+
+// const inlineFuncs = Modules._parameterTypes._varString.replace(/\n/g, '').split(';');
+
+// for (const i in inlineFuncs) {
+//     if (inlineFuncs[i] === '') {
+//         inlineFuncs[i] = undefined;
+//         continue;
+//     } else {
+//         inlineFuncs[i] = inlineFuncs[i].split(' = ');
+//     }
+// }
+
+// for (const inlineFunc of inlineFuncs) {
+//     if (!inlineFunc) { continue; }
+//     const funcNames = inlineFunc[1].split('.')
+//     let mod;
+//     let func;
+//     for (const m of doc.children) {
+//         if (m.name[2] === funcNames[1]) {
+//             mod = m;
+//             for (const f of mod.func) {
+//                 if (f.name === funcNames[2]) {
+//                     func = f;
+//                     break;
+//                 }
+//             }
+//             break;
+//         }
+//     }
+//     if (!mod || !func) { continue; }
+// }
+
 export const ModuleList = module_list;
-export const ModuleDocList = docs;
+export const ModuleDocList = moduleDocs;
+export const InlineDocList = inlineDocs;

@@ -12,6 +12,7 @@ import * as Modules from '@modules';
 import { checkNodeValidity } from '@shared/parser';
 import { DownloadUtils } from '../file/download.utils';
 import { inline_func } from '@assets/core/inline/inline';
+import { InlineDocList } from '@shared/decorators';
 
 const inputEvent = new Event('input', {
     'bubbles': true,
@@ -41,6 +42,7 @@ export class PanelHeaderComponent implements OnDestroy {
     backupDates;
 
     inlineFunc = inline_func;
+    inlineDocs = {};
     searchedInlineFunc;
 
 
@@ -68,6 +70,40 @@ export class PanelHeaderComponent implements OnDestroy {
             this.settings['_func_' + this.func_categories[cat]] = true;
         }
         localStorage.setItem('mobius_settings', JSON.stringify(this.settings));
+
+        const inlineFuncs = Modules._varString.replace(/\n/g, '').split(';');
+        let i = 0;
+        while (i < inlineFuncs.length) {
+            if (inlineFuncs[i] === '') {
+                inlineFuncs.splice(i, 1);
+                continue;
+            }
+            const funcName = inlineFuncs[i].split(' = ')[0];
+            const funcModule = inlineFuncs[i].split('.')[1];
+            const funcDir = inlineFuncs[i].split('.')[2];
+            if (InlineDocList[funcModule] && InlineDocList[funcModule][funcDir]) {
+                this.inlineDocs[funcName] = InlineDocList[funcModule][funcDir];
+                if (this.inlineDocs[funcName].parameters) {
+                    let j = 0;
+                    while (j < this.inlineDocs[funcName].parameters.length) {
+                        if (this.inlineDocs[funcName].parameters[j].name === 'debug') {
+                            this.inlineDocs[funcName].parameters.splice(j, 1);
+                            continue;
+                        }
+                        if (!this.inlineDocs[funcName].parameters[j].description) {
+                            this.inlineDocs[funcName].parameters[j].description = '';
+                        }
+                        this.inlineDocs[funcName].parameters[j].description = this.inlineDocs[funcName].parameters[j].description.trim();
+                        j += 1;
+                    }
+                }
+                console.log(this.inlineDocs[funcName])
+            } else {
+                this.inlineDocs[funcName] = null;
+            }
+            i++;
+        }
+        
     }
 
     ngOnDestroy() {
@@ -1049,17 +1085,37 @@ export class PanelHeaderComponent implements OnDestroy {
         document.getElementById('hidden_node_selection').click();
     }
 
-    updateInlineHelpText(event: MouseEvent, inlineFunc: string[]) {
+    updateInlineHelpText(event: MouseEvent, modName: string, inlineFunc: string[]) {
         event.stopPropagation();
         const inlineHelp = <HTMLTextAreaElement> document.getElementById('inlineHelp');
-        let inlineString = '';
-        if (inlineFunc.length >= 2) {
-            inlineString = `<h3>${inlineFunc[0]}</h3><br><div>` + inlineFunc[1] + '</div>';
-            for (let i = 2; i < inlineFunc.length; i++) {
-                inlineString = inlineString + '<div>' + inlineFunc[i] + '</div>';
+        const fnDoc = this.inlineDocs[inlineFunc[0].split('(')[0]];
+        console.log(fnDoc)
+        if (!fnDoc) {
+            inlineHelp.innerHTML = `<h3>${inlineFunc[0]}</h3><br><div>` + inlineFunc[1] + '</div>';
+            return;
+        } else {
+            let fnDocHtml = `<h3>${inlineFunc[0]}</h3><br><div class='inlineHelpDiv'>`;
+            if (fnDoc.summary) {
+                fnDocHtml += `<p class="funcDesc">${fnDoc.summary}</p>`;
+            } else if (fnDoc.description) {
+                fnDocHtml += `<p class="funcDesc">${fnDoc.description.split('~').join('<br>')}</p>`;
+            } else {
+                fnDocHtml += `<p class="funcDesc"></p>`;
             }
+            if (fnDoc.parameters && fnDoc.parameters.length > 0) {
+                fnDocHtml += `<br><p><span>Parameters: </span></p>`;
+                for (const param of fnDoc.parameters) {
+                    if (!param) {continue; }
+                    fnDocHtml += `<p class="paramP"><span>${param.name} - </span> ${param.description}</p>`;
+                }
+            }
+            if (fnDoc.returns) {
+                fnDocHtml += `<p><span>Returns: </span> ${fnDoc.returns}</p>`;
+            }
+            fnDocHtml += '</div>';
+            inlineHelp.innerHTML = fnDocHtml;
+
         }
-        inlineHelp.innerHTML = inlineString;
     }
 
 

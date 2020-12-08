@@ -247,7 +247,7 @@
                     <ul class='inlinefuncUL'>
                         <li *ngFor='let fn of fnCategory[1]' (mousedown)='disableFocus($event)' (click)='addInlineFunc(fn[0])' title='{{fn[1]}}'>
                             {{fn[0]}}
-                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='updateInlineHelpText($event, fn)'>
+                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='updateInlineHelpText($event, fnCategory[0], fn)'>
                                 <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
                             </button>
                         </li>

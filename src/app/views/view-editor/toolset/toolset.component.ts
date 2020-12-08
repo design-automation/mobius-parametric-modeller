@@ -410,7 +410,7 @@ export class ToolsetComponent implements OnInit {
     open_inline_dialog(event: MouseEvent) {
         event.stopPropagation();
         const activeElm = <HTMLInputElement> document.activeElement;
-        console.log('~~~~', activeElm, activeElm.nodeName)
+
         let insertInlineExpr = <HTMLButtonElement> document.getElementById('insertInlineExpression');
         if (insertInlineExpr && !insertInlineExpr.classList.contains('disabled')) {
             insertInlineExpr.classList.add('disabled');
@@ -520,7 +520,6 @@ export class ToolsetComponent implements OnInit {
         for (const func of this.getNode().localFunc) {
             if (func.type !== ProcedureTypes.LocalFuncDef) { continue; }
             if (this.searchedMainFuncs.length >= 10) { break; }
-            console.log(func.args[0].value, func.args[0].value.toLowerCase().indexOf(str))
             if (func.args[0].value.toLowerCase().indexOf(str) !== -1) {
                 this.searchedMainFuncs.push({
                     'type': 'localFunc',

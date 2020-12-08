@@ -1,42 +1,4 @@
-import {__new__, __merge__, __clone__} from './modules/_model';
-import { GIMetaData } from '@assets/libs/geo-info/GIMetaData';
-
-export const _parameterTypes = {
-    constList: '__constList__',
-    model: '__model__',
-    input: '__input__',
-    console: '__console__',
-    fileName: '__fileName__',
-
-    new: '_model.__new__',
-    newFn: __new__,
-
-    newMeta: GIMetaData,
-
-    merge: '_model.__merge__',
-    mergeFn: __merge__,
-    cloneFn: __clone__,
-
-    addData: '_model.addGiData',
-
-    preprocess: '_model.__preprocess__',
-    postprocess: '_model.__postprocess__',
-
-    setattrib: 'attrib.Set',
-    getattrib: 'attrib.Get',
-    queryGet: 'query.Get',
-    queryFilter: 'query.Filter',
-
-    select: '_model.__select__',
-
-    return: '_Output.Return',
-
-    asyncFuncs: ['util.ModelCompare',
-                'io.Write', 'io.Read',
-                'io.Import', 'io.Export']
-};
-
-export const _varString = `
+const _varString = `
 PI = __modules__._constants.PI;
 XY = __modules__._constants.XY;
 YZ = __modules__._constants.YZ;
@@ -189,3 +151,6 @@ randPick = __modules__._rand.randPick;
 setattr = __modules__._model.__setAttrib__;
 getattr = __modules__._model.__getAttrib__;
 `;
+
+// export {_varString};
+module.exports = {_varString};

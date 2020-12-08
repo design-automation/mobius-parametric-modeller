@@ -1,5 +1,6 @@
 import {XYPLANE, YZPLANE, ZXPLANE, YXPLANE, ZYPLANE, XZPLANE } from '@libs/geo-info/common';
 
+export const PI = Math.PI;
 export const XY = XYPLANE;
 export const YZ = YZPLANE;
 export const ZX = ZXPLANE;

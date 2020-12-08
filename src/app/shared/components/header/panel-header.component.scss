@@ -489,6 +489,8 @@ button.mat-menu-item:hover{
             padding: 15px;
             margin-left: 10px;
             color: $color8;
+
+
         }
         .inlineFuncExpressionContainer{
             font-family: Arial;
@@ -708,3 +710,23 @@ button.mat-menu-item:hover{
     }
 }
 
+.inlineHelpDiv {
+    .funcDesc{
+        font-family: sans-serif;
+        display: flex;
+        flex-flow: row nowrap;
+        font-weight: 600;
+        padding-bottom: 5px;
+    }
+
+    .paramP{
+        padding-left: 5px;
+    }
+
+    span{
+        font-style: italic;
+        line-height: $fsize1;
+        white-space: nowrap;
+        margin-right: 2px;
+    }
+}

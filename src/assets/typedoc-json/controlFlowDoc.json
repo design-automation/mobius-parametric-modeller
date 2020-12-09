@@ -1,0 +1,46 @@
+{
+    "Variable": {
+        "description": "something something \n~\nsomething something",
+        "examples": ["example 1", "example 2"]
+    },
+    "If": {
+        "description": "",
+        "examples": []
+    },
+    "Elseif": {
+        "description": "",
+        "examples": []
+    },
+    "Else": {
+        "description": "",
+        "examples": []
+    },
+    "Foreach": {
+        "description": "",
+        "examples": []
+    },
+    "While": {
+        "description": "",
+        "examples": []
+    },
+    "Break": {
+        "description": "",
+        "examples": []
+    },
+    "Continue": {
+        "description": "",
+        "examples": []
+    },
+    "Return": {
+        "description": "",
+        "examples": []
+    },
+    "Error": {
+        "description": "",
+        "examples": []
+    },
+    "Comment": {
+        "description": "",
+        "examples": []
+    }
+}

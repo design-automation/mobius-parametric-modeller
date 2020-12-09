@@ -99,7 +99,6 @@ export class PanelHeaderComponent implements OnDestroy {
                     }
                 }
             } else {
-                console.log('~~~', funcName, '=', funcModule + '.' + funcDir)
                 this.inlineDocs[funcName] = null;
             }
             i++;
@@ -1042,7 +1041,8 @@ export class PanelHeaderComponent implements OnDestroy {
         event.preventDefault();
     }
 
-    addInlineFunc(str: string) {
+    addInlineFunc(inlineFunc: string) {
+        this.updateInlineHelpText(new MouseEvent(''), inlineFunc);
         let expressionElement = <HTMLTextAreaElement> document.activeElement;
         let selStart: number, selEnd: number;
         if (expressionElement && expressionElement.id === 'inlineExpression') {
@@ -1054,16 +1054,16 @@ export class PanelHeaderComponent implements OnDestroy {
             selEnd = expressionElement.value.length;
             expressionElement.focus();
         }
-        const newSelStart = str.indexOf('(');
+        const newSelStart = inlineFunc.indexOf('(');
         expressionElement.value =
             expressionElement.value.slice(0, selStart) +
-            str +
+            inlineFunc +
             expressionElement.value.slice(selEnd);
         expressionElement.dispatchEvent(inputEvent);
         if (newSelStart !== -1) {
-            expressionElement.setSelectionRange(selStart + newSelStart + 1, selStart + str.length - 1);
+            expressionElement.setSelectionRange(selStart + newSelStart + 1, selStart + inlineFunc.length - 1);
         } else {
-            expressionElement.setSelectionRange(selStart + str.length, selStart + str.length);
+            expressionElement.setSelectionRange(selStart + inlineFunc.length, selStart + inlineFunc.length);
         }
     }
 
@@ -1085,36 +1085,48 @@ export class PanelHeaderComponent implements OnDestroy {
         document.getElementById('hidden_node_selection').click();
     }
 
-    updateInlineHelpText(event: MouseEvent, modName: string, inlineFunc: string[]) {
+    updateInlineHelpText(event: MouseEvent, inlineFunc: string) {
         event.stopPropagation();
         const inlineHelp = <HTMLTextAreaElement> document.getElementById('inlineHelp');
-        const fnDoc = this.inlineDocs[inlineFunc[0].split('(')[0]];
+        const fnDoc = this.inlineDocs[inlineFunc.split('(')[0]];
         if (!fnDoc) {
-            inlineHelp.innerHTML = `<h3>${inlineFunc[0]}</h3><br><div>` + inlineFunc[1] + '</div>';
+            inlineHelp.innerHTML = `<h3>${inlineFunc}</h3><br><div></div>`;
             return;
-        } else {
-            let fnDocHtml = `<h3>${inlineFunc[0]}</h3><br><div class='inlineHelpDiv'>`;
-            if (fnDoc.summary) {
-                fnDocHtml += `<p>${fnDoc.summary}</p>`;
-            } else if (fnDoc.description) {
-                fnDocHtml += `<p>${fnDoc.description.split('~').join('<br>')}</p>`;
-            } else {
-                fnDocHtml += `<p></p>`;
-            }
-            if (fnDoc.parameters && fnDoc.parameters.length > 0) {
-                fnDocHtml += `<br><p><span>Parameters: </span></p>`;
-                for (const param of fnDoc.parameters) {
-                    if (!param) {continue; }
-                    fnDocHtml += `<p class="paramP"><span>${param.name} - </span> ${param.description}</p>`;
-                }
-            }
-            if (fnDoc.returns) {
-                fnDocHtml += `<p><span>Returns: </span> ${fnDoc.returns}</p>`;
-            }
-            fnDocHtml += '</div>';
-            inlineHelp.innerHTML = fnDocHtml;
-
         }
+        let fnDocHtml = `<h3>${inlineFunc}</h3><br><div class='inlineHelpDiv'>`;
+        if (fnDoc.summary) {
+            fnDocHtml += `<p>${fnDoc.summary}</p>`;
+        } else if (fnDoc.description) {
+            fnDocHtml += `<p>${fnDoc.description.split('~').join('<br>')}</p>`;
+        } else {
+            fnDocHtml += `<p></p>`;
+        }
+        if (fnDoc.parameters && fnDoc.parameters.length > 0) {
+            fnDocHtml += `<br><p><span>Parameters: </span></p>`;
+            for (const param of fnDoc.parameters) {
+                if (!param) {continue; }
+                fnDocHtml += `<p class="paramP"><span>${param.name} - </span> ${param.description}</p>`;
+            }
+        }
+        if (fnDoc.returns) {
+            fnDocHtml += `<p><span>Returns: </span> ${fnDoc.returns}</p>`;
+        }
+        fnDocHtml += '</div>';
+        inlineHelp.innerHTML = fnDocHtml;
+    }
+
+    getInlineHoverText(funcText: string) {
+        const fnDoc = this.inlineDocs[funcText.split('(')[0]];
+        if (!fnDoc) {
+            return '';
+        }
+        if (fnDoc.summary) {
+            return fnDoc.summary;
+        }
+        if (fnDoc.description) {
+            return fnDoc.description;
+        }
+        return '';
     }
 
 

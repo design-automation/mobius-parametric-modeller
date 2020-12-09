@@ -245,9 +245,9 @@
                 <button  id='inlineAcc_{{fnCategory[0]}}' class='inlinefuncAccordion' (mousedown)='disableFocus($event)' (click)='openInlineMenu($event, fnCategory[0])'>{{fnCategory[0]}}</button>
                 <div id='inlinefunc_{{fnCategory[0]}}' class='inlinefuncDiv'>
                     <ul class='inlinefuncUL'>
-                        <li *ngFor='let fn of fnCategory[1]' (mousedown)='disableFocus($event)' (click)='addInlineFunc(fn[0])' title='{{fn[1]}}'>
-                            {{fn[0]}}
-                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='updateInlineHelpText($event, fnCategory[0], fn)'>
+                        <li *ngFor='let fn of fnCategory[1]' (mousedown)='disableFocus($event)' (click)='addInlineFunc(fn)' title='{{getInlineHoverText(fn)}}'>
+                            {{fn}}
+                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='updateInlineHelpText($event, fn)'>
                                 <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
                             </button>
                         </li>

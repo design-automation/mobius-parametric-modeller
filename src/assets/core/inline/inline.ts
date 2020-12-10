@@ -1,17 +1,9 @@
 
 export const inline_query_expr = [
-    '#@name == value',
-    '#@name[i] == value',
-    '#@name != value',
-    '#@name[i] != value',
-    '#@name > value',
-    '#@name[i] > value',
-    '#@name >= value',
-    '#@name[i] >= value',
-    '#@name < value',
-    '#@name[i] < value',
-    '#@name <= value',
-    '#@name[i] <= value'
+    ['#XX', 'xxx'],
+    ['entity#XX', 'xxx'],
+    ['entity@name', 'xxx'],
+    ['?@name == value', 'xxx']
 ];
 
 export const inline_sort_expr = [
@@ -207,6 +199,7 @@ const types = [
 ];
 
 export const inline_func = [
+    ['queries', inline_query_expr],
     ['constants', constants],
     ['conversion', conversion],
     ['strings', strings],

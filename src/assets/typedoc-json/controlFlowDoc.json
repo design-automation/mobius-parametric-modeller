@@ -1,14 +1,22 @@
 {
     "Variable": {
-        "description": "something something \n~\nsomething something",
-        "examples": ["example 1", "example 2"]
+        "description": "An assignment statement, which can be used to define a new variable or set the value of an existing variable.",
+        "examples": ["my_var = 123", "my_list[2] = 123", "my_dict['abc'] = 123"]
     },
-    "If": {
+    "Comment": {
         "description": "",
         "examples": []
     },
-    "Elseif": {
+    "Expression": {
         "description": "",
+        "examples": []
+    },
+    "If": {
+        "description": "A conditional statement into the procedure.",
+        "examples": []
+    },
+    "Elseif": {
+        "description": "A part of a compound conditional statement.",
         "examples": []
     },
     "Else": {
@@ -36,10 +44,6 @@
         "examples": []
     },
     "Error": {
-        "description": "",
-        "examples": []
-    },
-    "Comment": {
         "description": "",
         "examples": []
     }

@@ -29,24 +29,6 @@ const constants = [
     'XZ'
 ];
 
- const types = [
-    'isNum(val)',
-    'isInt(val)',
-    'isFlt(val)',
-    'isBool(val)',
-    'isStr(val)',
-    'isList(val)',
-    'isDict(val)',
-    'isVec2(val)',
-    'isVec3(val)',
-    'isCol(val)',
-    'isRay(val)',
-    'isPln(val)',
-    'isNaN(val)',
-    'isNull(val)',
-    'isUndef(val)'
-];
-
 const conversion = [
     'boolean(val)',
     'number(val)',
@@ -80,7 +62,7 @@ const lists = [
     'listHas(list, val)',
     'listCount(list, val)',
     'listCopy(list)',
-    'listRep(list, n)',
+    'listRep(list, num)',
     'listJoin(list1, list2)',
     'listFlat(list)',
     'listSlice(list, start, end?)',
@@ -150,9 +132,6 @@ const random = [
 ];
 
 const arithmetic = [
-    'isApprox(num1, num2, tol)',
-    'isIn(num1, num2, num3)',
-    'isWithin(num1, num2, num3)',
     'abs(num)',
     'square(num)',
     'cube(num)',
@@ -164,11 +143,15 @@ const arithmetic = [
     'sigFig(num, f)',
     'ceil(num)',
     'floor(num)',
-    'remap(num, d1, d2)',
     'sum(list)',
     'prod(list)',
     'hypot(list)',
-    'norm(list)'];
+    'norm(list)',
+    'isApprox(num1, num2, tol)',
+    'isIn(num1, num2, num3)',
+    'isWithin(num1, num2, num3)',
+    'remap(num, d1, d2)'
+];
 
 const geometry = [
     'distance(a, b)',
@@ -176,7 +159,7 @@ const geometry = [
     'distanceMS(a, b)',
     'intersect(a, b)',
     'project(a, b)'
-]
+];
 
 const statistics = [
     'min(list)',
@@ -201,14 +184,32 @@ const trigonometry = [
     'atan(num)',
     'tanh(rad)',
     'atanh(num)',
-    'atan2(num1, num2)'];
+    'atan2(num1, num2)'
+];
+
+
+const types = [
+    'isNum(val)',
+    'isInt(val)',
+    'isFlt(val)',
+    'isBool(val)',
+    'isStr(val)',
+    'isList(val)',
+    'isDict(val)',
+    'isVec2(val)',
+    'isVec3(val)',
+    'isCol(val)',
+    'isRay(val)',
+    'isPln(val)',
+    'isNaN(val)',
+    'isNull(val)',
+    'isUndef(val)'
+];
 
 export const inline_func = [
     ['constants', constants],
-    ['types', types],
     ['conversion', conversion],
     ['strings', strings],
-    ['random', random],
     ['lists', lists],
     ['sets', sets],
     ['vectors', vectors],
@@ -219,4 +220,6 @@ export const inline_func = [
     ['statistics', statistics],
     ['trigonometry', trigonometry],
     ['geometry', geometry],
+    ['random', random],
+    ['types', types],
 ];

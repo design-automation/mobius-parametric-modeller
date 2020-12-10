@@ -10,12 +10,7 @@ The `XX` is a two letter code that specifies the type of entity that is required
 * `pg`: polygons (objects)
 * `co`: collections (groups of objects)
 
-The expression will return a list of entities of the given type.
-
-Examples going down the hierarchy:
+The expression will return a list of entities of the given type. For example:
 
 * `#ps` gets all the positions in the model
 * `1#pg` gets all the polygons in the model.
-
-
-

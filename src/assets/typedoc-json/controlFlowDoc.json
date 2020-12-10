@@ -1,50 +1,56 @@
 {
     "Variable": {
-        "description": "An assignment statement, which can be used to define a new variable or set the value of an existing variable.",
-        "examples": ["my_var = 123", "my_list[2] = 123", "my_dict['abc'] = 123"]
+        "description": "Insert an assignment statement that contains an `=` operator. An assignment statement is used to define a new variable or set the value of an existing variable.\n\nMore fundamentally, an assignment statement sets and/or re-sets the value stored in the storage location denoted by a variable name. For example, consider the statement `x = 10`. If the variable `x` does not exist in the current scope, then a new variable is created in storage and the value `10` is then copied into that storage location. If the variable exists already, then the value `10` is copied into the existing storage location , overwriting any value that exists there already.",
+        "examples": [
+            "my_var = 123", 
+            "my_list[2] = 123", 
+            "my_dict['abc'] = 123"
+        ]
     },
     "Comment": {
-        "description": "",
+        "description": "A comment, which is a descriptive annotation of the code that does not get executed.",
         "examples": []
     },
     "Expression": {
-        "description": "",
-        "examples": []
+        "description": "Opens up a dialog box for creating expressions.\n\nAn expression is a combination of one or more constants, variables, functions, and operators that can be evaluated to produce another value.\n\n== Simple Expressions ==\n\nExamples of simple expressions are `2 + 2`, which evaluates to `4`, and `1 == 2`, which evaluates to `false`. Expressions can also contain variables, for exaple is the variable `x` exists in the current scope, and has a value of `10`, then the expression `x + 2` will evaluate to `12`. \n\n== Expressions with Functions ==\n\nAn expression can also contain inline functions, such as `sqrt(9)` which evaluates to `3`. Functions can also be nested inside one another, for example, `round(sqrt(20))` evaluates to `4`. \n\nNote that all inline functions return a value. \n\n== Expressions with Spatial Information Queries == \n\nThe Obi language also supports a number of shortcus for querying entities in the spatial information model. \n\nThe `#` character is used to get a list of entities from the model. For example:\n\n* `#pg` gets all polygons in the model.\n* `pgon1#_e` gets the edges from the polygon that is stored in the variable `pgon1`.\n\nNote that the `#` shorcut will always return a list of entities.\n\nThe `@` character is used to get attributes from entities in the model. For example:\n\n* `pgon1@abc` gets the value of an attribute called `abc` from the polygon that is stored in the variable `pgon1`. (Note that if an attribute with that name does not exist, then an error will be thrown.)\n* `posi1@xyz` gets the value of an attribute called `xyz` from the position that is stored in the variable `posi1`. ((Note that the `xyz` attribute is a built in attribute that stores the location of a position.)\n\nThe `?@` pair of characters is used to filter a list of entities based on attribute values. The `?@` characters can be read as 'where attribute'. For example:\n\n* `#pg ?@abc == 10` gets all the polygons in the model, and then filters them, returning only the polygons where the attribute `abc` has a value of `10`.\n* `pgon1#ps ?@xyz[2] > 10` gets the positions from the polygon that is stored in the variable `pgon1`, and then filters the positions, returning only the positions where the Z value is greater than 10.\n",
+        "examples": [
+            
+        ]
     },
     "If": {
-        "description": "A conditional statement into the procedure.",
+        "description": "Inserts a conditional 'If' statement into the procedure.",
         "examples": []
     },
     "Elseif": {
-        "description": "A part of a compound conditional statement.",
+        "description": "Inserts a conditional 'Else-if' statement, which must be part of a compound conditional 'If' statement. The 'Else-if' statement must directly follow either an 'If' statement or another 'Else-if' statement.",
         "examples": []
     },
     "Else": {
-        "description": "",
+        "description": "Inserts a conditional 'Else' statement, which must be part of a compound conditional 'If' statement. The 'Else' statement must directly follow either an 'If' statement or another 'Else-if' statement.",
         "examples": []
     },
     "Foreach": {
-        "description": "",
+        "description": "Inserts a 'For-each' loop statement. The body of the loop can be executed zero or more times.",
         "examples": []
     },
     "While": {
-        "description": "",
+        "description": "Inserts a 'While' loop statement. The body of the loop can be executed zero or more times.",
         "examples": []
     },
     "Break": {
-        "description": "",
+        "description": "Inserts a 'Break' statement into the body of either a 'For-each' loop or a 'While' loop. When the 'Break' is executed, execution will break out of the loop and procedure to the next line of code immediatley after the loop statement. The 'Break' statement os typically nested inside a conditional 'If' statement.",
         "examples": []
     },
     "Continue": {
-        "description": "",
+        "description": "Inserts a 'Continue' statement into the body of either a 'For-each' loop or a 'While' loop. When the 'Continue' is executed, execution will skips the subsequent lines of code in the loop body and continue with the next iteration of the loop. The 'Continue' statement is typically nested inside a conditional 'If' statement.",
         "examples": []
     },
     "Return": {
-        "description": "",
+        "description": "Inserts a 'Return' statement into either the body of a procedure or the body of a local function.",
         "examples": []
     },
     "Error": {
-        "description": "",
+        "description": "Inserts an 'Error' statement. When executed, the 'Error' statement will raise an error and print an error message to the console. The 'Error' statement is typically nested inside a conditional 'If' statement.",
         "examples": []
     }
 }

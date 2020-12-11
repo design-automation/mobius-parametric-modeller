@@ -29,7 +29,12 @@ const otherSymbols = new Set(['.', '#', ',']);
 
 const noSpaceBefore = new Set(['@', ',', ']', '[']);
 
-const allConstants = JSON.parse(JSON.stringify(inline_func[0][1]));
+let allConstants = [];
+for (const inline of inline_func) {
+    if (inline[0] === 'constants') {
+        allConstants = JSON.parse(JSON.stringify(inline[1]));
+    }
+}
 const specialVars = new Set(['undefined', 'null', 'Infinity', 'true', 'false', 'True', 'False', 'None'].concat(allConstants));
 const constantSet = new Set(allConstants);
 

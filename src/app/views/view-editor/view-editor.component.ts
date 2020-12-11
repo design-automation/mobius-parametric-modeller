@@ -358,9 +358,10 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         this.dataService.registerEdtAction(redoActions);
         checkNodeValidity(this.dataService.node);
 
+        node.state.procedure = [];
+
         // NodeUtils.deselect_procedure(node);
         NodeUtils.select_procedure(node, tobeSelected, false, false);
-
         this.dataService.notifyMessage(`Cut ${copiedProds.length} Procedures`);
     }
 
@@ -504,6 +505,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         }
         this.dataService.registerEdtAction(redoActions);
         checkNodeValidity(this.dataService.node);
+        node.state.procedure = [];
         NodeUtils.select_procedure(node, tobeSelected, false, false);
         // this.dataService.node.state.procedure = [];
     }

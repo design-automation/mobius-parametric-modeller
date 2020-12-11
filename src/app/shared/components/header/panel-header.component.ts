@@ -120,7 +120,6 @@ export class PanelHeaderComponent implements OnDestroy {
                 }
             }
         }
-        console.log(this.inlineDocs)
     }
 
     ngOnDestroy() {

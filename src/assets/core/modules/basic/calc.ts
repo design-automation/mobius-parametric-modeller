@@ -30,7 +30,7 @@ export enum _EDistanceMethod {
 }
 /**
  * Calculates the minimum distance from one position to other entities in the model.
- * ~
+ * \n
  * @param __model__
  * @param entities1 Position to calculate distance from.
  * @param entities2 List of entities to calculate distance to.
@@ -254,15 +254,15 @@ function _distancePointToLine(from: Txyz, start: Txyz, end: Txyz) {
 // ================================================================================================
 /**
  * Calculates the length of an entity.
- * ~
+ * \n
  * The entity can be an edge, a wire, a polyline, or anything from which wires can be extracted.
  * This includes polylines, polygons, faces, and collections.
- * ~
+ * \n
  * Given a list of edges, wires, or polylines, a list of lengths are returned.
- * ~
+ * \n
  * Given any types of entities from which wires can be extracted, a list of lengths are returned.
  * For example, given a single polygon, a list of lengths are returned (since a polygon may have multiple wires).
- * ~
+ * \n
  * @param __model__
  * @param entities Single or list of edges, wires, or polylines, or other entities from which wires can be extracted.
  * @returns Lengths, a number or list of numbers.
@@ -328,11 +328,11 @@ function _wireLength(__model__: GIModel, wire_i: number): number {
 // ================================================================================================
 /**
  * Calculates the area of en entity.
- * ~
+ * \n
  * The entity can be a polygon, a face, a closed polyline, a closed wire, or a collection.
- * ~
+ * \n
  * Given a list of entities, a list of areas are returned.
- * ~
+ * \n
  * @param __model__
  * @param entities Single or list of polygons, faces, closed polylines, closed wires, collections.
  * @returns Area.
@@ -402,12 +402,12 @@ function _area(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): number
 /**
  * Returns a vector along an edge, from the start position to the end position.
  * The vector is not normalized.
- * ~
+ * \n
  * Given a single edge, a single vector will be returned. Given a list of edges, a list of vectors will be returned.
- * ~
+ * \n
  * Given any entity that has edges (collection, polygons, polylines, faces, and wires),
  * a list of edges will be extracted, and a list of vectors will be returned.
- * ~
+ * \n
  * @param __model__
  * @param entities Single or list of edges, or any entity from which edges can be extracted.
  * @returns The vector [x, y, z] or a list of vectors.
@@ -467,16 +467,16 @@ export enum _ECentroidMethod {
 }
 /**
  * Calculates the centroid of an entity.
- * ~
+ * \n
  * If 'ps_average' is selected, the centroid is the average of the positions that make up that entity.
- * ~
+ * \n
  * If 'center_of_mass' is selected, the centroid is the centre of mass of the faces that make up that entity.
  * Note that only faces are deemed to have mass.
- * ~
+ * \n
  * Given a list of entities, a list of centroids will be returned.
- * ~
+ * \n
  * Given a list of positions, a single centroid that is the average of all those positions will be returned.
- * ~
+ * \n
  * @param __model__
  * @param entities Single or list of entities. (Can be any type of entities.)
  * @param method Enum, the method for calculating the centroid.
@@ -511,22 +511,22 @@ export function Centroid(__model__: GIModel, entities: TId|TId[], method: _ECent
 /**
  * Calculates the normal vector of an entity or list of entities. The vector is normalised, and scaled
  * by the specified scale factor.
- * ~
+ * \n
  * Given a single entity, a single normal will be returned. Given a list of entities, a list of normals will be returned.
- * ~
+ * \n
  * For polygons, faces, and face wires the normal is calculated by taking the average of all the normals of the face triangles.
- * ~
+ * \n
  * For polylines and polyline wires, the normal is calculated by triangulating the positions, and then
  * taking the average of all the normals of the triangles.
- * ~
+ * \n
  * For edges, the normal is calculated by takingthe avery of the normals of the two vertices.
- * ~
+ * \n
  * For vertices, the normal is calculated by creating a triangle out of the two adjacent edges,
  * and then calculating the normal of the triangle.
  * (If there is only one edge, or if the two adjacent edges are colinear, the the normal of the wire is returned.)
- * ~
+ * \n
  * For positions, the normal is calculated by taking the average of the normals of all the vertices linked to the position.
- * ~
+ * \n
  * If the normal cannot be calculated, [0, 0, 0] will be returned.
  *
  * @param __model__
@@ -608,20 +608,20 @@ function _vertNormal(__model__: GIModel, index: number) {
 // ================================================================================================
 /**
  * Calculates the xyz coord along an edge, wire, or polyline given a t parameter.
- * ~
+ * \n
  * The 't' parameter varies between 0 and 1, where 0 indicates the start and 1 indicates the end.
  * For example, given a polyline,
  * evaluating at t=0 gives that xyz at the start,
  * evaluating at t=0.5 gives the xyz halfway along the polyline,
  * evaluating at t=1 gives the xyz at the end of the polyline.
- * ~
+ * \n
  * Given a single edge, wire, or polyline, a single xyz coord will be returned.
- * ~
+ * \n
  * Given a list of edges, wires, or polylines, a list of xyz coords will be returned.
- * ~
+ * \n
  * Given any entity that has wires (faces, polygons and collections),
  * a list of wires will be extracted, and a list of coords will be returned.
- * ~
+ * \n
  * @param __model__
  * @param entities Single or list of edges, wires, polylines, or faces, polygons, or collections.
  * @param t_param A value between 0 to 1.
@@ -720,7 +720,7 @@ export function _ParamXyzToT(__model__: GIModel, lines: TId|TId[], locations: TI
 /**
  * Returns a ray for an edge, a face, or a polygons. For edges, it returns a ray along the edge, from teh start vertex to the end vertex
  * For a face or polygon, it returns the ray that is the z-axis of the plane.
- * ~
+ * \n
  * For an edge, the ray vector is not normalised. For a face or polygon, the ray vector is normalised.
  *
  * @param __model__
@@ -774,7 +774,7 @@ function _getRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TRay|
 /**
  * Returns a plane from a polygon, a face, a polyline, or a wire.
  * For polylines or wires, there must be at least three non-colinear vertices.
- * ~
+ * \n
  * The winding order is counter-clockwise.
  * This means that if the vertices are ordered counter-clockwise relative to your point of view,
  * then the z axis of the plane will be pointing towards you.
@@ -826,7 +826,7 @@ function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPl
  * - The second [x, y, z] is the corner of the bounding box with the lowest x, y, z values.
  * - The third [x, y, z] is the corner of the bounding box with the highest x, y, z values.
  * - The fourth [x, y, z] is the dimensions of the bounding box.
- * ~
+ * \n
  * @param __model__
  * @param entities The etities for which to calculate the bounding box.
  * @returns The bounding box consisting of a list of four lists.
@@ -875,7 +875,7 @@ function _getBoundingBox(__model__: GIModel, ents_arr: TEntTypeIdx[]): TBBox {
 // ================================================================================================
 // /**
 //  * Calculates the distance between a ray or plane and a list of positions.
-//  * ~
+//  * \n
 //  * @param __model__
 //  * @param ray_or_plane Ray or a plane.
 //  * @param entities A position or list of positions.

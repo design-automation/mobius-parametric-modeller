@@ -78,7 +78,7 @@ export function ParamInfo(__model__: GIModel, __constList__: {}): string {
 // ================================================================================================
 /**
  * Returns an html string representation of one or more entities in the model.
- * ~
+ * \n
  * @param __model__
  * @param entities One or more objects ot collections.
  * @returns void
@@ -355,13 +355,13 @@ export function ModelCheck(__model__: GIModel): string {
 
 /**
  * Compare the GI data in this model to the GI data in another model.
- * ~
+ * \n
  * If method = subset, then this model is the answer, and the other model is the submitted model.
  * It will check that all entites in this model also exist in the other model.
- * ~
+ * \n
  * If method = superset, then this model is the submitted model, and the other model is the answer model.
  * It will check that all entites in the other model also exist in this model.
- * ~
+ * \n
  * For specifying the location of the GI Model, you can either specify a URL,
  * or the name of a file in LocalStorage.
  * In the latter case, you do not specify a path, you just specify the file name, e.g. 'my_model.gi'

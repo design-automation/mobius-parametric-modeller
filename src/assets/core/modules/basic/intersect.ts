@@ -18,14 +18,14 @@ import * as THREE from 'three';
 // ================================================================================================
 /**
  * Calculates the xyz intersection between a ray or a plane and a list of entities.
- * ~
+ * \n
  * For a ray, the intersection between the ray and one or more faces is return.
  * The intersection between each face triangle and the ray is caclulated.
  * This ignores the intersections between rays and edges (including polyline edges).
- * ~
+ * \n
  * For a plane, the intersection between the plane and one or more edges is returned.
  * This ignores the intersections between planes and face triangles (including polygon faces).
- * ~
+ * \n
  * @param __model__
  * @param ray A ray.
  * @param entities List of entities.
@@ -97,14 +97,14 @@ function _intersectRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], 
 // ================================================================================================
 /**
  * Calculates the xyz intersection between a ray or a plane and a list of entities.
- * ~
+ * \n
  * For a ray, the intersection between the ray and one or more faces is return.
  * The intersection between each face triangle and the ray is caclulated.
  * This ignores the intersections between rays and edges (including polyline edges).
- * ~
+ * \n
  * For a plane, the intersection between the plane and one or more edges is returned.
  * This ignores the intersections between planes and face triangles (including polygon faces).
- * ~
+ * \n
  * @param __model__
  * @param plane A plane.
  * @param entities List of entities.

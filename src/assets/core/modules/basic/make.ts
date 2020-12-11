@@ -185,7 +185,7 @@ export function _Tin(__model__: GIModel, entities: TId[]|TId[][]): TId[] {
 // ================================================================================================
 /**
  * Lofts between entities.
- * ~
+ * \n
  * The geometry that is generated depends on the method that is selected.
  * - The 'quads' methods will generate polygons.
  * - The 'stringers' and 'ribs' methods will generate polylines.
@@ -223,12 +223,12 @@ export function Loft(__model__: GIModel, entities: TId[]|TId[][], divisions: num
  * - Extrusion of a position, vertex, or point produces polylines;
  * - Extrusion of an edge, wire, or polyline produces polygons;
  * - Extrusion of a face or polygon produces polygons, capped at the top.
- * ~
+ * \n
  * The geometry that is generated depends on the method that is selected.
  * - The 'quads' methods will generate polygons.
  * - The 'stringers' and 'ribs' methods will generate polylines.
  * - The 'copies' method will generate copies of the input geometry type.
- * ~
+ * \n
  * @param __model__
  * @param entities Vertex, edge, wire, face, position, point, polyline, polygon, collection.
  * @param dist Number or vector. If number, assumed to be [0,0,value] (i.e. extrusion distance in z-direction).
@@ -269,7 +269,7 @@ export function Extrude(__model__: GIModel, entities: TId|TId[],
 // ================================================================================================
 /**
  * Sweeps a cross section wire along a backbone wire.
- * ~
+ * \n
  * @param __model__
  * @param entities Wires, or entities from which wires can be extracted.
  * @param xsection Cross section wire to sweep, or entity from which a wire can be extracted.
@@ -304,16 +304,16 @@ export function Sweep(__model__: GIModel, entities: TId|TId[], x_section: TId, d
 // ================================================================================================
 /**
  * Cuts polygons and polylines using a plane.
- * ~
+ * \n
  * If the 'keep_above' method is selected, then only the part of the cut entities above the plane are kept.
  * If the 'keep_below' method is selected, then only the part of the cut entities below the plane are kept.
  * If the 'keep_both' method is selected, then both the parts of the cut entities are kept.
- * ~
+ * \n
  * Currently does not support cutting polygons with holes. TODO
- * ~
+ * \n
  * If 'keep_both' is selected, returns a list of two lists.
  * [[entities above the plane], [entities below the plane]].
- * ~
+ * \n
  * @param __model__
  * @param entities Polylines or polygons, or entities from which polyline or polygons can be extracted.
  * @param plane The plane to cut with.

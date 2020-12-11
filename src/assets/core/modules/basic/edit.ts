@@ -38,14 +38,14 @@ export enum _EDeleteMethod {
 // ================================================================================================
 /**
  * Divides edges into a set of shorter edges.
- * ~
+ * \n
  * If the 'by_number' method is selected, then each edge is divided into a fixed number of equal length shorter edges.
  * If the 'by length' method is selected, then each edge is divided into shorter edges of the specified length.
  * The length of the last segment will be the remainder.
  * If the 'by_min_length' method is selected,
  * then the edge is divided into the maximum number of shorter edges
  * that have a new length that is equal to or greater than the minimum.
- * ~
+ * \n
  * @param __model__
  * @param entities Edges, or entities from which edges can be extracted.
  * @param divisor Segment length or number of segments.
@@ -77,13 +77,13 @@ export function Divide(__model__: GIModel, entities: TId|TId[], divisor: number,
 // ================================================================================================
 /**
  * Makes one or more holes in a polygon.
- * ~
+ * \n
  * The positions must be on the polygon, i.e. they must be co-planar with the polygon and
  * they must be within the boundary of the polygon.
- * ~
+ * \n
  * If the list of positions consists of a single list, then one hole will be generated.
  * If the list of positions consists of a list of lists, then multiple holes will be generated.
- * ~
+ * \n
  * @param __model__
  * @param pgon A face or polygon to make holes in.
  * @param entities List of positions, or nested lists of positions, or entities from which positions can be extracted.
@@ -114,10 +114,10 @@ export function Hole(__model__: GIModel, pgon: TId, entities: TId|TId[]|TId[][])
 /**
  * Make or break welds between vertices.
  * If two vertices are welded, then they share the same position.
- * ~
+ * \n
  * When making welds, the positions that become shared are returned.
  * When breaking welds, the new positions that get generated are returned.
- * ~
+ * \n
  * @param __model__
  * @param entities Entities, a list of vertices, or entities from which vertices can be extracted.
  * @param method Enum; the method to use for welding.
@@ -145,12 +145,12 @@ export function Weld(__model__: GIModel, entities: TId|TId[], method: _EWeldMeth
  * Fuse positions that lie within a certain tolerance of one another.
  * New positions will be created.
  * If the positions that are fuse have vertices attached, then the vertices will become welded.
- * ~
+ * \n
  * In some cases, if edges are shorter than the tolerance, this can result in edges being deleted.
  * The deletion of edges may also result in polylines or polygpns being deleted.
- * ~
+ * \n
  * The new positions that get generated are returned.
- * ~
+ * \n
  * @param __model__
  * @param entities Entities, a list of positions, or entities from which positions can be extracted.
  * @param tolerance The distance tolerance for fusing positions.
@@ -175,7 +175,7 @@ export function Fuse(__model__: GIModel, entities: TId|TId[], tolerance: number)
 // ================================================================================================
 /**
  * Opens or closes a polyline.
- * ~
+ * \n
  * @param __model__
  * @param lines Polyline(s).
  * @returns void
@@ -201,7 +201,7 @@ export function Ring(__model__: GIModel, entities: TId|TId[], method: _ERingMeth
 // ================================================================================================
 /**
  * Shifts the order of the edges in a closed wire.
- * ~
+ * \n
  * In a closed wire, any edge (or vertex) could be the first edge of the ring.
  * In some cases, it is useful to have an edge in a particular position in a ring.
  * This function allows the edges to be shifted either forwards or backwards around the ring.
@@ -263,15 +263,15 @@ export function Reverse(__model__: GIModel, entities: TId|TId[]): void {
 // ================================================================================================
 /**
  * Deletes geometric entities: positions, points, polylines, polygons, and collections.
- * ~
+ * \n
  * When deleting positions, any topology that requires those positions will also be deleted.
  * (For example, any vertices linked to the deleted position will also be deleted,
  * which may in turn result in some edges being deleted, and so forth.)
- * ~
+ * \n
  * When deleting objects (point, polyline, and polygons), topology is also deleted.
- * ~
+ * \n
  * When deleting collections, the objects and other collections in the collection are also deleted.
- * ~
+ * \n
  * @param __model__
  * @param entities Positions, points, polylines, polygons, collections.
  * @param method Enum, delete or keep unused positions.

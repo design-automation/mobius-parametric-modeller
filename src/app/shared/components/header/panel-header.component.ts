@@ -13,6 +13,7 @@ import { checkNodeValidity } from '@shared/parser';
 import { DownloadUtils } from '../file/download.utils';
 import { inline_func } from '@assets/core/inline/inline';
 import { InlineDocList } from '@shared/decorators';
+import * as showdown from 'showdown';
 
 const inputEvent = new Event('input', {
     'bubbles': true,
@@ -42,13 +43,15 @@ export class PanelHeaderComponent implements OnDestroy {
     private ctx = document.createElement('canvas').getContext('2d');
     backupDates;
 
-    inlineFunc = inline_func;
+    inlineFunc = JSON.parse(JSON.stringify(inline_func));
     inlineDocs = {};
     searchedInlineFunc;
 
 
     constructor(private dataService: DataService, private keyboardService: KeyboardService, private router: Router) {
         SaveFileComponent.updateBackupList();
+        const mdConverter = new showdown.Converter({literalMidWordUnderscores: true});
+
         if (this.router.url.startsWith('/about')) {
             this.executeCheck = false;
             this.nodeListCheck = false;
@@ -103,6 +106,21 @@ export class PanelHeaderComponent implements OnDestroy {
             }
             i++;
         }
+        for (const mod of this.inlineFunc) {
+            if (mod[0] === 'queries') {
+                for (let j = 0; j < mod[1].length; j++) {
+                    const func = mod[1][j];
+                    this.inlineDocs[func[0]] = {
+                        description: mdConverter.makeHtml(func[1]).replace(/\\n/g, '<br/>'),
+                        module: '_queries',
+                        name: func[0],
+                        parameters: [],
+                        returns: undefined};
+                    mod[1][j] = func[0];
+                }
+            }
+        }
+        console.log(this.inlineDocs)
     }
 
     ngOnDestroy() {
@@ -991,7 +1009,7 @@ export class PanelHeaderComponent implements OnDestroy {
             }
         }
         let allInlineFuncs = [['parameters', parameters]];
-        allInlineFuncs = allInlineFuncs.concat(inline_func);
+        allInlineFuncs = allInlineFuncs.concat(this.inlineFunc);
 
         if (searchTerm === '') {
             this.searchedInlineFunc = allInlineFuncs;
@@ -1097,7 +1115,7 @@ export class PanelHeaderComponent implements OnDestroy {
         if (fnDoc.summary) {
             fnDocHtml += `<p>${fnDoc.summary}</p>`;
         } else if (fnDoc.description) {
-            fnDocHtml += `<p>${fnDoc.description.split('~').join('<br>')}</p>`;
+            fnDocHtml += `<p>${fnDoc.description}</p>`;
         } else {
             fnDocHtml += `<p></p>`;
         }
@@ -1116,6 +1134,9 @@ export class PanelHeaderComponent implements OnDestroy {
     }
 
     getInlineHoverText(funcText: string) {
+        if (typeof funcText !== 'string') {
+            return funcText[1];
+        }
         const fnDoc = this.inlineDocs[funcText.split('(')[0]];
         if (!fnDoc) {
             return '';

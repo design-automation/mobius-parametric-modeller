@@ -103,23 +103,6 @@
         overflow: hidden;
         text-overflow: ellipsis;
 
-        .helpButton {
-            display: none;
-            position: absolute;
-            right: 1px;
-            background-color: inherit;
-            padding: 2px 0px 0px 0px;
-            margin: 0px;
-            border: 0px;
-
-            &:focus {
-                outline: 0px;
-            }
-            .icon {
-                width: 14px;
-                height: 14px;
-            }
-        }
     }
     .user--Manage{
         margin-bottom: 4px;
@@ -132,8 +115,25 @@
             display: inline-block;
         }
     }
-
 }
+.helpButton {
+    display: none;
+    position: absolute;
+    right: 1px;
+    background-color: inherit;
+    padding: 2px 0px 0px 0px;
+    margin: 0px;
+    border: 0px;
+
+    &:focus {
+        outline: 0px;
+    }
+    .icon {
+        width: 14px;
+        height: 14px;
+    }
+}
+
 .user--def{
     .user--def-lnContainer{
         width: 100%;
@@ -169,6 +169,7 @@
 
 
 .accordion {
+    position: relative;
     background-color: $color4;
     color: $color8;
     cursor: pointer;
@@ -202,8 +203,15 @@
             margin-left: 5px;
         }
     }
-    &.active, &:hover {
+    &.active {
         background-color: $color3; 
+    }
+    &:hover {
+        background-color: $color3; 
+        .helpButton {
+            display: inline-block;
+            bottom: 1px;
+        }
     }
     &:disabled{
         color: $color3;

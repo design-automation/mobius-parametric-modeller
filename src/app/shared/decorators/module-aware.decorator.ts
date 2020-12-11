@@ -3,11 +3,14 @@ import { Injectable } from '@angular/core';
 import { IModule, IFunction } from '@models/procedure';
 import { IArgument } from '@models/code';
 import * as doc from '@assets/typedoc-json/doc.json';
+import * as ctrlFlowDoc from '@assets/typedoc-json/controlFlowDoc.json';
 // const doc = require('@assets/typedoc-json/doc.json');
+import * as showdown from 'showdown';
 
 // @ts-ignore
 import * as Modules from 'assets/core/modules';
 
+const mdConverter = new showdown.Converter({literalMidWordUnderscores: true});
 const module_list = [];
 
 // todo: bug fix for defaults
@@ -138,10 +141,16 @@ function addDoc(mod, modName, docs) {
                 pr['name'] = param.name;
                 if (param.comment) {
                     pr['description'] = param.comment.shortText || param.comment.text;
+                    // if (pr['description']) {
+                    //     pr['description'] = mdConverter.makeHtml(pr['description']).replace(/\n/g, '<br/>')
+                    // }
                 }
                 pr['type'] = analyzeParamType(fn, param.type);
                 fn['parameters'].push(pr);
             }
+        }
+        if (fn['description']) {
+            fn['description'] = mdConverter.makeHtml(fn['description']).replace(/\\n/g, '<br/>');
         }
         moduleDoc[func.name] = fn;
     }
@@ -151,6 +160,9 @@ function addDoc(mod, modName, docs) {
 
 const moduleDocs = {};
 const inlineDocs = {};
+// @ts-ignore
+const controlFlowDocList = JSON.parse(JSON.stringify(ctrlFlowDoc.default));
+
 for (const mod of doc.children) {
     let modName: any = mod.name.replace(/"/g, '').replace(/'/g, '').split('/');
     const coreIndex = modName.indexOf('core');
@@ -240,6 +252,23 @@ for (const mod of doc.children) {
     // docs[modName] = moduleDoc;
 }
 
+for (const i of Object.keys(controlFlowDocList)) {
+    controlFlowDocList[i].displayedName = i;
+    controlFlowDocList[i].name = i;
+    controlFlowDocList[i].module = '';
+    controlFlowDocList[i].description = mdConverter.makeHtml(controlFlowDocList[i].description).replace(/\n/g, '<br/>');
+    for (const j in controlFlowDocList[i].example) {
+        if (controlFlowDocList[i].example[j]) {
+            controlFlowDocList[i].example[j] = mdConverter.makeHtml(controlFlowDocList[i].example[j]).replace(/\n/g, '<br/>');
+        }
+    }
+    for (const j in controlFlowDocList[i].example_info) {
+        if (controlFlowDocList[i].example_info[j]) {
+            controlFlowDocList[i].example_info[j] = mdConverter.makeHtml(controlFlowDocList[i].example_info[j]).replace(/\n/g, '<br/>');
+        }
+    }
+}
+
 // const inlineFuncs = Modules._parameterTypes._varString.replace(/\n/g, '').split(';');
 
 // for (const i in inlineFuncs) {
@@ -274,3 +303,4 @@ for (const mod of doc.children) {
 export const ModuleList = module_list;
 export const ModuleDocList = moduleDocs;
 export const InlineDocList = inlineDocs;
+export const ControlFlowDocList = controlFlowDocList;

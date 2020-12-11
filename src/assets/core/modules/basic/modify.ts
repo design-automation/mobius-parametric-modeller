@@ -21,14 +21,14 @@ import { getRay, getPlane } from './_common';
 // ================================================================================================
 /**
  * Moves entities. The directio and distance if movement is specified as a vector.
- * ~
+ * \n
  * If only one vector is given, then all entities are moved by the same vector.
  * If a list of vectors is given, the each entity will be moved by a different vector.
  * In this case, the number of vectors should be equal to the number of entities.
- * ~
+ * \n
  * If a position is shared between entites that are being moved by different vectors,
  * then the position will be moved by the average of the vectors.
- * ~
+ * \n
  * @param __model__
  * @param entities An entity or list of entities to move.
  * @param vector A vector or a list of vectors.
@@ -59,13 +59,13 @@ export function Move(__model__: GIModel, entities: TId|TId[], vectors: Txyz|Txyz
 // ================================================================================================
 /**
  * Rotates entities on plane by angle.
- * ~
+ * \n
  * @param __model__
  * @param entities  An entity or list of entities to rotate.
- * @param ray A ray to rotate around. \
- * Given a plane, a ray will be created from the plane z axis. \
- * Given an `xyz` location, a ray will be generated with an origin at this location, and a direction `[0, 0, 1]`. \
- * Given any entities, the centroid will be extracted, \
+ * @param ray A ray to rotate around. \n
+ * Given a plane, a ray will be created from the plane z axis. \n
+ * Given an `xyz` location, a ray will be generated with an origin at this location, and a direction `[0, 0, 1]`. \n
+ * Given any entities, the centroid will be extracted, \n
  * and a ray will be generated with an origin at this centroid, and a direction `[0, 0, 1]`.
  * @param angle Angle (in radians).
  * @returns void
@@ -94,13 +94,13 @@ export function Rotate(__model__: GIModel, entities: TId|TId[], ray: Txyz|TRay|T
 // ================================================================================================
 /**
  * Scales entities relative to a plane.
- * ~
+ * \n
  * @param __model__
  * @param entities  An entity or list of entities to scale.
- * @param plane A plane to scale around. \
- * Given a ray, a plane will be generated that is perpendicular to the ray. \
- * Given an `xyz` location, a plane will be generated with an origin at that location and with axes parallel to the global axes. \
- * Given any entities, the centroid will be extracted, \
+ * @param plane A plane to scale around. \n
+ * Given a ray, a plane will be generated that is perpendicular to the ray. \n
+ * Given an `xyz` location, a plane will be generated with an origin at that location and with axes parallel to the global axes. \n
+ * Given any entities, the centroid will be extracted, \n
  * and a plane will be generated with an origin at the centroid, and with axes parallel to the global axes.
  * @param scale Scale factor, a single number to scale equally, or [scale_x, scale_y, scale_z] relative to the plane.
  * @returns void
@@ -131,13 +131,13 @@ export function Scale(__model__: GIModel, entities: TId|TId[], plane: Txyz|TRay|
 // ================================================================================================
 /**
  * Mirrors entities across a plane.
- * ~
+ * \n
  * @param __model__
  * @param entities An entity or list of entities to mirros.
- * @param plane A plane to scale around. \
- * Given a ray, a plane will be generated that is perpendicular to the ray. \
- * Given an `xyz` location, a plane will be generated with an origin at that location and with axes parallel to the global axes. \
- * Given any entities, the centroid will be extracted, \
+ * @param plane A plane to scale around. \n
+ * Given a ray, a plane will be generated that is perpendicular to the ray. \n
+ * Given an `xyz` location, a plane will be generated with an origin at that location and with axes parallel to the global axes. \n
+ * Given any entities, the centroid will be extracted, \n
  * and a plane will be generated with an origin at the centroid, and with axes parallel to the global axes.
  * @returns void
  * @example modify.Mirror(polygon1, plane1)
@@ -164,18 +164,18 @@ export function Mirror(__model__: GIModel, entities: TId|TId[], plane: Txyz|TRay
 // ================================================================================================
 /**
  * Transforms entities from a source plane to a target plane.
- * ~
+ * \n
  * @param __model__
  * @param entities Vertex, edge, wire, face, position, point, polyline, polygon, collection.
- * @param from_plane Plane defining source plane for the transformation. \
- * Given a ray, a plane will be generated that is perpendicular to the ray. \
- * Given an `xyz` location, a plane will be generated with an origin at that location and with axes parallel to the global axes. \
- * Given any entities, the centroid will be extracted, \
+ * @param from_plane Plane defining source plane for the transformation. \n
+ * Given a ray, a plane will be generated that is perpendicular to the ray. \n
+ * Given an `xyz` location, a plane will be generated with an origin at that location and with axes parallel to the global axes. \n
+ * Given any entities, the centroid will be extracted, \n
  * and a plane will be generated with an origin at the centroid, and with axes parallel to the global axes.
- * @param to_plane Plane defining target plane for the transformation. \
- * Given a ray, a plane will be generated that is perpendicular to the ray. \
- * Given an `xyz` location, a plane will be generated with an origin at that location and with axes parallel to the global axes. \
- * Given any entities, the centroid will be extracted, \
+ * @param to_plane Plane defining target plane for the transformation. \n
+ * Given a ray, a plane will be generated that is perpendicular to the ray. \n
+ * Given an `xyz` location, a plane will be generated with an origin at that location and with axes parallel to the global axes. \n
+ * Given any entities, the centroid will be extracted, \n
  * and a plane will be generated with an origin at the centroid, and with axes parallel to the global axes.
  * @returns void
  * @example modify.XForm(polygon1, plane1, plane2)
@@ -204,7 +204,7 @@ export function XForm(__model__: GIModel, entities: TId|TId[],
 // ================================================================================================
 /**
  * Offsets wires.
- * ~
+ * \n
  * @param __model__
  * @param entities Edges, wires, faces, polylines, polygons, collections.
  * @param dist The distance to offset by, can be either positive or negative
@@ -232,12 +232,12 @@ export function Offset(__model__: GIModel, entities: TId|TId[], dist: number): v
 // ================================================================================================
 /**
  * Remesh a face or polygon.
- * ~
+ * \n
  * When a face or polygon is deformed, the triangles that make up that face will sometimes become incorrect.
  * Remeshing will regenerate the triangulated mesh for the face.
  * Remeshing is not performed automatically as it would degrade performance.
  * Instead, it is left up to the user to remesh only when it is actually required.
- * ~
+ * \n
  * @param __model__
  * @param entities Single or list of faces, polygons, collections.
  * @returns void

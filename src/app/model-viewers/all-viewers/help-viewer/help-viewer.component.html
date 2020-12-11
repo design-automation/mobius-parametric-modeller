@@ -9,7 +9,8 @@
     </div>
 
     <div class = 'container' *ngIf='output; else module_help'>
-        <h2><span>{{output.module}}</span>.{{output.name}}</h2>
+        <h2>{{output.displayedName}}</h2>
+        <!-- <h2><span>{{output.module}}</span>.{{output.name}}</h2> -->
         <!--<h4>Module: <span>{{output.module}}</span></h4>-->
         <div class = 'body--container'>
             <h5>Description:</h5>
@@ -62,7 +63,7 @@
 
     <ng-template #module_help>
         <div class = 'container'> 
-            <p class='moduleDesc' *ngIf='Modules[activeModIndex]?.description'>{{Modules[activeModIndex].description}}</p> <br>
+            <div class='moduleDesc' *ngIf='Modules[activeModIndex]?.description' [innerHTML]='Modules[activeModIndex].description'></div>
             <!--
             <ng-container *ngIf='Modules[activeModIndex]?.description'>
                 <p class='moduleDesc' *ngFor='let txt of Modules[activeModIndex].description.split("~")'>{{txt}}</p> <br>
@@ -70,12 +71,13 @@
             -->
             <ng-container *ngFor='let func of getFuncs()'>
                 <hr>
-                <h2><span>{{func.module}}</span>.{{func.name}}</h2>
+                <h2>{{func.displayedName}}</h2>
+                <!-- <h2><span>{{func.module}}</span>.{{func.name}}</h2> -->
                 <!--<h4>Module: <span>{{func.module}}</span></h4>-->
                 <div class = 'body--container'>
                     <div class = 'descr--container'>
                         <h5>Description:</h5>
-                        <p *ngFor='let txt of func.description.split("~")'>{{txt}}</p>
+                        <div [innerHTML]='func.description'></div>
                     </div>
             
                     <div class = 'param--container'>
@@ -89,7 +91,7 @@
                                 </li>
                             </ng-container>
                         </ul>
-                    </div>        
+                    </div>
             
                     <!-- <p class='paramP' *ngFor='let param of func.parameters'>
                         <span>{{param.name}} - </span>{{param.description}}

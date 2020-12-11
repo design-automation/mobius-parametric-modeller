@@ -15,7 +15,7 @@ import { checkArgs, ArgCh } from '../_check_args';
 // ================================================================================================
 /**
  * Adds one or more key-value pairs to a dict. Existing keys with the same name will be overwritten.
- * ~
+ * \n
  * @param dict Dictionary to add the key-value pairs to.
  * @param keys A key or list of keys.
  * @param values A value of list of values.
@@ -41,7 +41,7 @@ export function Add(dict: object, keys: string|string[], values: any|any[]): voi
 // ================================================================================================
 /**
  * Removes keys from a dict. If the key does not exist, no action is taken and no error is thrown.
- * ~
+ * \n
  * @param dict The dict in which to remove keys
  * @param keys The key or list of keys to remove.
  * @returns void
@@ -66,7 +66,7 @@ export function Remove(dict: object, keys: string|string[]): void {
 // ================================================================================================
 /**
  * Replaces keys in a dict. If the key does not exist, no action is taken and no error is thrown.
- * ~
+ * \n
  * @param dict The dict in which to replace keys
  * @param old_keys The old key or list of keys.
  * @param new_keys The new key or list of keys.

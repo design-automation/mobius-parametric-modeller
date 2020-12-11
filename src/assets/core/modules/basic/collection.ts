@@ -18,10 +18,10 @@ import { arrMakeFlat } from '@libs/util/arrs';
 // ================================================================================================
 /**
  * Adds one or more new collections to the model.
- * ~
+ * \n
  * If the list of entities contains other collections, these other collections will then become
  * children of the new collection that will be created.
- * ~
+ * \n
  * @param __model__
  * @param entities List or nested lists of points, polylines, polygons, and other colletions.
  * @param name The name to give to this collection, resulting in an attribute called `name`. If `null`, no attribute will be created.
@@ -103,15 +103,15 @@ function _create(__model__: GIModel, ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEn
 /**
  * Get one or more collections from the model, given a name or list of names.
  * Collections with an attribute called 'name' and with a value that matches teh given vale will be returned.
- * ~
+ * \n
  * The value for name can include wildcards: '?' matches any single character and '*' matches any sequence of characters.
  * For example, 'coll?' will match 'coll1' and 'colla'. 'coll*' matches any name that starts with 'coll'.
- * ~
+ * \n
  * If a single collection is found, the collection will be returned as a single item (not a list).
  * This is a convenience so that there is no need to get the first item out of the returned list.
- * ~
+ * \n
  * If no collections are found, then an empty list is returned.
- * ~
+ * \n
  * @param __model__
  * @param names A name or list of names. May include wildcards, '?' and '*'.
  * @returns The collection, or a list of collections.
@@ -165,7 +165,7 @@ function _get(__model__: GIModel, names: string|string[]): number[] {
 // ================================================================================================
 /**
  * Addes entities to a collection.
- * ~
+ * \n
  * @param __model__
  * @param coll The collection to be updated.
  * @param entities Points, polylines, polygons, and collections to add.
@@ -229,7 +229,7 @@ function _collectionAdd(__model__: GIModel, coll_i: number, ents_arr: TEntTypeId
 // ================================================================================================
 /**
  * Removes entities from a collection.
- * ~
+ * \n
  * @param __model__
  * @param coll The collection to be updated.
  * @param entities Points, polylines, polygons, and collections to add. Or null to empty the collection.
@@ -310,7 +310,7 @@ function _collectionEmpty(__model__: GIModel, coll_i: number): void {
 // ================================================================================================
 /**
  * Deletes a collection without deleting the entities in the collection.
- * ~
+ * \n
  * @param __model__
  * @param coll The collection or list of collections to be deleted.
  * @returns void

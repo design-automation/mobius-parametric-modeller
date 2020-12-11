@@ -102,7 +102,7 @@ function _setMaterialModelAttrib(__model__: GIModel, name: string, settings_obj:
  * Sets material by creating a polygon attribute called 'material' and setting the value.
  * The value is a sitring, which is the name of the material.
  * The properties of this material must be defined at the model level, using one of the material functions.
- * ~
+ * \n
  * @param entities The entities for which to set the material.
  * @param material The name of the material.
  * @returns void
@@ -180,28 +180,28 @@ function _meshMaterial(__model__: GIModel, ents_arr: TEntTypeIdx[], material: st
 // ================================================================================================
 /**
  * Creates a line material and saves it in the model attributes.
- * ~
+ * \n
  * [See the threejs docs](https://threejs.org/docs/#api/en/materials/LineBasicMaterial)
  * [See the threejs docs](https://threejs.org/docs/#api/en/materials/LineDashedMaterial)
- * ~
+ * \n
  * The color of the material can either ignore or apply the vertex rgb colors.
  * If 'apply' id selected, then the actual color will be a combination of the material color
  * and the vertex colors, as specified by the a vertex attribute called 'rgb'.
  * In such a case, if material color is set to white, then it will
  * have no effect, and the color will be defined by the vertex [r,g,b] values.
- * ~
+ * \n
  * In order to assign a material to polylines in the model, a polyline attribute called 'material'.
  * will be created. The value for each polyline must either be null, or must be a material name.
- * ~
+ * \n
  * For dashed lines, the 'dash_gap_scale' parameter can be set.
  * - If 'dash_gap_scale' is null will result in a continouse line.
  * - If 'dash_gap_scale' is a single number: dash = gap = dash_gap_scale, scale = 1.
  * - If 'dash_gap_scale' is a list of two numbers: dash = dash_gap_scale[0], gap = dash_gap_scale[1], scale = 1.
  * - If 'dash_gap_scale' is a list of three numbers: dash = dash_gap_scale[0], gap = dash_gap_scale[1], scale = dash_gap_scale[2].
- * ~
+ * \n
  * Due to limitations of the OpenGL Core Profile with the WebGL renderer on most platforms,
  * line widths cannot be rendered. As a result, lines width will always be set to 1.
- * ~
+ * \n
  * @param name The name of the material.
  * @param color The diffuse color, as [r, g, b] values between 0 and 1. White is [1, 1, 1].
  * @param dash_gap_scale Size of the dash and gap, and a scale factor. (The gap and scale are optional.)
@@ -256,22 +256,22 @@ export function LineMat(__model__: GIModel, name: string,
 // ================================================================================================
 /**
  * Creates a basic mesh material and saves it in the model attributes.
- * ~
+ * \n
  * [See the threejs docs](https://threejs.org/docs/#api/en/materials/MeshBasicMaterial)
- * ~
+ * \n
  * The color of the material can either ignore or apply the vertex rgb colors.
  * If 'apply' id selected, then the actual color will be a combination of the material color
  * and the vertex colors, as specified by the a vertex attribute called 'rgb'.
  * In such a case, if material color is set to white, then it will
  * have no effect, and the color will be defined by the vertex [r,g,b] values.
- * ~
+ * \n
  * Additional material properties can be set by calling the functions for the more advanced materials.
  * These include LambertMaterial, PhongMaterial, StandardMaterial, and Physical Material.
  * Each of these more advanced materials allows you to specify certain additional settings.
- * ~
+ * \n
  * In order to assign a material to polygons in the model, a polygon attribute called 'material'.
  * needs to be created. The value for each polygon must either be null, or must be a material name.
- * ~
+ * \n
  * @param name The name of the material.
  * @param color The diffuse color, as [r, g, b] values between 0 and 1. White is [1, 1, 1].
  * @param opacity The opacity of the glass, between 0 (totally transparent) and 1 (totally opaque).
@@ -312,10 +312,10 @@ export function MeshMat(__model__: GIModel, name: string,
 // ================================================================================================
 /**
  * Creates a glass material with an opacity setting. The material will default to a Phong material.
- * ~
+ * \n
  * In order to assign a material to polygons in the model, a polygon attribute called 'material'
  * needs to be created. The value for each polygon must either be null, or must be a material name.
- * ~
+ * \n
  * @param name The name of the material.
  * @param opacity The opacity of the glass, between 0 (totally transparent) and 1 (totally opaque).
  * @returns void
@@ -345,12 +345,12 @@ export function Glass(__model__: GIModel, name: string, opacity: number): void {
 /**
  * Creates a Lambert material and saves it in the model attributes.
  * If a material with the same name already exits, these settings will be added to the existing material.
- * ~
+ * \n
  * [See the threejs docs](https://threejs.org/docs/#api/en/materials/MeshLambertMaterial)
- * ~
+ * \n
  * In order to assign a material to polygons in the model, a polygon attribute called 'material'
  * needs to be created. The value for each polygon must either be null, or must be a material name.
- * ~
+ * \n
  * @param name The name of the material.
  * @param emissive The emissive color, as [r, g, b] values between 0 and 1. White is [1, 1, 1].
  * @returns void
@@ -374,12 +374,12 @@ export function Lambert(__model__: GIModel, name: string, emissive: Txyz): void 
 /**
  * Creates a Phong material and saves it in the model attributes.
  * If a material with the same name already exits, these settings will be added to the existing material.
- * ~
+ * \n
  * [See the threejs docs](https://threejs.org/docs/#api/en/materials/MeshPhongMaterial)
- * ~
+ * \n
  * In order to assign a material to polygons in the model, a polygon attribute called 'material'
  * needs to be created. The value for each polygon must either be null, or must be a material name.
- * ~
+ * \n
  * @param name The name of the material.
  * @param emissive The emissive color, as [r, g, b] values between 0 and 1. White is [1, 1, 1].
  * @param specular The specular color, as [r, g, b] values between 0 and 1. White is [1, 1, 1].
@@ -416,12 +416,12 @@ export function Phong(__model__: GIModel, name: string,
 /**
  * Creates a Standard material and saves it in the model attributes.
  * If a material with the same name already exits, these settings will be added to the existing material.
- * ~
+ * \n
  * [See the threejs docs](https://threejs.org/docs/#api/en/materials/MeshStandardMaterial)
- * ~
+ * \n
  * In order to assign a material to polygons in the model, a polygon attribute called 'material'
  * needs to be created. The value for each polygon must either be null, or must be a material name.
- * ~
+ * \n
  * @param name The name of the material.
  * @param emissive The emissive color, as [r, g, b] values between 0 and 1. White is [1, 1, 1].
  * @param roughness The roughness, between 0 (smooth) and 1 (rough).
@@ -459,12 +459,12 @@ export function Standard(__model__: GIModel, name: string,
 /**
  * Creates a Physical material and saves it in the model attributes.
  * If a material with the same name already exits, these settings will be added to the existing material.
- * ~
+ * \n
  * [See the threejs docs](https://threejs.org/docs/#api/en/materials/MeshPhysicalMaterial)
- * ~
+ * \n
  * In order to assign a material to polygons in the model, a polygon attribute called 'material'
  * needs to be created. The value for each polygon must either be null, or must be a material name.
- * ~
+ * \n
  * @param name The name of the material.
  * @param emissive The emissive color, as [r, g, b] values between 0 and 1. White is [1, 1, 1].
  * @param roughness The roughness, between 0 (smooth) and 1 (rough).

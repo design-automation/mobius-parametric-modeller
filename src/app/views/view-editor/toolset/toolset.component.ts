@@ -4,7 +4,7 @@ import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
 import { IFlowchart } from '@models/flowchart';
 import * as CircularJSON from 'circular-json';
 import { IArgument } from '@models/code';
-import { ModuleList, ModuleDocList } from '@shared/decorators';
+import { ModuleList, ModuleDocList, ControlFlowDocList } from '@shared/decorators';
 import { INode, NodeUtils } from '@models/node';
 
 import { DownloadUtils } from '@shared/components/file/download.utils';
@@ -48,6 +48,7 @@ export class ToolsetComponent implements OnInit {
     AllModules = {};
     Modules = [];
     ModuleDoc = ModuleDocList;
+    ControlFlowDoc = ControlFlowDocList;
 
     private timeOut;
 
@@ -74,12 +75,7 @@ export class ToolsetComponent implements OnInit {
                     if (fn.doc.summary) {
                         fnDocHtml = `<p class="funcDesc">${fn.doc.summary}</p>`;
                     } else {
-                        fnDocHtml = `<p class="funcDesc">${fn.doc.description.split('~')[0]}</p>`;
-                        // const splittedDesc = fn.doc.description.split('~');
-                        // fnDocHtml = ``;
-                        // for (const txt of splittedDesc) {
-                        //     fnDocHtml += `<p class="funcDesc">${txt}</p>`;
-                        // }
+                        fnDocHtml = `<p class="funcDesc">${fn.doc.description.split('\n')[0]}</p>`;
                     }
                     if (fn.doc.parameters && fn.doc.parameters.length > 0) {
                         fnDocHtml += `<p><span>Parameters: </span></p>`;
@@ -660,10 +656,15 @@ export class ToolsetComponent implements OnInit {
                 'type': 'helpText',
                 'content': this.ModuleDoc[func.module][func.name]
             });
-        } else {
+        } else if (functype === 'global') {
             this.eventAction.emit({
                 'type': 'helpText',
                 'content': func.doc
+            });
+        } else {
+            this.eventAction.emit({
+                'type': 'helpText',
+                'content': this.ControlFlowDoc[func]
             });
         }
     }

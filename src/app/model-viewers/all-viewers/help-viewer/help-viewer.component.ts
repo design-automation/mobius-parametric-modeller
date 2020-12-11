@@ -1,5 +1,5 @@
-import { Component, Input, DoCheck, OnDestroy } from '@angular/core';
-import { ModuleList, ModuleDocList } from '@shared/decorators';
+import { Component, Input, DoCheck, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { ModuleList, ModuleDocList, ControlFlowDocList} from '@shared/decorators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from '@shared/services';
 import * as showdown from 'showdown';
@@ -30,11 +30,46 @@ export class HelpViewerComponent implements DoCheck, OnDestroy {
                         'https://raw.githubusercontent.com/design-automation/' +
                         'mobius-parametric-modeller/master/src/assets/gallery/function_examples/';
 
+                        const extraMods = ['Variable', 'Comment', 'Expression']
+        for (const i of extraMods) {
+            this.Modules.push({
+                'module': i,
+                'functions': [{
+                    description: ControlFlowDocList[i].description,
+                    module: '',
+                    name: i,
+                    displayedName: i,
+                    parameters: [],
+                    returns: undefined,
+                    example: ControlFlowDocList[i].example,
+                    example_info: ControlFlowDocList[i].example_info,
+                }],
+                'description': ''
+            });
+        }
+        const controlFlowMod = {'module': 'Control Flow', 'functions': [], 'description': ''};
+        for (const basicfunc of Object.keys(ControlFlowDocList)) {
+            if (extraMods.indexOf(basicfunc) !== -1) { continue; }
+            controlFlowMod.functions.push({
+                description: ControlFlowDocList[basicfunc].description,
+                module: '',
+                name: basicfunc,
+                displayedName: basicfunc,
+                parameters: [],
+                returns: undefined,
+                example: ControlFlowDocList[basicfunc].example,
+                example_info: ControlFlowDocList[basicfunc].example_info,
+            });
+        }
+        this.Modules.push(controlFlowMod);
+
         for (const mod of ModuleList) {
             if (mod.module[0] === '_') {continue; }
             const nMod = {'module': mod.module, 'functions': [], 'description': ModuleDocList[mod.module].description};
             for (const func of mod.functions) {
                 if (func.name[0] === '_') {continue; }
+                ModuleDocList[mod.module][func.name].displayedName = func.module + '.' + func.name;
+                ModuleDocList[mod.module][func.name].description = ModuleDocList[mod.module][func.name].description;
                 nMod.functions.push(ModuleDocList[mod.module][func.name]);
             }
             if (mod.functions.length > 0) {
@@ -44,8 +79,7 @@ export class HelpViewerComponent implements DoCheck, OnDestroy {
         this.output = this.mainDataService.helpViewData[0];
         this.activeModIndex = this.mainDataService.helpViewData[1];
         if (this.output) {
-            this.description = this.mdConverter.makeHtml(this.output.description.replace(/~/g, '<br/>'));
-            console.log(this.description);
+            this.description = this.output.description;
         } else {
             this.description = '';
         }
@@ -60,8 +94,7 @@ export class HelpViewerComponent implements DoCheck, OnDestroy {
             this.output = this.mainDataService.helpView[2];
             this.mainDataService.togglePageHelp(false);
             if (this.output) {
-                this.description = this.mdConverter.makeHtml(this.output.description.replace(/~/g, '<br/>'));
-                console.log(this.description)
+                this.description = this.output.description;
             } else {
                 this.description = '';
             }

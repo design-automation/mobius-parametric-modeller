@@ -387,7 +387,7 @@ function _printPaths(paths: TClipPaths, mesage: string) {
 // ================================================================================================
 /**
  * Create a voronoi subdivision of one or more polygons.
- * ~
+ * \n
  * @param __model__
  * @param pgons A list of polygons, or entities from which polygons can be extracted.
  * @param entities A list of positions, or entities from which positions can be extracted.
@@ -506,7 +506,7 @@ function _voronoiClipOld(__model__: GIModel, pgon_shape: Shape, d3_cell_coords: 
 // ================================================================================================
 /**
  * Create a delaunay triangulation of set of positions.
- * ~
+ * \n
  * @param __model__
  * @param entities A list of positions, or entities from which positions can be extracted.
  * @returns A list of new polygons.
@@ -619,9 +619,9 @@ export enum _EBBoxMethod {
 }
 /**
  * Create a polygon that is a 2D bounding box of the entities.
- * ~
+ * \n
  * For the method, 'aabb' generates an Axis Aligned Bounding Box, and 'obb' generates an Oriented Bounding Box.
- * ~
+ * \n
  *
  * @param __model__
  * @param entities A list of positions, or entities from which positions can bet extracted.
@@ -771,15 +771,15 @@ export function Union(__model__: GIModel, entities: TId|TId[]): TId[] {
 // ================================================================================================
 /**
  * Perform a boolean operation on polylines or polygons.
- * ~
+ * \n
  * The entities in A can be either polyline or polygons.
  * The entities in B must be polygons.
  * The polygons in B are first unioned before the operation is performed.
  * The boolean operation is then performed between each polyline or polygon in A, and the unioned B polygons.
- * ~
+ * \n
  * If A is an empty list, then an empty list is returned.
  * If B is an empty list, then the A list is returned.
- * ~
+ * \n
  * @param __model__
  * @param a_entities A list of polyline or polygons, or entities from which polyline or polygons can be extracted.
  * @param b_entities A list of polygons, or entities from which polygons can be extracted.
@@ -1095,9 +1095,9 @@ function _offsetPline(__model__: GIModel, pline_i: number, dist: number,
  * Adds vertices to polyline and polygons at all locations where egdes intersect one another.
  * The vertices are welded.
  * This can be useful for creating networks that can be used for shortest path calculations.
- * ~
+ * \n
  * The input polyline and polygons are copied.
- * ~
+ * \n
  * @param __model__
  * @param entities A list polylines or polygons, or entities from which polylines or polygons can be extracted.
  * @returns Copies of the input polyline and polygons, stiched.
@@ -1324,10 +1324,10 @@ function _knifeIntersect(l1: [Txy, Txy], l2: [Txy, Txy]): [number, number, Txy] 
 // ================================================================================================
 /**
  * Clean a polyline or polygon.
- * ~
+ * \n
  * Vertices that are closer together than the specified tolerance will be merged.
  * Vertices that are colinear within the tolerance distance will be deleted.
- * ~
+ * \n
  * @param __model__
  * @param entities A list of polylines or polygons, or entities from which polylines or polygons can be extracted.
  * @param tolerance The tolerance for deleting vertices from the polyline.

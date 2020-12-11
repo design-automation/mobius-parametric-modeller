@@ -76,14 +76,14 @@ export async function Write(__model__: GIModel, data: string, file_name: string,
 // ================================================================================================
 /**
  * Imports data into the model.
- * ~
+ * \n
  * There are two ways of specifying the file location to be imported:
  * - A url, e.g. "https://www.dropbox.com/xxxx/my_data.obj"
  * - A file name in the local storage, e.g. "my_data.obj".
- * ~
+ * \n
  * To place a file in local storage, go to the Mobius menu, and select 'Local Storage' from the dropdown.
  * Note that a codescript using a file in local storage may fail when others try to open the file.
- * ~
+ * \n
  * @param model_data The model data
  * @param data_format Enum, the file format.
  * @returns A list of the positions, points, polylines, polygons and collections added to the model.
@@ -222,12 +222,12 @@ export enum _EIOExportDataFormat {
 }
 /**
  * Export data from the model as a file.
- * ~
+ * \n
  * If you expore to your  hard disk,
  * it will result in a popup in your browser, asking you to save the file.
- * ~
+ * \n
  * If you export to Local Storage, there will be no popup.
- * ~
+ * \n
  * @param __model__
  * @param entities Optional. Entities to be exported. If null, the whole model will be exported.
  * @param file_name Name of the file as a string.

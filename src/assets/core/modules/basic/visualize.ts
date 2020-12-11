@@ -32,7 +32,7 @@ export enum _Ecolors {
 // ================================================================================================
 /**
  * Sets color by creating a vertex attribute called 'rgb' and setting the value.
- * ~
+ * \n
  * @param entities The entities for which to set the color.
  * @param color The color, [0,0,0] is black, [1,1,1] is white.
  * @returns void
@@ -83,7 +83,7 @@ function _color(__model__: GIModel, ents_arr: TEntTypeIdx[], color: TColor): voi
 /**
  * Generates a colour range based on a numeric attribute.
  * Sets the color by creating a vertex attribute called 'rgb' and setting the value.
- * ~
+ * \n
  * @param entities The entities for which to set the color.
  * @param attrib The numeric attribute to be used to create the gradient.
  * You can spacify an attribute with an index. For example, ['xyz', 2] will create a gradient based on height.
@@ -271,11 +271,11 @@ export enum _EEdgeMethod {
 
 /**
  * Controls how edges are visualized by setting the visibility of the edge.
- * ~
+ * \n
  * The method can either be 'visible' or 'hidden'.
  * 'visible' means that an edge line will be visible.
  * 'hidden' means that no edge lines will be visible.
- * ~
+ * \n
  * @param entities A list of edges, or other entities from which edges can be extracted.
  * @param method Enum, visible or hidden.
  * @returns void
@@ -335,11 +335,11 @@ export enum _EMeshMethod {
 }
 /**
  * Controls how polygon meshes are visualized by creating normals on vertices.
- * ~
+ * \n
  * The method can either be 'faceted' or 'smooth'.
  * 'faceted' means that the normal direction for each vertex will be perpendicular to the polygon to which it belongs.
  * 'smooth' means that the normal direction for each vertex will be the average of all polygons welded to this vertex.
- * ~
+ * \n
  * @param entities Vertices belonging to polygons, or entities from which polygon vertices can be extracted.
  * @param method Enum, the types of normals to create, faceted or smooth.
  * @returns void

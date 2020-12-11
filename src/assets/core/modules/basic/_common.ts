@@ -1,7 +1,7 @@
 /**
  * Shared utility functions
- * ~
- * ~
+ * \n
+ * \n
  */
 
 /**

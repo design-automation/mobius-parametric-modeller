@@ -1,8 +1,8 @@
 /**
  * The `attrib` module has functions for working with attributes in teh model.
  * Note that attributes can also be set and retrieved using the "@" symbol.
- * ~
- * ~
+ * \n
+ * \n
  */
 
 /**
@@ -119,9 +119,9 @@ function _getAttribPushTarget(ent_type_str: _EAttribPushTarget): EEntType|string
 // ================================================================================================
 /**
  * Set an attribute value for one or more entities.
- * ~
+ * \n
  * If entities is null, then model level attributes will be set.
- * ~
+ * \n
  * @param __model__
  * @param entities Entities, the entities to set the attribute value for.
  * @param attrib The attribute. Can be `name`, `[name, index]`, or `[name, key]`.
@@ -249,9 +249,9 @@ function _getEntsIndices(__model__: GIModel, ents_arr: TEntTypeIdx[]): number[] 
 // ================================================================================================
 /**
  * Get attribute values for one or more entities.
- * ~
+ * \n
  * If entities is null, then model level attributes will be returned.
- * ~
+ * \n
  * @param __model__
  * @param entities Entities, the entities to get the attribute values for.
  * @param attrib The attribute. Can be `name`, `[name, index]`, or `[name, key]`.
@@ -327,7 +327,7 @@ function _get(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[],
  * The attribute will appear as a new column in the attribute table.
  * (At least one entity must have a value for the column to be visible in the attribute table).
  * All attribute values will be set to null.
- * ~
+ * \n
  * @param __model__
  * @param ent_type_sel Enum, the attribute entity type.
  * @param data_type_sel Enum, the data type for this attribute
@@ -395,7 +395,7 @@ export function Add(__model__: GIModel, ent_type_sel: _EEntTypeAndMod, data_type
  * Delete one or more attributes from the model.
  * The column in the attribute table will be deleted.
  * All values will also be deleted.
- * ~
+ * \n
  * @param __model__
  * @param ent_type_sel Enum, the attribute entity type.
  * @param attribs A single attribute name, or a list of attribute names. In 'null' all attributes will be deleted.
@@ -439,7 +439,7 @@ export function Delete(__model__: GIModel, ent_type_sel: _EEntTypeAndMod, attrib
  * Rename an attribute in the model.
  * The header for column in the attribute table will be renamed.
  * All values will remain the same.
- * ~
+ * \n
  * @param __model__
  * @param ent_type_sel Enum, the attribute entity type.
  * @param old_attrib The old attribute name.
@@ -467,7 +467,7 @@ export function Rename(__model__: GIModel, ent_type_sel: _EEntTypeAndMod, old_at
 // ================================================================================================
 /**
  * Push attributes up or down the hierarchy. The original attribute is not changed.
- * ~
+ * \n
  * @param __model__
  * @param entities Entities, the entities to push the attribute values for.
  * @param attrib The attribute. Can be `name`, `[name, index_or_key]`,

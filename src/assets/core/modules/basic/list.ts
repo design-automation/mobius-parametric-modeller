@@ -134,7 +134,7 @@ export enum _ERemoveMethod {
 }
 /**
  * Removes items in a list.
- * ~
+ * \n
  * If @param method is set to 'index', then @param item should be the index of the item to be replaced.
  * Negative indexes are allowed.
  * If @param method is not set to 'index', then @param item should be the value.
@@ -188,7 +188,7 @@ export enum _EReplaceMethod {
 }
 /**
  * Replaces items in a list.
- * ~
+ * \n
  * If @param method is set to 'index', then @param old_item should be the index of the item to be replaced. Negative indexes are allowed.
  * If @param method is not set to 'index', then @param old_item should be the value.
  *
@@ -236,7 +236,7 @@ export function Replace(list: any[], old_item: any, new_item: any, method: _ERep
 // ================================================================================================
 /**
  * Sorts an list, based on the values of the items in the list.
- * ~
+ * \n
  * For alphabetical sort, values are sorted character by character,
  * numbers before upper case alphabets, upper case alphabets before lower case alphabets.
  *
@@ -337,7 +337,7 @@ function _sort(list: any[], method: _ESortMethod): void {
 // ================================================================================================
 /**
  * Removes and inserts items in a list.
- * ~
+ * \n
  * If no items_to_add are specified, then items are only removed.
  * If num_to_remove is 0, then values are only inserted.
  *

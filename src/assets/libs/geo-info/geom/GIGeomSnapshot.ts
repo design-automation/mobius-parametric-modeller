@@ -644,17 +644,17 @@ export class GIGeomSnapshot {
             // remove the coll from points
             const set_points_i: Set<number> = this.ss_data.get(ssid).co_pt.get(coll_i);
             if (set_points_i !== undefined) {
-                set_points_i.forEach( point_i => this.ss_data.get(ssid).pt_co.get(coll_i).delete(point_i) );
+                set_points_i.forEach( point_i => this.ss_data.get(ssid).pt_co.get(point_i).delete(coll_i) );
             }
             // remove the coll from plines
             const set_plines_i: Set<number> = this.ss_data.get(ssid).co_pl.get(coll_i);
             if (set_plines_i !== undefined) {
-                set_plines_i.forEach( pline_i => this.ss_data.get(ssid).pl_co.get(coll_i).delete(pline_i) );
+                set_plines_i.forEach( pline_i => this.ss_data.get(ssid).pl_co.get(pline_i).delete(coll_i) );
             }
             // remove the coll from pgons
             const set_pgons_i: Set<number> = this.ss_data.get(ssid).co_pg.get(coll_i);
             if (set_pgons_i !== undefined) {
-                set_pgons_i.forEach( pgon_i => this.ss_data.get(ssid).pg_co.get(coll_i).delete(pgon_i) );
+                set_pgons_i.forEach( pgon_i => this.ss_data.get(ssid).pg_co.get(pgon_i).delete(coll_i) );
             }
             // remove the coll from children (the children no longer have this coll as a parent)
             const set_childs_i: Set<number> = this.ss_data.get(ssid).co_ch.get(coll_i);
@@ -1009,12 +1009,37 @@ export class GIGeomSnapshot {
     // Debug
     // ============================================================================
     public toStr(ssid: number): string {
+        // data.pt_co = new Map();
+        // data.pl_co = new Map();
+        // data.pg_co = new Map();
+        // // coll -> obj
+        // data.co_pt = new Map();
+        // data.co_pl = new Map();
+        // data.co_pg = new Map();
+        // // coll data
+        // data.co_ch = new Map();
+        // data.co_pa = new Map();
+        this.ss_data.get(ssid).pl_co.forEach( (val, key) => console.log(">>", val, key));
         return JSON.stringify([
             'posis', Array.from(this.ss_data.get(ssid).ps),
             'points', Array.from(this.ss_data.get(ssid).pt),
             'plines', Array.from(this.ss_data.get(ssid).pl),
             'pgons', Array.from(this.ss_data.get(ssid).pg),
             'colls', Array.from(this.ss_data.get(ssid).co),
+            'pt_co', this._mapSetToStr(this.ss_data.get(ssid).pt_co),
+            'pl_co', this._mapSetToStr(this.ss_data.get(ssid).pl_co),
+            'pg_co', this._mapSetToStr(this.ss_data.get(ssid).pg_co),
+            'co_pt', this._mapSetToStr(this.ss_data.get(ssid).co_pt),
+            'co_pl', this._mapSetToStr(this.ss_data.get(ssid).co_pl),
+            'co_pg', this._mapSetToStr(this.ss_data.get(ssid).co_pg),
+            'co_ch', this._mapSetToStr(this.ss_data.get(ssid).co_ch),
         ]) + '\n';
+    }
+    private _mapSetToStr(map_set: Map<number, Set<number>>): string {
+        let result = '{';
+        map_set.forEach( (val_set, key) => {
+            result = result + key + ':' + JSON.stringify(Array.from(val_set));
+        });
+        return result + '}';
     }
 }

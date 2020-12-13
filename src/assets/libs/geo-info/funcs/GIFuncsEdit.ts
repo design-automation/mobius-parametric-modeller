@@ -258,6 +258,7 @@ export class GIFuncsEdit {
         // create new positions, replace posis for existing vertices
         const nns_filt: [number, number, number[]][] = []; // [posi_i, num_neighbours, neighbour_poisi_i]
         const exclude_posis_i: Set<number> = new Set(); // exclude any posis that have already been moved
+        const new_posis_i: number[] = [];
         for (const nn of nns) {
             if (!exclude_posis_i.has(nn[0]) && nn[1] > 1) {
                 nns_filt.push(nn);
@@ -273,6 +274,7 @@ export class GIFuncsEdit {
                 new_xyz[1] = new_xyz[1] / nn[1];
                 new_xyz[2] = new_xyz[2] / nn[1];
                 const new_posi_i: number = this.modeldata.geom.add.addPosi();
+                new_posis_i.push(new_posi_i);
                 this.modeldata.attribs.posis.setPosiCoords(new_posi_i, new_xyz);
                 for (const n_posi_i of nn[2]) {
                     const verts_i: number[] = this.modeldata.geom.nav.navPosiToVert(n_posi_i);
@@ -286,8 +288,8 @@ export class GIFuncsEdit {
         // delete the posis if they are unused
         const ssid: number = this.modeldata.active_ssid;
         this.modeldata.geom.snapshot.delUnusedPosis(ssid, Array.from(exclude_posis_i));
-        // TODO
-        return [];
+        // return new posis
+        return new_posis_i.map(posi_i => [EEntType.POSI, posi_i]) as TEntTypeIdx[];
     }
     private _fuseDistSq(xyz1: number[], xyz2: number[]): number {
         return Math.pow(xyz1[0] - xyz2[0], 2) +  Math.pow(xyz1[1] - xyz2[1], 2) +  Math.pow(xyz1[2] - xyz2[2], 2);

@@ -356,16 +356,14 @@ export class GIFuncsEdit {
         if (ents_arr.length === 0) { return; }
         // create sets
         const ent_sets: IEntSets = this.modeldata.geom.snapshot.getSubEntsSets(ssid, ents_arr);
-        // delete
-        if (ent_sets.ps.size) { this.modeldata.geom.snapshot.delPosis(ssid, Array.from(ent_sets.ps), invert); }
-        if (ent_sets.pt.size) { this.modeldata.geom.snapshot.delPoints(ssid, Array.from(ent_sets.pt), true, invert); }
-        if (ent_sets.pl.size) { this.modeldata.geom.snapshot.delPlines(ssid, Array.from(ent_sets.pl), true, invert); }
-        if (ent_sets.pg.size) { this.modeldata.geom.snapshot.delPgons(ssid, Array.from(ent_sets.pg), true, invert); }
-        if (ent_sets.co.size) { this.modeldata.geom.snapshot.delColls(ssid, Array.from(ent_sets.co), invert); }
-        //
-        if (ent_sets._v) { throw new Error('Not implemented'); } // should never happen
-        if (ent_sets._e) { throw new Error('Not implemented'); } // should never happen
-        if (ent_sets._w) { throw new Error('Not implemented'); } // should never happen
+        // console.log(">>>before");
+        // Object.keys(ent_sets).forEach( key => console.log(key, Array.from(ent_sets[key])));
+        if (invert) {
+            this.modeldata.geom.snapshot.invertEntSets(ssid, ent_sets);
+        }
+        // console.log(">>>after");
+        // Object.keys(ent_sets).forEach( key => console.log(key, Array.from(ent_sets[key])));
+        this.modeldata.geom.snapshot.delEntSets(ssid, ent_sets);
     }
     private _deleteNull(invert: boolean): void {
         const ssid: number = this.modeldata.active_ssid;

@@ -56,7 +56,7 @@ export class GIGeomDelVert {
         // point
         if (this.modeldata.geom._geom_maps.up_verts_points.has(vert_i)) {
             const point_i: number = this.modeldata.geom._geom_maps.up_verts_points.get(vert_i);
-            this.modeldata.geom.snapshot.delPoints(ssid, point_i, false);
+            this.modeldata.geom.snapshot.delPoints(ssid, point_i);
             return;
         }
         // pline
@@ -77,9 +77,11 @@ export class GIGeomDelVert {
         const wire_verts_i: number[] = this.modeldata.geom.query.getWireVerts(wire_i);
         const wire_is_closed: boolean = this.modeldata.geom.query.isWireClosed(wire_i);
         const num_verts: number = wire_verts_i.length;
-        // do we have to delete teh whole pline?
+        // do we have to delete the whole pline?
         if (num_verts - verts_i.length < 2) {
-            this.modeldata.geom.snapshot.delPlines(ssid, pline_i, true); // true=del_unused_posis
+            const pline_posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(EEntType.WIRE, wire_i);
+            this.modeldata.geom.snapshot.delPlines(ssid, pline_i);
+            this.modeldata.geom.snapshot.delUnusedPosis(ssid, pline_posis_i);
         }
         // check the object time stamp
         this.modeldata.getObjsCheckTs(EEntType.PLINE, pline_i);
@@ -117,7 +119,9 @@ export class GIGeomDelVert {
         const num_verts: number = this.modeldata.geom.nav.navAnyToVert(EEntType.PGON, pgon_i).length;
         // do we have to delete the whole pgon?
         if (num_verts - verts_i.length < 3) {
-            this.modeldata.geom.snapshot.delPgons(ssid, pgon_i, true); // true=del_unused_posis
+            const pgon_posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(EEntType.PGON, pgon_i);
+            this.modeldata.geom.snapshot.delPgons(ssid, pgon_i);
+            this.modeldata.geom.snapshot.delUnusedPosis(ssid, pgon_posis_i);
         }
         // check the object time stamp
         this.modeldata.getObjsCheckTs(EEntType.PGON, pgon_i);
@@ -151,7 +155,7 @@ export class GIGeomDelVert {
     private __delVert__OpenPline1Edge(wire_i: number) {
         const ssid: number = this.modeldata.active_ssid;
         const pline_i: number = this._geom_maps.up_wires_plines.get(wire_i);
-        this.modeldata.geom.snapshot.delPlines(ssid, pline_i, false);
+        this.modeldata.geom.snapshot.delPlines(ssid, pline_i);
     }
     /**
      * Special case, delete the first edge
@@ -207,7 +211,8 @@ export class GIGeomDelVert {
      */
     private __delVert__PgonBoundaryWire3Edge(pgon_i: number) {
         const ssid: number = this.modeldata.active_ssid;
-        this.modeldata.geom.snapshot.delPgons(ssid, pgon_i, false); // false=del_unused_posis TODO Why is this false???
+        // TODO do we need to del posis?
+        this.modeldata.geom.snapshot.delPgons(ssid, pgon_i);
     }
     /**
      * Special case, delete either the hole
@@ -215,7 +220,7 @@ export class GIGeomDelVert {
      */
     private __delVert__PgonHoleWire3Edge(pgon_i: number, wire_i: number) {
         // TODO
-        console.log('Not implemented');
+        console.log('Not implemented: Deleting posis in holes.');
     }
     /**
      * Final case, delete the next edge, reqire the previous edge

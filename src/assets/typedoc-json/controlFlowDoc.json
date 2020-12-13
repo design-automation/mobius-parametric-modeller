@@ -28,8 +28,8 @@
     },
     "Elseif": {
         "description": "Inserts a conditional 'Else-if' statement, which must be part of a compound conditional 'If' statement. The 'Else-if' statement must directly follow either an 'If' statement or another 'Else-if' statement.",
-        "example": [],
-        "example_info": []
+        "example": ["If a > 4\n    b = 0\nElse-if a > 3\n    b = 1"],
+        "example_info": [""]
     },
     "Else": {
         "description": "Inserts a conditional 'Else' statement, which must be part of a compound conditional 'If' statement. The 'Else' statement must directly follow either an 'If' statement or another 'Else-if' statement.",

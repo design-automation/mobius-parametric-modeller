@@ -63,7 +63,7 @@ export class GIModelData {
             };
 
         }
-        const ent_sets: IEntSets = this.geom.snapshot.getSubEntsSets( this.active_ssid, ents, true, true); // topo and tris
+        const ent_sets: IEntSets = this.geom.snapshot.getSubEntsSets( this.active_ssid, ents, true); // incl topo
         // merge the two sets of posis
         for (const posi_i of ent_sets.obj_ps) { ent_sets.ps.add(posi_i); }
         // return the data

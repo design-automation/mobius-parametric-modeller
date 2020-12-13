@@ -354,7 +354,7 @@ export class GIGeomSnapshot {
      * ~
      * Used for deleting all entities and for adding global function entities to a snapshot.
      */
-    public getSubEntsSets(ssid: number, ents: TEntTypeIdx[], incl_topo = false, incl_tris = false): IEntSets {
+    public getSubEntsSets(ssid: number, ents: TEntTypeIdx[], incl_topo = false): IEntSets {
         const ent_sets: IEntSets = {
             ps: new Set(),
             obj_ps: new Set(),
@@ -399,14 +399,12 @@ export class GIGeomSnapshot {
             ent_sets._v = new Set();
             ent_sets._e = new Set();
             ent_sets._w = new Set();
-            if (incl_tris) {
-                ent_sets._t = new Set();
-            }
+            ent_sets._t = new Set();
         }
         ent_sets.pt.forEach( point_i => {
             const posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(EEntType.POINT, point_i);
             posis_i.forEach( posi_i => {
-                if ( !ent_sets.ps.has(posi_i) ) { ent_sets.obj_ps.add(posi_i); }
+                ent_sets.obj_ps.add(posi_i);
             });
             if (incl_topo) {
                 ent_sets._v.add(this.modeldata.geom.nav.navPointToVert(point_i) );
@@ -415,7 +413,7 @@ export class GIGeomSnapshot {
         ent_sets.pl.forEach( pline_i => {
             const posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(EEntType.PLINE, pline_i);
             posis_i.forEach( posi_i => {
-                if ( !ent_sets.ps.has(posi_i) ) { ent_sets.obj_ps.add(posi_i); }
+                ent_sets.obj_ps.add(posi_i);
             });
             if (incl_topo) {
                 const wire_i: number = this.modeldata.geom.nav.navPlineToWire(pline_i);
@@ -429,7 +427,7 @@ export class GIGeomSnapshot {
         ent_sets.pg.forEach( pgon_i => {
             const posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(EEntType.PGON, pgon_i);
             posis_i.forEach( posi_i => {
-                if ( !ent_sets.ps.has(posi_i) ) { ent_sets.obj_ps.add(posi_i); }
+                ent_sets.obj_ps.add(posi_i);
             });
             if (incl_topo) {
                 const wires_i: number[] = this.modeldata.geom.nav.navPgonToWire(pgon_i);
@@ -440,10 +438,8 @@ export class GIGeomSnapshot {
                     edges_i.forEach( edge_i => ent_sets._e.add(edge_i) );
                     verts_i.forEach( vert_i => ent_sets._v.add(vert_i) );
                 });
-                if (incl_tris) {
-                    const tris_i: number[] = this.modeldata.geom.nav_tri.navPgonToTri(pgon_i);
-                    tris_i.forEach( tri_i => ent_sets._t.add(tri_i) );
-                }
+                const tris_i: number[] = this.modeldata.geom.nav_tri.navPgonToTri(pgon_i);
+                tris_i.forEach( tri_i => ent_sets._t.add(tri_i) );
             }
         });
         // return the result
@@ -474,17 +470,42 @@ export class GIGeomSnapshot {
      * @param ent_sets
      */
     public delEntSets(ssid: number, ent_sets: IEntSets): void {
-        // delete the ents
         this.delColls(ssid, Array.from(ent_sets.co));
-        this.delPgons(ssid, Array.from(ent_sets.pg), true);
-        this.delPlines(ssid, Array.from(ent_sets.pl), true);
-        this.delPoints(ssid, Array.from(ent_sets.pt), true);
+        this.delPgons(ssid, Array.from(ent_sets.pg));
+        this.delPlines(ssid, Array.from(ent_sets.pl));
+        this.delPoints(ssid, Array.from(ent_sets.pt));
         this.delPosis(ssid, Array.from(ent_sets.ps));
         this.delUnusedPosis(ssid, Array.from(ent_sets.obj_ps));
     }
     /**
-     * Del all unused posis in the model.
-     * Posi attributes will also be deleted.
+     * Invert ent sets
+     * @param ent_sets
+     */
+    public invertEntSets(ssid: number, ent_sets: IEntSets): void {
+        ent_sets.co = this._invertSet(this.ss_data.get(ssid).co, ent_sets.co);
+        ent_sets.pg = this._invertSet(this.ss_data.get(ssid).pg, ent_sets.pg);
+        ent_sets.pl = this._invertSet(this.ss_data.get(ssid).pl, ent_sets.pl);
+        ent_sets.pt = this._invertSet(this.ss_data.get(ssid).pt, ent_sets.pt);
+        // go through the posis
+        // we get the inverse of the untion of ps and obj_ps
+        // for this inverse set, we then sort into those that are used and those that are unused
+        const new_set_ps: Set<number> = new Set();
+        const new_set_obj_ps: Set<number> = new Set();
+        for (const posi_i of this.ss_data.get(ssid).ps) {
+            if (ent_sets.obj_ps.has(posi_i) || ent_sets.ps.has(posi_i)) {
+                continue;
+            }
+            if (this.isPosiUnused(ssid, posi_i)) {
+                new_set_ps.add(posi_i);
+            } else {
+                new_set_obj_ps.add(posi_i);
+            }
+        }
+        ent_sets.ps = new_set_ps;
+        ent_sets.obj_ps = new_set_obj_ps;
+    }
+    /**
+     * Del unused posis, i.e posis that are not linked to any vertices.
      * @param posis_i
      */
     public delUnusedPosis(ssid: number, posis_i: number|number[]): void {
@@ -493,21 +514,20 @@ export class GIGeomSnapshot {
         // loop
         for (const posi_i of posis_i) {
             if (!this._geom_maps.up_posis_verts.has(posi_i)) { continue; } // already deleted
-            const verts_i: number[] = this._geom_maps.up_posis_verts.get(posi_i);
-            if ( verts_i.length === 0) { // only delete posis with no verts
+            if ( this.isPosiUnused(ssid, posi_i) ) { // only delete posis with no verts
                 this.ss_data.get(ssid).ps.delete(posi_i);
             }
         }
     }
     /**
      * Del posis.
-     * Posi attributes will also be deleted.
+     * This will delete any geometry connected to these posis, starting with the vertices
+     * and working up the hierarchy.
      * @param posis_i
      */
-    public delPosis(ssid: number, posis_i: number|number[], invert = false): void {
+    public delPosis(ssid: number, posis_i: number|number[]): void {
         // make array
         posis_i = (Array.isArray(posis_i)) ? posis_i : [posis_i];
-        if (invert) { posis_i = this._invert(this.ss_data.get(ssid).ps, posis_i); }
         if (posis_i.length === 0) { return; }
         // delete the posis
         for (const posi_i of posis_i) {
@@ -557,10 +577,9 @@ export class GIGeomSnapshot {
      * Point attributes will also be deleted.
      * @param points_i
      */
-    public delPoints(ssid: number, points_i: number|number[], del_unused_posis: boolean, invert = false): void {
+    public delPoints(ssid: number, points_i: number|number[]): void {
         // make array
         points_i = (Array.isArray(points_i)) ? points_i : [points_i];
-        if (invert) { points_i = this._invert(this.ss_data.get(ssid).pt, points_i); }
         if (points_i.length === 0) { return; }
         // delete the points
         for (const point_i of points_i) {
@@ -571,23 +590,14 @@ export class GIGeomSnapshot {
                 set_colls_i.forEach( coll_i => this.ss_data.get(ssid).co_pt.get(coll_i).delete(point_i) );
             }
         }
-        // get posis and del unused
-        if (del_unused_posis) {
-            for (const point_i of points_i) {
-                const posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(EEntType.POINT, point_i);
-                this.delUnusedPosis(ssid, posis_i);
-            }
-        }
     }
     /**
      * Del plines.
-     * Pline attributes will also be deleted.
      * @param plines_i
      */
-    public delPlines(ssid: number, plines_i: number|number[], del_unused_posis: boolean, invert = false): void {
+    public delPlines(ssid: number, plines_i: number|number[]): void {
         // make array
         plines_i = (Array.isArray(plines_i)) ? plines_i : [plines_i];
-        if (invert) { plines_i = this._invert(this.ss_data.get(ssid).pl, plines_i); }
         if (plines_i.length === 0) { return; }
         // delete the plines
         for (const pline_i of plines_i) {
@@ -598,22 +608,14 @@ export class GIGeomSnapshot {
                 set_colls_i.forEach( coll_i => this.ss_data.get(ssid).co_pl.get(coll_i).delete(pline_i) );
             }
         }
-        // get posis and del unused
-        if (del_unused_posis) {
-            for (const pline_i of plines_i) {
-                const posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(EEntType.PLINE, pline_i);
-                this.delUnusedPosis(ssid, posis_i);
-            }
-        }
     }
     /**
      * Del pgons.
      * @param pgons_i
      */
-    public delPgons(ssid: number, pgons_i: number|number[], del_unused_posis: boolean, invert = false): void {
+    public delPgons(ssid: number, pgons_i: number|number[], invert = false): void {
         // make array
         pgons_i = (Array.isArray(pgons_i)) ? pgons_i : [pgons_i];
-        if (invert) { pgons_i = this._invert(this.ss_data.get(ssid).pg, pgons_i); }
         if (pgons_i.length === 0) { return; }
         // delete the pgons
         for (const pgon_i of pgons_i) {
@@ -624,13 +626,6 @@ export class GIGeomSnapshot {
                 set_colls_i.forEach( coll_i => this.ss_data.get(ssid).co_pg.get(coll_i).delete(pgon_i) );
             }
         }
-        // get posis and del unused
-        if (del_unused_posis) {
-            for (const pgon_i of pgons_i) {
-                const posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(EEntType.PGON, pgon_i);
-                this.delUnusedPosis(ssid, posis_i);
-            }
-        }
     }
     /**
      * Delete a collection.
@@ -638,10 +633,9 @@ export class GIGeomSnapshot {
      * Also, does not delete any positions.
      * @param colls_i The collections to delete
      */
-    public delColls(ssid: number, colls_i: number|number[], invert = false): void {
+    public delColls(ssid: number, colls_i: number|number[]): void {
         // make array
         colls_i = (Array.isArray(colls_i)) ? colls_i : [colls_i];
-        if (invert) { colls_i = this._invert(this.ss_data.get(ssid).co, colls_i); }
         if (colls_i.length === 0) { return; }
         // delete the colls
         for (const coll_i of colls_i) {
@@ -984,15 +978,29 @@ export class GIGeomSnapshot {
         if (count === 0) { return [0, 0, 0]; }
         return vecDiv(normal, count);
     }
+    /**
+     * Returns true if posis is used
+     * @param point_i
+     */
+    public isPosiUnused(ssid: number, posi_i: number): boolean {
+        const verts_i: number[] = this._geom_maps.up_posis_verts.get(posi_i);
+        for (const vert_i of verts_i) {
+            const [ent_type, ent_i]: TEntTypeIdx  = this.modeldata.geom.query.getTopoObj(EEntType.VERT, vert_i);
+            if (this.modeldata.geom.snapshot.hasEnt(ssid, ent_type, ent_i)) {
+                return false;
+            }
+        }
+        return true;
+    }
     // ============================================================================
     // Private
     // ============================================================================
-    private _invert(ents_ss: Set<number>, selected: number[]): number[] {
-        const inverted: number[] = [];
+    private _invertSet(ents_ss: Set<number>, selected: Set<number>): Set<number> {
+        const inverted: Set<number> = new Set();
         const set_selected: Set<number> = new Set(selected);
         for (const ent_i of ents_ss) {
             if (!set_selected.has(ent_i)) {
-                inverted.push(ent_i);
+                inverted.add(ent_i);
             }
         }
         return inverted;

@@ -56,16 +56,17 @@ export class GIModelData {
      * Exports the JSON data for this model.
      */
     public exportGI(ents: TEntTypeIdx[]): IModelJSONData {
+        let ent_sets: IEntSets;
         if (ents === null) {
-            return {
-                geometry: this.geom.imp_exp.exportGIAll(),
-                attributes: this.attribs.imp_exp.exportGIAll()
-            };
-
+            ent_sets = this.geom.snapshot.getAllEntSets(this.active_ssid);
+        } else {
+            ent_sets = this.geom.snapshot.getSubEntsSets( this.active_ssid, ents);
         }
-        const ent_sets: IEntSets = this.geom.snapshot.getSubEntsSets( this.active_ssid, ents, true); // incl topo
+        this.geom.snapshot.addTopoToSubEntsSets(ent_sets);
         // merge the two sets of posis
-        for (const posi_i of ent_sets.obj_ps) { ent_sets.ps.add(posi_i); }
+        // if (ent_sets.obj_ps) {
+        //     for (const posi_i of ent_sets.obj_ps) { ent_sets.ps.add(posi_i); }
+        // }
         // return the data
         return {
             geometry: this.geom.imp_exp.exportGI(ent_sets),

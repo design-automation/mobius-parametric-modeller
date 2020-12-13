@@ -266,9 +266,6 @@ async function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
     switch (data_format) {
         case _EIOExportDataFormat.GI:
             let model_data = '';
-            
-            console.log(">>> exportGI");
-
             model_data = __model__.exportGI(ents_arr);
             // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
             model_data = model_data.replace(/\\/g, '\\\\\\'); // TODO temporary fix

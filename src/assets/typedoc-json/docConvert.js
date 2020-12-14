@@ -3,7 +3,6 @@
 const dc = require('./doc.json');
 const fs = require('fs');
 const config = require('../gallery/__config__.json');
-const varString = require('../core/_inlineList.js')._varString;
 
 const urlString = 'https://mobius.design-automation.net';
 
@@ -285,16 +284,6 @@ function genInlineDocs(inlineList, inlineDocs) {
 // const doc = dc.default;
 const doc = dc;
 const moduleDocs = [];
-const inlineDocs = [];
-
-const inlineFuncs = varString.replace(/\n/g, '').split(';');
-for (let i in inlineFuncs) {
-    if (inlineFuncs[i] === '') {
-        inlineFuncs[i] = undefined;
-        continue;
-    }
-    inlineFuncs[i] = inlineFuncs[i].split(' = ');
-}
 
 for (const mod of doc.children) {
     let modName = mod.name.replace(/"/g, '').replace(/'/g, '').split('/');
@@ -303,7 +292,6 @@ for (const mod of doc.children) {
         continue;
     }
     if (modName[coreIndex + 1] === 'inline') {
-        addDoc(mod, modName, inlineDocs);
 
     } else if (modName[coreIndex + 1] === 'modules') {
         modName = modName[modName.length - 1];
@@ -316,7 +304,6 @@ for (const mod of doc.children) {
 moduleDocs.sort(compare);
 
 genModuleDocs(ModuleList, moduleDocs)
-genInlineDocs(inlineFuncs, inlineDocs)
 
 fs.writeFile(`./src/assets/gallery/__config__.json`, JSON.stringify(config, null, 4), function(err) {
     if (err) {

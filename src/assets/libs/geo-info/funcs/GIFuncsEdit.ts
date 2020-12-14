@@ -258,6 +258,7 @@ export class GIFuncsEdit {
         // create new positions, replace posis for existing vertices
         const nns_filt: [number, number, number[]][] = []; // [posi_i, num_neighbours, neighbour_poisi_i]
         const exclude_posis_i: Set<number> = new Set(); // exclude any posis that have already been moved
+        const new_posis_i: number[] = [];
         for (const nn of nns) {
             if (!exclude_posis_i.has(nn[0]) && nn[1] > 1) {
                 nns_filt.push(nn);
@@ -273,6 +274,7 @@ export class GIFuncsEdit {
                 new_xyz[1] = new_xyz[1] / nn[1];
                 new_xyz[2] = new_xyz[2] / nn[1];
                 const new_posi_i: number = this.modeldata.geom.add.addPosi();
+                new_posis_i.push(new_posi_i);
                 this.modeldata.attribs.posis.setPosiCoords(new_posi_i, new_xyz);
                 for (const n_posi_i of nn[2]) {
                     const verts_i: number[] = this.modeldata.geom.nav.navPosiToVert(n_posi_i);
@@ -286,8 +288,8 @@ export class GIFuncsEdit {
         // delete the posis if they are unused
         const ssid: number = this.modeldata.active_ssid;
         this.modeldata.geom.snapshot.delUnusedPosis(ssid, Array.from(exclude_posis_i));
-        // TODO
-        return [];
+        // return new posis
+        return new_posis_i.map(posi_i => [EEntType.POSI, posi_i]) as TEntTypeIdx[];
     }
     private _fuseDistSq(xyz1: number[], xyz2: number[]): number {
         return Math.pow(xyz1[0] - xyz2[0], 2) +  Math.pow(xyz1[1] - xyz2[1], 2) +  Math.pow(xyz1[2] - xyz2[2], 2);
@@ -356,16 +358,14 @@ export class GIFuncsEdit {
         if (ents_arr.length === 0) { return; }
         // create sets
         const ent_sets: IEntSets = this.modeldata.geom.snapshot.getSubEntsSets(ssid, ents_arr);
-        // delete
-        if (ent_sets.ps.size) { this.modeldata.geom.snapshot.delPosis(ssid, Array.from(ent_sets.ps), invert); }
-        if (ent_sets.pt.size) { this.modeldata.geom.snapshot.delPoints(ssid, Array.from(ent_sets.pt), true, invert); }
-        if (ent_sets.pl.size) { this.modeldata.geom.snapshot.delPlines(ssid, Array.from(ent_sets.pl), true, invert); }
-        if (ent_sets.pg.size) { this.modeldata.geom.snapshot.delPgons(ssid, Array.from(ent_sets.pg), true, invert); }
-        if (ent_sets.co.size) { this.modeldata.geom.snapshot.delColls(ssid, Array.from(ent_sets.co), invert); }
-        //
-        if (ent_sets._v) { throw new Error('Not implemented'); } // should never happen
-        if (ent_sets._e) { throw new Error('Not implemented'); } // should never happen
-        if (ent_sets._w) { throw new Error('Not implemented'); } // should never happen
+        // console.log(">>>before");
+        // Object.keys(ent_sets).forEach( key => console.log(key, Array.from(ent_sets[key])));
+        if (invert) {
+            this.modeldata.geom.snapshot.invertEntSets(ssid, ent_sets);
+        }
+        // console.log(">>>after");
+        // Object.keys(ent_sets).forEach( key => console.log(key, Array.from(ent_sets[key])));
+        this.modeldata.geom.snapshot.delEntSets(ssid, ent_sets);
     }
     private _deleteNull(invert: boolean): void {
         const ssid: number = this.modeldata.active_ssid;

@@ -81,6 +81,6 @@ export class GIGeom {
      * Generate a string for debugging
      */
     public toStr(): string {
-        return JSON.stringify(this.imp_exp.exportGIAll());
+        throw new Error('Not implemented');
     }
 }

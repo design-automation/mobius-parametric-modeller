@@ -125,14 +125,6 @@ export class GIAttribsImpExp {
         data.model = Array.from(this.modeldata.attribs.attribs_maps.get(ssid).mo);
         return data;
     }
-    /**
-     * Returns the JSON data for this model.
-     */
-    public exportGIAll(): IAttribsJSONData {
-        // TODO
-        throw new Error("Not implemented");
-        // TODO
-    }
     // ============================================================================
     // Private methods
     // ============================================================================

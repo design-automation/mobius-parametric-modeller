@@ -290,12 +290,4 @@ export class GIGeomImpExp {
         }
         return data;
     }
-    /**
-     * Export GI data out of this model.
-     */
-    public exportGIAll(): IGeomJSONData {
-        // TODO
-        throw new Error("Not implemented.");
-        // TODO
-    }
 }

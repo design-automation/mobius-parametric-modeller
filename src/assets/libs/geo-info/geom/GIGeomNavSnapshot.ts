@@ -1,4 +1,4 @@
-import {  EEntType, IGeomMaps } from '../common';
+import {  EEntType, IGeomMaps, TEntTypeIdx } from '../common';
 import { GIModelData } from '../GIModelData';
 /**
  * Class for navigating the geometry.
@@ -110,6 +110,21 @@ export class GIGeomNavSnapshot {
     // ============================================================================
     // Navigate up the hierarchy
     // ============================================================================
+    /**
+     * Returns [] if none
+     * @param point_i
+     */
+    public navPosiToVert(ssid: number, posi_i: number): number[] {
+        const verts_i: number[] = this._geom_maps.up_posis_verts.get(posi_i);
+        const filt_verts_i: number[] = [];
+        for (const vert_i of verts_i) {
+            const [ent_type, ent_i]: TEntTypeIdx  = this.modeldata.geom.query.getTopoObj(EEntType.VERT, vert_i);
+            if (this.modeldata.geom.snapshot.hasEnt(ssid, ent_type, ent_i)) {
+                filt_verts_i.push(vert_i);
+            }
+        }
+        return filt_verts_i;
+    }
     /**
      * Returns [] if none
      * @param point_i

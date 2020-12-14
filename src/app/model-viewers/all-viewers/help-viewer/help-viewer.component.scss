@@ -31,12 +31,16 @@
     padding: $small-padding;
 }
 
+$ln-height: $fsize2 + 3px;
+
 .body--container{
     padding: 6px 0px;
     border-top: 1px solid $color1;
+    h5{
+        margin-bottom: $ln-height/4;
+    }
 }
 
-$ln-height: $fsize2 + 3px;
 
 .descr--container, .param--container, .ret--container, .exam--container{
     padding: 0px;

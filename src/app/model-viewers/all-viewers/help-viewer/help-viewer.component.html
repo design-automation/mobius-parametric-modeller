@@ -46,8 +46,8 @@
                 <h5>Examples:</h5>
                 <div *ngFor='let ex of output.example; let i = index;' class = 'examp'>
                     <ul>
-                        <li>{{ex}}</li>
-                        <p *ngIf='output.example_info'>{{output.example_info[i]}}</p>
+                        <li [innerHTML]='ex'></li>
+                        <p *ngIf='output.example_info' [innerHTML]='output.example_info[i]'></p>
                     </ul>
                 </div>
             </div>
@@ -70,7 +70,6 @@
             </ng-container>
             -->
             <ng-container *ngFor='let func of getFuncs()'>
-                <hr>
                 <h2>{{func.displayedName}}</h2>
                 <!-- <h2><span>{{func.module}}</span>.{{func.name}}</h2> -->
                 <!--<h4>Module: <span>{{func.module}}</span></h4>-->
@@ -106,8 +105,8 @@
                         <h5>Examples:</h5>
                         <div *ngFor='let ex of func.example; let i = index;' class = 'examp'>
                             <ul>
-                                <li>{{ex}}</li>
-                                <p *ngIf='func.example_info'>{{func.example_info[i]}}</p>
+                                <li [innerHTML]='ex'></li>
+                                <p *ngIf='func.example_info'  [innerHTML]='func.example_info[i]'></p>
                             </ul>
                         </div>
                     </div>

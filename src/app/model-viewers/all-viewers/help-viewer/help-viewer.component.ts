@@ -9,7 +9,8 @@ import * as showdown from 'showdown';
  @Component({
   selector: 'help-viewer',
   templateUrl: './help-viewer.component.html',
-  styleUrls: ['./help-viewer.component.scss']
+  styleUrls: ['./help-viewer.component.scss'],
+  encapsulation: ViewEncapsulation.Emulated
 })
 export class HelpViewerComponent implements DoCheck, OnDestroy {
     output: any;

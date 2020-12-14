@@ -57,10 +57,21 @@ const lists = [
     'listRep(list, num)',
     'listJoin(list1, list2)',
     'listFlat(list)',
+    'listRot(list, rot)',
     'listSlice(list, start, end?)',
     'listCull(list)',
     'listZip(lists)',
     'listZip2(lists)'
+];
+
+const dictionaries = [
+    'len(dict)',
+    'dictGet(list, index)',
+    'dictKeys(dict)',
+    'dictVals(dict)',
+    'dictHasKey(dict, key)',
+    'dictHasVal(dict, val)',
+    'dictGetKeys(dict, val)'
 ];
 
  const sets = [
@@ -204,6 +215,7 @@ export const inline_func = [
     ['conversion', conversion],
     ['strings', strings],
     ['lists', lists],
+    ['dictionaries', dictionaries],
     ['sets', sets],
     ['vectors', vectors],
     ['rays', rays],

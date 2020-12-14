@@ -35,13 +35,6 @@ export function isList(debug: boolean, list: any): boolean {
     return Array.isArray(list);
 }
 /**
- * Returns the number of items in the list
- * @param list 
- */
-export function listLen(debug: boolean, list: any[]): number {
-    return list.length;
-}
-/**
  * Returns the number of times the value is in the list
  * @param list 
  * @param val 
@@ -56,8 +49,8 @@ export function listCount(debug: boolean, list: any[], val: any): number {
     return count;
 }
 /**
- * Returns a copy of the list
- * @param list 
+ * Returns a shallow copy of the list.
+ * @param list
  */
 export function listCopy(debug: boolean, list: any[]): any[] {
     return list.slice();
@@ -76,13 +69,6 @@ export function listRep(debug: boolean, list: any[], n: number): any[] {
         }
     }
     return result;
-}
-/**
- * Returns the last item in a list
- * @param list 
- */
-export function listLast(debug: boolean, list: any[]): number {
-    return list[list.length - 1];
 }
 /**
  * Returns the item in the list specified by index, either a positive or negative integer
@@ -141,6 +127,21 @@ export function listFlat(debug: boolean, list: any[], depth?: number): any[] {
         return list.flat(depth);
     }
     return arrMakeFlat(list);
+}
+/**
+ * Return a list that is rotated, i.e. items from the end of the list are moved to the start of the list.
+ * For a positive rotation, items are move from the end to the start of the list.
+ * For a negative rotation, items are moved from the start to the end of the list.
+ * @param list
+ * @param start
+ * @param end
+ */
+export function listRot(debug: boolean, list: any[], rot: number): any[] {
+    const len: number = list.length;
+    const split: number = (len - rot) % len;
+    const start: any[] = list.slice(split, len);
+    const end: any[] = list.slice(0, split);
+    return start.concat(end);
 }
 /**
  * Return a sub-list from the list

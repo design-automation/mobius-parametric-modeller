@@ -331,7 +331,10 @@ export class GIGeomSnapshot {
                     }
                     return tris_i;
                 }
-                throw new Error('Entity type not recognised.');
+                throw new Error(
+                    'Entity type not recognised: "' + ent_type + '".' +
+                    'Valid entity types are: "ps", "_v", "_e", "_w", "pt", "pl", "pg" and "co".'
+                );
         }
     }
     /**

@@ -96,6 +96,12 @@ export {_geometry};
 import * as _list from '../inline/_list';
 export {_list};
 
+import * as _common from '../inline/_common';
+export {_common};
+
+import * as _dict from '../inline/_dict';
+export {_dict};
+
 import * as _set from '../inline/_set';
 export {_set};
 

@@ -279,7 +279,6 @@ export function modifyVarArg(arg: IArgument, toLower = true) {
                     return str;
                 }
             }
-            console.log( mathFuncs)
             for (const funcName of mathFuncs) {
                 if (i === funcName) {
                     arg.invalidVar = 'Error: Invalid variable name - existing math function name';

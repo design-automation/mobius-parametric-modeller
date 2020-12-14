@@ -5,11 +5,11 @@ import { ProcedureTypes, IFunction } from '@models/procedure';
 import { IdGenerator } from '@utils';
 import { IArgument } from '@models/code';
 import { DownloadUtils } from './download.utils';
-import { _varString } from '@assets/core/_inlineList.js';
 // import {js as beautify} from 'js-beautify';
 import { mergeInputsFunc, printFuncString, pythonListFunc, ExecuteComponent } from '../execute/execute.component';
 import { InputType } from '@models/port';
 import { CodeUtils } from '@shared/components/execute/code.util';
+import { _varString } from '@assets/core/modules';
 
 @Component({
   selector: 'javascript-save',

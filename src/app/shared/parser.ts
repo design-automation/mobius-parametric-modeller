@@ -70,7 +70,11 @@ const varStartSymbols = new Set(['#', '@', '?']);
 const mathFuncs = [];
 for (const funcMod of inline_func) {
     for (const func of funcMod[1]) {
-        mathFuncs.push(func[0].split('(')[0]);
+        if (typeof func === 'string') {
+            mathFuncs.push(func.split('(')[0]);
+        } else {
+            mathFuncs.push(func[0].split('(')[0]);
+        }
     }
 }
 
@@ -275,6 +279,7 @@ export function modifyVarArg(arg: IArgument, toLower = true) {
                     return str;
                 }
             }
+            console.log( mathFuncs)
             for (const funcName of mathFuncs) {
                 if (i === funcName) {
                     arg.invalidVar = 'Error: Invalid variable name - existing math function name';

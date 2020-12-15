@@ -35,6 +35,28 @@ export class LoadUrlComponent {
     constructor(private dataService: DataService, private router: Router) {}
 
 
+
+    /*
+        <<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        LOAD URL PARAMETERS:
+
+        file="<<file_url>>" -> load file on load
+
+        node=<<node_index>> -> switch to node with index node_index
+
+        showViewer=0 -> show all viewers
+        showViewer=1 -> show GI viewer only
+        showViewer=2 -> show Geo viewer only
+        showViewer=3 -> show Console only
+        showViewer=4 -> show Help only
+        showViewer=[1,2,3] -> show combination of viewers listed above
+
+        defaultViewer=0 -> show console on load
+        defaultViewer=1 -> show GI viewer on load
+        defaultViewer=2 -> show Geo viewer on load
+        <<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    */
+
     async loadStartUpURL(routerUrl: string): Promise<boolean> {
         const url = this.extractUrl(routerUrl);
         if (!url) { return; }

@@ -46,7 +46,7 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
             for (const v of viewCheck) {
                 for (const view of Viewers) {
                     if (v === 1 && view.component.name === 'GIViewerComponent') { this.Viewers.push(view); }
-                    // if (v === 2 && view.component.name === 'GICesiumViewerComponent') { this.Viewers.push(view); }
+                    if (v === 2 && view.component.name === 'GIGeoViewerComponent') { this.Viewers.push(view); }
                     if (v === 3 && view.component.name === 'ConsoleViewerComponent') { this.Viewers.push(view); }
                     if (v === 4 && view.component.name === 'HelpViewerComponent') { this.Viewers.push(view); }
                 }
@@ -63,7 +63,7 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
                     continue;
                 }
                 if (viewCheck === '0') { continue; }
-                // if (viewCheck === '1' && view.component.name === 'GICesiumViewerComponent') { continue; }
+                if (viewCheck === '1' && view.component.name === 'GIGeoViewerComponent') { continue; }
                 if (viewCheck === '2' && view.component.name === 'GIViewerComponent') { continue; }
                 this.Viewers.push(view);
             }
@@ -79,7 +79,7 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
                     this.dataService.activeView = '3D Viewer';
                     break;
                 case '2':
-                    this.dataService.activeView = 'Geo Viewer';
+                    this.dataService.activeView = 'Three Geo Viewer';
                     break;
             }
         }

@@ -13,8 +13,8 @@ import { checkAttribNameIdxKey, checkAttribValue, splitAttribNameIdxKey } from '
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, ESort, TEntTypeIdx, EFilterOperatorTypes, TAttribDataTypes} from '@libs/geo-info/common';
-import { idsMake, getArrDepth, isEmptyArr, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
-import { isEmptyArr2, arrMakeFlat } from '@assets/libs/util/arrs';
+import { idsMake, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
+import { isEmptyArr, getArrDepth, arrMakeFlat } from '@assets/libs/util/arrs';
 // ================================================================================================
 export enum _EEntType {
     POSI =   'ps',
@@ -385,7 +385,7 @@ function _compareID(id1: TEntTypeIdx, id2: TEntTypeIdx): number {
 * @example_info Returns list of edges that are at the perimeter of polygon1, polygon2, or polygon3.
 */
 export function Perimeter(__model__: GIModel, ent_type: _EEntType, entities: TId|TId[]): TId[] {
-    if (isEmptyArr2(entities)) { return []; }
+    if (isEmptyArr(entities)) { return []; }
     entities = arrMakeFlat(entities) as TId[];
     // --- Error Check ---
     let ents_arr: TEntTypeIdx[] = null;

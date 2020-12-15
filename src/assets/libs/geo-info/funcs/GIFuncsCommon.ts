@@ -1,7 +1,7 @@
 import { vecAdd, vecCross, vecDiv, vecDot, vecFromTo, vecLen, vecNorm, vecSetLen, vecSum } from '../../geom/vectors';
 import { EEntType, Txyz, TEntTypeIdx, TPlane, TRay } from '../common';
 import * as THREE from 'three';
-import { getArrDepth } from '../common_id_funcs';
+import { getArrDepth } from '@assets/libs/util/arrs';
 import { GIModelData } from '../GIModelData';
 const EPS = 1e-8;
 

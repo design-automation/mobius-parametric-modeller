@@ -12,8 +12,8 @@ import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, TEntTypeIdx, IEntSets } from '@libs/geo-info/common';
-import { idsMake, isEmptyArr, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
-import { arrMakeFlat, isEmptyArr2 } from '@libs/util/arrs';
+import { idsMake, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
+import { arrMakeFlat, isEmptyArr } from '@libs/util/arrs';
 
 // Enums
 export enum _EDivisorMethod {
@@ -298,11 +298,11 @@ export function Delete(__model__: GIModel, entities: TId|TId[], method: _EDelete
     // --- Error Check ---
     switch (method) {
         case _EDeleteMethod.DELETE_SELECTED:
-            if (isEmptyArr2(entities)) { return; }
+            if (isEmptyArr(entities)) { return; }
             __model__.modeldata.funcs_edit.delete(ents_arr, false); // do not invert
             return;
         case _EDeleteMethod.KEEP_SELECTED:
-            if (isEmptyArr2(entities)) { __model__.modeldata.funcs_edit.delete(null, false); return; }
+            if (isEmptyArr(entities)) { __model__.modeldata.funcs_edit.delete(null, false); return; }
             __model__.modeldata.funcs_edit.delete(ents_arr, true); // invert
             return;
         default:

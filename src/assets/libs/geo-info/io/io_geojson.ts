@@ -1,6 +1,6 @@
 import { GIModel } from '../GIModel';
 import { Txyz, EEntType, TAttribDataTypes, LONGLAT, Txy, TEntTypeIdx, IEntSets } from '../common';
-import { getArrDepth } from '../common_id_funcs';
+import { getArrDepth } from '@assets/libs/util/arrs';
 import proj4 from 'proj4';
 import { vecAng2, vecDot } from '../../geom/vectors';
 import { rotateMatrix, multMatrix } from '../../geom/matrix';

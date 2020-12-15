@@ -1,3 +1,4 @@
+import lodash from 'lodash';
 /**
  * Remove an item from an array
  * Return teh index where the item was removed.
@@ -63,53 +64,24 @@ export function arrMakeFlat(data: any): any[] {
     if (!Array.isArray(data)) {
         return [data];
     }
+    return lodash.flattenDeep(data);
     // const depth = arrMaxDepth(data);
     // // @ts-ignore
     // const new_array = data.flat(depth - 1);
     // return new_array;
-    const flattend = [];
-    function flat(data2: any) {
-        data2.forEach(function(el: any) {
-            if (Array.isArray(el)) {
-                flat(el);
-            } else {
-                flattend.push(el);
-            }
-        });
-    }
-    flat(data);
-    return flattend;
+    // const flattend = [];
+    // function flat(data2: any) {
+    //     data2.forEach(function(el: any) {
+    //         if (Array.isArray(el)) {
+    //             flat(el);
+    //         } else {
+    //             flattend.push(el);
+    //         }
+    //     });
+    // }
+    // flat(data);
+    // return flattend;
 }
-/**
- * Make an array of depth 2 from anything.
- * ~
- * If it is not an array, then make it an array
- * ~
- * If it is an array, then make it flat
- * ~
- * @param data
- */
-// export function arrMake2Deep(data: any): any[] {
-//     if (!Array.isArray(data)) {
-//         return [[data]];
-//     }
-//     // return new_array;
-//     const flattend = [];
-//     function flat(data2: any) {
-//         data2.forEach(function(el: any) {
-//             if (!Array.isArray(el)) {
-//                 flattend.push([el]);
-//             } else if (!Array.isArray(el[0])) {
-//                 flattend.push(el);
-//             } else {
-//                 flat(el);
-//             }
-//         });
-//     }
-//     flat(data);
-//     return flattend;
-// }
-
 
 /**
  * Maximum depth of an array
@@ -153,14 +125,14 @@ export function arrFill(data: any, length: number): any[] {
     return data;
 }
 
-export function getArrDepth2(arr: any): number {
+export function getArrDepth(arr: any): number {
     if (Array.isArray(arr)) {
-        return 1 + getArrDepth2(arr[0]);
+        return 1 + getArrDepth(arr[0]);
     }
     return 0;
 }
 
-export function isEmptyArr2(arr: any): boolean {
+export function isEmptyArr(arr: any): boolean {
     if (Array.isArray(arr) && !arr.length) {
         return true;
     }

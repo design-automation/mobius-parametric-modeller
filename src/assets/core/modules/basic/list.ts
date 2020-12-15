@@ -13,7 +13,7 @@ import { checkArgs, ArgCh } from '../_check_args';
 
 import { idsBreak } from '@assets/libs/geo-info/common_id_funcs';
 import { TEntTypeIdx } from '@libs/geo-info/common';
-import { getArrDepth2 } from '@assets/libs/util/arrs';
+import { getArrDepth } from '@assets/libs/util/arrs';
 
 
 // ================================================================================================
@@ -299,7 +299,7 @@ function _sort(list: any[], method: _ESortMethod): void {
             break;
         case _ESortMethod.NUM:
             if (Array.isArray(list[0])) {
-                const depth: number = getArrDepth2(list[0]);
+                const depth: number = getArrDepth(list[0]);
                 list.sort((a, b) => _compareNumList(a, b, depth)).reverse();
             } else {
                 list.sort((a, b) => b - a);
@@ -307,7 +307,7 @@ function _sort(list: any[], method: _ESortMethod): void {
             break;
         case _ESortMethod.REV_NUM:
             if (Array.isArray(list[0])) {
-                const depth: number = getArrDepth2(list[0]);
+                const depth: number = getArrDepth(list[0]);
                 list.sort((a, b) => _compareNumList(a, b, depth));
             } else {
                 list.sort((a, b) => a - b);

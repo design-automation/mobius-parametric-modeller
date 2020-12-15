@@ -13,18 +13,18 @@ ID_REV_MAP.set(EEntType.PGON, new Map() );
 ID_REV_MAP.set(EEntType.COLL, new Map() );
 
 // ============================================================================
-export function getArrDepth(arr: any): number {
-    if (Array.isArray(arr)) {
-        return 1 + getArrDepth(arr[0]);
-    }
-    return 0;
-}
-export function isEmptyArr(arr: any): boolean {
-    if (Array.isArray(arr) && !arr.length) {
-        return true;
-    }
-    return false;
-}
+// export function getArrDepth(arr: any): number {
+//     if (Array.isArray(arr)) {
+//         return 1 + getArrDepth(arr[0]);
+//     }
+//     return 0;
+// }
+// export function isEmptyArr(arr: any): boolean {
+//     if (Array.isArray(arr) && !arr.length) {
+//         return true;
+//     }
+//     return false;
+// }
 // ============================================================================
 export function idMake(ent_type: EEntType, ent_i: number): TId {
     const id: TId = ID_REV_MAP.get(ent_type).get(ent_i);

@@ -10,7 +10,8 @@ import { checkArgs, ArgCh } from '../_check_args';
 
 import { TId, Txyz, EEntType, TPlane, TRay, TEntTypeIdx } from '@libs/geo-info/common';
 import { GIModel } from '@libs/geo-info/GIModel';
-import { getArrDepth, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
+import { idsBreak } from '@assets/libs/geo-info/common_id_funcs';
+import { getArrDepth } from '@assets/libs/util/arrs';
 import { vecCross} from '@libs/geom/vectors';
 import { _normal } from './calc';
 import * as THREE from 'three';

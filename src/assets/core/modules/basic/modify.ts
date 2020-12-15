@@ -13,8 +13,8 @@ import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EEntType, TEntTypeIdx, TRay, IEntSets} from '@libs/geo-info/common';
-import { isEmptyArr, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
-import { arrMakeFlat, isEmptyArr2 } from '@assets/libs/util/arrs';
+import { idsBreak } from '@assets/libs/geo-info/common_id_funcs';
+import { arrMakeFlat, isEmptyArr } from '@assets/libs/util/arrs';
 import { getRay, getPlane } from './_common';
 
 

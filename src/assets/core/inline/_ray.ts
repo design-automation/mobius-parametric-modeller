@@ -1,19 +1,19 @@
 import { TRay, TPlane, Txyz } from '@assets/libs/geo-info/common';
 import { vecCross, vecMult, vecsAdd, vecSetLen, vecNorm, vecAdd, vecRot, vecFromTo, vecSub } from '@assets/libs/geom/vectors';
-import { getArrDepth2 } from '@assets/libs/util/arrs';
+import { getArrDepth } from '@assets/libs/util/arrs';
 import { multMatrix, xformMatrix } from '@assets/libs/geom/matrix';
 
 /**
  * Creates a ray from an origin "o" and a direction vector "d".
  * Creates a ray from an origin "o", a direction vector "d", and length "l".
- * @param origin 
- * @param dir 
- * @param len 
+ * @param origin
+ * @param dir
+ * @param len
  */
 export function rayMake(debug: boolean, origin: Txyz|Txyz[], dir: Txyz|Txyz[], len?: number): TRay|TRay[] {
     // overloaded case
-    const origin_dep: number = getArrDepth2(origin);
-    const dir_dep: number = getArrDepth2(dir);
+    const origin_dep: number = getArrDepth(origin);
+    const dir_dep: number = getArrDepth(dir);
     if (origin_dep === 2 || dir_dep === 2) {
         if (dir_dep === 1) {
             // only origin is Txyz[]
@@ -39,25 +39,58 @@ export function rayMake(debug: boolean, origin: Txyz|Txyz[], dir: Txyz|Txyz[], l
     return [origin.slice() as Txyz, ray_vec];
 }
 /**
+ * Creates a ray between to points.
+ * @param xyz1
+ * @param xyz2
+ */
+export function rayFromTo(debug: boolean, xyz1: Txyz|Txyz[], xyz2: Txyz|Txyz[]): TRay|TRay[] {
+    // overloaded case
+    const depth1: number = getArrDepth(xyz1);
+    const depth2: number = getArrDepth(xyz2);
+    if (depth1 === 2 || depth2 === 2) {
+        if (depth2 === 1) {
+            // only xyz1 is Txyz[]
+            return (xyz1 as Txyz[]).map( a_xyz1 => [a_xyz1, vecFromTo(a_xyz1 as Txyz, xyz2 as Txyz)] as TRay );
+        } else if (depth1 === 1) {
+            // only xyz2 is Txyz[]
+            return (xyz2 as Txyz[]).map( a_xyz2 => [xyz1, vecFromTo(xyz1 as Txyz, a_xyz2 as Txyz)] as TRay );
+        } else {
+            // both xyz1 and xyz2 are Txyz[], they must be equal length
+            if (xyz1.length === xyz2.length) {
+                const rays: TRay[] = [];
+                for (let i = 0; i < xyz1.length; i++) {
+                    rays.push( [xyz1[i], vecFromTo(xyz1[i] as Txyz, xyz2[i] as Txyz)] as TRay );
+                }
+                return rays;
+            } else {
+                throw new Error(
+                    'Error calculating vectors between two between lists of coordinates: The two lists must be of equal length.');
+            }
+        }
+    }
+    // normal case, both xyz1 and xyz2 are Txyz
+    return [xyz1, vecFromTo(xyz1 as Txyz, xyz2 as Txyz)] as TRay;
+}
+/**
  * Make a copy of the ray "r"
- * @param ray 
+ * @param ray
  */
 export function rayCopy(debug: boolean, ray: TRay|TRay[]): TRay|TRay[] {
     // overloaded case
-    const ray_dep: number = getArrDepth2(ray);
+    const ray_dep: number = getArrDepth(ray);
     if (ray_dep === 3) { return (ray as TRay[]).map(ray_one => rayCopy(debug, ray_one)) as TRay[]; }
     // normal case
     return [ray[0].slice() as Txyz, ray[1].slice() as Txyz];
 }
 /**
  * Move the ray "r" relative to the global X, Y, and Z axes, by vector "v".
- * @param ray 
- * @param vec 
+ * @param ray
+ * @param vec
  */
 export function rayMove(debug: boolean, ray: TRay|TRay[], vec: Txyz|Txyz[]): TRay|TRay[] {
     // overloaded case
-    const ray_dep: number = getArrDepth2(ray);
-    const vec_dep: number = getArrDepth2(vec);
+    const ray_dep: number = getArrDepth(ray);
+    const vec_dep: number = getArrDepth(vec);
     if (ray_dep === 3) {
         ray = ray as TRay[];
         if (vec_dep === 1) {
@@ -80,15 +113,15 @@ export function rayMove(debug: boolean, ray: TRay|TRay[], vec: Txyz|Txyz[]): TRa
 }
 /**
  * Rotate the ray "r1" around the ray "r2", by angle "a" (in radians).
- * @param ray1 
- * @param ray2 
- * @param ang 
+ * @param ray1
+ * @param ray2
+ * @param ang
  */
 export function rayRot(debug: boolean, ray1: TRay|TRay[], ray2: TRay|TRay[], ang: number|number[]): TRay|TRay[] {
     // overloaded case
-    const ray1_dep: number = getArrDepth2(ray1);
-    const ray2_dep: number = getArrDepth2(ray2);
-    const ang_dep: number = getArrDepth2(ang);
+    const ray1_dep: number = getArrDepth(ray1);
+    const ray2_dep: number = getArrDepth(ray2);
+    const ang_dep: number = getArrDepth(ang);
     if (ray1_dep === 3) {
         ray1 = ray1 as TRay[];
         if (ray2_dep === 2 && ang_dep === 0) {
@@ -117,13 +150,13 @@ export function rayRot(debug: boolean, ray1: TRay|TRay[], ray2: TRay|TRay[], ang
 }
 /**
  * Move the ray "r" relative to the ray direction vector, by distance "d".
- * @param ray 
- * @param dist 
+ * @param ray
+ * @param dist
  */
 export function rayLMove(debug: boolean, ray: TRay|TRay[], dist: number|number[]): TRay|TRay[] {
     // overloaded case
-    const ray_dep: number = getArrDepth2(ray);
-    const dist_dep: number = getArrDepth2(dist);
+    const ray_dep: number = getArrDepth(ray);
+    const dist_dep: number = getArrDepth(dist);
     if (ray_dep === 3) {
         ray = ray as TRay[];
         if (dist_dep === 0) {
@@ -147,11 +180,11 @@ export function rayLMove(debug: boolean, ray: TRay|TRay[], dist: number|number[]
 }
 /**
  * Create a ray from a plane "p", with the same origin and with a direction along the plane z axis.
- * @param pln 
+ * @param pln
  */
 export function rayFromPln(debug: boolean, pln: TPlane|TPlane[]): TRay|TRay[] {
     // overloaded case
-    const pln_dep: number = getArrDepth2(pln);
+    const pln_dep: number = getArrDepth(pln);
     if (pln_dep === 3) { return (pln as TPlane[]).map( pln_one => rayFromPln(debug, pln_one) ) as TRay[]; }
     // normal case
     pln = pln as TPlane;
@@ -175,8 +208,8 @@ export function rayGtoL(debug: boolean, r: TRay|TRay[], p: TPlane|TPlane[]): TRa
 }
 function _rayXForm(debug: boolean, r: TRay|TRay[], p: TPlane|TPlane[], to_global: boolean): TRay|TRay[] {
     // overloaded case
-    const depth1: number = getArrDepth2(r);
-    const depth2: number = getArrDepth2(p);
+    const depth1: number = getArrDepth(r);
+    const depth2: number = getArrDepth(p);
     if (depth1 === 2 && depth2 === 2) {
         // r is TRay and p is TPlane
         r = r as TRay;

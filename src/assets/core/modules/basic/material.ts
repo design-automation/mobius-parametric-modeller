@@ -14,8 +14,8 @@ import { GIModel } from '@libs/geo-info/GIModel';
 import { Txyz, EAttribNames, EAttribDataTypeStrs } from '@libs/geo-info/common';
 import * as THREE from 'three';
 import { TId, EEntType, TEntTypeIdx } from '@libs/geo-info/common';
-import { isEmptyArr, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
-import { arrMakeFlat } from '@assets/libs/util/arrs';
+import { idsBreak } from '@assets/libs/geo-info/common_id_funcs';
+import { isEmptyArr, arrMakeFlat } from '@assets/libs/util/arrs';
 
 // ================================================================================================
 export enum _ESide {

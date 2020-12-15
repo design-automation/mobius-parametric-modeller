@@ -10,9 +10,9 @@ import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EEntType, TId, TEntTypeIdx, Txyz, Txy, TPlane } from '@libs/geo-info/common';
-import { arrMakeFlat } from '@assets/libs/util/arrs';
 import Shape from '@doodle3d/clipper-js';
-import { isEmptyArr, idsMake, idsBreak, idsMakeFromIdxs, idMake } from '@assets/libs/geo-info/common_id_funcs';
+import { idsMake, idsBreak, idsMakeFromIdxs, idMake } from '@assets/libs/geo-info/common_id_funcs';
+import { isEmptyArr, arrMakeFlat } from '@assets/libs/util/arrs';
 import * as d3del from 'd3-delaunay';
 import * as d3poly from 'd3-polygon';
 import * as d3vor from 'd3-voronoi';

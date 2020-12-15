@@ -12,7 +12,7 @@ import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, TBBox, Txy } from '@libs/geo-info/common';
-import { getArrDepth, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
+import { idsBreak } from '@assets/libs/geo-info/common_id_funcs';
 import { distance } from '@libs/geom/distance';
 import { vecSum, vecDiv, vecAdd, vecSub, vecCross, vecMult, vecFromTo, vecLen, vecDot, vecNorm, vecSetLen } from '@libs/geom/vectors';
 import { triangulate } from '@libs/triangulate/triangulate';
@@ -20,7 +20,7 @@ import { area } from '@libs/geom/triangle';
 import uscore from 'underscore';
 import { getCentroid, getCenterOfMass } from './_common';
 import { rayFromPln } from '@assets/core/inline/_ray';
-import { isEmptyArr2, arrMakeFlat, arrMaxDepth } from '@assets/libs/util/arrs';
+import { isEmptyArr, arrMakeFlat, arrMaxDepth, getArrDepth } from '@assets/libs/util/arrs';
 
 // ================================================================================================
 export enum _EDistanceMethod {
@@ -30,7 +30,7 @@ export enum _EDistanceMethod {
 }
 /**
  * Calculates the minimum distance from one position to other entities in the model.
- * \n
+ *
  * @param __model__
  * @param entities1 Position to calculate distance from.
  * @param entities2 List of entities to calculate distance to.
@@ -40,8 +40,8 @@ export enum _EDistanceMethod {
  * @example_info position1 = [0,0,0], position2 = [[0,0,10],[0,0,20]], Expected value of distance is 10.
  */
 export function Distance(__model__: GIModel, entities1: TId|TId[], entities2: TId|TId[], method: _EDistanceMethod): number|number[] {
-    if (isEmptyArr2(entities1)) { return []; }
-    if (isEmptyArr2(entities2)) { return []; }
+    if (isEmptyArr(entities1)) { return []; }
+    if (isEmptyArr(entities2)) { return []; }
     if (Array.isArray(entities1)) { entities1 = arrMakeFlat(entities1); }
     entities2 = arrMakeFlat(entities2);
     // --- Error Check ---
@@ -54,10 +54,6 @@ export function Distance(__model__: GIModel, entities1: TId|TId[], entities2: TI
         ents_arr2 = checkIDs(__model__, fn_name, 'entities2', entities2, [ID.isIDL],
             null) as TEntTypeIdx[];
     } else {
-        // ents_arr1 = splitIDs(fn_name, 'entities1', entities1, [IDcheckObj.isID, IDcheckObj.isIDList],
-        //     null)  as TEntTypeIdx|TEntTypeIdx[];
-        // ents_arr2 = splitIDs(fn_name, 'entities2', entities2, [IDcheckObj.isIDList],
-        //     null) as TEntTypeIdx[];
         ents_arr1 = idsBreak(entities1)  as TEntTypeIdx|TEntTypeIdx[];
         ents_arr2 = idsBreak(entities2) as TEntTypeIdx[];
     }
@@ -254,22 +250,22 @@ function _distancePointToLine(from: Txyz, start: Txyz, end: Txyz) {
 // ================================================================================================
 /**
  * Calculates the length of an entity.
- * \n
+ *
  * The entity can be an edge, a wire, a polyline, or anything from which wires can be extracted.
  * This includes polylines, polygons, faces, and collections.
- * \n
+ *
  * Given a list of edges, wires, or polylines, a list of lengths are returned.
- * \n
+ *
  * Given any types of entities from which wires can be extracted, a list of lengths are returned.
  * For example, given a single polygon, a list of lengths are returned (since a polygon may have multiple wires).
- * \n
+ *
  * @param __model__
- * @param entities Single or list of edges, wires, or polylines, or other entities from which wires can be extracted.
+ * @param entities Single or list of edges or wires or other entities from which wires can be extracted.
  * @returns Lengths, a number or list of numbers.
  * @example length1 = calc.Length(line1)
  */
 export function Length(__model__: GIModel, entities: TId|TId[]): number|number[] {
-    if (isEmptyArr2(entities)) { return []; }
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Length';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[];
@@ -277,8 +273,6 @@ export function Length(__model__: GIModel, entities: TId|TId[]): number|number[]
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL],
         [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
     } else {
-        // ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList],
-        // [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON, EEntType.FACE, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
         ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     }
     // --- Error Check ---
@@ -328,18 +322,18 @@ function _wireLength(__model__: GIModel, wire_i: number): number {
 // ================================================================================================
 /**
  * Calculates the area of en entity.
- * \n
+ *
  * The entity can be a polygon, a face, a closed polyline, a closed wire, or a collection.
- * \n
+ *
  * Given a list of entities, a list of areas are returned.
- * \n
+ *
  * @param __model__
- * @param entities Single or list of polygons, faces, closed polylines, closed wires, collections.
+ * @param entities Single or list of polygons, closed polylines, closed wires, collections.
  * @returns Area.
  * @example area1 = calc.Area (surface1)
  */
 export function Area(__model__: GIModel, entities: TId|TId[]): number|number[] {
-    if (isEmptyArr2(entities)) { return []; }
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Area';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[];
@@ -348,9 +342,6 @@ export function Area(__model__: GIModel, entities: TId|TId[]): number|number[] {
         [ID.isID, ID.isIDL],
         [EEntType.PGON, EEntType.PLINE, EEntType.WIRE, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
     } else {
-        // ents_arr = splitIDs(fn_name, 'entities', entities,
-        // [IDcheckObj.isID, IDcheckObj.isIDList],
-        // [EEntType.PGON, EEntType.FACE, EEntType.PLINE, EEntType.WIRE, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
         ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     }
     // --- Error Check ---
@@ -402,18 +393,18 @@ function _area(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): number
 /**
  * Returns a vector along an edge, from the start position to the end position.
  * The vector is not normalized.
- * \n
+ *
  * Given a single edge, a single vector will be returned. Given a list of edges, a list of vectors will be returned.
- * \n
+ *
  * Given any entity that has edges (collection, polygons, polylines, faces, and wires),
  * a list of edges will be extracted, and a list of vectors will be returned.
- * \n
+ *
  * @param __model__
  * @param entities Single or list of edges, or any entity from which edges can be extracted.
  * @returns The vector [x, y, z] or a list of vectors.
  */
 export function Vector(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
-    if (isEmptyArr2(entities)) { return []; }
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Vector';
     let ents_arrs: TEntTypeIdx|TEntTypeIdx[];
@@ -422,9 +413,6 @@ export function Vector(__model__: GIModel, entities: TId|TId[]): Txyz|Txyz[] {
         [ID.isID, ID.isIDL],
         [EEntType.PGON, EEntType.PLINE, EEntType.WIRE, EEntType.EDGE]) as TEntTypeIdx|TEntTypeIdx[];
     } else {
-        // ents_arrs = splitIDs(fn_name, 'entities', entities,
-        // [IDcheckObj.isID, IDcheckObj.isIDList],
-        // [EEntType.PGON, EEntType.FACE, EEntType.PLINE, EEntType.WIRE, EEntType.EDGE]) as TEntTypeIdx|TEntTypeIdx[];
         ents_arrs = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     }
     // --- Error Check ---
@@ -467,16 +455,16 @@ export enum _ECentroidMethod {
 }
 /**
  * Calculates the centroid of an entity.
- * \n
+ *
  * If 'ps_average' is selected, the centroid is the average of the positions that make up that entity.
- * \n
+ *
  * If 'center_of_mass' is selected, the centroid is the centre of mass of the faces that make up that entity.
  * Note that only faces are deemed to have mass.
- * \n
+ *
  * Given a list of entities, a list of centroids will be returned.
- * \n
+ *
  * Given a list of positions, a single centroid that is the average of all those positions will be returned.
- * \n
+ *
  * @param __model__
  * @param entities Single or list of entities. (Can be any type of entities.)
  * @param method Enum, the method for calculating the centroid.
@@ -484,7 +472,7 @@ export enum _ECentroidMethod {
  * @example centroid1 = calc.Centroid (polygon1)
  */
 export function Centroid(__model__: GIModel, entities: TId|TId[], method: _ECentroidMethod): Txyz|Txyz[] {
-    if (isEmptyArr2(entities)) { return []; }
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Centroid';
     let ents_arrs: TEntTypeIdx|TEntTypeIdx[];
@@ -492,8 +480,6 @@ export function Centroid(__model__: GIModel, entities: TId|TId[], method: _ECent
         ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
         [ID.isID, ID.isIDL], null) as TEntTypeIdx|TEntTypeIdx[];
     } else {
-        // ents_arrs = splitIDs(fn_name, 'entities', entities,
-        // [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
         ents_arrs = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     }
     // --- Error Check ---
@@ -511,22 +497,22 @@ export function Centroid(__model__: GIModel, entities: TId|TId[], method: _ECent
 /**
  * Calculates the normal vector of an entity or list of entities. The vector is normalised, and scaled
  * by the specified scale factor.
- * \n
+ *
  * Given a single entity, a single normal will be returned. Given a list of entities, a list of normals will be returned.
- * \n
+ *
  * For polygons, faces, and face wires the normal is calculated by taking the average of all the normals of the face triangles.
- * \n
+ *
  * For polylines and polyline wires, the normal is calculated by triangulating the positions, and then
  * taking the average of all the normals of the triangles.
- * \n
+ *
  * For edges, the normal is calculated by takingthe avery of the normals of the two vertices.
- * \n
+ *
  * For vertices, the normal is calculated by creating a triangle out of the two adjacent edges,
  * and then calculating the normal of the triangle.
  * (If there is only one edge, or if the two adjacent edges are colinear, the the normal of the wire is returned.)
- * \n
+ *
  * For positions, the normal is calculated by taking the average of the normals of all the vertices linked to the position.
- * \n
+ *
  * If the normal cannot be calculated, [0, 0, 0] will be returned.
  *
  * @param __model__
@@ -537,7 +523,7 @@ export function Centroid(__model__: GIModel, entities: TId|TId[], method: _ECent
  * @example_info If the input is non-planar, the output vector will be an average of all normals vector of the polygon triangles.
  */
 export function Normal(__model__: GIModel, entities: TId|TId[], scale: number): Txyz|Txyz[] {
-    if (isEmptyArr2(entities)) { return []; }
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Normal';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[];
@@ -546,8 +532,6 @@ export function Normal(__model__: GIModel, entities: TId|TId[], scale: number): 
         [ID.isID, ID.isIDL], null) as  TEntTypeIdx|TEntTypeIdx[];
         checkArgs(fn_name, 'scale', scale, [ArgCh.isNum]);
     } else {
-        // ents_arr = splitIDs(fn_name, 'entities', entities,
-        // [IDcheckObj.isID, IDcheckObj.isIDList], null) as  TEntTypeIdx|TEntTypeIdx[];
         ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     }
     // --- Error Check ---
@@ -608,20 +592,20 @@ function _vertNormal(__model__: GIModel, index: number) {
 // ================================================================================================
 /**
  * Calculates the xyz coord along an edge, wire, or polyline given a t parameter.
- * \n
+ *
  * The 't' parameter varies between 0 and 1, where 0 indicates the start and 1 indicates the end.
  * For example, given a polyline,
  * evaluating at t=0 gives that xyz at the start,
  * evaluating at t=0.5 gives the xyz halfway along the polyline,
  * evaluating at t=1 gives the xyz at the end of the polyline.
- * \n
+ *
  * Given a single edge, wire, or polyline, a single xyz coord will be returned.
- * \n
+ *
  * Given a list of edges, wires, or polylines, a list of xyz coords will be returned.
- * \n
+ *
  * Given any entity that has wires (faces, polygons and collections),
  * a list of wires will be extracted, and a list of coords will be returned.
- * \n
+ *
  * @param __model__
  * @param entities Single or list of edges, wires, polylines, or faces, polygons, or collections.
  * @param t_param A value between 0 to 1.
@@ -629,19 +613,16 @@ function _vertNormal(__model__: GIModel, index: number) {
  * @example coord1 = calc.Eval (polyline1, 0.23)
  */
 export function Eval(__model__: GIModel, entities: TId|TId[], t_param: number): Txyz|Txyz[] {
-    if (isEmptyArr2(entities)) { return []; }
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Eval';
     let ents_arrs: TEntTypeIdx|TEntTypeIdx[];
     if (__model__.debug) {
         ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
-            [ID.isID, ID.isIDL],
+            [ID.isID, ID.isIDL ],
             [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
         checkArgs(fn_name, 'param', t_param, [ArgCh.isNum01]);
     } else {
-        // ents_arrs = splitIDs(fn_name, 'entities', entities,
-        //     [IDcheckObj.isID, IDcheckObj.isIDList],
-        //     [EEntType.EDGE, EEntType.WIRE, EEntType.FACE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
         ents_arrs = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     }
     // --- Error Check ---
@@ -694,50 +675,27 @@ function _eval(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], t_param:
 }
 // ================================================================================================
 /**
- * Calculates the 't' parameter along a linear entity, given a location.
- * The 't' parameter varies between 0 and 1, where 0 indicates the start and 1 indicates the end.
+ * Returns a ray for an edge or a polygons. 
+ * 
+ * For edges, it returns a ray along the edge, from the start vertex to the end vertex
+ *
+ * For a polygon, it returns the ray that is the z-axis of the plane.
+ *
+ * For an edge, the ray vector is not normalised. For a polygon, the ray vector is normalised.
  *
  * @param __model__
- * @param lines List of edges, wires, or polylines.
- * @param locations List of positions, vertices, points, or coordinates.
- * @return The 't' parameter vale, between 0 and 1.
- * @example coord1 = calc.ParamXyzToT (polyline1, [1,2,3])
- */
-export function _ParamXyzToT(__model__: GIModel, lines: TId|TId[], locations: TId|TId[]|Txyz|Txyz[]): number|number[] {
-    // --- Error Check ---
-    // const fn_name = 'calc.ParamXyzToT';
-    // checkIDs(__model__, fn_name, 'lines', lines, [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE]);
-    // checkIDnTypes(fn_name, 'locations', locations,
-    //               [IDcheckObj.isID, IDcheckObj.isIDList, TypeCheckObj.isNumberList], [EEntType.POSI, EEntType.VERT, EEntType.POINT]);
-    // --- Error Check ---
-    throw new Error('Not implemented.'); return null;
-}
-// ================================================================================================
-
-
-
-// ================================================================================================
-/**
- * Returns a ray for an edge, a face, or a polygons. For edges, it returns a ray along the edge, from teh start vertex to the end vertex
- * For a face or polygon, it returns the ray that is the z-axis of the plane.
- * \n
- * For an edge, the ray vector is not normalised. For a face or polygon, the ray vector is normalised.
- *
- * @param __model__
- * @param entities An edge, a face, or a polygon, or a list.
+ * @param entities An edge, a wirea polygon, or a list.
  * @returns The ray.
  */
 export function Ray(__model__: GIModel, entities: TId|TId[]): TRay|TRay[] {
-    if (isEmptyArr2(entities)) { return []; }
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Ray';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-        [ID.isID, ID.isIDL], [EEntType.EDGE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
+        [ID.isID, ID.isIDL, ID.isIDLL], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
     } else {
-        // ents_arr = splitIDs(fn_name, 'entities', entities,
-        // [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.EDGE, EEntType.PLINE, EEntType.FACE, EEntType.PGON]) as TEntTypeIdx|TEntTypeIdx[];
         ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     }
     // --- Error Check ---
@@ -752,7 +710,7 @@ function _getRayFromPgon(__model__: GIModel, ent_arr: TEntTypeIdx): TRay {
     const plane: TPlane = _getPlane(__model__, ent_arr) as TPlane;
     return rayFromPln(false, plane) as TRay;
 }
-function _getRayFromPline(__model__: GIModel, ent_arr: TEntTypeIdx): TRay[] {
+function _getRayFromEdges(__model__: GIModel, ent_arr: TEntTypeIdx): TRay[] {
     const edges_i: number[] = __model__.modeldata.geom.nav.navAnyToEdge(ent_arr[0], ent_arr[1]);
     return edges_i.map( edge_i => _getRayFromEdge(__model__, [EEntType.EDGE, edge_i]) ) as TRay[];
 }
@@ -761,9 +719,9 @@ function _getRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TRay|
         const ent_arr: TEntTypeIdx = ents_arr as TEntTypeIdx;
         if (ent_arr[0] === EEntType.EDGE) {
             return _getRayFromEdge(__model__, ent_arr);
-        } else if (ent_arr[0] === EEntType.PLINE) {
-            return _getRayFromPline(__model__, ent_arr);
-        } else { // must be a polygon
+        } else if (ent_arr[0] === EEntType.PLINE || ent_arr[0] === EEntType.WIRE ) {
+            return _getRayFromEdges(__model__, ent_arr);
+        } else if (ent_arr[0] === EEntType.PGON) {
             return _getRayFromPgon(__model__, ent_arr);
         }
     } else {
@@ -774,7 +732,7 @@ function _getRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TRay|
 /**
  * Returns a plane from a polygon, a face, a polyline, or a wire.
  * For polylines or wires, there must be at least three non-colinear vertices.
- * \n
+ *
  * The winding order is counter-clockwise.
  * This means that if the vertices are ordered counter-clockwise relative to your point of view,
  * then the z axis of the plane will be pointing towards you.
@@ -783,19 +741,16 @@ function _getRay(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TRay|
  * @returns The plane.
  */
 export function Plane(__model__: GIModel, entities: TId|TId[]): TPlane|TPlane[] {
-    if (isEmptyArr2(entities)) { return []; }
+    if (isEmptyArr(entities)) { return []; }
     // --- Error Check ---
     const fn_name = 'calc.Plane';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-            [ID.isID, ID.isIDL], null) as TEntTypeIdx|TEntTypeIdx[]; // takes in any
+            [ID.isID, ID.isIDL, ID.isIDLL], null) as TEntTypeIdx|TEntTypeIdx[]; // takes in any
     } else {
-        // ents_arr = splitIDs(fn_name, 'entities', entities,
-        //     [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[]; // takes in any
         ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     }
-    // TODO [EEntType.PGON, EEntType.FACE, EEntType.PLINE, EEntType.WIRE]);
     // --- Error Check ---
     return _getPlane(__model__, ents_arr);
 }
@@ -822,24 +777,24 @@ function _getPlane(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): TPl
  * The bounding box is an imaginary box that completley contains all the geometry.
  * The box is always aligned with the global x, y, and z axes.
  * The bounding box consists of a list of lists, as follows [[x, y, z], [x, y, z], [x, y, z], [x, y, z]].
+ *
  * - The first [x, y, z] is the coordinates of the centre of the bounding box.
  * - The second [x, y, z] is the corner of the bounding box with the lowest x, y, z values.
  * - The third [x, y, z] is the corner of the bounding box with the highest x, y, z values.
  * - The fourth [x, y, z] is the dimensions of the bounding box.
- * \n
+ *
  * @param __model__
  * @param entities The etities for which to calculate the bounding box.
  * @returns The bounding box consisting of a list of four lists.
  */
 export function BBox(__model__: GIModel, entities: TId|TId[]): TBBox {
-    if (!Array.isArray(entities)) { entities = [entities]; }
+    entities = arrMakeFlat(entities);
     // --- Error Check ---
     const fn_name = 'calc.BBox';
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isIDL], null) as TEntTypeIdx[]; // all
     } else {
-        // ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[]; // all
         ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
     // --- Error Check ---
@@ -875,7 +830,7 @@ function _getBoundingBox(__model__: GIModel, ents_arr: TEntTypeIdx[]): TBBox {
 // ================================================================================================
 // /**
 //  * Calculates the distance between a ray or plane and a list of positions.
-//  * \n
+//  *
 //  * @param __model__
 //  * @param ray_or_plane Ray or a plane.
 //  * @param entities A position or list of positions.

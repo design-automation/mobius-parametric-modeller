@@ -1,7 +1,7 @@
 import { interpByNum, interpByLen } from '@libs/geom/vectors';
 import { EEntType, Txyz, TEntTypeIdx, IEntSets } from '../common';
 import { distance } from '@libs/geom/distance';
-import { getArrDepth } from '../common_id_funcs';
+import { getArrDepth } from '@assets/libs/util/arrs';
 import { GIModelData } from '../GIModelData';
 import { TypedArrayUtils } from '@libs/TypedArrayUtils.js';
 import * as THREE from 'three';

@@ -8,7 +8,7 @@
  */
 import { TPlane, TRay, Txyz, Txy } from '@assets/libs/geo-info/common';
 import { vecCross, vecMult, vecsAdd, vecRot, vecNorm, vecMakeOrtho, vecAdd, vecFromTo, vecDot } from '@assets/libs/geom/vectors';
-import { getArrDepth2 } from '@assets/libs/util/arrs';
+import { getArrDepth } from '@assets/libs/util/arrs';
 
 
 /**
@@ -19,9 +19,9 @@ import { getArrDepth2 } from '@assets/libs/util/arrs';
  */
 export function plnMake(debug: boolean, origin: Txyz|Txyz[], x_vec: Txyz|Txyz[], xy_vec: Txyz|Txyz[]): TPlane|TPlane[] {
     // overloaded case
-    const origin_dep: number = getArrDepth2(origin);
-    const x_vec_dep: number = getArrDepth2(x_vec);
-    const xy_vec_dep: number = getArrDepth2(xy_vec);
+    const origin_dep: number = getArrDepth(origin);
+    const x_vec_dep: number = getArrDepth(x_vec);
+    const xy_vec_dep: number = getArrDepth(xy_vec);
     if (origin_dep === 2 || x_vec_dep === 2) {
         if (x_vec_dep === 1) {
             // only origin is Txyz[]
@@ -61,7 +61,7 @@ export function plnMake(debug: boolean, origin: Txyz|Txyz[], x_vec: Txyz|Txyz[],
  */
 export function plnCopy(debug: boolean, pln: TPlane|TPlane[]): TPlane|TPlane[] {
     // overloaded case
-    const pln_dep: number = getArrDepth2(pln);
+    const pln_dep: number = getArrDepth(pln);
     if (pln_dep === 3) { return (pln as TPlane[]).map(pln_one => plnCopy(debug, pln_one)) as TPlane[]; }
     // normal case
     pln = pln as TPlane;
@@ -74,8 +74,8 @@ export function plnCopy(debug: boolean, pln: TPlane|TPlane[]): TPlane|TPlane[] {
  */
 export function plnMove(debug: boolean, pln: TPlane|TPlane[], vec: Txyz|Txyz[]): TPlane|TPlane[] {
     // overloaded case
-    const pln_dep: number = getArrDepth2(pln);
-    const vec_dep: number = getArrDepth2(vec);
+    const pln_dep: number = getArrDepth(pln);
+    const vec_dep: number = getArrDepth(vec);
     if (pln_dep === 3) {
         pln = pln as TPlane[];
         if (vec_dep === 1) {
@@ -104,9 +104,9 @@ export function plnMove(debug: boolean, pln: TPlane|TPlane[], vec: Txyz|Txyz[]):
  */
 export function plnRot(debug: boolean, pln: TPlane|TPlane[], ray: TRay|TRay[], ang: number|number[]): TPlane|TPlane[] {
     // overloaded case
-    const pln_dep: number = getArrDepth2(pln);
-    const ray_dep: number = getArrDepth2(ray);
-    const ang_dep: number = getArrDepth2(ang);
+    const pln_dep: number = getArrDepth(pln);
+    const ray_dep: number = getArrDepth(ray);
+    const ang_dep: number = getArrDepth(ang);
     if (pln_dep === 3) {
         pln = pln as TPlane[];
         if (ray_dep === 2 && ang_dep === 0) {
@@ -140,8 +140,8 @@ export function plnRot(debug: boolean, pln: TPlane|TPlane[], ray: TRay|TRay[], a
  */
 export function plnLMove(debug: boolean, pln: TPlane|TPlane[], vec: Txyz|Txyz[]): TPlane|TPlane[] {
     // overloaded case
-    const pln_dep: number = getArrDepth2(pln);
-    const vec_dep: number = getArrDepth2(vec);
+    const pln_dep: number = getArrDepth(pln);
+    const vec_dep: number = getArrDepth(vec);
     if (pln_dep === 3) {
         pln = pln as TPlane[];
         if (vec_dep === 1) {
@@ -174,8 +174,8 @@ export function plnLMove(debug: boolean, pln: TPlane|TPlane[], vec: Txyz|Txyz[])
  */
 export function plnLRotX(debug: boolean, pln: TPlane|TPlane[], ang: number|number[]): TPlane|TPlane[] {
     // overloaded case
-    const pln_dep: number = getArrDepth2(pln);
-    const ang_dep: number = getArrDepth2(ang);
+    const pln_dep: number = getArrDepth(pln);
+    const ang_dep: number = getArrDepth(ang);
     if (pln_dep === 3) {
         pln = pln as TPlane[];
         if (ang_dep === 0) {
@@ -207,8 +207,8 @@ export function plnLRotX(debug: boolean, pln: TPlane|TPlane[], ang: number|numbe
  */
 export function plnLRotY(debug: boolean, pln: TPlane|TPlane[], ang: number|number[]): TPlane|TPlane[] {
     // overloaded case
-    const pln_dep: number = getArrDepth2(pln);
-    const ang_dep: number = getArrDepth2(ang);
+    const pln_dep: number = getArrDepth(pln);
+    const ang_dep: number = getArrDepth(ang);
     if (pln_dep === 3) {
         pln = pln as TPlane[];
         if (ang_dep === 0) {
@@ -240,8 +240,8 @@ export function plnLRotY(debug: boolean, pln: TPlane|TPlane[], ang: number|numbe
  */
 export function plnLRotZ(debug: boolean, pln: TPlane|TPlane[], ang: number|number[]): TPlane|TPlane[] {
     // overloaded case
-    const pln_dep: number = getArrDepth2(pln);
-    const ang_dep: number = getArrDepth2(ang);
+    const pln_dep: number = getArrDepth(pln);
+    const ang_dep: number = getArrDepth(ang);
     if (pln_dep === 3) {
         pln = pln as TPlane[];
         if (ang_dep === 0) {
@@ -274,7 +274,7 @@ export function plnLRotZ(debug: boolean, pln: TPlane|TPlane[], ang: number|numbe
  */
 export function plnFromRay(debug: boolean, ray: TRay|TRay[]): TPlane|TPlane[] {
     // overloaded case
-    const ray_dep: number = getArrDepth2(ray);
+    const ray_dep: number = getArrDepth(ray);
     if (ray_dep === 3) { return (ray as TRay[]).map( ray_one => plnFromRay(debug, ray_one) ) as TPlane[]; }
     // normal case
     ray = ray as TRay;

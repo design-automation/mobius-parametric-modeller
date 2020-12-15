@@ -1,6 +1,7 @@
 import { GIModel } from '@assets/libs/geo-info/GIModel';
 import { EEntType, TEntTypeIdx } from '@libs/geo-info/common';
-import { getArrDepth, idsBreak } from '@assets/libs/geo-info/common_id_funcs';
+import { idsBreak } from '@assets/libs/geo-info/common_id_funcs';
+import { getArrDepth } from '@assets/libs/util/arrs';
 
 export const ID = {
     isID: 0,

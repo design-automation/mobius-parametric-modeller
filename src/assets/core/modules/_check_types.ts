@@ -13,6 +13,12 @@ export function isList(fn_name: string, arg_name: string, arg: any): void {
         throw new Error (fn_name + ': ' + arg_name + ' is not a list');
     }
 }
+// List
+export function isLList(fn_name: string, arg_name: string, arg: any): void {
+    if (!Array.isArray(arg) || !Array.isArray(arg[0])) {
+        throw new Error (fn_name + ': ' + arg_name + ' is not a list of lists');
+    }
+}
 // List of specified length
 export function isLLen(fn_name: string, arg_name: string, arg: any[], len: number): void {
     if (arg.length !== len) {

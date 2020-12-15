@@ -11,12 +11,12 @@ import { checkArgs, ArgCh } from '../_check_args';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, Txy, EAttribDataTypeStrs } from '@libs/geo-info/common';
-import { getArrDepth, idsMakeFromIdxs, idsMake, idsBreak, idMake } from '@assets/libs/geo-info/common_id_funcs';
+import { idsMakeFromIdxs, idsMake, idsBreak, idMake } from '@assets/libs/geo-info/common_id_funcs';
 import { distance } from '@libs/geom/distance';
 import { vecAdd, vecCross, vecMult, vecNorm, vecAng2, vecSetLen, vecRot } from '@libs/geom/vectors';
 import uscore from 'underscore';
 import { min, max } from '@assets/core/inline/_math';
-import { arrMakeFlat, getArrDepth2 } from '@assets/libs/util/arrs';
+import { arrMakeFlat, getArrDepth } from '@assets/libs/util/arrs';
 import { degToRad } from '@assets/core/inline/_conversion';
 import { multMatrix } from '@libs/geom/matrix';
 import { XAXIS, YAXIS, ZAXIS } from '@assets/libs/geom/constants';
@@ -129,7 +129,7 @@ export function Raytrace(__model__: GIModel, rays: TRay|TRay[]|TRay[][],
 function _raytraceAll(__model__: GIModel, rays: TRay|TRay[]|TRay[][],
         mesh: [THREE.Mesh, number[]], limits: [number, number],
         method: _ERaytraceMethod): TRaytraceResult|TRaytraceResult[] {
-    const depth: number = getArrDepth2(rays);
+    const depth: number = getArrDepth(rays);
     if (depth < 2) {// an empty list
         return null;
     } else if (depth === 2) {// just one ray

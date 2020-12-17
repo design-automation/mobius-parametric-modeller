@@ -48,7 +48,7 @@ export class GIModelData {
      * @param model_data The JSON data.
      */
     public importGI (model_data: IModelJSONData): void {
-        // console.log("SET DATA");
+        // console.log("SET DATA...", model_data);
         const renum_maps: Map<number, Map<number, number>> = this.geom.imp_exp.importGI(model_data.geometry);
         this.attribs.imp_exp.importGI(model_data.attributes, renum_maps);
     }
@@ -73,104 +73,6 @@ export class GIModelData {
             attributes: this.attribs.imp_exp.exportGI(ent_sets)
         };
     }
-    // /**
-    //  * Copys the data from a second model into this model.
-    //  * The existing data in this model is not deleted.
-    //  * For the imported data, deleted entities are also merged.
-    //  * @param model_data The GI model.
-    //  */
-    // public merge(ssid: number, modeldata: GIModelData): void {
-    //     // const geom_maps: Map<number, number>[] = this.geom.io.merge(model.modeldata.geom._geom_maps);
-    //     // this.attribs.io.merge(model.modeldata.attribs.attribs_maps.get(ssid), geom_maps);
-    //     this.geom.merge.merge(ssid, modeldata.geom);
-    //     this.attribs.io.merge(ssid, modeldata.attribs.attribs_maps.get(ssid));
-    //     this.model.metadata = modeldata.model.metadata;
-    // }
-    // /**
-    //  * Copys the data from a second model into this model without conflict detection.
-    //  * Usually, this model is assumed to be empty.
-    //  * If ent_sets is null, then only model attribs are copied.
-    //  * @param model_data The GI model.
-    //  */
-    // public dumpEnts(ssid: number, modeldata: GIModelData, ent_sets: IEntSets): void {
-    //     if (ent_sets === null) {
-    //         this.attribs.io.dumpEnts(ssid, modeldata.attribs.attribs_maps.get(ssid), ent_sets);
-    //         return;
-    //     }
-    //     // add topo geom sets
-    //     ent_sets.verts_i = new Set();
-    //     ent_sets.tris_i = new Set();
-    //     ent_sets.edges_i = new Set();
-    //     ent_sets.wires_i = new Set();
-    //     ent_sets.faces_i = new Set();
-    //     // add the ent posis to the main posis list to keep
-    //     ent_sets.obj_posis_i.forEach( posi_i => ent_sets.posis_i.add(posi_i) );
-    //     // points
-    //     ent_sets.points_i.forEach( point_i => {
-    //         ent_sets.verts_i.add(modeldata.geom.nav.navPointToVert(point_i));
-    //     });
-    //     // plines
-    //     ent_sets.plines_i.forEach( pline_i => {
-    //         const wire_i: number = modeldata.geom.nav.navPlineToWire(pline_i);
-    //         ent_sets.wires_i.add(wire_i);
-    //         const edges_i: number[] = modeldata.geom.nav.navWireToEdge(wire_i);
-    //         edges_i.forEach(edge_i => ent_sets.edges_i.add(edge_i));
-    //         const verts_i: number[] = modeldata.geom.query.getWireVerts(wire_i);
-    //         verts_i.forEach(vert_i => ent_sets.verts_i.add(vert_i));
-    //     });
-    //     // pgons
-    //     ent_sets.pgons_i.forEach( pgon_i => {
-    //         const face_i: number = modeldata.geom.nav.navPgonToFace(pgon_i);
-    //         ent_sets.faces_i.add(face_i);
-    //         const tris_i: number[] = modeldata.geom.nav.navFaceToTri(face_i);
-    //         tris_i.forEach(tri_i => ent_sets.tris_i.add(tri_i));
-    //         const wires_i: number[] = modeldata.geom.nav.navFaceToWire(face_i);
-    //         wires_i.forEach(wire_i => ent_sets.wires_i.add(wire_i));
-    //         wires_i.forEach( wire_i => {
-    //             const edges_i: number[] = modeldata.geom.nav.navWireToEdge(wire_i);
-    //             edges_i.forEach(edge_i => ent_sets.edges_i.add(edge_i));
-    //             const verts_i: number[] = modeldata.geom.query.getWireVerts(wire_i);
-    //         verts_i.forEach(vert_i => ent_sets.verts_i.add(vert_i));
-    //         });
-    //     });
-    //     // dump the selected data into this model
-    //     // this model is assumed to be emprt
-    //     this.geom.dump.dumpEnts(ssid, modeldata.geom, ent_sets);
-    //     this.attribs.io.dumpEnts(ssid, modeldata.attribs.attribs_maps.get(ssid), ent_sets);
-    // }
-    // /**
-    //  * Returns a clone of this model.
-    //  * Entity IDs will not change.
-    //  */
-    // public clone(ssid: number): GIModelData {
-    //     const clone: GIModelData = new GIModelData(this.model);
-    //     clone.geom.dump.dump(ssid, this.geom._geom_maps);
-    //     clone.attribs.io.dump(ssid, this.attribs.attribs_maps.get(ssid));
-    //     // this.model.metadata = this.model.metadata;
-    //     // clone.dump(this);
-    //     return clone;
-    // }
-    // /**
-    //  * Renumber entities.
-    //  */
-    // public purge(ssid: number): GIModelData {
-    //     throw new Error('Not implemented.');
-    //     // const clone: GIModelData = new GIModelData(this.model);
-    //     // clone.append(ssid, this);
-    //     // return clone;
-    // }
-    // /**
-    //  * Copys the data from a second model into this model.
-    //  * The existing data in this model is not deleted.
-    //  * For the imported data, deleted entities are filtered out (i.e. not merged).
-    //  * @param model_data The GI model.
-    //  */
-    // public append(ssid: number, ssid2: number, modeldata: GIModelData): void {
-    //     // append the geometry
-    //     const renum_maps: Map<string, Map<number, number>> = this.geom.append.append(ssid, ssid2, modeldata);
-    //     // append the attributes
-    //     this.attribs.io.append(ssid, ssid2, modeldata, renum_maps);
-    // }
     /**
      * Check model for internal consistency
      */

@@ -34,7 +34,7 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
                 private giDataService: GIDataService, private router: Router) {
         let viewCheck: any;
         this.emptyModel = _parameterTypes.newFn();
-        this.emptyModel.nextSnapshot([]);
+        // this.emptyModel.nextSnapshot([]);
 
         const page = this.router.url.split('?')[0]
         viewCheck = this.router.url.split('showViewer=');

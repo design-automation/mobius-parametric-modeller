@@ -24,6 +24,7 @@ export class GIModel {
             this.metadata = meta_data;
         }
         this.modeldata = new GIModelData(this);
+        this.nextSnapshot();
     }
     /**
      * Get the current time stamp

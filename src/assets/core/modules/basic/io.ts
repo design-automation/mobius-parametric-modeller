@@ -253,8 +253,6 @@ export async function Export(__model__: GIModel, entities: TId|TId[]|TId[][],
     } else {
         if (entities !== null) {
             entities = arrMakeFlat(entities) as TId[];
-            // ents_arr = splitIDs(fn_name, 'entities', entities,
-            //     [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON, EEntType.COLL])  as TEntTypeIdx[];
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
     }

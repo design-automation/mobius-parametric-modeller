@@ -332,6 +332,7 @@ export abstract class NodeUtils {
                     }
                 }
             } else {
+                console.log('???????')
                 node.procedure.push(prod);
             }
             return;
@@ -355,6 +356,10 @@ export abstract class NodeUtils {
         }
         const lastNode = node.state.procedure[node.state.procedure.length - 1];
         if (lastNode && lastNode.type !== ProcedureTypes.Constant) {
+            if (lastNode.type === ProcedureTypes.EndReturn) {
+                node.procedure.splice( node.procedure.length - 1, 0, prod);
+                return;
+            }
             if (lastNode.type === ProcedureTypes.LocalFuncDef || (lastNode.type === ProcedureTypes.Blank && lastNode.ID === 'local_func_blank')) {
                 node.procedure.splice(1, 0, prod);
             }

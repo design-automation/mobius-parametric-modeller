@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { isDevMode, ViewChild, HostListener } from '@angular/core';
+import { ViewChild, HostListener, OnDestroy } from '@angular/core';
 import { DefaultSettings, SettingsColorMap, Locale } from './gi-viewer.settings';
 // import @angular stuff
 import { Component, Input, OnInit } from '@angular/core';
@@ -24,7 +24,7 @@ import { ISettings } from './data/data.threejsSettings';
     templateUrl: './gi-viewer.component.html',
     styleUrls: ['./gi-viewer.component.scss'],
 })
-export class GIViewerComponent implements OnInit {
+export class GIViewerComponent implements OnInit, OnDestroy {
     // model data passed to the viewer
     @Input() data: GIModel;
     @Input() nodeIndex: number;
@@ -44,6 +44,8 @@ export class GIViewerComponent implements OnInit {
     public attrTableReset: number;
     public selectSwitchOnOff: Boolean;
     public attribLabelVal: String;
+
+    private settingsUpdateInterval;
 
     @ViewChild(ThreejsViewerComponent, { static: true }) threejs: ThreejsViewerComponent;
     @ViewChild(SplitComponent, { static: true }) viewerSplit: SplitComponent;
@@ -106,6 +108,19 @@ export class GIViewerComponent implements OnInit {
         }
         localStorage.setItem('mpm_default_settings', JSON.stringify(DefaultSettings));
         this.temp_camera_pos = this.dataService.getThreejsScene().perspCam.position;
+
+        this.settingsUpdateInterval = setInterval(() => {
+            if (this.mainDataService.viewerSettingsUpdated) {
+                this.settings = JSON.parse(localStorage.getItem('mpm_settings'));
+                this.closeModal('settings_modal', true);
+                this.mainDataService.viewerSettingsUpdated = false;
+            }
+        }, 100);
+    }
+
+    ngOnDestroy() {
+        clearInterval(this.settingsUpdateInterval);
+        this.settingsUpdateInterval = null;
     }
 
     private getSettings() {

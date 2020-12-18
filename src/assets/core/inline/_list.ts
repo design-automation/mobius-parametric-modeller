@@ -18,7 +18,7 @@ export function range(debug: boolean, start: number, end?: number, step?: number
         checkNumArgs('range', arguments, 3, 1);
         checkArgs('range', 'start', start, [chk.isInt]);
         if (end !== undefined) { checkArgs('range', 'end', end, [chk.isInt]); }
-        if (end !== undefined) { checkArgs('range', 'step', step, [chk.isInt]); }
+        if (step !== undefined) { checkArgs('range', 'step', step, [chk.isInt]); }
     }
     if (start === undefined) { throw new Error('Invalid inline arg: min must be defined.'); }
     if (end === undefined) { end = start; start = 0; }

@@ -4,7 +4,7 @@ import { ArgCh, checkArgs } from './_check_args';
 // Attribute Checks
 // =========================================================================================================================================
 export function checkAttribName(fn_name: string, attrib_name: string): void {
-    ArgCh.isStr(fn_name, 'attrib_name', attrib_name); // check arg is string
+    ArgCh.isStr(attrib_name); // check arg is string
     if (attrib_name === undefined) {
         throw new Error (fn_name + ': ' + 'attrib_name is undefined');
     }
@@ -26,11 +26,11 @@ export function checkAttribIdxKey(fn_name: string, idx_or_key?: number|string): 
     // -- check defined index
     if (typeof idx_or_key === 'number') {
         // check if index is number
-        ArgCh.isNum(fn_name, 'attrib_index', idx_or_key);
+        ArgCh.isNum(idx_or_key);
         // this is an item in a list, the item value can be any
     } else if (typeof idx_or_key === 'string') {
         // check if index is number
-        ArgCh.isStr(fn_name, 'attrib_key', idx_or_key);
+        ArgCh.isStr(idx_or_key);
         // this is an item in an object, the item value can be any
     } else {
         throw new Error(fn_name + ': index or key is not a valid type: ' + idx_or_key);

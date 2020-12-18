@@ -186,8 +186,6 @@ export function Filter(__model__: GIModel,
         checkAttribValue(fn_name, value);
     } else {
         if (entities !== null && entities !== undefined) {
-            // ents_arr = splitIDs(fn_name, 'entities', entities,
-            //     [IDcheckObj.isID, IDcheckObj.isIDList, IDcheckObj.isIDListOfLists], null) as TEntTypeIdx|TEntTypeIdx[];
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
         [attrib_name, attrib_idx_key] = splitAttribNameIdxKey(fn_name, attrib);
@@ -290,15 +288,13 @@ export function Invert(__model__: GIModel, ent_type_enum: _EEntType, entities: T
         }
     } else {
         if (entities !== null && entities !== undefined) {
-            // ents_arr = splitIDs('query.Invert', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
     }
     // --- Error Check ---
     const select_ent_types: EEntType = _getEntTypeFromStr(ent_type_enum);
     const found_ents_arr: TEntTypeIdx[] = _invert(__model__, select_ent_types, ents_arr);
-    throw new Error('Snapshot Not implemented');
-    // return idsMake(found_ents_arr) as TId[];
+    return idsMake(found_ents_arr) as TId[];
 }
 function _invert(__model__: GIModel, select_ent_type: EEntType, ents_arr: TEntTypeIdx[]): TEntTypeIdx[] {
     // get the ents to exclude
@@ -341,7 +337,6 @@ export function Sort(__model__: GIModel, entities: TId[], attrib: string|[string
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isIDL], null) as TEntTypeIdx[];
         [attrib_name, attrib_idx_key] = checkAttribNameIdxKey(fn_name, attrib);
     } else {
-        // ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
         ents_arr = idsBreak(entities) as TEntTypeIdx[];
         [attrib_name, attrib_idx_key] = splitAttribNameIdxKey(fn_name, attrib);
     }
@@ -395,7 +390,6 @@ export function Perimeter(__model__: GIModel, ent_type: _EEntType, entities: TId
         }
     } else {
         if (entities !== null && entities !== undefined) {
-            // ents_arr = splitIDs('query.Perimeter', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
     }
@@ -442,7 +436,6 @@ export function Neighbor(__model__: GIModel, ent_type_enum: _EEntType, entities:
         }
     } else {
         if (entities !== null && entities !== undefined) {
-            // ents_arr = splitIDs('query.neighbor', 'entities', entities, [IDcheckObj.isIDList], null) as TEntTypeIdx[];
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
     }
@@ -497,7 +490,6 @@ export function Type(__model__: GIModel, entities: TId|TId[], type_query_enum: _
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL], null, false) as TEntTypeIdx|TEntTypeIdx[];
     } else {
-        // ents_arr = splitIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
         ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     }
     // --- Error Check ---

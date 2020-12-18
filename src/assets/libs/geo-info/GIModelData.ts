@@ -8,6 +8,7 @@ import { GIFuncsCommon } from './funcs/GIFuncsCommon';
 import { GIFuncsMake } from './funcs/GIFuncsMake';
 import { GIFuncsEdit } from './funcs/GIFuncsEdit';
 import { GIFuncsModify } from './funcs/GIFuncsModify';
+import { idMake } from './common_id_funcs';
 
 /**
  * Geo-info model class.
@@ -140,9 +141,19 @@ export class GIModelData {
             case EEntType.PLINE:
             case EEntType.PGON:
                 if (this.attribs.get.getEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP) !== ts) {
-                    const obj_ts = this.attribs.get.getEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP);
-                    // TODO improve this error message
-                    throw new Error('Bad edit...' + ent_type + ', ' + ent_i + ', ' + obj_ts + ', ' + ts);
+                    // const obj_ts = this.attribs.get.getEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP);
+                    throw new Error(
+                        'An object is being edited that was created in an upstream node. ' +
+                        'Objects are immutable outside the node in which they are created. ' +
+                        'In order to edit the object, it should first be cloned, using the make.Clone() function. ' +
+                        '<ul>' +
+                        '<li>The object being edited is: "' + idMake(ent_type, ent_i) + '".</li>' +
+                        '</ul>' +
+                        'Possible fixes:' +
+                        '<ul>' +
+                        '<li>In this node, before editing, clone the object using the using the make.Clone() function.</li>' +
+                        '</ul>'
+                    );
                 }
                 return;
             case EEntType.COLL:

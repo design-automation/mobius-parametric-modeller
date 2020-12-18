@@ -145,7 +145,6 @@ export class GIModelData {
                     throw new Error(
                         'An object is being edited that was created in an upstream node. ' +
                         'Objects are immutable outside the node in which they are created. ' +
-                        'In order to edit the object, it should first be cloned, using the make.Clone() function. ' +
                         '<ul>' +
                         '<li>The object being edited is: "' + idMake(ent_type, ent_i) + '".</li>' +
                         '</ul>' +

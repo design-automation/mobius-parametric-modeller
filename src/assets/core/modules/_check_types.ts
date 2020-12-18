@@ -2,118 +2,152 @@
 // util - check type
 // =====================================================================================================================
 // Dict
-export function isDict(fn_name: string, arg_name: string, arg: any): void {
+export function isDict(arg: any): void {
     if (Array.isArray(arg) || typeof arg !== 'object') {
-        throw new Error (fn_name + ': ' + arg_name + ' is not a dict');
+        throw new Error ();
     }
 }
 // List
-export function isList(fn_name: string, arg_name: string, arg: any): void {
+export function isList(arg: any): void {
     if (!Array.isArray(arg)) {
-        throw new Error (fn_name + ': ' + arg_name + ' is not a list');
+        throw new Error ();
     }
 }
 // List
-export function isLList(fn_name: string, arg_name: string, arg: any): void {
+export function isLList(arg: any): void {
     if (!Array.isArray(arg) || !Array.isArray(arg[0])) {
-        throw new Error (fn_name + ': ' + arg_name + ' is not a list of lists');
+        throw new Error ();
     }
 }
 // List of specified length
-export function isLLen(fn_name: string, arg_name: string, arg: any[], len: number): void {
+export function isLLen(arg: any[], len: number): void {
     if (arg.length !== len) {
-        throw new Error (fn_name + ': ' + arg_name + ' is not a list of length ' + len);
+        throw new Error ();
     }
 }
 // Any
-export function isAny(fn_name: string, arg_name: string, arg: any): void {
+export function isAny(arg: any): void {
     if (arg === undefined) {
-        throw new Error(fn_name + ': ' + arg_name + ' must be defined');
+        throw new Error();
     }
 }
 // Any list
-export function isAnyL(fn_name: string, arg_name: string, arg: any): void {
-    isList(fn_name, arg_name, arg);
+export function isAnyL(arg: any): void {
+    isList(arg);
     for (let i = 0; i < arg.length; i++) {
-        isAny(fn_name, arg_name + '[' + i + ']', arg[i]);
+        isAny(arg[i]);
     }
 }
 // Null
-export function isNull(fn_name: string, arg_name: string, arg: any): void {
+export function isNull(arg: any): void {
     if (arg !== null) {
-        throw new Error(fn_name + ': ' + arg_name + ' is not null');
+        throw new Error();
     }
 }
 // Null list
-export function isNullL(fn_name: string, arg_name: string, arg: any): void {
-    isList(fn_name, arg_name, arg);
+export function isNullL(arg: any): void {
+    isList(arg);
     for (let i = 0; i < arg.length; i++) {
-        isNull(fn_name, arg_name + '[' + i + ']', arg[i]);
+        isNull(arg[i]);
     }
 }
 // Boolean
-export function isBool(fn_name: string, arg_name: string, arg: boolean): void {
+export function isBool(arg: boolean): void {
     if (typeof arg !== 'boolean') {
-        throw new Error(fn_name + ': ' + arg_name + ' is not a boolean');
+        throw new Error();
     }
 }
 // Boolean list
-export function isBoolL(fn_name: string, arg_name: string, arg: boolean[]): void {
-    isList(fn_name, arg_name, arg);
+export function isBoolL(arg: boolean[]): void {
+    isList(arg);
     for (let i = 0; i < arg.length; i++) {
-        isBool(fn_name, arg_name + '[' + i + ']', arg[i]);
+        isBool(arg[i]);
     }
 }
 // String
-export function isStr(fn_name: string, arg_name: string, arg: string): void {
+export function isStr(arg: string): void {
     if (typeof arg !== 'string') {
-        throw new Error(fn_name + ': ' + arg_name + ' is not a string');
+        throw new Error();
     }
 }
 // String list
-export function isStrL(fn_name: string, arg_name: string, arg: string[]): void {
-    isList(fn_name, arg_name, arg);
+export function isStrL(arg: string[]): void {
+    isList(arg);
     for (let i = 0; i < arg.length; i++) {
-        isStr(fn_name, arg_name + '[' + i + ']', arg[i]);
+        isStr(arg[i]);
     }
 }
 // Numbers
-export function isNum(fn_name: string, arg_name: string, arg: number): void {
+export function isNum(arg: number): void {
     if (isNaN(arg)) { // } || isNaN(parseInt(arg, 10))) {
-        throw new Error(fn_name + ': ' + arg_name + ' is not a number');
+        throw new Error();
     }
 }
 // Number list
-export function isNumL(fn_name: string, arg_name: string, arg: number[]): void {
-    isList(fn_name, arg_name, arg);
+export function isNumL(arg: number[]): void {
+    isList(arg);
     for (let i = 0; i < arg.length; i++) {
-        isNum(fn_name, arg_name + '[' + i + ']', arg[i]);
+        isNum(arg[i]);
     }
 }
 // Number between 0 and 1
-export function isNum01(fn_name: string, arg_name: string, arg: any): void {
-    isNum(fn_name, arg_name, arg);
+export function isNum01(arg: any): void {
+    isNum(arg);
     if (arg < 0 || arg > 1) {
-        throw new Error(fn_name + ': ' + arg_name + ' must be between 0 and 1');
+        throw new Error();
     }
 }
 // Number list between 0 and 1
-export function isNum01L(fn_name: string, arg_name: string, arg: any): void {
-    isNumL(fn_name, arg_name, arg);
+export function isNum01L(arg: any): void {
+    isNumL(arg);
     for (let i = 0; i < arg.length; i++) {
-        isNum01(fn_name, arg_name + '[' + i + ']', arg[i]);
+        isNum01(arg[i]);
     }
 }
 // Integer
-export function isInt(fn_name: string, arg_name: string, arg: any): void {
+export function isInt(arg: any): void {
     if (!Number.isInteger(arg)) {
-        throw new Error(fn_name + ': ' + arg_name + ' is not an integer');
+        throw new Error();
     }
 }
 // Integer list
-export function isIntL(fn_name: string, arg_name: string, arg: any[]): void {
-    isList(fn_name, arg_name, arg);
+export function isIntL(arg: any[]): void {
+    isList(arg);
     for (let i = 0; i < arg.length; i++) {
-        isInt(fn_name, arg_name, arg[i]);
+        isInt(arg[i]);
     }
 }
+export function getDataTypeStrFromValue(arg: any): string {
+    if (Array.isArray(arg)) {
+        if (arg.length === 0) {
+            return 'empty list';
+        }
+        const types_set: Set<string> = new Set();
+        for (const a_arg of arg) {
+            types_set.add(_typeOf(a_arg));
+        }
+        const types_arr: string[] = Array.from(types_set.values());
+        if (types_arr.length === 1) {
+            return 'a list of ' + arg.length + ' ' + types_arr[0] + 's';
+        } else {
+            let str = 'a list of length ' + arg.length + ', containing ';
+            for (let i = 0; i < types_arr.length; i++) {
+                if (i < types_arr.length - 2) {
+                    str += types_arr[i] + 's, ';
+                } else if (i < types_arr.length - 1) {
+                    str += types_arr[i] + 's and ';
+                } else {
+                    str += types_arr[i] + 's';
+                }
+            }
+            return str;
+        }
+    }
+    return _typeOf(arg);
+}
+function _typeOf(arg: any): string {
+    if (Array.isArray(arg)) { return 'list'; }
+    if (typeof arg === 'object') { return 'dict'; }
+    return typeof arg;
+}
+

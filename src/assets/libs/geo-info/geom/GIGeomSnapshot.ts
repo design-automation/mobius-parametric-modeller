@@ -341,16 +341,18 @@ export class GIGeomSnapshot {
      * Get the sub ents as a list
      * @param ents
      */
-    public getSubEnts(ssid: number, ents: TEntTypeIdx[]): TEntTypeIdx[] {
-        const ent_sets: IEntSets = this.getSubEntsSets(ssid, ents);
-        const ents_tree: TEntTypeIdx[] = [];
-        ent_sets.ps.forEach( posi_i => ents_tree.push([EEntType.POSI, posi_i]) );
-        ent_sets.obj_ps.forEach( posi_i => ents_tree.push([EEntType.POSI, posi_i]) );
-        ent_sets.pt.forEach( point_i => ents_tree.push([EEntType.POINT, point_i]) );
-        ent_sets.pl.forEach( pline_i => ents_tree.push([EEntType.PLINE, pline_i]) );
-        ent_sets.pg.forEach( pgon_i => ents_tree.push([EEntType.PGON, pgon_i]) );
-        ent_sets.co.forEach( coll_i => ents_tree.push([EEntType.COLL, coll_i]) );
-        return ents_tree;
+    public getSubEnts(ents_sets: IEntSets): TEntTypeIdx[] {
+        const ents_arr: TEntTypeIdx[] = [];
+        ents_sets.ps.forEach( posi_i => ents_arr.push([EEntType.POSI, posi_i]) );
+        ents_sets.obj_ps.forEach( posi_i => ents_arr.push([EEntType.POSI, posi_i]) );
+        ents_sets.pt.forEach( point_i => ents_arr.push([EEntType.POINT, point_i]) );
+        ents_sets.pl.forEach( pline_i => ents_arr.push([EEntType.PLINE, pline_i]) );
+        ents_sets.pg.forEach( pgon_i => ents_arr.push([EEntType.PGON, pgon_i]) );
+        ents_sets.co.forEach( coll_i => ents_arr.push([EEntType.COLL, coll_i]) );
+        if (ents_sets.hasOwnProperty('_v')) { ents_sets._v.forEach(vert_i => ents_arr.push([EEntType.VERT, vert_i])); }
+        if (ents_sets.hasOwnProperty('_e')) { ents_sets._e.forEach(vert_i => ents_arr.push([EEntType.EDGE, vert_i])); }
+        if (ents_sets.hasOwnProperty('_w')) { ents_sets._w.forEach(vert_i => ents_arr.push([EEntType.WIRE, vert_i])); }
+        return ents_arr;
     }
     /**
      * Returns sets of unique entity indexes, given an array of TEntTypeIdx.

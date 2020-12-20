@@ -204,6 +204,9 @@ export class GIGeomAdd {
         const new_point_i: number = this.addPoint(posis_i[0]);
         if (copy_attribs) {
             this.modeldata.attribs.set.copyAttribs(EEntType.POINT, old_point_i, new_point_i);
+            const old_vert_i: number = this.modeldata.geom.nav.navPointToVert(old_point_i);
+            const new_vert_i: number = this.modeldata.geom.nav.navPointToVert(new_point_i);
+            this.modeldata.attribs.set.copyAttribs(EEntType.VERT, old_vert_i, new_vert_i);
         }
         // return the new point
         return new_point_i;
@@ -225,6 +228,17 @@ export class GIGeomAdd {
         const new_pline_i: number = this.addPline(posis_i, is_closed);
         if (copy_attribs) {
             this.modeldata.attribs.set.copyAttribs(EEntType.PLINE, old_pline_i, new_pline_i);
+            const old_topo: [number[], number[], number[]] = this.modeldata.geom.query.getObjTopo(EEntType.PGON, old_pline_i);
+            const new_topo: [number[], number[], number[]] = this.modeldata.geom.query.getObjTopo(EEntType.PGON, new_pline_i);
+            for (let i = 0; i < old_topo[0].length; i++) {
+                this.modeldata.attribs.set.copyAttribs(EEntType.VERT, old_topo[0][i], new_topo[0][i]);
+            }
+            for (let i = 0; i < old_topo[1].length; i++) {
+                this.modeldata.attribs.set.copyAttribs(EEntType.EDGE, old_topo[1][i], new_topo[1][i]);
+            }
+            for (let i = 0; i < old_topo[2].length; i++) {
+                this.modeldata.attribs.set.copyAttribs(EEntType.WIRE, old_topo[2][i], new_topo[2][i]);
+            }
         }
         // return the new polyline
         return new_pline_i;
@@ -255,6 +269,17 @@ export class GIGeomAdd {
         }
         if (copy_attribs) {
             this.modeldata.attribs.set.copyAttribs(EEntType.PGON, old_pgon_i, new_pgon_i);
+            const old_topo: [number[], number[], number[]] = this.modeldata.geom.query.getObjTopo(EEntType.PGON, old_pgon_i);
+            const new_topo: [number[], number[], number[]] = this.modeldata.geom.query.getObjTopo(EEntType.PGON, new_pgon_i);
+            for (let i = 0; i < old_topo[0].length; i++) {
+                this.modeldata.attribs.set.copyAttribs(EEntType.VERT, old_topo[0][i], new_topo[0][i]);
+            }
+            for (let i = 0; i < old_topo[1].length; i++) {
+                this.modeldata.attribs.set.copyAttribs(EEntType.EDGE, old_topo[1][i], new_topo[1][i]);
+            }
+            for (let i = 0; i < old_topo[2].length; i++) {
+                this.modeldata.attribs.set.copyAttribs(EEntType.WIRE, old_topo[2][i], new_topo[2][i]);
+            }
         }
         // return the new polygon
         return new_pgon_i;
@@ -265,7 +290,8 @@ export class GIGeomAdd {
     }
    /**
      * Copy a collection
-     * This also copies the entities in the collection.
+     * The new collection will contain the same ents as the old collection.
+     * The ents themselves are not copied.
      * @param ent_type
      * @param index
      * @param copy_posis

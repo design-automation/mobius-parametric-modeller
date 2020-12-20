@@ -507,7 +507,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                         const _ent = object[0];
                         const _id = object[1];
                         const objEntType = _ent.slice(0, 2);
-                        console.log(_ent, _id, objEntType)
                         switch (objEntType) {
                             case EEntTypeStr[EEntType.POSI]:
                                 this.selectPositions(_id, null, null, _ent);

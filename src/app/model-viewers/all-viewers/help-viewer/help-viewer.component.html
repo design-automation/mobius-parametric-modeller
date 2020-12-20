@@ -55,7 +55,7 @@
             <div *ngIf='output.example_link' class = 'exam--container'>
                 <h5>Example URLs:</h5>
                 <ul *ngFor='let ex of output.example_link; let i = index;'>
-                    <li>{{i+1}}) <a class='hyperlink' href={{urlString+ex.split()}} target="_blank">{{ex.split('&node=')[0]}}</a></li>
+                    <li>{{i+1}}) <a class='hyperlink' href={{urlString+ex.split()}} target="help_example">{{ex.split('&node=')[0]}}</a></li>
                 </ul>
             </div>
         </div>
@@ -114,7 +114,7 @@
                     <div *ngIf='func.example_link' class = 'exam--container'>
                         <h5>Example URLs:</h5>
                         <ul *ngFor='let ex of func.example_link; let i = index;'>
-                            <li>{{i+1}}) <a class='hyperlink' href={{urlString+ex.split()}} target="_blank">{{ex.split('&node=')[0]}}</a></li>
+                            <li>{{i+1}}) <a class='hyperlink' href={{urlString+ex.split()}} target="help_example">{{ex.split('&node=')[0]}}</a></li>
                         </ul>
                     </div>
                 </div>

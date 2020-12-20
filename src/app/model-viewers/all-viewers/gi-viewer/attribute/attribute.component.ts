@@ -248,8 +248,8 @@ export class AttributeComponent implements OnChanges {
                 } else {
                     const first = columns.shift();
                     // const second = columns.shift();
-                    const selected = columns.find(column => column.substr(0, 1) === '_');
-                    const rest_of_columns = columns.filter(column => column.substr(0, 1) !== '_');
+                    // const selected = columns.find(column => column.substr(0, 1) === '_');
+                    const rest_of_columns = columns.filter(column => column !== '_ts');
                     // new_columns = selected ? [first, second, selected, ...rest_of_columns, ' ']
                     // new_columns = selected ? [first, selected, ...rest_of_columns, ' '] : [first, ...rest_of_columns, ' '];
                     new_columns = [first, ...rest_of_columns, ' '];
@@ -299,7 +299,7 @@ export class AttributeComponent implements OnChanges {
             if ((<string> topoRow.get('_id')).slice(0, 2) === selected_type_str) {
                 if (topoHeader.length === 0) {
                     for (const attr of topoRow) {
-                        if (attr[0][0] !== '_') {
+                        if (attr[0] !== '_ts' && attr[0] !== '_id') {
                             topoHeader.push(attr[0]);
                         }
                     }
@@ -594,13 +594,11 @@ export class AttributeComponent implements OnChanges {
         clearTimeout(this.timer);
         const ent_id = row._id.trim();
         const ent_str = ent_id.substr(0, 2);
-        console.log(row._id.trim(), this.tab_rev_map[this.string_map[ent_str]])
         this.showTopo(row._id.trim(), this.tab_rev_map[this.string_map[ent_str]]);
     }
 
 
     showTopo(ent_id: string, tabIndex) {
-        console.log(ent_id, tabIndex);
         if (!this.generateTopoTable(ent_id, tabIndex, 'ps')) {
             return;
         }
@@ -619,9 +617,7 @@ export class AttributeComponent implements OnChanges {
             s.clear();
             this.current_selected = ent_id;
             for (const datarow of this.dataSourceTopo.data) {
-                console.log(datarow);
                 const row_ent_id = datarow['_id'].trim();
-                console.log(row_ent_id.substr(0, 2), ent_type, row_ent_id.substr(0, 2) === ent_type)
                 if (row_ent_id.substr(0, 2) === ent_type) {
                     s.set(row_ent_id, Number(row_ent_id.substr(2)));
                 }

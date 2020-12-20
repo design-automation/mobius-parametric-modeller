@@ -251,7 +251,7 @@ export class GIGeomNav {
         // we do not want to have two copies of that wire, so we need to take care to only get 1 edge
         if (ent_type === EEntType.POSI) {
             const wires_i: number[] = [];
-            for (const vert_i of this._geom_maps.up_posis_verts.get(ent_i)) {
+            for (const vert_i of this.navPosiToVert(ent_i)) {
                 const edges_i: number[] = this._geom_maps.up_verts_edges.get(vert_i);
                 if (edges_i !== undefined) {
                     wires_i.push( this._geom_maps.up_edges_wires.get(edges_i[0]) ); // only 1 edge
@@ -274,9 +274,8 @@ export class GIGeomNav {
             return point_i === undefined ? [] : [point_i];
         }
         if (ent_type === EEntType.POSI) {
-            const verts_i: number[] = this.navPosiToVert(ent_i);
             const points_i: number[] = [];
-            for (const vert_i of verts_i) {
+            for (const vert_i of this.navPosiToVert(ent_i)) {
                 const point_i: number = this._geom_maps.up_verts_points.get(vert_i);
                 if (point_i !== undefined) { points_i.push(point_i); }
             }

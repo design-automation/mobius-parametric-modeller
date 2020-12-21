@@ -241,11 +241,11 @@ export function listRev(debug: boolean, list: any[]): any[] {
  */
 export function listCull(debug: boolean, list1: any[], list2?: any[]): any[] {
     if (debug) {
-        checkNumArgs('listCull', arguments, 2);
+        checkNumArgs('listCull', arguments, 2, 1);
         checkArgs('listCull', 'list1', list1, [chk.isList]);
-        checkArgs('listCull', 'list2', list2, [chk.isList]);
+        if (list2 !== undefined) { checkArgs('listCull', 'list2', list2, [chk.isList]); }
     }
-    list2 = list2 ? list2 : list1;
+    list2 = list2 !== undefined ? list2 : list1;
     const result: any[] = [];
     const list2_len =  list2.length;
     for (let i = 0; i < list1.length; i++) {

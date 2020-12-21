@@ -228,8 +228,8 @@ export class GIGeomAdd {
         const new_pline_i: number = this.addPline(posis_i, is_closed);
         if (copy_attribs) {
             this.modeldata.attribs.set.copyAttribs(EEntType.PLINE, old_pline_i, new_pline_i);
-            const old_topo: [number[], number[], number[]] = this.modeldata.geom.query.getObjTopo(EEntType.PGON, old_pline_i);
-            const new_topo: [number[], number[], number[]] = this.modeldata.geom.query.getObjTopo(EEntType.PGON, new_pline_i);
+            const old_topo: [number[], number[], number[]] = this.modeldata.geom.query.getObjTopo(EEntType.PLINE, old_pline_i);
+            const new_topo: [number[], number[], number[]] = this.modeldata.geom.query.getObjTopo(EEntType.PLINE, new_pline_i);
             for (let i = 0; i < old_topo[0].length; i++) {
                 this.modeldata.attribs.set.copyAttribs(EEntType.VERT, old_topo[0][i], new_topo[0][i]);
             }
@@ -290,8 +290,7 @@ export class GIGeomAdd {
     }
    /**
      * Copy a collection
-     * The new collection will contain the same ents as the old collection.
-     * The ents themselves are not copied.
+     * Also makes copies of all ents in the collection, and all sub collections.
      * @param ent_type
      * @param index
      * @param copy_posis
@@ -302,16 +301,28 @@ export class GIGeomAdd {
         // add the new collection
         const new_coll_i: number = this.addColl();
         // set the content
-        const coll_points_i: number[] = this.modeldata.geom.snapshot.getCollPoints(ssid, old_coll_i);
+        // const coll_points_i: number[] = this.modeldata.geom.snapshot.getCollPoints(ssid, old_coll_i);
+        // if (coll_points_i !== undefined) { this.modeldata.geom.snapshot.addCollPoints(ssid, new_coll_i, coll_points_i); }
+        // const coll_plines_i: number[] = this.modeldata.geom.snapshot.getCollPlines(ssid, old_coll_i);
+        // if (coll_plines_i !== undefined) {this.modeldata.geom.snapshot.addCollPlines(ssid, new_coll_i, coll_plines_i); }
+        // const coll_pgons_i: number[] = this.modeldata.geom.snapshot.getCollPgons(ssid, old_coll_i);
+        // if (coll_pgons_i !== undefined) { this.modeldata.geom.snapshot.addCollPgons(ssid, new_coll_i, coll_pgons_i); }
+        // const coll_childs: number[] = this.modeldata.geom.snapshot.getCollChildren(ssid, old_coll_i);
+        // if (coll_childs !== undefined) { this.modeldata.geom.snapshot.addCollChildren(ssid, new_coll_i, coll_childs); }
+        // const coll_parent_i: number = this.modeldata.geom.snapshot.getCollParent(ssid, old_coll_i);
+        // if (coll_parent_i !== undefined) { this.modeldata.geom.snapshot.setCollParent(ssid, new_coll_i, coll_parent_i); }
+        const coll_points_i: number[] = this.copyPoints(this.modeldata.geom.snapshot.getCollPoints(ssid, old_coll_i), copy_attribs) as number[];
         if (coll_points_i !== undefined) { this.modeldata.geom.snapshot.addCollPoints(ssid, new_coll_i, coll_points_i); }
-        const coll_plines_i: number[] = this.modeldata.geom.snapshot.getCollPlines(ssid, old_coll_i);
-        if (coll_plines_i !== undefined) {this.modeldata.geom.snapshot.addCollPlines(ssid, new_coll_i, coll_plines_i); }
-        const coll_pgons_i: number[] = this.modeldata.geom.snapshot.getCollPgons(ssid, old_coll_i);
+        const coll_plines_i: number[] = this.copyPlines(this.modeldata.geom.snapshot.getCollPlines(ssid, old_coll_i), copy_attribs) as number[];
+        if (coll_plines_i !== undefined) { this.modeldata.geom.snapshot.addCollPlines(ssid, new_coll_i, coll_plines_i); }
+        const coll_pgons_i: number[] = this.copyPgons(this.modeldata.geom.snapshot.getCollPgons(ssid, old_coll_i), copy_attribs) as number[];
         if (coll_pgons_i !== undefined) { this.modeldata.geom.snapshot.addCollPgons(ssid, new_coll_i, coll_pgons_i); }
-        const coll_childs: number[] = this.modeldata.geom.snapshot.getCollChildren(ssid, old_coll_i);
+        const coll_childs: number[] = this.copyColls(this.modeldata.geom.snapshot.getCollChildren(ssid, old_coll_i), copy_attribs) as number[];
         if (coll_childs !== undefined) { this.modeldata.geom.snapshot.addCollChildren(ssid, new_coll_i, coll_childs); }
         const coll_parent_i: number = this.modeldata.geom.snapshot.getCollParent(ssid, old_coll_i);
         if (coll_parent_i !== undefined) { this.modeldata.geom.snapshot.setCollParent(ssid, new_coll_i, coll_parent_i); }
+        // TODO check for infinite loop when getting coll children
+        //
         // copy the attributes from old collection to new collection
         if (copy_attribs) {
             this.modeldata.attribs.set.copyAttribs(EEntType.COLL, old_coll_i, new_coll_i);

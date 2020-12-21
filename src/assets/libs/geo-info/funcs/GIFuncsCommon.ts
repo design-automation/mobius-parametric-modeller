@@ -332,12 +332,12 @@ export class GIFuncsCommon {
         // create the new positions
         const old_to_new_posis_i_map: Map<number, number> = new Map(); // count number of posis
         for (const ent_arr of ents_arr) {
-            const [ent_type, index]: TEntTypeIdx = ent_arr as TEntTypeIdx;
+            const [ent_type, ent_i]: TEntTypeIdx = ent_arr as TEntTypeIdx;
             // something may not be right here
             // if you copy a pgon + posi, if you process the pgon first you wil make a copy of the posis
             // but the posi may already be copied by the this.copyGeom function, then we get two copies of that posi
             if (ent_type !== EEntType.POSI) { // obj or coll
-                const old_posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(ent_type, index);
+                const old_posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(ent_type, ent_i);
                 const ent_new_posis_i: number[] = [];
                 for (const old_posi_i of old_posis_i) {
                     let new_posi_i: number;
@@ -349,7 +349,7 @@ export class GIFuncsCommon {
                     }
                     ent_new_posis_i.push(new_posi_i);
                 }
-                this.modeldata.geom.edit_topo.replacePosis(ent_type, index, ent_new_posis_i);
+                this.modeldata.geom.edit_topo.replacePosis(ent_type, ent_i, ent_new_posis_i);
             }
         }
     }

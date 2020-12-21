@@ -20,7 +20,7 @@ import { GIGeomNavSnapshot } from './GIGeomNavSnapshot';
  */
 export class GIGeom {
     public modeldata: GIModelData;
-    public selected: TEntTypeIdx[]; // entities that should become selected
+    public selected: Map<Number, TEntTypeIdx[]>; // entities that should become selected
     //  all arrays
     public _geom_maps: IGeomMaps = {  // TODO this should not be public
         dn_verts_posis: new Map(),
@@ -75,7 +75,7 @@ export class GIGeom {
         this.threejs = new GIGeomThreejs(modeldata, this._geom_maps);
         this.snapshot = new GIGeomSnapshot(modeldata, this._geom_maps);
         this.nav_snapshot = new GIGeomNavSnapshot(modeldata, this._geom_maps);
-        this.selected = [];
+        this.selected = new Map();
     }
     /**
      * Generate a string for debugging

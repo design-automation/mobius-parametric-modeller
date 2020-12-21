@@ -251,6 +251,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }
         if (changes['attr_table_select']) {
             if (this.attr_table_select) {
+                console.log('~~~~')
                 this.attrTableSelect(this.attr_table_select);
             }
         }
@@ -615,7 +616,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                 this._no_model = false;
 
                 // Show Flowchart Selected Entities
-                const selected = this.model.modeldata.geom.selected;
+                const selected = this.model.modeldata.geom.selected[this.nodeIndex];
                 this.dataService.clearAll();
                 if (selected !== undefined && selected.length) {
                     let selectingType;

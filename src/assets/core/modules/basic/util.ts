@@ -21,7 +21,8 @@ import { _getFile } from './io';
  * @returns void
  */
 export function SelectEntities(__model__: GIModel, entities: string|string[]|string[][]): void {
-    __model__.modeldata.geom.selected = [];
+    __model__.modeldata.geom.selected[__model__.getActiveSnapshot()] = [];
+    const activeSelected = __model__.modeldata.geom.selected[__model__.getActiveSnapshot()];
     entities = ((Array.isArray(entities)) ? entities : [entities]) as string[];
     const [ents_id_flat, ents_indices] = _flatten(entities);
     const ents_arr: TEntTypeIdx[] = idsBreak(ents_id_flat) as TEntTypeIdx[];
@@ -30,7 +31,7 @@ export function SelectEntities(__model__: GIModel, entities: string|string[]|str
         const ent_arr: TEntTypeIdx = ents_arr[i];
         const ent_indices: number[] = ents_indices[i];
         const attrib_value: string = 'selected[' + ent_indices.join('][') + ']';
-        __model__.modeldata.geom.selected.push(ent_arr);
+        activeSelected.push(ent_arr);
         if (!__model__.modeldata.attribs.query.hasEntAttrib(ent_arr[0], attrib_name)) {
             __model__.modeldata.attribs.add.addAttrib(ent_arr[0], attrib_name, EAttribDataTypeStrs.STRING);
         }

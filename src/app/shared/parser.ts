@@ -99,6 +99,10 @@ export function modifyVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
     procedure.args[0].value = modifyVarArg(procedure.args[0]).trim();
     const modifiedVar = parseVariable(procedure.args[0].value);
     procedure.args[0].jsValue = modifiedVar.jsStr;
+    if (modifiedVar.jsStr && modifiedVar.jsStr.startsWith('__modules__')) {
+        procedure.args[0].invalidVar = `Error: Invalid query call: "${procedure.args[0].value}"`;
+        return;
+    }
     if (modifiedVar.valueStr) {
         procedure.args[0].value = modifiedVar.valueStr.trim();
     }

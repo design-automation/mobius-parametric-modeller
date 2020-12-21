@@ -74,7 +74,8 @@ export function __stringify__(__model__: GIModel): string {
  */
 export function __select__(__model__: GIModel, ents_id: string|string[]|string[][], var_name: string): void {
     const start = performance.now();
-    __model__.modeldata.geom.selected = [];
+    __model__.modeldata.geom.selected[__model__.getActiveSnapshot()] = [];
+    const activeSelected = __model__.modeldata.geom.selected[__model__.getActiveSnapshot()];
     ents_id = ((Array.isArray(ents_id)) ? ents_id : [ents_id]) as string[];
     const [ents_id_flat, ents_indices] = _flatten(ents_id);
     const ents_arr: TEntTypeIdx[] = idsBreak(ents_id_flat) as TEntTypeIdx[];
@@ -83,7 +84,7 @@ export function __select__(__model__: GIModel, ents_id: string|string[]|string[]
         const ent_arr: TEntTypeIdx = ents_arr[i];
         const ent_indices: number[] = ents_indices[i];
         const attrib_value: string = var_name + '[' + ent_indices.join('][') + ']';
-        __model__.modeldata.geom.selected.push(ent_arr);
+        activeSelected.push(ent_arr);
         if (!__model__.modeldata.attribs.query.hasEntAttrib(ent_arr[0], attrib_name)) {
             __model__.modeldata.attribs.add.addAttrib(ent_arr[0], attrib_name, EAttribDataTypeStrs.STRING);
         }

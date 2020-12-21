@@ -273,7 +273,7 @@ export interface IGeomJSONData {
     pgontris: TPgonTri[];
     pgons_i: number[];
     colls_i: number[];
-    selected: TEntTypeIdx[];
+    selected: Map<Number, TEntTypeIdx[]>;
 }
 export interface IAttribJSONData {
     name: string;

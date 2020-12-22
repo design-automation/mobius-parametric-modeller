@@ -203,7 +203,7 @@ export class GIGeomNav {
     private _navUpAnyToEdge(ent_type: EEntType, ent_i: number): number[] {
         // console.log("_navUpAnyToEdge");
         // if (ent_type > EEntType.EDGE) { throw new Error(); }
-        // if (ent_type === EEntType.EDGE) { return [ent_i]; }
+        if (ent_type === EEntType.EDGE) { return [ent_i]; }
         if (ent_type === EEntType.VERT) {
             const edges_i: number[] = [];
             const v_edges_i: number[] = this._geom_maps.up_verts_edges.get(ent_i);
@@ -237,7 +237,7 @@ export class GIGeomNav {
     private _navUpAnyToWire(ent_type: EEntType, ent_i: number): number[] {
         // console.log("_navUpAnyToWire");
         // if (ent_type > EEntType.WIRE) { throw new Error(); }
-        // if (ent_type === EEntType.WIRE) { return [ent_i]; }
+        if (ent_type === EEntType.WIRE) { return [ent_i]; }
         if (ent_type === EEntType.EDGE) {
             return [this._geom_maps.up_edges_wires.get(ent_i)];
         }
@@ -268,7 +268,7 @@ export class GIGeomNav {
     private _navUpAnyToPoint(ent_type: EEntType, ent_i: number): number[] {
         // console.log("_navUpAnyToPoint");
         // if (ent_type > EEntType.POINT) { throw new Error(); }
-        // if (ent_type === EEntType.POINT) { return [ent_i]; }
+        if (ent_type === EEntType.POINT) { return [ent_i]; }
         if (ent_type === EEntType.VERT) {
             const point_i: number = this._geom_maps.up_verts_points.get(ent_i);
             return point_i === undefined ? [] : [point_i];
@@ -290,7 +290,7 @@ export class GIGeomNav {
     private _navUpAnyToPline(ent_type: EEntType, ent_i: number): number[] {
         // console.log("_navUpAnyToPline");
         // if (ent_type > EEntType.PLINE) { throw new Error(); }
-        // if (ent_type === EEntType.PLINE) { return [ent_i]; }
+        if (ent_type === EEntType.PLINE) { return [ent_i]; }
         if (ent_type === EEntType.POINT) { return[]; }
         const plines_i: number[] = [];
         for (const wire_i of this._navUpAnyToWire(ent_type, ent_i)) {
@@ -306,7 +306,7 @@ export class GIGeomNav {
     private _navUpAnyToPgon(ent_type: EEntType, ent_i: number): number[] {
         // console.log("_navUpAnyToPgon");
         // if (ent_type > EEntType.PGON) { throw new Error(); }
-        // if (ent_type === EEntType.PGON) { return [ent_i]; }
+        if (ent_type === EEntType.PGON) { return [ent_i]; }
         if (ent_type > EEntType.WIRE) { return[]; } // point and pline
         const pgons_i: number[] = [];
         for (const wire_i of this._navUpAnyToWire(ent_type, ent_i)) {
@@ -324,7 +324,7 @@ export class GIGeomNav {
      */
     private _navUpAnyToColl(ent_type: EEntType, ent_i: number): number[] {
         // console.log("_navUpAnyToColl");
-        // if (ent_type === EEntType.COLL) { return [ent_i]; }
+        if (ent_type === EEntType.COLL) { return [ent_i]; }
         const colls_i: number[] = [];
         for (const point_i of this.navAnyToPoint(ent_type, ent_i)) {
             for (const coll_i of this.navPointToColl(point_i)) {
@@ -355,7 +355,7 @@ export class GIGeomNav {
     private _navDnAnyToWire(ent_type: EEntType, ent_i: number): number[] {
         // console.log("_navDnAnyToWire");
         // if (ent_type < EEntType.WIRE) { throw new Error(); }
-        // if (ent_type === EEntType.WIRE) { return [ent_i]; }
+        if (ent_type === EEntType.WIRE) { return [ent_i]; }
         if (ent_type === EEntType.PLINE) {
             return [this._geom_maps.dn_plines_wires.get(ent_i)];
         }
@@ -383,7 +383,7 @@ export class GIGeomNav {
     private _navDnAnyToEdge(ent_type: EEntType, ent_i: number): number[] {
         // console.log("_navDnAnyToEdge");
         // if (ent_type < EEntType.EDGE) { throw new Error(); }
-        // if (ent_type === EEntType.EDGE) { return [ent_i]; }
+        if (ent_type === EEntType.EDGE) { return [ent_i]; }
         if (ent_type === EEntType.WIRE) { return this._geom_maps.dn_wires_edges.get(ent_i); }
         const edges_i: number[] = [];
         for (const wire_i of this._navDnAnyToWire(ent_type, ent_i)) {
@@ -400,7 +400,7 @@ export class GIGeomNav {
     private _navDnAnyToVert(ent_type: EEntType, ent_i: number): number[] {
         // console.log("_navDnAnyToVert");
         // if (ent_type < EEntType.VERT) { throw new Error(); }
-        // if (ent_type === EEntType.VERT) { return [ent_i]; }
+        if (ent_type === EEntType.VERT) { return [ent_i]; }
         if (ent_type === EEntType.EDGE) { return this._geom_maps.dn_edges_verts.get(ent_i); }
         if (ent_type === EEntType.WIRE) { return this.modeldata.geom.query.getWireVerts(ent_i); }
         if (ent_type === EEntType.POINT) { return [this._geom_maps.dn_points_verts.get(ent_i)]; }
@@ -418,7 +418,7 @@ export class GIGeomNav {
      */
     private _navDnAnyToPosi(ent_type: EEntType, ent_i: number): number[] {
         // console.log("_navDnAnyToPosi");
-        // if (ent_type === EEntType.POSI) { return [ent_i]; }
+        if (ent_type === EEntType.POSI) { return [ent_i]; }
         if (ent_type === EEntType.VERT) { return [ this._geom_maps.dn_verts_posis.get(ent_i) ]; }
         // multiple verts can share the same vertex, so we need to check for dups
         const set_posis_i: Set<number> = new Set();

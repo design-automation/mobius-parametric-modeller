@@ -289,6 +289,7 @@ export class GIGeomQuery {
      */
     public getWireVerts(wire_i: number): number[] {
         const edges_i: number[] = this._geom_maps.dn_wires_edges.get(wire_i); // WARNING BY REF
+
         const verts_i: number[] = [];
         // walk the edges chain
         let next_edge_i: number = edges_i[0];
@@ -503,10 +504,12 @@ export class GIGeomQuery {
                 if (plines_i.length !== 0) {
                     return [EEntType.PLINE, plines_i[0]];
                 }
-                const points_i: number[] = this.modeldata.geom.nav.navAnyToPoint(ent_type, ent_i);
-                if (this.modeldata.geom.nav.navAnyToVert(ent_type, ent_i).length !== 0) {
-                    return [EEntType.POINT, points_i[0]];
+                // must be a vertex of a point, no other option
+                const point_i: number = this.modeldata.geom.nav.navVertToPoint(ent_i);
+                if (point_i !== undefined) {
+                    return [EEntType.POINT, point_i];
                 }
+                throw new Error('Error in geometry: Object for a topo entity not found.');
                 break;
             default:
                 throw new Error('Invalid entity type: Must be a topo entity.');

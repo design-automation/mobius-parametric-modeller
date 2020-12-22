@@ -9,6 +9,7 @@ import { IdGenerator } from '@utils';
 import { IMobius } from '@models/mobius';
 import { INode, NodeUtils } from '@models/node';
 import JSZip from 'jszip';
+import { _parameterTypes } from '@assets/core/modules';
 
 declare global {
     interface Navigator {
@@ -266,12 +267,8 @@ export class SaveFileComponent implements OnDestroy{
         nodeList.splice(nodeList.length - 1, 0, checkNode);
     }
 
-    static clearModelData(f: IFlowchart, modelMap = null, clearAll = true, clearState = true) {
+    static clearModelData(f: IFlowchart, clearAll = true, clearState = true) {
         for (const node of f.nodes) {
-            if (modelMap !== null) {
-                modelMap[node.id] = node.model;
-            }
-            node.model = undefined;
             if (node.input.hasOwnProperty('value')) {
                 node.input.value = undefined;
             }
@@ -377,19 +374,16 @@ export class SaveFileComponent implements OnDestroy{
 
         // clear the nodes' input/output in the flowchart, save them in modelMap
         // (save time on JSON stringify + parse)
-        const modelMap = {};
-        SaveFileComponent.clearModelData(f.flowchart, modelMap, false, false);
+        const flowchartModel = f.flowchart.model;
+        f.flowchart.model = undefined;
+        SaveFileComponent.clearModelData(f.flowchart, false, false);
 
         // make a copy of the flowchart
         const savedfile = circularJSON.parse(circularJSON.stringify(f));
+        f.flowchart.model = flowchartModel;
 
-        // set the nodes' input/output in the original flowchart again
-        for (const node of f.flowchart.nodes) {
-            node.model = modelMap[node.id];
-            modelMap[node.id] = null;
-        }
+        SaveFileComponent.clearModelData(savedfile.flowchart);
 
-        SaveFileComponent.clearModelData(savedfile.flowchart, {});
 
         // reset each node's id in the new copy of the flowchart --> the same node will
         // have different id everytime it's saved

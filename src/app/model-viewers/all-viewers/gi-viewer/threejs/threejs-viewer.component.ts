@@ -251,7 +251,6 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         }
         if (changes['attr_table_select']) {
             if (this.attr_table_select) {
-                console.log('~~~~')
                 this.attrTableSelect(this.attr_table_select);
             }
         }

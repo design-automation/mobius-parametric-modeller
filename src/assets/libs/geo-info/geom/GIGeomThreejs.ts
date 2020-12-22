@@ -65,21 +65,23 @@ export class GIGeomThreejs {
             const tri_mat_indices: number[] = [];
             if (pgon_material_attrib !== undefined) {
                 const mat_attrib_val: string|string[] = pgon_material_attrib.getEntVal(tri_pgon_i) as string|string[];
-                const pgon_mat_names: string[] = (Array.isArray(mat_attrib_val)) ? mat_attrib_val : [mat_attrib_val];
-                for (const pgon_mat_name of pgon_mat_names) {
-                    let pgon_mat_index: number = material_names.indexOf(pgon_mat_name);
-                    if (pgon_mat_index === -1) {
-                        const mat_settings_obj: object = this.modeldata.attribs.attribs_maps.get(ssid).mo.get(pgon_mat_name);
-                        if (mat_settings_obj !== undefined) {
-                            pgon_mat_index = materials.length;
-                            material_names.push(pgon_mat_name);
-                            materials.push(this._getPgonMaterial(mat_settings_obj));
-                        } else {
-                            throw new Error('Material not found: ' + pgon_mat_name);
+                if (mat_attrib_val !== undefined) {
+                    const pgon_mat_names: string[] = (Array.isArray(mat_attrib_val)) ? mat_attrib_val : [mat_attrib_val];
+                    for (const pgon_mat_name of pgon_mat_names) {
+                        let pgon_mat_index: number = material_names.indexOf(pgon_mat_name);
+                        if (pgon_mat_index === -1) {
+                            const mat_settings_obj: object = this.modeldata.attribs.attribs_maps.get(ssid).mo.get(pgon_mat_name);
+                            if (mat_settings_obj !== undefined) {
+                                pgon_mat_index = materials.length;
+                                material_names.push(pgon_mat_name);
+                                materials.push(this._getPgonMaterial(mat_settings_obj));
+                            } else {
+                                throw new Error('Material not found: ' + pgon_mat_name);
+                            }
                         }
-                    }
-                    if (pgon_mat_index !== -1) {
-                        tri_mat_indices.push(pgon_mat_index);
+                        if (pgon_mat_index !== -1) {
+                            tri_mat_indices.push(pgon_mat_index);
+                        }
                     }
                 }
             }

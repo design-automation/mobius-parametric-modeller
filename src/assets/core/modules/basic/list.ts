@@ -9,7 +9,8 @@
 /**
  *
  */
-import { checkArgs, ArgCh } from '../_check_args';
+
+import * as chk from '../../_check_types';
 
 import { idsBreak } from '@assets/libs/geo-info/common_id_funcs';
 import { TEntTypeIdx } from '@libs/geo-info/common';
@@ -48,8 +49,8 @@ export enum _EAddMethod {
 export function Add(list: any[], item: any|any[], method: _EAddMethod): void {
     // --- Error Check ---
     const fn_name = 'list.Add';
-    checkArgs(fn_name, 'list', list, [ArgCh.isList]);
-    checkArgs(fn_name, 'value', item, [ArgCh.isAny]);
+    chk.checkArgs(fn_name, 'list', list, [chk.isList]);
+    chk.checkArgs(fn_name, 'value', item, [chk.isAny]);
     // --- Error Check ---
     let str_value: string;
     switch (method) {
@@ -147,8 +148,8 @@ export enum _ERemoveMethod {
 export function Remove(list: any[], item: any, method: _ERemoveMethod): void {
     // --- Error Check ---
     const fn_name = 'list.Remove';
-    checkArgs(fn_name, 'list', list, [ArgCh.isList]);
-    checkArgs(fn_name, 'item', item, [ArgCh.isAny]);
+    chk.checkArgs(fn_name, 'list', list, [chk.isList]);
+    chk.checkArgs(fn_name, 'item', item, [chk.isAny]);
     // --- Error Check ---
     let index: number;
     switch (method) {
@@ -201,9 +202,9 @@ export enum _EReplaceMethod {
 export function Replace(list: any[], old_item: any, new_item: any, method: _EReplaceMethod): void {
     // --- Error Check ---
     const fn_name = 'list.Replace';
-    checkArgs(fn_name, 'list', list, [ArgCh.isList]);
-    checkArgs(fn_name, 'item', old_item, [ArgCh.isAny]);
-    checkArgs(fn_name, 'new_value', new_item, [ArgCh.isAny]);
+    chk.checkArgs(fn_name, 'list', list, [chk.isList]);
+    chk.checkArgs(fn_name, 'item', old_item, [chk.isAny]);
+    chk.checkArgs(fn_name, 'new_value', new_item, [chk.isAny]);
     // --- Error Check ---
     let index: number;
     switch (method) {
@@ -252,7 +253,7 @@ export function Replace(list: any[], old_item: any, new_item: any, method: _ERep
  */
 export function Sort(list: any[], method: _ESortMethod): void {
     // --- Error Check ---
-    checkArgs('list.Sort', 'list', list, [ArgCh.isList]);
+    chk.checkArgs('list.Sort', 'list', list, [chk.isList]);
     // --- Error Check ---
     _sort(list, method);
 }
@@ -353,10 +354,10 @@ function _sort(list: any[], method: _ESortMethod): void {
 export function Splice(list: any[], index: number, num_to_remove: number, items_to_insert: any[]): void {
     // --- Error Check ---
     const fn_name = 'list.Splice';
-    checkArgs(fn_name, 'list', list, [ArgCh.isList]);
-    checkArgs(fn_name, 'index', index, [ArgCh.isInt]);
-    checkArgs(fn_name, 'num_to_remove', num_to_remove, [ArgCh.isInt]);
-    checkArgs(fn_name, 'values_to_add', items_to_insert, [ArgCh.isList]);
+    chk.checkArgs(fn_name, 'list', list, [chk.isList]);
+    chk.checkArgs(fn_name, 'index', index, [chk.isInt]);
+    chk.checkArgs(fn_name, 'num_to_remove', num_to_remove, [chk.isInt]);
+    chk.checkArgs(fn_name, 'values_to_add', items_to_insert, [chk.isList]);
     // --- Error Check ---
 
     // avoid the spread operator

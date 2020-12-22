@@ -7,8 +7,9 @@
 /**
  *
  */
-import { checkIDs, ID } from '../_check_ids';
-import { checkArgs, ArgCh } from '../_check_args';
+import { checkIDs, ID } from '../../_check_ids';
+
+import * as chk from '../../_check_types';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { Txyz, EAttribNames, EAttribDataTypeStrs } from '@libs/geo-info/common';
@@ -116,7 +117,7 @@ export function Set(__model__: GIModel, entities: TId|TId[], material: string|st
         if (__model__.debug) {
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
                 [ID.isID, ID.isIDL, ID.isIDLL], null) as TEntTypeIdx[];
-            checkArgs(fn_name, 'material', material, [ArgCh.isStr, ArgCh.isStrL]);
+            chk.checkArgs(fn_name, 'material', material, [chk.isStr, chk.isStrL]);
         } else {
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
@@ -216,9 +217,9 @@ export function LineMat(__model__: GIModel, name: string,
     // --- Error Check ---
     if (__model__.debug) {
         const fn_name = 'material.LineMat';
-        checkArgs(fn_name, 'name', name, [ArgCh.isStr]);
-        checkArgs(fn_name, 'color', color, [ArgCh.isColor]);
-        checkArgs(fn_name, 'dash_gap_scale', dash_gap_scale, [ArgCh.isNull, ArgCh.isNum, ArgCh.isNumL]);
+        chk.checkArgs(fn_name, 'name', name, [chk.isStr]);
+        chk.checkArgs(fn_name, 'color', color, [chk.isColor]);
+        chk.checkArgs(fn_name, 'dash_gap_scale', dash_gap_scale, [chk.isNull, chk.isNum, chk.isNumL]);
     }
     // --- Error Check ---
     const vert_colors: number = _convertSelectEcolorsToNum(select_vert_colors);
@@ -288,9 +289,9 @@ export function MeshMat(__model__: GIModel, name: string,
     // --- Error Check ---
     if (__model__.debug) {
         const fn_name = 'material.MeshMat';
-        checkArgs(fn_name, 'name', name, [ArgCh.isStr]);
-        checkArgs(fn_name, 'color', color, [ArgCh.isColor]);
-        checkArgs(fn_name, 'opacity', opacity, [ArgCh.isNum01]);
+        chk.checkArgs(fn_name, 'name', name, [chk.isStr]);
+        chk.checkArgs(fn_name, 'color', color, [chk.isColor]);
+        chk.checkArgs(fn_name, 'opacity', opacity, [chk.isNum01]);
     }
     // --- Error Check ---
     const side: number = _convertSelectESideToNum(select_side);
@@ -324,8 +325,8 @@ export function Glass(__model__: GIModel, name: string, opacity: number): void {
     // --- Error Check ---
     const fn_name = 'material.Glass';
     if (__model__.debug) {
-        checkArgs(fn_name, 'name', name, [ArgCh.isStr]);
-        checkArgs(fn_name, 'opacity', opacity, [ArgCh.isNum01]);
+        chk.checkArgs(fn_name, 'name', name, [chk.isStr]);
+        chk.checkArgs(fn_name, 'opacity', opacity, [chk.isNum01]);
     }
     // --- Error Check ---
     opacity = _clamp01(opacity);
@@ -359,8 +360,8 @@ export function Lambert(__model__: GIModel, name: string, emissive: Txyz): void 
     // --- Error Check ---
     if (__model__.debug) {
         const fn_name = 'material.Lambert';
-        checkArgs(fn_name, 'name', name, [ArgCh.isStr]);
-        checkArgs(fn_name, 'emissive', emissive, [ArgCh.isXYZ]);
+        chk.checkArgs(fn_name, 'name', name, [chk.isStr]);
+        chk.checkArgs(fn_name, 'emissive', emissive, [chk.isXYZ]);
     }
     // --- Error Check ---
     _clampArr01(emissive);
@@ -394,10 +395,10 @@ export function Phong(__model__: GIModel, name: string,
     // --- Error Check ---
     if (__model__.debug) {
         const fn_name = 'material.Phong';
-        checkArgs(fn_name, 'name', name, [ArgCh.isStr]);
-        checkArgs(fn_name, 'emissive', emissive, [ArgCh.isXYZ]);
-        checkArgs(fn_name, 'emissive', specular, [ArgCh.isXYZ]);
-        checkArgs(fn_name, 'shininess', shininess, [ArgCh.isNum]);
+        chk.checkArgs(fn_name, 'name', name, [chk.isStr]);
+        chk.checkArgs(fn_name, 'emissive', emissive, [chk.isXYZ]);
+        chk.checkArgs(fn_name, 'emissive', specular, [chk.isXYZ]);
+        chk.checkArgs(fn_name, 'shininess', shininess, [chk.isNum]);
     }
     // --- Error Check ---
     _clampArr01(emissive);
@@ -437,10 +438,10 @@ export function Standard(__model__: GIModel, name: string,
     // --- Error Check ---
     if (__model__.debug) {
         const fn_name = 'material.Standard';
-        checkArgs(fn_name, 'name', name, [ArgCh.isStr]);
-        checkArgs(fn_name, 'emissive', emissive, [ArgCh.isXYZ]);
-        checkArgs(fn_name, 'roughness', roughness, [ArgCh.isNum]);
-        checkArgs(fn_name, 'metalness', metalness, [ArgCh.isNum]);
+        chk.checkArgs(fn_name, 'name', name, [chk.isStr]);
+        chk.checkArgs(fn_name, 'emissive', emissive, [chk.isXYZ]);
+        chk.checkArgs(fn_name, 'roughness', roughness, [chk.isNum]);
+        chk.checkArgs(fn_name, 'metalness', metalness, [chk.isNum]);
     }
     // --- Error Check ---
     _clampArr01(emissive);
@@ -481,11 +482,11 @@ export function Physical(__model__: GIModel, name: string,
     // --- Error Check ---
     if (__model__.debug) {
         const fn_name = 'material.Physical';
-        checkArgs(fn_name, 'name', name, [ArgCh.isStr]);
-        checkArgs(fn_name, 'emissive', emissive, [ArgCh.isXYZ]);
-        checkArgs(fn_name, 'roughness', roughness, [ArgCh.isNum]);
-        checkArgs(fn_name, 'metalness', metalness, [ArgCh.isNum]);
-        checkArgs(fn_name, 'reflectivity', reflectivity, [ArgCh.isNum]);
+        chk.checkArgs(fn_name, 'name', name, [chk.isStr]);
+        chk.checkArgs(fn_name, 'emissive', emissive, [chk.isXYZ]);
+        chk.checkArgs(fn_name, 'roughness', roughness, [chk.isNum]);
+        chk.checkArgs(fn_name, 'metalness', metalness, [chk.isNum]);
+        chk.checkArgs(fn_name, 'reflectivity', reflectivity, [chk.isNum]);
     }
     // --- Error Check ---
     _clampArr01(emissive);

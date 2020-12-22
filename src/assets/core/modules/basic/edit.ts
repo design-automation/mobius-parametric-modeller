@@ -7,8 +7,9 @@
 /**
  *
  */
-import { checkIDs, ID } from '../_check_ids';
-import { checkArgs, ArgCh } from '../_check_args';
+import { checkIDs, ID } from '../../_check_ids';
+
+import * as chk from '../../_check_types';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, TEntTypeIdx, IEntSets } from '@libs/geo-info/common';
@@ -65,7 +66,7 @@ export function Divide(__model__: GIModel, entities: TId|TId[], divisor: number,
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
         [ID.isID, ID.isIDL], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
-        checkArgs(fn_name, 'divisor', divisor, [ArgCh.isNum]);
+        chk.checkArgs(fn_name, 'divisor', divisor, [chk.isNum]);
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }

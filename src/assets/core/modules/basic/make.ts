@@ -6,8 +6,9 @@
 /**
  *
  */
-import { checkIDs, ID } from '../_check_ids';
-import { checkArgs, ArgCh } from '../_check_args';
+import { checkIDs, ID } from '../../_check_ids';
+
+import * as chk from '../../_check_types';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, Txyz, TEntTypeIdx, TPlane } from '@libs/geo-info/common';
@@ -58,7 +59,7 @@ export function Position(__model__: GIModel, coords: Txyz|Txyz[]|Txyz[][]): TId|
     if (isEmptyArr(coords)) { return []; }
     // --- Error Check ---
     if (__model__.debug) {
-        checkArgs('make.Position', 'coords', coords, [ArgCh.isXYZ, ArgCh.isXYZL, ArgCh.isXYZLL]);
+        chk.checkArgs('make.Position', 'coords', coords, [chk.isXYZ, chk.isXYZL, chk.isXYZLL]);
     }
     // --- Error Check ---
     const new_ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] = __model__.modeldata.funcs_make.position(coords);
@@ -231,8 +232,8 @@ export function Extrude(__model__: GIModel, entities: TId|TId[],
             [ID.isID, ID.isIDL],
             [EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
             EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
-        checkArgs(fn_name, 'dist', dist, [ArgCh.isNum, ArgCh.isXYZ]);
-        checkArgs(fn_name, 'divisions', divisions, [ArgCh.isInt]);
+        chk.checkArgs(fn_name, 'dist', dist, [chk.isNum, chk.isXYZ]);
+        chk.checkArgs(fn_name, 'divisions', divisions, [chk.isInt]);
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     }
@@ -268,7 +269,7 @@ export function Sweep(__model__: GIModel, entities: TId|TId[], x_section: TId, d
             [ID.isID, ID.isIDL], [EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
         xsection_ent = checkIDs(__model__, fn_name, 'xsextion', x_section,
             [ID.isID], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx;
-        checkArgs(fn_name, 'divisions', divisions, [ArgCh.isInt]);
+        chk.checkArgs(fn_name, 'divisions', divisions, [chk.isInt]);
         if (divisions === 0) {
             throw new Error(fn_name + ' : Divisor cannot be zero.');
         }
@@ -312,7 +313,7 @@ export function Cut(__model__: GIModel, entities: TId|TId[], plane: TPlane, meth
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
             [ID.isID, ID.isIDL], null) as TEntTypeIdx[];
-        checkArgs(fn_name, 'plane', plane, [ArgCh.isPln]);
+        chk.checkArgs(fn_name, 'plane', plane, [chk.isPln]);
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
@@ -348,7 +349,7 @@ export function Copy(__model__: GIModel, entities: TId|TId[]|TId[][], vector: Tx
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
         [ID.isID, ID.isIDL, ID.isIDLL],
         [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
-        checkArgs(fn_name, 'vector', vector, [ArgCh.isXYZ, ArgCh.isNull]);
+        chk.checkArgs(fn_name, 'vector', vector, [chk.isXYZ, chk.isNull]);
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
     }

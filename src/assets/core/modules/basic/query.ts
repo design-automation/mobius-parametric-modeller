@@ -8,8 +8,8 @@
 /**
  *
  */
-import { checkIDs, ID } from '../_check_ids';
-import { checkAttribNameIdxKey, checkAttribValue, splitAttribNameIdxKey } from '../_check_attribs';
+import { checkIDs, ID } from '../../_check_ids';
+import { checkAttribNameIdxKey, checkAttribValue, splitAttribNameIdxKey } from '../../_check_attribs';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, ESort, TEntTypeIdx, EFilterOperatorTypes, TAttribDataTypes} from '@libs/geo-info/common';

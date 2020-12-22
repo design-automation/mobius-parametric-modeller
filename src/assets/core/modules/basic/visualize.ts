@@ -7,8 +7,9 @@
  *
  */
 
-import { checkIDs, ID } from '../_check_ids';
-import { checkArgs, ArgCh } from '../_check_args';
+import { checkIDs, ID } from '../../_check_ids';
+
+import * as chk from '../../_check_types';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { Txyz, TColor, EAttribNames, EAttribDataTypeStrs, EAttribPush, TRay, TPlane, TBBox } from '@libs/geo-info/common';
@@ -47,7 +48,7 @@ export function Color(__model__: GIModel, entities: TId|TId[], color: TColor): v
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
                 [ID.isID, ID.isIDL, ID.isIDLL], null) as TEntTypeIdx[];
         }
-        checkArgs(fn_name, 'color', color, [ArgCh.isColor]);
+        chk.checkArgs(fn_name, 'color', color, [chk.isColor]);
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
@@ -103,9 +104,9 @@ export function Gradient(__model__: GIModel, entities: TId|TId[], attrib: string
         if (__model__.debug) {
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
                 [ID.isID, ID.isIDL, ID.isIDLL], null) as TEntTypeIdx[];
-            checkArgs(fn_name, 'attrib', attrib,
-                [ArgCh.isStr, ArgCh.isStrStr, ArgCh.isStrNum]);
-            checkArgs(fn_name, 'range', range, [ArgCh.isNull, ArgCh.isNum, ArgCh.isNumL]);
+            chk.checkArgs(fn_name, 'attrib', attrib,
+                [chk.isStr, chk.isStrStr, chk.isStrNum]);
+            chk.checkArgs(fn_name, 'range', range, [chk.isNull, chk.isNum, chk.isNumL]);
             attrib_name = Array.isArray(attrib) ? attrib[0] : attrib;
             attrib_idx_or_key = Array.isArray(attrib) ? attrib[1] : null;
             if (!__model__.modeldata.attribs.query.hasEntAttrib(ents_arr[0][0], attrib_name)) {
@@ -496,8 +497,8 @@ export function Ray(__model__: GIModel, rays: TRay|TRay[], scale: number): TId[]
     // --- Error Check ---
     const fn_name = 'visualize.Ray';
     if (__model__.debug) {
-        checkArgs(fn_name, 'ray', rays, [ArgCh.isRay, ArgCh.isRayL]);
-        checkArgs(fn_name, 'scale', scale, [ArgCh.isNum]);
+        chk.checkArgs(fn_name, 'ray', rays, [chk.isRay, chk.isRayL]);
+        chk.checkArgs(fn_name, 'scale', scale, [chk.isNum]);
     }
     // --- Error Check ---
    return idsMake(_visRay(__model__, rays, scale)) as TId[];
@@ -564,9 +565,9 @@ export function Plane(__model__: GIModel, planes: TPlane|TPlane[], scale: number
     // --- Error Check ---
     const fn_name = 'visualize.Plane';
     if (__model__.debug) {
-        checkArgs(fn_name, 'planes', planes,
-            [ArgCh.isPln, ArgCh.isPlnL]);
-        checkArgs(fn_name, 'scale', scale, [ArgCh.isNum]);
+        chk.checkArgs(fn_name, 'planes', planes,
+            [chk.isPln, chk.isPlnL]);
+        chk.checkArgs(fn_name, 'scale', scale, [chk.isNum]);
     }
     // --- Error Check ---
     return idsMake(_visPlane(__model__, planes, scale)) as TId[];
@@ -643,7 +644,7 @@ export function BBox(__model__: GIModel, bboxes: TBBox|TBBox): TId[] {
     // --- Error Check ---
     const fn_name = 'visualize.BBox';
     if (__model__.debug) {
-        checkArgs(fn_name, 'bbox', bboxes, [ArgCh.isBBox]); // TODO bboxs can be a list // add isBBoxList to enable check
+        chk.checkArgs(fn_name, 'bbox', bboxes, [chk.isBBox]); // TODO bboxs can be a list // add isBBoxList to enable check
     }
     // --- Error Check ---
     return  idsMake(_visBBox(__model__, bboxes)) as TId[];

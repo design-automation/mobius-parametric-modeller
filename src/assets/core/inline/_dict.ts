@@ -2,9 +2,9 @@
  * Functions for working with dictionaries. The functions do not modify input dictionaries.
  */
 import lodash from 'lodash';
-import { checkArgs } from '../modules/_check_args';
-import { isDict, isStr, isStrL } from '../modules/_check_types';
-import { checkNumArgs } from './_check_inline_args';
+import * as chk from '../_check_types';
+import { isDict, isStr, isStrL } from '../_check_types';
+import { checkNumArgs } from '../_check_inline_args';
 
 /**
  * Returns the item in the dictionary specified by key.
@@ -18,8 +18,8 @@ import { checkNumArgs } from './_check_inline_args';
 export function dictGet(debug: boolean, dict: object, key: string|string[]): any|any[] {
     if (debug) {
         checkNumArgs('dictGet', arguments, 2);
-        checkArgs('dictGet', 'dict', dict, [isDict]);
-        checkArgs('dictGet', 'key', key, [isStr, isStrL]);
+        chk.checkArgs('dictGet', 'dict', dict, [isDict]);
+        chk.checkArgs('dictGet', 'key', key, [isStr, isStrL]);
     }
     if (Array.isArray(key)) { return key.map( a_key => dict[a_key]) as any[]; }
     return dict[key] as any;
@@ -32,7 +32,7 @@ export function dictGet(debug: boolean, dict: object, key: string|string[]): any
 export function dictKeys(debug: boolean, dict: object): string[] {
     if (debug) {
         checkNumArgs('dictKeys', arguments, 1);
-        checkArgs('dictKeys', 'dict', dict, [isDict]);
+        chk.checkArgs('dictKeys', 'dict', dict, [isDict]);
     }
     return Object.keys(dict);
 }
@@ -44,7 +44,7 @@ export function dictKeys(debug: boolean, dict: object): string[] {
 export function dictVals(debug: boolean, dict: object): string[] {
     if (debug) {
         checkNumArgs('dictVals', arguments, 1);
-        checkArgs('dictVals', 'dict', dict, [isDict]);
+        chk.checkArgs('dictVals', 'dict', dict, [isDict]);
     }
     return Object.values(dict);
 }
@@ -59,8 +59,8 @@ export function dictVals(debug: boolean, dict: object): string[] {
 export function dictHasKey(debug: boolean, dict: object, key: string|string[]): boolean|boolean[] {
     if (debug) {
         checkNumArgs('dictHasKey', arguments, 2);
-        checkArgs('dictHasKey', 'dict', dict, [isDict]);
-        checkArgs('dictHasKey', 'key', key, [isStr, isStrL]);
+        chk.checkArgs('dictHasKey', 'dict', dict, [isDict]);
+        chk.checkArgs('dictHasKey', 'key', key, [isStr, isStrL]);
     }
     if (Array.isArray(key)) { return key.map( a_key => dict.hasOwnProperty(a_key)) as boolean[]; }
     return dict.hasOwnProperty(key);
@@ -74,7 +74,7 @@ export function dictHasKey(debug: boolean, dict: object, key: string|string[]): 
 export function dictHasVal(debug: boolean, dict: object, val: any): boolean {
     if (debug) {
         checkNumArgs('dictHasVal', arguments, 2);
-        checkArgs('dictHasVal', 'dict', dict, [isDict]);
+        chk.checkArgs('dictHasVal', 'dict', dict, [isDict]);
     }
     return Object.values(dict).indexOf(val) !== -1;
 }
@@ -89,7 +89,7 @@ export function dictHasVal(debug: boolean, dict: object, val: any): boolean {
 export function dictFind(debug: boolean, dict: object, val: any|any[]): string {
     if (debug) {
         checkNumArgs('dictFind', arguments, 2);
-        checkArgs('dictFind', 'dict', dict, [isDict]);
+        chk.checkArgs('dictFind', 'dict', dict, [isDict]);
     }
     for (const key of Object.keys(dict)) {
         if (dict[key] === val) { return key; }
@@ -106,7 +106,7 @@ export function dictFind(debug: boolean, dict: object, val: any|any[]): string {
 export function dictCopy(debug: boolean, dict: object): object {
     if (debug) {
         checkNumArgs('dictCopy', arguments, 1);
-        checkArgs('dictCopy', 'dict', dict, [isDict]);
+        chk.checkArgs('dictCopy', 'dict', dict, [isDict]);
     }
     return lodash.cloneDeep(dict);
 }
@@ -121,8 +121,8 @@ export function dictCopy(debug: boolean, dict: object): object {
 export function dictEq(debug: boolean, dict1: any[], dict2: any[]): boolean {
     if (debug) {
         checkNumArgs('dictEq', arguments, 2);
-        checkArgs('dictEq', 'dict1', dict1, [isDict]);
-        checkArgs('dictEq', 'dict2', dict2, [isDict]);
+        chk.checkArgs('dictEq', 'dict1', dict1, [isDict]);
+        chk.checkArgs('dictEq', 'dict2', dict2, [isDict]);
     }
     return lodash.isEqual(dict1, dict2);
 }

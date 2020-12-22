@@ -8,9 +8,10 @@
 /**
  *
  */
-import { checkIDs, ID } from '../_check_ids';
+import { checkIDs, ID } from '../../_check_ids';
+
 import { checkAttribValue, checkAttribName,
-    checkAttribIdxKey, checkAttribNameIdxKey, splitAttribNameIdxKey } from '../_check_attribs';
+    checkAttribIdxKey, checkAttribNameIdxKey, splitAttribNameIdxKey } from '../../_check_attribs';
 
 import uscore from 'underscore';
 import { GIModel } from '@libs/geo-info/GIModel';

@@ -2,9 +2,8 @@
  * list functions that obtain and return information from an input list. Does not modify input list.
  */
 import lodash from 'lodash';
-import { checkArgs } from '../modules/_check_args';
-import * as chk from '../modules/_check_types';
-import { checkListsSameLen, checkNumArgs } from './_check_inline_args';
+import * as chk from '../_check_types';
+import { checkListsSameLen, checkNumArgs } from '../_check_inline_args';
 /**
  * Generates a list of integers, from start to end, with a step size of 1
  * Generates a list of integers, from start to end, with a specified step size
@@ -16,9 +15,9 @@ import { checkListsSameLen, checkNumArgs } from './_check_inline_args';
 export function range(debug: boolean, start: number, end?: number, step?: number): number[] {
     if (debug) {
         checkNumArgs('range', arguments, 3, 1);
-        checkArgs('range', 'start', start, [chk.isInt]);
-        if (end !== undefined) { checkArgs('range', 'end', end, [chk.isInt]); }
-        if (step !== undefined) { checkArgs('range', 'step', step, [chk.isInt]); }
+        chk.checkArgs('range', 'start', start, [chk.isNum]);
+        if (end !== undefined) { chk.checkArgs('range', 'end', end, [chk.isNum]); }
+        if (step !== undefined) { chk.checkArgs('range', 'step', step, [chk.isNum]);    }
     }
     if (start === undefined) { throw new Error('Invalid inline arg: min must be defined.'); }
     if (end === undefined) { end = start; start = 0; }
@@ -46,7 +45,7 @@ export function range(debug: boolean, start: number, end?: number, step?: number
 export function listCount(debug: boolean, list: any[], val: any): number {
     if (debug) {
         checkNumArgs('listCount', arguments, 2);
-        checkArgs('listCount', 'list', list, [chk.isList]);
+        chk.checkArgs('listCount', 'list', list, [chk.isList]);
     }
     let count = 0;
     for (let i = 0; i < list.length; i++) {
@@ -64,7 +63,7 @@ export function listCount(debug: boolean, list: any[], val: any): number {
 export function listCopy(debug: boolean, list: any[]): any[] {
     if (debug) {
         checkNumArgs('listCopy', arguments, 1);
-        checkArgs('listCopy', 'list', list, [chk.isList]);
+        chk.checkArgs('listCopy', 'list', list, [chk.isList]);
     }
     return list.slice();
 }
@@ -77,7 +76,7 @@ export function listCopy(debug: boolean, list: any[]): any[] {
 export function listRep(debug: boolean, list: any, n: number): any[] {
     if (debug) {
         checkNumArgs('listRep', arguments, 2);
-        checkArgs('listRep', 'n', n, [chk.isInt]);
+        chk.checkArgs('listRep', 'n', n, [chk.isInt]);
     }
     list = Array.isArray(list) ? list : [list];
     const result: any[] = [];
@@ -97,8 +96,8 @@ export function listRep(debug: boolean, list: any, n: number): any[] {
 export function listGet(debug: boolean, list: any[], idx: number|number[]): any|any[] {
     if (debug) {
         checkNumArgs('listGet', arguments, 2);
-        checkArgs('listGet', 'list', list, [chk.isList]);
-        checkArgs('listGet', 'index', idx, [chk.isInt, chk.isIntL]);
+        chk.checkArgs('listGet', 'list', list, [chk.isList]);
+        chk.checkArgs('listGet', 'index', idx, [chk.isInt, chk.isIntL]);
     }
     if (Array.isArray(idx)) { return idx.map( a_idx => listGet(debug, list, a_idx)) as any[]; }
     if (idx < 0) { idx = list.length + idx; }
@@ -115,7 +114,7 @@ export function listGet(debug: boolean, list: any[], idx: number|number[]): any|
 export function listFind(debug: boolean, list: any[], val: any): number {
     if (debug) {
         checkNumArgs('listFind', arguments, 2);
-        checkArgs('listFind', 'list', list, [chk.isList]);
+        chk.checkArgs('listFind', 'list', list, [chk.isList]);
     }
     const index = list.indexOf(val);
     if (index === -1) {
@@ -132,7 +131,7 @@ export function listFind(debug: boolean, list: any[], val: any): number {
 export function listHas(debug: boolean, list: any[], val: any): boolean {
     if (debug) {
         checkNumArgs('listHas', arguments, 2);
-        checkArgs('listHas', 'list', list, [chk.isList]);
+        chk.checkArgs('listHas', 'list', list, [chk.isList]);
     }
     return list.indexOf(val) !== -1;
 }
@@ -174,8 +173,8 @@ export function listJoin(debug: boolean, list1: any[], list2: any[]): any[] {
 export function listFlat(debug: boolean, list: any[], depth?: number): any[] {
     if (debug) {
         checkNumArgs('listFlat', arguments, 2, 1);
-        checkArgs('listFlat', 'list', list, [chk.isList]);
-        if (depth !== undefined) { checkArgs('listFlat', 'depth', depth, [chk.isInt]); }
+        chk.checkArgs('listFlat', 'list', list, [chk.isList]);
+        if (depth !== undefined) { chk.checkArgs('listFlat', 'depth', depth, [chk.isInt]); }
     }
     if (depth !== undefined) {
         return lodash.flattenDepth(list);
@@ -193,8 +192,8 @@ export function listFlat(debug: boolean, list: any[], depth?: number): any[] {
 export function listRot(debug: boolean, list: any[], rot: number): any[] {
     if (debug) {
         checkNumArgs('listRot', arguments, 2);
-        checkArgs('listRot', 'list', list, [chk.isList]);
-        checkArgs('listRot', 'rot', rot, [chk.isInt]);
+        chk.checkArgs('listRot', 'list', list, [chk.isList]);
+        chk.checkArgs('listRot', 'rot', rot, [chk.isInt]);
     }
     const len: number = list.length;
     const split: number = (len - rot) % len;
@@ -212,9 +211,9 @@ export function listRot(debug: boolean, list: any[], rot: number): any[] {
 export function listSlice(debug: boolean, list: any[], start: number, end?: number): any[] {
     if (debug) {
         checkNumArgs('listSlice', arguments, 3, 2);
-        checkArgs('listSlice', 'list', list, [chk.isList]);
-        checkArgs('listSlice', 'start', start, [chk.isInt]);
-        if (end !== undefined) { checkArgs('listSlice', 'end', end, [chk.isInt]); }
+        chk.checkArgs('listSlice', 'list', list, [chk.isList]);
+        chk.checkArgs('listSlice', 'start', start, [chk.isInt]);
+        if (end !== undefined) { chk.checkArgs('listSlice', 'end', end, [chk.isInt]); }
     }
     return list.slice(start, end);
 }
@@ -226,7 +225,7 @@ export function listSlice(debug: boolean, list: any[], start: number, end?: numb
 export function listRev(debug: boolean, list: any[]): any[] {
     if (debug) {
         checkNumArgs('listRev', arguments, 1);
-        checkArgs('listRev', 'list', list, [chk.isList]);
+        chk.checkArgs('listRev', 'list', list, [chk.isList]);
     }
     return list.slice().reverse();
 }
@@ -242,8 +241,8 @@ export function listRev(debug: boolean, list: any[]): any[] {
 export function listCull(debug: boolean, list1: any[], list2?: any[]): any[] {
     if (debug) {
         checkNumArgs('listCull', arguments, 2, 1);
-        checkArgs('listCull', 'list1', list1, [chk.isList]);
-        if (list2 !== undefined) { checkArgs('listCull', 'list2', list2, [chk.isList]); }
+        chk.checkArgs('listCull', 'list1', list1, [chk.isList]);
+        if (list2 !== undefined) { chk.checkArgs('listCull', 'list2', list2, [chk.isList]); }
     }
     list2 = list2 !== undefined ? list2 : list1;
     const result: any[] = [];
@@ -269,9 +268,9 @@ export function listCull(debug: boolean, list1: any[], list2?: any[]): any[] {
 export function listSort(debug: boolean, list1: any[], list2?: any[]): any[] {
     if (debug) {
         checkNumArgs('listSort', arguments, 2, 1);
-        checkArgs('listSort', 'list1', list1, [chk.isList]);
+        chk.checkArgs('listSort', 'list1', list1, [chk.isList]);
         if (list2 !== undefined) {
-            checkArgs('listSort', 'list2', list1, [chk.isList]);
+            chk.checkArgs('listSort', 'list2', list1, [chk.isList]);
             checkListsSameLen('listSort', arguments);
         }
     }
@@ -299,9 +298,10 @@ export function listSort(debug: boolean, list1: any[], list2?: any[]): any[] {
 export function listZip(debug: boolean, list1: any[], list2?: any[]): any[] {
     if (debug) {
         if (list2 === undefined) {
-            checkArgs('listZip', 'list1', list1, [chk.isLList]);
+            chk.checkArgs('listZip', 'list1', list1, [chk.isLList]);
         } else {
-            checkArgs('listZip', 'list1', list1, [chk.isList]);
+            chk.checkArgs('listZip', 'list1', list1, [chk.isList]);
+            chk.checkArgs('listZip', 'list2', list2, [chk.isList]);
             checkListsSameLen('listZip', arguments);
         }
     }
@@ -320,8 +320,8 @@ export function listZip(debug: boolean, list1: any[], list2?: any[]): any[] {
 export function listEq(debug: boolean, list1: any[], list2: any[]): boolean {
     if (debug) {
         checkNumArgs('listEq', arguments, 2);
-        checkArgs('listEq', 'list1', list1, [chk.isList]);
-        checkArgs('listEq', 'list2', list2, [chk.isList]);
+        chk.checkArgs('listEq', 'list1', list1, [chk.isList]);
+        chk.checkArgs('listEq', 'list2', list2, [chk.isList]);
     }
     return lodash.isEqual(list1, list2);
 }

@@ -5,8 +5,9 @@
 /**
  *
  */
-import { checkIDs, ID } from '../_check_ids';
-import { checkArgs, ArgCh } from '../_check_args';
+import { checkIDs, ID } from '../../_check_ids';
+
+import * as chk from '../../_check_types';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, EEntType, TEntTypeIdx, EFilterOperatorTypes, EAttribNames } from '@libs/geo-info/common';
@@ -21,7 +22,7 @@ import { arrMakeFlat } from '@libs/util/arrs';
  * Create a new collection.
  *
  * If the `entities` argument is null or an empty list, then an empty collection will be created.
- * 
+ *
  * If the `name` argument is null, then no name attribute will be created for the collection.
  *
  * If the list of entities contains other collections, these other collections will then become
@@ -43,7 +44,7 @@ export function Create(__model__: GIModel, entities: TId|TId[]|TId[][], name: st
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
             [ID.isID, ID.isIDL, ID.isIDLL],
             [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-        checkArgs(fn_name, 'name', name, [ArgCh.isStr, ArgCh.isNull]);
+        chk.checkArgs(fn_name, 'name', name, [chk.isStr, chk.isNull]);
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
@@ -98,7 +99,7 @@ export function Get(__model__: GIModel, names: string|string[]): TId|TId[] {
     // --- Error Check ---
     if (__model__.debug) {
         const fn_name = 'collection.Get';
-        checkArgs(fn_name, 'names', names, [ArgCh.isStr, ArgCh.isStrL]);
+        chk.checkArgs(fn_name, 'names', names, [chk.isStr, chk.isStrL]);
     }
     // --- Error Check ---
     const colls_i: number[] = _get(__model__, names);

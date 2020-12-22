@@ -5,8 +5,9 @@
 /**
  *
  */
-import { checkIDs, ID } from '../_check_ids';
-import { checkArgs, ArgCh } from '../_check_args';
+import { checkIDs, ID } from '../../_check_ids';
+
+import * as chk from '../../_check_types';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EEntType, TId, TEntTypeIdx, Txyz, Txy, TPlane } from '@libs/geo-info/common';
@@ -926,7 +927,7 @@ export function OffsetMitre(__model__: GIModel, entities: TId|TId[], dist: numbe
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
             [ID.isID, ID.isIDL], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
-        checkArgs(fn_name, 'miter_limit', limit, [ArgCh.isNum]);
+        chk.checkArgs(fn_name, 'miter_limit', limit, [chk.isNum]);
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,
         //     [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
@@ -1041,7 +1042,7 @@ export function OffsetRound(__model__: GIModel, entities: TId|TId[], dist: numbe
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
             [ID.isID, ID.isIDL], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
-        checkArgs(fn_name, 'tolerance', tolerance, [ArgCh.isNum]);
+        chk.checkArgs(fn_name, 'tolerance', tolerance, [chk.isNum]);
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,
         // [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
@@ -1342,7 +1343,7 @@ export function Clean(__model__: GIModel, entities: TId|TId[], tolerance: number
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
             [ID.isID, ID.isIDL], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
-        checkArgs(fn_name, 'tolerance', tolerance, [ArgCh.isNum]);
+        chk.checkArgs(fn_name, 'tolerance', tolerance, [chk.isNum]);
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,
         //     [IDcheckObj.isID, IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];

@@ -5,8 +5,9 @@
 /**
  *
  */
-import { checkIDs, ID } from '../_check_ids';
-import { checkArgs, ArgCh } from '../_check_args';
+import { checkIDs, ID } from '../../_check_ids';
+
+import * as chk from '../../_check_types';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { importObj, exportPosiBasedObj, exportVertBasedObj } from '@assets/libs/geo-info/io/io_obj';
@@ -249,7 +250,7 @@ export async function Export(__model__: GIModel, entities: TId|TId[]|TId[][],
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
                 [ID.isIDL], [EEntType.PLINE, EEntType.PGON, EEntType.COLL])  as TEntTypeIdx[];
         }
-        checkArgs(fn_name, 'file_name', file_name, [ArgCh.isStr, ArgCh.isStrL]);
+        chk.checkArgs(fn_name, 'file_name', file_name, [chk.isStr, chk.isStrL]);
     } else {
         if (entities !== null) {
             entities = arrMakeFlat(entities) as TId[];

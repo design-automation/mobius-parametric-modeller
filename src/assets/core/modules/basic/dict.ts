@@ -10,7 +10,8 @@
  *
  */
 
-import { checkArgs, ArgCh } from '../_check_args';
+
+import * as chk from '../../_check_types';
 
 // ================================================================================================
 /**
@@ -24,8 +25,8 @@ import { checkArgs, ArgCh } from '../_check_args';
 export function Add(dict: object, keys: string|string[], values: any|any[]): void {
     // --- Error Check ---
     const fn_name = 'dict.Add';
-    checkArgs(fn_name, 'keys', keys, [ArgCh.isStr, ArgCh.isStrL]);
-    checkArgs(fn_name, 'values', keys, [ArgCh.isAny, ArgCh.isList]);
+    chk.checkArgs(fn_name, 'keys', keys, [chk.isStr, chk.isStrL]);
+    chk.checkArgs(fn_name, 'values', keys, [chk.isAny, chk.isList]);
     keys = Array.isArray(keys) ? keys : [keys];
     values = Array.isArray(values) ? values : [values];
     if (keys.length !== values.length) {
@@ -49,7 +50,7 @@ export function Add(dict: object, keys: string|string[], values: any|any[]): voi
 export function Remove(dict: object, keys: string|string[]): void {
     // --- Error Check ---
     const fn_name = 'dict.Remove';
-    checkArgs(fn_name, 'key', keys, [ArgCh.isStr, ArgCh.isStrL]);
+    chk.checkArgs(fn_name, 'key', keys, [chk.isStr, chk.isStrL]);
     // --- Error Check ---
     if (!Array.isArray(keys)) { keys = [keys] as string[]; }
     keys = keys as string[];
@@ -75,8 +76,8 @@ export function Remove(dict: object, keys: string|string[]): void {
 export function Replace(dict: object, old_keys: string|string[], new_keys: string|string[]): void {
     // --- Error Check ---
     const fn_name = 'dict.Replace';
-    checkArgs(fn_name, 'old_keys', old_keys, [ArgCh.isStr, ArgCh.isStrL]);
-    checkArgs(fn_name, 'new_keys', new_keys, [ArgCh.isStr, ArgCh.isStrL]);
+    chk.checkArgs(fn_name, 'old_keys', old_keys, [chk.isStr, chk.isStrL]);
+    chk.checkArgs(fn_name, 'new_keys', new_keys, [chk.isStr, chk.isStrL]);
     old_keys = Array.isArray(old_keys) ? old_keys : [old_keys];
     new_keys = Array.isArray(new_keys) ? new_keys : [new_keys];
     if (old_keys.length !== new_keys.length) {

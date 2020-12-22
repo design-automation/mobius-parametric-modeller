@@ -23,7 +23,7 @@ import { xformMatrix, multMatrix } from '@assets/libs/geom/matrix';
 // ================================================================================================
 /**
  * Add multiple vectors
- * @param v 
+ * @param v
  */
 export function vecSum(debug: boolean, ...v: Txyz[]): Txyz {
     const depth1: number = getArrDepth(v);
@@ -39,9 +39,9 @@ export function vecSum(debug: boolean, ...v: Txyz[]): Txyz {
 // ================================================================================================
 /**
  * Adds two vectors
- * @param v1 
- * @param v2 
- * @param norm 
+ * @param v1
+ * @param v2
+ * @param norm
  */
 export function vecAdd(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], norm: boolean = false): Txyz|Txyz[] {
     // overloaded case
@@ -74,9 +74,9 @@ export function vecAdd(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], norm: b
 // ================================================================================================
 /**
  * Subtracts v2 from v1
- * @param v1 
- * @param v2 
- * @param norm 
+ * @param v1
+ * @param v2
+ * @param norm
  */
 export function vecSub(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], norm: boolean = false): Txyz|Txyz[] {
     // overloaded case
@@ -109,8 +109,8 @@ export function vecSub(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], norm: b
 // ================================================================================================
 /**
  * Divides a vector by a numbe
- * @param v 
- * @param num 
+ * @param v
+ * @param num
  */
 export function vecDiv(debug: boolean, v: Txyz|Txyz[], num: number|number[]): Txyz|Txyz[] {
     // overloaded case
@@ -144,8 +144,8 @@ export function vecDiv(debug: boolean, v: Txyz|Txyz[], num: number|number[]): Tx
 // ================================================================================================
 /**
  * Multiplies a vector by a number
- * @param v 
- * @param num 
+ * @param v
+ * @param num
  */
 export function vecMult(debug: boolean, v: Txyz|Txyz[], num: number|number[]): Txyz|Txyz[] {
     // overloaded case
@@ -179,8 +179,8 @@ export function vecMult(debug: boolean, v: Txyz|Txyz[], num: number|number[]): T
 // ================================================================================================
 /**
  * Sets the magnitude of a vector
- * @param v 
- * @param num 
+ * @param v
+ * @param num
  */
 export function vecSetLen(debug: boolean, v: Txyz|Txyz[], num: number|number[]): Txyz|Txyz[] {
     // overloaded case
@@ -214,8 +214,8 @@ export function vecSetLen(debug: boolean, v: Txyz|Txyz[], num: number|number[]):
 // ================================================================================================
 /**
  * Calculates the dot product of two vectors
- * @param v1 
- * @param v2 
+ * @param v1
+ * @param v2
  */
 export function vecDot(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[]): number|number[] {
     // overloaded case
@@ -248,8 +248,8 @@ export function vecDot(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[]): number
 // ================================================================================================
 /**
  * Calculates the cross product of two vectors
- * @param v1 
- * @param v2 
+ * @param v1
+ * @param v2
  */
 export function vecCross(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[]): Txyz|Txyz[] {
     // overloaded case
@@ -282,8 +282,8 @@ export function vecCross(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[]): Txyz
 // ================================================================================================
 /**
  * Calculate the angle (0 to PI) between two vectors
- * @param v1 
- * @param v2 
+ * @param v1
+ * @param v2
  */
 export function vecAng(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[]): number|number[] {
     // overloaded case
@@ -316,8 +316,8 @@ export function vecAng(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[]): number
 // ================================================================================================
 /**
  * Creates a vector between two points
- * @param xyz1 
- * @param xyz2 
+ * @param xyz1
+ * @param xyz2
  */
 export function vecFromTo(debug: boolean, xyz1: Txyz|Txyz[], xyz2: Txyz|Txyz[]): Txyz|Txyz[] {
     // overloaded case
@@ -350,9 +350,9 @@ export function vecFromTo(debug: boolean, xyz1: Txyz|Txyz[], xyz2: Txyz|Txyz[]):
 // ================================================================================================
 /**
  * Returns true if the difference between two vectors is smaller than a specified tolerance
- * @param v1 
- * @param v2 
- * @param tol 
+ * @param v1
+ * @param v2
+ * @param tol
  */
 export function vecEqual(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], tol: number): boolean|boolean[] {
     // overloaded case
@@ -382,9 +382,9 @@ export function vecEqual(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], tol: 
 // ================================================================================================
 /**
  * Calculate the angle (0 to 2PI) between two vectors, relative to the plane normal
- * @param v1 
- * @param v2 
- * @param v3 
+ * @param v1
+ * @param v2
+ * @param v3
  */
 export function vecAng2(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], v3: Txyz|Txyz[]): number|number[] {
     // overloaded case
@@ -458,9 +458,9 @@ export function vecAng2(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], v3: Tx
 // ================================================================================================
 /**
  * Rotates one vector around another vector.
- * @param v1 
- * @param v2 
- * @param ang 
+ * @param v1
+ * @param v2
+ * @param ang
  */
 export function vecRot(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], ang: number|number[]): Txyz|Txyz[] {
     // overloaded case
@@ -536,7 +536,7 @@ export function vecRot(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], ang: nu
 // ================================================================================================
 /**
  * Calculates the magnitude of a vector
- * @param v 
+ * @param v
  */
 export function vecLen(debug: boolean, v: Txyz|Txyz[]): number|number[] {
     // overloaded case
@@ -550,7 +550,7 @@ export function vecLen(debug: boolean, v: Txyz|Txyz[]): number|number[] {
 // ================================================================================================
 /**
  * Sets the magnitude of a vector to 1
- * @param v 
+ * @param v
  */
 export function vecNorm(debug: boolean, v: Txyz|Txyz[]): Txyz|Txyz[] {
     // overloaded case
@@ -564,7 +564,7 @@ export function vecNorm(debug: boolean, v: Txyz|Txyz[]): Txyz|Txyz[] {
 // ================================================================================================
 /**
  * Reverses the direction of a vector
- * @param v 
+ * @param v
  */
 export function vecRev(debug: boolean, v: Txyz|Txyz[]): Txyz|Txyz[] {
     // overloaded case
@@ -578,16 +578,16 @@ export function vecRev(debug: boolean, v: Txyz|Txyz[]): Txyz|Txyz[] {
 // ================================================================================================
 /**
  * Transforms a vector from a local coordinate system define by plane "p" to the global coordinate system.
- * @param v 
- * @param p 
+ * @param v
+ * @param p
  */
 export function vecLtoG(debug: boolean, v: Txyz|Txyz[], p: TPlane|TPlane[]): Txyz|Txyz[] {
     return _vecXForm(v, p, true);
 }
 /**
  * Transforms a vector from the global coordinate system to a local coordinate system define by plane "p".
- * @param v 
- * @param p 
+ * @param v
+ * @param p
  */
 export function vecGtoL(debug: boolean, v: Txyz|Txyz[], p: TPlane|TPlane[]): Txyz|Txyz[] {
     return _vecXForm(v, p, false);

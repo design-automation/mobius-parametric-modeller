@@ -7,8 +7,9 @@
 /**
  *
  */
-import { checkIDs, ID } from '../_check_ids';
-import { checkArgs, ArgCh } from '../_check_args';
+import { checkIDs, ID } from '../../_check_ids';
+
+import * as chk from '../../_check_types';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, TBBox, Txy } from '@libs/geo-info/common';
@@ -530,7 +531,7 @@ export function Normal(__model__: GIModel, entities: TId|TId[], scale: number): 
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
         [ID.isID, ID.isIDL], null) as  TEntTypeIdx|TEntTypeIdx[];
-        checkArgs(fn_name, 'scale', scale, [ArgCh.isNum]);
+        chk.checkArgs(fn_name, 'scale', scale, [chk.isNum]);
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     }
@@ -621,7 +622,7 @@ export function Eval(__model__: GIModel, entities: TId|TId[], t_param: number): 
         ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
             [ID.isID, ID.isIDL ],
             [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
-        checkArgs(fn_name, 'param', t_param, [ArgCh.isNum01]);
+        chk.checkArgs(fn_name, 'param', t_param, [chk.isNum01]);
     } else {
         ents_arrs = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     }
@@ -675,8 +676,8 @@ function _eval(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[], t_param:
 }
 // ================================================================================================
 /**
- * Returns a ray for an edge or a polygons. 
- * 
+ * Returns a ray for an edge or a polygons.
+ *
  * For edges, it returns a ray along the edge, from the start vertex to the end vertex
  *
  * For a polygon, it returns the ray that is the z-axis of the plane.

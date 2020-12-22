@@ -7,7 +7,7 @@
 /**
  *
  */
-import { checkIDs, ID } from '../_check_ids';
+import { checkIDs, ID } from '../../_check_ids';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane, Txyz, EEntType, TRay, TEntTypeIdx } from '@libs/geo-info/common';

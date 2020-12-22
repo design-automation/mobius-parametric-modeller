@@ -5,7 +5,7 @@
 /**
  *
  */
-import { checkIDs, ID } from '../_check_ids';
+import { checkIDs, ID } from '../../_check_ids';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EEntType, TId, TEntTypeIdx, EAttribNames, EAttribDataTypeStrs, IModelJSONData } from '@libs/geo-info/common';
 import { arrMakeFlat } from '@assets/libs/util/arrs';

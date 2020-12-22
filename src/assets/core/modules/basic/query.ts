@@ -21,7 +21,6 @@ export enum _EEntType {
     VERT =   '_v',
     EDGE =   '_e',
     WIRE =   '_w',
-    FACE =   '_f',
     POINT =  'pt',
     PLINE =  'pl',
     PGON =   'pg',
@@ -32,7 +31,6 @@ export enum _EEntTypeAndMod {
     VERT =   '_v',
     EDGE =   '_e',
     WIRE =   '_w',
-    FACE =   '_f',
     POINT =  'pt',
     PLINE =  'pl',
     PGON =   'pg',
@@ -124,6 +122,7 @@ function _getAll(__model__: GIModel, ent_type: EEntType): TEntTypeIdx[] {
     return ents_i.map(ent_i => [ent_type, ent_i]) as TEntTypeIdx[];
 }
 function _getFrom(__model__: GIModel, ent_type: EEntType, ents_arr: TEntTypeIdx[]|TEntTypeIdx[][]): TEntTypeIdx[]|TEntTypeIdx[][] {
+    console.log("_getFrom", ent_type, ents_arr);
     const ssid: number = __model__.modeldata.active_ssid;
     if (ents_arr.length === 0) { return []; }
     // do the query
@@ -133,9 +132,11 @@ function _getFrom(__model__: GIModel, ent_type: EEntType, ents_arr: TEntTypeIdx[
         // get the list of entities that are found
         const found_ents_i_set: Set<number> = new Set();
         for (const ent_arr of ents_arr) {
+            console.log(">>>>ent_arr", ent_arr)
             if (__model__.modeldata.geom.snapshot.hasEnt(ssid, ent_arr[0], ent_arr[1])) {
                 // snapshot
                 const ents_i: number[] = __model__.modeldata.geom.nav.navAnyToAny(ent_arr[0], ent_type, ent_arr[1]);
+                console.log(">>>>ents_i", ents_i)
                 if (ents_i) {
                     for (const ent_i of ents_i) {
                         if (ent_i !== undefined) {
@@ -145,6 +146,7 @@ function _getFrom(__model__: GIModel, ent_type: EEntType, ents_arr: TEntTypeIdx[
                 }
             }
         }
+        console.log(">>>>found_ents_i", found_ents_i_set)
         // return the found ents
         const found_ents_i: number[] = Array.from(found_ents_i_set);
         return found_ents_i.map( entity_i => [ent_type, entity_i]) as TEntTypeIdx[];
@@ -504,7 +506,6 @@ export enum _ETypeQueryEnum {
     IS_VERT =   'is_vertex',
     IS_EDGE =   'is_edge',
     IS_WIRE =   'is_wire',
-    IS_FACE =   'is_face',
     IS_POINT =  'is_point',
     IS_PLINE =  'is_polyline',
     IS_PGON =   'is_polygon',

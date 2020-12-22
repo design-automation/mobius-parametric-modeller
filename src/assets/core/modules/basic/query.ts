@@ -399,8 +399,7 @@ export function Perimeter(__model__: GIModel, ent_type: _EEntType, entities: TId
     // --- Error Check ---
     const select_ent_type: EEntType = _getEntTypeFromStr(ent_type);
     const found_ents_arr: TEntTypeIdx[] = _perimeter(__model__, select_ent_type, ents_arr);
-    throw new Error('Snapshot Not implemented');
-    // return idsMake(found_ents_arr) as TId[];
+    return idsMake(found_ents_arr) as TId[];
 }
 export function _perimeter(__model__: GIModel,  select_ent_type: EEntType, ents_arr: TEntTypeIdx[]): TEntTypeIdx[] {
     // get an array of all edges
@@ -445,8 +444,7 @@ export function Neighbor(__model__: GIModel, ent_type_enum: _EEntType, entities:
     // --- Error Check ---
     const select_ent_type: EEntType = _getEntTypeFromStr(ent_type_enum);
     const found_ents_arr: TEntTypeIdx[] = _neighbors(__model__, select_ent_type, ents_arr);
-    throw new Error('Snapshot Not implemented');
-    // return idsMake(found_ents_arr) as TId[];
+    return idsMake(found_ents_arr) as TId[];
 }
 export function _neighbors(__model__: GIModel,  select_ent_type: EEntType, ents_arr: TEntTypeIdx[]): TEntTypeIdx[] {
     // get an array of all vertices

@@ -305,7 +305,6 @@ export class GIGeomQuery {
                 break;
             }
         }
-        console.log("verts = ", verts_i)
         return verts_i;
     }
     // ============================================================================

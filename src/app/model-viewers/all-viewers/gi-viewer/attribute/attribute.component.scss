@@ -6,9 +6,9 @@
   height: calc(100% - 31px);
   overflow-y: auto;
   overflow-x: auto;
-  &.topo--container{
-    height: 100%;
-  }
+//   &.topo--container{
+//     height: 100%;
+//   }
 }
 
 .mat-table{
@@ -155,7 +155,7 @@ table{
             .mat-cell{
                 background-color: $color5-5;
             }
-        }
+        }table--container
         .active-row {
             .mat-cell{
                 background-color: $color6;

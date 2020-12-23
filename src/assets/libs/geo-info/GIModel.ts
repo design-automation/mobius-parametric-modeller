@@ -185,8 +185,8 @@ export class GIModel {
      * Import a GI model.
      * @param meta
      */
-    public importGI(model_json_data_str: string): void {
-        this.modeldata.importGI(JSON.parse(model_json_data_str));
+    public importGI(model_json_data_str: string): TEntTypeIdx[] {
+        return this.modeldata.importGI(JSON.parse(model_json_data_str));
     }
     /**
      * Export a GI model.

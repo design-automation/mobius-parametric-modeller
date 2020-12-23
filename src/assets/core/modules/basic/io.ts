@@ -109,11 +109,11 @@ export async function Import(__model__: GIModel, input_data: string, data_format
     // single file
     return _import(__model__, model_data, data_format);
 }
-export function _import(__model__: GIModel, model_data: string, data_format: _EIODataFormat): TId|TId[] {
+export function _import(__model__: GIModel, model_data: string, data_format: _EIODataFormat): TId {
     switch (data_format) {
         case _EIODataFormat.GI:
-            const gi_colls_i: number[]  = _importGI(__model__, <string> model_data);
-            return idsMakeFromIdxs(EEntType.COLL, gi_colls_i) as TId|TId[];
+            const gi_coll_i: number  = _importGI(__model__, <string> model_data);
+            return idMake(EEntType.COLL, gi_coll_i) as TId;
         case _EIODataFormat.OBJ:
             const obj_coll_i: number  = _importObj(__model__, <string> model_data);
             return idMake(EEntType.COLL, obj_coll_i) as TId;
@@ -124,19 +124,30 @@ export function _import(__model__: GIModel, model_data: string, data_format: _EI
             throw new Error('Import type not recognised');
     }
 }
-export function _importGI(__model__: GIModel, json_str: string): number[] {
-    // get number of ents before merge
-    const num_ents_before: number[] = __model__.metadata.getEntCounts();
+export function _importGI(__model__: GIModel, json_str: string): number {
+    const ssid: number = __model__.modeldata.active_ssid;
     // import
-    __model__.importGI(json_str);
-    // get number of ents after merge
-    const num_ents_after: number[] = __model__.metadata.getEntCounts();
-    // return the result
-    const colls_i: number[] = [];
-    for (let coll_i = num_ents_before[4]; coll_i < num_ents_after[4]; coll_i++) {
-        colls_i.push( coll_i );
+    const ents: TEntTypeIdx[] = __model__.importGI(json_str);
+    const container_coll_i: number = __model__.modeldata.geom.add.addColl();
+    for (const [ent_type, ent_i] of ents) {
+        switch (ent_type) {
+            case EEntType.POINT:
+                __model__.modeldata.geom.snapshot.addCollPoints(ssid, container_coll_i, ent_i);
+                break;
+            case EEntType.PLINE:
+                __model__.modeldata.geom.snapshot.addCollPlines(ssid, container_coll_i, ent_i);
+                break;
+            case EEntType.PGON:
+                __model__.modeldata.geom.snapshot.addCollPgons(ssid, container_coll_i, ent_i);
+                break;
+            case EEntType.COLL:
+                __model__.modeldata.geom.snapshot.addCollChildren(ssid, container_coll_i, ent_i);
+                break;
+        }
     }
-    return colls_i;
+    __model__.modeldata.attribs.set.setEntAttribVal(EEntType.COLL, container_coll_i, 'name', 'import GI');
+    // return the result
+    return container_coll_i;
 }
 function _importObj(__model__: GIModel, model_data: string): number {
     // get number of ents before merge
@@ -146,7 +157,9 @@ function _importObj(__model__: GIModel, model_data: string): number {
     // get number of ents after merge
     const num_ents_after: number[] = __model__.metadata.getEntCounts();
     // return the result
-    return _createColl(__model__, num_ents_before, num_ents_after);
+    const container_coll_i = _createColl(__model__, num_ents_before, num_ents_after);
+    __model__.modeldata.attribs.set.setEntAttribVal(EEntType.COLL, container_coll_i, 'name', 'import OBJ');
+    return container_coll_i;
 }
 function _importGeojson(__model__: GIModel, model_data: string): number {
     // get number of ents before merge
@@ -156,7 +169,9 @@ function _importGeojson(__model__: GIModel, model_data: string): number {
     // get number of ents after merge
     const num_ents_after: number[] = __model__.metadata.getEntCounts();
     // return the result
-    return _createColl(__model__, num_ents_before, num_ents_after);
+    const container_coll_i = _createColl(__model__, num_ents_before, num_ents_after);
+    __model__.modeldata.attribs.set.setEntAttribVal(EEntType.COLL, container_coll_i, 'name', 'import GEOJSON');
+    return container_coll_i;
 }
 // function _createGIColl(__model__: GIModel, before: number[], after: number[]): number {
 //     throw new Error('Not implemented');

@@ -918,14 +918,33 @@ export class PanelHeaderComponent implements OnDestroy {
 
     updateGlobalFuncProds(prodList: IProcedure[], globalFunc: IFunction) {
         for (const prod of prodList) {
-            if (prod.type === ProcedureTypes.globalFuncCall && prod.meta.name === globalFunc.name && prod.argCount === globalFunc.argCount + 1) {
-                for (const globalFuncArg of globalFunc.args) {
-                    for (const prodArg of prod.args) {
-                        if (globalFuncArg.name.toLowerCase() === prodArg.name) {
-                            prodArg.isEntity = globalFuncArg.isEntity;
-                            break;
+            if (prod.type === ProcedureTypes.globalFuncCall && prod.meta.name === globalFunc.name) {
+                if (prod.argCount === globalFunc.argCount + 1) {
+                    for (let i = 0; i < globalFunc.args.length; i++) {
+                        prod.args[i + 1].isEntity = globalFunc.args[i].isEntity;
+                    }
+                } else {
+                    const oldArgs = prod.args;
+                    prod.args = JSON.parse(JSON.stringify(globalFunc.args));
+                    for (const newArg of prod.args) {
+                        let mismatch = true;
+                        newArg.name = newArg.name.toLowerCase();
+                        for (const oldArg of oldArgs) {
+                            if (newArg.name.toLowerCase() === oldArg.name.toLowerCase()) {
+                                newArg.value = oldArg.value;
+                                newArg.jsValue = oldArg.jsValue;
+                                mismatch = false;
+                                break;
+                            }
+                        }
+                        if (mismatch) {
+                            newArg.value = '';
+                            newArg.jsValue = '';
+                            newArg.invalidVar = true;
                         }
                     }
+                    prod.args.unshift(oldArgs[0]);
+                    prod.argCount = globalFunc.argCount + 1;
                 }
             }
             if (prod.children) {

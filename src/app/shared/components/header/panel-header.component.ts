@@ -1024,7 +1024,18 @@ export class PanelHeaderComponent implements OnDestroy {
         const parameters = [];
         for (const prod of this.flowchart.nodes[0].procedure) {
             if (prod.type === ProcedureTypes.Constant && prod.enabled) {
-                parameters.push([prod.args[0].value, 'Global Parameter ' + prod.args[0].value]);
+                parameters.push(prod.args[0].value);
+                let description = 'Global Parameter ' + prod.args[0].value;
+                if (prod.meta.description) {
+                    description += ': ' + prod.meta.description;
+                }
+                this.inlineDocs['param_' + prod.args[0].value] = {
+                    description: description,
+                    module: '_parameters',
+                    name: prod.args[0].value,
+                    parameters: [],
+                    returns: undefined
+                };
             }
         }
         let allInlineFuncs = [['parameters', parameters]];
@@ -1122,10 +1133,16 @@ export class PanelHeaderComponent implements OnDestroy {
         document.getElementById('hidden_node_selection').click();
     }
 
-    updateInlineHelpText(event: MouseEvent, inlineFunc: string) {
+    updateInlineHelpText(event: MouseEvent, inlineFunc: string, category?: string) {
         event.stopPropagation();
         const inlineHelp = <HTMLTextAreaElement> document.getElementById('inlineHelp');
-        const fnDoc = this.inlineDocs[inlineFunc.split('(')[0]];
+        let fnDoc;
+        if (category && category === 'parameters') {
+            fnDoc = this.inlineDocs['param_' + inlineFunc];
+        } else {
+            fnDoc = this.inlineDocs[inlineFunc.split('(')[0]];
+            console.log(fnDoc)
+        }
         if (!fnDoc) {
             inlineHelp.innerHTML = `<h3>${inlineFunc}</h3><br><div></div>`;
             return;
@@ -1152,11 +1169,16 @@ export class PanelHeaderComponent implements OnDestroy {
         inlineHelp.innerHTML = fnDocHtml;
     }
 
-    getInlineHoverText(funcText: string) {
+    getInlineHoverText(funcText: string, category: string) {
         if (typeof funcText !== 'string') {
             return funcText[1];
         }
-        const fnDoc = this.inlineDocs[funcText.split('(')[0]];
+        let fnDoc;
+        if (category === 'parameters') {
+            fnDoc = this.inlineDocs['param_' + funcText];
+        } else {
+            fnDoc = this.inlineDocs[funcText.split('(')[0]];
+        }
         if (!fnDoc) {
             return '';
         }

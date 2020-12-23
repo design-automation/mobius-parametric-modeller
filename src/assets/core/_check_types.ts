@@ -53,14 +53,26 @@ export function checkArgs(fn_name: string, arg_name: string, arg: any, check_fns
     return ret;
 }
 function _getSampleStr(arg: any): string {
-    if (Array.isArray(arg)) { return JSON.stringify(arg.slice(0, 20)) + '...first 20 items...'; }
-    return JSON.stringify(arg);
+    let str: string;
+    if (Array.isArray(arg)) {
+        if (arg.length > 20) {
+            str = JSON.stringify(arg.slice(0, 20)) + '...array items truncated';
+        } else {
+            str = JSON.stringify(arg);
+        }
+    } else {
+        str = JSON.stringify(arg);
+    }
+    if (str.length > 1000) {
+        return str.substring(0, 1000) + ' ...data truncated';
+    }
+    return str;
 }
 
 
 // Dict
 export function isDict(arg: any): void {
-    if (Array.isArray(arg) || typeof arg !== 'object') {
+    if (Array.isArray(arg) || typeof arg === 'string' || arg === null || typeof arg !== 'object') {
         throw new Error ();
     }
 }
@@ -358,6 +370,8 @@ export function getDataTypeStrFromValue(arg: any): string {
     return _typeOf(arg);
 }
 function _typeOf(arg: any): string {
+    if (arg === undefined) { return 'undefined'; }
+    if (arg === null) { return 'null'; }
     if (Array.isArray(arg)) { return 'list'; }
     if (typeof arg === 'object') { return 'dict'; }
     return typeof arg;

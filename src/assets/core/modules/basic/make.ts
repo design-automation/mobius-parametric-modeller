@@ -382,7 +382,7 @@ export function Clone(__model__: GIModel, entities: TId|TId[]|TId[][]): TId|TId[
     let ents_arr;
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-        [ID.isID, ID.isIDL, , ID.isIDLL],
+        [ID.isID, ID.isIDL, ID.isIDLL],
         [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];

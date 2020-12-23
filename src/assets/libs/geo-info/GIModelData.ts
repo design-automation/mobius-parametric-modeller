@@ -48,10 +48,15 @@ export class GIModelData {
      * Eexisting data in the model is not affected.
      * @param model_data The JSON data.
      */
-    public importGI (model_data: IModelJSONData): void {
+    public importGI(model_data: IModelJSONData): TEntTypeIdx[] {
         // console.log("SET DATA...", model_data);
-        const renum_maps: Map<number, Map<number, number>> = this.geom.imp_exp.importGI(model_data.geometry);
+        const renum_maps: Map<EEntType, Map<number, number>> = this.geom.imp_exp.importGI(model_data.geometry);
         this.attribs.imp_exp.importGI(model_data.attributes, renum_maps);
+        const ents: TEntTypeIdx[] = [];
+        renum_maps.forEach( (ent_i_map, ent_type) => {
+            ent_i_map.forEach( (new_ent_i, _) => ents.push( [ent_type, new_ent_i] ) );
+        });
+        return ents;
     }
     /**
      * Exports the JSON data for this model.

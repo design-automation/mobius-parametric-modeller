@@ -80,7 +80,7 @@ export class LoadFileComponent {
             reader.readAsText(selectedFile);
         });
         stream.subscribe(loadeddata => {
-            SaveFileComponent.clearModelData(this.dataService.flowchart, null);
+            SaveFileComponent.clearModelData(this.dataService.flowchart);
             delete this.dataService.file.flowchart;
             this.dataService.file = loadeddata;
             if (updateLocalViewerSettings(loadeddata.settings)) {

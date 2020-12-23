@@ -275,7 +275,7 @@ export class PanelHeaderComponent implements OnDestroy {
             if (result === 'error') {
                 return;
             }
-            SaveFileComponent.clearModelData(this.dataService.flowchart, null);
+            SaveFileComponent.clearModelData(this.dataService.flowchart);
             try {
                 this.dataService.file = circularJSON.parse(result);
             } catch (ex) {

@@ -393,16 +393,15 @@ async function getURLContent(url: string): Promise<any> {
     return await p;
 }
 async function openZipFile(zipFile) {
-    let result = '{';
+    const result = {};
     await JSZip.loadAsync(zipFile).then(async function (zip) {
         for (const filename of Object.keys(zip.files)) {
             // const splittedNames = filename.split('/').slice(1).join('/');
             await zip.files[filename].async('text').then(function (fileData) {
-                result += `"${filename}": \`${fileData.replace(/\\/g, '\\\\')}\`,`;
+                result[filename] = fileData;
             });
         }
     });
-    result += '}';
     return result;
 }
 async function loadFromFileSystem(filecode): Promise<any> {

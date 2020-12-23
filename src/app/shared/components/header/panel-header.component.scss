@@ -401,6 +401,10 @@ button.mat-menu-item:hover{
         }
         .tabContent {
             display: none;
+            width: 585px;
+            max-height: 400px;
+            overflow-y: scroll;
+            padding-right: 2px;
 
             &.active {
                 display: block;

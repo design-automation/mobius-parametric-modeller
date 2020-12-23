@@ -463,6 +463,9 @@ export async function _getFile(source: string) {
         }
         const val = source.replace(/\"|\'/g, '');
         const backup_list: string[] = JSON.parse(localStorage.getItem('mobius_backup_list'));
+        if (val.endsWith('.zip')) {
+            throw(new Error(`Importing zip files from local storage is not supported`));
+        }
         if (val.indexOf('*') !== -1) {
             const splittedVal = val.split('*');
             const start = splittedVal[0] === '' ? null : splittedVal[0];

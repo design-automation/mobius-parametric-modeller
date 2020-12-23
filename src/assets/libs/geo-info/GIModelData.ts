@@ -186,7 +186,7 @@ export class GIModelData {
         }
     }
     /**
-     * Get the timestamp of a posi
+     * Get the timestamp of an entity.
      * @param posi_i
      */
     public getEntTs(ent_type: EEntType, ent_i: number): number {
@@ -194,7 +194,7 @@ export class GIModelData {
         return this.attribs.get.getEntAttribVal(ent_type, ent_i, EAttribNames.TIMESTAMP ) as number;
     }
     /**
-     *
+     * Get the ID (integer) of the next snapshot.
      */
     public nextSnapshot() {
         this._max_timestamp += 1;

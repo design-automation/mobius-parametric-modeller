@@ -51,9 +51,16 @@ export class GIAttribsSnapshot {
         attribs.co.set(EAttribNames.COLL_NAME, new GIAttribMapStr(this.modeldata, EAttribNames.COLL_NAME, EEntType.COLL, EAttribDataTypeStrs.STRING));
         // merge data
         if (include !== undefined) {
-            for (const exist_ssid of include) {
-                const exist_attribs: IAttribsMaps = this.modeldata.attribs.attribs_maps.get(exist_ssid);
-                this.modeldata.attribs.merge.merge(ssid, exist_attribs);
+            // the first one we add with no conflict detection
+            if (include.length > 0) {
+                this.modeldata.attribs.merge.add(ssid, include[0]);
+            }
+            // everything after the first must be added with conflict detection
+            if (include.length > 1) {
+                for (let i = 1; i < include.length; i++) {
+                    const exist_ssid: number = include[i];
+                    this.modeldata.attribs.merge.merge(ssid, exist_ssid);
+                }
             }
         }
     }

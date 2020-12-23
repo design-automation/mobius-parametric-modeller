@@ -139,6 +139,7 @@ export class GIAttribMapBase {
     }
     /**
      * Returns the IDs of all ents that have a value.
+     * Note that this may include deleted ents.
      */
     public getEnts(): number[] {
         return Array.from(this._map_ent_i_to_val_i.keys());
@@ -234,110 +235,133 @@ export class GIAttribMapBase {
         return ents_i.filter(ent_i => this._map_ent_i_to_val_i.has(ent_i));
     }
     /**
-     * Merges another attrib map into this attrib map
-     * @param attrib_map The attrib map to merge into this map
+     * Adds all the entity-value pairs in the other attribute map to this attribute map.
+     * Conflict detection is performed.
+     * This method is used when it is known that this attribute map already contains some data.
+     * @param other_attrib_map
+     * @param other_ents_i
      */
-    public merge(attrib_map: GIAttribMapBase, ent_set?: Set<number>): void {
-        const filter: boolean = ent_set !== undefined;
-        for (const val_i of attrib_map._map_val_i_to_ents_i.keys())  {
-            const other_ents_i: number[] = attrib_map._mapValToEntsGetArr(val_i);
-            // update the  maps
-            for (const ent_i of other_ents_i) {
-                if (filter && !ent_set.has(ent_i)) { continue; }
-                if (this._map_ent_i_to_val_i.has(ent_i) && this._map_ent_i_to_val_i.get(ent_i) !== val_i) {
-                    const ent_type_str: string = getEntTypeStr(this._ent_type);
-                    let err_msg: string  =
-                        'A attribute merge conflict has been detected. ' +
-                        'This node has two or more incoming links, and as a result the incoming entities will be merged, ' +
-                        'meaning that entities with the same ID will be merged into a single entity. ' +
-                        'If two entities have the same ID, but have different attributes, then it will result in a merge conflict. ';
-                    if (this._ent_type === EEntType.POSI && this._name === 'xyz') {
-                        const verts_i: number[] = this.modeldata.geom.nav.navPosiToVert(ent_i);
-                        const parent_obj_strs: string[] = [];
-                        for (const vert_i of verts_i) {
-                            const parent_obj: TEntTypeIdx = this.modeldata.geom.query.getTopoObj(EEntType.VERT, vert_i);
-                            const parent_obj_str: string = idMake(parent_obj[0], parent_obj[1]);
-                            parent_obj_strs.push(parent_obj_str);
-                        }
-                        err_msg = err_msg + '<br><br>' +
-                        'In this case, the conflict is caused by two positions with same ID but different XYZ coordinates.' +
-                        '<ul>' +
-                        '<li>The position causing the merge conflict is: "' + idMake(this._ent_type, ent_i) + '". </li>' +
-                        '<li>The conflicting attribute is: "' + this._name + '". </li>' +
-                        '<li>The conflicting values are : ' +
-                            JSON.stringify(this._getVal(this._map_ent_i_to_val_i.get(ent_i))) + 'and ' +
-                            JSON.stringify(this._getVal(val_i)) + '. </li>';
-                        if (parent_obj_strs.length === 1) {
-                            err_msg = err_msg +
-                            '<li>This position is used in the following object: "' + parent_obj_strs[0] + '". </li>' +
-                            '</ul>';
-                            err_msg = err_msg +
-                            'This conflict is most likley due to the fact that the "' + parent_obj_strs[0] + '" entity has been modified in one of the upstream nodes, ' +
-                            'using one of the modify.XXX() functions. ' +
-                            'Possible fixes in one of the upstream nodes: ' +
-                            '<ul>' +
-                            '<li>One of the two conflicting positions could be deleted before reaching this node. </li>' +
-                            '<li>The ' + parent_obj_strs[0] + ' object could be cloned before being modified, using the make.Clone() function. </li>' +
-                            '</ul>';
-                        } else if (parent_obj_strs.length > 1) {
-                            const all_parent_objs_str: string = JSON.stringify(parent_obj_strs);
-                            err_msg = err_msg +
-                            '<li>This position is used in the following objects: ' + all_parent_objs_str + '. </li>' +
-                            '</ul>' +
-                            'Possible fixes in one of the upstream nodes: ' +
-                            '<ul>' +
-                            '<li>One of the two conflicting positions could be deleted before reaching this node. </li>' +
-                            '<li>One of the objects ' + all_parent_objs_str + ' could be cloned before being modified, using the make.Clone() function. </li>' +
-                            '</ul>';
-                        } else {
-                            err_msg = err_msg +
-                            '<li>The position is not being used in any objects. </li>' +
-                            '</ul>' +
-                            'Possible fixes in one of the upstream nodes: ' +
-                            '<ul>' +
-                            '<li>One of the two conflicting positions could be deleted before reaching this node. </li>' +
-                            '</ul>';
-                        }
-                    } else if (this._ent_type > EEntType.POSI && this._ent_type < EEntType.POINT) {
-                        const parent_obj: TEntTypeIdx = this.modeldata.geom.query.getTopoObj(this._ent_type, ent_i);
-                        const parent_obj_str: string = idMake(parent_obj[0], parent_obj[1]);
-                        const parent_ent_type_str: string = getEntTypeStr(parent_obj[0]);
-                        err_msg = err_msg + '<br><br>' +
-                        'In this case, the conflict is caused by two ' + ent_type_str + ' with same ID but with different attributes.' +
-                        '<ul>' +
-                        '<li>The entity causing the merge conflict is: "' + idMake(this._ent_type, ent_i) + '". </li>' +
-                        '<li>The entity is part of the following object: "' + parent_obj_str + '". </li>' +
-                        '<li>The conflicting attribute is: "' + this._name + '". </li>' +
-                        '<li>The conflicting values are : ' +
-                            JSON.stringify(this._getVal(this._map_ent_i_to_val_i.get(ent_i))) + ' and ' +
-                            JSON.stringify(this._getVal(val_i)) + '. </li>' +
-                        '</ul>' +
-                        'Possible fixes in one of the upstream nodes: ' +
-                        '<ul>' +
-                        '<li>One of the ' + parent_ent_type_str + ' entities causing the conflict could be deleted before reaching this node. </li>' +
-                        '</ul>';
-                    } else {
-                        err_msg = err_msg + '<br><br>' +
-                        'In this case, the conflict is caused by two ' + ent_type_str + ' with same ID but with different attributes.' +
-                        '<ul>' +
-                        '<li>The entity causing the merge conflict is: "' + idMake(this._ent_type, ent_i) + '". </li>' +
-                        '<li>The conflicting attribute is: "' + this._name + '". </li>' +
-                        '<li>The conflicting values are : ' +
-                            JSON.stringify(this._getVal(this._map_ent_i_to_val_i.get(ent_i))) + ' and ' +
-                            JSON.stringify(this._getVal(val_i)) + '. </li>' +
-                        '</ul>' +
-                        'Possible fixes in one of the upstream nodes: ' +
-                        '<ul>' +
-                        '<li>One of the two conflicting ' + ent_type_str + ' could be deleted deleted before reaching this node. </li>' +
-                        '</ul>';
-                    }
-                    throw new Error(err_msg);
-                } else {
-                    this._mapValToEntsAdd(val_i, ent_i);
-                    this._map_ent_i_to_val_i.set(ent_i, val_i);
-                }
+    public mergeAttribMap(other_attrib_map: GIAttribMapBase, other_ents_i: number[]): void {
+        for (const other_ent_i of other_ents_i) {
+            // get the value in the other map
+            const other_val_i: number = other_attrib_map._map_ent_i_to_val_i.get(other_ent_i);
+            // check for conflict
+            if (this._map_ent_i_to_val_i.has(other_ent_i) && this._map_ent_i_to_val_i.get(other_ent_i) !== other_val_i) {
+                this._mergeConflictError(other_ent_i, other_val_i);
+            } else {
+                this._mapValToEntsAdd(other_val_i, other_ent_i);
+                this._map_ent_i_to_val_i.set(other_ent_i, other_val_i);
             }
         }
+    }
+    /**
+     * Adds all the entity-value pairs in the other attribute map to this attribute map.
+     * No conflict detection is performed.
+     * This method is used when it is known that this attribute map is actually empty.
+     * @param other_attrib_map
+     * @param other_ents_i
+     */
+    public addAttribMap(other_attrib_map: GIAttribMapBase, other_ents_i: number[]): void {
+        for (const other_ent_i of other_ents_i) {
+            // get the value in the other map
+            const other_val_i: number = other_attrib_map._map_ent_i_to_val_i.get(other_ent_i);
+            this._mapValToEntsAdd(other_val_i, other_ent_i);
+            this._map_ent_i_to_val_i.set(other_ent_i, other_val_i);
+        }
+    }
+    /**
+     * Generates teh merge conflict error message.
+     * @param other_ent_i
+     * @param other_val_i
+     */
+    _mergeConflictError(other_ent_i: number, other_val_i: number) {
+        const ent_type_str: string = getEntTypeStr(this._ent_type);
+        let err_msg: string =
+            'A attribute merge conflict has been detected. ' +
+            'This node has two or more incoming links, and as a result the incoming entities will be merged, ' +
+            'meaning that entities with the same ID will be merged into a single entity. ' +
+            'If two entities have the same ID, but have different attributes, then it will result in a merge conflict. ';
+        if (this._ent_type === EEntType.POSI && this._name === 'xyz') {
+            const verts_i: number[] = this.modeldata.geom.nav.navPosiToVert(other_ent_i);
+            const parent_obj_strs: string[] = [];
+            for (const vert_i of verts_i) {
+                const parent_obj: TEntTypeIdx = this.modeldata.geom.query.getTopoObj(EEntType.VERT, vert_i);
+                const parent_obj_str: string = idMake(parent_obj[0], parent_obj[1]);
+                parent_obj_strs.push(parent_obj_str);
+            }
+            err_msg = err_msg + '<br><br>' +
+                'In this case, the conflict is caused by two positions with same ID but different XYZ coordinates.' +
+                '<ul>' +
+                '<li>The position causing the merge conflict is: "' + idMake(this._ent_type, other_ent_i) + '". </li>' +
+                '<li>The conflicting attribute is: "' + this._name + '". </li>' +
+                '<li>The conflicting values are : ' +
+                JSON.stringify(this._getVal(this._map_ent_i_to_val_i.get(other_ent_i))) + 'and ' +
+                JSON.stringify(this._getVal(other_val_i)) + '. </li>';
+            if (parent_obj_strs.length === 1) {
+                err_msg = err_msg +
+                    '<li>This position is used in the following object: "' + parent_obj_strs[0] + '". </li>' +
+                    '</ul>';
+                err_msg = err_msg +
+                    'This conflict is most likley due to the fact that the "' + parent_obj_strs[0] + '" entity has been modified in one of the upstream nodes, ' +
+                    'using one of the modify.XXX() functions. ' +
+                    'Possible fixes in one of the upstream nodes: ' +
+                    '<ul>' +
+                    '<li>One of the two conflicting positions could be deleted before reaching this node. </li>' +
+                    '<li>The ' + parent_obj_strs[0] + ' object could be cloned before being modified, using the make.Clone() function. </li>' +
+                    '</ul>';
+            } else if (parent_obj_strs.length > 1) {
+                const all_parent_objs_str: string = JSON.stringify(parent_obj_strs);
+                err_msg = err_msg +
+                    '<li>This position is used in the following objects: ' + all_parent_objs_str + '. </li>' +
+                    '</ul>' +
+                    'Possible fixes in one of the upstream nodes: ' +
+                    '<ul>' +
+                    '<li>One of the two conflicting positions could be deleted before reaching this node. </li>' +
+                    '<li>One of the objects ' + all_parent_objs_str + ' could be cloned before being modified, using the make.Clone() function. </li>' +
+                    '</ul>';
+            } else {
+                err_msg = err_msg +
+                    '<li>The position is not being used in any objects. </li>' +
+                    '</ul>' +
+                    'Possible fixes in one of the upstream nodes: ' +
+                    '<ul>' +
+                    '<li>One of the two conflicting positions could be deleted before reaching this node. </li>' +
+                    '</ul>';
+            }
+        } else if (this._ent_type > EEntType.POSI && this._ent_type < EEntType.POINT) {
+            const parent_obj: TEntTypeIdx = this.modeldata.geom.query.getTopoObj(this._ent_type, other_ent_i);
+            const parent_obj_str: string = idMake(parent_obj[0], parent_obj[1]);
+            const parent_ent_type_str: string = getEntTypeStr(parent_obj[0]);
+            err_msg = err_msg + '<br><br>' +
+                'In this case, the conflict is caused by two ' + ent_type_str + ' with same ID but with different attributes.' +
+                '<ul>' +
+                '<li>The entity causing the merge conflict is: "' + idMake(this._ent_type, other_ent_i) + '". </li>' +
+                '<li>The entity is part of the following object: "' + parent_obj_str + '". </li>' +
+                '<li>The conflicting attribute is: "' + this._name + '". </li>' +
+                '<li>The conflicting values are : ' +
+                JSON.stringify(this._getVal(this._map_ent_i_to_val_i.get(other_ent_i))) + ' and ' +
+                JSON.stringify(this._getVal(other_val_i)) + '. </li>' +
+                '</ul>' +
+                'Possible fixes in one of the upstream nodes: ' +
+                '<ul>' +
+                '<li>One of the ' + parent_ent_type_str + ' entities causing the conflict could be deleted before reaching this node. </li>' +
+                '</ul>';
+        } else {
+            err_msg = err_msg + '<br><br>' +
+                'In this case, the conflict is caused by two ' + ent_type_str + ' with same ID but with different attributes.' +
+                '<ul>' +
+                '<li>The entity causing the merge conflict is: "' + idMake(this._ent_type, other_ent_i) + '". </li>' +
+                '<li>The conflicting attribute is: "' + this._name + '". </li>' +
+                '<li>The conflicting values are : ' +
+                JSON.stringify(this._getVal(this._map_ent_i_to_val_i.get(other_ent_i))) + ' and ' +
+                JSON.stringify(this._getVal(other_val_i)) + '. </li>' +
+                '</ul>' +
+                'Possible fixes in one of the upstream nodes: ' +
+                '<ul>' +
+                '<li>One of the two conflicting ' + ent_type_str + ' could be deleted deleted before reaching this node. </li>' +
+                '</ul>';
+        }
+        throw new Error(err_msg);
     }
     // ============================================================================
     // Debug

@@ -22,16 +22,32 @@ export class GIAttribsMerge {
      * The existing data in the model is not deleted - checks for conflicts.
      * @param model_data Attribute data from the other model.
      */
-    public merge(ssid: number, attribs_maps: IAttribsMaps): void {
-        this._mergeEntAttribs(ssid, attribs_maps, EEntType.POSI);
-        this._mergeEntAttribs(ssid, attribs_maps, EEntType.VERT);
-        this._mergeEntAttribs(ssid, attribs_maps, EEntType.EDGE);
-        this._mergeEntAttribs(ssid, attribs_maps, EEntType.WIRE);
-        this._mergeEntAttribs(ssid, attribs_maps, EEntType.POINT);
-        this._mergeEntAttribs(ssid, attribs_maps, EEntType.PLINE);
-        this._mergeEntAttribs(ssid, attribs_maps, EEntType.PGON);
-        this._mergeEntAttribs(ssid, attribs_maps, EEntType.COLL);
-        this._mergeModelAttribs(ssid, attribs_maps);
+    public merge(ssid: number, exist_ssid: number): void {
+        this._mergeEntAttribs(ssid, exist_ssid, EEntType.POSI);
+        this._mergeEntAttribs(ssid, exist_ssid, EEntType.VERT);
+        this._mergeEntAttribs(ssid, exist_ssid, EEntType.EDGE);
+        this._mergeEntAttribs(ssid, exist_ssid, EEntType.WIRE);
+        this._mergeEntAttribs(ssid, exist_ssid, EEntType.POINT);
+        this._mergeEntAttribs(ssid, exist_ssid, EEntType.PLINE);
+        this._mergeEntAttribs(ssid, exist_ssid, EEntType.PGON);
+        this._mergeEntAttribs(ssid, exist_ssid, EEntType.COLL);
+        this._mergeModelAttribs(ssid, exist_ssid);
+    }
+    /**
+     * Adds data to this model from another model.
+     * The existing data in the model is not deleted - checks for conflicts.
+     * @param model_data Attribute data from the other model.
+     */
+    public add(ssid: number, exist_ssid: number): void {
+        this._addEntAttribs(ssid, exist_ssid, EEntType.POSI);
+        this._addEntAttribs(ssid, exist_ssid, EEntType.VERT);
+        this._addEntAttribs(ssid, exist_ssid, EEntType.EDGE);
+        this._addEntAttribs(ssid, exist_ssid, EEntType.WIRE);
+        this._addEntAttribs(ssid, exist_ssid, EEntType.POINT);
+        this._addEntAttribs(ssid, exist_ssid, EEntType.PLINE);
+        this._addEntAttribs(ssid, exist_ssid, EEntType.PGON);
+        this._addEntAttribs(ssid, exist_ssid, EEntType.COLL);
+        this._mergeModelAttribs(ssid, exist_ssid);
     }
     // ============================================================================
     // Private methods
@@ -42,33 +58,26 @@ export class GIAttribsMerge {
      * Deep copy of attrib values
      * @param attribs_maps
      */
-    private _mergeModelAttribs(ssid: number, attribs_maps: IAttribsMaps): void {
-        const other_attribs: Map<string, TAttribDataTypes> = attribs_maps[EEntTypeStr[ EEntType.MOD ]];
+    private _mergeModelAttribs(ssid: number, exist_ssid: number): void {
+        const other_attribs: Map<string, TAttribDataTypes> = this.modeldata.attribs.attribs_maps.get(exist_ssid)[EEntTypeStr[ EEntType.MOD ]];
         const this_attribs: Map<string, TAttribDataTypes> = this.modeldata.attribs.attribs_maps.get(ssid)[EEntTypeStr[ EEntType.MOD ]];
         // TODO this is a hack to fix an error
         if (!(other_attribs instanceof Map)) { return; }
+        // end of hack
         other_attribs.forEach( (val, key) => {
             this_attribs.set(key, lodash.cloneDeep(val));
         });
     }
     /**
-     * From JSON data
-     * Existing attributes are deleted
-     * @param new_attribs_data
+     * Merge attributes from another attribute map into this attribute map.
+     * Conflict detection is performed.
      */
-    private _setModelAttribs(ssid: number, new_attribs_data: TModelAttribValuesArr) {
-        this.modeldata.attribs.attribs_maps.get(ssid)[EEntTypeStr[ EEntType.MOD ]] = new Map(new_attribs_data);
-    }
-    /**
-     * merge attributes from another model into this model.
-     * The existing attributes are not deleted
-     * @param attribs_maps
-     */
-    private _mergeEntAttribs(ssid: number, attribs_maps: IAttribsMaps, ent_type: EEntType) {
-        const other_attribs: Map<string, GIAttribMapBase> = attribs_maps[EEntTypeStr[ ent_type ]];
+    private _mergeEntAttribs(ssid: number, other_ssid: number, ent_type: EEntType) {
+        const other_attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(other_ssid)[EEntTypeStr[ ent_type ]];
         const this_attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[EEntTypeStr[ ent_type ]];
         other_attribs.forEach( other_attrib => {
-            if (other_attrib.numEnts() > 0) {
+            const other_ents_i: number[] = this.modeldata.geom.snapshot.filterEnts(other_ssid, ent_type, other_attrib.getEnts());
+            if (other_ents_i.length > 0) {
                 // get the name
                 const name: string = other_attrib.getName();
                 // get or create the attrib
@@ -82,7 +91,29 @@ export class GIAttribsMerge {
                     }
                 }
                 // merge
-                this_attrib.merge(other_attrib);
+                this_attrib.mergeAttribMap(other_attrib, other_ents_i);
+            }
+        });
+    }
+    /**
+     * Add attributes from another attribute map into this attribute map.
+     * No conflict detection is performed.
+     * This attribute map is assumed to be empty.
+     * @param ssid
+     * @param other_ssid
+     * @param ent_type
+     */
+    private _addEntAttribs(ssid: number, other_ssid: number, ent_type: EEntType) {
+        const other_attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(other_ssid)[EEntTypeStr[ent_type]];
+        other_attribs.forEach(other_attrib => {
+            const other_ents_i: number[] = this.modeldata.geom.snapshot.filterEnts(other_ssid, ent_type, other_attrib.getEnts());
+            if (other_ents_i.length > 0) {
+                // get the name
+                const name: string = other_attrib.getName();
+                // get or create the attrib
+                const this_attrib: GIAttribMapBase = this.modeldata.attribs.add.addEntAttrib(ent_type, name, other_attrib.getDataType());
+                // merge
+                this_attrib.addAttribMap(other_attrib, other_ents_i);
             }
         });
     }

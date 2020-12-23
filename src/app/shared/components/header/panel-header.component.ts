@@ -911,6 +911,7 @@ export class PanelHeaderComponent implements OnDestroy {
         }
         for (const node of this.dataService.flowchart.nodes) {
             this.updateGlobalFuncProds(node.procedure, func);
+            this.updateGlobalFuncProds(node.localFunc, func);
         }
         document.getElementById('tooltiptext').click();
         this.dataService.notifyMessage(`Updated Global Function ${func.name}`);

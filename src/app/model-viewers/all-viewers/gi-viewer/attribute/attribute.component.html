@@ -57,6 +57,11 @@
                         <tr mat-header-row *matHeaderRowDef="displayedTopoColumns; sticky: true"></tr>
                         <tr mat-row class='inactive-row' *matRowDef="let row; columns: displayedTopoColumns;" (click)='singleClick($event, row)' (dblclick)="doubleClick(row)" [class.active-row]='row.active' [class.selected-row]='row.selected'></tr>
                     </table>
+                    <div class = 'btm--container'>
+                        <div class = 'paginator--container'>
+                            <mat-paginator id="matPaginator" [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
+                        </div>
+                    </div>
                 </ng-container>
                 <ng-template #emptyTopoMessage>
                     <div class="emptyMessage">

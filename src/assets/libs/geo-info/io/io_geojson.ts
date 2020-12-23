@@ -415,7 +415,7 @@ function _addPgonToModel(model: GIModel, polygon: any,
  */
 function _addPointCollToModel(model: GIModel, multipoint: any,
         proj_obj: proj4.Converter, rot_matrix: Matrix4, elevation: number): [number[], number] {
-    const ssid: number = this.modeldata.active_ssid;
+    const ssid: number = model.modeldata.active_ssid;
     // add features
     const points_i: number[] = [];
     for (const coordinates of multipoint.geometry.coordinates) {
@@ -447,7 +447,7 @@ function _addPointCollToModel(model: GIModel, multipoint: any,
  */
 function _addPlineCollToModel(model: GIModel, multilinestring: any,
         proj_obj: proj4.Converter, rot_matrix: Matrix4, elevation: number): [number[], number] {
-    const ssid: number = this.modeldata.active_ssid;
+    const ssid: number = model.modeldata.active_ssid;
     // add features
     const plines_i: number[] = [];
     for (const coordinates of multilinestring.geometry.coordinates) {
@@ -484,7 +484,7 @@ function _addPlineCollToModel(model: GIModel, multilinestring: any,
  */
 function _addPgonCollToModel(model: GIModel, multipolygon: any,
         proj_obj: proj4.Converter, rot_matrix: Matrix4, elevation: number): [number[], number] {
-    const ssid: number = this.modeldata.active_ssid;
+    const ssid: number = model.modeldata.active_ssid;
     // add features
     const pgons_i: number[] = [];
     for (const coordinates of multipolygon.geometry.coordinates) {

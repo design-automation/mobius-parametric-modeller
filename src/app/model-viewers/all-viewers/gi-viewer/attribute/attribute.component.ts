@@ -321,7 +321,6 @@ export class AttributeComponent implements OnChanges {
 
         this.displayedTopoColumns = topoHeader;
         this.dataSourceTopo.data = topoDataSource;
-        console.log(this.paginator);
         this.dataSourceTopo.paginator = this.paginator.toArray()[9];
         this.topoSelectedType = selected_type;
         if (this.topoTabIndex === tabIndex && this.topoID === ent_id) {

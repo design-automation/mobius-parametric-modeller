@@ -873,13 +873,7 @@ export class GIGeomSnapshot {
         }
         // children up to coll
         for (const child_i of childs_i) {
-            if (this.ss_data.get(ssid).co_pa.has(child_i)) {
-                if (this.ss_data.get(ssid).co_pa.get(child_i) !== coll_i) {
-                    throw new Error('Error merging collections.');
-                }
-            } else {
-                this.ss_data.get(ssid).co_pa.set(child_i, coll_i);
-            }
+            this.ss_data.get(ssid).co_pa.set(child_i, coll_i);
         }
     }
     // ============================================================================================

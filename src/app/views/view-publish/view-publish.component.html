@@ -1,5 +1,5 @@
 <div class='container' (window:resize)='attribTogglePos()'>
-    <as-split direction="horizontal" (dragEnd)='setSplit($event)' disabled='true' id="published">
+    <as-split direction="horizontal" (dragEnd)='setSplit($event)' gutterSize=0 disabled='true' id="published">
         <as-split-area [size]="100 - getSplit()">
             <publish-header [title]='getFlowchart().name'></publish-header>
             <!-- viewchild content -->

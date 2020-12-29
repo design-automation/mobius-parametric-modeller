@@ -135,6 +135,8 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
         const component = view.component;
         const factory = this.r.resolveComponentFactory(component);
         const componentRef = factory.create(this.injector);
+        componentRef.instance['nodeIndex'] = 1;
+        componentRef.instance['data'] = this.emptyModel;
         /*
         if (view.name != 'Console'){
             componentRef.instance["data"] = this.data;

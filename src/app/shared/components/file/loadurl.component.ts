@@ -147,7 +147,7 @@ export class LoadUrlComponent {
         SaveFileComponent.clearModelData(this.dataService.flowchart);
         delete this.dataService.file.flowchart;
         this.dataService.file = loadeddata;
-        if (loadURLSettings && !loadURLSettings.keepSettings) {
+        if (!loadURLSettings || !loadURLSettings.keepSettings) {
             if (updateLocalViewerSettings(loadeddata.settings)) {
                 this.dataService.viewerSettingsUpdated = true;
             }

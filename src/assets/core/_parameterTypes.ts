@@ -31,9 +31,12 @@ export const _parameterTypes = {
 
     return: '_Output.Return',
 
-    asyncFuncs: ['util.ModelCompare',
-                'io.Write', 'io.Read',
-                'io.Import', 'io.Export']
+    asyncFuncs: [
+        'util.ModelCompare',
+        'util.ModelMerge',
+        'io.Write', 'io.Read',
+        'io.Import', 'io.Export'
+    ]
 };
 
 export const _varString = `

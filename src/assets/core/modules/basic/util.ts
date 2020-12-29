@@ -9,7 +9,7 @@ import { checkIDs, ID } from '../../_check_ids';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { EEntType, TId, TEntTypeIdx, EAttribNames, EAttribDataTypeStrs, IModelJSONData } from '@libs/geo-info/common';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
-import { idsBreak } from '@assets/libs/geo-info/common_id_funcs';
+import { idsBreak, idsMake } from '@assets/libs/geo-info/common_id_funcs';
 import { _getFile } from './io';
 
 // ================================================================================================
@@ -20,7 +20,7 @@ import { _getFile } from './io';
  * @param entities
  * @returns void
  */
-export function SelectEntities(__model__: GIModel, entities: string|string[]|string[][]): void {
+export function Select(__model__: GIModel, entities: string|string[]|string[][]): void {
     __model__.modeldata.geom.selected[__model__.getActiveSnapshot()] = [];
     const activeSelected = __model__.modeldata.geom.selected[__model__.getActiveSnapshot()];
     entities = ((Array.isArray(entities)) ? entities : [entities]) as string[];
@@ -59,12 +59,6 @@ function _flatten(arrs: string|string[]|string[][]): [string[], number[][]] {
     }
     return [arr_flat, arr_indices];
 }
-
-export enum _ECOmpareMethod {
-    THIS_IS_SUBSET = 'subset',
-    THIS_IS_SUPERSET = 'superset',
-    THIS_IS_EQUAL = 'equal'
-}
 // ================================================================================================
 /**
  * Returns am html string representation of the parameters in this model
@@ -79,7 +73,7 @@ export function ParamInfo(__model__: GIModel, __constList__: {}): string {
 // ================================================================================================
 /**
  * Returns an html string representation of one or more entities in the model.
- * \n
+ *
  * @param __model__
  * @param entities One or more objects ot collections.
  * @returns void
@@ -334,7 +328,7 @@ export function ModelInfo(__model__: GIModel): string {
 }
 // ================================================================================================
 /**
- * Check the internal consistency of the model.
+ * Checks the internal consistency of the model.
  *
  * @param __model__
  * @returns Text that summarises what is in the model, click print to see this text.
@@ -353,48 +347,55 @@ export function ModelCheck(__model__: GIModel): string {
     return 'No internal inconsistencies have been found.';
 }
 // ================================================================================================
-
 /**
- * Compare the GI data in this model to the GI data in another model.
- * \n
- * If method = subset, then this model is the answer, and the other model is the submitted model.
- * It will check that all entites in this model also exist in the other model.
- * \n
- * If method = superset, then this model is the submitted model, and the other model is the answer model.
- * It will check that all entites in the other model also exist in this model.
- * \n
- * For specifying the location of the GI Model, you can either specify a URL,
- * or the name of a file in LocalStorage.
+ * Compares two models.
+ * The score that is calculated is based on whether the input model contains all the entities in this model.
+ *
+ * Additional entitis in the input model will not affect the score.
+ * Attributes at the model level are ignored except for the `material` attributes.
+ *
+ * For grading, this model is assumed to be the answer model, and the input model is assumed to be
+ * the model submitted by the student.
+ *
+ * Both models will be modified in the comparison process.
+ *
+ * For specifying the location of the GI Model, you can either specify a URL, or the name of a file in LocalStorage.
  * In the latter case, you do not specify a path, you just specify the file name, e.g. 'my_model.gi'
  *
  * @param __model__
  * @param input_data The location of the GI Model to compare this model to.
- * @param method Enum, method used to compare this model to the other model specified in the gi_model parameter.
  * @returns Text that summarises the comparison between the two models.
  */
-export async function ModelCompare(__model__: GIModel, input_data: string, method: _ECOmpareMethod): Promise<string> {
+export async function ModelCompare(__model__: GIModel, input_data: string): Promise<string> {
     const input_data_str: string = await _getFile(input_data);
+    if (!input_data_str) {
+        throw new Error('Invalid imported model data');
+    }
     const input_model = new GIModel();
     input_model.importGI(input_data_str);
-    let result: {score: number, total: number, comment: string} = null;
-    // compare function has three boolean args
-    // normalize: boolean
-    // check_geom_equality: boolean
-    // check_attrib_equality: boolean
-    switch (method) {
-        case _ECOmpareMethod.THIS_IS_SUBSET:
-            result = __model__.compare(input_model, true, false, false);
-            break;
-        case _ECOmpareMethod.THIS_IS_SUPERSET:
-            result = input_model.compare(__model__, true, false, false);
-            break;
-        case _ECOmpareMethod.THIS_IS_EQUAL:
-            result = __model__.compare(input_model, true, true, false);
-            break;
-        default:
-            throw new Error('Compare method not recognised');
-    }
+    const result: {score: number, total: number, comment: string} = __model__.compare(input_model, true, false, false);
+    console.log(result);
     return result.comment;
+}
+// ================================================================================================
+/**
+ * Merges data from another model into this model.
+ * This is the same as importing the model, except that no collection is created.
+ *
+ * For specifying the location of the GI Model, you can either specify a URL, or the name of a file in LocalStorage.
+ * In the latter case, you do not specify a path, you just specify the file name, e.g. 'my_model.gi'
+ *
+ * @param __model__
+ * @param input_data The location of the GI Model to import into this model to.
+ * @returns Text that summarises the comparison between the two models.
+ */
+export async function ModelMerge(__model__: GIModel, input_data: string): Promise<TId[]> {
+    const input_data_str: string = await _getFile(input_data);
+    if (!input_data_str) {
+        throw new Error('Invalid imported model data');
+    }
+    const ents_arr: TEntTypeIdx[] = __model__.importGI(input_data_str);
+    return idsMake(ents_arr) as TId[];
 }
 // ================================================================================================
 /**

@@ -117,7 +117,6 @@ export function Get(__model__: GIModel, ent_type_enum: _EEntType, entities: TId|
 }
 function _getAll(__model__: GIModel, ent_type: EEntType): TEntTypeIdx[] {
     const ssid: number = __model__.modeldata.active_ssid;
-    // const ents_i: number[] = __model__.modeldata.geom.query.getEnts(ent_type);
     const ents_i: number[] = __model__.modeldata.geom.snapshot.getEnts(ssid, ent_type);
     return ents_i.map(ent_i => [ent_type, ent_i]) as TEntTypeIdx[];
 }

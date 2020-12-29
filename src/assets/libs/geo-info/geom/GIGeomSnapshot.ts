@@ -197,7 +197,7 @@ export class GIGeomSnapshot {
     /**
      * Takes in a list of ents and filters out ents that do no exist in the snapshot specified by SSID.
      * Used by nav any to any
-     * 
+     *
      * @param ent_type
      * @param ents_i
      */

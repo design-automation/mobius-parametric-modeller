@@ -261,12 +261,16 @@ export class GIModel {
         return this.modeldata.check();
     }
     /**
-     * Compares this model and another model.
+     * Compares two models.
+     * The score that is calculated is based on wether the other model contains all the entities in this model.
      * ~
-     * This is the answer model.
-     * The other model is the submitted model.
+     * Additional entitis in the other model will not affect the score.
+     * Attributes at the model level are ignored.
      * ~
-     * Both models will be modified in the process.
+     * For grading, this model is assumed to be the answer model, and the other model is assumed to be
+     * the model submitted by the student.
+     * ~
+     * Both models will be modified in the process of cpmparing.
      * ~
      * @param model The model to compare with.
      */

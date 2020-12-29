@@ -14,16 +14,17 @@ export class GIModelComparator {
     constructor(model: GIModelData) {
         this.modeldata = model;
     }
-
     /**
-     * Compares this model and another model.
+     * Compares two models.
+     * The score that is calculated is based on wether the other model contains all the entities in this model.
      * ~
-     * This is the answer model.
-     * The other model is the submitted model.
+     * Additional entitis in the other model will not affect the score.
+     * Attributes at the model level are ignored except for the `material` attributes.
      * ~
-     * This method checks that every entity in the answer model is also in the submitted model.
+     * For grading, this model is assumed to be the answer model, and the other model is assumed to be
+     * the model submitted by the student.
      * ~
-     * Both models will be modified in the process.
+     * Both models will be modified in the process of cpmparing.
      * ~
      * @param model The model to compare with.
      */
@@ -40,7 +41,7 @@ export class GIModelComparator {
 
         // check that the attributes in this model all exist in the other model
         if (check_attrib_equality) {
-            this.modeldata.attribs.compare(model, result);
+            this.modeldata.attribs.compare.compare(model, result);
         }
 
         // normalize the two models
@@ -111,10 +112,11 @@ export class GIModelComparator {
      * Get the min max posis
      */
     private getTransPadding(): [Txyz, number[]] {
+        const ssid: number = this.modeldata.active_ssid;
         const precision = 1e4;
         const min: Txyz = [Infinity, Infinity, Infinity];
         const max: Txyz = [-Infinity, -Infinity, -Infinity];
-        for (const posi_i of this.modeldata.geom.query.getEnts(EEntType.POSI)) {
+        for (const posi_i of this.modeldata.geom.snapshot.getEnts(ssid, EEntType.POSI)) {
             const xyz: Txyz = this.modeldata.attribs.posis.getPosiCoords(posi_i);
             if (xyz[0] < min[0]) { min[0] = xyz[0]; }
             if (xyz[1] < min[1]) { min[1] = xyz[1]; }
@@ -136,7 +138,8 @@ export class GIModelComparator {
      * Normalises the direction of open wires
      */
     private normOpenWires(trans_padding: [Txyz, number[]]): void {
-        for (const wire_i of this.modeldata.geom.query.getEnts(EEntType.WIRE)) {
+        const ssid: number = this.modeldata.active_ssid;
+        for (const wire_i of this.modeldata.geom.snapshot.getEnts(ssid, EEntType.WIRE)) {
             if (!this.modeldata.geom.query.isWireClosed(wire_i)) {
                 // an open wire can only start at the first or last vertex, but the order can be reversed
                 const verts_i: number[] = this.modeldata.geom.nav.navAnyToVert(EEntType.WIRE, wire_i);
@@ -152,7 +155,8 @@ export class GIModelComparator {
      * Normalises the edge order of closed wires
      */
     private normClosedWires(trans_padding: [Txyz, number[]]): void {
-        for (const wire_i of this.modeldata.geom.query.getEnts(EEntType.WIRE)) {
+        const ssid: number = this.modeldata.active_ssid;
+        for (const wire_i of this.modeldata.geom.snapshot.getEnts(ssid, EEntType.WIRE)) {
             if (this.modeldata.geom.query.isWireClosed(wire_i)) {
                 // a closed wire can start at any edge
                 const edges_i: number[] = this.modeldata.geom.nav.navAnyToEdge(EEntType.WIRE, wire_i);
@@ -182,7 +186,8 @@ export class GIModelComparator {
      * Normalises the order of holes in faces
      */
     private normHoles(trans_padding: [Txyz, number[]]): void {
-        for (const pgon_i of this.modeldata.geom.query.getEnts(EEntType.PGON)) {
+        const ssid: number = this.modeldata.active_ssid;
+        for (const pgon_i of this.modeldata.geom.snapshot.getEnts(ssid, EEntType.PGON)) {
             const holes_i: number[] = this.modeldata.geom.query.getPgonHoles(pgon_i);
             if (holes_i.length > 0) {
                 const fprints: Array<[string, number]> = [];
@@ -368,7 +373,7 @@ export class GIModelComparator {
             idx_maps: [Map<EEntType, Map<number, number>>, Map<EEntType, Map<number, number>>]): void {
         result.comment.push('Comparing collections in the two models.');
         const data_comments: string [] = [];
-        // set attrib names to check when comparing objects and collections
+        // set attrib names to check when comparing collections
         const attrib_names: string[] = []; // no attribs to check
         // get the maps
         const this_to_com_idx_maps: Map<EEntType, Map<number, number>> = idx_maps[0];
@@ -407,12 +412,13 @@ export class GIModelComparator {
      * At the moment, this seems to only compare the material attribute in the model
      */
     private compareModelAttribs(other_model: GIModel, result: {score: number, total: number, comment: any[]}): void {
+        const ssid: number = this.modeldata.active_ssid;
         result.comment.push('Comparing model attributes in the two models.');
         const data_comments: string [] = [];
         // set attrib names to check when comparing objects and collections
         const attrib_names: string[] = [];
         if (this.modeldata.attribs.query.hasEntAttrib(EEntType.PGON, 'material')) {
-            const pgons_i: number[] = this.modeldata.geom.query.getEnts(EEntType.PGON);
+            const pgons_i: number[] = this.modeldata.geom.snapshot.getEnts(ssid, EEntType.PGON);
             const mat_names: Set<string> =
                 new Set(this.modeldata.attribs.get.getEntAttribVal(EEntType.PGON, pgons_i, 'material') as string[]);
             for (const mat_name of Array.from(mat_names)) {
@@ -453,6 +459,7 @@ export class GIModelComparator {
      */
     private checkForErrors(other_model: GIModel, result: {score: number, total: number, comment: any[]},
             idx_maps: [Map<EEntType, Map<number, number>>, Map<EEntType, Map<number, number>>]): void {
+        const ssid: number = this.modeldata.active_ssid;
         // set precision of comparing vectors
         // this precision should be a little higher than the precision used in
         // getAttribValFprint()
@@ -474,7 +481,7 @@ export class GIModelComparator {
             // note that this map will be undefined for each ent for which no match was found
             // at the same time, flip the map
             const com_idx_to_other_map: Map<number, number> = new Map();
-            const other_ents_i: number[] = other_model.modeldata.geom.query.getEnts(obj_ent_type);
+            const other_ents_i: number[] = other_model.modeldata.geom.snapshot.getEnts(ssid, obj_ent_type);
             const other_mia_ents_i: number[] = [];
             for (const ent_i of other_ents_i) {
                 const com_idx: number = other_to_com_idx_maps.get(obj_ent_type).get(ent_i);
@@ -486,7 +493,7 @@ export class GIModelComparator {
             }
             // get all the ents in this model for which no match has been found in the other model
             // note that this map is never empty, it always contains a mapping for each ent, even when no match was found
-            const this_ents_i: number[] = this.modeldata.geom.query.getEnts(obj_ent_type);
+            const this_ents_i: number[] = this.modeldata.geom.snapshot.getEnts(ssid, obj_ent_type);
             const this_mia_ents_i: number[] = [];
             for (const ent_i of this_ents_i) {
                 const com_idx: number = this_to_com_idx_maps.get(obj_ent_type).get(ent_i);
@@ -631,8 +638,9 @@ export class GIModelComparator {
      * The two arrays are in the same order
      */
     private getEntsFprint(ent_type: EEntType, attrib_names: Map<EEntType, string[]>): [Array<Map<string, string>>, number[]] {
+        const ssid: number = this.modeldata.active_ssid;
         const fprints: Array<Map<string, string>>  = [];
-        const ents_i: number[] = this.modeldata.geom.query.getEnts(ent_type);
+        const ents_i: number[] = this.modeldata.geom.snapshot.getEnts(ssid, ent_type);
         for (const ent_i of ents_i) {
             fprints.push(this.getEntFprint(ent_type, ent_i, attrib_names));
         }
@@ -685,12 +693,10 @@ export class GIModelComparator {
      * Get one fprint for all collections
      */
     private getCollFprints(idx_maps: Map<EEntType, Map<number, number>>, attrib_names: string[]): string[] {
-
         const ssid: number = this.modeldata.active_ssid;
-
         const fprints: string[]  = [];
         // create the fprints for each collection
-        const colls_i: number[] = this.modeldata.geom.query.getEnts(EEntType.COLL);
+        const colls_i: number[] = this.modeldata.geom.snapshot.getEnts(ssid, EEntType.COLL);
         for (const coll_i of colls_i) {
             fprints.push(this.getCollFprint(coll_i, idx_maps, attrib_names));
         }
@@ -713,7 +719,7 @@ export class GIModelComparator {
         for (let i = 0; i < fprints.length; i++) {
             const idx: number = fprint_to_old_i_map.get(fprints[i]);
             const coll_old_i: number = colls_i[idx];
-            const coll_parent_old_i: number = this.modeldata.geom.snapshot.getCollParent(ssid, coll_old_i);
+            const coll_parent_old_i: number = this.modeldata.geom.nav.navCollToCollParent(coll_old_i);
             let parent_str = '';
             if (coll_parent_old_i === -1) {
                 parent_str = '.^';

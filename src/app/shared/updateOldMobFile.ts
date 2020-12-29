@@ -15,6 +15,7 @@ export function checkMobFile(file: IMobius) {
     if (file.version === VERSION.version) {
         return;
     }
+    checkFileVersion(file.version);
     // check the end node
     // checkEndReturn(file);
 
@@ -257,6 +258,15 @@ function checkEndReturn(file) {
                 break;
             }
         }
+    }
+}
+
+function checkFileVersion(fileVersion) {
+    console.log(fileVersion)
+    const fileVer = fileVersion.split('.');
+    if (fileVer[0] === '0' && Number(fileVer[1]) < 7) {
+        alert(`Outdated file: File Version of ${fileVersion}. May be incompatible with current version of Mobius.`);
+        // throw new Error(`Unable to open outdated file: File Version of ${fileVersion}. Requires file version of 0.7.x`);
     }
 }
 

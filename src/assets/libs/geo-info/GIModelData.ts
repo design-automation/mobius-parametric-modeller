@@ -66,7 +66,7 @@ export class GIModelData {
         if (ents === null) {
             ent_sets = this.geom.snapshot.getAllEntSets(this.active_ssid);
         } else {
-            ent_sets = this.geom.snapshot.getSubEntsSets( this.active_ssid, ents);
+            ent_sets = this.geom.snapshot.getSubEntsSets(this.active_ssid, ents);
         }
         this.geom.snapshot.addTopoToSubEntsSets(ent_sets);
         // merge the two sets of posis

@@ -258,7 +258,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             if (this.selectSwitch !== undefined) {
                 let ent_type = this.tab_map[this.getCurrentTab()];
                 if (ent_type === undefined) {
-                    const curr_topo = localStorage.getItem('mpm_attrib_current_topo_obj')
+                    const curr_topo = localStorage.getItem('mpm_attrib_current_topo_obj');
                     if (curr_topo) {
                         ent_type = Number(curr_topo);
                     }
@@ -270,7 +270,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
             if (this.attribLabel !== undefined) {
                 let ent_type = this.tab_map[this.getCurrentTab()];
                 if (ent_type === undefined) {
-                    const curr_topo = localStorage.getItem('mpm_attrib_current_topo_obj')
+                    const curr_topo = localStorage.getItem('mpm_attrib_current_topo_obj');
                     if (curr_topo) {
                         ent_type = Number(curr_topo);
                     }

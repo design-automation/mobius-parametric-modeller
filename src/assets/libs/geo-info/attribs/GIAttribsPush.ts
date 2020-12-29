@@ -104,7 +104,7 @@ export class GIAttribsPush {
         } else if (source_ent_type === EEntType.MOD) {
             const value: TAttribDataTypes = this.modeldata.attribs.get.getModelAttribValOrItem(source_attrib_name, source_attrib_idx_key);
             this.modeldata.attribs.add.addAttrib(target_ent_type, target_attrib_name, target_data_type);
-            const target_ents_i: number[] = this.modeldata.geom.query.getEnts(target_ent_type);
+            const target_ents_i: number[] = this.modeldata.geom.snapshot.getEnts(ssid, target_ent_type);
             for (const target_ent_i of target_ents_i) {
                 if (typeof target_attrib_idx_key === 'number') {
                     this.modeldata.attribs.set.setEntsAttribListIdxVal(target_ent_type, target_ent_i, target_attrib_name, target_attrib_idx_key, value);

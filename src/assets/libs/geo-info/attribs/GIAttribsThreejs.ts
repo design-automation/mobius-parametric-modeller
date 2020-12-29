@@ -139,7 +139,6 @@ export class GIAttribsThreejs {
         // get the attribs map for this ent type
         const attribs_maps_key: string = EEntTypeStr[ent_type];
         const attribs: Map<string, GIAttribMapBase> = this.modeldata.attribs.attribs_maps.get(ssid)[attribs_maps_key];
-
         // create a map of objects to store the data
         // const data_obj_map: Map< number, { '#': number, _id: string} > = new Map();
         const data_obj_map: Map< number, {_id: string} > = new Map();

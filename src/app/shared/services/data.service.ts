@@ -8,6 +8,8 @@ import { Subject } from 'rxjs';
 import { VERSION } from '@env/version';
 import { GIMetaData } from '@assets/libs/geo-info/GIMetaData';
 import { inline_func } from '@assets/core/inline/inline';
+import { GIModel } from '@assets/libs/geo-info/GIModel';
+import { _parameterTypes } from '@assets/core/modules';
 
 @Injectable()
 export class DataService {
@@ -23,6 +25,8 @@ export class DataService {
 
     private static _flowchartPosition: string = undefined;
     private static _newFlowchart = true;
+
+    private static _model: GIModel;
 
     private static _modelOutputView = {};
     private static _testModel = false;
@@ -125,6 +129,12 @@ export class DataService {
     }
     get settings() {return DataService._data.settings; }
     set settings(settings: any) {DataService._data.settings = settings; }
+
+    get executeModel() {return DataService._model; }
+    initiateExecuteModel() {
+        DataService._model = _parameterTypes.newFn();
+        DataService._model.debug = DataService._mobiusSettings.debug;
+    }
 
     get viewerSettingsUpdated() {return DataService._viewerSettingsUpdated; }
     set viewerSettingsUpdated(updated: boolean) {DataService._viewerSettingsUpdated = updated; }

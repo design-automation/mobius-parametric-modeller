@@ -252,8 +252,9 @@ export class ExecuteComponent {
         this.triggerCheck = false;
         this.terminated = null;
         this.dataService.timelineDefault = true;
-        this.dataService.flowchart.model = _parameterTypes.newFn();
-        this.dataService.flowchart.model.debug = this.dataService.mobiusSettings.debug;
+        this.dataService.initiateExecuteModel();
+        // this.dataService.flowchart.model = _parameterTypes.newFn();
+        // this.dataService.flowchart.model.debug = this.dataService.mobiusSettings.debug;
 
         if (this.dataService.consoleClear) {
             this.dataService.clearLog();
@@ -303,6 +304,7 @@ export class ExecuteComponent {
                 // setTimeout for 20ms so that the loading screen has enough time to be loaded in
                 setTimeout(async () => {
                     await this.executeFlowchart();
+                    this.dataService.flowchart.model = this.dataService.executeModel;
                     this.dataService.finalizeLog();
                     this.dataService.log('<br>');
                     const hudData = this.dataService.flowchart.model.modeldata.attribs.getAttrib(EEntType.MOD, 'hud') || null;
@@ -669,7 +671,7 @@ export class ExecuteComponent {
                 }
             }
 
-            params['model'] = this.dataService.flowchart.model;
+            params['model'] = this.dataService.executeModel;
             const snapshotID = params['model'].nextSnapshot(node.input.value);
             node.model = null;
 

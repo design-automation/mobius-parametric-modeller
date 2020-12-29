@@ -277,6 +277,7 @@ export async function Export(__model__: GIModel, entities: TId|TId[]|TId[][],
 }
 async function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
     file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): Promise<boolean> {
+    const ssid: number = __model__.modeldata.active_ssid;
     switch (data_format) {
         case _EIOExportDataFormat.GI:
             let model_data = '';
@@ -289,14 +290,14 @@ async function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
             }
             return saveResource(model_data, file_name);
         case _EIOExportDataFormat.OBJ_VERT:
-            const obj_verts_data: string = exportVertBasedObj(__model__, ents_arr);
+            const obj_verts_data: string = exportVertBasedObj(__model__, ents_arr, ssid);
             // obj_data = obj_data.replace(/#/g, '%23'); // TODO temporary fix
             if (data_target === _EIODataTarget.DEFAULT) {
                 return download(obj_verts_data , file_name);
             }
             return saveResource(obj_verts_data, file_name);
         case _EIOExportDataFormat.OBJ_POSI:
-            const obj_posis_data: string = exportPosiBasedObj(__model__, ents_arr);
+            const obj_posis_data: string = exportPosiBasedObj(__model__, ents_arr, ssid);
             // obj_data = obj_data.replace(/#/g, '%23'); // TODO temporary fix
             if (data_target === _EIODataTarget.DEFAULT) {
                 return download(obj_posis_data , file_name);

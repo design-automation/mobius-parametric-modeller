@@ -139,7 +139,7 @@ function processColls(model: GIModel): void {
     const ssid: number = this.modeldata.active_ssid;
     const colls_map: Map<number, number[]> = new Map();
     // go through the collections
-    const colls_i: number[] = model.modeldata.geom.query.getEnts(EEntType.COLL);
+    const colls_i: number[] = model.modeldata.geom.snapshot.getEnts(ssid, EEntType.COLL);
     for (const coll_i of colls_i) {
         const parent: number = model.modeldata.geom.snapshot.getCollParent(ssid, coll_i);
         // const pgons_i: number[] = model.modeldata.geom.nav.navCollToPgon(coll_i);
@@ -278,7 +278,7 @@ function processGeomMeshPline(model: GIModel, pline_i: number, material_id: stri
 /**
  * Export to dae collada file
  */
-export function exportDae(model: GIModel): string {
+export function exportDae(model: GIModel, ssid: number): string {
     // do we have color, texture, normal?
     const has_color_attrib: boolean = model.modeldata.attribs.query.hasEntAttrib(EEntType.VERT, EAttribNames.COLOR);
     const has_normal_attrib: boolean = model.modeldata.attribs.query.hasEntAttrib(EEntType.VERT, EAttribNames.NORMAL);
@@ -294,7 +294,7 @@ export function exportDae(model: GIModel): string {
     const materials_pgons_rev_map: Map<string, string> = new Map();
     const materials_plines_rev_map: Map<string, string> = new Map();
     // process the polygons that are not in a collection
-    const pgons_i: number[] = model.modeldata.geom.query.getEnts(EEntType.PGON);
+    const pgons_i: number[] = model.modeldata.geom.snapshot.getEnts(ssid, EEntType.PGON);
     for (const pgon_i of pgons_i) {
         const material_id: string  = processMaterialPgon(model, pgon_i, has_color_attrib,
             materials_map, material_effectss_map, materials_pgons_rev_map);
@@ -316,7 +316,7 @@ export function exportDae(model: GIModel): string {
         }
     }
     // process the polylines that are not in a collection
-    const plines_i: number[] = model.modeldata.geom.query.getEnts(EEntType.PLINE);
+    const plines_i: number[] = model.modeldata.geom.snapshot.getEnts(ssid, EEntType.PLINE);
     for (const pline_i of plines_i) {
         const material_id: string  = processMaterialPline(model, pline_i, has_color_attrib,
             materials_map, material_effectss_map, materials_plines_rev_map);

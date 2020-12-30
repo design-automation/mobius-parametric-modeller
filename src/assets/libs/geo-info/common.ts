@@ -245,34 +245,42 @@ export interface ISnapshotData {
     co_ch: Map<number, Set<number>>;
     co_pa: Map<number, number>;
 }
-
+export interface IRenumMaps {
+    posis: Map<number, number>;
+    verts: Map<number, number>;
+    tris: Map<number, number>;
+    edges: Map<number, number>;
+    wires: Map<number, number>;
+    points: Map<number, number>;
+    plines: Map<number, number>;
+    pgons: Map<number, number>;
+    colls: Map<number, number>;
+}
 // ================================================================================================
 // JSON MODEL DATA
 // ================================================================================================
 
 export interface IModelJSONData {
+    type: string;
+    version: string;
     geometry: IGeomJSONData;
     attributes: IAttribsJSONData;
 }
 
 export interface IGeomJSONData {
-    posis_i: number[];
+    num_posis: number;
     verts: TVert[];
-    verts_i: number[];
     tris: TTri[];
-    tris_i: number[];
     edges: TEdge[];
-    edges_i: number[];
     wires: TWire[];
-    wires_i: number[];
     points: TPoint[];
-    points_i: number[];
     plines: TPline[];
-    plines_i: number[];
     pgons: TPgon[];
     pgontris: TPgonTri[];
-    pgons_i: number[];
-    colls_i: number[];
+    coll_pgons: number[][];
+    coll_plines: number[][];
+    coll_points: number[][];
+    coll_childs: number[][];
     selected: Map<Number, TEntTypeIdx[]>;
 }
 export interface IAttribJSONData {

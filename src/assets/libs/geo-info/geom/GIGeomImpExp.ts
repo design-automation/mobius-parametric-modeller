@@ -1,5 +1,5 @@
 import { IGeomMaps, TTri, TEdge, TWire,
-    TPgonTri, TPoint, TPline, TPgon, EEntType, IEntSets, IGeomJSONData } from '../common';
+    TPgonTri, TPoint, TPline, TPgon, EEntType, IEntSets, IGeomJSONData, IRenumMaps } from '../common';
 import { GIModelData } from '../GIModelData';
 
 /**
@@ -19,93 +19,92 @@ export class GIGeomImpExp {
      * Import GI data into this model
      * @param other_geom_maps The geom_arrays of the other model.
      */
-    public importGI( gi_data: IGeomJSONData ): Map<EEntType, Map<number, number>> {
-        const ssid: number = this.modeldata.active_ssid;
-        // ======================================================================
-        // get maps for entities
+    public importGIRenum( gi_data: IGeomJSONData ): IRenumMaps {
         // positions
         const renum_posis_map: Map<number, number> = new Map();
-        for (const other_posi_i of gi_data.posis_i) {
-            renum_posis_map.set(other_posi_i, this.modeldata.model.metadata.nextPosi());
+        for (let i = 0; i < gi_data.num_posis; i++) {
+            renum_posis_map.set(i, this.modeldata.model.metadata.nextPosi());
         }
         // vertices
         const renum_verts_map: Map<number, number> = new Map();
-        for (const other_vert_i of gi_data.verts_i) {
-            renum_verts_map.set(other_vert_i, this.modeldata.model.metadata.nextVert());
+        for (let i = 0; i < gi_data.verts.length; i++) {
+            renum_verts_map.set(i, this.modeldata.model.metadata.nextVert());
         }
         // triangles
         const renum_tris_map: Map<number, number> = new Map();
-        for (const other_tri_i of gi_data.tris_i) {
-            renum_tris_map.set(other_tri_i, this.modeldata.model.metadata.nextTri());
+        for (let i = 0; i < gi_data.tris.length; i++) {
+            renum_tris_map.set(i, this.modeldata.model.metadata.nextTri());
         }
         // edges
         const renum_edges_map: Map<number, number> = new Map();
-        for (const other_edge_i of gi_data.edges_i) {
-            renum_edges_map.set(other_edge_i, this.modeldata.model.metadata.nextEdge());
+        for (let i = 0; i < gi_data.edges.length; i++) {
+            renum_edges_map.set(i, this.modeldata.model.metadata.nextEdge());
         }
         // wires
         const renum_wires_map: Map<number, number> = new Map();
-        for (const other_wire_i of gi_data.wires_i) {
-            renum_wires_map.set(other_wire_i, this.modeldata.model.metadata.nextWire());
+        for (let i = 0; i < gi_data.wires.length; i++) {
+            renum_wires_map.set(i, this.modeldata.model.metadata.nextWire());
         }
-        // // faces
-        // const renum_faces_map: Map<number, number> = new Map();
-        // for (const other_face_i of gi_data.faces_i) {
-        //     renum_faces_map.set(other_face_i, this.modeldata.model.metadata.nextFace());
-        // }
         // points
         const renum_points_map: Map<number, number> = new Map();
-        for (const other_point_i of gi_data.points_i) {
-            renum_points_map.set(other_point_i, this.modeldata.model.metadata.nextPoint());
+        for (let i = 0; i < gi_data.points.length; i++) {
+            renum_points_map.set(i, this.modeldata.model.metadata.nextPoint());
         }
         // plines
         const renum_plines_map: Map<number, number> = new Map();
-        for (const other_pline_i of gi_data.plines_i) {
-            renum_plines_map.set(other_pline_i, this.modeldata.model.metadata.nextPline());
+        for (let i = 0; i < gi_data.plines.length; i++) {
+            renum_plines_map.set(i, this.modeldata.model.metadata.nextPline());
         }
         // pgons
         const renum_pgons_map: Map<number, number> = new Map();
-        for (const other_pgon_i of gi_data.pgons_i) {
-            renum_pgons_map.set(other_pgon_i, this.modeldata.model.metadata.nextPgon());
+        for (let i = 0; i < gi_data.pgons.length; i++) {
+            renum_pgons_map.set(i, this.modeldata.model.metadata.nextPgon());
         }
         // colls
         const renum_colls_map: Map<number, number> = new Map();
-        for (const other_coll_i of gi_data.colls_i) {
-            renum_colls_map.set(other_coll_i, this.modeldata.model.metadata.nextColl());
+        for (let i = 0; i < gi_data.coll_pgons.length; i++) {
+            renum_colls_map.set(i, this.modeldata.model.metadata.nextColl());
         }
-        // create maps to be return later
-        // these maps are required when appending the attribute data
-        const renum_maps: Map<EEntType, Map<number, number>> = new Map();
-        renum_maps.set(EEntType.POSI, renum_posis_map);
-        renum_maps.set(EEntType.VERT, renum_verts_map);
-        renum_maps.set(EEntType.EDGE, renum_edges_map);
-        renum_maps.set(EEntType.WIRE, renum_wires_map);
-        renum_maps.set(EEntType.POINT, renum_points_map);
-        renum_maps.set(EEntType.PLINE, renum_plines_map);
-        renum_maps.set(EEntType.PGON, renum_pgons_map);
-        renum_maps.set(EEntType.COLL, renum_colls_map);
-        // ======================================================================
-        // update arrays
+        // return maps
+        const renum_maps: IRenumMaps = {
+            posis: renum_posis_map,
+            verts: renum_verts_map,
+            tris: renum_tris_map,
+            edges: renum_edges_map,
+            wires: renum_wires_map,
+            points: renum_points_map,
+            plines: renum_plines_map,
+            pgons: renum_pgons_map,
+            colls: renum_colls_map
+        };
+        return renum_maps;
+    }
+    /**
+     * Import GI data into this model
+     * @param other_geom_maps The geom_arrays of the other model.
+     */
+    public importGI(gi_data: IGeomJSONData, renum_maps: IRenumMaps): void {
+        const ssid: number = this.modeldata.active_ssid;
         // posis->verts, create empty []
-        for (let i = 0; i < gi_data.posis_i.length; i++) {
-            const other_posi_i: number = renum_posis_map.get(gi_data.posis_i[i]);
+        for (let i = 0; i < gi_data.num_posis; i++) {
+            const other_posi_i: number = renum_maps.posis.get(i);
             this._geom_maps.up_posis_verts.set(other_posi_i, []);
             // snapshot
             this.modeldata.geom.snapshot.addNewEnt(ssid, EEntType.POSI, other_posi_i);
         }
         // add vertices to model
-        for (let i = 0; i < gi_data.verts_i.length; i++) {
-            const other_vert_i: number = renum_verts_map.get(gi_data.verts_i[i]);
-            const other_posi_i: number = renum_posis_map.get(gi_data.verts[i]);
+        for (let i = 0; i < gi_data.verts.length; i++) {
+            const other_vert_i: number = renum_maps.verts.get(i);
+            const other_posi_i: number = renum_maps.posis.get(gi_data.verts[i]);
             // down
             this._geom_maps.dn_verts_posis.set(other_vert_i, other_posi_i);
             // up
             this._geom_maps.up_posis_verts.get(other_posi_i).push(other_vert_i);
         }
         // add triangles to model
-        for (let i = 0; i < gi_data.tris_i.length; i++) {
-            const other_tri_i: number = renum_tris_map.get(gi_data.tris_i[i]);
-            const other_verts_i: TTri = gi_data.tris[i].map( other_vert_i => renum_verts_map.get(other_vert_i) ) as TTri;
+        for (let i = 0; i < gi_data.tris.length; i++) {
+            const other_tri_i: number = renum_maps.tris.get(i);
+            const other_verts_i: TTri = gi_data.tris[i].map(other_vert_i => renum_maps.verts.get(other_vert_i) ) as TTri;
             // down
             this._geom_maps.dn_tris_verts.set(other_tri_i, other_verts_i);
             // up
@@ -117,9 +116,9 @@ export class GIGeomImpExp {
             });
         }
         // add edges to model
-        for (let i = 0; i < gi_data.edges_i.length; i++) {
-            const other_edge_i: number = renum_edges_map.get(gi_data.edges_i[i]);
-            const other_verts_i: TEdge = gi_data.edges[i].map( other_vert_i => renum_verts_map.get(other_vert_i) ) as TEdge;
+        for (let i = 0; i < gi_data.edges.length; i++) {
+            const other_edge_i: number = renum_maps.edges.get(i);
+            const other_verts_i: TEdge = gi_data.edges[i].map(other_vert_i => renum_maps.verts.get(other_vert_i) ) as TEdge;
             // down
             this._geom_maps.dn_edges_verts.set(other_edge_i, other_verts_i);
             // up
@@ -138,9 +137,9 @@ export class GIGeomImpExp {
             });
         }
         // add wires to model
-        for (let i = 0; i < gi_data.wires_i.length; i++) {
-            const other_wire_i: number = renum_wires_map.get(gi_data.wires_i[i]);
-            const other_edges_i: TWire = gi_data.wires[i].map( other_edge_i => renum_edges_map.get(other_edge_i) ) as TWire;
+        for (let i = 0; i < gi_data.wires.length; i++) {
+            const other_wire_i: number = renum_maps.wires.get(i);
+            const other_edges_i: TWire = gi_data.wires[i].map(other_edge_i => renum_maps.edges.get(other_edge_i) ) as TWire;
             // down
             this._geom_maps.dn_wires_edges.set(other_wire_i, other_edges_i);
             // up
@@ -148,26 +147,10 @@ export class GIGeomImpExp {
                 this._geom_maps.up_edges_wires.set(edge_i, other_wire_i);
             });
         }
-        // add faces to model
-        // for (let i = 0; i < gi_data.faces_i.length; i++) {
-        //     const other_face_i: number = renum_faces_map.get(gi_data.faces_i[i]);
-        //     const other_wires_i: TFaceTri = gi_data.faces[i].map( other_wire_i => renum_wires_map.get(other_wire_i) ) as TFace;
-        //     const other_tris_i: TFaceTri = gi_data.facetris[i].map ( other_tri_i => renum_tris_map.get(other_tri_i) ) as TFaceTri;
-        //     // down
-        //     this._geom_maps.dn_faces_wires.set(other_face_i, other_wires_i);
-        //     this._geom_maps.dn_faces_tris.set(other_face_i, other_tris_i);
-        //     // up
-        //     other_wires_i.forEach( wire_i => {
-        //         this._geom_maps.up_wires_faces.set(wire_i, other_face_i);
-        //     });
-        //     other_tris_i.forEach( tri_i => {
-        //         this._geom_maps.up_tris_faces.set(tri_i, other_face_i);
-        //     });
-        // }
         // add points to model
-        for (let i = 0; i < gi_data.points_i.length; i++) {
-            const other_point_i: number = renum_points_map.get(gi_data.points_i[i]);
-            const other_vert_i: TPoint = renum_verts_map.get(gi_data.points[i]) as TPoint;
+        for (let i = 0; i < gi_data.points.length; i++) {
+            const other_point_i: number = renum_maps.points.get(i);
+            const other_vert_i: TPoint = renum_maps.verts.get(gi_data.points[i]) as TPoint;
             // down
             this._geom_maps.dn_points_verts.set(other_point_i, other_vert_i);
             // up
@@ -178,9 +161,9 @@ export class GIGeomImpExp {
             this.modeldata.geom.snapshot.addNewEnt(ssid, EEntType.POINT, other_point_i);
         }
         // add plines to model
-        for (let i = 0; i < gi_data.plines_i.length; i++) {
-            const other_pline_i: number = renum_plines_map.get(gi_data.plines_i[i]);
-            const other_wire_i: TPline = renum_wires_map.get(gi_data.plines[i]) as TPline;
+        for (let i = 0; i < gi_data.plines.length; i++) {
+            const other_pline_i: number = renum_maps.plines.get(i);
+            const other_wire_i: TPline = renum_maps.wires.get(gi_data.plines[i]) as TPline;
             // down
             this._geom_maps.dn_plines_wires.set(other_pline_i, other_wire_i);
             // up
@@ -191,22 +174,10 @@ export class GIGeomImpExp {
             this.modeldata.geom.snapshot.addNewEnt(ssid, EEntType.PLINE, other_pline_i);
         }
         // add pgons to model
-        // for (let i = 0; i < gi_data.pgons_i.length; i++) {
-        //     const other_pgon_i: number = renum_pgons_map.get(gi_data.pgons_i[i]);
-        //     const other_face_i: TPgon = renum_faces_map.get(gi_data.pgons[i]) as TPgon;
-        //     // down
-        //     this._geom_maps.dn_pgons_faces.set(other_pgon_i, other_face_i);
-        //     // up
-        //     this._geom_maps.up_faces_pgons.set(other_face_i, other_pgon_i);
-        //     // timestamp
-        //     this.modeldata.updateEntTs(EEntType.PGON, other_pgon_i);
-        //     // snapshot
-        //     this.modeldata.geom.snapshot.addEnt(ssid, EEntType.PGON, other_pgon_i);
-        // }
-        for (let i = 0; i < gi_data.pgons_i.length; i++) {
-            const other_pgon_i: number = renum_pgons_map.get(gi_data.pgons_i[i]);
-            const other_wires_i: TPgon = gi_data.pgons[i].map( other_wire_i => renum_wires_map.get(other_wire_i) ) as TPgon;
-            const other_tris_i: TPgonTri = gi_data.pgontris[i].map ( other_tri_i => renum_tris_map.get(other_tri_i) ) as TPgonTri;
+        for (let i = 0; i < gi_data.pgons.length; i++) {
+            const other_pgon_i: number = renum_maps.pgons.get(i);
+            const other_wires_i: TPgon = gi_data.pgons[i].map(other_wire_i => renum_maps.wires.get(other_wire_i) ) as TPgon;
+            const other_tris_i: TPgonTri = gi_data.pgontris[i].map(other_tri_i => renum_maps.tris.get(other_tri_i) ) as TPgonTri;
             // down
             this._geom_maps.dn_pgons_wires.set(other_pgon_i, other_wires_i);
             this._geom_maps.dn_pgons_tris.set(other_pgon_i, other_tris_i);
@@ -223,71 +194,168 @@ export class GIGeomImpExp {
             this.modeldata.geom.snapshot.addNewEnt(ssid, EEntType.PGON, other_pgon_i);
         }
         // add colls to model
-        for (let i = 0; i < gi_data.colls_i.length; i++) {
-            const other_coll_i: number = gi_data.colls_i[i];
+        for (let i = 0; i < gi_data.coll_pgons.length; i++) {
+
+            // const other_coll_i: number = gi_data.colls_i[i];
+            // // set
+            // this._geom_maps.colls.add( renum_colls_map.get(other_coll_i) );
+            // // snapshot
+            // this.modeldata.geom.snapshot.addNewEnt(ssid, EEntType.COLL, other_coll_i);
+
+            const other_coll_i: number = renum_maps.colls.get(i);
+            const other_pgons_i: number[] = gi_data.coll_pgons[i].map(coll_pgon_i => renum_maps.pgons.get(coll_pgon_i));
+            const other_plines_i: number[] = gi_data.coll_plines[i].map(coll_pline_i => renum_maps.plines.get(coll_pline_i));
+            const other_points_i: number[] = gi_data.coll_points[i].map(coll_point_i => renum_maps.points.get(coll_point_i));
+            const other_childs_i: number[] = gi_data.coll_childs[i].map(coll_child_i => renum_maps.colls.get(coll_child_i));
             // set
-            this._geom_maps.colls.add( renum_colls_map.get(other_coll_i) );
-            // snapshot
+            this._geom_maps.colls.add(other_coll_i);
+            // snapshot (creates new empts sets of pgons, plines, points, and child collections)
             this.modeldata.geom.snapshot.addNewEnt(ssid, EEntType.COLL, other_coll_i);
+            // add contents of collection in this snapshot
+            this.modeldata.geom.snapshot.addCollPgons(ssid, other_coll_i, other_pgons_i);
+            this.modeldata.geom.snapshot.addCollPlines(ssid, other_coll_i, other_plines_i);
+            this.modeldata.geom.snapshot.addCollPoints(ssid, other_coll_i, other_points_i);
+            this.modeldata.geom.snapshot.addCollChildren(ssid, other_coll_i, other_childs_i);
         }
         // ========================================================================================
-        // return the maps
+        // return ???
+    }
+    /**
+     * Export GI data out of this model.
+     */
+    public exportGIRenum(ent_sets: IEntSets): IRenumMaps {
+        let i: number;
+        // posis
+        const renum_posis_map: Map<number, number> = new Map();
+        i = 0;
+        ent_sets.ps.forEach(ent_i => {
+            renum_posis_map.set(ent_i, i);
+            i += 1;
+        });
+        // verts
+        const renum_verts_map: Map<number, number> = new Map();
+        i = 0;
+        ent_sets._v.forEach(ent_i => {
+            renum_verts_map.set(ent_i, i);
+            i += 1;
+        });
+        // tris
+        const renum_tris_map: Map<number, number> = new Map();
+        i = 0;
+        ent_sets._t.forEach(ent_i => {
+            renum_tris_map.set(ent_i, i);
+            i += 1;
+        });
+        // edges
+        const renum_edges_map: Map<number, number> = new Map();
+        i = 0;
+        ent_sets._e.forEach(ent_i => {
+            renum_edges_map.set(ent_i, i);
+            i += 1;
+        });
+        // wires
+        const renum_wires_map: Map<number, number> = new Map();
+        i = 0;
+        ent_sets._w.forEach(ent_i => {
+            renum_wires_map.set(ent_i, i);
+            i += 1;
+        });
+        // points
+        const renum_points_map: Map<number, number> = new Map();
+        i = 0;
+        ent_sets.pt.forEach(ent_i => {
+            renum_points_map.set(ent_i, i);
+            i += 1;
+        });
+        // plines
+        const renum_plines_map: Map<number, number> = new Map();
+        i = 0;
+        ent_sets.pl.forEach(ent_i => {
+            renum_plines_map.set(ent_i, i);
+            i += 1;
+        });
+        // pgons
+        const renum_pgons_map: Map<number, number> = new Map();
+        i = 0;
+        ent_sets.pg.forEach(ent_i => {
+            renum_pgons_map.set(ent_i, i);
+            i += 1;
+        });
+        // colls
+        const renum_colls_map: Map<number, number> = new Map();
+        i = 0;
+        ent_sets.co.forEach(ent_i => {
+            renum_colls_map.set(ent_i, i);
+            i += 1;
+        });
+        // return maps
+        const renum_maps: IRenumMaps =  {
+            posis: renum_posis_map,
+            verts: renum_verts_map,
+            tris: renum_tris_map,
+            edges: renum_edges_map,
+            wires: renum_wires_map,
+            points: renum_points_map,
+            plines: renum_plines_map,
+            pgons: renum_pgons_map,
+            colls: renum_colls_map
+        };
         return renum_maps;
     }
     /**
      * Export GI data out of this model.
      */
-    public exportGI(ent_sets: IEntSets): IGeomJSONData {
+    public exportGI(ent_sets: IEntSets, renum_maps: IRenumMaps): IGeomJSONData {
         const data: IGeomJSONData = {
-            posis_i: [],
-            verts: [], verts_i: [],
-            tris: [], tris_i: [],
-            edges: [], edges_i: [],
-            wires: [], wires_i: [],
-            points: [], points_i: [],
-            plines: [], plines_i: [],
-            pgons: [], pgontris: [], pgons_i: [],
-            colls_i: [],
+            num_posis: 0,
+            verts: [], // verts_i: [],
+            tris: [], // tris_i: [],
+            edges: [], // edges_i: [],
+            wires: [], // wires_i: [],
+            points: [], // points_i: [],
+            plines: [], // plines_i: [],
+            pgons: [], pgontris: [], // pgons_i: [],
+            coll_pgons: [], coll_plines: [], coll_points: [], coll_childs: [], // colls_i: [],
             selected: this.modeldata.geom.selected
         };
-        for (const ent_i of ent_sets.ps) { data.posis_i.push(ent_i); }
-        for (const ent_i of ent_sets._v) {
-            data.verts_i.push(ent_i);
-            data.verts.push( this._geom_maps.dn_verts_posis.get(ent_i) );
-        }
-        for (const ent_i of ent_sets._t) {
-            data.tris_i.push(ent_i);
-            data.tris.push( this._geom_maps.dn_tris_verts.get(ent_i) );
-        }
-        for (const ent_i of ent_sets._e) {
-            data.edges_i.push(ent_i);
-            data.edges.push( this._geom_maps.dn_edges_verts.get(ent_i) );
-        }
-        for (const ent_i of ent_sets._w) {
-            data.wires_i.push(ent_i);
-            data.wires.push( this._geom_maps.dn_wires_edges.get(ent_i) );
-        }
-        // for (const ent_i of ent_sets._f) {
-        //     data.faces_i.push(ent_i);
-        //     data.faces.push( this._geom_maps.dn_faces_wires.get(ent_i) );
-        //     data.facetris.push( this._geom_maps.dn_faces_tris.get(ent_i) );
-        // }
-        for (const ent_i of ent_sets.pt) {
-            data.points_i.push(ent_i);
-            data.points.push( this._geom_maps.dn_points_verts.get(ent_i) );
-        }
-        for (const ent_i of ent_sets.pl) {
-            data.plines_i.push(ent_i);
-            data.plines.push( this._geom_maps.dn_plines_wires.get(ent_i) );
-        }
-        for (const ent_i of ent_sets.pg) {
-            data.pgons_i.push(ent_i);
-            data.pgons.push( this._geom_maps.dn_pgons_wires.get(ent_i) );
-            data.pgontris.push( this._geom_maps.dn_pgons_tris.get(ent_i) );
-        }
-        for (const ent_i of ent_sets.co) {
-            data.colls_i.push(ent_i);
-        }
+        // posis
+        data.num_posis = renum_maps.posis.size;
+        // verts
+        ent_sets._v.forEach( ent_i => {
+            data.verts.push(renum_maps.posis.get(this._geom_maps.dn_verts_posis.get(ent_i)) );
+        });
+        // tris
+        ent_sets._t.forEach( ent_i => {
+            data.tris.push(this._geom_maps.dn_tris_verts.get(ent_i).map(vert_i => renum_maps.verts.get(vert_i)) as TTri );
+        });
+        // edges
+        ent_sets._e.forEach( ent_i => {
+            data.edges.push(this._geom_maps.dn_edges_verts.get(ent_i).map(vert_i => renum_maps.verts.get(vert_i)) as TEdge );
+        });
+        // wires
+        ent_sets._w.forEach( ent_i => {
+            data.wires.push(this._geom_maps.dn_wires_edges.get(ent_i).map(edge_i => renum_maps.edges.get(edge_i)) as TWire );
+        });
+        // points
+        ent_sets.pt.forEach( ent_i => {
+            data.points.push(renum_maps.verts.get(this._geom_maps.dn_points_verts.get(ent_i)) );
+        });
+        // plines
+        ent_sets.pl.forEach( ent_i => {
+            data.plines.push(renum_maps.wires.get(this._geom_maps.dn_plines_wires.get(ent_i)) );
+        });
+        // pgons
+        ent_sets.pg.forEach( ent_i => {
+            data.pgons.push(this._geom_maps.dn_pgons_wires.get(ent_i).map(wire_i => renum_maps.wires.get(wire_i)) );
+            data.pgontris.push(this._geom_maps.dn_pgons_tris.get(ent_i).map(tri_i => renum_maps.tris.get(tri_i)) );
+        });
+        // colls
+        ent_sets.co.forEach( ent_i => {
+            data.coll_pgons.push(this.modeldata.geom.nav.navCollToPgon(ent_i).map(pgon_i => renum_maps.pgons.get(pgon_i)) );
+            data.coll_plines.push(this.modeldata.geom.nav.navCollToPline(ent_i).map(pline_i => renum_maps.plines.get(pline_i))  );
+            data.coll_points.push(this.modeldata.geom.nav.navCollToPoint(ent_i).map(point_i => renum_maps.points.get(point_i))  );
+            data.coll_childs.push(this.modeldata.geom.nav.navCollToCollChildren(ent_i).map(child_coll_i => renum_maps.colls.get(child_coll_i)) );
+        });
         return data;
     }
 }

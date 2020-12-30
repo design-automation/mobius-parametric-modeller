@@ -1,6 +1,6 @@
 import { GIGeom } from './geom/GIGeom';
 import { GIAttribs } from './attribs/GIAttribs';
-import { IModelJSONData, EEntType, EAttribNames, TEntTypeIdx, IEntSets } from './common';
+import { IModelJSONData, EEntType, EAttribNames, TEntTypeIdx, IEntSets, IRenumMaps } from './common';
 import { GIModelComparator } from './GIModelComparator';
 import { GIModel } from './GIModel';
 import { GIModelThreejs } from './GIModelThreejs';
@@ -49,19 +49,39 @@ export class GIModelData {
      * @param model_data The JSON data.
      */
     public importGI(model_data: IModelJSONData): TEntTypeIdx[] {
-        // console.log("SET DATA...", model_data);
-        const renum_maps: Map<EEntType, Map<number, number>> = this.geom.imp_exp.importGI(model_data.geometry);
+        if (model_data.version !== '0.7') {
+            if (model_data.version === undefined) {
+                throw new Error(
+                    'Importing GI data from with incorrect version.' +
+                    'The data being imported was generated in an old version of Mobius Modeller.' +
+                    'This is Mobius Modeller version 0.7.'
+                );
+            }
+            throw new Error(
+                'Importing GI data from with incorrect version.' +
+                'The data being imported was generated in Mobius Modeller version ' + model_data.version + '.' +
+                'This is Mobius Modeller version 0.7.'
+            );
+        }
+        // get the renum maps for the imprted data
+        const renum_maps: IRenumMaps = this.geom.imp_exp.importGIRenum(model_data.geometry);
+        // import the data
+        this.geom.imp_exp.importGI(model_data.geometry, renum_maps);
         this.attribs.imp_exp.importGI(model_data.attributes, renum_maps);
+        // get the new ents to return
         const ents: TEntTypeIdx[] = [];
-        renum_maps.forEach( (ent_i_map, ent_type) => {
-            ent_i_map.forEach( (new_ent_i, _) => ents.push( [ent_type, new_ent_i] ) );
-        });
+        renum_maps.points.forEach( (new_ent_i, _) => ents.push([EEntType.POINT, new_ent_i]) );
+        renum_maps.plines.forEach( (new_ent_i, _) => ents.push([EEntType.PLINE, new_ent_i]) );
+        renum_maps.pgons.forEach( (new_ent_i, _) => ents.push([EEntType.PGON, new_ent_i]) );
+        renum_maps.colls.forEach( (new_ent_i, _) => ents.push([EEntType.COLL, new_ent_i]) );
+        // return the new ents that have been imported
         return ents;
     }
     /**
      * Exports the JSON data for this model.
      */
     public exportGI(ents: TEntTypeIdx[]): IModelJSONData {
+        // get the ents to export
         let ent_sets: IEntSets;
         if (ents === null) {
             ent_sets = this.geom.snapshot.getAllEntSets(this.active_ssid);
@@ -69,14 +89,13 @@ export class GIModelData {
             ent_sets = this.geom.snapshot.getSubEntsSets(this.active_ssid, ents);
         }
         this.geom.snapshot.addTopoToSubEntsSets(ent_sets);
-        // merge the two sets of posis
-        // if (ent_sets.obj_ps) {
-        //     for (const posi_i of ent_sets.obj_ps) { ent_sets.ps.add(posi_i); }
-        // }
-        // return the data
+        // get the renum maps
+        const renum_maps: IRenumMaps = this.geom.imp_exp.exportGIRenum(ent_sets);
         return {
-            geometry: this.geom.imp_exp.exportGI(ent_sets),
-            attributes: this.attribs.imp_exp.exportGI(ent_sets)
+            type: 'GIJson',
+            version: '0.7',
+            geometry: this.geom.imp_exp.exportGI(ent_sets, renum_maps),
+            attributes: this.attribs.imp_exp.exportGI(ent_sets, renum_maps)
         };
     }
     /**
@@ -86,7 +105,8 @@ export class GIModelData {
         return this.geom.check.check();
     }
     /**
-     * Compares this model and another model.
+     * Compares two models.
+     * Checks that every entity in this model also exists in the other model.
      * ~
      * This is the answer model.
      * The other model is the submitted model.

@@ -301,16 +301,6 @@ export class GIGeomAdd {
         // add the new collection
         const new_coll_i: number = this.addColl();
         // set the content
-        // const coll_points_i: number[] = this.modeldata.geom.snapshot.getCollPoints(ssid, old_coll_i);
-        // if (coll_points_i !== undefined) { this.modeldata.geom.snapshot.addCollPoints(ssid, new_coll_i, coll_points_i); }
-        // const coll_plines_i: number[] = this.modeldata.geom.snapshot.getCollPlines(ssid, old_coll_i);
-        // if (coll_plines_i !== undefined) {this.modeldata.geom.snapshot.addCollPlines(ssid, new_coll_i, coll_plines_i); }
-        // const coll_pgons_i: number[] = this.modeldata.geom.snapshot.getCollPgons(ssid, old_coll_i);
-        // if (coll_pgons_i !== undefined) { this.modeldata.geom.snapshot.addCollPgons(ssid, new_coll_i, coll_pgons_i); }
-        // const coll_childs: number[] = this.modeldata.geom.snapshot.getCollChildren(ssid, old_coll_i);
-        // if (coll_childs !== undefined) { this.modeldata.geom.snapshot.addCollChildren(ssid, new_coll_i, coll_childs); }
-        // const coll_parent_i: number = this.modeldata.geom.snapshot.getCollParent(ssid, old_coll_i);
-        // if (coll_parent_i !== undefined) { this.modeldata.geom.snapshot.setCollParent(ssid, new_coll_i, coll_parent_i); }
         const coll_points_i: number[] = this.copyPoints(this.modeldata.geom.snapshot.getCollPoints(ssid, old_coll_i), copy_attribs) as number[];
         if (coll_points_i !== undefined) { this.modeldata.geom.snapshot.addCollPoints(ssid, new_coll_i, coll_points_i); }
         const coll_plines_i: number[] = this.copyPlines(this.modeldata.geom.snapshot.getCollPlines(ssid, old_coll_i), copy_attribs) as number[];

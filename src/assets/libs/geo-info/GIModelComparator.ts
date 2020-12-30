@@ -16,7 +16,7 @@ export class GIModelComparator {
     }
     /**
      * Compares two models.
-     * The score that is calculated is based on wether the other model contains all the entities in this model.
+     * Checks that every entity in this model also exists in the other model.
      * ~
      * Additional entitis in the other model will not affect the score.
      * Attributes at the model level are ignored except for the `material` attributes.
@@ -247,6 +247,7 @@ export class GIModelComparator {
     }
     /**
      * Compare the objects.
+     * Check that every object in this model also exists in the other model.
      * ~
      * This will also check the following attributes:
      * For posis, it will check the xyz attribute.
@@ -290,6 +291,16 @@ export class GIModelComparator {
             // get the fprints for this model
             const [this_fprints_arr, this_ents_i]: [Array<Map<string, string>>, number[]] =
                 this.getEntsFprint(obj_ent_type, attrib_names);
+
+            // check if we have any duplicates
+            const fprints_set: Set<string> = new Set( this_fprints_arr.map(att_map => att_map.get('ps:xyz') ) );
+            if (fprints_set.size !== this_fprints_arr.length) {
+                // console.log(fprints_set, this_fprints_arr);
+                throw new Error(
+                    'This model contains duplicate objects with the same XYZ coordinates. ' +
+                    'Model comparison cannot be performed.'
+                );
+            }
 
             // get the fprints for the other model
             const [other_fprints_arr, other_ents_i]: [Array<Map<string, string>>, number[]] =
@@ -692,13 +703,13 @@ export class GIModelComparator {
     /**
      * Get one fprint for all collections
      */
-    private getCollFprints(idx_maps: Map<EEntType, Map<number, number>>, attrib_names: string[]): string[] {
+    private getCollFprints(com_idx_maps: Map<EEntType, Map<number, number>>, attrib_names: string[]): string[] {
         const ssid: number = this.modeldata.active_ssid;
         const fprints: string[]  = [];
         // create the fprints for each collection
         const colls_i: number[] = this.modeldata.geom.snapshot.getEnts(ssid, EEntType.COLL);
         for (const coll_i of colls_i) {
-            fprints.push(this.getCollFprint(coll_i, idx_maps, attrib_names));
+            fprints.push(this.getCollFprint(coll_i, com_idx_maps, attrib_names));
         }
         // if there are no values for a certain entity type, e.g. no coll, then return []
         if (fprints.length === 0) { return []; }
@@ -721,7 +732,7 @@ export class GIModelComparator {
             const coll_old_i: number = colls_i[idx];
             const coll_parent_old_i: number = this.modeldata.geom.nav.navCollToCollParent(coll_old_i);
             let parent_str = '';
-            if (coll_parent_old_i === -1) {
+            if (coll_parent_old_i === undefined) {
                 parent_str = '.^';
             } else {
                 const coll_parent_new_i: number = old_i_to_new_i_map.get(coll_parent_old_i);

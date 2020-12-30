@@ -262,7 +262,7 @@ export class GIModel {
     }
     /**
      * Compares two models.
-     * The score that is calculated is based on wether the other model contains all the entities in this model.
+     * Checks that every entity in this model also exists in the other model.
      * ~
      * Additional entitis in the other model will not affect the score.
      * Attributes at the model level are ignored.

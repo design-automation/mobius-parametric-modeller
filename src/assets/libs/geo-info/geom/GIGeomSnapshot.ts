@@ -258,16 +258,11 @@ export class GIGeomSnapshot {
      */
     public getAllEnts(ssid: number): TEntTypeIdx[] {
         const ents: TEntTypeIdx[] = [];
-        const posis_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[EEntType.POSI]];
-        posis_set.forEach( posi_i => ents.push([EEntType.POSI, posi_i]) );
-        const points_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[EEntType.POINT]];
-        points_set.forEach( point_i => ents.push([EEntType.POINT, point_i]) );
-        const plines_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[EEntType.PLINE]];
-        plines_set.forEach( pline_i => ents.push([EEntType.PLINE, pline_i]) );
-        const pgons_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[EEntType.PGON]];
-        pgons_set.forEach( pgon_i => ents.push([EEntType.PGON, pgon_i]) );
-        const colls_set: Set<number> = this.ss_data.get(ssid)[EEntTypeStr[EEntType.COLL]];
-        colls_set.forEach( coll_i => ents.push([EEntType.COLL, coll_i]) );
+        this.ss_data.get(ssid).ps.forEach( posi_i => ents.push([EEntType.POSI, posi_i]) );
+        this.ss_data.get(ssid).pt.forEach( point_i => ents.push([EEntType.POINT, point_i]) );
+        this.ss_data.get(ssid).pl.forEach( pline_i => ents.push([EEntType.PLINE, pline_i]) );
+        this.ss_data.get(ssid).pg.forEach( pgon_i => ents.push([EEntType.PGON, pgon_i]) );
+        this.ss_data.get(ssid).co.forEach( coll_i => ents.push([EEntType.COLL, coll_i]) );
         return ents;
     }
     /**

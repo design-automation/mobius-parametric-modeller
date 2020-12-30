@@ -774,7 +774,7 @@ export class CodeUtils {
                 // //     fnCode += `\nlet ssid_${nodeFuncName} = ${activeNodes[0]};\n`;
                 // // }
 
-                if (node.input.edges.length === 1 && numRemainingOutputs[node.input.edges[0].source.parentNode.id] === 1) {
+                if (node.type !== 'end' && node.input.edges.length === 1 && node.input.edges[0].source.parentNode.output.edges.length === 1) {
                     fnCode += `\nlet ssid_${nodeFuncName} = ssid_${func.name}_${node.input.edges[0].source.parentNode.id};\n`;
                 } else {
                     let activeNodes = [];

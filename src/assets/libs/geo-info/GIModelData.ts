@@ -54,13 +54,13 @@ export class GIModelData {
                 throw new Error(
                     'Importing GI data from with incorrect version.' +
                     'The data being imported was generated in an old version of Mobius Modeller.' +
-                    'This is Mobius Modeller version 0.7.'
+                    'GI data should be generated using Mobius Modeller version 0.7.'
                 );
             }
             throw new Error(
                 'Importing GI data from with incorrect version.' +
                 'The data being imported was generated in Mobius Modeller version ' + model_data.version + '.' +
-                'This is Mobius Modeller version 0.7.'
+                'GI data should be generated using Mobius Modeller version 0.7.'
             );
         }
         // get the renum maps for the imprted data

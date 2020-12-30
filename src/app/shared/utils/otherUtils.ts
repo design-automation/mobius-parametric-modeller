@@ -16,6 +16,10 @@ export function updateLocalViewerSettings(settings: any): boolean {
     } else {
         propCheck(settings, local_settings);
         localStorage.setItem('mpm_settings', JSON.stringify(settings));
+        if (settings.camera) {
+            console.log(JSON.stringify(settings.camera))
+            localStorage.setItem('gi_camera', JSON.stringify(settings.camera));
+        }
     }
     return true;
 }

@@ -549,19 +549,32 @@ export class SaveFileComponent implements OnDestroy{
             return;
         }
         const modelVal = '\'__model_data__' + this.dataService.flowchart.model.exportGI(null).replace(/\\/g, '\\\\').replace(/\'/g, '\\\'') + '\'';
+        // NodeUtils.add_procedure(node, ProcedureTypes.MainFunction, {
+        //     'module': 'io',
+        //     'name': 'Import',
+        //     'argCount': 3,
+        //     'args': [
+        //         {'name': '__model__'},
+        //         {
+        //             'name': 'model_data',
+        //             'value': modelVal
+        //         }, {
+        //             'name': 'data_format',
+        //             'value': '\'gi\'',
+        //             'jsValue': '\'gi\''
+        //         }
+        //     ],
+        //     'hasReturn': true
+        // });
         NodeUtils.add_procedure(node, ProcedureTypes.MainFunction, {
-            'module': 'io',
-            'name': 'Import',
-            'argCount': 3,
+            'module': 'util',
+            'name': 'ModelMerge',
+            'argCount': 2,
             'args': [
                 {'name': '__model__'},
                 {
-                    'name': 'model_data',
+                    'name': 'input_data',
                     'value': modelVal
-                }, {
-                    'name': 'data_format',
-                    'value': '\'gi\'',
-                    'jsValue': '\'gi\''
                 }
             ],
             'hasReturn': true

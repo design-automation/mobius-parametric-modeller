@@ -65,7 +65,7 @@ export function Divide(__model__: GIModel, entities: TId|TId[], divisor: number,
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-        [ID.isID, ID.isIDL], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+        [ID.isID, ID.isIDL1], [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
         chk.checkArgs(fn_name, 'divisor', divisor, [chk.isNum]);
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx[];
@@ -100,7 +100,7 @@ export function Hole(__model__: GIModel, pgon: TId, entities: TId|TId[]|TId[][])
     if (__model__.debug) {
         ent_arr = checkIDs(__model__, fn_name, 'pgon', pgon, [ID.isID], [EEntType.PGON]) as TEntTypeIdx;
         holes_ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-            [ID.isID, ID.isIDL, ID.isIDLL],
+            [ID.isID, ID.isIDL1, ID.isIDL2],
             [EEntType.POSI, EEntType.WIRE, EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[]|TEntTypeIdx[][];
     } else {
         ent_arr = idsBreak(pgon) as TEntTypeIdx;
@@ -130,7 +130,7 @@ export function Weld(__model__: GIModel, entities: TId|TId[], method: _EWeldMeth
     const fn_name = 'edit.Weld';
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
-        ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL],
+        ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL1],
             [EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
             EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
     } else {
@@ -164,7 +164,7 @@ export function Fuse(__model__: GIModel, entities: TId|TId[], tolerance: number)
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-        [ID.isID, ID.isIDL], null) as TEntTypeIdx[];
+        [ID.isID, ID.isIDL1], null) as TEntTypeIdx[];
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
@@ -191,7 +191,7 @@ export function Ring(__model__: GIModel, entities: TId|TId[], method: _ERingMeth
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-            [ID.isID, ID.isIDL], [EEntType.PLINE]) as TEntTypeIdx[];
+            [ID.isID, ID.isIDL1], [EEntType.PLINE]) as TEntTypeIdx[];
         } else {
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
@@ -225,7 +225,7 @@ export function Shift(__model__: GIModel, entities: TId|TId[], offset: number): 
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
             ents_arr = checkIDs(__model__, 'edit.Reverse', 'entities', entities,
-            [ID.isID, ID.isIDL],
+            [ID.isID, ID.isIDL1],
             [EEntType.WIRE, EEntType.PLINE, EEntType.PGON])  as TEntTypeIdx[];
         } else {
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
@@ -252,7 +252,7 @@ export function Reverse(__model__: GIModel, entities: TId|TId[]): void {
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
             ents_arr = checkIDs(__model__, 'edit.Reverse', 'entities', entities,
-                [ID.isID, ID.isIDL],
+                [ID.isID, ID.isIDL1],
                 [EEntType.WIRE, EEntType.PLINE, EEntType.PGON])  as TEntTypeIdx[];
         } else {
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
@@ -291,7 +291,7 @@ export function Delete(__model__: GIModel, entities: TId|TId[], method: _EDelete
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-        [ID.isID, ID.isIDL],
+        [ID.isID, ID.isIDL1],
         [EEntType.POSI, EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx[];

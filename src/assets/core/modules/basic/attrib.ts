@@ -144,7 +144,7 @@ export function Set(__model__: GIModel, entities: TId|TId[]|TId[][],
         if (value === undefined) {
             throw new Error(fn_name + ': value is undefined');
         }
-        ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isNull, ID.isID, ID.isIDL], null) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isNull, ID.isID, ID.isIDL1], null) as TEntTypeIdx|TEntTypeIdx[];
         [attrib_name, attrib_idx_key] = checkAttribNameIdxKey(fn_name, attrib);
         checkAttribName(fn_name , attrib_name);
     } else {
@@ -271,7 +271,7 @@ export function Get(__model__: GIModel, entities: TId|TId[]|TId[][],
     const fn_name = 'attrib.Get';
     if (__model__.debug) {
         if (entities !== null && entities !== undefined) {
-            ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL], null) as TEntTypeIdx|TEntTypeIdx[];
+            ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL1], null) as TEntTypeIdx|TEntTypeIdx[];
         }
         [attrib_name, attrib_idx_key] = checkAttribNameIdxKey(fn_name, attrib);
         checkAttribName(fn_name, attrib_name);
@@ -521,7 +521,7 @@ export function Push(__model__: GIModel, entities: TId|TId[],
 
     if (__model__.debug) {
         if (entities !== null && entities !== undefined) {
-            ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL], null) as TEntTypeIdx[];
+            ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL1], null) as TEntTypeIdx[];
         }
         [source_attrib_name, source_attrib_idx_key] = checkAttribNameIdxKey(fn_name, source_attrib);
         [target_attrib_name, target_attrib_idx_key] = checkAttribNameIdxKey(fn_name, target_attrib);

@@ -116,7 +116,7 @@ export function Set(__model__: GIModel, entities: TId|TId[], material: string|st
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-                [ID.isID, ID.isIDL, ID.isIDLL], null) as TEntTypeIdx[];
+                [ID.isID, ID.isIDL1, ID.isIDL2], null) as TEntTypeIdx[];
             chk.checkArgs(fn_name, 'material', material, [chk.isStr, chk.isStrL]);
         } else {
             ents_arr = idsBreak(entities) as TEntTypeIdx[];

@@ -42,7 +42,7 @@ export function Create(__model__: GIModel, entities: TId|TId[]|TId[][], name: st
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-            [ID.isID, ID.isIDL, ID.isIDLL],
+            [ID.isID, ID.isIDL1, ID.isIDL2],
             [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         chk.checkArgs(fn_name, 'name', name, [chk.isStr, chk.isNull]);
     } else {
@@ -160,7 +160,7 @@ export function Add(__model__: GIModel, coll: TId, entities: TId|TId[]): void {
         if (__model__.debug) {
             coll_arr = checkIDs(__model__, fn_name, 'coll', coll, [ID.isID], [EEntType.COLL]) as TEntTypeIdx;
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-                [ID.isID, ID.isIDL],
+                [ID.isID, ID.isIDL1],
                 [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         } else {
             // coll_arr = splitIDs(fn_name, 'coll', coll, [IDcheckObj.isID], [EEntType.COLL]) as TEntTypeIdx;
@@ -223,7 +223,7 @@ export function Remove(__model__: GIModel, coll: TId, entities: TId|TId[]): void
         if (entities !== null) {
             entities = arrMakeFlat(entities) as TId[];
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-                [ID.isID, ID.isIDL],
+                [ID.isID, ID.isIDL1],
                 [EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         }
         coll_arr = checkIDs(__model__, fn_name, 'coll', coll, [ID.isID], [EEntType.COLL]) as TEntTypeIdx;
@@ -300,7 +300,7 @@ export function Delete(__model__: GIModel, coll: TId|TId[]): void {
     const fn_name = 'collection.Delete';
     let colls_arrs;
     if (__model__.debug) {
-        colls_arrs = checkIDs(__model__, fn_name, 'coll', coll, [ID.isIDL], [EEntType.COLL]) as TEntTypeIdx[];
+        colls_arrs = checkIDs(__model__, fn_name, 'coll', coll, [ID.isIDL1], [EEntType.COLL]) as TEntTypeIdx[];
     } else {
         // colls_arrs = splitIDs(fn_name, 'coll', coll, [IDcheckObj.isIDList], [EEntType.COLL]) as TEntTypeIdx[];
         colls_arrs = idsBreak(coll) as TEntTypeIdx[];

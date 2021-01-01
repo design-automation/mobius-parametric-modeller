@@ -5,42 +5,13 @@ import { getArrDepth } from '@assets/libs/util/arrs';
 import { getDataTypeStrFromValue } from './_check_types';
 
 export const ID = {
+    isNull: -1,
     isID: 0,
-    isIDL: 1,
-    isIDLL: 2,
-    isIDLLL: 3,
-    isNull: 4
+    isIDL1: 1,
+    isIDL2: 2,
+    isIDL3: 3,
+    isIDL4: 4,
 };
-/**
- *
- * @param __model__
- * @param arg
- * @param ent_types_set
- * @param check_exists
- */
-function checkId(__model__: GIModel, arg: any, ent_types_set: Set<number>, check_exists: boolean):
-        TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
-    if (!Array.isArray(arg)) {
-        let ent_arr;
-        try {
-            ent_arr = idsBreak(arg) as TEntTypeIdx; // split
-        } catch (err) {
-            throw new Error('<ul><li>The entity ID "' + arg + '" is not a valid Entity ID.</li></ul>'); // check valid id
-        }
-        // check entity exists
-        if (check_exists && !__model__.modeldata.geom.snapshot.hasEnt(__model__.modeldata.active_ssid, ent_arr[0], ent_arr[1])) {
-            throw new Error('<ul><li>The entity with the ID "' + arg + '" has been deleted.</li></ul>'); // check id exists
-        }
-        // check entity type
-        if (!ent_types_set.has(ent_arr[0])) {
-            throw new Error('<ul><li>The entity with the ID "' + arg + '" is not one of the perimtted types.</li></ul>');
-        }
-        // return the ent array
-        return ent_arr as TEntTypeIdx;
-    } else {
-        return arg.map( a_arg => checkId(__model__, a_arg, ent_types_set, check_exists)) as TEntTypeIdx[]|TEntTypeIdx[][];
-    }
-}
 /**
  *
  * @param __model__
@@ -54,13 +25,13 @@ function checkId(__model__: GIModel, arg: any, ent_types_set: Set<number>, check
 export function checkIDs(__model__: GIModel, fn_name: string, arg_name: string, arg: any, id_types: number[],
                          ent_types: EEntType[]|null, check_exists = true): TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][] {
     if (arg === undefined) {
-        const err_msg: string = errorMsg(fn_name, arg_name, arg, id_types, ent_types);
+        const err_msg: string = _errorMsg(fn_name, arg_name, arg, id_types, ent_types);
         throw new Error(err_msg + 'The argument "' + arg_name + '" is undefined.' + '<br>');
     }
     // check for null case
     if (arg === null) {
         if (id_types.indexOf(ID.isNull) === -1) {
-            const err_msg: string = errorMsg(fn_name, arg_name, arg, id_types, ent_types);
+            const err_msg: string = _errorMsg(fn_name, arg_name, arg, id_types, ent_types);
             throw new Error(err_msg + 'The argument "' + arg_name + '" cannot be null.<br>');
         } else {
             return null;
@@ -68,9 +39,19 @@ export function checkIDs(__model__: GIModel, fn_name: string, arg_name: string, 
     }
     // check list depths
     const arg_depth: number = getArrDepth(arg);
-    if (arg_depth > 3 || id_types.indexOf(arg_depth) === -1) {
-        const err_msg: string = errorMsg(fn_name, arg_name, arg, id_types, ent_types);
-        throw new Error(err_msg + 'The argument "' + arg_name + '" has the wrong structure.</li></ul>');
+    if (id_types.indexOf(arg_depth) === -1) {
+        const max_depth: number = Math.max( ...id_types );
+        const err_msg: string = _errorMsg(fn_name, arg_name, arg, id_types, ent_types);
+        if (max_depth === 0 && arg_depth > 0) {
+            throw new Error(err_msg +
+                'The argument "' + arg_name + '" has the wrong structure. ' +
+                'A single entity ID is expected. ' +
+                'However, the argument is a list of depth ' + arg_depth + '. ');
+        }
+        throw new Error(err_msg +
+            'The argument "' + arg_name + '" has the wrong structure. ' +
+            'The maximum depth of the list structure is ' + max_depth + '. ' +
+            'However, the argument is a list of depth ' + arg_depth + '. ');
     }
     // create a set of allowable entity types
     let ent_types_set: Set<number>;
@@ -91,13 +72,49 @@ export function checkIDs(__model__: GIModel, fn_name: string, arg_name: string, 
     // check the IDs
     let ents: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
     try {
-        ents = checkId(__model__, arg, ent_types_set, check_exists);
+        ents = _checkIdsAreValid(__model__, arg, ent_types_set, check_exists, 0, arg_depth);
     } catch (err) {
-        const err_msg: string = errorMsg(fn_name, arg_name, arg, id_types, ent_types);
+        const err_msg: string = _errorMsg(fn_name, arg_name, arg, id_types, ent_types);
         throw new Error(err_msg + 'The argument "' + arg_name + '" contains bad IDs:' + err.message + '<br>');
     }
     // return the ents
     return ents; // returns TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][]; depends on which passes
+}
+/**
+ *
+ * @param __model__
+ * @param arg
+ * @param ent_types_set
+ * @param check_exists
+ */
+function _checkIdsAreValid(__model__: GIModel, arg: any, ent_types_set: Set<number>, check_exists: boolean, curr_depth: number, req_depth: number):
+    TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][] {
+    if (!Array.isArray(arg)) {
+        // check array is homogeneous
+        if (curr_depth !== req_depth) {
+            throw new Error('<ul><li>The entity with the ID "' + arg + '" is in a list that has an inconsistent depth. ' +
+                'For this entity, the depth of the list is ' + curr_depth + ', while previous entities were in lists with a depth of ' + req_depth + '.' +
+                '</li></ul>');
+        }
+        let ent_arr;
+        try {
+            ent_arr = idsBreak(arg) as TEntTypeIdx; // split
+        } catch (err) {
+            throw new Error('<ul><li>The entity ID "' + arg + '" is not a valid Entity ID.</li></ul>'); // check valid id
+        }
+        // check entity exists
+        if (check_exists && !__model__.modeldata.geom.snapshot.hasEnt(__model__.modeldata.active_ssid, ent_arr[0], ent_arr[1])) {
+            throw new Error('<ul><li>The entity with the ID "' + arg + '" has been deleted.</li></ul>'); // check id exists
+        }
+        // check entity type
+        if (!ent_types_set.has(ent_arr[0])) {
+            throw new Error('<ul><li>The entity with the ID "' + arg + '" is not one of the perimtted types.</li></ul>');
+        }
+        // return the ent array
+        return ent_arr as TEntTypeIdx;
+    } else {
+        return arg.map(a_arg => _checkIdsAreValid(__model__, a_arg, ent_types_set, check_exists, curr_depth + 1, req_depth)) as TEntTypeIdx[] | TEntTypeIdx[][];
+    }
 }
 /**
  *
@@ -107,7 +124,7 @@ export function checkIDs(__model__: GIModel, fn_name: string, arg_name: string, 
  * @param id_types
  * @param ent_types
  */
-function errorMsg(fn_name: string, arg_name: string, arg: any, id_types: number[], ent_types: EEntType[]|null): string {
+function _errorMsg(fn_name: string, arg_name: string, arg: any, id_types: number[], ent_types: EEntType[]|null): string {
     let err_msg =
         'One of the arguments passed to the ' + fn_name + ' function is invalid. ' +
         '<ul>' +
@@ -131,11 +148,7 @@ function errorMsg(fn_name: string, arg_name: string, arg: any, id_types: number[
             _getIDTypeStr(ent_type) +
             '</li>';
     }
-    err_msg +=
-        '</ul>';
-        //  +
-        // ' Make sure that the agument passed to the "' + arg_name + '" parameter matches one of the above perimtted types of geometric entities.' +
-        // '<br><br>';
+    err_msg += '</ul>';
     return err_msg;
 }
 /**
@@ -146,12 +159,12 @@ function _getDataTypeStrFromIDType(id_type: any, ): string {
     switch (id_type) {
         case ID.isID:
             return 'an entity ID';
-        case ID.isIDL:
-            return 'a list of entity IDs';
-        case ID.isIDLL:
-            return 'a nested list of entity IDs';
-        case ID.isIDLLL:
-            return 'a nested list of entity IDs';
+        case ID.isIDL1:
+            return 'a list of entity IDs (with a depth of 1)';
+        case ID.isIDL2:
+            return 'a nested list of entity IDs (with a depth of 2)';
+        case ID.isIDL3:
+            return 'a nested list of entity IDs (with a depth of 3)';
         case ID.isNull:
             return 'a null value';
         default:
@@ -183,6 +196,6 @@ function _getIDTypeStr(ent_type: EEntType): string {
         case null:
             return 'a null value';
         default:
-            return 'sorry... entitiy type not found';
+            return 'Internal error... entitiy type not found';
     }
 }

@@ -48,7 +48,7 @@ export function Move(__model__: GIModel, entities: TId|TId[], vectors: Txyz|Txyz
         const fn_name = 'modify.Move';
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
-            ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL], null) as TEntTypeIdx[];
+            ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL1], null) as TEntTypeIdx[];
             chk.checkArgs(fn_name, 'vectors', vectors, [chk.isXYZ, chk.isXYZL]);
         } else {
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
@@ -80,7 +80,7 @@ export function Rotate(__model__: GIModel, entities: TId|TId[], ray: Txyz|TRay|T
         const fn_name = 'modify.Rotate';
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
-            ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL],
+            ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL1],
                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
                 EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
             chk.checkArgs(fn_name, 'angle', angle, [chk.isNum]);
@@ -117,7 +117,7 @@ export function Scale(__model__: GIModel, entities: TId|TId[], plane: Txyz|TRay|
         const fn_name = 'modify.Scale';
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
-            ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL],
+            ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL1],
                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
                 EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
             chk.checkArgs(fn_name, 'scale', scale, [chk.isNum, chk.isXYZ]);
@@ -151,7 +151,7 @@ export function Mirror(__model__: GIModel, entities: TId|TId[], plane: Txyz|TRay
         const fn_name = 'modify.Mirror';
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
-            ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL],
+            ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL1],
                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
                 EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         } else {
@@ -190,7 +190,7 @@ export function XForm(__model__: GIModel, entities: TId|TId[],
         const fn_name = 'modify.XForm';
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
-            ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL],
+            ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL1],
                 [EEntType.POSI, EEntType.VERT, EEntType.EDGE, EEntType.WIRE,
                 EEntType.POINT, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         } else {
@@ -220,7 +220,7 @@ export function Offset(__model__: GIModel, entities: TId|TId[], dist: number): v
         const fn_name = 'modify.Offset';
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
-            ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL],
+            ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL1],
                 [EEntType.WIRE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
             chk.checkArgs(fn_name, 'dist', dist, [chk.isNum]);
         } else {
@@ -252,7 +252,7 @@ export function Remesh(__model__: GIModel, entities: TId[]): void {
         let ents_arr: TEntTypeIdx[];
         if (__model__.debug) {
             ents_arr = checkIDs(__model__, 'modify.Remesh', 'entities', entities,
-            [ID.isID, ID.isIDL], [EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+            [ID.isID, ID.isIDL1], [EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
         } else {
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }

@@ -1,7 +1,5 @@
 /**
  * Shared utility functions
- * \n
- * \n
  */
 
 /**
@@ -51,7 +49,7 @@ export function getCentoridFromEnts(__model__: GIModel, ents: TId|TId[], fn_name
     // this must be an ID or an array of IDs, so lets get the centroid
     // TODO this error message is confusing
     const ents_arr: TEntTypeIdx|TEntTypeIdx[] = checkIDs(__model__, fn_name, 'ents', ents,
-        [ID.isID, ID.isIDL],
+        [ID.isID, ID.isIDL1],
         [EEntType.POSI, EEntType.VERT, EEntType.POINT, EEntType.EDGE, EEntType.WIRE,
             EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx;
     const centroid: Txyz|Txyz[] = getCentroid(__model__, ents_arr);
@@ -264,89 +262,3 @@ export function getPlanesSeq(xyzs: Txyz[], normal: Txyz, close: boolean): TPlane
     return planes;
 }
 // ================================================================================================
-
-
-// ================================================================================================
-// // Utility functions used in make.Copy() and in poly2d.Stitch()
-// /**
-//  * Copy posis, points, plines, pgons
-//  * @param __model__
-//  * @param ents_arr
-//  * @param copy_attributes
-//  */
-// export function _copyGeom(__model__: GIModel,
-//     ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][], copy_attributes: boolean): TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][] {
-//     const depth: number = getArrDepth(ents_arr);
-//     if (depth === 1) {
-//         const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
-//         if (ent_type === EEntType.COLL) {
-//             const coll_i: number = __model__.modeldata.geom.add.copyColls(index, copy_attributes) as number;
-//             return [ent_type, coll_i];
-//         } else if (ent_type === EEntType.PGON) {
-//             const obj_i: number = __model__.modeldata.geom.add.copyPgons(index, copy_attributes) as number;
-//             return [ent_type, obj_i];
-//         } else if (ent_type === EEntType.PLINE) {
-//             const obj_i: number = __model__.modeldata.geom.add.copyPlines(index, copy_attributes) as number;
-//             return [ent_type, obj_i];
-//         } else if (ent_type === EEntType.POINT) {
-//             const obj_i: number = __model__.modeldata.geom.add.copyPoints(index, copy_attributes) as number;
-//             return [ent_type, obj_i];
-//         } else if (ent_type === EEntType.POSI) {
-//             const posi_i: number = __model__.modeldata.geom.add.copyPosis(index, copy_attributes) as number;
-//             return [ent_type, posi_i];
-//         }
-//     } else if (depth === 2) {
-//         ents_arr = ents_arr as TEntTypeIdx[];
-//         return ents_arr.map(ents_arr_item => _copyGeom(__model__, ents_arr_item, copy_attributes)) as TEntTypeIdx[];
-//     } else { // depth > 2
-//         ents_arr = ents_arr as TEntTypeIdx[][];
-//         return ents_arr.map(ents_arr_item => _copyGeom(__model__, ents_arr_item, copy_attributes)) as TEntTypeIdx[][];
-//     }
-// }
-// export function _copyGeomPosis(__model__: GIModel, ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][],
-//         copy_attributes: boolean, vector: Txyz): void {
-//     const depth: number = getArrDepth(ents_arr);
-//     if (depth === 1) {
-//         ents_arr = [ents_arr] as TEntTypeIdx[];
-//     } else if (depth > 2) {
-//         // @ts-ignore
-//         ents_arr = ents_arr.flat(depth - 2) as TEntTypeIdx[];
-//     }
-//     // create the new positions
-//     const old_to_new_posis_i_map: Map<number, number> = new Map(); // count number of posis
-//     for (const ent_arr of ents_arr) {
-//         const [ent_type, index]: TEntTypeIdx = ent_arr as TEntTypeIdx;
-//         // something may not be right here
-//         // if you copy a pgon + posi, if you process the pgon first you wil make a copy of the posis
-//         // but the posi may already be copied by the _copyGeom function, then we get two copies of that posi
-//         // I think this whole copy-move function need to to be moved to the GI library, can also make it more efficient
-//         if (ent_type === EEntType.POSI && vector !== null) { // positions
-//             const old_posi_i: number = index;
-//             let new_posi_i: number;
-//             if (old_to_new_posis_i_map.has(old_posi_i)) {
-//                 new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
-//             } else {
-//                 const xyz: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(old_posi_i);
-//                 __model__.modeldata.attribs.posis.setPosiCoords(old_posi_i, vecAdd(xyz, vector));
-//                 old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
-//             }
-//         } else { // obj or coll
-//             const old_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(ent_type, index);
-//             const ent_new_posis_i: number[] = [];
-//             for (const old_posi_i of old_posis_i) {
-//                 let new_posi_i: number;
-//                 if (old_to_new_posis_i_map.has(old_posi_i)) {
-//                     new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
-//                 } else {
-//                     new_posi_i = __model__.modeldata.geom.add.copyMovePosi(old_posi_i, vector, copy_attributes) as number;
-//                     old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
-//                 }
-//                 ent_new_posis_i.push(new_posi_i);
-//             }
-//             __model__.modeldata.geom.modify.replacePosis(ent_type, index, ent_new_posis_i);
-//         }
-//     }
-//     // return all the new points
-//     // const all_new_posis_i: number[] = Array.from(old_to_new_posis_i_map.values());
-//     // return all_new_posis_i.map( posi_i => [EEntType.POSI, posi_i] ) as TEntTypeIdx[];
-// }

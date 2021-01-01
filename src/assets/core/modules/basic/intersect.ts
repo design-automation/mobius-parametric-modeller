@@ -42,7 +42,7 @@ export function RayFace(__model__: GIModel, ray: TRay, entities: TId|TId[]): Txy
     if (__model__.debug) {
         chk.checkArgs(fn_name, 'ray', ray, [chk.isRay]);
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-            [ID.isID, ID.isIDL],
+            [ID.isID, ID.isIDL1],
             [EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,
@@ -121,7 +121,7 @@ export function PlaneEdge(__model__: GIModel, plane: TRay|TPlane, entities: TId|
     if (__model__.debug) {
         chk.checkArgs(fn_name, 'plane', plane, [chk.isPln]);
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-            [ID.isID, ID.isIDL],
+            [ID.isID, ID.isIDL1],
             [EEntType.EDGE, EEntType.WIRE, EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx|TEntTypeIdx[];
     } else {
         // ents_arr = splitIDs(fn_name, 'entities', entities,

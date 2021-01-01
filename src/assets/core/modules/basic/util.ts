@@ -85,7 +85,7 @@ export function EntityInfo(__model__: GIModel, entities: TId|TId[]): string {
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'coll', entities,
-            [ID.isID, ID.isIDL],
+            [ID.isID, ID.isIDL1],
             [EEntType.COLL, EEntType.PGON, EEntType.PLINE, EEntType.POINT]) as TEntTypeIdx[];
     } else {
         // ents_arr = splitIDs(fn_name, 'coll', entities,

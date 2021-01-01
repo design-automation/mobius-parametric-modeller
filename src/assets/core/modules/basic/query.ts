@@ -93,7 +93,7 @@ export function Get(__model__: GIModel, ent_type_enum: _EEntType, entities: TId|
     let ents_arr: TEntTypeIdx|TEntTypeIdx[]|TEntTypeIdx[][];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-            [ID.isNull, ID.isID, ID.isIDL, ID.isIDLL], null, false) as TEntTypeIdx|TEntTypeIdx[];
+            [ID.isNull, ID.isID, ID.isIDL1, ID.isIDL2], null, false) as TEntTypeIdx|TEntTypeIdx[];
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }
@@ -179,7 +179,7 @@ export function Filter(__model__: GIModel,
     if (__model__.debug) {
         if (entities !== null && entities !== undefined) {
             ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-                [ID.isID, ID.isIDL, ID.isIDLL], null, false) as TEntTypeIdx|TEntTypeIdx[];
+                [ID.isID, ID.isIDL1, ID.isIDL2], null, false) as TEntTypeIdx|TEntTypeIdx[];
         }
         [attrib_name, attrib_idx_key] = checkAttribNameIdxKey(fn_name, attrib);
         checkAttribValue(fn_name, value);
@@ -283,7 +283,7 @@ export function Invert(__model__: GIModel, ent_type_enum: _EEntType, entities: T
     let ents_arr: TEntTypeIdx[] = null;
     if (__model__.debug) {
         if (entities !== null && entities !== undefined) {
-            ents_arr = checkIDs(__model__, 'query.Invert', 'entities', entities, [ID.isIDL], null, false) as TEntTypeIdx[];
+            ents_arr = checkIDs(__model__, 'query.Invert', 'entities', entities, [ID.isIDL1], null, false) as TEntTypeIdx[];
         }
     } else {
         if (entities !== null && entities !== undefined) {
@@ -334,7 +334,7 @@ export function Sort(__model__: GIModel, entities: TId[], attrib: string|[string
     let ents_arr: TEntTypeIdx[];
     let attrib_name: string, attrib_idx_key: number|string;
     if (__model__.debug) {
-        ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isIDL], null) as TEntTypeIdx[];
+        ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isIDL1], null) as TEntTypeIdx[];
         [attrib_name, attrib_idx_key] = checkAttribNameIdxKey(fn_name, attrib);
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx[];
@@ -386,7 +386,7 @@ export function Perimeter(__model__: GIModel, ent_type: _EEntType, entities: TId
     let ents_arr: TEntTypeIdx[] = null;
     if (__model__.debug) {
         if (entities !== null && entities !== undefined) {
-            ents_arr = checkIDs(__model__, 'query.Perimeter', 'entities', entities, [ID.isIDL], null) as TEntTypeIdx[];
+            ents_arr = checkIDs(__model__, 'query.Perimeter', 'entities', entities, [ID.isIDL1], null) as TEntTypeIdx[];
         }
     } else {
         if (entities !== null && entities !== undefined) {
@@ -431,7 +431,7 @@ export function Neighbor(__model__: GIModel, ent_type_enum: _EEntType, entities:
     let ents_arr: TEntTypeIdx[] = null;
     if (__model__.debug) {
         if (entities !== null && entities !== undefined) {
-            ents_arr = checkIDs(__model__, 'query.Neighbor', 'entities', entities, [ID.isIDL], null) as TEntTypeIdx[];
+            ents_arr = checkIDs(__model__, 'query.Neighbor', 'entities', entities, [ID.isIDL1], null) as TEntTypeIdx[];
         }
     } else {
         if (entities !== null && entities !== undefined) {
@@ -486,7 +486,7 @@ export function Type(__model__: GIModel, entities: TId|TId[], type_query_enum: _
     const fn_name = 'query.Type';
     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
     if (__model__.debug) {
-        ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL], null, false) as TEntTypeIdx|TEntTypeIdx[];
+        ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [ID.isID, ID.isIDL1], null, false) as TEntTypeIdx|TEntTypeIdx[];
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx|TEntTypeIdx[];
     }

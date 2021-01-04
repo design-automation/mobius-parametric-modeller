@@ -992,6 +992,8 @@ export class GIFuncsMake {
         const edge_to_isect_posis: number[][] = []; // sparse array, map_posis[2][3] is the edge from posi 2 to posi 3 (and 3 to 2)
         const cut_posi_to_copies: number[] = []; // sparse array
         // loop through each edge
+        const cut_edges: [number, number][] = [];
+        let prev_isect_tjs: THREE.Vector3 = null;
         for (const edge_i of edges_i) {
             const edge_posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
             edge_posis_i.sort();
@@ -1005,18 +1007,32 @@ export class GIFuncsMake {
                 const isect_tjs: THREE.Vector3 = new THREE.Vector3();
                 const result: THREE.Vector3 = plane_tjs.intersectLine(line_tjs, isect_tjs);
                 if (result !== undefined && result !== null) {
-                    const new_posi_i: number = this.modeldata.geom.add.addPosi();
-                    this.modeldata.attribs.posis.setPosiCoords(new_posi_i, [isect_tjs.x, isect_tjs.y, isect_tjs.z]);
-                    edge_to_isect_posis[edge_posis_i[0]][edge_posis_i[1]] = new_posi_i;
-                    if (method === _ECutMethod.KEEP_BOTH) {
-                        const copy_posi_i: number = this.modeldata.geom.add.addPosi();
-                        this.modeldata.attribs.posis.setPosiCoords(copy_posi_i, [isect_tjs.x, isect_tjs.y, isect_tjs.z]);
-                        cut_posi_to_copies[new_posi_i] = copy_posi_i;
+                    const dist: number = prev_isect_tjs === null ? 1 : prev_isect_tjs.distanceTo(isect_tjs);
+                    if (dist > 0) {
+                        cut_edges.push([edge_posis_i[0], edge_posis_i[1]]);
+                        const new_posi_i: number = this.modeldata.geom.add.addPosi();
+                        this.modeldata.attribs.posis.setPosiCoords(new_posi_i, [isect_tjs.x, isect_tjs.y, isect_tjs.z]);
+                        edge_to_isect_posis[edge_posis_i[0]][edge_posis_i[1]] = new_posi_i;
+                        if (method === _ECutMethod.KEEP_BOTH) {
+                            const copy_posi_i: number = this.modeldata.geom.add.addPosi();
+                            this.modeldata.attribs.posis.setPosiCoords(copy_posi_i, [isect_tjs.x, isect_tjs.y, isect_tjs.z]);
+                            cut_posi_to_copies[new_posi_i] = copy_posi_i;
+                        }
+                        prev_isect_tjs = isect_tjs;
+                    } else {
+                        edge_to_isect_posis[edge_posis_i[0]][edge_posis_i[1]] = null;
                     }
                 } else {
                     edge_to_isect_posis[edge_posis_i[0]][edge_posis_i[1]] = null;
                 }
             }
+        }
+        if (cut_edges.length === 1) {
+            // the cut is though a single vertex, so set the intersection to null
+            edge_to_isect_posis[cut_edges[0][0]][cut_edges[0][1]] = null;
+            // TODO delete the new posi(s) that were created in the process
+        } else if (cut_edges.length % 2 !== 0) {
+            throw new Error("Error cutting: Number of edge intersections is uneven.");
         }
         return [edge_to_isect_posis, cut_posi_to_copies, posi_to_tjs] ;
     }

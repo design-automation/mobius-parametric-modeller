@@ -19,6 +19,7 @@ import { TId, EEntType, TEntTypeIdx, IEntSets } from '@libs/geo-info/common';
 import { idsMake, idsBreak, idsMakeFromIdxs, idMake } from '@assets/libs/geo-info/common_id_funcs';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
 import JSZip from 'jszip';
+import fetch from 'node-fetch';
 
 const requestedBytes = 1024 * 1024 * 200; // 200 MB local storage quota
 

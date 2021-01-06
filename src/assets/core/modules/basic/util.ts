@@ -215,7 +215,7 @@ function _pgonInfo(__model__: GIModel, pgon_i: number): string {
     return info;
 }
 function _collInfo(__model__: GIModel, coll_i: number): string {
-    const ssid: number = this.modeldata.active_ssid;
+    const ssid: number = __model__.modeldata.active_ssid;
     let info = '';
     // get the data
     let coll_name = 'None';

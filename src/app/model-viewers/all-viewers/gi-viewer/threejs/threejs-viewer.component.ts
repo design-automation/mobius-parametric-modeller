@@ -597,7 +597,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     public async updateModel(model: GIModel) {
         this._data_threejs = this.dataService.getThreejsScene();
         if (!model) {
-            console.warn('Model or Scene not defined.');
+            // console.warn('Model or Scene not defined.');
             this._no_model = true;
             return;
         } else {

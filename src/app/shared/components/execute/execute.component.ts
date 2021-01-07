@@ -328,6 +328,7 @@ export class ExecuteComponent {
                 }, 20);
             }
         } catch (ex) {
+            this.dataService.flowchart.model = this.dataService.executeModel;
             document.getElementById('spinner-off').click();
         }
     }
@@ -588,6 +589,7 @@ export class ExecuteComponent {
             this.dataService.log('<h4 style="padding: 2px 0px 2px 0px; style="color:red">Error: Invalid Argument ' +
                                     'detected. Check marked node(s) and procedure(s)!</h5>');
             document.getElementById('spinner-off').click();
+            this.dataService.flowchart.model = this.dataService.executeModel;
             this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
             const _category = this.isDev ? 'dev' : 'execute';
             this.googleAnalyticsService.trackEvent(_category, `error: Reserved Word Argument`,
@@ -768,6 +770,7 @@ export class ExecuteComponent {
             // for (const str of params.console) {
             //     this.dataService.log(str);
             // }
+            this.dataService.flowchart.model = this.dataService.executeModel;
             document.getElementById('spinner-off').click();
             const endTime = performance.now();
             const duration: number = Math.round(endTime - startTime);

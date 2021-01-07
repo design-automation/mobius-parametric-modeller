@@ -1,7 +1,8 @@
 import { GIModel } from './GIModel';
-import { EEntType, Txyz, TAttribDataTypes, EEntTypeStr } from './common';
+import { EEntType, Txyz, TAttribDataTypes, EEntTypeStr, TEntTypeIdx } from './common';
 import { vecDot } from '../geom/vectors';
 import { GIModelData } from './GIModelData';
+import { idMake, idsMake } from './common_id_funcs';
 /**
  * Geo-info model class.
  */
@@ -296,9 +297,20 @@ export class GIModelComparator {
             const fprints_set: Set<string> = new Set( this_fprints_arr.map(att_map => att_map.get('ps:xyz') ) );
             if (fprints_set.size !== this_fprints_arr.length) {
                 // console.log(fprints_set, this_fprints_arr);
+                const tmp_set: Set<string> = new Set();
+                const dup_ent_ids: string[] = [];
+                for (let i = 0; i < this_fprints_arr.length; i++) {
+                    const tmp_str: string = this_fprints_arr[i].get('ps:xyz');
+                    if (tmp_set.has(tmp_str)) {
+                        const dup_ent_id: string = idMake(obj_ent_type, this_ents_i[i]);
+                        dup_ent_ids.push(dup_ent_id);
+                    }
+                    tmp_set.add(tmp_str);
+                }
                 throw new Error(
                     'This model contains duplicate objects with the same XYZ coordinates. ' +
-                    'Model comparison cannot be performed.'
+                    'Model comparison cannot be performed. <br>' +
+                    'Duplicate objects: ' + JSON.stringify(dup_ent_ids, undefined, ' ')
                 );
             }
 

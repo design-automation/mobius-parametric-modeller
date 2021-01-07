@@ -547,19 +547,24 @@ export class GIGeomSnapshot {
             for (const vert_i of this._geom_maps.up_posis_verts.get(posi_i)) {
                 if (this._geom_maps.up_verts_points.has(vert_i)) {
                     points_i.push(this._geom_maps.up_verts_points.get(vert_i));
-                } else if (this._geom_maps.up_verts_tris.has(vert_i)) {
-                    const pgon_i: number = this.modeldata.geom.nav.navAnyToPgon(EEntType.VERT, vert_i)[0];
-                    if (pgons_verts.has(pgon_i)) {
-                        pgons_verts.get(pgon_i).push(vert_i);
-                    } else {
-                        pgons_verts.set(pgon_i, [vert_i]);
-                    }
                 } else {
-                    const pline_i: number = this.modeldata.geom.nav.navAnyToPline(EEntType.VERT, vert_i)[0];
-                    if (plines_verts.has(pline_i)) {
-                        plines_verts.get(pline_i).push(vert_i);
+                    // not we cannot check trianges, some pgons have no triangles
+                    const edges_i: number[] = this._geom_maps.up_verts_edges.get(vert_i);
+                    const wire_i: number = this._geom_maps.up_edges_wires.get(edges_i[0]);
+                    if (this._geom_maps.up_wires_pgons.has(wire_i)) {
+                        const pgon_i: number = this.modeldata.geom.nav.navAnyToPgon(EEntType.VERT, vert_i)[0];
+                        if (pgons_verts.has(pgon_i)) {
+                            pgons_verts.get(pgon_i).push(vert_i);
+                        } else {
+                            pgons_verts.set(pgon_i, [vert_i]);
+                        }
                     } else {
-                        plines_verts.set(pline_i, [vert_i]);
+                        const pline_i: number = this.modeldata.geom.nav.navAnyToPline(EEntType.VERT, vert_i)[0];
+                        if (plines_verts.has(pline_i)) {
+                            plines_verts.get(pline_i).push(vert_i);
+                        } else {
+                            plines_verts.set(pline_i, [vert_i]);
+                        }
                     }
                 }
             }

@@ -97,9 +97,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             case 'add_prod' :
                 this.add_prod(event.content);
                 break;
-            case 'helpText' :
-                this.updateHelpView(event.content);
-                break;
+            // case 'helpText' :
+            //     this.updateHelpView(event.content);
+            //     break;
         }
     }
 
@@ -124,9 +124,6 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 break;
             case 'notifyError' :
                 this.notifyError(event.content);
-                break;
-            case 'helpText' :
-                this.updateHelpView(event.content);
                 break;
         }
     }
@@ -659,16 +656,16 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     }
 
     updateHelpView(event) {
-        if (typeof(event) === 'string') {
-            for (const func of this.dataService.flowchart.functions) {
-                if (func.name === event) {
-                    this.dataService.helpView = func.doc;
-                }
-            }
-        } else {
-            this.dataService.helpView = event;
-        }
-        this.dataService.toggleHelp(true);
+        // if (typeof(event) === 'string') {
+        //     for (const func of this.dataService.flowchart.functions) {
+        //         if (func.name === event) {
+        //             this.dataService.helpView = func.doc;
+        //         }
+        //     }
+        // } else {
+        //     this.dataService.helpView = event;
+        // }
+        // this.dataService.toggleHelp(true);
     }
 
     setViewOutput() {

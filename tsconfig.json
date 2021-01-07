@@ -10,6 +10,7 @@
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "target": "es2015",
+    "skipLibCheck": true,
     "paths": {
       "@assets/*" : ["src/assets/*"],
       "@env/*" : ["src/environments/*"],

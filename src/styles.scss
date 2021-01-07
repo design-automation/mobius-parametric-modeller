@@ -132,10 +132,10 @@ as-split-area{
 
 // general styles
 
-h1, h2, h3, h4, h5, h6, p{
-    margin: 0px;
-    padding: 0px;
-}
+// h1, h2, h3, h4, h5, h6, p{
+//     margin: 0px;
+//     padding: 0px;
+// }
 
 input, textarea, select, a { 
     outline: none; 
@@ -326,7 +326,11 @@ li:active {
 button:active {
     background-color: $color1;
 }
-// angular overwrite
-// .mat-tab-label{
-//     font-family: sans-serif !important;
-// }
+
+showdown {
+    li {
+        &:active {
+            background-color: $color6;
+        }
+    }
+}

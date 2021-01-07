@@ -6,18 +6,6 @@ const config = require('../gallery/__config__.json');
 
 const urlString = 'https://mobius.design-automation.net';
 
-// Edit this ModuleList to include modules that are to be converted into MD file
-const ModuleList = [
-    'query',
-    'make',
-    'modify',
-    'isect',
-    'calc',
-    'util',
-    'pattern',
-    'virtual',
-    'list',
-];
 
 
 let examples;
@@ -128,52 +116,52 @@ function addDoc(mod, modName, docs) {
     docs.push(moduleDoc);
 }
 
-function genModuleDocs(ModuleList, docs) {
+function genModuleDocs(docs) {
     let count = 0;
-    for (const modName of ModuleList) {
-        let mod;
-        for (let m of docs) {
-            if (m.name === modName) {
-                mod = m;
-                break;
-            }
-        }
-        if (!mod) {continue;}
+    for (const mod of docs) {
+        // let mod;
+        // for (let m of docs) {
+        //     if (m.name === modName) {
+        //         mod = m;
+        //         break;
+        //     }
+        // }
+        // if (!mod) {continue;}
+        if (mod.name[0] === '_') { continue; }
         // if (!docs[modName]) { continue; }
         // const mod = docs[modName];
         // Module name
-        if (ModuleList.indexOf (mod.name) === -1) { continue; }``
-        let mdString = `# ${modName.toUpperCase()}    \n\n`;
+        // if (ModuleList.indexOf (mod.name) === -1) { continue; }``
+        let mdString = `# ${mod.name.toUpperCase()}  \n  \n`;
         for (const func of mod.func) {
             // if (!mod[funcName]) { continue; }
     
             // const func = mod[funcName];
-    
-            mdString += `## ${func.name}  \n`;
-            mdString += `* **Description:** ${func.description}  \n`;
+            fnString = `## ${func.name}  \n  \n  \n`;
+            fnString += `**Description:** ${func.description}  \n  \n`;
             if (func.parameters && func.parameters.length > 0) {
-                mdString += `* **Parameters:**  \n`;
+                fnString += `**Parameters:**  \n`;
                 for (const param of func.parameters) {
                     if (!param) {continue; }
-                    mdString += `  * *${param.name}:* ${param.description}  \n`;
+                    fnString += `  * *${param.name}:* ${param.description}  \n`;
                 }
             }
             if (func.returns) {
-                mdString += `* **Returns:** ${func.returns}  \n`;
+                fnString += `  \n**Returns:** ${func.returns}  \n`;
             }
             if (func.example) {
-                mdString += `* **Examples:**  \n`;
+                fnString += `**Examples:**  \n`;
                 for (const i in func.example) {
                     if (!func.example[i]) {continue; }
-                    mdString += `  * ${func.example[i]}  \n`;
+                    fnString += `  * ${func.example[i]}  \n`;
                     if (func.example_info) {
-                        mdString += `    ${func.example_info[i]}  \n`;
+                        fnString += `    ${func.example_info[i]}  \n`;
                     }
     
                 }
             }
             if (func.example_link) {
-                mdString += `* **Example URLs:**  \n`;
+                fnString += `**Example URLs:**  \n`;
                 for (const ex of func.example_link) {
                     let check = false;
                     f = ex.trim();
@@ -186,13 +174,13 @@ function genModuleDocs(ModuleList, docs) {
                     if (!check) {
                         examples.files.push(f);
                     }
-                    mdString += `  1. [${f.split('&node=')[0]}](${urlString}/flowchart?file=https://raw.githubusercontent.com/design-automation/` +
+                    fnString += `  1. [${f.split('&node=')[0]}](${urlString}/flowchart?file=https://raw.githubusercontent.com/design-automation/` +
                                 `mobius-parametric-modeller/master/src/assets/gallery/function_examples/${ex})  \n`;
     
                 }
             }
-            mdString += `  \n`;
-    
+            fnString += `  \n  \n`;
+            mdString += fnString
         }
     
         count += 1;
@@ -200,11 +188,12 @@ function genModuleDocs(ModuleList, docs) {
         if (countStr.length === 1) {
             countStr = '0' + countStr;
         }
-        fs.writeFile(`./src/assets/typedoc-json/docMD/${countStr}_${modName}.md`, mdString, function(err) {
+        mdString = mdString.replace(/\\n/g, '\n');
+        fs.writeFile(`./src/assets/typedoc-json/docMD/_${mod.name}.md`, mdString, function(err) {
             if (err) {
                 return console.log(err);
             }
-            console.log(`successfully saved ${countStr}_${modName}.md`);
+            console.log(`successfully saved _${mod.name}.md`);
         });
     }
 }
@@ -273,7 +262,7 @@ function genInlineDocs(inlineList, inlineDocs) {
         }
         ilString += `  \n`;
     }
-    fs.writeFile(`./src/assets/typedoc-json/docIL/_inline.md`, ilString, function(err) {
+    fs.writeFile(`./src/assets/typedoc-json/docCF/_inline.md`, ilString, function(err) {
         if (err) {
             return console.log(err);
         }
@@ -286,15 +275,15 @@ const doc = dc;
 const moduleDocs = [];
 
 for (const mod of doc.children) {
-    let modName = mod.name.replace(/"/g, '').replace(/'/g, '').split('/');
-    const coreIndex = modName.indexOf('core');
-    if (modName.length < 3 || coreIndex === -1) {
+    const modNameSplit = mod.name.replace(/"/g, '').replace(/'/g, '').split('/');
+    const coreIndex = modNameSplit.indexOf('core');
+    if (modNameSplit.length < 3 || coreIndex === -1) {
         continue;
     }
-    if (modName[coreIndex + 1] === 'inline') {
+    if (modNameSplit[coreIndex + 1] === 'inline') {
 
-    } else if (modName[coreIndex + 1] === 'modules') {
-        modName = modName[modName.length - 1];
+    } else if (modNameSplit[coreIndex + 1] === 'modules') {
+        const modName = modNameSplit[modNameSplit.length - 1];
         if (modName.substr(0, 1) === '_' || modName === 'index' || modName === 'categorization') {
             continue;
         }
@@ -303,7 +292,11 @@ for (const mod of doc.children) {
 }
 moduleDocs.sort(compare);
 
-genModuleDocs(ModuleList, moduleDocs)
+fs.mkdirSync('./src/assets/typedoc-json/docMD', { recursive: true }, (err) => {
+    if (err) throw err;
+});
+
+genModuleDocs(moduleDocs)
 
 fs.writeFile(`./src/assets/gallery/__config__.json`, JSON.stringify(config, null, 4), function(err) {
     if (err) {

@@ -22,7 +22,7 @@ export class GIGeomSnapshot {
     // Snapshot
     // ============================================================================
     /**
-     *
+     * Create a new snapshot.
      * @param id Starts a new snapshot with the given ID.
      * @param include
      */
@@ -239,7 +239,7 @@ export class GIGeomSnapshot {
         }
     }
     /**
-     *
+     * Get sets of all the ps, pt, pl, pg, co in a snapshot.
      * @param ent_type
      */
     public getAllEntSets(ssid: number): IEntSets {
@@ -253,7 +253,7 @@ export class GIGeomSnapshot {
         return ent_sets;
     }
     /**
-     * Get an array of all the ents in a snapshot.
+     * Get an array of all the ps, pt, pl, pg, co in a snapshot.
      * @param ssid
      */
     public getAllEnts(ssid: number): TEntTypeIdx[] {
@@ -266,7 +266,7 @@ export class GIGeomSnapshot {
         return ents;
     }
     /**
-     *
+     * Get an array of ent indexes in the snapshot.
      * @param ent_type
      */
     public getEnts(ssid: number, ent_type: EEntType): number[] {
@@ -335,7 +335,8 @@ export class GIGeomSnapshot {
         }
     }
     /**
-     * Get the sub ents as a list
+     * Get an array of sub ents given an set of ents.
+     * This can include topology.
      * @param ents
      */
     public getSubEnts(ents_sets: IEntSets): TEntTypeIdx[] {
@@ -418,7 +419,7 @@ export class GIGeomSnapshot {
         return ent_sets;
     }
     /**
-     *
+     * Given sets of [ps, pt, pl, pg, co], get the sub ents and add create additional sets.
      * @param ent_sets
      */
     public addTopoToSubEntsSets(ent_sets: IEntSets): void {

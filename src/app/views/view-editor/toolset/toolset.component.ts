@@ -616,7 +616,7 @@ export class ToolsetComponent implements OnInit {
         }
     }
 
-    assembleImportedTooltip(funcData, type = 'globalFunc'): string {
+    assembleImportedTooltip(funcData, type = 'globalFunc'): any {
         let htmlDesc: string;
         if (type === 'globalFunc') {
             const funcDoc = funcData.doc;
@@ -635,7 +635,24 @@ export class ToolsetComponent implements OnInit {
             htmlDesc = `<p class="funcDesc">Function ${funcData.args[0].value}`
                      + `(${funcData.args.slice(1).map(arg => arg.value).join(', ')})</p>`;
         }
-        return htmlDesc;
+        return {doc: htmlDesc};
+    }
+
+    assembleGlobalHelp(funcData): string {
+        let docText: string;
+        const funcDoc = funcData.doc;
+        docText = `## Global.${funcDoc.name}  \n`;
+        docText += `**Description:** ${funcDoc.description}  \n`;
+        if (funcDoc.parameters && funcDoc.parameters.length > 0) {
+            docText += `\n**Parameters:**  \n`;
+            for (const param of funcDoc.parameters) {
+                docText += `  * *${param.name}:* ${param.description}  \n`;
+            }
+        }
+        if (funcDoc.returns) {
+            docText += `\n**Returns:** ${funcDoc.returns}  \n`;
+        }
+        return docText;
     }
 
     popupTooltip(event, functionObj) {
@@ -655,6 +672,8 @@ export class ToolsetComponent implements OnInit {
             this.dataService.helpView = this.AllFuncsDoc[func.module.toLowerCase()][func.name.toLowerCase()];
             this.dataService.toggleHelp(true);
         } else if (functype === 'global') {
+            this.dataService.helpView = this.assembleGlobalHelp(func)
+            this.dataService.toggleHelp(true);
         } else {
             this.dataService.helpView = this.AllFuncsDoc[functype.toLowerCase()][func.toLowerCase()];
             this.dataService.toggleHelp(true);

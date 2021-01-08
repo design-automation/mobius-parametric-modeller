@@ -9,7 +9,7 @@
                 (mousedown)='selectPrevProd()'
                 (click)='add_basic_func(0)'> 
                 Variable
-                <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "controlFlow", "Variable")'>
+                <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "variable", "Variable")'>
                     <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
                 </button>
             </li>
@@ -18,7 +18,7 @@
                 (mousedown)='selectPrevProd()'
                 (click)='add_basic_func(ProcedureTypes.Comment)'> 
                 Comment
-                <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "controlFlow", "Comment")'>
+                <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "comment", "Comment")'>
                     <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
                 </button>
             </li>
@@ -28,7 +28,7 @@
         <button id='Inline' class="accordion" 
             (mousedown)='preventfocus($event)'
             (click)='open_inline_dialog($event)'>Expression
-            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "controlFlow", "Expression")'>
+            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "expression", "Expression")'>
                 <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
             </button>
         </button>
@@ -67,7 +67,7 @@
                         (mousedown)='selectPrevProd()'
                         (click)='add_basic_func(1)'> 
                             If
-                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "controlFlow", "If")'>
+                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "control_flow", "If")'>
                                 <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
                             </button>
                     </li>
@@ -76,7 +76,7 @@
                         (mousedown)='selectPrevProd()'
                         (click)='add_basic_func(2)'> 
                             Else-if
-                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "controlFlow", "Elseif")'>
+                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "control_flow", "Elseif")'>
                                 <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
                             </button>
                     </li>
@@ -85,7 +85,7 @@
                         (mousedown)='selectPrevProd()'
                         (click)='add_basic_func(3)'> 
                             Else
-                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "controlFlow", "Else")'>
+                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "control_flow", "Else")'>
                                 <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
                             </button>
                     </li>
@@ -94,7 +94,7 @@
                         (mousedown)='selectPrevProd()'
                         (click)='add_basic_func(4)'> 
                             For-each
-                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "controlFlow", "Foreach")'>
+                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "control_flow", "Foreach")'>
                                 <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
                             </button>
                     </li>
@@ -103,7 +103,7 @@
                         (mousedown)='selectPrevProd()'
                         (click)='add_basic_func(5)'> 
                             While
-                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "controlFlow", "While")'>
+                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "control_flow", "While")'>
                                 <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
                             </button>
                     </li>
@@ -112,7 +112,7 @@
                         (mousedown)='selectPrevProd()'
                         (click)='add_basic_func(6)'> 
                             Break
-                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "controlFlow", "Break")'>
+                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "control_flow", "Break")'>
                                 <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
                             </button>
                     </li>
@@ -121,7 +121,7 @@
                         (mousedown)='selectPrevProd()'
                         (click)='add_basic_func(7)'> 
                             Continue
-                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "controlFlow", "Continue")'>
+                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "control_flow", "Continue")'>
                                 <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
                             </button>
                     </li>
@@ -130,7 +130,7 @@
                         (mousedown)='selectPrevProd()'
                         (click)='add_basic_func(ProcedureTypes.Return)'>
                             Return
-                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "controlFlow", "Return")'>
+                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "control_flow", "Return")'>
                                 <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
                             </button>
                     </li>
@@ -145,7 +145,7 @@
                         (mousedown)='selectPrevProd()'
                         (click)='add_basic_func(ProcedureTypes.Error)'> 
                             Error
-                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "controlFlow", "Error")'>
+                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText($event, "control_flow", "Error")'>
                                 <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
                             </button>
                     </li>
@@ -167,7 +167,7 @@
                             <li
                             (mousedown)='selectPrevProd()'
                             (click)='add_searched_func(fn)'
-                            (mouseenter)='popupTooltip($event, fn.data.doc)'
+                            (mouseenter)='popupTooltip($event, fn)'
                             (mouseleave)='turnoffTooltip()'>
                                 <span class='module-name'>{{fn.module}}.</span>{{fn.name}}
                             </li>
@@ -185,7 +185,7 @@
                         <ul class='toolset__functions--subset'>
                             <ng-container *ngFor='let fn of mod.functions'>
                                 <div class='tooltip'
-                                (mouseenter)='popupTooltip($event, fn.doc)'
+                                (mouseenter)='popupTooltip($event, fn)'
                                 (mouseleave)='turnoffTooltip()'>
                                     <li 
                                     (mousedown)='selectPrevProd()'

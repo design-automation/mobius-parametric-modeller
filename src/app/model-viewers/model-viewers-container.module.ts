@@ -8,6 +8,7 @@ import { ConsoleViewerComponent } from './all-viewers/console-viewer/console-vie
 import { HelpViewerComponent } from './all-viewers/help-viewer/help-viewer.component';
 // import { GIViewerModule } from './all-viewers/gi-viewer/gi-viewer.module';
 import { MatIconModule } from '@angular/material/icon';
+import { ShowdownModule } from 'ngx-showdown';
 
 /**
  * DataViewersContainer, NgModule
@@ -26,6 +27,7 @@ import { MatIconModule } from '@angular/material/icon';
         CommonModule,
         FormsModule,
         MatIconModule,
+        ShowdownModule,
         ...VIEWER_MOD
 
         // SharedModule

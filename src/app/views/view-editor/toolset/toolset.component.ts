@@ -4,7 +4,7 @@ import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
 import { IFlowchart } from '@models/flowchart';
 import * as CircularJSON from 'circular-json';
 import { IArgument } from '@models/code';
-import { ModuleList, ModuleDocList, ControlFlowDocList } from '@shared/decorators';
+import { ModuleList, ModuleDocList, AllFunctionDoc } from '@shared/decorators';
 import { INode, NodeUtils } from '@models/node';
 
 import { DownloadUtils } from '@shared/components/file/download.utils';
@@ -48,7 +48,7 @@ export class ToolsetComponent implements OnInit {
     AllModules = {};
     Modules = [];
     ModuleDoc = ModuleDocList;
-    ControlFlowDoc = ControlFlowDocList;
+    AllFuncsDoc = AllFunctionDoc;
 
     private timeOut;
 
@@ -638,9 +638,9 @@ export class ToolsetComponent implements OnInit {
         return htmlDesc;
     }
 
-    popupTooltip(event, funcText: string) {
+    popupTooltip(event, functionObj) {
         let tooltip = document.getElementById('tooltiptext');
-        tooltip.innerHTML = funcText;
+        tooltip.innerHTML = functionObj.doc;
         tooltip.style.top = event.target.getBoundingClientRect().top + 'px';
         this.timeOut = setTimeout(() => {
             tooltip.style.transitionDuration = '0.3s';
@@ -652,20 +652,12 @@ export class ToolsetComponent implements OnInit {
     emitHelpText(event, functype, func) {
         event.stopPropagation();
         if (functype === 'core') {
-            this.eventAction.emit({
-                'type': 'helpText',
-                'content': this.ModuleDoc[func.module][func.name]
-            });
+            this.dataService.helpView = this.AllFuncsDoc[func.module.toLowerCase()][func.name.toLowerCase()];
+            this.dataService.toggleHelp(true);
         } else if (functype === 'global') {
-            this.eventAction.emit({
-                'type': 'helpText',
-                'content': func.doc
-            });
         } else {
-            this.eventAction.emit({
-                'type': 'helpText',
-                'content': this.ControlFlowDoc[func]
-            });
+            this.dataService.helpView = this.AllFuncsDoc[functype.toLowerCase()][func.toLowerCase()];
+            this.dataService.toggleHelp(true);
         }
     }
 

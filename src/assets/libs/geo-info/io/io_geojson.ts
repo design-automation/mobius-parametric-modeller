@@ -5,6 +5,7 @@ import proj4 from 'proj4';
 import { vecAng2, vecDot } from '../../geom/vectors';
 import { rotateMatrix, multMatrix } from '../../geom/matrix';
 import { Matrix4 } from 'three';
+import { getObjSets } from './common';
 
 
 enum EGeojsoFeatureType {
@@ -15,7 +16,7 @@ enum EGeojsoFeatureType {
     MULTILINESTRING = 'MultiLineString',
     MULTIPOLYGON = 'MultiPolygon'
 }
-export function exportGeojson(model: GIModel, entities: TEntTypeIdx[], flatten: boolean): string {
+export function exportGeojson(model: GIModel, entities: TEntTypeIdx[], flatten: boolean, ssid: number): string {
     // create the projection object
     const proj_obj: proj4.Converter = _createProjection(model);
     // calculate angle of rotation
@@ -27,18 +28,21 @@ export function exportGeojson(model: GIModel, entities: TEntTypeIdx[], flatten: 
             rot_matrix = rotateMatrix([[0, 0, 0], [0, 0, 1]], -rot_ang);
         }
     }
+    // create features from pgons, plines, points
     const features: object[] = [];
-    for (const [ent_type, ent_i] of entities) {
-        switch (ent_type) {
-            case EEntType.PGON:
-                features.push(_createGeojsonPolygon(model, ent_i, proj_obj, rot_matrix, flatten));
-                break;
-            case EEntType.PLINE:
-                features.push(_createGeojsonLineString(model, ent_i, proj_obj, rot_matrix, flatten));
-                break;
-            default:
-                break;
-        }
+    const obj_sets: IEntSets = getObjSets(model, entities, ssid);
+    for (const pgon_i of obj_sets.pg) {
+        features.push(_createGeojsonPolygon(model, pgon_i, proj_obj, rot_matrix, flatten));
+    }
+    for (const pline_i of obj_sets.pl) {
+        features.push(_createGeojsonLineString(model, pline_i, proj_obj, rot_matrix, flatten));
+    }
+    for (const pline_i of obj_sets.pt) {
+        //
+        //
+        // TODO implement points
+        //
+        //
     }
     const export_json = {
         'type': 'FeatureCollection',
@@ -77,7 +81,9 @@ function _createGeojsonPolygon(model: GIModel, pgon_i: number, proj_obj: any, ro
     }
     const all_props = {};
     for (const name of model.modeldata.attribs.getAttribNames(EEntType.PGON)) {
-        all_props[name] = model.modeldata.attribs.get.getEntAttribVal(EEntType.PGON, pgon_i, name);
+        if (!name.startsWith('_')) {
+            all_props[name] = model.modeldata.attribs.get.getEntAttribVal(EEntType.PGON, pgon_i, name);
+        }
     }
     return {
         'type': 'Feature',
@@ -115,7 +121,9 @@ function _createGeojsonLineString(model: GIModel, pline_i: number, proj_obj: any
     }
     const all_props = {};
     for (const name of model.modeldata.attribs.getAttribNames(EEntType.PLINE)) {
-        all_props[name] = model.modeldata.attribs.get.getEntAttribVal(EEntType.PLINE, pline_i, name);
+        if (!name.startsWith('_')) {
+            all_props[name] = model.modeldata.attribs.get.getEntAttribVal(EEntType.PLINE, pline_i, name);
+        }
     }
     return {
         'type': 'Feature',

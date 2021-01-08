@@ -313,7 +313,7 @@ async function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
         //     return saveResource(dae_data, file_name);
         //     break;
         case _EIOExportDataFormat.GEOJSON:
-            const geojson_data: string = exportGeojson(__model__, ents_arr, true); // flatten
+            const geojson_data: string = exportGeojson(__model__, ents_arr, true, ssid); // flatten
             if (data_target === _EIODataTarget.DEFAULT) {
                 return download(geojson_data , file_name);
             }

@@ -337,6 +337,7 @@ function _addPointToModel(model: GIModel, point: any,
  */
 function _addPlineToModel(model: GIModel, linestring: any,
         proj_obj: proj4.Converter, rot_matrix: Matrix4, elevation: number): number {
+    // check that the polyline has 2 or more positions
     if (linestring.geometry.coordinates.length < 2) { return null; }
     // add feature
     let xyzs: Txyz[] = _xformFromLongLatToXYZ(linestring.geometry.coordinates, proj_obj, elevation) as Txyz[];
@@ -381,7 +382,8 @@ function _addPlineToModel(model: GIModel, linestring: any,
  */
 function _addPgonToModel(model: GIModel, polygon: any,
         proj_obj: proj4.Converter, rot_matrix: Matrix4, elevation: number): number {
-    if (polygon.geometry.coordinates.length < 2) { return null; }
+    // check that the first ring has 2 or more positions
+    if (polygon.geometry.coordinates.length && polygon.geometry.coordinates[0].length < 2) { return null; }
     // add feature
     const rings: number[][] = [];
     for (const ring of polygon.geometry.coordinates) {

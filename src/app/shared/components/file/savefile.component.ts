@@ -541,7 +541,7 @@ export class SaveFileComponent implements OnDestroy{
             }
             flowchart_desc += '\n' + prod.args[0].value + ' = ' + prod.args[1].value;
         }
-        newFile.flowchart.description = splitDesc.join('\n') + flowchart_desc;
+        newFile.flowchart.description = splitDesc.join('\n') + '\n\nParameter values used to generate this model:' + flowchart_desc;
 
         const node = newFile.flowchart.nodes[1];
         if (!this.dataService.flowchart.model) {

@@ -1,6 +1,17 @@
 @import '~scss/colors';
 @import '~scss/variables';
 
+#geo-container {
+    position: relative;
+    // padding:50px;
+    height: 100%;
+    width: 100%;
+    margin:0px;
+    overflow: hidden;
+    // color: blue;
+    font-family:sans-serif;
+}
+
 #threejs-geo-container {
     position: relative;
     // padding:50px;

@@ -6,7 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 // import app services
 import { DataService, KeyboardService } from '@services';
-import { DataService as GiViewerDataService } from '../model-viewers/all-viewers/gi-viewer/data/data.service';
+import { DataService as ThreeJSViewerDataService } from '../model-viewers/all-viewers/gi-viewer/data/data.service';
+import { DataGeoService as ThreeGeoViewerDataService } from '../model-viewers/all-viewers/gi-geo-viewer/data/data.geo.service';
 // import app modules
 // import { CoreModule } from '@assets/core/core.module';
 import { SharedModule } from '@shared/shared.module';
@@ -57,7 +58,8 @@ import { CytoscapeService } from '../model-viewers/all-viewers/cytoscape-viewer/
         ViewAboutComponent,
     ],
     providers: [ DataService, DataOutputService, KeyboardService,
-                 GiViewerDataService, CytoscapeService,
+                 ThreeJSViewerDataService, ThreeGeoViewerDataService,
+                 CytoscapeService,
                  GoogleAnalyticsService,
                  {
                     provide: HTTP_INTERCEPTORS,

@@ -14,7 +14,6 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { GIGeoViewerComponent } from './gi-geo-viewer.component';
 
 import { ModalService } from './html/modal-window.service';
-import { DataGeoService } from './data/data.geo.service';
 import { ThreeGeoComponent } from './threejs/three-geo-viewer.component';
 import { ModalWindowComponent } from './html/modal-window.component';
 import { DropdownMenuComponent } from './html/dropdown-menu.component';
@@ -49,8 +48,7 @@ import { TabComponent } from './html/tab.component';
         ColorPickerModule
     ],
     providers: [
-        ModalService,
-        DataGeoService
+        ModalService
     ]
 })
 export class GIGeoViewerModule {

@@ -70,8 +70,6 @@ export class DataGeo {
      *
      */
     public createGeoViewer(threejsScene) {
-        this._getLayers();
-        this._getTerrains();
 
         const placement = {
             coord: new itowns.Coordinates('EPSG:4326', LONGLAT[0], LONGLAT[1]),

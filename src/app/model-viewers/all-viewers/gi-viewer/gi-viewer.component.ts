@@ -112,7 +112,8 @@ export class GIViewerComponent implements OnInit, OnDestroy {
         this.settingsUpdateInterval = setInterval(() => {
             if (this.mainDataService.viewerSettingsUpdated) {
                 this.settings = JSON.parse(localStorage.getItem('mpm_settings'));
-                this.closeModal('settings_modal', true);
+                this.dataService.getThreejsScene().settings = this.settings;
+                this.threejs.updateModel(this.data);
                 this.mainDataService.viewerSettingsUpdated = false;
             }
         }, 100);

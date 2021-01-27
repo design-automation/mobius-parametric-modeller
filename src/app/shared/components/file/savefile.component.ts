@@ -322,12 +322,9 @@ export class SaveFileComponent implements OnDestroy{
 
     static fileDownloadString(f: IMobius): {'name': string, 'file': string} {
         const main_settings = JSON.parse(localStorage.getItem('mpm_settings'));
-        const cesiumSettings = JSON.parse(localStorage.getItem('cesium_settings'));
-        if (cesiumSettings) {
-            if (cesiumSettings.cesium) {
-                delete cesiumSettings.cesium;
-            }
-            main_settings.cesium = cesiumSettings;
+        const geo_settings = JSON.parse(localStorage.getItem('geo_settings'));
+        if (geo_settings) {
+            main_settings.geo = geo_settings;
         }
         f.settings = JSON.stringify(main_settings);
 
@@ -507,12 +504,9 @@ export class SaveFileComponent implements OnDestroy{
         newFile.flowchart.name = this.dataService.flowchart.name;
 
         const main_settings = JSON.parse(localStorage.getItem('mpm_settings'));
-        const cesiumSettings = JSON.parse(localStorage.getItem('cesium_settings'));
-        if (cesiumSettings) {
-            if (cesiumSettings.cesium) {
-                delete cesiumSettings.cesium;
-            }
-            main_settings.cesium = cesiumSettings;
+        const geo_settings = JSON.parse(localStorage.getItem('geo_settings'));
+        if (geo_settings) {
+            main_settings.geo = geo_settings;
         }
         newFile.settings = JSON.stringify(main_settings);
 

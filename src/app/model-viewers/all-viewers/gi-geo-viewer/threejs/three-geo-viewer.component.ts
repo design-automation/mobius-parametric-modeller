@@ -8,6 +8,7 @@ import { API_MAPS, API_MAPS_KEY_MAPPING, DataGeo } from '../data/data.geo';
 import { GeoSettings, geo_default_settings } from '../gi-geo-viewer.settings';
 import { ModalService } from '../html/modal-window.service';
 import { DataService as ThreeJSDataService } from '../../gi-viewer/data/data.service';
+import { DefaultSettings } from '../../gi-viewer/gi-viewer.settings';
 
 /**
  * GIViewerComponent
@@ -23,7 +24,6 @@ export class ThreeGeoComponent implements OnInit, OnChanges {
     @Input() model: GIModel;
     @Input() nodeIndex: number;
 
-    public settings: GeoSettings;
     public backup_settings: GeoSettings;
     public colorLayerList: string[];
     public elevLayerList: string[];
@@ -45,7 +45,12 @@ export class ThreeGeoComponent implements OnInit, OnChanges {
             }
             const data = this.dataService.getGeoScene();
             data.model = this.model;
-            this.dataService.createGeoViewer(this.threeJSDataService.getThreejsScene());
+            let threeJSScene = this.threeJSDataService.getThreejsScene();
+            if (!threeJSScene) {
+                this.threeJSDataService.setThreejsScene(DefaultSettings);
+                threeJSScene = this.threeJSDataService.getThreejsScene();
+            }
+            this.dataService.createGeoViewer(threeJSScene);
         } else {
             const data = this.dataService.getGeoScene();
             const geoCont = <HTMLDivElement> document.getElementById('geo-container');

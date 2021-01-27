@@ -9,7 +9,7 @@ import { _parameterTypes } from '@assets/core/_parameterTypes';
 import { ModuleList } from '@shared/decorators';
 import { Router } from '@angular/router';
 import { checkNodeValidity } from '@shared/parser';
-import { IdGenerator, updateLocalViewerSettings, updateCesiumViewerSettings } from '@utils';
+import { IdGenerator, updateLocalViewerSettings, updateGeoViewerSettings } from '@utils';
 import { checkMobFile } from '@shared/updateOldMobFile';
 import { SaveFileComponent } from './savefile.component';
 import { InputType } from '@models/port';
@@ -148,10 +148,10 @@ export class LoadUrlComponent {
         delete this.dataService.file.flowchart;
         this.dataService.file = loadeddata;
         if (!loadURLSettings || !loadURLSettings.keepSettings) {
+            updateGeoViewerSettings(loadeddata.settings);
             if (updateLocalViewerSettings(loadeddata.settings)) {
                 this.dataService.viewerSettingsUpdated = true;
             }
-            updateCesiumViewerSettings(loadeddata.settings);
         }
         this.dataService.newFlowchart = true;
         if ((nodeID || nodeID === 0) && nodeID >= 0 && nodeID < loadeddata.flowchart.nodes.length) {
@@ -232,10 +232,10 @@ export class LoadUrlComponent {
         SaveFileComponent.clearModelData(this.dataService.flowchart);
         delete this.dataService.file.flowchart;
         this.dataService.file = loadeddata;
+        updateGeoViewerSettings(loadeddata.settings);
         if (updateLocalViewerSettings(loadeddata.settings)) {
             this.dataService.viewerSettingsUpdated = true;
         }
-        updateCesiumViewerSettings(loadeddata.settings);
         this.dataService.newFlowchart = true;
         this.router.navigate(['/editor']);
         for (const func of this.dataService.flowchart.functions) {

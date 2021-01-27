@@ -307,11 +307,13 @@ export class DataGeo {
 
             if (north_dir.constructor === [].constructor && north_dir.length === 2) {
                 // make the north vector and the default north vector
-                const north_cartesian = new THREE.Vector3(north_dir[0], north_dir[1], 0);
-                const model_cartesian = new THREE.Vector3(0, 1, 0);
-
-                // const angle = north_cartesian.angleTo(model_cartesian);
-                threeJSGroup.rotateZ(north_cartesian.angleTo(model_cartesian));
+                const model_cartesian = new THREE.Vector3(north_dir[0], north_dir[1], 0);
+                const north_cartesian = new THREE.Vector3(0, 1, 0);
+                let angle = north_cartesian.angleTo(model_cartesian);
+                if (north_cartesian.cross(model_cartesian).z > 0) {
+                    angle = -angle;
+                }
+                threeJSGroup.rotateZ(angle);
             }
         }
 
@@ -375,7 +377,6 @@ export class DataGeo {
         } else {
             lighting.intensity = 1;
         }
-        console.log('tilt:', lightingPos.altitude * 180 / Math.PI, 'heading:', lightingPos.azimuth * 180 / Math.PI )
 
         // lighting.matrix.copy(this.lightingCamera.matrix);
         // lighting.matrixWorld.copy(this.lightingCamera.matrixWorld);

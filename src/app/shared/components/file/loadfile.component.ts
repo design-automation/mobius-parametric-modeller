@@ -83,9 +83,11 @@ export class LoadFileComponent {
             SaveFileComponent.clearModelData(this.dataService.flowchart);
             delete this.dataService.file.flowchart;
             this.dataService.file = loadeddata;
-            updateGeoViewerSettings(loadeddata.settings);
+            if (updateGeoViewerSettings(loadeddata.settings)) {
+                this.dataService.geoViewerSettingsUpdated = true;
+            }
             if (updateLocalViewerSettings(loadeddata.settings)) {
-                this.dataService.viewerSettingsUpdated = true;
+                this.dataService.giViewerSettingsUpdated = true;
             }
             this.dataService.newFlowchart = true;
             if (this.dataService.node.type !== 'end') {

@@ -148,9 +148,11 @@ export class LoadUrlComponent {
         delete this.dataService.file.flowchart;
         this.dataService.file = loadeddata;
         if (!loadURLSettings || !loadURLSettings.keepSettings) {
-            updateGeoViewerSettings(loadeddata.settings);
+            if (updateGeoViewerSettings(loadeddata.settings)) {
+                this.dataService.geoViewerSettingsUpdated = true;
+            }
             if (updateLocalViewerSettings(loadeddata.settings)) {
-                this.dataService.viewerSettingsUpdated = true;
+                this.dataService.giViewerSettingsUpdated = true;
             }
         }
         this.dataService.newFlowchart = true;
@@ -232,9 +234,11 @@ export class LoadUrlComponent {
         SaveFileComponent.clearModelData(this.dataService.flowchart);
         delete this.dataService.file.flowchart;
         this.dataService.file = loadeddata;
-        updateGeoViewerSettings(loadeddata.settings);
+        if (updateGeoViewerSettings(loadeddata.settings)) {
+            this.dataService.geoViewerSettingsUpdated = true;
+        }
         if (updateLocalViewerSettings(loadeddata.settings)) {
-            this.dataService.viewerSettingsUpdated = true;
+            this.dataService.giViewerSettingsUpdated = true;
         }
         this.dataService.newFlowchart = true;
         this.router.navigate(['/editor']);

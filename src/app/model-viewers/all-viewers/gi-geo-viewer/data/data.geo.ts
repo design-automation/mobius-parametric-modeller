@@ -198,22 +198,24 @@ export class DataGeo {
             //     }
             // }
         }
-        // if (newSetting.camera) {
-        //     if (newSetting.camera.pos) {
-        //         this.settings.camera.pos.x = newSetting.camera.pos.x;
-        //         this.settings.camera.pos.y = newSetting.camera.pos.y;
-        //         this.settings.camera.pos.z = newSetting.camera.pos.z;
-        //         this.settings.camera.direction.x = newSetting.camera.direction.x;
-        //         this.settings.camera.direction.y = newSetting.camera.direction.y;
-        //         this.settings.camera.direction.z = newSetting.camera.direction.z;
-        //         this.settings.camera.up.x = newSetting.camera.up.x;
-        //         this.settings.camera.up.y = newSetting.camera.up.y;
-        //         this.settings.camera.up.z = newSetting.camera.up.z;
-        //         this.settings.camera.right.x = newSetting.camera.right.x;
-        //         this.settings.camera.right.y = newSetting.camera.right.y;
-        //         this.settings.camera.right.z = newSetting.camera.right.z;
-        //     }
-        // }
+        if (newSetting.camera) {
+            if (newSetting.camera.pos) {
+                if (newSetting.camera.pos.x !== 0 &&
+                    this.settings.camera.pos.x !== newSetting.camera.pos.x &&
+                    this.settings.camera.pos.y !== newSetting.camera.pos.y &&
+                    this.settings.camera.pos.z !== newSetting.camera.pos.z) {
+                    this.view.camera.camera3D.position.set(newSetting.camera.pos.x, newSetting.camera.pos.y, newSetting.camera.pos.z);
+                    this.view.camera.camera3D.rotation.set(newSetting.camera.rot.x, newSetting.camera.rot.y, newSetting.camera.rot.z);
+                    this.view.notifyChange();
+                }
+                this.settings.camera.pos.x = newSetting.camera.pos.x;
+                this.settings.camera.pos.y = newSetting.camera.pos.y;
+                this.settings.camera.pos.z = newSetting.camera.pos.z;
+                this.settings.camera.rot.x = newSetting.camera.rot.x;
+                this.settings.camera.rot.y = newSetting.camera.rot.y;
+                this.settings.camera.rot.z = newSetting.camera.rot.z;
+            }
+        }
         if (newSetting.time) {
             if (newSetting.time.date) {
                 this.settings.time.date = newSetting.time.date;
@@ -322,8 +324,11 @@ export class DataGeo {
         this.view.scene.add(threeJSGroup);
 
         // this._addGround(threejsScene, cameraTargetPosition);
-
-        this.scale = threejsScene._all_objs_sphere.radius;
+        if (threejsScene._all_objs_sphere) {
+            this.scale = threejsScene._all_objs_sphere.radius;
+        } else {
+            this.scale = 1;
+        }
 
         const lightTarget = new THREE.Object3D();
         lightTarget.name = 'mobius_lightTarget';
@@ -331,10 +336,17 @@ export class DataGeo {
         lightTarget.updateMatrixWorld();
         this.view.scene.add(lightTarget);
 
-        this.updateLightPos(this.settings.time.date, lightTarget);
+        // this.lookAtObj(threejsScene);
 
         // this.view.scene.add(lighting);
-        this.lookAtObj(threejsScene);
+        if (this.settings.camera.pos.x !== 0) {
+            this.view.camera.camera3D.position.set(this.settings.camera.pos.x, this.settings.camera.pos.y, this.settings.camera.pos.z);
+            this.view.camera.camera3D.rotation.set(this.settings.camera.rot.x, this.settings.camera.rot.y, this.settings.camera.rot.z);
+            this.view.notifyChange();
+        } else {
+            this.lookAtObj(threejsScene);
+        }
+        this.updateLightPos(this.settings.time.date, lightTarget);
     }
 
     public updateLightPos(time, lightTarget?) {
@@ -349,9 +361,21 @@ export class DataGeo {
         const lightingTime = new Date(time);
         const lightingPos = suncalc.getPosition(lightingTime, this.latitude, this.longitude);
 
-        const lighting = this.view.scene.children[0].children[0]
-        // const lighting = new itowns.THREE.DirectionalLight(0xFFFFFF, 1);
-        // lighting.name = 'mobius_lighting';
+        // const lighting = this.view.scene.children[0].children[0]
+        let lighting;
+        let lighting_check = false;
+        for (const i of this.view.scene.children) {
+            if (i.name === 'mobius_lighting') {
+                lighting = i;
+                lighting_check = true;
+                break;
+            }
+        }
+        if (!lighting_check) {
+            lighting = new itowns.THREE.DirectionalLight(0xFFFFFF, 1);
+            lighting.name = 'mobius_lighting';
+            this.view.scene.add(lighting);
+        }
         // this.getDLPosition(distance);
         lighting.castShadow = true;
         lighting.visible = true;

@@ -41,7 +41,11 @@ export class ThreeGeoComponent implements OnInit, OnChanges {
             if (!savedSettings) {
                 this.dataService.setGeoScene(geo_default_settings);
             } else {
-                this.dataService.setGeoScene(JSON.parse(savedSettings));
+                // this.dataService.setGeoScene(JSON.parse(savedSettings));
+                const prevSavedSettings = JSON.parse(savedSettings);
+                this.propCheck(prevSavedSettings, geo_default_settings);
+                if (prevSavedSettings.imagery.apiKey) { delete prevSavedSettings.imagery.apiKey; }
+                this.dataService.setGeoScene(prevSavedSettings);
             }
             const data = this.dataService.getGeoScene();
             data.model = this.model;
@@ -96,4 +100,21 @@ export class ThreeGeoComponent implements OnInit, OnChanges {
             }
         }
     }
+
+    /**
+     * Check whether the current settings has same structure with
+     * the previous settings saved in local storage. If not, replace the local storage.
+     * @param obj1
+     * @param obj2
+     */
+    propCheck(obj1, obj2, checkChildren = true) {
+        for (const i in obj2) {
+            if (!obj1.hasOwnProperty(i)) {
+                obj1[i] = JSON.parse(JSON.stringify(obj2[i]));
+            } else if (checkChildren && obj1[i].constructor === {}.constructor && obj2[i].constructor === {}.constructor) {
+                this.propCheck(obj1[i], obj2[i], false);
+            }
+        }
+    }
+
 }

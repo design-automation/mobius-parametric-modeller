@@ -33,7 +33,7 @@ export class HelpViewerComponent implements DoCheck, OnDestroy {
         for (const i of extraMods) {
             this.Modules.push({
                 'module': i,
-                'src': `assets/typedoc-json/docCF/_${i}.md`,
+                'src': `assets/typedoc-json/docCF/${i}.md`,
                 'functions': {}
             });
         }
@@ -41,7 +41,7 @@ export class HelpViewerComponent implements DoCheck, OnDestroy {
         for (const mod of ModuleList) {
             if (mod.module[0] === '_') {continue; }
             const nMod = {  'module': mod.module,
-                            'src': `assets/typedoc-json/docMD/_${mod.module}.md`,
+                            'src': `assets/typedoc-json/docMD/${mod.module}.md`,
                             'functions': {}};
             this.Modules.push(nMod);
         }

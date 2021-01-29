@@ -330,7 +330,7 @@ async function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
             }
         case _EIOExportDataFormat.GLTF:
             {
-                const gltf_data: string = exportGltf(__model__, ents_arr, ssid);
+                const gltf_data: string = await exportGltf(__model__, ents_arr, ssid);
                 if (data_target === _EIODataTarget.DEFAULT) {
                     return download(gltf_data, file_name);
                 }

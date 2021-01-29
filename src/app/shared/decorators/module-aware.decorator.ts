@@ -97,7 +97,7 @@ function addDoc(mod, modName, docs) {
         const fn = {};
         fn['name'] = func.name;
         fn['module'] = modName;
-        if (modName === '_constants') {
+        if (modName === 'constants') {
             fn['description'] = func['comment'].shortText;
             moduleDoc[func.name] = fn;
         }
@@ -214,11 +214,11 @@ for (const mod of doc.children) {
             continue;
         }
         addDoc(mod, modName, moduleDocs);
-        addModFuncDoc(functionDocs, `assets/typedoc-json/docMD/_${modName}.md`, modName)
+        addModFuncDoc(functionDocs, `assets/typedoc-json/docMD/${modName}.md`, modName)
     }
 }
 for (const i of extraMods) {
-    addModFuncDoc(functionDocs, `assets/typedoc-json/docCF/_${i}.md`, i)
+    addModFuncDoc(functionDocs, `assets/typedoc-json/docCF/${i}.md`, i)
 }
 
 export const ModuleList = module_list;

@@ -6,7 +6,7 @@ import { DataService } from '@services';
 import { _parameterTypes } from '@assets/core/_parameterTypes';
 import { ModuleList } from '@shared/decorators';
 import { checkNodeValidity } from '@shared/parser';
-import { IdGenerator, updateLocalViewerSettings, updateCesiumViewerSettings } from '@utils';
+import { IdGenerator, updateLocalViewerSettings, updateGeoViewerSettings } from '@utils';
 import { checkMobFile } from '@shared/updateOldMobFile';
 import { SaveFileComponent } from './savefile.component';
 
@@ -83,10 +83,12 @@ export class LoadFileComponent {
             SaveFileComponent.clearModelData(this.dataService.flowchart);
             delete this.dataService.file.flowchart;
             this.dataService.file = loadeddata;
-            if (updateLocalViewerSettings(loadeddata.settings)) {
-                this.dataService.viewerSettingsUpdated = true;
+            if (updateGeoViewerSettings(loadeddata.settings)) {
+                this.dataService.geoViewerSettingsUpdated = true;
             }
-            updateCesiumViewerSettings(loadeddata.settings);
+            if (updateLocalViewerSettings(loadeddata.settings)) {
+                this.dataService.giViewerSettingsUpdated = true;
+            }
             this.dataService.newFlowchart = true;
             if (this.dataService.node.type !== 'end') {
                 loadeddata.flowchart.meta.selected_nodes = [loadeddata.flowchart.nodes.length - 1];

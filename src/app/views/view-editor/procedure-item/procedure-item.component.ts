@@ -241,6 +241,7 @@ export class ProcedureItemComponent implements OnDestroy {
                 return;
             }
             this.data.enabled = !this.data.enabled;
+            checkNodeValidity(this.dataService.node);
             return;
         }
         const prodList = this.dataService.node.state.procedure;
@@ -257,6 +258,7 @@ export class ProcedureItemComponent implements OnDestroy {
             }
             prod.enabled = newEnabled;
         }
+        checkNodeValidity(this.dataService.node);
         // this.data.enabled = !this.data.enabled;
     }
 

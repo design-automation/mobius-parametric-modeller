@@ -1442,7 +1442,7 @@ export function checkValidVar(vars: string[], procedure: IProcedure, nodeProdLis
                     break;
                 }
             }
-            if (!prod.variable || prod.type === ProcedureTypes.Foreach) { continue; }
+            if (!prod.variable || prod.type === ProcedureTypes.Foreach || !prod.enabled) { continue; }
             const index = vars.indexOf(prod.variable);
             if (index !== -1) {
                 validVars.push(vars.splice(index, 1)[0]);
@@ -1473,7 +1473,7 @@ export function checkValidVar(vars: string[], procedure: IProcedure, nodeProdLis
                 break;
             }
         }
-        if (!prod.variable || prod.type === ProcedureTypes.Foreach) { continue; }
+        if (!prod.variable || prod.type === ProcedureTypes.Foreach || !prod.enabled) { continue; }
         const index = vars.indexOf(prod.variable);
         if (index !== -1) {
             validVars.push(vars.splice(index, 1)[0]);
@@ -1505,6 +1505,7 @@ export function checkNodeValidity(node: INode) {
 
 function checkProdListValidity(prodList: IProcedure[], nodeProdList: IProcedure[]) {
     for (const prod of prodList) {
+        if (!prod.enabled) { continue; }
         switch (prod.type) {
             case ProcedureTypes.Variable:
             case ProcedureTypes.Foreach:

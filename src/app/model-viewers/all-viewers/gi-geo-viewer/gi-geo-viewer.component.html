@@ -5,7 +5,7 @@
         <mat-icon svgIcon="cZoom"></mat-icon>
     </button>
     <div class='date-picker-div'>
-        <input class='viewer-date-picker' type="datetime-local" [ngModel]="settings.time.date" (ngModelChange)="updateLighting($event)">
+        <input class='viewer-date-picker' type="datetime-local" [ngModel]="settings.time.date" (ngModelChange)="updateLighting($event, true)">
     </div>
     <modal-window id="geo_settings_modal" (closeModal) = 'onCloseModal()'>
         <h1>Geo Viewer Settings</h1>
@@ -19,16 +19,48 @@
                                 <option *ngFor="let item of colorLayerList" value ={{item}}>{{item}}</option>
                             </select>
                         </dd>
-                        <dd id='cesium_date'>
+                        <dd><hr></dd>
+                        <dd id='itowns_date'>
                             <div class="label">Date:</div><br><br>
-                            <input class='date-picker' type="datetime-local" [ngModel]="settings.time.date" (ngModelChange)="updateLighting($event)">
+                            <input class='date-picker' type="datetime-local" [ngModel]="settings.time.date" (ngModelChange)="updateLighting($event, false)">
                             <!-- <button (click)="settingOnChange('time.date')" class="filebtn getbtn">Get</button> -->
                             <button (click)="settingOnChange('time.current')" class="filebtn getbtn">Reset</button>
+                        </dd>
+                        <dd><hr></dd>
+                        <dd id='itowns_camera'>
+                            <div class="label">Camera Position</div>
+                            <input type="number"
+                            (change)="settingOnChange('camera.pos_x', $event.target.value)" 
+                            [value]="formatNumber(settings.camera.pos.x)">
+                            <input type="number"
+                            (change)="settingOnChange('camera.pos_y', $event.target.value)" 
+                            [value]="formatNumber(settings.camera.pos.y)">
+                            <input type="number"
+                            (change)="settingOnChange('camera.pos_z', $event.target.value)" 
+                            [value]="formatNumber(settings.camera.pos.z)">
+                            <button (click)="settingOnChange('camera.get_camera_pos')" class="filebtn getbtn">Get</button>
+                        </dd>
+                        <dd id='itowns_camera_rot'>
+                            <div class="label">Camera Rotation</div>
+                            <input type="number"
+                            (change)="settingOnChange('camera.rot_x', $event.target.value)" 
+                            [value]="formatNumber(settings.camera.rot.x)" disabled>
+                            <input type="number" 
+                            (change)="settingOnChange('camera.rot_y', $event.target.value)"
+                            [value]="formatNumber(settings.camera.rot.y)" disabled>
+                            <input type="number" 
+                            (change)="settingOnChange('camera.rot_z', $event.target.value)"
+                            [value]="formatNumber(settings.camera.rot.z)" disabled>
+                            <button (click)="settingOnChange('camera.get_camera_rot')" class="filebtn getbtn">Get</button>
+                        </dd>
+                        <dd>
+                            <button (click)="settingOnChange('camera.reset_camera')" class="filebtn getbtn">Reset</button>
                         </dd>
                     </dl>
                 </div>
             </tab>
         </tabs>
+        <br>
         <button (click)="closeModal('geo_settings_modal', true);" class="filebtn closebtn setting">Apply</button>
         <button (click)="closeModal('geo_settings_modal');" class='filebtn closebtn setting'>Cancel</button>
     </modal-window>

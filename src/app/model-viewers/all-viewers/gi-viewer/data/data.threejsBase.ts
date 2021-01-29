@@ -170,11 +170,13 @@ export class DataThreejsBase {
 
         setTimeout(() => {
             const threeContainer = document.getElementById('threejs-container');
-            const aspect = (threeContainer.clientWidth / threeContainer.clientHeight + 1) / 2;
-            this.orthoCam.left = aspect * -300;
-            this.orthoCam.right = aspect * 300;
-            this.orthoCam.updateProjectionMatrix();
-            this.orthoControls.update();
+            if (threeContainer) {
+                const aspect = (threeContainer.clientWidth / threeContainer.clientHeight + 1) / 2;
+                this.orthoCam.left = aspect * -300;
+                this.orthoCam.right = aspect * 300;
+                this.orthoCam.updateProjectionMatrix();
+                this.orthoControls.update();
+            }
         }, 0);
     }
 }

@@ -110,10 +110,11 @@ export class GIViewerComponent implements OnInit, OnDestroy {
         this.temp_camera_pos = this.dataService.getThreejsScene().perspCam.position;
 
         this.settingsUpdateInterval = setInterval(() => {
-            if (this.mainDataService.viewerSettingsUpdated) {
+            if (this.mainDataService.giViewerSettingsUpdated) {
                 this.settings = JSON.parse(localStorage.getItem('mpm_settings'));
-                this.closeModal('settings_modal', true);
-                this.mainDataService.viewerSettingsUpdated = false;
+                this.dataService.getThreejsScene().settings = this.settings;
+                this.threejs.updateModel(this.data);
+                this.mainDataService.giViewerSettingsUpdated = false;
             }
         }, 100);
     }

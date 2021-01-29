@@ -189,11 +189,11 @@ function genModuleDocs(docs) {
             countStr = '0' + countStr;
         }
         mdString = mdString.replace(/\\n/g, '\n');
-        fs.writeFile(`./src/assets/typedoc-json/docMD/_${mod.name}.md`, mdString, function(err) {
+        fs.writeFile(`./src/assets/typedoc-json/docMD/${mod.name}.md`, mdString, function(err) {
             if (err) {
                 return console.log(err);
             }
-            console.log(`successfully saved _${mod.name}.md`);
+            console.log(`successfully saved ${mod.name}.md`);
         });
     }
 }
@@ -262,11 +262,11 @@ function genInlineDocs(inlineList, inlineDocs) {
         }
         ilString += `  \n`;
     }
-    fs.writeFile(`./src/assets/typedoc-json/docCF/_inline.md`, ilString, function(err) {
+    fs.writeFile(`./src/assets/typedoc-json/docCF/inline.md`, ilString, function(err) {
         if (err) {
             return console.log(err);
         }
-        console.log(`successfully saved _inline.md`);
+        console.log(`successfully saved inline.md`);
     });
 }
 

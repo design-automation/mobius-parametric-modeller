@@ -90,7 +90,7 @@ modal-window {
         line-height: 35px;
     }
     dl{
-        margin: 20px 0;
+        // margin: 20px 0;
         padding: 0;
         background-color: transparent;
         dd{
@@ -351,15 +351,16 @@ body.modal-open {
         float: left;
     }
 
-    #camera, #camera_target, #grid_pos{
-        input{
-            width: 65px;
-            border: 1px solid #bdbdbd;
-            height: 16px;
-            margin-right: 3px;
-            text-align: right;
-            padding-right: 3px
-        }
+}
+
+#itowns_camera, #itowns_camera_rot, #grid_pos{
+    input{
+        width: 65px;
+        border: 1px solid #bdbdbd;
+        height: 16px;
+        margin-right: 3px;
+        text-align: right;
+        padding-right: 3px
     }
 }
 

@@ -30,7 +30,14 @@ export class GIGeomThreejs {
     public get3jsTris(ssid: number, vertex_map: Map<number, number>): [number[], Map<number, number>, object[], [number, number, number][]] {
 
         // TODO this should not be parsed each time
-        const settings = JSON.parse(localStorage.getItem('mpm_settings'));
+        let settings = JSON.parse(localStorage.getItem('mpm_settings'));
+        if (!settings) {
+            settings = {
+                'wireframe': {
+                    'show': false
+                }
+            };
+        }
 
         // arrays to store threejs data
         const tri_data_arrs: [number[], TTri, number][] = []; // tri_mat_indices, new_tri_verts_i, tri_i

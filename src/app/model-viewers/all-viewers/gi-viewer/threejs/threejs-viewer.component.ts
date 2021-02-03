@@ -1569,7 +1569,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     private indexAsLabel(ent_type_str: string, ent_id: string, id: number, type: EEntType) {
         let indexAsLabel;
         const showSelected = JSON.parse(sessionStorage.getItem('mpm_showSelected'));
-        if (showSelected) {
+        if (showSelected && this.tab_map[this.getCurrentTab()] === type) {
             const sorted = sortByKey(this.dataService.selected_ents.get(ent_type_str));
             const arr = Array.from(sorted.values());
             indexAsLabel = String(arr.findIndex(ent => ent === id));

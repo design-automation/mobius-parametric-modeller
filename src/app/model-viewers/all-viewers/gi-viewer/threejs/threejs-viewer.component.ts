@@ -642,11 +642,13 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
                         this.attrTableSelect({ action: 'select', ent_type: type, id: select_groups[type] }, true);
                     }
 
+                    const selectionType = this.selections.find(selection => selection.id === selectingType);
+                    if (!selectionType) { return; }
                     sessionStorage.setItem('mpm_showSelected', 'true');
 
                     sessionStorage.setItem('mpm_changetab', 'true');
                     localStorage.setItem('mpm_attrib_current_tab', this.tab_rev_map[selectingType]);
-                    this.selectEntityType(this.selections.find(selection => selection.id === selectingType));
+                    this.selectEntityType(selectionType);
                 } else {
                     sessionStorage.setItem('mpm_showSelected', 'false');
                     sessionStorage.setItem('mpm_changetab', 'false');
@@ -1845,6 +1847,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
     }
 
     private selectEntityType(selection: { id: number, name: string }) {
+        if (!selection) { return; }
         this.dataService.updateSelectingEntityType(selection);
         this.SelectingEntityType = selection;
         const settings = JSON.parse(localStorage.getItem('mpm_settings'));

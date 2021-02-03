@@ -53,7 +53,9 @@ export class GIGeoViewerComponent implements OnDestroy {
 
         this.settingsUpdateInterval = setInterval(() => {
             if (this.mainDataService.geoViewerSettingsUpdated) {
-                this.settings = JSON.parse(localStorage.getItem('geo_settings'));
+                const loadedSettings = JSON.parse(localStorage.getItem('geo_settings'));
+                this.updateSettings(this.settings, loadedSettings);
+                // this.settings = JSON.parse(localStorage.getItem('geo_settings'));
                 const geoScene = this.dataService.getGeoScene();
                 geoScene.settings = JSON.parse(localStorage.getItem('geo_settings'));
                 geoScene.refreshModel(this.threeJSDataService.getThreejsScene());

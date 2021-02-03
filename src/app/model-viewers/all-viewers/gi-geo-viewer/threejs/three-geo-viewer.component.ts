@@ -40,12 +40,14 @@ export class ThreeGeoComponent implements OnInit, OnChanges {
             const savedSettings = localStorage.getItem('geo_settings');
             if (!savedSettings) {
                 this.dataService.setGeoScene(geo_default_settings);
+                localStorage.setItem('geo_settings', JSON.stringify(geo_default_settings));
             } else {
                 // this.dataService.setGeoScene(JSON.parse(savedSettings));
                 const prevSavedSettings = JSON.parse(savedSettings);
                 this.propCheck(prevSavedSettings, geo_default_settings);
                 if (prevSavedSettings.imagery.apiKey) { delete prevSavedSettings.imagery.apiKey; }
                 this.dataService.setGeoScene(prevSavedSettings);
+                localStorage.setItem('geo_settings', JSON.stringify(prevSavedSettings));
             }
             const data = this.dataService.getGeoScene();
             data.model = this.model;

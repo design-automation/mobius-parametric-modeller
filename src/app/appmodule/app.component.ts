@@ -70,8 +70,6 @@ export class AppComponent implements OnInit, OnDestroy {
 <br> 2. Scroll down to the bottom and select the “Advanced” option.
 <br> 3. Scroll to the “System” section and switch on “Use hardware acceleration when available”.</div>`;
         }
-        console.log(videoCardInfo)
-        console.log(videoCardInfo.renderer.toLowerCase().indexOf('google'))
         if (errorMsg) {
             setTimeout(() => {
                 this.dataService.notifyMessage(errorMsg);

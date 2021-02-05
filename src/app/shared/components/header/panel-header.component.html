@@ -320,7 +320,7 @@
         </div>
         <br>
         <ng-container *ngFor='let category of func_categories'>
-            <div class='settingLine subsetting'>
+            <div class='settingLine'>
                 <div class='div--chbox'>
                     <input id='_func_{{category}}' 
                     name='_func_{{category}}' 
@@ -332,11 +332,14 @@
             </div>
             <br>
         </ng-container>
-
+        <br>
+        <div class='settingLine'>
+            <p>WebGL Renderer: {{getRendererInfo()}}</p>
+        </div>
         <br>
         <br>
         <br>
-        <button class='settingsButton' (click)="updateSettings($event, backup)">Apply</button>
         <button class='settingsButton' (click)="closeDialog()">Cancel</button>
+        <button class='settingsButton' (click)="updateSettings($event, backup)">Apply</button>
     </div>
 </dialog>

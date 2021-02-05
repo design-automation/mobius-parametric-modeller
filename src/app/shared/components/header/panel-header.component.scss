@@ -665,11 +665,12 @@ button.mat-menu-item:hover{
     
         .settingsButton{
             width: 80px;
-            margin: 0px 20px 2px 20px;
+            margin: 0px 10px 2px 10px;
             padding: 0px 5px 0px 5px;
             background-color: $color5;
             color: $color1;
-            display: inline-block;
+            display: block;
+            float: right;
         }
 
         .textdiv{

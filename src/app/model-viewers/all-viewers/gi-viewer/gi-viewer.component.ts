@@ -464,8 +464,7 @@ export class GIViewerComponent implements OnInit, OnDestroy {
     // }
 
     resetToDefault() {
-        const default_settings = JSON.parse(localStorage.getItem('mpm_default_settings'));
-        this.settings = default_settings;
+        this.settings = JSON.parse(JSON.stringify(DefaultSettings));
     }
 
     checkColor(color) {

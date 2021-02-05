@@ -231,6 +231,10 @@ export class GIGeoViewerComponent implements OnDestroy {
         }
     }
 
+    resetToDefault() {
+        this.settings = JSON.parse(JSON.stringify(geo_default_settings));
+    }
+
     public updateLighting(event, setLocalStorage = false) {
         this.dataService.getGeoScene().updateLightPos(event);
         this.settings.time.date = event;

@@ -1191,6 +1191,14 @@ export class PanelHeaderComponent implements OnDestroy {
         return '';
     }
 
+    getRendererInfo() {
+        if (this.dataService.rendererInfo.error) {
+            return this.dataService.rendererInfo.error;
+        } else {
+            return this.dataService.rendererInfo.renderer;
+        }
+    }
+
 
     updateNode() {
         const nodeSelInput = <HTMLInputElement> document.getElementById('hidden_node_selection');

@@ -24,6 +24,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.matIconRegistry.addSvgIcon('settings', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Settings.svg'));
         this.matIconRegistry.addSvgIcon('select', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Select.svg'));
         this.matIconRegistry.addSvgIcon('terminate', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Terminate.svg'));
+
         this.matIconRegistry.addSvgIcon('c3D Viewer', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/3D2.svg'));
         this.matIconRegistry.addSvgIcon('cGeo Viewer', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Geo.svg'));
         this.matIconRegistry.addSvgIcon('cThree Geo Viewer', this.domSanitizer.bypassSecurityTrustResourceUrl('assets/Icons/Geo.svg'));
@@ -59,23 +60,21 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.googleAnalyticsService.subscribe();
-        const videoCardInfo = this.getVideoCardInfo();
+        this.dataService.rendererInfo = this.getVideoCardInfo();
         let errorMsg = null;
-        if (videoCardInfo.error) {
+        if (this.dataService.rendererInfo.error) {
             errorMsg = 'No WebGL renderer detected.';
-        } else if (videoCardInfo.renderer.toLowerCase().indexOf('google') !== -1) {
-            errorMsg =
-`<div>You have not enabled hardware support for WebGL rendering. Performance will be degraded.
-<br> 1. In Chrome, select "Menu" > "Settings"
-<br> 2. Scroll down to the bottom and select the “Advanced” option.
-<br> 3. Scroll to the “System” section and switch on “Use hardware acceleration when available”.</div>`;
+        } else if (this.dataService.rendererInfo.renderer.toLowerCase().indexOf('google') !== -1) {
+            errorMsg = `<div>You have not enabled hardware support for WebGL rendering. Performance will be degraded.
+                        <br> 1. In Chrome, select "Menu" > "Settings"
+                        <br> 2. Scroll down to the bottom and select the “Advanced” option.
+                        <br> 3. Scroll to the “System” section and switch on “Use hardware acceleration when available”.</div>`;
         }
         if (errorMsg) {
             setTimeout(() => {
                 this.dataService.notifyMessage(errorMsg);
             }, 1000);
         }
-
     }
     ngOnDestroy() {
         this.googleAnalyticsService.unsubscribe();
@@ -94,7 +93,7 @@ export class AppComponent implements OnInit, OnDestroy {
         const gl = document.createElement('canvas').getContext('webgl');
         if (!gl) {
           return {
-            error: "no webgl",
+            error: 'no webgl',
           };
         }
         const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
@@ -102,10 +101,9 @@ export class AppComponent implements OnInit, OnDestroy {
           vendor: gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL),
           renderer:  gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL),
         } : {
-          error: "no WEBGL_debug_renderer_info",
+          error: 'no WEBGL_debug_renderer_info',
         };
       }
-
 }
 
 @Injectable()

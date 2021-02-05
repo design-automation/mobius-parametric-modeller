@@ -64,8 +64,11 @@ export class DataService {
     private static _mobiusSettings; // {'execute': true};
     private static _giViewerSettingsUpdated = false;
     private static _geoViewerSettingsUpdated = false;
+    private static _aframeViewerSettingsUpdated = false;
 
     private static _timelineDefault;
+
+    private static _rendererInfo;
 
     private _backupDialogType: any;
 
@@ -141,6 +144,8 @@ export class DataService {
     set giViewerSettingsUpdated(updated: boolean) {DataService._giViewerSettingsUpdated = updated; }
     get geoViewerSettingsUpdated() {return DataService._geoViewerSettingsUpdated; }
     set geoViewerSettingsUpdated(updated: boolean) {DataService._geoViewerSettingsUpdated = updated; }
+    get aframeViewerSettingsUpdated() {return DataService._aframeViewerSettingsUpdated; }
+    set aframeViewerSettingsUpdated(updated: boolean) {DataService._aframeViewerSettingsUpdated = updated; }
 
     get flowchartPos() {return DataService._flowchartPosition; }
     set flowchartPos(transf: string) {DataService._flowchartPosition = transf; }
@@ -238,6 +243,9 @@ export class DataService {
 
     get timelineDefault() { return DataService._timelineDefault; }
     set timelineDefault(setting) { DataService._timelineDefault = setting; }
+
+    get rendererInfo() { return DataService._rendererInfo; }
+    set rendererInfo(info) { DataService._rendererInfo = info; }
 
 
 

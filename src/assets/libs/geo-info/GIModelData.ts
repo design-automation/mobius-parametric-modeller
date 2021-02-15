@@ -87,6 +87,12 @@ export class GIModelData {
             ent_sets = this.geom.snapshot.getAllEntSets(this.active_ssid);
         } else {
             ent_sets = this.geom.snapshot.getSubEntsSets(this.active_ssid, ents);
+            // the getSubEntsSets() function creates two sets of posis
+            // isolated posis and obj posis
+            // in this case, we need a single list
+            for (const posi_i of ent_sets.obj_ps) {
+                ent_sets.ps.add(posi_i);
+            }
         }
         this.geom.snapshot.addTopoToSubEntsSets(ent_sets);
         // get the renum maps

@@ -141,10 +141,10 @@ export class SaveJavascriptComponent {
             ` result.result is the model of the flowchart\n */\n\n` +
             argString.replace(/\\/g, '\\\\') +  '\n\n' +
             `async function ${funcName}(__modules__` + func.args.map(arg => ', ' + arg.name).join('') + `) {\n\n` +
-            `__debug__ = ${this.dataService.mobiusSettings.debug};\n` +
-            `__model__ = null;\n` +
+            `var __debug__ = ${this.dataService.mobiusSettings.debug};\n` +
+            `var __model__ = null;\n` +
             '/** * **/' +
-            _varString + `\n\n` +
+            '\nvar ' + _varString.split(';\n').join(';\nvar ') + `\n\n` +
             fnString +
             pythonListFunc +
             mergeInputsFunc +
@@ -157,6 +157,7 @@ export class SaveJavascriptComponent {
             `__params__["model"].debug = __debug__;\n` +
             `__params__["console"] = [];\n` +
             `__params__["modules"] = __modules__;\n` +
+            `__params__["curr_ss"] = {};\n` +
             `const result = await exec_${funcName}(__params__` +
             func.args.map(arg => ', ' + arg.name).join('') +
             `);\n` +

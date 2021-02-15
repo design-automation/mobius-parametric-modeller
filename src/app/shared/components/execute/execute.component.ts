@@ -651,7 +651,7 @@ export class ExecuteComponent {
                         '\n\n// ------ MERGE INPUTS FUNCTION ------' + mergeInputsFunc +
                         '\n\n// ------ PRINT FUNCTION ------' + printFuncString +
                         `\n\n// ------ FUNCTION FOR PYTHON STYLE LIST ------` + pythonListFunc +
-                        '\n\n// ------ CONSTANTS ------' + fnString;
+                        '\n\n// ------ CONSTANTS ------\n' + fnString;
 
             // ==> generated code structure:
             //  1. pythonList + mergeInputFunction + printFunc

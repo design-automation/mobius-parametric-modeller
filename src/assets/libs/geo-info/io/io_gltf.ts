@@ -25,7 +25,13 @@ export async function exportGltf(model: GIModel, entities: TEntTypeIdx[], ssid: 
     // }
     // for (const pline_i of obj_sets.pl) {
     // }
-
+    
+    if (entities !== null) {
+        const gi_data: string = model.exportGI(entities);
+        model = new GIModel(model.getMetaData());
+        model.importGI(gi_data);
+        ssid = 1;
+    }
 
     // return JSON.stringify(export_json, null, 2); // pretty
 

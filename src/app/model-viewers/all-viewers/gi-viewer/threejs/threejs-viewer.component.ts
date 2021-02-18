@@ -1640,7 +1640,7 @@ export class ThreejsViewerComponent implements OnInit, DoCheck, OnChanges, OnDes
         const point_indices: number[] = [];
         const positions: Txyz[] = [];
         verts_flat.map((v, i) => {
-            positions.push(this.model.modeldata.attribs.posis.getPosiCoords(v));
+            positions.push(this.model.modeldata.attribs.posis.getVertCoords(v));
             point_indices.push(i);
         });
         const posi_flat = [].concat(...positions);

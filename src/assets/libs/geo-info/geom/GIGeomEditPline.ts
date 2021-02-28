@@ -49,8 +49,6 @@ export class GIGeomEditPline {
      */
     public openPline(pline_i: number): void {
         const wire_i: number = this.modeldata.geom.nav.navPlineToWire(pline_i);
-        // get the pline
-        if (pline_i === undefined) { return; }
         // get the wire start and end verts
         const wire: TWire = this._geom_maps.dn_wires_edges.get(wire_i);
         // check wire has more than two edges
@@ -65,5 +63,42 @@ export class GIGeomEditPline {
         if (start_vert_i !== end_vert_i) { return; }
         // del the end edge from the pline
         throw new Error('Not implemented');
+    }
+    /**
+     *
+     * @param pline_i
+     * @param posi_i
+     * @param to_end
+     */
+    public appendVertToOpenPline(pline_i: number, posi_i: number, to_end: boolean): number {
+        const wire_i: number = this.modeldata.geom.nav.navPlineToWire(pline_i);
+        // get the wire start and end verts
+        const wire: TWire = this._geom_maps.dn_wires_edges.get(wire_i);
+        if (to_end) {
+            const end_edge_i: number = wire[wire.length - 1];
+            const end_vert_i: number = this.modeldata.geom.nav.navEdgeToVert(end_edge_i)[1];
+            // create one new vertex and one new edge
+            const new_vert_i: number = this.modeldata.geom.add._addVertex(posi_i);
+            const new_edge_i: number = this.modeldata.geom.add._addEdge(end_vert_i, new_vert_i);
+            // update the down arrays
+            wire.push(new_edge_i);
+            // update the up arrays for edges to wires
+            this._geom_maps.up_edges_wires.set(new_edge_i, wire_i);
+            // return the new edge
+            return new_edge_i;
+
+        } else {
+            const start_edge_i: number = wire[0];
+            const start_vert_i: number = this.modeldata.geom.nav.navEdgeToVert(start_edge_i)[0];
+            // create one new vertex and one new edge
+            const new_vert_i: number = this.modeldata.geom.add._addVertex(posi_i);
+            const new_edge_i: number = this.modeldata.geom.add._addEdge(new_vert_i, start_vert_i);
+            // update the down arrays
+            wire.splice(0, 0, new_edge_i);
+            // update the up arrays for edges to wires
+            this._geom_maps.up_edges_wires.set(new_edge_i, wire_i);
+            // return the new edge
+            return new_edge_i;
+        }
     }
 }

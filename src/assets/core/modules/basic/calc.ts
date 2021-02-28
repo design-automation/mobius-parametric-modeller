@@ -357,6 +357,7 @@ function _area(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): number
             let total_area = 0;
             for (const tri_i of tris_i) {
                 const corners_i: number[] = __model__.modeldata.geom.nav_tri.navTriToPosi(tri_i);
+                if (corners_i.length !== 3) { continue; } // two or more verts have same posi, so area is 0
                 const corners_xyzs: Txyz[] = corners_i.map(corner_i => __model__.modeldata.attribs.posis.getPosiCoords(corner_i));
                 const tri_area: number = area( corners_xyzs[0], corners_xyzs[1], corners_xyzs[2] );
                 total_area += tri_area;

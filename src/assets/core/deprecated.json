@@ -280,6 +280,19 @@
             "module": "edit",
             "name": "Fuse"
         }
+    },
+    {
+        "old_func": {
+            "module": "poly2d",
+            "name": "Stitch"
+        },
+        "new_func": {
+            "module": "poly2d",
+            "name": "Stitch",
+            "values": {
+                "tolerance": "0.1"
+            }
+        }
     }
 
 ]

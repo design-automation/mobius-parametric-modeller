@@ -1125,7 +1125,7 @@ export function Stitch(__model__: GIModel, entities: TId | TId[], tolerance: num
     let ents_arr: TEntTypeIdx[];
     if (__model__.debug) {
         ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
-            [ID.isIDL2], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
+            [ID.isIDL1, ID.isIDL2], [EEntType.PLINE, EEntType.PGON]) as TEntTypeIdx[];
     } else {
         ents_arr = idsBreak(entities) as TEntTypeIdx[];
     }

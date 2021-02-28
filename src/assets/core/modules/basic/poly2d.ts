@@ -791,7 +791,6 @@ export function Boolean(__model__: GIModel, a_entities: TId|TId[], b_entities: T
     a_entities = arrMakeFlat(a_entities) as TId[];
     if (isEmptyArr(a_entities)) { return []; }
     b_entities = arrMakeFlat(b_entities) as TId[];
-    if (isEmptyArr(b_entities)) { return a_entities; }
     // --- Error Check ---
     const fn_name = 'poly2d.Boolean';
     let a_ents_arr: TEntTypeIdx[];
@@ -814,7 +813,19 @@ export function Boolean(__model__: GIModel, a_entities: TId|TId[], b_entities: T
     const [a_pgons_i, a_plines_i]: [number[], number[]] = _getPgonsPlines(__model__, a_ents_arr);
     const b_pgons_i: number[] = _getPgons(__model__, b_ents_arr);
     if (a_pgons_i.length === 0 && a_plines_i.length === 0) { return []; }
-    if (b_pgons_i.length === 0) { return []; }
+    if (b_pgons_i.length === 0) {
+        switch (method) {
+            case _EBooleanMethod.INTERSECT:
+                // intersect with nothing returns nothing
+                return [];
+            case _EBooleanMethod.DIFFERENCE:
+            case _EBooleanMethod.SYMMETRIC:
+                // difference with nothing returns copies
+                return idsMake(__model__.modeldata.funcs_common.copyGeom(a_ents_arr, false)) as TId[];
+            default:
+                return [];
+        }
+    }
     // const a_shape: Shape = _convertPgonsToShapeUnion(__model__, a_pgons_i, posis_map);
     const b_shape: Shape = _convertPgonsToShapeUnion(__model__, b_pgons_i, posis_map);
     // call the boolean function

@@ -424,10 +424,10 @@ function _vector(__model__: GIModel, ents_arrs: TEntTypeIdx|TEntTypeIdx[]): Txyz
     if (getArrDepth(ents_arrs) === 1) {
         const [ent_type, index]: [EEntType, number] = ents_arrs as TEntTypeIdx;
         if (ent_type === EEntType.EDGE) {
-            const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(ent_type, index);
-            const start: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(posis_i[0]);
-            const end: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(posis_i[1]);
-            // console.log(">>>>", start, end);
+            const verts_i: number[] = __model__.modeldata.geom.nav.navAnyToVert(ent_type, index);
+            const start: Txyz = __model__.modeldata.attribs.posis.getVertCoords(verts_i[0]);
+            const end: Txyz = __model__.modeldata.attribs.posis.getVertCoords(verts_i[1]);
+            // if (!start || !end) { console.log(">>>>", verts_i, start, end, __model__.modeldata.geom._geom_maps); }
             return vecSub(end, start);
         } else {
             const edges_i: number[] = __model__.modeldata.geom.nav.navAnyToEdge(ent_type, index);

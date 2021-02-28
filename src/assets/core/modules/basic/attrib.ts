@@ -544,13 +544,10 @@ export function Push(__model__: GIModel, entities: TId|TId[],
         }
     } else {
         if (entities !== null && entities !== undefined) {
-            // ents_arr = splitIDs(fn_name, 'entities', entities,
-            // [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
         [source_attrib_name, source_attrib_idx_key] = splitAttribNameIdxKey(fn_name, source_attrib);
         [target_attrib_name, target_attrib_idx_key] = splitAttribNameIdxKey(fn_name, target_attrib);
-
         // get the source ent_type and indices
         source_ent_type = ents_arr[0][0];
         for (const ent_arr of ents_arr) {
@@ -558,52 +555,7 @@ export function Push(__model__: GIModel, entities: TId|TId[],
         }
         // get the target ent_type
         target = _getAttribPushTarget(ent_type_sel);
-        //
-        throw new Error('Snapshot Not implemented');
     }
-
-    // let ents_arr: TEntTypeIdx[] = null;
-    // if (entities !== null && entities !== undefined) {
-    //     ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
-    // }
-    // let source_attrib: [string, number|string] = null;
-    // let target_attrib: [string, number|string] = null;
-    // if (Array.isArray(attrib)) {
-    //     // set source attrib
-    //     source_attrib = [
-    //         attrib[0] as string,
-    //         (attrib.length > 1 ? attrib[1] : null) as number|string
-    //     ];
-    //     // set target attrib
-    //     target_attrib = [
-    //         (attrib.length > 2 ? attrib[2] : attrib[0]) as string,
-    //         (attrib.length > 3 ? attrib[3] : null) as number|string
-    //     ];
-    // } else {
-    //     source_attrib = [attrib, null];
-    //     target_attrib = [attrib, null];
-    // }
-    // const [source_attrib_name, source_attrib_idx_key]: [string, number|string] = checkAttribNameIdxKey(fn_name, source_attrib);
-    // const [target_attrib_name, target_attrib_idx_key]: [string, number|string] = checkAttribNameIdxKey(fn_name, target_attrib);
-    // // --- Error Check ---
-    // // get the source ent_type and indices
-    // const source_ent_type: EEntType = ents_arr[0][0];
-    // const indices: number[] = [];
-    // for (const ent_arr of ents_arr) {
-    //     if (ent_arr[0] !== source_ent_type) {
-    //         throw new Error('The entities must all be of the same type.');
-    //     }
-    //     indices.push(ent_arr[1]);
-    // }
-    // // check the names
-    // checkAttribName(fn_name, source_attrib_name);
-    // checkAttribName(fn_name, target_attrib_name);
-    // // get the target ent_type
-    // const target: EEntType|string = _getAttribPushTarget(ent_type_sel);
-    // if (source_ent_type === target) {
-    //     throw new Error('The new attribute is at the same level as the existing attribute.');
-    // }
-
     // get the method
     const method: EAttribPush = _convertPushMethod(method_sel);
     // do the push

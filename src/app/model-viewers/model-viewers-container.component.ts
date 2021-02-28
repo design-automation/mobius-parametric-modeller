@@ -137,6 +137,7 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
         const componentRef = factory.create(this.injector);
         componentRef.instance['nodeIndex'] = 1;
         componentRef.instance['data'] = this.emptyModel;
+        componentRef.instance['data'].modeldata.active_ssid = 1;
         /*
         if (view.name != 'Console'){
             componentRef.instance["data"] = this.data;
@@ -172,8 +173,10 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
                 if (!this.dataService.node.enabled || !this.dataService.node.model) {
                     componentRef.instance['nodeIndex'] = 1;
                     componentRef.instance['data'] = this.emptyModel;
+                    componentRef.instance['data'].modeldata.active_ssid = 1;
                 } else {
                     componentRef.instance['data'] = this.dataService.flowchart.model;
+                    componentRef.instance['data'].modeldata.active_ssid = this.dataService.node.model;
                     componentRef.instance['nodeIndex'] = this.dataService.node.model;
                 }
             // } else {

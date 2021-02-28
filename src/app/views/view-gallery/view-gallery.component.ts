@@ -118,59 +118,37 @@ export class ViewGalleryComponent implements AfterViewInit {
     }
 
     loadFile(fileLink) {
-        const linkSplit = (this.urlPrefix + fileLink).split(/\s*&*\s*node\s*=/);
+        const linkSplit = (this.urlPrefix + fileLink).split(/\s*&\s*/);
         linkSplit[0] = linkSplit[0].trim();
-        // if (!linkSplit[0].endsWith('.mob')) {
-        //     linkSplit[0] = linkSplit[0].concat('.mob');
-        // }
-        if (linkSplit.length > 1) {
-            new LoadUrlComponent(this.dataService, this.router).loadURL(linkSplit[0], Number(linkSplit[1].split('&')[0].trim()));
-        } else {
-            new LoadUrlComponent(this.dataService, this.router).loadURL(linkSplit[0]);
+        let nodeIndex = null;
+        let defaultViewer = null;
+        for (const split of linkSplit) {
+            if (split.indexOf('node') !== -1) {
+                nodeIndex = Number(split.split('=')[1].trim());
+            }
+            if (split.indexOf('defaultViewer') !== -1) {
+                defaultViewer = split.split('=')[1].trim();
+            }
         }
+        new LoadUrlComponent(this.dataService, this.router).loadURL(linkSplit[0], nodeIndex);
         this.router.navigate(['/dashboard']);
-
-        // const stream = Observable.create(observer => {
-        //     const request = new XMLHttpRequest();
-
-        //     request.open('GET', fileLink + '.mob');
-        //     request.onload = () => {
-        //         if (request.status === 200) {
-        //             const f = circularJSON.parse(request.responseText);
-        //             const file: IMobius = {
-        //                 name: f.name,
-        //                 author: f.author,
-        //                 flowchart: f.flowchart,
-        //                 last_updated: f.last_updated,
-        //                 version: f.version,
-        //                 settings: f.settings || {}
-        //             };
-        //             observer.next(file);
-        //             observer.complete();
-        //         } else {
-        //             observer.error('error happened');
-        //         }
-        //     };
-
-        //     request.onerror = () => {
-        //     observer.error('error happened');
-        //     };
-        //     request.send();
-        // });
-        // stream.subscribe(loadeddata => {
-        //     this.dataService.file = loadeddata;
-        //     this.dataService.newFlowchart = true;
-        //     if (this.dataService.node.type !== 'end') {
-        //         for (let i = 0; i < loadeddata.flowchart.nodes.length; i++) {
-        //             if (loadeddata.flowchart.nodes[i].type === 'end') {
-        //                 loadeddata.flowchart.meta.selected_nodes = [i];
-        //                 break;
-        //             }
-        //         }
-        //     }
-        //     this.router.navigate(['/dashboard']);
-        //     document.getElementById('executeButton').click();
-        // });
+        if (defaultViewer) {
+            setTimeout(() => {
+                let viewerBtn;
+                switch (defaultViewer) {
+                    case '0':
+                        viewerBtn = document.getElementById('Console');
+                        break;
+                    case '1':
+                        viewerBtn = document.getElementById('3D Viewer');
+                        break;
+                    case '2':
+                        viewerBtn = document.getElementById('Three Geo Viewer');
+                        break;
+                }
+                if (viewerBtn) { viewerBtn.click(); }
+            }, 100);
+        }
     }
 
     getImgURL(imgLink: string, f) {

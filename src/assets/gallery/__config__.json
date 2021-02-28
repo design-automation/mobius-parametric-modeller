@@ -10,7 +10,9 @@
                 "Urban_plot_subdivision.mob",
                 "Podium_tower_options_part1.mob",
                 "Podium_tower_options_part2.mob",
-                "Podium_tower_options_part3.mob"
+                "Podium_tower_options_part3.mob&defaultViewer=2",
+                "Undulating_Pavilion_Site.mob&defaultViewer=2",
+                "Spiral_staircase_options.mob"
             ],
             "link": "/assets/gallery/generative_modelling_examples/"
         },
@@ -84,7 +86,9 @@
                 "basic_foreach.mob&node=1",
                 "basic_while.mob&node=1",
                 "podium_with_towers.mob",
-                "block_patterns.mob"
+                "block_patterns.mob",
+                "Parametric_stairs.mob",
+                "Polyline.mob"
             ],
             "link": "/assets/gallery/basic_examples/"
         },

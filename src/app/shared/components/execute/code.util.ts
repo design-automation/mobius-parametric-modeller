@@ -512,7 +512,11 @@ export class CodeUtils {
             url = url.substring(0, url.length - 1);
         }
         const p = new Promise((resolve) => {
-            fetch(url).then(res => {
+            const fetchObj = fetch(url);
+            fetchObj.catch(err => {
+                resolve('HTTP Request Error: Unable to retrieve file from ' + url);
+            });
+            fetchObj.then(res => {
                 if (!res.ok) {
                     resolve('HTTP Request Error: Unable to retrieve file from ' + url);
                     return '';

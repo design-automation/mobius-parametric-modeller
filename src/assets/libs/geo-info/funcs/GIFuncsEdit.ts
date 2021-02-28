@@ -278,7 +278,11 @@ export class GIFuncsEdit {
                 this.modeldata.attribs.posis.setPosiCoords(new_posi_i, new_xyz);
                 for (const n_posi_i of nn[2]) {
                     const verts_i: number[] = this.modeldata.geom.nav.navPosiToVert(n_posi_i);
-                    for (const vert_i of verts_i) {
+                    // create a copy of the list of verts
+                    // otherwise verts may be removed from the list while inside the loop
+                    const copy_verts_i: number[] = verts_i.slice();
+                    // loop through the list, replace each vert posi
+                    for (const vert_i of copy_verts_i) {
                         this.modeldata.geom.edit_topo.replaceVertPosi(vert_i, new_posi_i);
                     }
                     // this.modeldata.geom.add.addPline([new_posi_i, n_posi_i], false); // temp

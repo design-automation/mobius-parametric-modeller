@@ -154,54 +154,65 @@ export class GIGeomEditTopo {
      * Called by modify.Fuse() and poly2d.Stitch().
      */
     public replaceVertPosi(vert_i: number, new_posi_i: number, del_if_invalid: boolean = true): void {
-        // special case
+        // check if the new posi is same as existing posi
+        const old_posi_i: number = this.modeldata.geom.nav.navVertToPosi(vert_i);
+        if (old_posi_i === new_posi_i) { return; }
+        // special cases
         // check if this is a vert for an edge
         const edges_i: number[] = this.modeldata.geom.nav.navVertToEdge(vert_i);
-        const num_edges: number = edges_i.length;
-        switch (num_edges) {
-            case 1:
-                // we must be at an edge at the start or end of an open wire
-                const edge_posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edges_i[0]);
-                if (edge_posis_i[0] === new_posi_i || edge_posis_i[1]  === new_posi_i) {
-                    // special case where start or end has new_posi_i
-                    if (del_if_invalid) {
-                        this.modeldata.geom.del_vert.delVert(vert_i);
+        if (edges_i !== undefined) {
+            const num_edges: number = edges_i.length;
+            switch (num_edges) {
+                case 1:
+                    // we must be at an edge at the start or end of an open wire
+                    // console.log("special case 1 edge")
+                    const edge_posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edges_i[0]);
+                    if (edge_posis_i[0] === new_posi_i || edge_posis_i[1] === new_posi_i) {
+                        // special case where start or end has new_posi_i
+                        if (del_if_invalid) {
+                            this.modeldata.geom.del_vert.delVert(vert_i);
+                        }
+                        return;
                     }
-                    return;
-                }
-                break;
-            case 2:
-                // we must be in the middle of a wire
-                const prev_edge_i: number = edges_i[0];
-                const next_edge_i: number = edges_i[1];
-                const [a_posi_i, b1_posi_i]: [number, number] = this.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, prev_edge_i) as [number, number];
-                const [b2_posi_i, c_posi_i]: [number, number] = this.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, next_edge_i) as [number, number];
-                if (a_posi_i === new_posi_i && c_posi_i  === new_posi_i) {
-                    // special case where both adjacent edges has new_posi_i
-                    const [b2_vert_i, c_vert_i]: [number, number] =
-                        this.modeldata.geom.nav.navEdgeToVert(next_edge_i) as [number, number];
-                    if (vert_i !== b2_vert_i) {
-                        throw new Error('Bad navigation in geometry data structure.');
+                    // continue to normal case
+                    break;
+                case 2:
+                    // we must be in the middle of a wire
+                    const prev_edge_i: number = edges_i[0];
+                    const next_edge_i: number = edges_i[1];
+                    const [a_posi_i, b1_posi_i]: [number, number] = this.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, prev_edge_i) as [number, number];
+                    const [b2_posi_i, c_posi_i]: [number, number] = this.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, next_edge_i) as [number, number];
+                    if (a_posi_i === new_posi_i && c_posi_i === new_posi_i) {
+                        // special case where both adjacent edges has new_posi_i
+                        // console.log("special case 2 edges, both with new_posi")
+                        const [b2_vert_i, c_vert_i]: [number, number] =
+                            this.modeldata.geom.nav.navEdgeToVert(next_edge_i) as [number, number];
+                        // --- start check ---
+                        if (vert_i !== b2_vert_i) {
+                            throw new Error('Bad navigation in geometry data structure.');
+                        }
+                        // -- end check ---
+                        if (del_if_invalid) {
+                            // we only keep vert 'a'
+                            this.modeldata.geom.del_vert.delVert(c_vert_i);
+                            this.modeldata.geom.del_vert.delVert(vert_i);
+                        }
+                        return;
+                    } else if (a_posi_i === new_posi_i || c_posi_i === new_posi_i) {
+                        // special case where one adjacent edges has new_posi_i
+                        // console.log("special case 2 edges, one with new posi")
+                        if (del_if_invalid) {
+                            this.modeldata.geom.del_vert.delVert(vert_i);
+                        }
+                        return;
                     }
-                    if (del_if_invalid) {
-                        this.modeldata.geom.del_vert.delVert(c_vert_i);
-                        this.modeldata.geom.del_vert.delVert(vert_i);
-                    }
-                    return;
-                } else if (a_posi_i === new_posi_i || c_posi_i === new_posi_i) {
-                    // special case where one adjacent edges has new_posi_i
-                    if (del_if_invalid) {
-                        this.modeldata.geom.del_vert.delVert(vert_i);
-                    }
-                    return;
-                }
-                break;
-            // default:
-            //     break;
+                    // continue to normal case
+                    break;
+            }
         }
 
         // normal case
-        const old_posi_i: number = this.modeldata.geom.nav.navVertToPosi(vert_i);
+        // console.log("normal case")
         // set the down array
         this._geom_maps.dn_verts_posis.set(vert_i, new_posi_i);
         // update the up arrays for the old posi, i.e. remove this vert
@@ -209,6 +220,62 @@ export class GIGeomEditTopo {
         // update the up arrays for the new posi, i.e. add this vert
         this._geom_maps.up_posis_verts.get(new_posi_i).push(vert_i);
     }
+    // public replaceVertPosi(vert_i: number, new_posi_i: number, del_if_invalid: boolean = true): void {
+    //     // special case
+    //     // check if this is a vert for an edge
+    //     const edges_i: number[] = this.modeldata.geom.nav.navVertToEdge(vert_i);
+    //     const num_edges: number = edges_i.length;
+    //     switch (num_edges) {
+    //         case 1:
+    //             // we must be at an edge at the start or end of an open wire
+    //             const edge_posis_i: number[] = this.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edges_i[0]);
+    //             if (edge_posis_i[0] === new_posi_i || edge_posis_i[1]  === new_posi_i) {
+    //                 // special case where start or end has new_posi_i
+    //                 if (del_if_invalid) {
+    //                     this.modeldata.geom.del_vert.delVert(vert_i);
+    //                 }
+    //                 return;
+    //             }
+    //             break;
+    //         case 2:
+    //             // we must be in the middle of a wire
+    //             const prev_edge_i: number = edges_i[0];
+    //             const next_edge_i: number = edges_i[1];
+    //             const [a_posi_i, b1_posi_i]: [number, number] = this.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, prev_edge_i) as [number, number];
+    //             const [b2_posi_i, c_posi_i]: [number, number] = this.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, next_edge_i) as [number, number];
+    //             if (a_posi_i === new_posi_i && c_posi_i  === new_posi_i) {
+    //                 // special case where both adjacent edges has new_posi_i
+    //                 const [b2_vert_i, c_vert_i]: [number, number] =
+    //                     this.modeldata.geom.nav.navEdgeToVert(next_edge_i) as [number, number];
+    //                 if (vert_i !== b2_vert_i) {
+    //                     throw new Error('Bad navigation in geometry data structure.');
+    //                 }
+    //                 if (del_if_invalid) {
+    //                     this.modeldata.geom.del_vert.delVert(c_vert_i);
+    //                     this.modeldata.geom.del_vert.delVert(vert_i);
+    //                 }
+    //                 return;
+    //             } else if (a_posi_i === new_posi_i || c_posi_i === new_posi_i) {
+    //                 // special case where one adjacent edges has new_posi_i
+    //                 if (del_if_invalid) {
+    //                     this.modeldata.geom.del_vert.delVert(vert_i);
+    //                 }
+    //                 return;
+    //             }
+    //             break;
+    //         // default:
+    //         //     break;
+    //     }
+
+    //     // normal case
+    //     const old_posi_i: number = this.modeldata.geom.nav.navVertToPosi(vert_i);
+    //     // set the down array
+    //     this._geom_maps.dn_verts_posis.set(vert_i, new_posi_i);
+    //     // update the up arrays for the old posi, i.e. remove this vert
+    //     arrRem(this._geom_maps.up_posis_verts.get(old_posi_i), vert_i);
+    //     // update the up arrays for the new posi, i.e. add this vert
+    //     this._geom_maps.up_posis_verts.get(new_posi_i).push(vert_i);
+    // }
     /**
      * Unweld the vertices on naked edges.
      * ~

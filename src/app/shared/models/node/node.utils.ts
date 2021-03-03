@@ -16,7 +16,7 @@ export abstract class NodeUtils {
             position: {x: 0, y: 0},
             enabled: false,
             type: '',
-            procedure: [{type: 13, ID: '',
+            procedure: [{type: 13, ID: 'main_blank',
                 parent: undefined,
                 meta: {name: '', module: ''},
                 variable: undefined,
@@ -332,7 +332,6 @@ export abstract class NodeUtils {
                     }
                 }
             } else {
-                console.log('???????')
                 node.procedure.push(prod);
             }
             return;
@@ -397,7 +396,7 @@ export abstract class NodeUtils {
 
     static initiateChildren(prod) {
         prod.children = [
-            {type: 13, ID: '',
+            {type: 13, ID: prod.ID + '-blank',
             parent: prod, meta: {name: '', module: ''},
             children: undefined,
             variable: undefined,

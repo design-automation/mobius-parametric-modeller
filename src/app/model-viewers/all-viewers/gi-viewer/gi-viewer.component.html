@@ -201,13 +201,13 @@
                         <dd id='grid_pos'>
                             <div class="label">Grid Position</div>
                             <input type="number"
-                            [value]="formatNumber(settings.grid.pos_x)"
+                            [value]="formatNumber(settings.grid.pos.x)"
                             (change)="settingOnChange('grid.update_pos_x', $event.target.value)">
                             <input type="number"
-                            [value]="formatNumber(settings.grid.pos_y)"
+                            [value]="formatNumber(settings.grid.pos.y)"
                             (change)="settingOnChange('grid.update_pos_y', $event.target.value)">
                             <input type="number"
-                            [value]="formatNumber(settings.grid.pos_z)"
+                            [value]="formatNumber(settings.grid.pos.z)"
                             (change)="settingOnChange('grid.update_pos_z', $event.target.value)">
                             <button (click)="settingOnChange('grid.update_pos')" class="filebtn getbtn">Get</button>
                         </dd>

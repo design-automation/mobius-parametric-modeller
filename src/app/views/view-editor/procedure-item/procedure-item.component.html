@@ -1,7 +1,8 @@
 <ng-container [ngSwitch]="data.type">
 
     <!-- Variable Assignment Template -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line'
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
@@ -64,7 +65,8 @@
     </div>
 
     <!-- IF Template -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.strong]="true"
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
@@ -119,7 +121,8 @@
 
 
     <!-- ELSEIF Template -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.strong]="true"
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
@@ -173,7 +176,8 @@
     </div>
 
     <!-- ELSE Template -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.strong]="true"
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
@@ -217,7 +221,8 @@
     </div>
 
     <!-- FOREACH Template -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.strong]="true"
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
@@ -287,7 +292,8 @@
 
 
     <!-- WHILE Template -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.strong]="true"
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
@@ -343,7 +349,8 @@
 
 
     <!-- BREAK Template -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
@@ -374,7 +381,8 @@
 
 
     <!-- CONTINUE Template -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
@@ -404,7 +412,8 @@
     </div>
 
     <!-- Blank (always the first procedure of if/else/else-if/for/while) -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [ngSwitch]="data.type"
@@ -421,7 +430,8 @@
 
 
     <!-- Comment -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
@@ -447,7 +457,8 @@
     </div>
 
     <!-- Terminate -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
@@ -476,7 +487,8 @@
     </div>
 
     <!-- Error -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.disabled]="!data.enabled"
@@ -513,7 +525,8 @@
     </div>
 
     <!-- MainFunction -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
@@ -598,7 +611,8 @@
     </div>
 
     <!-- globalFuncCall -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
@@ -668,7 +682,8 @@
 
     <!-- LocalFuncDef -->
     <ng-container *ngSwitchCase="ProcedureTypes.LocalFuncDef">
-        <div class='container--line' 
+        <div id='prodDiv_{{data.ID}}'
+        class='container--line' 
         [class.strong]="true"
         [class.selected]="data.selected"
         [class.lastSelected]="data.lastSelected"
@@ -742,7 +757,8 @@
     </ng-container>
 
     <!-- LocalFuncReturn -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
@@ -789,7 +805,8 @@
 
 
     <!-- LocalFuncCall -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"

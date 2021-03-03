@@ -292,6 +292,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     cutProd() {
         const node = this.dataService.node;
         let tobeSelected;
+        if (node.state.procedure.length === 0) { return; }
         for (const selected of node.state.procedure) {
             if (!selected.lastSelected) {
                 continue;
@@ -315,6 +316,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 }
             }
         }
+        this.scrollToProd(node.state.procedure[node.state.procedure.length - 1]);
         let i = 0;
         while (i < node.state.procedure.length) {
             if (node.state.procedure[i].type === ProcedureTypes.Blank || node.state.procedure[i].type === ProcedureTypes.EndReturn) {
@@ -417,6 +419,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 pastingPlace.selected = true;
                 pastingPlace.lastSelected = true;
                 node.state.procedure = [pastingPlace];
+                this.scrollToProd(pastingPlace);
             }
             this.dataService.registerEdtAction(redoActions);
             checkNodeValidity(this.dataService.node);
@@ -426,6 +429,30 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             }
         }
     }
+
+    scrollToProd(prod) {
+        const mainProdContainer = <HTMLDivElement> document.getElementById('procedure');
+        let topmostProd = prod.parent;
+        while (topmostProd && topmostProd.parent) { topmostProd = topmostProd.parent; }
+        if (topmostProd && topmostProd.type === ProcedureTypes.LocalFuncDef && topmostProd.meta.otherInfo['collapsed']) {
+            topmostProd.meta.otherInfo['collapsed'] = false;
+            prod = topmostProd;
+        }
+        let prodDiv;
+        if (prod.ID === '' && prod.parent) {
+            prodDiv = <HTMLDivElement> document.getElementById('prodDiv_' + prod.parent.ID);
+        } else {
+            prodDiv = <HTMLDivElement> document.getElementById('prodDiv_' + prod.ID);
+        }
+        if (!prodDiv) {
+            return;
+        }
+        let scrollPos = prodDiv.offsetTop - mainProdContainer.offsetTop - (mainProdContainer.offsetHeight / 3);
+        if (scrollPos < 0) { scrollPos = 0; }
+        if (scrollPos > mainProdContainer.scrollHeight) { scrollPos = mainProdContainer.scrollHeight; }
+        mainProdContainer.scrollTop = scrollPos;
+    }
+
     // @HostListener('window:keydown', ['$event'])
     // onKeyDown(event: KeyboardEvent) {
     //     // disable text input in textboxes when ctrl/shift/command key is held down
@@ -520,8 +547,10 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             if (event.shiftKey) {
                 actions = this.dataService.redoEdt();
                 if (!actions) { return; }
-                for (const act of actions) {
+                for (let i = actions.length - 1; i >= 0; i--) {
+                    const act = actions[i];
                     if (act.type === 'del') {
+                        this.scrollToProd(act.prod);
                         let prodList: IProcedure[];
                         if (act.parent) {
                             prodList = act.parent.children;
@@ -541,6 +570,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                             prodList = this.dataService.node.procedure;
                         }
                         prodList.splice(act.index, 0, act.prod);
+                        this.scrollToProd(act.prod);
                     }
                 }
             } else {
@@ -548,6 +578,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 if (!actions) { return; }
                 for (const act of actions) {
                     if (act.type === 'add') {
+                        this.scrollToProd(act.prod);
                         let prodList: IProcedure[];
                         if (act.parent) {
                             prodList = act.parent.children;
@@ -577,6 +608,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                             prodList = this.dataService.node.procedure;
                         }
                         prodList.splice(act.index, 0, act.prod);
+                        this.scrollToProd(act.prod);
                     }
                 }
             }

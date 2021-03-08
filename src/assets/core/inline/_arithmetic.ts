@@ -1,3 +1,5 @@
+import { checkNumArgs } from '../_check_inline_args';
+
 /**
  * Maps a number from the d1 domain to the d2 domain.
  * @param num
@@ -5,6 +7,9 @@
  * @param d2
  */
 export function remap(debug: boolean, num: number|number[], d1: number[], d2: number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('remap', arguments, 3);
+    }
     if (Array.isArray(num)) { return num.map(num_val => remap(debug, num_val, d1, d2)) as number[]; }
     return ( d2[0] +
         (

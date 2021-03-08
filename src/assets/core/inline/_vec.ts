@@ -2,6 +2,7 @@ import * as vec from '@libs/geom/vectors';
 import { Txyz, TPlane } from '@assets/libs/geo-info/common';
 import { getArrDepth } from '@assets/libs/util/arrs';
 import { xformMatrix, multMatrix } from '@assets/libs/geom/matrix';
+import { checkNumArgs } from '../_check_inline_args';
 
 // export const vecAdd = vec.vecAdd;
 // export const vecSub = vec.vecSub;
@@ -26,6 +27,9 @@ import { xformMatrix, multMatrix } from '@assets/libs/geom/matrix';
  * @param v
  */
 export function vecSum(debug: boolean, ...v: Txyz[]): Txyz {
+    if (debug) {
+        // TODO
+    }
     const depth1: number = getArrDepth(v);
     if (depth1 > 2) {
         // @ts-ignore
@@ -44,6 +48,9 @@ export function vecSum(debug: boolean, ...v: Txyz[]): Txyz {
  * @param norm
  */
 export function vecAdd(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], norm: boolean = false): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecAdd', arguments, 3, 2);
+    }
     // overloaded case
     const depth1: number = getArrDepth(v1);
     const depth2: number = getArrDepth(v2);
@@ -79,6 +86,9 @@ export function vecAdd(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], norm: b
  * @param norm
  */
 export function vecSub(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], norm: boolean = false): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecSub', arguments, 3, 2);
+    }
     // overloaded case
     const depth1: number = getArrDepth(v1);
     const depth2: number = getArrDepth(v2);
@@ -113,6 +123,9 @@ export function vecSub(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], norm: b
  * @param num
  */
 export function vecDiv(debug: boolean, v: Txyz|Txyz[], num: number|number[]): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecDiv', arguments, 2);
+    }
     // overloaded case
     const depth1: number = getArrDepth(v);
     const depth2: number = getArrDepth(num);
@@ -148,6 +161,9 @@ export function vecDiv(debug: boolean, v: Txyz|Txyz[], num: number|number[]): Tx
  * @param num
  */
 export function vecMult(debug: boolean, v: Txyz|Txyz[], num: number|number[]): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecMult', arguments, 2);
+    }
     // overloaded case
     const depth1: number = getArrDepth(v);
     const depth2: number = getArrDepth(num);
@@ -183,6 +199,9 @@ export function vecMult(debug: boolean, v: Txyz|Txyz[], num: number|number[]): T
  * @param num
  */
 export function vecSetLen(debug: boolean, v: Txyz|Txyz[], num: number|number[]): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecSetLen', arguments, 2);
+    }
     // overloaded case
     const depth1: number = getArrDepth(v);
     const depth2: number = getArrDepth(num);
@@ -218,6 +237,9 @@ export function vecSetLen(debug: boolean, v: Txyz|Txyz[], num: number|number[]):
  * @param v2
  */
 export function vecDot(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[]): number|number[] {
+    if (debug) {
+        checkNumArgs('vecDot', arguments, 2);
+    }
     // overloaded case
     const depth1: number = getArrDepth(v1);
     const depth2: number = getArrDepth(v2);
@@ -252,6 +274,9 @@ export function vecDot(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[]): number
  * @param v2
  */
 export function vecCross(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[]): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecCross', arguments, 2);
+    }
     // overloaded case
     const depth1: number = getArrDepth(v1);
     const depth2: number = getArrDepth(v2);
@@ -281,11 +306,16 @@ export function vecCross(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[]): Txyz
 }
 // ================================================================================================
 /**
- * Calculate the angle (0 to PI) between two vectors
+ * Calculate the angle (0 to PI) between two vectors.
+ * \n
+ * The inner (smaller) angle is always returned, which will always be smaller than or equal to PI.
  * @param v1
  * @param v2
  */
 export function vecAng(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[]): number|number[] {
+    if (debug) {
+        checkNumArgs('vecAng', arguments, 2);
+    }
     // overloaded case
     const depth1: number = getArrDepth(v1);
     const depth2: number = getArrDepth(v2);
@@ -320,6 +350,9 @@ export function vecAng(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[]): number
  * @param xyz2
  */
 export function vecFromTo(debug: boolean, xyz1: Txyz|Txyz[], xyz2: Txyz|Txyz[]): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecFromTo', arguments, 2);
+    }
     // overloaded case
     const depth1: number = getArrDepth(xyz1);
     const depth2: number = getArrDepth(xyz2);
@@ -355,6 +388,9 @@ export function vecFromTo(debug: boolean, xyz1: Txyz|Txyz[], xyz2: Txyz|Txyz[]):
  * @param tol
  */
 export function vecEqual(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], tol: number): boolean|boolean[] {
+    if (debug) {
+        checkNumArgs('vecEqual', arguments, 3);
+    }
     // overloaded case
     const depth1: number = getArrDepth(v1);
     const depth2: number = getArrDepth(v2);
@@ -381,12 +417,21 @@ export function vecEqual(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], tol: 
 }
 // ================================================================================================
 /**
- * Calculate the angle (0 to 2PI) between two vectors, relative to the plane normal
+ * Calculate the angle (0 to 2PI) between two vectors, relative to the plane normal.
+ * \n
+ * Unlike the vecAng() function, this funtion may return an angle larger than PI.
+ * \n
+ * The function calculates the angle from the first vector to the second vector
+ * in a counter-clockwise direction, assuming the normal is pointing up towards the viewer.
+ * \n
  * @param v1
  * @param v2
  * @param v3
  */
 export function vecAng2(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], v3: Txyz|Txyz[]): number|number[] {
+    if (debug) {
+        checkNumArgs('vecAng2', arguments, 3);
+    }
     // overloaded case
     const depth1: number = getArrDepth(v1);
     const depth2: number = getArrDepth(v2);
@@ -463,6 +508,9 @@ export function vecAng2(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], v3: Tx
  * @param ang
  */
 export function vecRot(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], ang: number|number[]): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecRot', arguments, 3);
+    }
     // overloaded case
     const depth1: number = getArrDepth(v1);
     const depth2: number = getArrDepth(v2);
@@ -539,6 +587,9 @@ export function vecRot(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], ang: nu
  * @param v
  */
 export function vecLen(debug: boolean, v: Txyz|Txyz[]): number|number[] {
+    if (debug) {
+        checkNumArgs('vecLen', arguments, 1);
+    }
     // overloaded case
     const depth1: number = getArrDepth(v);
     if (depth1 === 2) {
@@ -553,6 +604,9 @@ export function vecLen(debug: boolean, v: Txyz|Txyz[]): number|number[] {
  * @param v
  */
 export function vecNorm(debug: boolean, v: Txyz|Txyz[]): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecNorm', arguments, 1);
+    }
     // overloaded case
     const depth1: number = getArrDepth(v);
     if (depth1 === 2) {
@@ -567,6 +621,9 @@ export function vecNorm(debug: boolean, v: Txyz|Txyz[]): Txyz|Txyz[] {
  * @param v
  */
 export function vecRev(debug: boolean, v: Txyz|Txyz[]): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecRev', arguments, 1);
+    }
     // overloaded case
     const depth1: number = getArrDepth(v);
     if (depth1 === 2) {
@@ -582,6 +639,9 @@ export function vecRev(debug: boolean, v: Txyz|Txyz[]): Txyz|Txyz[] {
  * @param p
  */
 export function vecLtoG(debug: boolean, v: Txyz|Txyz[], p: TPlane|TPlane[]): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecLtoG', arguments, 2);
+    }
     return _vecXForm(v, p, true);
 }
 /**
@@ -590,6 +650,9 @@ export function vecLtoG(debug: boolean, v: Txyz|Txyz[], p: TPlane|TPlane[]): Txy
  * @param p
  */
 export function vecGtoL(debug: boolean, v: Txyz|Txyz[], p: TPlane|TPlane[]): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecGtoL', arguments, 2);
+    }
     return _vecXForm(v, p, false);
 }
 // ================================================================================================

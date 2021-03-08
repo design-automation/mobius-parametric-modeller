@@ -36,8 +36,8 @@ export function checkNumArgs(fn_name: string, args: IArguments, max: number, min
 }
 /**
  * 
- * @param fn_name 
- * @param args 
+ * @param fn_name
+ * @param args
  */
 export function checkListsSameLen(fn_name: string, args: IArguments) {
     for (let i = 1; i < args.length; i++) {

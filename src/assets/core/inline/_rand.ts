@@ -1,12 +1,16 @@
 import * as mathjs from 'mathjs';
+import { checkNumArgs } from '../_check_inline_args';
 /**
  * Returns a random number in the specified range
  * Returns a random number in the specified range, given a numeric seed
- * @param min 
- * @param max 
- * @param seed 
+ * @param min
+ * @param max
+ * @param seed
  */
 export function rand(debug: boolean, min: number, max: number, seed?: number): number {
+    if (debug) {
+        checkNumArgs('rand', arguments, 3, 2);
+    }
     if (seed !== undefined) {
         return min + (_randWithSeed(seed) * (max - min));
     } else {
@@ -16,11 +20,14 @@ export function rand(debug: boolean, min: number, max: number, seed?: number): n
 /**
  * Returns a random integer in the specified range
  * Returns a random integer in the specified range, given a numeric seed
- * @param min 
- * @param max 
- * @param seed 
+ * @param min
+ * @param max
+ * @param seed
  */
 export function randInt(debug: boolean, min: number, max: number, seed?: number): number {
+    if (debug) {
+        checkNumArgs('randInt', arguments, 3, 2);
+    }
     if (seed !== undefined) {
         return Math.floor(min + (_randWithSeed(seed) * (max - min)));
     } else {
@@ -35,6 +42,9 @@ export function randInt(debug: boolean, min: number, max: number, seed?: number)
  * @param seed
  */
 export function randPick(debug: boolean, list: any[], num: number, seed?: number): number|number[] {
+    if (debug) {
+        checkNumArgs('randPick', arguments, 3, 2);
+    }
     if (num === 1) {
         const length: number = list.length;
         if (seed !== undefined) {

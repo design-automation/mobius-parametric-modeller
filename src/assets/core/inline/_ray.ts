@@ -2,6 +2,7 @@ import { TRay, TPlane, Txyz } from '@assets/libs/geo-info/common';
 import { vecCross, vecMult, vecsAdd, vecSetLen, vecNorm, vecAdd, vecRot, vecFromTo, vecSub } from '@assets/libs/geom/vectors';
 import { getArrDepth } from '@assets/libs/util/arrs';
 import { multMatrix, xformMatrix } from '@assets/libs/geom/matrix';
+import { checkNumArgs } from '../_check_inline_args';
 
 /**
  * Creates a ray from an origin "o" and a direction vector "d".
@@ -11,6 +12,9 @@ import { multMatrix, xformMatrix } from '@assets/libs/geom/matrix';
  * @param len
  */
 export function rayMake(debug: boolean, origin: Txyz|Txyz[], dir: Txyz|Txyz[], len?: number): TRay|TRay[] {
+    if (debug) {
+        checkNumArgs('rayMake', arguments, 3, 2);
+    }
     // overloaded case
     const origin_dep: number = getArrDepth(origin);
     const dir_dep: number = getArrDepth(dir);
@@ -44,6 +48,9 @@ export function rayMake(debug: boolean, origin: Txyz|Txyz[], dir: Txyz|Txyz[], l
  * @param xyz2
  */
 export function rayFromTo(debug: boolean, xyz1: Txyz|Txyz[], xyz2: Txyz|Txyz[]): TRay|TRay[] {
+    if (debug) {
+        checkNumArgs('rayFromTo', arguments, 2);
+    }
     // overloaded case
     const depth1: number = getArrDepth(xyz1);
     const depth2: number = getArrDepth(xyz2);
@@ -76,6 +83,9 @@ export function rayFromTo(debug: boolean, xyz1: Txyz|Txyz[], xyz2: Txyz|Txyz[]):
  * @param ray
  */
 export function rayCopy(debug: boolean, ray: TRay|TRay[]): TRay|TRay[] {
+    if (debug) {
+        checkNumArgs('rayCopy', arguments, 1);
+    }
     // overloaded case
     const ray_dep: number = getArrDepth(ray);
     if (ray_dep === 3) { return (ray as TRay[]).map(ray_one => rayCopy(debug, ray_one)) as TRay[]; }
@@ -88,6 +98,9 @@ export function rayCopy(debug: boolean, ray: TRay|TRay[]): TRay|TRay[] {
  * @param vec
  */
 export function rayMove(debug: boolean, ray: TRay|TRay[], vec: Txyz|Txyz[]): TRay|TRay[] {
+    if (debug) {
+        checkNumArgs('rayMove', arguments, 2);
+    }
     // overloaded case
     const ray_dep: number = getArrDepth(ray);
     const vec_dep: number = getArrDepth(vec);
@@ -118,6 +131,9 @@ export function rayMove(debug: boolean, ray: TRay|TRay[], vec: Txyz|Txyz[]): TRa
  * @param ang
  */
 export function rayRot(debug: boolean, ray1: TRay|TRay[], ray2: TRay|TRay[], ang: number|number[]): TRay|TRay[] {
+    if (debug) {
+        checkNumArgs('rayRot', arguments, 3);
+    }
     // overloaded case
     const ray1_dep: number = getArrDepth(ray1);
     const ray2_dep: number = getArrDepth(ray2);
@@ -154,6 +170,9 @@ export function rayRot(debug: boolean, ray1: TRay|TRay[], ray2: TRay|TRay[], ang
  * @param dist
  */
 export function rayLMove(debug: boolean, ray: TRay|TRay[], dist: number|number[]): TRay|TRay[] {
+    if (debug) {
+        checkNumArgs('rayLMove', arguments, 2);
+    }
     // overloaded case
     const ray_dep: number = getArrDepth(ray);
     const dist_dep: number = getArrDepth(dist);
@@ -183,6 +202,9 @@ export function rayLMove(debug: boolean, ray: TRay|TRay[], dist: number|number[]
  * @param pln
  */
 export function rayFromPln(debug: boolean, pln: TPlane|TPlane[]): TRay|TRay[] {
+    if (debug) {
+        checkNumArgs('rayFromPln', arguments, 1);
+    }
     // overloaded case
     const pln_dep: number = getArrDepth(pln);
     if (pln_dep === 3) { return (pln as TPlane[]).map( pln_one => rayFromPln(debug, pln_one) ) as TRay[]; }
@@ -196,6 +218,9 @@ export function rayFromPln(debug: boolean, pln: TPlane|TPlane[]): TRay|TRay[] {
  * @param p
  */
 export function rayLtoG(debug: boolean, r: TRay|TRay[], p: TPlane|TPlane[]): TRay|TRay[] {
+    if (debug) {
+        checkNumArgs('rayLtoG', arguments, 2);
+    }
     return _rayXForm(debug, r, p, true);
 }
 /**
@@ -204,6 +229,9 @@ export function rayLtoG(debug: boolean, r: TRay|TRay[], p: TPlane|TPlane[]): TRa
  * @param p
  */
 export function rayGtoL(debug: boolean, r: TRay|TRay[], p: TPlane|TPlane[]): TRay|TRay[] {
+    if (debug) {
+        checkNumArgs('rayGtoL', arguments, 2);
+    }
     return _rayXForm(debug, r, p, false);
 }
 function _rayXForm(debug: boolean, r: TRay|TRay[], p: TPlane|TPlane[], to_global: boolean): TRay|TRay[] {

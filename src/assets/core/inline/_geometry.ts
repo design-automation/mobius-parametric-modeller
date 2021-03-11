@@ -1,5 +1,6 @@
 import * as isect from '@libs/geom/intersect';
 import * as dist from '@libs/geom/distance';
+import { checkNumArgs } from '../_check_inline_args';
 type Txyz = [number, number, number];
 type TRay = [Txyz, Txyz];
 type TPlane = [Txyz, Txyz, Txyz];
@@ -21,6 +22,9 @@ type TPlane = [Txyz, Txyz, Txyz];
  * @param met
  */
 export function intersect(debug: boolean, r1: TRay, r2: TRay|TPlane, met: number = 2) {
+    if (debug) {
+        checkNumArgs('intersect', arguments, 3, 2);
+    }
     return isect.intersect(r1, r2, met);
 }
 /**
@@ -36,6 +40,9 @@ export function intersect(debug: boolean, r1: TRay, r2: TRay|TPlane, met: number
  * @param met
  */
 export function project(debug: boolean, c: Txyz, r: TRay|TPlane, met: number = 2) {
+    if (debug) {
+        checkNumArgs('project', arguments, 3, 2);
+    }
     return isect.project(c, r, met);
 }
 /**
@@ -46,6 +53,9 @@ export function project(debug: boolean, c: Txyz, r: TRay|TPlane, met: number = 2
  * @param c2
  */
 export function distance(debug: boolean, c1: Txyz, c2: Txyz|TRay|TPlane) {
+    if (debug) {
+        checkNumArgs('distance', arguments, 2);
+    }
     return dist.distance(c1, c2);
 }
 /**
@@ -56,6 +66,9 @@ export function distance(debug: boolean, c1: Txyz, c2: Txyz|TRay|TPlane) {
  * @param c2
  */
 export function distanceM(debug: boolean, c1: Txyz, c2: Txyz|TRay|TPlane) {
+    if (debug) {
+        checkNumArgs('distanceM', arguments, 2);
+    }
     return dist.distanceManhattan(c1, c2);
 }
 /**
@@ -66,6 +79,9 @@ export function distanceM(debug: boolean, c1: Txyz, c2: Txyz|TRay|TPlane) {
  * @param c2
  */
 export function distanceMS(debug: boolean, c1: Txyz, c2: Txyz|TRay|TPlane) {
+    if (debug) {
+        checkNumArgs('distanceMS', arguments, 2);
+    }
     return dist.distanceManhattanSq(c1, c2);
 }
 

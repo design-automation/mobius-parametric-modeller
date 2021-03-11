@@ -1,9 +1,14 @@
+import { checkNumArgs } from '../_check_inline_args';
+
 /**
  * Converts radians to degrees.
  *
  * @param rad
  */
 export function radToDeg(debug: boolean, rad: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('radToDeg', arguments, 1);
+    }
     if (Array.isArray(rad)) { return rad.map(a_rad => radToDeg(debug, a_rad)) as number[]; }
     return rad * (180 / Math.PI);
 }
@@ -13,6 +18,9 @@ export function radToDeg(debug: boolean, rad: number|number[]): number|number[] 
  * @param deg
  */
 export function degToRad(debug: boolean, deg: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('degToRad', arguments, 1);
+    }
     if (Array.isArray(deg)) { return deg.map(a_deg => degToRad(debug, a_deg)) as number[]; }
     return deg * (Math.PI / 180);
 }
@@ -26,6 +34,9 @@ export function degToRad(debug: boolean, deg: number|number[]): number|number[] 
  * @param locale
  */
 export function numToStr(debug: boolean, num: number|number[], frac_digits?: number, locale?: string): string|string[] {
+    if (debug) {
+        checkNumArgs('numToStr', arguments, 3, 1);
+    }
     if (Array.isArray(num)) {
         for (let i = 0; i < num.length; i++) {
             num[i] = typeof num === 'number' ? num : Number(num);
@@ -47,6 +58,9 @@ export function numToStr(debug: boolean, num: number|number[], frac_digits?: num
  * @param locale
  */
 export function numToCurr(debug: boolean, num: number|number[], currency: string, locale?: string): string|string[] {
+    if (debug) {
+        checkNumArgs('numToCurr', arguments, 3, 2);
+    }
     if (Array.isArray(num)) {
         for (let i = 0; i < num.length; i++) {
             num[i] = typeof num === 'number' ? num : Number(num);

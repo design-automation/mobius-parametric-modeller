@@ -23,6 +23,8 @@
 // atanh = Math.atanh;
 // atan2 = Math.atan2;
 
+import { checkNumArgs } from '../_check_inline_args';
+
 /**
  * Returns the smallest of the given numbers.
  *
@@ -36,6 +38,9 @@
  * @param list A list of numbers, or a sequence of numbers
  */
 export function min(debug: boolean, list: any): any {
+    if (debug) {
+        checkNumArgs('min', arguments, 1);
+    }
     const args = Array.prototype.slice.call (arguments, min.length);
     if (args.length === 0) {
         if (list.constructor === [].constructor) {
@@ -57,6 +62,9 @@ export function min(debug: boolean, list: any): any {
  * @param list A list of numbers, or a sequence of numbers.
  */
 export function max(debug: boolean, list: any): any {
+    if (debug) {
+        checkNumArgs('max', arguments, 1);
+    }
     const args = Array.prototype.slice.call (arguments, min.length);
     if (args.length === 0) {
         if (list.constructor === [].constructor) {
@@ -71,13 +79,16 @@ export function max(debug: boolean, list: any): any {
  * Returns a number representing the given base taken to the power of the given exponent.
  *
  * @param base  A number or list of numbers.
- * @param exp The exponent used to raise the base.
+ * @param xp The exponent used to raise the base.
  */
-export function pow(debug: boolean, base: number|number[], exp: number): number|number[] {
-    if (Array.isArray(base)) {
-        return base.map( a_num => Math.pow(a_num, exp) ) as number[];
+export function pow(debug: boolean, base: number|number[], xp: number): number|number[] {
+    if (debug) {
+        checkNumArgs('pow', arguments, 2);
     }
-    return Math.pow(base as number, exp);
+    if (Array.isArray(base)) {
+        return base.map( a_num => Math.pow(a_num, xp) ) as number[];
+    }
+    return Math.pow(base as number, xp);
 }
 /**
  * Returns the square root of the given number. If the number is negative, NaN is returned.
@@ -85,6 +96,9 @@ export function pow(debug: boolean, base: number|number[], exp: number): number|
  * @param num A number or list of numbers.
  */
 export function sqrt(debug: boolean, num: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('sqrt', arguments, 1);
+    }
     if (Array.isArray(num)) {
         return num.map( a_num => Math.sqrt(a_num) ) as number[];
     }
@@ -96,6 +110,9 @@ export function sqrt(debug: boolean, num: number|number[]): number|number[] {
  * @param num A number or list of numbers.
  */
 export function exp(debug: boolean, num: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('exp', arguments, 1);
+    }
     if (Array.isArray(num)) {
         return num.map( a_num => Math.exp(a_num) ) as number[];
     }
@@ -107,6 +124,9 @@ export function exp(debug: boolean, num: number|number[]): number|number[] {
  * @param base A number or list of numbers.
  */
 export function log(debug: boolean, base: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('log', arguments, 1);
+    }
     if (Array.isArray(base)) {
         return base.map( a_num => Math.log(a_num) ) as number[];
     }
@@ -118,6 +138,9 @@ export function log(debug: boolean, base: number|number[]): number|number[] {
  * @param base A number or list of numbers.
  */
 export function log10(debug: boolean, base: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('log10', arguments, 1);
+    }
     if (Array.isArray(base)) {
         return base.map( a_num => Math.log10(a_num) ) as number[];
     }
@@ -130,6 +153,9 @@ export function log10(debug: boolean, base: number|number[]): number|number[] {
  * @param dec_pla The number of decimal places.
  */
 export function round(debug: boolean, num: number|number[], dec_pla = 0): number|number[] {
+    if (debug) {
+        checkNumArgs('round', arguments, 2, 1);
+    }
     if (Array.isArray(num)) {
         return num.map( a_num => round(debug, a_num, dec_pla) ) as number[];
     }
@@ -150,6 +176,9 @@ export function round(debug: boolean, num: number|number[], dec_pla = 0): number
  * @param sig_figs The number of significant figures.
  */
 export function sigFig(debug: boolean, num: number|number[], sig_figs: number): number|number[] {
+    if (debug) {
+        checkNumArgs('sigFig', arguments, 2);
+    }
     if (Array.isArray(num)) {
         return num.map( a_num => sigFig(debug, a_num, sig_figs) ) as number[];
     }
@@ -172,6 +201,9 @@ export function sigFig(debug: boolean, num: number|number[], sig_figs: number): 
  * @param num A number or list of numbers.
  */
 export function ceil(debug: boolean, num: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('ceil', arguments, 1);
+    }
     if (Array.isArray(num)) {
         return num.map( a_num => Math.ceil(a_num) ) as number[];
     }
@@ -189,6 +221,9 @@ export function ceil(debug: boolean, num: number|number[]): number|number[] {
  * @param num A number or list of numbers.
  */
 export function floor(debug: boolean, num: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('floor', arguments, 1);
+    }
     if (Array.isArray(num)) {
         return num.map( a_num => Math.floor(a_num) ) as number[];
     }
@@ -212,6 +247,9 @@ export function floor(debug: boolean, num: number|number[]): number|number[] {
  * @param num A number or list of numbers.
  */
 export function abs(debug: boolean, num: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('abs', arguments, 1);
+    }
     if (Array.isArray(num)) {
         return num.map( a_num => Math.abs(a_num) ) as number[];
     }
@@ -227,6 +265,9 @@ export function abs(debug: boolean, num: number|number[]): number|number[] {
  * @param num A number or list of numbers (in radians).
  */
 export function sin(debug: boolean, num: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('sin', arguments, 1);
+    }
     if (Array.isArray(num)) {
         return num.map( a_num => Math.sin(a_num) ) as number[];
     }
@@ -245,6 +286,9 @@ export function sin(debug: boolean, num: number|number[]): number|number[] {
  * @param num A number or list of numbers between -1 and 1.
  */
 export function asin(debug: boolean, num: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('cos', arguments, 1);
+    }
     if (Array.isArray(num)) {
         return num.map( a_num => Math.asin(a_num) ) as number[];
     }
@@ -259,6 +303,9 @@ export function asin(debug: boolean, num: number|number[]): number|number[] {
  * @param num A number or list of numbers (in radians).
  */
 export function sinh(debug: boolean, num: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('sinh', arguments, 1);
+    }
     if (Array.isArray(num)) {
         return num.map( a_num => Math.sinh(a_num) ) as number[];
     }
@@ -273,6 +320,9 @@ export function sinh(debug: boolean, num: number|number[]): number|number[] {
  * @param num A number or list of numbers.
  */
 export function asinh(debug: boolean, num: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('asinh', arguments, 1);
+    }
     if (Array.isArray(num)) {
         return num.map( a_num => Math.asinh(a_num) ) as number[];
     }
@@ -289,6 +339,9 @@ export function asinh(debug: boolean, num: number|number[]): number|number[] {
  * @param num A number or list of numbers (in radians).
  */
 export function cos(debug: boolean, num: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('cos', arguments, 1);
+    }
     if (Array.isArray(num)) {
         return num.map( a_num => Math.cos(a_num) ) as number[];
     }
@@ -307,6 +360,9 @@ export function cos(debug: boolean, num: number|number[]): number|number[] {
  * @param num A number or list of numbers between -1 and 1.
  */
 export function acos(debug: boolean, num: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('acos', arguments, 1);
+    }
     if (Array.isArray(num)) {
         return num.map( a_num => Math.acos(a_num) ) as number[];
     }
@@ -321,6 +377,9 @@ export function acos(debug: boolean, num: number|number[]): number|number[] {
  * @param num A number or list of numbers (in radians).
  */
 export function cosh(debug: boolean, num: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('cosh', arguments, 1);
+    }
     if (Array.isArray(num)) {
         return num.map( a_num => Math.cosh(a_num) ) as number[];
     }
@@ -338,6 +397,9 @@ export function cosh(debug: boolean, num: number|number[]): number|number[] {
  * @param num A number or list of numbers.
  */
 export function acosh(debug: boolean, num: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('acosh', arguments, 1);
+    }
     if (Array.isArray(num)) {
         return num.map( a_num => Math.acosh(a_num) ) as number[];
     }
@@ -351,6 +413,9 @@ export function acosh(debug: boolean, num: number|number[]): number|number[] {
  * @param num A number or list of numbers (in radians).
  */
 export function tan(debug: boolean, num: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('tan', arguments, 1);
+    }
     if (Array.isArray(num)) {
         return num.map( a_num => Math.tan(a_num) ) as number[];
     }
@@ -371,6 +436,9 @@ export function tan(debug: boolean, num: number|number[]): number|number[] {
  * @param num A number or list of numbers between -1 and 1.
  */
 export function atan(debug: boolean, num: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('atan', arguments, 1);
+    }
     if (Array.isArray(num)) {
         return num.map( a_num => Math.atan(a_num) ) as number[];
     }
@@ -382,9 +450,12 @@ export function atan(debug: boolean, num: number|number[]): number|number[] {
  * atan2([15, 90]]); // 1.4056476493802699
  * atan2([90, 15]]); // 0.16514867741462683
  *
- * @param num A list of two numbers [x,y] or a list of lists [[x,y], [x,y], [x,y]...].
+ * @param xy A list of two numbers [x,y] or a list of lists [[x,y], [x,y], [x,y]...].
  */
 export function atan2(debug: boolean, xy: [number, number]|[number, number][]): number|number[] {
+    if (debug) {
+        checkNumArgs('atan2', arguments, 1);
+    }
     if (Array.isArray(xy[0])) {
         return (xy as [number, number][]).map( a_xy => Math.atan2(a_xy[1], a_xy[0]) ) as number[];
     }
@@ -401,6 +472,9 @@ export function atan2(debug: boolean, xy: [number, number]|[number, number][]): 
  * @param num A number or list of numbers (in radians).
  */
 export function tanh(debug: boolean, num: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('tanh', arguments, 1);
+    }
     if (Array.isArray(num)) {
         return num.map( a_num => Math.tanh(a_num) ) as number[];
     }
@@ -419,6 +493,9 @@ export function tanh(debug: boolean, num: number|number[]): number|number[] {
  * @param num A number or list of numbers.
  */
 export function atanh(debug: boolean, num: number|number[]): number|number[] {
+    if (debug) {
+        checkNumArgs('atanh', arguments, 1);
+    }
     if (Array.isArray(num)) {
         return num.map( a_num => Math.atanh(a_num) ) as number[];
     }

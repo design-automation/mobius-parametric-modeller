@@ -9,15 +9,19 @@
 import { TPlane, TRay, Txyz, Txy } from '@assets/libs/geo-info/common';
 import { vecCross, vecMult, vecsAdd, vecRot, vecNorm, vecMakeOrtho, vecAdd, vecFromTo, vecDot } from '@assets/libs/geom/vectors';
 import { getArrDepth } from '@assets/libs/util/arrs';
+import { checkNumArgs } from '../_check_inline_args';
 
 
 /**
  * Creates a plane from an origin "o", an "x" axis vector, and any other vector in the "xy" plane.
- * @param origin 
- * @param x_vec 
- * @param xy_vec 
+ * @param origin
+ * @param x_vec
+ * @param xy_vec
  */
 export function plnMake(debug: boolean, origin: Txyz|Txyz[], x_vec: Txyz|Txyz[], xy_vec: Txyz|Txyz[]): TPlane|TPlane[] {
+    if (debug) {
+        checkNumArgs('plnMake', arguments, 3);
+    }
     // overloaded case
     const origin_dep: number = getArrDepth(origin);
     const x_vec_dep: number = getArrDepth(x_vec);
@@ -57,9 +61,12 @@ export function plnMake(debug: boolean, origin: Txyz|Txyz[], x_vec: Txyz|Txyz[],
 }
 /**
  * Make a copy of the plane "p"
- * @param pln 
+ * @param pln
  */
 export function plnCopy(debug: boolean, pln: TPlane|TPlane[]): TPlane|TPlane[] {
+    if (debug) {
+        checkNumArgs('plnCopy', arguments, 1);
+    }
     // overloaded case
     const pln_dep: number = getArrDepth(pln);
     if (pln_dep === 3) { return (pln as TPlane[]).map(pln_one => plnCopy(debug, pln_one)) as TPlane[]; }
@@ -69,10 +76,13 @@ export function plnCopy(debug: boolean, pln: TPlane|TPlane[]): TPlane|TPlane[] {
 }
 /**
  * Move the plane "p" relative to the global X, Y, and Z axes, by vector "v".
- * @param pln 
- * @param vec 
+ * @param pln
+ * @param vec
  */
 export function plnMove(debug: boolean, pln: TPlane|TPlane[], vec: Txyz|Txyz[]): TPlane|TPlane[] {
+    if (debug) {
+        checkNumArgs('plnMove', arguments, 2);
+    }
     // overloaded case
     const pln_dep: number = getArrDepth(pln);
     const vec_dep: number = getArrDepth(vec);
@@ -98,11 +108,14 @@ export function plnMove(debug: boolean, pln: TPlane|TPlane[], vec: Txyz|Txyz[]):
 }
 /**
  * Rotate the plane "p" around the ray "r", by angle "a" (in radians).
- * @param pln 
- * @param ray 
- * @param ang 
+ * @param pln
+ * @param ray
+ * @param ang
  */
 export function plnRot(debug: boolean, pln: TPlane|TPlane[], ray: TRay|TRay[], ang: number|number[]): TPlane|TPlane[] {
+    if (debug) {
+        checkNumArgs('plnRot', arguments, 3);
+    }
     // overloaded case
     const pln_dep: number = getArrDepth(pln);
     const ray_dep: number = getArrDepth(ray);
@@ -135,10 +148,13 @@ export function plnRot(debug: boolean, pln: TPlane|TPlane[], ray: TRay|TRay[], a
 }
 /**
  * Move the plane "p" relative to the local X, Y, and Z axes, by vector "v".
- * @param pln 
- * @param vec 
+ * @param pln
+ * @param vec
  */
 export function plnLMove(debug: boolean, pln: TPlane|TPlane[], vec: Txyz|Txyz[]): TPlane|TPlane[] {
+    if (debug) {
+        checkNumArgs('plnLMake', arguments, 2);
+    }
     // overloaded case
     const pln_dep: number = getArrDepth(pln);
     const vec_dep: number = getArrDepth(vec);
@@ -169,10 +185,13 @@ export function plnLMove(debug: boolean, pln: TPlane|TPlane[], vec: Txyz|Txyz[])
 }
 /**
  * Rotate the plane "p" around the local X axis, by angle "a" (in radians).
- * @param pln 
- * @param ang 
+ * @param pln
+ * @param ang
  */
 export function plnLRotX(debug: boolean, pln: TPlane|TPlane[], ang: number|number[]): TPlane|TPlane[] {
+    if (debug) {
+        checkNumArgs('plnLRotX', arguments, 2);
+    }
     // overloaded case
     const pln_dep: number = getArrDepth(pln);
     const ang_dep: number = getArrDepth(ang);
@@ -202,10 +221,13 @@ export function plnLRotX(debug: boolean, pln: TPlane|TPlane[], ang: number|numbe
 }
 /**
  * Rotate the plane "p" around the local Y axis, by angle "a" (in radians).
- * @param pln 
- * @param ang 
+ * @param pln
+ * @param ang
  */
 export function plnLRotY(debug: boolean, pln: TPlane|TPlane[], ang: number|number[]): TPlane|TPlane[] {
+    if (debug) {
+        checkNumArgs('plnLRotY', arguments, 2);
+    }
     // overloaded case
     const pln_dep: number = getArrDepth(pln);
     const ang_dep: number = getArrDepth(ang);
@@ -235,10 +257,13 @@ export function plnLRotY(debug: boolean, pln: TPlane|TPlane[], ang: number|numbe
 }
 /**
  * Rotate the plane "p" around the local Z axis, by angle "a" (in radians).
- * @param pln 
- * @param ang 
+ * @param pln
+ * @param ang
  */
 export function plnLRotZ(debug: boolean, pln: TPlane|TPlane[], ang: number|number[]): TPlane|TPlane[] {
+    if (debug) {
+        checkNumArgs('plnLRotZ', arguments, 2);
+    }
     // overloaded case
     const pln_dep: number = getArrDepth(pln);
     const ang_dep: number = getArrDepth(ang);
@@ -269,10 +294,13 @@ export function plnLRotZ(debug: boolean, pln: TPlane|TPlane[], ang: number|numbe
     return [pln[0].slice() as Txyz, x_axis, y_axis];
 }
 /**
- * Generate a plane from a ray... 
- * @param ray 
+ * Generate a plane from a ray...
+ * @param ray
  */
 export function plnFromRay(debug: boolean, ray: TRay|TRay[]): TPlane|TPlane[] {
+    if (debug) {
+        checkNumArgs('plnFromRay', arguments, 1);
+    }
     // overloaded case
     const ray_dep: number = getArrDepth(ray);
     if (ray_dep === 3) { return (ray as TRay[]).map( ray_one => plnFromRay(debug, ray_one) ) as TPlane[]; }

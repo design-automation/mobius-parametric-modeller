@@ -447,10 +447,12 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         if (!prodDiv) {
             return;
         }
-        const prodFromTop =  window.pageYOffset + prodDiv.getBoundingClientRect().top;
+        const prodFromTop = mainProdContainer.scrollTop + prodDiv.getBoundingClientRect().top + mainProdContainer.offsetTop;
         let scrollPos = prodFromTop - mainProdContainer.offsetTop - (mainProdContainer.offsetHeight / 3);
         if (scrollPos < 0) { scrollPos = 0; }
         if (scrollPos > mainProdContainer.scrollHeight) { scrollPos = mainProdContainer.scrollHeight; }
+        const scrollDiff = scrollPos - mainProdContainer.scrollTop;
+        if (scrollDiff < (mainProdContainer.offsetHeight / 2) && scrollDiff > (- mainProdContainer.offsetHeight / 6)) { return; }
         mainProdContainer.scrollTop = scrollPos;
     }
 
@@ -571,7 +573,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                             prodList = this.dataService.node.procedure;
                         }
                         prodList.splice(act.index, 0, act.prod);
-                        this.scrollToProd(act.prod);
+                        setTimeout(() => {
+                            this.scrollToProd(act.prod);
+                        }, 0);
                     }
                 }
             } else {
@@ -609,7 +613,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                             prodList = this.dataService.node.procedure;
                         }
                         prodList.splice(act.index, 0, act.prod);
-                        this.scrollToProd(act.prod);
+                        setTimeout(() => {
+                            this.scrollToProd(act.prod);
+                        }, 0);
                     }
                 }
             }

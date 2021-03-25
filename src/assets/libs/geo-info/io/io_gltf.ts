@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
+import { GLTFExporter } from './GLTFExporter.js';
 
 import { GIModel } from '../GIModel';
 import { TEntTypeIdx, IEntSets } from '../common';

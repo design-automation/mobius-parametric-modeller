@@ -316,7 +316,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 }
             }
         }
-        this.scrollToProd(node.state.procedure[node.state.procedure.length - 1]);
+        // this.scrollToProd(node.state.procedure[node.state.procedure.length - 1]);
         let i = 0;
         while (i < node.state.procedure.length) {
             if (node.state.procedure[i].type === ProcedureTypes.Blank || node.state.procedure[i].type === ProcedureTypes.EndReturn) {
@@ -419,7 +419,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 pastingPlace.selected = true;
                 pastingPlace.lastSelected = true;
                 node.state.procedure = [pastingPlace];
-                this.scrollToProd(pastingPlace);
+                // this.scrollToProd(pastingPlace);
             }
             this.dataService.registerEdtAction(redoActions);
             checkNodeValidity(this.dataService.node);
@@ -447,9 +447,12 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         if (!prodDiv) {
             return;
         }
-        let scrollPos = prodDiv.offsetTop - mainProdContainer.offsetTop - (mainProdContainer.offsetHeight / 3);
+        const prodFromTop = mainProdContainer.scrollTop + prodDiv.getBoundingClientRect().top + mainProdContainer.offsetTop;
+        let scrollPos = prodFromTop - mainProdContainer.offsetTop - (mainProdContainer.offsetHeight / 3);
         if (scrollPos < 0) { scrollPos = 0; }
         if (scrollPos > mainProdContainer.scrollHeight) { scrollPos = mainProdContainer.scrollHeight; }
+        const scrollDiff = scrollPos - mainProdContainer.scrollTop;
+        if (scrollDiff < (mainProdContainer.offsetHeight / 2) && scrollDiff > (- mainProdContainer.offsetHeight / 6)) { return; }
         mainProdContainer.scrollTop = scrollPos;
     }
 
@@ -570,7 +573,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                             prodList = this.dataService.node.procedure;
                         }
                         prodList.splice(act.index, 0, act.prod);
-                        this.scrollToProd(act.prod);
+                        setTimeout(() => {
+                            this.scrollToProd(act.prod);
+                        }, 0);
                     }
                 }
             } else {
@@ -608,7 +613,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                             prodList = this.dataService.node.procedure;
                         }
                         prodList.splice(act.index, 0, act.prod);
-                        this.scrollToProd(act.prod);
+                        setTimeout(() => {
+                            this.scrollToProd(act.prod);
+                        }, 0);
                     }
                 }
             }

@@ -211,7 +211,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
         // delete: delete selected edge(s)
         this.keyupSub = this.keyupListener.subscribe((event: KeyboardEvent) => {
             if (!this.listenerActive || !this.router.url.startsWith('/flowchart')) { return; }
-            if (event.key === 'Delete') {
+            if (event.key === 'Delete' || event.key === 'Backspace') {
                 if (this.selectedEdge.length > 0) {
                     this.deleteSelectedEdges();
                 } else {

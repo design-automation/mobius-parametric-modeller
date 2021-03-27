@@ -449,6 +449,7 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
     }
     const vars = [];
     const check = analyzeVar(comps, 0, vars, false, true);
+    console.log(check)
 
     if (check.error) {
         console.log(check.error, '\n', str);
@@ -700,7 +701,7 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
                     {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string, 'jsStr'?: string} {
     const comp = comps[i];
 
-    if (globals.indexOf(comp.value.toUpperCase()) !== -1) {
+    if (globals.indexOf(comp.value.toUpperCase()) !== -1 && !disallowAt) {
         comp.value = comp.value.toUpperCase();
     }
 

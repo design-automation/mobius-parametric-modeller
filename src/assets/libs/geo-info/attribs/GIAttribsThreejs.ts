@@ -198,6 +198,9 @@ export class GIAttribsThreejs {
                             } else {
                                 data_obj_map.get(ent_i)[attrib_name] = JSON.stringify(attrib_value);
                             }
+                        } else if(Array.isArray(attrib_value)) {
+                            const _attrib_value = isString(attrib_value[0]) ? `'${attrib_value[0]}'` : attrib_value[0];
+                            data_obj_map.get(ent_i)[`${attrib_name}[0]`] = _attrib_value;
                         } else {
                             const _attrib_value = isString(attrib_value) ? `'${attrib_value}'` : attrib_value;
                             data_obj_map.get(ent_i)[`${attrib_name}`] = _attrib_value;

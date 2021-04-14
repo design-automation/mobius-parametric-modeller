@@ -528,7 +528,11 @@ function _addAttribsToModel(model: GIModel, ent_type: EEntType, ent_i: number, f
     if (! feature.hasOwnProperty('properties')) { return; }
     for (const name of Object.keys(feature.properties)) {
         let value: any = feature.properties[name];
+        if (value === null) {
+            continue;
+        }
         const value_type: string = typeof feature.properties[name];
+        console.log("value = ", value, value_type)
         if (value_type === 'object') {
             value = JSON.stringify(value);
         }

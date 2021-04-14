@@ -126,7 +126,7 @@ export function exportVertBasedObj(model: GIModel, entities: TEntTypeIdx[], ssid
                         f_str += '/';
                     }
                     // vn
-                    if (has_normal_attrib) {
+                    if (has_normal_attrib && vert_i_obj_vn[vert_i] !== undefined) {
                         f_str += '/' + (1 + num_v + num_vt + vert_i_obj_vn[vert_i]);
                     } else {
                         f_str += '/';
@@ -332,7 +332,7 @@ function _getGroups(model: GIModel, ent_type: EEntType, ents_i: number[]): [stri
     // make sure the ---nogroups--- key is first in the list
     let keys: string[] = Array.from(map_colls_to_ents.keys());
     const ng_i: number = keys.indexOf(NOGROUPS);
-    if (ng_i !== -1) {
+    if (ng_i > 0) {
         keys = keys.splice(ng_i, 1).splice(0, 0, NOGROUPS);
     }
     // return the keys arrays, and the map

@@ -61,7 +61,7 @@ export class GIGeomDelVert {
         }
         // pline
         const pline_i: number = this.modeldata.geom.nav.navAnyToPline(EEntType.VERT, vert_i)[0];
-        this.delPgonVerts(pline_i, [vert_i]);
+        this.delPlineVerts(pline_i, [vert_i]);
         return;
     }
     /**

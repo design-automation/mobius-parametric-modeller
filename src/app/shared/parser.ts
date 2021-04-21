@@ -449,7 +449,6 @@ export function parseVariable(value: string): {'error'?: string, 'declaredVar'?:
     }
     const vars = [];
     const check = analyzeVar(comps, 0, vars, false, true);
-    console.log(check)
 
     if (check.error) {
         console.log(check.error, '\n', str);

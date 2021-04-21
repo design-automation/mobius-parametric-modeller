@@ -62,7 +62,7 @@ export class FlowchartUtils {
             nodeOrder.push(node);
         } else {
             for (const edge of node.input.edges) {
-                if (!edge.source.parentNode.hasExecuted) {
+                if (edge.source.parentNode.enabled && !edge.source.parentNode.hasExecuted) {
                     return;
                 }
             }

@@ -1,7 +1,6 @@
 @import '~scss/colors';
 @import '~scss/variables';
 
-
 .container--nested{
     padding-left: 0px;
 }
@@ -14,8 +13,8 @@
     // padding-bottom: 1px;
     // padding-left: 2px;
     //border-bottom: 1px solid red;
-    border-bottom: 1px solid $color5;
-    border-left: 1px solid $color5;
+    border-bottom: 1px solid $color4-5;
+    border-left: 1px solid $color4-5;
     box-shadow: inset 1px -1px 0px 0px white;
     color: $color1;
     //min-height: 22px;
@@ -29,7 +28,7 @@
     flex-shrink: 0;
 
     overflow-x: hidden;
-    width: calc(100% - 10px);
+    width: calc(100% - 13px);
     // min-width: fit-content; // for global side scroll
 
     &.strong{
@@ -39,172 +38,100 @@
 
     &.disabled{
         opacity: $disabled-opacity;
-        .btns{
-            display: inline-flex;
-            #disable-btn{
-                // display: flex;
-                justify-content: center;
-                &:hover{
-                    color: $selected-color;
-                }
-            }
-        }
-        &.onhover{
-            .btns{
-                #disable-btn{
-                    order: 0;
-                }
-            }
-        }
     }
-
-    // &.disabled .input--var, &.disabled .input--arg{
-    //     border: 2px solid $color5 !important;
-    // }
 
     &.selected{
         background-color: $selected-color1;
+        .disableOn, .printingOn, .terminateOn {
+            background-color: $selected-color1;
+        }
         &.lastSelected{
             background-color: $selected-color2;
-        }
-    }
-    &.printing:not(.disabled){
-        border-bottom: 2px solid $print-color;
-        border-left: 2px solid $print-color;
-        padding-bottom: 0px;
-        padding-left: 8px;
-        // #print-btn{
-        //     color: $print-color;
-        //     background-color: $color6;
-        // }
-        &.onhover {
-            // background-color: $print-color-lt;
-            #print-btn{
-                background-color: transparent;
+            .disableOn, .printingOn, .terminateOn {
+                background-color: $selected-color2;
             }
         }
     }
 
     &.printing{
-        .btns{
-            display: inline-flex;
-            .btn{
-                background-color: inherit;
-            }
-        }
-        &.onhover{
-            .btns{
-                #print-btn{
-                    order: 1
-                }
-            }
-        }
+        border-bottom: 2px solid $print-color;
+        border-left: 2px solid $print-color;
+        padding-bottom: 0px;
+        padding-left: 8px;
     }
 
-    &.selectGeom:not(.disabled){
+    &.selectGeom{
         border-bottom: 2px solid $selectGeom-color;
         border-left: 2px solid $selectGeom-color;
         padding-bottom: 0px;
         padding-left: 8px;
-        #selectGeom-btn{
-            color: $selectGeom-color;
-            background-color: $color6;
-        }
-        &.onhover {
-            // background-color: $selectGeom-color-lt;
-            #selectGeom-btn{
-                background-color: transparent;
-            }
-        }
-        &.printing {
-            border-left: 2px solid $print-color;
-            padding-left: 8px;
-        }
-        &.error{
-            border-bottom: 2px solid $error-color;
-            border-left: 2px solid $error-color;
-            padding-bottom: 0px;
-            padding-left: 8px;
-        }
     }
 
-    &.selectGeom{
-        .btns{
-            display: inline-flex;
-            .btn{
-                background-color: inherit;
-            }
-            #selectGeom-btn{
-                display: flex;
-                justify-content: center;   
-                &:hover{
-                    color: $selected-color;
-                }
-            }
-        }
-        &.onhover{
-            .btns{
-                #selectGeom-btn{
-                    order: 1
-                }
-            }
-        }
-        // &:hover .btns{
-        //     #selectGeom-btn{
-        //         order: 1
-        //     }
-        // }
+    &.terminate{
+        border-left: 2px solid $terminate-color;
+        border-bottom: 2px solid $terminate-color;
+        padding-bottom: 0px;
+        padding-left: 8px;
     }
+
     &.error{
         border-bottom: 2px solid $error-color;
         border-left: 2px solid $error-color;
         padding-bottom: 0px;
         padding-left: 8px;
-
-    }
-    &.error:not(.disabled){
-        border-bottom: 2px solid $error-color;
-        border-left: 2px solid $error-color;
-        padding-bottom: 0px;
-        padding-left: 8px;
-        .btn{
-            background-color: inherit;
-        }
-        // &.onhover {
-        //     background-color: $error-color-lt;
-        // }
     }
 
     &.onhover{
         background-color: $color5;
         &.selected{
-            background-color: $selected-color1;
+            // .btn-container &.onhover .btn{
+            //     background-color: $selected-color1;
+            // }
+            .btn-container {
+                &.onhover {
+                    .btn{
+                        background-color: $selected-color1;
+                    }
+                }
+            }
             &.lastSelected{
-                background-color: $selected-color2;
+                .btn-container {
+                    &.onhover {
+                        .btn{
+                            background-color: $selected-color2;
+                        }
+                    }
+                }
             }
         }
-        .btn{
-            background-color: inherit;
-        }
+        // .btns{
+        //     display: inline-flex;
+        //     .btn{
+        //         display: flex;
+        //         justify-content: center;
+        //     }
+        // }
     }
 
     .input--var{
+        font-family: $inputFontFam;
         font-size: $fsize2;
+        font-weight: 400;
         min-width: 10px;
         background-color: $color6; 
         //border-bottom: 1px solid $color1;
         margin-right: 5px;
         border: 1px solid $color5;
-        padding: 1px 1px 1px 6px;
+        padding: 1px 1px 1px 2px;
         // padding-left: 6px;
 
         &.linked{
             border: 2px solid $selectGeom-color;
-            padding: 0px 0px 0px 5px;
+            padding: 0px 0px 0px 1px;
             // border: 2px solid $print-color-dk;
         }
         &.error{
-            padding: 0px 0px 0px 5px;
+            padding: 0px 0px 0px 1px;
             border: 2px solid $error-color;
         }
         &:focus, &:hover{
@@ -217,7 +144,9 @@
     }
     
     .input--arg{
+        font-family: $inputFontFam;
         font-size: $fsize2;
+        font-weight: 400;
         resize: horizontal;
         min-width: 10px;
         //max-width: 300px;
@@ -225,15 +154,15 @@
         //border-bottom: 1px solid $color1;
         margin-left: 5px;
         border: 1px solid $color5;
-        padding: 1px 1px 1px 6px;
+        padding: 1px 1px 1px 2px;
 
         &.linked{
             border: 2px solid $selectGeom-color;
-            padding: 0px 0px 0px 5px;
+            padding: 0px 0px 0px 1px;
         }
         &.error{
             border: 2px solid $error-color;
-            padding: 0px 0px 0px 5px;
+            padding: 0px 0px 0px 1px;
         }
         &:focus, &:hover{
             border-color: $selected-color;
@@ -242,9 +171,15 @@
         &.disabled{
             pointer-events: none;
         }
+        &.input--funcName{
+            font-weight: bold;
+            margin-right: 4px;
+        }
     }
     .input--comment{
+        font-family: $inputFontFam;
         font-size: $fsize2;
+        font-weight: 600;
         resize: horizontal;
         min-width: 200px;
         color: $comment-color;
@@ -311,19 +246,19 @@
     //     }
     // }
 }
-#print-btn{
-    &.printing:not(.disabled){
-        color: $print-color;
-        background-color: $color6;
-    }
-    &.printing{
-        display: flex;
-        justify-content: center;   
-        &:hover{
-            color: $selected-color;
-        }
-    }
-}
+// #print-btn{
+//     &.printing:not(.disabled){
+//         color: $print-color;
+//         background-color: $color6;
+//     }
+//     &.printing{
+//         display: flex;
+//         justify-content: center;   
+//         &:hover{
+//             color: $selected-color;
+//         }
+//     }
+// }
 
 .container--item{
     position: relative;
@@ -362,16 +297,6 @@
     }
 }
 
-.container--item:hover + .btn-container{//.container--line
-    .btns{
-        display: inline-flex;
-        .btn{
-            display: flex;
-            justify-content: center;
-            background-color: inherit;
-        }
-    }
-}
 
 //.container--item .selected .btn {display: block}
 
@@ -380,28 +305,30 @@
     width: 100%;
     display: flex;
     flex-flow: row nowrap;
-    background-color: inherit;
     justify-content: flex-end;
     order: -1;
     z-index: 2;
-    &:hover .btns{
-        display: inline-flex;
-        .btn{
-            display: flex;
-            justify-content: center;
-            background-color: inherit;
+
+    &.onhover{
+        .btns{
+            // display: inline-flex;
+            .btn{
+                color: $color1;
+                background-color: $color5;
+                // display: flex;
+                // justify-content: center;
+            }
         }
     }
 }
 
 .btns{
     position: absolute;
+    top: 2px;
 
-    display: none;
+    display: inline-flex;
     flex-flow: row-reverse nowrap;
     justify-content: flex-end;
-
-    background-color: inherit;
 
     // border-left: 1px solid $color1;
     // border-bottom: 1px solid $color1;
@@ -413,22 +340,38 @@
 .btn{
     //height: 100%;
     width: $fsize1;
-    background-color: $color6;
+    // background-color: $color6;
+    // color: $color1;
+    background-color: transparent;
+    color: transparent;
 
     border: none;
-    color: $color1;
 
-    display: none;
+    display: flex;
+    justify-content: center;
 
     overflow: hidden;
     vertical-align: center;
-    
+    outline: none;
+
     order: 4;
     // &.highlighted{
     //     background-color: red;
     // }
     &:hover{
-        color: $selected-color;
+        color: $selected-color !important;
+    }
+    &.disableOn {
+        color: $selectGeom-color-dk !important;
+        background-color: $color6;
+    }
+    &.printingOn {
+        color: $print-color !important;
+        background-color: $color6;
+    }
+    &.terminateOn {
+        color: $terminate-color !important;
+        background-color: $color6;
     }
 }
 .btn{
@@ -440,9 +383,9 @@
         vertical-align: center;
         width: $fsize1;
         height: $fsize1 + 2px;
-        margin: 1px;
+        margin: 1px transparent;
         font-size: $fsize2;
-        // border: 1px solid $color1;
+        border: none;
     }
 }
 
@@ -481,13 +424,15 @@
 
 
 .function-text{
+    font-family: $inputTextFontFam;
     display: inline-block;
     white-space: nowrap;
     font-style: italic;
     color: $function-text-color;
-    font-weight: 550;
+    font-weight: 700;
     text-align: center;
     min-height: 17px;
+    margin-left: 2px;
 
     .module-name{
         color: $selected-color;
@@ -495,11 +440,12 @@
 }
 
 .basic-function-text{
+    font-family: $inputTextFontFam;
     display: inline-block;
     white-space: nowrap;
     font-style: italic;
     color: $basic-function-text-color;
-    font-weight: 550;
+    font-weight: 700;
     text-align: center;
     min-height: 17px;
 

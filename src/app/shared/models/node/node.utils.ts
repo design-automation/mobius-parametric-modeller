@@ -16,7 +16,7 @@ export abstract class NodeUtils {
             position: {x: 0, y: 0},
             enabled: false,
             type: '',
-            procedure: [{type: 13, ID: '',
+            procedure: [{type: 13, ID: 'main_blank',
                 parent: undefined,
                 meta: {name: '', module: ''},
                 variable: undefined,
@@ -73,7 +73,7 @@ export abstract class NodeUtils {
             for ( const j of i.functions) {
                 if (j.name !== returnMeta[1]) { continue; }
                 const newReturn = {
-                    type: 11,
+                    type: ProcedureTypes.EndReturn,
                     ID: 'Return',
                     parent: undefined,
                     meta: {name: '', module: ''},
@@ -84,7 +84,7 @@ export abstract class NodeUtils {
                     print: false,
                     enabled: true,
                     selected: false,
-                    selectGeom: false,
+                    terminate: false,
                     hasError: false
                 };
 
@@ -355,6 +355,10 @@ export abstract class NodeUtils {
         }
         const lastNode = node.state.procedure[node.state.procedure.length - 1];
         if (lastNode && lastNode.type !== ProcedureTypes.Constant) {
+            if (lastNode.type === ProcedureTypes.EndReturn) {
+                node.procedure.splice( node.procedure.length - 1, 0, prod);
+                return;
+            }
             if (lastNode.type === ProcedureTypes.LocalFuncDef || (lastNode.type === ProcedureTypes.Blank && lastNode.ID === 'local_func_blank')) {
                 node.procedure.splice(1, 0, prod);
             }
@@ -392,7 +396,7 @@ export abstract class NodeUtils {
 
     static initiateChildren(prod) {
         prod.children = [
-            {type: 13, ID: '',
+            {type: 13, ID: prod.ID + '-blank',
             parent: prod, meta: {name: '', module: ''},
             children: undefined,
             variable: undefined,
@@ -415,7 +419,6 @@ export abstract class NodeUtils {
         prod.ID = IdGenerator.getProdID();
         prod.enabled = true;
         prod.print = false;
-
 
         switch (prod.type) {
             case ProcedureTypes.Variable:
@@ -466,16 +469,29 @@ export abstract class NodeUtils {
                 this.initiateChildren(prod);
                 break;
 
-            case ProcedureTypes.LocalFuncReturn:
-                prod.argCount = 1;
-                prod.args = [ {name: 'Value', value: undefined} ];
-                let funcDef = prod.parent;
-                while (funcDef.parent) { funcDef = funcDef.parent; }
-                if (!funcDef.meta || !funcDef.meta.otherInfo) { break; }
-                funcDef.meta.otherInfo.num_returns ++;
-                if (funcDef.meta.otherInfo.num_returns === 1) {
-                    modifyLocalFuncVar(funcDef, node.localFunc.concat(node.procedure));
+            case ProcedureTypes.Return:
+                let topParent = prod.parent;
+                while (topParent && topParent.parent) {
+                    topParent = topParent.parent;
                 }
+                if (topParent && topParent.type === ProcedureTypes.LocalFuncDef) {
+                    prod.argCount = 1;
+                    prod.args = [ {name: 'Value', value: undefined} ];
+                    let funcDef = prod.parent;
+                    while (funcDef.parent) { funcDef = funcDef.parent; }
+                    if (!funcDef.meta || !funcDef.meta.otherInfo) { break; }
+                    funcDef.meta.otherInfo.num_returns ++;
+                    if (funcDef.meta.otherInfo.num_returns === 1) {
+                        modifyLocalFuncVar(funcDef, node.localFunc.concat(node.procedure));
+                    }
+                    break;
+                } else if (node.type === 'end') {
+                    prod.argCount = 1;
+                    prod.args = [ {name: 'Value', value: undefined} ];
+                    break;
+                }
+                prod.argCount = 0;
+                prod.args = [];
                 break;
 
 
@@ -501,7 +517,7 @@ export abstract class NodeUtils {
                 prod.args = [
                 {name: 'const_name', value: undefined},
                 {name: '__input__', value: 0} ];
-            break;
+                break;
 
             case ProcedureTypes.AddData:
                 prod.argCount = 2;
@@ -509,24 +525,24 @@ export abstract class NodeUtils {
                 prod.args = [
                 {name: 'const_name', value: undefined},
                 {name: '__input__', value: undefined} ];
-            break;
+                break;
 
             case ProcedureTypes.Comment:
                 prod.argCount = 1;
                 prod.args = [{name: 'comment', value: undefined}];
-            break;
+                break;
 
             case ProcedureTypes.Terminate:
                 prod.argCount = 0;
                 prod.args = [];
-            break;
+                break;
 
             case ProcedureTypes.Error:
                 prod.argCount = 1;
                 prod.args = [{name: 'error_message', value: undefined}];
-            break;
+                break;
 
-            case ProcedureTypes.Return:
+            case ProcedureTypes.EndReturn:
                 prod.meta = { module: 'Output', name: 'Return', description: undefined};
                 prod.argCount = 1;
                 prod.args = [ {name: 'index', value: undefined} ];
@@ -568,7 +584,7 @@ export abstract class NodeUtils {
     static checkLocalFuncReturn(prod): boolean {
         if (!prod.children) { return false; }
         for (const child_prod of prod.children){
-            if (child_prod.type === ProcedureTypes.LocalFuncReturn
+            if (child_prod.type === ProcedureTypes.Return
             && child_prod.args[0].value
             && child_prod.args[0].value !== 'null'
             && child_prod.args[0].value !== 'undefined'
@@ -618,8 +634,32 @@ export abstract class NodeUtils {
             return false;
         }
         const newProd = NodeUtils.updateID(circularJSON.parse(circularJSON.stringify(prod)));
+        if (prod.type === ProcedureTypes.LocalFuncDef) {
+            for (const existingFunc of node.localFunc) {
+                if (existingFunc.type !== ProcedureTypes.LocalFuncDef) { continue; }
+                if (existingFunc.args[0].value === newProd.args[0].value) {
+                    newProd.args[0].value += '_copy';
+                    newProd.args[0].jsValue += 'copy_';
+                }
+            }
+        }
         newProd.parent = undefined;
         NodeUtils.insert_procedure(node, newProd);
+        if (newProd.type === ProcedureTypes.Return) {
+            let topProd = newProd.parent;
+            while (topProd && topProd.parent) {
+                topProd = topProd.parent;
+            }
+            if (node.type === 'end' || (topProd && topProd.type === ProcedureTypes.LocalFuncDef)) {
+                if (newProd.args.length === 0) {
+                    newProd.argCount = 1;
+                    newProd.args = [ {name: 'Value', value: undefined} ];
+                }
+            } else {
+                newProd.argCount = 0;
+                newProd.args = [];
+            }
+        }
         NodeUtils.select_procedure(node, newProd, false, false);
         return true;
     }
@@ -653,18 +693,18 @@ export abstract class NodeUtils {
             const checkNode = node.state.procedure[node.state.procedure.length - 1];
             return (checkNode.type.toString() !== ProcedureTypes.If.toString()
             && checkNode.type.toString() !== ProcedureTypes.Elseif.toString());
-        } else if (tp === 'RETURN') {
-            let checkNode = node.state.procedure[node.state.procedure.length - 1];
-            if (!checkNode || checkNode.type === ProcedureTypes.LocalFuncDef) { return true; }
-            while (checkNode.parent) {
-                checkNode = checkNode.parent;
-            }
-            if (checkNode.type === ProcedureTypes.LocalFuncDef) { return false; }
-            return true;
+        // } else if (tp === 'RETURN') {
+        //     let checkNode = node.state.procedure[node.state.procedure.length - 1];
+        //     if (!checkNode || checkNode.type === ProcedureTypes.LocalFuncDef) { return true; }
+        //     while (checkNode.parent) {
+        //         checkNode = checkNode.parent;
+        //     }
+        //     if (checkNode.type === ProcedureTypes.LocalFuncDef) { return false; }
+        //     return true;
         } else {
             let checkNode = node.state.procedure[node.state.procedure.length - 1];
-            // if (tp === 'BREAK' || tp === 'CONTINUE') {
-            if (tp === 'CONTINUE' || (tp === 'BREAK' && node.type === 'end')) {
+            if (tp === 'BREAK' || tp === 'CONTINUE') {
+            // if (tp === 'CONTINUE' || (tp === 'BREAK' && node.type === 'end')) {
                 if (!checkNode) {return true; }
                 while (checkNode.parent) {
                     if (checkNode.parent.type.toString() === ProcedureTypes.Foreach.toString() ||

@@ -12,11 +12,95 @@ import { GoogleAnalyticsService } from '@shared/services/google.analytics';
 import { Router } from '@angular/router';
 import { DataOutputService } from '@shared/services/dataOutput.service';
 import { SaveFileComponent } from '@shared/components/file';
-import { _parameterTypes, _varString } from '@assets/core/_parameterTypes';
+import { _parameterTypes } from '@assets/core/_parameterTypes';
+import { _varString } from '@assets/core/modules';
 import { isArray } from 'util';
 import JSZip from 'jszip';
+import { GIModel } from '@assets/libs/geo-info/GIModel';
+import { WindowMessageComponent } from '@shared/components/window-message/window-message.component';
+import { EEntType } from '@assets/libs/geo-info/common';
 
-export const pythonList = `
+// function pythonList(x, l) {
+//     if (x < 0) {
+//         return x + l;
+//     }
+//     return x;
+// }
+// function mergeInputs(models) {
+//     const result = _parameterTypes.newFn();
+//     // try {
+//     //     result.debug = __debug__;
+//     // } catch (ex) {}
+//     for (const model of models){
+//         _parameterTypes.mergeFn(result, model);
+//     }
+//     return result;
+// }
+// function printFunc(_console, name, value){
+//     let val;
+//     let padding_style = 'padding: 2px 0px 2px 10px;';
+//     if (!value) {
+//         val = value;
+//     } else if (value === '__null__') {
+//         _console.push('<p style="' + padding_style + '"><b><i>_ ' + name + '</i></b></p>');
+//         return value;
+//     } else if (typeof value === 'number' || value === undefined) {
+//         val = value;
+//     } else if (typeof value === 'string') {
+//         val = '"' + value.replace(/\\n/g, '<br>') + '"';
+//     } else if (value.constructor === [].constructor) {
+//         let __list_check__ = false;
+//         const __value_strings__ = [];
+//         for (const __item__ of value) {
+//             if (!__item__) {
+//                 __value_strings__.push('' + __item__);
+//                 continue;
+//             }
+//             if (__item__.constructor === [].constructor || __item__.constructor === {}.constructor) {
+//                 __list_check__ = true;
+//             }
+//             __value_strings__.push(JSON.stringify(__item__).replace(/,/g, ', '));
+//         }
+//         if (__list_check__) {
+//             padding_style = 'padding: 2px 0px 0px 10px;';
+//             val = '[<p style="padding: 0px 0px 2px 40px;">' +
+//                   __value_strings__.join(',</p><p style="padding: 0px 0px 2px 40px;">') +
+//                   '</p><p style="padding: 0px 0px 2px 30px;">]</p>';
+//         } else {
+//             val = '[' + __value_strings__.join(', ') + ']';
+//         }
+//     } else if (value.constructor === {}.constructor) {
+//         let __list_check__ = false;
+//         const __value_strings__ = [];
+//         for (const __item__ in value) {
+//             if (value[__item__]) {
+//                 const __value__ = value[__item__];
+//                 if (!__value__) {
+//                     __value_strings__.push('\\<b>"' + __item__ + '\\"</b>' + ': ' + __value__);
+//                     continue;
+//                 }
+//                 if (__value__.constructor === [].constructor || __value__.constructor === {}.constructor) {
+//                     __list_check__ = true;
+//                 }
+//                 __value_strings__.push('\\<b>"' + __item__ + '\\"</b>' + ': ' + JSON.stringify(__value__).replace(/,/g, ', '));
+//             }
+//         }
+//         if (__list_check__) {
+//             padding_style = 'padding: 2px 0px 0px 10px;';
+//             val = '{<p style="padding: 0px 0px 2px 40px;">' +
+//                   __value_strings__.join(',</p><p style="padding: 0px 0px 2px 40px;">') +
+//                   '</p><p style="padding: 0px 0px 2px 30px;">}</p>';
+//         } else {
+//             val = '{' + __value_strings__.join(', ') + '}';
+//         }
+//     } else {
+//         val = value;
+//     }
+//     _console.push('<p style="' + padding_style + '"><b><i>_ ' + name+'</i></b>  = ' + val + '</p>');
+//     return val;
+// }
+
+export const pythonListFunc = `
 function pythonList(x, l){
     if (x < 0) {
         return x + l;
@@ -24,15 +108,33 @@ function pythonList(x, l){
     return x;
 }
 `;
+// export const mergeInputsFunc = `
+// function mergeInputs(models){
+//     let result = __modules__.${_parameterTypes.new}();
+//     try {
+//         result.debug = __debug__;
+//     } catch (ex) {}
+//     for (let model of models){
+//         __modules__.${_parameterTypes.merge}(result, model);
+//     }
+//     return result;
+// }
 export const mergeInputsFunc = `
 function mergeInputs(models){
-    let result = __modules__.${_parameterTypes.new}();
+    let result = null;
+    if (models.length === 0) {
+        result = __modules__.${_parameterTypes.new}();
+    } else if (models.length === 1) {
+        result = models[0].clone();
+    } else {
+        result = models[0].clone();
+        for (let i = 1; i < models.length; i++) {
+            __modules__.${_parameterTypes.merge}(result, models[i]);
+        }
+    }
     try {
         result.debug = __debug__;
     } catch (ex) {}
-    for (let model of models){
-        __modules__.${_parameterTypes.merge}(result, model);
-    }
     return result;
 }
 function duplicateModel(model){
@@ -43,30 +145,7 @@ function duplicateModel(model){
     return result;
 }
 `;
-// export const mergeInputsFunc = `
-// function mergeInputs(models){
-//     const start = performance.now()
-//     let result = __modules__.${_parameterTypes.new}();
-//     try {
-//         result.debug = __debug__;
-//     } catch (ex) {}
-//     for (let model of models){
-//         __modules__.${_parameterTypes.merge}(result, model);
-//     }
-//     console.log('merge time:', (performance.now() - start ) / 1000, 'sec')
-//     return result;
-// }
-// function duplicateModel(model){
-//     const start = performance.now()
-//     const result = model.clone();
-//     try {
-//         result.debug = __debug__;
-//     } catch (ex) {}
-//     console.log('clone time:', (performance.now() - start ) / 1000, 'sec')
-//     return result;
-// }
-// `;
-export const printFunc = `
+export const printFuncString = `
 function printFunc(_console, name, value){
     let val;
     let padding_style = 'padding: 2px 0px 2px 10px;';
@@ -129,7 +208,11 @@ function printFunc(_console, name, value){
     return val;
 }
 `;
+const inlineVarNames = _varString.split(';').map(v => v.split('=')[0].trim());
+
 const DEBUG = false;
+
+const AsyncFunction = Object.getPrototypeOf(async function() {}).constructor;
 
 @Component({
     selector: 'execute',
@@ -148,107 +231,6 @@ export class ExecuteComponent {
                 private router: Router,
                 private googleAnalyticsService: GoogleAnalyticsService) {
         this.isDev = isDevMode();
-    }
-
-    static async resolveImportedUrl(prodList: IProcedure[]|INode, isMainFlowchart?: boolean, isStartNode = false) {
-        if (!isArray(prodList)) {
-            await ExecuteComponent.resolveImportedUrl(prodList.procedure, isMainFlowchart, isStartNode);
-            if (prodList.localFunc) {
-                await ExecuteComponent.resolveImportedUrl(prodList.localFunc, isMainFlowchart, isStartNode);
-            }
-            return;
-        }
-        for (const prod of <IProcedure[]> prodList) {
-            if (prod.children) {await  ExecuteComponent.resolveImportedUrl(prod.children, isMainFlowchart, isStartNode); }
-            if (!prod.enabled) {
-                continue;
-            }
-            if (isMainFlowchart && prod.type === ProcedureTypes.globalFuncCall) {
-                for (let i = 1; i < prod.args.length; i++) {
-                    const arg = prod.args[i];
-                    // args.slice(1).map((arg) => {
-                    if (arg.type.toString() !== InputType.URL.toString()) { continue; }
-                    prod.resolvedValue = await CodeUtils.getStartInput(arg, InputType.URL);
-                }
-                continue;
-            }
-            if (prod.type !== ProcedureTypes.MainFunction || (isStartNode && !isMainFlowchart)) {continue; }
-            for (const func of _parameterTypes.urlFunctions) {
-                const funcMeta = func.split('.');
-                if (prod.meta.module === funcMeta[0] && prod.meta.name === funcMeta[1]) {
-                    const arg = prod.args[2];
-                    if (arg.name[0] === '_') { continue; }
-                    if (arg.value.indexOf('__model_data__') !== -1) {
-                        arg.jsValue = arg.value;
-                        prod.resolvedValue = arg.value.split('__model_data__').join('');
-                    } else if (arg.jsValue && arg.jsValue.indexOf('__model_data__') !== -1) {
-                        prod.resolvedValue = arg.jsValue.split('__model_data__').join('');
-                    } else if (arg.value.indexOf('://') !== -1) {
-                        const val = <string>(arg.value).replace(/ /g, '');
-                        const result = await CodeUtils.getURLContent(val);
-                        if (result === undefined) {
-                            prod.resolvedValue = arg.value;
-                        } else if (result.indexOf && result.indexOf('HTTP Request Error') !== -1) {
-                            throw new Error(result);
-                        } else if (val.indexOf('.zip') !== -1) {
-                            prod.resolvedValue = await ExecuteComponent.openZipFile(result);
-                        } else {
-                            prod.resolvedValue = '`' + result + '`';
-                        }
-                        break;
-                    } else if ((arg.value[0] !== '"' && arg.value[0] !== '\'')) {
-                        prod.resolvedValue = null;
-                        break;
-                    } else {
-                        let val = arg.value.slice(1, -1).trim();
-                        if (val.length > 1 && val[0] === '{') {
-                            prod.resolvedValue = null;
-                            break;
-                        }
-                        val = val.replace(/\"|\'/g, '');
-                        const backup_list: string[] = JSON.parse(localStorage.getItem('mobius_backup_list'));
-                        if (val.indexOf('*') !== -1) {
-                            const splittedVal = val.split('*');
-                            const start = splittedVal[0] === '' ? null : splittedVal[0];
-                            const end = splittedVal[1] === '' ? null : splittedVal[1];
-                            let result = '{';
-                            for (const backup_name of backup_list) {
-                                let valid_check = true;
-                                if (start && !backup_name.startsWith(start)) {
-                                    valid_check = false;
-                                }
-                                if (end && !backup_name.endsWith(end)) {
-                                    valid_check = false;
-                                }
-                                if (valid_check) {
-                                    const backup_file = await SaveFileComponent.loadFromFileSystem(backup_name);
-                                    result += `"${backup_name}": \`${backup_file.replace(/\\/g, '\\\\')}\`,`;
-                                }
-                            }
-                            result += '}';
-                            prod.resolvedValue = result;
-                            break;
-                        } else {
-                            if (backup_list.indexOf(val) !== -1) {
-                                const result = await SaveFileComponent.loadFromFileSystem(val);
-                                if (!result || result === 'error') {
-                                    prod.hasError = true;
-                                    throw(new Error(`File named ${val} does not exist in the local storage`));
-                                    // prod.resolvedValue = arg.value;
-                                } else {
-                                    prod.resolvedValue = '`' + result + '`';
-                                    break;
-                                }
-                            } else {
-                                prod.hasError = true;
-                                throw(new Error(`File named ${val} does not exist in the local storage`));
-                            }
-                        }
-                    }
-                    break;
-                }
-            }
-        }
     }
 
     static async openZipFile(zipFile) {
@@ -270,11 +252,14 @@ export class ExecuteComponent {
         this.triggerCheck = false;
         this.terminated = null;
         this.dataService.timelineDefault = true;
+        this.dataService.initiateExecuteModel();
+        // this.dataService.flowchart.model = _parameterTypes.newFn();
+        // this.dataService.flowchart.model.debug = this.dataService.mobiusSettings.debug;
 
         if (this.dataService.consoleClear) {
             this.dataService.clearLog();
         }
-        SaveFileComponent.clearModelData(this.dataService.flowchart, null, false, false);
+        SaveFileComponent.clearModelData(this.dataService.flowchart, false, false);
 
         if (this.dataService.mobiusSettings.debug === undefined) {
             this.dataService.mobiusSettings.debug = true;
@@ -291,109 +276,59 @@ export class ExecuteComponent {
 
             // reset node input value to undefined --> save memory
             if (node.type !== 'start') {
-                if (node.input.edges) {
-                    node.input.value = undefined;
-                }
+                node.input.value = null;
+                // if (node.input.edges) {
+                //     node.input.value = null;
+                // }
             }
 
             if (!node.enabled) {
                 continue;
             }
 
-            // resolve all urls (or local storage files) in the node, calling the url and retrieving the data
-            // the data is then saved as resolvedValue in its respective argument in the procedure (in JSON format)
-            try {
-                await  ExecuteComponent.resolveImportedUrl(node, true, node.type === 'start');
-            } catch (ex) {
-                node.hasError = true;
-                this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-                document.getElementById('spinner-off').click();
-                document.getElementById('Console').click();
-                this.dataService.log(`<h4 style="padding: 2px 0px 2px 0px; color:red;">Error: ${ex.message}</h4>`);
-                const _category = this.isDev ? 'dev' : 'execute';
-                this.googleAnalyticsService.trackEvent(_category, `error: ${ex.name}`, 'click', performance.now() - this.startTime);
-                throw ex;
-            }
             let validCheck = await this.checkProdValidity(node, node.localFunc);
             InvalidECheck = InvalidECheck || validCheck[0];
             EmptyECheck = EmptyECheck || validCheck[1];
             validCheck = await this.checkProdValidity(node, node.procedure);
             InvalidECheck = InvalidECheck || validCheck[0];
             EmptyECheck = EmptyECheck || validCheck[1];
-            // // Empty argument error
-            // if (EmptyECheck) {
-            //     document.getElementById('Console').click();
-            //     this.dataService.log('<h4 style="padding: 2px 0px 2px 0px; color:red;">Error: Empty Argument detected. ' +
-            //                          'Check marked node(s) and procedure(s)!</h5>');
-            //     this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-            //     document.getElementById('spinner-off').click();
-            //     const _category = this.isDev ? 'dev' : 'execute';
-            //     this.googleAnalyticsService.trackEvent(_category, `error: Empty Argument`, 'click', performance.now() - this.startTime);
-            //     throw new Error('Empty Argument');
-            // }
-            // // Invalid argument value error
-            // if (InvalidECheck) {
-            //     document.getElementById('Console').click();
-            //     this.dataService.log('<h4 style="padding: 2px 0px 2px 0px; style="color:red">Error: Invalid Argument or ' +
-            //                          'Argument with Reserved Word detected. Check marked node(s) and procedure(s)!</h5>');
-            //     document.getElementById('spinner-off').click();
-            //     this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-            //     const _category = this.isDev ? 'dev' : 'execute';
-            //     this.googleAnalyticsService.trackEvent(_category, `error: Reserved Word Argument`,
-            //         'click', performance.now() - this.startTime);
-            //     throw new Error('Reserved Word Argument');
-            // }
-        }
-
-        // resolve urls for each imported functions and subFunctions
-        for (const func of this.dataService.flowchart.functions) {
-            for (const node of func.flowchart.nodes) {
-                try {
-                    await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
-                } catch (ex) {
-                    document.getElementById('spinner-off').click();
-                    document.getElementById('Console').click();
-                    this.dataService.log(`<h4 style="padding: 2px 0px 2px 0px; color:red;">` +
-                                         `Error in global function ${func.name}: ${ex.message}</h4>`);
-                    const _category = this.isDev ? 'dev' : 'execute';
-                    this.googleAnalyticsService.trackEvent(_category, `error: ${ex.name}`, 'click', performance.now() - this.startTime);
-                    throw ex;
-                }
-            }
-        }
-        if (this.dataService.flowchart.subFunctions) {
-            for (const func of this.dataService.flowchart.subFunctions) {
-                for (const node of func.flowchart.nodes) {
-                    try {
-                        await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
-                    } catch (ex) {
-                        document.getElementById('spinner-off').click();
-                        document.getElementById('Console').click();
-                        this.dataService.log(`<h4 style="padding: 2px 0px 2px 0px; color:red;">` +
-                                             `Error in global function ${func.name.split('_')[0]}: ${ex.message}</h4>`);
-                        const _category = this.isDev ? 'dev' : 'execute';
-                        this.googleAnalyticsService.trackEvent(_category, `error: ${ex.name}`, 'click', performance.now() - this.startTime);
-                        throw ex;
-                    }
-                }
-            }
         }
 
         // execute the flowchart
         try {
             if (testing) {
-                this.executeFlowchart();
+                await this.executeFlowchart();
                 this.dataService.finalizeLog();
                 return;
             } else {
                 // setTimeout for 20ms so that the loading screen has enough time to be loaded in
-                setTimeout(() => {
-                    this.executeFlowchart();
+                setTimeout(async () => {
+                    await this.executeFlowchart();
+                    this.dataService.flowchart.model = this.dataService.executeModel;
                     this.dataService.finalizeLog();
                     this.dataService.log('<br>');
+                    const hudData = this.dataService.flowchart.model.modeldata.attribs.getAttrib(EEntType.MOD, 'hud') || null;
+                    WindowMessageComponent.SendData({
+                        messageType: 'execute_end',
+                        data: {
+                          hud: hudData
+                        }
+                    });
+
+                    const mainPanelCheck = document.getElementById('headerDialog')
+                    const mobius_settings = this.dataService.mobiusSettings;
+                    if (mobius_settings['autosave'] && mainPanelCheck) {
+                        let fileName = this.dataService.flowchart.name.replace(/\s/g, '_');
+                        if (fileName.length < 4 || fileName.slice(-4) !== '.mob') {
+                            fileName += '.mob';
+                        }
+                        SaveFileComponent.saveFileToLocal(fileName, this.dataService.file);
+                        // this.dataService.notifyMessage(`Auto-saving Flowchart as ${fileName}`);
+                    }
                 }, 20);
             }
         } catch (ex) {
+            this.dataService.flowchart.model = this.dataService.executeModel;
             document.getElementById('spinner-off').click();
         }
     }
@@ -403,7 +338,7 @@ export class ExecuteComponent {
         let EmptyECheck = false;
         for (const prod of prodList) {
             // ignore the return, comment and disabled procedures
-            if (prod.type === ProcedureTypes.Return || prod.type === ProcedureTypes.Comment || !prod.enabled) { continue; }
+            if (prod.type === ProcedureTypes.EndReturn || prod.type === ProcedureTypes.Comment || !prod.enabled) { continue; }
             // if there's any invalid argument, flag as having error
             for (const arg of prod.args) {
                 if (arg.invalidVar) {
@@ -412,11 +347,6 @@ export class ExecuteComponent {
                     InvalidECheck = true;
                 }
             }
-            // if (prod.argCount > 0 && prod.args[0].invalidVar) {
-            //     node.hasError = true;
-            //     prod.hasError = true;
-            //     InvalidECheck = true;
-            // }
 
             // for start node constant procedures (start node parameters)
             if (prod.type === ProcedureTypes.Constant) {
@@ -534,7 +464,7 @@ export class ExecuteComponent {
 
 
 
-    executeFlowchart() {
+    async executeFlowchart() {
         let globalVars = '';
         const constantList = {};
 
@@ -584,34 +514,34 @@ export class ExecuteComponent {
         }
 
         const nodeIndices = {};
+        this.dataService.modelMeta = new _parameterTypes.newMeta();
         // execute each node
         for (let i = 0; i < this.dataService.flowchart.nodes.length; i++) {
             const node = this.dataService.flowchart.nodes[i];
-
             // if disabled node -> continue
             if (!node.enabled) {
                 node.output.value = undefined;
                 continue;
             }
-            nodeIndices[node.id] = i;
 
             // if the node is not to be executed
-            if (!executeSet.has(i)) {
-                let exCheck = false;
-                for (const edge of node.output.edges) {
-                    if (!edge.target.parentNode.hasExecuted) {
-                        exCheck = true;
-                    }
-                }
-                if (exCheck) {
-                    node.output.value = _parameterTypes.newFn();
-                    node.output.value.debug = this.dataService.mobiusSettings.debug;
-                    node.output.value.setData(JSON.parse(node.model));
-                }
-                continue;
-            }
+            // if (!executeSet.has(i)) {
+            //     let exCheck = false;
+            //     for (const edge of node.output.edges) {
+            //         if (!edge.target.parentNode.hasExecuted) {
+            //             exCheck = true;
+            //         }
+            //     }
+            //     if (exCheck) {
+            //         node.output.value = _parameterTypes.newFn();
+            //         node.output.value.debug = this.dataService.mobiusSettings.debug;
+            //         node.output.value.setData(JSON.parse(node.model));
+            //     }
+            //     continue;
+            // }
             // execute valid node
-            globalVars = this.executeNode(node, funcStrings, globalVars, constantList, nodeIndices);
+            node.model = null;
+            globalVars = await this.executeNode(node, funcStrings, globalVars, constantList, nodeIndices);
         }
 
         // delete each node.output.value to save memory
@@ -643,12 +573,13 @@ export class ExecuteComponent {
     }
 
 
-    executeNode(node: INode, funcStrings, globalVars, constantList, nodeIndices): string {
+    async executeNode(node: INode, funcStrings, globalVars, constantList, nodeIndices): Promise<string> {
         const params = {
             'currentProcedure': [''],
             'console': this.dataService.getLog(),
             'constants': constantList,
             'fileName': this.dataService.flowchart.name,
+            'curr_ss': {},
             'message': null,
             'terminated': false
         };
@@ -658,6 +589,7 @@ export class ExecuteComponent {
             this.dataService.log('<h4 style="padding: 2px 0px 2px 0px; style="color:red">Error: Invalid Argument ' +
                                     'detected. Check marked node(s) and procedure(s)!</h5>');
             document.getElementById('spinner-off').click();
+            this.dataService.flowchart.model = this.dataService.executeModel;
             this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
             const _category = this.isDev ? 'dev' : 'execute';
             this.googleAnalyticsService.trackEvent(_category, `error: Reserved Word Argument`,
@@ -672,33 +604,33 @@ export class ExecuteComponent {
             if (this.terminated) {
                 this.dataService.notifyMessage(`PROCESS TERMINATED IN NODE: "${this.terminated}"`);
                 this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
-                node.model = undefined;
+                node.model = null;
                 return;
             }
             const usedFuncs: string[] = [];
-            const codeResult = CodeUtils.getNodeCode(node, true, nodeIndices, undefined, undefined, usedFuncs);
+            const codeResult = CodeUtils.getNodeCode(node, true, nodeIndices, undefined, node.id, usedFuncs);
             const usedFuncsSet = new Set(usedFuncs);
             // if process is terminated, return
             if (codeResult[1]) {
                 this.dataService.notifyMessage(`PROCESS TERMINATED IN NODE: "${codeResult[1]}"`);
                 this.dataService.flagModifiedNode(this.dataService.flowchart.nodes[0].id);
                 if (!codeResult[0]) {
-                    node.model = undefined;
+                    node.model = null;
                     return;
                 }
             }
 
             const codeRes = codeResult[0];
             const nodeCode = codeRes[0].join('\n').split('_-_-_+_-_-_');
-            const varsDefined = codeRes[1];
+            // const varsDefined = codeRes[1];
 
             // Create function string:
             // start with asembling the node's code
             fnString =  '\n\n//  ------------ MAIN CODE ------------\n' +
                         nodeCode[0] +
-                        '\nfunction __main_node_code__(){\n' +
+                        '\nasync function __main_node_code__(__modules__, __params__){\n' +
                         nodeCode[1] +
-                        '\n}\nreturn __main_node_code__();';
+                        '\n}\nreturn __main_node_code__;';
 
             // add the user defined functions that are used in the node
             const addedFunc = new Set([]);
@@ -712,14 +644,14 @@ export class ExecuteComponent {
             });
 
             // add the constants from the start node and the predefined constants/functions (e.g. PI, sqrt, ...)
-            fnString = _varString + globalVars + fnString;
+            fnString = _varString + globalVars + '\n\n// <<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>\n\n' + fnString;
 
             // add the merge input function and the print function
             fnString = `\nconst __debug__ = ${this.dataService.mobiusSettings.debug};` +
                         '\n\n// ------ MERGE INPUTS FUNCTION ------' + mergeInputsFunc +
-                        '\n\n// ------ PRINT FUNCTION ------' + printFunc +
-                        `\n\n// ------ FUNCTION FOR PYTHON STYLE LIST ------` + pythonList +
-                        '\n\n// ------ CONSTANTS ------' + fnString;
+                        '\n\n// ------ PRINT FUNCTION ------' + printFuncString +
+                        `\n\n// ------ FUNCTION FOR PYTHON STYLE LIST ------` + pythonListFunc +
+                        '\n\n// ------ CONSTANTS ------\n' + fnString;
 
             // ==> generated code structure:
             //  1. pythonList + mergeInputFunction + printFunc
@@ -735,26 +667,26 @@ export class ExecuteComponent {
             }
 
             const prevWindowVar = {};
-            for (const v of varsDefined) {
+            for (const v of inlineVarNames) {
                 if (window.hasOwnProperty(v)) {
                     prevWindowVar[v] = window[v];
                 }
             }
 
-            params['model'] = node.input.value;
-            // console.log(node.input.value)
-            // _parameterTypes.mergeFn(params['model'], node.input.value);
-            params['model'].debug = this.dataService.mobiusSettings.debug;
+            params['model'] = this.dataService.executeModel;
+            const snapshotID = params['model'].nextSnapshot(node.input.value);
+            node.model = null;
 
             // create the function with the string: new Function ([arg1[, arg2[, ...argN]],] functionBody)
 
             // #########################################################
             // *********************************************************
-            // console.log(fnString);
+            // console.log(fnString.split('<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>')[1]);
 
             const fn = new Function('__modules__', '__params__', fnString);
             // execute the function
-            const result = fn(Modules, params);
+            const result = await fn(Modules, params)(Modules, params);
+            node.model = snapshotID;
             if (params['terminated']) {
                 this.terminated = node.name;
                 this.dataService.notifyMessage(`PROCESS TERMINATED IN NODE: "${this.terminated}"`);
@@ -766,7 +698,7 @@ export class ExecuteComponent {
                 this.dataService.notifyMessage(params.message.replace('%node%', node.name));
             }
 
-            for (const v of varsDefined) {
+            for (const v of inlineVarNames) {
                 if (window.hasOwnProperty(v)) {
                     delete window[v];
                     if (prevWindowVar[v]) {
@@ -775,6 +707,7 @@ export class ExecuteComponent {
                 }
             }
             for (const i in window) {
+                if (i === 'webpackJsonp_name_') { continue; }
                 if (i[i.length - 1] === '_' && i[i.length - 2] !== '_' && i[0] !== '_') {
                     delete window[i];
                 }
@@ -783,7 +716,7 @@ export class ExecuteComponent {
             if (node.type === 'end') {
                 node.output.value = result;
             } else {
-                node.output.value = params['model'];
+                node.output.value = null;
             }
 
             // mark the node as has been executed
@@ -811,11 +744,12 @@ export class ExecuteComponent {
                     }
                 }
                 globalVars += '\n';
-                // node.model = params['model'].getData();
+                // node.model = params['model'].getModelData();
             } else {
-                // node.model = diff(node.input.value.getData(), params['model'].getData());
+                // node.model = diff(node.input.value.getData(), params['model'].getModelData());
             }
-            node.model = JSON.stringify(params['model'].getData());
+            // node.model = JSON.stringify(params['model'].getModelData());
+            // node.model = params['model'];
             node.input.value = null;
 
             const endTime = performance.now();
@@ -836,6 +770,7 @@ export class ExecuteComponent {
             // for (const str of params.console) {
             //     this.dataService.log(str);
             // }
+            this.dataService.flowchart.model = this.dataService.executeModel;
             document.getElementById('spinner-off').click();
             const endTime = performance.now();
             const duration: number = Math.round(endTime - startTime);

@@ -230,7 +230,15 @@ button.mat-menu-item:hover{
 
 #headerDialog{
     position: relative;
+    background-color: $color6;
     top: 10%;
+
+    .closebutton {
+        position:absolute;
+        z-index: 1;
+        top: 5px;
+        right: 5px;
+    }
 
     .genUrlDialog{
         font-family: 12px sans-serif;
@@ -290,7 +298,7 @@ button.mat-menu-item:hover{
             width: fit-content;
             min-width: 400px;
             margin-bottom: 2px;
-            margin-left: 20px;
+            margin-left: 25px;
             padding: 0px 5px 0px 12px;
             background-color: $color5;
             // color: $color1;
@@ -393,6 +401,10 @@ button.mat-menu-item:hover{
         }
         .tabContent {
             display: none;
+            width: 585px;
+            max-height: 400px;
+            overflow-y: scroll;
+            padding-right: 2px;
 
             &.active {
                 display: block;
@@ -436,14 +448,210 @@ button.mat-menu-item:hover{
                 height: 18px;
             }
         }
-        #addGlobalButton{
+        .addGlobalButton{
             width: 70px;
             font-size: 12px;
-            margin-bottom: 2px;
+            margin: 0px 5px 2px 0px;
             padding: 0px 5px 0px 5px;
             background-color: $color5;
             color: $color1;
             display: inline-block;
+        }
+    }
+    .inlineFuncDialog{
+        font-family: 12px sans-serif;
+        color: $color1;
+        background-color: $color6;
+        top: 0%;
+        max-width: 600px;
+        min-width: 600px;
+        padding: 5px;
+        display: inline-block;
+
+        .inlineFuncContainer{
+            font-family: $inputTextFontFam;
+            font-weight: 700;
+            display: inline-block;
+            width: 180px;
+            height: calc(50vh + 30px);
+            overflow-y: scroll;
+            .searchBar{
+                width: 162px;
+                font-size: 12px;
+                padding: 2px 0px 2px 8px;
+                // border: 1px solid $color4;
+                height: $fsize1;
+                // border-bottom: 5px solid $color6;
+                border: 1px solid $color5;
+            }
+        }
+        .inlineFuncHelpContainer{
+            display: inline-block;
+            width: 380px;
+            height: 50vh;
+            overflow-y: scroll;
+            padding: 15px;
+            margin-left: 10px;
+            color: $color8;
+
+
+        }
+        .inlineFuncExpressionContainer{
+            font-family: Arial;
+            display: inline-block;
+            margin-top: 7px;
+            width: 580px;
+            height: 80px;
+        }
+        .inlineFuncSaveButtonContainer {
+            display: inline-block;
+            // width: 40px;
+            // height: 100px;
+            padding-left: 477px;
+            button{
+                width: 50px;
+                height: 40px;
+                margin-left: 10px;
+                background-color: $color5;
+                &.disabled {
+                    visibility: hidden;
+                }
+            }
+        }
+
+        .inlinefuncDiv{
+            display: none;
+            &.opened{
+                display: block;
+                border-left: 2px solid $color3;
+            }
+
+            .inlinefunc{
+                height: 25px;
+                font-size: 12px;
+                cursor: pointer;
+                width: fit-content;
+                // width: 100%;
+                margin: 2px;
+                padding: 0px 5px 0px 5px;
+                background-color: $color5;
+                color: $color1;
+                display: inline-block;
+            }
+
+            .inlinefuncUL{
+                position: relative;
+                list-style-type: none;
+                margin: 0px 0px 0px 3px;
+                border-left: 2px solid $color3;
+                padding: 0px;
+                background-color: $color5;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                //padding-top: 2px;
+                //padding-bottom: 2px;
+            
+                li{
+                    position: relative;
+                    user-select: none;
+                    margin: 0px;
+                    padding: 0px;
+                    padding-left: 8px;
+                    font-style: italic;
+                    font-family: $inputTextFontFam;
+                    font-weight: 700;
+                    color: $function-text-color2;
+                    font-size: $fsize2;
+                    height: 18px;
+                    line-height: 18px;
+                    width: 100%;
+                    box-sizing: border-box;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+            
+                    .helpButton {
+                        display: none;
+                        position: absolute;
+                        right: 1px;
+                        width: 18px;
+                        height: 18px;
+                        background-color: inherit;
+                        padding: 2px 0px 0px 0px;
+                        margin: 0px;
+                        border: 0px;
+            
+                        &:focus {
+                            outline: 0px;
+                        }
+                        .icon {
+                            width: 14px;
+                            height: 14px;
+                        }
+                    }
+                }
+                .user--Manage{
+                    margin-bottom: 4px;
+                    border-bottom: 2px solid $color3;
+                }
+                :hover{
+                    background-color: $color4;
+                    transition: 0.4s;
+                    .helpButton {
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+
+        .inlinefuncAccordion{
+            height: 25px;
+            font-size: 12px;
+            cursor: pointer;
+            width: fit-content;
+            width: 100%;
+            padding: 0px 5px 0px 5px;
+            border-left: 1px solid $color3;
+            background-color: $color4;
+            color: $color8;
+            display: inline-block;
+            text-align: left;
+
+            font-family: $inputTextFontFam;
+            font-weight: 700;
+            color: #00006d;
+            font-style: italic;
+            white-space: nowrap;
+
+
+            &.opened {
+                background-color: $color3;
+            }
+            // &:after{
+            //     content: '\2bc8'; 
+            //     font-size: 12px;
+            //     font-style: normal;
+            //     color: #777;
+            //     float: left;
+            //     margin-left: 5px;
+            // }
+            // &.opened {
+            //     &:after{
+            //         content: '\2bc6'; 
+            //     }
+            // }
+            
+        }
+
+        .inlineFuncExpression {
+            font-family: $inputFontFam;
+            // display: block;
+            width: 585px;
+            height: 100%;
+            resize: none;
+            padding: 5px;
+            border: 1px solid $color5;
+            color: $color8;
         }
     }
     .settingsDialog{
@@ -457,15 +665,16 @@ button.mat-menu-item:hover{
     
         .settingsButton{
             width: 80px;
-            margin: 0px 20px 2px 20px;
+            margin: 0px 10px 2px 10px;
             padding: 0px 5px 0px 5px;
             background-color: $color5;
             color: $color1;
-            display: inline-block;
+            display: block;
+            float: right;
         }
 
         .textdiv{
-            padding: 0px 5px 0px 5px;
+            padding: 0px 5px 0px 10px;
             height: 20px;
             display: inline-block;
         }
@@ -506,3 +715,23 @@ button.mat-menu-item:hover{
     }
 }
 
+.inlineHelpDiv {
+    .funcDesc{
+        font-family: sans-serif;
+        display: flex;
+        flex-flow: row nowrap;
+        font-weight: 600;
+        padding-bottom: 5px;
+    }
+
+    .paramP{
+        padding-left: 10px;
+    }
+
+    span{
+        font-style: italic;
+        line-height: $fsize1;
+        white-space: nowrap;
+        margin-right: 2px;
+    }
+}

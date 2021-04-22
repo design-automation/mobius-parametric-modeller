@@ -1,4 +1,5 @@
-import {__new__, __merge__} from './modules/_model';
+import {__new__, __merge__, __clone__} from './modules/_model';
+import { GIMetaData } from '@assets/libs/geo-info/GIMetaData';
 
 export const _parameterTypes = {
     constList: '__constList__',
@@ -10,8 +11,11 @@ export const _parameterTypes = {
     new: '_model.__new__',
     newFn: __new__,
 
+    newMeta: GIMetaData,
+
     merge: '_model.__merge__',
     mergeFn: __merge__,
+    cloneFn: __clone__,
 
     addData: '_model.addGiData',
 
@@ -27,13 +31,16 @@ export const _parameterTypes = {
 
     return: '_Output.Return',
 
-    urlFunctions: [ 'util.Write', 'util.Read',
-                    'io.Write', 'io.Read',
-                    'util.ModelCompare', 'io.Import']
+    asyncFuncs: [
+        'util.ModelCompare',
+        'util.ModelMerge',
+        'io.Write', 'io.Read',
+        'io.Import', 'io.Export'
+    ]
 };
 
-export const _varString = `
-PI = Math.PI;
+export const _varString = 
+`PI = __modules__._constants.PI;
 XY = __modules__._constants.XY;
 YZ = __modules__._constants.YZ;
 ZX = __modules__._constants.ZX;
@@ -71,28 +78,28 @@ isIn = __modules__._util.isIn;
 isWithin = __modules__._util.isWithin;
 min = __modules__._math.min;
 max = __modules__._math.max;
-pow = Math.pow;
-sqrt = Math.sqrt;
-exp = Math.exp;
-log = Math.log;
+pow = __modules__._math.pow;
+sqrt = __modules__._math.sqrt;
+exp = __modules__._math.exp;
+log = __modules__._math.log;
 round = __modules__._math.round;
 sigFig = __modules__._math.sigFig;
-ceil = Math.ceil;
-floor = Math.floor;
-abs = Math.abs;
-sin = Math.sin;
-asin = Math.asin;
-sinh = Math.sinh;
-asinh = Math.asinh;
-cos = Math.cos;
-acos = Math.acos;
-cosh = Math.cosh;
-acosh = Math.acosh;
-tan = Math.tan;
-atan = Math.atan;
-tanh = Math.tanh;
-atanh = Math.atanh;
-atan2 = Math.atan2;
+ceil = __modules__._math.ceil;
+floor = __modules__._math.floor;
+abs = __modules__._math.abs;
+sin = __modules__._math.sin;
+asin = __modules__._math.asin;
+sinh = __modules__._math.sinh;
+asinh = __modules__._math.asinh;
+cos = __modules__._math.cos;
+acos = __modules__._math.acos;
+cosh = __modules__._math.cosh;
+acosh = __modules__._math.acosh;
+tan = __modules__._math.tan;
+atan = __modules__._math.atan;
+tanh = __modules__._math.tanh;
+atanh = __modules__._math.atanh;
+atan2 = __modules__._math.atan2;
 boolean = __modules__._mathjs.boolean;
 number = __modules__._mathjs.number;
 string = __modules__._mathjs.string;
@@ -102,11 +109,10 @@ median = __modules__._mathjs.median;
 mode = __modules__._mathjs.mode;
 prod = __modules__._mathjs.prod;
 std = __modules__._mathjs.std;
-vari = __modules__._mathjs.var;
+vari = __modules__._mathjs.vari;
 sum = __modules__._mathjs.sum;
 hypot = __modules__._mathjs.hypot;
 norm = __modules__._mathjs.norm;
-mod = __modules__._mathjs.mod;
 square = __modules__._mathjs.square;
 cube = __modules__._mathjs.cube;
 remap = __modules__._arithmetic.remap;
@@ -116,9 +122,7 @@ distanceMS = __modules__._geometry.distanceMS;
 intersect = __modules__._geometry.intersect;
 project = __modules__._geometry.project;
 range = __modules__._list.range;
-isList = __modules__._list.isList;
-len = __modules__._list.listLen;
-listLen = __modules__._list.listLen;
+len = __modules__._common.len;
 listCount = __modules__._list.listCount;
 listCopy = __modules__._list.listCopy;
 listRep = __modules__._list.listRep;
@@ -128,19 +132,25 @@ listFind = __modules__._list.listFind;
 listHas = __modules__._list.listHas;
 listJoin = __modules__._list.listJoin;
 listFlat = __modules__._list.listFlat;
+listRot = __modules__._list.listRot;
 listSlice = __modules__._list.listSlice;
+listRev = __modules__._list.listRev;
 listCull = __modules__._list.listCull;
+listSort = __modules__._list.listSort;
 listZip = __modules__._list.listZip;
-listZip2 = __modules__._list.listZip2;
+listEq = __modules__._list.listEq;
+dictGet = __modules__._dict.dictGet;
+dictKeys = __modules__._dict.dictKeys;
+dictVals = __modules__._dict.dictVals;
+dictHasKey = __modules__._dict.dictHasKey;
+dictHasVal = __modules__._dict.dictHasVal;
+dictFind = __modules__._dict.dictFind;
+dictCopy = __modules__._dict.dictCopy;
+dictEq = __modules__._dict.dictEq;
 setMake = __modules__._set.setMake;
 setUni = __modules__._set.setUni;
 setInt = __modules__._set.setInt;
 setDif = __modules__._set.setDif;
-length = __modules__._list.length;
-shuffle = __modules__._list.shuffle;
-concat = __modules__._list.concat;
-zip = __modules__._list.zip;
-zip2 = __modules__._list.zip2;
 vecAdd = __modules__._vec.vecAdd;
 vecSub = __modules__._vec.vecSub;
 vecDiv = __modules__._vec.vecDiv;
@@ -181,7 +191,4 @@ degToRad = __modules__._conversion.degToRad;
 numToStr = __modules__._conversion.numToStr;
 rand = __modules__._rand.rand;
 randInt = __modules__._rand.randInt;
-randPick = __modules__._rand.randPick;
-setattr = __modules__._model.__setAttrib__;
-getattr = __modules__._model.__getAttrib__;
-`;
+randPick = __modules__._rand.randPick;`;

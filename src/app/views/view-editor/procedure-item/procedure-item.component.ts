@@ -26,12 +26,14 @@ export class ProcedureItemComponent implements OnDestroy {
 
     private keys = Object.keys(ProcedureTypes);
     private ctx = document.createElement('canvas').getContext('2d');
+    private ctxB = document.createElement('canvas').getContext('2d');
 
     ProcedureTypesArr = this.keys.slice(this.keys.length / 2);
     ModuleDoc = ModuleDocList;
 
     constructor(private dataService: DataService) {
-        this.ctx.font = '12px Arial';
+        this.ctx.font = '400 12px Inconsolata';
+        this.ctxB.font = '700 12px Inconsolata';
     }
 
     ngOnDestroy() {
@@ -41,9 +43,19 @@ export class ProcedureItemComponent implements OnDestroy {
 
     onenter(e) {
         e.target.classList.add('onhover');
+        for (const child of e.target.children) {
+            if (child.classList.contains('btn-container') && !child.classList.contains('onhover')) {
+                child.classList.add('onhover');
+            }
+        }
         const highlighted = this.dataService.getHighlightedProd();
         if (highlighted) {
             highlighted.classList.remove('onhover');
+            for (const child of highlighted.children) {
+                if (child.classList.contains('btn-container') && child.classList.contains('onhover')) {
+                    child.classList.remove('onhover');
+                }
+            }
         }
         this.dataService.addHighlightedProd(e.target);
         e.stopPropagation();
@@ -53,10 +65,20 @@ export class ProcedureItemComponent implements OnDestroy {
         let highlighted = this.dataService.removeHighlightedProd();
         if (highlighted) {
             highlighted.classList.remove('onhover');
+            for (const child of highlighted.children) {
+                if (child.classList.contains('btn-container') && child.classList.contains('onhover')) {
+                    child.classList.remove('onhover');
+                }
+            }
         }
         highlighted = this.dataService.getHighlightedProd();
         if (highlighted) {
             highlighted.classList.add('onhover');
+            for (const child of highlighted.children) {
+                if (child.classList.contains('btn-container') && !child.classList.contains('onhover')) {
+                    child.classList.add('onhover');
+                }
+            }
         }
         e.stopPropagation();
     }
@@ -183,6 +205,10 @@ export class ProcedureItemComponent implements OnDestroy {
         return false;
     }
 
+    markTerminate(event: MouseEvent) {
+        event.stopPropagation();
+        this.data.terminate = !this.data.terminate;
+    }
 
 
     markPrint(event: MouseEvent) {
@@ -210,11 +236,12 @@ export class ProcedureItemComponent implements OnDestroy {
     markDisabled(event: MouseEvent) {
         event.stopPropagation();
         if (!this.data.selected) {
-            if (this.data.type === ProcedureTypes.LocalFuncReturn) {
+            if (this.data.type === ProcedureTypes.Return) {
                 this.updateNumReturn(this.data, !this.data.enabled);
                 return;
             }
             this.data.enabled = !this.data.enabled;
+            checkNodeValidity(this.dataService.node);
             return;
         }
         const prodList = this.dataService.node.state.procedure;
@@ -225,12 +252,13 @@ export class ProcedureItemComponent implements OnDestroy {
             prod.type === ProcedureTypes.LocalFuncDef) {
                 continue;
             // for local func return, update the local func def if
-            } else if (prod.type === ProcedureTypes.LocalFuncReturn) {
+            } else if (prod.type === ProcedureTypes.Return) {
                 this.updateNumReturn(prod, newEnabled);
                 continue;
             }
             prod.enabled = newEnabled;
         }
+        checkNodeValidity(this.dataService.node);
         // this.data.enabled = !this.data.enabled;
     }
 
@@ -398,6 +426,10 @@ export class ProcedureItemComponent implements OnDestroy {
 
     inputSize(val) {
         return this.ctx.measureText(val).width + 7;
+    }
+
+    inputSizeBold(val) {
+        return this.ctxB.measureText(val).width + 7;
     }
 
 

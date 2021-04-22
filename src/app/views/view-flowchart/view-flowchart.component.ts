@@ -182,14 +182,13 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
                 this.dataService.notifyMessage(`Error: No saved nodes to be pasted!`);
                 return;
             }
-            event.preventDefault();
+            val.preventDefault();
             const pt = this.canvas.createSVGPoint();
-            pt.x = 20;
-            pt.y = 100;
+            pt.x = this.mousePos[0];
+            pt.y = this.mousePos[1];
             for (const newNode of copiedNodes) {
 
                 const svgP = this.convertCoord(pt);
-                pt.y += 80;
 
                 NodeUtils.updateNode(newNode, svgP);
                 newNode.enabled = false;
@@ -311,7 +310,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     viewerData() {
-        return this.dataOutputService.getViewerData(this.getNode(), true);
+        return this.dataOutputService.getViewerData(this.getNode(), this.dataService.flowchart.model, true);
     }
 
     convertCoord(pt) {
@@ -668,13 +667,16 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
         // VER 4: transform relative to the mouse position
-        this.mousePos = [event.pageX - this.offset[0], event.pageY - this.offset[1]];
+        const mousePos = [event.pageX - this.offset[0], event.pageY - this.offset[1]];
+        // this.mousePos = [event.pageX - this.offset[0], event.pageY - this.offset[1]];
 
         let bRect = <DOMRect>this.canvas.getBoundingClientRect();
         let boundingDiv = <DOMRect>document.getElementById('flowchart-main-container').getBoundingClientRect();
 
-        let newX = ((bRect.left - this.offset[0]) * value - this.mousePos[0] * (value - this.zoom)) / this.zoom;
-        let newY = ((bRect.top  - this.offset[1]) * value - this.mousePos[1] * (value - this.zoom)) / this.zoom;
+        let newX = ((bRect.left - this.offset[0]) * value - mousePos[0] * (value - this.zoom)) / this.zoom;
+        let newY = ((bRect.top  - this.offset[1]) * value - mousePos[1] * (value - this.zoom)) / this.zoom;
+        // let newX = ((bRect.left - this.offset[0]) * value - this.mousePos[0] * (value - this.zoom)) / this.zoom;
+        // let newY = ((bRect.top  - this.offset[1]) * value - this.mousePos[1] * (value - this.zoom)) / this.zoom;
 
         // snapping back the x and y coordinates if the zoom goes out of the bounding box
         if (newX > 0) {
@@ -720,6 +722,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
     // handle mouse move for dragging view/node/port
     handleMouseMove(event: any) {
         // return if no dragging initiated
+        this.mousePos = [event.pageX - 40, event.pageY - 35];
         if (!this.isDown) {
             return;
 
@@ -982,7 +985,7 @@ export class ViewFlowchartComponent implements OnInit, AfterViewInit, OnDestroy 
 
     @HostListener('document:mouseleave', [])
     onmouseleave() {
-        this.flowchartSplit.notify('end');
+        this.flowchartSplit.notify('end', this.flowchartSplit.gutterSize);
     }
 
 }

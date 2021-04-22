@@ -47,7 +47,7 @@ export class NewFileComponent {
             settings: {}
         };
 
-        SaveFileComponent.clearModelData(this.dataService.flowchart, null);
+        SaveFileComponent.clearModelData(this.dataService.flowchart);
         delete this.dataService.file.flowchart;
         this.dataService.file = file;
         let zooming = document.getElementById('zoomToFit');

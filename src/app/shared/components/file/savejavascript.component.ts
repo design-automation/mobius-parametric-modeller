@@ -5,11 +5,11 @@ import { ProcedureTypes, IFunction } from '@models/procedure';
 import { IdGenerator } from '@utils';
 import { IArgument } from '@models/code';
 import { DownloadUtils } from './download.utils';
-import { _varString } from '@assets/core/modules';
 // import {js as beautify} from 'js-beautify';
-import { mergeInputsFunc, printFunc, pythonList, ExecuteComponent } from '../execute/execute.component';
+import { mergeInputsFunc, printFuncString, pythonListFunc, ExecuteComponent } from '../execute/execute.component';
 import { InputType } from '@models/port';
 import { CodeUtils } from '@shared/components/execute/code.util';
+import { _varString } from '@assets/core/modules';
 
 @Component({
   selector: 'javascript-save',
@@ -90,15 +90,15 @@ export class SaveJavascriptComponent {
             func.hasReturn = false;
         }
 
-        for (const node of func.flowchart.nodes) {
-            await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
-        }
+        // for (const node of func.flowchart.nodes) {
+        //     await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
+        // }
         let fnString = CodeUtils.getFunctionString(func);
 
         for (const i of fl.functions) {
-            for (const node of i.flowchart.nodes) {
-                await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
-            }
+            // for (const node of i.flowchart.nodes) {
+            //     await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
+            // }
             const nFunc = <IFunction> {
                 module: i.module,
                 name: func.name + '_' + i.name,
@@ -111,9 +111,9 @@ export class SaveJavascriptComponent {
         }
         if (fl.subFunctions) {
             for (const i of fl.subFunctions) {
-                for (const node of i.flowchart.nodes) {
-                    await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
-                }
+                // for (const node of i.flowchart.nodes) {
+                //     await  ExecuteComponent.resolveImportedUrl(node, false, node.type === 'start');
+                // }
                 const nFunc = <IFunction> {
                     module: i.module,
                     name: func.name + '_' + i.name,
@@ -134,30 +134,31 @@ export class SaveJavascriptComponent {
             ` * e.g.:\n` +
             ` * const ${funcName} = require('./${funcName}.js').${funcName}\n` +
             ` * const module = require('gi-module')\n` +
-            ` * const result = ${funcName}(module, start_input_1, start_input_2, ...);\n *\n` +
+            ` * const result = await ${funcName}(module, start_input_1, start_input_2, ...);\n *\n` +
             ` * returns: a json object:\n` +
             ` *   _ result.model -> gi model of the flowchart\n` +
             ` *   _ result.result -> returned output of the flowchart, if the flowchart does not return any value,` +
             ` result.result is the model of the flowchart\n */\n\n` +
             argString.replace(/\\/g, '\\\\') +  '\n\n' +
-            `function ${funcName}(__modules__` + func.args.map(arg => ', ' + arg.name).join('') + `) {\n\n` +
-            `__debug__ = ${this.dataService.mobiusSettings.debug};\n` +
-            `__model__ = null;\n` +
+            `async function ${funcName}(__modules__` + func.args.map(arg => ', ' + arg.name).join('') + `) {\n\n` +
+            `var __debug__ = ${this.dataService.mobiusSettings.debug};\n` +
+            `var __model__ = null;\n` +
             '/** * **/' +
-            _varString + `\n\n` +
+            '\nvar ' + _varString.split(';\n').join(';\nvar ') + `\n\n` +
             fnString +
-            pythonList +
+            pythonListFunc +
             mergeInputsFunc +
-            printFunc +
+            printFuncString +
             `\n\nconst __params__ = {};\n` +
             `__params__["model"] = __modules__._model.__new__();\n` +
             `if (__model__) {\n` +
-            `__params__["model"].setData(JSON.parse(__model__))\n` +
+            `__modules__.io._importGI(__params__["model"], __model__);\n` +
             `}\n` +
             `__params__["model"].debug = __debug__;\n` +
             `__params__["console"] = [];\n` +
             `__params__["modules"] = __modules__;\n` +
-            `const result = exec_${funcName}(__params__` +
+            `__params__["curr_ss"] = {};\n` +
+            `const result = await exec_${funcName}(__params__` +
             func.args.map(arg => ', ' + arg.name).join('') +
             `);\n` +
             `if (result === __params__.model) { return { "model": __params__.model, "result": null };}\n` +

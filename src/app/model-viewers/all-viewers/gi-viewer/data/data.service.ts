@@ -4,6 +4,7 @@ import { DataThreejs } from './data.threejs';
 // import @angular stuff
 import { Injectable } from '@angular/core';
 import { DataService as DS } from '@services';
+import { MatTableDataSource } from '@angular/material';
 /**
  * DataService
  * The data service for the Goe-Info viewer.
@@ -12,6 +13,8 @@ import { DataService as DS } from '@services';
 export class DataService {
     // GI Model
     // private _model: GIModel;
+    private static _tableDataSource: MatTableDataSource<object>;
+
     private _data_threejs: DataThreejs;
 
     selecting: any = [];
@@ -24,6 +27,8 @@ export class DataService {
     selected_face_wires: Map<string, string[]>;
     selected_coll: Map<string, string[]>;
 
+    selectingEntityType: { id: EEntType, name: string } ;
+
     switch_page: boolean;
     /**
      * Create a data service.
@@ -32,7 +37,6 @@ export class DataService {
         this.selected_ents.set(EEntTypeStr[EEntType.POSI], new Map());
         this.selected_ents.set(EEntTypeStr[EEntType.VERT], new Map());
         this.selected_ents.set(EEntTypeStr[EEntType.EDGE], new Map());
-        this.selected_ents.set(EEntTypeStr[EEntType.FACE], new Map());
         this.selected_ents.set(EEntTypeStr[EEntType.WIRE], new Map());
         this.selected_ents.set(EEntTypeStr[EEntType.PGON], new Map());
         this.selected_ents.set(EEntTypeStr[EEntType.PLINE], new Map());
@@ -43,6 +47,7 @@ export class DataService {
         this.selected_face_edges = new Map();
         this.selected_face_wires = new Map();
         this.selected_coll = new Map();
+        this.selectingEntityType = { id: EEntType.PGON, name: 'Polygons' };
     }
 
     /**
@@ -73,4 +78,10 @@ export class DataService {
     clearAll() {
         this.selected_ents.forEach(selected_ents => selected_ents.clear());
     }
+
+    updateSelectingEntityType(selEntType: { id: number, name: string }) { this.selectingEntityType = selEntType; }
+
+    get tableDataSource() {return DataService._tableDataSource; }
+    set tableDataSource(dataSource: any) {DataService._tableDataSource = dataSource; }
+
 }

@@ -3,8 +3,12 @@
 
 .table--container{
   // height: 100%;
+  height: calc(100% - 31px);
   overflow-y: auto;
   overflow-x: auto;
+//   &.topo--container{
+//     height: 100%;
+//   }
 }
 
 .mat-table{
@@ -34,6 +38,8 @@ table {
   width: 100%;
   font-family: sans-serif;
   background-color: transparent;
+  border-spacing: 0px;
+  border-collapse: collapse;
   th{
     i {
       color: rgba(117,117,117,0.5);
@@ -131,9 +137,41 @@ table {
 }
 
 table{
-  &.c2{
-    tr.mat-row .mat-cell:nth-child(2), th:nth-child(2){font-style: italic}
-  }
+    &.c2{
+        tr.mat-row .mat-cell:nth-child(2), th:nth-child(2){font-style: italic}
+    }
+    &.c3{
+        white-space: pre;
+        th {
+            vertical-align: middle;
+            cursor: default;
+            &:last-child {
+                .material-icons {
+                    display: none;
+                }
+            }
+        }
+        .inactive-row {
+            .mat-cell{
+                background-color: $color5-5;
+            }
+        }table--container
+        .active-row {
+            .mat-cell{
+                background-color: $color6;
+            }
+        }
+        .selected-row {
+            .mat-cell{
+                background-color: $color5;
+            }
+        }
+        .material-icons{
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+    }
 }
 
 ::ng-deep table{
@@ -220,7 +258,8 @@ table{
   // contains everything
   .pane{
     margin-top: 20px;
-    height: calc(100% - 31px);
+    // height: calc(100% - 31px);
+    height: 100%;
     .mat-elevation-z1{
       display: flex;
       flex-flow: column nowrap;
@@ -242,11 +281,33 @@ table{
   }
 }
 
-#emptyMessage{
-  text-align: left;
-  margin-top: -20px;
-  margin-left: 10px;
-  color: #888888;
+.emptyMessage{
+    text-align: left;
+    margin-top: 10px;
+    margin-left: 10px;
+    color: #888888;
+}
+.topoUtilButton{
+    width: 33.33%;
+    display: inline-block;
+    height: 15px;
+    background-color: $color6;
+    border: 1px solid #B3B3B3;
+    // border-right: 1px solid #B3B3B3;
+    // border-bottom: 1px solid #B3B3B3;
+    // border-left: 1px solid #B3B3B3;
+    border-top: 0px;
+    outline:none;
+    color: #888888;
+    padding: 0px;
+
+    &.center {
+        border-left: 0px;
+        border-right: 0px;
+    }
+    mat-icon{
+        font-size: 15px;
+    }
 }
 
 .btm--container{

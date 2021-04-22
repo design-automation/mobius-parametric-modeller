@@ -1,13 +1,14 @@
 <ng-container [ngSwitch]="data.type">
 
     <!-- Variable Assignment Template -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line'
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
     [class.disabled]="!data.enabled"
     [class.printing]='data.print'
-    [class.selectGeom]='data.selectGeom'
+    [class.terminate]='data.terminate'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
     (mousedown)='disableShift($event)'
@@ -44,30 +45,34 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button id = 'disable-btn' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
                 <!-- Select button -->
-                <button id = 'selectGeom-btn' *ngIf='canSelectGeom()' class='btn' mat-icon-button title="Show Geometric Entities" (click)="markSelectGeom($event)" tabindex="-1">
+                <!-- <button id = 'selectGeom-btn' *ngIf='canSelectGeom()' class='btn' mat-icon-button title="Show Geometric Entities" (click)="markSelectGeom($event)" tabindex="-1">
                     <mat-icon class='icon' svgIcon='select'></mat-icon>
-                </button>
+                </button> -->
                 <!-- Print button-->
-                <button id = 'print-btn' [class.printing]='data.print' [class.disabled]='!data.enabled' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                <button [class.disabled]='!data.enabled' [class.printingOn]='data.print' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                     <mat-icon class="icon" svgIcon='print'></mat-icon>
+                </button>
+                <!-- Terminate button -->
+                <button class='btn' [class.terminateOn]='data.terminate' mat-icon-button title="Terminate process" (click)="markTerminate($event)" tabindex="-1">
+                    <mat-icon class='icon' svgIcon='terminate'></mat-icon>
                 </button>
             </div>
         </div>
     </div>
 
     <!-- IF Template -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.strong]="true"
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
     [class.disabled]="!data.enabled"
     [class.printing]='data.print'
-    [class.selectGeom]='data.selectGeom'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
     (mousedown)='disableShift($event)'
@@ -103,11 +108,11 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button id = 'disable-btn' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
                 <!-- Print button-->
-                <button id = 'print-btn'  class='btn' [class.printing]='data.print' [class.disabled]='!data.enabled' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                <button class='btn'  [class.disabled]='!data.enabled' [class.printingOn]='data.print' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                     <mat-icon class="icon" svgIcon='print'></mat-icon>
                 </button>
             </div>
@@ -116,14 +121,14 @@
 
 
     <!-- ELSEIF Template -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.strong]="true"
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
     [class.disabled]="!data.enabled"
     [class.printing]='data.print'
-    [class.selectGeom]='data.selectGeom'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
     (mousedown)='disableShift($event)'
@@ -159,11 +164,11 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button id = 'disable-btn' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
                 <!-- Print button-->
-                <button id = 'print-btn'  class='btn' [class.printing]='data.print' [class.disabled]='!data.enabled' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                <button class='btn' [class.disabled]='!data.enabled' [class.printingOn]='data.print' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                     <mat-icon class="icon" svgIcon='print'></mat-icon>
                 </button>
             </div>
@@ -171,14 +176,14 @@
     </div>
 
     <!-- ELSE Template -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.strong]="true"
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
     [class.disabled]="!data.enabled"
     [class.printing]='data.print'
-    [class.selectGeom]='data.selectGeom'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
     (mousedown)='disableShift($event)'
@@ -204,11 +209,11 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button id = 'disable-btn' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
                 <!-- Print button-->
-                <button id = 'print-btn'  class='btn' [class.printing]='data.print' [class.disabled]='!data.enabled' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                <button class='btn' [class.disabled]='!data.enabled' [class.printingOn]='data.print' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                     <mat-icon class="icon" svgIcon='print'></mat-icon>
                 </button>
             </div>
@@ -216,14 +221,14 @@
     </div>
 
     <!-- FOREACH Template -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.strong]="true"
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
     [class.disabled]="!data.enabled"
     [class.printing]='data.print'
-    [class.selectGeom]='data.selectGeom'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
     (mousedown)='disableShift($event)'
@@ -274,11 +279,11 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button id = 'disable-btn' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
                 <!-- Print button-->
-                <button id = 'print-btn' [class.printing]='data.print' [class.disabled]='!data.enabled' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                <button class='btn' [class.disabled]='!data.enabled' [class.printingOn]='data.print' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                     <mat-icon class="icon" svgIcon='print'></mat-icon>
                 </button>
             </div>
@@ -287,14 +292,14 @@
 
 
     <!-- WHILE Template -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.strong]="true"
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
     [class.disabled]="!data.enabled"
     [class.printing]='data.print'
-    [class.selectGeom]='data.selectGeom'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
     (mousedown)='disableShift($event)'
@@ -330,11 +335,11 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button id = 'disable-btn' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
                 <!-- Print button-->
-                <button id = 'print-btn' [class.printing]='data.print' [class.disabled]='!data.enabled' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                <button [class.disabled]='!data.enabled' [class.printingOn]='data.print' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                     <mat-icon class="icon" svgIcon='print'></mat-icon>
                 </button>
 
@@ -344,13 +349,13 @@
 
 
     <!-- BREAK Template -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
     [class.disabled]="!data.enabled"
     [class.printing]='data.print'
-    [class.selectGeom]='data.selectGeom'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
     (mousedown)='disableShift($event)'
@@ -367,7 +372,7 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button id = 'disable-btn' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
             </div>
@@ -376,13 +381,13 @@
 
 
     <!-- CONTINUE Template -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
     [class.disabled]="!data.enabled"
     [class.printing]='data.print'
-    [class.selectGeom]='data.selectGeom'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
     (mousedown)='disableShift($event)'
@@ -399,7 +404,7 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button id = 'disable-btn' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
             </div>
@@ -407,13 +412,10 @@
     </div>
 
     <!-- Blank (always the first procedure of if/else/else-if/for/while) -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
-    [class.error]="data.hasError"
-    [class.disabled]="!data.enabled"
-    [class.printing]='data.print'
-    [class.selectGeom]='data.selectGeom'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
     (mousedown)='disableShift($event)'
@@ -428,13 +430,12 @@
 
 
     <!-- Comment -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
     [class.disabled]="!data.enabled"
-    [class.printing]='data.print'
-    [class.selectGeom]='data.selectGeom'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
     (mousedown)='disableShift($event)'
@@ -456,13 +457,12 @@
     </div>
 
     <!-- Terminate -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
     [class.disabled]="!data.enabled"
-    [class.printing]='data.print'
-    [class.selectGeom]='data.selectGeom'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
     (mousedown)='disableShift($event)'
@@ -479,7 +479,7 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button id = 'disable-btn' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
             </div>
@@ -487,13 +487,11 @@
     </div>
 
     <!-- Error -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
-    [class.error]="data.hasError"
     [class.disabled]="!data.enabled"
-    [class.printing]='data.print'
-    [class.selectGeom]='data.selectGeom'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
     (mousedown)='disableShift($event)'
@@ -519,7 +517,7 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button id = 'disable-btn' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
             </div>
@@ -527,13 +525,14 @@
     </div>
 
     <!-- MainFunction -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
     [class.disabled]="!data.enabled"
     [class.printing]='data.print'
-    [class.selectGeom]='data.selectGeom'
+    [class.terminate]='data.terminate'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
     (mousedown)='disableShift($event)'
@@ -551,7 +550,7 @@
                     (focus)='onInputFocus(0, true)'
                     (blur)='varMod()'
                     placeholder={{data.args[0].name}}
-                    [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>  
+                    [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'>
                     = 
     
                 </ng-container>
@@ -587,34 +586,39 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button id = 'disable-btn' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
                 <!-- Select button -->
-                <button id = 'selectGeom-btn' *ngIf='canSelectGeom()' class='btn' mat-icon-button title="Show Geometric Entities" (click)="markSelectGeom($event)" tabindex="-1">
+                <!-- <button id = 'selectGeom-btn' *ngIf='canSelectGeom()' class='btn' mat-icon-button title="Show Geometric Entities" (click)="markSelectGeom($event)" tabindex="-1">
                     <mat-icon class='icon' svgIcon='select'></mat-icon>
-                </button>
+                </button> -->
                 <!-- Print button-->
-                <button id = 'print-btn'  *ngIf='canBePrinted()' [class.printing]='data.print' [class.disabled]='!data.enabled' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                <button *ngIf='canBePrinted()' [class.disabled]='!data.enabled' [class.printingOn]='data.print' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                     <mat-icon class="icon" svgIcon='print'></mat-icon>
                 </button>
-                <!-- help button-->
-                <button class='btn' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText(undefined)'>
-                    <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
+                <!-- Terminate button -->
+                <button class='btn' [class.terminateOn]='data.terminate' mat-icon-button title="Terminate process" (click)="markTerminate($event)" tabindex="-1">
+                    <mat-icon class='icon' svgIcon='terminate'></mat-icon>
                 </button>
+                <!-- help button-->
+                <!-- <button class='btn' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText(undefined)'>
+                    <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
+                </button> -->
 
             </div>
         </div>
     </div>
 
     <!-- globalFuncCall -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
     [class.disabled]="!data.enabled"
     [class.printing]='data.print'
-    [class.selectGeom]='data.selectGeom'
+    [class.terminate]='data.terminate'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
     (mousedown)='disableShift($event)'
@@ -653,35 +657,40 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button id = 'disable-btn' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
                 <!-- Select button -->
-                <button id = 'selectGeom-btn' *ngIf='canSelectGeom()' class='btn' mat-icon-button title="Show Geometric Entities" (click)="markSelectGeom($event)" tabindex="-1">
+                <!-- <button id = 'selectGeom-btn' *ngIf='canSelectGeom()' class='btn' mat-icon-button title="Show Geometric Entities" (click)="markSelectGeom($event)" tabindex="-1">
                     <mat-icon class='icon' svgIcon='select'></mat-icon>
-                </button>
+                </button> -->
                 <!-- Print button-->
-                <button id = 'print-btn'  *ngIf='canBePrinted()' [class.printing]='data.print' [class.disabled]='!data.enabled' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                <button *ngIf='canBePrinted()' [class.disabled]='!data.enabled' [class.printingOn]='data.print' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                     <mat-icon class="icon" svgIcon='print'></mat-icon>
                 </button>
-                <!-- help button-->
-                <button class='btn' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText(undefined)'>
-                    <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
+                <!-- Terminate button -->
+                <button class='btn' [class.terminateOn]='data.terminate' mat-icon-button title="Terminate process" (click)="markTerminate($event)" tabindex="-1">
+                    <mat-icon class='icon' svgIcon='terminate'></mat-icon>
                 </button>
+                <!-- help button-->
+                <!-- <button class='btn' mat-icon-button title="Help" tabindex="-1" (click)='emitHelpText(undefined)'>
+                    <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
+                </button> -->
             </div>
         </div>
     </div>
 
     <!-- LocalFuncDef -->
     <ng-container *ngSwitchCase="ProcedureTypes.LocalFuncDef">
-        <div class='container--line' 
+        <div id='prodDiv_{{data.ID}}'
+        class='container--line' 
         [class.strong]="true"
         [class.selected]="data.selected"
         [class.lastSelected]="data.lastSelected"
         [class.error]="data.hasError"
         [class.disabled]="!data.enabled"
         [class.printing]='data.print'
-        [class.selectGeom]='data.selectGeom'
+        [class.terminate]='data.terminate'
         [ngSwitch]="data.type"
         (click)='emitSelect($event, data)'
         (mousedown)='disableShift($event)'
@@ -690,7 +699,7 @@
             <div class='container--item' >
                 <div class='line--item'>
                     <div class='basic-function-text'>Def  </div>
-                    <input class='input--arg' 
+                    <input class='input--arg input--funcName' 
                     *ngIf="data.args[0].name[0] !== '_'" 
                     [(ngModel)]='data.args[0].value'
                     [class.error]='data.args[0].invalidVar'
@@ -698,7 +707,7 @@
                     [class.disabled]='disableInput'
                     (blur)='varMod(0)'
                     placeholder={{data.args[0].name}}
-                    [style.width.px]='inputSize(data.args[0].value||data.args[0].name)'
+                    [style.width.px]='inputSizeBold(data.args[0].value||data.args[0].name)'
                     >
                     <span class='function-text'>  Function</span>
                     <ng-container *ngFor='let p of data.args;let i=index'>
@@ -748,23 +757,24 @@
     </ng-container>
 
     <!-- LocalFuncReturn -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
     [class.disabled]="!data.enabled"
     [class.printing]='data.print'
-    [class.selectGeom]='data.selectGeom'
+    [class.terminate]='data.terminate'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
     (mousedown)='disableShift($event)'
     (mouseenter)='onenter($event)'
     (mouseleave)='onleave($event)'
-    *ngSwitchCase="ProcedureTypes.LocalFuncReturn">
+    *ngSwitchCase="ProcedureTypes.Return">
         <div class='container--item' >
             <div class='line--item'>
                 <div class='basic-function-text'>Return </div>
-                <div style='position:relative; display:inline-block;'>
+                <div style='position:relative; display:inline-block;' *ngIf="data?.args[0]">
                     <input class='input--arg'
                     [(ngModel)]='data.args[0].value'
                     [class.error]='data.args[0].invalidVar'
@@ -780,11 +790,11 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button id = 'disable-btn' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
                 <!-- Print button-->
-                <button id = 'print-btn'  *ngIf='canBePrinted()' [class.printing]='data.print' [class.disabled]='!data.enabled' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                <button [class.disabled]='!data.enabled' [class.printingOn]='data.print' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                     <mat-icon class="icon" svgIcon='print'></mat-icon>
                 </button>
 
@@ -795,13 +805,14 @@
 
 
     <!-- LocalFuncCall -->
-    <div class='container--line' 
+    <div id='prodDiv_{{data.ID}}'
+    class='container--line' 
     [class.selected]="data.selected"
     [class.lastSelected]="data.lastSelected"
     [class.error]="data.hasError"
     [class.disabled]="!data.enabled"
     [class.printing]='data.print'
-    [class.selectGeom]='data.selectGeom'
+    [class.terminate]='data.terminate'
     [ngSwitch]="data.type"
     (click)='emitSelect($event, data)'
     (mousedown)='disableShift($event)'
@@ -835,7 +846,7 @@
                         (focus)='onInputFocus(i+1)'
                         (blur)='argMod($event, i+1)'
                         placeholder={{p.name}}
-                        [style.width.px]='inputSize(p.value||p.name)'>    
+                        [style.width.px]='inputSize(p.value||p.name)'>
                 </ng-container>
         
             </div>
@@ -843,16 +854,20 @@
         <div class = "btn-container">
             <div class = "btns">
                 <!-- Disable button-->
-                <button id = 'disable-btn' class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
+                <button class='btn' mat-icon-button [class.disableOn]='!data.enabled' title="Disable Procedure" (click)='markDisabled($event)' tabindex="-1">
                     <mat-icon class='icon' svgIcon='disabled'></mat-icon>
                 </button>
                 <!-- Select button -->
-                <button id = 'selectGeom-btn' *ngIf='canSelectGeom()' class='btn' mat-icon-button title="Show Geometric Entities" (click)="markSelectGeom($event)" tabindex="-1">
+                <!-- <button id = 'selectGeom-btn' *ngIf='canSelectGeom()' class='btn' mat-icon-button title="Show Geometric Entities" (click)="markSelectGeom($event)" tabindex="-1">
                     <mat-icon class='icon' svgIcon='select'></mat-icon>
-                </button>
+                </button> -->
                 <!-- Print button-->
-                <button id = 'print-btn'  *ngIf='canBePrinted()' [class.printing]='data.print' [class.disabled]='!data.enabled' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
+                <button *ngIf='canBePrinted()' [class.disabled]='!data.enabled' [class.printingOn]='data.print' class='btn' mat-icon-button title="Print Result In Console" (click)='markPrint($event)' tabindex="-1">
                     <mat-icon class="icon" svgIcon='print'></mat-icon>
+                </button>
+                <!-- Terminate button -->
+                <button class='btn' [class.terminateOn]='data.terminate' mat-icon-button title="Terminate process" (click)="markTerminate($event)" tabindex="-1">
+                    <mat-icon class='icon' svgIcon='terminate'></mat-icon>
                 </button>
 
             </div>

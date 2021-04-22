@@ -9,6 +9,7 @@ import { IdGenerator } from '@utils';
 import { IMobius } from '@models/mobius';
 import { INode, NodeUtils } from '@models/node';
 import JSZip from 'jszip';
+import { _parameterTypes } from '@assets/core/modules';
 
 declare global {
     interface Navigator {
@@ -54,17 +55,17 @@ export class SaveFileComponent implements OnDestroy{
         if (settings['autosave'] === undefined) {
             settings['autosave'] = true;
         }
-        this._interval_ = setInterval(() => {
-            const mobius_settings = this.dataService.mobiusSettings;
-            if (!mobius_settings['autosave']) { return; }
+        // this._interval_ = setInterval(() => {
+        //     const mobius_settings = this.dataService.mobiusSettings;
+        //     if (!mobius_settings['autosave']) { return; }
 
-            let fileName = this.dataService.flowchart.name.replace(/\s/g, '_');
-            if (fileName.length < 4 || fileName.slice(-4) !== '.mob') {
-                fileName += '.mob';
-            }
-            SaveFileComponent.saveFileToLocal(fileName, this.dataService.file);
-            this.dataService.notifyMessage(`Auto-saving Flowchart as ${fileName}`);
-        }, 300000);
+        //     let fileName = this.dataService.flowchart.name.replace(/\s/g, '_');
+        //     if (fileName.length < 4 || fileName.slice(-4) !== '.mob') {
+        //         fileName += '.mob';
+        //     }
+        //     SaveFileComponent.saveFileToLocal(fileName, this.dataService.file);
+        //     this.dataService.notifyMessage(`Auto-saving Flowchart as ${fileName}`);
+        // }, 300000);
     }
 
 
@@ -266,12 +267,8 @@ export class SaveFileComponent implements OnDestroy{
         nodeList.splice(nodeList.length - 1, 0, checkNode);
     }
 
-    static clearModelData(f: IFlowchart, modelMap = null, clearAll = true, clearState = true) {
+    static clearModelData(f: IFlowchart, clearAll = true, clearState = true) {
         for (const node of f.nodes) {
-            if (modelMap !== null) {
-                modelMap[node.id] = node.model;
-            }
-            node.model = undefined;
             if (node.input.hasOwnProperty('value')) {
                 node.input.value = undefined;
             }
@@ -325,12 +322,9 @@ export class SaveFileComponent implements OnDestroy{
 
     static fileDownloadString(f: IMobius): {'name': string, 'file': string} {
         const main_settings = JSON.parse(localStorage.getItem('mpm_settings'));
-        const cesiumSettings = JSON.parse(localStorage.getItem('cesium_settings'));
-        if (cesiumSettings) {
-            if (cesiumSettings.cesium) {
-                delete cesiumSettings.cesium;
-            }
-            main_settings.cesium = cesiumSettings;
+        const geo_settings = JSON.parse(localStorage.getItem('geo_settings'));
+        if (geo_settings) {
+            main_settings.geo = geo_settings;
         }
         f.settings = JSON.stringify(main_settings);
 
@@ -377,19 +371,16 @@ export class SaveFileComponent implements OnDestroy{
 
         // clear the nodes' input/output in the flowchart, save them in modelMap
         // (save time on JSON stringify + parse)
-        const modelMap = {};
-        SaveFileComponent.clearModelData(f.flowchart, modelMap, false, false);
+        const flowchartModel = f.flowchart.model;
+        f.flowchart.model = undefined;
+        SaveFileComponent.clearModelData(f.flowchart, false, false);
 
         // make a copy of the flowchart
         const savedfile = circularJSON.parse(circularJSON.stringify(f));
+        f.flowchart.model = flowchartModel;
 
-        // set the nodes' input/output in the original flowchart again
-        for (const node of f.flowchart.nodes) {
-            node.model = modelMap[node.id];
-            modelMap[node.id] = null;
-        }
+        SaveFileComponent.clearModelData(savedfile.flowchart);
 
-        SaveFileComponent.clearModelData(savedfile.flowchart, {});
 
         // reset each node's id in the new copy of the flowchart --> the same node will
         // have different id everytime it's saved
@@ -513,12 +504,9 @@ export class SaveFileComponent implements OnDestroy{
         newFile.flowchart.name = this.dataService.flowchart.name;
 
         const main_settings = JSON.parse(localStorage.getItem('mpm_settings'));
-        const cesiumSettings = JSON.parse(localStorage.getItem('cesium_settings'));
-        if (cesiumSettings) {
-            if (cesiumSettings.cesium) {
-                delete cesiumSettings.cesium;
-            }
-            main_settings.cesium = cesiumSettings;
+        const geo_settings = JSON.parse(localStorage.getItem('geo_settings'));
+        if (geo_settings) {
+            main_settings.geo = geo_settings;
         }
         newFile.settings = JSON.stringify(main_settings);
 
@@ -547,23 +535,40 @@ export class SaveFileComponent implements OnDestroy{
             }
             flowchart_desc += '\n' + prod.args[0].value + ' = ' + prod.args[1].value;
         }
-        newFile.flowchart.description = splitDesc.join('\n') + flowchart_desc;
+        newFile.flowchart.description = splitDesc.join('\n') + '\n\nParameter values used to generate this model:' + flowchart_desc;
 
         const node = newFile.flowchart.nodes[1];
-        const modelVal = '\'__model_data__' + this.dataService.flowchart.nodes[this.dataService.flowchart.nodes.length - 1].model.replace(/\\/g, '\\\\').replace(/\'/g, '\\\'') + '\'';
+        if (!this.dataService.flowchart.model) {
+            this.dataService.notifyMessage('No model to be saved');
+            return;
+        }
+        const modelVal = '\'__model_data__' + this.dataService.flowchart.model.exportGI(null).replace(/\\/g, '\\\\').replace(/\'/g, '\\\'') + '\'';
+        // NodeUtils.add_procedure(node, ProcedureTypes.MainFunction, {
+        //     'module': 'io',
+        //     'name': 'Import',
+        //     'argCount': 3,
+        //     'args': [
+        //         {'name': '__model__'},
+        //         {
+        //             'name': 'model_data',
+        //             'value': modelVal
+        //         }, {
+        //             'name': 'data_format',
+        //             'value': '\'gi\'',
+        //             'jsValue': '\'gi\''
+        //         }
+        //     ],
+        //     'hasReturn': true
+        // });
         NodeUtils.add_procedure(node, ProcedureTypes.MainFunction, {
-            'module': 'io',
-            'name': 'Import',
-            'argCount': 3,
+            'module': 'util',
+            'name': 'ModelMerge',
+            'argCount': 2,
             'args': [
                 {'name': '__model__'},
                 {
-                    'name': 'model_data',
+                    'name': 'input_data',
                     'value': modelVal
-                }, {
-                    'name': 'data_format',
-                    'value': '\'gi\'',
-                    'jsValue': '\'gi\''
                 }
             ],
             'hasReturn': true

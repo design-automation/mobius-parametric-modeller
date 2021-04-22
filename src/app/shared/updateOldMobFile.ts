@@ -8,23 +8,25 @@ import { _parameterTypes } from '@assets/core/_parameterTypes';
 import { fn } from '@angular/compiler/src/output/output_ast';
 import { VERSION } from '@env/version';
 import { IMobius } from '@models/mobius';
+import { INode } from '@models/node';
 
 
 export function checkMobFile(file: IMobius) {
     if (file.version === VERSION.version) {
         return;
     }
+    checkFileVersion(file.version);
     // check the end node
     // checkEndReturn(file);
 
     // check if there's any missing procedure in each node
     let hasError = false;
     for (const node of file.flowchart.nodes) {
-        if (!checkMissingProd(node.procedure, file.version)) {
+        if (!checkMissingProd(node.procedure, file.version, node)) {
             node.hasError = true;
             hasError = true;
         }
-        if (node.localFunc && !checkMissingProd(node.localFunc, file.version)) {
+        if (node.localFunc && !checkMissingProd(node.localFunc, file.version, node)) {
             node.hasError = true;
             hasError = true;
         }
@@ -42,7 +44,7 @@ export function checkMobFile(file: IMobius) {
     for (const userDefFunc of file.flowchart.functions) {
         if (!userDefFunc.flowchart) { continue; }
         for (const node of userDefFunc.flowchart.nodes) {
-            if (!checkMissingProd(node.procedure, file.version)) {
+            if (!checkMissingProd(node.procedure, file.version, node)) {
                 alert('User Defined Function ' + userDefFunc.name +
                       ' contains functions that do not exist in the current version of Mobius');
             }
@@ -52,7 +54,7 @@ export function checkMobFile(file: IMobius) {
         for (const userDefFunc of file.flowchart.subFunctions) {
             if (!userDefFunc.flowchart) { continue; }
             for (const node of userDefFunc.flowchart.nodes) {
-                if (!checkMissingProd(node.procedure, file.version)) {
+                if (!checkMissingProd(node.procedure, file.version, node)) {
                     alert('User Defined Function ' + userDefFunc.name +
                           ' contains functions that do not exist in the current version of Mobius');
                 }
@@ -88,18 +90,43 @@ function updateNode(flowchart) {
     }
 }
 
-function checkMissingProd(prodList: any[], fileVersion: string) {
+function checkMissingProd(prodList: any[], fileVersion: string, node: INode) {
     let check = true;
     for (const prod of prodList) {
 
         // check the children procedures if the procedure has any
         if (prod.children) {
-            if (!checkMissingProd(prod.children, fileVersion)) {
+            if (!checkMissingProd(prod.children, fileVersion, node)) {
                 check = false;
             }
         }
 
         prod.hasError = false;
+
+        if (prod.type === ProcedureTypes.Break) {
+            let topProd = prod;
+            let switchCheck = true;
+            while (topProd.parent) {
+                if (topProd.parent.type === ProcedureTypes.Foreach || topProd.parent.type === ProcedureTypes.While) {
+                    switchCheck = false;
+                    break;
+                }
+                topProd = topProd.parent;
+            }
+            if (switchCheck) {
+                prod.type = ProcedureTypes.Return;
+                if (node.type === 'end') {
+                    prod.argCount = 1;
+                    prod.args = [{name: 'Value', value: undefined}];
+                    const endreturn = node.procedure[node.procedure.length - 1];
+                    prod.args[0].value = endreturn.args[0].value;
+                    prod.args[0].jsValue = endreturn.args[0].jsValue;
+                } else {
+                    prod.argCount = 0;
+                    prod.args = [];
+                }
+            }
+        }
 
         // the part below is only for function procedures, skip everything else
         if (prod.type !== ProcedureTypes.MainFunction) { continue; }
@@ -121,14 +148,15 @@ function checkMissingProd(prodList: any[], fileVersion: string) {
                         break;
                     }
                 }
-                if (dpFn.old_func.name === dpFn.new_func.name && prod.argCount === (data.argCount + 1)
+                if (dpFn.old_func.module === dpFn.new_func.module
+                && dpFn.old_func.name === dpFn.new_func.name && prod.argCount === (data.argCount + 1)
                 && !dpFn.new_func.values && !dpFn.new_func.replace) { break; }
-
+                // console.log(prod)
                 prod.meta = { module: data.module, name: data.name};
                 prod.argCount = data.argCount + 1;
-                let returnArg = {name: 'var_name', value: undefined};
+                let returnArg = {name: 'var_name', value: 'var', jsValue: 'var'};
                 if (!data.hasReturn) {
-                    returnArg = {name: '__none__', value: undefined};
+                    returnArg = {name: '__none__', value: undefined, jsValue: undefined};
                 } else if (prod.args[0].name !== '__none__') {
                     returnArg.value = prod.args[0].value;
                 }
@@ -171,6 +199,7 @@ function checkMissingProd(prodList: any[], fileVersion: string) {
                     }
                 }
                 prod.args = [ returnArg, ...data.args];
+                // console.log(prod)
                 break;
             }
         }
@@ -229,6 +258,15 @@ function checkEndReturn(file) {
                 break;
             }
         }
+    }
+}
+
+function checkFileVersion(fileVersion) {
+    console.log(fileVersion)
+    const fileVer = fileVersion.split('.');
+    if (fileVer[0] === '0' && Number(fileVer[1]) < 7) {
+        alert(`Outdated file: File Version of ${fileVersion}. May be incompatible with current version of Mobius.`);
+        // throw new Error(`Unable to open outdated file: File Version of ${fileVersion}. Requires file version of 0.7.x`);
     }
 }
 

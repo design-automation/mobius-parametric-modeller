@@ -3,25 +3,52 @@
     <!-- viewchild content -->
     <div class='content__panel'>
         <div class='logo'>
-            <p><img  src="assets/logo/logo-120high.png" alt="Möbius  Modeller"></p>
-            <p><img  src="assets/logo/logo-120high.png" alt="Möbius  Modeller"></p>
+            <iframe class='embedded-vid' frameborder="0"
+            src="https://www.youtube.com/embed/gpBufqN1emY" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen></iframe>
+            <br>
+            <a [href]='getExampleURL("Mobius_interface.mob&node=1")' target="video_example">Mobius: Interface</a>
+            <br>
+            <br>
+            <iframe class='embedded-vid' frameborder="0" 
+            src="https://www.youtube.com/embed/_I4FePIkS8A" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen></iframe>
+            <br>
+            <a [href]='getExampleURL("Mobius_variable.mob&node=1")' target="video_example">Mobius: Variables</a>
+            <br>
+            <br>
+            <iframe class='embedded-vid' frameborder="0" 
+            src="https://www.youtube.com/embed/QGlH0ud6Dhc" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen></iframe>
+            <br>
+            <a [href]='getExampleURL("Mobius_saving_loading.mob&node=1")' target="video_example">Mobius: Saving and Loading</a>
+            <br>
+            <br>
+            <iframe class='embedded-vid' frameborder="0" 
+            src="https://www.youtube.com/embed/uABWolM5ags" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen></iframe>
+            <br>
+            <a [href]='getExampleURL("Mobius_parameter.mob&node=1")' target="video_example">Mobius: Parameters</a>
+            <br>
+            <br>
+            <iframe class='embedded-vid' frameborder="0" 
+            src="https://www.youtube.com/embed/iL1i40Dbsk4" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen></iframe>
+            <br>
+            <a [href]='getExampleURL("Mobius_flowcharts.mob", "flowchart")' target="video_example">Mobius: Flowcharts</a>
+        </div>
+        <div class='text'>
             <p><img  src="assets/logo/logo-120high.png" alt="Möbius  Modeller"></p>
             <p>Version: {{version.version}}</p>
             <p>
-                <a class='link-share' href="http://expando.github.io/add/?u=https%3A%2F%2Fmobius.design-automation.net%2F&t=Möbius%20Modeller" target="_blank">
+                <a class='link-share' href="http://expando.github.io/add/?u=https%3A%2F%2Fmobius.design-automation.net%2F&t=Möbius%20Modeller" target="video_example">
                     Share this Site</a>
             </p>
-            <p>The latest version has made some changes to the modelling functions. </p>
-            <p>Previous versions: </p>
-            <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-5-48' target='_blank'>Version 0.5.48</a></li>
-            <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-5-6' target='_blank'>Version 0.5.6</a></li>
-            <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-4-34' target='_blank'>Version 0.4.34</a></li>
-            <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-4-30' target='_blank'>Version 0.4.30</a></li>
-            <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-4-26' target='_blank'>Version 0.4.26</a></li>
-            <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-4-18' target='_blank'>Version 0.4.18</a></li>
-            <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-4-11' target='_blank'>Version 0.4.11</a></li>
-        </div>
-        <div class='text'>
             <h3>What is Möbius  Modeller?</h3>
             <p>Möbius Modeller is an open-source web application for 3D parametric modelling. 
                 The app allows users to create modelling procedures using the Öbi visual programming language.
@@ -125,7 +152,7 @@
             <p>Used Libraries:</p>
             <ul>
                 <li>three.js</li>
-                <li>CesiumJS</li>
+                <li>Itowns</li>
                 <li>cytoscape.js</li>
                 <li>chroma.js</li>
                 <li>d3-delaunay</li>
@@ -138,7 +165,18 @@
                 <li>underscore</li>
                 <li>verbs</li>
             </ul>
-        
+
+            <h3>Previous versions</h3>
+            <ul>
+                <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-5-48' target='older_versions'>Version 0.5.48</a></li>
+                <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-5-6' target='older_versions'>Version 0.5.6</a></li>
+                <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-4-34' target='older_versions'>Version 0.4.34</a></li>
+                <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-4-30' target='older_versions'>Version 0.4.30</a></li>
+                <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-4-26' target='older_versions'>Version 0.4.26</a></li>
+                <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-4-18' target='older_versions'>Version 0.4.18</a></li>
+                <li><a href='https://design-automation.github.io/mobius-parametric-modeller-0-4-11' target='older_versions'>Version 0.4.11</a></li>
+            </ul>
+
         </div>
     </div>
 </div>

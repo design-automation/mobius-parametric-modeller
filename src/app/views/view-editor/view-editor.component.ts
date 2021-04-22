@@ -29,6 +29,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     // notificationTrigger = true;
 
     disableInput = false;
+    keyboardSub = null;
     @ViewChild('editorSplit', { static: true }) editorSplit: SplitComponent;
 
     // private copyCheck = true;
@@ -39,10 +40,10 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 private keyboardService: KeyboardService,
                 private router: Router) {
         new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url);
-        this.keyboardService.shiftKeyPushed$.subscribe(() => {
+        this.keyboardSub = this.keyboardService.shiftKeyPushed$.subscribe(() => {
             this.disableInput = true;
         });
-        this.ctx.font = 'bold 12px arial';
+        this.ctx.font = '700 12px arial';
     }
 
     ngAfterViewInit() {
@@ -54,10 +55,11 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
     ngOnDestroy() {
         this.ctx = null;
+        this.keyboardSub.unsubscribe();
     }
 
     viewerData() {
-        return this.dataOutputService.getViewerData(this.getNode(), this.getViewOutput());
+        return this.dataOutputService.getViewerData(this.getNode(), this.dataService.flowchart.model, this.getViewOutput());
     }
 
     performAction_param_editor(event: any) {
@@ -95,6 +97,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             case 'add_prod' :
                 this.add_prod(event.content);
                 break;
+            // case 'helpText' :
+            //     this.updateHelpView(event.content);
+            //     break;
         }
     }
 
@@ -120,15 +125,12 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             case 'notifyError' :
                 this.notifyError(event.content);
                 break;
-            case 'helpText' :
-                this.updateHelpView(event.content);
-                break;
         }
     }
 
     // .............. ON INPUT FOCUS ................
     onfocus(event: Event) {
-        if ((<HTMLElement>event.target).nodeName === 'INPUT') {
+        if ((<HTMLElement>event.target).nodeName === 'TEXTAREA' || (<HTMLElement>event.target).nodeName === 'INPUT') {
             for (const prod of this.dataService.node.state.procedure) {
                 prod.selected = false;
                 prod.lastSelected = false;
@@ -186,8 +188,10 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             this.dataService.focusedInputProd = null;
         }
         if (this.dataService.node.state.procedure.length === 0) {
-            if (this.dataService.node.localFunc.length === 1) {
-                if (data.type === ProcedureTypes.LocalFuncDef || this.dataService.node.procedure.length === 1) {
+            if (data.type === ProcedureTypes.Constant) {
+            } else if (this.dataService.node.localFunc.length === 1) {
+                if (data.type === ProcedureTypes.LocalFuncDef || this.dataService.node.procedure.length === 1 ||
+                    (this.dataService.node.type === 'end' && this.dataService.node.procedure.length === 2)) {
                 } else {
                     this.dataService.notifyMessage('Error: No selected place for adding procedure!');
                     return;
@@ -254,7 +258,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         }
         NodeUtils.check_procedure_selected(this.dataService.node.state.procedure, this.dataService.node.localFunc);
         NodeUtils.check_procedure_selected(this.dataService.node.state.procedure, this.dataService.node.procedure);
-        if (!event.ctrl && document.activeElement.tagName === 'INPUT') {
+        if (!event.ctrl && (document.activeElement.tagName === 'TEXTAREA' || document.activeElement.tagName === 'INPUT')) {
             return;
         }
         NodeUtils.select_procedure(this.dataService.node, event.prod, event.ctrl || false, event.shift || false);
@@ -265,7 +269,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         const node = this.dataService.node;
         let i = 0;
         while (i < node.state.procedure.length) {
-            if (node.state.procedure[i].type === ProcedureTypes.Blank || node.state.procedure[i].type === ProcedureTypes.Return) {
+            if (node.state.procedure[i].type === ProcedureTypes.Blank || node.state.procedure[i].type === ProcedureTypes.EndReturn) {
                 node.state.procedure[i].selected = false;
                 node.state.procedure[i].lastSelected = false;
                 node.state.procedure.splice(i, 1);
@@ -274,7 +278,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             }
         }
         // if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
-        if (document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
+        if (document.activeElement.nodeName === 'TEXTAREA' || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
 
         const temp = node.state.procedure.slice();
         const copiedProds = [];
@@ -288,6 +292,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     cutProd() {
         const node = this.dataService.node;
         let tobeSelected;
+        if (node.state.procedure.length === 0) { return; }
         for (const selected of node.state.procedure) {
             if (!selected.lastSelected) {
                 continue;
@@ -311,9 +316,10 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 }
             }
         }
+        // this.scrollToProd(node.state.procedure[node.state.procedure.length - 1]);
         let i = 0;
         while (i < node.state.procedure.length) {
-            if (node.state.procedure[i].type === ProcedureTypes.Blank || node.state.procedure[i].type === ProcedureTypes.Return) {
+            if (node.state.procedure[i].type === ProcedureTypes.Blank || node.state.procedure[i].type === ProcedureTypes.EndReturn) {
                 node.state.procedure[i].selected = false;
                 node.state.procedure[i].lastSelected = false;
                 node.state.procedure.splice(i, 1);
@@ -322,7 +328,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             }
         }
         // if (!this.copyCheck || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
-        if (document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
+        if (document.activeElement.nodeName === 'TEXTAREA' || document.activeElement.nodeName === 'INPUT' || node.state.procedure.length === 0) { return; }
 
         const temp = node.state.procedure.slice();
         const copiedProds = [];
@@ -351,9 +357,10 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         this.dataService.registerEdtAction(redoActions);
         checkNodeValidity(this.dataService.node);
 
+        node.state.procedure = [];
+
         // NodeUtils.deselect_procedure(node);
         NodeUtils.select_procedure(node, tobeSelected, false, false);
-
         this.dataService.notifyMessage(`Cut ${copiedProds.length} Procedures`);
     }
 
@@ -383,7 +390,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 }
                 for (let i = 0; i < toBePasted.length; i++) {
                     if (toBePasted[i].type === ProcedureTypes.Blank ||
-                        toBePasted[i].type === ProcedureTypes.Return) { continue; }
+                        toBePasted[i].type === ProcedureTypes.EndReturn) { continue; }
                     const check = NodeUtils.paste_procedure(node, toBePasted[i]);
                     if (!check) {
                         this.dataService.notifyMessage('Error: Unable to paste procedure');
@@ -398,7 +405,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             } else {
                 for (let i = 0; i < toBePasted.length; i++) {
                     if (toBePasted[i].type === ProcedureTypes.Blank ||
-                        toBePasted[i].type === ProcedureTypes.Return) { continue; }
+                        toBePasted[i].type === ProcedureTypes.EndReturn) { continue; }
                     const check = NodeUtils.paste_procedure(node, toBePasted[i]);
                     if (!check) {
                         this.dataService.notifyMessage('Error: Unable to paste procedure');
@@ -412,6 +419,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 pastingPlace.selected = true;
                 pastingPlace.lastSelected = true;
                 node.state.procedure = [pastingPlace];
+                // this.scrollToProd(pastingPlace);
             }
             this.dataService.registerEdtAction(redoActions);
             checkNodeValidity(this.dataService.node);
@@ -421,6 +429,33 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             }
         }
     }
+
+    scrollToProd(prod) {
+        const mainProdContainer = <HTMLDivElement> document.getElementById('procedure');
+        let topmostProd = prod.parent;
+        while (topmostProd && topmostProd.parent) { topmostProd = topmostProd.parent; }
+        if (topmostProd && topmostProd.type === ProcedureTypes.LocalFuncDef && topmostProd.meta.otherInfo['collapsed']) {
+            topmostProd.meta.otherInfo['collapsed'] = false;
+            prod = topmostProd;
+        }
+        let prodDiv;
+        if (prod.ID === '' && prod.parent) {
+            prodDiv = <HTMLDivElement> document.getElementById('prodDiv_' + prod.parent.ID);
+        } else {
+            prodDiv = <HTMLDivElement> document.getElementById('prodDiv_' + prod.ID);
+        }
+        if (!prodDiv) {
+            return;
+        }
+        const prodFromTop = mainProdContainer.scrollTop + prodDiv.getBoundingClientRect().top + mainProdContainer.offsetTop;
+        let scrollPos = prodFromTop - mainProdContainer.offsetTop - (mainProdContainer.offsetHeight / 3);
+        if (scrollPos < 0) { scrollPos = 0; }
+        if (scrollPos > mainProdContainer.scrollHeight) { scrollPos = mainProdContainer.scrollHeight; }
+        const scrollDiff = scrollPos - mainProdContainer.scrollTop;
+        if (scrollDiff < (mainProdContainer.offsetHeight / 2) && scrollDiff > (- mainProdContainer.offsetHeight / 6)) { return; }
+        mainProdContainer.scrollTop = scrollPos;
+    }
+
     // @HostListener('window:keydown', ['$event'])
     // onKeyDown(event: KeyboardEvent) {
     //     // disable text input in textboxes when ctrl/shift/command key is held down
@@ -497,6 +532,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
         }
         this.dataService.registerEdtAction(redoActions);
         checkNodeValidity(this.dataService.node);
+        node.state.procedure = [];
         NodeUtils.select_procedure(node, tobeSelected, false, false);
         // this.dataService.node.state.procedure = [];
     }
@@ -504,7 +540,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     @HostListener('window:keyup', ['$event'])
     onKeyUp(event: KeyboardEvent) {
         if (!(event.ctrlKey && event.metaKey && event.shiftKey)) { this.disableInput = false; }
-        if (document.activeElement.nodeName === 'INPUT') {return; }
+        if (document.activeElement.nodeName === 'TEXTAREA' || document.activeElement.nodeName === 'INPUT') {return; }
         // if (!this.copyCheck) { return; }
         if (event.key === 'Delete' || event.key === 'Backspace') {
             this.deleteSelectedProds();
@@ -514,8 +550,10 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
             if (event.shiftKey) {
                 actions = this.dataService.redoEdt();
                 if (!actions) { return; }
-                for (const act of actions) {
+                for (let i = actions.length - 1; i >= 0; i--) {
+                    const act = actions[i];
                     if (act.type === 'del') {
+                        this.scrollToProd(act.prod);
                         let prodList: IProcedure[];
                         if (act.parent) {
                             prodList = act.parent.children;
@@ -535,6 +573,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                             prodList = this.dataService.node.procedure;
                         }
                         prodList.splice(act.index, 0, act.prod);
+                        setTimeout(() => {
+                            this.scrollToProd(act.prod);
+                        }, 0);
                     }
                 }
             } else {
@@ -542,6 +583,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                 if (!actions) { return; }
                 for (const act of actions) {
                     if (act.type === 'add') {
+                        this.scrollToProd(act.prod);
                         let prodList: IProcedure[];
                         if (act.parent) {
                             prodList = act.parent.children;
@@ -571,6 +613,9 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
                             prodList = this.dataService.node.procedure;
                         }
                         prodList.splice(act.index, 0, act.prod);
+                        setTimeout(() => {
+                            this.scrollToProd(act.prod);
+                        }, 0);
                     }
                 }
             }
@@ -650,16 +695,16 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
     }
 
     updateHelpView(event) {
-        if (typeof(event) === 'string') {
-            for (const func of this.dataService.flowchart.functions) {
-                if (func.name === event) {
-                    this.dataService.helpView = func.doc;
-                }
-            }
-        } else {
-            this.dataService.helpView = event;
-        }
-        this.dataService.toggleHelp(true);
+        // if (typeof(event) === 'string') {
+        //     for (const func of this.dataService.flowchart.functions) {
+        //         if (func.name === event) {
+        //             this.dataService.helpView = func.doc;
+        //         }
+        //     }
+        // } else {
+        //     this.dataService.helpView = event;
+        // }
+        // this.dataService.toggleHelp(true);
     }
 
     setViewOutput() {
@@ -711,7 +756,7 @@ export class ViewEditorComponent implements AfterViewInit, OnDestroy {
 
     @HostListener('document:mouseleave', [])
     onmouseleave() {
-        this.editorSplit.notify('end');
+        this.editorSplit.notify('end', this.editorSplit.gutterSize);
     }
 
 }

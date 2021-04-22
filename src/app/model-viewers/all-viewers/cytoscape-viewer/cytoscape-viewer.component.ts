@@ -22,6 +22,7 @@ import { EEntType } from '@assets/libs/geo-info/common';
 export class CytoscapeViewerComponent  {
     // model data passed to the viewer
     @Input() data: GIModel;
+    @Input() nodeIndex: number;
     public modelData: GIModel;
     protected cytoscape: cytoscape.Core;
 

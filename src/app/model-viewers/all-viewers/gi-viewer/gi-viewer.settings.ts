@@ -6,9 +6,6 @@ export const DefaultSettings = {
     grid: {
         show: true,
         size: 500,
-        pos_x: 0,
-        pos_y: 0,
-        pos_z: 0,
         pos: new Vector3(0, 0, 0)
     },
     background: {

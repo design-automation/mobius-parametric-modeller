@@ -18,7 +18,6 @@ import { ATabComponent } from './tab.component';
 })
 export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestroy {
     @Output() selectedTab = new EventEmitter<number>();
-    @Output() selectedTopology = new EventEmitter<number>();
 
     @ContentChildren(ATabComponent) tabs: QueryList<ATabComponent>;
 
@@ -33,8 +32,7 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
         [
             { tab: 1, title: 'Vertices' },
             { tab: 2, title: 'Edges' },
-            { tab: 3, title: 'Wires' },
-            { tab: 4, title: 'Faces' }
+            { tab: 3, title: 'Wires' }
         ];
 
     object_dropdown;
@@ -44,9 +42,9 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
 
     object: { tab: number, title: string }[] =
         [
-            { tab: 5, title: 'Points' },
-            { tab: 6, title: 'Polylines' },
-            { tab: 7, title: 'Polygons' }
+            { tab: 4, title: 'Points' },
+            { tab: 5, title: 'Polylines' },
+            { tab: 6, title: 'Polygons' }
         ];
 
     // contentChildren are set
@@ -61,15 +59,16 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
     }
 
     ngAfterViewInit(): void {
-        this.topology_dropdown = document.getElementById('topology_dropdown');
-        this.topology_dropdown.style.display = 'none';
+        // this.topology_dropdown = document.getElementById('topology_dropdown');
+        // this.topology_dropdown.style.display = 'none';
 
         this.object_dropdown = document.getElementById('object_dropdown');
         this.object_dropdown.style.display = 'none';
+
     }
 
     ngOnDestroy() {
-        this.topology_dropdown = null;
+        // this.topology_dropdown = null;
         this.object_dropdown = null;
     }
 
@@ -84,27 +83,27 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
         }
 
         this.selectedTab.emit(tab);
-        if (this.topology_dropdown) {
-            this.topology_dropdown.style.display = 'none';
-        }
-        this.topology_text = 'Topology';
-        this.topology_open = false;
+        // if (this.topology_dropdown) {
+        //     this.topology_dropdown.style.display = 'none';
+        // }
+        // this.topology_text = 'Topology';
+        // this.topology_open = false;
 
-        if (this.object_dropdown) {
-            this.topology_dropdown.style.display = 'none';
-        }
+        // if (this.object_dropdown) {
+        //     this.topology_dropdown.style.display = 'none';
+        // }
         this.object_text = 'Objects';
         this.object_open = false;
     }
 
-    selectTopology(tab, event: Event) {
+    selectTopology(tab: number, event?: Event) {
         this.tabs.toArray().forEach(_tab => _tab.active = false);
         this.tab_active = 1;
         const option = this.topology.find(item => item.tab === tab);
         if (!option) {
             return;
         }
-        this.selectedTopology.emit(Number(tab));
+        this.selectedTab.emit(Number(tab));
         this.topology_text = option.title;
         this.tabs.toArray()[option.tab].active = true;
         if (event !== undefined) {
@@ -114,14 +113,14 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
         this.topology_open = false;
     }
 
-    selectObject(tab, event: Event) {
+    selectObject(tab: number, event?: Event) {
         this.tabs.toArray().forEach(_tab => _tab.active = false);
         this.tab_active = 2;
         const option = this.object.find(item => item.tab === tab);
         if (!option) {
             return;
         }
-        this.selectedTopology.emit(Number(tab));
+        this.selectedTab.emit(Number(tab));
         this.object_text = option.title;
         this.tabs.toArray()[option.tab].active = true;
         if (event !== undefined) {
@@ -134,7 +133,6 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
     showTDropdown() {
         this.object_text = 'Objects';
         this.object_open = false;
-        // this.tabs.toArray().forEach(_tab => _tab.active = false);
         if (!this.topology_dropdown) { return; }
         this.object_dropdown.style.display = 'none';
         if (this.topology_dropdown.style.display === 'none') {
@@ -149,9 +147,8 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
     showODropdown() {
         this.topology_text = 'Topology';
         this.topology_open = false;
-        // this.tabs.toArray().forEach(_tab => _tab.active = false);
         if (!this.object_dropdown) { return; }
-        this.topology_dropdown.style.display = 'none';
+        // this.topology_dropdown.style.display = 'none';
         if (this.object_dropdown.style.display === 'none') {
             this.object_dropdown.style.display = 'block';
             this.object_open = true;
@@ -160,4 +157,5 @@ export class ATabsComponent implements AfterContentInit, AfterViewInit, OnDestro
             this.object_open = false;
         }
     }
+
 }

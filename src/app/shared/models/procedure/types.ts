@@ -12,7 +12,7 @@ export enum ProcedureTypes {
     globalFuncCall,   // 9 (previously Imported)
 
     Constant,   // 10
-    Return,     // 11
+    EndReturn,     // 11
 
     AddData,    // 12 !Obsolete!
 
@@ -22,7 +22,7 @@ export enum ProcedureTypes {
     Terminate,  // 15
 
     LocalFuncDef,  // 16
-    LocalFuncReturn, // 17
+    Return, // 17
     LocalFuncCall, // 18
 
     Error // 19

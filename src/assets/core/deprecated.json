@@ -97,11 +97,8 @@
             "name": "Delete"
         },
         "new_func": {
-            "module": "modify",
-            "name": "Delete",
-            "values": {
-                "method": "'delete_selected'"
-            }
+            "module": "edit",
+            "name": "Delete"
         }
     },
     {
@@ -110,10 +107,10 @@
             "name": "Unweld"
         },
         "new_func": {
-            "module": "modify",
+            "module": "edit",
             "name": "Weld",
             "values": {
-                "method": "'clone_positions'"
+                "method": "'break_weld'"
             }
         }
     },
@@ -124,7 +121,7 @@
         },
         "new_func": {
             "module": "material",
-            "name": "Basic",
+            "name": "MeshMat",
             "replace": {
                 "color": "colour",
                 "select_vert_colors": "select_vert_colours"
@@ -203,5 +200,99 @@
                 "method": "'ps_average'"
             }
         }
+    },
+    {
+        "old_func": {
+            "module": "material",
+            "name": "Basic"
+        },
+        "new_func": {
+            "module": "material",
+            "name": "MeshMat"
+        }
+    },
+    {
+        "old_func": {
+            "module": "make",
+            "name": "Hole"
+        },
+        "new_func": {
+            "module": "edit",
+            "name": "Hole"
+        }
+    },
+    {
+        "old_func": {
+            "module": "make",
+            "name": "Divide"
+        },
+        "new_func": {
+            "module": "edit",
+            "name": "Divide"
+        }
+    },
+    {
+        "old_func": {
+            "module": "modify",
+            "name": "Reverse"
+        },
+        "new_func": {
+            "module": "edit",
+            "name": "Reverse"
+        }
+    },
+    {
+        "old_func": {
+            "module": "modify",
+            "name": "Shift"
+        },
+        "new_func": {
+            "module": "edit",
+            "name": "Shift"
+        }
+    },
+    {
+        "old_func": {
+            "module": "modify",
+            "name": "Ring"
+        },
+        "new_func": {
+            "module": "edit",
+            "name": "Ring"
+        }
+    },
+    {
+        "old_func": {
+            "module": "modify",
+            "name": "Weld"
+        },
+        "new_func": {
+            "module": "edit",
+            "name": "Weld"
+        }
+    },
+    {
+        "old_func": {
+            "module": "modify",
+            "name": "Fuse"
+        },
+        "new_func": {
+            "module": "edit",
+            "name": "Fuse"
+        }
+    },
+    {
+        "old_func": {
+            "module": "poly2d",
+            "name": "Stitch"
+        },
+        "new_func": {
+            "module": "poly2d",
+            "name": "Stitch",
+            "values": {
+                "tolerance": "0.1"
+            }
+        }
     }
+
 ]

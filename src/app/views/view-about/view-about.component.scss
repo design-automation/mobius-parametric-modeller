@@ -9,8 +9,9 @@
     margin-top: 1px;
     margin-left: 11px; //split bar width
     // max-width: 600px;
+    width: calc(100% - 10px);
     height: calc(100% - 41px);
-    overflow: auto;
+    overflow: scroll;
 
     .logo{
         float: right;
@@ -47,4 +48,13 @@ mat-icon{
     margin: 0px;
     padding: 0px;
     cursor: pointer;
+}
+
+.embedded-vid {
+    width: calc(100vw - 700px);
+    height: calc((100vw - 700px) * 315 / 560);
+    max-width: 562px;
+    max-height: 317px;
+    border: 1px solid $color1;
+    padding: 1px;
 }

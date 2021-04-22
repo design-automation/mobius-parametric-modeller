@@ -34,7 +34,7 @@ export class DataThreejsBase {
     // interaction and selection
     public tri_select_map: Map<number, number>;
     public edge_select_map: Map<number, number>;
-    public white_edge_select_map: Map<number, number>;
+    // public white_edge_select_map: Map<number, number>;
     public point_select_map: Map<number, number>;
     public point_label: any[];
     public posis_map: Map<number, number>;
@@ -71,6 +71,7 @@ export class DataThreejsBase {
 
     // the model to display
     public model: GIModel;
+    public nodeIndex: number;
     public scene_objs: THREE.Object3D[] = [];
     public scene_objs_selected: Map<string, THREE.Object3D> = new Map();
     public positions: THREE.Object3D[] = [];
@@ -91,8 +92,10 @@ export class DataThreejsBase {
     protected origin: THREE.Vector3 = new THREE.Vector3(0, 1, 0);
 
     // BufferGeoms
-    protected _buffer_geoms: THREE.BufferGeometry[] = [];
+    // protected _buffer_geoms: THREE.BufferGeometry[] = [];
     protected _all_objs_sphere: THREE.Sphere;
+
+    protected _text_font: THREE.Font;
 
     /**
      * Constructs a new data subscriber.
@@ -103,6 +106,9 @@ export class DataThreejsBase {
             this.settings.directional_light.type = 'directional';
             localStorage.setItem('mpm_settings', JSON.stringify(this.settings));
         }
+        const textFontLoader = new THREE.FontLoader();
+        textFontLoader.load( 'assets/fonts/helvetiker_regular.typeface.json', font => { this._text_font = font; });
+
         // scene
         this.scene = new THREE.Scene();
         // renderer
@@ -164,11 +170,13 @@ export class DataThreejsBase {
 
         setTimeout(() => {
             const threeContainer = document.getElementById('threejs-container');
-            const aspect = (threeContainer.clientWidth / threeContainer.clientHeight + 1) / 2;
-            this.orthoCam.left = aspect * -300;
-            this.orthoCam.right = aspect * 300;
-            this.orthoCam.updateProjectionMatrix();
-            this.orthoControls.update();
+            if (threeContainer) {
+                const aspect = (threeContainer.clientWidth / threeContainer.clientHeight + 1) / 2;
+                this.orthoCam.left = aspect * -300;
+                this.orthoCam.right = aspect * 300;
+                this.orthoCam.updateProjectionMatrix();
+                this.orthoControls.update();
+            }
         }, 0);
     }
 }

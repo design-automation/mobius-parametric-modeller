@@ -21,7 +21,7 @@ export class ViewDashboardComponent implements AfterViewInit, OnDestroy {
                 private dataOutputService: DataOutputService,
                 private router: Router) {
         new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url);
-        this.ctx.font = '12px sans-serif';
+        this.ctx.font = '400 12px arial';
     }
 
     ngAfterViewInit() {
@@ -35,7 +35,7 @@ export class ViewDashboardComponent implements AfterViewInit, OnDestroy {
     }
 
     viewerData() {
-        return this.dataOutputService.getViewerData(this.getNode(), true);
+        return this.dataOutputService.getViewerData(this.getNode(), this.dataService.flowchart.model, true);
     }
 
     // adjustTextArea() {
@@ -92,7 +92,7 @@ export class ViewDashboardComponent implements AfterViewInit, OnDestroy {
 
     @HostListener('document:mouseleave', [])
     onmouseleave() {
-        this.dashboardSplit.notify('end');
+        this.dashboardSplit.notify('end', this.dashboardSplit.gutterSize);
     }
 
 }

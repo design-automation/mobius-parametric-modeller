@@ -8,9 +8,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { GIModel } from '@libs/geo-info/GIModel';
 import { DataService } from '../data/data.service';
 import { EEntType, EEntTypeStr } from '@libs/geo-info/common';
-import { GIAttribsThreejs } from '@libs/geo-info/GIAttribsThreejs';
+import { GIAttribsThreejs } from '@assets/libs/geo-info/attribs/GIAttribsThreejs';
 import { ATabsComponent } from './tabs.component';
-import { sortByKey } from '@libs/util/maps';
+import { _EEntType } from '@assets/core/modules/basic/attrib';
 
 enum SORT_STATE {
     DEFAULT,
@@ -27,7 +27,8 @@ enum SORT_STATE {
 export class AttributeComponent implements OnChanges {
     @ViewChild(ATabsComponent, { static: true }) child: ATabsComponent;
 
-    @Input() data: GIModel;
+    @Input() model: GIModel;
+    @Input() nodeIndex: number;
     @Input() refresh: Event;
     @Input() reset: Event;
     @Output() attrTableSelect = new EventEmitter<Object>();
@@ -36,21 +37,22 @@ export class AttributeComponent implements OnChanges {
     showSelected = false;
     currentShowingCol = '';
     shiftKeyPressed = false;
+    preventSimpleClick;
+    timer;
 
-    tabs: { type: number, title: string }[] = [
+    tabs: { type?: number, title: string }[] = [
         { type: EEntType.POSI, title: 'Positions' },
         { type: EEntType.VERT, title: 'Vertices' },
         { type: EEntType.EDGE, title: 'Edges' },
         { type: EEntType.WIRE, title: 'Wires' },
-        { type: EEntType.FACE, title: 'Faces' },
         { type: EEntType.POINT, title: 'Points' },
         { type: EEntType.PLINE, title: 'Polylines' },
         { type: EEntType.PGON, title: 'Polygons' },
         { type: EEntType.COLL, title: 'Collections' },
-        { type: EEntType.MOD, title: 'Model' }
+        { type: EEntType.MOD, title: 'Model' },
+        { title: 'Obj Topo' },
+        { title: 'Col Topo' }
     ];
-    displayedColumns: string[] = [];
-    displayData: {}[] = [];
     selected_ents = new Map();
     multi_selection = new Map();
     last_selected;
@@ -65,6 +67,15 @@ export class AttributeComponent implements OnChanges {
     @ViewChildren(MatSort) sort = new QueryList<MatSort>();
 
     dataSource: MatTableDataSource<object>;
+    displayedColumns: string[] = [];
+    displayData: {}[] = [];
+
+
+    dataSourceTopo: MatTableDataSource<object>;
+    displayedTopoColumns: string[] = [];
+    topoID: string;
+    topoSelectedType: string;
+    topoTabIndex: number;
 
     protected dataService: DataService;
 
@@ -73,12 +84,11 @@ export class AttributeComponent implements OnChanges {
         1: EEntType.VERT,
         2: EEntType.EDGE,
         3: EEntType.WIRE,
-        4: EEntType.FACE,
-        5: EEntType.POINT,
-        6: EEntType.PLINE,
-        7: EEntType.PGON,
-        8: EEntType.COLL,
-        9: EEntType.MOD
+        4: EEntType.POINT,
+        5: EEntType.PLINE,
+        6: EEntType.PGON,
+        7: EEntType.COLL,
+        8: EEntType.MOD
     };
 
     tab_rev_map = {
@@ -94,6 +104,30 @@ export class AttributeComponent implements OnChanges {
         10: 9
     };
 
+    indent_map = {
+        'ps': 1,
+        '_v': 2,
+        '_e': 2,
+        '_w': 3,
+        'pt': 4,
+        'pl': 4,
+        'pg': 4,
+        'co': 5,
+    };
+
+    string_map = {
+        'ps': EEntType.POSI,
+        '_v': EEntType.VERT,
+        '_e': EEntType.EDGE,
+        '_w': EEntType.WIRE,
+        'pt': EEntType.POINT,
+        'pl': EEntType.PLINE,
+        'pg': EEntType.PGON,
+        'co': EEntType.COLL,
+    };
+    topoTypes = ['pg', 'pl', 'pt'];
+
+
     columnItalic = 'c2';
 
     constructor(injector: Injector) {
@@ -101,6 +135,10 @@ export class AttributeComponent implements OnChanges {
         if (localStorage.getItem('mpm_attrib_current_tab') === null) {
             localStorage.setItem('mpm_attrib_current_tab', '0');
         }
+        this.dataSource = new MatTableDataSource();
+        this.dataSource.sortingDataAccessor = this._sortingDataAccessor;
+        this.dataSourceTopo = new MatTableDataSource();
+        this.dataSourceTopo.sortingDataAccessor = this._sortingDataAccessor;
     }
 
     // ngDoCheck() {
@@ -125,7 +163,7 @@ export class AttributeComponent implements OnChanges {
     // }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['data'] && this.data) {
+        if (changes['model'] && this.model) {
             this.refreshTable();
         }
         if (changes['reset']) {
@@ -140,54 +178,89 @@ export class AttributeComponent implements OnChanges {
     }
 
     generateTable(tabIndex: number) {
-        if (this.data) {
-            const ThreeJSData = this.data.attribs.threejs;
-            if (Number(tabIndex) === 9) {
-                this.displayData = ThreeJSData.getModelAttribsForTable();
+        // if (tabIndex > 8) {
+        //     const entityTypes = ['pg', 'pl', 'pt'];
+        //     let entity = null;
+        //     let entType = null;
+        //     for ( const entityType of entityTypes ) {
+        //         const selectedEnts = this.dataService.selected_ents.get(entityType);
+        //         if (selectedEnts && selectedEnts.size > 0) {
+        //             for (const entSet of selectedEnts) {
+        //                 entity = entSet;
+        //                 entType = entityType;
+        //             }
+        //             break;
+        //         }
+        //     }
+        //     if (!entity) { return; }
+        //     this.generateTopoTable(entity[0], this.tab_rev_map[this.string_map[entType]], 'ps');
+        //     return;
+        // }
+        if (this.model && this.nodeIndex) {
+            const entityTypes = ['pg', 'pl', 'pt'];
+            for ( const entityType of entityTypes ) {
+                const selectedEnts = this.dataService.selected_ents.get(entityType);
+                if (selectedEnts && selectedEnts.size > 0) {
+                    let entity = null;
+                    let entType = null;
+                    for (const entSet of selectedEnts) {
+                        entity = entSet;
+                        entType = entityType;
+                    }
+                    if (!this.topoSelectedType) { this.topoSelectedType = 'ps'; }
+                    this.generateTopoTable(entity[0], this.tab_rev_map[this.string_map[entType]], this.topoSelectedType);
+                    break;
+                }
+            }
+            if (tabIndex > 8) { return; }
+
+            const ThreeJSData = this.model.modeldata.attribs.threejs;
+            if (Number(tabIndex) === 8) {
+                this.displayData = ThreeJSData.getModelAttribsForTable(this.nodeIndex);
             } else {
-                const ready = this.data.attribs.threejs instanceof GIAttribsThreejs;
+                const ready = this.model.modeldata.attribs.threejs instanceof GIAttribsThreejs;
                 this.selected_ents = this.dataService.selected_ents.get(EEntTypeStr[this.tab_map[tabIndex]]);
 
                 if (!ready) { return; }
                 if (this.showSelected) {
-                    const SelectedAttribData = ThreeJSData.getEntsVals(this.selected_ents, this.tab_map[tabIndex]);
+                    const SelectedAttribData = ThreeJSData.getEntsVals(this.nodeIndex, this.selected_ents, this.tab_map[tabIndex]);
                     SelectedAttribData.map(row => {
                         if (this.selected_ents.has(row._id)) {
                             return row.selected = true;
                         }
                     });
-                    this.displayData = SelectedAttribData;
+                    this.displayData = SelectedAttribData.sort((a, b) => Number(a['_id'].slice(2)) - Number(b['_id'].slice(2)));
                 } else {
-                    const AllAttribData = ThreeJSData.getAttribsForTable(this.tab_map[tabIndex]).data;
+                    const AllAttribData = ThreeJSData.getAttribsForTable(this.nodeIndex, this.tab_map[tabIndex]).data;
                     AllAttribData.map(row => {
                         if (this.selected_ents.has(row._id)) {
                             return row.selected = true;
                         }
                     });
-                    this.displayData = AllAttribData;
+                    this.displayData = AllAttribData.sort((a, b) => Number(a['_id'].slice(2)) - Number(b['_id'].slice(2)));
                 }
             }
             if (this.displayData.length > 0) {
                 const columns = Object.keys(this.displayData[0]).filter(e => e !== 'selected');
                 let new_columns;
-                if (Number(tabIndex) === 9) {
+                if (Number(tabIndex) === 8) {
                     new_columns = columns;
                 } else {
                     const first = columns.shift();
                     // const second = columns.shift();
-                    const selected = columns.find(column => column.substr(0, 1) === '_');
-                    const rest_of_columns = columns.filter(column => column.substr(0, 1) !== '_');
+                    // const selected = columns.find(column => column.substr(0, 1) === '_');
+                    const rest_of_columns = columns.filter(column => column !== '_ts');
                     // new_columns = selected ? [first, second, selected, ...rest_of_columns, ' ']
-                    // : [first, second, ...rest_of_columns, ' '];
-                    new_columns = selected ? [first, selected, ...rest_of_columns, ' '] : [first, ...rest_of_columns, ' '];
+                    // new_columns = selected ? [first, selected, ...rest_of_columns, ' '] : [first, ...rest_of_columns, ' '];
+                    new_columns = [first, ...rest_of_columns, ' '];
                 }
                 this.displayedColumns = new_columns;
-                this.dataSource = new MatTableDataSource<object>(this.displayData);
+                this.dataSource.data = this.displayData;
+                // this.dataSource = new MatTableDataSource<object>(this.displayData);
             } else {
                 this.displayedColumns = [];
-                this.dataSource = new MatTableDataSource<object>();
+                this.dataSource.data = [];
             }
-            this.dataSource.sortingDataAccessor = this._sortingDataAccessor;
             this.dataSource.paginator = this.paginator.toArray()[tabIndex];
             this.dataSource.sort = this.sort.toArray()[tabIndex];
             if (this.table_scroll) {
@@ -198,6 +271,75 @@ export class AttributeComponent implements OnChanges {
             }
         }
         return tabIndex;
+    }
+
+    generateTopoTable(ent_id: string, tabIndex: number, selected_type: string): boolean {
+        const currentScroll = document.getElementById('topotable--container').scrollTop;
+        const ThreeJSData = this.model.modeldata.attribs.threejs;
+        const id = Number(ent_id.substr(2));
+        const ent_str = ent_id.slice(0, 2);
+        let selected_type_str = selected_type.slice(0, 2);
+        if (ent_str === 'co' && selected_type_str === 'ps') { selected_type_str = 'co'; }
+        const topoData = ThreeJSData.getEntSubAttribsForTable(this.nodeIndex, this.tab_map[tabIndex], id, this.string_map[selected_type_str]);
+        const baseIndent = this.indent_map[ent_str];
+        if (!topoData) {
+            return false;
+        }
+        const topoDataSource = [];
+        const topoHeader = [];
+        for (const topoRow of topoData) {
+            // @ts-ignore
+            const tableRow = Object.fromEntries(topoRow);
+            for (const selectedRow of this.multi_selection) {
+                if (topoRow.get('_id') === selectedRow[0]) {
+                    tableRow.selected = true;
+                    break;
+                }
+            }
+            if ((<string> topoRow.get('_id')).slice(0, 2) === selected_type_str) {
+                if (topoHeader.length === 0) {
+                    for (const attr of topoRow) {
+                        if (attr[0] !== '_ts' && attr[0] !== '_id') {
+                            topoHeader.push(attr[0]);
+                        }
+                    }
+                }
+                tableRow.active = true;
+            }
+            const indentation = baseIndent - this.indent_map[tableRow._id.slice(0, 2)];
+            tableRow._id = '    '.repeat(indentation) + tableRow._id;
+            if (ent_str === 'co') {
+                tableRow._id = '    ' + tableRow._id.trim();
+            }
+            topoDataSource.push(tableRow);
+        }
+        topoDataSource[0]._id = topoDataSource[0]._id.trim();
+        // topoDataSource[0].selected = true;
+
+        topoHeader.unshift('_id');
+        topoHeader.push(' ');
+
+        this.displayedTopoColumns = topoHeader;
+        this.dataSourceTopo.data = topoDataSource;
+        this.dataSourceTopo.paginator = this.paginator.toArray()[9];
+        this.topoSelectedType = selected_type;
+        if (this.topoTabIndex === tabIndex && this.topoID === ent_id) {
+            setTimeout(() => {
+                document.getElementById('topotable--container').scrollTop = currentScroll;
+            }, 0);
+
+        } else {
+            this.topoTabIndex = tabIndex;
+            this.topoID = ent_id;
+        }
+        localStorage.setItem('mpm_attrib_current_topo_obj', null);
+        return true;
+    }
+
+    _clearSelectedTopo() {
+        for (const row of this.dataSourceTopo.data) {
+            row['selected'] = false;
+        }
     }
 
     _sortingDataAccessor(data: object, headerID: string): string|number {
@@ -211,6 +353,7 @@ export class AttributeComponent implements OnChanges {
     }
 
     _setDataSource(tabIndex: number) {
+        this.multi_selection.clear();
         setTimeout(() => {
             localStorage.setItem('mpm_attrib_current_tab', tabIndex.toString());
             const settings = JSON.parse(localStorage.getItem('mpm_settings'));
@@ -218,14 +361,17 @@ export class AttributeComponent implements OnChanges {
                 if (settings.select !== undefined) {
                     settings.select.tab = tabIndex.toString();
                 } else {
-                    settings.select = {selector: {id: '_f', name: 'Faces'}, tab: '0'};
+                    settings.select = {selector: {id: 'pg', name: 'Polygons'}, tab: '0'};
                 }
                 localStorage.setItem('mpm_settings', JSON.stringify(settings));
             }
             if (tabIndex === 999) {
                 this.displayedColumns = [];
-                this.dataSource = new MatTableDataSource<object>();
-                this.dataSource.sortingDataAccessor = this._sortingDataAccessor;
+                // this.dataSource = new MatTableDataSource<object>();
+                this.dataSource.data = [];
+                // this.dataSource.sortingDataAccessor = this._sortingDataAccessor;
+            } else if (tabIndex === 9) {
+            } else if (tabIndex === 10) {
             } else {
                 this.generateTable(tabIndex);
             }
@@ -262,13 +408,13 @@ export class AttributeComponent implements OnChanges {
             }
             // sessionStorage.setItem('mpm_changetab', 'true');
             if (changeTab) {
-                if (this.data) {
-                    if (currentTab === 0 || currentTab === 8 || currentTab === 9) {
+                if (this.model) {
+                    if (currentTab === 0 || currentTab === 7 || currentTab === 8) {
                         this.child.selectTab(this.tab_rev_map[currentTab]);
-                    } else if (currentTab === 1 || currentTab === 2 || currentTab === 3 || currentTab === 4) {
-                        this.child.selectTopology(currentTab, event);
-                    } else if (currentTab === 5 || currentTab === 6 || currentTab === 7) {
-                        this.child.selectObject(currentTab, event);
+                    } else if (currentTab === 1 || currentTab === 2 || currentTab === 3) {
+                        this.child.selectTopology(currentTab);
+                    } else if (currentTab === 4 || currentTab === 5 || currentTab === 6) {
+                        this.child.selectObject(currentTab);
                     }
                 }
             }
@@ -277,82 +423,31 @@ export class AttributeComponent implements OnChanges {
     }
 
     resetTable() {
-        const rows = document.querySelectorAll('.selected-row');
-        rows.forEach(row => row.classList.remove('selected-row'));
+        for (const row of this.dataSource.data) {
+            row['selected'] = false;
+        }
         this.selected_ents.clear();
         this.multi_selection.clear();
     }
 
-//   selectRow(ent_id: string, event) {
-//     const currentTab = this.getCurrentTab();
-//     if (currentTab === 9) {
-//       return;
-//     }
-//     const id = Number(ent_id.substr(2));
-//     // Multiple row selection
-//     const ThreeJSData = this.data.attribs.threejs;
-//     const attrib_table_ents = ThreeJSData.getAttribsForTable(this.tab_map[currentTab]).ents;
-//     this.current_selected = id;
-//     const s = this.multi_selection;
-
-//     if (event.ctrlKey) {
-//       this.last_selected = this.current_selected;
-//       s.set(this.current_selected, this.current_selected);
-//     } else {
-//       if (!event.shiftKey) {
-//         s.clear();
-//         s.set(this.current_selected, this.current_selected);
-//         this.last_selected = this.current_selected;
-//       } else {
-//         if (this.last_selected === undefined) {
-//           this.last_selected = ThreeJSData.getAttribsForTable(this.tab_map[currentTab]).ents[0];
-//         }
-//         s.clear();
-//         if (this.current_selected < this.last_selected) { // select upper row
-//           attrib_table_ents.filter(ents => ents > this.current_selected && ents < this.last_selected).forEach(item => {
-//             s.set(item, item);
-//           });
-//           s.set(this.current_selected, this.current_selected);
-//           s.set(this.last_selected, this.last_selected);
-//         } else if (this.current_selected > this.last_selected) { // select lower row
-//           attrib_table_ents.filter(ents => ents < this.current_selected && ents > this.last_selected).forEach(item => {
-//             s.set(item, item);
-//           });
-//           s.set(this.current_selected, this.current_selected);
-//           s.set(this.last_selected, this.last_selected);
-//         }
-//       }
-//     }
-
-//     const ent_type = ent_id.substr(0, 2);
-//     const target = event.target;
-//     if (s.size === 1) {
-//       if (this.selected_ents.has(ent_id)) {
-//         this.attrTableSelect.emit({ action: 'unselect', ent_type: ent_type, id: id });
-//         this.selected_ents.delete(ent_id);
-//         target.parentNode.classList.remove('selected-row');
-//       } else {
-//         this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: id });
-//         this.selected_ents.set(ent_id, id);
-//         target.parentNode.classList.add('selected-row');
-//       }
-//     } else {
-//       this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: s });
-//       s.forEach(_id => {
-//         this.selected_ents.set(ent_id, id);
-//       });
-//     }
-//   }
-
     selectRow(ent_id: string, event) {
         const currentTab = this.getCurrentTab();
-        if (currentTab === 9) {
+
+        if (currentTab === 8) {
             return;
         }
+        this._clearSelectedTopo();
+
         const id = Number(ent_id.substr(2));
+        const ent_type = ent_id.substr(0, 2);
+
+        if (this.topoTypes.indexOf(ent_type) !== -1) {
+            this.generateTopoTable(ent_id, this.tab_rev_map[this.string_map[ent_type]], 'ps');
+        }
+
         // Multiple row selection
-        const ThreeJSData = this.data.attribs.threejs;
-        const attrib_table = ThreeJSData.getAttribsForTable(this.tab_map[currentTab]);
+        const ThreeJSData = this.model.modeldata.attribs.threejs;
+        const attrib_table = ThreeJSData.getAttribsForTable(this.nodeIndex, this.tab_map[currentTab]);
         this.current_selected = id;
         const s = this.multi_selection;
 
@@ -459,19 +554,101 @@ export class AttributeComponent implements OnChanges {
             s.set(this.current_selected, this.current_selected);
         }
 
-        const ent_type = ent_id.substr(0, 2);
-        const target = event.target;
         this.selected_ents.clear();
         if (s.size === 1) {
             this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: id });
             this.selected_ents.set(ent_id, id);
-            target.parentNode.classList.add('selected-row');
         } else {
             this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: s });
             s.forEach(_id => {
                 this.selected_ents.set(ent_id, id);
             });
         }
+        for (const row of this.dataSource.data) {
+            row['selected'] = false;
+        }
+        for (const selNumID of s) {
+            const selID = ent_type + selNumID[1];
+            for (const row of this.dataSource.data) {
+                if (row['_id'] === selID) {
+                    row['selected'] = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    singleClick(event, row): void{
+        this.timer = 0;
+        this.preventSimpleClick = false;
+
+        this.timer = setTimeout(() => {
+            if (!this.preventSimpleClick) {
+                this.selectTopo(event, row);
+            }
+        }, 200);
+
+    }
+
+    doubleClick(row): void {
+        this.preventSimpleClick = true;
+        clearTimeout(this.timer);
+        const ent_id = row._id.trim();
+        const ent_str = ent_id.substr(0, 2);
+        this.showTopo(row._id.trim(), this.tab_rev_map[this.string_map[ent_str]]);
+    }
+
+
+    showTopo(ent_id: string, tabIndex) {
+        if (!this.generateTopoTable(ent_id, tabIndex, 'ps')) {
+            return;
+        }
+        this.multi_selection.clear();
+        const switchTabButton = document.getElementById('ObjTopoTab');
+        localStorage.setItem('mpm_attrib_current_topo_obj', this.string_map['ps'].toString());
+        if (switchTabButton) { switchTabButton.click(); }
+    }
+
+    selectTopo(event: MouseEvent, row: any) {
+        const ent_id = row._id.trim();
+        const ent_type = ent_id.substr(0, 2);
+        const id = Number(ent_id.substr(2));
+        const s = this.multi_selection;
+        if ((s.size === 0 || this.current_selected.substr(0, 2) !== ent_type) && !(event.shiftKey || event.ctrlKey || event.metaKey)) {
+            s.clear();
+            this.current_selected = ent_id;
+            for (const datarow of this.dataSourceTopo.data) {
+                const row_ent_id = datarow['_id'].trim();
+                if (row_ent_id.substr(0, 2) === ent_type) {
+                    s.set(row_ent_id, Number(row_ent_id.substr(2)));
+                }
+            }
+            this.attrTableSelect.emit({ action: 'select', ent_type: 'multiple', id: s});
+        } else {
+            if (this.current_selected !== ent_id) {
+                this.currentShowingCol = '';
+            }
+            this.current_selected = ent_id;
+            if (event.shiftKey || event.ctrlKey || event.metaKey) {
+                if (s.has(ent_id)) {
+                    s.delete(ent_id);
+                } else {
+                    this.last_selected = this.current_selected;
+                    s.set(ent_id, this.current_selected);
+                }
+                this.attrTableSelect.emit({ action: 'select', ent_type: 'multiple', id: s});
+            } else {
+                s.clear();
+                s.set(ent_id, this.current_selected);
+                this.attrTableSelect.emit({ action: 'select', ent_type: ent_type, id: id });
+            }
+        }
+        this.generateTopoTable(this.topoID, this.topoTabIndex, ent_id);
+        localStorage.setItem('mpm_attrib_current_topo_obj', this.string_map[ent_type].toString());
+    }
+
+    prevTopo() {
+        if (!this.topoID || !this.topoTabIndex) { return; }
     }
 
     add_remove_selected(ent_id, event) {

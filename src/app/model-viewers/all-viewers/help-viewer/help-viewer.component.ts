@@ -1,8 +1,8 @@
-import { Component, Input, DoCheck, OnDestroy } from '@angular/core';
-import { ModuleList, ModuleDocList } from '@shared/decorators';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, DoCheck, OnDestroy } from '@angular/core';
+import { ModuleList} from '@shared/decorators';
 import { DataService } from '@shared/services';
-
+import * as showdown from 'showdown';
+import { FaceNormalsHelper } from 'three';
 /**
  * HelpViewerComponent
  */
@@ -13,9 +13,10 @@ import { DataService } from '@shared/services';
 })
 export class HelpViewerComponent implements DoCheck, OnDestroy {
     output: any;
-    ModuleDoc = ModuleDocList;
+    description = '';
     Modules = [];
     activeModIndex: string;
+    mdConverter = new showdown.Converter({literalMidWordUnderscores: true});
 
     // TODO: update mobius url
     urlString: string;
@@ -28,16 +29,21 @@ export class HelpViewerComponent implements DoCheck, OnDestroy {
                         'https://raw.githubusercontent.com/design-automation/' +
                         'mobius-parametric-modeller/master/src/assets/gallery/function_examples/';
 
+        const extraMods = ['variable', 'comment', 'expression', 'control_flow'];
+        for (const i of extraMods) {
+            this.Modules.push({
+                'module': i,
+                'src': `assets/typedoc-json/docCF/${i}.md`,
+                'functions': {}
+            });
+        }
+
         for (const mod of ModuleList) {
             if (mod.module[0] === '_') {continue; }
-            const nMod = {'module': mod.module, 'functions': [], 'description': ModuleDocList[mod.module].description};
-            for (const func of mod.functions) {
-                if (func.name[0] === '_') {continue; }
-                nMod.functions.push(ModuleDocList[mod.module][func.name]);
-            }
-            if (mod.functions.length > 0) {
-                this.Modules.push(nMod);
-            }
+            const nMod = {  'module': mod.module,
+                            'src': `assets/typedoc-json/docMD/${mod.module}.md`,
+                            'functions': {}};
+            this.Modules.push(nMod);
         }
         this.output = this.mainDataService.helpViewData[0];
         this.activeModIndex = this.mainDataService.helpViewData[1];

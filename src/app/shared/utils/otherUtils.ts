@@ -4,8 +4,8 @@ export function updateLocalViewerSettings(settings: any): boolean {
     if (typeof settings === 'string') {
         settings = JSON.parse(settings);
     }
-    if (settings.cesium) {
-        delete settings['cesium'];
+    if (settings.geo) {
+        delete settings['geo'];
     }
     settings_string = JSON.stringify(settings);
     if (settings_string === '{}') { return false; }
@@ -16,30 +16,34 @@ export function updateLocalViewerSettings(settings: any): boolean {
     } else {
         propCheck(settings, local_settings);
         localStorage.setItem('mpm_settings', JSON.stringify(settings));
+        if (settings.camera) {
+            // console.log(JSON.stringify(settings.camera))
+            localStorage.setItem('gi_camera', JSON.stringify(settings.camera));
+        }
     }
     return true;
 }
 
-export function updateCesiumViewerSettings(settings: any): boolean {
+export function updateGeoViewerSettings(settings: any): boolean {
     if (!settings) { return false; }
     let settings_string;
     if (typeof settings === 'string') {
         settings = JSON.parse(settings);
     }
-    if (!settings || !settings.cesium) {
+    if (!settings || !settings.geo) {
         return false;
     }
-    settings = settings.cesium;
+    settings = settings.geo;
     settings_string = JSON.stringify(settings);
     if (settings_string === '{}') { return false; }
-    const local_settings = JSON.parse(localStorage.getItem('cesium_settings'));
+    const local_settings = JSON.parse(localStorage.getItem('geo_settings'));
 
     if (settings === null) {
         return false;
     } else {
         propCheck(settings, local_settings);
         settings.updated = true;
-        localStorage.setItem('cesium_settings', JSON.stringify(settings));
+        localStorage.setItem('geo_settings', JSON.stringify(settings));
     }
     return true;
 }

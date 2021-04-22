@@ -21,7 +21,7 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
                 private dataOutputService: DataOutputService,
                 private router: Router) {
         new LoadUrlComponent(this.dataService, this.router).loadStartUpURL(this.router.url.split(/\s*&*\s*node\s*=/)[0]);
-        this.ctx.font = '12px sans-serif';
+        this.ctx.font = '400 12px arial';
         this.dataService.splitVal = 100;
         this.dataService.attribVal = -1;
         this.attribTogglePos();
@@ -41,7 +41,7 @@ export class ViewPublishComponent implements AfterViewInit, OnDestroy {
     }
 
     viewerData() {
-        return this.dataOutputService.getViewerData(this.getNode(), true);
+        return this.dataOutputService.getViewerData(this.getNode(), this.dataService.flowchart.model, true);
     }
 
     adjustTextArea() {

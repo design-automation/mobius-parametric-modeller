@@ -11,6 +11,7 @@
         <input id='hidden_node_selection' value=''>
         <input id='hidden_node_selection_button' (click)=updateNode() >
         <input id='hidden_notify_button' value='' (click)=notifyMessage($event) >
+        <input id='hidden_update_inline_func' value='' (click)="searchInlineFuncs()">
     </div>
 
     <!-- buttons -->
@@ -88,9 +89,9 @@
                 </button>
                 <br>
                 <button onclick="document.getElementById('savedata').click();"
-                title="Save Javascript Execution code to Computer">
+                title="Save generated model data to computer">
                     <mat-icon>play_for_work</mat-icon>
-                    Save Data
+                    Save Model
                 </button>
                 <br>
                 <button (click)="openHeaderDialog($event, 'backup')"
@@ -116,6 +117,7 @@
 </div>
 
 <dialog id='headerDialog'>
+    <button class='closebutton' (click)='closeDialog(false)'><mat-icon class='icon'>close</mat-icon></button>
     <div class='genUrlDialog' *ngIf='checkDialog("url")'>
         <p>To publish your model, please upload your Möbius (.mob) file to an online file server to allows
         you to share the URL. (For example, you can upload your file to platforms such Github or Dropbox.) 
@@ -229,7 +231,41 @@
                 <mat-icon class='icon'>delete_outline</mat-icon>
             </button>
         </div>
-        <button id='addGlobalButton' (click)="addGlobalFunc($event)">Import File</button>
+        <button class='addGlobalButton' (click)="addGlobalFunc($event)">Import File</button>
+        <button class='addGlobalButton' (click)="addGlobalFuncLS($event)">Import LS</button>
+    </div>
+    <div class='inlineFuncDialog' *ngIf='checkDialog("inlinefunc")'>
+        <p>Create Expression: </p>
+        <br>
+        <div class='inlineFuncContainer'>
+            <input id='search_inline' class='searchBar' placeholder='Search Inline Function' value='' (keyup)="searchInlineFuncs($event)">
+            <br>
+            <br>
+            <ng-container *ngFor='let fnCategory of searchedInlineFunc'>
+                <button  id='inlineAcc_{{fnCategory[0]}}' class='inlinefuncAccordion' (mousedown)='disableFocus($event)' (click)='openInlineMenu($event, fnCategory[0])'>{{fnCategory[0]}}</button>
+                <div id='inlinefunc_{{fnCategory[0]}}' class='inlinefuncDiv'>
+                    <ul class='inlinefuncUL'>
+                        <!-- <li *ngFor='let fn of fnCategory[1]' (mousedown)='disableFocus($event)' (click)='addInlineFunc(fn)' title='{{getInlineHoverText(fn, fnCategory[0])}}'> -->
+                        <li *ngFor='let fn of fnCategory[1]' (mousedown)='disableFocus($event)' (click)='addInlineFunc(fn)'>
+                            {{fn}}
+                            <button class='helpButton' mat-icon-button title="Help" tabindex="-1" (click)='updateInlineHelpText($event, fn, fnCategory[0])'>
+                                <mat-icon class='icon' svgIcon='cHelp'></mat-icon>
+                            </button>
+                        </li>
+                    </ul>
+            </div>
+            </ng-container>
+        </div>
+        <div class='inlineFuncHelpContainer' id='inlineHelp'>
+            <p>Inline Function Help</p>
+        </div>
+        <div class='inlineFuncExpressionContainer'>
+            <textarea id='inlineExpression' class='inlineFuncExpression' placeholder='Expression' (mousedown)='textareaMousedown = true'></textarea>
+        </div>
+        <div class='inlineFuncSaveButtonContainer'>
+            <button id='insertInlineExpression' class='disabled' (click)='insertInlineFunc()'>Insert</button>
+            <button (click)='copyInlineFunc()'>Copy</button>
+        </div>
     </div>
     <div class='saveLocalDialog' *ngIf='checkDialog("savels")'>
         <p>Save File to Local Storage as: </p>
@@ -264,7 +300,7 @@
                 [checked]='checkSetting("autosave", true)'>
                 <label for='settings-autosave'></label>
             </div>
-            <div class='textdiv'>Auto-saving file (5-min interval)</div>
+            <div class='textdiv'>Auto-saving file after executing</div>
         </div>
         <br>
         <div class='settingLine'>
@@ -284,7 +320,7 @@
         </div>
         <br>
         <ng-container *ngFor='let category of func_categories'>
-            <div class='settingLine subsetting'>
+            <div class='settingLine'>
                 <div class='div--chbox'>
                     <input id='_func_{{category}}' 
                     name='_func_{{category}}' 
@@ -296,11 +332,14 @@
             </div>
             <br>
         </ng-container>
-
+        <br>
+        <div class='settingLine'>
+            <p>WebGL Renderer: {{getRendererInfo()}}</p>
+        </div>
         <br>
         <br>
         <br>
-        <button class='settingsButton' (click)="updateSettings($event, backup)">Apply</button>
         <button class='settingsButton' (click)="closeDialog()">Cancel</button>
+        <button class='settingsButton' (click)="updateSettings($event, backup)">Apply</button>
     </div>
 </dialog>

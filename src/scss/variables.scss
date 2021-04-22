@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
 $padding: 40px; // ? not used
 $small-padding: 15px;
 $header-height: 40px;
@@ -9,4 +12,7 @@ $fsize3: 30px;
 $port-size: 15px;
 $default-side-padding: 15px;
 
-$disabled-opacity: 0.4;
+$disabled-opacity: 0.5;
+
+$inputFontFam: 'Inconsolata', monospace;
+$inputTextFontFam: 'Share Tech Mono', monospace;

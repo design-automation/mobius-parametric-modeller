@@ -38,7 +38,7 @@
 }
 
 .toolset--commands{
-    max-height: calc(100vh - 90px);
+    max-height: calc(100vh - 120px);
     overflow:hidden;
     &:hover{
         overflow-y: auto;
@@ -85,12 +85,14 @@
     //padding-bottom: 2px;
 
     li{
+        position: relative;
         user-select: none;
         margin: 0px;
         padding: 0px;
         padding-left: 8px;
         font-style: italic;
-        font-weight: 550;
+        font-family: $inputTextFontFam;
+        font-weight: 700;
         // color: $function-text-color;
         font-size: $fsize2;
         height: 18px;
@@ -100,6 +102,7 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+
     }
     .user--Manage{
         margin-bottom: 4px;
@@ -108,9 +111,29 @@
     :hover{
         background-color: $color4;
         transition: 0.4s;
+        .helpButton {
+            display: inline-block;
+        }
     }
-
 }
+.helpButton {
+    display: none;
+    position: absolute;
+    right: 1px;
+    background-color: inherit;
+    padding: 2px 0px 0px 0px;
+    margin: 0px;
+    border: 0px;
+
+    &:focus {
+        outline: 0px;
+    }
+    .icon {
+        width: 14px;
+        height: 14px;
+    }
+}
+
 .user--def{
     .user--def-lnContainer{
         width: 100%;
@@ -146,6 +169,7 @@
 
 
 .accordion {
+    position: relative;
     background-color: $color4;
     color: $color8;
     cursor: pointer;
@@ -161,6 +185,8 @@
     font-weight: 550;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-family: $inputTextFontFam;
+    font-weight: 700;
 
     &.mainAccordion{
         &.active {
@@ -177,8 +203,15 @@
             margin-left: 5px;
         }
     }
-    &.active, &:hover {
+    &.active {
         background-color: $color3; 
+    }
+    &:hover {
+        background-color: $color3; 
+        .helpButton {
+            display: inline-block;
+            bottom: 1px;
+        }
     }
     &:disabled{
         color: $color3;
@@ -198,7 +231,8 @@
     // background-color: $color5;
     overflow: hidden;
     button{
-        font-weight: 550;
+        font-family: $inputTextFontFam;
+        font-weight: 700;
         color: $selected-color;
         font-style: italic;
         white-space: nowrap;
@@ -212,6 +246,7 @@
 .tooltip-variable{
     display: block;
     color: $color8;
+    font-family: $inputTextFontFam;
 
     &.invalid{
         opacity: $disabled-opacity;
@@ -222,6 +257,7 @@
 .tooltip-basic{
     display: block;
     color: $basic-function-text-color;
+    font-family: $inputTextFontFam;
 
     &.invalid{
         opacity: $disabled-opacity;
@@ -232,6 +268,8 @@
 .tooltip{
     display: block;
     color: $function-text-color;
+    font-family: $inputTextFontFam;
+    font-weight: 700;
 }
 
 
@@ -259,6 +297,8 @@
 
 
     p{
+        padding: 0px;
+        margin: 1px;
         font-family: sans-serif;
         display: flex;
         flex-flow: row nowrap;

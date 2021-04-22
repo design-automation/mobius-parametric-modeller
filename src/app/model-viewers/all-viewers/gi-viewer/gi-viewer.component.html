@@ -2,20 +2,22 @@
 	<as-split #viewerSplit direction="vertical" (dragEnd)='dragSplitEnd($event)' [disabled]='checkPublish()'>
 		<as-split-area [size]="100 - getSplit()" id="three-js">
 			<threejs-viewer [model]='data'
+            [attr_table_select]='attrTableSelect'
+            [selectSwitch] = 'selectSwitchOnOff'
+            [attribLabel] = 'attribLabelVal'
+            [nodeIndex] = 'nodeIndex'
 			(action)="threejsAction($event)"
-				[attr_table_select]='attrTableSelect'
-				[selectSwitch] = 'selectSwitchOnOff'
-				[attribLabel] = 'attribLabelVal'
 			></threejs-viewer>
 			<button class='btn' id="settings_button" mat-icon-button (click)="openModal('settings_modal')" title="Settings"><mat-icon svgIcon="settings"></mat-icon></button>
 		</as-split-area>
 		<as-split-area [size]='getSplit()' id="attrib">
-			<attribute [data]="data"
-				[refresh]="clickedEvent"
-				[reset]="attrTableReset"
-				(attrTableSelect) = "attribTableSelected($event)"
-				(selectSwitch) = "selectSwitch($event)"
-				(attribLabel) = "attribLabel($event)"
+			<attribute [model]="data"
+            [nodeIndex] = 'nodeIndex'
+            [refresh]="clickedEvent"
+            [reset]="attrTableReset"
+            (attrTableSelect) = "attribTableSelected($event)"
+            (selectSwitch) = "selectSwitch($event)"
+            (attribLabel) = "attribLabel($event)"
 			>
 			</attribute>
 		</as-split-area>
@@ -199,13 +201,13 @@
                         <dd id='grid_pos'>
                             <div class="label">Grid Position</div>
                             <input type="number"
-                            [value]="formatNumber(settings.grid.pos_x)"
+                            [value]="formatNumber(settings.grid.pos.x)"
                             (change)="settingOnChange('grid.update_pos_x', $event.target.value)">
                             <input type="number"
-                            [value]="formatNumber(settings.grid.pos_y)"
+                            [value]="formatNumber(settings.grid.pos.y)"
                             (change)="settingOnChange('grid.update_pos_y', $event.target.value)">
                             <input type="number"
-                            [value]="formatNumber(settings.grid.pos_z)"
+                            [value]="formatNumber(settings.grid.pos.z)"
                             (change)="settingOnChange('grid.update_pos_z', $event.target.value)">
                             <button (click)="settingOnChange('grid.update_pos')" class="filebtn getbtn">Get</button>
                         </dd>
@@ -568,23 +570,7 @@
             <tab tabTitle="Entity selection">
                 <div class="mat-elevation-z1">
                     <dl>
-                        <dd>
-                            <div class="label">Positions (ps)</div>
-                            <div class="onoffswitch">
-                                <input type="checkbox"
-                                name="onoffswitch"
-                                class="onoffswitch-checkbox"
-                                id="psOnOff"
-                                [checked]='settings.select.enabledselector.ps'
-                                (change)="settingOnChange('select.ps')"
-                                >
-                                <label class="onoffswitch-label" for="psOnOff">
-                                    <span class="onoffswitch-inner"></span>
-                                    <span class="onoffswitch-switch"></span>
-                                </label>
-                            </div>
-                        </dd>
-                        <dd>
+                        <!-- <dd>
                             <div class="label">Vertices (_v)</div>
                             <div class="onoffswitch">
                                 <input type="checkbox"
@@ -631,8 +617,8 @@
                                     <span class="onoffswitch-switch"></span>
                                 </label>
                             </div>
-                        </dd>
-                        <dd>
+                        </dd> -->
+                        <!-- <dd>
                             <div class="label">Faces (_f)</div>
                             <div class="onoffswitch">
                                 <input type="checkbox"
@@ -643,6 +629,22 @@
                                 (change)="settingOnChange('select._f')"
                                 >
                                 <label class="onoffswitch-label" for="_fOnOff">
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                            </div>
+                        </dd> -->
+                        <dd>
+                            <div class="label">Collections (co)</div>
+                            <div class="onoffswitch">
+                                <input type="checkbox"
+                                name="onoffswitch"
+                                class="onoffswitch-checkbox"
+                                id="coOnOff"
+                                [checked]='settings.select.enabledselector.co'
+                                (change)="settingOnChange('select.co')"
+                                >
+                                <label class="onoffswitch-label" for="coOnOff">
                                     <span class="onoffswitch-inner"></span>
                                     <span class="onoffswitch-switch"></span>
                                 </label>
@@ -697,23 +699,22 @@
                             </div>
                         </dd>
                         <dd>
-                            <div class="label">Collections (co)</div>
+                            <div class="label">Positions (ps)</div>
                             <div class="onoffswitch">
                                 <input type="checkbox"
                                 name="onoffswitch"
                                 class="onoffswitch-checkbox"
-                                id="coOnOff"
-                                [checked]='settings.select.enabledselector.co'
-                                (change)="settingOnChange('select.co')"
+                                id="psOnOff"
+                                [checked]='settings.select.enabledselector.ps'
+                                (change)="settingOnChange('select.ps')"
                                 >
-                                <label class="onoffswitch-label" for="coOnOff">
+                                <label class="onoffswitch-label" for="psOnOff">
                                     <span class="onoffswitch-inner"></span>
                                     <span class="onoffswitch-switch"></span>
                                 </label>
                             </div>
                         </dd>
                     </dl>
-                    
                 </div>
             </tab>
         </tabs>

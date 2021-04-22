@@ -19,7 +19,7 @@ export class ProcedureInputEditorComponent implements OnDestroy {
     private ctx = document.createElement('canvas').getContext('2d');
 
     constructor() {
-        this.ctx.font = 'bold 12px arial';
+        this.ctx.font = '400 12px \'inconsolata\'';
     }
 
     ngOnDestroy() {
@@ -65,10 +65,14 @@ export class ProcedureInputEditorComponent implements OnDestroy {
         }
     }
 
+    markEntity() {
+        this.prod.selectGeom = !this.prod.selectGeom;
+    }
+
     // modify variable input: replace space " " with underscore "_"
     varMod() {
         if (!this.prod.args[0].value) { return; }
-        this.prod.args[0].value = this.prod.args[0].value.replace(/\s|\"/g, '');
+        this.prod.args[0].value = this.prod.args[0].value.replace(/\s|\"/g, '').toUpperCase();
         if (! this.prod.args[0].value.match(/^[a-zA-Z0-9_]*$/)) {
             this.prod.args[0].invalidVar = true;
         } else {

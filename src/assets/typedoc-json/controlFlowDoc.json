@@ -1,0 +1,69 @@
+{
+    "Variable": {
+        "description": "Insert an assignment statement that contains an `=` operator. An assignment statement is used to define a new variable or set the value of an existing variable.\n \nMore fundamentally, an assignment statement sets and/or re-sets the value stored in the storage location denoted by a variable name. For example, consider the statement `x = 10`. If the variable `x` does not exist in the current scope, then a new variable is created in storage and the value `10` is then copied into that storage location. If the variable exists already, then the value `10` is copied into the existing storage location , overwriting any value that exists there already.",
+        "example": [
+            "my_var = 123", 
+            "my_list[2] = 123", 
+            "my_dict['abc'] = 123"],
+        "example_info": [
+            "Sets the variable `my_var` to the value `123`.", 
+            "In the list `my_list`, sets the third item in the list to the value `123`.",
+            "In the dictionary `my_dict`, sets a key-value pair, where the key is `abc` and the value is `123`."
+        ]
+    },
+    "Comment": {
+        "description": "Inserts a comment, which is a descriptive annotation of the code that does not get executed.",
+        "example": [],
+        "example_info": []
+    },
+    "Expression": {
+        "description": "Opens up a dialog box for creating expressions.\n \nAn expression is a combination of one or more constants, variables, functions, and operators that can be evaluated to produce another value.\n \n== Simple Expressions ==\n \nexample of simple expressions are `2 + 2`, which evaluates to `4`, and `1 == 2`, which evaluates to `false`. Expressions can also contain variables, for exaple is the variable `x` exists in the current scope, and has a value of `10`, then the expression `x + 2` will evaluate to `12`. \n \n== Expressions with Functions ==\n \nAn expression can also contain inline functions, such as `sqrt(9)` which evaluates to `3`. Functions can also be nested inside one another, for example, `round(sqrt(20))` evaluates to `4`. \n \nNote that all inline functions return a value. \n \n== Expressions with Spatial Information Queries == \n \nThe Obi language also supports a number of shortcus for querying entities in the spatial information model. \n \n * The `#XX` and `entity#XX` expressions are used to get a list of entities from the model.\n * The `entity@name` expression is used to get attributes from entities in the model.\n * The `?@name == value` expression is used to filter a list of entities based on attribute values.\n",
+        "example": [],
+        "example_info": []
+    },
+    "If": {
+        "description": "Inserts a conditional 'If' statement into the procedure.",
+        "example": [],
+        "example_info": []
+    },
+    "Elseif": {
+        "description": "Inserts a conditional 'Else-if' statement, which must be part of a compound conditional 'If' statement. The 'Else-if' statement must directly follow either an 'If' statement or another 'Else-if' statement.",
+        "example": ["If a > 4\n    b = 0\nElse-if a > 3\n    b = 1"],
+        "example_info": [""]
+    },
+    "Else": {
+        "description": "Inserts a conditional 'Else' statement, which must be part of a compound conditional 'If' statement. The 'Else' statement must directly follow either an 'If' statement or another 'Else-if' statement.",
+        "example": [],
+        "example_info": []
+    },
+    "Foreach": {
+        "description": "Inserts a 'For-each' loop statement. The body of the loop can be executed zero or more times.",
+        "example": [],
+        "example_info": []
+    },
+    "While": {
+        "description": "Inserts a 'While' loop statement. The body of the loop can be executed zero or more times.",
+        "example": [],
+        "example_info": []
+    },
+    "Break": {
+        "description": "Inserts a 'Break' statement into the body of either a 'For-each' loop or a 'While' loop. When the 'Break' is executed, execution will break out of the loop and procedure to the next line of code immediatley after the loop statement. The 'Break' statement os typically nested inside a conditional 'If' statement.",
+        "example": [],
+        "example_info": []
+    },
+    "Continue": {
+        "description": "Inserts a 'Continue' statement into the body of either a 'For-each' loop or a 'While' loop. When the 'Continue' is executed, execution will skips the subsequent lines of code in the loop body and continue with the next iteration of the loop. The 'Continue' statement is typically nested inside a conditional 'If' statement.",
+        "example": [],
+        "example_info": []
+    },
+    "Return": {
+        "description": "Inserts a 'Return' statement into either the body of a procedure or the body of a local function.",
+        "example": [],
+        "example_info": []
+    },
+    "Error": {
+        "description": "Inserts an 'Error' statement. When executed, the 'Error' statement will raise an error and print an error message to the console. The 'Error' statement is typically nested inside a conditional 'If' statement.",
+        "example": [],
+        "example_info": []
+    }
+}

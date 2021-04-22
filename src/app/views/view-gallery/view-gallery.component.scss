@@ -9,6 +9,7 @@ $scale-factor: 1.1;
     margin-top: $header-height;
     margin-left: 11px; //split bar width
     height: calc(100vh - 40px); //header height
+    width: calc(100% - 11px); //header height
     overflow: hidden;
     overflow-y: auto;
 }
@@ -151,6 +152,8 @@ hr{
 }
 
 h3 {
+    margin: 0px;
+    padding: 0px;
     cursor: pointer;
 }
 

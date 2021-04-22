@@ -20,7 +20,7 @@ export class ParameterEditorComponent implements OnDestroy {
     private ctx = document.createElement('canvas').getContext('2d');
 
     constructor(private dataService: DataService) {
-        this.ctx.font = 'bold 12px arial';
+        this.ctx.font = '400 12px \'inconsolata\'';
     }
 
     ngOnDestroy() {

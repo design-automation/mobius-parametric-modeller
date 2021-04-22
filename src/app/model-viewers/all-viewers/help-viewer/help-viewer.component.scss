@@ -31,12 +31,16 @@
     padding: $small-padding;
 }
 
+$ln-height: $fsize2 + 3px;
+
 .body--container{
     padding: 6px 0px;
     border-top: 1px solid $color1;
+    h5{
+        margin-bottom: $ln-height/4;
+    }
 }
 
-$ln-height: $fsize2 + 3px;
 
 .descr--container, .param--container, .ret--container, .exam--container{
     padding: 0px;
@@ -118,7 +122,8 @@ $ln-height: $fsize2 + 3px;
 
 h1 {
     // display: inline-block;
-    padding-left: 10px;
+    margin: 0px;
+    padding: 0px 0px 0px 10px;
     font-size: 14px;
     font-weight: 600;
     line-height: 30px;
@@ -142,6 +147,7 @@ p{
 
 .moduleDesc{
     font-size: 12px;
+    padding: 0px 0px 10px 0px;
 }
 
 #helpMenu {

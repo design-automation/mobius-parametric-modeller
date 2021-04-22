@@ -10,7 +10,7 @@ div[class^="container--"]{
 .flowchart-info{
     display: flex;
     flex-flow: column nowrap;
-    padding-left: 8px;
+    padding-left: 0px;
     padding-right: 5px;
     width: 100%;
     box-sizing: border-box;
@@ -24,7 +24,7 @@ div[class^="container--"]{
     }
 }
 
-textarea, #flowchart-name, #ret--input{
+textarea, #flowchart-name{
     color: $color8;
     border: 2px solid $color5;
     background-color: transparent;
@@ -32,7 +32,7 @@ textarea, #flowchart-name, #ret--input{
     margin-bottom: 1px;
 
     padding-left: 6px;
-    font-family: sans-serif;
+    font-family: arial;
     font-size: $fsize2;
     max-width: 100%;
     resize: none; 
@@ -44,7 +44,28 @@ textarea, #flowchart-name, #ret--input{
     &.error{
         border: 2px solid $error-color;
     }
+}
+.ret--input {
+    font-family: $inputFontFam;
+    font-size: $fsize2;
+    font-weight: 400;
+    color: $color8;
+    border: 2px solid $color5;
+    background-color: transparent;
+    height: $fsize1;
+    margin-bottom: 1px;
 
+    padding-left: 6px;
+    max-width: 100%;
+    resize: none; 
+    overflow: auto;
+    &:hover, &:focus{
+        border-color: $selected-color;
+        background-color: $color7;
+    }
+    &.error{
+        border: 2px solid $error-color;
+    }
 }
 
 .input-container{
@@ -66,15 +87,15 @@ hr{
 }
 
 .disabled-input{
+    font-family: $inputTextFontFam;
+    font-size: $fsize2;
+    font-style: italic;
+    font-weight: 700;
+    color: $basic-function-text-color;
     border: 0px;
     margin: 0px;
     width: 50px;
-    font-family: sans-serif;
-    font-size: $fsize2;
-    font-weight: 550;
-    font-style: italic;
     background-color: $color6;
-    color: $function-text-color;
 }
 
 .input{

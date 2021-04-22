@@ -3,12 +3,17 @@ import { Injectable } from '@angular/core';
 import { IModule, IFunction } from '@models/procedure';
 import { IArgument } from '@models/code';
 import * as doc from '@assets/typedoc-json/doc.json';
+import * as ctrlFlowDoc from '@assets/typedoc-json/controlFlowDoc.json';
 // const doc = require('@assets/typedoc-json/doc.json');
+import * as showdown from 'showdown';
+import * as fs from 'fs';
 
 // @ts-ignore
 import * as Modules from 'assets/core/modules';
 
+const mdConverter = new showdown.Converter({literalMidWordUnderscores: true});
 const module_list = [];
+const extraMods = ['variable', 'comment', 'expression', 'control_flow'];
 
 // todo: bug fix for defaults
 function extract_params(func: Function): [IArgument[], boolean] {
@@ -82,29 +87,20 @@ function analyzeParamType(fn, paramType) {
 
 }
 
-const docs = {};
-for (const mod of doc.children) {
-    let modName: any = mod.name.replace(/"/g, '').replace(/'/g, '').split('/');
-    const coreIndex = modName.indexOf('core');
-    if (modName.length < 3 || coreIndex === -1  || modName[coreIndex + 1] !== 'modules') { continue; }
-    modName = modName[modName.length - 1];
-    // if (modName.substr(0, 1) === '"' || modName.substr(0, 1) === '\'') {
-    //     modName = modName.substr(1, modName.length - 2);
-    // } else {
-    //     modName = modName.substr(0, modName.length - 1);
-    // }
-    if (modName.substr(0, 1) === '_' || modName === 'index' || modName === 'categorization') {
-        continue;
-    }
+function addDoc(mod, modName, docs) {
     const moduleDoc = {};
     if (mod.comment && mod.comment.shortText) {
         moduleDoc['description'] = mod.comment.shortText;
     }
-    if (!mod.children) { continue; }
+    if (!mod.children) { return; }
     for (const func of mod.children) {
         const fn = {};
         fn['name'] = func.name;
         fn['module'] = modName;
+        if (modName === 'constants') {
+            fn['description'] = func['comment'].shortText;
+            moduleDoc[func.name] = fn;
+        }
         if (!func['signatures']) { continue; }
         if (func['signatures'][0].comment) {
             const cmmt = func['signatures'][0].comment;
@@ -147,15 +143,85 @@ for (const mod of doc.children) {
                 pr['name'] = param.name;
                 if (param.comment) {
                     pr['description'] = param.comment.shortText || param.comment.text;
+                    // if (pr['description']) {
+                    //     pr['description'] = mdConverter.makeHtml(pr['description']).replace(/\n/g, '<br/>')
+                    // }
                 }
                 pr['type'] = analyzeParamType(fn, param.type);
                 fn['parameters'].push(pr);
             }
+        }
+        if (fn['description']) {
+            fn['description'] = mdConverter.makeHtml(fn['description']).replace(/\\n/g, '<br/>');
         }
         moduleDoc[func.name] = fn;
     }
     docs[modName] = moduleDoc;
 }
 
+function addModFuncDoc(modDoc, modUrl, modName) {
+    fetch(modUrl).then(res => {
+        if (!res.ok) {
+            console.log('HTTP Request Error: Unable to retrieve documentation for ' + modName);
+            return '';
+        }
+        const mod = { };
+        modDoc[modName] = mod;
+        res.text().then(docText => {
+            const splitText = docText.split('## ');
+            if (splitText.length === 1) {
+                const funcText = docText.split('# ')[1];
+                const funcName = funcText.split('\n')[0].trim().toLowerCase();
+
+                if (extraMods.indexOf(modName) !== -1) {
+                    mod[funcName] = '## ' + funcText.trim();
+                } else {
+                    mod[funcName] = '## ' + modName + '.' + funcText.trim();
+                }
+            } else {
+                for (const funcText of splitText) {
+                    if (funcText[0] === '#') { continue; }
+                    const funcName = funcText.split('\n')[0].trim().toLowerCase();
+
+                    if (extraMods.indexOf(modName) !== -1) {
+                        mod[funcName] = '## ' + funcText.trim();
+                    } else {
+                        mod[funcName] = '## ' + modName + '.' + funcText.trim();
+                    }
+                }
+            }
+        });
+    });
+
+}
+
+const moduleDocs = {};
+const inlineDocs = {};
+const functionDocs = {};
+for (const mod of doc.children) {
+    let modName: any = mod.name.replace(/"/g, '').replace(/'/g, '').split('/');
+    const coreIndex = modName.indexOf('core');
+    if (modName.length < 3 || coreIndex === -1) {
+        continue;
+    }
+    if (modName[coreIndex + 1] === 'inline') {
+        modName = modName[modName.length - 1];
+        addDoc(mod, modName, inlineDocs);
+
+    } else if (modName[coreIndex + 1] === 'modules') {
+        modName = modName[modName.length - 1];
+        if (modName.substr(0, 1) === '_' || modName === 'index' || modName === 'categorization') {
+            continue;
+        }
+        addDoc(mod, modName, moduleDocs);
+        addModFuncDoc(functionDocs, `assets/typedoc-json/docMD/${modName}.md`, modName)
+    }
+}
+for (const i of extraMods) {
+    addModFuncDoc(functionDocs, `assets/typedoc-json/docCF/${i}.md`, i)
+}
+
 export const ModuleList = module_list;
-export const ModuleDocList = docs;
+export const ModuleDocList = moduleDocs;
+export const AllFunctionDoc = functionDocs;
+export const InlineDocList = inlineDocs;

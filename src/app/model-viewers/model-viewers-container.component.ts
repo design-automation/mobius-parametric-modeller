@@ -5,6 +5,8 @@ import { Viewers } from './model-viewers.config';
 import { DataService } from '@services';
 import { DataService as GIDataService } from './all-viewers/gi-viewer/data/data.service';
 import { Router } from '@angular/router';
+import { GIModel } from '@assets/libs/geo-info/GIModel';
+import { _parameterTypes } from '@assets/core/modules';
 
 /**
  * A component that contains all the viewers.
@@ -18,9 +20,10 @@ import { Router } from '@angular/router';
 })
 export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy {
     @ViewChild('vc', { read: ViewContainerRef, static: true }) vc: ViewContainerRef;
-    @Input() data: any;
+    // @Input() data: any;
     private views = [];
     private activeView: IView;
+    private emptyModel: GIModel;
     Viewers = Viewers;
     /**
      * Construct the viewer container.
@@ -30,24 +33,10 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
     constructor(private injector: Injector, private r: ComponentFactoryResolver, private dataService: DataService,
                 private giDataService: GIDataService, private router: Router) {
         let viewCheck: any;
+        this.emptyModel = _parameterTypes.newFn();
+        // this.emptyModel.nextSnapshot([]);
+
         const page = this.router.url.split('?')[0]
-        // if (page === '/publish' || page === '/minimal') {
-        //     this.Viewers = [];
-        //     viewCheck = this.router.url.split('showViewer=');
-        //     if (viewCheck.length === 1) { viewCheck = '';
-        //     } else { viewCheck = viewCheck[1].split('&')[0]; }
-        //     for (const view of Viewers) {
-        //         if (view.component.name === 'HelpViewerComponent') { continue; }
-        //         if (view.component.name === 'ConsoleViewer') {
-        //             this.Viewers.push(view);
-        //             continue;
-        //         }
-        //         if (viewCheck === '0') { continue; }
-        //         if (viewCheck === '1' && view.component.name === 'GICesiumViewerComponent') { continue; }
-        //         if (viewCheck === '2' && view.component.name === 'GIViewerComponent') { continue; }
-        //         this.Viewers.push(view);
-        //     }
-        // }
         viewCheck = this.router.url.split('showViewer=');
         this.Viewers = [];
         if (viewCheck.length === 1) { viewCheck = '';
@@ -57,7 +46,7 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
             for (const v of viewCheck) {
                 for (const view of Viewers) {
                     if (v === 1 && view.component.name === 'GIViewerComponent') { this.Viewers.push(view); }
-                    if (v === 2 && view.component.name === 'GICesiumViewerComponent') { this.Viewers.push(view); }
+                    if (v === 2 && view.component.name === 'GIGeoViewerComponent') { this.Viewers.push(view); }
                     if (v === 3 && view.component.name === 'ConsoleViewerComponent') { this.Viewers.push(view); }
                     if (v === 4 && view.component.name === 'HelpViewerComponent') { this.Viewers.push(view); }
                 }
@@ -74,7 +63,7 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
                     continue;
                 }
                 if (viewCheck === '0') { continue; }
-                if (viewCheck === '1' && view.component.name === 'GICesiumViewerComponent') { continue; }
+                if (viewCheck === '1' && view.component.name === 'GIGeoViewerComponent') { continue; }
                 if (viewCheck === '2' && view.component.name === 'GIViewerComponent') { continue; }
                 this.Viewers.push(view);
             }
@@ -90,7 +79,7 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
                     this.dataService.activeView = '3D Viewer';
                     break;
                 case '2':
-                    this.dataService.activeView = 'Geo Viewer';
+                    this.dataService.activeView = 'Three Geo Viewer';
                     break;
             }
         }
@@ -146,6 +135,9 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
         const component = view.component;
         const factory = this.r.resolveComponentFactory(component);
         const componentRef = factory.create(this.injector);
+        componentRef.instance['nodeIndex'] = 1;
+        componentRef.instance['data'] = this.emptyModel;
+        componentRef.instance['data'].modeldata.active_ssid = 1;
         /*
         if (view.name != 'Console'){
             componentRef.instance["data"] = this.data;
@@ -178,7 +170,15 @@ export class DataViewersContainerComponent implements DoCheck, OnInit, OnDestroy
             if (this.activeView.name === 'Help') {
                 // componentRef.instance['output'] = this.dataService.helpView[1];
             } else if (this.activeView.name !== 'Console') {
-                componentRef.instance['data'] = this.data;
+                if (!this.dataService.node.enabled || !this.dataService.node.model) {
+                    componentRef.instance['nodeIndex'] = 1;
+                    componentRef.instance['data'] = this.emptyModel;
+                    componentRef.instance['data'].modeldata.active_ssid = 1;
+                } else {
+                    componentRef.instance['data'] = this.dataService.flowchart.model;
+                    componentRef.instance['data'].modeldata.active_ssid = this.dataService.node.model;
+                    componentRef.instance['nodeIndex'] = this.dataService.node.model;
+                }
             // } else {
             //     componentRef.instance['scrollcheck'] = true;
             }

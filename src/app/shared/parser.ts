@@ -29,7 +29,12 @@ const otherSymbols = new Set(['.', '#', ',']);
 
 const noSpaceBefore = new Set(['@', ',', ']', '[']);
 
-const allConstants = (<string[][]>inline_func[0][1]).map(constComp => constComp[0]);
+let allConstants = [];
+for (const inline of inline_func) {
+    if (inline[0] === 'constants') {
+        allConstants = JSON.parse(JSON.stringify(inline[1]));
+    }
+}
 const specialVars = new Set(['undefined', 'null', 'Infinity', 'true', 'false', 'True', 'False', 'None'].concat(allConstants));
 const constantSet = new Set(allConstants);
 
@@ -65,7 +70,11 @@ const varStartSymbols = new Set(['#', '@', '?']);
 const mathFuncs = [];
 for (const funcMod of inline_func) {
     for (const func of funcMod[1]) {
-        mathFuncs.push(func[0].split('(')[0]);
+        if (typeof func === 'string') {
+            mathFuncs.push(func.split('(')[0]);
+        } else {
+            mathFuncs.push(func[0].split('(')[0]);
+        }
     }
 }
 
@@ -76,7 +85,8 @@ export function updateGlobals(startNode: INode) {
     globals = [];
     for (let i = startNode.procedure.length - 1; i > -1; i-- ) {
         const prod = startNode.procedure[i];
-        if (prod.type !== ProcedureTypes.Constant) { return; }
+        if (prod.type !== ProcedureTypes.Constant || !prod.args[0].value) { return; }
+        prod.args[0].value = prod.args[0].value.toUpperCase();
         globals.push(prod.args[0].value);
         prod.args[0].jsValue = prod.args[0].value + '_';
     }
@@ -86,11 +96,15 @@ export function modifyVar(procedure: IProcedure, nodeProdList: IProcedure[]) {
     procedure.variable = null;
     if (!procedure.args[0].value) { return; }
 
-    procedure.args[0].value = modifyVarArg(procedure.args[0]);
+    procedure.args[0].value = modifyVarArg(procedure.args[0]).trim();
     const modifiedVar = parseVariable(procedure.args[0].value);
     procedure.args[0].jsValue = modifiedVar.jsStr;
+    if (modifiedVar.jsStr && modifiedVar.jsStr.startsWith('__modules__')) {
+        procedure.args[0].invalidVar = `Error: Invalid query call: "${procedure.args[0].value}"`;
+        return;
+    }
     if (modifiedVar.valueStr) {
-        procedure.args[0].value = modifiedVar.valueStr;
+        procedure.args[0].value = modifiedVar.valueStr.trim();
     }
 
     if (modifiedVar.error) {
@@ -170,7 +184,7 @@ export function modifyLocalFuncVar(procedure: IProcedure, nodeProdList: IProcedu
 function findLocalFuncNumReturns(procedureList: IProcedure[]): number {
     let num_returns = 0;
     for (const prod of procedureList) {
-        if (prod.type === ProcedureTypes.LocalFuncReturn && prod.enabled) {
+        if (prod.type === ProcedureTypes.Return && prod.enabled) {
             num_returns ++;
         }
         if (prod.children) {
@@ -304,7 +318,6 @@ export function modifyArgument(procedure: IProcedure, argIndex: number, nodeProd
         procedure.args[argIndex].invalidVar = varResult.error;
         return;
     }
-
     procedure.args[argIndex].value = varResult.str;
     procedure.args[argIndex].jsValue = varResult.jsStr;
     varResult = checkValidVar(varResult.vars, procedure, nodeProdList);
@@ -615,6 +628,20 @@ function analyzeComp(comps: {'type': strType, 'value': string}[], i: number, var
         newString += `{${result.str}}`; //////////
         jsString += `{${result.jsStr}}`; //////////
 
+        while (i + 1 < comps.length && comps[i + 1].value === '[') {
+            const result2 = analyzeComp(comps, i + 2, vars);
+            // const result2 = analyzePythonSlicing(comps, i + 1, vars, jsString, false);
+            if (result2.error) { return result2; }
+            newString += '[' + result2.str + ']';
+            jsString += '[' + result2.jsStr + ']';
+            // arrayName = result2.arrayName;
+            i = result2.i + 1;
+            if (i >= comps.length || comps[i].value !== ']') {
+                return {'error': 'Error: Closing Square Bracket "]" expected\n' +
+                `at: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`};
+            }
+        }
+
     // if "@"/"#"/"?" ==> query
     } else if (comps[i].value === '@' || comps[i].value === '#' || comps[i].value === '?') {
         const result = analyzeQuery(comps, i, vars, '', '');
@@ -673,8 +700,13 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
                     {'error'?: string, 'i'?: number, 'value'?: number, 'str'?: string, 'jsStr'?: string} {
     const comp = comps[i];
 
+    if (globals.indexOf(comp.value.toUpperCase()) !== -1 && !disallowAt) {
+        comp.value = comp.value.toUpperCase();
+    }
+
     let newString = comp.value;
     let jsString = comp.value;
+
 
     // if (comp.value === 'and') {
     //     return {'i': i + 1, 'str': 'and', 'jsStr': '&&'};
@@ -760,7 +792,7 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
         if (comps[i + 2].value === ')') {
             i++;
             newString += '()';
-            jsString += '()';
+            jsString += '(true)';
         } else {
             const result = analyzeArray(comps, i + 2, vars, true);
             if (result.error) { return result; }
@@ -768,7 +800,7 @@ function analyzeVar(comps: {'type': strType, 'value': string}[], i: number, vars
                 return { 'error': `Error: ")" expected \nat: ... ${comps.slice(i).map(cp => cp.value).join(' ')}`}; }
             i = result.i + 1;
             newString += `(${result.str})`;
-            jsString += `(${result.jsStr})`;
+            jsString += `(__debug__, ${result.jsStr})`;
 
             if (i + 1 < comps.length && comps[i + 1].value === '[') {
                 // look for all subsequent "." or "[]" for the variable
@@ -1089,11 +1121,16 @@ function analyzeQuery(comps: {'type': strType, 'value': string}[],
             }
             i = nComp.i;
 
-            newString += `?@${result.str}${operator}${nComp.str} `;
-            // jsString = ` __modules__.${_parameterTypes.queryFilter}(__params__.model, ${entity}, '${att_name}'` +
-            //            `, ${att_index}, '${operator}', ${nComp.jsStr})`; //////////
-            jsString = ` __modules__.${_parameterTypes.queryFilter}(__params__.model, ${entity}, ['${att_name}'` +
-                       `, ${att_index}], '${operator}', ${nComp.jsStr})`; //////////
+            bracketIndex = nComp.jsStr.indexOf('[pythonList(');
+            if (bracketIndex !== -1) {
+                newString += `?@${result.str}${operator}${nComp.str} `;
+                jsString = ` __modules__.${_parameterTypes.queryFilter}(__params__.model, ${entity}, ['${att_name}'` +
+                           `, ${att_index}], '${operator}', ${nComp.jsStr.slice(0, bracketIndex)})${nComp.jsStr.slice(bracketIndex)}`;
+            } else {
+                newString += `?@${result.str}${operator}${nComp.str} `;
+                jsString = ` __modules__.${_parameterTypes.queryFilter}(__params__.model, ${entity}, ['${att_name}'` +
+                           `, ${att_index}], '${operator}', ${nComp.jsStr})`;
+            }
 
             if (i === comps.length - 1 || (comps[i + 1].value !== '@' && comps[i + 1].value !== '#' && comps[i + 1].value !== '?')) {
                 return {'i': i, 'str': newString, 'jsStr': jsString};
@@ -1405,7 +1442,7 @@ export function checkValidVar(vars: string[], procedure: IProcedure, nodeProdLis
                     break;
                 }
             }
-            if (!prod.variable || prod.type === ProcedureTypes.Foreach) { continue; }
+            if (!prod.variable || prod.type === ProcedureTypes.Foreach || !prod.enabled) { continue; }
             const index = vars.indexOf(prod.variable);
             if (index !== -1) {
                 validVars.push(vars.splice(index, 1)[0]);
@@ -1436,7 +1473,7 @@ export function checkValidVar(vars: string[], procedure: IProcedure, nodeProdLis
                 break;
             }
         }
-        if (!prod.variable || prod.type === ProcedureTypes.Foreach) { continue; }
+        if (!prod.variable || prod.type === ProcedureTypes.Foreach || !prod.enabled) { continue; }
         const index = vars.indexOf(prod.variable);
         if (index !== -1) {
             validVars.push(vars.splice(index, 1)[0]);
@@ -1468,6 +1505,7 @@ export function checkNodeValidity(node: INode) {
 
 function checkProdListValidity(prodList: IProcedure[], nodeProdList: IProcedure[]) {
     for (const prod of prodList) {
+        if (!prod.enabled) { continue; }
         switch (prod.type) {
             case ProcedureTypes.Variable:
             case ProcedureTypes.Foreach:
@@ -1488,15 +1526,17 @@ function checkProdListValidity(prodList: IProcedure[], nodeProdList: IProcedure[
             case ProcedureTypes.If:
             case ProcedureTypes.Elseif:
             case ProcedureTypes.While:
-            case ProcedureTypes.LocalFuncReturn:
-                modifyArgument(prod, 0, nodeProdList);
+            case ProcedureTypes.Return:
+                if (prod.args.length > 0) {
+                    modifyArgument(prod, 0, nodeProdList);
+                }
                 break;
             case ProcedureTypes.Constant:
                 if (prod.meta.inputMode === InputType.Constant || prod.meta.inputMode === InputType.SimpleInput) {
                     modifyArgument(prod, 1, nodeProdList);
                 }
                 break;
-            case ProcedureTypes.Return:
+            case ProcedureTypes.EndReturn:
                 modifyArgument(prod, 1, nodeProdList);
                 break;
             case ProcedureTypes.LocalFuncDef:

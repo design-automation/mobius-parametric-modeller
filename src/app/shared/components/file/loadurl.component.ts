@@ -9,7 +9,7 @@ import { _parameterTypes } from '@assets/core/_parameterTypes';
 import { ModuleList } from '@shared/decorators';
 import { Router } from '@angular/router';
 import { checkNodeValidity } from '@shared/parser';
-import { IdGenerator, updateLocalViewerSettings, updateCesiumViewerSettings } from '@utils';
+import { IdGenerator, updateLocalViewerSettings, updateGeoViewerSettings } from '@utils';
 import { checkMobFile } from '@shared/updateOldMobFile';
 import { SaveFileComponent } from './savefile.component';
 import { InputType } from '@models/port';
@@ -34,6 +34,28 @@ export class LoadUrlComponent {
 
     constructor(private dataService: DataService, private router: Router) {}
 
+
+
+    /*
+        <<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        LOAD URL PARAMETERS:
+
+        file="<<file_url>>" -> load file on load
+
+        node=<<node_index>> -> switch to node with index node_index
+
+        showViewer=0 -> show all viewers
+        showViewer=1 -> show GI viewer only
+        showViewer=2 -> show Geo viewer only
+        showViewer=3 -> show Console only
+        showViewer=4 -> show Help only
+        showViewer=[1,2,3] -> show combination of viewers listed above
+
+        defaultViewer=0 -> show console on load
+        defaultViewer=1 -> show GI viewer on load
+        defaultViewer=2 -> show Geo viewer on load
+        <<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    */
 
     async loadStartUpURL(routerUrl: string): Promise<boolean> {
         const url = this.extractUrl(routerUrl);
@@ -77,7 +99,7 @@ export class LoadUrlComponent {
         return url;
     }
 
-    async loadURL(url: string, nodeID?: number, keepSettings?: boolean, newParams?: any): Promise<boolean> {
+    async loadURL(url: string, nodeID?: number, loadURLSettings?: any, newParams?: any): Promise<boolean> {
         const p = new Promise((resolve) => {
             const request = new XMLHttpRequest();
 
@@ -122,14 +144,16 @@ export class LoadUrlComponent {
             return false;
         }
 
-        SaveFileComponent.clearModelData(this.dataService.flowchart, null);
+        SaveFileComponent.clearModelData(this.dataService.flowchart);
         delete this.dataService.file.flowchart;
         this.dataService.file = loadeddata;
-        if (!keepSettings) {
-            if (updateLocalViewerSettings(loadeddata.settings)) {
-                this.dataService.viewerSettingsUpdated = true;
+        if (!loadURLSettings || !loadURLSettings.keepSettings) {
+            if (updateGeoViewerSettings(loadeddata.settings)) {
+                this.dataService.geoViewerSettingsUpdated = true;
             }
-            updateCesiumViewerSettings(loadeddata.settings);
+            if (updateLocalViewerSettings(loadeddata.settings)) {
+                this.dataService.giViewerSettingsUpdated = true;
+            }
         }
         this.dataService.newFlowchart = true;
         if ((nodeID || nodeID === 0) && nodeID >= 0 && nodeID < loadeddata.flowchart.nodes.length) {
@@ -174,7 +198,7 @@ export class LoadUrlComponent {
         }
         setTimeout(() => {
             const zoomFlowchart = document.getElementById('zoomToFit');
-            if (zoomFlowchart) { zoomFlowchart.click(); }
+            if (zoomFlowchart && (!loadURLSettings || !loadURLSettings.keepCamera)) { zoomFlowchart.click(); }
             let executeB = document.getElementById('executeButton');
             if (executeB && this.dataService.mobiusSettings.execute) { executeB.click(); }
             executeB = null;
@@ -207,13 +231,15 @@ export class LoadUrlComponent {
         checkMobFile(loadeddata);
         loadeddata.flowchart.meta.selected_nodes = [loadeddata.flowchart.nodes.length - 1];
 
-        SaveFileComponent.clearModelData(this.dataService.flowchart, null);
+        SaveFileComponent.clearModelData(this.dataService.flowchart);
         delete this.dataService.file.flowchart;
         this.dataService.file = loadeddata;
-        if (updateLocalViewerSettings(loadeddata.settings)) {
-            this.dataService.viewerSettingsUpdated = true;
+        if (updateGeoViewerSettings(loadeddata.settings)) {
+            this.dataService.geoViewerSettingsUpdated = true;
         }
-        updateCesiumViewerSettings(loadeddata.settings);
+        if (updateLocalViewerSettings(loadeddata.settings)) {
+            this.dataService.giViewerSettingsUpdated = true;
+        }
         this.dataService.newFlowchart = true;
         this.router.navigate(['/editor']);
         for (const func of this.dataService.flowchart.functions) {

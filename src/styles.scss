@@ -39,10 +39,10 @@ as-split-area{
 
 
 
-as-split-gutter{
+.as-split-gutter{
     // background-image: none !important;
     background-color:$color6 !important;
-    border-right: 1px solid $color4;
+    // border-right: 1px solid $color4;
 }
 
 #gi-viewer-container{
@@ -86,6 +86,7 @@ as-split-gutter{
         display: none !important;
     }
 }
+
 
 // for teh 4 views
 
@@ -131,10 +132,10 @@ as-split-gutter{
 
 // general styles
 
-h1, h2, h3, h4, h5, h6, p{
-    margin: 0px;
-    padding: 0px;
-}
+// h1, h2, h3, h4, h5, h6, p{
+//     margin: 0px;
+//     padding: 0px;
+// }
 
 input, textarea, select, a { 
     outline: none; 
@@ -253,34 +254,35 @@ input, textarea, select, a {
         width: $fsize1;
         height: $fsize1;
         
-        background-color: $color6;
-        border:1px solid $color2;
-        margin: 1px;
+        // background-color: $color6;
+        border:2px solid $color5;
+        margin-left: 2px;
 
         &:after { // check
             position: absolute;
-            top: 4px;
+            top: 5px;
             left: 4px;
 
-            opacity: 0.2;
+            opacity: 0;
             content: '';
             
             width: 4px;
             height: 2px;
             background-color: transparent;
             
-            border: 3px solid $color8;
+            color: $selected-color;
+            border: 2px solid $color8;
             border-top: none;
             border-right: none;      
             transform: rotate(-45deg);
         }
         &:hover{
             background-color: $color7;
-            border:2px solid rgba($selected-color,0.5);
-            margin: 0px;
+            border:2px solid $selected-color;
+            // margin: 0px;
         }
         &:hover:after {
-            border-color: rgba($selected-color,0.5);
+            border-color: selected-color;
         }
     }
     input[type=checkbox]:checked + label:after {
@@ -317,7 +319,21 @@ input, textarea, select, a {
 .hidden-button {
     display: none;
 }
-// angular overwrite
-// .mat-tab-label{
-//     font-family: sans-serif !important;
-// }
+
+li:active {
+    background-color: $color1;
+}
+button:active {
+    background-color: $color1;
+}
+
+showdown {
+    li {
+        &:active {
+            background-color: $color6;
+        }
+    }
+    code {
+        background-color: $color5;
+    }
+}

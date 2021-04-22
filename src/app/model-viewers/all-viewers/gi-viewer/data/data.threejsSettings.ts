@@ -8,9 +8,6 @@ export interface ISettings {
         show: boolean,
         size: number,
         pos: THREE.Vector3,
-        pos_x: number,
-        pos_y: number,
-        pos_z: number,
     };
     background: {
         show: boolean,

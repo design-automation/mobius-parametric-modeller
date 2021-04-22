@@ -16,6 +16,8 @@
     // border-left: 1px solid red;
     border-bottom: 1px solid $color5;
     border-left: 1px solid $color5;
+    padding: 0px 0px 1px 1px;
+
     overflow: hidden;
     // width: calc(100% - 20px);
     width: 100%;
@@ -23,11 +25,25 @@
     box-shadow: inset 1px -1px 0px 0px white;
 
     &.inputDisabled{
-        opacity: 0.4;
+        opacity: $disabled-opacity;
+        .disable-btn {
+            // color: $color1;
+            color: $selectGeom-color-dk !important;
+        }
     }
-    &:hover .btns{
-        display: inline-flex;
-        background-color: transparent;
+    &.inputEntity{
+        border-bottom: 2px solid $print-color-dk;
+        border-left: 2px solid $print-color-dk;
+        padding: 0px;
+        .entity-btn {
+            color: $print-color-dk !important;
+        }
+    }
+    &:hover .btn{
+        color: $color1;
+        background-color: $color6;
+        // display: inline-flex;
+        // background-color: transparent;
     }
 
     &.error {
@@ -35,8 +51,14 @@
     }
     &.selected{
         background-color: $selected-color1;
+        &:hover .btn {
+            background-color: $selected-color1;
+        }
         &.lastSelected{
             background-color: $selected-color2;
+            &:hover .btn {
+                background-color: $selected-color2;
+            }
         }
     }
 }
@@ -44,13 +66,15 @@
 .inline-div{
     box-sizing: border-box;
     display: inline-block;
-    height: $fsize1+3px;
-    padding-bottom: 3px;
+    // height: $fsize1+3px;
+    // padding-bottom: 3px;
     white-space: nowrap;
 }
 
 input, select {
+    font-family: $inputFontFam;
     color: $color8;
+    font-weight: 400;
     background-color: transparent;
     border: 2px solid $color5;
     margin: 0px 2px;
@@ -61,7 +85,6 @@ input, select {
     vertical-align: bottom;
     padding: 0px 0px 0px 6px;
 
-    font-family: sans-serif;
     font-size: $fsize2;
     &:hover, &:focus{
         background-color: $color7;
@@ -97,12 +120,12 @@ select{
 }
 
 .btns{
-    display: none;
+    display: inline-flex;
     flex-flow: row-reverse nowrap;
     justify-content: flex-end;
     padding-right: 8px;
     
-    background-color: $color6;
+    // background-color: $color6;
     // border-left: 1px solid $color1;
     // border-bottom: 1px solid $color1;
 
@@ -119,11 +142,12 @@ select{
     height: $fsize1;
     width: $fsize1;
     padding: 0px;
+    outline: none;
 
     background-color: transparent;
+    color: transparent;
     border: none;
     float: right;
-    color: $color1;
 
     :hover{
         color: $selected-color;
@@ -138,8 +162,9 @@ select{
 }
 
 .inp--type--container{
-    display: flex;
+    display: block;
     flex-flow: row nowrap;
+    align-items: center;
     justify-content: flex-start;
     margin-top: 1px;
     box-sizing: border-box;
@@ -147,8 +172,9 @@ select{
     min-width: fit-content;
     margin-bottom: 2px;
     .input--type{
+        font-family: $inputTextFontFam;
         color: $function-text-color;
-        font-weight: 550;
+        font-weight: 700;
         font-style: italic;
         width: 90px;
     }
@@ -208,7 +234,24 @@ select{
         }
     }
 }
-
+.inputEntity {
+    min-width: 200px;
+    .div--globalEnt{
+        padding-left: 3px;
+        height: 22px;
+        width: 22px;
+        display: inline-block;
+    }
+    .entityDesc{
+        color: $color1;
+        height: 22px;
+        width: 220px;
+        padding: 0px;
+        vertical-align: top;
+        border: none;
+        background-color: transparent;
+    }
+}
 // parameter description
 .desc--container{
     margin-top: 1px;
@@ -222,7 +265,7 @@ select{
         background-color: transparent;
 
         padding-left: 5px;
-        font-family: sans-serif;
+        font-family: arial;
         font-size: $fsize2;
         min-width: 100%;
         resize: none;
@@ -244,7 +287,9 @@ select{
 .chkbox{
     display: none;
 }
-
+.chbox-inp{
+    display: inline-block;
+}
 
 .slider {
     -webkit-appearance: none;

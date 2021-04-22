@@ -27,7 +27,7 @@ export class ViewMinimalComponent implements AfterViewInit {
     }
 
     viewerData() {
-        return this.dataOutputService.getViewerData(this.dataService.node, true);
+        return this.dataOutputService.getViewerData(this.dataService.node, this.dataService.flowchart.model, true);
     }
 
     updateNode() {

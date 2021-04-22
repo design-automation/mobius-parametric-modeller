@@ -11,7 +11,7 @@ export class CodeUtils {
 
 
     static getProcedureCode(prod: IProcedure, existingVars: string[], isMainFlowchart: Boolean,
-                            functionName?: string, nodeId?: string, usedFunctions?: string[]): string[] {
+                            functionName: string, nodeId: string, usedFunctions?: string[]): string[] {
         if (_terminateCheck === '' || prod.enabled === false ||
             prod.type === ProcedureTypes.Blank ||
             prod.type === ProcedureTypes.Comment) { return []; }
@@ -24,7 +24,10 @@ export class CodeUtils {
 
         prod.hasError = false;
         let specialPrint = false;
-
+        let loopVarIndex = null;
+        if (prod.children) {
+            loopVarIndex = existingVars.length;
+        }
         let codeStr: string[] = [];
         const args = prod.args;
         let prefix = '';
@@ -60,7 +63,7 @@ export class CodeUtils {
                 // if (isMainFlowchart && prod.print) {
                 if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,` +
-                    `'Evaluating If: (${args[0].value}) is ' + (${args[0].jsValue}), '__null__');`);
+                    `\`Evaluating If: (${args[0].value}) is \` + (${args[0].jsValue}), '__null__');`);
                 }
                 codeStr.push(`if (${args[0].jsValue}){`);
                 // if (isMainFlowchart && prod.print) {
@@ -90,7 +93,7 @@ export class CodeUtils {
                 }
                 if (prod.print) {
                     codeStr.push(`printFunc(__params__.console,` +
-                    `'Evaluating Else-if: (${args[0].value}) is ' + (${args[0].jsValue}), '__null__');`);
+                    `\`Evaluating Else-if: (${args[0].value}) is \` + (${args[0].jsValue}), '__null__');`);
                 }
                 codeStr.push(`if(${args[0].jsValue}){`);
                 // if (isMainFlowchart && prod.print) {
@@ -159,7 +162,7 @@ export class CodeUtils {
                 break;
 
 
-            case ProcedureTypes.Return:
+            case ProcedureTypes.EndReturn:
                 let check = true;
                 const returnArgVals = [];
                 for (const arg of args) {
@@ -238,7 +241,14 @@ export class CodeUtils {
                     }
                 }
                 // const argValues = argVals.join(', ');
-                const fnCall = `__modules__.${prod.meta.module}.${prod.meta.name}( ${argVals.join(', ')} )`;
+                let fnCall = `__modules__.${prod.meta.module}.${prod.meta.name}( ${argVals.join(', ')} )`;
+                const fullName = prod.meta.module + '.' + prod.meta.name;
+                for (const asyncFunc of _parameterTypes.asyncFuncs) {
+                    if (fullName === asyncFunc) {
+                        fnCall = 'await ' + fnCall;
+                        break;
+                    }
+                }
                 if ( prod.meta.module.toUpperCase() === 'OUTPUT') {
                     if (prod.args[prod.args.length - 1].jsValue) {
                         codeStr.push(`return ${fnCall};`);
@@ -258,28 +268,34 @@ export class CodeUtils {
                 }
                 break;
             case ProcedureTypes.LocalFuncDef:
-                let funcDef_prefix = '';
+                // const funcDef_prefix = `${functionName}_${nodeId}_`;
+                let funcDef_prefix = `${nodeId}_`;
                 if (! isMainFlowchart) {
-                    funcDef_prefix = `${functionName}_${nodeId}_`;
+                    funcDef_prefix = `${functionName}_` + funcDef_prefix;
                 }
-                codeStr.push(`\nfunction ${funcDef_prefix}${prod.args[0].jsValue}` +
+                codeStr.push(`\nasync function ${funcDef_prefix}${prod.args[0].jsValue}` +
                              `(__params__, ${prod.args.slice(1).map(arg => arg.jsValue).join(', ')}) {`);
                 break;
-            case ProcedureTypes.LocalFuncReturn:
-                codeStr.push(`return ${prod.args[0].jsValue};`);
+            case ProcedureTypes.Return:
+                if (prod.args.length > 0) {
+                    codeStr.push(`return ${prod.args[0].jsValue};`);
+                    break;
+                }
+                codeStr.push(`return;`);
                 break;
             case ProcedureTypes.LocalFuncCall:
                 const lArgsVals: any = [];
-                let funcCall_prefix = '';
+                // const funcCall_prefix = `${functionName}_${nodeId}_`;
+                let funcCall_prefix = `${nodeId}_`;
                 if (! isMainFlowchart) {
-                    funcCall_prefix = `${functionName}_${nodeId}_`;
+                    funcCall_prefix = `${functionName}_` + funcCall_prefix;
                 }
                 // let urlCheck = false;
                 for (let i = 1; i < args.length; i++) {
                     lArgsVals.push(args[i].jsValue);
                 }
 
-                const lfn = `${funcCall_prefix}${prod.meta.name}_(__params__${lArgsVals.map(val => ', ' + val).join('')})`;
+                const lfn = `await ${funcCall_prefix}${prod.meta.name}_(__params__${lArgsVals.map(val => ', ' + val).join('')})`;
                 if (args[0].name === '__none__' || !args[0].jsValue) {
                     codeStr.push(`${lfn};`);
                     codeStr.push('if (__params__.terminated) { return __params__.model;}')
@@ -314,39 +330,46 @@ export class CodeUtils {
                 //         }
                 //     }
                 }
+                const prepArgs = [];
                 for (let i = 1; i < args.length; i++) {
                     const arg = args[i];
-                    // if (urlCheck && arg.jsValue.indexOf('://') !== -1) {
-                    //     argsVals.push(prod.resolvedValue);
-                    //     prod.resolvedValue = null;
-                    // }
                     if (arg.type.toString() !== InputType.URL.toString()) {
                         argsVals.push(arg.jsValue);
                         // argsVals.push(this.repGetAttrib(arg.jsValue));
                     } else {
                         argsVals.push(prod.resolvedValue);
                     }
+                    if (arg.isEntity) {
+                        prepArgs.push(argsVals[argsVals.length - 1]);
+                    }
                 }
 
                 codeStr.push(`__params__.console.push('<div style="margin: 5px 0px 5px 10px; border: 1px solid #E6E6E6"><p><b> Global Function: ${prod.meta.name}</b></p>');`);
-                // argsVals = argsVals.join(', ');
-                // const fn = `${namePrefix}${prod.meta.name}(__params__, ${argsVals} )`;
-                const fn = `${namePrefix}${prod.meta.name}(__params__${argsVals.map(val => ', ' + val).join('')})`;
+                codeStr.push(`__params__.curr_ss.${nodeId} = __params__.model.prepGlobalFunc([${prepArgs.join(', ')}]);`);
+                // if (prepArgs.length === 0) {
+                //     codeStr.push(`__params__.curr_ss.${nodeId} = __params__.model.prepGlobalFunc([${argsVals[0]}]);`);
+                // } else {
+                //     codeStr.push(`__params__.curr_ss.${nodeId} = __params__.model.prepGlobalFunc([${prepArgs.join(', ')}]);`);
+                // }
+                const fn = `await ${namePrefix}${prod.meta.name}(__params__${argsVals.map(val => ', ' + val).join('')})`;
+                // codeStr.push(`__params__.prevModel = __params__.model.clone();`);
                 if (args[0].name === '__none__' || !args[0].jsValue) {
                     codeStr.push(`${fn};`);
-                    codeStr.push(`__params__.console.push('</div>')`);
-                    break;
-                }
-                const repImpVar = this.repSetAttrib(args[0].jsValue);
-                if (!repImpVar) {
-                    codeStr.push(`${prefix}${args[0].jsValue} = ${fn};`);
                 } else {
-                    codeStr.push(`${repImpVar[0]} ${fn} ${repImpVar[1]}`);
+                    const repImpVar = this.repSetAttrib(args[0].jsValue);
+                    if (!repImpVar) {
+                        codeStr.push(`${prefix}${args[0].jsValue} = ${fn};`);
+                    } else {
+                        codeStr.push(`${repImpVar[0]} ${fn} ${repImpVar[1]}`);
+                    }
+                    if (prefix === 'let ') {
+                        existingVars.push(args[0].jsValue);
+                    }
                 }
-
-                if (prefix === 'let ') {
-                    existingVars.push(args[0].jsValue);
-                }
+                codeStr.push(`__params__.model.postGlobalFunc(__params__.curr_ss.${nodeId})`);
+                // codeStr.push(`__params__.prevModel.merge(__params__.model);`);
+                // codeStr.push(`__params__.model = __params__.prevModel;`);
+                // codeStr.push(`__params__.prevModel = null;`);
                 codeStr.push(`__params__.console.push('</div>')`);
                 break;
             case ProcedureTypes.Error:
@@ -358,32 +381,39 @@ export class CodeUtils {
         if (prod.print && !specialPrint && prod.args[0].name !== '__none__' && prod.args[0].jsValue) {
                 // const repGet = prod.args[0].jsValue;
             const repGet = this.repGetAttrib(prod.args[0].jsValue);
-            codeStr.push(`printFunc(__params__.console,'${prod.args[0].value}', ${repGet});`);
+            codeStr.push(`printFunc(__params__.console,\`${prod.args[0].value}\`, ${repGet});`);
         }
-        if (isMainFlowchart && prod.selectGeom && prod.args[0].jsValue) {
-            // const repGet = prod.args[0].jsValue;
-            const repGet = this.repGetAttrib(prod.args[0].value);
-            const repGetJS = this.repGetAttrib(prod.args[0].jsValue);
-            codeStr.push(`try {` +
-            `\t__modules__.${_parameterTypes.select}(__params__.model, ${repGetJS}, "${repGet}"); ` +
-            `} catch (ex) {` +
-            `\t__params__.message = 'Trying to select geometric entities in node "%node%", but no entity was found';` +
-            `}`);
-        }
+        // if (isMainFlowchart && prod.selectGeom && prod.args[0].jsValue) {
+        //     // const repGet = prod.args[0].jsValue;
+        //     const repGet = this.repGetAttrib(prod.args[0].value);
+        //     const repGetJS = this.repGetAttrib(prod.args[0].jsValue);
+        //     codeStr.push(`try {` +
+        //     `\t__modules__.${_parameterTypes.select}(__params__.model, ${repGetJS}, "${repGet}"); ` +
+        //     `} catch (ex) {` +
+        //     `\t__params__.message = 'Trying to select geometric entities in node "%node%", but no entity was found';` +
+        //     `}`);
+        // }
 
         if (prod.children) {
             codeStr = codeStr.concat(CodeUtils.getProdListCode(prod.children, existingVars, isMainFlowchart,
                                                                functionName, nodeId, usedFunctions));
-            // for (const p of prod.children) {
-            //     codeStr = codeStr.concat(CodeUtils.getProcedureCode(p, existingVars, isMainFlowchart, functionName, usedFunctions));
-            // }
             codeStr.push(`}`);
+            if (loopVarIndex) {
+                existingVars.splice(loopVarIndex);
+            }
         }
+
+        // mark _terminateCheck to terminate all process after this
+        if (prod.terminate && prod.enabled) {
+            codeStr.push('__params__.terminated = true;');
+            codeStr.push('return null;');
+        }
+
         return codeStr;
     }
 
     static getProdListCode(prodList: IProcedure[], existingVars: string[], isMainFlowchart: Boolean,
-                           functionName?: string, nodeId?: string, usedFunctions?: string[]): string[] {
+                           functionName: string, nodeId: string, usedFunctions?: string[]): string[] {
         let codeStr = [];
         let elifcount = 0;
         for (const p of prodList) {
@@ -482,7 +512,11 @@ export class CodeUtils {
             url = url.substring(0, url.length - 1);
         }
         const p = new Promise((resolve) => {
-            fetch(url).then(res => {
+            const fetchObj = fetch(url);
+            fetchObj.catch(err => {
+                resolve('HTTP Request Error: Unable to retrieve file from ' + url);
+            });
+            fetchObj.then(res => {
                 if (!res.ok) {
                     resolve('HTTP Request Error: Unable to retrieve file from ' + url);
                     return '';
@@ -583,42 +617,67 @@ export class CodeUtils {
         });
     }
 
+    // static mergeInputs(models): any {
+    //     const result = _parameterTypes.newFn();
+    //     for (const model of models) {
+    //         _parameterTypes.mergeFn(result, model);
+    //     }
+    //     return result;
+    // }
     static mergeInputs(models): any {
-        const result = _parameterTypes.newFn();
-        for (const model of models) {
-            _parameterTypes.mergeFn(result, model);
+        let result = null;
+        if (models.length === 0) {
+            result = _parameterTypes.newFn();
+        } else if (models.length === 1) {
+            result = models[0].clone();
+        } else {
+            result = models[0].clone();
+            for (let i = 1; i < models.length; i++) {
+                _parameterTypes.mergeFn(result, models[i]);
+            }
         }
         return result;
     }
 
 
 
-    static getInputValue(inp: IPortInput, node: INode, nodeIndices: {}): Promise<string> {
-        let input: any;
-        // const x = performance.now();
-        if (node.type === 'start' || inp.edges.length === 0) {
-            input = _parameterTypes['newFn']();
-        // } else if (inp.edges.length === 1 && inp.edges[0].source.parentNode.enabled) {
-        //     input = inp.edges[0].source.value.clone();
-        //     console.log('clone time:', performance.now() - x);
-        } else {
-            let inputs = [];
-            for (const edge of inp.edges) {
-                if (!edge.source.parentNode.enabled) {
-                    continue;
-                }
-                inputs.push([nodeIndices[edge.source.parentNode.id], edge.source.value]);
+    // static getInputValue(inp: IPortInput, node: INode, nodeIndices: {}): string {
+    //     let input: any;
+    //     // const x = performance.now();
+    //     if (node.type === 'start' || inp.edges.length === 0) {
+    //         input = _parameterTypes['newFn']();
+    //     // } else if (inp.edges.length === 1 && inp.edges[0].source.parentNode.enabled) {
+    //     //     input = inp.edges[0].source.value.clone();
+    //     //     console.log('clone time:', performance.now() - x);
+    //     } else {
+    //         let inputs = [];
+    //         for (const edge of inp.edges) {
+    //             if (!edge.source.parentNode.enabled) {
+    //                 continue;
+    //             }
+    //             inputs.push([nodeIndices[edge.source.parentNode.id], edge.source.value]);
+    //         }
+    //         inputs = inputs.sort((a, b) => a[0] - b[0]);
+    //         const mergeModels = inputs.map(i => i[1])
+    //         input = CodeUtils.mergeInputs(mergeModels);
+    //         // console.log('merge time:', performance.now() - x);
+    //     }
+    //     return input;
+    // }
+
+    static getInputValue(inp: IPortInput, node: INode, nodeIndices: {}): number[] {
+        const input = [];
+        for (const edge of inp.edges) {
+            if (!edge.source.parentNode.enabled) {
+                continue;
             }
-            inputs = inputs.sort((a, b) => a[0] - b[0]);
-            const mergeModels = inputs.map(i => i[1])
-            input = CodeUtils.mergeInputs(mergeModels);
-            // console.log('merge time:', performance.now() - x);
+            input.push(edge.source.parentNode.model);
         }
         return input;
     }
 
     public static getNodeCode(node: INode, isMainFlowchart = false, nodeIndices: {},
-                              functionName?: string, nodeId?: string, usedFunctions?: string[]): [string[][], string] {
+                              functionName: string, nodeId: string, usedFunctions?: string[]): [string[][], string] {
         node.hasError = false;
         let codeStr = [];
 
@@ -645,8 +704,7 @@ export class CodeUtils {
 
         // input initializations
         if (isMainFlowchart) {
-            const input = CodeUtils.getInputValue(node.input, node, nodeIndices);
-            node.input.value = input;
+            node.input.value = CodeUtils.getInputValue(node.input, node, nodeIndices);
         }
 
         if (node.type === 'start') {
@@ -654,25 +712,22 @@ export class CodeUtils {
         }
 
 
-        codeStr.push('_-_-_+_-_-_')
-        codeStr.push('while (true) {');
+        codeStr.push('_-_-_+_-_-_');
+        // codeStr.push('while (true) {');
         codeStr.push(`__modules__.${_parameterTypes.preprocess}( __params__.model);`);
         varsDefined = [];
 
         codeStr = codeStr.concat(CodeUtils.getProdListCode(node.procedure, varsDefined, isMainFlowchart, functionName,
                                                            nodeId, usedFunctions));
-        // for (const prod of node.procedure) {
-        //     // if (node.type === 'start' && !isMainFlowchart) { break; }
-        //     codeStr = codeStr.concat(CodeUtils.getProcedureCode(prod, varsDefined, isMainFlowchart, functionName, usedFunctions));
-        // }
         if (node.type === 'end' && node.procedure.length > 0) {
-            codeStr.push('break; }');
+            // codeStr.push('break; }');
+
             // codeStr.splice(codeStr.length - 2, 0, 'break; }');
             // return [[codeStr, varsDefined], _terminateCheck];
         } else {
             codeStr.push(`__modules__.${_parameterTypes.postprocess}( __params__.model);`);
-            codeStr.push('break; }');
-            codeStr.push('return __params__.model;');
+            // codeStr.push('break; }');
+            // codeStr.push('return __params__.model;');
         }
 
         if (_terminateCheck === '') {
@@ -683,7 +738,8 @@ export class CodeUtils {
     }
 
     static getFunctionString(func: IFunction): string {
-        let fullCode = `function ${func.name}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){\n`;
+        func.args.forEach(arg => arg.name = arg.name.toUpperCase());
+        let fullCode = `async function ${func.name}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){\n`;
 
         let fnCode = `var merged;\n`;
 
@@ -699,16 +755,31 @@ export class CodeUtils {
             numRemainingOutputs[node.id] = node.output.edges.length;
             const nodeFuncName = `${func.name}_${node.id}`;
             if (node.type === 'start') {
-                fnCode += `let result_${nodeFuncName} = __params__.model;\n`;
+                // fnCode += `let result_${nodeFuncName} = __params__.model;\n`;
+                fnCode += `let ssid_${nodeFuncName} = __params__.model.getActiveSnapshot();\n`;
             } else {
                 const codeRes = CodeUtils.getNodeCode(node, false, nodeIndices, func.name, node.id)[0];
                 const nodecode = codeRes[0].join('\n').split('_-_-_+_-_-_');
-                fullCode += `${nodecode[0]}\nfunction ${nodeFuncName}` +
+                fullCode += `${nodecode[0]}\nasync function ${nodeFuncName}` +
                             `(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')}){` +
                             nodecode[1] + `\n}\n\n`;
 
-                if (node.input.edges.length === 1 && numRemainingOutputs[node.input.edges[0].source.parentNode.id] === 1) {
-                    fnCode += `\n__params__.model = result_${func.name}_${node.input.edges[0].source.parentNode.id};\n`;
+                // const activeNodes = [];
+                // for (const nodeEdge of node.input.edges) {
+                //     if (!nodeEdge.source.parentNode.enabled) {
+                //         continue;
+                //     }
+                //     activeNodes.push(`ssid_${func.name}_${nodeEdge.source.parentNode.id}`);
+                // }
+                // fnCode += `\nlet ssid_${nodeFuncName} = __params__.model.nextSnapshot([${activeNodes.join(',')}]);\n`;
+                // // if (activeNodes.length !== 1) {
+                // //     fnCode += `\nlet ssid_${nodeFuncName} = __params__.model.nextSnapshot([${activeNodes.join(',')}]);\n`;
+                // // } else {
+                // //     fnCode += `\nlet ssid_${nodeFuncName} = ${activeNodes[0]};\n`;
+                // // }
+
+                if (node.type !== 'end' && node.input.edges.length === 1 && node.input.edges[0].source.parentNode.output.edges.length === 1) {
+                    fnCode += `\nlet ssid_${nodeFuncName} = ssid_${func.name}_${node.input.edges[0].source.parentNode.id};\n`;
                 } else {
                     let activeNodes = [];
                     for (const nodeEdge of node.input.edges) {
@@ -716,28 +787,16 @@ export class CodeUtils {
                             continue;
                         }
                         numRemainingOutputs[nodeEdge.source.parentNode.id] --;
-                        activeNodes.push([nodeIndices[nodeEdge.source.parentNode.id], nodeEdge.source.parentNode.id]);
-                        // if (nodeEdge.source.parentNode.type === 'start') {
-                        //     activeNodes.unshift(nodeEdge.source.parentNode.id);
-                        // } else {
-                        //     activeNodes.push(nodeEdge.source.parentNode.id);
-                        // }
+                        activeNodes.push([nodeIndices[nodeEdge.source.parentNode.id], `ssid_${func.name}_${nodeEdge.source.parentNode.id}`]);
                     }
-                    if (activeNodes.length === 1) {
-                        fnCode += `\n__params__.model = duplicateModel(result_${func.name}_${activeNodes[0][1]});\n`;
-                    } else {
-                        activeNodes = activeNodes.sort((a, b) => a[0] - b[0]);
-                        fnCode += `\n__params__.model = mergeInputs([${activeNodes.map((nodeId) =>
-                            `result_${func.name}_${nodeId[1]}`).join(', ')}]);\n`;
-                    }
+                    activeNodes = activeNodes.sort((a, b) => a[0] - b[0]);
+                    fnCode += `\nlet ssid_${nodeFuncName} = __params__.model.nextSnapshot([${activeNodes.map(nodeId => nodeId[1]).join(', ')}]);\n`;
                 }
-                fnCode += `let result_${nodeFuncName} = ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_'
-                            ).join('')});\n`;
-
-            }
-            if (node.type === 'end') {
-                // fnCode += `\n__params__.model.purge();`;
-                fnCode += `\nreturn result_${nodeFuncName};\n`;
+                if (node.type === 'end') {
+                    fnCode += `\nreturn await ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')});\n`;
+                } else {
+                    fnCode += `\nawait ${nodeFuncName}(__params__${func.args.map(arg => ', ' + arg.name + '_').join('')});\n`;
+                }
             }
         }
         fnCode += '}\n\n';

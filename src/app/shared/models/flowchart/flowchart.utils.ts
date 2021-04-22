@@ -48,7 +48,8 @@ export class FlowchartUtils {
             nodes: [ startNode, middleNode, endNode ],
             edges: [ startMid, midEnd ],
             functions: [],
-            ordered: true
+            ordered: true,
+            model: null
         };
 
         return flw;
@@ -61,7 +62,7 @@ export class FlowchartUtils {
             nodeOrder.push(node);
         } else {
             for (const edge of node.input.edges) {
-                if (!edge.source.parentNode.hasExecuted) {
+                if (edge.source.parentNode.enabled && !edge.source.parentNode.hasExecuted) {
                     return;
                 }
             }

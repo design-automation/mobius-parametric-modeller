@@ -2,10 +2,14 @@ import { Injectable } from '@angular/core';
 import { IMobius } from '@models/mobius';
 import { IFlowchart, FlowchartUtils } from '@models/flowchart';
 import { INode } from '@models/node';
-import { IProcedure } from '@models/procedure';
+import { IProcedure, ProcedureTypes } from '@models/procedure';
 import { IEdge } from '@models/edge';
 import { Subject } from 'rxjs';
 import { VERSION } from '@env/version';
+import { GIMetaData } from '@assets/libs/geo-info/GIMetaData';
+import { inline_func } from '@assets/core/inline/inline';
+import { GIModel } from '@assets/libs/geo-info/GIModel';
+import { _parameterTypes } from '@assets/core/modules';
 
 @Injectable()
 export class DataService {
@@ -22,8 +26,12 @@ export class DataService {
     private static _flowchartPosition: string = undefined;
     private static _newFlowchart = true;
 
+    private static _model: GIModel;
+
     private static _modelOutputView = {};
     private static _testModel = false;
+
+    private static _modelMeta = null;
 
     private static _helpView = [false, false, undefined];
     private static _helpViewData = [undefined, ''];
@@ -54,9 +62,13 @@ export class DataService {
     private static _dialogType: string;
 
     private static _mobiusSettings; // {'execute': true};
-    private static _viewerSettingsUpdated = false;
+    private static _giViewerSettingsUpdated = false;
+    private static _geoViewerSettingsUpdated = false;
+    private static _aframeViewerSettingsUpdated = false;
 
     private static _timelineDefault;
+
+    private static _rendererInfo;
 
     private _backupDialogType: any;
 
@@ -122,14 +134,27 @@ export class DataService {
     get settings() {return DataService._data.settings; }
     set settings(settings: any) {DataService._data.settings = settings; }
 
-    get viewerSettingsUpdated() {return DataService._viewerSettingsUpdated; }
-    set viewerSettingsUpdated(updated: boolean) {DataService._viewerSettingsUpdated = updated; }
+    get executeModel() {return DataService._model; }
+    initiateExecuteModel() {
+        DataService._model = _parameterTypes.newFn();
+        DataService._model.debug = DataService._mobiusSettings.debug;
+    }
+
+    get giViewerSettingsUpdated() {return DataService._giViewerSettingsUpdated; }
+    set giViewerSettingsUpdated(updated: boolean) {DataService._giViewerSettingsUpdated = updated; }
+    get geoViewerSettingsUpdated() {return DataService._geoViewerSettingsUpdated; }
+    set geoViewerSettingsUpdated(updated: boolean) {DataService._geoViewerSettingsUpdated = updated; }
+    get aframeViewerSettingsUpdated() {return DataService._aframeViewerSettingsUpdated; }
+    set aframeViewerSettingsUpdated(updated: boolean) {DataService._aframeViewerSettingsUpdated = updated; }
 
     get flowchartPos() {return DataService._flowchartPosition; }
     set flowchartPos(transf: string) {DataService._flowchartPosition = transf; }
 
     get newFlowchart() {return DataService._newFlowchart; }
     set newFlowchart(check: boolean) {DataService._newFlowchart = check; }
+
+    get modelMeta() {return DataService._modelMeta; }
+    set modelMeta(meta: GIMetaData) {DataService._modelMeta = meta; }
 
     getModelOutputView(nodeID: string) {
         if (DataService._modelOutputView.hasOwnProperty(nodeID)) {
@@ -218,6 +243,9 @@ export class DataService {
 
     get timelineDefault() { return DataService._timelineDefault; }
     set timelineDefault(setting) { DataService._timelineDefault = setting; }
+
+    get rendererInfo() { return DataService._rendererInfo; }
+    set rendererInfo(info) { DataService._rendererInfo = info; }
 
 
 

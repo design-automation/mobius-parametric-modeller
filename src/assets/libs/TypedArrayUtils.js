@@ -235,7 +235,7 @@ TypedArrayUtils.Kdtree = function ( points, metric, eleSize ) {
 		 /* point: array of size eleSize
 			maxNodes: max amount of nodes to return
 			maxDistance: maximum distance to point result nodes should have
-			condition (not implemented): function to test node before it's added to the result list, e.g. test for view frustum
+			condition (Not implemented): function to test node before it's added to the result list, e.g. test for view frustum
 		*/
 
 		var i,

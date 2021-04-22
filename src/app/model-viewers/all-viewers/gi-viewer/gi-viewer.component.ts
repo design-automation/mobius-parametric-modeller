@@ -1,5 +1,5 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { isDevMode, ViewChild, HostListener } from '@angular/core';
+import { ViewChild, HostListener, OnDestroy } from '@angular/core';
 import { DefaultSettings, SettingsColorMap, Locale } from './gi-viewer.settings';
 // import @angular stuff
 import { Component, Input, OnInit } from '@angular/core';
@@ -24,10 +24,10 @@ import { ISettings } from './data/data.threejsSettings';
     templateUrl: './gi-viewer.component.html',
     styleUrls: ['./gi-viewer.component.scss'],
 })
-export class GIViewerComponent implements OnInit {
-    dataservice: DataService;
+export class GIViewerComponent implements OnInit, OnDestroy {
     // model data passed to the viewer
     @Input() data: GIModel;
+    @Input() nodeIndex: number;
 
     settings: ISettings = DefaultSettings;
 
@@ -44,6 +44,8 @@ export class GIViewerComponent implements OnInit {
     public attrTableReset: number;
     public selectSwitchOnOff: Boolean;
     public attribLabelVal: String;
+
+    private settingsUpdateInterval;
 
     @ViewChild(ThreejsViewerComponent, { static: true }) threejs: ThreejsViewerComponent;
     @ViewChild(SplitComponent, { static: true }) viewerSplit: SplitComponent;
@@ -106,6 +108,20 @@ export class GIViewerComponent implements OnInit {
         }
         localStorage.setItem('mpm_default_settings', JSON.stringify(DefaultSettings));
         this.temp_camera_pos = this.dataService.getThreejsScene().perspCam.position;
+
+        this.settingsUpdateInterval = setInterval(() => {
+            if (this.mainDataService.giViewerSettingsUpdated) {
+                this.settings = JSON.parse(localStorage.getItem('mpm_settings'));
+                this.dataService.getThreejsScene().settings = this.settings;
+                this.threejs.updateModel(this.data);
+                this.mainDataService.giViewerSettingsUpdated = false;
+            }
+        }, 100);
+    }
+
+    ngOnDestroy() {
+        clearInterval(this.settingsUpdateInterval);
+        this.settingsUpdateInterval = null;
     }
 
     private getSettings() {
@@ -165,10 +181,9 @@ export class GIViewerComponent implements OnInit {
     closeModal(id: string, save = false) {
         this.modalService.close(id);
         if (save) {
-            const _selector = JSON.parse(localStorage.getItem('mpm_selecting_entity_type'));
             const _tab = Number(JSON.parse(localStorage.getItem('mpm_attrib_current_tab')));
             // this.settings.select = {selector: _selector, tab: _tab, };
-            this.settings.select.selector = _selector;
+            this.settings.select.selector = this.dataService.selectingEntityType;
             this.settings.select.tab = _tab;
             this.settings.camera = {
                 pos: this.temp_camera_pos,
@@ -228,29 +243,24 @@ export class GIViewerComponent implements OnInit {
                 this.temp_grid_pos = this.dataService.getThreejsScene().getGridPos();
                 if (this.temp_grid_pos) {
                     this.settings.grid.pos = this.temp_grid_pos;
-                    this.settings.grid.pos_x = this.temp_grid_pos.x;
-                    this.settings.grid.pos_y = this.temp_grid_pos.y;
                 }
                 break;
             case 'grid.update_pos_x':
                 if (isNaN(value)) {
                     return;
                 }
-                this.settings.grid.pos_x = Number(value);
                 this.settings.grid.pos.x = Number(value);
                 break;
             case 'grid.update_pos_y':
                 if (isNaN(value)) {
                     return;
                 }
-                this.settings.grid.pos_y = Number(value);
                 this.settings.grid.pos.y = Number(value);
                 break;
             case 'grid.update_pos_z':
                 if (isNaN(value)) {
                     return;
                 }
-                this.settings.grid.pos_z = Number(value);
                 this.settings.grid.pos.z = Number(value);
                 break;
             case 'positions.show':
@@ -449,8 +459,7 @@ export class GIViewerComponent implements OnInit {
     // }
 
     resetToDefault() {
-        const default_settings = JSON.parse(localStorage.getItem('mpm_default_settings'));
-        this.settings = default_settings;
+        this.settings = JSON.parse(JSON.stringify(DefaultSettings));
     }
 
     checkColor(color) {
@@ -505,7 +514,7 @@ export class GIViewerComponent implements OnInit {
 
     @HostListener('mouseleave', [])
     onmouseleave() {
-        this.viewerSplit.notify('end');
+        this.viewerSplit.notify('end', this.viewerSplit.gutterSize);
     }
 }
 

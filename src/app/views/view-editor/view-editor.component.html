@@ -73,7 +73,7 @@
                                 </div>
                                 <div class = 'divider--container' *ngIf="getNode().type !== ''">
                                     <div class = 'divider' *ngIf="getNode().type == 'start'"><span>Parameters</span></div>
-                                    <div class = 'divider' *ngIf="getNode().type == 'end'"><span>Return</span></div>
+                                    <div class = 'divider' *ngIf="getNode().type == 'end'"></div>
                                 </div>
                                 <parameter-editor *ngIf="getNode().type !== ''" 
                                 [flowchart]='getFlowchart()' 
@@ -95,7 +95,7 @@
         <as-split-area [size]="getSplit()">
             <!-- data viewers panel -->
             <div class='content__viewer' >
-                <model-viewers-container [data]='viewerData()'></model-viewers-container>
+                <model-viewers-container></model-viewers-container>
             </div>
         </as-split-area>
         

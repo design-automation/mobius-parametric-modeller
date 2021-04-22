@@ -10,4 +10,3 @@ declare module "*.mob" {
     export default value;
 }
 
-declare var Cesium;

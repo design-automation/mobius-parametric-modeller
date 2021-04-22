@@ -1,9 +1,9 @@
-import { Component, Input, HostListener, OnDestroy } from '@angular/core';
+import { Component, Input, HostListener, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataService, KeyboardService } from '@shared/services';
 import * as circularJSON from 'circular-json';
 import { IFlowchart } from '@models/flowchart';
-import { ProcedureTypes, IFunction } from '@models/procedure';
+import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
 import { SaveFileComponent } from '../file';
 import { IdGenerator } from '@utils';
 import { InputType } from '@models/port';
@@ -11,11 +11,20 @@ import { IArgument } from '@models/code';
 import * as Modules from '@modules';
 import { checkNodeValidity } from '@shared/parser';
 import { DownloadUtils } from '../file/download.utils';
+import { inline_func } from '@assets/core/inline/inline';
+import { InlineDocList } from '@shared/decorators';
+import * as showdown from 'showdown';
+
+const inputEvent = new Event('input', {
+    'bubbles': true,
+    'cancelable': true
+});
 
 @Component({
     selector: 'panel-header',
     templateUrl: 'panel-header.component.html',
-    styleUrls: ['panel-header.component.scss']
+    styleUrls: ['panel-header.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class PanelHeaderComponent implements OnDestroy {
 
@@ -23,6 +32,7 @@ export class PanelHeaderComponent implements OnDestroy {
     executeCheck: boolean;
     nodeListCheck: boolean;
     selectedBackups: string[] = [];
+    textareaMousedown = false;
 
     urlSet = ['', 'publish', '', '', '', ''];
     urlValid: boolean;
@@ -33,8 +43,15 @@ export class PanelHeaderComponent implements OnDestroy {
     private ctx = document.createElement('canvas').getContext('2d');
     backupDates;
 
+    inlineFunc = JSON.parse(JSON.stringify(inline_func));
+    inlineDocs = {};
+    searchedInlineFunc;
+
+
     constructor(private dataService: DataService, private keyboardService: KeyboardService, private router: Router) {
         SaveFileComponent.updateBackupList();
+        const mdConverter = new showdown.Converter({literalMidWordUnderscores: true});
+
         if (this.router.url.startsWith('/about')) {
             this.executeCheck = false;
             this.nodeListCheck = false;
@@ -45,7 +62,7 @@ export class PanelHeaderComponent implements OnDestroy {
             this.executeCheck = true;
             this.nodeListCheck = true;
         }
-        this.ctx.font = '12px sans-serif';
+        this.ctx.font = '400 12px arial';
 
         this.settings = this.dataService.mobiusSettings;
 
@@ -57,6 +74,52 @@ export class PanelHeaderComponent implements OnDestroy {
             this.settings['_func_' + this.func_categories[cat]] = true;
         }
         localStorage.setItem('mobius_settings', JSON.stringify(this.settings));
+
+        const inlineFuncs = Modules._varString.replace(/\n/g, '').split(';');
+        let i = 0;
+        while (i < inlineFuncs.length) {
+            if (inlineFuncs[i] === '') {
+                inlineFuncs.splice(i, 1);
+                continue;
+            }
+            const funcName = inlineFuncs[i].split(' = ')[0];
+            const funcModule = inlineFuncs[i].split('.')[1];
+            const funcDir = inlineFuncs[i].split('.')[2];
+            if (InlineDocList[funcModule] && InlineDocList[funcModule][funcDir]) {
+                this.inlineDocs[funcName] = InlineDocList[funcModule][funcDir];
+                if (this.inlineDocs[funcName].parameters) {
+                    let j = 0;
+                    while (j < this.inlineDocs[funcName].parameters.length) {
+                        if (this.inlineDocs[funcName].parameters[j].name === 'debug') {
+                            this.inlineDocs[funcName].parameters.splice(j, 1);
+                            continue;
+                        }
+                        if (!this.inlineDocs[funcName].parameters[j].description) {
+                            this.inlineDocs[funcName].parameters[j].description = '';
+                        }
+                        this.inlineDocs[funcName].parameters[j].description = this.inlineDocs[funcName].parameters[j].description.trim();
+                        j += 1;
+                    }
+                }
+            } else {
+                this.inlineDocs[funcName] = null;
+            }
+            i++;
+        }
+        for (const mod of this.inlineFunc) {
+            if (mod[0] === 'queries') {
+                for (let j = 0; j < mod[1].length; j++) {
+                    const func = mod[1][j];
+                    this.inlineDocs[func[0]] = {
+                        description: mdConverter.makeHtml(func[1]).replace(/\\n/g, '<br/>'),
+                        module: '_queries',
+                        name: func[0],
+                        parameters: [],
+                        returns: undefined};
+                    mod[1][j] = func[0];
+                }
+            }
+        }
     }
 
     ngOnDestroy() {
@@ -171,6 +234,14 @@ export class PanelHeaderComponent implements OnDestroy {
         }
     }
 
+    closeDialog(closeLS = false) {
+        if (closeLS) {
+            (<HTMLInputElement>document.getElementById('savels-name')).value = this.flowchart.name;
+        }
+        this.dataService.dialog.close();
+        this.dataService.dialog.style.right = '0px';
+    }
+
     checkDialog(type) {
         return this.dataService.dialogType === type;
     }
@@ -185,6 +256,7 @@ export class PanelHeaderComponent implements OnDestroy {
             this.settings['_func_' + this.func_categories[cat]] = (<HTMLInputElement>document.getElementById(`_func_${this.func_categories[cat]}`)).checked;
         }
         this.dataService.dialog.close();
+        this.dataService.dialog.style.right = '0px';
         this.dataService.triggerToolsetUpdate();
         localStorage.setItem('mobius_settings', JSON.stringify(this.settings));
 
@@ -194,12 +266,6 @@ export class PanelHeaderComponent implements OnDestroy {
         return this.settings[settingName] === value;
     }
 
-    closeDialog(closeLS = false) {
-        if (closeLS) {
-            (<HTMLInputElement>document.getElementById('savels-name')).value = this.flowchart.name;
-        }
-        this.dataService.dialog.close();
-    }
 
     async loadBackup(event: MouseEvent, filecode: string) {
         event.stopPropagation();
@@ -209,7 +275,7 @@ export class PanelHeaderComponent implements OnDestroy {
             if (result === 'error') {
                 return;
             }
-            SaveFileComponent.clearModelData(this.dataService.flowchart, null);
+            SaveFileComponent.clearModelData(this.dataService.flowchart);
             try {
                 this.dataService.file = circularJSON.parse(result);
             } catch (ex) {
@@ -287,6 +353,7 @@ export class PanelHeaderComponent implements OnDestroy {
                     name: v,
                     value: prod.args[prod.argCount - 1].value,
                     type: prod.meta.inputMode,
+                    isEntity: prod.selectGeom
                 });
             }
             func.argCount = func.args.length;
@@ -320,6 +387,9 @@ export class PanelHeaderComponent implements OnDestroy {
                 this.dataService.flowchart.subFunctions.push(subfunc);
             }
 
+            for (const node of this.dataService.flowchart.nodes) {
+                this.updateGlobalFuncProds(node.procedure, func);
+            }
             this.dataService.notifyMessage(`Successfully import global function ${funcName} from local storage`);
             this.closeDialog();
 
@@ -448,7 +518,6 @@ export class PanelHeaderComponent implements OnDestroy {
 
     deleteBackup(event: MouseEvent, filecode: string) {
         event.stopPropagation();
-        console.log(this.selectedBackups)
         for (filecode of this.selectedBackups) {
             SaveFileComponent.deleteFile(filecode);
             const itemsString = localStorage.getItem('mobius_backup_list');
@@ -574,6 +643,10 @@ export class PanelHeaderComponent implements OnDestroy {
             helpMenu.style.display = 'none';
         }
         if (this.dataService.dialog) {
+            if (this.textareaMousedown) {
+                this.textareaMousedown = false;
+                return;
+            }
             if ((<HTMLElement>event.target).tagName === 'SELECT') { return; }
 
             const rect = this.dataService.dialog.getBoundingClientRect();
@@ -582,6 +655,7 @@ export class PanelHeaderComponent implements OnDestroy {
                 && rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
             if (!isInDialog) {
                 this.dataService.dialog.close();
+                this.dataService.dialog.style.right = '0px';
                 this.dataService.dialog = null;
             }
         }
@@ -701,7 +775,7 @@ export class PanelHeaderComponent implements OnDestroy {
         let txtArea = document.getElementById('generatedLink');
         let baseLink = window.location.origin;
         if (baseLink.indexOf('design-automation.github.io') !== -1) {
-            baseLink += '/mobius-parametric-modeller-dev'
+            baseLink += '/mobius-parametric-modeller-dev-0-7';
         }
         txtArea.innerHTML = `${baseLink}/${this.urlSet[1]}` +
             `?file=${url}${this.urlSet[2]}${this.urlSet[3]}${this.urlSet[4]}${this.urlSet[5]}`;
@@ -812,6 +886,7 @@ export class PanelHeaderComponent implements OnDestroy {
                 name: v,
                 value: prod.args[prod.argCount - 1].value,
                 type: prod.meta.inputMode,
+                isEntity: prod.selectGeom
             });
         }
         func.argCount = func.args.length;
@@ -834,8 +909,49 @@ export class PanelHeaderComponent implements OnDestroy {
         } else {
             func.hasReturn = false;
         }
+        for (const node of this.dataService.flowchart.nodes) {
+            this.updateGlobalFuncProds(node.procedure, func);
+            this.updateGlobalFuncProds(node.localFunc, func);
+        }
         document.getElementById('tooltiptext').click();
         this.dataService.notifyMessage(`Updated Global Function ${func.name}`);
+    }
+
+    updateGlobalFuncProds(prodList: IProcedure[], globalFunc: IFunction) {
+        for (const prod of prodList) {
+            if (prod.type === ProcedureTypes.globalFuncCall && prod.meta.name === globalFunc.name) {
+                if (prod.argCount === globalFunc.argCount + 1) {
+                    for (let i = 0; i < globalFunc.args.length; i++) {
+                        prod.args[i + 1].isEntity = globalFunc.args[i].isEntity;
+                    }
+                } else {
+                    const oldArgs = prod.args;
+                    prod.args = JSON.parse(JSON.stringify(globalFunc.args));
+                    for (const newArg of prod.args) {
+                        let mismatch = true;
+                        newArg.name = newArg.name.toLowerCase();
+                        for (const oldArg of oldArgs) {
+                            if (newArg.name.toLowerCase() === oldArg.name.toLowerCase()) {
+                                newArg.value = oldArg.value;
+                                newArg.jsValue = oldArg.jsValue;
+                                mismatch = false;
+                                break;
+                            }
+                        }
+                        if (mismatch) {
+                            newArg.value = '';
+                            newArg.jsValue = '';
+                            newArg.invalidVar = true;
+                        }
+                    }
+                    prod.args.unshift(oldArgs[0]);
+                    prod.argCount = globalFunc.argCount + 1;
+                }
+            }
+            if (prod.children) {
+                this.updateGlobalFuncProds(prod.children, globalFunc);
+            }
+        }
     }
 
     download_global_func(event: MouseEvent, fnData) {
@@ -854,7 +970,11 @@ export class PanelHeaderComponent implements OnDestroy {
         SaveFileComponent.saveToLocalStorage('___TEMP___.mob', fileString);
         // localStorage.setItem('temp_file', fileString);
         setTimeout(() => {
-            window.open(`${window.location.origin}/editor?file=temp`, '_blank');
+            let baseLink = window.location.origin;
+            if (baseLink.indexOf('design-automation.github.io') !== -1) {
+                baseLink += '/mobius-parametric-modeller-dev-0-7';
+            }
+            window.open(`${baseLink}/editor?file=temp`, '_blank');
         }, 200);
         this.closeDialog();
     }
@@ -881,6 +1001,204 @@ export class PanelHeaderComponent implements OnDestroy {
         document.getElementById('selectImportFile').click();
         this.openHeaderDialog(event, 'globalfunc');
     }
+
+    addGlobalFuncLS(event: MouseEvent) {
+        event.stopPropagation();
+        this.dataService.dialog.close();
+        this.dataService.dialog.style.right = '0px';
+        this.dataService.dialogType = 'backup';
+        this.dataService.dialog = <HTMLDialogElement>document.getElementById('headerDialog');
+        this.dataService.dialog.showModal();
+        this.dataService.setbackup_updateImported(true);
+    }
+
+    searchInlineFuncs() {
+        const inputElement = <HTMLInputElement> document.getElementById('search_inline');
+        let searchTerm;
+        if (inputElement) {
+            searchTerm = inputElement.value.trim().toLowerCase();
+        } else {
+            searchTerm = '';
+        }
+
+        const parameters = [];
+        for (const prod of this.flowchart.nodes[0].procedure) {
+            if (prod.type === ProcedureTypes.Constant && prod.enabled) {
+                parameters.push(prod.args[0].value);
+                let description = 'Global Parameter ' + prod.args[0].value;
+                if (prod.meta.description) {
+                    description += ': ' + prod.meta.description;
+                }
+                this.inlineDocs['param_' + prod.args[0].value] = {
+                    description: description,
+                    module: '_parameters',
+                    name: prod.args[0].value,
+                    parameters: [],
+                    returns: undefined
+                };
+            }
+        }
+        let allInlineFuncs = [['parameters', parameters]];
+        allInlineFuncs = allInlineFuncs.concat(this.inlineFunc);
+
+        if (searchTerm === '') {
+            this.searchedInlineFunc = allInlineFuncs;
+            return;
+        }
+        this.searchedInlineFunc = [];
+        for (const fnCategory of this.inlineFunc) {
+            if ((<string>fnCategory[0]).toLowerCase().indexOf(searchTerm) !== -1) {
+                this.searchedInlineFunc.push(fnCategory);
+                continue;
+            }
+            const funcs = [];
+            for (const fn of fnCategory[1]) {
+                if (fn[0].toLowerCase().indexOf(searchTerm) !== -1) {
+                    funcs.push(fn);
+                }
+            }
+            if (funcs.length > 0) {
+                this.searchedInlineFunc.push([fnCategory[0], funcs]);
+            }
+        }
+        setTimeout(() => {
+            for (const cat of this.searchedInlineFunc) {
+                const accordion = <HTMLInputElement> document.getElementById('inlinefunc_' + cat[0]);
+                if (!accordion.classList.contains('opened')) {
+                    accordion.classList.add('opened');
+                }
+            }
+        }, 10);
+    }
+
+    openInlineMenu(event, id) {
+        const inlineAcc = document.getElementById('inlineAcc_' + id);
+        const inlineDiv = document.getElementById('inlinefunc_' + id);
+        if (inlineDiv.classList.contains('opened')) {
+            // event.target.classList.remove('opened');
+            inlineDiv.classList.remove('opened');
+            inlineAcc.classList.remove('opened');
+        } else {
+            // event.target.classList.add('opened');
+            inlineDiv.classList.add('opened');
+            inlineAcc.classList.add('opened');
+        }
+    }
+
+    disableFocus(event) {
+        event.preventDefault();
+    }
+
+    addInlineFunc(inlineFunc: string) {
+        this.updateInlineHelpText(new MouseEvent(''), inlineFunc);
+        let expressionElement = <HTMLTextAreaElement> document.activeElement;
+        let selStart: number, selEnd: number;
+        if (expressionElement && expressionElement.id === 'inlineExpression') {
+            selStart = expressionElement.selectionStart;
+            selEnd = expressionElement.selectionEnd;
+        } else {
+            expressionElement = <HTMLTextAreaElement> document.getElementById('inlineExpression');
+            selStart = expressionElement.value.length;
+            selEnd = expressionElement.value.length;
+            expressionElement.focus();
+        }
+        const newSelStart = inlineFunc.indexOf('(');
+        expressionElement.value =
+            expressionElement.value.slice(0, selStart) +
+            inlineFunc +
+            expressionElement.value.slice(selEnd);
+        expressionElement.dispatchEvent(inputEvent);
+        if (newSelStart !== -1) {
+            expressionElement.setSelectionRange(selStart + newSelStart + 1, selStart + inlineFunc.length - 1);
+        } else {
+            expressionElement.setSelectionRange(selStart + inlineFunc.length, selStart + inlineFunc.length);
+        }
+    }
+
+    async insertInlineFunc() {
+        const expressionElement = <HTMLTextAreaElement> document.getElementById('inlineExpression');
+        this.dataService.focusedInput.value = expressionElement.value;
+        this.dataService.focusedInput.dispatchEvent(inputEvent);
+        document.getElementById('hidden_node_selection').click();
+        this.dataService.focusedInput.focus();
+    }
+
+    async copyInlineFunc() {
+        const expressionElement = <HTMLTextAreaElement> document.getElementById('inlineExpression');
+        // expressionElement.focus();
+        // expressionElement.setSelectionRange(0, expressionElement.value.length);
+        // document.execCommand('copy', true);
+        await navigator.clipboard.writeText(expressionElement.value);
+        this.dataService.notifyMessage('Copied "' + expressionElement.value + '" to clipboard');
+        document.getElementById('hidden_node_selection').click();
+    }
+
+    updateInlineHelpText(event: MouseEvent, inlineFunc: string, category?: string) {
+        event.stopPropagation();
+        const inlineHelp = <HTMLTextAreaElement> document.getElementById('inlineHelp');
+        let fnDoc;
+        if (category && category === 'parameters') {
+            fnDoc = this.inlineDocs['param_' + inlineFunc];
+        } else {
+            fnDoc = this.inlineDocs[inlineFunc.split('(')[0]];
+            console.log(fnDoc)
+        }
+        if (!fnDoc) {
+            inlineHelp.innerHTML = `<h3>${inlineFunc}</h3><br><div></div>`;
+            return;
+        }
+        let fnDocHtml = `<h3>${inlineFunc}</h3><br><div class='inlineHelpDiv'>`;
+        if (fnDoc.summary) {
+            fnDocHtml += `<p>${fnDoc.summary}</p>`;
+        } else if (fnDoc.description) {
+            fnDocHtml += `<p>${fnDoc.description}</p>`;
+        } else {
+            fnDocHtml += `<p></p>`;
+        }
+        if (fnDoc.parameters && fnDoc.parameters.length > 0) {
+            fnDocHtml += `<br><p><span>Parameters: </span></p>`;
+            for (const param of fnDoc.parameters) {
+                if (!param) {continue; }
+                fnDocHtml += `<p class="paramP"><span>${param.name} - </span> ${param.description}</p>`;
+            }
+        }
+        if (fnDoc.returns) {
+            fnDocHtml += `<p><span>Returns: </span> ${fnDoc.returns}</p>`;
+        }
+        fnDocHtml += '</div>';
+        inlineHelp.innerHTML = fnDocHtml;
+    }
+
+    getInlineHoverText(funcText: string, category: string) {
+        if (typeof funcText !== 'string') {
+            return funcText[1];
+        }
+        let fnDoc;
+        if (category === 'parameters') {
+            fnDoc = this.inlineDocs['param_' + funcText];
+        } else {
+            fnDoc = this.inlineDocs[funcText.split('(')[0]];
+        }
+        if (!fnDoc) {
+            return '';
+        }
+        if (fnDoc.summary) {
+            return fnDoc.summary;
+        }
+        if (fnDoc.description) {
+            return fnDoc.description;
+        }
+        return '';
+    }
+
+    getRendererInfo() {
+        if (this.dataService.rendererInfo.error) {
+            return this.dataService.rendererInfo.error;
+        } else {
+            return this.dataService.rendererInfo.renderer;
+        }
+    }
+
 
     updateNode() {
         const nodeSelInput = <HTMLInputElement> document.getElementById('hidden_node_selection');

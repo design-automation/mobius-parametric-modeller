@@ -15,7 +15,7 @@ export class ProcedureInputViewerComponent implements OnDestroy {
     private ctx = document.createElement('canvas').getContext('2d');
 
     constructor() {
-        this.ctx.font = '13px Arial';
+        this.ctx.font = '400 12px Arial';
 
     }
 

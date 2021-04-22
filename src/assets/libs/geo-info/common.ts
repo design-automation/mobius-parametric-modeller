@@ -1,4 +1,4 @@
-import { GIAttribMap } from './GIAttribMap';
+import { GIAttribMapBase } from './attrib_classes/GIAttribMapBase';
 
 // longitude latitude in Singapore, NUS
 export const LONGLAT = [103.778329, 1.298759];
@@ -15,23 +15,18 @@ export const XZPLANE: TPlane = [[0, 0, 0], [1, 0, 0], [0, 0, 1]];
 // EEntType and an index
 export type TEntTypeIdx = [EEntType, number];
 
-// Object for entities
-export interface IGeomPack {
-    posis_i: number[];
-    posis2_i?: number[];
-    points_i: number[];
-    plines_i: number[];
-    pgons_i: number[];
-    colls_i: number[];
-}
-
-// Object for entities
-export interface IGeomPackTId {
-    ps: TId[];
-    po: TId[];
-    pl: TId[];
-    pg: TId[];
-    co: TId[];
+// For each entity type, a set of entity indexes
+export interface IEntSets {
+    ps?: Set<number>;
+    pt?: Set<number>;
+    pl?: Set<number>;
+    pg?: Set<number>;
+    co?: Set<number>;
+    obj_ps?: Set<number>;
+    _v?: Set<number>;
+    _t?: Set<number>;
+    _e?: Set<number>;
+    _w?: Set<number>;
 }
 
 // Types
@@ -44,90 +39,27 @@ export type TColor = [number, number, number]; // TODO replace with Txyz
 export type TNormal = [number, number, number]; // TODO replace with xyz
 export type TTexture = [number, number];
 
-// export interface IExpr {
-//     ent_type1: string;
-//     attrib_name1?: string;
-//     attrib_index1?: number;
-//     ent_type2?: string;
-//     attrib_name2?: string;
-//     attrib_index2?: number;
-//     operator?: string;
-//     value?: TAttribDataTypes;
-// }
-
-// export interface IExprQuery {
-//     ent_type: EEntType;
-//     attrib_name?: string;
-//     attrib_index?: number;
-//     operator?: EFilterOperatorTypes;
-//     value?: TAttribDataTypes;
-// }
-
-// export interface IExprSort {
-//     ent_type: EEntType;
-//     attrib_name: string;
-//     attrib_index?: number;
-// }
-
-// export interface IExprPush {
-//     ent_type1: EEntType;
-//     attrib_name1: string;
-//     attrib_index1?: number;
-//     ent_type2: EEntType;
-//     attrib_name2: string;
-//     attrib_index2?: number;
-// }
-
-// export enum EExprEntType {
-//     POSI =   'ps',
-//     VERT =   '_v',
-//     EDGE =   '_e',
-//     WIRE =   '_w',
-//     FACE =   '_f',
-//     POINT =  'pt',
-//     PLINE =  'pl',
-//     PGON =   'pg',
-//     COLL =   'co'
-// }
-
 // Types of entities
 export enum EEntType {
     POSI,
-    TRI,
     VERT,
+    TRI,
     EDGE,
     WIRE,
-    FACE,
     POINT,
     PLINE,
     PGON,
     COLL,
-    MOD
-}
-export enum EEntTypeCollCP {
-    POSI,
-    TRI,
-    VERT,
-    EDGE,
-    WIRE,
-    FACE,
-    POINT,
-    PLINE,
-    PGON,
-    COLL,
-    COLLC,
-    COLLP,
     MOD
 }
 
-// Types of entities
+// Must match types of entities
 export enum EEntTypeStr {
     'ps',
-    '_t',
     '_v',
+    '_t',
     '_e',
     '_w',
-    '_f',
     'pt',
     'pl',
     'pg',
@@ -135,32 +67,33 @@ export enum EEntTypeStr {
     'mo'
 }
 
-export enum EEntStrToGeomArray {
-    'posis',
-    'dn_tris_verts',
+// Must match types of entities
+// Must also match interface IGeomMaps
+export enum EEntStrToGeomMaps {
+    'up_posis_verts', // 'posis',
     'dn_verts_posis',
+    'dn_tris_verts',
     'dn_edges_verts',
     'dn_wires_edges',
-    'dn_faces_wirestris',
     'dn_points_verts',
     'dn_plines_wires',
-    'dn_pgons_faces',
-    'dn_colls_objs'
+    'dn_pgons_wires',
+    'colls'
 }
 
 /**
  * Attribute maps
  */
+
 export interface IAttribsMaps {
-    ps: Map<string, GIAttribMap>;
-    _v: Map<string, GIAttribMap>;
-    _e: Map<string, GIAttribMap>;
-    _w: Map<string, GIAttribMap>;
-    _f: Map<string, GIAttribMap>;
-    pt: Map<string, GIAttribMap>;
-    pl: Map<string, GIAttribMap>;
-    pg: Map<string, GIAttribMap>;
-    co: Map<string, GIAttribMap>;
+    ps: Map<string, GIAttribMapBase>;
+    _v: Map<string, GIAttribMapBase>;
+    _e: Map<string, GIAttribMapBase>;
+    _w: Map<string, GIAttribMapBase>;
+    pt: Map<string, GIAttribMapBase>;
+    pl: Map<string, GIAttribMapBase>;
+    pg: Map<string, GIAttribMapBase>;
+    co: Map<string, GIAttribMapBase>;
     mo: Map<string, any>;
 }
 
@@ -173,7 +106,9 @@ export enum EAttribNames {
     NAME = 'name',
     MATERIAL = 'material',
     VISIBILITY = 'visibility',
-    LABEL = 'label'
+    LABEL = 'label',
+    COLL_NAME = 'name',
+    TIMESTAMP = '_ts'
 }
 
 // Wire Type
@@ -183,9 +118,7 @@ export enum EWireType {
     PGON_HOLE =   'pgon_hole'
 }
 
-/**
- * The types of operators that can be used in a filter.
- */
+// The types of operators that can be used in a filter.
 export enum EFilterOperatorTypes {
     IS_EQUAL = '==',
     IS_NOT_EQUAL = '!=',
@@ -194,33 +127,6 @@ export enum EFilterOperatorTypes {
     IS_GREATER = '>',
     IS_LESS = '<',
     EQUAL = '='
-}
-
-// /**
-//  * A query component.
-//  * Each query can consist of multiple components.
-//  * Some examples of queries
-//  * @name == value
-//  * @name > value
-//  * @name[2] <= value
-//  */
-// export interface IQueryComponent {
-//     attrib_name: string;
-//     attrib_index: number;
-//     attrib_value_str: string;
-//     operator_type: EFilterOperatorTypes;
-// }
-
-/**
- * A sort component.
- * Each sort can consist of multiple components.
- * Some examples of queries
- * @name
- * @name[2]
- */
-export interface ISortComponent {
-    attrib_name: string;
-    attrib_index: number;
 }
 
 export enum ESort {
@@ -238,53 +144,14 @@ export enum EAttribPush {
     LAST
 }
 
-/**
- * Geom arrays
- */
-export interface IGeomArrays {
-    // num_posis: number;
-    dn_verts_posis: TVert[];
-    dn_tris_verts: TTri[];
-    dn_edges_verts: TEdge[];
-    dn_wires_edges: TWire[];
-    dn_faces_wirestris: TFace[];
-    dn_points_verts: TPoint[];
-    dn_plines_wires: TPline[];
-    dn_pgons_faces: TPgon[];
-    dn_colls_objs: TColl[];
-    up_posis_verts: number[][]; // one to many
-    up_tris_faces: number[];
-    up_verts_edges: number[][]; // one to two
-    up_verts_tris: number[][]; // one to many
-    up_verts_points: number[];
-    up_edges_wires: number[];
-    up_wires_faces: number[];
-    up_wires_plines: number[];
-    up_faces_pgons: number[];
-    up_points_colls: number[][]; // one to many
-    up_plines_colls: number[][]; // one to many
-    up_pgons_colls: number[][]; // one to many
-}
-
-// copy geometry
-export interface IGeomCopy {
-    points: number[];
-    plines: number[];
-    pgons: number[];
-    colls: number[];
-}
-// ================================================================================================
-// JSON DATA
-// ================================================================================================
-
 // enums
 export enum EAttribDataTypeStrs {
     // INT = 'Int',
-    NUMBER = 'Number',
-    STRING = 'String',
-    BOOLEAN = 'Boolean',
-    LIST = 'List', // a list of anything
-    DICT = 'Dict // an object'
+    NUMBER = 'number',
+    STRING = 'string',
+    BOOLEAN = 'boolean',
+    LIST = 'list', // a list of anything
+    DICT = 'dict' // an object
 }
 
 // types
@@ -295,50 +162,143 @@ export type TTri = [number, number, number]; // [position, position, position]
 export type TVert = number; // positions
 export type TEdge = [number, number]; // [vertex, vertex]
 export type TWire = number[]; // [edge, edge,....]
-export type TFace = [number[], number[]]; // [[wire, ....], [triangle, ...]]
-export type TPoint = number; // [vertex,....]
-export type TPline = number; // [wire,....]
-export type TPgon = number; // [face,....]
+export type TPgonTri = number[]; // [triangle, ...]
+export type TPoint = number; // vertex
+export type TPline = number; // wire
+export type TPgon = number[]; // [wire,....]
 export type TColl = [number, number[], number[], number[]]; // [parent, [point, ...], [polyline, ...], [polygon, ....]]
-export type TEntity = TTri | TVert | TEdge | TWire | TFace | TPoint | TPline | TPgon | TColl;
+export type TEntity = TTri | TVert | TEdge | TWire | TPoint | TPline | TPgon | TColl;
 export type TAttribDataTypes = string | number | boolean | any[] | object;
-export type TEntAttribValuesArr = Array<[number[], TAttribDataTypes]>;
-export type TModelAttribValuesArr = Array<[string, TAttribDataTypes]>;
-// interfaces for JSON data
+
 
 export const RE_SPACES: RegExp = /\s+/g;
 
-export interface IGeomData {
-    num_positions: number;
-    triangles: TTri[];
-    vertices: TVert[];
+/**
+ * Geom arrays
+ */
+export interface IGeomMaps {
+    // down
+    dn_verts_posis: Map<number, TVert>; // one to many
+    dn_tris_verts: Map<number, TTri>; // one to three
+    dn_edges_verts: Map<number, TEdge>; // one to two
+    dn_wires_edges: Map<number, TWire>; // one to many
+    dn_points_verts: Map<number, TPoint>;
+    dn_plines_wires: Map<number, TPline>;
+    dn_pgons_tris: Map<number, TPgonTri>; // one to many
+    dn_pgons_wires: Map<number, TPgon>; // one to many
+    // up
+    up_posis_verts: Map<number, number[]>; // one to many
+    up_tris_pgons: Map<number, number>;
+    up_verts_edges: Map<number, number[]>; // one to two (or one)
+    up_verts_tris: Map<number, number[]>; // one to many
+    up_edges_wires: Map<number, number>;
+    up_verts_points: Map<number, number>;
+    up_wires_plines: Map<number, number>;
+    up_wires_pgons: Map<number, number>;
+    // colls
+    colls: Set<number>;
+}
+
+// copy geometry
+export interface IGeomCopy {
+    points: number[];
+    plines: number[];
+    pgons: number[];
+    colls: number[];
+}
+
+// note the names of the keys must match EAttribDataTypeStrs
+export interface IAttribValues {
+    number: [number[], Map<string, number>];
+    string: [string[], Map<string, number>];
+    list:   [any[],    Map<string, number>];
+    dict:   [object[], Map<string, number>];
+}
+
+export interface IMetaData {
+    // timestamp: number;
+    posi_count: number;
+    vert_count: number;
+    tri_count: number;
+    edge_count: number;
+    wire_count: number;
+    point_count: number;
+    pline_count: number;
+    pgon_count: number;
+    coll_count: number;
+    attrib_values: IAttribValues;
+}
+
+// data in a snapshot
+export interface ISnapshotData {
+    ps: Set<number>;
+    pt: Set<number>;
+    pl: Set<number>;
+    pg: Set<number>;
+    co: Set<number>;
+    pt_co: Map<number, Set<number>>;
+    pl_co: Map<number, Set<number>>;
+    pg_co: Map<number, Set<number>>;
+    co_pt: Map<number, Set<number>>;
+    co_pl: Map<number, Set<number>>;
+    co_pg: Map<number, Set<number>>;
+    co_ch: Map<number, Set<number>>;
+    co_pa: Map<number, number>;
+}
+export interface IRenumMaps {
+    posis: Map<number, number>;
+    verts: Map<number, number>;
+    tris: Map<number, number>;
+    edges: Map<number, number>;
+    wires: Map<number, number>;
+    points: Map<number, number>;
+    plines: Map<number, number>;
+    pgons: Map<number, number>;
+    colls: Map<number, number>;
+}
+// ================================================================================================
+// JSON MODEL DATA
+// ================================================================================================
+
+export interface IModelJSONData {
+    type: string;
+    version: string;
+    geometry: IGeomJSONData;
+    attributes: IAttribsJSONData;
+}
+
+export interface IGeomJSONData {
+    num_posis: number;
+    verts: TVert[];
+    tris: TTri[];
     edges: TEdge[];
     wires: TWire[];
-    faces: TFace[];
     points: TPoint[];
-    polylines: TPline[];
-    polygons: TPgon[];
-    collections: TColl[];
-    selected: TEntTypeIdx[];
+    plines: TPline[];
+    pgons: TPgon[];
+    pgontris: TPgonTri[];
+    coll_pgons: number[][];
+    coll_plines: number[][];
+    coll_points: number[][];
+    coll_childs: number[][];
+    selected: Map<Number, TEntTypeIdx[]>;
 }
-export interface IAttribData {
+export interface IAttribJSONData {
     name: string;
     data_type: EAttribDataTypeStrs;
     data: TEntAttribValuesArr;
 }
-export interface IAttribsData {
-    positions: IAttribData[];
-    vertices: IAttribData[];
-    edges: IAttribData[];
-    wires: IAttribData[];
-    faces: IAttribData[];
-    points: IAttribData[];
-    polylines: IAttribData[];
-    polygons: IAttribData[];
-    collections: IAttribData[];
+export interface IAttribsJSONData {
+    posis: IAttribJSONData[];
+    verts: IAttribJSONData[];
+    edges: IAttribJSONData[];
+    wires: IAttribJSONData[];
+    points: IAttribJSONData[];
+    plines: IAttribJSONData[];
+    pgons: IAttribJSONData[];
+    colls: IAttribJSONData[];
     model: TModelAttribValuesArr;
 }
-export interface IModelData {
-    geometry: IGeomData;
-    attributes: IAttribsData;
-}
+
+export type TEntAttribValuesArr = Array<[TAttribDataTypes, number[]]>;
+export type TModelAttribValuesArr = Array<[string, TAttribDataTypes]>;

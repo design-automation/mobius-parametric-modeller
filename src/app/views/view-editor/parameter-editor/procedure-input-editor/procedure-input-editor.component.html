@@ -4,17 +4,17 @@
 [class.selected]='prod.selected'
 [class.lastSelected]="prod.lastSelected"
 [class.inputDisabled]='!prod.enabled' 
+[class.inputEntity]='prod.selectGeom' 
 (mousedown)='disableShift($event)'
 (click)='selectInput($event)'>
     <div class = "btn-container">
         <div class = "btns">
-            <!-- delete button-->
-            <button class='btn' mat-icon-button title="Delete Procedure" (click)='deleteProd()' tabindex="-1">
-                <mat-icon class='icon'>delete_outline</mat-icon>
+            <button class='btn disable-btn' mat-icon-button title="Disable Procedure" (click)='markDisabled()' tabindex="-1">
+                <mat-icon class='icon' svgIcon='disabled'></mat-icon>
             </button>
-            <button class='btn' mat-icon-button title="Disable Procedure" (click)='markDisabled()' tabindex="-1">
-                <mat-icon class='icon'>tv_off</mat-icon>
-            </button>
+            <!-- <button class='btn entity-btn' mat-icon-button title="Input entities for global function" (click)='markEntity()' tabindex="-1">
+                <mat-icon class='icon' svgIcon='select'></mat-icon>
+            </button> -->
         </div>
     </div>
     <div class = 'inp--type--container'>
@@ -32,6 +32,12 @@
             </ng-container>
             <input class = 'input--type' *ngIf='prod.type == 12' [class.disabled-input]='true' value='Add Model' size='5' disabled>
         </div>
+        <div class = 'desc--container'>
+            <textarea id='{{prod.ID}}_desc' autogrow class='inp--desc' placeholder='Parameter Description' 
+            (click)='emitClearSelect($event)'
+            [class.disablePointer]='disableInput'
+            [(ngModel)]='prod.meta.description'></textarea>
+        </div>
         <div class='inline-div'>
             <!-- <input [class.disabled-input]='true' value='Name:' disabled> -->
             <input 
@@ -42,16 +48,7 @@
             (focus)='emitClearSelect($event)'
             placeholder="Param_name"
             [style.width.px]='inputSize(prod.args[0].value,"Param_name")'>
-        </div>
-        =
-        <!-- <div class='inline-div' *ngIf='prod.type == 12'>
-            <select [(ngModel)]="prod.meta.inputMode" tabindex="-1">
-                <option value='3' [selected]="prod.meta.inputMode == 3">URL</option>
-                <option value='4' [selected]="prod.meta.inputMode == 4">File</option>
-            </select>
-        </div> -->
-        <!-- <input [class.disabled-input]='true' value='Default:' disabled> -->
-        <div class='inline-div'>
+            =
             <ng-container [ngSwitch]="prod.meta.inputMode" >
                 <!-- Constant -->
                 <input *ngSwitchCase="PortTypes.Constant" [(ngModel)]='prod.args[prod.argCount-1].value' placeholder='Default Value' 
@@ -70,8 +67,7 @@
                 [style.width.px]='inputSize(prod.args[prod.argCount-1].value,"Default Value")'>
     
                 <!-- slider -->
-                <div class='div--slider' *ngSwitchCase="PortTypes.Slider">
-                    <div class = 'input--container'>
+                <ng-container *ngSwitchCase="PortTypes.Slider">
                         <input [(ngModel)]='prod.args[prod.argCount-1].step' placeholder='Step'
                             (focus)='emitClearSelect($event)'
                             [class.disablePointer]='disableInput'
@@ -88,11 +84,10 @@
                             (focus)='emitClearSelect($event)'
                             [class.disablePointer]='disableInput'
                             [style.width.px]='inputSize(prod.args[prod.argCount-1].max,"Max")'>
-                    </div>              
-                </div>
+                </ng-container>
                 
                 <!-- checkbox -->
-                <div class = 'div--chbox' *ngSwitchCase="PortTypes.Checkbox">
+                <div class = 'div--chbox chbox-inp' *ngSwitchCase="PortTypes.Checkbox">
                     <input class='chkbox' id = 'chbox_{{prod.ID}}' 
                         [(ngModel)]='prod.args[prod.argCount-1].value' 
                         [class.disablePointer]='disableInput'
@@ -121,10 +116,21 @@
                         type="file">
                 </div>
             </ng-container>
+
         </div>
         
     </div>
     <ng-container [ngSwitch]="prod.meta.inputMode" >
+        <div class='inputEntity' *ngSwitchCase="PortTypes.SimpleInput">
+            <div class='div--chbox div--globalEnt' >
+                <input class='chkbox' id='globalEntity_{{prod.ID}}'
+                    [(ngModel)]='prod.selectGeom' 
+                    [class.disablePointer]='disableInput'
+                    type="checkbox">
+                <label for='globalEntity_{{prod.ID}}'></label>
+            </div> 
+            <input class = 'entityDesc' value='Input entities for global function' disabled>
+        </div>
         <div class='div--slider' *ngSwitchCase="PortTypes.Slider">
             <div class = 'slider--container'>
                 <input class = 'slider-input' [(ngModel)]='prod.args[prod.argCount-1].value'
@@ -159,12 +165,6 @@
             </div>
         </div> 
     </ng-container>
-    <div class = 'desc--container'>
-        <textarea id='{{prod.ID}}_desc' autogrow class='inp--desc' placeholder='Parameter Description' 
-        (click)='emitClearSelect($event)'
-        [class.disablePointer]='disableInput'
-        [(ngModel)]='prod.meta.description'></textarea>
-    </div>
 </div>
 
 

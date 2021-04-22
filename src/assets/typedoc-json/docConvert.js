@@ -6,18 +6,6 @@ const config = require('../gallery/__config__.json');
 
 const urlString = 'https://mobius.design-automation.net';
 
-// Edit this ModuleList to include modules that are to be converted into MD file
-const ModuleList = [
-    'query',
-    'make',
-    'modify',
-    'isect',
-    'calc',
-    'util',
-    'pattern',
-    'virtual',
-    'list',
-];
 
 
 let examples;
@@ -64,31 +52,14 @@ function analyzeParamType(fn, paramType) {
         console.log('in function:', fn.module + '.' + fn.name);
         return paramType.type;
     }
-
 }
 
-// const doc = dc.default;
-const doc = dc;
-const docs = [];
-
-for (const mod of doc.children) {
-    let modName = mod.name.replace(/"/g, '').replace(/'/g, '').split('/');
-    const coreIndex = modName.indexOf('core');
-    if (modName.length < 3 || coreIndex === -1  || modName[coreIndex + 1] !== 'modules') { continue; }
-    modName = modName[modName.length - 1];
-    // if (modName.substr(0, 1) === '"' || modName.substr(0, 1) === '\'') {
-    //     modName = modName.substr(1, modName.length - 2);
-    // } else {
-    //     modName = modName.substr(0, modName.length - 1);
-    // }
-    if (modName.substr(0, 1) === '_' || modName === 'index' || modName === 'categorization') {
-        continue;
-    }
+function addDoc(mod, modName, docs) {
     const moduleDoc = {};
     moduleDoc['id'] = mod.id;
     moduleDoc['name'] = modName;
     moduleDoc['func'] = [];
-    if (!mod.children) { continue; }
+    if (!mod.children) { return; }
     for (const func of mod.children) {
         if (func.name[0] === '_') { continue; }
         const fn = {};
@@ -140,57 +111,138 @@ for (const mod of doc.children) {
         }
         moduleDoc.func.push(fn);
     }
-    if (moduleDoc.func.length === 0) {continue; }
+    if (moduleDoc.func.length === 0) {return; }
     moduleDoc.func.sort(compare);
     docs.push(moduleDoc);
 }
-docs.sort(compare);
 
-let count = 0;
-for (const modName of ModuleList) {
-    let mod;
-    for (let m of docs) {
-        if (m.name === modName) {
-            mod = m;
-            break;
+function genModuleDocs(docs) {
+    let count = 0;
+    for (const mod of docs) {
+        // let mod;
+        // for (let m of docs) {
+        //     if (m.name === modName) {
+        //         mod = m;
+        //         break;
+        //     }
+        // }
+        // if (!mod) {continue;}
+        if (mod.name[0] === '_') { continue; }
+        // if (!docs[modName]) { continue; }
+        // const mod = docs[modName];
+        // Module name
+        // if (ModuleList.indexOf (mod.name) === -1) { continue; }``
+        let mdString = `# ${mod.name.toUpperCase()}  \n  \n`;
+        for (const func of mod.func) {
+            // if (!mod[funcName]) { continue; }
+    
+            // const func = mod[funcName];
+            fnString = `## ${func.name}  \n  \n  \n`;
+            fnString += `**Description:** ${func.description}  \n  \n`;
+            if (func.parameters && func.parameters.length > 0) {
+                fnString += `**Parameters:**  \n`;
+                for (const param of func.parameters) {
+                    if (!param) {continue; }
+                    fnString += `  * *${param.name}:* ${param.description}  \n`;
+                }
+            }
+            if (func.returns) {
+                fnString += `  \n**Returns:** ${func.returns}  \n`;
+            }
+            if (func.example) {
+                fnString += `**Examples:**  \n`;
+                for (const i in func.example) {
+                    if (!func.example[i]) {continue; }
+                    fnString += `  * ${func.example[i]}  \n`;
+                    if (func.example_info) {
+                        fnString += `    ${func.example_info[i]}  \n`;
+                    }
+    
+                }
+            }
+            if (func.example_link) {
+                fnString += `**Example URLs:**  \n`;
+                for (const ex of func.example_link) {
+                    let check = false;
+                    f = ex.trim();
+                    fNoNode = f.split('.mob')[0].trim();
+                    for (const exampleFile of examples.files) {
+                        if (exampleFile.indexOf(fNoNode) !== -1) {
+                            check =true;
+                        }
+                    }
+                    if (!check) {
+                        examples.files.push(f);
+                    }
+                    fnString += `  1. [${f.split('&node=')[0]}](${urlString}/flowchart?file=https://raw.githubusercontent.com/design-automation/` +
+                                `mobius-parametric-modeller/master/src/assets/gallery/function_examples/${ex})  \n`;
+    
+                }
+            }
+            fnString += `  \n  \n`;
+            mdString += fnString
         }
+    
+        count += 1;
+        let countStr = count.toString();
+        if (countStr.length === 1) {
+            countStr = '0' + countStr;
+        }
+        mdString = mdString.replace(/\\n/g, '\n');
+        fs.writeFile(`./src/assets/typedoc-json/docMD/${mod.name}.md`, mdString, function(err) {
+            if (err) {
+                return console.log(err);
+            }
+            console.log(`successfully saved ${mod.name}.md`);
+        });
     }
-    if (!mod) {continue;}
-    // if (!docs[modName]) { continue; }
-    // const mod = docs[modName];
-    // Module name
-    if (ModuleList.indexOf (mod.name) === -1) { continue; }``
-    let mdString = `# ${modName.toUpperCase()}    \n\n`;
-    for (const func of mod.func) {
-        // if (!mod[funcName]) { continue; }
+}
 
-        // const func = mod[funcName];
-
-        mdString += `## ${func.name}  \n`;
-        mdString += `* **Description:** ${func.description}  \n`;
+function genInlineDocs(inlineList, inlineDocs) {
+    ilString = ''
+    for (const inlineFunc of inlineList) {
+        if (!inlineFunc) { continue; }
+        const funcNames = inlineFunc[1].split('.')
+        let mod;
+        let func
+        for (let m of inlineDocs) {
+            if (m.name[2] === funcNames[1]) {
+                mod = m;
+                for (let f of mod.func) {
+                    if (f.name === funcNames[2]) {
+                        func = f;
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        if (!mod || !func) { continue; }
+        ilString += `# ## ${inlineFunc[0]}  \n`;
+        ilString += `* **Description:** ${func.description}  \n`;
         if (func.parameters && func.parameters.length > 0) {
-            mdString += `* **Parameters:**  \n`;
+            ilString += `* **Parameters:**  \n`;
             for (const param of func.parameters) {
-                if (!param) {continue; }
-                mdString += `  * *${param.name}:* ${param.description}  \n`;
+                if (!param || param.name === 'debug') {continue; }
+                ilString += `  * *${param.name}:* ${param.description?param.description:''}  \n`;
             }
         }
         if (func.returns) {
-            mdString += `* **Returns:** ${func.returns}  \n`;
+            ilString += `* **Returns:** ${func.returns}  \n`;
         }
         if (func.example) {
-            mdString += `* **Examples:**  \n`;
+            ilString += `* **Examples:**  \n`;
             for (const i in func.example) {
                 if (!func.example[i]) {continue; }
-                mdString += `  * ${func.example[i]}  \n`;
+                ilString += `  * ${func.example[i]}  \n`;
                 if (func.example_info) {
-                    mdString += `    ${func.example_info[i]}  \n`;
+                    ilString += `    ${func.example_info[i]}  \n`;
                 }
 
             }
         }
         if (func.example_link) {
-            mdString += `* **Example URLs:**  \n`;
+            ilString += `* **Example URLs:**  \n`;
             for (const ex of func.example_link) {
                 let check = false;
                 f = ex.trim();
@@ -203,27 +255,48 @@ for (const modName of ModuleList) {
                 if (!check) {
                     examples.files.push(f);
                 }
-                mdString += `  1. [${f.split('&node=')[0]}](${urlString}/flowchart?file=https://raw.githubusercontent.com/design-automation/` +
+                ilString += `  1. [${f.split('&node=')[0]}](${urlString}/flowchart?file=https://raw.githubusercontent.com/design-automation/` +
                             `mobius-parametric-modeller/master/src/assets/gallery/function_examples/${ex})  \n`;
 
             }
         }
-        mdString += `  \n`;
-
+        ilString += `  \n`;
     }
-
-    count += 1;
-    let countStr = count.toString();
-    if (countStr.length === 1) {
-        countStr = '0' + countStr;
-    }
-    fs.writeFile(`./src/assets/typedoc-json/docMD/${countStr}_${modName}.md`, mdString, function(err) {
+    fs.writeFile(`./src/assets/typedoc-json/docCF/inline.md`, ilString, function(err) {
         if (err) {
             return console.log(err);
         }
-        console.log(`successfully saved ${countStr}_${modName}.md`);
+        console.log(`successfully saved inline.md`);
     });
 }
+
+// const doc = dc.default;
+const doc = dc;
+const moduleDocs = [];
+
+for (const mod of doc.children) {
+    const modNameSplit = mod.name.replace(/"/g, '').replace(/'/g, '').split('/');
+    const coreIndex = modNameSplit.indexOf('core');
+    if (modNameSplit.length < 3 || coreIndex === -1) {
+        continue;
+    }
+    if (modNameSplit[coreIndex + 1] === 'inline') {
+
+    } else if (modNameSplit[coreIndex + 1] === 'modules') {
+        const modName = modNameSplit[modNameSplit.length - 1];
+        if (modName.substr(0, 1) === '_' || modName === 'index' || modName === 'categorization') {
+            continue;
+        }
+        addDoc(mod, modName, moduleDocs);
+    }
+}
+moduleDocs.sort(compare);
+
+fs.mkdirSync('./src/assets/typedoc-json/docMD', { recursive: true }, (err) => {
+    if (err) throw err;
+});
+
+genModuleDocs(moduleDocs)
 
 fs.writeFile(`./src/assets/gallery/__config__.json`, JSON.stringify(config, null, 4), function(err) {
     if (err) {

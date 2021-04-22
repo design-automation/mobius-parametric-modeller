@@ -13,7 +13,7 @@
 
     display: block;
     flex-flow: row nowrap;
-    padding-left: $small-padding;
+    // padding-left: $small-padding;
 
     color: $color8;
 
@@ -40,13 +40,14 @@
     mat-slider{
         width: 100%;
         height: $fsize3;
-        padding: 0px 10px 0px 0px;
+        padding: 0px;
         position: relative;
         bottom: 7px;
     }
     .input-const-name{
         width: 100px;
         text-overflow: ellipsis;
+        // padding-left: 10px;
     }
     .input-const-colon{
         width: 3px;
@@ -66,7 +67,7 @@ input{
     vertical-align: bottom;
     padding: 0px 0px 0px 6px;
 
-    font-family: sans-serif;
+    font-family: Arial;
     font-size: $fsize2;
     &:hover, &:focus{
         background-color: $color7;

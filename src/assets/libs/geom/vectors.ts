@@ -134,16 +134,17 @@ export function vecAng(v1: Txyz, v2: Txyz): number {
     const v1n: Txyz = vecNorm(v1);
     const v2n: Txyz = vecNorm(v2);
     const d: number = mathjs.dot(v1n, v2n);
-    return Math.acos( d );
+    const ang: number = d <= -1 ? Math.PI : d >= 1 ? 0 : Math.acos(d);
+    return ang;
 }
 
 export function vecAng2(v1: Txyz, v2: Txyz, n: Txyz): number {
     const v1n: Txyz = vecNorm(v1);
     const v2n: Txyz = vecNorm(v2);
     const d: number = mathjs.dot(v1n, v2n);
-    if (d === 1) {
+    if (d >= 1) {
         return 0;
-    } else if (d === -1) {
+    } else if (d <= -1) {
         return Math.PI;
     }
     let angle: number = Math.acos( d );

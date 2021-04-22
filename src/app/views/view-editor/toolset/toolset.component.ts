@@ -4,7 +4,7 @@ import { ProcedureTypes, IFunction, IProcedure } from '@models/procedure';
 import { IFlowchart } from '@models/flowchart';
 import * as CircularJSON from 'circular-json';
 import { IArgument } from '@models/code';
-import { ModuleList, ModuleDocList } from '@shared/decorators';
+import { ModuleList, ModuleDocList, AllFunctionDoc } from '@shared/decorators';
 import { INode, NodeUtils } from '@models/node';
 
 import { DownloadUtils } from '@shared/components/file/download.utils';
@@ -38,16 +38,17 @@ export class ToolsetComponent implements OnInit {
     ProcedureTypes = ProcedureTypes;
     ProcedureTypesArr = keys.slice(keys.length / 2);
     searchedMainFuncs = [];
-    searchedInlineFuncs = [];
-    searchedUserFuncs = [];
+    // searchedInlineFuncs = [];
+    // searchedUserFuncs = [];
 
-    inlineQueryExpr = inline_query_expr;
-    inlineSortExpr = inline_sort_expr;
-    inlineFunc = inline_func;
+    // inlineQueryExpr = inline_query_expr;
+    // inlineSortExpr = inline_sort_expr;
+    // inlineFunc = inline_func;
 
     AllModules = {};
     Modules = [];
     ModuleDoc = ModuleDocList;
+    AllFuncsDoc = AllFunctionDoc;
 
     private timeOut;
 
@@ -74,12 +75,7 @@ export class ToolsetComponent implements OnInit {
                     if (fn.doc.summary) {
                         fnDocHtml = `<p class="funcDesc">${fn.doc.summary}</p>`;
                     } else {
-                        fnDocHtml = `<p class="funcDesc">${fn.doc.description.split('~')[0]}</p>`;
-                        // const splittedDesc = fn.doc.description.split('~');
-                        // fnDocHtml = ``;
-                        // for (const txt of splittedDesc) {
-                        //     fnDocHtml += `<p class="funcDesc">${txt}</p>`;
-                        // }
+                        fnDocHtml = `<p class="funcDesc">${fn.doc.description.split('\n')[0]}</p>`;
                     }
                     if (fn.doc.parameters && fn.doc.parameters.length > 0) {
                         fnDocHtml += `<p><span>Parameters: </span></p>`;
@@ -174,16 +170,27 @@ export class ToolsetComponent implements OnInit {
     // add selected imported function as a new procedure
     add_global_func(fnData) {
         fnData.args = fnData.args.map( (arg) => {
-            if (arg.type === InputType.Constant) {
-                return {name: arg.name, value: arg.value, jsValue: arg.value, type: arg.type};
-            }
-            return {name: arg.name, value: arg.value, jsValue: arg.value, type: arg.type};
+            // if (arg.type === InputType.Constant) {
+            //     return {name: arg.name, value: arg.value, jsValue: arg.value, type: arg.type, isEntity: arg.isEntity};
+            // }
+            return {name: arg.name, value: arg.value, jsValue: arg.value, type: arg.type, isEntity: arg.isEntity};
         });
         this.eventAction.emit({
             'type': 'add_prod',
             'content': { type: ProcedureTypes.globalFuncCall, data: fnData }
         });
     }
+
+    add_searched_func(fnData) {
+        if (fnData.type === 'localFunc') {
+            this.add_local_func_call(fnData.data);
+        } else if (fnData.type === 'globalFunc') {
+            this.add_global_func(fnData.data);
+        } else {
+            this.add_main_func(fnData.data);
+        }
+    }
+
 
     add_searched_user_func(fnData) {
         if (fnData.type === 'localFunc') {
@@ -295,6 +302,7 @@ export class ToolsetComponent implements OnInit {
                             name: v,
                             value: prod.args[prod.argCount - 1].value,
                             type: prod.meta.inputMode,
+                            isEntity: prod.selectGeom
                         });
                     }
                     func.argCount = func.args.length;
@@ -395,6 +403,35 @@ export class ToolsetComponent implements OnInit {
         this.dataService.dialog.showModal();
     }
 
+    open_inline_dialog(event: MouseEvent) {
+        event.stopPropagation();
+        const activeElm = <HTMLInputElement> document.activeElement;
+
+        let insertInlineExpr = <HTMLButtonElement> document.getElementById('insertInlineExpression');
+        if (insertInlineExpr && !insertInlineExpr.classList.contains('disabled')) {
+            insertInlineExpr.classList.add('disabled');
+        }
+        (<HTMLInputElement>document.getElementById('hidden_update_inline_func')).click();
+        this.dataService.dialogType = 'inlinefunc';
+        this.dataService.dialog = <HTMLDialogElement>document.getElementById('headerDialog');
+        this.dataService.dialog.showModal();
+        this.dataService.dialog.style.right = '-300px';
+
+        setTimeout(() => {
+            const expressionInput = <HTMLTextAreaElement> document.getElementById('inlineExpression');
+            insertInlineExpr = <HTMLButtonElement> document.getElementById('insertInlineExpression');
+            if (!expressionInput) { return; }
+            if (activeElm && activeElm.nodeName === 'INPUT') {
+                expressionInput.value = activeElm.value;
+                if (insertInlineExpr && insertInlineExpr.classList.contains('disabled')) {
+                    insertInlineExpr.classList.remove('disabled');
+                }
+            } else {
+                expressionInput.value = '';
+            }
+        }, 0);
+    }
+
     preventfocus(event) {
         event.preventDefault();
     }
@@ -467,81 +504,109 @@ export class ToolsetComponent implements OnInit {
                 if (func.name.toLowerCase().indexOf(str) !== -1) {
                     this.searchedMainFuncs.push({
                         'type': 'function',
-                        'name': func.name,
                         'module': mod.module,
+                        'name': func.name,
                         'data': func,
                     });
                 }
             }
         }
 
-    }
-
-    searchInlineFuncs(event) {
-        this.updateFocusProd()
-        const str = event.target.value.toLowerCase();
-        this.searchedInlineFuncs = [];
-        if (str.length === 0) {
-            return;
-        }
-        // search Global Variables
-        for (const cnst of this.dataService.flowchart.nodes[0].procedure) {
-            if (this.searchedInlineFuncs.length >= 10) { break; }
-            if (cnst.type !== ProcedureTypes.Constant) { continue; }
-            const cnstString = cnst.args[cnst.argCount - 2].value;
-            if (cnstString.toLowerCase().indexOf(str) !== -1) {
-                this.searchedInlineFuncs.push([cnstString, `Global Variable ${cnstString}`]);
-            }
-        }
-
-        // // search inline query expressions
-        // for (const expr of this.inlineQueryExpr) {
-        //     if (this.searchedInlineFuncs.length >= 10) { break; }
-        //     if (expr[0].toLowerCase().indexOf(str) !== -1) {
-        //         this.searchedInlineFuncs.push([expr, '']);
-        //     }
-        // }
-
-        // search inline functions
-        for (const category of this.inlineFunc) {
-            for (const funcString of category[1]) {
-                if (this.searchedInlineFuncs.length >= 10) { break; }
-                if (funcString[0].toLowerCase().indexOf(str) !== -1) {
-                    this.searchedInlineFuncs.push(funcString);
-                }
-            }
-            if (this.searchedInlineFuncs.length >= 10) { break; }
-        }
-    }
-
-    searchUserFuncs(event) {
-        this.updateFocusProd()
-        const str = event.target.value.toLowerCase();
-        this.searchedUserFuncs = [];
+        if (this.searchedMainFuncs.length >= 10) { return; }
         for (const func of this.getNode().localFunc) {
             if (func.type !== ProcedureTypes.LocalFuncDef) { continue; }
-            if (this.searchedUserFuncs.length >= 10) { break; }
+            if (this.searchedMainFuncs.length >= 10) { break; }
             if (func.args[0].value.toLowerCase().indexOf(str) !== -1) {
-                this.searchedUserFuncs.push({
+                this.searchedMainFuncs.push({
                     'type': 'localFunc',
+                    'module': 'local',
                     'name': func.args[0].value,
                     'data': func
                 });
             }
-
         }
+
+        if (this.searchedMainFuncs.length >= 10) { return; }
+
         // Search User Defined Functions
         for (const func of this.dataService.flowchart.functions) {
-            if (this.searchedUserFuncs.length >= 10) { break; }
+            if (this.searchedMainFuncs.length >= 10) { break; }
             if (func.name.toLowerCase().indexOf(str) !== -1) {
-                this.searchedUserFuncs.push({
+                this.searchedMainFuncs.push({
                     'type': 'globalFunc',
+                    'module': 'global',
                     'name': func.name,
                     'data': func
                 });
             }
         }
     }
+
+    // searchInlineFuncs(event) {
+    //     this.updateFocusProd()
+    //     const str = event.target.value.toLowerCase();
+    //     this.searchedInlineFuncs = [];
+    //     if (str.length === 0) {
+    //         return;
+    //     }
+    //     // search Global Variables
+    //     for (const cnst of this.dataService.flowchart.nodes[0].procedure) {
+    //         if (this.searchedInlineFuncs.length >= 10) { break; }
+    //         if (cnst.type !== ProcedureTypes.Constant) { continue; }
+    //         const cnstString = cnst.args[cnst.argCount - 2].value;
+    //         if (cnstString.toLowerCase().indexOf(str) !== -1) {
+    //             this.searchedInlineFuncs.push([cnstString, `Global Variable ${cnstString}`]);
+    //         }
+    //     }
+
+    //     // // search inline query expressions
+    //     // for (const expr of this.inlineQueryExpr) {
+    //     //     if (this.searchedInlineFuncs.length >= 10) { break; }
+    //     //     if (expr[0].toLowerCase().indexOf(str) !== -1) {
+    //     //         this.searchedInlineFuncs.push([expr, '']);
+    //     //     }
+    //     // }
+
+    //     // search inline functions
+    //     for (const category of this.inlineFunc) {
+    //         for (const funcString of category[1]) {
+    //             if (this.searchedInlineFuncs.length >= 10) { break; }
+    //             if (funcString[0].toLowerCase().indexOf(str) !== -1) {
+    //                 this.searchedInlineFuncs.push(funcString);
+    //             }
+    //         }
+    //         if (this.searchedInlineFuncs.length >= 10) { break; }
+    //     }
+    // }
+
+    // searchUserFuncs(event) {
+    //     this.updateFocusProd()
+    //     const str = event.target.value.toLowerCase();
+    //     this.searchedUserFuncs = [];
+    //     for (const func of this.getNode().localFunc) {
+    //         if (func.type !== ProcedureTypes.LocalFuncDef) { continue; }
+    //         if (this.searchedUserFuncs.length >= 10) { break; }
+    //         if (func.args[0].value.toLowerCase().indexOf(str) !== -1) {
+    //             this.searchedUserFuncs.push({
+    //                 'type': 'localFunc',
+    //                 'name': func.args[0].value,
+    //                 'data': func
+    //             });
+    //         }
+
+    //     }
+    //     // Search User Defined Functions
+    //     for (const func of this.dataService.flowchart.functions) {
+    //         if (this.searchedUserFuncs.length >= 10) { break; }
+    //         if (func.name.toLowerCase().indexOf(str) !== -1) {
+    //             this.searchedUserFuncs.push({
+    //                 'type': 'globalFunc',
+    //                 'name': func.name,
+    //                 'data': func
+    //             });
+    //         }
+    //     }
+    // }
 
     updateFocusProd() {
         if (this.dataService.focusedInputProd && this.dataService.node.state.procedure.length === 0) {
@@ -551,7 +616,7 @@ export class ToolsetComponent implements OnInit {
         }
     }
 
-    assembleImportedTooltip(funcData, type = 'globalFunc'): string {
+    assembleImportedTooltip(funcData, type = 'globalFunc'): any {
         let htmlDesc: string;
         if (type === 'globalFunc') {
             const funcDoc = funcData.doc;
@@ -570,12 +635,29 @@ export class ToolsetComponent implements OnInit {
             htmlDesc = `<p class="funcDesc">Function ${funcData.args[0].value}`
                      + `(${funcData.args.slice(1).map(arg => arg.value).join(', ')})</p>`;
         }
-        return htmlDesc;
+        return {doc: htmlDesc};
     }
 
-    popupTooltip(event, funcText: string) {
+    assembleGlobalHelp(funcData): string {
+        let docText: string;
+        const funcDoc = funcData.doc;
+        docText = `## Global.${funcDoc.name}  \n`;
+        docText += `**Description:** ${funcDoc.description}  \n`;
+        if (funcDoc.parameters && funcDoc.parameters.length > 0) {
+            docText += `\n**Parameters:**  \n`;
+            for (const param of funcDoc.parameters) {
+                docText += `  * *${param.name}:* ${param.description}  \n`;
+            }
+        }
+        if (funcDoc.returns) {
+            docText += `\n**Returns:** ${funcDoc.returns}  \n`;
+        }
+        return docText;
+    }
+
+    popupTooltip(event, functionObj) {
         let tooltip = document.getElementById('tooltiptext');
-        tooltip.innerHTML = funcText;
+        tooltip.innerHTML = functionObj.doc;
         tooltip.style.top = event.target.getBoundingClientRect().top + 'px';
         this.timeOut = setTimeout(() => {
             tooltip.style.transitionDuration = '0.3s';
@@ -583,6 +665,21 @@ export class ToolsetComponent implements OnInit {
             tooltip = null;
         }, 700);
     }
+
+    emitHelpText(event, functype, func) {
+        event.stopPropagation();
+        if (functype === 'core') {
+            this.dataService.helpView = this.AllFuncsDoc[func.module.toLowerCase()][func.name.toLowerCase()];
+            this.dataService.toggleHelp(true);
+        } else if (functype === 'global') {
+            this.dataService.helpView = this.assembleGlobalHelp(func)
+            this.dataService.toggleHelp(true);
+        } else {
+            this.dataService.helpView = this.AllFuncsDoc[functype.toLowerCase()][func.toLowerCase()];
+            this.dataService.toggleHelp(true);
+        }
+    }
+
 
     turnoffTooltip() {
         clearTimeout(this.timeOut);

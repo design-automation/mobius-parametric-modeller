@@ -5,18 +5,24 @@
 /**
  *
  */
-import { checkIDs, IdCh } from '../_check_ids';
-import { checkArgs, ArgCh } from '../_check_args';
+import { checkIDs, ID } from '../../_check_ids';
+
+import * as chk from '../../_check_types';
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { importObj, exportPosiBasedObj, exportVertBasedObj } from '@libs/geo-info/io_obj';
-import { importGeojson, exportGeojson } from '@libs/geo-info/io_geojson';
+import { importObj, exportPosiBasedObj, exportVertBasedObj } from '@assets/libs/geo-info/io/io_obj';
+import { importGeojson, exportGeojson } from '@assets/libs/geo-info/io/io_geojson';
 import { download } from '@libs/filesys/download';
-import { TId, EEntType, Txyz, TPlane, TRay, IGeomPack, IModelData, IGeomPackTId, TEntTypeIdx } from '@libs/geo-info/common';
-import { __merge__ } from '../_model';
-import { _model } from '..';
-import { idsMake, idsBreak } from '@libs/geo-info/id';
+import { TId, EEntType, TEntTypeIdx, IEntSets } from '@libs/geo-info/common';
+// import { __merge__ } from '../_model';
+// import { _model } from '..';
+import { idsMake, idsBreak, idsMakeFromIdxs, idMake } from '@assets/libs/geo-info/common_id_funcs';
 import { arrMakeFlat } from '@assets/libs/util/arrs';
+import JSZip from 'jszip';
+import fetch from 'node-fetch';
+import { exportGltf } from '@assets/libs/geo-info/io/io_gltf';
+
+const requestedBytes = 1024 * 1024 * 200; // 200 MB local storage quota
 
 // ================================================================================================
 declare global {
@@ -48,8 +54,8 @@ export enum _EIODataTarget {
  * @param data The data to be read (from URL or from Local Storage).
  * @returns the data.
  */
-export function Read(__model__: GIModel, data: string|{}): string|{} {
-    return data;
+export async function Read(__model__: GIModel, data: string): Promise<string|{}> {
+    return _getFile(data);
 }
 // ================================================================================================
 /**
@@ -60,7 +66,7 @@ export function Read(__model__: GIModel, data: string|{}): string|{} {
  * @param data_target Enum, where the data is to be exported to.
  * @returns whether the data is successfully saved.
  */
-export function Write(__model__: GIModel, data: string, file_name: string, data_target: _EIODataTarget): Boolean {
+export async function Write(__model__: GIModel, data: string, file_name: string, data_target: _EIODataTarget): Promise<Boolean> {
     try {
         if (data_target === _EIODataTarget.DEFAULT) {
             return download(data, file_name);
@@ -73,131 +79,137 @@ export function Write(__model__: GIModel, data: string, file_name: string, data_
 // ================================================================================================
 /**
  * Imports data into the model.
- * ~
- * Model data can be pasted in directly as a string, or can be retrieved as a file.
- * ~
- * If model data is retrieved from a file, there are two ways of specifying the file location:
+ * \n
+ * There are two ways of specifying the file location to be imported:
  * - A url, e.g. "https://www.dropbox.com/xxxx/my_data.obj"
  * - A file name in the local storage, e.g. "my_data.obj".
- * ~
+ * \n
  * To place a file in local storage, go to the Mobius menu, and select 'Local Storage' from the dropdown.
- * Note that a codescript using a file in local storage will not be shareable with others.
- * ~
+ * Note that a codescript using a file in local storage may fail when others try to open the file.
+ * \n
  * @param model_data The model data
  * @param data_format Enum, the file format.
  * @returns A list of the positions, points, polylines, polygons and collections added to the model.
  * @example io.Import ("my_data.obj", obj)
  * @example_info Imports the data from my_data.obj, from local storage.
  */
-export function Import(__model__: GIModel, model_data: string|{}, data_format: _EIODataFormat): TId|{} {
+export async function Import(__model__: GIModel, input_data: string, data_format: _EIODataFormat): Promise<TId|TId[]|{}> {
+    const model_data = await _getFile(input_data);
     if (!model_data) {
         throw new Error('Invalid imported model data');
     }
-    let coll_i: number = null;
+    // zip file
     if (model_data.constructor === {}.constructor) {
-        let import_func: Function;
-        switch (data_format) {
-            case _EIODataFormat.GI:
-                import_func  = _importGI;
-                break;
-            case _EIODataFormat.OBJ:
-                import_func  = _importObj;
-                break;
-            case _EIODataFormat.GEOJSON:
-                import_func  = _importGeojson;
-                break;
-            default:
-                throw new Error('Import type not recognised');
-        }
         const coll_results = {};
         for (const data_name in <Object> model_data) {
             if (model_data[data_name]) {
-                coll_i  = import_func(__model__, <string> model_data[data_name]);
-                coll_results[data_name] = idsMake([EEntType.COLL, coll_i]) as TId;
+                coll_results[data_name]  = _import(__model__, <string> model_data[data_name], data_format);
             }
         }
         return coll_results;
     }
+    // single file
+    return _import(__model__, model_data, data_format);
+}
+export function _import(__model__: GIModel, model_data: string, data_format: _EIODataFormat): TId {
     switch (data_format) {
         case _EIODataFormat.GI:
-            coll_i  = _importGI(__model__, <string> model_data);
-            break;
+            const gi_coll_i: number  = _importGI(__model__, <string> model_data);
+            return idMake(EEntType.COLL, gi_coll_i) as TId;
         case _EIODataFormat.OBJ:
-            coll_i  = _importObj(__model__, <string> model_data);
-            break;
+            const obj_coll_i: number  = _importObj(__model__, <string> model_data);
+            return idMake(EEntType.COLL, obj_coll_i) as TId;
         case _EIODataFormat.GEOJSON:
-            coll_i  = _importGeojson(__model__, <string> model_data);
-            break;
+            const gj_coll_i: number  = _importGeojson(__model__, <string> model_data);
+            return idMake(EEntType.COLL, gj_coll_i) as TId;
         default:
             throw new Error('Import type not recognised');
     }
-    return idsMake([EEntType.COLL, coll_i]) as TId;
 }
-function _importGI(__model__: GIModel, model_data: string): number {
-    // get number of ents before merge
-    const num_ents_before: number[] = __model__.geom.query.numEntsAll(true);
+export function _importGI(__model__: GIModel, json_str: string): number {
+    const ssid: number = __model__.modeldata.active_ssid;
     // import
-    const gi_json: IModelData = JSON.parse(model_data) as IModelData;
-    const gi_model: GIModel = new GIModel(gi_json);
-    __model__.merge(gi_model);
-    // get number of ents after merge
-    const num_ents_after: number[] = __model__.geom.query.numEntsAll(true);
+    const ents: TEntTypeIdx[] = __model__.importGI(json_str);
+    const container_coll_i: number = __model__.modeldata.geom.add.addColl();
+    for (const [ent_type, ent_i] of ents) {
+        switch (ent_type) {
+            case EEntType.POINT:
+                __model__.modeldata.geom.snapshot.addCollPoints(ssid, container_coll_i, ent_i);
+                break;
+            case EEntType.PLINE:
+                __model__.modeldata.geom.snapshot.addCollPlines(ssid, container_coll_i, ent_i);
+                break;
+            case EEntType.PGON:
+                __model__.modeldata.geom.snapshot.addCollPgons(ssid, container_coll_i, ent_i);
+                break;
+            case EEntType.COLL:
+                __model__.modeldata.geom.snapshot.addCollChildren(ssid, container_coll_i, ent_i);
+                break;
+        }
+    }
+    __model__.modeldata.attribs.set.setEntAttribVal(EEntType.COLL, container_coll_i, 'name', 'import GI');
     // return the result
-    return _createGIColl(__model__, num_ents_before, num_ents_after);
+    return container_coll_i;
 }
 function _importObj(__model__: GIModel, model_data: string): number {
     // get number of ents before merge
-    const num_ents_before: number[] = __model__.geom.query.numEntsAll(true);
+    const num_ents_before: number[] = __model__.metadata.getEntCounts();
     // import
-    const obj_model: GIModel = importObj(model_data);
-    __model__.merge(obj_model);
+    importObj(__model__, model_data);
     // get number of ents after merge
-    const num_ents_after: number[] = __model__.geom.query.numEntsAll(true);
+    const num_ents_after: number[] = __model__.metadata.getEntCounts();
     // return the result
-    return _createColl(__model__, num_ents_before, num_ents_after);
+    const container_coll_i = _createColl(__model__, num_ents_before, num_ents_after);
+    __model__.modeldata.attribs.set.setEntAttribVal(EEntType.COLL, container_coll_i, 'name', 'import OBJ');
+    return container_coll_i;
 }
 function _importGeojson(__model__: GIModel, model_data: string): number {
     // get number of ents before merge
-    const num_ents_before: number[] = __model__.geom.query.numEntsAll(true);
+    const num_ents_before: number[] = __model__.metadata.getEntCounts();
     // import
     importGeojson(__model__, model_data, 0);
     // get number of ents after merge
-    const num_ents_after: number[] = __model__.geom.query.numEntsAll(true);
+    const num_ents_after: number[] = __model__.metadata.getEntCounts();
     // return the result
-    return _createColl(__model__, num_ents_before, num_ents_after);
-}
-function _createGIColl(__model__: GIModel, before: number[], after: number[]): number {
-    const points_i: number[] = [];
-    const plines_i: number[] = [];
-    const pgons_i: number[] = [];
-    for (let point_i = before[1]; point_i < after[1]; point_i++) {
-        if (__model__.geom.query.entExists(EEntType.POINT, point_i)) {
-            points_i.push( point_i );
-        }
-    }
-    for (let pline_i = before[2]; pline_i < after[2]; pline_i++) {
-        if (__model__.geom.query.entExists(EEntType.PLINE, pline_i)) {
-            plines_i.push( pline_i );
-        }
-    }
-    for (let pgon_i = before[3]; pgon_i < after[3]; pgon_i++) {
-        if (__model__.geom.query.entExists(EEntType.PGON, pgon_i)) {
-            pgons_i.push( pgon_i );
-        }
-    }
-    if (points_i.length + plines_i.length + pgons_i.length === 0) { return null; }
-    const container_coll_i: number = __model__.geom.add.addColl(null, points_i, plines_i, pgons_i);
-    for (let coll_i = before[4]; coll_i < after[4]; coll_i++) {
-        if (__model__.geom.query.entExists(EEntType.COLL, coll_i)) {
-            __model__.geom.modify_coll.setCollParent(coll_i, container_coll_i);
-        }
-    }
+    const container_coll_i = _createColl(__model__, num_ents_before, num_ents_after);
+    __model__.modeldata.attribs.set.setEntAttribVal(EEntType.COLL, container_coll_i, 'name', 'import GEOJSON');
     return container_coll_i;
 }
+// function _createGIColl(__model__: GIModel, before: number[], after: number[]): number {
+//     throw new Error('Not implemented');
+//     // const points_i: number[] = [];
+//     // const plines_i: number[] = [];
+//     // const pgons_i: number[] = [];
+//     // for (let point_i = before[1]; point_i < after[1]; point_i++) {
+//     //     if (__model__.modeldata.geom.query.entExists(EEntType.POINT, point_i)) {
+//     //         points_i.push( point_i );
+//     //     }
+//     // }
+//     // for (let pline_i = before[2]; pline_i < after[2]; pline_i++) {
+//     //     if (__model__.modeldata.geom.query.entExists(EEntType.PLINE, pline_i)) {
+//     //         plines_i.push( pline_i );
+//     //     }
+//     // }
+//     // for (let pgon_i = before[3]; pgon_i < after[3]; pgon_i++) {
+//     //     if (__model__.modeldata.geom.query.entExists(EEntType.PGON, pgon_i)) {
+//     //         pgons_i.push( pgon_i );
+//     //     }
+//     // }
+//     // if (points_i.length + plines_i.length + pgons_i.length === 0) { return null; }
+//     // const container_coll_i: number = __model__.modeldata.geom.add.addColl(null, points_i, plines_i, pgons_i);
+//     // for (let coll_i = before[4]; coll_i < after[4]; coll_i++) {
+//     //     if (__model__.modeldata.geom.query.entExists(EEntType.COLL, coll_i)) {
+//     //         __model__.modeldata.geom.modify_coll.setCollParent(coll_i, container_coll_i);
+//     //     }
+//     // }
+//     // return container_coll_i;
+// }
 function _createColl(__model__: GIModel, before: number[], after: number[]): number {
+    const ssid: number = __model__.modeldata.active_ssid;
     const points_i: number[] = [];
     const plines_i: number[] = [];
     const pgons_i: number[] = [];
+    const colls_i: number[] = [];
     for (let point_i = before[1]; point_i < after[1]; point_i++) {
         points_i.push( point_i );
     }
@@ -207,11 +219,15 @@ function _createColl(__model__: GIModel, before: number[], after: number[]): num
     for (let pgon_i = before[3]; pgon_i < after[3]; pgon_i++) {
         pgons_i.push( pgon_i );
     }
-    if (points_i.length + plines_i.length + pgons_i.length === 0) { return null; }
-    const container_coll_i: number = __model__.geom.add.addColl(null, points_i, plines_i, pgons_i);
     for (let coll_i = before[4]; coll_i < after[4]; coll_i++) {
-        __model__.geom.modify_coll.setCollParent(coll_i, container_coll_i);
+        colls_i.push( coll_i );
     }
+    if (points_i.length + plines_i.length + pgons_i.length === 0) { return null; }
+    const container_coll_i: number = __model__.modeldata.geom.add.addColl();
+    __model__.modeldata.geom.snapshot.addCollPoints(ssid, container_coll_i, points_i);
+    __model__.modeldata.geom.snapshot.addCollPlines(ssid, container_coll_i, plines_i);
+    __model__.modeldata.geom.snapshot.addCollPgons(ssid, container_coll_i, pgons_i);
+    __model__.modeldata.geom.snapshot.addCollChildren(ssid, container_coll_i, colls_i);
     return container_coll_i;
 }
 // ================================================================================================
@@ -220,11 +236,17 @@ export enum _EIOExportDataFormat {
     OBJ_VERT = 'obj_v',
     OBJ_POSI = 'obj_ps',
     // DAE = 'dae',
-    GEOJSON = 'geojson'
+    GEOJSON = 'geojson',
+    GLTF = 'gltf'
 }
 /**
  * Export data from the model as a file.
- * This will result in a popup in your browser, asking you to save the file.
+ * \n
+ * If you expore to your  hard disk,
+ * it will result in a popup in your browser, asking you to save the file.
+ * \n
+ * If you export to Local Storage, there will be no popup.
+ * \n
  * @param __model__
  * @param entities Optional. Entities to be exported. If null, the whole model will be exported.
  * @param file_name Name of the file as a string.
@@ -234,8 +256,8 @@ export enum _EIOExportDataFormat {
  * @example io.Export (#pg, 'my_model.obj', obj)
  * @example_info Exports all the polgons in the model as an OBJ.
  */
-export function Export(__model__: GIModel, entities: TId|TId[]|TId[][],
-        file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): void {
+export async function Export(__model__: GIModel, entities: TId|TId[]|TId[][],
+        file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget) {
     if ( typeof localStorage === 'undefined') { return; }
     // --- Error Check ---
     const fn_name = 'io.Export';
@@ -243,63 +265,53 @@ export function Export(__model__: GIModel, entities: TId|TId[]|TId[][],
     if (__model__.debug) {
         if (entities !== null) {
             entities = arrMakeFlat(entities) as TId[];
-            ents_arr = checkIDs(fn_name, 'entities', entities,
-                [IdCh.isIdL], [EEntType.PLINE, EEntType.PGON, EEntType.COLL])  as TEntTypeIdx[];
+            ents_arr = checkIDs(__model__, fn_name, 'entities', entities,
+                [ID.isIDL1], [EEntType.PLINE, EEntType.PGON, EEntType.COLL])  as TEntTypeIdx[];
         }
-        checkArgs(fn_name, 'file_name', file_name, [ArgCh.isStr, ArgCh.isStrL]);
+        chk.checkArgs(fn_name, 'file_name', file_name, [chk.isStr, chk.isStrL]);
     } else {
         if (entities !== null) {
             entities = arrMakeFlat(entities) as TId[];
-            // ents_arr = splitIDs(fn_name, 'entities', entities,
-            //     [IDcheckObj.isIDList], [EEntType.PLINE, EEntType.PGON, EEntType.COLL])  as TEntTypeIdx[];
             ents_arr = idsBreak(entities) as TEntTypeIdx[];
         }
     }
     // --- Error Check ---
-    _export(__model__, ents_arr, file_name, data_format, data_target);
+    await _export(__model__, ents_arr, file_name, data_format, data_target);
 }
-function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
-    file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): boolean {
+async function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
+    file_name: string, data_format: _EIOExportDataFormat, data_target: _EIODataTarget): Promise<boolean> {
+    const ssid: number = __model__.modeldata.active_ssid;
     switch (data_format) {
         case _EIOExportDataFormat.GI:
-            let gi_data = '';
-            if (ents_arr === null) {
-                gi_data = JSON.stringify(__model__.copy().getData());
-            } else {
-                // make a clone of the model (warning: do not copy, copy will change entity IDs)
-                const model_clone: GIModel = __model__.clone();
-                // get the ents
-                const gp: IGeomPack = model_clone.geom.query.createGeomPack(ents_arr, true);
-                // delete the ents
-                model_clone.geom.del.delColls(gp.colls_i, true);
-                model_clone.geom.del.delPgons(gp.pgons_i, true);
-                model_clone.geom.del.delPlines(gp.plines_i, true);
-                model_clone.geom.del.delPoints(gp.points_i, true);
-                model_clone.geom.del.delPosis(gp.posis_i);
-                model_clone.geom.del.delUnusedPosis(gp.posis2_i);
-                model_clone.purge();
-                gi_data = JSON.stringify(model_clone.getData());
+            {
+                let model_data = '';
+                model_data = __model__.exportGI(ents_arr);
+                // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
+                model_data = model_data.replace(/\\/g, '\\\\\\'); // TODO temporary fix
+                // === save the file ===
+                if (data_target === _EIODataTarget.DEFAULT) {
+                    return download(model_data , file_name);
+                }
+                return saveResource(model_data, file_name);
             }
-            // gi_data = gi_data.replace(/\\\"/g, '\\\\\\"'); // TODO temporary fix
-            gi_data = gi_data.replace(/\\/g, '\\\\'); // TODO temporary fix
-            if (data_target === _EIODataTarget.DEFAULT) {
-                return download(gi_data , file_name);
-            }
-            return saveResource(gi_data, file_name);
         case _EIOExportDataFormat.OBJ_VERT:
-            const obj_verts_data: string = exportVertBasedObj(__model__, ents_arr);
-            // obj_data = obj_data.replace(/#/g, '%23'); // TODO temporary fix
-            if (data_target === _EIODataTarget.DEFAULT) {
-                return download(obj_verts_data , file_name);
+            {
+                const obj_verts_data: string = exportVertBasedObj(__model__, ents_arr, ssid);
+                // obj_data = obj_data.replace(/#/g, '%23'); // TODO temporary fix
+                if (data_target === _EIODataTarget.DEFAULT) {
+                    return download(obj_verts_data , file_name);
+                }
+                return saveResource(obj_verts_data, file_name);
             }
-            return saveResource(obj_verts_data, file_name);
         case _EIOExportDataFormat.OBJ_POSI:
-            const obj_posis_data: string = exportPosiBasedObj(__model__, ents_arr);
-            // obj_data = obj_data.replace(/#/g, '%23'); // TODO temporary fix
-            if (data_target === _EIODataTarget.DEFAULT) {
-                return download(obj_posis_data , file_name);
+            {
+                const obj_posis_data: string = exportPosiBasedObj(__model__, ents_arr, ssid);
+                // obj_data = obj_data.replace(/#/g, '%23'); // TODO temporary fix
+                if (data_target === _EIODataTarget.DEFAULT) {
+                    return download(obj_posis_data , file_name);
+                }
+                return saveResource(obj_posis_data, file_name);
             }
-            return saveResource(obj_posis_data, file_name);
         // case _EIOExportDataFormat.DAE:
         //     const dae_data: string = exportDae(__model__);
         //     // dae_data = dae_data.replace(/#/g, '%23'); // TODO temporary fix
@@ -309,11 +321,21 @@ function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
         //     return saveResource(dae_data, file_name);
         //     break;
         case _EIOExportDataFormat.GEOJSON:
-            const geojson_data: string = exportGeojson(__model__, ents_arr, true); // flatten
-            if (data_target === _EIODataTarget.DEFAULT) {
-                return download(geojson_data , file_name);
+            {
+                const geojson_data: string = exportGeojson(__model__, ents_arr, true, ssid); // flatten
+                if (data_target === _EIODataTarget.DEFAULT) {
+                    return download(geojson_data , file_name);
+                }
+                return saveResource(geojson_data, file_name);
             }
-            return saveResource(geojson_data, file_name);
+        case _EIOExportDataFormat.GLTF:
+            {
+                const gltf_data: string = await exportGltf(__model__, ents_arr, ssid);
+                if (data_target === _EIODataTarget.DEFAULT) {
+                    return download(gltf_data, file_name);
+                }
+                return saveResource(gltf_data, file_name);
+            }
         default:
             throw new Error('Data type not recognised');
     }
@@ -324,7 +346,7 @@ function _export(__model__: GIModel, ents_arr: TEntTypeIdx[],
  * Functions for saving and loading resources to file system.
  */
 
-function saveResource(file: string, name: string): boolean {
+async function saveResource(file: string, name: string): Promise<boolean> {
     const itemstring = localStorage.getItem('mobius_backup_list');
     if (!itemstring) {
         localStorage.setItem('mobius_backup_list', `["${name}"]`);
@@ -353,7 +375,6 @@ function saveResource(file: string, name: string): boolean {
         itemDates[itemstring] = (new Date()).toLocaleString();
         localStorage.setItem('mobius_backup_date_dict', JSON.stringify(itemDates));
     }
-    const requestedBytes = 1024 * 1024 * 50;
     // window['_code__'] = name;
     // window['_file__'] = file;
 
@@ -379,3 +400,143 @@ function saveResource(file: string, name: string): boolean {
     // localStorage.setItem(code, file);
 }
 
+async function getURLContent(url: string): Promise<any> {
+    url = url.replace('http://', 'https://');
+    if (url.indexOf('dropbox') !== -1) {
+        url = url.replace('www', 'dl').replace('dl=0', 'dl=1');
+    }
+    if (url[0] === '"' || url[0] === '\'') {
+        url = url.substring(1);
+    }
+    if (url[url.length - 1] === '"' || url[url.length - 1] === '\'') {
+        url = url.substring(0, url.length - 1);
+    }
+    const p = new Promise((resolve) => {
+        const fetchObj = fetch(url);
+        fetchObj.catch(err => {
+            resolve('HTTP Request Error: Unable to retrieve file from ' + url);
+        });
+        fetchObj.then(res => {
+            if (!res.ok) {
+                resolve('HTTP Request Error: Unable to retrieve file from ' + url);
+                return '';
+            }
+            if (url.indexOf('.zip') !== -1) {
+                res.blob().then(body => resolve(body));
+            } else {
+                res.text().then(body => resolve(body.replace(/(\\[bfnrtv\'\"\\])/g, '\\$1')));
+            }
+        });
+
+    });
+    return await p;
+}
+async function openZipFile(zipFile) {
+    const result = {};
+    await JSZip.loadAsync(zipFile).then(async function (zip) {
+        for (const filename of Object.keys(zip.files)) {
+            // const splittedNames = filename.split('/').slice(1).join('/');
+            await zip.files[filename].async('text').then(function (fileData) {
+                result[filename] = fileData;
+            });
+        }
+    });
+    return result;
+}
+async function loadFromFileSystem(filecode): Promise<any> {
+    const p = new Promise((resolve) => {
+        navigator.webkitPersistentStorage.requestQuota (
+            requestedBytes, function(grantedBytes) {
+                // @ts-ignore
+                window.webkitRequestFileSystem(PERSISTENT, grantedBytes, function(fs) {
+                    fs.root.getFile(filecode, {}, function(fileEntry) {
+                        fileEntry.file((file) => {
+                            const reader = new FileReader();
+                            reader.onerror = () => {
+                                resolve('error');
+                            };
+                            reader.onloadend = () => {
+                                if ((typeof reader.result) === 'string') {
+                                    resolve((<string>reader.result).split('_|_|_')[0]);
+                                    // const splitted = (<string>reader.result).split('_|_|_');
+                                    // let val = splitted[0];
+                                    // for (const i of splitted) {
+                                    //     if (val.length < i.length) {
+                                    //         val = i;
+                                    //     }
+                                    // }
+                                    // resolve(val);
+                                } else {
+                                    resolve(reader.result);
+                                }
+                            };
+                            reader.readAsText(file, 'text/plain;charset=utf-8');
+                        });
+                    });
+                });
+            }, function(e) { console.log('Error', e); }
+        );
+    });
+    return await p;
+}
+export async function _getFile(source: string) {
+    if (source.indexOf('__model_data__') !== -1) {
+        return source.split('__model_data__').join('');
+    } else if (source[0] === '{') {
+        return source;
+    } else if (source.indexOf('://') !== -1) {
+        const val = source.replace(/ /g, '');
+        const result = await getURLContent(val);
+        if (result === undefined) {
+            return source;
+        } else if (result.indexOf && result.indexOf('HTTP Request Error') !== -1) {
+            throw new Error(result);
+        } else if (val.indexOf('.zip') !== -1) {
+            return await openZipFile(result);
+        } else {
+            return result;
+        }
+    } else {
+        if (source.length > 1 && source[0] === '{') {
+            return null;
+        }
+        const val = source.replace(/\"|\'/g, '');
+        const backup_list: string[] = JSON.parse(localStorage.getItem('mobius_backup_list'));
+        if (val.endsWith('.zip')) {
+            throw(new Error(`Importing zip files from local storage is not supported`));
+        }
+        if (val.indexOf('*') !== -1) {
+            const splittedVal = val.split('*');
+            const start = splittedVal[0] === '' ? null : splittedVal[0];
+            const end = splittedVal[1] === '' ? null : splittedVal[1];
+            let result = '{';
+            for (const backup_name of backup_list) {
+                let valid_check = true;
+                if (start && !backup_name.startsWith(start)) {
+                    valid_check = false;
+                }
+                if (end && !backup_name.endsWith(end)) {
+                    valid_check = false;
+                }
+                if (valid_check) {
+                    const backup_file = await loadFromFileSystem(backup_name);
+                    result += `"${backup_name}": \`${backup_file.replace(/\\/g, '\\\\')}\`,`;
+                }
+            }
+            result += '}';
+            return result;
+        } else {
+            if (backup_list.indexOf(val) !== -1) {
+                const result = await loadFromFileSystem(val);
+                if (!result || result === 'error') {
+                    throw(new Error(`File named ${val} does not exist in the local storage`));
+                    // return source;
+                } else {
+                    return result;
+                }
+            } else {
+                throw(new Error(`File named ${val} does not exist in the local storage`));
+            }
+        }
+    }
+}

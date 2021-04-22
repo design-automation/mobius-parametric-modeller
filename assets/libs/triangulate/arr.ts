@@ -94,30 +94,30 @@ export class Arr {
             }
         }, []);
     }
-    /**
-     * Make a copy of an nD array.
-     * If the input is not an array, then just return the same thing.
-     * A new array is returned. The input array remains unchanged.
-     * If the input array is undefined, an empty array is returned.
-     * If the input is s sparse array, then the output will alos be a sparse array.
-     * @param arr The nD array to copy.
-     * @returns The new nD array.
-     */
-    public static deepCopy(arr: any[]): any[] {
-        if (arr === undefined) {return []; }
-        if (!Array.isArray(arr)) {return arr; }
-        const arr2: any[] = [];
-        for (let i = 0; i < arr.length; i++) {
-            if (Array.isArray(arr[i])) {
-                arr2[i] = (Arr.deepCopy(arr[i]));
-            } else {
-                if (arr[i] !== undefined) {
-                    arr2[i] = (arr[i]);
-                }
-            }
-        }
-        return arr2;
-    }
+    // /**
+    //  * Make a copy of an nD array.
+    //  * If the input is not an array, then just return the same thing.
+    //  * A new array is returned. The input array remains unchanged.
+    //  * If the input array is undefined, an empty array is returned.
+    //  * If the input is s sparse array, then the output will alos be a sparse array.
+    //  * @param arr The nD array to copy.
+    //  * @returns The new nD array.
+    //  */
+    // public static deepCopy(arr: any[]): any[] {
+    //     if (arr === undefined) {return []; }
+    //     if (!Array.isArray(arr)) {return arr; }
+    //     const arr2: any[] = [];
+    //     for (let i = 0; i < arr.length; i++) {
+    //         if (Array.isArray(arr[i])) {
+    //             arr2[i] = (Arr.deepCopy(arr[i]));
+    //         } else {
+    //             if (arr[i] !== undefined) {
+    //                 arr2[i] = (arr[i]);
+    //             }
+    //         }
+    //     }
+    //     return arr2;
+    // }
     /**
      * Fills an nD array with new values (all the same value).
      * The input array is changed.

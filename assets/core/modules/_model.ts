@@ -1,6 +1,6 @@
 import { GIModel } from '@libs/geo-info/GIModel';
-import { EAttribDataTypeStrs, TAttribDataTypes, EAttribNames, EEntType, TId, TEntTypeIdx, EEntTypeStr } from '@libs/geo-info/common';
-import { getArrDepth, idsBreak } from '@libs/geo-info/id';
+import { EAttribDataTypeStrs, TEntTypeIdx } from '@libs/geo-info/common';
+import { idsBreak } from '@assets/libs/geo-info/common_id_funcs';
 
 //  ===============================================================================================
 //  Functions used by Mobius
@@ -12,7 +12,7 @@ import { getArrDepth, idsBreak } from '@libs/geo-info/id';
  */
 export function __new__(): GIModel {
     const model: GIModel = new GIModel();
-    model.attribs.add.addAttrib(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.LIST);
+    // model.modeldata.attribs.add.addAttrib(EEntType.POSI, EAttribNames.COORDS, EAttribDataTypeStrs.LIST);
     return model;
 }
 //  ===============================================================================================
@@ -24,7 +24,7 @@ export function __new__(): GIModel {
  * @param model The model to preprocess.
  */
 export function __preprocess__(__model__: GIModel): void {
-    // TODO
+
 }
 //  ===============================================================================================
 /**
@@ -45,7 +45,18 @@ export function __postprocess__(__model__: GIModel): void {
  * @param model2 The model to merge from    .
  */
 export function __merge__(model1: GIModel, model2: GIModel): void {
-    model1.merge(model2);
+    // model1.merge(model2);
+    throw new Error('Deprecated');
+}
+//  ===============================================================================================
+/**
+ * Clone a model.
+ *
+ * @param model The model to clone.
+ */
+export function __clone__(model: GIModel): GIModel {
+    // return model.clone();
+    throw new Error('Deprecated');
 }
 //  ===============================================================================================
 /**
@@ -53,7 +64,8 @@ export function __merge__(model1: GIModel, model2: GIModel): void {
  * @param __model__
  */
 export function __stringify__(__model__: GIModel): string {
-    return JSON.stringify(__model__.getData());
+    // return JSON.stringify(__model__.getModelData());
+    throw new Error('Not implemented');
 }
 //  ===============================================================================================
 /**
@@ -62,7 +74,8 @@ export function __stringify__(__model__: GIModel): string {
  */
 export function __select__(__model__: GIModel, ents_id: string|string[]|string[][], var_name: string): void {
     const start = performance.now();
-    __model__.geom.selected = [];
+    __model__.modeldata.geom.selected[__model__.getActiveSnapshot()] = [];
+    const activeSelected = __model__.modeldata.geom.selected[__model__.getActiveSnapshot()];
     ents_id = ((Array.isArray(ents_id)) ? ents_id : [ents_id]) as string[];
     const [ents_id_flat, ents_indices] = _flatten(ents_id);
     const ents_arr: TEntTypeIdx[] = idsBreak(ents_id_flat) as TEntTypeIdx[];
@@ -71,11 +84,11 @@ export function __select__(__model__: GIModel, ents_id: string|string[]|string[]
         const ent_arr: TEntTypeIdx = ents_arr[i];
         const ent_indices: number[] = ents_indices[i];
         const attrib_value: string = var_name + '[' + ent_indices.join('][') + ']';
-        __model__.geom.selected.push(ent_arr);
-        if (!__model__.attribs.query.hasAttrib(ent_arr[0], attrib_name)) {
-            __model__.attribs.add.addAttrib(ent_arr[0], attrib_name, EAttribDataTypeStrs.STRING);
+        activeSelected.push(ent_arr);
+        if (!__model__.modeldata.attribs.query.hasEntAttrib(ent_arr[0], attrib_name)) {
+            __model__.modeldata.attribs.add.addAttrib(ent_arr[0], attrib_name, EAttribDataTypeStrs.STRING);
         }
-        __model__.attribs.add.setAttribVal(ent_arr[0], ent_arr[1], attrib_name, attrib_value);
+        __model__.modeldata.attribs.set.setCreateEntsAttribVal(ent_arr[0], ent_arr[1], attrib_name, attrib_value);
     }
 }
 function _flatten(arrs: string|string[]|string[][]): [string[], number[][]] {
@@ -122,7 +135,7 @@ export function __checkModel__(__model__: GIModel): string[] {
 //     const fn_name = 'entities@' + attrib_name;
 //     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
 //     if (entities !== null && entities !== undefined) {
-//         ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+//         ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
 //     }
 //     checkAttribName(fn_name , attrib_name);
 //     // --- Error Check ---
@@ -156,7 +169,7 @@ export function __checkModel__(__model__: GIModel): string[] {
 //         const attrib_values_arr: number[]|string[] = attrib_values as number[]|string[];
 //         if (ents_arr.length === attrib_values_arr.length) {
 //             const first_ent_type: number = ents_arr[0][0];
-//             if (__model__.attribs.query.hasAttrib(first_ent_type, attrib_name)) {
+//             if (__model__.modeldata.attribs.query.hasAttrib(first_ent_type, attrib_name)) {
 //                 _setEachEntDifferentAttribValue(__model__, ents_arr, attrib_name, attrib_values as TAttribDataTypes[], attrib_index);
 //                 return;
 //             }
@@ -168,11 +181,11 @@ export function __checkModel__(__model__: GIModel): string[] {
 // }
 // function _setModelAttrib(__model__: GIModel, attrib_name: string, attrib_value: TAttribDataTypes, idx_or_key?: number): void {
 //     if (typeof idx_or_key === 'number') {
-//         __model__.attribs.add.setModelAttribListIdxVal(attrib_name, idx_or_key, attrib_value);
+//         __model__.modeldata.attribs.set.setModelAttribListIdxVal(attrib_name, idx_or_key, attrib_value);
 //     } if (typeof idx_or_key === 'string') {
-//         __model__.attribs.add.setModelAttribDictKeyVal(attrib_name, idx_or_key, attrib_value);
+//         __model__.modeldata.attribs.set.setModelAttribDictKeyVal(attrib_name, idx_or_key, attrib_value);
 //     } else {
-//         __model__.attribs.add.setModelAttribVal(attrib_name, attrib_value);
+//         __model__.modeldata.attribs.set.setModelAttribVal(attrib_name, attrib_value);
 //     }
 // }
 // function _setEachEntDifferentAttribValue(__model__: GIModel, ents_arr: TEntTypeIdx[],
@@ -189,9 +202,9 @@ export function __checkModel__(__model__: GIModel): string[] {
 //         checkAttribValue(fn_name , attrib_values[i], attrib_index);
 //         // --- Error Check ---
 //         if (attrib_index !== null && attrib_index !== undefined) {
-//             __model__.attribs.add.setAttribListIdxVal(ent_type, ents_i[i], attrib_name, attrib_index, attrib_values[i] as number|string);
+//             __model__.modeldata.attribs.set.setAttribListIdxVal(ent_type, ents_i[i], attrib_name, attrib_index, attrib_values[i] as number|string);
 //         } else {
-//             __model__.attribs.add.setAttribVal(ent_type, ents_i[i], attrib_name, attrib_values[i]);
+//             __model__.modeldata.attribs.set.setAttribVal(ent_type, ents_i[i], attrib_name, attrib_values[i]);
 //         }
 //     }
 // }
@@ -204,9 +217,9 @@ export function __checkModel__(__model__: GIModel): string[] {
 //     const ent_type: number = ents_arr[0][0];
 //     const ents_i: number[] = _getEntsIndices(__model__, ents_arr);
 //     if (attrib_index !== null && attrib_index !== undefined) {
-//         __model__.attribs.add.setAttribListIdxVal(ent_type, ents_i, attrib_name, attrib_index, attrib_value as number|string);
+//         __model__.modeldata.attribs.set.setAttribListIdxVal(ent_type, ents_i, attrib_name, attrib_index, attrib_value as number|string);
 //     } else {
-//         __model__.attribs.add.setAttribVal(ent_type, ents_i, attrib_name, attrib_value);
+//         __model__.modeldata.attribs.set.setAttribVal(ent_type, ents_i, attrib_name, attrib_value);
 //     }
 // }
 // function _getEntsIndices(__model__: GIModel, ents_arr: TEntTypeIdx[]): number[] {
@@ -233,7 +246,7 @@ export function __checkModel__(__model__: GIModel): string[] {
 //     const fn_name = 'Inline.__getAttrib__';
 //     let ents_arr: TEntTypeIdx|TEntTypeIdx[] = null;
 //     if (entities !== null && entities !== undefined) {
-//         ents_arr = checkIDs(fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
+//         ents_arr = checkIDs(__model__, fn_name, 'entities', entities, [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx|TEntTypeIdx[];
 //     }
 //     checkCommTypes(fn_name, 'attrib_name', attrib_name, [TypeCheckObj.isString]);
 //     if (idx_or_key !== null && idx_or_key !== undefined) {
@@ -247,11 +260,11 @@ export function __checkModel__(__model__: GIModel): string[] {
 //     const has_idx_or_key: boolean = idx_or_key !== null && idx_or_key !== undefined;
 //     if (ents_arr === null) {
 //         if (has_idx_or_key && typeof idx_or_key === 'number') {
-//             return __model__.attribs.query.getModelAttribListIdxVal(attrib_name, idx_or_key);
+//             return __model__.modeldata.attribs.get.getModelAttribListIdxVal(attrib_name, idx_or_key);
 //         } else if (has_idx_or_key && typeof idx_or_key === 'string') {
-//             return __model__.attribs.query.getModelAttribDictKeyVal(attrib_name, idx_or_key);
+//             return __model__.modeldata.attribs.get.getModelAttribDictKeyVal(attrib_name, idx_or_key);
 //         } else {
-//             return __model__.attribs.query.getModelAttribVal(attrib_name);
+//             return __model__.modeldata.attribs.get.getModelAttribVal(attrib_name);
 //         }
 //     } else if (ents_arr.length === 0) {
 //         return;
@@ -261,11 +274,11 @@ export function __checkModel__(__model__: GIModel): string[] {
 //             if (has_idx_or_key) { throw new Error('The "id" attribute does have an index or key.'); }
 //             return EEntTypeStr[ent_type] + ent_i as TAttribDataTypes;
 //         } else if (has_idx_or_key && typeof idx_or_key === 'number') {
-//             return __model__.attribs.query.getAttribListIdxVal(ent_type, attrib_name, ent_i, idx_or_key);
+//             return __model__.modeldata.attribs.get.getAttribListIdxVal(ent_type, attrib_name, ent_i, idx_or_key);
 //         } else if (has_idx_or_key && typeof idx_or_key === 'string') {
-//             return __model__.attribs.query.getAttribDictKeyVal(ent_type, attrib_name, ent_i, idx_or_key);
+//             return __model__.modeldata.attribs.get.getAttribDictKeyVal(ent_type, attrib_name, ent_i, idx_or_key);
 //         } else {
-//             return __model__.attribs.query.getAttribVal(ent_type, attrib_name, ent_i);
+//             return __model__.modeldata.attribs.get.getAttribVal(ent_type, attrib_name, ent_i);
 //         }
 //     } else {
 //         return (ents_arr as TEntTypeIdx[]).map( ent_arr =>

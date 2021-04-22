@@ -6,17 +6,18 @@
 /**
  *
  */
-import { checkIDs, IdCh } from '../_check_ids';
-import { checkArgs, ArgCh } from '../_check_args';
+import { checkIDs, ID } from '../../_check_ids';
+
+import * as chk from '../../_check_types';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, Txyz, EEntType, TEntTypeIdx, TRay, TPlane, Txy, EAttribDataTypeStrs } from '@libs/geo-info/common';
-import { getArrDepth, idsMakeFromIndicies, idsMake, idsBreak } from '@libs/geo-info/id';
+import { idsMakeFromIdxs, idsMake, idsBreak, idMake } from '@assets/libs/geo-info/common_id_funcs';
 import { distance } from '@libs/geom/distance';
 import { vecAdd, vecCross, vecMult, vecNorm, vecAng2, vecSetLen, vecRot } from '@libs/geom/vectors';
 import uscore from 'underscore';
 import { min, max } from '@assets/core/inline/_math';
-import { arrMakeFlat, getArrDepth2 } from '@assets/libs/util/arrs';
+import { arrMakeFlat, getArrDepth } from '@assets/libs/util/arrs';
 import { degToRad } from '@assets/core/inline/_conversion';
 import { multMatrix } from '@libs/geom/matrix';
 import { XAXIS, YAXIS, ZAXIS } from '@assets/libs/geom/constants';
@@ -25,7 +26,7 @@ import * as THREE from 'three';
 import { TypedArrayUtils } from '@libs/TypedArrayUtils.js';
 import * as Mathjs from 'mathjs';
 import { createSingleMeshTjs } from '@assets/libs/geom/mesh';
-import { isRay, isXYZ, isPlane } from '@assets/libs/geo-info/virtual';
+import { isRay, isXYZ, isPlane } from '@assets/libs/geo-info/common_func';
 
 // ================================================================================================
 interface TRaytraceResult {
@@ -50,19 +51,19 @@ export enum _ERaytraceMethod {
 /**
  * Shoot a set of rays into a set of obstructions, consisting of polygon faces.
  * One can imagine particles being shot from the ray origin in the ray direction, hitting the obstructions.
- * ~
+ * \n
  * Each ray will either hit an obstruction, or will hit no obstructions.
  * The length of the ray vector is ignored, only the ray origin and direction is taken into account.
  * Each particle shot out from a ray will travel a certain distance.
  * The minimum and maximum distance that the particle will travel is defined by the 'dist' argument.
- * ~
+ * \n
  * If a ray particle hits an obstruction, then the 'distance' for that ray is the distance from the ray origin
  * to the point of intersection.
  * If the ray particle does not hit an obstruction, then the 'distance' for that ray is equal to
  * the max for the 'dist' argument.
- * ~
+ * \n
  * Returns a dictionary containing the following data.
- * ~
+ * \n
  * If 'stats' is selected, the dictionary will contain the following numbers:
  * 1) 'hit_count': the total number of rays that hit an obstruction.
  * 2) 'miss_count': the total number of rays that did not hit any obstruction.
@@ -71,23 +72,23 @@ export enum _ERaytraceMethod {
  * 5) 'max_dist': the maximum distance for all the rays.
  * 6) 'avg_dist': the average dist for all the rays.
  * 7) 'dist_ratio': the ratio of 'total_dist' to the maximum distance if not rays hit any obstructions.
-  * ~
+  * \n
  * If 'distances' is selected, the dictionary will contain the following list:
  * 1) 'distances': A list of numbers, the distance travelled for each ray.
-   * ~
+   * \n
  * If 'hit_pgons' is selected, the dictionary will contain the following list:
  * 1) 'hit_pgons': A list of polygon IDs, the polygons hit for each ray, or 'null' if no polygon was hit.
- * ~
+ * \n
  * If 'intersections' is selected, the dictionary will contain the following list:
  * 1) 'intersections': A list of XYZ coords, the point of intersection where the ray hit a polygon,
  * or 'null' if no polygon was hit.
- * ~
+ * \n
  * If 'all' is selected, the dictionary will contain all of the above.
- * ~
+ * \n
  * If the input is a list of rays, the output will be a single dictionary.
  * If the list is empty (i.e. contains no rays), then 'null' is returned.
  * If the input is a list of lists of rays, then the output will be a list of dictionaries.
- * ~
+ * \n
  * @param __model__
  * @param rays A ray, a list of rays, or a list of lists of rays.
  * @param entities The obstructions, faces, polygons, or collections of faces or polygons.
@@ -101,11 +102,11 @@ export function Raytrace(__model__: GIModel, rays: TRay|TRay[]|TRay[][],
     const fn_name = 'analyze.Raytrace';
     let ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
-        checkArgs(fn_name, 'rays', rays, [ArgCh.isRay, ArgCh.isRayL, ArgCh.isRayLL]);
-        ents_arrs = checkIDs(fn_name, 'entities', entities,
-            [IdCh.isId, IdCh.isIdL],
-            [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-        checkArgs(fn_name, 'dist', dist, [ArgCh.isNum, ArgCh.isNumL]);
+        chk.checkArgs(fn_name, 'rays', rays, [chk.isRay, chk.isRayL, chk.isRayLL]);
+        ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
+            [ID.isID, ID.isIDL1],
+            [EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+        chk.checkArgs(fn_name, 'dist', dist, [chk.isNum, chk.isNumL]);
         if (Array.isArray(dist)) {
             if (dist.length !== 2) { throw new Error('If "dist" is a list, it must have a length of two: [min_dist, max_dist].'); }
             if (dist[0] >= dist[1]) { throw new Error('If "dist" is a list, the "min_dist" must be less than the "max_dist": [min_dist, max_dist].'); }
@@ -129,7 +130,7 @@ export function Raytrace(__model__: GIModel, rays: TRay|TRay[]|TRay[][],
 function _raytraceAll(__model__: GIModel, rays: TRay|TRay[]|TRay[][],
         mesh: [THREE.Mesh, number[]], limits: [number, number],
         method: _ERaytraceMethod): TRaytraceResult|TRaytraceResult[] {
-    const depth: number = getArrDepth2(rays);
+    const depth: number = getArrDepth(rays);
     if (depth < 2) {// an empty list
         return null;
     } else if (depth === 2) {// just one ray
@@ -185,7 +186,7 @@ function _raytrace(origins_tjs: THREE.Vector3[], dirs_tjs: THREE.Vector3[], mesh
             hit_count += 1;
             if (method === _ERaytraceMethod.ALL || method === _ERaytraceMethod.HIT_PGONS) {
                 const face_i = mesh[1][isects[0].faceIndex];
-                result_ents.push( idsMake([EEntType.PGON, face_i]) as TId );
+                result_ents.push( idMake(EEntType.PGON, face_i) as TId );
             }
             if (method === _ERaytraceMethod.ALL || method === _ERaytraceMethod.INTERSECTIONS) {
                 const isect_tjs: THREE.Vector3 = isects[0].point;
@@ -197,9 +198,9 @@ function _raytrace(origins_tjs: THREE.Vector3[], dirs_tjs: THREE.Vector3[], mesh
         result.hit_count = hit_count;
         result.miss_count = miss_count;
         result.total_dist = Mathjs.sum(result_dists);
-        result.min_dist = min(result_dists);
+        result.min_dist = Mathjs.min(result_dists);
         result.avg_dist = result.total_dist / result_dists.length;
-        result.max_dist = max(result_dists);
+        result.max_dist = Mathjs.max(result_dists);
         result.dist_ratio = result.total_dist / (result_dists.length * limits[1]);
     }
     if (method === _ERaytraceMethod.ALL || method === _ERaytraceMethod.DISTANCES) {
@@ -228,16 +229,16 @@ interface TIsovistResult {
 }
 /**
  * Calculates an approximation of the isovist for a set of origins, defined by XYZ coords.
- * ~
+ * \n
  * The isovist is calculated by shooting rays out from the origins in a radial pattern.
  * The 'radius' argument defines the maximum radius of the isovist.
  * (The radius is used to define the maximum distance for shooting the rays.)
  * The 'num_rays' argument defines the number of rays that will be shot,
  * in a radial pattern parallel to the XY plane, with equal angle between rays.
  * More rays will result in more accurate result, but will also be slower to execute.
- * ~
+ * \n
  * Returns a dictionary containing different isovist metrics.
- * ~
+ * \n
  * 1) 'avg_dist': The average distance from origin to the perimeter.
  * 2) 'min_dist': The minimum distance from the origin to the perimeter.
  * 3) 'max_dist': The minimum distance from the origin to the perimeter.
@@ -249,8 +250,8 @@ interface TIsovistResult {
  * 7) 'compactness': The ratio of average distance to the maximum distance (Michael Batty, 2001).
  * 8) 'cluster': The ratio of the radius of an idealized circle with the actual area of the
  * isovist to the radius of an idealized circle with the actual perimeter of the circle (Michael Batty, 2001).
- * ~
- * ~
+ * \n
+ * \n
  * @param __model__
  * @param origins A list of Rays or a list of Planes, to be used as the origins for calculating the isovists.
  * @param entities The obstructions: faces, polygons, or collections.
@@ -265,11 +266,11 @@ export function Isovist(__model__: GIModel, origins: TRay[]|TPlane[],
     // let origin_ents_arrs: TEntTypeIdx[];
     let ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
-        checkArgs(fn_name, 'origins', origins, [ArgCh.isRayL, ArgCh.isPlnL]);
-        ents_arrs = checkIDs(fn_name, 'entities', entities,
-            [IdCh.isIdL],
-            [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-        checkArgs(fn_name, 'dist', radius, [ArgCh.isNum, ArgCh.isNumL]);
+        chk.checkArgs(fn_name, 'origins', origins, [chk.isRayL, chk.isPlnL]);
+        ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
+            [ID.isIDL1],
+            [EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+        chk.checkArgs(fn_name, 'dist', radius, [chk.isNum, chk.isNumL]);
         if (Array.isArray(radius)) {
             if (radius.length !== 2) { throw new Error('If "dist" is a list, it must have a length of two: [min_dist, max_dist].'); }
             if (radius[0] >= radius[1]) { throw new Error('If "dist" is a list, the "min_dist" must be less than the "max_dist": [min_dist, max_dist].'); }
@@ -344,8 +345,8 @@ export function Isovist(__model__: GIModel, origins: TRay[]|TPlane[],
         }
         const total_dist = Mathjs.sum(result_dists);
         const avg_dist = total_dist / result_dists.length;
-        const min_dist = min(result_dists);
-        const max_dist = max(result_dists);
+        const min_dist = Mathjs.min(result_dists);
+        const max_dist = Mathjs.max(result_dists);
         // save the data
         result.avg_dist.push( avg_dist );
         result.min_dist.push( min_dist );
@@ -401,45 +402,45 @@ export enum _ESkyMethod {
  * Calculate an approximation of the sky exposure factor, for a set sensors positioned at specified locations.
  * The sky exposure factor for each sensor is a value between 0 and 1, where 0 means that it has no exposure
  * and 1 means that it has maximum exposure.
- * ~
+ * \n
  * Each sensor has a location and direction, specified using either rays or planes.
  * The direction of the sensor specifies what is infront and what is behind the sensor.
  * For each sensor, only exposure infront of the sensor is calculated.
- * ~
+ * \n
  * The exposure is calculated by shooting rays in reverse.
  * from the sensor origin to a set of points on the sky dome.
  * If the rays hits an obstruction, then the sky dome is obstructed..
  * If the ray hits no obstructions, then the sky dome is not obstructed.
- * ~
+ * \n
  * The exposure factor at each sensor point is calculated as follows:
  * 1) Shoot rays to all sky dome points.
  * 2) If the ray hits an obstruction, assign a weight of 0 to that ray.
  * 3) If a ray does not hit any obstructions, assign a weight between 0 and 1, depending on the incidence angle.
  * 4) Calculate the total solar expouse by adding up the weights for all rays.
  * 5) Divide by the maximum possible exposure for an unobstructed sensor with a direction pointing straight up.
- * ~
+ * \n
  * If 'weighted' is selected, then
  * the exposure calculation takes into account the angle of incidence of the ray to the sensor direction.
  * Rays parallel to the sensor direction are assigned a weight of 1.
  * Rays at an oblique angle are assigned a weight equal to the cosine of the angle
  * betweeen the sensor direction and the ray.
- * ~
+ * \n
  * If 'unweighted' is selected, then all rays are assigned a weight of 1, irresepctive of angle.
- * ~
+ * \n
  * The detail parameter spacifies the number of rays that get generated.
  * The higher the level of detail, the more accurate but also the slower the analysis will be.
- * ~
+ * \n
  * The number of rays are as follows:
  * 0 = 89 rays,
  * 1 = 337 rays,
  * 2 = 1313 rays,
  * 3 = 5185 rays.
- * ~
+ * \n
  * Returns a dictionary containing exposure results.
- * ~
+ * \n
  * 1) 'exposure': A list of numbers, the exposure factors.
- * ~
- * ~
+ * \n
+ * \n
  * @param __model__
  * @param origins A list of coordinates, a list of Rays or a list of Planes, to be used as the origins for calculating exposure.
  * @param detail An integer between 1 and 3 inclusive, specifying the level of detail for the analysis.
@@ -456,20 +457,20 @@ export function Sky(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], detail:
     // let latitude: number = null;
     // let north: Txy = [0, 1];
     if (__model__.debug) {
-        checkArgs(fn_name, 'origins', origins, [ArgCh.isXYZL, ArgCh.isRayL, ArgCh.isPlnL]);
-        checkArgs(fn_name, 'detail', detail, [ArgCh.isInt]);
+        chk.checkArgs(fn_name, 'origins', origins, [chk.isXYZL, chk.isRayL, chk.isPlnL]);
+        chk.checkArgs(fn_name, 'detail', detail, [chk.isInt]);
         if (detail < 0 || detail > 3) {
             throw new Error (fn_name + ': "detail" must be an integer between 0 and 3 inclusive.');
         }
-        ents_arrs = checkIDs(fn_name, 'entities', entities,
-            [IdCh.isId, IdCh.isIdL],
-            [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+        ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
+            [ID.isID, ID.isIDL1],
+            [EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
     } else {
         ents_arrs = idsBreak(entities) as TEntTypeIdx[];
-        // const geolocation = __model__.attribs.query.getModelAttribVal('geolocation');
+        // const geolocation = __model__.modeldata.attribs.get.getModelAttribVal('geolocation');
         // latitude = geolocation['latitude'];
-        // if (__model__.attribs.query.hasModelAttrib('north')) {
-        //     north = __model__.attribs.query.getModelAttribVal('north') as Txy;
+        // if (__model__.modeldata.attribs.query.hasModelAttrib('north')) {
+        //     north = __model__.modeldata.attribs.get.getModelAttribVal('north') as Txy;
         // }
     }
     // TODO
@@ -502,7 +503,6 @@ function _skyRayDirsTjs(detail: number): THREE.Vector3[] {
             vecs.push(vec);
         }
     }
-    //console.log("num rays = ", vecs.length);
     return vecs;
 }
 // ================================================================================================
@@ -516,72 +516,72 @@ export enum _ESolarMethod {
  * Calculate an approximation of the solar exposure factor, for a set sensors positioned at specfied locations.
  * The solar exposure factor for each sensor is a value between 0 and 1, where 0 means that it has no exposure
  * and 1 means that it has maximum exposure.
- * ~
+ * \n
  * The calculation takes into account the geolocation and the north direction of the model.
  * Geolocation is specified by a model attributes as follows:
  * @geolocation={'longitude':123,'latitude':12}.
  * North direction is specified by a model attribute as follows, using a vector:
  * @north==[1,2]
  * If no north direction is specified, then [0,1] is the default (i.e. north is in the direction of the y-axis);
- * ~
+ * \n
  * Each sensor has a location and direction, specified using either rays or planes.
  * The direction of the sensor specifies what is infront and what is behind the sensor.
  * For each sensor, only exposure infront of the sensor is calculated.
- * ~
+ * \n
  * The exposure is calculated by shooting rays in reverse.
  * from the sensor origin to a set of points on the sky dome.
  * If the rays hits an obstruction, then the sky dome is obstructed..
  * If the ray hits no obstructions, then the sky dome is not obstructed.
- * ~
+ * \n
  * The exposure factor at each sensor point is calculated as follows:
  * 1) Shoot rays to all sky dome points.
  * 2) If the ray hits an obstruction, assign a wight of 0 to that ray.
  * 3) If a ray does not hit any obstructions, assign a weight between 0 and 1, depending on the incidence angle.
  * 4) Calculate the total solar expouse by adding up the weights for all rays.
  * 5) Divide by the maximum possible solar exposure for an unobstructed sensor.
- * ~
+ * \n
  * The solar exposure calculation takes into account the angle of incidence of the sun ray to the sensor direction.
  * Sun rays that are hitting the sensor straight on are assigned a weight of 1.
  * Sun rays that are hitting the sensor at an oblique angle are assigned a weight equal to the cosine of the angle.
- * ~
+ * \n
  * If 'direct_exposure' is selected, then the points on the sky dome will follow the path of the sun throughout the year.
  * If 'indirect_exposure' is selected, then the points on the sky dome will consist of points excluded by
  * the path of the sun throughout the year.
- * ~
+ * \n
  * The direct sky dome points cover a strip of sky where the sun travels.
  * The inderect sky dome points cover the segments of sky either side of the direct sun strip.
- * ~
+ * \n
  * The detail parameter spacifies the number of rays that get generated.
  * The higher the level of detail, the more accurate but also the slower the analysis will be.
  * The number of rays differs depending on the latitde.
- * ~
+ * \n
  * At latitude 0, the number of rays for 'direct' are as follows:
  * 0 = 44 rays,
  * 1 = 105 rays,
  * 2 = 510 rays,
  * 3 = 1287 rays.
- * ~
+ * \n
  * At latitude 0, the number of rays for 'indirect' are as follows:
  * 0 = 58 rays,
  * 1 = 204 rays,
  * 2 = 798 rays,
  * 3 = 3122 rays.
- * ~
+ * \n
  * The number of rays for 'sky' are as follows:
  * 0 = 89 rays,
  * 1 = 337 rays,
  * 2 = 1313 rays,
  * 3 = 5185 rays.
- * ~
+ * \n
  * Returns a dictionary containing solar exposure results.
- * ~
+ * \n
  * If one  of the 'direct' methods is selected, the dictionary will contain:
  * 1) 'direct': A list of numbers, the direct exposure factors.
- * ~
+ * \n
  * If one  of the 'indirect' methods is selected, the dictionary will contain:
  * 1) 'indirect': A list of numbers, the indirect exposure factors.
- * ~
- * ~
+ * \n
+ * \n
  * @param __model__
  * @param origins A list of coordinates, a list of Rays or a list of Planes, to be used as the origins for calculating exposure.
  * @param detail An integer between 1 and 3 inclusive, specifying the level of detail for the analysis.
@@ -598,19 +598,19 @@ export function Sun(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], detail:
     let latitude: number = null;
     let north: Txy = [0, 1];
     if (__model__.debug) {
-        checkArgs(fn_name, 'origins', origins, [ArgCh.isXYZL, ArgCh.isRayL, ArgCh.isPlnL]);
-        checkArgs(fn_name, 'detail', detail, [ArgCh.isInt]);
+        chk.checkArgs(fn_name, 'origins', origins, [chk.isXYZL, chk.isRayL, chk.isPlnL]);
+        chk.checkArgs(fn_name, 'detail', detail, [chk.isInt]);
         if (detail < 0 || detail > 3) {
             throw new Error (fn_name + ': "detail" must be an integer between 0 and 3 inclusive.');
         }
-        ents_arrs = checkIDs(fn_name, 'entities', entities,
-            [IdCh.isId, IdCh.isIdL],
-            [EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
-        if (!__model__.attribs.query.hasModelAttrib('geolocation')) {
+        ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
+            [ID.isID, ID.isIDL1],
+            [EEntType.PGON, EEntType.COLL]) as TEntTypeIdx[];
+        if (!__model__.modeldata.attribs.query.hasModelAttrib('geolocation')) {
             throw new Error('analyze.Solar: model attribute "geolocation" is missing, \
                 e.g. @geolocation = {"latitude":12, "longitude":34}');
         } else {
-            const geolocation = __model__.attribs.query.getModelAttribVal('geolocation');
+            const geolocation = __model__.modeldata.attribs.get.getModelAttribVal('geolocation');
             if (uscore.isObject(geolocation) && uscore.has(geolocation, 'latitude')) {
                 latitude = geolocation['latitude'];
             } else {
@@ -618,8 +618,8 @@ export function Sun(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], detail:
                     e.g. @geolocation = {"latitude":12, "longitude":34}');
             }
         }
-        if (__model__.attribs.query.hasModelAttrib('north')) {
-            north = __model__.attribs.query.getModelAttribVal('north') as Txy;
+        if (__model__.modeldata.attribs.query.hasModelAttrib('north')) {
+            north = __model__.modeldata.attribs.get.getModelAttribVal('north') as Txy;
             if (!Array.isArray(north) || north.length !== 2) {
                 throw new Error('analyze.Solar: model has a "north" attribute with the wrong type, \
                 it should be a vector with two values, \
@@ -628,10 +628,10 @@ export function Sun(__model__: GIModel, origins: Txyz[]|TRay[]|TPlane[], detail:
         }
     } else {
         ents_arrs = idsBreak(entities) as TEntTypeIdx[];
-        const geolocation = __model__.attribs.query.getModelAttribVal('geolocation');
+        const geolocation = __model__.modeldata.attribs.get.getModelAttribVal('geolocation');
         latitude = geolocation['latitude'];
-        if (__model__.attribs.query.hasModelAttrib('north')) {
-            north = __model__.attribs.query.getModelAttribVal('north') as Txy;
+        if (__model__.modeldata.attribs.query.hasModelAttrib('north')) {
+            north = __model__.modeldata.attribs.get.getModelAttribVal('north') as Txy;
         }
     }
     // TODO
@@ -731,10 +731,10 @@ function _solarRaysDirectTjs(latitude: number, north: Txy, detail: number): THRE
     // const hour_step = [0.25 * 6, 0.25 * 5, 0.25 * 4, 0.25 * 3, 0.25 * 2, 0.25 * 1, 0.25 * 0.5][detail];
     const hour_step = [0.25 * 6, 0.25 * 4, 0.25 * 1, 0.25 * 0.5][detail];
     // get the angles in radians
-    const day_ang_rad: number = degToRad(47) as number / 182;
+    const day_ang_rad: number = degToRad(false, 47) as number / 182;
     const hour_ang_rad: number = (2 * Math.PI) / 24;
     // get the atitude angle in radians
-    const latitude_rad: number = degToRad(latitude) as number;
+    const latitude_rad: number = degToRad(false, latitude) as number;
     // get the angle from y-axis to north vector in radians
     const north_rad = vecAng2([north[0], north[1], 0], [0, 1, 0], [0, 0, 1]);
     // create the vectors
@@ -782,9 +782,9 @@ function _solarRaysDirectTjs(latitude: number, north: Txy, detail: number): THRE
 }
 function _solarRaysIndirectTjs(latitude: number, north: Txy, detail: number): THREE.Vector3[] {
     const hedron_tjs: THREE.IcosahedronGeometry = new THREE.IcosahedronGeometry(1, detail + 2);
-    const solar_offset = Math.cos(degToRad(66.5) as number);
+    const solar_offset = Math.cos(degToRad(false, 66.5) as number);
     // get the atitude angle in radians
-    const latitude_rad: number = degToRad(latitude) as number;
+    const latitude_rad: number = degToRad(false, latitude) as number;
     // get the angle from y-axis to north vector in radians
     const north_rad = vecAng2([north[0], north[1], 0], [0, 1, 0], [0, 0, 1]);
     // calc vectors
@@ -853,14 +853,14 @@ export enum _ESunPathMethod {
  * Generates a sun path, oriented according to the geolocation and north direction.
  * The sun path is generated as an aid to visualize the orientation of the sun relative to the model.
  * Note that the solar exposure calculations do not require the sub path to be visualized.
- * ~
+ * \n
  * The sun path takes into account the geolocation and the north direction of the model.
  * Geolocation is specified by a model attributes as follows:
  * @geolocation={'longitude':123,'latitude':12}.
  * North direction is specified by a model attribute as follows, using a vector:
  * @north==[1,2]
  * If no north direction is specified, then [0,1] is the default (i.e. north is in the direction of the y-axis);
- * ~
+ * \n
  * @param __model__
  * @param origins The origins of the rays
  * @param detail The level of detail for the analysis
@@ -874,18 +874,18 @@ export function SkyDome(__model__: GIModel, origin: Txyz|TRay|TPlane, detail: nu
     let latitude: number = null;
     let north: Txy = [0, 1];
     if (__model__.debug) {
-        checkArgs(fn_name, 'origin', origin, [ArgCh.isXYZ, ArgCh.isRay, ArgCh.isPln]);
-        checkArgs(fn_name, 'detail', detail, [ArgCh.isInt]);
+        chk.checkArgs(fn_name, 'origin', origin, [chk.isXYZ, chk.isRay, chk.isPln]);
+        chk.checkArgs(fn_name, 'detail', detail, [chk.isInt]);
         if (detail < 0 || detail > 6) {
             throw new Error (fn_name + ': "detail" must be an integer between 0 and 6.');
         }
-        checkArgs(fn_name, 'radius', radius, [ArgCh.isNum]);
+        chk.checkArgs(fn_name, 'radius', radius, [chk.isNum]);
         if (method !== _ESunPathMethod.SKY) {
-            if (!__model__.attribs.query.hasModelAttrib('geolocation')) {
+            if (!__model__.modeldata.attribs.query.hasModelAttrib('geolocation')) {
                 throw new Error('analyze.Solar: model attribute "geolocation" is missing, \
                     e.g. @geolocation = {"latitude":12, "longitude":34}');
             } else {
-                const geolocation = __model__.attribs.query.getModelAttribVal('geolocation');
+                const geolocation = __model__.modeldata.attribs.get.getModelAttribVal('geolocation');
                 if (uscore.isObject(geolocation) && uscore.has(geolocation, 'latitude')) {
                     latitude = geolocation['latitude'];
                 } else {
@@ -893,8 +893,8 @@ export function SkyDome(__model__: GIModel, origin: Txyz|TRay|TPlane, detail: nu
                         e.g. @geolocation = {"latitude":12, "longitude":34}');
                 }
             }
-            if (__model__.attribs.query.hasModelAttrib('north')) {
-                north = __model__.attribs.query.getModelAttribVal('north') as Txy;
+            if (__model__.modeldata.attribs.query.hasModelAttrib('north')) {
+                north = __model__.modeldata.attribs.get.getModelAttribVal('north') as Txy;
                 if (!Array.isArray(north) || north.length !== 2) {
                     throw new Error('analyze.Solar: model has a "north" attribute with the wrong type, \
                     it should be a vector with two values, \
@@ -903,10 +903,10 @@ export function SkyDome(__model__: GIModel, origin: Txyz|TRay|TPlane, detail: nu
             }
         }
     } else {
-        const geolocation = __model__.attribs.query.getModelAttribVal('geolocation');
+        const geolocation = __model__.modeldata.attribs.get.getModelAttribVal('geolocation');
         latitude = geolocation['latitude'];
-        if (__model__.attribs.query.hasModelAttrib('north')) {
-            north = __model__.attribs.query.getModelAttribVal('north') as Txy;
+        if (__model__.modeldata.attribs.query.hasModelAttrib('north')) {
+            north = __model__.modeldata.attribs.get.getModelAttribVal('north') as Txy;
         }
     }
     // --- Error Check ---
@@ -953,32 +953,32 @@ function _sunPathGenPosis(__model__: GIModel, rays_dirs_tjs: THREE.Vector3[],
     for (const direction_tjs of rays_dirs_tjs) {
         let xyz: Txyz = vecMult([direction_tjs.x, direction_tjs.y, direction_tjs.z], radius);
         xyz = multMatrix(xyz, matrix);
-        const posi_i: number = __model__.geom.add.addPosi();
-        __model__.attribs.add.setPosiCoords(posi_i, xyz);
+        const posi_i: number = __model__.modeldata.geom.add.addPosi();
+        __model__.modeldata.attribs.posis.setPosiCoords(posi_i, xyz);
         posis_i.push(posi_i);
     }
-    return idsMakeFromIndicies(EEntType.POSI, posis_i) as TId[];
+    return idsMakeFromIdxs(EEntType.POSI, posis_i) as TId[];
 }
 // ================================================================================================
 /**
  * Finds the nearest positions within a certain maximum radius.
- * ~
+ * \n
  * The neighbors to each source position is calculated as follows:
  * 1) Calculate the distance to all target positions.
  * 2) Creat the neighbors set by filtering out target positions that are further than the maximum radius.
  * 3) If the number of neighbors is greater than 'max_neighbors',
  * then select the 'max_neighbors' closest target positions.
- * ~
+ * \n
  * Returns a dictionary containing the nearest positions.
- * ~
+ * \n
  * If 'num_neighbors' is 1, the dictionary will contain two lists:
  * 1) 'posis': a list of positions, a subset of positions from the source.
  * 2) 'neighbors': a list of neighbouring positions, a subset of positions from target.
-  * ~
+  * \n
  * If 'num_neighbors' is greater than 1, the dictionary will contain two lists:
  * 1) 'posis': a list of positions, a subset of positions from the source.
  * 2) 'neighbors': a list of lists of neighbouring positions, a subset of positions from target.
- * ~
+ * \n
  * @param __model__
  * @param source A list of positions, or entities from which positions can be extracted.
  * @param target A list of positions, or entities from which positions can be extracted.
@@ -999,10 +999,10 @@ export function Nearest(__model__: GIModel,
     let source_ents_arrs: TEntTypeIdx[];
     let target_ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
-        source_ents_arrs = checkIDs(fn_name, 'origins', source,
-            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
-        target_ents_arrs = checkIDs(fn_name, 'destinations', target,
-            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+        source_ents_arrs = checkIDs(__model__, fn_name, 'origins', source,
+            [ID.isID, ID.isIDL1], null) as TEntTypeIdx[];
+        target_ents_arrs = checkIDs(__model__, fn_name, 'destinations', target,
+            [ID.isID, ID.isIDL1], null) as TEntTypeIdx[];
     } else {
         // source_ents_arrs = splitIDs(fn_name, 'origins', source,
         //     [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
@@ -1018,8 +1018,8 @@ export function Nearest(__model__: GIModel,
         _nearest(__model__, source_posis_i, target_posis_i, radius, max_neighbors);
     // return dictionary with results
     return {
-        'posis': idsMakeFromIndicies(EEntType.POSI, result[0]) as TId[],
-        'neighbors': idsMakeFromIndicies(EEntType.POSI, result[1]) as TId[][]|TId[],
+        'posis': idsMakeFromIdxs(EEntType.POSI, result[0]) as TId[],
+        'neighbors': idsMakeFromIdxs(EEntType.POSI, result[1]) as TId[][]|TId[],
         'distances': result[2] as number[]|number[][]
     };
 }
@@ -1043,7 +1043,7 @@ function _nearest(__model__: GIModel, source_posis_i: number[], target_posis_i: 
     typed_buff.setAttribute( 'position', new THREE.BufferAttribute( typed_positions, 4 ) );
     for (let i = 0; i < posis_i.length; i++) {
         const posi_i: number = posis_i[i];
-        const xyz: Txyz = __model__.attribs.query.getPosiCoords(posi_i);
+        const xyz: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(posi_i);
         map_posi_i_to_xyz.set(posi_i, xyz);
         typed_positions[ i * 4 + 0 ] = xyz[0];
         typed_positions[ i * 4 + 1 ] = xyz[1];
@@ -1128,38 +1128,38 @@ export enum _EShortestPathResult {
 }
 /**
  * Calculates the shortest path from every source position to every target position.
- * ~
+ * \n
  * Paths are calculated through a network of connected edges.
  * For edges to be connected, vertices must be welded.
  * For example, if the network consists of multiple polylines, then the vertcies of those polylines must be welded.
- * ~
+ * \n
  * If 'directed' is selected, then the edge direction is taken into account. Each edge will be one-way.
  * If 'undirected' is selected, the edge direction is ignored. Each edge will be two-way.
- * ~
+ * \n
  * Each edge can be assigned a weight.
  * The shortest path is the path where the sum of the weights of the edges along the path is the minimum.
- * ~
+ * \n
  * By default, all edges are assigned a weight of 1.
  * Default weights can be overridden by creating a numeric attribute on edges call 'weight'.
- * ~
+ * \n
  * Returns a dictionary containing the shortest paths.
- * ~
+ * \n
  * If 'distances' is selected, the dictionary will contain two list:
  * 1) 'source_posis': a list of start positions for eah path,
  * 2) 'distances': a list of distances, one list for each path starting at each source position.
- * ~
+ * \n
  * If 'counts' is selected, the dictionary will contain four lists:
  * 1) 'posis': a list of positions traversed by the paths,
  * 2) 'posis_count': a list of numbers that count how often each position was traversed,
  * 3) 'edges': a list of edges traversed by the paths,
  * 4) 'edges_count': a list of numbers that count how often each edge was traversed.
- * ~
+ * \n
  * If 'paths' is selected, the dictionary will contain two lists of lists:
  * 1) 'posi_paths': a list of lists of positions, one list for each path,
  * 2) 'edge_paths': a list of lists of edges, one list for each path.
- * ~
+ * \n
  * If 'all' is selected, the dictionary will contain all lists just described.
- * ~
+ * \n
  * @param __model__
  * @param source Path source, a list of positions, or entities from which positions can be extracted.
  * @param target Path target, a list of positions, or entities from which positions can be extracted.
@@ -1180,12 +1180,12 @@ export function ShortestPath(__model__: GIModel, source: TId|TId[]|TId[][][], ta
     let target_ents_arrs: TEntTypeIdx[];
     let ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
-        source_ents_arrs = checkIDs(fn_name, 'origins', source,
-            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
-        target_ents_arrs = checkIDs(fn_name, 'destinations', target,
-            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
-        ents_arrs = checkIDs(fn_name, 'entities', entities,
-            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+        source_ents_arrs = checkIDs(__model__, fn_name, 'origins', source,
+            [ID.isID, ID.isIDL1], null) as TEntTypeIdx[];
+        target_ents_arrs = checkIDs(__model__, fn_name, 'destinations', target,
+            [ID.isID, ID.isIDL1], null) as TEntTypeIdx[];
+        ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
+            [ID.isID, ID.isIDL1], null) as TEntTypeIdx[];
     } else {
         // source_ents_arrs = splitIDs(fn_name, 'origins', source,
         //     [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
@@ -1295,18 +1295,18 @@ export function ShortestPath(__model__: GIModel, source: TId|TId[]|TId[][][], ta
     }
     const dict: TShortestPathResult = {};
     if (return_dists) {
-        dict.source_posis = idsMakeFromIndicies(EEntType.POSI, source_posis_i) as TId[];
+        dict.source_posis = idsMakeFromIdxs(EEntType.POSI, source_posis_i) as TId[];
         dict.distances = source_posis_i.length === 1 ? all_path_dists[0] : all_path_dists;
     }
     if (return_counts) {
-        dict.edges = idsMakeFromIndicies(EEntType.EDGE, Array.from(map_edges_i.keys())) as TId[];
+        dict.edges = idsMakeFromIdxs(EEntType.EDGE, Array.from(map_edges_i.keys())) as TId[];
         dict.edges_count = Array.from(map_edges_i.values());
-        dict.posis =  idsMakeFromIndicies(EEntType.POSI, Array.from(map_posis_i.keys())) as TId[];
+        dict.posis =  idsMakeFromIdxs(EEntType.POSI, Array.from(map_posis_i.keys())) as TId[];
         dict.posis_count =  Array.from(map_posis_i.values());
     }
     if (return_paths) {
-        dict.edge_paths =  idsMakeFromIndicies(EEntType.EDGE, edge_paths) as TId[][];
-        dict.posi_paths =  idsMakeFromIndicies(EEntType.POSI, posi_paths) as TId[][];
+        dict.edge_paths =  idsMakeFromIdxs(EEntType.EDGE, edge_paths) as TId[][];
+        dict.posi_paths =  idsMakeFromIdxs(EEntType.POSI, posi_paths) as TId[][];
     }
     return dict;
 }
@@ -1315,7 +1315,7 @@ function _getUniquePosis(__model__: GIModel, ents_arr: TEntTypeIdx[]): number[] 
     if (ents_arr.length === 0) { return []; }
     const set_posis_i: Set<number> = new Set();
     for (const [ent_type, ent_i] of ents_arr) {
-        const posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, ent_i);
+        const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(ent_type, ent_i);
         for (const posi_i of posis_i) {
             set_posis_i.add(posi_i);
         }
@@ -1333,8 +1333,8 @@ function _cytoscapeWeightFn2(edge: cytoscape.EdgeSingular) {
 function _cytoscapeGetElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
         source_posis_i: number[], target_posis_i: number[], directed: boolean): any[] {
     let has_weight_attrib = false;
-    if (__model__.attribs.query.hasAttrib(EEntType.EDGE, 'weight')) {
-        has_weight_attrib = __model__.attribs.query.getAttribDataType(EEntType.EDGE, 'weight') === EAttribDataTypeStrs.NUMBER;
+    if (__model__.modeldata.attribs.query.hasEntAttrib(EEntType.EDGE, 'weight')) {
+        has_weight_attrib = __model__.modeldata.attribs.query.getAttribDataType(EEntType.EDGE, 'weight') === EAttribDataTypeStrs.NUMBER;
     }
     // edges, starts empty
     const set_edges_i: Set<number> = new Set();
@@ -1343,11 +1343,11 @@ function _cytoscapeGetElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
     for (const target_posi_i of target_posis_i) { set_posis_i.add(target_posi_i); }
     // network
     for (const [ent_type, ent_i] of ents_arr) {
-        const edges_i: number[] = __model__.geom.nav.navAnyToEdge(ent_type, ent_i);
+        const edges_i: number[] = __model__.modeldata.geom.nav.navAnyToEdge(ent_type, ent_i);
         for (const edge_i of edges_i) {
             set_edges_i.add(edge_i);
         }
-        const posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, ent_i);
+        const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(ent_type, ent_i);
         for (const posi_i of posis_i) {
             set_posis_i.add(posi_i);
         }
@@ -1360,13 +1360,13 @@ function _cytoscapeGetElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
     if (directed) {
         // directed
         for (const edge_i of Array.from(set_edges_i)) {
-            const edge_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
+            const edge_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
             let weight = 1.0;
             if (has_weight_attrib) {
-                weight = __model__.attribs.query.getAttribVal(EEntType.EDGE, 'weight', edge_i) as number;
+                weight = __model__.modeldata.attribs.get.getEntAttribVal(EEntType.EDGE, edge_i, 'weight') as number;
             } else {
-                const c0: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[0]);
-                const c1: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[1]);
+                const c0: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(edge_posis_i[0]);
+                const c1: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(edge_posis_i[1]);
                 weight = distance(c0, c1);
             }
             elements.push( {  data: { id: 'e' + edge_i,
@@ -1376,7 +1376,7 @@ function _cytoscapeGetElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
         // undirected
         const map_edges_ab: Map<string, any> = new Map();
         for (const edge_i of Array.from(set_edges_i)) {
-            let edge_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
+            let edge_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
             edge_posis_i = edge_posis_i[0] < edge_posis_i[1] ? edge_posis_i : [edge_posis_i[1], edge_posis_i[0]];
             const undir_edge_id: string = 'e_' + edge_posis_i[0].toString() + '_' + edge_posis_i[1].toString();
             if (map_edges_ab.has(undir_edge_id)) {
@@ -1386,10 +1386,10 @@ function _cytoscapeGetElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
             } else {
                 let weight = 1.0;
                 if (has_weight_attrib) {
-                    weight = __model__.attribs.query.getAttribVal(EEntType.EDGE, 'weight', edge_i) as number;
+                    weight = __model__.modeldata.attribs.get.getEntAttribVal(EEntType.EDGE, edge_i, 'weight') as number;
                 } else {
-                    const c0: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[0]);
-                    const c1: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[1]);
+                    const c0: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(edge_posis_i[0]);
+                    const c1: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(edge_posis_i[1]);
                     weight = distance(c0, c1);
                 }
                 const obj = {
@@ -1422,44 +1422,44 @@ interface TClosestPathResult {
 }
 /**
  * Calculates the shortest path from every position in source, to the closest position in target.
- * ~
+ * \n
  * This differs from the 'analyze.ShortestPath()' function. If you specify multiple target positions,
  * for each cource position,
  * the 'analyze.ShortestPath()' function will calculate multiple shortest paths,
  * i.e. the shortest path to all targets.
  * This function will caculate just one shortest path,
  * i.e. the shortest path to the closest target.
- * ~
+ * \n
  * Paths are calculated through a network of connected edges.
  * For edges to be connected, vertices must be welded.
  * For example, if the network consists of multiple polylines, then the vertcies of those polylines must be welded.
- * ~
+ * \n
  * If 'directed' is selected, then the edge direction is taken into account. Each edge will be one-way.
  * If 'undirected' is selected, the edge direction is ignored. Each edge will be two-way.
- * ~
+ * \n
  * Each edge can be assigned a weight.
  * The shortest path is the path where the sum of the weights of the edges along the path is the minimum.
- * ~
+ * \n
  * By default, all edges are assigned a weight of 1.
  * Default weights can be overridden by creating a numeric attribute on edges call 'weight'.
- * ~
+ * \n
  * Returns a dictionary containing the shortes paths.
- * ~
+ * \n
  * If 'distances' is selected, the dictionary will contain one list:
  * 1) 'distances': a list of distances.
- * ~
+ * \n
  * If 'counts' is selected, the dictionary will contain four lists:
  * 1) 'posis': a list of positions traversed by the paths,
  * 2) 'posis_count': a list of numbers that count how often each position was traversed.
  * 3) 'edges': a list of edges traversed by the paths,
  * 4) 'edges_count': a list of numbers that count how often each edge was traversed.
- * ~
+ * \n
  * If 'paths' is selected, the dictionary will contain two lists of lists:
  * 1) 'posi_paths': a list of lists of positions, one list for each path.
  * 2) 'edge_paths': a list of lists of edges, one list for each path.
- * ~
+ * \n
  * If 'all' is selected, the dictionary will contain all lists just described.
- * ~
+ * \n
  * @param __model__
  * @param source Path source, a list of positions, or entities from which positions can be extracted.
  * @param target Path source, a list of positions, or entities from which positions can be extracted.
@@ -1480,12 +1480,12 @@ export function ClosestPath(__model__: GIModel, source: TId|TId[]|TId[][][], tar
     let target_ents_arrs: TEntTypeIdx[];
     let ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
-        source_ents_arrs = checkIDs(fn_name, 'origins', source,
-            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
-        target_ents_arrs = checkIDs(fn_name, 'destinations', target,
-            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
-        ents_arrs = checkIDs(fn_name, 'entities', entities,
-            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+        source_ents_arrs = checkIDs(__model__, fn_name, 'origins', source,
+            [ID.isID, ID.isIDL1], null) as TEntTypeIdx[];
+        target_ents_arrs = checkIDs(__model__, fn_name, 'destinations', target,
+            [ID.isID, ID.isIDL1], null) as TEntTypeIdx[];
+        ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
+            [ID.isID, ID.isIDL1], null) as TEntTypeIdx[];
     } else {
         // source_ents_arrs = splitIDs(fn_name, 'origins', source,
         //     [IDcheckObj.isID, IDcheckObj.isIDList], null) as TEntTypeIdx[];
@@ -1613,18 +1613,18 @@ export function ClosestPath(__model__: GIModel, source: TId|TId[]|TId[][][], tar
     }
     const dict: TClosestPathResult = {};
     if (return_dists) {
-        dict.source_posis = idsMakeFromIndicies(EEntType.POSI, source_posis_i) as TId[];
+        dict.source_posis = idsMakeFromIdxs(EEntType.POSI, source_posis_i) as TId[];
         dict.distances = path_dists;
     }
     if (return_counts) {
-        dict.edges = idsMakeFromIndicies(EEntType.EDGE, Array.from(map_edges_i.keys())) as TId[];
+        dict.edges = idsMakeFromIdxs(EEntType.EDGE, Array.from(map_edges_i.keys())) as TId[];
         dict.edges_count = Array.from(map_edges_i.values());
-        dict.posis =  idsMakeFromIndicies(EEntType.POSI, Array.from(map_posis_i.keys())) as TId[];
+        dict.posis =  idsMakeFromIdxs(EEntType.POSI, Array.from(map_posis_i.keys())) as TId[];
         dict.posis_count =  Array.from(map_posis_i.values());
     }
     if (return_paths) {
-        dict.edge_paths =  idsMakeFromIndicies(EEntType.EDGE, edge_paths) as TId[][];
-        dict.posi_paths =  idsMakeFromIndicies(EEntType.POSI, posi_paths) as TId[][];
+        dict.edge_paths =  idsMakeFromIdxs(EEntType.EDGE, edge_paths) as TId[][];
+        dict.posi_paths =  idsMakeFromIdxs(EEntType.POSI, posi_paths) as TId[][];
     }
     return dict;
 }
@@ -1636,8 +1636,8 @@ export enum _ECentralityMethod {
 function _cyGetPosisAndElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
     posis_i: number[], directed: boolean): [cytoscape.ElementDefinition[], number[]] {
     let has_weight_attrib = false;
-    if (__model__.attribs.query.hasAttrib(EEntType.EDGE, 'weight')) {
-        has_weight_attrib = __model__.attribs.query.getAttribDataType(EEntType.EDGE, 'weight') === EAttribDataTypeStrs.NUMBER;
+    if (__model__.modeldata.attribs.query.hasEntAttrib(EEntType.EDGE, 'weight')) {
+        has_weight_attrib = __model__.modeldata.attribs.query.getAttribDataType(EEntType.EDGE, 'weight') === EAttribDataTypeStrs.NUMBER;
     }
     // edges, starts empty
     const set_edges_i: Set<number> = new Set();
@@ -1645,11 +1645,11 @@ function _cyGetPosisAndElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
     const set_posis_i: Set<number> = new Set(posis_i);
     // network
     for (const [ent_type, ent_i] of ents_arr) {
-        const n_edges_i: number[] = __model__.geom.nav.navAnyToEdge(ent_type, ent_i);
+        const n_edges_i: number[] = __model__.modeldata.geom.nav.navAnyToEdge(ent_type, ent_i);
         for (const edge_i of n_edges_i) {
             set_edges_i.add(edge_i);
         }
-        const n_posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, ent_i);
+        const n_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(ent_type, ent_i);
         for (const posi_i of n_posis_i) {
             set_posis_i.add(posi_i);
         }
@@ -1664,13 +1664,13 @@ function _cyGetPosisAndElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
     if (directed) {
         // directed
         for (const edge_i of Array.from(set_edges_i)) {
-            const edge_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
+            const edge_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
             let weight = 1.0;
             if (has_weight_attrib) {
-                weight = __model__.attribs.query.getAttribVal(EEntType.EDGE, 'weight', edge_i) as number;
+                weight = __model__.modeldata.attribs.get.getEntAttribVal(EEntType.EDGE, edge_i, 'weight') as number;
             } else {
-                // const c0: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[0]);
-                // const c1: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[1]);
+                // const c0: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(edge_posis_i[0]);
+                // const c1: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(edge_posis_i[1]);
                 weight = 1; // distance(c0, c1);
             }
             elements.push( {  data: { id: 'e' + edge_i,
@@ -1680,7 +1680,7 @@ function _cyGetPosisAndElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
         // undirected
         const map_edges_ab: Map<string, any> = new Map();
         for (const edge_i of Array.from(set_edges_i)) {
-            let edge_posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
+            let edge_posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(EEntType.EDGE, edge_i);
             edge_posis_i = edge_posis_i[0] < edge_posis_i[1] ? edge_posis_i : [edge_posis_i[1], edge_posis_i[0]];
             const undir_edge_id: string = 'e_' + edge_posis_i[0].toString() + '_' + edge_posis_i[1].toString();
             if (map_edges_ab.has(undir_edge_id)) {
@@ -1690,10 +1690,10 @@ function _cyGetPosisAndElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
             } else {
                 let weight = 1.0;
                 if (has_weight_attrib) {
-                    weight = __model__.attribs.query.getAttribVal(EEntType.EDGE, 'weight', edge_i) as number;
+                    weight = __model__.modeldata.attribs.get.getEntAttribVal(EEntType.EDGE, edge_i, 'weight') as number;
                 } else {
-                    // const c0: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[0]);
-                    // const c1: Txyz = __model__.attribs.query.getPosiCoords(edge_posis_i[1]);
+                    // const c0: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(edge_posis_i[0]);
+                    // const c1: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(edge_posis_i[1]);
                     weight = 1; // distance(c0, c1);
                 }
                 const obj = {
@@ -1716,34 +1716,34 @@ function _cyGetPosisAndElements(__model__: GIModel, ents_arr: TEntTypeIdx[],
 // ================================================================================================
 /**
  * Calculates degree centrality for positions in a netowrk. Values are normalized in the range 0 to 1.
- * ~
+ * \n
  * The network is defined by a set of connected edges, consisting of polylines and/or polygons.
  * For edges to be connected, vertices must be welded.
  * For example, if the network consists of multiple polylines, then the vertcies of those polylines must be welded.
- * ~
+ * \n
  * Degree centrality is based on the idea that the centrality of a position in a network is related to
  * the number of direct links that it has to other positions.
- * ~
+ * \n
  * If 'undirected' is selected,  degree centrality is calculated by summing up the weights
  * of all edges connected to a position.
  * If 'directed' is selected, then two types of centrality are calculated: incoming degree and
  * outgoing degree.
  * Incoming degree is calculated by summing up the weights of all incoming edges connected to a position.
  * Outgoing degree is calculated by summing up the weights of all outgoing edges connected to a position.
- * ~
+ * \n
  * Default weight is 1 for all edges. Weights can be specified using an attribute called 'weight' on edges.
- * ~
+ * \n
  * Returns a dictionary containing the results.
- * ~
+ * \n
  * If 'undirected' is selected, the dictionary will contain  the following:
  * 1) 'posis': a list of position IDs.
  * 2) 'degree': a list of numbers, the values for degree centrality.
- * ~
+ * \n
  * If 'directed' is selected, the dictionary will contain  the following:
  * 1) 'posis': a list of position IDs.
  * 2) 'indegree': a list of numbers, the values for incoming degree centrality.
  * 3) 'outdegree': a list of numbers, the values for outgoing degree centrality.
- * ~
+ * \n
  * @param __model__
  * @param source A list of positions, or entities from which positions can be extracted.
  * These positions should be part of the network.
@@ -1769,11 +1769,11 @@ export function Degree(__model__: GIModel, source: TId|TId[]|TId[][][],
     let ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
         if (source.length > 0) {
-            source_ents_arrs = checkIDs(fn_name, 'source', source,
-                [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+            source_ents_arrs = checkIDs(__model__, fn_name, 'source', source,
+                [ID.isID, ID.isIDL1], null) as TEntTypeIdx[];
         }
-        ents_arrs = checkIDs(fn_name, 'entities', entities,
-            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+        ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
+            [ID.isID, ID.isIDL1], null) as TEntTypeIdx[];
     } else {
         // if (source.length > 0) {
         //     source_ents_arrs = splitIDs(fn_name, 'source', source,
@@ -1818,7 +1818,7 @@ function _centralityDegreeDirected(posis_i: number[], cy_network: any, alpha: nu
         outdegree.push( cy_centrality.outdegree(source_elem) );
     }
     return {
-        'posis': idsMakeFromIndicies(EEntType.POSI, posis_i),
+        'posis': idsMakeFromIdxs(EEntType.POSI, posis_i),
         'indegree': indegree,
         'outdegree': outdegree
     };
@@ -1835,7 +1835,7 @@ function _centralityDegreeUndirected(posis_i: number[], cy_network: any, alpha: 
         degree.push( cy_centrality.degree(source_elem) );
     }
     return {
-        'posis': idsMakeFromIndicies(EEntType.POSI, posis_i),
+        'posis': idsMakeFromIdxs(EEntType.POSI, posis_i),
         'degree': degree
     };
 }
@@ -1848,39 +1848,39 @@ export enum _ECentralityType {
 /**
  * Calculates betweenness, closeness, and harmonic centrality
  * for positions in a netowrk. Values are normalized in the range 0 to 1.
- * ~
+ * \n
  * The network is defined by a set of connected edges, consisting of polylines and/or polygons.
  * For edges to be connected, vertices must be welded.
  * For example, if the network consists of multiple polylines, then the vertcies of those polylines must be welded.
- * ~
+ * \n
  * Centralities are calculate based on distances between positions.
  * The distance between two positions is the shortest path between those positions.
  * The shortest path is the path where the sum of the weights of the edges along the path is the minimum.
- * ~
+ * \n
  * Default weight is 1 for all edges. Weights can be specified using an attribute called 'weight' on edges.
- * ~
+ * \n
  * Closeness centrality is calculated by inverting the sum of the distances to all other positions.
- * ~
+ * \n
  * Harmonic centrality is calculated by summing up the inverted distances to all other positions.
- * ~
+ * \n
  * Betweenness centrality os calculated in two steps.
  * First, the shortest path between every pair of nodes is calculated.
  * Second, the betweenness centrality of each node is then the total number of times the node is traversed
  * by the shortest paths.
- * ~
+ * \n
  * For closeness centrality, the network is first split up into connected sub-networks.
  * This is because closeness centrality cannot be calculated on networks that are not fully connected.
  * The closeness centrality is then calculated for each sub-network seperately.
- * ~
+ * \n
  * For harmonic centrality, care must be taken when defining custom weights.
  * Weight with zero values or very small values will result in errors or will distort the results.
  * This is due to the inversion operation: 1 / weight.
- * ~
+ * \n
  * Returns a dictionary containing the results.
- * ~
+ * \n
  * 1) 'posis': a list of position IDs.
  * 2) 'centrality': a list of numbers, the values for centrality, either betweenness, closeness, or harmonic.
- * ~
+ * \n
  * @param __model__
  * @param source A list of positions, or entities from which positions can be extracted.
  * These positions should be part of the network.
@@ -1904,11 +1904,11 @@ export function Centrality(__model__: GIModel, source: TId|TId[]|TId[][][],
     let ents_arrs: TEntTypeIdx[];
     if (__model__.debug) {
         if (source.length > 0) {
-            source_ents_arrs = checkIDs(fn_name, 'source', source,
-                [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+            source_ents_arrs = checkIDs(__model__, fn_name, 'source', source,
+                [ID.isID, ID.isIDL1], null) as TEntTypeIdx[];
         }
-        ents_arrs = checkIDs(fn_name, 'entities', entities,
-            [IdCh.isId, IdCh.isIdL], null) as TEntTypeIdx[];
+        ents_arrs = checkIDs(__model__, fn_name, 'entities', entities,
+            [ID.isID, ID.isIDL1], null) as TEntTypeIdx[];
     } else {
         // if (source.length > 0) {
         //     source_ents_arrs = splitIDs(fn_name, 'source', source,
@@ -1972,7 +1972,7 @@ function _centralityCloseness(posis_i: number[], cy_network: cytoscape.Core,  di
         comps.push(comp);
     }
     return {
-        'posis': idsMakeFromIndicies(EEntType.POSI, result_posis_i),
+        'posis': idsMakeFromIdxs(EEntType.POSI, result_posis_i),
         'centrality': results
     };
 }
@@ -1994,7 +1994,7 @@ function _centralityHarmonic(posis_i: number[], cy_network: cytoscape.Core,  dir
         results.push( result );
     }
     return {
-        'posis': idsMakeFromIndicies(EEntType.POSI, posis_i),
+        'posis': idsMakeFromIdxs(EEntType.POSI, posis_i),
         'centrality': results
     };
 }
@@ -2013,7 +2013,7 @@ function _centralityBetweenness(posis_i: number[], cy_network: cytoscape.Core, d
         results.push( result );
     }
     return {
-        'posis': idsMakeFromIndicies(EEntType.POSI, posis_i),
+        'posis': idsMakeFromIdxs(EEntType.POSI, posis_i),
         'centrality': results
     };
 }

@@ -1,7 +1,8 @@
 import * as vec from '@libs/geom/vectors';
 import { Txyz, TPlane } from '@assets/libs/geo-info/common';
-import { getArrDepth2 } from '@assets/libs/util/arrs';
+import { getArrDepth } from '@assets/libs/util/arrs';
 import { xformMatrix, multMatrix } from '@assets/libs/geom/matrix';
+import { checkNumArgs } from '../_check_inline_args';
 
 // export const vecAdd = vec.vecAdd;
 // export const vecSub = vec.vecSub;
@@ -21,8 +22,15 @@ import { xformMatrix, multMatrix } from '@assets/libs/geom/matrix';
 
 // Overloaded vector functions
 // ================================================================================================
-export function vecSum(...v: Txyz[]): Txyz {
-    const depth1: number = getArrDepth2(v);
+/**
+ * Add multiple vectors
+ * @param v
+ */
+export function vecSum(debug: boolean, ...v: Txyz[]): Txyz {
+    if (debug) {
+        // TODO
+    }
+    const depth1: number = getArrDepth(v);
     if (depth1 > 2) {
         // @ts-ignore
         v = v.slice().flat(depth1 - 2);
@@ -33,10 +41,19 @@ export function vecSum(...v: Txyz[]): Txyz {
     return vec.vecSum(v, false) as Txyz;
 }
 // ================================================================================================
-export function vecAdd(v1: Txyz|Txyz[], v2: Txyz|Txyz[], norm: boolean = false): Txyz|Txyz[] {
+/**
+ * Adds two vectors
+ * @param v1
+ * @param v2
+ * @param norm
+ */
+export function vecAdd(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], norm: boolean = false): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecAdd', arguments, 3, 2);
+    }
     // overloaded case
-    const depth1: number = getArrDepth2(v1);
-    const depth2: number = getArrDepth2(v2);
+    const depth1: number = getArrDepth(v1);
+    const depth2: number = getArrDepth(v2);
     if (depth1 === 2 || depth2 === 2) {
         if (depth2 === 1) {
             // only v1 is Txyz[]
@@ -61,12 +78,20 @@ export function vecAdd(v1: Txyz|Txyz[], v2: Txyz|Txyz[], norm: boolean = false):
     // normal case, both v1 and v2 are Txyz
     return vec.vecAdd(v1 as Txyz, v2 as Txyz, norm) as Txyz;
 }
-
 // ================================================================================================
-export function vecSub(v1: Txyz|Txyz[], v2: Txyz|Txyz[], norm: boolean = false): Txyz|Txyz[] {
+/**
+ * Subtracts v2 from v1
+ * @param v1
+ * @param v2
+ * @param norm
+ */
+export function vecSub(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], norm: boolean = false): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecSub', arguments, 3, 2);
+    }
     // overloaded case
-    const depth1: number = getArrDepth2(v1);
-    const depth2: number = getArrDepth2(v2);
+    const depth1: number = getArrDepth(v1);
+    const depth2: number = getArrDepth(v2);
     if (depth1 === 2 || depth2 === 2) {
         if (depth2 === 1) {
             // only v1 is Txyz[]
@@ -91,12 +116,19 @@ export function vecSub(v1: Txyz|Txyz[], v2: Txyz|Txyz[], norm: boolean = false):
     // normal case, both v1 and v2 are Txyz
     return vec.vecSub(v1 as Txyz, v2 as Txyz, norm) as Txyz;
 }
-
 // ================================================================================================
-export function vecDiv(v: Txyz|Txyz[], num: number|number[]): Txyz|Txyz[] {
+/**
+ * Divides a vector by a numbe
+ * @param v
+ * @param num
+ */
+export function vecDiv(debug: boolean, v: Txyz|Txyz[], num: number|number[]): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecDiv', arguments, 2);
+    }
     // overloaded case
-    const depth1: number = getArrDepth2(v);
-    const depth2: number = getArrDepth2(num);
+    const depth1: number = getArrDepth(v);
+    const depth2: number = getArrDepth(num);
     if (depth1 === 2 || depth2 === 1) {
         if (depth2 === 0) {
             // only vec is Txyz[]
@@ -122,12 +154,19 @@ export function vecDiv(v: Txyz|Txyz[], num: number|number[]): Txyz|Txyz[] {
     // normal case, vec is Txyz and num is number
     return vec.vecDiv(v as Txyz, num as number) as Txyz;
 }
-
 // ================================================================================================
-export function vecMult(v: Txyz|Txyz[], num: number|number[]): Txyz|Txyz[] {
+/**
+ * Multiplies a vector by a number
+ * @param v
+ * @param num
+ */
+export function vecMult(debug: boolean, v: Txyz|Txyz[], num: number|number[]): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecMult', arguments, 2);
+    }
     // overloaded case
-    const depth1: number = getArrDepth2(v);
-    const depth2: number = getArrDepth2(num);
+    const depth1: number = getArrDepth(v);
+    const depth2: number = getArrDepth(num);
     if (depth1 === 2 || depth2 === 1) {
         if (depth2 === 0) {
             // only vec is Txyz[]
@@ -153,12 +192,19 @@ export function vecMult(v: Txyz|Txyz[], num: number|number[]): Txyz|Txyz[] {
     // normal case, vec is Txyz and num is number
     return vec.vecMult(v as Txyz, num as number) as Txyz;
 }
-
 // ================================================================================================
-export function vecSetLen(v: Txyz|Txyz[], num: number|number[]): Txyz|Txyz[] {
+/**
+ * Sets the magnitude of a vector
+ * @param v
+ * @param num
+ */
+export function vecSetLen(debug: boolean, v: Txyz|Txyz[], num: number|number[]): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecSetLen', arguments, 2);
+    }
     // overloaded case
-    const depth1: number = getArrDepth2(v);
-    const depth2: number = getArrDepth2(num);
+    const depth1: number = getArrDepth(v);
+    const depth2: number = getArrDepth(num);
     if (depth1 === 2 || depth2 === 1) {
         if (depth2 === 0) {
             // only vec is Txyz[]
@@ -184,12 +230,19 @@ export function vecSetLen(v: Txyz|Txyz[], num: number|number[]): Txyz|Txyz[] {
     // normal case, vec is Txyz and num is number
     return vec.vecSetLen(v as Txyz, num as number) as Txyz;
 }
-
 // ================================================================================================
-export function vecDot(v1: Txyz|Txyz[], v2: Txyz|Txyz[]): number|number[] {
+/**
+ * Calculates the dot product of two vectors
+ * @param v1
+ * @param v2
+ */
+export function vecDot(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[]): number|number[] {
+    if (debug) {
+        checkNumArgs('vecDot', arguments, 2);
+    }
     // overloaded case
-    const depth1: number = getArrDepth2(v1);
-    const depth2: number = getArrDepth2(v2);
+    const depth1: number = getArrDepth(v1);
+    const depth2: number = getArrDepth(v2);
     if (depth1 === 2 || depth2 === 2) {
         if (depth2 === 1) {
             // only v1 is Txyz[]
@@ -214,12 +267,19 @@ export function vecDot(v1: Txyz|Txyz[], v2: Txyz|Txyz[]): number|number[] {
     // normal case, both v1 and v2 are Txyz
     return vec.vecDot(v1 as Txyz, v2 as Txyz) as number;
 }
-
 // ================================================================================================
-export function vecCross(v1: Txyz|Txyz[], v2: Txyz|Txyz[]): Txyz|Txyz[] {
+/**
+ * Calculates the cross product of two vectors
+ * @param v1
+ * @param v2
+ */
+export function vecCross(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[]): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecCross', arguments, 2);
+    }
     // overloaded case
-    const depth1: number = getArrDepth2(v1);
-    const depth2: number = getArrDepth2(v2);
+    const depth1: number = getArrDepth(v1);
+    const depth2: number = getArrDepth(v2);
     if (depth1 === 2 || depth2 === 2) {
         if (depth2 === 1) {
             // only v1 is Txyz[]
@@ -244,12 +304,21 @@ export function vecCross(v1: Txyz|Txyz[], v2: Txyz|Txyz[]): Txyz|Txyz[] {
     // normal case, both v1 and v2 are Txyz
     return vec.vecCross(v1 as Txyz, v2 as Txyz) as Txyz;
 }
-
 // ================================================================================================
-export function vecAng(v1: Txyz|Txyz[], v2: Txyz|Txyz[]): number|number[] {
+/**
+ * Calculate the angle (0 to PI) between two vectors.
+ * \n
+ * The inner (smaller) angle is always returned, which will always be smaller than or equal to PI.
+ * @param v1
+ * @param v2
+ */
+export function vecAng(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[]): number|number[] {
+    if (debug) {
+        checkNumArgs('vecAng', arguments, 2);
+    }
     // overloaded case
-    const depth1: number = getArrDepth2(v1);
-    const depth2: number = getArrDepth2(v2);
+    const depth1: number = getArrDepth(v1);
+    const depth2: number = getArrDepth(v2);
     if (depth1 === 2 || depth2 === 2) {
         if (depth2 === 1) {
             // only v1 is Txyz[]
@@ -274,25 +343,32 @@ export function vecAng(v1: Txyz|Txyz[], v2: Txyz|Txyz[]): number|number[] {
     // normal case, both v1 and v2 are Txyz
     return vec.vecAng(v1 as Txyz, v2 as Txyz) as number;
 }
-
 // ================================================================================================
-export function vecFromTo(v1: Txyz|Txyz[], v2: Txyz|Txyz[]): Txyz|Txyz[] {
+/**
+ * Creates a vector between two points
+ * @param xyz1
+ * @param xyz2
+ */
+export function vecFromTo(debug: boolean, xyz1: Txyz|Txyz[], xyz2: Txyz|Txyz[]): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecFromTo', arguments, 2);
+    }
     // overloaded case
-    const depth1: number = getArrDepth2(v1);
-    const depth2: number = getArrDepth2(v2);
+    const depth1: number = getArrDepth(xyz1);
+    const depth2: number = getArrDepth(xyz2);
     if (depth1 === 2 || depth2 === 2) {
         if (depth2 === 1) {
             // only v1 is Txyz[]
-            return (v1 as Txyz[]).map( v1_val => vec.vecFromTo(v1_val as Txyz, v2 as Txyz) as Txyz);
+            return (xyz1 as Txyz[]).map( v1_val => vec.vecFromTo(v1_val as Txyz, xyz2 as Txyz) as Txyz);
         } else if (depth1 === 1) {
             // only v2 is Txyz[]
-            return (v2 as Txyz[]).map( v2_val => vec.vecFromTo(v1 as Txyz, v2_val as Txyz) as Txyz);
+            return (xyz2 as Txyz[]).map( v2_val => vec.vecFromTo(xyz1 as Txyz, v2_val as Txyz) as Txyz);
         } else {
             // both v1 and v2 are Txyz[], they must be equal length
-            if (v1.length === v2.length) {
+            if (xyz1.length === xyz2.length) {
                 const vecs: Txyz[] = [];
-                for (let i = 0; i < v1.length; i++) {
-                    vecs.push( vec.vecFromTo(v1[i] as Txyz, v2[i] as Txyz) as Txyz );
+                for (let i = 0; i < xyz1.length; i++) {
+                    vecs.push( vec.vecFromTo(xyz1[i] as Txyz, xyz2[i] as Txyz) as Txyz );
                 }
                 return vecs;
             } else {
@@ -302,14 +378,22 @@ export function vecFromTo(v1: Txyz|Txyz[], v2: Txyz|Txyz[]): Txyz|Txyz[] {
         }
     }
     // normal case, both v1 and v2 are Txyz
-    return vec.vecFromTo(v1 as Txyz, v2 as Txyz) as Txyz;
+    return vec.vecFromTo(xyz1 as Txyz, xyz2 as Txyz) as Txyz;
 }
-
 // ================================================================================================
-export function vecEqual(v1: Txyz|Txyz[], v2: Txyz|Txyz[], tol: number): boolean|boolean[] {
+/**
+ * Returns true if the difference between two vectors is smaller than a specified tolerance
+ * @param v1
+ * @param v2
+ * @param tol
+ */
+export function vecEqual(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], tol: number): boolean|boolean[] {
+    if (debug) {
+        checkNumArgs('vecEqual', arguments, 3);
+    }
     // overloaded case
-    const depth1: number = getArrDepth2(v1);
-    const depth2: number = getArrDepth2(v2);
+    const depth1: number = getArrDepth(v1);
+    const depth2: number = getArrDepth(v2);
     if (depth1 === 2 || depth2 === 2) {
         if (depth2 === 1 || depth2 === 1) {
             throw new Error(
@@ -331,13 +415,27 @@ export function vecEqual(v1: Txyz|Txyz[], v2: Txyz|Txyz[], tol: number): boolean
     // normal case, both v1 and v2 are Txyz
     return vec.vecEqual(v1 as Txyz, v2 as Txyz, tol) as boolean;
 }
-
 // ================================================================================================
-export function vecAng2(v1: Txyz|Txyz[], v2: Txyz|Txyz[], v3: Txyz|Txyz[]): number|number[] {
+/**
+ * Calculate the angle (0 to 2PI) between two vectors, relative to the plane normal.
+ * \n
+ * Unlike the vecAng() function, this funtion may return an angle larger than PI.
+ * \n
+ * The function calculates the angle from the first vector to the second vector
+ * in a counter-clockwise direction, assuming the normal is pointing up towards the viewer.
+ * \n
+ * @param v1
+ * @param v2
+ * @param v3
+ */
+export function vecAng2(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], v3: Txyz|Txyz[]): number|number[] {
+    if (debug) {
+        checkNumArgs('vecAng2', arguments, 3);
+    }
     // overloaded case
-    const depth1: number = getArrDepth2(v1);
-    const depth2: number = getArrDepth2(v2);
-    const depth3: number = getArrDepth2(v3);
+    const depth1: number = getArrDepth(v1);
+    const depth2: number = getArrDepth(v2);
+    const depth3: number = getArrDepth(v3);
     if (depth1 === 2 || depth2 === 2 || depth3 === 2) {
         if (depth2 === 1 && depth3 === 1) {
             // only v1 is Txyz[]
@@ -403,11 +501,20 @@ export function vecAng2(v1: Txyz|Txyz[], v2: Txyz|Txyz[], v3: Txyz|Txyz[]): numb
 }
 
 // ================================================================================================
-export function vecRot(v1: Txyz|Txyz[], v2: Txyz|Txyz[], ang: number|number[]): Txyz|Txyz[] {
+/**
+ * Rotates one vector around another vector.
+ * @param v1
+ * @param v2
+ * @param ang
+ */
+export function vecRot(debug: boolean, v1: Txyz|Txyz[], v2: Txyz|Txyz[], ang: number|number[]): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecRot', arguments, 3);
+    }
     // overloaded case
-    const depth1: number = getArrDepth2(v1);
-    const depth2: number = getArrDepth2(v2);
-    const depth3: number = getArrDepth2(ang);
+    const depth1: number = getArrDepth(v1);
+    const depth2: number = getArrDepth(v2);
+    const depth3: number = getArrDepth(ang);
     if (depth1 === 2 || depth2 === 2 || depth3 === 2) {
         if (depth2 === 1 && depth3 === 1) {
             // only v1 is Txyz[]
@@ -474,33 +581,51 @@ export function vecRot(v1: Txyz|Txyz[], v2: Txyz|Txyz[], ang: number|number[]): 
     // normal case, v1 and v2 and ang are Txyz
     return vec.vecRot(v1 as Txyz, v2 as Txyz, ang as number) as Txyz;
 }
-
 // ================================================================================================
-export function vecLen(v: Txyz|Txyz[]): number|number[] {
+/**
+ * Calculates the magnitude of a vector
+ * @param v
+ */
+export function vecLen(debug: boolean, v: Txyz|Txyz[]): number|number[] {
+    if (debug) {
+        checkNumArgs('vecLen', arguments, 1);
+    }
     // overloaded case
-    const depth1: number = getArrDepth2(v);
+    const depth1: number = getArrDepth(v);
     if (depth1 === 2) {
         return (v as Txyz[]).map( v_val => vec.vecLen(v_val as Txyz) as number);
     }
     // normal case, vec is Txyz
     return vec.vecLen(v as Txyz) as number;
 }
-
 // ================================================================================================
-export function vecNorm(v: Txyz|Txyz[]): Txyz|Txyz[] {
+/**
+ * Sets the magnitude of a vector to 1
+ * @param v
+ */
+export function vecNorm(debug: boolean, v: Txyz|Txyz[]): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecNorm', arguments, 1);
+    }
     // overloaded case
-    const depth1: number = getArrDepth2(v);
+    const depth1: number = getArrDepth(v);
     if (depth1 === 2) {
         return (v as Txyz[]).map( v_val => vec.vecNorm(v_val as Txyz) as Txyz);
     }
     // normal case, vec is Txyz
     return vec.vecNorm(v as Txyz) as Txyz;
 }
-
 // ================================================================================================
-export function vecRev(v: Txyz|Txyz[]): Txyz|Txyz[] {
+/**
+ * Reverses the direction of a vector
+ * @param v
+ */
+export function vecRev(debug: boolean, v: Txyz|Txyz[]): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecRev', arguments, 1);
+    }
     // overloaded case
-    const depth1: number = getArrDepth2(v);
+    const depth1: number = getArrDepth(v);
     if (depth1 === 2) {
         return (v as Txyz[]).map( v_val => vec.vecRev(v_val as Txyz) as Txyz);
     }
@@ -508,16 +633,33 @@ export function vecRev(v: Txyz|Txyz[]): Txyz|Txyz[] {
     return vec.vecRev(v as Txyz) as Txyz;
 }
 // ================================================================================================
-export function vecLtoG(v: Txyz|Txyz[], p: TPlane|TPlane[]): Txyz|Txyz[] {
-    return vecXForm(v, p, true);
+/**
+ * Transforms a vector from a local coordinate system define by plane "p" to the global coordinate system.
+ * @param v
+ * @param p
+ */
+export function vecLtoG(debug: boolean, v: Txyz|Txyz[], p: TPlane|TPlane[]): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecLtoG', arguments, 2);
+    }
+    return _vecXForm(v, p, true);
 }
-export function vecGtoL(v: Txyz|Txyz[], p: TPlane|TPlane[]): Txyz|Txyz[] {
-    return vecXForm(v, p, false);
+/**
+ * Transforms a vector from the global coordinate system to a local coordinate system define by plane "p".
+ * @param v
+ * @param p
+ */
+export function vecGtoL(debug: boolean, v: Txyz|Txyz[], p: TPlane|TPlane[]): Txyz|Txyz[] {
+    if (debug) {
+        checkNumArgs('vecGtoL', arguments, 2);
+    }
+    return _vecXForm(v, p, false);
 }
-function vecXForm(v: Txyz|Txyz[], p: TPlane|TPlane[], to_global: boolean): Txyz|Txyz[] {
+// ================================================================================================
+function _vecXForm(v: Txyz|Txyz[], p: TPlane|TPlane[], to_global: boolean): Txyz|Txyz[] {
     // overloaded case
-    const depth1: number = getArrDepth2(v);
-    const depth2: number = getArrDepth2(p);
+    const depth1: number = getArrDepth(v);
+    const depth2: number = getArrDepth(p);
     if (depth1 === 1 && depth2 === 2) {
         // v is Txyz and p is TPlane
         return multMatrix(v as Txyz, xformMatrix(p as TPlane, to_global));

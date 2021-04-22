@@ -7,12 +7,13 @@
 /**
  *
  */
-import { checkIDs, IdCh } from '../_check_ids';
-import { checkArgs, ArgCh } from '../_check_args';
+import { checkIDs, ID } from '../../_check_ids';
+
+import * as chk from '../../_check_types';
 
 import { GIModel } from '@libs/geo-info/GIModel';
 import { TId, TPlane } from '@libs/geo-info/common';
-import { __merge__ } from '../_model';
+// import { __merge__ } from '../_model';
 
 /**
  * Adds positions by intersecting polylines, planes, and polygons.
@@ -54,7 +55,7 @@ export enum _EKnifeKeep {
 export function Knife(__model__: GIModel, geometry: TId[], plane: TPlane, keep: _EKnifeKeep): TId[] {
     // --- Error Check ---
     // const fn_name = 'isect.Knife';
-    // const ents_arr = checkIDs(fn_name, 'geometry', geometry, ['isIDList'], [EEntType.POINT, EEntType.PLINE, EEntType.PGON]);
+    // const ents_arr = checkIDs(__model__, fn_name, 'geometry', geometry, ['isIDList'], [EEntType.POINT, EEntType.PLINE, EEntType.PGON]);
     // checkCommTypes(fn_name, 'plane', plane, [TypeCheckObj.isPlane]);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
@@ -71,8 +72,8 @@ export function Knife(__model__: GIModel, geometry: TId[], plane: TPlane, keep: 
 export function Split(__model__: GIModel, geometry: TId[], polyline: TId): TId[] {
     // --- Error Check ---
     // const fn_name = 'isect.Split';
-    // const ents_arr = checkIDs(fn_name, 'objects', geometry, ['isIDList'], [EEntType.PLINE, EEntType.PGON]);
-    // checkIDs(fn_name, 'polyline', polyline, [IDcheckObj.isID], [EEntType.PLINE]);
+    // const ents_arr = checkIDs(__model__, fn_name, 'objects', geometry, ['isIDList'], [EEntType.PLINE, EEntType.PGON]);
+    // checkIDs(__model__, fn_name, 'polyline', polyline, [IDcheckObj.isID], [EEntType.PLINE]);
     // --- Error Check ---
     throw new Error('Not implemented.'); return null;
 }

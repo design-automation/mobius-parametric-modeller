@@ -1,20 +1,58 @@
 import * as mathjs from 'mathjs';
-
-export function rand(min: number, max: number, seed?: number): number {
+import { checkNumArgs } from '../_check_inline_args';
+/**
+ * Returns a random number in the specified range
+ * Returns a random number in the specified range, given a numeric seed
+ * @param min
+ * @param max
+ * @param seed
+ */
+export function rand(debug: boolean, min: number, max: number, seed?: number): number {
+    if (debug) {
+        checkNumArgs('rand', arguments, 3, 2);
+    }
     if (seed !== undefined) {
         return min + (_randWithSeed(seed) * (max - min));
     } else {
         return mathjs.random(min, max);
     }
 }
-export function randInt(min: number, max: number, seed?: number): number {
+/**
+ * Returns a random integer in the specified range
+ * Returns a random integer in the specified range, given a numeric seed
+ * @param min
+ * @param max
+ * @param seed
+ */
+export function randInt(debug: boolean, min: number, max: number, seed?: number): number {
+    if (debug) {
+        checkNumArgs('randInt', arguments, 3, 2);
+    }
     if (seed !== undefined) {
         return Math.floor(min + (_randWithSeed(seed) * (max - min)));
     } else {
         return mathjs.randomInt(min, max);
     }
 }
-export function randPick(list: any[], num: number, seed?: number): number[] {
+/**
+ * Returns a random set of items from the list
+ * Returns a random set of items from the list, given a numeric seed
+ * @param list
+ * @param num
+ * @param seed
+ */
+export function randPick(debug: boolean, list: any[], num: number, seed?: number): number|number[] {
+    if (debug) {
+        checkNumArgs('randPick', arguments, 3, 2);
+    }
+    if (num === 1) {
+        const length: number = list.length;
+        if (seed !== undefined) {
+            return list[Math.floor(_randWithSeed(seed) * length)];
+        } else {
+            return list[mathjs.randomInt(0, list.length)];
+        }
+    }
     const list_copy: any[] = list.slice();
     _randShuffleWithSeed(list_copy, seed);
     return list_copy.slice(0, num);
@@ -32,10 +70,10 @@ function _randWithSeed(s: number): number {
     //return (2**31-1&(s=Math.imul(48271,s)))/2**31;
     /* tslint:enable */
 }
-function _randShuffleWithSeed(arr: any[], s?: number) {
+function _randShuffleWithSeed(arr: any[], seed?: number) {
     let ctr = arr.length;
     while (ctr > 0) {
-        const r: number = (s === undefined) ? Math.random() : _randWithSeed(ctr + s);
+        const r: number = (seed === undefined) ? Math.random() : _randWithSeed(ctr + seed);
         const index: number = Math.floor(r * ctr);
         ctr--;
         const temp: number = arr[ctr];

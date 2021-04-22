@@ -1,19 +1,17 @@
 /**
  * Shared utility functions
- * ~
- * ~
  */
 
 /**
  *
  */
-import { checkIDs, IdCh } from '../_check_ids';
+import { checkIDs, ID } from '../../_check_ids';
 
 import { GIModel } from '@libs/geo-info/GIModel';
-import { TId, TPlane, Txyz, EEntType, TRay, TEntTypeIdx, EEntTypeStr, Txy} from '@libs/geo-info/common';
-import { getArrDepth, isColl, isPosi, isPgon, isPline, isPoint } from '@assets/libs/geo-info/id';
+import { TId, TPlane, Txyz, EEntType, TRay, TEntTypeIdx } from '@libs/geo-info/common';
+import { getArrDepth } from '@assets/libs/util/arrs';
 import { vecDiv, vecSum, vecAvg, vecFromTo, vecLen, vecCross, vecNorm, vecAdd, vecSetLen, vecDot } from '@assets/libs/geom/vectors';
-import { isRay, isPlane, isXYZ } from '@assets/libs/geo-info/virtual';
+import { isRay, isPlane, isXYZ } from '@assets/libs/geo-info/common_func';
 import { rayFromPln } from '@assets/core/inline/_ray';
 import { plnFromRay } from '@assets/core/inline/_plane';
 import * as THREE from 'three';
@@ -32,7 +30,7 @@ export function getOrigin(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], 
 export function getRay(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], fn_name: string): TRay {
     if (isXYZ(data)) { return [data, [0, 0, 1]] as TRay; }
     if (isRay(data)) { return data as TRay; }
-    if (isPlane(data)) { return rayFromPln(data as TPlane) as TRay; }
+    if (isPlane(data)) { return rayFromPln(false, data as TPlane) as TRay; }
     const ents: TId|TId[] = data as TId|TId[];
     const origin: Txyz = getCentoridFromEnts(__model__, ents, fn_name);
     return [origin, [0, 0, 1]] as TRay;
@@ -40,7 +38,7 @@ export function getRay(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], fn_
 // ================================================================================================
 export function getPlane(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], fn_name: string): TPlane {
     if (isXYZ(data)) { return [data, [1, 0, 0], [0, 1, 0]] as TPlane; }
-    if (isRay(data)) { return plnFromRay(data as TRay) as TPlane; }
+    if (isRay(data)) { return plnFromRay(false, data as TRay) as TPlane; }
     if (isPlane(data)) { return data as TPlane; }
     const ents: TId|TId[] = data as TId|TId[];
     const origin: Txyz = getCentoridFromEnts(__model__, ents, fn_name);
@@ -50,10 +48,10 @@ export function getPlane(__model__: GIModel, data: Txyz|TRay|TPlane|TId|TId[], f
 export function getCentoridFromEnts(__model__: GIModel, ents: TId|TId[], fn_name: string): Txyz {
     // this must be an ID or an array of IDs, so lets get the centroid
     // TODO this error message is confusing
-    const ents_arr: TEntTypeIdx|TEntTypeIdx[] = checkIDs(fn_name, 'ents', ents,
-        [IdCh.isId, IdCh.isIdL],
+    const ents_arr: TEntTypeIdx|TEntTypeIdx[] = checkIDs(__model__, fn_name, 'ents', ents,
+        [ID.isID, ID.isIDL1],
         [EEntType.POSI, EEntType.VERT, EEntType.POINT, EEntType.EDGE, EEntType.WIRE,
-            EEntType.PLINE, EEntType.FACE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx;
+            EEntType.PLINE, EEntType.PGON, EEntType.COLL]) as TEntTypeIdx;
     const centroid: Txyz|Txyz[] = getCentroid(__model__, ents_arr);
     if (Array.isArray(centroid[0])) {
         return vecAvg(centroid as Txyz[]) as Txyz;
@@ -64,7 +62,7 @@ export function getCentoridFromEnts(__model__: GIModel, ents: TId|TId[], fn_name
 export function getCentroid(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): Txyz|Txyz[] {
     if (getArrDepth(ents_arr) === 1) {
         const [ent_type, index]: [EEntType, number] = ents_arr as TEntTypeIdx;
-        const posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, index);
+        const posis_i: number[] = __model__.modeldata.geom.nav.navAnyToPosi(ent_type, index);
         return _centroidPosis(__model__, posis_i);
     } else {
         // divide the input into posis and non posis
@@ -94,33 +92,33 @@ export function getCentroid(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeId
 }
 function _centroidPosis(__model__: GIModel, posis_i: number[]): Txyz {
     const unique_posis_i = Array.from(new Set(posis_i));
-    const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.attribs.query.getPosiCoords(posi_i));
+    const unique_xyzs: Txyz[] = unique_posis_i.map( posi_i => __model__.modeldata.attribs.posis.getPosiCoords(posi_i));
     return vecDiv(vecSum(unique_xyzs), unique_xyzs.length);
 }
 // ================================================================================================
 export function getCenterOfMass(__model__: GIModel, ents_arr: TEntTypeIdx|TEntTypeIdx[]): Txyz|Txyz[] {
     if (getArrDepth(ents_arr) === 1) {
         const [ent_type, ent_i]: [EEntType, number] = ents_arr as TEntTypeIdx;
-        const faces_i: number[] = __model__.geom.nav.navAnyToFace(ent_type, ent_i);
-        if (faces_i.length === 0) { return null; }
-        return _centerOfMass(__model__, faces_i);
+        const pgons_i: number[] = __model__.modeldata.geom.nav.navAnyToPgon(ent_type, ent_i);
+        if (pgons_i.length === 0) { return null; }
+        return _centerOfMass(__model__, pgons_i);
     } else {
         const cents: Txyz[] = [];
         ents_arr = ents_arr as TEntTypeIdx[];
         for (const [ent_type, ent_i] of ents_arr) {
-            const faces_i: number[] = __model__.geom.nav.navAnyToFace(ent_type, ent_i);
-            if (faces_i.length === 0) { cents.push(null); }
-            cents.push(_centerOfMass(__model__, faces_i));
+            const pgons_i: number[] = __model__.modeldata.geom.nav.navAnyToPgon(ent_type, ent_i);
+            if (pgons_i.length === 0) { cents.push(null); }
+            cents.push(_centerOfMass(__model__, pgons_i));
         }
         return cents;
     }
 }
-function _centerOfMass(__model__: GIModel, faces_i: number[]): Txyz {
+function _centerOfMass(__model__: GIModel, pgons_i: number[]): Txyz {
     const face_midpoints: Txyz[] = [];
     const face_areas: number[] = [];
     let total_area = 0;
-    for (const face_i of faces_i) {
-        const [midpoint_xyz, area]: [Txyz, number] = _centerOfMassOfFace(__model__, face_i);
+    for (const face_i of pgons_i) {
+        const [midpoint_xyz, area]: [Txyz, number] = _centerOfMassOfPgon(__model__, face_i);
         face_midpoints.push(midpoint_xyz);
         face_areas.push(area);
         total_area += area;
@@ -134,18 +132,18 @@ function _centerOfMass(__model__: GIModel, faces_i: number[]): Txyz {
     }
     return cent;
 }
-function _centerOfMassOfFace(__model__: GIModel, face_i: number): [Txyz, number] {
+function _centerOfMassOfPgon(__model__: GIModel, pgon_i: number): [Txyz, number] {
     const tri_midpoints: Txyz[] = [];
     const tri_areas: number[] = [];
     let total_area = 0;
     const map_posi_to_v3: Map< number, THREE.Vector3> = new Map();
-    for (const tri_i of __model__.geom.nav.navFaceToTri(face_i)) {
-        const posis_i: number[] = __model__.geom.nav.navAnyToPosi(EEntType.TRI, tri_i);
+    for (const tri_i of __model__.modeldata.geom.nav_tri.navPgonToTri(pgon_i)) {
+        const posis_i: number[] = __model__.modeldata.geom.nav_tri.navTriToPosi(tri_i);
         const posis_v3: THREE.Vector3[] = [];
         for (const posi_i of posis_i) {
             let posi_v3: THREE.Vector3 = map_posi_to_v3.get(posi_i);
             if (posi_v3 === undefined) {
-                const xyz: Txyz = __model__.attribs.query.getPosiCoords(posi_i);
+                const xyz: Txyz = __model__.modeldata.attribs.posis.getPosiCoords(posi_i);
                 posi_v3 = new THREE.Vector3(xyz[0], xyz[1], xyz[2]);
             }
             posis_v3.push(posi_v3);
@@ -264,89 +262,3 @@ export function getPlanesSeq(xyzs: Txyz[], normal: Txyz, close: boolean): TPlane
     return planes;
 }
 // ================================================================================================
-
-
-// ================================================================================================
-// Utility functions used in make.Copy() and in poly2d.Stitch()
-/**
- * Copy posis, points, plines, pgons
- * @param __model__
- * @param ents_arr
- * @param copy_attributes
- */
-export function _copyGeom(__model__: GIModel,
-    ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][], copy_attributes: boolean): TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][] {
-    const depth: number = getArrDepth(ents_arr);
-    if (depth === 1) {
-        const [ent_type, index]: TEntTypeIdx = ents_arr as TEntTypeIdx;
-        if (isColl(ent_type)) {
-            const coll_i: number = __model__.geom.add.copyColls(index, copy_attributes) as number;
-            return [ent_type, coll_i];
-        } else if (isPgon(ent_type)) {
-            const obj_i: number = __model__.geom.add.copyPgons(index, copy_attributes) as number;
-            return [ent_type, obj_i];
-        } else if (isPline(ent_type)) {
-            const obj_i: number = __model__.geom.add.copyPlines(index, copy_attributes) as number;
-            return [ent_type, obj_i];
-        } else if (isPoint(ent_type)) {
-            const obj_i: number = __model__.geom.add.copyPoints(index, copy_attributes) as number;
-            return [ent_type, obj_i];
-        } else if (isPosi(ent_type)) {
-            const posi_i: number = __model__.geom.add.copyPosis(index, copy_attributes) as number;
-            return [ent_type, posi_i];
-        }
-    } else if (depth === 2) {
-        ents_arr = ents_arr as TEntTypeIdx[];
-        return ents_arr.map(ents_arr_item => _copyGeom(__model__, ents_arr_item, copy_attributes)) as TEntTypeIdx[];
-    } else { // depth > 2
-        ents_arr = ents_arr as TEntTypeIdx[][];
-        return ents_arr.map(ents_arr_item => _copyGeom(__model__, ents_arr_item, copy_attributes)) as TEntTypeIdx[][];
-    }
-}
-export function _copyGeomPosis(__model__: GIModel, ents_arr: TEntTypeIdx | TEntTypeIdx[] | TEntTypeIdx[][],
-        copy_attributes: boolean, vector: Txyz): void {
-    const depth: number = getArrDepth(ents_arr);
-    if (depth === 1) {
-        ents_arr = [ents_arr] as TEntTypeIdx[];
-    } else if (depth > 2) {
-        // @ts-ignore
-        ents_arr = ents_arr.flat(depth - 2) as TEntTypeIdx[];
-    }
-    // create the new positions
-    const old_to_new_posis_i_map: Map<number, number> = new Map(); // count number of posis
-    for (const ent_arr of ents_arr) {
-        const [ent_type, index]: TEntTypeIdx = ent_arr as TEntTypeIdx;
-        // something may not be right here
-        // if you copy a pgon + posi, if you process the pgon first you wil make a copy of the posis
-        // but the posi may already be copied by the _copyGeom function, then we get two copies of that posi
-        // I think this whole copy-move function need to to be moved to the GI library, can also make it more efficient
-        if (isPosi(ent_type) && vector !== null) { // positions
-            const old_posi_i: number = index;
-            let new_posi_i: number;
-            if (old_to_new_posis_i_map.has(old_posi_i)) {
-                new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
-            } else {
-                const xyz: Txyz = __model__.attribs.query.getPosiCoords(old_posi_i);
-                __model__.attribs.add.setPosiCoords(old_posi_i, vecAdd(xyz, vector));
-                old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
-            }
-        } else { // obj or coll
-            const old_posis_i: number[] = __model__.geom.nav.navAnyToPosi(ent_type, index);
-            const ent_new_posis_i: number[] = [];
-            for (const old_posi_i of old_posis_i) {
-                let new_posi_i: number;
-                if (old_to_new_posis_i_map.has(old_posi_i)) {
-                    new_posi_i = old_to_new_posis_i_map.get(old_posi_i);
-                } else {
-                    new_posi_i = __model__.geom.add.copyMovePosis(old_posi_i, vector, copy_attributes) as number;
-                    old_to_new_posis_i_map.set(old_posi_i, new_posi_i);
-                }
-                ent_new_posis_i.push(new_posi_i);
-            }
-            __model__.geom.modify.replacePosis(ent_type, index, ent_new_posis_i);
-        }
-    }
-    // return all the new points
-    // const all_new_posis_i: number[] = Array.from(old_to_new_posis_i_map.values());
-    // return all_new_posis_i.map( posi_i => [EEntType.POSI, posi_i] ) as TEntTypeIdx[];
-}
